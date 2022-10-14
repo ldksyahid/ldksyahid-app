@@ -62,7 +62,7 @@
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="formFile" class="form-label">Poster (1080 x 1350 Pixel)</label>
-                        <input class="form-control" type="file" id="poster" name = 'poster'>
+                        <input class="form-control" type="file" id="poster" name = 'poster' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
                         <div class="invalid-feedback">
                             Please insert a Poster Event here.
                         </div>

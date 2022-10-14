@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\News;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 class NewsController extends Controller
 {
@@ -44,8 +45,9 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $gambar = $request->picture;
-        $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
+        $filename = time().$request->file('picture')->getClientOriginalName();
+        $path = $request->file('picture')->storeAs('Images/uploads/news',$filename);
+
 
         $postnews = News::create([
             "datepublish" => $request["datepublish"],
@@ -53,12 +55,11 @@ class NewsController extends Controller
             "title" => $request["title"],
             "reporter" => $request["reporter"],
             "editor" => $request["editor"],
-            'picture' => $new_gambar,
+            'picture' => $path,
             "descpicture" => $request["descpicture"],
             "body" => $request["body"],
         ]);
 
-        $gambar->move('Images/uploads/news/',$new_gambar);
         Alert::success('Success', 'News has been uploaded !');
         return redirect('/admin/news');
     }
@@ -97,8 +98,20 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $gambar = $request->picture;
-        $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
+
+        if ($request->file('picture')) {
+            $filename = time().$request->file('picture')->getClientOriginalName();
+            $path = $request->file('picture')->storeAs('Images/uploads/news',$filename);
+
+            // hapus file
+            $gambar = News::where('id',$id)->first();
+            File::delete($gambar->picture);
+
+            // upload file
+            $update = News::where("id", $id)-> update([
+                'picture' => $path,
+            ]);
+        }
 
         $updatenews = News::where("id", $id)-> update([
             "datepublish" => $request["datepublish"],
@@ -106,13 +119,11 @@ class NewsController extends Controller
             "title" => $request["title"],
             "reporter" => $request["reporter"],
             "editor" => $request["editor"],
-            'picture' => $new_gambar,
             "descpicture" => $request["descpicture"],
             "body" => $request["body"],
         ]);
 
         toast('News has been edited !', 'success')->autoClose(1500)->width('400px');
-        $gambar->move('Images/uploads/news/',$new_gambar);
         return redirect('/admin/news');
     }
 
@@ -124,7 +135,12 @@ class NewsController extends Controller
      */
     public function destroy($id)
     {
-        $data = News::findOrFail($id);
-        $data->delete();
+        // hapus file
+        $gambar = News::where('id',$id)->first();
+        File::delete($gambar->picture);
+
+        // hapus data
+        News::where('id',$id)->delete();
+        return redirect()->back();
     }
 }

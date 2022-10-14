@@ -63,6 +63,13 @@
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
         var is_admin = $('#is_admin').is(':checked');
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            width: '350px',
+        })
         $.ajax({
             type: "get",
             url: "{{ url('admin/user/store') }}",
@@ -75,6 +82,10 @@
             success: function(data) {
                 $(".btn-close").click();
                 read();
+                Toast.fire({
+                    icon: 'success',
+                    title: 'User has been created !'
+                });
             }
         });
     }
@@ -94,6 +105,13 @@
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
         var is_admin = $('#is_admin').is(':checked');
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            width: '350px',
+        })
         $.ajax({
             type: "get",
             url: "{{ url('admin/user/update') }}/"+id,
@@ -105,6 +123,10 @@
             success: function(data) {
                 $(".btn-close").click();
                 read();
+                Toast.fire({
+                    icon: 'success',
+                    title: 'User has been updated !'
+                });
 
             }
         });

@@ -35,7 +35,7 @@
                         @if ($comment->user->profile == null || $comment->user->profile->profilepicture == null)
                             <img class="rounded-circle" src="https://source.unsplash.com/70x70?bee" alt="" style="width: 70px; height: 70px;">
                         @else
-                            <img class="rounded-circle" src="{{asset('Images/uploads/profiles')}}/{{$comment->user->profile->profilepicture}}" alt="" style="width: 70px; height: 70px;">
+                            <img class="rounded-circle" src="/{{$comment->user->profile->profilepicture}}" alt="" style="width: 70px; height: 70px;">
                         @endif
                     </div>
                     <div class="comment-body">
@@ -61,7 +61,7 @@
                         @if ($comment->user->profile == null || $comment->user->profile->profilepicture == null)
                             <img class="rounded-circle" src="https://source.unsplash.com/70x70?bee" alt="" style="width: 70px; height: 70px;">
                         @else
-                            <img class="rounded-circle" src="{{asset('Images/uploads/profiles')}}/{{$comment->user->profile->profilepicture}}" alt="" style="width: 70px; height: 70px;">
+                            <img class="rounded-circle" src="/{{$comment->user->profile->profilepicture}}" alt="" style="width: 70px; height: 70px;">
                         @endif
                     </div>
                     <div class="comment-body">

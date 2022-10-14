@@ -12,7 +12,7 @@ data-wow-delay="0.1s"
   </h1>
   <nav aria-label="breadcrumb animated slideInDown">
     <ol class="breadcrumb justify-content-center mb-0">
-      <p class="text-white">asdwadaw</p>
+      <p class="text-white">Yuk Hadir dan Ikuti Kegiatan LDK Syahid untuk menambah Teman dan Ilmu Kamu</p>
     </ol>
   </nav>
 </div>
@@ -41,7 +41,7 @@ data-wow-delay="0.1s"
                 <a class="mb-0" href="/event/{{ $postevent->id }}/show">Baca Selengkapnya</a>
             </div>
             <div class="col-lg-4 col-md-6 wow fadeInRight" data-wow-delay="0.5s">
-                <img src="{{asset('Images/uploads/eventsposter')}}/{{$postevent->poster}}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px">
+                <img src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px">
             </div>
         </div>
         @empty

@@ -30,7 +30,7 @@
                                 <td scope="row" align='center'>{{$key + 1}}</td>
                                 <td>{{ $postjumbotron->title }}</td>
                                 <td>
-                                    <img style="width: 100px;" src="{{asset('Images/uploads/jumbotrons')}}/{{$postjumbotron->picture}}" alt="{{$postjumbotron->title}}" class="card-img-top"/>
+                                    <img style="width: 100px;" src="{{ asset($postjumbotron->picture) }}" alt="{{$postjumbotron->title}}" class="card-img-top"/>
                                 </td>
                                 <td>{{ $postjumbotron->subtitle }}</td>
                                 <td>{{substr($postjumbotron->sentence, 0, 10)}}...</td>

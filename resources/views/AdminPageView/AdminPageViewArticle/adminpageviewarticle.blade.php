@@ -34,7 +34,7 @@
                                 <td align='center'>{{ $postarticle->writer }}</td>
                                 <td align='center'>{{ $postarticle->editor }}</td>
                                 <td align='center'>
-                                    <img style="width: 100px;" src="{{asset('Images/uploads/articlesposter')}}/{{$postarticle->poster}}" alt="{{$postarticle->title}}" class="card-img-top"/>
+                                    <img style="width: 100px;" src="{{ asset($postarticle->poster) }}" alt="{{$postarticle->title}}" class="card-img-top"/>
                                 </td>
                                 <td align='center'><a href="{{ $postarticle->embedpdf }}" target="_blank">{{substr($postarticle->embedpdf, 0, 10)}}</a></td>
                                 <td align="center">

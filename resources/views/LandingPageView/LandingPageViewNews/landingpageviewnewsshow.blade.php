@@ -21,7 +21,7 @@
             <div class="wow fadeInUp " data-wow-delay="1.0s">
                 <div class="col-lg-10 col-md-6 text-start">
                     <p class="mb-2 text-start"><i>Reporter</i> {{ $postnews->reporter }}; <i>Editor</i> {{ $postnews->editor }}</p>
-                    <img src="{{asset('Images/uploads/news')}}/{{$postnews->picture}}"alt="{{$postnews->title}}" class="img-fluid rounded">
+                    <img src="{{ asset($postnews->picture) }}" alt="{{$postnews->title}}" class="img-fluid rounded">
                     <p class="mt-1 small text-center"><i>{{ $postnews->descpicture }}</i></p>
                 </div>
                 <div class="mb-1 col-lg-10 col-md-6" style="">
@@ -42,7 +42,7 @@
                             @if ($comment->user->profile == null || $comment->user->profile->profilepicture == null)
                                 <img class="rounded-circle" src="https://source.unsplash.com/70x70?bee" alt="" style="width: 70px; height: 70px;">
                             @else
-                                <img class="rounded-circle" src="{{asset('Images/uploads/profiles')}}/{{$comment->user->profile->profilepicture}}" alt="" style="width: 70px; height: 70px;">
+                                <img class="rounded-circle" src="/{{$comment->user->profile->profilepicture}}" alt="" style="width: 70px; height: 70px;">
                             @endif
                         </div>
                         <div class="comment-body">
@@ -58,7 +58,7 @@
                             @if ($comment->user->profile == null || $comment->user->profile->profilepicture == null)
                                 <img class="rounded-circle" src="https://source.unsplash.com/70x70?bee" alt="" style="width: 70px; height: 70px;">
                             @else
-                                <img class="rounded-circle" src="{{asset('Images/uploads/profiles')}}/{{$comment->user->profile->profilepicture}}" alt="" style="width: 70px; height: 70px;">
+                                <img class="rounded-circle" src="/{{$comment->user->profile->profilepicture}}" alt="" style="width: 70px; height: 70px;">
                             @endif
                         </div>
                         <div class="comment-body">

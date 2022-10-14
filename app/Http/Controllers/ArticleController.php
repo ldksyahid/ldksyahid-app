@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 class ArticleController extends Controller
 {
@@ -44,8 +45,8 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        $gambar = $request->poster;
-        $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
+        $filename = time().$request->file('poster')->getClientOriginalName();
+        $path = $request->file('poster')->storeAs('Images/uploads/articlesposter',$filename);
 
         $postarticle = Article::create([
             "title" => $request["title"],
@@ -53,11 +54,10 @@ class ArticleController extends Controller
             "dateevent" => $request["datearticle"],
             "writer" => $request["writer"],
             "editor" => $request["editor"],
-            'poster' => $new_gambar,
+            'poster' => $path,
             "embedpdf" => $request["embedpdf"],
         ]);
 
-        $gambar->move('Images/uploads/articlesposter/',$new_gambar);
         Alert::success('Success', 'Article has been uploaded !');
         return redirect('/admin/article');
     }
@@ -96,8 +96,19 @@ class ArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $gambar = $request->poster;
-        $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
+        if ($request->file('poster')) {
+            $filename = time().$request->file('poster')->getClientOriginalName();
+            $path = $request->file('poster')->storeAs('Images/uploads/articlesposter',$filename);
+
+            // hapus file
+            $gambar = Article::where('id',$id)->first();
+            File::delete($gambar->poster);
+
+            // upload file
+            $update = Article::where("id", $id)-> update([
+                'poster' => $path,
+            ]);
+        }
 
         $update = Article::where("id", $id)-> update([
             "title" => $request["title"],
@@ -105,12 +116,10 @@ class ArticleController extends Controller
             "dateevent" => $request["datearticle"],
             "writer" => $request["writer"],
             "editor" => $request["editor"],
-            'poster' => $new_gambar,
             "embedpdf" => $request["embedpdf"],
         ]);
 
         toast('Article has been edited !', 'success')->autoClose(1500)->width('400px');
-        $gambar->move('Images/uploads/articlesposter/',$new_gambar);
         return redirect('/admin/article');
     }
 
@@ -122,7 +131,12 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-        $data = Article::findOrFail($id);
-        $data->delete();
+        // hapus file
+        $gambar = Article::where('id',$id)->first();
+        File::delete($gambar->poster);
+
+        // hapus data
+        Article::where('id',$id)->delete();
+        return redirect()->back();
     }
 }

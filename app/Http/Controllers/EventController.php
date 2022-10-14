@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 class EventController extends Controller
 {
@@ -44,19 +45,16 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $gambar = $request->poster;
-        $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
-
+        $filename = time().$request->file('poster')->getClientOriginalName();
+        $path = $request->file('poster')->storeAs('Images/uploads/eventsposter',$filename);
         $postevent = Event::create([
             "title" => $request["title"],
             "division" => $request["division"],
             "broadcast" => $request["broadcast"],
             "linkembedgform" => $request["linkembedgform"],
             "dateevent" => $request["dateevent"],
-            'poster' => $new_gambar
+            'poster' => $path
         ]);
-
-        $gambar->move('Images/uploads/eventsposter/',$new_gambar);
         Alert::success('Success', 'Event has been uploaded !');
         return redirect('/admin/event');
     }
@@ -71,7 +69,7 @@ class EventController extends Controller
     {
         $dt = Carbon::now();
         $postevent = Event::find($id);
-        return view('LandingPageView.LandingPageViewEvent.landingpagevieweventshow', compact('postevent'), ["title" => "Event"]);
+        return view('LandingPageView.LandingPageViewEvent.landingpagevieweventshow', compact('postevent'), ["title" => "Kegiatan"]);
     }
 
     /**
@@ -95,8 +93,19 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $gambar = $request->poster;
-        $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
+        if ($request->file('poster')) {
+            $filename = time().$request->file('poster')->getClientOriginalName();
+            $path = $request->file('poster')->storeAs('Images/uploads/eventsposter',$filename);
+
+            // hapus file
+            $gambar = Event::where('id',$id)->first();
+            File::delete($gambar->poster);
+
+            // upload file
+            $update = Event::where("id", $id)-> update([
+                'poster' => $path,
+            ]);
+        }
 
         $update = Event::where("id", $id)-> update([
             "title" => $request["title"],
@@ -104,11 +113,9 @@ class EventController extends Controller
             "broadcast" => $request["broadcast"],
             "linkembedgform" => $request["linkembedgform"],
             "dateevent" => $request["dateevent"],
-            'poster' => $new_gambar
         ]);
 
         toast('Event has been edited !', 'success')->autoClose(1500)->width('400px');
-        $gambar->move('Images/uploads/eventsposter/',$new_gambar);
         return redirect('/admin/event');
     }
 
@@ -120,7 +127,12 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        $data = Event::findOrFail($id);
-        $data->delete();
+        // hapus file
+        $gambar = Event::where('id',$id)->first();
+        File::delete($gambar->poster);
+
+        // hapus data
+        Event::where('id',$id)->delete();
+        return redirect()->back();
     }
 }

@@ -18,7 +18,7 @@
                 @if (Auth::User()->profile == null || Auth::User()->profile->profilepicture == null)
                     <img class="rounded-circle me-lg-2" src="https://source.unsplash.com/40x40?bee" alt="" style="width: 40px; height: 40px;">
                 @else
-                    <img class="rounded-circle me-lg-2" src="{{asset('Images/uploads/profiles')}}/{{Auth::User()->profile->profilepicture}}" alt="{{Auth::User()->profile->namapanggilan}}" style="width: 40px; height: 40px;">
+                    <img class="rounded-circle me-lg-2" src="/{{Auth::User()->profile->profilepicture}}" alt="{{Auth::User()->profile->namapanggilan}}" style="width: 40px; height: 40px;">
                 @endif
                 {{-- <img class="rounded-circle me-lg-2" src="{{ asset('Images/Icons/guesticon.png') }}" alt="" style="width: 40px; height: 40px;"> --}}
                 <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>

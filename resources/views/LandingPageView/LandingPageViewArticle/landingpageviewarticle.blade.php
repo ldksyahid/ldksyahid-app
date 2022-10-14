@@ -9,7 +9,7 @@
         </h1>
         <nav aria-label="breadcrumb animated slideInDown">
             <ol class="breadcrumb justify-content-center mb-0">
-                <p class="text-white">asdwadaw</p>
+                <p class="text-white">Artikel ini merupakan Hasil Karya Tulisan dari para kader dakwah LDK Syahid</p>
             </ol>
         </nav>
     </div>
@@ -22,7 +22,7 @@
             @forelse($postarticle as $key => $postarticle)
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="service-item bg-light overflow-hidden h-100">
-                    <img class="img-fluid" src="{{asset('Images/uploads/articlesposter')}}/{{$postarticle->poster}}" alt="{{$postarticle->title}}" />
+                    <img class="img-fluid" src="{{ asset($postarticle->poster) }}" alt="{{$postarticle->title}}" />
                     <div class="service-text position-relative text-center h-100 p-4">
                         <p class="text-end">{{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->format('Y') }}</p>
                         <h6 class="text-body text-uppercase mb-2 text-start">{{ $postarticle->theme }}</h6>

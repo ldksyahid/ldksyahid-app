@@ -9,7 +9,7 @@
                 @if (Auth::User()->profile == null || Auth::User()->profile->profilepicture == null)
                     <img class="rounded-circle" src="https://source.unsplash.com/40x40?bee" alt="" style="width: 40px; height: 40px;">
                 @else
-                    <img class="rounded-circle" src="{{asset('Images/uploads/profiles')}}/{{Auth::User()->profile->profilepicture}}" alt="{{Auth::User()->profile->namapanggilan}}" style="width: 40px; height: 40px;">
+                    <img class="rounded-circle" src="/{{Auth::User()->profile->profilepicture}}" alt="{{Auth::User()->profile->namapanggilan}}" style="width: 40px; height: 40px;">
                 @endif
                 {{-- <img class="rounded-circle" src="{{ asset('Images/Icons/guesticon.png') }}" alt="" style="width: 40px; height: 40px;"> --}}
                 <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>

@@ -29,7 +29,7 @@
                                 <td scope="row" align='center'>{{$key + 1}}</td>
                                 <td>{{ $postevent->title }}</td>
                                 <td>
-                                    <img style="width: 100px;" src="{{asset('Images/uploads/eventsposter')}}/{{$postevent->poster}}" alt="{{ $postevent->title }}" class="card-img-top"/>
+                                    <img style="width: 100px;" src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="card-img-top"/>
                                 </td>
                                 <td>{{ $postevent->division }}</td>
                                 <td>{!!  substr(strip_tags($postevent->broadcast), 0, 20) !!}</td>

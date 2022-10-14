@@ -7,14 +7,14 @@
         <div class="row g-5">
             <div class="col-lg-7 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-5 border-primary ps-4 mb-5">
-                    <h6 class="text-body">Lorem, ipsum dolor.</h6>
-                    <h1 class="display-6">Update Profil Kamu disini yaaa</h1>
-                    <p class="mb-0" style="text-align: justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem accusantium obcaecati temporibus, numquam sit officiis doloremque quos ipsam iure laboriosam commodi quibusdam quam, vitae voluptatibus.</p>
+                    <h6 class="text-body">Struktur Pengurus LDK Syahid 26</h6>
+                    <h1 class="display-6">PENDAR CAKRAWALA</h1>
+                    <p class="mb-0" style="text-align: justify">"Barang siapa mengerjakan kebajikan, baik laki-laki maupun perempuan dalam keadaan beriman, maka pasti akan Kami berikan kepadanya kehidupan yang baik dan akan Kami beri balasan dengan pahala yang lebih baik dari apa yang telah mereka kerjakan." &#9679; (QS. An-Nahl 16: Ayat 97)</p>
                 </div>
             </div>
             <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                <div class=" mb-5 text-end">
-                    <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="LDK Syahid" width="255px" height="255px">
+                <div class=" mb-1 text-end">
+                    <img src="{{ asset('Images/Logos/pendarcakrawala.png') }}" alt="LDK Syahid" width="250px" height="250px">
                 </div>
             </div>
             <div class="col-lg-12 col-md-6 wow fadeInUp" data-wow-delay="0.1s">

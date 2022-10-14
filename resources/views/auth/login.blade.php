@@ -7,15 +7,13 @@
         <div class="row g-5">
             <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-5 border-primary ps-4 mb-5">
-                <h6 class="text-body text-uppercase mb-2">Appointment</h6>
+                <h6 class="text-body text-uppercase mb-2">Masuk</h6>
                 <h1 class="display-6 mb-0">
-                    A Company Involved In Service And Maintenance
+                    Manfaatkan Hidup Kita dengan Baik
                 </h1>
                 </div>
                 <p class="mb-0">
-                Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu
-                diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet
-                lorem sit clita duo justo magna dolore erat amet
+                    "Maka sesungguhnya bersama kesulitan itu ada kemudahan, sesungguhnya bersama kesulitan itu ada kemudahan." <br> &#9679; (QS. Al-Insyirah 94: Ayat 5 - 6)
                 </p>
             </div>
             <div class="col-lg-7 col-md-6 wow fadeInUp" data-wow-delay="0.5s">

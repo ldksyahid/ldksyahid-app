@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class ProfileController extends Controller
 {
@@ -50,34 +51,48 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
 
-        $new_gambar = null;
+        if ($request->file('profilepicture')) {
+            $filename = time().$request->file('profilepicture')->getClientOriginalName();
+            $path = $request->file('profilepicture')->storeAs('Images/uploads/profiles',$filename);
 
-        if ($gambar = $request->profilepicture) {
-            $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
-            $gambar->move('Images/uploads/profiles/',$new_gambar);
+            // upload file
+            $upload = Profile::create([
+                'profilepicture' => $path,
+                "namapanggilan" => $request["namapanggilan"],
+                "sifat" => $request["sifat"],
+                "tentangdiri" => $request["tentangdiri"],
+                "universitas" => $request["universitas"],
+                "nim" => $request["nim"],
+                "fakultas" => $request["fakultas"],
+                "programstudi" => $request["programstudi"],
+                "forkat" => $request["forkat"],
+                "nomoranggota" => $request["nomoranggota"],
+                "akuninstagram" => $request["akuninstagram"],
+                "akunlinkedin" => $request["akunlinkedin"],
+                "mottohidup" => $request["mottohidup"],
+                "user_id" => Auth::id()
+            ]);
+            return redirect('/profile');
+        } else{
+            $post = Profile::create([
+                "namapanggilan" => $request["namapanggilan"],
+                "sifat" => $request["sifat"],
+                "tentangdiri" => $request["tentangdiri"],
+                "universitas" => $request["universitas"],
+                "nim" => $request["nim"],
+                "fakultas" => $request["fakultas"],
+                "programstudi" => $request["programstudi"],
+                "forkat" => $request["forkat"],
+                "nomoranggota" => $request["nomoranggota"],
+                "akuninstagram" => $request["akuninstagram"],
+                "akunlinkedin" => $request["akunlinkedin"],
+                "mottohidup" => $request["mottohidup"],
+                "user_id" => Auth::id()
+            ]);
+
+            return redirect('/profile');
         }
-        // $gambar = $request->profilepicture;
-        // $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
-        // $gambar->move('Images/uploads/profiles/',$new_gambar);
 
-        $post = Profile::create([
-            "namapanggilan" => $request["namapanggilan"],
-            "sifat" => $request["sifat"],
-            "tentangdiri" => $request["tentangdiri"],
-            "universitas" => $request["universitas"],
-            "nim" => $request["nim"],
-            "fakultas" => $request["fakultas"],
-            "programstudi" => $request["programstudi"],
-            "forkat" => $request["forkat"],
-            "nomoranggota" => $request["nomoranggota"],
-            "akuninstagram" => $request["akuninstagram"],
-            "akunlinkedin" => $request["akunlinkedin"],
-            "mottohidup" => $request["mottohidup"],
-            'profilepicture' => $new_gambar,
-            "user_id" => Auth::id()
-        ]);
-
-        return redirect('/profile');
     }
 
     /**
@@ -111,15 +126,21 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $new_gambar = null;
 
-        if ($gambar = $request->profilepicture) {
-            $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
-            $gambar->move('Images/uploads/profiles/',$new_gambar);
+        if ($request->file('profilepicture')) {
+            $filename = time().$request->file('profilepicture')->getClientOriginalName();
+            $path = $request->file('profilepicture')->storeAs('Images/uploads/profiles',$filename);
+
+            // hapus file
+            $gambar = Profile::where('id',$id)->first();
+            File::delete($gambar->profilepicture);
+
+            // upload file
+            $update = Profile::where("id", $id)-> update([
+                'profilepicture' => $path,
+            ]);
         }
-        // $gambar = $request->profilepicture;
-        // $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
-        // $gambar->move('Images/uploads/profiles/',$new_gambar);
+
         $update = Profile::where("id", $id)-> update([
             "namapanggilan" => $request["namapanggilan"],
             "sifat" => $request["sifat"],
@@ -133,7 +154,6 @@ class ProfileController extends Controller
             "akuninstagram" => $request["akuninstagram"],
             "akunlinkedin" => $request["akunlinkedin"],
             "mottohidup" => $request["mottohidup"],
-            'profilepicture' => $new_gambar,
             "user_id" => Auth::id()
         ]);
         return redirect('/profile');

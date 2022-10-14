@@ -126,10 +126,12 @@ Route::get('/about/contact', function () {
     return view('LandingPageView.LandingPageViewTentang.landingpageviewtentanghubungikami', ["title" => "Tentang Kami"]);
 })->name('aboutus');
 
-// Route Landing Page Struktur Pengurus di Tentang Kami
 Route::get('/about/structure', function () {
     return view('LandingPageView.LandingPageViewTentang.landingpageviewtentangstrukturpengurus', ["title" => "Tentang Kami"]);
 })->name('aboutus.structure');
+// Route::get('/about/galery', function () {
+//     return view('LandingPageView.LandingPageViewTentang.landingpageviewtentanggaleri', ["title" => "Tentang Kami"]);
+// })->name('aboutus.galery');
 
 // Route Landing Page Contact Us Hubungi Kami di Tentang Kami
 Route::post('/about/contact/message/store', [MessageContactController::class, 'store'])->name('messagecontact');

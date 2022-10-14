@@ -57,6 +57,7 @@
                 <div class="dropdown-menu bg-light m-0">
                     <a href="/about/structure" class="nav-item dropdown-item">Struktur Pengurus LDK Syahid 26</a>
                     <a href="/about/contact" class="nav-item dropdown-item">Hubungi Kami</a>
+                    {{-- <a href="/about/galery" class="nav-item dropdown-item">Galeri</a> --}}
                 </div>
             </div>
             {{-- ABOUT US NAV END --}}
@@ -110,7 +111,7 @@
                         @if (Auth::User()->profile == null || Auth::User()->profile->profilepicture == null)
                             <img class="rounded-circle" src="https://source.unsplash.com/20x20?bee" alt="" style="width: 20px; height: 20px;">
                         @else
-                            <img class="rounded-circle" src="{{asset('Images/uploads/profiles')}}/{{Auth::User()->profile->profilepicture}}" alt="" style="width: 20px; height: 20px;">
+                            <img class="rounded-circle" src="/{{Auth::User()->profile->profilepicture}}" alt="" style="width: 20px; height: 20px;">
                         @endif
                         {{-- <img class="rounded-circle" src="{{ asset('Images/Icons/guesticon.png') }}" alt="" style="width: 20px; height: 20px;"> --}}
                     </span>{{ Auth::user()->name }}</a>

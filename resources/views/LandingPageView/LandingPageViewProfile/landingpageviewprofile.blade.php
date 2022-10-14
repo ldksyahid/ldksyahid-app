@@ -10,7 +10,7 @@
                         @if (Auth::User()->profile->profilepicture == null)
                             <img class="position-sticky img-fluid" src="https://source.unsplash.com/500x700?bee" alt="" style="object-fit: cover;" width= "500px" height= "700px"/>
                         @else
-                            <img class="position-sticky img-fluid" src="Images/uploads/profiles/{{Auth::User()->profile->profilepicture}}" alt="" style="object-fit: cover"  width= "500px" height= "700px"/>
+                            <img class="position-sticky img-fluid" src="{{Auth::User()->profile->profilepicture}}" alt="" style="object-fit: cover"  width= "500px" height= "700px"/>
                         @endif
                     <div class="position-absolute top-0 start-0 bg-white pe-3 pb-3" style="width: 250px; height: 150px">
                         <div class="d-flex flex-column justify-content-center text-center bg-primary h-100 p-3">

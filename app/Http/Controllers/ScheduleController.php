@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Schedule;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 class ScheduleController extends Controller
 {
@@ -44,17 +45,16 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        $gambar = $request->picture;
-        $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
+        $filename = time().$request->file('picture')->getClientOriginalName();
+        $path = $request->file('picture')->storeAs('Images/uploads/schedule',$filename);
 
         $postschedule = Schedule::create([
             "title" => $request["title"],
             "month" => $request["month"],
             "year" => $request["year"],
-            'picture' => $new_gambar,
+            'picture' => $path,
         ]);
 
-        $gambar->move('Images/uploads/schedule/',$new_gambar);
         Alert::success('Success', 'Schedule has been uploaded !');
         return redirect('/admin/schedule');
     }
@@ -91,18 +91,27 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $gambar = $request->picture;
-        $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
+        if ($request->file('picture')) {
+            $filename = time().$request->file('picture')->getClientOriginalName();
+            $path = $request->file('picture')->storeAs('Images/uploads/schedule',$filename);
+
+            // hapus file
+            $gambar = Schedule::where('id',$id)->first();
+            File::delete($gambar->picture);
+
+            // upload file
+            $update = Schedule::where("id", $id)-> update([
+                'picture' => $path,
+            ]);
+        }
 
         $updateschedule = Schedule::where("id", $id)-> update([
             "title" => $request["title"],
             "month" => $request["month"],
             "year" => $request["year"],
-            'picture' => $new_gambar,
         ]);
 
         toast('Schedule has been edited !', 'success')->autoClose(1500)->width('400px');
-        $gambar->move('Images/uploads/schedule/',$new_gambar);
         return redirect('/admin/schedule');
     }
 
@@ -114,7 +123,12 @@ class ScheduleController extends Controller
      */
     public function destroy($id)
     {
-        $data = Schedule::findOrFail($id);
-        $data->delete();
+         // hapus file
+         $gambar = Schedule::where('id',$id)->first();
+         File::delete($gambar->picture);
+
+         // hapus data
+         Schedule::where('id',$id)->delete();
+         return redirect()->back();
     }
 }

@@ -8,6 +8,7 @@ use App\Models\User;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\File;
 
 
 class UserController extends Controller
@@ -126,7 +127,15 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $data = User::findOrFail($id);
-        $data->delete();
+
+        // hapus file
+        $gambar = User::where('id',$id)->first();
+        File::delete($gambar->profile->profilepicture);
+
+        // hapus data
+        User::where('id',$id)->delete();
+        return redirect()->back();
+        // $data = User::findOrFail($id);
+        // $data->delete();
     }
 }

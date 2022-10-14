@@ -7,10 +7,13 @@
         <div class="row g-5">
             <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-5 border-primary ps-4 mb-5">
-                    <h6 class="text-body mb-2">Lorem, ipsum dolor.</h6>
-                    <h1 class="display-6 mb-0">Update Profil Kamu disini yaaa</h1>
+                    <h6 class="text-body mb-2">Update</h6>
+                    <h1 class="display-6 mb-0">Update Profil Kamu Disini</h1>
                 </div>
-                <p class="mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem accusantium obcaecati temporibus, numquam sit officiis doloremque quos ipsam iure laboriosam commodi quibusdam quam, vitae voluptatibus.</p>
+                <p class="mb-0">
+                    "Dan siapakah yang lebih baik perkataannya daripada orang yang menyeru kepada Allah dan mengerjakan kebajikan dan berkata, "Sungguh, aku termasuk orang-orang muslim (yang berserah diri)?""
+                    &#9679; (QS. Fussilat 41: Ayat 33)
+                </p>
             </div>
             <div class="col-lg-7 col-md-6 wow fadeInRight" data-wow-delay="0.5s">
                 <form role="form" action='/profile/{{ Auth::user()->profile->id }}/update' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
@@ -103,14 +106,8 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="">
-                                <input type="file" class="form-control bg-light border-0" id="inputprofilepicture" name="profilepicture" placeholder="Gurdian Name"/>
+                                <input type="file" class="form-control bg-light border-0" id="inputprofilepicture" name="profilepicture" placeholder="Gurdian Name" accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG"/>
                                 <label for="inputprofilepicture">Pilih Foto Profil Kamu yaaaa</label>
-                                {{-- <div class="invalid-feedback">
-                                    Jangan lupa untuk upload foto profil yaaaa!
-                                </div>
-                                <div class="valid-feedback">
-                                    Foto Profil nya kece!
-                                </div> --}}
                             </div>
                         </div>
                         <div class="col-6">

@@ -7,7 +7,7 @@
         <h1 class="display-4 text-white animated slideInDown mb-4 text-uppercase">Hubungi Kami</h1>
         <nav aria-label="breadcrumb animated slideInDown">
             <ol class="breadcrumb justify-content-center mb-0">
-                <p class="text-white">asdwadaw</p>
+                <p class="text-white">Mari Mengenal lebih dalam UKM LDK Syahid</p>
             </ol>
         </nav>
     </div>
@@ -22,7 +22,7 @@
                 <div class="row g-0">
                     <div class="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative">
-                            <img class="img-fluid w-100" src="{{ asset('LandingPageSource/img/fact-1.jpg') }}" alt="" />
+                            <img class="img-fluid w-100" src="{{ asset('LandingPageSource/img/01hub.jpg') }}" alt="" />
                             <div class="facts-overlay">
                                 <h1 class="display-1">01</h1>
                                 <h4 class="text-white mb-3">Alamat Lengkap</h4>
@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative">
-                            <img class="img-fluid w-100" src="{{ asset('LandingPageSource/img/fact-2.jpg') }}" alt="" />
+                            <img class="img-fluid w-100" src="{{ asset('LandingPageSource/img/02hub.jpg') }}" alt="" />
                             <div class="facts-overlay text-center">
                                 <h1 class="display-1">02</h1>
                                 <h4 class="text-white mb-3">Kontak</h4>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative">
-                            <img class="img-fluid w-100" src="{{ asset('LandingPageSource/img/fact-3.jpg') }}" alt="" />
+                            <img class="img-fluid w-100" src="{{ asset('LandingPageSource/img/03hub.jpg') }}" alt="" />
                             <div class="facts-overlay text-center">
                                 <h1 class="display-1">03</h1>
                                 <h4 class="text-white mb-3">Alamat Email</h4>
@@ -58,7 +58,7 @@
                     </div>
                     <div class="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative">
-                            <img class="img-fluid w-100" src="{{ asset('LandingPageSource/img/fact-4.jpg') }}" alt="" />
+                            <img class="img-fluid w-100" src="{{ asset('LandingPageSource/img/04hub.jpg') }}" alt="" />
                             <div class="facts-overlay text-end">
                                 <h1 class="display-1">04</h1>
                                 <h4 class="text-white mb-3">Sosial Media</h4>
@@ -82,7 +82,7 @@
                     <h6 class="text-body text-uppercase mb-2">Hubungi Kami</h6>
                     <h1 class="display-6 mb-0">Jika Kamu Memiliki Pertanyaan, Silahkan Hubungi Kami</h1>
                 </div>
-                <p class="mb-4">The contact form is currently inactive. Get a functional andworking contact form with Ajax & PHP in a few minutes. Just copyand paste the files, add a little code and you're done.<a href="https://htmlcodex.com/contact-form">Download Now</a>.</p>
+                <p class="mb-4" style="text-align: justify">"Sesungguhnya malu dan iman selalu berbarengan apabila salah satu diantaranya diangkat ( di hilangkan ) maka yang lainnya pun akan diangkat pula" &#9679; (HR. imam hakim)</p>
                 <form role="form" action='/about/contact/message/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
                 @method('POST')

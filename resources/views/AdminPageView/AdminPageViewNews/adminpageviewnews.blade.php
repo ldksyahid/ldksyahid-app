@@ -34,7 +34,7 @@
                                 <td>{{ substr($postnews->title, 0, 10) }}</td>
                                 <td>{{ $postnews->reporter }}</td>
                                 <td align='center'>{{ $postnews->editor }}</td>
-                                <td align='center'><img style="width: 100px;" src="{{asset('Images/uploads/news')}}/{{$postnews->picture}}" alt="{{ $postnews->title }}" class="card-img-top"/></td>
+                                <td align='center'><img style="width: 100px;" src="{{ asset($postnews->picture) }}" alt="{{ $postnews->title }}" class="card-img-top"/></td>
                                 <td align='center'>{{ substr($postnews->descpicture, 0, 10) }}</td>
                                 <td align='center'>{!!  substr(strip_tags($postnews->body), 0, 10) !!}</td>
                                 <td align="center">

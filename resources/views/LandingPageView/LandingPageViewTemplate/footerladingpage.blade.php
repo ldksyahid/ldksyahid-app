@@ -34,9 +34,11 @@
             </div>
             <div class="col-lg-3 col-md-6">
                 <h4 class="text-light mb-4">Akses Cepat</h4>
-                <a class="btn btn-link" href="/event">Kegiatan</a>
                 <a class="btn btn-link" href="/about/contact">Hubungi Kami</a>
                 <a class="btn btn-link" href="/article">Artikel</a>
+                <a class="btn btn-link" href="/news">Berita</a>
+                <a class="btn btn-link" href="/event">Kegiatan</a>
+                <a class="btn btn-link" href="/schedule">Jadwal</a>
                 <a class="btn btn-link" href="/layanan/hitungproker">Hitung Proker (Kestari)</a>
             </div>
             <div class="col-lg-3 col-md-6">

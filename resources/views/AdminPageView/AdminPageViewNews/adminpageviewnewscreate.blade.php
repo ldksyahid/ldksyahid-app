@@ -62,7 +62,7 @@
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="picture" class="form-label">Picture (1366 x 768 Pixel)</label>
-                        <input class="form-control" type="file" id="picture" name = 'picture' required>
+                        <input class="form-control" type="file" id="picture" name = 'picture' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" required>
                         <div class="invalid-feedback">
                             Please insert a Picture News here.
                         </div>

@@ -12,7 +12,7 @@ data-wow-delay="0.1s"
   </h1>
   <nav aria-label="breadcrumb animated slideInDown">
     <ol class="breadcrumb justify-content-center mb-0">
-      <p class="text-white">ini di isi konten</p>
+      <p class="text-white">Dapatkan Berita terbaru bersama LDK Syahid</p>
     </ol>
   </nav>
 </div>

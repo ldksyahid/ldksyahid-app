@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Jumbotron;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\File;
 
 
 class JumbotronController extends Controller
@@ -39,20 +40,18 @@ class JumbotronController extends Controller
      */
     public function store(Request $request)
     {
-        $gambar = $request->picture;
-        $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
-
+        $filename = time().$request->file('picture')->getClientOriginalName();
+        $path = $request->file('picture')->storeAs('Images/uploads/jumbotrons',$filename);
         $postjumbotron = Jumbotron::create([
             "title" => $request["title"],
             "subtitle" => $request["subtitle"],
             "sentence" => $request["sentence"],
             "btnname" => $request["buttonname"],
             "btnlink" => $request["buttonlink"],
-            'picture' => $new_gambar,
+            'picture' => $path,
             "textalign" => $request["textalign"],
         ]);
 
-        $gambar->move('Images/uploads/jumbotrons/',$new_gambar);
         Alert::success('Success', 'Jumbotron has been uploaded !');
         return redirect('/admin/jumbotron');
     }
@@ -90,8 +89,19 @@ class JumbotronController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $gambar = $request->picture;
-        $new_gambar = time() . ' . ' . $gambar->getClientOriginalName();
+        if ($request->file('picture')) {
+            $filename = time().$request->file('picture')->getClientOriginalName();
+            $path = $request->file('picture')->storeAs('Images/uploads/jumbotrons',$filename);
+
+            // hapus file
+            $gambar = Jumbotron::where('id',$id)->first();
+            File::delete($gambar->picture);
+
+            // upload file
+            $update = Jumbotron::where("id", $id)-> update([
+                'picture' => $path,
+            ]);
+        }
 
         $update = Jumbotron::where("id", $id)-> update([
             "title" => $request["title"],
@@ -99,12 +109,10 @@ class JumbotronController extends Controller
             "sentence" => $request["sentence"],
             "btnname" => $request["buttonname"],
             "btnlink" => $request["buttonlink"],
-            'picture' => $new_gambar,
             "textalign" => $request["textalign"],
         ]);
 
         toast('Jumbotron has been edited !', 'success')->autoClose(1500)->width('400px');
-        $gambar->move('images/uploads/jumbotrons/',$new_gambar);
         return redirect('/admin/jumbotron');
     }
 
@@ -116,11 +124,12 @@ class JumbotronController extends Controller
      */
     public function destroy($id)
     {
-        // Jumbotron::destroy($id);
-        // toast('Jumbotron has been deleted !', 'success')->autoClose(1500)->width('400px');
-        // return redirect('/admin/jumbotron');
-        $data = Jumbotron::findOrFail($id);
-        $data->delete();
-        // return redirect('/admin/jumbotron');
+        // hapus file
+        $gambar = Jumbotron::where('id',$id)->first();
+        File::delete($gambar->picture);
+
+        // hapus data
+        Jumbotron::where('id',$id)->delete();
+        return redirect()->back();
     }
 }

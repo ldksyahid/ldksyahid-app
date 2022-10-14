@@ -4,14 +4,18 @@
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5">
-            <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="col-lg-9 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-5 border-primary ps-4 mb-5">
-                    <h6 class="text-body mb-2">Lorem, ipsum dolor.</h6>
-                    <h1 class="display-6 mb-0">Update Profil Kamu disini yaaa</h1>
-                    <p class="mb-0" style="text-align: justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem accusantium obcaecati temporibus, numquam sit officiis doloremque quos ipsam iure laboriosam commodi quibusdam quam, vitae voluptatibus.</p>
+                    <h6 class="text-body mb-2">Program Perhitungan Proker LDK Syahid</h6>
+                    <h1 class="display-6 mb-0">Mari Kami Bantu untuk Menghitung Nilai Program Kerja Divisimu</h1>
+                    <p class="mb-0 mt-1" style="text-align: justify">
+                        "Dan janganlah kamu mengikuti sesuatu yang tidak kamu ketahui. Karena pendengaran, penglihatan, dan hati nurani, semua itu akan diminta pertanggungjawabannya."
+
+                        &#9679; (QS. Al-Isra' 17: Ayat 36)
+                    </p>
                 </div>
             </div>
-            <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class=" mb-5 text-end">
                     <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="LDK Syahid" width="255px" height="255px">
                 </div>
@@ -241,7 +245,7 @@
             </article>
           </div>
           <div class="text-center fadeInRight wow" data-wow-delay="0.1s">
-            <p>Program Perhitungan ini dibuat oleh Yuda Kurnia NF (2018/Al-Muzammil/Biro Kestari 25)</p>
+            <p>Program Perhitungan ini dibuat oleh Biro Kestari 25</p>
           </div>
     </div>
 </div>

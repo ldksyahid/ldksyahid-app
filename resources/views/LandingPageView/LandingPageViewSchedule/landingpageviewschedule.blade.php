@@ -17,7 +17,7 @@
                 <div class="border-start border-5 border-primary ps-4 mb-3">
                     <h1 class="display-6 mb-0" style="text-align: left">{{ $postschedule->title }}</h1>
                 </div>
-                <img src="{{asset('Images/uploads/schedule')}}/{{$postschedule->picture}}" alt="{{ $postschedule->title }}" class="img-fluid rounded" width="1080px" height="1350px">
+                <img src="{{ asset($postschedule->picture) }}" alt="{{ $postschedule->title }}" class="img-fluid rounded" width="1080px" height="1350px">
             </div>
         </div>
         @empty

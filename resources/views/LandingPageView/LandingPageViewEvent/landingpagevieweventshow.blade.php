@@ -20,15 +20,11 @@
             </div>
             <div class="shadow wow fadeInUp p-5 rounded" data-wow-delay="1.0s" style="background-color: #F8F9FA;">
                 <div class="col-lg-12 col-md-6 text-center">
-                    <img src="{{asset('Images/uploads/eventsposter')}}/{{$postevent->poster}}"alt="" class="img-fluid rounded" width="700px" height="800">
+                    <img src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="img-fluid rounded" width="700px" height="800">
                 </div>
-                {{-- <div class="col-lg-12 col-md-6 wow fadeInLeft text-center" data-wow-delay="0.5s">
-                    <img src="{{ asset('Images/Testing/testevent.jpg') }}"alt="" width="700px" height="800">
-                </div> --}}
                 <div class="mb-1  rounded-bottom p-3">
                     <p data-wow-delay="0.5s">{!! $postevent->broadcast !!}</p>
                 </div>
-                {{-- <p data-wow-delay="0.5s">{!! $postevent->broadcast !!}</p> --}}
                 @if ($postevent->linkembedgform == null)
 
                 @else
