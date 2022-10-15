@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Closure;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Auth;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Profile;
 
 
 class UserController extends Controller
@@ -127,15 +128,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $data = User::findOrFail($id);
+        if ($data->profile == !null) {
+            File::delete($data->profile->profilepicture);
+        }
+        $data->delete();
 
-        // hapus file
-        $gambar = User::where('id',$id)->first();
-        File::delete($gambar->profile->profilepicture);
-
-        // hapus data
-        User::where('id',$id)->delete();
-        return redirect()->back();
-        // $data = User::findOrFail($id);
-        // $data->delete();
     }
 }

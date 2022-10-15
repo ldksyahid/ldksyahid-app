@@ -132,7 +132,7 @@
         });
     }
 
-    // untuk destroy database
+    //untuk destroy database
     function destroyuser(id) {
         var name = $("#inputName1").val();
         var email = $("#inputEmail1").val();
@@ -177,6 +177,58 @@
             }
         })
     }
+
+    // function destroyuser(id) {
+    //     var name = $("#inputName1").val();
+    //     var email = $("#inputEmail1").val();
+    //     var password = $("#inputPassword1").val();
+    //     var is_admin = $('#is_admin').is(':checked');
+
+    //     const Toast = Swal.mixin({
+    //         toast: true,
+    //         position: 'top-end',
+    //         showConfirmButton: false,
+    //         timer: 1500,
+    //         width: '350px',
+    //     })
+
+    //     if (id == 12) {
+    //         Toast.fire({
+    //             icon: 'error',
+    //             title: "Can't delete this user!"
+    //         });
+    //     }else {
+    //         Swal.fire({
+    //         title: 'Are you sure ?',
+    //         text: "You won't be able to revert this !",
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Yes, delete it!'
+    //         }).then((result) => {
+    //             if (result.isConfirmed) {
+    //                 $.ajax({
+    //                 type: "get",
+    //                 url: "{{ url('admin/user/destroy') }}/"+id,
+    //                 data: {
+    //                     name: name,
+    //                     email: email,
+    //                     password: password,
+    //                     is_admin:is_admin },
+    //                     success: function(data) {
+    //                         $(".btn-close").click();
+    //                         read();
+    //                         Toast.fire({
+    //                             icon: 'success',
+    //                             title: 'User has been deleted !'
+    //                         });
+    //                     }
+    //                 });
+    //             }
+    //         })
+    //     }
+    // }
 
     // untuk modal preview
     function preview(id) {

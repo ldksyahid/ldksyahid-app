@@ -17,7 +17,7 @@ class CreateArticleCommentsTable extends Migration
             $table->id();
             $table->string('body');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
             $table->unsignedBigInteger('articles_id');
             $table->foreign('articles_id')->references('id')->on('articles')->onDelete('cascade');
             $table->timestamps();
