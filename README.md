@@ -23,30 +23,30 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 
 ## Installation ldkshayid-app
 
-# 1. Clone git to Local Folder
+### 1. Clone git to Local Folder
 ```
 git clone https://github.com/My-Dios/ldksyahid-app.git
 ```
 
-# 2. Install Composer
+### 2. Install Composer
 ```
 composer install
 ```
 
-# 3. Add .env
+### 3. Add .env
 copy paste ".env.example" and rename to ".env"
 
-# 4. Install Composer
+### 4. Install Composer
 ```
 composer install
 ```
 
-# 5. Generate Key
+### 5. Generate Key
 ```
 php artisan key:generate
 ```
 
-# 6. Configuration .env
+### 6. Configuration .env
 edit .env db_database same with your db created (you must create db from like mysql)
 ```
 DB_HOST=localhost
@@ -55,17 +55,17 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-# 7. Migrate Database
+### 7. Migrate Database
 ```
 php artisan migrate
 ```
 
-# 8. Migrate Seed DB
+### 8. Migrate Seed DB
 ```
 php artisan db:seed --class=CreateUsersSeeder
 ```
 
-# 9. Run Application
+### 9. Run Application
 ```
 php artisan serve
 ```
