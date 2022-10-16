@@ -33,7 +33,7 @@
                 <div class="my-5">
                     <div class="m-2">
                         @if ($comment->user->profile == null || $comment->user->profile->profilepicture == null)
-                            <img class="rounded-circle" src="https://source.unsplash.com/70x70?bee" alt="" style="width: 70px; height: 70px;">
+                            <img class="rounded-circle" src="{{ Avatar::create($comment->user->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}" alt="" style="width: 70px; height: 70px;">
                         @else
                             <img class="rounded-circle" src="/{{$comment->user->profile->profilepicture}}" alt="" style="width: 70px; height: 70px;">
                         @endif
@@ -59,7 +59,7 @@
                 <div class="my-5">
                     <div class="m-2">
                         @if ($comment->user->profile == null || $comment->user->profile->profilepicture == null)
-                            <img class="rounded-circle" src="https://source.unsplash.com/70x70?bee" alt="" style="width: 70px; height: 70px;">
+                            <img class="rounded-circle" src="{{ Avatar::create($comment->user->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}" alt="" style="width: 70px; height: 70px;">
                         @else
                             <img class="rounded-circle" src="/{{$comment->user->profile->profilepicture}}" alt="" style="width: 70px; height: 70px;">
                         @endif

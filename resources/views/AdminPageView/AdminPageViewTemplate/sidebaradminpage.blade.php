@@ -7,7 +7,7 @@
         <div class="d-flex align-items-center ms-4 mb-4">
             <div class="position-relative">
                 @if (Auth::User()->profile == null || Auth::User()->profile->profilepicture == null)
-                    <img class="rounded-circle" src="https://source.unsplash.com/40x40?bee" alt="" style="width: 40px; height: 40px;">
+                    <img class="rounded-circle" src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}" alt="" style="width: 40px; height: 40px;">
                 @else
                     <img class="rounded-circle" src="/{{Auth::User()->profile->profilepicture}}" alt="{{Auth::User()->profile->namapanggilan}}" style="width: 40px; height: 40px;">
                 @endif
@@ -23,7 +23,7 @@
             <a href="/admin/dashboard" class="nav-item nav-link {{($title === "Dashboard") ? "active" : ""}}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
             <a href="/admin/user" class="nav-item nav-link {{($title === "User") ? "active" : ""}}"><i class="fa fa-users me-2"></i>Users</a>
             <div class="nav-item dropdown">
-                <a href="/admin/home" class="nav-link dropdown-toggle {{($title === "Home") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-home me-2"></i>Home</a>
+                <a href="/admin" class="nav-link dropdown-toggle {{($title === "Home") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-home me-2"></i>Home</a>
                 <div class="dropdown-menu bg-transparent border-0">
                     <a href="/admin/jumbotron" class="dropdown-item">Jumbotron</a>
                 </div>

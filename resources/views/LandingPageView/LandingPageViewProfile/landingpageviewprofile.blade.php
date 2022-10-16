@@ -8,7 +8,7 @@
             <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
                 <div class="position-relative overflow-hidden ps-5 pt-5 h-100" style="min-height: 400px">
                         @if (Auth::User()->profile->profilepicture == null)
-                            <img class="position-sticky img-fluid" src="https://source.unsplash.com/500x700?bee" alt="" style="object-fit: cover;" width= "500px" height= "700px"/>
+                            <img class="position-sticky img-fluid" src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setShape('square')->setDimension(500)->setFontSize(250)->toBase64() }}" alt="" style="object-fit: cover;" width= "500px" height= "700px"/>
                         @else
                             <img class="position-sticky img-fluid" src="{{Auth::User()->profile->profilepicture}}" alt="" style="object-fit: cover"  width= "500px" height= "700px"/>
                         @endif

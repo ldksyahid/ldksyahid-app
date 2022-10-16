@@ -13,6 +13,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
+        "laravolt/avatar": "^4.1",
         "mydnic/laravel-subscribers": "^1.8",
         "realrashid/sweet-alert": "^5.1"
     },

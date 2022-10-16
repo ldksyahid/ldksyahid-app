@@ -109,7 +109,7 @@
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle text-capitalize {{($title === "Profilku") ? "active" : ""}}" data-bs-toggle="dropdown"><span class="mr-5">
                         @if (Auth::User()->profile == null || Auth::User()->profile->profilepicture == null)
-                            <img class="rounded-circle" src="https://source.unsplash.com/20x20?bee" alt="" style="width: 20px; height: 20px;">
+                            <img class="rounded-circle" src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}" alt="" style="width: 27px; height: 27px;">
                         @else
                             <img class="rounded-circle" src="/{{Auth::User()->profile->profilepicture}}" alt="" style="width: 20px; height: 20px;">
                         @endif
