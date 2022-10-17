@@ -2,15 +2,18 @@
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5 align-items-end mb-5">
-            <div class="col-lg-9 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="col-lg-7 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-5 border-primary ps-4">
                     <h6 class="text-body text-uppercase mb-2">Artikel</h6>
                     <h1 class="display-6 mb-0">
                         Karya Tulis Anggota UKM LDK Syahid
                     </h1>
+                    <p class="mb-0 mt-1" style="text-align: justify">
+                        Artikel ini merupakan Hasil Karya Tulis murni dari para Anggota UKM LDK Syahid yang memiliki kemampuan dibidang Karya Tulis
+                    </p>
                 </div>
             </div>
-            <div class="col-lg-3 text-lg-end wow fadeInUp" data-wow-delay="0.3s">
+            <div class="col-lg-5 text-lg-end wow fadeInUp" data-wow-delay="0.3s">
                 <a class="btn btn-primary py-3 px-5" href="/article">Artikel Lainnya</a>
             </div>
         </div>

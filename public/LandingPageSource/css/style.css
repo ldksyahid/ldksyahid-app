@@ -250,7 +250,7 @@
 
 /*** Appointment ***/
 .appointment {
-    background: linear-gradient(rgba(0, 0, 0, .65), rgba(0, 0, 0, .65)), url(../img/untuk_contact_us.jpg) center center no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, .65), rgba(0, 0, 0, .65)), url(../../Images/fixImage/untuk_contact_us.jpg) center center no-repeat;
     background-size: cover;
 }
 
