@@ -20,12 +20,12 @@
             </div>
                 @empty
                 <div class="carousel-item active">
-                    <img class="w-100" src="{{ asset('LandingPageSource/img/potobersamapanitiaekspresi2022.jpg') }}" alt="Image" />
+                    <img class="w-100" src="{{ asset('Images/fixImage/bg_bilboard.png') }}" alt="Image" />
                     <div class="carousel-caption">
                         <div class="container">
                             <div class="row justify-content-center">
                                 <div class="col-12 col-lg-10 text-center">
-                                    <h5 class="text-light mb-3 animated slideInDown">Belum Ada Jumbotron</h5>
+                                    <h1 class="text-light mb-3 animated slideInDown">Billboard Belum Tersedia</h2>
                                 </div>
                             </div>
                         </div>
