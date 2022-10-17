@@ -172,6 +172,9 @@
                             icon: 'success',
                             title: 'User has been deleted !'
                         });
+                    },
+                    error: function(xhr, status, error) {
+                        alert(err.Message);
                     }
                 });
             }

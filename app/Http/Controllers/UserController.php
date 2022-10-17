@@ -129,10 +129,15 @@ class UserController extends Controller
     public function destroy($id)
     {
         $data = User::findOrFail($id);
-        if ($data->profile == !null) {
-            File::delete($data->profile->profilepicture);
-        }
-        $data->delete();
 
+        if ($data->id == 2) {
+            Alert::error('Delete Failed', "You Can't Delete Admin Yusuf Wijaya ^_^");
+            return redirect('/admin/user');
+        } else {
+            if ($data->profile == !null) {
+                File::delete($data->profile->profilepicture);
+            }
+            $data->delete();
+        }
     }
 }
