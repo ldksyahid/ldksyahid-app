@@ -49,7 +49,7 @@ class MessageContactController extends Controller
             "message" => $request->message,
         ]);
         Alert::success('Pesan Kamu Berhasil Dikirim', 'Terimakasih, Kami akan Menindaklanjuti Pesan kamu secepatnya!')->autoClose(5000)->width('40%');
-        return redirect('/about/contact');
+        return redirect()->back();
     }
 
     /**

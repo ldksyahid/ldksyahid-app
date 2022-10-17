@@ -29,9 +29,9 @@ use App\Http\Controllers\RequestShortlinkController;
 Auth::routes();
 
 // Route Template
-Route::get('/template', function () {
-    return view('AdminPageTemplate.formadmin');
-});
+// Route::get('/template', function () {
+//     return view('AdminPageTemplate.formadmin');
+// });
 
 // Route Basic
 Route::get('/', [HomeController::class, 'index'])->name('home');
