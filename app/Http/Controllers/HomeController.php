@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Jumbotron;
+use App\Models\Article;
+use App\Models\Testimony;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -26,8 +28,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $postarticle= Article::orderBy('created_at','desc')->limit(3)->get();
         $postjumbotron= Jumbotron::orderBy('created_at','desc')->get();
-        return view('LandingPageView.LandingPageViewHome.landingpageviewhome', compact('postjumbotron'), ['title' => "Beranda"]);
+        $posttestimony = Testimony::getAPITestimony()->orderBy('created_at','desc')->get();
+        return view('LandingPageView.LandingPageViewHome.landingpageviewhome', compact('postjumbotron', 'postarticle', 'posttestimony'), ['title' => "Beranda"]);
     }
 
     public function adminHome()
