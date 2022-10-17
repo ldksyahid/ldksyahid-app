@@ -47,7 +47,7 @@ data-wow-delay="0.1s"
         @empty
         <div class="row g-5 my-1">
             <div class="col-lg-12 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                <h1 class="display-6 mb-0" style="text-align: center">Maaf, Event Belum Tersedia</h1>
+                <h1 class="display-6 mb-0" style="text-align: center">Kegiatan Belum Tersedia</h1>
             </div>
         </div>
         @endforelse
