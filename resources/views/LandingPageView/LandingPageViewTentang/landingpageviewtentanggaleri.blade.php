@@ -46,36 +46,6 @@
                             <img class="img-fluid w-100" src="{{ asset('Images/Testing/galeri2.jpg') }}" alt="" />
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative">
-                            <img class="img-fluid w-100" src="{{ asset('Images/Testing/galeri4.jpg') }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative">
-                            <img class="img-fluid w-100" src="{{ asset('Images/Testing/galeri2.jpg') }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative">
-                            <img class="img-fluid w-100" src="{{ asset('Images/Testing/galeri3.jpg') }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative">
-                            <img class="img-fluid w-100" src="{{ asset('Images/Testing/galeri4.jpg') }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative">
-                            <img class="img-fluid w-100" src="{{ asset('Images/Testing/galeri1.jpg') }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative">
-                            <img class="img-fluid w-100" src="{{ asset('Images/Testing/galeri3.jpg') }}" alt="" />
-                        </div>
-                    </div>
                     <iframe class="wow fadeIn" data-wow-delay="0.1s" width="700" height="600" src="https://www.youtube.com/embed/bnefWnvfIfc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
