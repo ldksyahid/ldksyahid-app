@@ -9,7 +9,7 @@
                         Karya Tulis Anggota UKM LDK Syahid
                     </h1>
                     <p class="mb-0 mt-1" style="text-align: justify">
-                        Artikel ini merupakan Hasil Karya Tulis murni dari para Anggota UKM LDK Syahid yang memiliki kemampuan dibidang Karya Tulis
+                        Artikel ini merupakan Hasil Karya Tulis dari para Anggota UKM LDK Syahid yang memiliki kemampuan dan sederet Prestasi dibidang Karya Tulis
                     </p>
                 </div>
             </div>
