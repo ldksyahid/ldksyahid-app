@@ -5,6 +5,7 @@
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5">
+            <audio src="{{ asset('Audio/RinduTakBersuara_FebyP.mp3') }}" type="audio/mpeg" autoplay loop></audio>
             <div class="col-lg-7 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-5 border-primary ps-4 mb-5">
                     <h6 class="text-body">Struktur Pengurus LDK Syahid 26</h6>
