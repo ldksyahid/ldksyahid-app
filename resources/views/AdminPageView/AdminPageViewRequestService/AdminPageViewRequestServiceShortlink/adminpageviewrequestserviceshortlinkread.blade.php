@@ -24,7 +24,7 @@
             <td align='left'>{{substr($item->note, 0, 5)}}</td>
             <td align='center'>
                 @if ($item->fixCustomLink == null)
-                    <p class="small">Belum Ada</p>
+                    <p class="small">Nothing</p>
                 @else
                     <a href="{{ $item->fixCustomLink }}" target="_blank">{{ substr($item->fixCustomLink, 0, 10) }}</a>
                 @endif

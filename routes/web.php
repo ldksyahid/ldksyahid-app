@@ -16,6 +16,7 @@ use App\Http\Controllers\NewsCommentController;
 use App\Http\Controllers\MessageContactController;
 use App\Http\Controllers\RequestShortlinkController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\StructureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,6 +115,14 @@ Route::get('/admin/about/gallery/{id}/edit', [GalleryController::class, 'edit'])
 Route::put('/admin/about/gallery/{id}/update', [GalleryController::class, 'update'])->name('admin.about.gallery.update')->middleware('is_admin');
 Route::get('/admin/about/gallery/{id}/destroy', [GalleryController::class, 'destroy'])->name('admin.about.gallery.destroy')->middleware('is_admin');
 
+// Route AdminPage Structure
+Route::get('/admin/about/structure', [StructureController::class, 'indexadmin'])->name('admin.about.structure.index')->middleware('is_admin');
+Route::get('/admin/about/structure/create', [StructureController::class, 'create'])->name('admin.about.structure.create')->middleware('is_admin');
+Route::post('/admin/about/structure/store', [StructureController::class, 'store'])->name('admin.about.structure.store')->middleware('is_admin');
+Route::get('/admin/about/structure/{id}/edit', [StructureController::class, 'edit'])->name('admin.about.structure.edit')->middleware('is_admin');
+Route::put('/admin/about/structure/{id}/update', [StructureController::class, 'update'])->name('admin.about.structure.update')->middleware('is_admin');
+Route::get('/admin/about/structure/{id}/destroy', [StructureController::class, 'destroy'])->name('admin.about.structure.destroy')->middleware('is_admin');
+
 // Route LandingPage Layanan => Hitung Proker Kestari
 Route::get('/service/hitungproker', function () {
     return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananHitungProker.KestariHitungPersentaseProgramKerja', ["title" => "Layanan"]);
@@ -135,9 +144,8 @@ Route::get('/about/contact', function () {
     return view('LandingPageView.LandingPageViewTentang.landingpageviewtentanghubungikami', ["title" => "Tentang Kami"]);
 })->name('aboutus');
 
-Route::get('/about/structure', function () {
-    return view('LandingPageView.LandingPageViewTentang.landingpageviewtentangstrukturpengurus', ["title" => "Tentang Kami"]);
-})->name('aboutus.structure');
+//Route LandingPage Structure
+Route::get('/about/structure', [StructureController::class, 'index'])->name('structure.index');
 
 //Route LandingPage Gallery
 Route::get('/about/gallery', [GalleryController::class, 'index'])->name('gallery.index');
