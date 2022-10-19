@@ -12,7 +12,7 @@
             </div>
             <div class="h-100 d-inline-flex align-items-center border-end px-3">
               <small class="far fa-clock me-2"></small>
-              <small>Mon - Fri : 09 AM - 05 PM</small>
+              <small>Senin - Jum'at : 09.00 - 17.00 WIB</small>
             </div>
         </div>
         <div class="col-lg-5 px-5 text-end">
@@ -55,7 +55,7 @@
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle text-capitalize {{($title === "Tentang Kami") ? "active" : ""}}" data-bs-toggle="dropdown">Tentang Kami</a>
                 <div class="dropdown-menu bg-light m-0">
-                    <a href="/about/structure" class="nav-item dropdown-item">Struktur Pengurus LDK Syahid 26</a>
+                    <a href="/about/structure" class="nav-item dropdown-item">Struktur Pengurus</a>
                     <a href="/about/contact" class="nav-item dropdown-item">Hubungi Kami</a>
                     <a href="/about/gallery" class="nav-item dropdown-item">Galeri</a>
                 </div>

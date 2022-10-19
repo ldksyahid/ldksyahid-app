@@ -38,7 +38,7 @@
                             src="{{ asset($posttestimony->picture) }}"
                             alt=""
                         />
-                        <p class="fs-5">
+                        <p class="fs-5 small">
                             {{$posttestimony->testimony}}
                         </p>
                         <div class="bg-primary mb-3" style="width: 60px; height: 5px"></div>
