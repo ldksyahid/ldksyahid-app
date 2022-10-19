@@ -36,6 +36,7 @@
                 <a href="/admin" class="nav-link dropdown-toggle {{($title === "About Us") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-hand-holding-heart me-2"></i>About Us</a>
                 <div class="dropdown-menu bg-transparent border-0">
                     <a href="/admin/about/contact/message" class="dropdown-item">Contact Us Message</a>
+                    <a href="/admin/about/gallery" class="dropdown-item">Gallery</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
