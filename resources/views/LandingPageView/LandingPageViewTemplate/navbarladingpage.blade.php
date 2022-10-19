@@ -57,7 +57,7 @@
                 <div class="dropdown-menu bg-light m-0">
                     <a href="/about/structure" class="nav-item dropdown-item">Struktur Pengurus LDK Syahid 26</a>
                     <a href="/about/contact" class="nav-item dropdown-item">Hubungi Kami</a>
-                    {{-- <a href="/about/galery" class="nav-item dropdown-item">Galeri</a> --}}
+                    <a href="/about/gallery" class="nav-item dropdown-item">Galeri</a>
                 </div>
             </div>
             {{-- ABOUT US NAV END --}}

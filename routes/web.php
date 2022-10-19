@@ -15,6 +15,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsCommentController;
 use App\Http\Controllers\MessageContactController;
 use App\Http\Controllers\RequestShortlinkController;
+use App\Http\Controllers\GalleryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,6 +106,14 @@ Route::put('/profile/{id}/update', [ProfileController::class, 'update'])->name('
 Route::get('/profile/{id}/create', [ProfileController::class, 'create'])->name('profile.create')->middleware('auth');
 Route::post('/profile/{id}/store', [ProfileController::class, 'store'])->name('profile.store')->middleware('auth');
 
+// Route AdminPage Gallery
+Route::get('/admin/about/gallery', [GalleryController::class, 'indexadmin'])->name('admin.about.gallery.index')->middleware('is_admin');
+Route::get('/admin/about/gallery/create', [GalleryController::class, 'create'])->name('admin.about.gallery.create')->middleware('is_admin');
+Route::post('/admin/about/gallery/store', [GalleryController::class, 'store'])->name('admin.about.gallery.store')->middleware('is_admin');
+Route::get('/admin/about/gallery/{id}/edit', [GalleryController::class, 'edit'])->name('admin.about.gallery.edit')->middleware('is_admin');
+Route::put('/admin/about/gallery/{id}/update', [GalleryController::class, 'update'])->name('admin.about.gallery.update')->middleware('is_admin');
+Route::get('/admin/about/gallery/{id}/destroy', [GalleryController::class, 'destroy'])->name('admin.about.gallery.destroy')->middleware('is_admin');
+
 // Route LandingPage Layanan => Hitung Proker Kestari
 Route::get('/service/hitungproker', function () {
     return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananHitungProker.KestariHitungPersentaseProgramKerja', ["title" => "Layanan"]);
@@ -129,9 +138,9 @@ Route::get('/about/contact', function () {
 Route::get('/about/structure', function () {
     return view('LandingPageView.LandingPageViewTentang.landingpageviewtentangstrukturpengurus', ["title" => "Tentang Kami"]);
 })->name('aboutus.structure');
-Route::get('/about/galery', function () {
-    return view('LandingPageView.LandingPageViewTentang.landingpageviewtentanggaleri', ["title" => "Tentang Kami"]);
-})->name('aboutus.galery');
+
+//Route LandingPage Gallery
+Route::get('/about/gallery', [GalleryController::class, 'index'])->name('gallery.index');
 
 // Route Landing Page Contact Us Hubungi Kami di Tentang Kami
 Route::post('/about/contact/message/store', [MessageContactController::class, 'store'])->name('messagecontact');
