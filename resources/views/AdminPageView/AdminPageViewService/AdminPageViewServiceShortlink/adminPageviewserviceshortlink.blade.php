@@ -30,7 +30,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($urls as $key => $item)
+                    @forelse ($urls as $key => $item)
                     <tr>
                         <th scope="row">{{ ++$key }}</th>
                         <td>{{ $item->url_key }}</td>
@@ -66,7 +66,11 @@
                             </div>
                         </div>
                     </div>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan='9', align='center'>No URL Shortener Data</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

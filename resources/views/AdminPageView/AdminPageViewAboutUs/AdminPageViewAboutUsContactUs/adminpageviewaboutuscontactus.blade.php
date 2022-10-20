@@ -20,7 +20,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($data as $key => $item)
+                            @forelse($data as $key => $item)
                             <tr>
                                 <td scope="row" align='center'>{{$key + 1}}</td>
                                 <td>{{substr($item->name, 0, 20)}}</td>
@@ -32,7 +32,11 @@
                                     <button class="btn btn-sm btn-primary" onClick="preview({{ $item->id }})"><i class="fa fa-eye"></i></button>
                                 </td>
                             </tr>
-                        @endforeach
+                            @empty
+                            <tr>
+                                <td colspan='9', align='center'>No Contact Message Data</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
