@@ -27,7 +27,7 @@
     </div>
 </div>
 @empty
-<div class="container-xxl py-5" style="text-align: center">
+<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s" style="text-align: center">
     <audio src="{{ asset('Audio/rabitah.mp3') }}" type="audio/mpeg" autoplay loop></audio>
     <h2>Struktur Pengurus Belum Tersedia</h2>
 </div>
