@@ -36,7 +36,7 @@
                                 <td align='center'>{{ $postevent->dateevent }}</td>
                                 <td align='center'>
                                     @if ($postevent->linkembedgform == null)
-                                        <p class="small">Tidak Ada</p>
+                                        <p class="small">Nothing</p>
                                     @else
                                         <p>{{ substr($postevent->linkembedgform, 0, 10) }}</p>
                                     @endif

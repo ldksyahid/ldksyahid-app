@@ -44,6 +44,7 @@
                 <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Services</a>
                 <div class="dropdown-menu bg-transparent border-0">
                     <a href="/admin/service/shortlink" class="dropdown-item">Shortlink</a>
+                    <a href="/admin/service/callkestari" class="dropdown-item">Call Kestari</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
