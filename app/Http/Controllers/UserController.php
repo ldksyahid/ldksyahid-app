@@ -131,7 +131,7 @@ class UserController extends Controller
         $data = User::findOrFail($id);
 
         if ($data->id == 2) {
-            Alert::error('Delete Failed', "You Can't Delete Admin Yusuf Wijaya ^_^");
+            Alert::error('Delete Failed', "^_^ Sory You Can't Delete Ucup ^_^");
             return redirect('/admin/user');
         } else {
             if ($data->profile == !null) {

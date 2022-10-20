@@ -35,7 +35,7 @@
             </div>
         </div>
         @empty
-        <div class="row g-5 mt-3 text-center">
+        <div class="row g-5 mt-3 text-center wow fadeInUp" data-wow-delay="0.1s">
             <h1>Jadwal Belum Tersedia</h1>
         </div>
         @endforelse
