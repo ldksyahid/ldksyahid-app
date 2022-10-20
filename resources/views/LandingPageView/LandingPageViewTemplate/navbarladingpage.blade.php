@@ -84,6 +84,7 @@
                 <div class="dropdown-menu bg-light m-0">
                     <a href="/service/hitungproker" class="dropdown-item">Hitung Proker (Kestari)</a>
                     <a href="/service/shortlink" class="dropdown-item">Perpendek URL</a>
+                    <a href="/service/callkestari" class="dropdown-item">Call Kestari</a>
                 </div>
             </div>
             {{-- FITURE NAV END --}}

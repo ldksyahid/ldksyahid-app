@@ -17,6 +17,7 @@ use App\Http\Controllers\MessageContactController;
 use App\Http\Controllers\RequestShortlinkController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\StructureController;
+use App\Http\Controllers\CallKestariController;
 
 /*
 |--------------------------------------------------------------------------
@@ -176,7 +177,19 @@ Route::get('/admin/reqservice/shortlink/{id}/addcustomlink/update', [RequestShor
 Route::get('/service/shortlink', [RequestShortlinkController::class, 'create'])->name('service.shortlink.create');
 Route::post('/service/shortlink/store', [RequestShortlinkController::class, 'store'])->name('service.shortlink.strore');
 
-// Route AdminPage Service Shortlink
+
+// Route AdminPage Service Call Kestari
+Route::get('/admin/service/callkestari', [CallKestariController::class, 'indexadmin'])->name('admin.service.callkestari.index')->middleware('is_admin');
+Route::get('/admin/service/callkestari/read', [CallKestariController::class, 'read'])->name('admin.service.callkestari.read')->middleware('is_admin');
+Route::get('/admin/service/callkestari/create', [CallKestariController::class, 'create'])->name('admin.service.callkestari.create')->middleware('is_admin');
+Route::get('/admin/service/callkestari/store', [CallKestariController::class, 'store'])->name('admin.service.callkestari.store')->middleware('is_admin');
+Route::get('/admin/service/callkestari/edit/{id}', [CallKestariController::class, 'edit'])->name('admin.service.callkestari.edit')->middleware('is_admin');
+Route::get('/admin/service/callkestari/update/{id}', [CallKestariController::class, 'update'])->name('admin.service.callkestari.update')->middleware('is_admin');
+Route::get('/admin/service/callkestari/destroy/{id}', [CallKestariController::class, 'destroy'])->name('admin.service.callkestari.destroy')->middleware('is_admin');
+// Route LandingPage Layanan Call Kestari
+Route::get('/service/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
+
+// START Route AdminPage Service Shortlink
 Route::get('/admin/service/shortlink', function () {
     $urls = \AshAllenDesign\ShortURL\Models\ShortURL::latest()->get();
     return view('AdminPageView.AdminPageViewService.AdminPageViewServiceShortlink.adminPageviewserviceshortlink', compact('urls'), ["title" => "Services"]);
@@ -203,3 +216,4 @@ Route::post('{id}', function ($id) {
 })->name('update');
 
 Route::get('/{shortURLKey}', '\AshAllenDesign\ShortURL\Controllers\ShortURLController');
+// END Route AdminPage Service Shortlink
