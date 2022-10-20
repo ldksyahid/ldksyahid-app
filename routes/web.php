@@ -32,9 +32,9 @@ use App\Http\Controllers\CallKestariController;
 Auth::routes();
 
 // Route Template
-// Route::get('/template', function () {
-//     return view('AdminPageTemplate.formadmin');
-// });
+Route::get('/welcome', function () {
+    return view('welcome');
+});
 
 // Route Basic
 Route::get('/', [HomeController::class, 'index'])->name('home');
