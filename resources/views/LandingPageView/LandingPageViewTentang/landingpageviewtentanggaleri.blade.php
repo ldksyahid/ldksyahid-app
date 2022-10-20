@@ -34,62 +34,62 @@
                     </div>
 
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo1) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo2) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo3) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo4) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo5) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo6) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo7) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo8) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo9) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo10) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo11) }}" alt="" />
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1">
+                        <div class="position-relative m-1 img-hover-zoom">
                             <img class="img-fluid w-100" src="{{ asset($postgallery->photo12) }}" alt="" />
                         </div>
                     </div>
