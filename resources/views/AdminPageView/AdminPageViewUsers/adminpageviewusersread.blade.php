@@ -5,6 +5,7 @@
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Password</th>
+            <th scope="col">Email Verified</th>
             <th scope="col">Admin?</th>
             <th scope="col">Action</th>
         </tr>
@@ -16,6 +17,11 @@
             <td>{{substr($item->name, 0, 20)}}</td>
             <td >{{ $item->email }}</td>
             <td>{{substr($item->password, 0, 10)}}...</td>
+            @if ($item->email_verified_at == null)
+                <td align='center'>Not yet</td>
+            @else
+                <td align='center'>{{$item->email_verified_at}}</td>
+            @endif
             <td align='center'>{{ $item->is_admin }}</td>
             <td align="center">
                 @if ($item->email == "ldk@uinjkt.ac.id")

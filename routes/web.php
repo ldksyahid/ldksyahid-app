@@ -29,7 +29,7 @@ use App\Http\Controllers\CallKestariController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 // Route Template
 Route::get('/welcome', function () {
@@ -38,6 +38,7 @@ Route::get('/welcome', function () {
 
 // Route Basic
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('verified');
 Route::get('/admin', [HomeController::class, 'adminHome'])->name('admin')->middleware('is_admin');
 
 

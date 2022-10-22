@@ -58,7 +58,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                    &copy; <a href="#">LDK Syahid UIN Syarif Hidayatullah Jakarta - #KitaAdalahSaudara</a>
+                    &copy; <a href="#">UKM LDK Syahid UIN Syarif Hidayatullah Jakarta - #KitaAdalahSaudara</a>
                     <p>All Right Reserved.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
