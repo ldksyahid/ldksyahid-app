@@ -56,7 +56,7 @@
                                 <label for="password">Password</label>
                             </div>
                         </div>
-                        <div>
+                        <div class="col-6">
                             <div class="form-check">
                                 <input
                                     type="checkbox"
@@ -68,6 +68,9 @@
                                     {{ __('Ingat Akun Saya') }}
                                 </label>
                             </div>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-end"><a href="password/reset"><u>Lupa Password ?</u></a></p>
                         </div>
                         <div class="col-3">
                             <button class="btn btn-primary w-100 py-3" type="submit">

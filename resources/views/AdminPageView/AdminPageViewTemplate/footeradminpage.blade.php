@@ -3,7 +3,7 @@
     <div class="bg-light rounded-top p-4">
         <div class="row">
             <div class="col-12 col-sm-6 text-center text-sm-start">
-                &copy; <a href="#">LDK Syahid UIN Syarif Hidayatullah Jakarta - #KitaAdalahSaudara</a>
+                &copy; <a href="#">UKM LDK Syahid UIN Syarif Hidayatullah Jakarta - #KitaAdalahSaudara</a>
                 <p>All Right Reserved.</p>
             </div>
             <div class="col-12 col-sm-6 text-center text-sm-end">
