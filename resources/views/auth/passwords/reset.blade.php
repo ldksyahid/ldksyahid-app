@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-floating">
-                                <input id="password-confirm" type="password" class="form-control g-light border-0" name="password_confirmation" required autocomplete="new-password">
+                                <input id="password-confirm" type="password" class="form-control bg-light border-0" name="password_confirmation" required autocomplete="new-password">
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -64,6 +64,9 @@
                             <button class="btn btn-primary w-100 py-3" type="submit">
                                 {{ __('Reset Password') }}
                             </button>
+                        </div>
+                        <div class="col-12">
+                            <p><a href="/login"><u>Kembali</u></a></p>
                         </div>
                     </div>
                 </form>

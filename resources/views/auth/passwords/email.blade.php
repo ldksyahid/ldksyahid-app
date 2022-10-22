@@ -50,6 +50,9 @@
                                 <p>Kami Telah Mengirikan Email untuk Mereset Password Kamu, Silahkan Cek Email Kamu Sekarang!</p>
                             </div>
                          @endif
+                         <div class="col-12">
+                            <p><a href="/login"><u>Kembali</u></a></p>
+                        </div>
                     </div>
                 </form>
             </div>
