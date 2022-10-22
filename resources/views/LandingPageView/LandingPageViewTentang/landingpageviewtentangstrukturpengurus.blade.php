@@ -1,7 +1,6 @@
 @extends('LandingPageView.LandingPageViewTemplate.bodylandingpage')
 
 @section('content')
-
 @forelse($poststructure as $key => $data)
 <div class="container-xxl py-5">
     <div class="container">
