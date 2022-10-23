@@ -38,7 +38,6 @@ Route::get('/welcome', function () {
 
 // Route Basic
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('verified');
 Route::get('/admin', [HomeController::class, 'adminHome'])->name('admin')->middleware('is_admin');
 
 
