@@ -65,9 +65,17 @@
         @include('LandingPageView/LandingPageViewTemplate/navbarladingpage')
         {{-- Navbar Landing Page End --}}
 
-        {{-- Body Landing Page Start --}}
-        @yield('content')
-        {{-- Body Landing Page End --}}
+        {{-- Content Landing Page Start --}}
+        @if (Auth::User() == !null)
+            @if (Auth::User()->email_verified_at == null)
+                @include('auth.verify')
+            @else
+                @yield('content')
+            @endif
+        @else
+            @yield('content')
+        @endif
+        {{-- Content Landing Page End --}}
 
         {{-- Footer Landing Page Start --}}
         @include('LandingPageView/LandingPageViewTemplate/footerladingpage')

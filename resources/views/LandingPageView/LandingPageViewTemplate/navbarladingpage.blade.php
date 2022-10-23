@@ -46,6 +46,11 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
+        {{-- <div class="navbar-nav ms-auto py-3 py-lg-0">
+            <div class="col-lg-12 col-md-6 mt-3">
+                <button href="" class="btn btn-primary m-2"><u>Klik Disini Untuk Verifikasi Email Kamu</u></button>
+            </div>
+        </div> --}}
         <div class="navbar-nav ms-auto py-3 py-lg-0">
             {{-- HOME NAV START --}}
             <a href="/" class="nav-item nav-link text-capitalize {{($title === "Beranda") ? "active" : ""}}">Beranda</a>

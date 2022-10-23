@@ -2,6 +2,11 @@
 <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="row g-5">
+            {{-- <div class="col-lg-12 col-md-6">
+                <div class="border-start border-end border-bottom border-top border-5 border-primary m-4 p-4 text-center" >
+                    <h1 class="text-light mb-4"><a href=""><u>Klik Disini Untuk Verifikasi Email Kamu</u></a></h2>
+                </div>
+            </div> --}}
             <div class="col-lg-3 col-md-6">
                 <h2 class="text-white mb-4">
                     <img src='{{ asset('Images/Logos/logoldksyahid.png') }}' width="55" height="55" alt="Logo LDK Syahid"> LDK Syahid
