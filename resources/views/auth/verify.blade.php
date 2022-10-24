@@ -1,6 +1,3 @@
-@php
-$title = "Verifikasi Email"
-@endphp
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5">
