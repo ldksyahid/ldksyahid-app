@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row g-5">
             <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="position-relative overflow-hidden ps-5 pt-5 h-90 " style="min-height: 500px">
+                <div class="position-relative overflow-hidden pt-5 h-90 " style="min-height: 527px">
                     <img class="position-absolute w-90 h-90 img-fluid" src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt=""/>
                 </div>
                 <div class="border-top pt-3" style="margin-top: -10%">
@@ -43,14 +43,6 @@
                         <li>Berkolaborasi dengan berbagai pihak yang menunjang aktivitas dakwah baik secara internal maupun eksternal kampus</li>
                         <li>Sebagai wadah konsolidasi para pemimpin menuju Indonesia Madani</li>
                     </ol>
-                    {{-- <div class="border-top mt-3 pt-3">
-                        <div class="row g-4">
-                            <p style="text-align: justify">
-                                LDK Syahid adalah salah satu Unit Kegiatan Mahasiswa (UKM) yang berada di Universitas Islam Negeri Syarif Hidayatullah Jakarta. <br> LDK Syahid ini bergerak
-                                dalam meningkatkan wawasan keilmuan & amal ibadah, pembinaan karakter & mental, serta pengasahan minat & bakat.
-                            </p>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
         </div>
@@ -59,7 +51,7 @@
 <!-- About End -->
 
       <!-- Facts Start -->
-      <div class="container-fluid my-5 p-0">
+      {{-- <div class="container-fluid my-5 p-0">
         <div class="row g-0">
           <div class="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
             <div class="position-relative">
@@ -126,11 +118,11 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
       <!-- Facts End -->
 
       <!-- Features Start -->
-      <div class="container-xxl py-5">
+      {{-- <div class="container-xxl py-5">
         <div class="container">
           <div class="row g-5">
             <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -219,7 +211,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
       <!-- Features End -->
 
 {{-- Article Landing Page Start --}}
@@ -231,7 +223,7 @@
 {{-- Article Landing Page End --}}
 
       <!-- Team Start -->
-      <div class="container-xxl py-5">
+      {{-- <div class="container-xxl py-5">
         <div class="container">
           <div class="row g-5 align-items-end mb-5">
             <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -278,7 +270,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
       <!-- Team End -->
 
 {{-- Testimony Landing Page Start --}}

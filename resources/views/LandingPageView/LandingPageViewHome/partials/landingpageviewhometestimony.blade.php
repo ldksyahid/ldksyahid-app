@@ -4,28 +4,26 @@
         <div class="row g-5">
             <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-5 border-primary ps-4 mb-5">
-                    <h6 class="text-body text-uppercase mb-2">Testimonial</h6>
-                    <h1 class="display-6 mb-0">What Our Happy Clients Say!</h1>
+                    <h6 class="text-body text-uppercase mb-2">Apa Kata Mereka?</h6>
+                    <h1 class="display-6 mb-0">Kenapa Mereka Memilih UKM LDK Syahid?</h1>
                 </div>
-                <p class="mb-4">
-                    Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat
-                    ipsum et lorem et sit, sed stet lorem sit clita duo justo magna
-                    dolore erat amet
+                <p class="mb-4" style="text-align: justify">
+                    Banyak dari Mahasiswa/i UIN Syarif Hidayatullah Jakarta Bergabung bersama UKM LDK Syahid karena ingin belajar dan berkembang bersama-sama didalam lingkungan Islami
                 </p>
                 <div class="row g-4">
                     <div class="col-sm-6">
                         <div class="d-flex align-items-center mb-2">
                             <i class="fa fa-users fa-2x text-primary flex-shrink-0"></i>
-                            <h1 class="ms-3 mb-0">123+</h1>
+                            <h1 class="ms-3 mb-0">1000+</h1>
                         </div>
-                        <h5 class="mb-0">Happy Clients</h5>
+                        <h5 class="mb-0">Anggota</h5>
                     </div>
                     <div class="col-sm-6">
                         <div class="d-flex align-items-center mb-2">
                             <i class="fa fa-check fa-2x text-primary flex-shrink-0"></i>
-                            <h1 class="ms-3 mb-0">123+</h1>
+                            <h1 class="ms-3 mb-0">1001</h1>
                         </div>
-                        <h5 class="mb-0">Projects Done</h5>
+                        <h5 class="mb-0">Berbagi Manfaat</h5>
                     </div>
                 </div>
             </div>
