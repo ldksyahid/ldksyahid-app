@@ -18,6 +18,7 @@ use App\Http\Controllers\RequestShortlinkController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\StructureController;
 use App\Http\Controllers\CallKestariController;
+use App\Http\Controllers\TestimonyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,14 @@ Route::get('/admin/jumbotron/{id}/edit', [JumbotronController::class, 'edit'])->
 Route::put('/admin/jumbotron/{id}/update', [JumbotronController::class, 'update'])->name('admin.jumbotron.update')->middleware('is_admin');
 Route::get('/admin/jumbotron/{id}/destroy', [JumbotronController::class, 'destroy'])->name('admin.jumbotron.destroy')->middleware('is_admin');
 Route::get('/admin/jumbotron/{id}/preview', [JumbotronController::class, 'show'])->name('admin.jumbotron.preview')->middleware('is_admin');
+
+// Route AdminPage Home Testimony
+Route::get('/admin/testimony', [TestimonyController::class, 'index'])->name('admin.testimony.index')->middleware('is_admin');
+Route::get('/admin/testimony/create', [TestimonyController::class, 'create'])->name('admin.testimony.create')->middleware('is_admin');
+Route::post('/admin/testimony/store', [TestimonyController::class, 'store'])->name('admin.testimony.store')->middleware('is_admin');
+Route::get('/admin/testimony/{id}/edit', [TestimonyController::class, 'edit'])->name('admin.testimony.edit')->middleware('is_admin');
+Route::put('/admin/testimony/{id}/update', [TestimonyController::class, 'update'])->name('admin.testimony.update')->middleware('is_admin');
+Route::get('/admin/testimony/{id}/destroy', [TestimonyController::class, 'destroy'])->name('admin.testimony.destroy')->middleware('is_admin');
 
 // Route AdminPage Event
 Route::get('/admin/event', [EventController::class, 'indexadmin'])->name('admin.event.index')->middleware('is_admin');
