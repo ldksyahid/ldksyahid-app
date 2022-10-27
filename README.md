@@ -50,9 +50,18 @@ php artisan key:generate
 edit .env db_database same with your db created (you must create db from like mysql)
 ```
 DB_HOST=localhost
-DB_DATABASE=ldksyahid_app_test
+DB_DATABASE=your_db_name
 DB_USERNAME=root
 DB_PASSWORD=
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.googlemail.com
+MAIL_PORT=587
+MAIL_USERNAME=your@gmail.com
+MAIL_PASSWORD=yourcodepassword
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=your@gmail.com
+MAIL_FROM_NAME="yourname"
 ```
 
 ### 7. Migrate Database
