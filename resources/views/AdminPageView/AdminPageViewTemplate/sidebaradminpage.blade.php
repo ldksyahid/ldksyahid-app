@@ -26,6 +26,7 @@
                 <a href="/admin" class="nav-link dropdown-toggle {{($title === "Home") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-home me-2"></i>Home</a>
                 <div class="dropdown-menu bg-transparent border-0">
                     <a href="/admin/jumbotron" class="dropdown-item">Jumbotron</a>
+                    <a href="/admin/testimony" class="dropdown-item">Testimony</a>
                 </div>
             </div>
             <a href="/admin/event" class="nav-item nav-link {{($title === "Event") ? "active" : ""}}"><i class="fas fa-calendar-check me-2"></i>Event</a>
