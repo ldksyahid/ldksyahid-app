@@ -47,7 +47,7 @@ php artisan key:generate
 ```
 
 ### 6. Configuration .env
-edit .env db_database same with your db created (you must create db from like mysql)
+edit .env db_database same with your db created (you must create db from like mysql) and email for notification from email
 ```
 DB_HOST=localhost
 DB_DATABASE=your_db_name
