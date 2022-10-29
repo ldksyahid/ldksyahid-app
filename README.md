@@ -65,6 +65,8 @@ MAIL_FROM_NAME="yourname"
 ```
 ### 7. Edit File VerifyEmail.php
 Open File in vendor/laravel/framework/src/Illuminate/Auth/Notifications/VerifyEmail.php 
+
+Add use
 ```
 use Illuminate\Support\HtmlString;
 ```
@@ -83,7 +85,9 @@ Change Code in Function buildMailMessage($url)
 ```
 
 ### 8. Edit File ResetPassword.php
-Open File in vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.php 
+Open File in vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.php
+
+Add Use 
 ```
 use Illuminate\Support\HtmlString;
 ```
