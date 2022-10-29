@@ -2,11 +2,6 @@
 <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="row g-5">
-            {{-- <div class="col-lg-12 col-md-6">
-                <div class="border-start border-end border-bottom border-top border-5 border-primary m-4 p-4 text-center" >
-                    <h1 class="text-light mb-4"><a href=""><u>Klik Disini Untuk Verifikasi Email Kamu</u></a></h2>
-                </div>
-            </div> --}}
             <div class="col-lg-3 col-md-6">
                 <h2 class="text-white mb-4">
                     <img src='{{ asset('Images/Logos/logoldksyahid.png') }}' width="55" height="55" alt="Logo LDK Syahid"> LDK Syahid
@@ -72,7 +67,7 @@
                     <br />Distributed By
                     <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
                     <br>
-                    Developed By <a href="https://instagram.com/suf_212" target="_blank">Choupy</a>
+                    Developed By <a href="https://www.linkedin.com/in/yusuf-wijaya-a92467148/" target="_blank">Choup</a>
                 </div>
             </div>
         </div>
