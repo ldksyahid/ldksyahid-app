@@ -3,8 +3,8 @@
 /public/storage
 /storage/*.key
 vendor/
-!VerifyEmail.php
-!ResetPassword.php
+!vendor/laravel/framework/src/Illuminate/Auth/Notifications/VerifyEmail.php
+!vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.php
 .env
 .env.backup
 .phpunit.result.cache
