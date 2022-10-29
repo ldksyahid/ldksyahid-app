@@ -50,63 +50,125 @@
                             Cool Link!
                         </div>
                     </div>
+                    <div class="mb-0 col-xl-6">
+                        <label for="groupPhoto" class="form-label"><i>Insert Photos gradually (maximum 4 Photos), then update to re-insert.</i></label>
+                    </div>
                     <div class="mb-3 col-xl-4">
                         <label for="groupPhoto" class="form-label">Group Photo</label>
                         <input class="form-control" type="file" id="groupPhoto" name = 'groupPhoto' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
-                        <div class="invalid-feedback">
-                            Please insert a Big Photo.
-                        </div>
-                        <div class="valid-feedback">
-                            Nice Photo!
-                        </div>
+                        @if ($postgallery->groupPhoto == !null)
+                            <p><i>{{$postgallery->groupPhoto}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo1" class="form-label">Photo 1</label>
                         <input class="form-control" type="file" id="photo1" name ='photo1' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo1 == !null)
+                            <p><i>{{$postgallery->photo1}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo2" class="form-label">Photo 2</label>
                         <input class="form-control" type="file" id="photo2" name ='photo2' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo2 == !null)
+                            <p><i>{{$postgallery->photo2}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo3" class="form-label">Photo 3</label>
                         <input class="form-control" type="file" id="photo3" name ='photo3' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo3 == !null)
+                            <p><i>{{$postgallery->photo3}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo4" class="form-label">Photo 4</label>
                         <input class="form-control" type="file" id="photo4" name ='photo4' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo4 == !null)
+                            <p><i>{{$postgallery->photo4}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo5" class="form-label">Photo 5</label>
                         <input class="form-control" type="file" id="photo5" name ='photo5' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo5 == !null)
+                            <p><i>{{$postgallery->photo5}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo6" class="form-label">Photo 6</label>
                         <input class="form-control" type="file" id="photo6" name ='photo6' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo6 == !null)
+                            <p><i>{{$postgallery->photo6}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo7" class="form-label">Photo 7</label>
                         <input class="form-control" type="file" id="photo7" name ='photo7' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo7 == !null)
+                            <p><i>{{$postgallery->photo7}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo8" class="form-label">Photo 8</label>
                         <input class="form-control" type="file" id="photo8" name ='photo8' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo8 == !null)
+                            <p><i>{{$postgallery->photo8}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo9" class="form-label">Photo 9</label>
                         <input class="form-control" type="file" id="photo9" name ='photo9' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo9 == !null)
+                            <p><i>{{$postgallery->photo9}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo10" class="form-label">Photo 10</label>
                         <input class="form-control" type="file" id="photo10" name ='photo10' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo10 == !null)
+                            <p><i>{{$postgallery->photo10}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo11" class="form-label">Photo 11</label>
                         <input class="form-control" type="file" id="photo11" name ='photo11' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo11 == !null)
+                            <p><i>{{$postgallery->photo11}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <div class="mb-3 col-xl-4">
                         <label for="photo12" class="form-label">Photo 12</label>
                         <input class="form-control" type="file" id="photo12" name ='photo12' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
+                        @if ($postgallery->photo12 == !null)
+                            <p><i>{{$postgallery->photo12}}</i></p>
+                        @else
+                            <p><i>Not yet</i></p>
+                        @endif
                     </div>
                     <button type="submit" class="btn btn-primary">Save Change</button>
                     <a type="submit" class="btn btn-primary" href="/admin/about/gallery">Cancel</a>

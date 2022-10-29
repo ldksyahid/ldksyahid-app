@@ -50,6 +50,9 @@
                             Cool Link!
                         </div>
                     </div>
+                    <div class="mb-0 col-xl-6">
+                        <label for="groupPhoto" class="form-label"><i>Insert Photos gradually (maximum 4 Photos), then update to re-insert.</i></label>
+                    </div>
                     <div class="mb-3 col-xl-4">
                         <label for="groupPhoto" class="form-label">Group Photo</label>
                         <input class="form-control" type="file" id="groupPhoto" name = 'groupPhoto' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" required>
