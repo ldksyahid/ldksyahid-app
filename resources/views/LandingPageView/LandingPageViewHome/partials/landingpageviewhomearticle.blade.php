@@ -19,7 +19,7 @@
         </div>
         <div class="row g-4 justify-content-center">
             @forelse($postarticle as $key => $postarticle)
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="col-lg-4 col-md-6 wow fadeInRight" data-wow-delay="0.1s">
                 <div class="service-item bg-light overflow-hidden h-100">
                     <img class="img-fluid" src="{{ asset($postarticle->poster) }}" alt="{{$postarticle->title}}" />
                     <div class="service-text position-relative text-center h-100 p-4">

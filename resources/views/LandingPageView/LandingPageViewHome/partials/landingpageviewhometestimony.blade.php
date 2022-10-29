@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="col-lg-7 wow fadeInRight" data-wow-delay="0.5s">
                 <div class="owl-carousel testimonial-carousel">
                     @forelse($posttestimony as $key => $posttestimony)
                     <div class="testimonial-item">
@@ -45,7 +45,7 @@
                     </div>
                     @empty
                     <div class="testimonial-item">
-                        <h5>Testimoni Belum Tersedia</h5>
+                        <h3>Testimoni Belum Tersedia</h3>
                     </div>
                     @endforelse
                 </div>

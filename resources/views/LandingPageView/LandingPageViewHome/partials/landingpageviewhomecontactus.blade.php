@@ -6,7 +6,7 @@
                 <div class="border-start border-5 border-primary ps-4 mb-3">
                     <h6 class="text-white text-uppercase mb-2">Hubungi Kami</h6>
                     <h1 class="display-6 text-white mb-0">
-                        Jika Kamu Memiliki Pertanyaan, Silahkan Hubungi Kami
+                        Jika Kamu Memiliki Pertanyaan, Kritik dan saran, Silahkan Hubungi Kami
                     </h1>
                 </div>
                 <p class="text-white mb-0" style="text-align: justify">
