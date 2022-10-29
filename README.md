@@ -63,18 +63,52 @@ MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=your@gmail.com
 MAIL_FROM_NAME="yourname"
 ```
+### 7. Edit File VerifyEmail.php
+Open File in vendor/laravel/framework/src/Illuminate/Auth/Notifications/VerifyEmail.php 
+Add Use
+```
+use Illuminate\Support\HtmlString;
+```
+Change Code in Function buildMailMessage($url)
+```
+ return (new MailMessage)
+        ->greeting(Lang::get("Assalammu'alaikum Sobat Syahid 😊"))
+        ->subject(Lang::get('Verifikasi Alamat Email Untuk Daftar Akun Website UKM LDK Syahid'))
+        ->line(Lang::get("Silahkan Klik Tombol di bawah ini untuk Memverifikasi Alamat Email"))
+        ->action(Lang::get('Verifikasi Alamat Email'), $url)
+        ->line(Lang::get("Verifikasi Email ini dilakukan untuk Menghindari Penyalahgunaan Akun"))
+        ->salutation(new HtmlString("<br><br>Wassalammu'alaikum 😊<br><br> Salam Semangat,<br>Admin Website UKM LDK Syahid UIN Jakarta"));
+```
 
-### 7. Migrate Database
+### 8. Edit File ResetPassword.php
+Open File in vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.php 
+Add Use
+```
+use Illuminate\Support\HtmlString;
+```
+Change Code in Function buildMailMessage($url)
+```
+ return (new MailMessage)
+            ->greeting(Lang::get("Assalammu'alaikum Sobat Syahid 😊"))
+            ->subject(Lang::get('Notifikasi Reset Password'))
+            ->line(Lang::get('Kamu Menerima Email ini karena Kami Menerima Permintaan untuk Mereset Password Akun Kamu'))
+            ->action(Lang::get('Reset Password'), $url)
+            ->line(Lang::get('Link Reset Password ini akan berakhir dalam :count Menit', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
+            ->line(Lang::get('Jika Kamu tidak Meminta Reset Password, Maka tidak ada Tindakan lebih lanjut yang perlu Kamu lakukan'))
+            ->salutation(new HtmlString("<br><br>Wassalammu'alaikum 😊<br><br> Salam Semangat,<br>Admin Website UKM LDK Syahid UIN Jakarta"));
+```
+
+### 9. Migrate Database
 ```
 php artisan migrate
 ```
 
-### 8. Migrate Seed DB
+### 10. Migrate Seed DB
 ```
 php artisan db:seed --class=CreateUsersSeeder
 ```
 
-### 9. Run Application
+### 11. Run Application
 ```
 php artisan serve
 ```
