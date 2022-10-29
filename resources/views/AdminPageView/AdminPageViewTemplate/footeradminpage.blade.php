@@ -12,7 +12,7 @@
             </br>
             Distributed By <a class="" href="https://themewagon.com" target="_blank">ThemeWagon</a>
             <br>
-            Developed By <a href="https://instagram.com/suf_212" target="_blank">Choupy</a>
+            Developed By <a href="https://www.linkedin.com/in/yusuf-wijaya-a92467148/" target="_blank">Choup</a>
             </div>
         </div>
     </div>
