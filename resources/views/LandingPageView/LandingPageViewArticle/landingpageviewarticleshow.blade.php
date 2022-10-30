@@ -21,8 +21,8 @@
                 <h6 class="text-body mb-0">Editor  : {{ $postarticle->editor }}</h6>
                 </div>
             </div>
-            {{-- <iframe style="width:1080px;height:1080px" src="http://online.anyflip.com/hcckr/jgjw/"  seamless="seamless" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" ></iframe> --}}
-            <iframe src="{{ $postarticle->embedpdf }}" width="500" height="600" allow="autoplay"></iframe>
+            <iframe style="width:1080px;height:600px" src="{{ $postarticle->embedpdf }}"  seamless="seamless" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" ></iframe>
+            {{-- <iframe src="{{ $postarticle->embedpdf }}" width="500" height="600" allow="autoplay"></iframe> --}}
             <div class="text-start">
                 <a class="small text-uppercase" href="/article"><i class="fa fa-arrow-left ms-3"></i>Artikel Lainnya</a>
             </div>
