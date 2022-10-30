@@ -24,8 +24,7 @@
                 <div class="" style="min-height: 527px">
                     <img class="w-70 h-70 wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt=""/>
                     <p style="text-align: center" class="mt-5 wow fadeInDown" data-wow-delay="0.1s">
-                        <i>LDK Syahid adalah salah satu Unit Kegiatan Mahasiswa (UKM) yang berada di Universitas Islam Negeri Syarif Hidayatullah Jakarta. UKM LDK Syahid ini bergerak
-                        dalam meningkatkan wawasan keilmuan & amal ibadah, pembinaan karakter & mental, serta pengasahan minat & bakat.</i>
+                        <i>LDK Syahid adalah Salah satu Unit Kegiatan Mahasiswa (UKM) bidang keislaman di UIN Jakarta. Kegiatan-kegiatan yang dilakukan oleh LDK Syahid ialah Mentoring Pekanan, Kajian Keislaman, Rihlah, Upgrading Softskill, Menguatkan Ukhuwah Islamiyah, Management SDM, Management Problem Solved, Pembentukan Karakter Kepemimpinan, dan masih banyak lagi. Outputnya adalah Anggota LDK Syahid menjadi generasi emas menyongsong kehidupan masyarakat madani.</i>
                     </p>
                 </div>
             </div>
