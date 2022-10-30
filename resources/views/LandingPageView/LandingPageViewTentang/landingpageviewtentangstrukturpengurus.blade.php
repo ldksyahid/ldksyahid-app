@@ -5,7 +5,7 @@
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5">
-            <audio src="{{ asset('Audio/rabitah.mp3') }}" type="audio/mpeg" autoplay loop></audio>
+            <audio src="{{ asset('Audio/mars_ldksyahid.mp3') }}" type="audio/mpeg" autoplay loop></audio>
             <div class="col-lg-7 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-5 border-primary ps-4 mb-5">
                     <h5 class="text-body">Struktur Pengurus LDK Syahid {{ $data->batch }}</h5>
@@ -27,7 +27,7 @@
 </div>
 @empty
 <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s" style="text-align: center">
-    <audio src="{{ asset('Audio/rabitah.mp3') }}" type="audio/mpeg" autoplay loop></audio>
+    <audio src="{{ asset('Audio/mars_ldksyahid.mp3') }}" type="audio/mpeg" autoplay loop></audio>
     <h2>Struktur Pengurus Belum Tersedia</h2>
 </div>
 @endforelse
