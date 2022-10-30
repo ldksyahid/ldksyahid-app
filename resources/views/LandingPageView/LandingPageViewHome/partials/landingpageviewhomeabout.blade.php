@@ -20,7 +20,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12 text-center mb-0 mt-3">
+            <div class="col-lg-12 text-center mb-5 mt-3">
                 <div class="" style="min-height: 527px">
                     <img class="w-70 h-70 wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt=""/>
                     <p style="text-align: center" class="mt-5 wow fadeInDown" data-wow-delay="0.1s">

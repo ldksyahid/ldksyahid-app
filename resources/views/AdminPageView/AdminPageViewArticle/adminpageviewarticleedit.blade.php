@@ -71,10 +71,10 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="inputLinkEmbedPDF" class="form-label">Link Embed PDF</label>
-                        <input type="text" class="form-control" id="inputLinkEmbedPDF" name='embedpdf' placeholder="Only insert Embedded PDF Link" value="{{old('embedpdf', $postarticle->embedpdf)}}" required>
+                        <label for="inputLinkEmbedPDF" class="form-label">Link Embed</label>
+                        <input type="text" class="form-control" id="inputLinkEmbedPDF" name='embedpdf' placeholder="Only insert Embedded Link" value="{{old('embedpdf', $postarticle->embedpdf)}}" required>
                         <div class="invalid-feedback">
-                            Please fill in the Link Embed PDF.
+                            Please fill in the Link Embed.
                         </div>
                         <div class="valid-feedback">
                             Good Job!
