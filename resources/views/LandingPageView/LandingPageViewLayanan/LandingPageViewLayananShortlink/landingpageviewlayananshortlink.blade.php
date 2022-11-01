@@ -107,7 +107,7 @@
                                     id="customLink"
                                     placeholder="Child Age"
                                     name="customLink"
-                                    value="https://ldksyah.id/"
+                                    value="https://ldksyahid.or.id/"
                                     required
                                 />
                                 <label for="customLink">Setelah dikustomisasi</label>
@@ -117,7 +117,7 @@
                                 <div class="valid-feedback">
                                     Linknya kreatif ya
                                 </div>
-                                <p style="font-size: 10px">*Link harus diawali dengan https://ldksyah.id/ <br> *Jika link tidak tersedia maka akan diganti secara random <br>*Beri tanda pisah “-” jika 1 kata terdapat > 10 huruf </p>
+                                <p style="font-size: 10px">*Link harus diawali dengan https://ldksyahid.or.id/ <br> *Jika link tidak tersedia maka akan diganti secara random <br>*Beri tanda pisah “-” jika 1 kata terdapat > 10 huruf </p>
                             </div>
                         </div>
                         <div class="col-12">
