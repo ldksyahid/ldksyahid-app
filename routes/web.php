@@ -201,6 +201,12 @@ Route::get('/service/callkestari', [CallKestariController::class, 'index'])->nam
 
 // START Route ITSupport
 Route::get('/itsupport', [ITSupportController::class, 'index'])->name('itsupport.index');
+Route::get('/admin/about/itsupport', [ITSupportController::class, 'indexadmin'])->name('admin.about.itsupport.index')->middleware('is_admin');
+Route::get('/admin/about/itsupport/create', [ITSupportController::class, 'create'])->name('admin.about.itsupport.create')->middleware('is_admin');
+Route::post('/admin/about/itsupport/store', [ITSupportController::class, 'store'])->name('admin.about.itsupport.store')->middleware('is_admin');
+Route::get('/admin/about/itsupport/{id}/edit', [ITSupportController::class, 'edit'])->name('admin.about.itsupport.edit')->middleware('is_admin');
+Route::put('/admin/about/itsupport/{id}/update', [ITSupportController::class, 'update'])->name('admin.about.itsupport.update')->middleware('is_admin');
+Route::get('/admin/about/itsupport/{id}/destroy', [ITSupportController::class, 'destroy'])->name('admin.about.itsupport.destroy')->middleware('is_admin');
 // END Route ITSupport
 
 // START Route AdminPage Service Shortlink

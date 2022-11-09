@@ -16,7 +16,19 @@ class ITSupportController extends Controller
      */
     public function index()
     {
-        return view('LandingPageView.LandingPageViewITSupport.landingpageviewitsupport', ["title" => "Tentang Kami"]);
+        $postitsupport = ITSupport::orderBy('created_at','desc')->get();
+        return view('LandingPageView.LandingPageViewITSupport.landingpageviewitsupport', compact('postitsupport'),["title" => "Tentang Kami"]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexadmin()
+    {
+        $postitsupport = ITSupport::orderBy('created_at','desc')->get();
+        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsITSupport.adminpageviewaboutusitsupport', compact('postitsupport'),["title" => "About Us"]);
     }
 
     /**
@@ -26,7 +38,7 @@ class ITSupportController extends Controller
      */
     public function create()
     {
-        //
+        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsITSupport.adminpageviewaboutusitsupportcreate', ["title" => "About Us"]);
     }
 
     /**
@@ -36,17 +48,6 @@ class ITSupportController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ITSupport  $iTSupport
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ITSupport $iTSupport)
     {
         //
     }
