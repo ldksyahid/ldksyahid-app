@@ -22,7 +22,7 @@
                 <div class="row g-0">
                     <div class="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative">
-                            <img class="img-fluid w-100" src="https://source.unsplash.com/500x600?mosque" alt="" />
+                            <img class="img-fluid w-100" src="https://source.unsplash.com/500x600?me" alt="" />
                             <div class="facts-overlay">
                                 <h1 class="display-1">01</h1>
                                 <h4 class="text-white mb-3">Alamat Lengkap</h4>

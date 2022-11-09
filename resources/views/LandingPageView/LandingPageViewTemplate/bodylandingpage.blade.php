@@ -40,8 +40,11 @@
         <link href="{{ asset('LandingPageSource/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet" />
         <link rel="stylesheet" href="{{ asset('KestariHitungProkerbyYuda/css/style.css') }}">
 
+
         <!-- Customized Bootstrap Stylesheet -->
         <link href="{{ asset('LandingPageSource/css/bootstrap.min.css') }}" rel="stylesheet" />
+
+        <link href="{{ asset('css/itsupport.css') }}" rel="stylesheet" />
 
         <!-- Template Stylesheet -->
         <link href="{{ asset('LandingPageSource/css/style.css') }}" rel="stylesheet" />
