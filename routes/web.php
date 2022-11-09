@@ -18,6 +18,7 @@ use App\Http\Controllers\RequestShortlinkController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\StructureController;
 use App\Http\Controllers\CallKestariController;
+use App\Http\Controllers\ITSupportController;
 use App\Http\Controllers\TestimonyController;
 
 /*
@@ -197,6 +198,10 @@ Route::get('/admin/service/callkestari/update/{id}', [CallKestariController::cla
 Route::get('/admin/service/callkestari/destroy/{id}', [CallKestariController::class, 'destroy'])->name('admin.service.callkestari.destroy')->middleware('is_admin');
 // Route LandingPage Layanan Call Kestari
 Route::get('/service/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
+
+// START Route ITSupport
+Route::get('/itsupport', [ITSupportController::class, 'index'])->name('itsupport.index');
+// END Route ITSupport
 
 // START Route AdminPage Service Shortlink
 Route::get('/admin/service/shortlink', function () {

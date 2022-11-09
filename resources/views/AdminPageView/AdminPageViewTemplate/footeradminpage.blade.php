@@ -12,7 +12,7 @@
             <br>
             Distributed By <a class="" href="https://themewagon.com" target="_blank">ThemeWagon</a>
             <br>
-            Developed By <a href="https://www.linkedin.com/in/yusuf-wijaya-a92467148/" target="_blank">Choup</a>
+            Developed By <a href="/itsupport" target="_blank">IT Support UKM LDK Syahid</a>
             <br>
             Managed By <a href="/">UKM LDK Syahid</a>
             </div>
