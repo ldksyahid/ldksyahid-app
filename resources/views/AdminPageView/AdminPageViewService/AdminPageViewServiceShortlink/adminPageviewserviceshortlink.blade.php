@@ -7,6 +7,7 @@
             <h1 class="my-2 fs-4 fw-bold text-center">LDK Syahid URL Shortener</h1>
             <form action="{{ route('url.shorten') }}" method="POST" class="my-2">
                 @csrf
+                @method('POST')
                 <div class="input-group mb-3">
                     <input type="text" name="url" class="form-control" placeholder="URL Shortener">
                     <button class="btn btn-outline-secondary" type="submit">Shorten</button>
