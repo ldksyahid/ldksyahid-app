@@ -15,6 +15,12 @@ class CreateITSupportsTable extends Migration
     {
         Schema::create('i_t_supports', function (Blueprint $table) {
             $table->id();
+            $table->string('photoProfile')->nullable();
+            $table->string('name');
+            $table->string('forkat');
+            $table->string('position');
+            $table->string('linkInstagram');
+            $table->string('linkLinkedin');
             $table->timestamps();
         });
     }
