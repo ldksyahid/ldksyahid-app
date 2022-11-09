@@ -36,17 +36,12 @@ composer install
 ### 3. Add .env
 copy paste ".env.example" and rename to ".env"
 
-### 4. Install Composer
-```
-composer install
-```
-
-### 5. Generate Key
+### 4. Generate Key
 ```
 php artisan key:generate
 ```
 
-### 6. Configuration .env
+### 5. Configuration .env
 edit .env db_database same with your db created (you must create db from like mysql) and email for notification from email
 ```
 DB_HOST=localhost
@@ -63,7 +58,7 @@ MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=your@gmail.com
 MAIL_FROM_NAME="yourname"
 ```
-### 7. Edit File VerifyEmail.php
+### 6. Edit File VerifyEmail.php
 Open File in vendor/laravel/framework/src/Illuminate/Auth/Notifications/VerifyEmail.php 
 
 Add use
@@ -84,7 +79,7 @@ Change Code in Function buildMailMessage($url)
     }
 ```
 
-### 8. Edit File ResetPassword.php
+### 7. Edit File ResetPassword.php
 Open File in vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.php
 
 Add Use 
@@ -106,17 +101,17 @@ Change Code in Function buildMailMessage($url)
     }
 ```
 
-### 9. Migrate Database
+### 8. Migrate Database
 ```
 php artisan migrate
 ```
 
-### 10. Migrate Seed DB
+### 9. Migrate Seed DB
 ```
 php artisan db:seed --class=CreateUsersSeeder
 ```
 
-### 11. Run Application
+### 10. Run Application
 ```
 php artisan serve
 ```
