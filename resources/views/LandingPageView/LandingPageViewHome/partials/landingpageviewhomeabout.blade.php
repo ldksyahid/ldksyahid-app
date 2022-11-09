@@ -31,18 +31,17 @@
             <div class="col-lg-6 wow fadeInLeft mt-0" data-wow-delay="0.5s">
                 <h5>Visi</h5>
                 <p style="text-align: justify">
-                    Menjadikan LDK Syahid sebagai tempat lahirnya insan dakwah yang memiliki high critical thinking, inkubator pelopor Amar Ma'ruf Nahi Munkar, dan mampu
-                    berkolaborasi serta berkontribusi dalam transformasi bangsa menuju Indonesia Madani
+                    “Terciptanya insan-insan dakwah yang memiliki kekokohan spiritualitas, intelektualitas, dan solidaritas dengan etos profesionalisme menuju kampus yang islami dalam rangka mewujudkan khairu ummah.”
                 </p>
             </div>
             <div class="col-lg-6 wow fadeInRight mt-0" data-wow-delay="0.5s">
                 <h5>Misi</h5>
                 <ol style="text-align: justify">
-                    <li>Membangungun kompetisi anggota yang rendah hati, open minded, objektif serta prestatif kontributif</li>
-                    <li>Meningkatkan jiwa critical thinking internal organisasi</li>
-                    <li>Pionir penebar kebermanfaatan baik skala nasional maupun internasional</li>
-                    <li>Berkolaborasi dengan berbagai pihak yang menunjang aktivitas dakwah baik secara internal maupun eksternal kampus</li>
-                    <li>Sebagai wadah konsolidasi para pemimpin menuju Indonesia Madani</li>
+                    <li>Tarbiyah Madal Hayah (Pendidikan Sepanjang Hidup)</li>
+                    <li>Amal Sholeh (Perbuatan yang Baik)</li>
+                    <li>Amar Ma’ruf Nahi Mungkar (Memerintahkan yang Baik dan Mencegah yang Mungkar)</li>
+                    <li>Khidmatul Ummah (Pengabdian Masyarakat)</li>
+                    <li>Wihdatul Ummah dan Ukhuwah Islamiyah (Persatuan Umat dan Ukhuwah Islamiyah)</li>
                 </ol>
             </div>
         </div>
