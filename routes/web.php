@@ -235,5 +235,14 @@ Route::post('{id}', function ($id) {
     return back()->with('success','URL updated successfully. ');
 })->name('update');
 
+Route::get('{id}/destroy', function ($id) {
+    // hapus data
+    $url = \AshAllenDesign\ShortURL\Models\ShortURL::find($id);
+    $url->url_key = request()->url;
+    $url->delete();
+
+    return back()->with('success','URL Delete successfully. ');
+})->name('destroy');
+
 Route::get('/{shortURLKey}', '\AshAllenDesign\ShortURL\Controllers\ShortURLController');
 // END Route AdminPage Service Shortlink
