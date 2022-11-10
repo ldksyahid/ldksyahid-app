@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Schedule Database</h5>
-                <a class='btn btn-primary' href="/admin/schedule/create"><i class="fa fa-plus"></i>Create Schedule</a>
+                <a class='btn btn-primary' href="/admin/schedule/create"><i class="fa fa-plus"></i> Create Schedule</a>
                 {{-- START Data table Article --}}
                 <div class="mt-3">
                     <table class="table table-bordered">

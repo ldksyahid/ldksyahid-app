@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">IT Support Database</h5>
-                <a class='btn btn-primary' href="/admin/about/itsupport/create"><i class="fa fa-plus"></i>Create IT Support</a>
+                <a class='btn btn-primary' href="/admin/about/itsupport/create"><i class="fa fa-plus"></i> Create IT Support</a>
                 {{-- START Data table IT Support --}}
                 <div class="mt-3">
                     <table class="table table-bordered">

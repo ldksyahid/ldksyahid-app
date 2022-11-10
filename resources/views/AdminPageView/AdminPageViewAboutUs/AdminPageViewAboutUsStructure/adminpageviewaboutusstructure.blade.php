@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Structure Database</h5>
-                <a class='btn btn-primary' href="/admin/about/structure/create"><i class="fa fa-plus"></i>Create Structure</a>
+                <a class='btn btn-primary' href="/admin/about/structure/create"><i class="fa fa-plus"></i> Create Structure</a>
                 {{-- START Data table Structure --}}
                 <div class="mt-3">
                     <table class="table table-bordered">

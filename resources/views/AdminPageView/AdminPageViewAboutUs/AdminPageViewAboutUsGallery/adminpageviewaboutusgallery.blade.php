@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Gallery Database</h5>
-                <a class='btn btn-primary' href="/admin/about/gallery/create"><i class="fa fa-plus"></i>Create Gallery</a>
+                <a class='btn btn-primary' href="/admin/about/gallery/create"><i class="fa fa-plus"></i> Create Gallery</a>
                 {{-- START Data table Article --}}
                 <div class="mt-3">
                     <table class="table table-bordered">
