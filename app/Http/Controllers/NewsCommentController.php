@@ -97,6 +97,8 @@ class NewsCommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+         // hapus data
+         NewsComment::where('id',$id)->delete();
+         return redirect()->back();
     }
 }

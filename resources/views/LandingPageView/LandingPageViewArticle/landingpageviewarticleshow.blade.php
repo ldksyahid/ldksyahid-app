@@ -42,21 +42,17 @@
                     <div class="comment-body">
                         <h4>{{$comment->user->name}}</h4>
                         <div class="meta mb-2">{{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('D') }} {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('Y') }} Pada Pukul {{ \Carbon\Carbon::parse( $comment->created_at )->format('H:i') }}</div>
-
                         <p style="text-align: justify">{{$comment->body}}</p>
+                        @if (Auth::User()->is($comment->user))
+                            <form action="/articlecomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_article">
+                                @csrf
+                                @method('DELETE')
+                                <a href="javascript:{}" onclick="document.getElementById('form_delete_comment_article').submit(); return false;">Hapus Komentar Ini</a>
+                            </form>
+                        @endif
                     </div>
                 </div>
                 @else
-                {{-- <div class="my-5">
-                    <div class="m-2">
-                        <img class="rounded-circle" src="https://source.unsplash.com/70x70?bee" alt="" style="width: 70px; height: 70px;">
-                    </div>
-                    <div class="comment-body">
-                        <h3>John Doe</h3>
-                        <div class="meta mb-2">June 27, 2019 at 2:21pm</div>
-                        <p style="text-align: justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                    </div>
-                </div> --}}
                 <div class="my-5">
                     <div class="m-2">
                         @if ($comment->user->profile == null || $comment->user->profile->profilepicture == null)
@@ -68,8 +64,14 @@
                     <div class="comment-body">
                         <h4>{{$comment->user->name}}</h4>
                         <div class="meta mb-2">{{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('D') }} {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('Y') }} Pada Pukul {{ \Carbon\Carbon::parse( $comment->created_at )->format('H:i') }}</div>
-
                         <p style="text-align: justify">{{$comment->body}}</p>
+                        @if (Auth::User()->is($comment->user))
+                            <form action="/articlecomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_article">
+                                @csrf
+                                @method('DELETE')
+                                <a href="javascript:{}" onclick="document.getElementById('form_delete_comment_article').submit(); return false;">Hapus Komentar Ini</a>
+                            </form>
+                        @endif
                     </div>
                 </div>
                 @endif
@@ -102,7 +104,6 @@
 </div>
 <!-- Article End -->
 @endsection
-
 {{-- @section('scripts')
 <script>
     // ===== START CRUD ARTICLE COMMENT  =====

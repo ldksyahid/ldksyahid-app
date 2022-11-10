@@ -166,6 +166,7 @@ Route::post('/about/contact/message/store', [MessageContactController::class, 's
 
 // Route Article Comment
 Route::post('/articlecomment', [ArticleCommentController::class, 'addarticlecomment'])->name('articlecomment')->middleware('auth');
+Route::delete('/articlecomment/{id}/destroy', [ArticleCommentController::class, 'destroy'])->name('articlecomment.destroy')->middleware('auth');
 
 // Route LandingPage News
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
@@ -173,6 +174,7 @@ Route::get('/news/{id}/show', [NewsController::class, 'show'])->name('news.show'
 
 // Route Article Comment
 Route::post('/newscomment', [NewsCommentController::class, 'addnewscomment'])->name('newscomment')->middleware('auth');
+Route::delete('/newscomment/{id}/destroy', [NewsCommentController::class, 'destroy'])->name('newscomment.destroy')->middleware('auth');
 
 
 // Route AdminPage Request Service Shortlink
