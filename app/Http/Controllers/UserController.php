@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Closure;
+use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -10,6 +12,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Profile;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 
 
 class UserController extends Controller
@@ -110,11 +113,20 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         // $passwordcr = Hash::make($request->password);
+        // $data = User::findOrFail($id);
+        // $passwordcr = Hash::make($request->password);
+        // $data['name'] = $request->name;
+        // $data['email'] = $request->email;
+        // $data['password'] = $passwordcr;
+        // $data['is_admin'] = $request->boolean('is_admin');
+        // User::save($data);
+        // toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
 
+        $passwordcr = Hash::make($request->password);
         $data = User::findOrFail($id);
         $data->name = $request->name;
         $data->email = $request->email;
-        $data->password = $request->password;
+        $data->password = $passwordcr;
         $data['is_admin'] = $request->boolean('is_admin');
         $data->save();
         toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
