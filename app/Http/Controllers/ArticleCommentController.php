@@ -97,6 +97,9 @@ class ArticleCommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+         // hapus data
+         ArticleComment::where('id',$id)->delete();
+         return redirect()->back();
     }
 }
