@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Admin LDK Syahid</title>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
