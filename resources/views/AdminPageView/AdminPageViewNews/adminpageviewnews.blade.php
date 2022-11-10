@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">News Database</h5>
-                <a class='btn btn-primary' href="/admin/news/create"><i class="fa fa-plus"></i>Create News</a>
+                <a class='btn btn-primary' href="/admin/news/create"><i class="fa fa-plus"></i> Create News</a>
                 {{-- START Data table News --}}
                 <div class="mt-3">
                     <table class="table table-bordered">

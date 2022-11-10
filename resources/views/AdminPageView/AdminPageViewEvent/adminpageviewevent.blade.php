@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Event Database</h5>
-                <a class='btn btn-primary' href="/admin/event/create"><i class="fa fa-plus"></i>Create Event</a>
+                <a class='btn btn-primary' href="/admin/event/create"><i class="fa fa-plus"></i> Create Event</a>
                 {{-- START Data table Jumbotron --}}
                 <div class="mt-3">
                     <table class="table table-bordered">

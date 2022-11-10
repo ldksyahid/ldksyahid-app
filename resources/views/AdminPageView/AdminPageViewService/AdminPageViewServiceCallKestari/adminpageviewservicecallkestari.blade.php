@@ -7,7 +7,7 @@
         <div class="col-xl-12">
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Call Kestari Database</h5>
-                <button class='btn btn-primary' onClick="create()"><i class="fa fa-plus"></i>Create Call Kestari</button>
+                <button class='btn btn-primary' onClick="create()"><i class="fa fa-plus"></i> Create Call Kestari</button>
                 {{-- START Data table Call Kestari --}}
                 <div id="read" class="mt-3"></div>
                 {{-- END Data table Call Kestari --}}
