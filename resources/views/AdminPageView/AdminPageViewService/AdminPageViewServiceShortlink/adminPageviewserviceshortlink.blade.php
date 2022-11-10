@@ -27,7 +27,7 @@
                         <th scope="col">URL Destination</th>
                         <th scope="col">Short URL</th>
                         <th scope="col">Visitors</th>
-                        <th scope="col">action</th>
+                        <th scope="col" class="text-center">action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,7 +39,8 @@
                         <td><a href="{{ $item->default_short_url }}" target="_blank">{{ $item->default_short_url }}</a></td>
                         <td align="center">{{ $item->visits->count() }}</td>
                         <td>
-                            <button type="button" class="btn btn-primary px-2" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $key }}"><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-sm btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $key }}"><i class="fa fa-edit"></i></button>
+                            <button type="button" onclick="deleteConfirmationShortlink({{$item->id}})" id="delete-shortlink" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                     <!-- Modal -->
@@ -81,4 +82,45 @@
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script>
+// ===== START CRUD ARTICLE =====
+// ini untuk konfirmasi delete
+function deleteConfirmationShortlink(id) {
+            // console.log(id);
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500,
+                width: '350px',
+            })
+
+            Swal.fire({
+                title: 'Are you sure ?',
+                text: "You won't be able to revert this !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                    type: "get",
+                    url: `{{ url('${id}/destroy') }}`,
+                        success: function(data) {
+                            setTimeout(function () { location.reload(1); }, 300);
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Shortlink has been deleted !'
+                            });
+                        }
+                    });
+
+                }
+            })
+        }
+// ===== END CRUD ARTICLE =====
+</script>
 @endsection
