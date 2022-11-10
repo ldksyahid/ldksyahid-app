@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid pt-4 px-4">
-    <div class="row p-2 bg-light rounded align-items-center justify-content-center mx-0">
+    <div class="row p-2 bg-light rounded  justify-content-center mx-0">
         <div class="row">
             <h1 class="my-2 fs-4 fw-bold text-center">LDK Syahid URL Shortener</h1>
             <form action="{{ route('url.shorten') }}" method="POST" class="my-2">
