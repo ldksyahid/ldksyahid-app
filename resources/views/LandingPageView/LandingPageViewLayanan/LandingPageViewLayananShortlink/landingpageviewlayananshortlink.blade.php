@@ -107,7 +107,7 @@
                                     id="customLink"
                                     placeholder="Child Age"
                                     name="customLink"
-                                    value="https://ldksyah.id"
+                                    value="https://ldksyah.id/"
                                     required
                                 />
                                 <label for="customLink">Setelah dikustomisasi</label>
