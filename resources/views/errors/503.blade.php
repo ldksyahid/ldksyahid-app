@@ -29,7 +29,7 @@
         <div class="container">
             <h1 class="page-title">Kami akan segera kembali!</h1>
             <p class="page-description text-justify">
-                Maaf atas ketidaknyamanan ini, tetapi kami sedang melakukan beberapa pemeliharaan saat ini. Jika ada Keperluan, Kamu akan selalu dapat menghubungi kami, jika tidak Keperluan, kami akan segera kembali untuk kamu!
+                Maaf atas ketidaknyamanan ini, tetapi kami sedang melakukan beberapa pemeliharaan saat ini. Jika ada Keperluan, Kamu akan selalu dapat menghubungi kami, jika tidak ada keperluan, kami akan segera kembali untuk kamu!
             </p>
             <p>Tetap Terhubung Bersama Kami</p>
             <nav class="footer-social-links">
