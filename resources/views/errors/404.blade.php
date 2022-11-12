@@ -34,7 +34,8 @@
         />
 
         <!-- Libraries Stylesheet -->
-
+        <link href="{{ asset('e404/css/bd-coming-soon.css') }}" rel="stylesheet" />
+        <link href="{{ asset('e404/css/bd-coming-soon.css.map') }}" rel="stylesheet" />
         <link href="{{ asset('LandingPageSource/lib/animate/animate.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('LandingPageSource/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet" />
         <link rel="stylesheet" href="{{ asset('KestariHitungProkerbyYuda/css/style.css') }}">
@@ -64,17 +65,17 @@
         <!-- 404 Start -->
         <div class="container-xxl wow fadeInUp" data-wow-delay="0.1s" style="margin-top: 10%">
             <div class="container text-center">
-                <div class="row justify-content-center">
-                    <div class="col-lg-6">
-                    <i class="bi bi-exclamation-triangle display-1 text-primary"></i>
-                    <h1 class="display-1">404</h1>
-                    <h1 class="mb-4">Halaman tidak ditemukan</h1>
-                    <p class="mb-4">
-                        Maaf, halaman yang Kamu cari tidak ada disini!
-                    </p>
-                    <a class="btn btn-primary py-3 px-5" href="/">Kembali ke Beranda</a>
-                    </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                <i class="bi bi-exclamation-triangle display-1 text-primary"></i>
+                <h1 class="display-1">404</h1>
+                <h1 class="mb-4">Halaman tidak ditemukan</h1>
+                <p class="mb-4">
+                    Maaf, halaman yang Kamu cari tidak ada disini!
+                </p>
+                <a class="btn btn-primary py-3 px-5" href="/">Kembali ke Beranda</a>
                 </div>
+            </div>
             </div>
         </div>
         <!-- 404 End -->
