@@ -26,7 +26,7 @@
                     </h6>
                     @endif
                     <br><br>
-                    <p style="font-size: 13px;"><i>*Jika kamu belum menerima email dari kami setelah kamu mengirim ulang link verifikasi, silahkan coba esok hari yaa, <br> Karena kami masih memiliki batas pengiriman email verifikasi</i></p>
+                    <p style="font-size: 13px;"><i>*Jika kamu belum menerima email dari kami setelah kamu mengirim ulang link verifikasi atau mengalami Server Error, silahkan coba esok hari yaa, <br> Karena kami masih memiliki batas pengiriman email verifikasi</i></p>
                 </div>
             </div>
         </div>
