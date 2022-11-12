@@ -1,10 +1,13 @@
 @extends('LandingPageView.LandingPageViewTemplate.bodylandingpage')
 
 @section('content')
-
 {{-- Jumbotron Landing Page Start --}}
 @include('LandingPageView.LandingPageViewHome.partials.landingpageviewhomejumbotron')
 {{-- Jumbptron Landing Page End --}}
+
+{{-- Verification Email Page Start --}}
+@include('LandingPageView.LandingPageViewHome.partials.landingpageviewhomeverifyemail')
+{{-- Verification Email Page END --}}
 
 {{-- About Landing Page Start --}}
 @include('LandingPageView.LandingPageViewHome.partials.landingpageviewhomeabout')
