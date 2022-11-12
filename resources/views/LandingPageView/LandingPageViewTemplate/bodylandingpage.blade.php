@@ -70,15 +70,7 @@
         {{-- Navbar Landing Page End --}}
 
         {{-- Content Landing Page Start --}}
-        @if (Auth::User() == !null)
-            @if (Auth::User()->email_verified_at == null)
-                @include('auth.verify')
-            @else
-                @yield('content')
-            @endif
-        @else
-            @yield('content')
-        @endif
+        @yield('content')
         {{-- Content Landing Page End --}}
 
         {{-- Footer Landing Page Start --}}
