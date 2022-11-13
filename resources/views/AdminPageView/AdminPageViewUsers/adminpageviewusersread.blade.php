@@ -1,4 +1,8 @@
-<table class="table table-bordered">
+
+
+
+{{-- BACKUP --}}
+{{-- <table class="table table-bordered">
     <thead>
         <tr align='center'>
             <th scope="col">Id</th>
@@ -37,4 +41,5 @@
         </tr>
     @endforeach
     </tbody>
-</table>
+</table> --}}
+{{-- BACKUP --}}
