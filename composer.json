@@ -15,7 +15,8 @@
         "laravel/ui": "^3.4",
         "laravolt/avatar": "^4.1",
         "mydnic/laravel-subscribers": "^1.8",
-        "realrashid/sweet-alert": "^5.1"
+        "realrashid/sweet-alert": "^5.1",
+        "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
