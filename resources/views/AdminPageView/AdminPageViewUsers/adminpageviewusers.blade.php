@@ -9,24 +9,8 @@
                 <h5 class="mb-4">User Database</h5>
                 <button class='btn btn-primary' onClick="create()"><i class="fa fa-plus"></i> Create User</button>
                 {{-- START Data table User --}}
-                <table class="mt-3 table table-bordered data-table">
-                    <thead>
-                        <tr align='center'>
-                            <th scope="col">Id</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Password</th>
-                            <th scope="col">Email Verified</th>
-                            <th scope="col">Admin?</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-
-
-                {{-- <div id="read" class="mt-3 data-table"></div> --}}
+                <div class="mt-3" id="read">
+                </div>
                 {{-- END Data table User --}}
             </div>
         </div>
@@ -51,23 +35,6 @@
 
 @section('scripts')
 <script type="text/javascript">
-    // ===== START DATATABLE =====
-    $(function () {
-        var table = $('.data-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('admin.user.index') }}",
-            columns: [
-                {data: 'id', name: 'id'},
-                {data: 'name', name: 'name'},
-                {data: 'email', name: 'email'},
-                {data: 'password', name: 'password'},
-                {data: 'is_admin', name: 'is_admin'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
-        });
-    });
-    // ===== END DATATABLE =====
 
     // ===== START CRUD USER =====
     // untuk load database
