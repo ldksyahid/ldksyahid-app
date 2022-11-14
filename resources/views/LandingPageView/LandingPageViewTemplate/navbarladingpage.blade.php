@@ -83,15 +83,19 @@
             <a href="/schedule" class="nav-item nav-link text-capitalize {{($title === "Jadwal") ? "active" : ""}}">Jadwal</a>
             {{-- JADWALIN NAV END --}}
 
+            {{-- LAYANAN NAV START --}}
+            <a href="/service" class="nav-item nav-link text-capitalize {{($title === "Layanan") ? "active" : ""}}">Layanan</a>
+            {{-- LAYANAN NAV END --}}
+
             {{-- FITURE NAV START --}}
-            <div class="nav-item dropdown">
+            {{-- <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle text-capitalize {{($title === "Layanan") ? "active" : ""}}" data-bs-toggle="dropdown">Layanan</a>
                 <div class="dropdown-menu bg-light m-0">
                     <a href="/service/hitungproker" class="dropdown-item">Hitung Proker (Kestari)</a>
                     <a href="/service/shortlink" class="dropdown-item">Perpendek URL</a>
                     <a href="/service/callkestari" class="dropdown-item">Call Kestari</a>
                 </div>
-            </div>
+            </div> --}}
             {{-- FITURE NAV END --}}
 
             {{-- USER NAV START --}}

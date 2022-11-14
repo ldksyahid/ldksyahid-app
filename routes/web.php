@@ -139,6 +139,11 @@ Route::get('/service/hitungproker', function () {
     return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananHitungProker.KestariHitungPersentaseProgramKerja', ["title" => "Layanan"]);
 });
 
+// Route LandingPage LayanaN
+Route::get('/service', function () {
+    return view('LandingPageView.LandingPageViewLayanan.landingpageviewlayanan', ["title" => "Layanan"]);
+});
+
 // Route LandingPage Artikel
 Route::get('/article', [ArticleController::class, 'index'])->name('article.index');
 Route::get('/article/{id}/show', [ArticleController::class, 'show'])->name('article.show');
