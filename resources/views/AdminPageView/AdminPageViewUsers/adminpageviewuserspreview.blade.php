@@ -12,6 +12,15 @@
             <label for="inputEmail" class="form-label">{{ $data->email }}</label>
         </div>
         <div class="mb-3">
+            <label for="inputEmail1" class="form-label"><b>Email Verified</b></label>
+            <br>
+            @if ($data->email_verified_at == null)
+                <label for="inputEmail" class="form-label">Not yet</label>
+            @else
+                <label for="inputEmail" class="form-label">{{ $data->email_verified_at }}</label>
+            @endif
+        </div>
+        <div class="mb-3">
             <label for="inputPassword1" class="form-label"><b>Password</b></label>
             <br>
             <label for="inputPassword1" class="form-label">{{ ($data->password) }}</label>

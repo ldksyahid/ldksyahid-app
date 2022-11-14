@@ -1,44 +1,4 @@
-{{-- <table class=" table table-bordered data-table">
-    <thead>
-        <tr align='center'>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Password</th>
-            <th scope="col">Email Verified</th>
-            <th scope="col">Admin?</th>
-            <th scope="col">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-<script type="text/javascript">
-    // ===== START DATATABLE =====
-    $(function () {
-        var table = $('.data-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('admin.user.index') }}",
-            columns: [
-                {data: 'id', name: 'id'},
-                {data: 'name', name: 'name'},
-                {data: 'email', name: 'email'},
-                // {data: 'test', name: 'test'},
-                {data: 'email_verified_at', name: 'email_verified_at'},
-                {data: 'is_admin', name: 'is_admin'},
-                {data: 'is_admin', name: 'is_admin'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-
-            ]
-        });
-    });
-    // ===== END DATATABLE =====
-</script> --}}
-
-
-{{-- BACKUP --}}
-<table class="table table-bordered">
+<table class=" table table-bordered" id="data_users_reguler">
     <thead>
         <tr align='center'>
             <th scope="col">Id</th>
@@ -55,12 +15,12 @@
         <tr>
             <td scope="row" align='center'>{{ $item->id }}</td>
             <td>{{substr($item->name, 0, 20)}}</td>
-            <td >{{ $item->email }}</td>
-            <td>{{substr($item->password, 0, 10)}}...</td>
+            <td >{{substr($item->email, 0, 20)}}</td>
+            <td>{{substr($item->password, 0, 5)}}...</td>
             @if ($item->email_verified_at == null)
                 <td align='center'>Not yet</td>
             @else
-                <td align='center'>{{$item->email_verified_at}}</td>
+                <td align='center'>Yes</td>
             @endif
             <td align='center'>{{ $item->is_admin }}</td>
             <td align="center">
@@ -78,4 +38,10 @@
     @endforeach
     </tbody>
 </table>
-{{-- BACKUP --}}
+
+<script>
+    $(document).ready(function() {
+    $('#data_users_reguler').DataTable();
+} );
+</script>
+
