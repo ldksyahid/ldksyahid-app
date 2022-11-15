@@ -20,6 +20,7 @@ use App\Http\Controllers\StructureController;
 use App\Http\Controllers\CallKestariController;
 use App\Http\Controllers\ITSupportController;
 use App\Http\Controllers\TestimonyController;
+use App\Http\Controllers\PrintController;
 
 /*
 |--------------------------------------------------------------------------
@@ -205,6 +206,9 @@ Route::get('/admin/service/callkestari/update/{id}', [CallKestariController::cla
 Route::get('/admin/service/callkestari/destroy/{id}', [CallKestariController::class, 'destroy'])->name('admin.service.callkestari.destroy')->middleware('is_admin');
 // Route LandingPage Layanan Call Kestari
 Route::get('/service/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
+
+// Route Print Layout
+Route::get('/print/profile/{id}/view', [PrintController::class, 'indexPrintProfile'])->name('print.profile.view')->middleware('auth');
 
 // START Route ITSupport
 Route::get('/itsupport', [ITSupportController::class, 'index'])->name('itsupport.index');
