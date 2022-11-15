@@ -31,9 +31,6 @@
                                 <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="LDK Syahid" width="100px" height="100px">
                             </div>
                         </div>
-                        {{-- <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="LDK Syahid" width="100px" height="100px">
-                        <h6 class="text-body mb-2 mt-4">{{ Auth::user()->name }}</h6>
-                        <h1 class="display-4 mb-0">{{Auth::User()->profile->namapanggilan}}</h1> --}}
                     </div>
                     <p class="" style="text-align: justify">{{Auth::User()->profile->tentangdiri}}</p>
                     <div class="border-top mt-4 pt-4">
@@ -130,7 +127,8 @@
             </div>
             <div class="col-12 d-flex wow fadeInUp" data-wow-delay="0.5s">
                 <a class="btn btn-primary w-100 py-3 fadeIn mr-1" href="/" type="submit">Kembali</a>
-                <a href="/print/profile/{{ Auth::user()->id }}/view" class="btn btn-primary w-100 py-3 fadeIn">Export PDF</a>
+                <a href="generatePDF/profile" class="btn btn-primary w-100 py-3 fadeIn">Export PDF</a>
+                {{-- <a class="btn btn-primary w-100 py-3 fadeIn" id="download">Export PNG</a> --}}
                 <a class="btn btn-primary w-100 py-3 fadeIn mx-auto" href="/profile/{{ Auth::user()->id }}/edit" type="submit">Ubah Profil</a>
             </div>
         </div>

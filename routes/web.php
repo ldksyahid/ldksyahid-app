@@ -208,7 +208,7 @@ Route::get('/admin/service/callkestari/destroy/{id}', [CallKestariController::cl
 Route::get('/service/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
 
 // Route Print Layout
-Route::get('/print/profile/{id}/view', [PrintController::class, 'indexPrintProfile'])->name('print.profile.view')->middleware('auth');
+Route::get('generatePDF/profile', [PrintController::class, 'generatePDFProfile'])->name('print.profile.view')->middleware('auth');
 
 // START Route ITSupport
 Route::get('/itsupport', [ITSupportController::class, 'index'])->name('itsupport.index');

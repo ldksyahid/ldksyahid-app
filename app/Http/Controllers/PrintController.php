@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Profile;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-
+use Barryvdh\DomPDF\Facade\PDF;
+use Illuminate\Support\Facades\App;
 class PrintController extends Controller
 {
     /**
@@ -15,12 +12,24 @@ class PrintController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function generatePDFProfile()
+    {
+        $pdf = App::make('dompdf.wrapper');
+        $html = view('Print.printprofileview')->render();
+        $pdf->loadHTML($html);
+        return $pdf->download('IniProfilku.pdf');
+        // $data = [
+
+        // ];
+
+        // $pdf = PDF::loadView('Print.printprofileview', ['data' => $data]);
+
+        // return $pdf->download('MyProfile.pdf');
+    }
+
     public function indexPrintProfile()
     {
-
-        $postprofile= Profile::orderBy('created_at','desc')->get();
-        return view('Print\printprofileview', compact('postprofile'), ["title" => "Profilku"]);
-
+        return view('Print.printprofileview', ["title" => "Profilku"]);
     }
 
     /**
