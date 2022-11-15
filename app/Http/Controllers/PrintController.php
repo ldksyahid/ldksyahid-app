@@ -14,10 +14,16 @@ class PrintController extends Controller
      */
     public function generatePDFProfile()
     {
-        $pdf = App::make('dompdf.wrapper');
-        $html = view('Print.printprofileview')->render();
-        $pdf->loadHTML($html);
-        return $pdf->download('IniProfilku.pdf');
+        $data = [
+
+        ];
+        $pdf = PDF::loadView('Print.printprofileview', $data);
+        $fileName = 'MyProfil.pdf';
+        $pdf->save(storage_path('export/'.$fileName));
+        // $pdf = App::make('dompdf.wrapper');
+        // $html = view('Print.printprofileview')->render();
+        // $pdf->loadHTML($html)->setOption(['defaultMediaType' => 'screen']);
+        // return $pdf->download('IniProfilku.pdf');
         // $data = [
 
         // ];
