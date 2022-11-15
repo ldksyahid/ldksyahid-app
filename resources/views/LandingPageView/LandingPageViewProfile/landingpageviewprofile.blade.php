@@ -127,7 +127,7 @@
             </div>
             <div class="col-12 d-flex wow fadeInUp" data-wow-delay="0.5s">
                 <a class="btn btn-primary w-100 py-3 fadeIn mr-1" href="/" type="submit">Kembali</a>
-                <a href="generatePDF/profile" class="btn btn-primary w-100 py-3 fadeIn">Export PDF</a>
+                <a href="generatePDF/profile" target="_blank" class="btn btn-primary w-100 py-3 fadeIn">Export PDF</a>
                 {{-- <a class="btn btn-primary w-100 py-3 fadeIn" id="download">Export PNG</a> --}}
                 <a class="btn btn-primary w-100 py-3 fadeIn mx-auto" href="/profile/{{ Auth::user()->id }}/edit" type="submit">Ubah Profil</a>
             </div>
