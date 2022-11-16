@@ -12,7 +12,7 @@
 
         <!-- Favicon -->
         <link href="{{ asset('Images/Logos/logoldksyahid.png') }}" rel="icon" />
-        {{-- <link rel="shortcut icon" href="{{ asset('KestariHitungProkerbyYuda/images/kestari.ico') }}" type="image/x-icon"> --}}
+
 
 
         <!-- Google Web Fonts -->
@@ -53,7 +53,7 @@
 
     <body>
 
-        {{-- Navbar Landing Page Profile Start --}}
+
         <div>
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-white navbar-light  sticky-top px-4 px-lg-5 py-lg-0">
@@ -68,7 +68,7 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-3 py-lg-0">
 
-                        {{-- USER NAV START --}}
+
                         @guest
                             <div class="nav-item dropdown">
                                 <a
@@ -93,7 +93,6 @@
                                     @else
                                         <img class="rounded-circle" src="/{{Auth::User()->profile->profilepicture}}" alt="" style="width: 20px; height: 20px;">
                                     @endif
-                                    {{-- <img class="rounded-circle" src="{{ asset('Images/Icons/guesticon.png') }}" alt="" style="width: 20px; height: 20px;"> --}}
                                 </span>{{ Auth::user()->email }}</a>
                                 <div class="dropdown-menu bg-light m-0">
                                     @if (Auth::user()->is_admin==1)
@@ -118,15 +117,13 @@
                                 </div>
                             </div>
                         @endguest
-                        {{-- USER NAV END --}}
                     </div>
                 </div>
             </nav>
             <!-- Navbar End -->
         </div>
-        {{-- Navbar Landing Page Profile End --}}
 
-        {{-- Body Landing Page Profile Start --}}
+
         <div class="container-xxl py-1">
             <div class="container">
                 <div class="row g-5">
@@ -224,7 +221,7 @@
                 </div>
             </div>
         </div>
-        {{-- Body Landing Page Profile End --}}
+
 
         <!-- JavaScript Libraries -->
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -237,12 +234,10 @@
 
         <!-- Template Javascript -->
         <script src="{{ asset('LandingPageSource/js/main.js') }}"></script>
-        {{-- Script Landing Page Start --}}
+
         @yield('scripts')
-        {{-- Script Landing Page End --}}
+
         @include('sweetalert::alert')
-        {{-- <script>
-            window.print();
-        </script> --}}
+
     </body>
 </html>
