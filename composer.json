@@ -17,6 +17,7 @@
         "laravolt/avatar": "^4.1",
         "mydnic/laravel-subscribers": "^1.8",
         "realrashid/sweet-alert": "^5.1",
+        "spatie/browsershot": "^3.57",
         "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {

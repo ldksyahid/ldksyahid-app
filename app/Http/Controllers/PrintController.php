@@ -21,12 +21,6 @@ class PrintController extends Controller
         $pdf->loadHTML($html)->setOption(['defaultMediaType' => 'screen']);
         return $pdf->download('IniProfilku.pdf');
 
-        // CARA 2
-        // $data = [];
-        // $pdf = PDF::loadView('Print.printprofileview', ['data' => $data]);
-        // return $pdf->download('MyProfile.pdf');
-
-
     }
 
     public function indexPrintProfile()
