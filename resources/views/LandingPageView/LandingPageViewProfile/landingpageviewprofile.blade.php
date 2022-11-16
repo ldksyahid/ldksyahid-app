@@ -148,7 +148,7 @@
 
     function screenshot(){
         html2canvas(document.getElementById("photo")).then(function(canvas){
-           downloadImage(canvas.toDataURL(),"Profile.png");
+           downloadImage(canvas.toDataURL(),"Profilku.png");
         });
     }
 
