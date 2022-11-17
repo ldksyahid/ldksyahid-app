@@ -107,8 +107,7 @@
                         @else
                             <img class="rounded-circle" src="/{{Auth::User()->profile->profilepicture}}" alt="" style="width: 20px; height: 20px;">
                         @endif
-                        {{-- <img class="rounded-circle" src="{{ asset('Images/Icons/guesticon.png') }}" alt="" style="width: 20px; height: 20px;"> --}}
-                    </span>{{ Auth::user()->name }}</a>
+                    </span>{{ substr(Auth::user()->name,0, 15) }}</a>
                     <div class="dropdown-menu bg-light m-0">
                         @if (Auth::user()->is_admin==1)
                             <a href="/admin/dashboard" class="dropdown-item">Admin Panel</a>

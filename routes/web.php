@@ -118,6 +118,7 @@ Route::get('/profile/{id}/edit', [ProfileController::class, 'edit'])->name('prof
 Route::put('/profile/{id}/update', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');
 Route::get('/profile/{id}/create', [ProfileController::class, 'create'])->name('profile.create')->middleware('auth');
 Route::post('/profile/{id}/store', [ProfileController::class, 'store'])->name('profile.store')->middleware('auth');
+// Route::post('/profile/{id}/destroy/profilepicture', [ProfileController::class, 'destroy'])->name('profile.destroy.profilepicture')->middleware('auth');
 
 // Route AdminPage Gallery
 Route::get('/admin/about/gallery', [GalleryController::class, 'indexadmin'])->name('admin.about.gallery.index')->middleware('is_admin');
