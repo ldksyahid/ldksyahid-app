@@ -2,7 +2,8 @@
 
 @section('content')
 <!-- About Start -->
-<div class="container-xxl py-5" id="photo" >
+<div class="container-xxl py-5">
+
     <div class="container">
         <div class="row g-5">
             <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
@@ -127,8 +128,8 @@
             </div>
             <div class="col-12 d-flex wow fadeInUp" data-wow-delay="0.5s">
                 <a class="btn btn-primary w-100 py-3 fadeIn mr-1" href="/" type="submit">Kembali</a>
-                <a href="generatePDF/profile" target="_blank" class="btn btn-primary w-100 py-3 fadeIn">Export PDF</a>
-                {{-- <a class="btn btn-primary w-100 py-3 fadeIn" id="download">Export PNG</a> --}}
+                {{-- <a href="generatePDF/profile" target="_blank" class="btn btn-primary w-100 py-3 fadeIn">Export PDF</a> --}}
+                <a class="btn btn-primary w-100 py-3 fadeIn" id="download">Export PNG</a>
                 <a class="btn btn-primary w-100 py-3 fadeIn mx-auto" href="/profile/{{ Auth::user()->id }}/edit" type="submit">Ubah Profil</a>
             </div>
         </div>
@@ -142,12 +143,15 @@
 
     jQuery(document).ready(function(){
         jQuery("#download").click(function(){
+            // document.getElementById('navbar').classList.remove("sticky-top");
             screenshot();
         });
     });
 
     function screenshot(){
-        html2canvas(document.getElementById("photo")).then(function(canvas){
+        html2canvas(document.getElementById("photo"),{
+            // height: 1920
+        }).then(function(canvas){
            downloadImage(canvas.toDataURL(),"Profilku.png");
         });
     }

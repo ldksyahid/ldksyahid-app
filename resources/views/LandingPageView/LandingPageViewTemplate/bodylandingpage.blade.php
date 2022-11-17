@@ -65,18 +65,19 @@
             <div class="spinner-grow text-primary" role="status"></div>
         </div>
         <!-- Spinner End -->
+        <div id="photo">
+            {{-- Navbar Landing Page Start --}}
+            @include('LandingPageView/LandingPageViewTemplate/navbarladingpage')
+            {{-- Navbar Landing Page End --}}
 
-        {{-- Navbar Landing Page Start --}}
-        @include('LandingPageView/LandingPageViewTemplate/navbarladingpage')
-        {{-- Navbar Landing Page End --}}
+            {{-- Content Landing Page Start --}}
+            @yield('content')
+            {{-- Content Landing Page End --}}
 
-        {{-- Content Landing Page Start --}}
-        @yield('content')
-        {{-- Content Landing Page End --}}
-
-        {{-- Footer Landing Page Start --}}
-        @include('LandingPageView/LandingPageViewTemplate/footerladingpage')
-        {{-- Footer Landing Page End --}}
+            {{-- Footer Landing Page Start --}}
+            @include('LandingPageView/LandingPageViewTemplate/footerladingpage')
+            {{-- Footer Landing Page End --}}
+        </div>
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top">
