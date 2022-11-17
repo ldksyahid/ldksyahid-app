@@ -167,6 +167,7 @@ class ProfileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // $gambar = Profile::where('id',$id)->first();
+        // File::delete($gambar->profilepicture);
     }
 }

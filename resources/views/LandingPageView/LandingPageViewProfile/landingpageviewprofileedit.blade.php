@@ -107,7 +107,15 @@
                         <div class="col-sm-12">
                             <div class="">
                                 <input type="file" class="form-control bg-light border-0" id="inputprofilepicture" name="profilepicture" placeholder="Gurdian Name" accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG"/>
-                                <label for="inputprofilepicture">Pilih Foto Profil Kamu yaaaa</label>
+                                <label for="inputprofilepicture"><i>{{Auth::User()->profile->profilepicture}}</i></label>
+                                {{-- <br>
+                                @if (Auth::User()->profile->profilepicture == !null )
+                                    <form action=" /profile/{{ Auth::User()->profile->id }}/destroy/profilepicture" method="post" id='form_delete_pp'>
+                                        @csrf
+                                        @method('DELETE')
+                                        <a href="javascript:{}" onclick="document.getElementById('form_delete_pp').submit(); return false;">Hapus Poto Profil</a>
+                                    </form>
+                                @endif --}}
                             </div>
                         </div>
                         <div class="col-6">

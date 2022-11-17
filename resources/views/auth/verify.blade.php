@@ -12,7 +12,7 @@
                         {{ __('Apakah Kamu tidak Menerima Email dari Kami ?') }}
                         <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
                             @csrf
-                            <button class="btn btn-primary w-50 m-1 py-3" type="submit">
+                            <button class="btn btn-primary py-3 px-5" type="submit">
                                 {{ __('klik di sini untuk mengirim ulang Link Verifikasi') }}
                             </button>
                         </form>

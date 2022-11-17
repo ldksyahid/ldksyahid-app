@@ -42,7 +42,9 @@
                     <div class="comment-body">
                         <h4>{{$comment->user->name}}</h4>
                         <div class="meta mb-2">{{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('D') }} {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('Y') }} Pada Pukul {{ \Carbon\Carbon::parse( $comment->created_at )->format('H:i') }}</div>
-                        <p style="text-align: justify">{{$comment->body}}</p>
+                        <div>
+                            <p style="text-align: justify">{!!  $comment->body !!}</p>
+                        </div>
                         @if (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1)
                             <form action="/articlecomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_article">
                                 @csrf
@@ -64,7 +66,9 @@
                     <div class="comment-body">
                         <h4>{{$comment->user->name}}</h4>
                         <div class="meta mb-2">{{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('D') }} {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $comment->created_at )->isoFormat('Y') }} Pada Pukul {{ \Carbon\Carbon::parse( $comment->created_at )->format('H:i') }}</div>
-                        <p style="text-align: justify">{{$comment->body}}</p>
+                        <div>
+                            <p style="text-align: justify">{!!  $comment->body !!}</p>
+                        </div>
                         @if (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1)
                             <form action="/articlecomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_article">
                                 @csrf

@@ -11,11 +11,12 @@ class CreateArticleCommentsTable extends Migration
      *
      * @return void
      */
+
     public function up()
     {
         Schema::create('article_comments', function (Blueprint $table) {
             $table->id();
-            $table->longText('body');
+            $table->string('body');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
             $table->unsignedBigInteger('articles_id');
