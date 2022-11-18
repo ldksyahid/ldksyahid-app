@@ -15,6 +15,13 @@
                         @else
                             <img class="position-sticky img-fluid" src="{{Auth::User()->profile->profilepicture}}" alt="" style="object-fit: cover"  width= "500px" height= "700px"/>
                         @endif
+                        @if (Auth::User()->profile->profilepicture == !null )
+                        <form  action="/profile/{{Auth::User()->id}}/destroy" method="post">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-primary w-100 py-3 fadeIn mx-auto">Hapus Poto Profil</button>
+                        </form>
+                        @endif
                     <div class="position-absolute top-0 start-0 bg-white pe-3 pb-3" style="width: 250px; height: 150px">
                         <div class="d-flex flex-column justify-content-center text-center bg-primary h-100 p-3">
                             <h5 class="text-white">Sipaling {{Auth::User()->profile->sifat}}</h5>

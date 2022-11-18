@@ -107,7 +107,11 @@
                         <div class="col-sm-12">
                             <div class="">
                                 <input type="file" class="form-control bg-light border-0" id="inputprofilepicture" name="profilepicture" placeholder="Gurdian Name" accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG"/>
-                                <label for="inputprofilepicture"><i>{{Auth::User()->profile->profilepicture}}</i></label>
+                                <label for="inputprofilepicture">
+                                    @if (Auth::User()->profile->profilepicture == !null )
+                                        <i>{{Auth::User()->profile->profilepicture}}</i>
+                                    @endif
+                                </label>
                                 {{-- <br>
                                 @if (Auth::User()->profile->profilepicture == !null )
                                     <form action=" /profile/{{ Auth::User()->profile->id }}/destroy/profilepicture" method="post" id='form_delete_pp'>
