@@ -7,6 +7,7 @@ use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -16,13 +17,13 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function indexprofilecheck()
+    public function indexprofilecheck(Request $id)
     {
         $query = Profile::where('user_id', Auth::id())->first();
         if ($query == null) {
             return view('LandingPageView.LandingPageViewProfile.landingpageviewprofilecreate', ["title" => "Profilku"]);
         } else {
-            $postprofile= Profile::orderBy('created_at','desc')->get();
+            $postprofile= Profile::find($id);
             return view('LandingPageView.LandingPageViewProfile.landingpageviewprofile', compact('postprofile'), ["title" => "Profilku"]);
         }
     }
@@ -165,9 +166,19 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+
+    public function destroy(Request $request, $id)
     {
-        // $gambar = Profile::where('id',$id)->first();
-        // File::delete($gambar->profilepicture);
+
+        // hapus file
+        $gambar = Profile::where('user_id',$id)->first();
+        File::delete($gambar->profilepicture);
+
+        // hapus dengan cara edit menjadi null
+        $update = Profile::where("user_id", $id)-> update([
+            'profilepicture' => $request->NULL,
+        ]);
+        return redirect()->back();
+
     }
 }
