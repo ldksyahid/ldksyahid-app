@@ -5,7 +5,7 @@
                 <div class="border-start border-end border-bottom border-top border-5 border-primary mb-5 p-5 text-center">
                     <h6 class="text-body text-uppercase mb-2">Verifikasi Alamat Email</h6>
                     <p class="mb-2">
-                        Kami telah Mengirimkan Link Verifikasi ke Alamat Email <u>{{ Auth::User()->email }}</u>, Silahkan Cek Sekarang!
+                        Kami telah Mengirimkan Link Verifikasi ke Alamat Email <u class="text-lowercase">{{ Auth::User()->email }}</u>, Silahkan Cek Sekarang!
                     </p>
                     <p class="mb-0">
                         <br>
