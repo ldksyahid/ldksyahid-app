@@ -16,7 +16,7 @@
                             <img class="position-sticky img-fluid" src="{{Auth::User()->profile->profilepicture}}" alt="" style="object-fit: cover"  width= "500px" height= "700px"/>
                         @endif
                         @if (Auth::User()->profile->profilepicture == !null )
-                        <form  action="/profile/{{Auth::User()->id}}/destroy" method="post">
+                        <form  action="/profile/{{Auth::User()->id}}/destroy" method="post" id="form-delete-pp">
                             @csrf
                             @method('PUT')
                             <button type="submit" class="btn btn-primary w-100 py-3 fadeIn mx-auto">Hapus Poto Profil</button>
