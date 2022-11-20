@@ -20,7 +20,7 @@
                                 <th scope="col">Writer</th>
                                 <th scope="col">Editor</th>
                                 <th scope="col">Poster</th>
-                                <th scope="col">Embed PDF</th>
+                                <th scope="col">Embed anyflip</th>
                                 <th scope="col" style="width: 10px">Action</th>
                             </tr>
                         </thead>
