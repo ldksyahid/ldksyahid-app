@@ -20,7 +20,7 @@
         <div class="row justify-content-center wow fadeInRight" data-wow-delay="0.1s">
             <div class="col-lg-4 mt-5">
                 <div class="card card-margin">
-                    <img src="{{asset('Images/fixImage/servicetest.png')}}" alt="" class="m-5">
+                    <img src="{{asset('Images/fixImage/serviceimage/callkestari.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Call kestari</h5>
                         <div class="widget-49">
@@ -36,7 +36,7 @@
             </div>
             <div class="col-lg-4 mt-5">
                 <div class="card card-margin">
-                    <img src="{{asset('Images/fixImage/servicetest.png')}}" alt="" class="m-5">
+                    <img src="{{asset('Images/fixImage/serviceimage/kalkulatorkestari.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Kalkulator Kestari</h5>
                         <div class="widget-49">
@@ -53,7 +53,7 @@
             </div>
             <div class="col-lg-4 mt-5">
                 <div class="card card-margin">
-                    <img src="{{asset('Images/fixImage/servicetest.png')}}" alt="" class="m-5">
+                    <img src="{{asset('Images/fixImage/serviceimage/shortlink.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Perpendek URL</h5>
                         <div class="widget-49">

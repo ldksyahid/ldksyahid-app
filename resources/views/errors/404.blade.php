@@ -63,17 +63,16 @@
 
         {{-- Body Landing Page Start --}}
         <!-- 404 Start -->
-        <div class="container-xxl wow fadeInUp" data-wow-delay="0.1s" style="margin-top: 10%">
+        <div class="container-xxl wow fadeInUp" data-wow-delay="0.1s" style="margin-top: 7%">
             <div class="container text-center">
             <div class="row justify-content-center">
-                <div class="col-lg-6">
-                <i class="bi bi-exclamation-triangle display-1 text-primary"></i>
-                <h1 class="display-1">404</h1>
-                <h1 class="mb-4">Halaman tidak ditemukan</h1>
-                <p class="mb-4">
-                    Maaf, halaman yang Kamu cari tidak ada disini!
-                </p>
-                <a class="btn btn-primary py-3 px-5" href="/">Kembali ke Beranda</a>
+                <div class="col-lg-12 mb-5" >
+                    <img src="{{ asset('Images/fixImage/404e.png') }}" alt="" width="300" height="300">
+                    <h1 class="mb-4">Halaman tidak ditemukan</h1>
+                    <p class="mb-4">
+                        Maaf, halaman yang Kamu cari tidak ada disini!
+                    </p>
+                    <a class="btn btn-primary py-3 px-5" href="/">Kembali ke Beranda</a>
                 </div>
             </div>
             </div>
