@@ -18,7 +18,7 @@
             @forelse($postitsupport as $key => $data)
             <div class="col-md-4 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="our-team">
-                    <img src="{{ asset($data->photoProfile) }}" width="300px" height="350">
+                    <img src="{{ asset($data->photoProfile) }}" style="width: 315px; height:435px; object-fit:fill;">
                     <div class="team-content">
                         <h3 class="title">{{ $data->name }}</h3>
                         <h4 class="title2">{{ $data->forkat }}</h4>
