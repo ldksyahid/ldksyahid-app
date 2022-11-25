@@ -16,7 +16,7 @@
                                 <th scope="col" style="width: 10px">No</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Theme</th>
-                                <th scope="col">Date Event</th>
+                                <th scope="col">Publish Date</th>
                                 <th scope="col">Writer</th>
                                 <th scope="col">Editor</th>
                                 <th scope="col">Poster</th>
