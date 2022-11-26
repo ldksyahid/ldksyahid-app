@@ -143,8 +143,11 @@
         opacity: 1;
     }
 }
-
-@media (max-width: 991.98px) {
+/* .hideIfMobile {
+    display: none;
+    visibility: visible;
+} */
+@media (max-width: 771.98px) {
     .hideIfMobile {
         display: none;
         visibility: visible;
