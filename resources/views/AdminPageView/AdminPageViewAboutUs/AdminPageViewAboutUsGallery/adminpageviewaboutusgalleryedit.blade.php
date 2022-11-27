@@ -32,7 +32,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="inputEventDescription" class="form-label">Event Description</label>
-                        <textarea class="form-control" name="eventDescription" id="inputEventDescription" required>{{$postgallery->eventDescription}}"</textarea>
+                        <textarea class="form-control" name="eventDescription" id="inputEventDescription" required>{{$postgallery->eventDescription}}</textarea>
                         <div class="invalid-feedback">
                             Please fill in the Event Description.
                         </div>

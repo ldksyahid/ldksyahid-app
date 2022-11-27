@@ -117,11 +117,20 @@ class UserController extends Controller
         // User::save($data);
         // toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
 
-        $passwordcr = Hash::make($request->password);
+        // $passwordcr = $request->password;
+        // if ($request->password != null) {
+        //     $data->password = Hash::make($request->password);
+        // }
+
+
+        // $passwordcr = Hash::make($request->password);
         $data = User::findOrFail($id);
         $data->name = $request->name;
         $data->email = $request->email;
-        $data->password = $passwordcr;
+        if ($request->password != null) {
+            $data->password = Hash::make($request->password);
+        }
+        // $data->password = $passwordcr;
         $data['is_admin'] = $request->boolean('is_admin');
         $data->save();
         toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
