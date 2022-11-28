@@ -45,7 +45,7 @@
                         <div>
                             <p style="text-align: justify">{!!  $comment->body !!}</p>
                         </div>
-                        @if (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1)
+                        @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1))
                             <form action="/articlecomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_article">
                                 @csrf
                                 @method('DELETE')
@@ -69,7 +69,7 @@
                         <div>
                             <p style="text-align: justify">{!!  $comment->body !!}</p>
                         </div>
-                        @if (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1)
+                        @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1))
                             <form action="/articlecomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_article">
                                 @csrf
                                 @method('DELETE')
