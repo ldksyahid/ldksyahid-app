@@ -31,6 +31,16 @@ class RequestShortlinkController extends Controller
             "title" => "Request Services"
         ]);
     }
+    // public function read()
+    // {
+    //     $data = ReqShortlink::all();
+    //     $urls = \AshAllenDesign\ShortURL\Models\ShortURL::all();
+    //     $all = $data->merge($urls);
+    //     return view('AdminPageView.AdminPageViewRequestService.AdminPageViewRequestServiceShortlink.adminpageviewrequestserviceshortlinkread')->with([
+    //         'all' => $all,
+    //         "title" => "Request Services"
+    //     ]);
+    // }
 
     /**
      * Show the form for creating a new resource.
