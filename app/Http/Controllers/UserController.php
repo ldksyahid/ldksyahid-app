@@ -108,22 +108,6 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         // $passwordcr = Hash::make($request->password);
-        // $data = User::findOrFail($id);
-        // $passwordcr = Hash::make($request->password);
-        // $data['name'] = $request->name;
-        // $data['email'] = $request->email;
-        // $data['password'] = $passwordcr;
-        // $data['is_admin'] = $request->boolean('is_admin');
-        // User::save($data);
-        // toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
-
-        // $passwordcr = $request->password;
-        // if ($request->password != null) {
-        //     $data->password = Hash::make($request->password);
-        // }
-
-
-        // $passwordcr = Hash::make($request->password);
         $data = User::findOrFail($id);
         $data->name = $request->name;
         $data->email = $request->email;
