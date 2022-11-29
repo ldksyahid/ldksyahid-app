@@ -5,11 +5,11 @@
             <div class="carousel-item {{($key + 1 === 1) ? "active" : ""}}">
                 <img class="w-100" src="{{ asset($postjumbotron->picture) }}" alt="Image" />
                 <div class="carousel-caption">
-                    <div class="container hideIfMobile">
+                    <div class="container">
                     {{-- <div class="container" style="object-fit: contain"> --}}
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-10 text-start">
-                                <a href="{{$postjumbotron->btnlink}}" target="_blank" class="btn btn-primary py-3 px-5">{{$postjumbotron->btnname}}</a>
+                                <a href="{{$postjumbotron->btnlink}}" target="_blank" class="btn btn-primary py-lg-3 px-lg-5 buttonphone">{{$postjumbotron->btnname}}</a>
                             </div>
                         </div>
                     </div>
@@ -18,7 +18,7 @@
                 @empty
                 <div class="carousel-item active">
                     <img class="w-100" src="{{ asset('Images/fixImage/bg_bilboard.png') }}" alt="Image" />
-                    <div class="carousel-caption">
+                    <div class="carousel-caption" style="top: 0%;right: 0%;background: rgba(0, 0, 0, .65);">
                         <div class="container">
                             <div class="row justify-content-center">
                                 <div class="col-12 col-lg-10 text-center">

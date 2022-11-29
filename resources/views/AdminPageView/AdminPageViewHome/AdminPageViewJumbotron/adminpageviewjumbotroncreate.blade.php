@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="mb-3 col-xl-4">
-                        <label for="formFile" class="form-label">Picture (1280 x 497 Pixel)</label>
+                        <label for="formFile" class="form-label">Picture (1440 x 560 Pixel)</label>
                         <input class="form-control" type="file" id="picture" name ='picture' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" required>
                         <div class="invalid-feedback">
                             Please insert a picture here.
