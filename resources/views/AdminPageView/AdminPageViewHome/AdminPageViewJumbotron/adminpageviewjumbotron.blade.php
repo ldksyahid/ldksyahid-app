@@ -8,7 +8,54 @@
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Jumbotron Database</h5>
                 <a class='btn btn-primary' href="/admin/jumbotron/create"><i class="fa fa-plus"></i> Create Jumbotron</a>
-                {{-- START Data table Jumbotron --}}
+
+                <div class="mt-3">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr align='center'>
+                                <th scope="col" style="width: 10px">No</th>
+                                <th scope="col">Picture</th>
+                                <th scope="col">Button Name</th>
+                                <th scope="col">Button Link</th>
+                                <th scope="col" style="width: 40px">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($postjumbotron as $key => $postjumbotron)
+                            <tr>
+                                <td scope="row" align='center'>{{$key + 1}}</td>
+                                <td align='center'>
+                                    <img style="width: 100px;" src="{{ asset($postjumbotron->picture) }}" alt="{{$postjumbotron->title}}" class="card-img-top"/>
+                                </td>
+                                <td align='center'>{{$postjumbotron->btnname}}</td>
+                                <td align='center'><a href="{{$postjumbotron->btnlink}}" target="_blank">Link</a></td>
+                                <td align="center">
+                                        <a href="/admin/jumbotron/{{$postjumbotron->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
+                                        <button type="submit" onclick="deleteConfirmationJumbotron({{$postjumbotron->id}})" id="delete-jumbotron" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
+                                        <a class="btn btn-sm btn-primary" href="/admin/jumbotron/{{$postjumbotron->id}}/preview"><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan='9', align='center'>No Jumbotron Data</td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- <div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h5 class="mb-4">Jumbotron Database</h5>
+                <a class='btn btn-primary' href="/admin/jumbotron/create"><i class="fa fa-plus"></i> Create Jumbotron</a>
+
                 <div class="mt-3">
                     <table class="table table-bordered">
                         <thead>
@@ -39,13 +86,9 @@
                                 <td align='center'>{{$postjumbotron->textalign}}</td>
                                 <td align="center">
                                         <a href="/admin/jumbotron/{{$postjumbotron->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
-                                        {{-- <button class="btn btn-sm btn-primary mb-1" onClick="destroy()"><i class="fa fa-trash"></i></button> --}}
+
                                         <button type="submit" onclick="deleteConfirmationJumbotron({{$postjumbotron->id}})" id="delete-jumbotron" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                        {{-- <form id="delete-jumbotron-form" action="/admin/jumbotron/{{$postjumbotron->id}}/destroy" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                                <button type="submit" onclick="deleteConfirmation({{$postjumbotron->id}})" id="delete-jumbotron" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                        </form> --}}
+
                                         <a class="btn btn-sm btn-primary" href="/admin/jumbotron/{{$postjumbotron->id}}/preview"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
@@ -57,11 +100,11 @@
                         </tbody>
                     </table>
                 </div>
-                {{-- END Data table Jumbotron --}}
+
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Table End -->
 @endsection
 

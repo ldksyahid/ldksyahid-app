@@ -1,8 +1,8 @@
 /********** Template CSS **********/
 :root {
     --primary: #00a79d;
-    --secondary: #8D9297;
-    --light: #F8F9FA;
+    --secondary: #8d9297;
+    --light: #f8f9fa;
     --dark: #282d30;
 }
 
@@ -14,47 +14,45 @@
     z-index: 99;
 }
 
-
-  .img-hover-zoom {
-     /* [1.1] Set it as per your need */
+.img-hover-zoom {
+    /* [1.1] Set it as per your need */
     overflow: hidden; /* [1.2] Hide the overflowing of child elements */
-  }
+}
 
-  /* [2] Transition property for smooth transformation of images */
-  .img-hover-zoom img {
-    transition: transform .5s ease;
-    cursor: pointer
-  }
+/* [2] Transition property for smooth transformation of images */
+.img-hover-zoom img {
+    transition: transform 0.5s ease;
+    cursor: pointer;
+}
 
-  /* [3] Finally, transforming the image when container gets hovered */
-  .img-hover-zoom:hover img {
+/* [3] Finally, transforming the image when container gets hovered */
+.img-hover-zoom:hover img {
     transform: scale(1.5);
-  }
+}
 
 /*** Spinner ***/
 #spinner {
     opacity: 0;
     visibility: hidden;
-    transition: opacity .5s ease-out, visibility 0s linear .5s;
+    transition: opacity 0.5s ease-out, visibility 0s linear 0.5s;
     z-index: 99999;
 }
 
 #spinner.show {
-    transition: opacity .5s ease-out, visibility 0s linear 0s;
+    transition: opacity 0.5s ease-out, visibility 0s linear 0s;
     visibility: visible;
     opacity: 1;
 }
 
-
 /*** Button ***/
 .btn {
     font-weight: 500;
-    transition: .5s;
+    transition: 0.5s;
 }
 
 .btn.btn-primary,
 .btn.btn-outline-primary:hover {
-    color: #FFFFFF;
+    color: #ffffff;
 }
 
 .btn-square {
@@ -82,11 +80,10 @@
     font-weight: normal;
 }
 
-
 /*** Navbar ***/
 .navbar.sticky-top {
     top: -100px;
-    transition: .5s;
+    transition: 0.5s;
 }
 
 .navbar .navbar-nav .nav-link {
@@ -113,14 +110,14 @@
 }
 
 @media (max-width: 991.98px) {
-    .navbar .navbar-nav .nav-link  {
+    .navbar .navbar-nav .nav-link {
         margin-left: 0;
         padding: 10px 0;
     }
 
     .navbar .navbar-nav {
         margin-top: 25px;
-        border-top: 1px solid #EEEEEE;
+        border-top: 1px solid #eeeeee;
     }
 }
 
@@ -133,13 +130,13 @@
         right: 0;
         opacity: 0;
         visibility: hidden;
-        transition: .5s;
+        transition: 0.5s;
     }
 
     .navbar .nav-item:hover .dropdown-menu {
         top: 100%;
         visibility: visible;
-        transition: .5s;
+        transition: 0.5s;
         opacity: 1;
     }
 }
@@ -154,17 +151,19 @@
     }
 }
 
-
 /*** Header ***/
 .carousel-caption {
-    top: 0;
+    top: 50%;
+    /* top: 0; */
     left: 0;
-    right: 0;
+    right: 45%;
+    /* right: 0; */
     bottom: 0;
     display: flex;
     align-items: center;
     text-align: start;
-    background: rgba(0, 0, 0, .65);
+    /* background: rgba(0, 0, 0, .65); */
+    background: rgba(0, 0, 0, 0);
     z-index: 1;
 }
 
@@ -182,7 +181,7 @@
     border-radius: 50px;
 }
 
-.carousel-caption .breadcrumb-item+.breadcrumb-item::before {
+.carousel-caption .breadcrumb-item + .breadcrumb-item::before {
     content: "\f111";
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
@@ -199,7 +198,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: scale-down;
     }
 
     .carousel-control-prev-icon,
@@ -211,14 +210,14 @@
 }
 
 .page-header {
-    background: linear-gradient(rgba(0, 0, 0, .07), rgba(0, 0, 0, .07)), url(../../Images/fixImage/bg_bilboard.png) center center no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, 0.07), rgba(0, 0, 0, 0.07)),
+        url(../../Images/fixImage/bg_bilboard.png) center center no-repeat;
     background-size: cover;
 }
 
-.page-header .breadcrumb-item+.breadcrumb-item::before {
+.page-header .breadcrumb-item + .breadcrumb-item::before {
     color: #999999;
 }
-
 
 /*** Facts ***/
 .facts-overlay {
@@ -231,7 +230,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: rgba(0, 0, 0, .65);
+    background: rgba(0, 0, 0, 0.65);
 }
 
 .facts-overlay h1 {
@@ -244,7 +243,6 @@
     color: var(--primary) !important;
 }
 
-
 /*** Service ***/
 .service-text::before {
     position: absolute;
@@ -255,7 +253,7 @@
     left: 0;
     background: var(--primary);
     opacity: 0;
-    transition: .5s;
+    transition: 0.5s;
 }
 
 .service-item:hover .service-text::before {
@@ -265,21 +263,20 @@
 
 .service-text * {
     position: relative;
-    transition: .5s;
+    transition: 0.5s;
     z-index: 1;
 }
 
 .service-item:hover .service-text * {
-    color: #FFFFFF !important;
+    color: #ffffff !important;
 }
-
 
 /*** Appointment ***/
 .appointment {
-    background: linear-gradient(rgba(0, 0, 0, .65), rgba(0, 0, 0, .65)), url(../../Images/fixImage/untuk_contact_us.jpg) center center no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+        url(../../Images/fixImage/untuk_contact_us.jpg) center center no-repeat;
     background-size: cover;
 }
-
 
 /*** Team ***/
 .team-text {
@@ -287,7 +284,7 @@
     width: 75%;
     bottom: 30px;
     left: 0;
-    transition: .5s;
+    transition: 0.5s;
 }
 
 .team-item:hover .team-text {
@@ -295,13 +292,12 @@
 }
 
 .team-text * {
-    transition: .5s;
+    transition: 0.5s;
 }
 
 .team-item:hover .team-text * {
     letter-spacing: 2px;
 }
-
 
 /*** Testimonial ***/
 .testimonial-carousel .owl-item img {
@@ -327,15 +323,14 @@
     border: 2px solid var(--primary);
     border-radius: 50px;
     font-size: 18px;
-    transition: .5s;
+    transition: 0.5s;
 }
 
 .testimonial-carousel .owl-nav .owl-prev:hover,
 .testimonial-carousel .owl-nav .owl-next:hover {
-    color: #FFFFFF;
+    color: #ffffff;
     background: var(--primary);
 }
-
 
 /*** Footer ***/
 .footer {
@@ -350,7 +345,7 @@
     color: #999999;
     font-weight: normal;
     text-transform: capitalize;
-    transition: .3s;
+    transition: 0.3s;
 }
 
 .footer .btn.btn-link::before {
@@ -371,7 +366,7 @@
 .footer .copyright {
     padding: 25px 0;
     font-size: 15px;
-    border-top: 1px solid rgba(256, 256, 256, .1);
+    border-top: 1px solid rgba(256, 256, 256, 0.1);
 }
 
 .footer .copyright a {

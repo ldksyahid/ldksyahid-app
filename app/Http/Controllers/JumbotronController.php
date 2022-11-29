@@ -43,18 +43,36 @@ class JumbotronController extends Controller
         $filename = time().$request->file('picture')->getClientOriginalName();
         $path = $request->file('picture')->storeAs('Images/uploads/jumbotrons',$filename);
         $postjumbotron = Jumbotron::create([
-            "title" => $request["title"],
-            "subtitle" => $request["subtitle"],
-            "sentence" => $request["sentence"],
+            "title" => "none",
+            "subtitle" => "none",
+            "sentence" => "none",
             "btnname" => $request["buttonname"],
             "btnlink" => $request["buttonlink"],
             'picture' => $path,
-            "textalign" => $request["textalign"],
+            "textalign" => "start",
         ]);
 
         Alert::success('Success', 'Jumbotron has been uploaded !');
         return redirect('/admin/jumbotron');
     }
+
+    // public function store(Request $request)
+    // {
+    //     $filename = time().$request->file('picture')->getClientOriginalName();
+    //     $path = $request->file('picture')->storeAs('Images/uploads/jumbotrons',$filename);
+    //     $postjumbotron = Jumbotron::create([
+    //         "title" => $request["title"],
+    //         "subtitle" => $request["subtitle"],
+    //         "sentence" => $request["sentence"],
+    //         "btnname" => $request["buttonname"],
+    //         "btnlink" => $request["buttonlink"],
+    //         'picture' => $path,
+    //         "textalign" => $request["textalign"],
+    //     ]);
+
+    //     Alert::success('Success', 'Jumbotron has been uploaded !');
+    //     return redirect('/admin/jumbotron');
+    // }
 
     /**
      * Display the specified resource.
@@ -104,17 +122,47 @@ class JumbotronController extends Controller
         }
 
         $update = Jumbotron::where("id", $id)-> update([
-            "title" => $request["title"],
-            "subtitle" => $request["subtitle"],
-            "sentence" => $request["sentence"],
+            "title" => "none",
+            "subtitle" => "none",
+            "sentence" => "none",
             "btnname" => $request["buttonname"],
             "btnlink" => $request["buttonlink"],
-            "textalign" => $request["textalign"],
+            "textalign" => "start",
         ]);
 
         toast('Jumbotron has been edited !', 'success')->autoClose(1500)->width('400px');
         return redirect('/admin/jumbotron');
     }
+
+
+    // public function update(Request $request, $id)
+    // {
+    //     if ($request->file('picture')) {
+    //         $filename = time().$request->file('picture')->getClientOriginalName();
+    //         $path = $request->file('picture')->storeAs('Images/uploads/jumbotrons',$filename);
+
+    //         // hapus file
+    //         $gambar = Jumbotron::where('id',$id)->first();
+    //         File::delete($gambar->picture);
+
+    //         // upload file
+    //         $update = Jumbotron::where("id", $id)-> update([
+    //             'picture' => $path,
+    //         ]);
+    //     }
+
+    //     $update = Jumbotron::where("id", $id)-> update([
+    //         "title" => $request["title"],
+    //         "subtitle" => $request["subtitle"],
+    //         "sentence" => $request["sentence"],
+    //         "btnname" => $request["buttonname"],
+    //         "btnlink" => $request["buttonlink"],
+    //         "textalign" => $request["textalign"],
+    //     ]);
+
+    //     toast('Jumbotron has been edited !', 'success')->autoClose(1500)->width('400px');
+    //     return redirect('/admin/jumbotron');
+    // }
 
     /**
      * Remove the specified resource from storage.
