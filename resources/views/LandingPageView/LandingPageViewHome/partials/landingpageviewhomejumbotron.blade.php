@@ -6,6 +6,7 @@
                 <img class="w-100" src="{{ asset($postjumbotron->picture) }}" alt="Image" />
                 <div class="carousel-caption">
                     <div class="container hideIfMobile">
+                    {{-- <div class="container" style="object-fit: contain"> --}}
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-10 text-start">
                                 <a href="{{$postjumbotron->btnlink}}" target="_blank" class="btn btn-primary py-3 px-5">{{$postjumbotron->btnname}}</a>
