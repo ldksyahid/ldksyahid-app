@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="stylesheet" type="text/css" href="{{asset('LandingPageSource/css/style.css')}}">
         <meta charset="utf-8" />
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
         <title>
@@ -9,8 +10,6 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <meta content="" name="keywords" />
         <meta content="" name="description" />
-
-
         <!-- Favicon -->
         <link href="{{ asset('Images/Logos/logoldksyahid.png') }}" rel="icon" />
         {{-- <link rel="shortcut icon" href="{{ asset('KestariHitungProkerbyYuda/images/kestari.ico') }}" type="image/x-icon"> --}}
