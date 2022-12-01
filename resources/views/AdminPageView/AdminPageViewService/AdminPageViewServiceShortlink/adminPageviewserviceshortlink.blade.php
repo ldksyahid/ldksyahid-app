@@ -35,7 +35,7 @@
                     <tr>
                         <th scope="row">{{ ++$key }}</th>
                         <td>{{ $item->url_key }}</td>
-                        <td class="small"><a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a></td>
+                        <td class="small"><a href="{{ $item->destination_url }}" target="_blank">{{ substr($item->destination_url, 0, 80)}}</a></td>
                         <td><a href="{{ $item->default_short_url }}" target="_blank">{{ $item->default_short_url }}</a></td>
                         <td align="center">{{ $item->visits->count() }}</td>
                         <td>
