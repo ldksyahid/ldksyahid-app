@@ -36,7 +36,8 @@ data-wow-delay="0.1s"
                 <h1 class="display-6 mb-0" style="text-align: left">{{ $postevent->title }}</h1>
                 </div>
                 <p class="mb-1">
-                    {!! substr($postevent->broadcast, 0, 300) !!}
+                    {{-- {!! substr($postevent->broadcast, 0, 300) !!} --}}
+                    {!!  substr(strip_tags($postevent->broadcast), 0, 100) !!}
                 </p>
                 <a class="mb-0" href="/event/{{ $postevent->id }}/show">Baca Selengkapnya</a>
             </div>
