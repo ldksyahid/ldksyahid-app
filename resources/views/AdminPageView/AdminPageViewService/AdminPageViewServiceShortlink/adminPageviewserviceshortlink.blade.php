@@ -26,7 +26,7 @@
                         <th scope="col">URL Key</th>
                         <th scope="col">URL Destination</th>
                         <th scope="col">Short URL</th>
-                        <th scope="col">Visitors</th>
+                        <th scope="col" class="text-center">Visitors</th>
                         <th scope="col" class="text-center">action</th>
                     </tr>
                 </thead>
@@ -35,10 +35,10 @@
                     <tr>
                         <th scope="row">{{ ++$key }}</th>
                         <td>{{ $item->url_key }}</td>
-                        <td class="small"><a href="{{ $item->destination_url }}" target="_blank">{{ substr($item->destination_url, 0, 80)}}</a></td>
+                        <td class="small"><a href="{{ $item->destination_url }}" target="_blank">Click Here</a></td>
                         <td><a href="{{ $item->default_short_url }}" target="_blank">{{ $item->default_short_url }}</a></td>
                         <td align="center">{{ $item->visits->count() }}</td>
-                        <td>
+                        <td align="center">
                             <button type="button" class="btn btn-sm btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $key }}"><i class="fa fa-edit"></i></button>
                             <button type="button" onclick="deleteConfirmationShortlink({{$item->id}})" id="delete-shortlink" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
                         </td>
