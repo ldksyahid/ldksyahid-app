@@ -230,10 +230,21 @@
 }
 
 .page-header {
-    background: linear-gradient(rgba(0, 0, 0, 0.07), rgba(0, 0, 0, 0.07)),
+    background:
         url(../../Images/fixImage/bg_bilboard.png) center center no-repeat;
-    background-size: cover;
+    background-size: 1350px 325px;
 }
+
+/* @media (max-width: 768px) {
+    .page-header-mobile-article {
+        background:
+            url(../../Images/fixImage/bg_bilboard.png) center center no-repeat;
+        background-size: contain;
+        position: static    ;
+        min-height: 80px;
+    }
+
+} */
 
 .page-header .breadcrumb-item + .breadcrumb-item::before {
     color: #999999;

@@ -2,20 +2,14 @@
 
 @section('content')
 <!-- Page Header Start -->
-<div
-class="container-fluid page-header py-5 mb-5 wow fadeIn"
-data-wow-delay="0.1s"
->
-<div class="container text-center py-5">
-  <h1 class="display-4 text-white animated slideInDown mb-4 text-uppercase">
-    Kegiatan LDK Syahid
-  </h1>
-  <nav aria-label="breadcrumb animated slideInDown">
-    <ol class="breadcrumb justify-content-center mb-0">
-      <p class="text-white">Yuk Hadir dan Ikuti Kegiatan LDK Syahid untuk menambah Teman dan Ilmu Kamu</p>
-    </ol>
-  </nav>
-</div>
+<div class="container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.2s">
+    <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="w-100" src="{{ asset('Images/fixImage/billboardimage/kegiatan.png') }}" alt="Image" />
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Page Header End -->
 <div class="container-xxl py-5">
