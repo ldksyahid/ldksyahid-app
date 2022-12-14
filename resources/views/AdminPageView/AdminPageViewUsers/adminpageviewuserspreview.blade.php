@@ -26,9 +26,16 @@
             <label for="inputPassword1" class="form-label">{{ ($data->password) }}</label>
         </div>
         <div class="mb-3">
-            <label for="inputPosition1" class="form-label"><b>Position</b></label>
+            <label for="inputPosition1" class="form-label"><b>Privilage</b></label>
             <br>
-            <label for="inputPosition" class="form-label">{{ $data->is_admin }}</label>
+            @if ($data->is_admin == 1)
+                <label for="inputPosition" class="form-label">Helper</label>
+            @elseif ($data->is_admin == 2)
+                <label for="inputPosition" class="form-label">Superadmin</label>
+            @else
+                <label for="inputPosition" class="form-label">User</label>
+            @endif
+
         </div>
     </form>
 

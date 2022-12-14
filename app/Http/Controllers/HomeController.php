@@ -50,7 +50,6 @@ class HomeController extends Controller
 
     public function adminHome()
     {
-
         Alert::success('Selamat Datang Admin LDK Syahid UIN Jakarta', 'Bismillah, Berikan yang Terbaik untuk Dakwah');
         return view('AdminPageView.AdminPageViewDashboard.adminpageviewdashboard', ["title" => "Dashboard"]);
     }

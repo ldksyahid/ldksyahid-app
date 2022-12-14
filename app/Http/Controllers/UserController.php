@@ -57,7 +57,7 @@ class UserController extends Controller
         $data['name'] = $request->name;
         $data['email'] = $request->email;
         $data['password'] = $passwordcr;
-        $data['is_admin'] = $request->boolean('is_admin');
+        $data['is_admin'] = $request->is_admin;
         User::insert($data);
         Alert::success('Success', 'User created successfully !');
     }
@@ -115,7 +115,7 @@ class UserController extends Controller
             $data->password = Hash::make($request->password);
         }
         // $data->password = $passwordcr;
-        $data['is_admin'] = $request->boolean('is_admin');
+        $data['is_admin'] = $request->is_admin;
         $data->save();
         toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
     }

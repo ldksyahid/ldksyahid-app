@@ -64,7 +64,8 @@
         var name = $("#inputName1").val();
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
-        var is_admin = $('#is_admin').is(':checked');
+        // var is_admin = $('#is_admin').is(':checked');
+        var is_admin = $('#is_admin:checked').val();
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -106,7 +107,9 @@
         var name = $("#inputName1").val();
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
-        var is_admin = $('#is_admin').is(':checked');
+        // var is_admin = $('#is_admin').is(':checked');
+        var is_admin = $('#is_admin:checked').val();
+        console.log(is_admin);
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',

@@ -15,29 +15,29 @@
             <input type="password" class="form-control" id="inputPassword1" placeholder="Please leave this field blank if you don't want to change the password">
         </div>
         <fieldset class="row mb-3">
-            <legend class="col-form-label col-sm-2 pt-0"><b>Position</b></legend>
+            <legend class="col-form-label col-sm-2 pt-0"><b>Privilage</b></legend>
             <div class="col-sm-10">
                 <div class="form-check">
-                    {{-- <input class="form-check-input" type="radio" name="is_admin"
-                        id="is_admin" value=1 required value="{{ $data->is_admin }}">
+                    <input class="form-check-input" type="radio" name="is_admin"
+                        id="is_admin" value=2 required
+                        @if ($data->is_admin == 2)
+                        checked
+                        @endif>
                     <label class="form-check-label" for="admin">
-                        Admin
-                    </label> --}}
+                        Superadmnin
+                    </label>
+                </div>
+                <div class="form-check">
                     <input class="form-check-input" type="radio" name="is_admin"
                         id="is_admin" value=1 required
                         @if ($data->is_admin == 1)
                         checked
                         @endif>
                     <label class="form-check-label" for="admin">
-                        Admin
+                        Helper
                     </label>
                 </div>
                 <div class="form-check">
-                    {{-- <input class="form-check-input" type="radio" name="is_admin"
-                        id="is_admin" value=0 required value="{{ $data->is_admin }}">
-                    <label class="form-check-label" for="user">
-                        User
-                    </label> --}}
                     <input class="form-check-input" type="radio" name="is_admin"
                         id="is_admin" value=0 required
                         @if ($data->is_admin == 0)

@@ -6,7 +6,7 @@
             <th scope="col">Email</th>
             <th scope="col">Password</th>
             <th scope="col">Email Verified</th>
-            <th scope="col">Admin?</th>
+            <th scope="col">Privilage</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -22,7 +22,13 @@
             @else
                 <td align='center'>Yes</td>
             @endif
-            <td align='center'>{{ $item->is_admin }}</td>
+            @if ($item->is_admin == 1)
+                <td align='center'>Helper</td>
+            @elseif ($item->is_admin == 2)
+                <td align='center'>Superadmin</td>
+            @else
+                <td align='center'>User</td>
+            @endif
             <td align="center">
                 @if ($item->email == "ldk@uinjkt.ac.id")
                     <button class="btn btn-sm btn-primary" onClick="preview({{ $item->id }})"><i class="fa fa-eye"></i></button>

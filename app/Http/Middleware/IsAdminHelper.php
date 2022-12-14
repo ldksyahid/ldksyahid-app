@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class IsAdmin
+class IsAdminHelper
 {
     /**
      * Handle an incoming request.
@@ -15,14 +15,13 @@ class IsAdmin
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user()->is_admin >  1){
+        if(auth()->user()->is_admin > 0 ){
             return $next($request);
         }
 
-        Alert::error('Akses Ditolak!', 'Maaf, Kamu tidak memiliki akses sebagai Superadmin');
+        Alert::error('Akses Ditolak!', 'Maaf, Kamu tidak memiliki akses sebagai Admin');
         // return redirect('/');
         return redirect()->back();
     }
