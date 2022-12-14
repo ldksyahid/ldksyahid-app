@@ -109,7 +109,7 @@
                         @endif
                     </span>{{ substr(Auth::user()->name,0, 15) }}</a>
                     <div class="dropdown-menu bg-light m-0">
-                        @if (Auth::user()->is_admin==1)
+                        @if (Auth::user()->is_admin==1 || Auth::user()->is_admin==2)
                             <a href="/admin/dashboard" class="dropdown-item">Admin Panel</a>
                             <a href="/profile" class="dropdown-item">Profil Aku</a>
                             <a class="dropdown-item" href="{{ route('logout') }}"

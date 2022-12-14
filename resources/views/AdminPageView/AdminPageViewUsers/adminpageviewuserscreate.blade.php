@@ -14,13 +14,20 @@
             <input type="password" class="form-control" id="inputPassword1" placeholder="Enter the Password...">
         </div>
         <fieldset class="row mb-3">
-            <legend class="col-form-label col-sm-2 pt-0"><b>Position</b></legend>
+            <legend class="col-form-label col-sm-2 pt-0"><b>Privilage</b></legend>
             <div class="col-sm-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="is_admin"
+                        id="is_admin" value=2 required>
+                    <label class="form-check-label" for="admin">
+                        Superadmin
+                    </label>
+                </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="is_admin"
                         id="is_admin" value=1 required>
                     <label class="form-check-label" for="admin">
-                        Admin
+                        Helper
                     </label>
                 </div>
                 <div class="form-check">
