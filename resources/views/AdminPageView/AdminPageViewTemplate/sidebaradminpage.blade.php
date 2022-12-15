@@ -63,6 +63,7 @@
         @elseif (auth()->user()->is_admin == 1)
             <div class="navbar-nav w-100">
                 <a href="/admin/dashboard" class="nav-item nav-link {{($title === "Dashboard") ? "active" : ""}}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="/admin/event" class="nav-item nav-link {{($title === "Event") ? "active" : ""}}"><i class="fas fa-calendar-check me-2"></i>Event</a>
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Home") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-home me-2"></i>Home</a>
                     <div class="dropdown-menu bg-transparent border-0">
