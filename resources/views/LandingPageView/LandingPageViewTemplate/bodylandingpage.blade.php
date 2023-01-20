@@ -43,9 +43,12 @@
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="{{ asset('LandingPageSource/css/bootstrap.min.css') }}" rel="stylesheet" />
-
         <link href="{{ asset('css/itsupport.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/cardservice.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/pagination.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/multiselectcelengan.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/cardcelengan.css') }}" rel="stylesheet" />
+
 
         <!-- Template Stylesheet -->
         <link href="{{ asset('LandingPageSource/css/style.css') }}" rel="stylesheet" />
