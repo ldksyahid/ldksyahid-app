@@ -20,6 +20,7 @@ use App\Http\Controllers\StructureController;
 use App\Http\Controllers\CallKestariController;
 use App\Http\Controllers\ITSupportController;
 use App\Http\Controllers\TestimonyController;
+use App\Http\Controllers\CelenganSyahidController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,6 +107,9 @@ Route::post('/service/shortlink/store', [RequestShortlinkController::class, 'sto
 
 // Route LandingPage Layanan Call Kestari
 Route::get('/service/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
+
+// Route LandingPage Layanan CelenganLDKSyahid
+Route::get('/service/celengansyahid', [CelenganSyahidController::class, 'index'])->name('service.celengansyahid');
 // ======================================= END ROUTE LANDING PAGE =======================================
 
 

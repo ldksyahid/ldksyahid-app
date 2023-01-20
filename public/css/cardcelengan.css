@@ -1,0 +1,41 @@
+.card {
+    border: none;
+    border-radius: 10px
+}
+
+.c-details span {
+    font-weight: 200;
+    font-size: 13px
+}
+
+
+
+.badge span {
+    background-color: #00a79d;
+    width: 100px;
+    height: 25px;
+    padding-bottom: 3px;
+    border-radius: 5px;
+    display: flex;
+    color: #ffff;
+    justify-content: center;
+    align-items: center
+}
+
+.progress {
+    height: 18px;
+    border-radius: 10px
+}
+
+.progress div {
+    background-color: #00a79d
+}
+
+.text1 {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.text2 {
+    color: #a5aec0
+}

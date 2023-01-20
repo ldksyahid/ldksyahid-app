@@ -65,6 +65,25 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-4 mt-0">
+                <div class="card card-margin">
+                    <img src="https://source.unsplash.com/768x515?poster" alt="" class="m-5">
+                    <div class="card-body pt-0">
+                        <h5 class="card-title">Celengan LDK Syahid</h5>
+                        <div class="widget-49">
+                            <div class="widget-49-meeting-points">
+                                <p style="text-align: justify">
+                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa ipsum fugit facere reiciendis. Soluta voluptatibus iste porro cum, dolores necessitatibus in velit ad ab quam fuga aliquam deleniti sint cumque error natus, laborum hic eum amet! Eos velit earum praesentium.
+                                </p>
+                                <br><br>
+                            </div>
+                            <div class="widget-49-meeting-action">
+                                <a href="/service/celengansyahid" target="_blank" class="btn btn-primary w-100 py-2" >Mulai</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
