@@ -71,6 +71,14 @@
     border-radius:5px;
 }
 
+#btn-simpan:hover {
+    background-color: #000;
+}
+
+#btn-hapus:hover {
+    background-color: #000;
+}
+
 .boder-r {
     border-radius:5px;
 }
