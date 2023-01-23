@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-<!-- Appointment Start -->
 <div class="container-fluid p-0 mb-5 wow fadeIn hideIfMobile" data-wow-delay="0.2s">
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -56,11 +55,21 @@
                                 <input type="checkbox" id="lingkungan" value="lingkungan" onchange="checkboxStatusChange()">Lingkungan</label>
                                 <hr>
                                 <div class="row mb-0">
+                                    {{-- <div class="col text-center">
+                                        <a class="btn btn-danger w-100 py-3 fadeIn boder-r d-flex align-items-center h-25" style="margin-bottom: -25px;" id="hapusPilihan" onclick="hapusPilihan()">Hapus&nbsp;&nbsp;</a>
+                                    </div> --}}
                                     <div class="col text-center">
-                                        <a class="btn btn-danger w-100 py-3 fadeIn boder-r d-flex align-items-center h-25" type="submit" style="margin-bottom: -25px;" onclick="hapusPilihan()">Hapus&nbsp;&nbsp;</a>
+                                        <label for="hapus" class="p-1 btn btn-danger w-100 py-3 fadeIn boder-r d-flex align-items-center h-25 btn-simpan" style="margin-bottom: -25px;" id="btn-hapus">
+                                            <input type="checkbox" id="hapus" value="hapus" onchange="hapusPilihan()">Hapus
+                                        </label>
                                     </div>
-                                    <div class="col text-center">
+                                    {{-- <div class="col text-center">
                                         <a class="btn btn-primary w-100 py-3 fadeIn boder-r d-flex align-items-center h-25 " href="#" type="submit" style="margin-bottom: -25px;" onclick="simpanPilihan()">Simpan</a>
+                                    </div> --}}
+                                    <div class="col text-center">
+                                        <label for="simpan" class="p-1 btn btn-primary w-100 py-3 fadeIn boder-r d-flex align-items-center h-25 btn-simpan" style="margin-bottom: -25px;" id="btn-simpan">
+                                            <input type="checkbox" id="simpan" value="simpan" onchange="simpanPilihan()">Simpan
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +205,6 @@
         </div>
     </div>
 </div>
-<!-- Appointment End -->
 @endsection
 
 @section('scripts')
@@ -244,6 +252,14 @@ function checkboxStatusChange() {
     dropdownValue = ' ('+values.length+') ';
   }
   multiselectOption.innerHTML = 'Kategori' + dropdownValue;
+}
+
+function hapusPilihan() {
+    console.log('iya hapus');
+}
+
+function simpanPilihan() {
+    console.log('iya simpan');
 }
 
 </script>
