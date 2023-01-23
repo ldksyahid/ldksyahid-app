@@ -72,11 +72,19 @@
 }
 
 #btn-simpan:hover {
-    background-color: #000;
+    background-color: #00D8CB;
+}
+
+#btn-simpan input[type="checkbox"]{
+    display: none;
 }
 
 #btn-hapus:hover {
-    background-color: #000;
+    background-color: #bd2d3b;
+}
+
+#btn-hapus input[type="checkbox"]{
+    display: none;
 }
 
 .boder-r {
