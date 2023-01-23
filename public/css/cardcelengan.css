@@ -3,6 +3,11 @@
     border-radius: 10px
 }
 
+.card-img {
+    border: none;
+    border-radius: 10px 10px 0px 0px;
+}
+
 .c-details span {
     font-weight: 200;
     font-size: 13px

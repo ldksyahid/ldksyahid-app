@@ -69,7 +69,7 @@
                 <div class="card card-margin">
                     <img src="https://source.unsplash.com/768x515?poster" alt="" class="m-5">
                     <div class="card-body pt-0">
-                        <h5 class="card-title">Celengan LDK Syahid</h5>
+                        <h5 class="card-title">Celengan Syahid</h5>
                         <div class="widget-49">
                             <div class="widget-49-meeting-points">
                                 <p style="text-align: justify">

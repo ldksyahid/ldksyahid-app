@@ -46,7 +46,6 @@
         <link href="{{ asset('css/itsupport.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/cardservice.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/pagination.css') }}" rel="stylesheet" />
-        <link href="{{ asset('css/multiselectcelengan.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/cardcelengan.css') }}" rel="stylesheet" />
 
 
@@ -56,6 +55,8 @@
 	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.esm.js"></script>
 	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.js"></script>
         <script src="{{ asset('KestariHitungProkerbyYuda/js/code.js') }}" charset="utf-8" async></script>
+
+        @yield('style')
     </head>
 
     <body>
