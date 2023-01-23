@@ -55,22 +55,22 @@
                                 <input type="checkbox" id="lingkungan" value="lingkungan" onchange="checkboxStatusChange()">Lingkungan</label>
                                 <hr>
                                 <div class="row mb-0">
-                                    <div class="col text-center">
+                                    {{-- <div class="col text-center">
                                         <a class="btn btn-danger w-100 py-3 fadeIn boder-r d-flex align-items-center h-25" style="margin-bottom: -25px;" id="hapusPilihan" onchange="hapusPilihan()">Hapus&nbsp;&nbsp;</a>
                                     </div>
-                                    {{-- <div class="col text-center">
+                                    <div class="col text-center">
+                                        <a class="btn btn-primary w-100 py-3 fadeIn boder-r d-flex align-items-center h-25 " href="#" type="submit" style="margin-bottom: -25px;" onchange="simpanPilihan()">Simpan</a>
+                                    </div> --}}
+                                    <div class="col text-center">
                                         <label for="hapus" class="p-3 btn btn-danger w-100 py-3 fadeIn boder-r d-flex align-items-center h-25 btn-simpan" style="margin-bottom: -25px;" id="btn-hapus">
                                             <input type="checkbox"  id="hapus" onchange="hapusPilihan()">Hapus
                                         </label>
-                                    </div> --}}
-                                    {{-- <div class="col text-center">
-                                        <a class="btn btn-primary w-100 py-3 fadeIn boder-r d-flex align-items-center h-25 " href="#" type="submit" style="margin-bottom: -25px;" onchange="simpanPilihan()">Simpan</a>
-                                    </div> --}}
-                                    {{-- <div class="col text-center">
+                                    </div>
+                                    <div class="col text-center">
                                         <label for="simpan" class="p-3 btn btn-primary w-100 py-3 fadeIn boder-r d-flex align-items-center h-25 btn-simpan" style="margin-bottom: -25px;" id="btn-simpan">
                                             <input type="checkbox" id="simpan" onchange="simpanPilihan()">Simpan
                                         </label>
-                                    </div> --}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -220,10 +220,10 @@ multiSelect_kategori.addEventListener('click', function(e) {
     checkboxes_kategori.style.display = "block";
     expanded = true;
   }
-//   else{
-//     checkboxes_kategori.style.display = "none";
-//     expanded = false;
-//   }
+  else{
+    checkboxes_kategori.style.display = "none";
+    expanded = false;
+  }
   e.stopPropagation();
 }, true)
 
