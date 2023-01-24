@@ -140,12 +140,18 @@
         opacity: 1;
     }
 }
-/* .hideIfMobile {
+/* .websiteResponsive {
     display: none;
     visibility: visible;
 } */
-@media (max-width: 768px) {
-    .hideIfMobile {
+@media (max-width: 912px) {
+    .websiteResponsive {
+        display: none;
+        visibility: visible;
+    }
+}
+@media (min-width: 912px) {
+    .mobileResponsive {
         display: none;
         visibility: visible;
     }
@@ -207,7 +213,7 @@
     .buttonphone {
         padding: 3px 12px 3px 12px;
         font-size: 6px;
-        margin-left: 5%
+        margin-left: 5%;
     }
     #header-carousel .carousel-item {
         position: relative;
@@ -230,8 +236,8 @@
 }
 
 .page-header {
-    background:
-        url(../../Images/fixImage/bg_bilboard.png) center center no-repeat;
+    background: url(../../Images/fixImage/bg_bilboard.png) center center
+        no-repeat;
     background-size: 1350px 325px;
 }
 
