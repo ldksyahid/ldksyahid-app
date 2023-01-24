@@ -83,7 +83,7 @@
 /*** Navbar ***/
 .navbar.sticky-top {
     top: -100px;
-    transition: 0.5s;
+    transition: 0.3s;
 }
 
 .navbar .navbar-nav .nav-link {
@@ -240,17 +240,6 @@
         no-repeat;
     background-size: 1350px 325px;
 }
-
-/* @media (max-width: 768px) {
-    .page-header-mobile-article {
-        background:
-            url(../../Images/fixImage/bg_bilboard.png) center center no-repeat;
-        background-size: contain;
-        position: static    ;
-        min-height: 80px;
-    }
-
-} */
 
 .page-header .breadcrumb-item + .breadcrumb-item::before {
     color: #999999;

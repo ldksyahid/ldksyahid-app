@@ -46,7 +46,7 @@ class CelenganSyahidController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show',["title" => "Layanan"]);
     }
 
     /**
