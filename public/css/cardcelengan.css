@@ -25,6 +25,11 @@
     align-items: center;
 }
 
+.shadow-c {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.16), 0 4px 10px rgba(0,0,0,0.23);
+
+}
+
 .badge-mobile span {
     background-color: #00a79d;
     width: 80px;

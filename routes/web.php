@@ -110,6 +110,7 @@ Route::get('/service/callkestari', [CallKestariController::class, 'index'])->nam
 
 // Route LandingPage Layanan CelenganLDKSyahid
 Route::get('/service/celengansyahid', [CelenganSyahidController::class, 'index'])->name('service.celengansyahid');
+Route::get('/service/celengansyahid/{id}/show', [CelenganSyahidController::class, 'show'])->name('service.celengansyahid.detail');
 // ======================================= END ROUTE LANDING PAGE =======================================
 
 

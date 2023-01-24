@@ -40,7 +40,7 @@
                     Mari Bantu Mereka yang Membutuhkan
                 </h1>
             </div>
-            <p class="mb-0" style="text-align: justify" style="font-size: 12px;">
+            <p class="mb-0" style="text-align: justify ;font-size: 10px;">
                 "Dan sembahlah Allah dan janganlah kamu mempersekutukan-Nya dengan sesuatu apa pun. Dan berbuat-baiklah kepada kedua orang tua, karib-kerabat, anak-anak yatim, orang-orang miskin, tetangga dekat dan tetangga jauh, teman sejawat, ibnu sabil dan hamba sahaya yang kamu miliki. Sungguh, Allah tidak menyukai orang yang sombong dan membanggakan diri,"
                 ● (QS. An-Nisa 4: Ayat 36)
             </p>
@@ -57,7 +57,7 @@
                                 </select>
                                 <div class="overSelect"></div>
                             </div>
-                            <div class="checkboxes card  mt-2 w-15 p-3" id="checkboxes-kategori">
+                            <div class="checkboxes card mt-2 w-15 p-3" id="checkboxes-kategori">
                                 <label for="pendidikan" class="p-1">
                                 <input type="checkbox" id="pendidikan" value="pendidikan" onchange="checkboxStatusChange()">Pendidikan</label>
                                 <label for="kemanusiaan" class="p-1">
@@ -100,14 +100,14 @@
             {{-- website --}}
             <div class="row g-4 mt-1 websiteResponsive">
                 <div class="col-lg-4 col-md-6 mt-3">
-                    <div class="card mb-2">
+                    <div class="card shadow-c mb-2">
                         <div style="height: 13em;">
-                            <a href=""><img src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="" class="card-img w-100"></a>
+                            <a href="/service/celengansyahid/{{ 1 }}/show"><img src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="" class="card-img w-100"></a>
                         </div>
                         <div class="mt-1 p-3">
                             <div class="badge" style="margin-left:-8px;"> <span>Sosial Dakwah</span> </div>
                             <div style="height: 5em;" class="d-flex flex-row align-items-center">
-                                <h5 class="text-body mb-0"><a href="">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</a></h5>
+                                <h5 class="text-body mb-0"><a href="/service/celengansyahid/{{ 1 }}/show">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</a></h5>
                             </div>
                             <div style="height: 2em;">
                                 <p style="font-size: 14px;">
@@ -120,7 +120,7 @@
                                     <div class="d-flex flex-row align-items-center" style="height: 2em;">
                                         <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="25" height="25">
                                         <div class="ms-2 c-details">
-                                            <h6 style="font-size: 16px" class="mb-0 text-body"><a href="" target="_blank">UKM LDK Syahid</a></h6>
+                                            <h6 style="font-size: 16px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
                                         </div>
                                     </div>
                                 </div>
@@ -157,18 +157,18 @@
             {{-- mobile --}}
             <div class="row g-4 mt-1 mobileResponsive">
                 <div class="col-lg-4 col-md-6 mt-3">
-                    <div class="card">
+                    <div class="card shadow-c">
                         <div class="row d-flex flex-row align-items-start">
                             <div class="col" style="margin-right:-20px;">
                                 <div  class="p-3">
-                                    <a href=""><img src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
+                                    <a href="/service/celengansyahid/{{ 1 }}/show"><img src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
                                 </div>
                             </div>
                             <div class="col" style="margin-left:-20px;">
                                 <div class="p-3">
                                     <div class="badge-mobile "> <span style="font-size:10px;"><b>Sosial Dakwah</b></span> </div>
                                     <div style="line-height: 1.1em">
-                                        <h5 class=""><a href="" style="font-size: 12px ;">{!!  substr(strip_tags('Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi'), 0, 25) !!}</a></h5>
+                                        <h5 class=""><a href="/service/celengansyahid/{{ 1 }}/show" style="font-size: 12px ;">{!!  substr(strip_tags('Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi'), 0, 25) !!}</a></h5>
                                         <p style="font-size: 10px;">
                                             {!!  substr(strip_tags('Miris, literasi Indonesia posisi ke-62 dari 70 negara di dunia. Mari bangun bangsa dengan tingkatkan literasi melalui Pojok'), 0, 100) !!}
                                         </p>
@@ -181,7 +181,7 @@
                                 <div class="d-flex flex-row align-items-center">
                                     <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="20" height="20">
                                     <div class="ms-2 c-details">
-                                        <h6 style="font-size: 10px" class="mb-0 text-body"><a href="" target="_blank">UKM LDK Syahid</a></h6>
+                                        <h6 style="font-size: 10px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
                                     </div>
                                 </div>
                             </div>
