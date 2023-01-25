@@ -18,7 +18,7 @@
   </div>
 </div>
 <div class="container-xl">
-    <div class="row g-5">
+    <div class="row g-3">
         {{-- website --}}
         <div class="col-lg-12 col-md-6 wow fadeInUp websiteResponsive" data-wow-delay="0.1s">
             <div class="border-start border-5 border-primary ps-4 mb-3">
@@ -155,7 +155,7 @@
                 </div>
             </div>
             {{-- mobile --}}
-            <div class="row g-4 mt-1 mobileResponsive">
+            <div class="row mt-1 mobileResponsive">
                 <div class="col-lg-4 col-md-6 mt-3">
                     <div class="card shadow-c">
                         <div class="row d-flex flex-row align-items-start">

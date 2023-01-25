@@ -83,9 +83,11 @@
         </div>
 
         <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top" style="border-radius: 100%">
-            <i class="bi bi-arrow-up"></i>
-        </a>
+        <div id="arrow-up">
+            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top" style="border-radius: 100%;">
+                <i class="bi bi-arrow-up"></i>
+            </a>
+        </div>
 
         <!-- JavaScript Libraries -->
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
