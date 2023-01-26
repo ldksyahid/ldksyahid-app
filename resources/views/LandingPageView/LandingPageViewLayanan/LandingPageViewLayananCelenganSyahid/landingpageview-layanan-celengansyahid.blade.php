@@ -102,12 +102,12 @@
                 <div class="col-lg-4 col-md-6 mt-3">
                     <div class="card shadow-c mb-2">
                         <div style="height: 13em;">
-                            <a href="/service/celengansyahid/{{ 1 }}/show"><img src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="" class="card-img w-100"></a>
+                            <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}"><img src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="" class="card-img w-100"></a>
                         </div>
                         <div class="mt-1 p-3">
                             <div class="badge" style="margin-left:-8px;"> <span>Sosial Dakwah</span> </div>
                             <div style="height: 5em;" class="d-flex flex-row align-items-center">
-                                <h5 class="text-body mb-0"><a href="/service/celengansyahid/{{ 1 }}/show">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</a></h5>
+                                <h5 class="text-body mb-0"><a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</a></h5>
                             </div>
                             <div style="height: 2em;">
                                 <p style="font-size: 14px;">
@@ -161,14 +161,14 @@
                         <div class="row d-flex flex-row align-items-start">
                             <div class="col" style="margin-right:-20px;">
                                 <div  class="p-3">
-                                    <a href="/service/celengansyahid/{{ 1 }}/show"><img src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
+                                    <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}"><img src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
                                 </div>
                             </div>
                             <div class="col" style="margin-left:-20px;">
                                 <div class="p-3">
                                     <div class="badge-mobile "> <span style="font-size:10px;"><b>Sosial Dakwah</b></span> </div>
                                     <div style="line-height: 1.1em">
-                                        <h5 class=""><a href="/service/celengansyahid/{{ 1 }}/show" style="font-size: 12px ;">{!!  substr(strip_tags('Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi'), 0, 25) !!}</a></h5>
+                                        <h5 class=""><a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}" style="font-size: 12px ;">{!!  substr(strip_tags('Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi'), 0, 25) !!}</a></h5>
                                         <p style="font-size: 10px;">
                                             {!!  substr(strip_tags('Miris, literasi Indonesia posisi ke-62 dari 70 negara di dunia. Mari bangun bangsa dengan tingkatkan literasi melalui Pojok'), 0, 100) !!}
                                         </p>
