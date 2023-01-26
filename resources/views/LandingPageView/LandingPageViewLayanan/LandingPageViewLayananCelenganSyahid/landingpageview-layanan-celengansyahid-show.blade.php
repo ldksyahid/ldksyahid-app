@@ -127,11 +127,11 @@
     </div>
 </div>
 
-<div class="container-fluid p-0 mb-5 wow fadeIn mobileResponsive" data-wow-delay="0.2s" style="background-color: #f5f6fa;">
+<div class="container-fluid p-0 wow fadeIn mobileResponsive" data-wow-delay="0.2s" style="background-color: #f5f6fa;">
     <div class="p-4">
         <div>
             <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="Image" style="border-radius: 15px;"/>
-            <div class="badge mt-3" style="margin-left:-8px;"> <span>Sosial Dakwah</span> </div>
+            <div class="badge-mobile mt-3"> <span style="font-size:10px;"><b>Sosial Dakwah</b></span> </div>
             <div class="d-flex flex-row align-items-center">
                 <h5 class="text-body mb-0">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</h5>
             </div>
@@ -148,10 +148,10 @@
             <div class="mb-0">
                 <div class="row d-flex flex-row align-items-end">
                     <div class="col-lg-8 text-start" style="margin-bottom: -39px;">
-                        <h5 style=" color:#00a79d;"><strong>Rp. 23.000,-</strong></h5>
+                        <h5 style=" color:#00a79d; font-size:16px;"><strong>Rp. 23.000,-</strong></h5>
                     </div>
                     <div class="col-lg-4 text-end" style="margin-bottom: -20px;">
-                        <p style="font-size:12px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>5 Donatur</p>
+                        <p style="font-size:10px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>5 Donatur</p>
                     </div>
                 </div>
             </div>
@@ -161,50 +161,44 @@
             <div class="mb-0">
                 <div class="row d-flex flex-row align-items-center">
                     <div class="col-lg-8 text-start my-2">
-                        <p style="font-size: 12px;">
+                        <p style="font-size: 10px;">
                             0.63% dari target Rp. 100.000.000,-
                         </p>
                     </div>
                     <div class="col-lg-4 text-end" style="margin-top: -50px;">
-                        <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>341 hari lagi</p>
+                        <p style="font-size:10px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>341 hari lagi</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="p-4 my-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
+    <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
             <h6 class="text-body">Detail</h6>
             <p>Di tengah maraknya penggunaan sosial media, faktanya minat baca orang Indonesia menurut data UNESCO hanya 0,001%. Artinya, dari 1.000 orang Indonesia, hanya 1 orang yang rajin membaca. Sementara survei Program for International Student Assessment (PISA) menyebutkan tingkat literasi Indonesia berada di urutan ke-62 dari 70 negara di dunia.</p>
         </div>
     </div>
-    <div class="p-4 my-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
+    <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
             <h6 class="text-body">Kabar Terbaru</h6>
             <p>Sejak didirikan lebih dari 10 tahun lalu dari hasil uang swadaya masyarakrat, sekolah ini tak pernah memiliki perpustakaan yang layak. Jangankan perpustakaan, buku-buku yang digunakanpun tidak sesuai dengan kurikulum yang berlaku. Tidak seperti sekolah lain yang memiliki perpustakaan, semua buku-buku hasil sumbangan tersebut hanya bisa diletakkan di atas meja pojok kelas. Berbaur menjadi satu tanpa dibedakan berdasarkan urutan kelas. Bahkan, tak jarang sudah usang.</p>
         </div>
     </div>
-    <div class="p-4 my-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
+    <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
-            <h6 class="text-body">Donatur <span style="color: #fff; background-color:#00a79d; border-radius:100%; padding:5px; font-size:10px;" class="text-center">1</span></h6>
-            <div class="row p-2" style="background-color: #f5f6fa; border-radius:15px;">
-                <div class="col col-lg-1 text-start">
-                    <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%;" width="50" height="50">
+            <h6 class="text-body" style="margin-bottom: 15px;">Donatur <span style="color: #fff; background-color:#00a79d; border-radius:100%; padding:5px; font-size:10px;" class="text-center">213</span></h6>
+            <div class="row p-2 my-2" style="background-color: #f5f6fa; border-radius:10px;">
+                <div class="col col-lg-2 text-start w-100" >
+                    <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%; margin-top:0px;" width="35" height="35">
                 </div>
-                <div class="col col-lg-10 text-start">
-                    <div class="row d-flex flex-row align-items-center">
-                        <div class="col-lg-9">
-                            <h6 class="text-body">Manusia Baik</h6>
-                        </div>
-                        <div class="col-lg-3 text-end">
-                            <span style="font-size: 11px;" class="text-body">30 menit yang lalu</span>
-                        </div>
-                    </div>
-                    <p class="text-body" style="">
+                <div class="col col-lg-10 text-start" style="margin-left: -225px;">
+                    <h6 class="text-body" style="font-size:12px;">Manusia Baik</h6>
+                    <p class="text-body" style="font-size:10px;">
                     Berdonasi Sebesar <strong>Rp. 250.000,-</strong>
                     <br>
                     <i>ya Allah terimakasih atas rezeki yg tak pernah putus ini sehingga aku bisa terus bersedekah</i>
                     </p>
+                    <p style="font-size: 8px;" class="text-body text-end">30 menit yang lalu</p>
                 </div>
             </div>
         </div>
@@ -225,8 +219,19 @@
 <script>
 var arrowup = document.getElementById("arrow-up");
 
+arrowup.style.display = "none";
 
-    arrowup.style.display = "none";
+function bgc(x) {
+  if (x.matches) { // If media query matches
+    document.body.style.backgroundColor = "#f5f6fa";
+  } else {
+   document.body.style.backgroundColor = "#fff";
+  }
+}
 
+var x = window.matchMedia("(max-width: 700px)")
+bgc(x);
+
+x.addListener(bgc)
 </script>
 @endsection
