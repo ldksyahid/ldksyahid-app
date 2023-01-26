@@ -59,7 +59,7 @@
         @yield('style')
     </head>
 
-    <body>
+    <body id="body-lp">
         <!-- Spinner Start -->
         <div
         id="spinner"

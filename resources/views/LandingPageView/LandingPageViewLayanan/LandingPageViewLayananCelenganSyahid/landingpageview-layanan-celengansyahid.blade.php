@@ -157,7 +157,7 @@
             {{-- mobile --}}
             <div class="row mt-1 mobileResponsive">
                 <div class="col-lg-4 col-md-6 mt-3">
-                    <div class="card shadow-c">
+                    <div class="card shadow">
                         <div class="row d-flex flex-row align-items-start">
                             <div class="col" style="margin-right:-20px;">
                                 <div  class="p-3">
