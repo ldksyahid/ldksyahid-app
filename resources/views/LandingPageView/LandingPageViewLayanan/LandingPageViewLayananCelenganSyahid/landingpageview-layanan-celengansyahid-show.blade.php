@@ -175,13 +175,19 @@
     <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
             <h6 class="text-body">Detail</h6>
-            <p>Di tengah maraknya penggunaan sosial media, faktanya minat baca orang Indonesia menurut data UNESCO hanya 0,001%. Artinya, dari 1.000 orang Indonesia, hanya 1 orang yang rajin membaca. Sementara survei Program for International Student Assessment (PISA) menyebutkan tingkat literasi Indonesia berada di urutan ke-62 dari 70 negara di dunia.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scel<span id="dotsDetail"></span><span id="moreDetail" style="display: none;">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.</span></p>
+            <div class="text-center">
+                <button type="button" class="btn btn-outline-primary w-100" onclick="readMoreLessDetail()" id="readMoreLessDetail">Baca Selengkapnya</button>
+            </div>
         </div>
     </div>
     <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
             <h6 class="text-body">Kabar Terbaru</h6>
-            <p>Sejak didirikan lebih dari 10 tahun lalu dari hasil uang swadaya masyarakrat, sekolah ini tak pernah memiliki perpustakaan yang layak. Jangankan perpustakaan, buku-buku yang digunakanpun tidak sesuai dengan kurikulum yang berlaku. Tidak seperti sekolah lain yang memiliki perpustakaan, semua buku-buku hasil sumbangan tersebut hanya bisa diletakkan di atas meja pojok kelas. Berbaur menjadi satu tanpa dibedakan berdasarkan urutan kelas. Bahkan, tak jarang sudah usang.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scel<span id="dotsUpdate"></span><span id="moreUpdate" style="display: none;">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.</span></p>
+            <div class="text-center">
+                <button type="button" class="btn btn-outline-primary w-100" onclick="readMoreLessUpdate()" id="readMoreLessUpdate">Baca Selengkapnya</button>
+            </div>
         </div>
     </div>
     <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
@@ -191,7 +197,7 @@
                 <div class="col col-lg-2 text-start w-100" >
                     <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%; margin-top:0px;" width="35" height="35">
                 </div>
-                <div class="col col-lg-10 text-start" style="margin-left: -225px;">
+                <div class="col col-lg-10 text-start" style="margin-left: -200px;">
                     <h6 class="text-body" style="font-size:12px;">Manusia Baik</h6>
                     <p class="text-body" style="font-size:10px;">
                     Berdonasi Sebesar <strong>Rp. 250.000,-</strong>
@@ -233,5 +239,37 @@ var x = window.matchMedia("(max-width: 700px)")
 bgc(x);
 
 x.addListener(bgc)
+</script>
+<script>
+function readMoreLessDetail() {
+    var dots = document.getElementById("dotsDetail");
+    var moreText = document.getElementById("moreDetail");
+    var btnText = document.getElementById("readMoreLessDetail");
+
+    if (dots.style.display === "none") {
+        dots.style.display = "inline";
+        btnText.innerHTML = "Baca Selengkapnya";
+        moreText.style.display = "none";
+    } else {
+        dots.style.display = "none";
+        btnText.innerHTML = "Baca Lebih Sedikit";
+        moreText.style.display = "inline";
+    }
+}
+function readMoreLessUpdate() {
+    var dots = document.getElementById("dotsUpdate");
+    var moreText = document.getElementById("moreUpdate");
+    var btnText = document.getElementById("readMoreLessUpdate");
+
+    if (dots.style.display === "none") {
+        dots.style.display = "inline";
+        btnText.innerHTML = "Baca Selengkapnya";
+        moreText.style.display = "none";
+    } else {
+        dots.style.display = "none";
+        btnText.innerHTML = "Baca Lebih Sedikit";
+        moreText.style.display = "inline";
+    }
+}
 </script>
 @endsection
