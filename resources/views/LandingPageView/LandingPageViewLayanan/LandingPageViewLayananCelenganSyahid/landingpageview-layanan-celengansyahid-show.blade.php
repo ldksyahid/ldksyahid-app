@@ -3,11 +3,12 @@
 @section('style')
 <link href="{{ asset('css/multiselectcelengan.css') }}" rel="stylesheet" />
 <link href="{{ asset('css/navcelengan.css') }}" rel="stylesheet" />
+<link href="{{ asset('css/cardcelengan.css') }}" rel="stylesheet" />
 @endsection
 
 
 @section('content')
-<div class="container-xxl websiteResponsive" style="background-color: #f5f6fa;">
+<div class="container-fluid websiteResponsive" style="background-color: #f5f6fa;">
     <div class="row g-5">
         <div class="col col-lg-8">
             <div class="p-5" style="margin-right: -20px">
@@ -79,7 +80,7 @@
         </div>
     </div>
 </div>
-<div class="container-xxl websiteResponsive">
+<div class="container-fluid websiteResponsive">
     <div class="row g-5">
         <div class="col-md-12">
             <div class="tab" role="tabpanel">
@@ -175,7 +176,9 @@
     <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
             <h6 class="text-body">Detail</h6>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scel<span id="dotsDetail"></span><span id="moreDetail" style="display: none;">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.</span></p>
+            <p>
+                {!!  substr('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.', 0, 150) !!}<span id="dotsDetail"></span><span id="moreDetail" style="display: none;">{!!  substr('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.', 151) !!}</span>
+            </p>
             <div class="text-center">
                 <button type="button" class="btn btn-outline-primary w-100" onclick="readMoreLessDetail()" id="readMoreLessDetail">Baca Selengkapnya</button>
             </div>
@@ -184,7 +187,9 @@
     <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
             <h6 class="text-body">Kabar Terbaru</h6>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scel<span id="dotsUpdate"></span><span id="moreUpdate" style="display: none;">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.</span></p>
+            <p>
+                {!!  substr('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.', 0, 150) !!}<span id="dotsUpdate"></span><span id="moreUpdate" style="display: none;">{!!  substr('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.', 151) !!}</span>
+            </p>
             <div class="text-center">
                 <button type="button" class="btn btn-outline-primary w-100" onclick="readMoreLessUpdate()" id="readMoreLessUpdate">Baca Selengkapnya</button>
             </div>
