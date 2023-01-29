@@ -5,14 +5,14 @@
 @endsection
 
 @section('content')
-<div class="container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.2s">
+<div class="container-fluid p-0 mb-4 wow fadeIn" data-wow-delay="0.2s">
   <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
+        <div class="carousel-item">
+            <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp3.png') }}" alt="Image" />
+        </div>
           <div class="carousel-item active">
-              <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="Image" />
-          </div>
-          <div class="carousel-item">
-              <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp2.png') }}" alt="Image" />
+              <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp4.png') }}" alt="Image" />
           </div>
       </div>
   </div>
@@ -20,7 +20,7 @@
 <div class="container-xl">
     <div class="row g-3">
         {{-- website --}}
-        <div class="col-lg-12 col-md-6 wow fadeInUp websiteResponsive" data-wow-delay="0.1s">
+        <div class="col-lg-12 col-md-6 wow fadeInUp website-responsive" data-wow-delay="0.1s">
             <div class="border-start border-5 border-primary ps-4 mb-3">
                 <h6 class="text-body text-uppercase mb-2">Celengan Syahid</h6>
                 <h1 class="display-6 mb-0">
@@ -33,7 +33,7 @@
             </p>
         </div>
         {{-- mobile --}}
-        <div class="col-lg-12 col-md-6 wow fadeInUp mobileResponsive" data-wow-delay="0.1s">
+        <div class="col-lg-12 col-md-6 wow fadeInUp mobile-responsive" data-wow-delay="0.1s">
             <div class="border-start border-5 border-primary ps-4 mb-3">
                 <h6 class="text-body text-uppercase mb-2" style="font-size: 18px;">Celengan Syahid</h6>
                 <h1 class="display-6 mb-0" style="font-size: 24px;">
@@ -98,11 +98,11 @@
         <div class="col-lg-12 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
             <h6 class="text-body">Menampilkan 12 dari 62 <i>campaign</i></h6>
             {{-- website --}}
-            <div class="row g-4 mt-1 websiteResponsive">
+            <div class="row g-4 mt-1 website-responsive">
                 <div class="col-lg-4 col-md-6 mt-3">
                     <div class="card shadow-c mb-2">
-                        <div style="height: 13em;">
-                            <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}"><img src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="" class="card-img w-100"></a>
+                        <div style="height: 12em;">
+                            <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}"><img src="{{ asset('Images/fixImage/dummy/excamp4.png') }}" alt="" class="card-img w-100"></a>
                         </div>
                         <div class="mt-1 p-3">
                             <div class="badge" style="margin-left:-8px;"> <span>Sosial Dakwah</span> </div>
@@ -134,7 +134,7 @@
                                                 <span style="font-size: 12px;">Terkumpul</span>
                                                 <br>
                                                 <span style=" color:#00a79d;">
-                                                    <strong>Rp. 23.000,-</strong>
+                                                    <strong>Rp23.000</strong>
                                                 </span>
                                             </p>
                                         </div>
@@ -155,13 +155,13 @@
                 </div>
             </div>
             {{-- mobile --}}
-            <div class="row mt-1 mobileResponsive">
+            <div class="row mt-1 mobile-responsive">
                 <div class="col-lg-4 col-md-6 mt-3">
                     <div class="card shadow">
                         <div class="row d-flex flex-row align-items-start">
                             <div class="col" style="margin-right:-20px;">
                                 <div  class="p-3">
-                                    <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}"><img src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
+                                    <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}"><img src="{{ asset('Images/fixImage/dummy/excamp4.png') }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
                                 </div>
                             </div>
                             <div class="col" style="margin-left:-20px;">
@@ -192,7 +192,7 @@
                                 <div class="row">
                                     <div class="col text-start" style="line-height: -50px;">
                                         <p style="font-size: 9px;">Terkumpul</p>
-                                        <p style=" color:#00a79d; font-size:10px; margin-top:-18px;"><strong>Rp. 23.000,-</strong></p>
+                                        <p style=" color:#00a79d; font-size:10px; margin-top:-18px;"><strong>Rp23.000</strong></p>
                                     </div>
                                     <div class="col text-end">
                                         <p style="font-size: 9px;">Sisa Hari</p>

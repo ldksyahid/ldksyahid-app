@@ -38,10 +38,10 @@
 <!-- Navbar Start -->
 <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top px-4 px-lg-5 py-lg-0" id="navbar">
     <a href="#" class="navbar-brand d-flex align-items-center">
-        <h3 class="m-0 websiteResponsive">
+        <h3 class="m-0 website-responsive">
             <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" width="55" height="55" alt="Logo LDK Syahid"> </i>LDK Syahid
         </h3>
-        <h6 class="m-0 mobileResponsive">
+        <h6 class="m-0 mobile-responsive">
             <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" width="33" height="33" alt="Logo LDK Syahid"> </i>LDK Syahid
         </h6>
     </a>

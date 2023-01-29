@@ -2055,7 +2055,7 @@ textarea.form-control-lg {
     filter: brightness(90%);
 }
 .form-check-input:focus {
-    border-color: #fed095;
+    border-color: #00a79d;
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgba(0, 243, 220, 0.25);
 }

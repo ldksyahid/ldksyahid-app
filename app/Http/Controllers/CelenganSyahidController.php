@@ -61,6 +61,17 @@ class CelenganSyahidController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function status($nameCampaign)
+    {
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasi-sekarang-status',["title" => "Layanan"]);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id

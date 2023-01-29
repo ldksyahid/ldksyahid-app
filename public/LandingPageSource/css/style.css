@@ -140,18 +140,18 @@
         opacity: 1;
     }
 }
-/* .websiteResponsive {
+/* .website-responsive {
     display: none;
     visibility: visible;
 } */
 @media (max-width: 912px) {
-    .websiteResponsive {
+    .website-responsive {
         display: none;
         visibility: visible;
     }
 }
 @media (min-width: 912px) {
-    .mobileResponsive {
+    .mobile-responsive {
         display: none;
         visibility: visible;
     }

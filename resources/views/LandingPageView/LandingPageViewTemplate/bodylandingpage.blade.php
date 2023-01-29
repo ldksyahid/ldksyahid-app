@@ -13,7 +13,7 @@
         <!-- Favicon -->
         <link href="{{ asset('Images/Logos/logoldksyahid.png') }}" rel="icon" />
         {{-- <link rel="shortcut icon" href="{{ asset('KestariHitungProkerbyYuda/images/kestari.ico') }}" type="image/x-icon"> --}}
-
+        {!! ReCaptcha::htmlScriptTagJsApi() !!}
 
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
