@@ -112,6 +112,7 @@ Route::get('/service/callkestari', [CallKestariController::class, 'index'])->nam
 Route::get('/service/celengansyahid', [CelenganSyahidController::class, 'index'])->name('service.celengansyahid');
 Route::get('/service/celengansyahid/{nameCampaign}', [CelenganSyahidController::class, 'show'])->name('service.celengansyahid.detail');
 Route::get('/service/celengansyahid/yuk-donasi/{nameCampaign}', [CelenganSyahidController::class, 'donasiSekarang'])->name('service.celengansyahid.detail.donasisekarang');
+Route::get('/service/celengansyahid/yuk-donasi/{nameCampaign}/status', [CelenganSyahidController::class, 'status'])->name('service.celengansyahid.detail.donasisekarang.status');
 // ======================================= END ROUTE LANDING PAGE =======================================
 
 

@@ -8,11 +8,11 @@
 
 
 @section('content')
-<div class="container-fluid websiteResponsive" style="background-color: #f5f6fa;">
+<div class="container-fluid website-responsive" style="background-color: #f5f6fa;">
     <div class="row g-5">
         <div class="col col-lg-8">
             <div class="p-5" style="margin-right: -20px">
-                <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="Image" style="border-radius: 15px;"/>
+                <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp3.png') }}" alt="Image" style="border-radius: 15px;"/>
             </div>
         </div>
         <div class="col col-lg-4 d-flex flex-row align-items-center">
@@ -34,7 +34,7 @@
                 <div class="mb-0">
                     <div class="row d-flex flex-row align-items-end">
                         <div class="col-lg-8 text-start">
-                            <h5 style=" color:#00a79d;"><strong>Rp. 23.000,-</strong></h5>
+                            <h5 style=" color:#00a79d;"><strong>Rp23.000</strong></h5>
                         </div>
                         <div class="col-lg-4 text-end" style="margin-bottom: -20px;">
                             <p style="font-size:12px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>5 Donatur</p>
@@ -48,7 +48,7 @@
                     <div class="row d-flex flex-row align-items-center">
                         <div class="col-lg-8 text-start my-2">
                             <p style="font-size: 12px;">
-                                0.63% dari target Rp. 100.000.000,-
+                                0.63% dari target Rp100.000.000
                             </p>
                         </div>
                         <div class="col-lg-4 text-end">
@@ -80,7 +80,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid websiteResponsive">
+<div class="container-fluid website-responsive">
     <div class="row g-5">
         <div class="col-md-12">
             <div class="tab" role="tabpanel">
@@ -114,7 +114,7 @@
                                         </div>
                                     </div>
                                     <p class="text-body" style="">
-                                    Berdonasi Sebesar <strong>Rp. 250.000,-</strong>
+                                    Berdonasi Sebesar <strong>Rp250.000</strong>
                                     <br>
                                     <i>ya Allah terimakasih atas rezeki yg tak pernah putus ini sehingga aku bisa terus bersedekah</i>
                                     </p>
@@ -128,10 +128,10 @@
     </div>
 </div>
 
-<div class="container-fluid p-0 wow fadeIn mobileResponsive" data-wow-delay="0.2s" style="background-color: #f5f6fa;">
+<div class="container-fluid p-0 wow fadeIn mobile-responsive" data-wow-delay="0.2s" style="background-color: #f5f6fa;">
     <div class="p-4">
         <div>
-            <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp.png') }}" alt="Image" style="border-radius: 15px;"/>
+            <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp3.png') }}" alt="Image" style="border-radius: 15px;"/>
             <div class="badge-mobile mt-3"> <span style="font-size:10px;"><b>Sosial Dakwah</b></span> </div>
             <div class="d-flex flex-row align-items-center">
                 <h5 class="text-body mb-0">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</h5>
@@ -149,7 +149,7 @@
             <div class="mb-0">
                 <div class="row d-flex flex-row align-items-end">
                     <div class="col-lg-8 text-start" style="margin-bottom: -39px;">
-                        <h5 style=" color:#00a79d; font-size:16px;"><strong>Rp. 23.000,-</strong></h5>
+                        <h5 style=" color:#00a79d; font-size:16px;"><strong>Rp23.000</strong></h5>
                     </div>
                     <div class="col-lg-4 text-end" style="margin-bottom: -20px;">
                         <p style="font-size:10px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>5 Donatur</p>
@@ -163,7 +163,7 @@
                 <div class="row d-flex flex-row align-items-center">
                     <div class="col-lg-8 text-start my-2">
                         <p style="font-size: 10px;">
-                            0.63% dari target Rp. 100.000.000,-
+                            0.63% dari target Rp100.000.000
                         </p>
                     </div>
                     <div class="col-lg-4 text-end" style="margin-top: -50px;">
@@ -205,7 +205,7 @@
                 <div class="col col-lg-10 text-start" style="margin-left: -200px;">
                     <h6 class="text-body" style="font-size:12px;">Manusia Baik</h6>
                     <p class="text-body" style="font-size:10px;">
-                    Berdonasi Sebesar <strong>Rp. 250.000,-</strong>
+                    Berdonasi Sebesar <strong>Rp250.000</strong>
                     <br>
                     <i>ya Allah terimakasih atas rezeki yg tak pernah putus ini sehingga aku bisa terus bersedekah</i>
                     </p>
@@ -215,7 +215,7 @@
         </div>
     </div>
 </div>
-<div class="conteiner-fluid mobileResponsive p-3 shadow wow fadeInUp" style="position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f5f6fa; text-align: center; z-index:3;" data-wow-delay="0.2s">
+<div class="conteiner-fluid mobile-responsive p-3 shadow wow fadeInUp" style="position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f5f6fa; text-align: center; z-index:3;" data-wow-delay="0.2s">
     <div class="col-lg-12 text-center">
         <a class="btn btn-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/yuk-donasi/{{ 'pojok-baca-pelosok-negeri' }}">Donasi Sekarang</a>
         <hr>
