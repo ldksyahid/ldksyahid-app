@@ -15,6 +15,8 @@ class CreateCampaignsTable extends Migration
     {
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('donations_id');
+            $table->foreign('donations_id')->references('id')->on('donations')->onDelete('cascade');
             $table->timestamps();
         });
     }
