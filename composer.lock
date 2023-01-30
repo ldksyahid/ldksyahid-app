@@ -197,6 +197,10 @@
                 "laravel",
                 "pdf"
             ],
+            "support": {
+                "issues": "https://github.com/barryvdh/laravel-dompdf/issues",
+                "source": "https://github.com/barryvdh/laravel-dompdf/tree/v2.0.0"
+            },
             "funding": [
                 {
                     "url": "https://fruitcake.nl",
@@ -274,10 +278,6 @@
                 "recaptcha",
                 "validation"
             ],
-            "support": {
-                "issues": "https://github.com/biscolab/laravel-recaptcha/issues",
-                "source": "https://github.com/biscolab/laravel-recaptcha/tree/v5.4.0"
-            },
             "time": "2022-05-07T12:52:46+00:00"
         },
         {
@@ -630,6 +630,10 @@
             ],
             "description": "DOMPDF is a CSS 2.1 compliant HTML to PDF converter",
             "homepage": "https://github.com/dompdf/dompdf",
+            "support": {
+                "issues": "https://github.com/dompdf/dompdf/issues",
+                "source": "https://github.com/dompdf/dompdf/tree/v2.0.1"
+            },
             "time": "2022-09-22T13:43:41+00:00"
         },
         {
@@ -2356,6 +2360,10 @@
                 "manipulation",
                 "processing"
             ],
+            "support": {
+                "issues": "https://github.com/thephpleague/glide/issues",
+                "source": "https://github.com/thephpleague/glide/tree/1.7.1"
+            },
             "time": "2022-04-27T04:03:46+00:00"
         },
         {
@@ -2477,6 +2485,10 @@
                 "serializer",
                 "xml"
             ],
+            "support": {
+                "issues": "https://github.com/Masterminds/html5-php/issues",
+                "source": "https://github.com/Masterminds/html5-php/tree/2.7.6"
+            },
             "time": "2022-08-18T16:18:26+00:00"
         },
         {
@@ -3091,6 +3103,10 @@
             ],
             "description": "A library to read, parse, export and make subsets of different types of font files.",
             "homepage": "https://github.com/PhenX/php-font-lib",
+            "support": {
+                "issues": "https://github.com/dompdf/php-font-lib/issues",
+                "source": "https://github.com/dompdf/php-font-lib/tree/0.5.4"
+            },
             "time": "2021-12-17T19:44:54+00:00"
         },
         {
@@ -3133,6 +3149,10 @@
             ],
             "description": "A library to read, parse and export to PDF SVG files.",
             "homepage": "https://github.com/PhenX/php-svg-lib",
+            "support": {
+                "issues": "https://github.com/dompdf/php-svg-lib/issues",
+                "source": "https://github.com/dompdf/php-svg-lib/tree/0.5.0"
+            },
             "time": "2022-09-06T12:16:56+00:00"
         },
         {
@@ -3999,6 +4019,10 @@
                 "parser",
                 "stylesheet"
             ],
+            "support": {
+                "issues": "https://github.com/sabberworm/PHP-CSS-Parser/issues",
+                "source": "https://github.com/sabberworm/PHP-CSS-Parser/tree/8.4.0"
+            },
             "time": "2021-12-11T13:40:54+00:00"
         },
         {
@@ -4056,6 +4080,9 @@
                 "screenshot",
                 "webpage"
             ],
+            "support": {
+                "source": "https://github.com/spatie/browsershot/tree/3.57.3"
+            },
             "funding": [
                 {
                     "url": "https://github.com/spatie",
@@ -4117,6 +4144,10 @@
                 "image",
                 "spatie"
             ],
+            "support": {
+                "issues": "https://github.com/spatie/image/issues",
+                "source": "https://github.com/spatie/image/tree/1.10.6"
+            },
             "funding": [
                 {
                     "url": "https://spatie.be/open-source/support-us",
@@ -4177,6 +4208,10 @@
                 "image-optimizer",
                 "spatie"
             ],
+            "support": {
+                "issues": "https://github.com/spatie/image-optimizer/issues",
+                "source": "https://github.com/spatie/image-optimizer/tree/1.6.2"
+            },
             "time": "2021-12-21T10:08:05+00:00"
         },
         {
@@ -4224,6 +4259,10 @@
                 "spatie",
                 "temporary-directory"
             ],
+            "support": {
+                "issues": "https://github.com/spatie/temporary-directory/issues",
+                "source": "https://github.com/spatie/temporary-directory/tree/1.3.0"
+            },
             "time": "2020-11-09T15:54:21+00:00"
         },
         {
@@ -6783,6 +6822,10 @@
                 "jquery",
                 "laravel"
             ],
+            "support": {
+                "issues": "https://github.com/yajra/laravel-datatables/issues",
+                "source": "https://github.com/yajra/laravel-datatables/tree/v9.21.2"
+            },
             "funding": [
                 {
                     "url": "https://www.paypal.me/yajra",
@@ -9069,5 +9112,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "1.1.0"
 }
