@@ -26,7 +26,7 @@
 }
 
 .shadow-c {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16), 0 4px 10px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .badge-mobile span {
@@ -39,6 +39,17 @@
     color: #ffff;
     justify-content: center;
     align-items: center;
+}
+
+.badge-mobile-all span {
+    background-color: #00a79d;
+    width: 55px;
+    height: 13px;
+    padding: 3px;
+    border-radius: 3px;
+    display: flex;
+    color: #ffff;
+    justify-content: center;
 }
 
 .progress {

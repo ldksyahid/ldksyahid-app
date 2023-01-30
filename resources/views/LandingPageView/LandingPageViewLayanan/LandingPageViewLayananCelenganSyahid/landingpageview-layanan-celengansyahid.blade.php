@@ -156,51 +156,49 @@
             </div>
             {{-- mobile --}}
             <div class="row mt-1 mobile-responsive">
-                <div class="col-lg-4 col-md-6 mt-3">
-                    <div class="card shadow">
-                        <div class="row d-flex flex-row align-items-start">
-                            <div class="col" style="margin-right:-20px;">
-                                <div  class="p-3">
-                                    <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}"><img src="{{ asset('Images/fixImage/dummy/excamp4.png') }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
+                <div class="col-lg-4 col-md-6 mt-1">
+                    <div class="row d-flex flex-row align-items-center">
+                        <div class="col" style="margin-right:-20px;">
+                            <div  class="p-3">
+                                <div class="badge-mobile-all pb-1" style="margin-top: -20px"> <span style="font-size:6px; font-weight:575;"><p>Sosial Dakwah</p></span> </div>
+                                <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}"><img src="{{ asset('Images/fixImage/dummy/excamp4.png') }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
+                            </div>
+                        </div>
+                        <div class="col" style="margin-left:-20px;">
+                            <div class="p-3">
+                                <div style="line-height: 1.1em">
+                                    <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}" style="font-size: 12px ; font-weight:600;">{!!  substr(strip_tags('Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi'), 0, 60) !!}</a>
                                 </div>
                             </div>
-                            <div class="col" style="margin-left:-20px;">
-                                <div class="p-3">
-                                    <div class="badge-mobile "> <span style="font-size:10px;"><b>Sosial Dakwah</b></span> </div>
-                                    <div style="line-height: 1.1em">
-                                        <h5 class=""><a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}" style="font-size: 12px ;">{!!  substr(strip_tags('Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi'), 0, 25) !!}</a></h5>
-                                        <p style="font-size: 10px;">
-                                            {!!  substr(strip_tags('Miris, literasi Indonesia posisi ke-62 dari 70 negara di dunia. Mari bangun bangsa dengan tingkatkan literasi melalui Pojok'), 0, 100) !!}
-                                        </p>
+                            <div class="col p-3" style="margin-top:-30px;">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex flex-row align-items-center">
+                                        <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="15" height="15">
+                                        <div class="ms-2 c-details">
+                                            <h6 style="font-size: 10px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank" style="font-size: 8px">UKM LDK Syahid</a></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress  my-1" style="height: 8px;">
+                                    <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong style="font-size: 6px; margin-bottom:0px;">50%</strong></div>
+                                </div>
+                                <div class="mt-0">
+                                    <div class="row">
+                                        <div class="col text-start" style="line-height: -50px;">
+                                            <p style="font-size: 8px;">Terkumpul</p>
+                                            <p style=" color:#00a79d; font-size:9px; margin-top:-18px;"><strong>Rp23.000</strong></p>
+                                        </div>
+                                        <div class="col text-end">
+                                            <p style="font-size: 8px;">Sisa Hari</p>
+                                            <p style="font-size:9px; margin-top:-18px;"><strong>365</strong></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col p-3" style="margin-top:-30px;">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex flex-row align-items-center">
-                                    <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="20" height="20">
-                                    <div class="ms-2 c-details">
-                                        <h6 style="font-size: 10px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="progress  my-1" style="height: 13px;">
-                                <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong style="font-size: 9px;">50%</strong></div>
-                            </div>
-                            <div class="mt-0">
-                                <div class="row">
-                                    <div class="col text-start" style="line-height: -50px;">
-                                        <p style="font-size: 9px;">Terkumpul</p>
-                                        <p style=" color:#00a79d; font-size:10px; margin-top:-18px;"><strong>Rp23.000</strong></p>
-                                    </div>
-                                    <div class="col text-end">
-                                        <p style="font-size: 9px;">Sisa Hari</p>
-                                        <p style="font-size:10px; margin-top:-18px;"><strong>365</strong></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
+                    <div style="margin:-25px -20px 0px -20px;" class="px-3">
+                        <hr>
                     </div>
                 </div>
             </div>
