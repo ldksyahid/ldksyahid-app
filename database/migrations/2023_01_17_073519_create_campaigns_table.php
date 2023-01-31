@@ -15,6 +15,20 @@ class CreateCampaignsTable extends Migration
     {
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
+            $table->string('logo_pj')->nullable();
+            $table->string('nama_pj')->nullable();
+            $table->string('telp_pj')->nullable();
+            $table->string('poster')->nullable();
+            $table->string('kategori')->nullable();
+            $table->string('judul')->nullable();
+            $table->string('lokasi')->nullable();
+            $table->longText('cerita')->nullable();
+            $table->longText('kabar_terbaru')->nullable();
+            $table->string('tujuan')->nullable();
+            $table->string('target_biaya')->nullable();
+            $table->date('deadline')->nullable();
+            $table->string('link')->nullable();
+            $table->string('status')->nullable();
             $table->unsignedBigInteger('donations_id');
             $table->foreign('donations_id')->references('id')->on('donations')->onDelete('cascade');
             $table->timestamps();
