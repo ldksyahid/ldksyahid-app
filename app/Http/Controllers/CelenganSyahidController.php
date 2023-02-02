@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Campaign;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\File;
 
 class CelenganSyahidController extends Controller
 {
@@ -103,5 +106,16 @@ class CelenganSyahidController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function indexAdminCampaign()
+    {
+        $postcampaign = Campaign::orderBy('created_at','desc')->get();
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcamp',compact('postcampaign'), ["title" => "Celengan Syahid"]);
+    }
+
+    public function createAdminCampaign()
+    {
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampcreate', ["title" => "Celengan Syahid"]);
     }
 }
