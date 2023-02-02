@@ -233,6 +233,15 @@ Route::get('/admin/about/itsupport/{id}/edit', [ITSupportController::class, 'edi
 Route::put('/admin/about/itsupport/{id}/update', [ITSupportController::class, 'update'])->name('admin.about.itsupport.update')->middleware('is_admin');
 Route::get('/admin/about/itsupport/{id}/destroy', [ITSupportController::class, 'destroy'])->name('admin.about.itsupport.destroy')->middleware('is_admin');
 
+// Route AdminPage Service Campaign
+Route::get('/admin/service/celengansyahid/campaigns', [CelenganSyahidController::class, 'indexAdminCampaign'])->name('admin.service.index.campaign')->middleware('is_admin');
+Route::get('/admin/service/celengansyahid/campaign/create', [CelenganSyahidController::class, 'createAdminCampaign'])->name('admin.service.create.campaign')->middleware('is_admin');
+Route::post('/admin/service/celengansyahid/campaign/store', [CelenganSyahidController::class, 'storeAdminCampaign'])->name('admin.service.store.campaign')->middleware('is_admin');
+Route::get('/admin/service/celengansyahid/campaign/{id}/edit', [CelenganSyahidController::class, 'editAdminCampaign'])->name('admin.service.edit.campaign')->middleware('is_admin');
+Route::put('/admin/service/celengansyahid/campaign/{id}/update', [CelenganSyahidController::class, 'updateAdminCampaign'])->name('admin.service.update.campaign')->middleware('is_admin');
+Route::put('/admin/service/celengansyahid/campaign/{id}/preview', [CelenganSyahidController::class, 'previewAdminCampaign'])->name('admin.service.preview.campaign')->middleware('is_admin');
+Route::get('/admin/service/celengansyahid/campaign/{id}/destroy', [CelenganSyahidController::class, 'destroyAdminCampaign'])->name('admin.service.destroy.campaign')->middleware('is_admin');
+
 // START Route AdminPage Service Shortlink
 Route::get('/admin/service/shortlink', function () {
     $urls = \AshAllenDesign\ShortURL\Models\ShortURL::latest()->get();
@@ -268,6 +277,6 @@ Route::get('{id}/destroy', function ($id) {
     return back()->with('success','URL Delete successfully. ');
 })->name('destroy')->middleware('is_admin_helper');
 
-Route::get('/{shortURLKey}', '\AshAllenDesign\ShortURL\Controllers\ShortURLController')->middleware('is_admin_helper');
+Route::get('/{shortURLKey}', '\AshAllenDesign\ShortURL\Controllers\ShortURLController');
 // END Route AdminPage Service Shortlink
 // ======================================= END ROUTE ADMIN PAGE =======================================
