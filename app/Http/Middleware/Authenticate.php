@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class Authenticate extends Middleware
 {
@@ -15,6 +16,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
+            Alert::error('Tidak Berhasil Masuk', 'gk bisa blokk');
             return route('login');
         }
     }

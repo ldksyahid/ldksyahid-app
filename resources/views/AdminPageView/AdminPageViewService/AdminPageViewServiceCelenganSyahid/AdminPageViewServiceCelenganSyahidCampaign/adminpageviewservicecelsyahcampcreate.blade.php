@@ -23,7 +23,7 @@
                         </div>
                         <div class="mb-3 col col-lg-6">
                             <label for="chooseKategoriCampaign" class="form-label">Kategori</label>
-                            <select class="form-select mb-3" aria-label="Default select" required>
+                            <select class="form-select mb-3" aria-label="Default select" required name="kategori">
                                 <option disabled selected hidden>-- Pilih Kategori --</option>
                                 <option value="pendidikan">Pendidikan</option>
                                 <option value="kemanusiaan">Kemanusiaan</option>
@@ -40,8 +40,58 @@
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-6">
-                            <label for="inputKotaCampaign" class="form-label">Kota</label>
+                            <label for="inputKotaCampaign" class="form-label">Kota Lokasi</label>
                             <input type="text" class="form-control" id="inputKotaCampaign" name='lokasi' placeholder="Jawaban Anda" required>
+                            <div class="invalid-feedback">
+                                Pertanyaan ini wajib diisi
+                            </div>
+                            <div class="valid-feedback">
+                                Okke!
+                            </div>
+                        </div>
+                        <div class="mb-3 col col-lg-6">
+                            <label for="inputTargetBiaya" class="form-label">Target Biaya</label>
+                            <input type="text" class="form-control" id="inputTargetBiaya" name='target_biaya' placeholder="Rp0" required >
+                            <div class="invalid-feedback">
+                                Pertanyaan ini wajib diisi
+                            </div>
+                            <div class="valid-feedback">
+                                Okke!
+                            </div>
+                        </div>
+                        <div class="mb-3 col col-lg-6">
+                            <label for="inputDeadlineCampaign" class="form-label">Deadline</label>
+                            <input type="date" class="form-control" id="inputDeadlineCampaign" name='deadline' required>
+                            <div class="invalid-feedback">
+                                Pertanyaan ini wajib diisi
+                            </div>
+                            <div class="valid-feedback">
+                                Okke!
+                            </div>
+                        </div>
+                        <div class="mb-3 col col-lg-12">
+                            <label for="inputCerita" class="form-label">Detail Cerita</label>
+                            <textarea class="form-control summernote" name="cerita" id="inputCerita" required></textarea>
+                            <div class="invalid-feedback">
+                                Pertanyaan ini wajib diisi
+                            </div>
+                            <div class="valid-feedback">
+                                Okke!
+                            </div>
+                        </div>
+                        <div class="mb-3 col col-lg-6">
+                            <label for="formFile" class="form-label">Poster (1920 x 1080 Pixel)</label>
+                            <input class="form-control" type="file" id="poster" name ='poster'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" required>
+                            <div class="invalid-feedback">
+                                Pertanyaan ini wajib diisi
+                            </div>
+                            <div class="valid-feedback">
+                                Okke!
+                            </div>
+                        </div>
+                        <div class="mb-3 col col-lg-6">
+                            <label for="inputLink" class="form-label">Link</label>
+                            <input type="text" class="form-control" id="inputLink" name='link' required placeholder="Jawaban Anda">
                             <div class="invalid-feedback">
                                 Pertanyaan ini wajib diisi
                             </div>
@@ -96,4 +146,29 @@
            });
         });
   </script>
+  <script>
+    const dengan_rupiah = document.querySelectorAll('#inputTargetBiaya');
+    for (let i = 0; i < dengan_rupiah.length; i++) {
+        dengan_rupiah[i].addEventListener('keyup', function(e)
+        {
+            dengan_rupiah[i].value = formatRupiah(this.value, 'Rp');
+        });
+    }
+    function formatRupiah(angka, prefix)
+        {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split    = number_string.split(','),
+                sisa     = split[0].length % 3,
+                rupiah     = split[0].substr(0, sisa),
+                ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
+        }
+    </script>
 @endsection
