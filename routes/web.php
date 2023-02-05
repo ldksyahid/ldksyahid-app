@@ -241,6 +241,9 @@ Route::get('/admin/service/celengansyahid/campaign/{id}/edit', [CelenganSyahidCo
 Route::put('/admin/service/celengansyahid/campaign/{id}/update', [CelenganSyahidController::class, 'updateAdminCampaign'])->name('admin.service.update.campaign')->middleware('is_admin');
 Route::put('/admin/service/celengansyahid/campaign/{id}/preview', [CelenganSyahidController::class, 'previewAdminCampaign'])->name('admin.service.preview.campaign')->middleware('is_admin');
 Route::get('/admin/service/celengansyahid/campaign/{id}/destroy', [CelenganSyahidController::class, 'destroyAdminCampaign'])->name('admin.service.destroy.campaign')->middleware('is_admin');
+Route::post('/admin/service/celengansyahid/campaign/get-city', [CelenganSyahidController::class, 'storeKota'])->name('dependent-dropdown.store.kota')->middleware('is_admin');
+
+
 
 // START Route AdminPage Service Shortlink
 Route::get('/admin/service/shortlink', function () {
