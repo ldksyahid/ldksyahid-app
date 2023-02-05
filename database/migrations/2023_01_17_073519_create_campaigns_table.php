@@ -21,7 +21,8 @@ class CreateCampaignsTable extends Migration
             $table->string('poster')->nullable();
             $table->string('kategori')->nullable();
             $table->string('judul')->nullable();
-            $table->string('lokasi')->nullable();
+            $table->string('kota')->nullable();
+            $table->string('provinsi')->nullable();
             $table->longText('cerita')->nullable();
             $table->longText('kabar_terbaru')->nullable();
             $table->string('tujuan')->nullable();

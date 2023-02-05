@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Campaign;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
+use Laravolt\Indonesia\Models\Province;
+use Laravolt\Indonesia\Models\City;
+use Laravolt\Indonesia\Models\Village;
 
 class CelenganSyahidController extends Controller
 {
@@ -116,6 +119,24 @@ class CelenganSyahidController extends Controller
 
     public function createAdminCampaign()
     {
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampcreate', ["title" => "Celengan Syahid"]);
+        $provinces = Province::pluck('name', 'id');
+
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampcreate', compact('provinces'),["title" => "Celengan Syahid"]);
+    }
+
+    public function storeKota(Request $request )
+    {
+        dd($request);
+        if($request->ajax())
+        {
+            $cities = City::where('province_id', $request->get('id'))
+            ->pluck('name', 'id');
+
+        return response()->json($cities);
+        }
+        // $cities = City::where('province_id', $request->get('id'))
+        //     ->pluck('name', 'id');
+
+        // return response()->json($cities);
     }
 }
