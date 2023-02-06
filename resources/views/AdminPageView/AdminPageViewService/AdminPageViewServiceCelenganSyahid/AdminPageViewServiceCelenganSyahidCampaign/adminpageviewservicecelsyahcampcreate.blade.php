@@ -244,7 +244,7 @@
             e.preventDefault();
 
             var provinsi_id = $("#inputProvinsiCampaign").val();
-            console.log(provinsi_id);
+            // console.log(provinsi_id);
             var CSRF_TOKEN = '{{csrf_token()}}';
             console.log(CSRF_TOKEN);
             $.ajax({
