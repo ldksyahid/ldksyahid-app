@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @if (env('APP_ENV') == 'Production')
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     @endif
@@ -47,7 +48,6 @@
     {{-- END Datatable FROM https://brilliansolution.com/tutorial-laravel-8-datatables-yajra-datatables/--}}
 
     {{-- START Datatable FROM https://www.itsolutionstuff.com/post/laravel-8-yajra-datatables-example-tutorialexample.html--}}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" /> --}}
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
