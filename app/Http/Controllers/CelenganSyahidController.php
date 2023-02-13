@@ -3,109 +3,58 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\LibraryFunctionController as LFC;
 use App\Models\Campaign;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
 use Laravolt\Indonesia\Models\Province;
 use Laravolt\Indonesia\Models\City;
-use Laravolt\Indonesia\Models\Village;
+use Laravolt\Indonesia\Models\District;
+use Illuminate\Support\Facades\Hash;
 
 class CelenganSyahidController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         // $postevent = Event::orderBy('dateevent','desc')->get();
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',["title" => "Layanan"]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($nameCampaign)
     {
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show',["title" => "Layanan"]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function donasiSekarang($nameCampaign)
     {
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasi-sekarang',["title" => "Layanan"]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function status($nameCampaign)
     {
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasi-sekarang-status',["title" => "Layanan"]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //
@@ -120,23 +69,66 @@ class CelenganSyahidController extends Controller
     public function createAdminCampaign()
     {
         $provinces = Province::pluck('name', 'id');
+        $cities = City::pluck('name', 'id');
 
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampcreate', compact('provinces'),["title" => "Celengan Syahid"]);
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampcreate', compact(['provinces', 'cities']),["title" => "Celengan Syahid"]);
     }
 
-    public function storeKota(Request $request )
+    public function storeAdminCampaign(Request $request)
     {
-        dd($request);
-        if($request->ajax())
-        {
-            $cities = City::where('province_id', $request->get('id'))
-            ->pluck('name', 'id');
+        $target_biaya = LFC::replaceamount($request['target_biaya']);
+        $provinsi = ucwords(strtolower($request["provinsi"]));
+        $kota = ucwords(strtolower($request["kota"]));
 
-        return response()->json($cities);
+        $filename_poster = time().$request->file('poster')->getClientOriginalName();
+        $path_poster = $request->file('poster')->storeAs('Images/uploads/campaigns',$filename_poster);
+
+        $path_logo_pj = null;
+        if ($request->logo_pj != null) {
+            $filename_logo_pj = time().$request->file('logo_pj')->getClientOriginalName();
+            $path_logo_pj = $request->file('logo_pj')->storeAs('Images/uploads/logos',$filename_logo_pj);
         }
-        // $cities = City::where('province_id', $request->get('id'))
-        //     ->pluck('name', 'id');
 
-        // return response()->json($cities);
+        // dd($kota);
+
+        $postCampaign = Campaign::create([
+            "judul" => $request['judul'],
+            "kategori" => $request["kategori"],
+            "link" => $request["link"],
+            "provinsi" => $provinsi,
+            "kota" => $kota,
+            "target_biaya" => $target_biaya,
+            "cerita" => $request["cerita"],
+            "deadline" => $request["deadline"],
+            "tujuan" => $request["tujuan"],
+            "poster" => $path_poster,
+            "logo_pj" => $path_logo_pj,
+            "nama_pj" => $request["nama_pj"],
+            "telp_pj" => $request["telp_pj"],
+            "link_pj" => $request["link_pj"],
+        ]);
+
+        Alert::success('Success', 'Campaign has been uploaded !');
+        return redirect('/admin/service/celengansyahid/campaigns');
     }
+
+    public function destroyAdminCampaign($id){
+        // hapus file
+        $gambar = Campaign::where('id',$id)->first();
+        File::delete($gambar->poster);
+        File::delete($gambar->logo_pj);
+
+        // hapus data
+        Campaign    ::where('id',$id)->delete();
+        return redirect()->back();
+    }
+    // public function storeKota(request $request)
+    // {
+    //     var_dump($request->get('province_id'));
+    //     $cities = City::where('province_id', $request->get('id'))
+    //         ->pluck('name', 'id');
+    //     $cities = City::pluck('name', $request->get('province_id'));
+    //     return response()->json($cities);
+    // }
 }
+

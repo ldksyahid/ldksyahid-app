@@ -128,8 +128,15 @@
                                     id="note"
                                     style="height: 100px"
                                     name="note"
+                                    required
                                 ></textarea>
                                 <label for="note">Catatan</label>
+                                <div class="invalid-feedback">
+                                    Kasih catatan dong untuk kami
+                                </div>
+                                <div class="valid-feedback">
+                                    Woke!
+                                </div>
                             </div>
                         </div>
                         <div class="col-12">

@@ -127,6 +127,7 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
+
         // hapus file
         $gambar = Event::where('id',$id)->first();
         File::delete($gambar->poster);
