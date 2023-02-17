@@ -16,7 +16,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            Alert::error('Tidak Berhasil Masuk', 'gk bisa blokk');
+            Alert::info('Tidak Berhasil Masuk', 'Harap login Terlebih dahulu!');
             return route('login');
         }
     }

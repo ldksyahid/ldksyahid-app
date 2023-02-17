@@ -27,12 +27,17 @@
                                 <td align='center'>
                                     <img style="width: 100px;" src="{{ asset($postjumbotron->picture) }}" alt="{{$postjumbotron->title}}" class="card-img-top"/>
                                 </td>
-                                <td align='center'>{{$postjumbotron->btnname}}</td>
-                                <td align='center'><a href="{{$postjumbotron->btnlink}}" target="_blank">Link</a></td>
+                                @if ($postjumbotron->btnname != null || $postjumbotron->btnlink != null)
+                                    <td align='center'>{{$postjumbotron->btnname}}</td>
+                                    <td align='center'><a href="{{$postjumbotron->btnlink}}" target="_blank">Link</a></td>
+                                @else
+                                    <td align='center'>None</td>
+                                    <td align='center'>None</td>
+                                @endif
                                 <td align="center">
-                                        <a href="/admin/jumbotron/{{$postjumbotron->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
-                                        <button type="submit" onclick="deleteConfirmationJumbotron({{$postjumbotron->id}})" id="delete-jumbotron" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/admin/jumbotron/{{$postjumbotron->id}}/preview"><i class="fa fa-eye"></i></a>
+                                    <a href="/admin/jumbotron/{{$postjumbotron->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
+                                    <button type="submit" onclick="deleteConfirmationJumbotron({{$postjumbotron->id}})" id="delete-jumbotron" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
+                                    <a class="btn btn-sm btn-primary" href="/admin/jumbotron/{{$postjumbotron->id}}/preview"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             @empty
