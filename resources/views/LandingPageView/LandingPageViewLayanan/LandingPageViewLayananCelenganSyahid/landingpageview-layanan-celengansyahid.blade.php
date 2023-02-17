@@ -8,12 +8,15 @@
 <div class="container-fluid p-0 mb-4 wow fadeIn" data-wow-delay="0.2s">
   <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img class="w-100 " src="{{ asset('Images/fixImage/billboardimage/celengan_syahid.png') }}" alt="Image" />
+        </div>
         <div class="carousel-item">
             <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp3.png') }}" alt="Image" />
         </div>
-          <div class="carousel-item active">
-              <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp4.png') }}" alt="Image" />
-          </div>
+        <div class="carousel-item">
+            <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp4.png') }}" alt="Image" />
+        </div>
       </div>
   </div>
 </div>

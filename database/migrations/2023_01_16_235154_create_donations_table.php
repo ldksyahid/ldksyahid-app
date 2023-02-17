@@ -14,7 +14,7 @@ class CreateDonationsTable extends Migration
     public function up()
     {
         Schema::create('donations', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
             $table->string('jumlah_donasi')->nullable();
             $table->string('nama_donatur')->nullable();
             $table->string('email_donatur')->nullable();
@@ -26,6 +26,8 @@ class CreateDonationsTable extends Migration
             $table->string('nama_merchant')->nullable();
             $table->string('biaya_admin')->nullable();
             $table->string('kode_unik')->nullable();
+            $table->uuid('campaign_id');
+            $table->foreign('campaign_id')->references('id')->on('campaigns');
             $table->timestamps();
         });
     }

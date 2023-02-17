@@ -9,8 +9,6 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
 use Laravolt\Indonesia\Models\Province;
 use Laravolt\Indonesia\Models\City;
-use Laravolt\Indonesia\Models\District;
-use Illuminate\Support\Facades\Hash;
 
 class CelenganSyahidController extends Controller
 {
@@ -74,6 +72,15 @@ class CelenganSyahidController extends Controller
         return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampcreate', compact(['provinces', 'cities']),["title" => "Celengan Syahid"]);
     }
 
+    public function previewAdminCampaign($id)
+    {
+        $data = Campaign::findOrFail($id);
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcamppreview')->with([
+            'data' => $data,
+            "title" => "Celengan Syahid"
+        ]);
+    }
+
     public function storeAdminCampaign(Request $request)
     {
         $target_biaya = LFC::replaceamount($request['target_biaya']);
@@ -91,7 +98,7 @@ class CelenganSyahidController extends Controller
 
         // dd($kota);
 
-        $postCampaign = Campaign::create([
+        $post = Campaign::create([
             "judul" => $request['judul'],
             "kategori" => $request["kategori"],
             "link" => $request["link"],
@@ -99,6 +106,7 @@ class CelenganSyahidController extends Controller
             "kota" => $kota,
             "target_biaya" => $target_biaya,
             "cerita" => $request["cerita"],
+            "kabar_terbaru" => $request["kabar_terbaru"],
             "deadline" => $request["deadline"],
             "tujuan" => $request["tujuan"],
             "poster" => $path_poster,
@@ -109,6 +117,75 @@ class CelenganSyahidController extends Controller
         ]);
 
         Alert::success('Success', 'Campaign has been uploaded !');
+        return redirect('/admin/service/celengansyahid/campaigns');
+    }
+
+    public function editAdminCampaign($id)
+    {
+        $provinces = Province::pluck('name', 'id');
+        $cities = City::pluck('name', 'id');
+        $data = Campaign::findOrFail($id);
+
+        // return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampedit')->with([
+        //     'data' => $data,
+        //     "title" => "Celengan Syahid"
+        // ]);
+
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampedit', compact(['provinces', 'cities', 'data']),["title" => "Celengan Syahid"]);
+    }
+
+    public function updateAdminCampaign(Request $request, $id)
+    {
+        // dd($request);
+        $target_biaya = LFC::replaceamount($request['target_biaya']);
+        $provinsi = ucwords(strtolower($request["provinsi"]));
+        $kota = ucwords(strtolower($request["kota"]));
+
+        if ($request->file('poster')) {
+            $filename = time().$request->file('poster')->getClientOriginalName();
+            $path = $request->file('poster')->storeAs('Images/uploads/campaigns',$filename);
+
+            // hapus file
+            $gambar = Campaign::where('id',$id)->first();
+            File::delete($gambar->poster);
+
+            // upload file
+            $update = Campaign::where("id", $id)-> update([
+                'poster' => $path,
+            ]);
+        }
+
+        if ($request->file('logo_pj')) {
+            $filename = time().$request->file('logo_pj')->getClientOriginalName();
+            $path = $request->file('logo_pj')->storeAs('Images/uploads/logos',$filename);
+
+            // hapus file
+            $gambar = Campaign::where('id',$id)->first();
+            File::delete($gambar->logo_pj);
+
+            // upload file
+            $update = Campaign::where("id", $id)-> update([
+                'logo_pj' => $path,
+            ]);
+        }
+
+        $update = Campaign::where("id", $id)-> update([
+            "judul" => $request['judul'],
+            "kategori" => $request["kategori"],
+            "link" => $request["link"],
+            "provinsi" => $provinsi,
+            "kota" => $kota,
+            "target_biaya" => $target_biaya,
+            "cerita" => $request["cerita"],
+            "kabar_terbaru" => $request["kabar_terbaru"],
+            "deadline" => $request["deadline"],
+            "tujuan" => $request["tujuan"],
+            "nama_pj" => $request["nama_pj"],
+            "telp_pj" => $request["telp_pj"],
+            "link_pj" => $request["link_pj"],
+        ]);
+
+        toast('Campaign has been edited !', 'success')->autoClose(1500)->width('400px');
         return redirect('/admin/service/celengansyahid/campaigns');
     }
 

@@ -16,7 +16,7 @@
     <div class="container">
         <div class="row justify-content-center wow fadeInRight" data-wow-delay="0.1s">
             <div class="col-lg-4 mt-5">
-                <div class="card card-margin">
+                <div class="card card-margin" style="height: 515px;">
                     <img src="{{asset('Images/fixImage/serviceimage/callkestari.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Call kestari</h5>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="col-lg-4 mt-5">
-                <div class="card card-margin">
+                <div class="card card-margin" style="height: 515px;">
                     <img src="{{asset('Images/fixImage/serviceimage/kalkulatorkestari.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Kalkulator Kestari</h5>
@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="col-lg-4 mt-5">
-                <div class="card card-margin">
+                <div class="card card-margin" style="height: 515px;">
                     <img src="{{asset('Images/fixImage/serviceimage/shortlink.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Perpendek URL</h5>
@@ -66,19 +66,20 @@
                 </div>
             </div>
             <div class="col-lg-4 mt-0">
-                <div class="card card-margin">
+                <div class="card card-margin" style="height: 515px;">
                     <img src="{{asset('Images/fixImage/serviceimage/celengan-syahid.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Celengan Syahid</h5>
                         <div class="widget-49">
                             <div class="widget-49-meeting-points">
                                 <p style="text-align: justify">
-                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa ipsum fugit facere reiciendis. Soluta voluptatibus iste porro cum, dolores necessitatibus in velit ad ab quam fuga aliquam deleniti sint cumque error natus, laborum hic eum amet! Eos velit earum praesentium.
+                                    Celengan Syahid adalah sebuah layanan Donasi Crowdfunding secara online untuk membantu orang yang membutuhkan. Melalui Celengan Syahid, kita dapat berdonasi untuk berbagai keperluan seperti kemanusiaan, pendidikan, dan kebutuhan dasar lainnya.
                                 </p>
                                 <br><br>
                             </div>
                             <div class="widget-49-meeting-action">
-                                <a href="/service/celengansyahid" target="_blank" class="btn btn-primary w-100 py-2" >Mulai</a>
+                                <a href="/service/celengansyahid" target="_blank" class="btn btn-outline-secondary w-100 py-2" style="pointer-events: none;cursor: default;">SEGERA HADIR</a>
+                                {{-- <a href="/service/celengansyahid" target="_blank" class="btn btn-primary w-100 py-2">Mulai</a> --}}
                             </div>
                         </div>
                     </div>

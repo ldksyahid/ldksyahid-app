@@ -108,7 +108,7 @@
                                 Okke!
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-6">
+                        <div class="mb-3 col col-lg-4">
                             <label for="formFile" class="form-label">Poster (1920 x 1080 Pixel)</label>
                             <input class="form-control" type="file" id="poster" name ='poster'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" required>
                             <div class="invalid-feedback">
@@ -118,9 +118,22 @@
                                 Okke!
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-6">
+                        <div class="mb-3 col col-lg-4">
                             <label for="inputDeadlineCampaign" class="form-label">Deadline</label>
                             <input type="date" class="form-control" id="inputDeadlineCampaign" name='deadline' required>
+                            <div class="invalid-feedback">
+                                Pertanyaan ini wajib diisi
+                            </div>
+                            <div class="valid-feedback">
+                                Okke!
+                            </div>
+                        </div>
+                        <div class="mb-3 col col-lg-4">
+                            <label for="inputTelpPJ" class="form-label">Kontak Penanggung Jawab</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="inputTelpPJ">+62</span>
+                                <input type="text" class="form-control" id="inputTelpPJ" name='telp_pj' placeholder="Jawaban Anda" aria-describedby="inputTelpPJ">
+                            </div>
                             <div class="invalid-feedback">
                                 Pertanyaan ini wajib diisi
                             </div>
@@ -154,7 +167,7 @@
                         </div>
                         <div id="formOrganisasi" style="display: none;">
                             <div class="row">
-                                <div class="mb-3 col col-lg-12" >
+                                <div class="mb-3 col col-lg-4" >
                                     <label for="inputNamaPJ" class="form-label">Nama Organisasi</label>
                                     <input type="text" class="form-control" id="inputNamaPJ" name='nama_pj' placeholder="Jawaban Anda">
                                     <div class="invalid-feedback">
@@ -165,18 +178,8 @@
                                     </div>
                                 </div>
                                 <div class="mb-3 col col-lg-4"  >
-                                    <label for="inputLinkPJ" class="form-label">Link Organisasi</label>
+                                    <label for="inputLinkPJ" class="form-label">Link Profil Organisasi</label>
                                     <input type="text" class="form-control" id="inputLinkPJ" name='link_pj' placeholder="Jawaban Anda">
-                                    <div class="invalid-feedback">
-                                        Pertanyaan ini wajib diisi
-                                    </div>
-                                    <div class="valid-feedback">
-                                        Okke!
-                                    </div>
-                                </div>
-                                <div class="mb-3 col col-lg-4"  >
-                                    <label for="inputTelpPJ" class="form-label">Kontak Organisasi</label>
-                                    <input type="text" class="form-control" id="inputTelpPJ" name='telp_pj' placeholder="Jawaban Anda">
                                     <div class="invalid-feedback">
                                         Pertanyaan ini wajib diisi
                                     </div>

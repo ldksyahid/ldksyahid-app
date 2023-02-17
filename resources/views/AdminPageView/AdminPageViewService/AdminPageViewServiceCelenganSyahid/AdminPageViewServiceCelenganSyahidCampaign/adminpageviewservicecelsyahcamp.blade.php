@@ -45,7 +45,7 @@
                                 <td align="center">
                                     <a href="/admin/service/celengansyahid/campaign/{{ $data->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
                                     <button type="submit" onclick="deleteConfirmationCampaign('{{ $data->id }}')" id="delete-campaign" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                    <a class="btn btn-sm btn-primary" href="/admin/service/celengansyahid/campaign/{{ $data->id }}/preview" target="_blank"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-sm btn-primary" href="/admin/service/celengansyahid/campaign/{{ $data->id }}/preview" ><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             @empty

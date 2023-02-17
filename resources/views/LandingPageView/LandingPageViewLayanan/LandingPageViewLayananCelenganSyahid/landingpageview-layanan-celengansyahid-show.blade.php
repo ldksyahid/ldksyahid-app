@@ -88,7 +88,7 @@
                 <ul class="px-5 nav nav-tabs" role="tablist" id="navbar-camp">
                     <li role="presentation" class="active"><a href="#Section1" aria-controls="home" role="tab" data-toggle="tab">Detail</a></li>
                     <li role="presentation"><a href="#Section2" aria-controls="profile" role="tab" data-toggle="tab">Kabar Terbaru</a></li>
-                    <li role="presentation"><a href="#Section3" aria-controls="messages" role="tab" data-toggle="tab">Donatur <span style="color: #fff; background-color:#00a79d; border-radius:100%; padding:5px; font-size:10px;" class="text-center">1</span></a></li>
+                    <li role="presentation"><a href="#Section3" aria-controls="messages" role="tab" data-toggle="tab">Donatur (189)</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content tabs pt-3 p-5 col col-lg-8" style="padding-top: -40px;">
