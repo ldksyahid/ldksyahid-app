@@ -5,18 +5,21 @@
 @endsection
 
 @section('content')
+@php
+    use App\Http\Controllers\LibraryFunctionController as LFC;
+@endphp
 <div class="container-fluid p-0 mb-4 wow fadeIn" data-wow-delay="0.2s">
   <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
             <img class="w-100 " src="{{ asset('Images/fixImage/billboardimage/celengan_syahid.png') }}" alt="Image" />
         </div>
+        @forelse($postcampaign as $key => $data)
         <div class="carousel-item">
-            <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp3.png') }}" alt="Image" />
+            <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image" />
         </div>
-        <div class="carousel-item">
-            <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp4.png') }}" alt="Image" />
-        </div>
+        @empty
+        @endforelse
       </div>
   </div>
 </div>
@@ -102,33 +105,43 @@
             <h6 class="text-body">Menampilkan 12 dari 62 <i>campaign</i></h6>
             {{-- website --}}
             <div class="row g-4 mt-1 website-responsive">
+                @forelse($postcampaign as $key => $data)
                 <div class="col-lg-4 col-md-6 mt-3">
                     <div class="card shadow-c mb-2">
                         <div style="height: 12em;">
-                            <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}"><img src="{{ asset('Images/fixImage/dummy/excamp4.png') }}" alt="" class="card-img w-100"></a>
+                            <a href="/service/celengansyahid/{{ $data->link }}"><img src="{{ asset($data->poster) }}" alt="poster-{{ $data->link }}" class="card-img w-100"></a>
                         </div>
                         <div class="mt-1 p-3">
-                            <div class="badge" style="margin-left:-8px;"> <span>Sosial Dakwah</span> </div>
+                            <div class="badge" style="margin-left:-8px;"> <span>{{ $data->kategori }}</span> </div>
                             <div style="height: 5em;" class="d-flex flex-row align-items-center">
-                                <h5 class="text-body mb-0"><a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</a></h5>
+                                <h5 class="text-body mb-0"><a href="/service/celengansyahid/{{ $data->link }}">{{ $data->judul }}</a></h5>
                             </div>
                             <div style="height: 2em;">
                                 <p style="font-size: 14px;">
-                                    {!!  substr(strip_tags('Miris, literasi Indonesia posisi ke-62 dari 70 negara di dunia. Mari bangun bangsa dengan tingkatkan literasi melalui Pojok'), 0, 100) !!}
+                                    {!!  substr(strip_tags($data->cerita), 0, 80) !!}...
                                 </p>
                             </div>
                             <div class="mt-3">
                                 <hr>
                                 <div class="d-flex justify-content-between">
+                                    @if ($data->nama_pj != null && $data->link_pj != null)
+                                    <div class="d-flex flex-row align-items-center" style="height: 2em;">
+                                        <img src="{{ asset($data->logo_pj) }}" alt="logo" width="25" height="25">
+                                        <div class="ms-2 c-details">
+                                            <h6 style="font-size: 16px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></h6>
+                                        </div>
+                                    </div>
+                                    @else
                                     <div class="d-flex flex-row align-items-center" style="height: 2em;">
                                         <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="25" height="25">
                                         <div class="ms-2 c-details">
                                             <h6 style="font-size: 16px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
                                         </div>
                                     </div>
+                                    @endif
                                 </div>
                                 <div class="progress mt-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>50%</strong></div>
+                                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%</strong></div>
                                 </div>
                                 <div class="mt-0">
                                     <div class="row">
@@ -137,7 +150,7 @@
                                                 <span style="font-size: 12px;">Terkumpul</span>
                                                 <br>
                                                 <span style=" color:#00a79d;">
-                                                    <strong>Rp23.000</strong>
+                                                    <strong>{{ LFC::formatRupiah(1000000) }}</strong>
                                                 </span>
                                             </p>
                                         </div>
@@ -146,7 +159,7 @@
                                                 <span style="font-size: 12px;">Sisa Hari</span>
                                                 <br>
                                                 <span>
-                                                    <strong>365</strong>
+                                                    <strong>{{ LFC::countdownHari($data->deadline) }}</strong>
                                                 </span>
                                             </p>
                                         </div>
@@ -156,44 +169,61 @@
                         </div>
                     </div>
                 </div>
+                @empty
+                <div class="col-lg-12 m-5 text-body text-center">
+                    <img src="{{asset('Images/Icons/empty_inbox.png')}}" alt="logo" width="150" height="150" >
+                    <br><br>
+                    <p>Campaign Belum Tersedia</p>
+                </div>
+                @endforelse
             </div>
             {{-- mobile --}}
             <div class="row mt-1 mobile-responsive">
+                @forelse($postcampaign as $key => $data)
                 <div class="col-lg-4 col-md-6 mt-1">
                     <div class="row d-flex flex-row align-items-center">
                         <div class="col" style="margin-right:-20px;">
                             <div  class="p-3">
-                                <div class="badge-mobile-all pb-1" style="margin-top: -20px"> <span style="font-size:6px; font-weight:575;"><p>Sosial Dakwah</p></span> </div>
-                                <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}"><img src="{{ asset('Images/fixImage/dummy/excamp4.png') }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
+                                <div class="badge-mobile-all pb-1" style="margin-top: -20px"> <span style="font-size:6px; font-weight:575;"><p>{{$data->kategori}}</p></span> </div>
+                                <a href="/service/celengansyahid/{{ $data->link }}"><img src="{{ asset($data->poster) }}" alt="{{ $data->link }}" class="card-img w-100" style="border-radius: 5px;"></a>
                             </div>
                         </div>
                         <div class="col" style="margin-left:-20px;">
                             <div class="p-3">
                                 <div style="line-height: 1.1em">
-                                    <a href="/service/celengansyahid/{{ 'pojok-baca-pelosok-negeri' }}" style="font-size: 12px ; font-weight:600;">{!!  substr(strip_tags('Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi'), 0, 60) !!}</a>
+                                    <a href="/service/celengansyahid/{{ $data->link }}" style="font-size: 12px ; font-weight:600;">{!!  strip_tags( $data->judul ) !!}</a>
                                 </div>
                             </div>
                             <div class="col p-3" style="margin-top:-30px;">
                                 <div class="d-flex justify-content-between">
+                                    @if ($data->nama_pj != null && $data->link_pj != null)
+                                    <div class="d-flex flex-row align-items-center">
+                                        <img src="{{ asset($data->logo_pj) }}" alt="logo" width="15" height="15">
+                                        <div class="ms-2 c-details">
+                                            <h6 style="font-size: 10px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank" style="font-size: 8px">{{ $data->nama_pj }}</a></h6>
+                                        </div>
+                                    </div>
+                                    @else
                                     <div class="d-flex flex-row align-items-center">
                                         <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="15" height="15">
                                         <div class="ms-2 c-details">
                                             <h6 style="font-size: 10px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank" style="font-size: 8px">UKM LDK Syahid</a></h6>
                                         </div>
                                     </div>
+                                    @endif
                                 </div>
                                 <div class="progress  my-1" style="height: 8px;">
-                                    <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong style="font-size: 6px; margin-bottom:0px;">50%</strong></div>
+                                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong style="font-size: 6px; margin-bottom:0px;">{{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%</strong></div>
                                 </div>
                                 <div class="mt-0">
                                     <div class="row">
                                         <div class="col text-start" style="line-height: -50px;">
                                             <p style="font-size: 8px;">Terkumpul</p>
-                                            <p style=" color:#00a79d; font-size:9px; margin-top:-18px;"><strong>Rp23.000</strong></p>
+                                            <p style=" color:#00a79d; font-size:9px; margin-top:-18px;"><strong>{{ LFC::formatRupiah(1000000) }}</strong></p>
                                         </div>
                                         <div class="col text-end">
                                             <p style="font-size: 8px;">Sisa Hari</p>
-                                            <p style="font-size:9px; margin-top:-18px;"><strong>365</strong></p>
+                                            <p style="font-size:9px; margin-top:-18px;"><strong>{{ LFC::countdownHari($data->deadline) }}</strong></p>
                                         </div>
                                     </div>
                                 </div>
@@ -204,6 +234,13 @@
                         <hr>
                     </div>
                 </div>
+                @empty
+                <div class="col-lg-12 m-2 text-body text-center">
+                    <img src="{{asset('Images/Icons/empty_inbox.png')}}" alt="logo" width="90" height="90" >
+                    <br><br>
+                    <p>Campaign Belum Tersedia</p>
+                </div>
+                @endforelse
             </div>
         </div>
         <div class="col-lg-12 col-md-6 wow fadeInUp text-center" data-wow-delay="0.5s">

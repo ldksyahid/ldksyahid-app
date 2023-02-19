@@ -22,4 +22,25 @@ class LibraryFunctionController extends Controller
 
         return $hasil_rupiah;
     }
+
+    public static function countdownHari($time){
+        $date = strtotime($time);
+        if ($date > time()) {
+            $remaining = $date - time();
+            $days_remaining = floor($remaining / 86400);
+            return $days_remaining;
+        } else {
+            return 0;
+        }
+    }
+
+    public static function persentaseBiayaTerkumpul($dana_terkumpul, $target_biaya){
+
+        $persentase = ($dana_terkumpul / $target_biaya) * 100;
+        if ($persentase <= 100) {
+            return $persentase;
+        } else {
+            return 100;
+        }
+    }
 }

@@ -12,11 +12,13 @@ use Laravolt\Indonesia\Models\City;
 
 class CelenganSyahidController extends Controller
 {
-    public function index()
+    public function indexLanding()
     {
-        // $postevent = Event::orderBy('dateevent','desc')->get();
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',["title" => "Layanan"]);
+        $postcampaign = Campaign::orderBy('created_at','desc')->get();
+
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact('postcampaign'),["title" => "Layanan"]);
     }
+
 
     public function create()
     {
@@ -28,9 +30,14 @@ class CelenganSyahidController extends Controller
         //
     }
 
-    public function show($nameCampaign)
+    public function showLanding($link)
     {
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show',["title" => "Layanan"]);
+        // dd($link);
+        $data = Campaign::where('link',$link)->first();
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show')->with([
+            'data' => $data,
+            "title" => "Layanan"
+        ]);
     }
 
     public function donasiSekarang($nameCampaign)
