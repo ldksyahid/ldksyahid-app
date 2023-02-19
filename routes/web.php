@@ -109,10 +109,10 @@ Route::post('/service/shortlink/store', [RequestShortlinkController::class, 'sto
 Route::get('/service/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
 
 // Route LandingPage Layanan CelenganLDKSyahid
-Route::get('/service/celengansyahid', [CelenganSyahidController::class, 'index'])->name('service.celengansyahid')->middleware('is_admin_helper');
-Route::get('/service/celengansyahid/{nameCampaign}', [CelenganSyahidController::class, 'show'])->name('service.celengansyahid.detail')->middleware('is_admin_helper');
-Route::get('/service/celengansyahid/yuk-donasi/{nameCampaign}', [CelenganSyahidController::class, 'donasiSekarang'])->name('service.celengansyahid.detail.donasisekarang')->middleware('is_admin_helper');
-Route::get('/service/celengansyahid/yuk-donasi/{nameCampaign}/status', [CelenganSyahidController::class, 'status'])->name('service.celengansyahid.detail.donasisekarang.status')->middleware('is_admin_helper');
+Route::get('/service/celengansyahid', [CelenganSyahidController::class, 'indexLanding'])->name('service.celengansyahid')->middleware('is_admin_helper');
+Route::get('/service/celengansyahid/{link}', [CelenganSyahidController::class, 'showLanding'])->name('service.celengansyahid.detail')->middleware('is_admin_helper');
+Route::get('/service/celengansyahid/yuk-donasi/{link}', [CelenganSyahidController::class, 'donasiSekarang'])->name('service.celengansyahid.detail.donasisekarang')->middleware('is_admin_helper');
+Route::get('/service/celengansyahid/yuk-donasi/{link}/status', [CelenganSyahidController::class, 'status'])->name('service.celengansyahid.detail.donasisekarang.status')->middleware('is_admin_helper');
 // ======================================= END ROUTE LANDING PAGE =======================================
 
 

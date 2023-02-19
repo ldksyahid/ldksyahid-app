@@ -81,7 +81,7 @@
                                             </p>
                                         </div>
                                         <div class="col-lg-4 text-end">
-                                            <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>341 hari lagi</p>
+                                            <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }} hari lagi</p>
                                         </div>
                                     </div>
                                 </div>

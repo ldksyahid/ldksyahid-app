@@ -8,27 +8,39 @@
 
 
 @section('content')
+@php
+    use App\Http\Controllers\LibraryFunctionController as LFC;
+@endphp
 <div class="container-fluid website-responsive" style="background-color: #f5f6fa;">
     <div class="row g-5">
         <div class="col col-lg-8">
             <div class="p-5" style="margin-right: -20px">
-                <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp3.png') }}" alt="Image" style="border-radius: 15px;"/>
+                <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image" style="border-radius: 15px;"/>
             </div>
         </div>
         <div class="col col-lg-4 d-flex flex-row align-items-center">
             <div class="p-5" style="margin-left:-80px ">
-                <div class="badge mb-3" style="margin-left:-8px;"> <span>Sosial Dakwah</span> </div>
+                <div class="badge mb-3" style="margin-left:-8px;"> <span>{{ $data->kategori }}</span> </div>
                 <div class="d-flex flex-row align-items-center">
-                    <h3 class="text-body mb-0">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</h3>
+                    <h3 class="text-body mb-0">{{ $data->judul }}</h3>
                 </div>
                 <hr>
                 <div class="d-flex justify-content-between">
-                    <div class="d-flex flex-row align-items-center" style="height: 2em;">
-                        <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="30" height="30">
-                        <div class="ms-2 c-details">
-                            <h6 style="font-size: 18px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
+                    @if ($data->nama_pj != null && $data->link_pj != null)
+                        <div class="d-flex flex-row align-items-center" style="height: 2em;">
+                            <img src="{{ asset($data->logo_pj) }}" alt="logo" width="30" height="30">
+                            <div class="ms-2 c-details">
+                                <h6 style="font-size: 18px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></h6>
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="d-flex flex-row align-items-center" style="height: 2em;">
+                            <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="30" height="30">
+                            <div class="ms-2 c-details">
+                                <h6 style="font-size: 18px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 <hr>
                 <div class="mb-0">
@@ -42,17 +54,17 @@
                     </div>
                 </div>
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>75%</strong></div>
+                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%</strong></div>
                 </div>
                 <div class="mb-0">
                     <div class="row d-flex flex-row align-items-center">
                         <div class="col-lg-8 text-start my-2">
                             <p style="font-size: 12px;">
-                                0.63% dari target Rp100.000.000
+                                Target {{ LFC::formatRupiah($data->target_biaya) }}
                             </p>
                         </div>
                         <div class="col-lg-4 text-end">
-                            <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>341 hari lagi</p>
+                            <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }} hari lagi</p>
                         </div>
                     </div>
                 </div>
@@ -60,7 +72,7 @@
                 <div class="mb-0">
                     <div class="row align-items-center">
                         <div class="col-lg-8 text-start">
-                            <a class="btn btn-primary py-2 px-5" style="border-radius: 5px;" href="/service/celengansyahid/yuk-donasi/{{ 'pojok-baca-pelosok-negeri' }}">Donasi Sekarang</a>
+                            <a class="btn btn-primary py-2 px-5" style="border-radius: 5px;" href="/service/celengansyahid/yuk-donasi/{{ $data->link }}">Donasi Sekarang</a>
                         </div>
                        <div class="col-lg-4 text-end  align-items-center">
                            <div class="row justify-content-center align-items-center">
@@ -93,14 +105,21 @@
                 <!-- Tab panes -->
                 <div class="tab-content tabs pt-3 p-5 col col-lg-8" style="padding-top: -40px;">
                     <div role="tabpanel" class="tab-pane active" id="Section1" style="color:#000;">
-                        <p>Di tengah maraknya penggunaan sosial media, faktanya minat baca orang Indonesia menurut data UNESCO hanya 0,001%. Artinya, dari 1.000 orang Indonesia, hanya 1 orang yang rajin membaca. Sementara survei Program for International Student Assessment (PISA) menyebutkan tingkat literasi Indonesia berada di urutan ke-62 dari 70 negara di dunia.</p>
+                        {!! $data->cerita !!}
                     </div>
                     <div role="tabpanel" class="tab-pane" id="Section2">
-                        <p>Sejak didirikan lebih dari 10 tahun lalu dari hasil uang swadaya masyarakrat, sekolah ini tak pernah memiliki perpustakaan yang layak. Jangankan perpustakaan, buku-buku yang digunakanpun tidak sesuai dengan kurikulum yang berlaku. Tidak seperti sekolah lain yang memiliki perpustakaan, semua buku-buku hasil sumbangan tersebut hanya bisa diletakkan di atas meja pojok kelas. Berbaur menjadi satu tanpa dibedakan berdasarkan urutan kelas. Bahkan, tak jarang sudah usang.</p>
+                        @if ($data->kabar_terbaru != null)
+                            {!! $data->kabar_terbaru !!}
+                        @else
+                            <div class="col col-lg-12 text-center m-3 text-body">
+                                <img src="{{asset('Images/Icons/empty_file.png')}}" alt="logo" width="150" height="150" >
+                                <p>Campaign ini belum memiliki kabar terbaru</p>
+                            </div>
+                        @endif
                     </div>
                     <div role="tabpanel" class="tab-pane" id="Section3">
                         <div style="margin: 30px 0px 30px 0px ; ">
-                            <div class="row d-flex flex-row align-items-center p-4" style="background-color: #f5f6fa; border-radius:15px;">
+                            {{-- <div class="row d-flex flex-row align-items-center p-4" style="background-color: #f5f6fa; border-radius:15px;">
                                 <div class="col-lg-2 text-center">
                                     <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%;" width="100" height="100">
                                 </div>
@@ -119,6 +138,10 @@
                                     <i>ya Allah terimakasih atas rezeki yg tak pernah putus ini sehingga aku bisa terus bersedekah</i>
                                     </p>
                                 </div>
+                            </div> --}}
+                            <div class="col col-lg-12 text-center m-3 text-body">
+                                <img src="{{asset('Images/Icons/empty_box.png')}}" alt="logo" width="150" height="150" >
+                                <p>Campaign ini belum memiliki Donatur</p>
                             </div>
                         </div>
                     </div>
@@ -131,19 +154,28 @@
 <div class="container-fluid p-0 wow fadeIn mobile-responsive" data-wow-delay="0.2s" style="background-color: #f5f6fa;">
     <div class="p-4">
         <div>
-            <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp3.png') }}" alt="Image" style="border-radius: 15px;"/>
-            <div class="badge-mobile mt-3"> <span style="font-size:10px;"><b>Sosial Dakwah</b></span> </div>
+            <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image" style="border-radius: 15px;"/>
+            <div class="badge-mobile mt-3"> <span style="font-size:10px;"><b>{{ $data->kategori }}</b></span> </div>
             <div class="d-flex flex-row align-items-center">
-                <h5 class="text-body mb-0">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</h5>
+                <h5 class="text-body mb-0">{{ $data->judul }}</h5>
             </div>
             <hr>
             <div class="d-flex justify-content-between">
+                @if ($data->nama_pj != null && $data->link_pj != null)
+                <div class="d-flex flex-row align-items-center" style="height: 2em;">
+                    <img src="{{ asset($data->logo_pj) }}" alt="logo" width="25" height="25">
+                    <div class="ms-2 c-details my-0">
+                        <h6 style="font-size: 14px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></h6>
+                    </div>
+                </div>
+                @else
                 <div class="d-flex flex-row align-items-center" style="height: 2em;">
                     <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="25" height="25">
                     <div class="ms-2 c-details my-0">
                         <h6 style="font-size: 14px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
                     </div>
                 </div>
+                @endif
             </div>
             <hr>
             <div class="mb-0">
@@ -157,17 +189,17 @@
                 </div>
             </div>
             <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>75%</strong></div>
+                <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%</strong></div>
             </div>
             <div class="mb-0">
                 <div class="row d-flex flex-row align-items-center">
                     <div class="col-lg-8 text-start my-2">
                         <p style="font-size: 10px;">
-                            0.63% dari target Rp100.000.000
+                            Target {{ LFC::formatRupiah($data->target_biaya) }}
                         </p>
                     </div>
                     <div class="col-lg-4 text-end" style="margin-top: -50px;">
-                        <p style="font-size:10px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>341 hari lagi</p>
+                        <p style="font-size:10px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }} hari lagi</p>
                     </div>
                 </div>
             </div>
@@ -176,28 +208,45 @@
     <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
             <h6 class="text-body">Detail</h6>
-            <p>
+            {{-- <p>
                 {!!  substr('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.', 0, 150) !!}<span id="dotsDetail"></span><span id="moreDetail" style="display: none;">{!!  substr('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.', 151) !!}</span>
+            </p> --}}
+            {{-- <p>
+                {!!  substr(strip_tags($data->cerita), 0, 150) !!}<span id="dotsDetail"></span><span id="moreDetail" style="display: none;">{!!  $data->cerita !!}}</span>
+            </p> --}}
+            <p>
+                {!! $data->cerita !!}
             </p>
-            <div class="text-center">
+            {{-- <div class="text-center">
                 <button type="button" class="btn btn-outline-primary w-100" onclick="readMoreLessDetail()" id="readMoreLessDetail">Baca Selengkapnya</button>
-            </div>
+            </div> --}}
         </div>
     </div>
     <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
             <h6 class="text-body">Kabar Terbaru</h6>
-            <p>
+            {{-- <p>
                 {!!  substr('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.', 0, 150) !!}<span id="dotsUpdate"></span><span id="moreUpdate" style="display: none;">{!!  substr('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.', 151) !!}</span>
             </p>
             <div class="text-center">
                 <button type="button" class="btn btn-outline-primary w-100" onclick="readMoreLessUpdate()" id="readMoreLessUpdate">Baca Selengkapnya</button>
+            </div> --}}
+            @if ($data->kabar_terbaru != null)
+            <p>
+                {!! $data->kabar_terbaru !!}
+            </p>
+            @else
+            <div class="col col-lg-12 text-center m-3 text-body small">
+                <img src="{{asset('Images/Icons/empty_file.png')}}" alt="logo" width="100" height="100" >
+                <p>Campaign ini belum memiliki kabar terbaru</p>
             </div>
+            @endif
         </div>
     </div>
     <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
-            <h6 class="text-body" style="margin-bottom: 15px;">Donatur <span style="color: #fff; background-color:#00a79d; border-radius:100%; padding:5px; font-size:10px;" class="text-center">213</span></h6>
+            <h6 class="text-body" style="margin-bottom: 15px;">Donatur (120)</h6>
+            @if (null)
             <div class="row p-2 my-2" style="background-color: #f5f6fa; border-radius:10px;">
                 <div class="col col-lg-2 text-start w-100" >
                     <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%; margin-top:0px;" width="35" height="35">
@@ -212,12 +261,20 @@
                     <p style="font-size: 8px;" class="text-body text-end">30 menit yang lalu</p>
                 </div>
             </div>
+            @else
+            <div class="col col-lg-12 text-center m-3 text-body">
+                <img src="{{asset('Images/Icons/empty_box.png')}}" alt="logo" width="100" height="100" >
+                <br><br>
+                <p>Campaign ini belum memiliki Donatur</p>
+            </div>
+            @endif
+
         </div>
     </div>
 </div>
 <div class="conteiner-fluid mobile-responsive p-3 shadow wow fadeInUp" style="position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f5f6fa; text-align: center; z-index:3;" data-wow-delay="0.2s">
     <div class="col-lg-12 text-center">
-        <a class="btn btn-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/yuk-donasi/{{ 'pojok-baca-pelosok-negeri' }}">Donasi Sekarang</a>
+        <a class="btn btn-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/yuk-donasi/{{ $data->link }}">Donasi Sekarang</a>
         <hr>
     </div>
 </div>

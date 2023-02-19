@@ -40,7 +40,11 @@
                         <td align="center">{{ $item->visits->count() }}</td>
                         <td align="center">
                             <button type="button" class="btn btn-sm btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $key }}"><i class="fa fa-edit"></i></button>
-                            <button type="button" onclick="deleteConfirmationShortlink({{$item->id}})" id="delete-shortlink" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
+                            @if (Auth::User()->is_admin == 2)
+                                <button type="button" onclick="deleteConfirmationShortlink({{$item->id}})" id="delete-shortlink" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
+                            @else
+
+                            @endif
                         </td>
                     </tr>
                     <!-- Modal -->
@@ -81,7 +85,7 @@
 @endsection
 
 @section('scripts')
-{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> --}}
+{{-- <scrip t src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></scrip> --}}
 <script>
 // ===== START CRUD ARTICLE =====
 // ini untuk konfirmasi delete
