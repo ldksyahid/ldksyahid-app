@@ -13,7 +13,7 @@
             <div class="row g-5">
                 <div class="col col-lg-6">
                     <div class="py-5">
-                        <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp3.png') }}" alt="Image" style="border-radius: 15px;"/>
+                        <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image" style="border-radius: 15px;"/>
                     </div>
                 </div>
                 <div class="col col-lg-6 d-flex flex-row align-items-center">
@@ -21,15 +21,24 @@
                         <div class="d-flex flex-row align-items-center">
                             <div style="line-height: 0.1;">
                                 <p style="color: #00a79d">Kamu akan berdonasi untuk membantu :</p>
-                                <h4 class="text-body mb-0">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</h4>
+                                <h4 class="text-body mb-0">{{ $data->judul }}</h4>
                                 <hr>
                                 <div class="d-flex justify-content-between">
+                                   @if ($data->nama_pj != null || $data->link_pj != null)
+                                    <div class="d-flex flex-row align-items-center" style="height: 2em;">
+                                        <img src="{{ asset($data->logo_pj) }}" alt="logo" width="30" height="30">
+                                        <div class="ms-2 c-details">
+                                            <h6 style="font-size: 18px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></h6>
+                                        </div>
+                                    </div>
+                                   @else
                                     <div class="d-flex flex-row align-items-center" style="height: 2em;">
                                         <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="30" height="30">
                                         <div class="ms-2 c-details">
                                             <h6 style="font-size: 18px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
                                         </div>
                                     </div>
+                                   @endif
                                 </div>
                             </div>
                         </div>
@@ -41,14 +50,16 @@
     <div class="container-fluid">
         <div class="container w-75">
             <div class="g-5">
-                <form action="">
+                <form role="form" action='/service/celengansyahid/donation/store' method='post' enctype="multipart/form-data">
+                @csrf
+                @method('POST')
                     <div class="col col-lg-12 my-5">
                         <div class="text-center">
                             <h3 class="text-body mb-3">Masukan Nominal Donasi</h3>
                         </div>
                         <div class="form-group">
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb" name='inputBiayaDonasi' style="border-radius:5px;" placeholder="Rp0">
+                                <input type="text" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb" name='jumlah_donasi' style="border-radius:5px;" placeholder="Rp0">
                             </div>
                         </div>
                         <div class="text-center">
@@ -84,13 +95,13 @@
                             <h3 class="text-body mb-3">Profil Donatur</h3>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control namaDonatur" id="namaDonaturWeb" placeholder="Nama Donatur" style="border-radius: 5px;">
+                            <input type="text" class="form-control namaDonatur" id="namaDonaturWeb" placeholder="Nama Donatur" style="border-radius: 5px;" name="nama_donatur">
                         </div>
                         <div class="form-group my-3">
-                            <input type="email" class="form-control" id="emailDonatur" placeholder="Email" style="border-radius: 5px;">
+                            <input type="email" class="form-control" id="emailDonatur" placeholder="Email" style="border-radius: 5px;" name="email_donatur">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px;">
+                            <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px;" name="no_telp_donatur">
                         </div>
                         <div class="form-group mt-3">
                             <div class="form-check">
@@ -284,6 +295,7 @@ for (let i = 0; i < anonimCheck.length; i++) {
     anonimCheck[i].addEventListener('change', function(e)
     {
         namaDonatur[i].disabled = this.checked;
+        namaDonatur[i].value = 'Manusia Baik';
     });
 }
 </script>

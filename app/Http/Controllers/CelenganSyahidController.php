@@ -25,9 +25,9 @@ class CelenganSyahidController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function storeDonationCampaign(Request $request)
     {
-        //
+        dd($request);
     }
 
     public function showLanding($link)
@@ -40,9 +40,14 @@ class CelenganSyahidController extends Controller
         ]);
     }
 
-    public function donasiSekarang($nameCampaign)
+    public function donasiSekarang($link)
     {
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasi-sekarang',["title" => "Layanan"]);
+        $data = Campaign::where('link',$link)->first();
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasi-sekarang')->with([
+            'data' => $data,
+            "title" => "Layanan"
+        ]);
+
     }
 
     public function status($nameCampaign)
