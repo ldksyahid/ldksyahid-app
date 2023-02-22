@@ -50,7 +50,7 @@
     <div class="container-fluid">
         <div class="container w-75">
             <div class="g-5">
-                <form role="form" action='/service/celengansyahid/donation/store' method='post' enctype="multipart/form-data">
+                <form role="form" action='/service/celengansyahid/donation/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
                 @method('POST')
                     <div class="col col-lg-12 my-5">
@@ -59,7 +59,13 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb" name='jumlah_donasi' style="border-radius:5px;" placeholder="Rp0">
+                                <input type="text" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb" name='jumlah_donasi' style="border-radius:5px;" placeholder="Rp0" required>
+                                <div class="invalid-feedback">
+                                    Pertanyaan ini wajib diisi
+                                </div>
+                                <div class="valid-feedback">
+                                    Okke!
+                                </div>
                             </div>
                         </div>
                         <div class="text-center">
@@ -95,13 +101,31 @@
                             <h3 class="text-body mb-3">Profil Donatur</h3>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control namaDonatur" id="namaDonaturWeb" placeholder="Nama Donatur" style="border-radius: 5px;" name="nama_donatur">
+                            <input type="text" class="form-control namaDonatur" id="namaDonaturWeb" placeholder="Nama Donatur" style="border-radius: 5px;" name="nama_donatur" required>
+                            <div class="invalid-feedback">
+                                Pertanyaan ini wajib diisi
+                            </div>
+                            <div class="valid-feedback">
+                                Okke!
+                            </div>
                         </div>
                         <div class="form-group my-3">
-                            <input type="email" class="form-control" id="emailDonatur" placeholder="Email" style="border-radius: 5px;" name="email_donatur">
+                            <input type="email" class="form-control" id="emailDonatur" placeholder="Email" style="border-radius: 5px;" name="email_donatur" required>
+                            <div class="invalid-feedback">
+                                Pertanyaan ini wajib diisi
+                            </div>
+                            <div class="valid-feedback">
+                                Okke!
+                            </div>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px;" name="no_telp_donatur">
+                            <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px;" name="no_telp_donatur" required>
+                            <div class="invalid-feedback">
+                                Pertanyaan ini wajib diisi
+                            </div>
+                            <div class="valid-feedback">
+                                Okke!
+                            </div>
                         </div>
                         <div class="form-group mt-3">
                             <div class="form-check">
@@ -117,7 +141,10 @@
                             <h3 class="text-body mb-3">Dukungan atau Doamu (Optional)</h3>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" id="doamu" rows="5" style="border-radius:5px;"></textarea>
+                            <textarea class="form-control" id="doamu" rows="5" style="border-radius:5px;" name="pesan_donatur"></textarea>
+                            <div class="valid-feedback">
+                                Okke!
+                            </div>
                         </div>
                     </div>
                     <div class="col col-lg-12 my-5 text-end">
@@ -131,11 +158,11 @@
                         </div>
                     </div>
                     <div class="col col-lg-12 my-5">
-                        <div class="col-md-6 mb-3">{!! htmlFormSnippet() !!} </div>
+                        <div class="col-md-6 mb-3" required>{!! htmlFormSnippet() !!} </div>
                     </div>
                     <div class="col col-lg-12 my-5">
                         <div class="text-center">
-                            <a class="btn btn-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/yuk-donasi/{{ 'pojok-baca-pelosok-negeri' }}/status">LANJUTKAN PEMBAYARAN DONASI</a>
+                            <button type="submit" class="btn btn-primary py-2 px-5 w-100" style="border-radius: 5px;">LANJUTKAN PEMBAYARAN DONASI</button>
                         </div>
                     </div>
                 </form>
@@ -294,7 +321,7 @@ const namaDonatur = document.querySelectorAll('.namaDonatur');
 for (let i = 0; i < anonimCheck.length; i++) {
     anonimCheck[i].addEventListener('change', function(e)
     {
-        namaDonatur[i].disabled = this.checked;
+        namaDonatur[i].readOnly = this.checked;
         namaDonatur[i].value = 'Manusia Baik';
     });
 }
@@ -347,5 +374,26 @@ for (let i = 0; i < firstInput.length; i++) {
     }
     firstInput[i].addEventListener("input", process);
 }
+</script>
+
+<script>
+    // Pemanggilan Validation
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
 </script>
 @endsection
