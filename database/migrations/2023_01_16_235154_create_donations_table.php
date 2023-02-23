@@ -20,7 +20,7 @@ class CreateDonationsTable extends Migration
             $table->string('email_donatur')->nullable();
             $table->string('no_telp_donatur')->nullable();
             $table->string('pesan_donatur')->nullable();
-            $table->string('captcha')->nullable();
+            $table->longText('captcha')->nullable();
             $table->string('status')->nullable();
             $table->string('metode_pembayaran')->nullable();
             $table->string('nama_merchant')->nullable();
