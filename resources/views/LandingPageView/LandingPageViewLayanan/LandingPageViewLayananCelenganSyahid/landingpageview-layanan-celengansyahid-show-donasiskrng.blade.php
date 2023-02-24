@@ -120,7 +120,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px;" name="no_telp_donatur" required>
+                            <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px;" name="no_telp_donatur" required onkeypress="return isNumber(event)">
                             <div class="invalid-feedback">
                                 Pertanyaan ini wajib diisi
                             </div>
@@ -276,7 +276,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px; font-size: 16px" required name="no_telp_donatur">
+                        <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px; font-size: 16px" required name="no_telp_donatur" onkeypress="return isNumber(event)">
                         <div class="invalid-feedback small">
                             Pertanyaan ini wajib diisi
                         </div>
@@ -435,5 +435,16 @@ for (let i = 0; i < firstInput.length; i++) {
             });
         }, false);
     })();
+</script>
+
+<script>
+function isNumber(evt)
+  {
+     var charCode = (evt.which) ? evt.which : event.keyCode
+     if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+
+     return true;
+  }
 </script>
 @endsection
