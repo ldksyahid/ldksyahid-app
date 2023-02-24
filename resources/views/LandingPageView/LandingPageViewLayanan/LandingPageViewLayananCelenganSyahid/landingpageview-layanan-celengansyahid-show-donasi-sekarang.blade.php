@@ -174,27 +174,36 @@
 <div class="mobile-responsive">
     <div class="container-fluid p-0" style="background-color: #f5f6fa;">
         <div>
-            <img class="w-100 " src="{{ asset('Images/fixImage/dummy/excamp3.png') }}" alt="Image"/>
+            <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image"/>
         </div>
         <div class="px-4 py-4">
             <div style="line-height: 0.1;">
                 <p style="color: #00a79d; font-size:14px;">Kamu akan berdonasi untuk membantu :</p>
-                <h6 class="text-body mb-0" style="font-size: 16px">Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</h6>
+                <h6 class="text-body mb-0" style="font-size: 16px">{{ $data->judul }}</h6>
                 <hr>
                 <div class="d-flex justify-content-between">
+                    @if ($data->nama_pj != null || $data->link_pj != null)
+                    <div class="d-flex flex-row align-items-center" style="height: 0.7em;">
+                        <img src="{{ asset($data->) }}" alt="logo" width="20" height="20">
+                        <div class="ms-2 c-details my-0">
+                            <h6 style="font-size: 12px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
+                        </div>
+                    </div>
+                    @else
                     <div class="d-flex flex-row align-items-center" style="height: 0.7em;">
                         <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="20" height="20">
                         <div class="ms-2 c-details my-0">
                             <h6 style="font-size: 12px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
     <div class="container px-4 py-3">
         <div>
-            <form action="">
+            <form role="form" action='/service/celengansyahid/donation/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
                 <div class="col col-md-12 my-4">
                     <div class="text-center">
                         <h6 class="text-body mb-2" style="font-size: 18px">Masukan Nominal Donasi</h6>
