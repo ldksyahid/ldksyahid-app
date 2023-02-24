@@ -141,7 +141,7 @@
                                     @endif
                                 </div>
                                 <div class="progress mt-3">
-                                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%</strong></div>
+                                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul($data->jumlah_donasi,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%</strong></div>
                                 </div>
                                 <div class="mt-0">
                                     <div class="row">
@@ -150,7 +150,7 @@
                                                 <span style="font-size: 12px;">Terkumpul</span>
                                                 <br>
                                                 <span style=" color:#00a79d;">
-                                                    <strong>{{ LFC::formatRupiah(1000000) }}</strong>
+                                                    <strong>{{ LFC::formatRupiah($data->donation()->count()) }}</strong>
                                                 </span>
                                             </p>
                                         </div>

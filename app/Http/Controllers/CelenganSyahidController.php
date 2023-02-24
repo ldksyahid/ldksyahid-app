@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LibraryFunctionController as LFC;
 use App\Models\Campaign;
+use App\Models\Donation;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
 use Laravolt\Indonesia\Models\Province;
@@ -15,8 +16,11 @@ class CelenganSyahidController extends Controller
     public function indexLanding()
     {
         $postcampaign = Campaign::orderBy('created_at','desc')->get();
-
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact('postcampaign'),["title" => "Layanan"]);
+        $postdonation = Donation::orderBy('created_at','desc')->get();
+        // $projects = Campaign::withcount('jumlah_donasi')->with('jumlah_donasi')->get();
+        // dd($projects);
+        // dd($postdonation->jumlah_donasi);
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact(['postcampaign', 'postdonation']),["title" => "Layanan"]);
     }
 
 
@@ -27,7 +31,22 @@ class CelenganSyahidController extends Controller
 
     public function storeDonationCampaign(Request $request)
     {
-        dd($request);
+        // dd($request);
+        $jumlah_donasi = LFC::replaceamount($request['jumlah_donasi']);
+
+        $postDonation = Donation::create([
+            "jumlah_donasi" => $jumlah_donasi,
+            "nama_donatur" => $request['nama_donatur'],
+            "email_donatur" => $request['email_donatur'],
+            "no_telp_donatur" => $request['no_telp_donatur'],
+            "pesan_donatur" => $request['pesan_donatur'],
+            "captcha" => $request['g-recaptcha-response'],
+            "campaign_id" => $request['postdonation'],
+        ]);
+        // dd('okke data terkirim');
+        // return redirect('/admin/service/celengansyahid/campaigns');
+        Alert::success('Success', 'Terimakasih telah berdonasi');
+        return redirect()->back();
     }
 
     public function showLanding($link)
@@ -43,7 +62,7 @@ class CelenganSyahidController extends Controller
     public function donasiSekarang($link)
     {
         $data = Campaign::where('link',$link)->first();
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasi-sekarang')->with([
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasiskrng')->with([
             'data' => $data,
             "title" => "Layanan"
         ]);
@@ -52,7 +71,7 @@ class CelenganSyahidController extends Controller
 
     public function status($nameCampaign)
     {
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasi-sekarang-status',["title" => "Layanan"]);
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasistatus',["title" => "Layanan"]);
     }
 
     public function edit($id)

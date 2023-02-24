@@ -10,4 +10,9 @@ class Campaign extends Model
 {
     use HasFactory, UsesUuid;
     protected $guarded =[];
+
+    public function donation() {
+        return $this->hasMany('App\Models\Donation','campaign_id');
+    }
+
 }
