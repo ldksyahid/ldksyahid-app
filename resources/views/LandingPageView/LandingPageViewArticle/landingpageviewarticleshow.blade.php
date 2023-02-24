@@ -30,7 +30,7 @@
             <div class="col-lg-12 col-md-6 wow fadeInRight text-start">
                 @forelse ($postarticle->articlecomments as $key => $comment)
                 @if ($key + 1 == 1)
-                <h3 class="mb-5 h4 font-weight-bold text-center"> {{ $postarticle->articlecomments->count() }}  Komentar</h3>
+                <h3 class="mb-5 h4 font-weight-bold text-center"> {{ $postarticle->articlecomments->count() }} Komentar</h3>
                 <div class="my-5">
                     <div class="m-2">
                         @if ($comment->user->profile == null || $comment->user->profile->profilepicture == null)

@@ -14,4 +14,5 @@ class Campaign extends Model
     public function donation() {
         return $this->hasMany('App\Models\Donation','campaign_id');
     }
+
 }
