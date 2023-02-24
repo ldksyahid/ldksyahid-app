@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{-- @if (env('APP_ENV') == 'Production')
+    @if (env('APP_ENV') == 'Production')
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-    @endif --}}
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    @endif
+    {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> --}}
     <title>Admin Panel &#9679; {{ Auth::User()->name }}</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">

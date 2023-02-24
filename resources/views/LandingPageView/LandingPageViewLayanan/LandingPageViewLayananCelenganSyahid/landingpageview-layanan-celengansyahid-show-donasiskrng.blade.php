@@ -53,6 +53,7 @@
                 <form role="form" action='/service/celengansyahid/donation/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
                 @method('POST')
+                    <input type="hidden" name="postdonation" value="{{$data->id}}" />
                     <div class="col col-lg-12 my-5">
                         <div class="text-center">
                             <h3 class="text-body mb-3">Masukan Nominal Donasi</h3>
@@ -119,7 +120,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px;" name="no_telp_donatur" required>
+                            <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px;" name="no_telp_donatur" required onkeypress="return isNumber(event)">
                             <div class="invalid-feedback">
                                 Pertanyaan ini wajib diisi
                             </div>
@@ -184,9 +185,9 @@
                 <div class="d-flex justify-content-between">
                     @if ($data->nama_pj != null || $data->link_pj != null)
                     <div class="d-flex flex-row align-items-center" style="height: 0.7em;">
-                        <img src="{{ asset($data->) }}" alt="logo" width="20" height="20">
+                        <img src="{{ asset($data->logo_pj) }}" alt="logo" width="20" height="20">
                         <div class="ms-2 c-details my-0">
-                            <h6 style="font-size: 12px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
+                            <h6 style="font-size: 12px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></h6>
                         </div>
                     </div>
                     @else
@@ -204,13 +205,22 @@
     <div class="container px-4 py-3">
         <div>
             <form role="form" action='/service/celengansyahid/donation/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
+            @csrf
+            @method('POST')
+                <input type="hidden" name="postdonation" value="{{$data->id}}" />
                 <div class="col col-md-12 my-4">
                     <div class="text-center">
                         <h6 class="text-body mb-2" style="font-size: 18px">Masukan Nominal Donasi</h6>
                     </div>
                     <div class="form-group">
                         <div class="input-group mb-2">
-                            <input type="text" class="form-control inputBiayaDonasi" id="inputBiayaDonasiMobile" name='inputBiayaDonasi' style="border-radius:5px; font-size: 16px" placeholder="Rp0">
+                            <input type="text" class="form-control inputBiayaDonasi" id="inputBiayaDonasiMobile" name='jumlah_donasi' style="border-radius:5px; font-size: 16px" placeholder="Rp0" required>
+                            <div class="invalid-feedback small">
+                                Pertanyaan ini wajib diisi
+                            </div>
+                            <div class="valid-feedback small">
+                                Okke!
+                            </div>
                         </div>
                     </div>
                     <div class="text-center">
@@ -248,13 +258,31 @@
                         <h6 class="text-body mb-3" style="font-size: 18px;">Profil Donatur</h6>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control namaDonatur" id="namaDonaturWeb" placeholder="Nama Donatur" style="border-radius: 5px; font-size: 16px">
+                        <input type="text" class="form-control namaDonatur" id="namaDonaturWeb" placeholder="Nama Donatur" style="border-radius: 5px; font-size: 16px" required name="nama_donatur">
+                        <div class="invalid-feedback small">
+                            Pertanyaan ini wajib diisi
+                        </div>
+                        <div class="valid-feedback small">
+                            Okke!
+                        </div>
                     </div>
                     <div class="form-group my-2">
-                        <input type="email" class="form-control" id="emailDonatur" placeholder="Email" style="border-radius: 5px; font-size: 16px">
+                        <input type="email" class="form-control" id="emailDonatur" placeholder="Email" style="border-radius: 5px; font-size: 16px" required name="email_donatur">
+                        <div class="invalid-feedback small">
+                            Pertanyaan ini wajib diisi
+                        </div>
+                        <div class="valid-feedback small">
+                            Okke!
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px; font-size: 16px">
+                        <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px; font-size: 16px" required name="no_telp_donatur" onkeypress="return isNumber(event)">
+                        <div class="invalid-feedback small">
+                            Pertanyaan ini wajib diisi
+                        </div>
+                        <div class="valid-feedback small">
+                            Okke!
+                        </div>
                     </div>
                     <div class="form-group mt-2">
                         <div class="form-check">
@@ -270,7 +298,10 @@
                         <h6 class="text-body mb-3" style="font-size: 18px;">Dukungan atau Doamu (Optional)</h6>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" id="doamu" rows="5" style="border-radius:5px; font-size: 16px"></textarea>
+                        <textarea class="form-control" id="doamu" rows="5" style="border-radius:5px; font-size: 16px" name="pesan_donatur"></textarea>
+                        <div class="valid-feedback small">
+                            Okke!
+                        </div>
                     </div>
                 </div>
                 <div class="col col-md-12 my-4 text-end">
@@ -288,7 +319,7 @@
                 </div>
                 <div class="col col-md-12 my-4">
                     <div class="text-center">
-                        <a class="btn btn-primary py-2 px-5 w-100" style="border-radius: 5px; font-size:14px;" href="/service/celengansyahid/yuk-donasi/{{ 'pojok-baca-pelosok-negeri' }}/status">LANJUTKAN PEMBAYARAN DONASI</a>
+                        <button type="submit" class="btn btn-primary py-2 px-5 w-100" style="border-radius: 5px; font-size:14px;">LANJUTKAN PEMBAYARAN DONASI</button>
                     </div>
                 </div>
             </form>
@@ -404,5 +435,16 @@ for (let i = 0; i < firstInput.length; i++) {
             });
         }, false);
     })();
+</script>
+
+<script>
+function isNumber(evt)
+  {
+     var charCode = (evt.which) ? evt.which : event.keyCode
+     if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+
+     return true;
+  }
 </script>
 @endsection
