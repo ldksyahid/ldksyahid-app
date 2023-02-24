@@ -43,8 +43,6 @@ class CelenganSyahidController extends Controller
             "captcha" => $request['g-recaptcha-response'],
             "campaign_id" => $request['postdonation'],
         ]);
-        // dd('okke data terkirim');
-        // return redirect('/admin/service/celengansyahid/campaigns');
         Alert::success('Success', 'Terimakasih telah berdonasi');
         return redirect()->back();
     }
