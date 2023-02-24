@@ -16,8 +16,11 @@ class CelenganSyahidController extends Controller
     public function indexLanding()
     {
         $postcampaign = Campaign::orderBy('created_at','desc')->get();
-
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact('postcampaign'),["title" => "Layanan"]);
+        $postdonation = Donation::orderBy('created_at','desc')->get();
+        // $projects = Campaign::withcount('jumlah_donasi')->with('jumlah_donasi')->get();
+        // dd($projects);
+        // dd($postdonation->jumlah_donasi);
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact(['postcampaign', 'postdonation']),["title" => "Layanan"]);
     }
 
 
@@ -40,8 +43,8 @@ class CelenganSyahidController extends Controller
             "captcha" => $request['g-recaptcha-response'],
             "campaign_id" => $request['postdonation'],
         ]);
-        dd('okke data terkirim');
-        // return redirect('/admin/service/celengansyahid/campaigns');
+        Alert::success('Success', 'Terimakasih telah berdonasi');
+        return redirect()->back();
     }
 
     public function showLanding($link)
