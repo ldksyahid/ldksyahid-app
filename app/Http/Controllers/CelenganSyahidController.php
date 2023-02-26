@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\LibraryFunctionController as LFC;
 use App\Models\Campaign;
 use App\Models\Donation;
@@ -15,23 +16,13 @@ class CelenganSyahidController extends Controller
 {
     public function indexLanding()
     {
-        $postcampaign = Campaign::orderBy('created_at','desc')->get();
-        $postdonation = Donation::orderBy('created_at','desc')->get();
-        // $projects = Campaign::withcount('jumlah_donasi')->with('jumlah_donasi')->get();
-        // dd($projects);
-        // dd($postdonation->jumlah_donasi);
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact(['postcampaign', 'postdonation']),["title" => "Layanan"]);
-    }
+        $postcampaign = Campaign::orderBy('created_at','desc')->with("donation")->get();
 
-
-    public function create()
-    {
-        //
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact(['postcampaign']),["title" => "Layanan"]);
     }
 
     public function storeDonationCampaign(Request $request)
     {
-        // dd($request);
         $jumlah_donasi = LFC::replaceamount($request['jumlah_donasi']);
 
         $postDonation = Donation::create([
@@ -43,14 +34,14 @@ class CelenganSyahidController extends Controller
             "captcha" => $request['g-recaptcha-response'],
             "campaign_id" => $request['postdonation'],
         ]);
-        Alert::success('Success', 'Terimakasih telah berdonasi');
-        return redirect()->back();
+
+        return Redirect::route('service.celengansyahid.detail.donasisekarang.status', array('link' => $request['linkcampaign'],'id' => $postDonation->id));
     }
 
     public function showLanding($link)
     {
-        // dd($link);
-        $data = Campaign::where('link',$link)->first();
+        $data = Campaign::where('link',$link)->with("donation")->first();
+        // dd($data);
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show')->with([
             'data' => $data,
             "title" => "Layanan"
@@ -64,27 +55,15 @@ class CelenganSyahidController extends Controller
             'data' => $data,
             "title" => "Layanan"
         ]);
-
     }
 
-    public function status($nameCampaign)
+    public function statusDonasi($link, $id)
     {
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasistatus',["title" => "Layanan"]);
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
+        $data = Donation::where('id',$id)->first();
+        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasistatus')->with([
+            'data' => $data,
+            "title" => "Layanan"
+        ]);
     }
 
     public function indexAdminCampaign()
@@ -125,8 +104,6 @@ class CelenganSyahidController extends Controller
             $path_logo_pj = $request->file('logo_pj')->storeAs('Images/uploads/logos',$filename_logo_pj);
         }
 
-        // dd($kota);
-
         $post = Campaign::create([
             "judul" => $request['judul'],
             "kategori" => $request["kategori"],
@@ -155,17 +132,11 @@ class CelenganSyahidController extends Controller
         $cities = City::pluck('name', 'id');
         $data = Campaign::findOrFail($id);
 
-        // return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampedit')->with([
-        //     'data' => $data,
-        //     "title" => "Celengan Syahid"
-        // ]);
-
         return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampedit', compact(['provinces', 'cities', 'data']),["title" => "Celengan Syahid"]);
     }
 
     public function updateAdminCampaign(Request $request, $id)
     {
-        // dd($request);
         $target_biaya = LFC::replaceamount($request['target_biaya']);
         $provinsi = ucwords(strtolower($request["provinsi"]));
         $kota = ucwords(strtolower($request["kota"]));
@@ -225,16 +196,8 @@ class CelenganSyahidController extends Controller
         File::delete($gambar->logo_pj);
 
         // hapus data
-        Campaign    ::where('id',$id)->delete();
+        Campaign::where('id',$id)->delete();
         return redirect()->back();
     }
-    // public function storeKota(request $request)
-    // {
-    //     var_dump($request->get('province_id'));
-    //     $cities = City::where('province_id', $request->get('id'))
-    //         ->pluck('name', 'id');
-    //     $cities = City::pluck('name', $request->get('province_id'));
-    //     return response()->json($cities);
-    // }
 }
 

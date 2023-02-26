@@ -7,6 +7,9 @@
 @endsection
 
 @section('content')
+@php
+    use App\Http\Controllers\LibraryFunctionController as LFC;
+@endphp
 <div class="website-responsive">
     <div class="container-fluid d-none" style="background-color: #fbe5e5;">
         <div class="container w-75">
@@ -38,7 +41,7 @@
                     <p>ID Donasi</p>
                 </div>
                 <div class="col col-lg-6 text-end">
-                    <strong style="font-size: 16px;">DNS29221146638791</strong>
+                    <strong style="font-size: 15px;">{{ $data->id }}</strong>
                 </div>
             </div>
             <div class="row my-4">
@@ -46,7 +49,7 @@
                     <p>Tanggal Transaksi</p>
                 </div>
                 <div class="col col-lg-6 text-end">
-                    <strong style="font-size: 16px;">29 Januari 2023, 22.11</strong>
+                    <strong style="font-size: 15px;">{{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('D') }} {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('Y') }} Pada Pukul {{ \Carbon\Carbon::parse( $data->created_at )->format('H:i') }}</strong>
                 </div>
             </div>
             <div class="row my-4">
@@ -54,55 +57,55 @@
                     <p>Atas Nama</p>
                 </div>
                 <div class="col col-lg-6 text-end">
-                    <strong style="font-size: 16px;">Manusia baik</strong>
+                    <strong style="font-size: 16px;">{{ $data->nama_donatur }}</strong>
                 </div>
             </div>
-            <div class="row my-4">
+            {{-- <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p>Metode Pembayaran</p>
                 </div>
                 <div class="col col-lg-6 text-end">
                     <strong style="font-size: 16px;">E-Wallet</strong>
                 </div>
-            </div>
-            <div class="row my-4">
+            </div> --}}
+            {{-- <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p>Nama Bank/E-Wallet</p>
                 </div>
                 <div class="col col-lg-6 text-end">
                     <strong style="font-size: 16px;">OVO</strong>
                 </div>
-            </div>
+            </div> --}}
             <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p>Donasi</p>
                 </div>
                 <div class="col col-lg-6 text-end">
-                    <strong style="font-size: 16px;">Rp10.000</strong>
+                    <strong style="font-size: 16px;">{{ LFC::formatRupiah($data->jumlah_donasi) }}</strong>
                 </div>
             </div>
-            <div class="row my-4">
+            {{-- <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p>Biaya Admin</p>
                 </div>
                 <div class="col col-lg-6 text-end">
                     <strong style="font-size: 16px;">Rp100</strong>
                 </div>
-            </div>
-            <div class="row my-4">
+            </div> --}}
+            {{-- <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p>Kode Unik</p>
                 </div>
                 <div class="col col-lg-6 text-end">
                     <strong style="font-size: 16px;">0</strong>
                 </div>
-            </div>
+            </div> --}}
             <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p>Total Pembayaran</p>
                 </div>
                 <div class="col col-lg-6 text-end">
-                    <strong style="font-size: 16px;">Rp10.100</strong>
+                    <strong style="font-size: 16px;">{{ LFC::formatRupiah($data->jumlah_donasi) }}</strong>
                 </div>
             </div>
             <div class="row my-4">
@@ -122,7 +125,7 @@
 </div>
 
 <div class="mobile-responsive">
-    <div class="container-fluid" style="background-color: #fbe5e5;">
+    <div class="container-fluid d-none" style="background-color: #fbe5e5;">
         <div class="container w-75">
             <div class="col col-lg-12">
                 <div class="py-5 text-center text-danger">
@@ -131,7 +134,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid d-none" style="background-color: #e5fbe9;">
+    <div class="container-fluid" style="background-color: #e5fbe9;">
         <div class="container w-75">
             <div class="col col-lg-12">
                 <div class="py-5 text-center text-success">
@@ -152,7 +155,7 @@
                     <p style="font-size: 14px;">ID Donasi</p>
                 </div>
                 <div class="col col-lg-6 text-end">
-                    <strong style="font-size: 14px;">DNS29221146638791</strong>
+                    <strong style="font-size: 14px;">{{ $data->id }}</strong>
                 </div>
             </div>
             <div class="row my-4">
@@ -160,7 +163,7 @@
                     <p style="font-size: 14px;">Tanggal Transaksi</p>
                 </div>
                 <div class="col col-lg-6 text-end">
-                    <strong style="font-size: 14px;">29 Januari 2023, 22.11</strong>
+                    <strong style="font-size: 14px;">{{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('D') }} {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('Y') }} Pada Pukul {{ \Carbon\Carbon::parse( $data->created_at )->format('H:i') }}</strong>
                 </div>
             </div>
             <div class="row my-4">
@@ -168,25 +171,25 @@
                     <p style="font-size: 14px;">Atas Nama</p>
                 </div>
                 <div class="col col-lg-6 text-end">
-                    <strong style="font-size: 14px;">Manusia baik</strong>
+                    <strong style="font-size: 14px;">{{ $data->nama_donatur }}</strong>
                 </div>
             </div>
-            <div class="row my-4">
+            {{-- <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p style="font-size: 14px;">Metode Pembayaran</p>
                 </div>
                 <div class="col col-lg-6 text-end">
                     <strong style="font-size: 14px;">E-Wallet</strong>
                 </div>
-            </div>
-            <div class="row my-4">
+            </div> --}}
+            {{-- <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p style="font-size: 14px;">Nama Bank/E-Wallet</p>
                 </div>
                 <div class="col col-lg-6 text-end">
                     <strong style="font-size: 14px;">OVO</strong>
                 </div>
-            </div>
+            </div> --}}
             <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p style="font-size: 14px;">Donasi</p>
@@ -195,28 +198,28 @@
                     <strong style="font-size: 14px;">Rp10.000</strong>
                 </div>
             </div>
-            <div class="row my-4">
+            {{-- <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p style="font-size: 14px;">Biaya Admin</p>
                 </div>
                 <div class="col col-lg-6 text-end">
                     <strong style="font-size: 14px;">Rp100</strong>
                 </div>
-            </div>
-            <div class="row my-4">
+            </div> --}}
+            {{-- <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p style="font-size: 14px;">Kode Unik</p>
                 </div>
                 <div class="col col-lg-6 text-end">
                     <strong style="font-size: 14px;">0</strong>
                 </div>
-            </div>
+            </div> --}}
             <div class="row my-4">
                 <div class="col col-lg-6 text-start">
                     <p style="font-size: 14px;">Total Pembayaran</p>
                 </div>
                 <div class="col col-lg-6 text-end">
-                    <strong style="font-size: 14px;">Rp10.100</strong>
+                    <strong style="font-size: 14px;">{{ LFC::formatRupiah($data->jumlah_donasi) }}</strong>
                 </div>
             </div>
             <div class="col col-md-12 my-4">
