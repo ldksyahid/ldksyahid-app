@@ -106,6 +106,10 @@
             {{-- website --}}
             <div class="row g-4 mt-1 website-responsive">
                 @forelse($postcampaign as $key => $data)
+                @php $donation_total = 0 @endphp
+                @foreach ( $data->donation as $donation)
+                @php $donation_total += $donation->jumlah_donasi @endphp
+                @endforeach
                 <div class="col-lg-4 col-md-6 mt-3">
                     <div class="card shadow-c mb-2">
                         <div style="height: 12em;">
@@ -141,7 +145,7 @@
                                     @endif
                                 </div>
                                 <div class="progress mt-3">
-                                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul($data->jumlah_donasi,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%</strong></div>
+                                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul($donation_total,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul($donation_total,$data->target_biaya),1,'.','') }}%</strong></div>
                                 </div>
                                 <div class="mt-0">
                                     <div class="row">
@@ -150,7 +154,7 @@
                                                 <span style="font-size: 12px;">Terkumpul</span>
                                                 <br>
                                                 <span style=" color:#00a79d;">
-                                                    <strong>{{ LFC::formatRupiah($data->donation()->count()) }}</strong>
+                                                    <strong>{{ LFC::FormatRupiah($donation_total) }}</strong>
                                                 </span>
                                             </p>
                                         </div>
@@ -180,6 +184,10 @@
             {{-- mobile --}}
             <div class="row mt-1 mobile-responsive">
                 @forelse($postcampaign as $key => $data)
+                @php $donation_total = 0 @endphp
+                @foreach ( $data->donation as $donation)
+                @php $donation_total += $donation->jumlah_donasi @endphp
+                @endforeach
                 <div class="col-lg-4 col-md-6 mt-1">
                     <div class="row d-flex flex-row align-items-center">
                         <div class="col" style="margin-right:-20px;">
@@ -213,13 +221,13 @@
                                     @endif
                                 </div>
                                 <div class="progress  my-1" style="height: 8px;">
-                                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong style="font-size: 6px; margin-bottom:0px;">{{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%</strong></div>
+                                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul($donation_total,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong style="font-size: 6px; margin-bottom:0px;">{{ number_format(LFC::persentaseBiayaTerkumpul($donation_total,$data->target_biaya),1,'.','') }}%</strong></div>
                                 </div>
                                 <div class="mt-0">
                                     <div class="row">
                                         <div class="col text-start" style="line-height: -50px;">
                                             <p style="font-size: 8px;">Terkumpul</p>
-                                            <p style=" color:#00a79d; font-size:9px; margin-top:-18px;"><strong>{{ LFC::formatRupiah(1000000) }}</strong></p>
+                                            <p style=" color:#00a79d; font-size:9px; margin-top:-18px;"><strong>{{ LFC::formatRupiah($donation_total) }}</strong></p>
                                         </div>
                                         <div class="col text-end">
                                             <p style="font-size: 8px;">Sisa Hari</p>

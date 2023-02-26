@@ -11,6 +11,10 @@
 @php
     use App\Http\Controllers\LibraryFunctionController as LFC;
 @endphp
+@php $donation_total = 0 @endphp
+@foreach ( $data->donation as $donation)
+@php $donation_total += $donation->jumlah_donasi @endphp
+@endforeach
 <div class="container-fluid website-responsive" style="background-color: #f5f6fa;">
     <div class="row g-5">
         <div class="col col-lg-8">
@@ -46,7 +50,7 @@
                 <div class="mb-0">
                     <div class="row d-flex flex-row align-items-end">
                         <div class="col-lg-8 text-start">
-                            <h5 style=" color:#00a79d;"><strong>Rp23.000</strong></h5>
+                            <h5 style=" color:#00a79d;"><strong>{{ LFC::formatRupiah($donation_total) }}</strong></h5>
                         </div>
                         <div class="col-lg-4 text-end" style="margin-bottom: -20px;">
                             <p style="font-size:12px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>{{ $data->donation()->count() }} Donatur</p>
@@ -54,7 +58,7 @@
                     </div>
                 </div>
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%</strong></div>
+                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul($donation_total,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul($donation_total,$data->target_biaya),1,'.','') }}%</strong></div>
                 </div>
                 <div class="mb-0">
                     <div class="row d-flex flex-row align-items-center">
@@ -82,7 +86,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <a href=""><i class="fa fa-whatsapp fa-2x"></i></a>
+                                    <a href="https://api.whatsapp.com/send?text=Sedekah%20Jariyah%20Sandal%20Wudhu%20%3A%20Raih%20Pahala%20dari%20Setiap%20Langkahnya%0D%0Ahttps%3A%2F%2Fdigital.dompetdhuafa.org%2Fdonasi%2Fsedekahsandalwudhu%0D%0A%E2%80%9CAnnadhafatu%20Minal%20Iman%E2%80%9D%20%3A%20kebersihan%20adalah%20sebagian%20dari%20Iman" target="_blank"><i class="fa fa-whatsapp fa-2x"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -119,30 +123,35 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="Section3">
                         <div style="margin: 30px 0px 30px 0px ; ">
-                            {{-- <div class="row d-flex flex-row align-items-center p-4" style="background-color: #f5f6fa; border-radius:15px;">
+                            @if ($data->donation()->count() > 0)
+                            @foreach ( $data->donation as $donation)
+                            <div class="row d-flex flex-row align-items-center p-4 my-3" style="background-color: #f5f6fa; border-radius:15px;">
                                 <div class="col-lg-2 text-center">
                                     <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%;" width="100" height="100">
                                 </div>
                                 <div class="col-lg-10 text-start">
                                     <div class="row d-flex flex-row align-items-center">
                                         <div class="col-lg-9">
-                                            <h6 class="text-body">Manusia Baik</h6>
+                                            <h6 class="text-body">{{ $donation->nama_donatur }}</h6>
                                         </div>
                                         <div class="col-lg-3 text-end">
-                                            <span style="font-size: 11px;" class="text-body">30 menit yang lalu</span>
+                                            <span style="font-size: 11px;" class="text-body">{{ $donation->created_at->diffForHumans()  }}</span>
                                         </div>
                                     </div>
                                     <p class="text-body" style="">
-                                    Berdonasi Sebesar <strong>Rp250.000</strong>
+                                    Berdonasi Sebesar <strong>{{ LFC::formatRupiah($donation->jumlah_donasi) }}</strong>
                                     <br>
-                                    <i>ya Allah terimakasih atas rezeki yg tak pernah putus ini sehingga aku bisa terus bersedekah</i>
+                                    <i>{{ $donation->pesan_donatur }}</i>
                                     </p>
                                 </div>
-                            </div> --}}
+                            </div>
+                            @endforeach
+                            @else
                             <div class="col col-lg-12 text-center m-3 text-body">
                                 <img src="{{asset('Images/Icons/empty_box.png')}}" alt="logo" width="150" height="150" >
                                 <p>Campaign ini belum memiliki Donatur</p>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -181,7 +190,7 @@
             <div class="mb-0">
                 <div class="row d-flex flex-row align-items-end">
                     <div class="col-lg-8 text-start" style="margin-bottom: -39px;">
-                        <h5 style=" color:#00a79d; font-size:16px;"><strong>Rp23.000</strong></h5>
+                        <h5 style=" color:#00a79d; font-size:16px;"><strong>{{ LFC::formatRupiah($donation_total) }}</strong></h5>
                     </div>
                     <div class="col-lg-4 text-end" style="margin-bottom: -20px;">
                         <p style="font-size:10px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>{{ $data->donation()->count() }} Donatur</p>
@@ -189,7 +198,7 @@
                 </div>
             </div>
             <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul(250000000,$data->target_biaya),1,'.','') }}%</strong></div>
+                <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul($donation_total,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul($donation_total,$data->target_biaya),1,'.','') }}%</strong></div>
             </div>
             <div class="mb-0">
                 <div class="row d-flex flex-row align-items-center">
@@ -202,6 +211,10 @@
                         <p style="font-size:10px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }} hari lagi</p>
                     </div>
                 </div>
+            </div>
+            <div class="text-center small">
+                <p>Bagikan</p>
+                <a href="https://api.whatsapp.com/send?text=Sedekah%20Jariyah%20Sandal%20Wudhu%20%3A%20Raih%20Pahala%20dari%20Setiap%20Langkahnya%0D%0Ahttps%3A%2F%2Fdigital.dompetdhuafa.org%2Fdonasi%2Fsedekahsandalwudhu%0D%0A%E2%80%9CAnnadhafatu%20Minal%20Iman%E2%80%9D%20%3A%20kebersihan%20adalah%20sebagian%20dari%20Iman" target="_blank"><i class="fa fa-whatsapp fa-2x"></i></a>
             </div>
         </div>
     </div>
@@ -246,21 +259,23 @@
     <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
             <h6 class="text-body" style="margin-bottom: 15px;">Donatur ({{ $data->donation()->count() }})</h6>
-            @if (null)
+            @if ($data->donation()->count() > 0)
+            @foreach ( $data->donation as $donation)
             <div class="row p-2 my-2" style="background-color: #f5f6fa; border-radius:10px;">
                 <div class="col col-lg-2 text-start w-100" >
                     <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%; margin-top:0px;" width="35" height="35">
                 </div>
                 <div class="col col-lg-10 text-start" style="margin-left: -200px;">
-                    <h6 class="text-body" style="font-size:12px;">Manusia Baik</h6>
+                    <h6 class="text-body" style="font-size:12px;">{{ $donation->nama_donatur }}</h6>
                     <p class="text-body" style="font-size:10px;">
-                    Berdonasi Sebesar <strong>Rp250.000</strong>
+                    Berdonasi Sebesar <strong>{{ LFC::formatRupiah($donation->jumlah_donasi) }}</strong>
                     <br>
-                    <i>ya Allah terimakasih atas rezeki yg tak pernah putus ini sehingga aku bisa terus bersedekah</i>
+                    <i>{{ $donation->pesan_donatur }}</i>
                     </p>
-                    <p style="font-size: 8px;" class="text-body text-end">30 menit yang lalu</p>
+                    <p style="font-size: 8px;" class="text-body text-end">{{ $donation->created_at->diffForHumans() }}</p>
                 </div>
             </div>
+            @endforeach
             @else
             <div class="col col-lg-12 text-center m-3 text-body">
                 <img src="{{asset('Images/Icons/empty_box.png')}}" alt="logo" width="100" height="100" >

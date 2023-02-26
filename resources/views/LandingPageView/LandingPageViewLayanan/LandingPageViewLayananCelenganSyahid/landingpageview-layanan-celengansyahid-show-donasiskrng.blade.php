@@ -54,6 +54,7 @@
                 @csrf
                 @method('POST')
                     <input type="hidden" name="postdonation" value="{{$data->id}}" />
+                    <input type="hidden" name="linkcampaign" value="{{$data->link}}" />
                     <div class="col col-lg-12 my-5">
                         <div class="text-center">
                             <h3 class="text-body mb-3">Masukan Nominal Donasi</h3>
@@ -207,6 +208,7 @@
             <form role="form" action='/service/celengansyahid/donation/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
             @csrf
             @method('POST')
+                <input type="hidden" name="linkcampaign" value="{{$data->link}}" />
                 <input type="hidden" name="postdonation" value="{{$data->id}}" />
                 <div class="col col-md-12 my-4">
                     <div class="text-center">
@@ -406,7 +408,7 @@ for (let i = 0; i < anonimCheck.length; i++) {
 </script>
 
 <script>
-var firstInput = document.getElementsByName("inputBiayaDonasi");
+var firstInput = document.getElementsByName("jumlah_donasi");
 var secondInput = document.getElementsByName("totalDonasi");
 for (let i = 0; i < firstInput.length; i++) {
     function process(e) {
