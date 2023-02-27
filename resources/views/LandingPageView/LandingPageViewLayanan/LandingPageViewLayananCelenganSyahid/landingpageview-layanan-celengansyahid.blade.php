@@ -108,7 +108,7 @@
                 @forelse($postcampaign as $key => $data)
                 @php $donation_total = 0 @endphp
                 @foreach ( $data->donation as $donation)
-                @php $donation_total += $donation->jumlah_donasi @endphp
+                @php $donation_total += (int)$donation->jumlah_donasi @endphp
                 @endforeach
                 <div class="col-lg-4 col-md-6 mt-3">
                     <div class="card shadow-c mb-2">
@@ -186,7 +186,7 @@
                 @forelse($postcampaign as $key => $data)
                 @php $donation_total = 0 @endphp
                 @foreach ( $data->donation as $donation)
-                @php $donation_total += $donation->jumlah_donasi @endphp
+                @php $donation_total += (int)$donation->jumlah_donasi @endphp
                 @endforeach
                 <div class="col-lg-4 col-md-6 mt-1">
                     <div class="row d-flex flex-row align-items-center">

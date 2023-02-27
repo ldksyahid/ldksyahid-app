@@ -13,7 +13,7 @@
 @endphp
 @php $donation_total = 0 @endphp
 @foreach ( $data->donation as $donation)
-@php $donation_total += $donation->jumlah_donasi @endphp
+@php $donation_total += (int)$donation->jumlah_donasi @endphp
 @endforeach
 <div class="container-fluid website-responsive" style="background-color: #f5f6fa;">
     <div class="row g-5">
@@ -68,7 +68,11 @@
                             </p>
                         </div>
                         <div class="col-lg-4 text-end">
+                            @if (strtotime($data->deadline) > time())
                             <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }} hari lagi</p>
+                            @else
+                            <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }}</p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -141,7 +145,11 @@
                                     <p class="text-body" style="">
                                     Berdonasi Sebesar <strong>{{ LFC::formatRupiah($donation->jumlah_donasi) }}</strong>
                                     <br>
-                                    <i>{{ $donation->pesan_donatur }}</i>
+                                    @if ($donation->pesan_donatur != null)
+                                        <i>{{ $donation->pesan_donatur }}</i>
+                                    @else
+                                        <i>Bismillah Semoga Berkah yaaa ! tetap Semangat Semuanya !!</i>
+                                    @endif
                                     </p>
                                 </div>
                             </div>
@@ -208,7 +216,11 @@
                         </p>
                     </div>
                     <div class="col-lg-4 text-end" style="margin-top: -50px;">
-                        <p style="font-size:10px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }} hari lagi</p>
+                        @if (strtotime($data->deadline) > time())
+                        <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }} hari lagi</p>
+                        @else
+                        <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }}</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -270,7 +282,11 @@
                     <p class="text-body" style="font-size:10px;">
                     Berdonasi Sebesar <strong>{{ LFC::formatRupiah($donation->jumlah_donasi) }}</strong>
                     <br>
-                    <i>{{ $donation->pesan_donatur }}</i>
+                    @if ($donation->pesan_donatur != null)
+                        <i>{{ $donation->pesan_donatur }}</i>
+                    @else
+                        <i>Bismillah Semoga Berkah yaaa ! tetap Semangat Semuanya !!</i>
+                    @endif
                     </p>
                     <p style="font-size: 8px;" class="text-body text-end">{{ $donation->created_at->diffForHumans() }}</p>
                 </div>

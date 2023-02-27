@@ -61,7 +61,8 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb" name='jumlah_donasi' style="border-radius:5px;" placeholder="Rp0" required>
+                                {{-- <input type="number" min="10000" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb"  name="jumlah_donasi" style="border-radius: 5px" placeholder="Rp0" required /> --}}
+                                <input type="text" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb"  name="jumlah_donasi" style="border-radius: 5px" placeholder="Rp0" required />
                                 <div class="invalid-feedback">
                                     Pertanyaan ini wajib diisi
                                 </div>
@@ -341,7 +342,7 @@ for (let i = 0; i < dengan_rupiah.length; i++) {
 }
 function formatRupiah(angka, prefix)
     {
-        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+        var number_string = angka.replace(/[^\d]/g, '').toString(),
             split    = number_string.split(','),
             sisa     = split[0].length % 3,
             rupiah     = split[0].substr(0, sisa),
@@ -355,6 +356,9 @@ function formatRupiah(angka, prefix)
         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
         return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
     }
+// function formatRupiah(angka){
+// return `Rp. ${angka.toLocaleString('id-ID')}`;
+// }
 </script>
 
 <script>
@@ -419,6 +423,17 @@ for (let i = 0; i < firstInput.length; i++) {
 </script>
 
 <script>
+    // function checkInput() {
+    //     var value = document.getElementById( "inputBiayaDonasiWeb" ).value;
+    //     console.log(value);
+    //     if ( value < 10000 ) {
+    //         input.classList.remove( "is-valid" );
+    //         input.classList.add( "is-invalid" );
+    //     } else {
+    //         input.classList.add( "is-valid" );
+    //         input.classList.remove( "is-invalid" );
+    //     }
+    // }
     // Pemanggilan Validation
     (function() {
         'use strict';
