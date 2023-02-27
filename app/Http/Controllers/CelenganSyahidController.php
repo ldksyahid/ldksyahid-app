@@ -18,7 +18,7 @@ class CelenganSyahidController extends Controller
     public function indexLanding()
     {
         $postcampaign = Campaign::orderBy('created_at','desc')->with("donation")->get();
-
+        // dd($postcampaign);
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact(['postcampaign']),["title" => "Layanan"]);
     }
 
@@ -41,8 +41,10 @@ class CelenganSyahidController extends Controller
 
     public function showLanding($link)
     {
-        $data = Campaign::where('link',$link)->with("donation")->first();
-        // dd($data);
+        $data = Campaign::where('link',$link)->with(['donation' => function ($q){
+            $q->orderBy('created_at', 'DESC');
+        }])->first();
+
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show')->with([
             'data' => $data,
             "title" => "Layanan"

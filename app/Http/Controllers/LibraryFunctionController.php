@@ -30,7 +30,7 @@ class LibraryFunctionController extends Controller
             $days_remaining = floor($remaining / 86400);
             return $days_remaining;
         } else {
-            return 0;
+            return 'selesai';
         }
     }
 
