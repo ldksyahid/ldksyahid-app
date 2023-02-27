@@ -11,6 +11,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
 use Laravolt\Indonesia\Models\Province;
 use Laravolt\Indonesia\Models\City;
+use Illuminate\Support\Facades\Validator;
 
 class CelenganSyahidController extends Controller
 {

@@ -86,7 +86,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <a href="https://api.whatsapp.com/send?text=Sedekah%20Jariyah%20Sandal%20Wudhu%20%3A%20Raih%20Pahala%20dari%20Setiap%20Langkahnya%0D%0Ahttps%3A%2F%2Fdigital.dompetdhuafa.org%2Fdonasi%2Fsedekahsandalwudhu%0D%0A%E2%80%9CAnnadhafatu%20Minal%20Iman%E2%80%9D%20%3A%20kebersihan%20adalah%20sebagian%20dari%20Iman" target="_blank"><i class="fa fa-whatsapp fa-2x"></i></a>
+                                    <a href="https://api.whatsapp.com/send?&text=%F0%9F%9A%A8%20*%5BCELENGAN%20SYAHID%5D*%20%F0%9F%9A%A8%0A%0A_*{{ $data->judul }}*_%0A%0A_https%3A%2F%2Fldksyah.id%2Fservice%2Fcelengansyahid%2F{{ $data->link }}_%0A%0AYuk%20teman-teman%20kita%20bantu%20saudara%20kita%20%F0%9F%98%87%0A%0A_%22Dan%20berbuat-baiklah%20kepada%20kedua%20orang%20tua%2C%20karib-kerabat%2C%20anak-anak%20yatim%2C%20orang-orang%20miskin%2C%20tetangga%20dekat%20dan%20tetangga%20jauh%2C%20teman%20sejawat%2C%20ibnu%20sabil%20dan%20hamba%20sahaya%20yang%20kamu%20miliki.%20Sungguh%2C%20Allah%20tidak%20menyukai%20orang%20yang%20sombong%20dan%20membanggakan%20diri%2C%22%20%E2%97%8F%20(QS.%20An-Nisa%204%3A%20Ayat%2036)_%0A%0A%23CelenganSyahid%0A%23{{ $data->link }}%0A%23UKMLDKSyahid%0A%23KitaAdalahSaudara%0A%23Bismillah" target="_blank"><i class="fa fa-whatsapp fa-2x"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -214,7 +214,7 @@
             </div>
             <div class="text-center small">
                 <p>Bagikan</p>
-                <a href="https://api.whatsapp.com/send?text=Sedekah%20Jariyah%20Sandal%20Wudhu%20%3A%20Raih%20Pahala%20dari%20Setiap%20Langkahnya%0D%0Ahttps%3A%2F%2Fdigital.dompetdhuafa.org%2Fdonasi%2Fsedekahsandalwudhu%0D%0A%E2%80%9CAnnadhafatu%20Minal%20Iman%E2%80%9D%20%3A%20kebersihan%20adalah%20sebagian%20dari%20Iman" target="_blank"><i class="fa fa-whatsapp fa-2x"></i></a>
+                <a href="https://api.whatsapp.com/send?&text=%F0%9F%9A%A8%20*%5BCELENGAN%20SYAHID%5D*%20%F0%9F%9A%A8%0A%0A_*{{ $data->judul }}*_%0A%0A_https%3A%2F%2Fldksyah.id%2Fservice%2Fcelengansyahid%2F{{ $data->link }}_%0A%0AYuk%20teman-teman%20kita%20bantu%20saudara%20kita%20%F0%9F%98%87%0A%0A_%22Dan%20berbuat-baiklah%20kepada%20kedua%20orang%20tua%2C%20karib-kerabat%2C%20anak-anak%20yatim%2C%20orang-orang%20miskin%2C%20tetangga%20dekat%20dan%20tetangga%20jauh%2C%20teman%20sejawat%2C%20ibnu%20sabil%20dan%20hamba%20sahaya%20yang%20kamu%20miliki.%20Sungguh%2C%20Allah%20tidak%20menyukai%20orang%20yang%20sombong%20dan%20membanggakan%20diri%2C%22%20%E2%97%8F%20(QS.%20An-Nisa%204%3A%20Ayat%2036)_%0A%0A%23CelenganSyahid%0A%23{{ $data->link }}%0A%23UKMLDKSyahid%0A%23KitaAdalahSaudara%0A%23Bismillah" target="_blank"><i class="fa fa-whatsapp fa-2x"></i></a>
             </div>
         </div>
     </div>
