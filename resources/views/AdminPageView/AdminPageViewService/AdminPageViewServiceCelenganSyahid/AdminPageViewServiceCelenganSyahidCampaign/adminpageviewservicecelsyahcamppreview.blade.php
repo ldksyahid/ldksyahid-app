@@ -11,6 +11,10 @@
 @php
     use App\Http\Controllers\LibraryFunctionController as LFC;
 @endphp
+@php $donation_total = 0 @endphp
+@foreach ( $data->donation as $donation)
+@php $donation_total += (int)$donation->jumlah_donasi @endphp
+@endforeach
 <!-- Form Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
@@ -54,7 +58,7 @@
                                         <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="30" height="30">
                                         <div class="ms-2 c-details">
                                             <h6 style="font-size: 18px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
-                                            <a class="small" href="https://wa.me/62{{ $data->telp_pj }}" target="_blank">0{{ $data->telp_pj }} (PJ)</a>
+                                            <a class="small" href="https://api.whatsapp.com/send?phone=62{{ $data->telp_pj }}" target="_blank">0{{ $data->telp_pj }} (PJ)</a>
                                         </div>
                                     </div>
                                     @endif
@@ -63,15 +67,15 @@
                                 <div class="mb-0">
                                     <div class="row d-flex flex-row align-items-end">
                                         <div class="col-lg-8 text-start">
-                                            <h5 style=" color:#00a79d;"><strong>Rp150.000</strong></h5>
+                                            <h5 style=" color:#00a79d;"><strong>{{ LFC::formatRupiah($donation_total) }}</strong></h5>
                                         </div>
                                         <div class="col-lg-4 text-end" style="margin-bottom: -20px;">
-                                            <p style="font-size:12px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>5 Donatur</p>
+                                            <p style="font-size:12px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>{{ $data->donation()->count() }} Donatur</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>75%</strong></div>
+                                    <div class="progress-bar" role="progressbar" style="width: {{ number_format(LFC::persentaseBiayaTerkumpul($donation_total,$data->target_biaya),1,'.','') }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><strong>{{ number_format(LFC::persentaseBiayaTerkumpul($donation_total,$data->target_biaya),1,'.','') }}%</strong></div>
                                 </div>
                                 <div class="mb-0">
                                     <div class="row d-flex flex-row align-items-center">
@@ -81,7 +85,11 @@
                                             </p>
                                         </div>
                                         <div class="col-lg-4 text-end">
+                                            @if (strtotime($data->deadline) > time())
                                             <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }} hari lagi</p>
+                                            @else
+                                            <p style="font-size:12px;"><i class="far fa-clock fa-1x text-body me-1 my-2"></i>{{ LFC::countdownHari($data->deadline) }}</p>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +109,7 @@
                                         aria-controls="nav-newInfo" aria-selected="false">Kabar Terbaru</button>
                                     <button class="nav-link" id="nav-donatur-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-donatur" type="button" role="tab"
-                                        aria-controls="nav-donatur" aria-selected="false">Donatur (189)</button>
+                                        aria-controls="nav-donatur" aria-selected="false">Donatur ({{ $data->donation()->count() }})</button>
                                 </div>
                             </nav>
                             <div class="tab-content pt-3" id="nav-tabContent">
@@ -122,30 +130,39 @@
                                     {{ $data->tujuan }}
                                 </div>
                                 <div class="tab-pane fade" id="nav-donatur" role="tabpanel" aria-labelledby="nav-donatur-tab">
-                                    {{-- <div class="row d-flex flex-row align-items-center p-4 col-lg-10" style="background-color: #f5f6fa; border-radius:15px;">
+                                    @if ($data->donation()->count() > 0)
+                                    @foreach ( $data->donation as $donation)
+                                    <div class="row d-flex flex-row align-items-center p-4 col-lg-10" style="background-color: #f5f6fa; border-radius:15px;">
                                         <div class="col-lg-2 text-center">
                                             <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%;" width="100" height="100">
                                         </div>
                                         <div class="col-lg-10 text-start">
                                             <div class="row d-flex flex-row align-items-center">
                                                 <div class="col-lg-9">
-                                                    <h6 class="text-body">Manusia Baik</h6>
+                                                    <h6 class="text-body">{{ $donation->nama_donatur }}</h6>
                                                 </div>
                                                 <div class="col-lg-3 text-end">
-                                                    <span style="font-size: 11px;" class="text-body">30 menit yang lalu</span>
+                                                    <span style="font-size: 11px;" class="text-body">{{ $donation->created_at->diffForHumans()  }}</span>
                                                 </div>
                                             </div>
                                             <p class="text-body" style="">
-                                            Berdonasi Sebesar <strong>Rp250.000</strong>
+                                            Berdonasi Sebesar <strong>{{ LFC::formatRupiah($donation->jumlah_donasi) }}</strong>
                                             <br>
-                                            <i>ya Allah terimakasih atas rezeki yg tak pernah putus ini sehingga aku bisa terus bersedekah</i>
+                                            @if ($donation->pesan_donatur != null)
+                                                <i>{{ $donation->pesan_donatur }}</i>
+                                            @else
+                                                <i>Bismillah Semoga Berkah yaaa ! tetap Semangat Semuanya !!</i>
+                                            @endif
                                             </p>
                                         </div>
-                                    </div> --}}
+                                    </div>
+                                    @endforeach
+                                    @else
                                     <div class="col col-lg-12 text-center m-3">
                                         <img src="{{asset('Images/Icons/empty_box.png')}}" alt="logo" width="150" height="150" >
                                         <p>Campaign ini belum memiliki Donatur</p>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

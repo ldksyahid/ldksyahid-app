@@ -11,7 +11,6 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
 use Laravolt\Indonesia\Models\Province;
 use Laravolt\Indonesia\Models\City;
-use Illuminate\Support\Facades\Validator;
 
 class CelenganSyahidController extends Controller
 {
@@ -24,19 +23,31 @@ class CelenganSyahidController extends Controller
 
     public function storeDonationCampaign(Request $request)
     {
+
         $jumlah_donasi = LFC::replaceamount($request['jumlah_donasi']);
 
-        $postDonation = Donation::create([
-            "jumlah_donasi" => $jumlah_donasi,
-            "nama_donatur" => $request['nama_donatur'],
-            "email_donatur" => $request['email_donatur'],
-            "no_telp_donatur" => $request['no_telp_donatur'],
-            "pesan_donatur" => $request['pesan_donatur'],
-            "captcha" => $request['g-recaptcha-response'],
-            "campaign_id" => $request['postdonation'],
-        ]);
+        if ($jumlah_donasi < 10000) {
+            Alert::warning('Maaf!', 'Silahkan masukkan donasi minimal Rp10.000');
+            return Redirect::back();
+        }
+        elseif($request['g-recaptcha-response'] == null){
+            Alert::warning('Maaf!', 'Silahkan verifikasi Captcha terlebih dahulu');
+            return Redirect::back();
+        }
+        else
+        {
+            $postDonation = Donation::create([
+                "jumlah_donasi" => $jumlah_donasi,
+                "nama_donatur" => $request['nama_donatur'],
+                "email_donatur" => $request['email_donatur'],
+                "no_telp_donatur" => $request['no_telp_donatur'],
+                "pesan_donatur" => $request['pesan_donatur'],
+                "captcha" => $request['g-recaptcha-response'],
+                "campaign_id" => $request['postdonation'],
+            ]);
 
-        return Redirect::route('service.celengansyahid.detail.donasisekarang.status', array('link' => $request['linkcampaign'],'id' => $postDonation->id));
+            return Redirect::route('service.celengansyahid.detail.donasisekarang.status', array('link' => $request['linkcampaign'],'id' => $postDonation->id));
+        }
     }
 
     public function showLanding($link)
@@ -85,7 +96,10 @@ class CelenganSyahidController extends Controller
 
     public function previewAdminCampaign($id)
     {
-        $data = Campaign::findOrFail($id);
+        $data = Campaign::where('id',$id)->with(['donation' => function ($q){
+            $q->orderBy('created_at', 'DESC');
+        }])->first();
+        // dd($data);
         return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcamppreview')->with([
             'data' => $data,
             "title" => "Celengan Syahid"
