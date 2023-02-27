@@ -61,8 +61,9 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group mb-2">
-                                {{-- <input type="number" min="10000" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb"  name="jumlah_donasi" style="border-radius: 5px" placeholder="Rp0" required /> --}}
-                                <input type="text" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb"  name="jumlah_donasi" style="border-radius: 5px" placeholder="Rp0" required />
+                                <input type="number" min="10000" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb"  name="jumlah_donasi" style="border-radius: 5px" placeholder="Rp0" required />
+                                {{-- <input type="text" class="form-control inputBiayaDonasi" id="inputBiayaDonasiWeb"  name="jumlah_donasi" style="border-radius: 5px" placeholder="Rp0" required /> --}}
+                                <div id="error">error</div>
                                 <div class="invalid-feedback">
                                     Pertanyaan ini wajib diisi
                                 </div>
@@ -333,32 +334,70 @@
 
 @section('scripts')
 <script>
-const dengan_rupiah = document.querySelectorAll('.inputBiayaDonasi');
-for (let i = 0; i < dengan_rupiah.length; i++) {
-    dengan_rupiah[i].addEventListener('keyup', function(e)
-    {
-        dengan_rupiah[i].value = formatRupiah(this.value, 'Rp');
-    });
-}
-function formatRupiah(angka, prefix)
-    {
-        var number_string = angka.replace(/[^\d]/g, '').toString(),
-            split    = number_string.split(','),
-            sisa     = split[0].length % 3,
-            rupiah     = split[0].substr(0, sisa),
-            ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+// const dengan_rupiah = document.querySelectorAll('.inputBiayaDonasi');
+// for (let i = 0; i < dengan_rupiah.length; i++) {
+//     dengan_rupiah[i].addEventListener('keyup', function(e)
+//     {
+//         dengan_rupiah[i].value = formatRupiah(this.value, 'Rp');
+//     });
+// }
+// function formatRupiah(angka, prefix)
+//     {
+//         var number_string = angka.replace(/[^\d]/g, '').toString(),
+//             split    = number_string.split(','),
+//             sisa     = split[0].length % 3,
+//             rupiah     = split[0].substr(0, sisa),
+//             ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
 
-        if (ribuan) {
-            separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
-        }
+//         if (ribuan) {
+//             separator = sisa ? '.' : '';
+//             rupiah += separator + ribuan.join('.');
+//         }
 
-        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
-    }
+//         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+//         return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
+//     }
 // function formatRupiah(angka){
 // return `Rp. ${angka.toLocaleString('id-ID')}`;
 // }
+/* Dengan Rupiah */
+var dengan_rupiah = document.getElementById("inputBiayaDonasiWeb");
+var errorAngka = document.getElementById('error')
+dengan_rupiah.addEventListener("keyup", function (e) {
+
+    dengan_rupiah.value = formatRupiah(this.value, "Rp");
+});
+
+
+/* Fungsi */
+function formatRupiah(angka, prefix) {
+  const num = parseInt(angka.replace(/[^0-9]/g, ""));
+  console.log(num)
+  if(num <= 10000) {
+        errorAngka.style.display = 'block'
+      errorAngka.textContent = 'Nominal kurang dari 10000'
+    }
+    if(num >= 10000) {
+      errorAngka.style.display = 'none'
+    }
+    var number_string = angka.replace(/[^,\d]/g, "").toString(),
+        split = number_string.split(","),
+        sisa = split[0].length % 3,
+        rupiah = split[0].substr(0, sisa),
+        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+    if (ribuan) {
+        separator = sisa ? "." : "";
+        rupiah += separator + ribuan.join(".");
+    }
+
+    rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+    return prefix == undefined
+        ? rupiah.toLocaleString("id-ID")
+        : rupiah.toLocaleString("id-ID")
+        ? "Rp. " + rupiah.toLocaleString("id-ID")
+        : "";
+}
 </script>
 
 <script>
@@ -423,17 +462,6 @@ for (let i = 0; i < firstInput.length; i++) {
 </script>
 
 <script>
-    // function checkInput() {
-    //     var value = document.getElementById( "inputBiayaDonasiWeb" ).value;
-    //     console.log(value);
-    //     if ( value < 10000 ) {
-    //         input.classList.remove( "is-valid" );
-    //         input.classList.add( "is-invalid" );
-    //     } else {
-    //         input.classList.add( "is-valid" );
-    //         input.classList.remove( "is-invalid" );
-    //     }
-    // }
     // Pemanggilan Validation
     (function() {
         'use strict';
