@@ -247,6 +247,7 @@ Route::post('/admin/service/celengansyahid/campaign/get-city', [CelenganSyahidCo
 
 // Route AdminPage Service Campaign -> donation
 Route::get('/admin/service/celengansyahid/donations', [CelenganSyahidController::class, 'indexAdminDonation'])->name('admin.service.index.donation')->middleware('is_admin');
+Route::get('/admin/service/celengansyahid/donation/{id}/destroy', [CelenganSyahidController::class, 'destroyAdminDonation'])->name('admin.service.destroy.donation')->middleware('is_admin');
 
 
 
