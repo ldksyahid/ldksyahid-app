@@ -80,6 +80,13 @@ class CelenganSyahidController extends Controller
         ]);
     }
 
+    public function indexAdminDonation()
+    {
+        $postcampaign = Campaign::orderBy('created_at','desc')->with("donation")->get();
+        dd($postcampaign);
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidDonation.adminpageviewservicecelsyahdona',compact('postcampaign'), ["title" => "Celengan Syahid"]);
+    }
+
     public function indexAdminCampaign()
     {
         $postcampaign = Campaign::orderBy('created_at','desc')->get();
