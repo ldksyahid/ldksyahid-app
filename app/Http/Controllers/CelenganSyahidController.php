@@ -82,9 +82,13 @@ class CelenganSyahidController extends Controller
 
     public function indexAdminDonation()
     {
-        $postdonation = Donation::orderBy('created_at','desc')->get();
-        // dd($postdonation);
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidDonation.adminpageviewservicecelsyahdona',compact('postdonation'), ["title" => "Celengan Syahid"]);
+        $postcampaign = Campaign::orderBy('created_at','desc')->with('donation')->get();
+        // foreach ($postcampaign as $data)
+        // {
+        //     //$product->skus is a collection of Sku models
+        //     dd( $data->donation );
+        // }
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidDonation.adminpageviewservicecelsyahdona',compact('postcampaign'), ["title" => "Celengan Syahid"]);
     }
 
     public function destroyAdminDonation($id){

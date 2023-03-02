@@ -10,44 +10,64 @@
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Donations Database</h5>
-                {{-- START Data table Campaign --}}
+                {{-- START Data table Donation --}}
                 <div class="mt-3">
-                    <table class="table table-bordered" id="data_donation_reguler">
+                    @forelse($postcampaign  as $key => $data)
+                    <table class="table table-bordered">
                         <thead>
+                            <tr>
+                                <th colspan="7">{{ $data->judul }}</th>
+                            </tr>
                             <tr align='center'>
                                 <th scope="col" style="width: 10px">No</th>
                                 <th scope="col" style="width: 170px">Nama</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Telp</th>
-                                <th scope="col">Donasi</th>
                                 <th scope="col">Jumlah</th>
                                 <th scope="col">Waktu</th>
                                 <th scope="col" style="width: 40px">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($postdonation  as $key => $data)
+                            @php
+                                $pointer = 0;
+                            @endphp
+                            @if ($data->donation()->count() > 0)
+                            @foreach ( $data->donation as $donation)
                             <tr class="small">
-                                <td scope="row" align='center'>{{$key + 1}}</td>
-                                <td>{{ $data->nama_donatur }}</td>
-                                <td>{{ $data->email_donatur }}</td>
-                                <td>{{ $data->no_telp_donatur }}</td>
-                                <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus a, aut dolore sit voluptates aperiam.</td>
-                                <td>{{ LFC::FormatRupiah($data->jumlah_donasi) }}</td>
-                                <td align="center">{{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $data->created_at )->format('Y') }}</td>
+                                <td scope="row" align='center'>{{$pointer += 1}}</td>
+                                <td>{{ $donation->nama_donatur }}</td>
+                                <td>{{ $donation->email_donatur }}</td>
+                                <td>{{ $donation->no_telp_donatur }}</td>
+                                <td>{{ LFC::formatRupiah($donation->jumlah_donasi) }}</td>
+                                <td align="center">{{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $donation->created_at )->format('Y') }} ({{ \Carbon\Carbon::parse( $donation->created_at )->format('H:t T') }})</td>
                                 <td align="center">
-                                    <button type="submit" onclick="deleteConfirmationDonation('{{ $data->id }}')" id="delete-donation" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
+                                    <button type="submit" onclick="deleteConfirmationDonation('{{ $donation->id }}' )" id="delete-donation" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
-                            @empty
-                            <tr>
-                                <td colspan='9', align='center'>Data Tidak Ditemukan</td>
+                            @endforeach
+                            @else
+                            <tr class="small">
+                                <td scope="row" align='center' colspan="7">Data Tidak Ditemukan</td>
                             </tr>
-                            @endforelse
+                            @endif
                         </tbody>
                     </table>
+                    @empty
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr align="center">
+                                <th>
+                                    <div style="height: 140px"></div>
+                                    Data Tidak Ditemukan
+                                    <div style="height: 140px"></div>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    @endforelse
                 </div>
-                {{-- END Data table Campaign --}}
+                {{-- END Data table Doantion --}}
             </div>
         </div>
     </div>
@@ -57,7 +77,7 @@
 
 @section('scripts')
 <script>
-// ===== START CRUD CAMPAIGN =====
+// ===== START CRUD DONATION =====
 // ini untuk konfirmasi delete
 function deleteConfirmationDonation(id) {
     const Toast = Swal.mixin({
@@ -94,14 +114,6 @@ function deleteConfirmationDonation(id) {
                 }
             })
 }
-// ===== END CRUD CAMPAIGN =====
+// ===== END CRUD DONATION =====
 </script>
-
-<script>
-    $(document).ready(function() {
-    $('#data_donation_reguler').DataTable();
-} );
-</script>
-
-
 @endsection

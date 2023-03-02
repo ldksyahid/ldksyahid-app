@@ -27,7 +27,7 @@ class CreateDonationsTable extends Migration
             $table->string('biaya_admin')->nullable();
             $table->string('kode_unik')->nullable();
             $table->uuid('campaign_id');
-            $table->foreign('campaign_id')->references('id')->on('campaigns');
+            $table->foreign('campaign_id')->references('id')->on('campaigns')->onDelete('cascade');
             $table->timestamps();
         });
     }
