@@ -11,9 +11,15 @@
 @php
     use App\Http\Controllers\LibraryFunctionController as LFC;
 @endphp
-@php $donation_total = 0 @endphp
+@php
+$donatur = 0;
+$donation_total = 0 ;
+@endphp
 @foreach ( $data->donation as $donation)
+@if ($donation->payment_status == 'PAID')
 @php $donation_total += (int)$donation->jumlah_donasi @endphp
+@php $donatur += 1 @endphp
+@endif
 @endforeach
 <div class="container-fluid website-responsive" style="background-color: #f5f6fa;">
     <div class="row g-5">
@@ -53,7 +59,7 @@
                             <h5 style=" color:#00a79d;"><strong>{{ LFC::formatRupiah($donation_total) }}</strong></h5>
                         </div>
                         <div class="col-lg-4 text-end" style="margin-bottom: -20px;">
-                            <p style="font-size:12px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>{{ $data->donation()->count() }} Donatur</p>
+                            <p style="font-size:12px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>{{ $donatur }} Donatur</p>
                         </div>
                     </div>
                 </div>
@@ -108,7 +114,7 @@
                 <ul class="px-5 nav nav-tabs" role="tablist" id="navbar-camp">
                     <li role="presentation" class="active"><a href="#Section1" aria-controls="home" role="tab" data-toggle="tab">Detail</a></li>
                     <li role="presentation"><a href="#Section2" aria-controls="profile" role="tab" data-toggle="tab">Kabar Terbaru</a></li>
-                    <li role="presentation"><a href="#Section3" aria-controls="messages" role="tab" data-toggle="tab">Donatur ({{ $data->donation()->count() }})</a></li>
+                    <li role="presentation"><a href="#Section3" aria-controls="messages" role="tab" data-toggle="tab">Donatur ({{ $donatur }})</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content tabs pt-3 p-5 col col-lg-8" style="padding-top: -40px;">
@@ -127,8 +133,9 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="Section3">
                         <div style="margin: 30px 0px 30px 0px ; ">
-                            @if ($data->donation()->count() > 0)
+                            @if ($donatur > 0)
                             @foreach ( $data->donation as $donation)
+                            @if ($donation->payment_status == 'PAID')
                             <div class="row d-flex flex-row align-items-center p-4 my-3" style="background-color: #f5f6fa; border-radius:15px;">
                                 <div class="col-lg-2 text-center">
                                     <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%;" width="100" height="100">
@@ -153,6 +160,7 @@
                                     </p>
                                 </div>
                             </div>
+                            @endif
                             @endforeach
                             @else
                             <div class="col col-lg-12 text-center m-3 text-body">
@@ -201,7 +209,7 @@
                         <h5 style=" color:#00a79d; font-size:16px;"><strong>{{ LFC::formatRupiah($donation_total) }}</strong></h5>
                     </div>
                     <div class="col-lg-4 text-end" style="margin-bottom: -20px;">
-                        <p style="font-size:10px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>{{ $data->donation()->count() }} Donatur</p>
+                        <p style="font-size:10px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>{{ $donatur }} Donatur</p>
                     </div>
                 </div>
             </div>
@@ -270,9 +278,10 @@
     </div>
     <div class="p-4 my-3 mx-3 shadow-sm" style="background-color: #fff; border-radius:10px;">
         <div>
-            <h6 class="text-body" style="margin-bottom: 15px;">Donatur ({{ $data->donation()->count() }})</h6>
-            @if ($data->donation()->count() > 0)
+            <h6 class="text-body" style="margin-bottom: 15px;">Donatur ({{ $donatur }})</h6>
+            @if ($donatur > 0)
             @foreach ( $data->donation as $donation)
+            @if ($donation->payment_status == 'PAID')
             <div class="row p-2 my-2" style="background-color: #f5f6fa; border-radius:10px;">
                 <div class="col col-lg-2 text-start w-100" >
                     <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%; margin-top:0px;" width="35" height="35">
@@ -291,6 +300,7 @@
                     <p style="font-size: 8px;" class="text-body text-end">{{ $donation->created_at->diffForHumans() }}</p>
                 </div>
             </div>
+            @endif
             @endforeach
             @else
             <div class="col col-lg-12 text-center m-3 text-body">

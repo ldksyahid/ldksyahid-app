@@ -109,12 +109,15 @@ Route::post('/service/shortlink/store', [RequestShortlinkController::class, 'sto
 Route::get('/service/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
 
 // Route LandingPage Layanan CelenganLDKSyahid
-Route::get('/service/celengansyahid', [CelenganSyahidController::class, 'indexLanding'])->name('service.celengansyahid')->middleware('is_admin_helper');
-Route::get('/service/celengansyahid/{link}', [CelenganSyahidController::class, 'showLanding'])->name('service.celengansyahid.detail')->middleware('is_admin_helper');
-Route::get('/service/celengansyahid/yuk-donasi/{link}', [CelenganSyahidController::class, 'donasiSekarang'])->name('service.celengansyahid.detail.donasisekarang')->middleware('is_admin_helper');
-Route::get('/service/celengansyahid/yuk-donasi/{link}/status/{id}', [CelenganSyahidController::class, 'statusDonasi'])->name('service.celengansyahid.detail.donasisekarang.status')->middleware('is_admin_helper');
+Route::get('/service/celengansyahid', [CelenganSyahidController::class, 'indexLanding'])->name('service.celengansyahid');
+Route::get('/service/celengansyahid/{link}', [CelenganSyahidController::class, 'showLanding'])->name('service.celengansyahid.detail');
+Route::get('/service/celengansyahid/yuk-donasi/{link}', [CelenganSyahidController::class, 'donasiSekarang'])->name('service.celengansyahid.detail.donasisekarang');
+Route::get('/service/celengansyahid/yuk-donasi/{link}/status/{id}', [CelenganSyahidController::class, 'statusDonasi'])->name('service.celengansyahid.detail.donasisekarang.status');
+Route::get('/service/celengansyahid/payment/{id}', [CelenganSyahidController::class, 'openPaymentGateway'])->name('service.celengansyahid.detail.donasisekarang.gateway');
+Route::get('/service/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController::class, 'savePaymentDonation'])->name('service.celengansyahid.savePayment');
 
-Route::post('/service/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign')->middleware('is_admin_helper');
+Route::post('/service/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
+Route::post('/service/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
 // ======================================= END ROUTE LANDING PAGE =======================================
 
 

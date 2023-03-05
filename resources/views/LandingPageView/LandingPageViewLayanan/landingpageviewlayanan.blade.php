@@ -78,8 +78,8 @@
                                 <br><br>
                             </div>
                             <div class="widget-49-meeting-action">
-                                <a href="/service/celengansyahid" target="_blank" class="btn btn-outline-secondary w-100 py-2" style="pointer-events: none;cursor: default;">SEGERA HADIR</a>
-                                {{-- <a href="/service/celengansyahid" target="_blank" class="btn btn-primary w-100 py-2">Mulai</a> --}}
+                                {{-- <a href="/service/celengansyahid" target="_blank" class="btn btn-outline-secondary w-100 py-2" style="pointer-events: none;cursor: default;">SEGERA HADIR</a> --}}
+                                <a href="/service/celengansyahid" target="_blank" class="btn btn-primary w-100 py-2">Mulai</a>
                             </div>
                         </div>
                     </div>

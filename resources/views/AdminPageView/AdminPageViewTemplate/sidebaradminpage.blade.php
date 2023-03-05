@@ -38,7 +38,7 @@
                 <a href="/admin/schedule" class="nav-item nav-link {{($title === "Schedule") ? "active" : ""}}"><i class="fa fa-list-alt me-2"></i>Schedule</a>
                 <a href="/admin/news" class="nav-item nav-link {{($title === "News") ? "active" : ""}}"><i class="fa fa-newspaper me-2"></i>News</a>
                 <div class="nav-item dropdown">
-                    <a href="/admin/service/celengansyahid" class="nav-link dropdown-toggle {{($title === "Celengan Syahid") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid <br> <span class="small">Coming Soon</span></a>
+                    <a href="/admin/service/celengansyahid" class="nav-link dropdown-toggle {{($title === "Celengan Syahid") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
                     <div class="dropdown-menu bg-transparent border-0">
                         <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item">Campaigns</a>
                         <a href="/admin/service/celengansyahid/donations" class="dropdown-item">Donations</a>
