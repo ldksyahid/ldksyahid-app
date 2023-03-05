@@ -10,7 +10,6 @@
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Donations Database</h5>
-                {{-- START Data table Donation --}}
                 <div class="mt-3">
                     @forelse($postcampaign  as $key => $data)
                     <table class="table table-bordered">
@@ -18,13 +17,13 @@
                             <tr>
                                 <th colspan="7">{{ $data->judul }}</th>
                             </tr>
-                            <tr align='center'>
+                            <tr align='center' class="small">
                                 <th scope="col" style="width: 10px">No</th>
                                 <th scope="col" style="width: 170px">Nama</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Telp</th>
                                 <th scope="col">Jumlah</th>
                                 <th scope="col">Waktu</th>
+                                <th scope="col">Status Pembayaran</th>
+                                <th scope="col">Link Pembayaran</th>
                                 <th scope="col" style="width: 40px">Action</th>
                             </tr>
                         </thead>
@@ -33,14 +32,14 @@
                                 $pointer = 0;
                             @endphp
                             @if ($data->donation()->count() > 0)
-                            @foreach ( $data->donation as $donation)
+                            @foreach ( $data->donation->reverse() as $donation)
                             <tr class="small">
                                 <td scope="row" align='center'>{{$pointer += 1}}</td>
                                 <td>{{ $donation->nama_donatur }}</td>
-                                <td>{{ $donation->email_donatur }}</td>
-                                <td>{{ $donation->no_telp_donatur }}</td>
-                                <td>{{ LFC::formatRupiah($donation->jumlah_donasi) }}</td>
-                                <td align="center">{{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $donation->created_at )->format('Y') }} ({{ \Carbon\Carbon::parse( $donation->created_at )->format('H:t T') }})</td>
+                                <td align="center">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</td>
+                                <td align="center">{{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $donation->created_at )->format('Y') }} ({{ \Carbon\Carbon::parse( $donation->created_at )->format('H:i T') }})</td>
+                                <td align="center">{{ $donation->payment_status }}</td>
+                                <td align="center"><a href="{{ $donation->payment_link }}" target="_blank">Klik Disini</a></td>
                                 <td align="center">
                                     <button type="submit" onclick="deleteConfirmationDonation('{{ $donation->id }}' )" id="delete-donation" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
                                 </td>
@@ -67,7 +66,6 @@
                     </table>
                     @endforelse
                 </div>
-                {{-- END Data table Doantion --}}
             </div>
         </div>
     </div>

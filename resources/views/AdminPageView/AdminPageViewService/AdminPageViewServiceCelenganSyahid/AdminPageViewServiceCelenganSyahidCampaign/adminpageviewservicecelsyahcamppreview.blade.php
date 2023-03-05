@@ -11,9 +11,11 @@
 @php
     use App\Http\Controllers\LibraryFunctionController as LFC;
 @endphp
-@php $donation_total = 0 @endphp
+@php $donation_total = 0 ; $donatur=0 @endphp
 @foreach ( $data->donation as $donation)
-@php $donation_total += (int)$donation->jumlah_donasi @endphp
+@if ($donation->payment_status == 'PAID')
+@php $donation_total += (int)$donation->jumlah_donasi ; $donatur +=1 @endphp
+@endif
 @endforeach
 <!-- Form Start -->
 <div class="container-fluid pt-4 px-4">
@@ -70,7 +72,7 @@
                                             <h5 style=" color:#00a79d;"><strong>{{ LFC::formatRupiah($donation_total) }}</strong></h5>
                                         </div>
                                         <div class="col-lg-4 text-end" style="margin-bottom: -20px;">
-                                            <p style="font-size:12px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>{{ $data->donation()->count() }} Donatur</p>
+                                            <p style="font-size:12px;"><i class="fas fa-users fa-1x text-body me-1 my-3"></i>{{ $donatur }} Donatur</p>
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +111,7 @@
                                         aria-controls="nav-newInfo" aria-selected="false">Kabar Terbaru</button>
                                     <button class="nav-link" id="nav-donatur-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-donatur" type="button" role="tab"
-                                        aria-controls="nav-donatur" aria-selected="false">Donatur ({{ $data->donation()->count() }})</button>
+                                        aria-controls="nav-donatur" aria-selected="false">Donatur ({{ $donatur }})</button>
                                 </div>
                             </nav>
                             <div class="tab-content pt-3" id="nav-tabContent">
@@ -130,7 +132,7 @@
                                     {{ $data->tujuan }}
                                 </div>
                                 <div class="tab-pane fade" id="nav-donatur" role="tabpanel" aria-labelledby="nav-donatur-tab">
-                                    @if ($data->donation()->count() > 0)
+                                    @if ($donatur > 0)
                                     @foreach ( $data->donation as $donation)
                                     <div class="row d-flex flex-row align-items-center p-4 col-lg-10" style="background-color: #f5f6fa; border-radius:15px;">
                                         <div class="col-lg-2 text-center">

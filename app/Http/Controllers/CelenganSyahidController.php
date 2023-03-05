@@ -11,6 +11,9 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
 use Laravolt\Indonesia\Models\Province;
 use Laravolt\Indonesia\Models\City;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
 
 class CelenganSyahidController extends Controller
 {
@@ -23,8 +26,13 @@ class CelenganSyahidController extends Controller
 
     public function storeDonationCampaign(Request $request)
     {
+        // dd($request->all());
 
-        $jumlah_donasi = LFC::replaceamount($request['jumlah_donasi']);
+        $jumlah_donasi = (int) LFC::replaceamount($request['jumlah_donasi']);
+        // dd($jumlah_donasi);
+
+        $secret_key = 'Basic '.config('xendit.key_auth');
+        $external_id = Str::random(10);
 
         if ($jumlah_donasi < 10000) {
             Alert::warning('Maaf!', 'Silahkan masukkan donasi minimal Rp10.000');
@@ -36,7 +44,21 @@ class CelenganSyahidController extends Controller
         }
         else
         {
+            $data_request = Http::withHeaders([
+                'Authorization' => $secret_key
+            ])->post('https://api.xendit.co/v2/invoices', [
+                'external_id' => $external_id,
+                'amount' => $jumlah_donasi
+            ]);
+            // $response->expiry_date
+            $response = $data_request->object();
+
+            $expired_date = Carbon::parse($response->expiry_date)->format('Y-m-d H:i:s');
+
+            // dd($expired_date);
+
             $postDonation = Donation::create([
+                'doc_no' => $external_id,
                 "jumlah_donasi" => $jumlah_donasi,
                 "nama_donatur" => $request['nama_donatur'],
                 "email_donatur" => $request['email_donatur'],
@@ -44,10 +66,31 @@ class CelenganSyahidController extends Controller
                 "pesan_donatur" => $request['pesan_donatur'],
                 "captcha" => $request['g-recaptcha-response'],
                 "campaign_id" => $request['postdonation'],
+                'payment_status' => $response->status,
+                'payment_link' => $response->invoice_url
             ]);
 
+            // return redirect()->away($postDonation->payment_link);
             return Redirect::route('service.celengansyahid.detail.donasisekarang.status', array('link' => $request['linkcampaign'],'id' => $postDonation->id));
         }
+    }
+
+    public function openPaymentGateway($id)
+    {
+        $data = Donation::where('id',$id)->first();
+
+        return redirect()->away($data->payment_link);
+    }
+
+    public function callbackDonation()
+    {
+        $data = request()->all();
+        $status = $data['status'];
+        $external_id = $data['external_id'];
+        Donation::where('doc_no', $external_id)->update([
+            'payment_status' => $status
+        ]);
+        return response()->json($data);
     }
 
     public function showLanding($link)
@@ -74,20 +117,30 @@ class CelenganSyahidController extends Controller
     public function statusDonasi($link, $id)
     {
         $data = Donation::where('id',$id)->first();
+        $campaign = Campaign::where('link', $link)->first();
+
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasistatus')->with([
             'data' => $data,
-            "title" => "Layanan"
+            "title" => "Layanan",
+            'campaign' => $campaign,
+        ]);
+    }
+
+    public function savePaymentDonation($link, $id)
+    {
+        $donation = Donation::where('id',$id)->first();
+        $campaign = Campaign::where('link', $link)->first();
+
+        return view('print-request.bukti-donasi')->with([
+            'donation' => $donation,
+            'campaign' => $campaign,
         ]);
     }
 
     public function indexAdminDonation()
     {
         $postcampaign = Campaign::orderBy('created_at','desc')->with('donation')->get();
-        // foreach ($postcampaign as $data)
-        // {
-        //     //$product->skus is a collection of Sku models
-        //     dd( $data->donation );
-        // }
+
         return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidDonation.adminpageviewservicecelsyahdona',compact('postcampaign'), ["title" => "Celengan Syahid"]);
     }
 

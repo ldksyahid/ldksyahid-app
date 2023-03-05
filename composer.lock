@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ae92bd8619d86c2340bba31cc7de9ab",
+    "content-hash": "7b7b8d6b678f08bf45a3818ee92d2dbc",
     "packages": [
         {
             "name": "ashallendesign/short-url",

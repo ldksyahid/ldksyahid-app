@@ -51,7 +51,7 @@
                 ● (QS. An-Nisa 4: Ayat 36)
             </p>
         </div>
-        <div class="col-lg-12 col-md-6 wow fadeInUp py-1" data-wow-delay="0.5s" style="margin-bottom: 0px;">
+        {{-- <div class="col-lg-12 col-md-6 wow fadeInUp py-1" data-wow-delay="0.5s" style="margin-bottom: 0px;">
             <div class="row">
                 <div class="col">
                     <h6 class="text-body" style="display: inline-block; margin-right:10px;">Filter</h6>
@@ -78,12 +78,12 @@
                                 <input type="checkbox" id="lingkungan" value="lingkungan" onchange="checkboxStatusChange()">Lingkungan</label>
                                 <hr>
                                 <div class="row mb-0">
-                                    {{-- <div class="col text-center">
+                                    <div class="col text-center">
                                         <a class="btn btn-danger w-100 py-3 fadeIn boder-r d-flex align-items-center h-25" style="margin-bottom: -25px;" id="hapusPilihan" onchange="hapusPilihan()">Hapus&nbsp;&nbsp;</a>
                                     </div>
                                     <div class="col text-center">
                                         <a class="btn btn-primary w-100 py-3 fadeIn boder-r d-flex align-items-center h-25 " href="#" type="submit" style="margin-bottom: -25px;" onchange="simpanPilihan()">Simpan</a>
-                                    </div> --}}
+                                    </div>
                                     <div class="col text-center">
                                         <label for="hapus" class="p-3 btn btn-danger w-100 py-3 fadeIn boder-r d-flex align-items-center h-25 btn-simpan" style="margin-bottom: -25px;" id="btn-hapus">
                                             <input type="checkbox"  id="hapus" onchange="hapusPilihan()">Hapus
@@ -100,16 +100,19 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="col-lg-12 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-            <h6 class="text-body">Menampilkan 12 dari 62 <i>campaign</i></h6>
+            {{-- <h6 class="text-body">Menampilkan 12 dari 62 <i>campaign</i></h6> --}}
             {{-- website --}}
             <div class="row g-4 mt-1 website-responsive">
                 @forelse($postcampaign as $key => $data)
                 @php $donation_total = 0 @endphp
                 @foreach ( $data->donation as $donation)
+                @if ($donation->payment_status == 'PAID')
                 @php $donation_total += (int)$donation->jumlah_donasi @endphp
+                @endif
                 @endforeach
+
                 <div class="col-lg-4 col-md-6 mt-3">
                     <div class="card shadow-c mb-2">
                         <div style="height: 12em;">
@@ -186,7 +189,9 @@
                 @forelse($postcampaign as $key => $data)
                 @php $donation_total = 0 @endphp
                 @foreach ( $data->donation as $donation)
+                @if ($donation->payment_status == 'PAID')
                 @php $donation_total += (int)$donation->jumlah_donasi @endphp
+                @endif
                 @endforeach
                 <div class="col-lg-4 col-md-6 mt-1">
                     <div class="row d-flex flex-row align-items-center">
@@ -251,7 +256,7 @@
                 @endforelse
             </div>
         </div>
-        <div class="col-lg-12 col-md-6 wow fadeInUp text-center" data-wow-delay="0.5s">
+        {{-- <div class="col-lg-12 col-md-6 wow fadeInUp text-center" data-wow-delay="0.5s">
             <div class="pagination">
                 <a href="#">&laquo;</a>
                 <a href="#">1</a>
@@ -262,7 +267,7 @@
                 <a href="#">6</a>
                 <a href="#">&raquo;</a>
                 </div>
-        </div>
+        </div> --}}
     </div>
 </div>
 @endsection
