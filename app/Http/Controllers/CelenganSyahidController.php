@@ -14,22 +14,68 @@ use Laravolt\Indonesia\Models\City;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\PDF;
+
 
 class CelenganSyahidController extends Controller
 {
     public function indexLanding()
     {
         $postcampaign = Campaign::orderBy('created_at','desc')->with("donation")->get();
-        // dd($postcampaign);
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact(['postcampaign']),["title" => "Layanan"]);
     }
 
+    // public function storeDonationCampaign(Request $request)
+    // {
+
+    //     $jumlah_donasi = (int) LFC::replaceamount($request['jumlah_donasi']);
+
+    //     $secret_key = 'Basic '.config('xendit.key_auth');
+    //     $external_id = Str::random(10);
+
+    //     if ($jumlah_donasi < 10000) {
+    //         Alert::warning('Maaf!', 'Silahkan masukkan donasi minimal Rp10.000');
+    //         return Redirect::back();
+    //     }
+    //     elseif($request['g-recaptcha-response'] == null){
+    //         Alert::warning('Maaf!', 'Silahkan verifikasi Captcha terlebih dahulu');
+    //         return Redirect::back();
+    //     }
+    //     else
+    //     {
+    //         $data_request = Http::withHeaders([
+
+    //         ])->post('https://sandbox.ipay88.co.id/ePayment/WebService/PaymentAPI/Checkout', [
+    //             'RefNo' => $external_id,
+    //             'Amount' => $jumlah_donasi
+    //         ]);
+
+    //         $response = $data_request->object();
+
+    //         dd($response);
+
+    //         $expired_date = Carbon::parse($response->expiry_date)->format('Y-m-d H:i:s');
+
+    //         $postDonation = Donation::create([
+    //             'doc_no' => $external_id,
+    //             "jumlah_donasi" => $jumlah_donasi,
+    //             "nama_donatur" => $request['nama_donatur'],
+    //             "email_donatur" => $request['email_donatur'],
+    //             "no_telp_donatur" => $request['no_telp_donatur'],
+    //             "pesan_donatur" => $request['pesan_donatur'],
+    //             "captcha" => $request['g-recaptcha-response'],
+    //             "campaign_id" => $request['postdonation'],
+    //             'payment_status' => $response->status,
+    //             'payment_link' => $response->invoice_url
+    //         ]);
+    //         return Redirect::route('service.celengansyahid.detail.donasisekarang.status', array('link' => $request['linkcampaign'],'id' => $postDonation->id));
+    //     }
+    // }
+
     public function storeDonationCampaign(Request $request)
     {
-        // dd($request->all());
 
         $jumlah_donasi = (int) LFC::replaceamount($request['jumlah_donasi']);
-        // dd($jumlah_donasi);
 
         $secret_key = 'Basic '.config('xendit.key_auth');
         $external_id = Str::random(10);
@@ -50,12 +96,10 @@ class CelenganSyahidController extends Controller
                 'external_id' => $external_id,
                 'amount' => $jumlah_donasi
             ]);
-            // $response->expiry_date
+
             $response = $data_request->object();
-
+            dd($response);
             $expired_date = Carbon::parse($response->expiry_date)->format('Y-m-d H:i:s');
-
-            // dd($expired_date);
 
             $postDonation = Donation::create([
                 'doc_no' => $external_id,
@@ -69,8 +113,6 @@ class CelenganSyahidController extends Controller
                 'payment_status' => $response->status,
                 'payment_link' => $response->invoice_url
             ]);
-
-            // return redirect()->away($postDonation->payment_link);
             return Redirect::route('service.celengansyahid.detail.donasisekarang.status', array('link' => $request['linkcampaign'],'id' => $postDonation->id));
         }
     }
@@ -131,10 +173,8 @@ class CelenganSyahidController extends Controller
         $donation = Donation::where('id',$id)->first();
         $campaign = Campaign::where('link', $link)->first();
 
-        return view('print-request.bukti-donasi')->with([
-            'donation' => $donation,
-            'campaign' => $campaign,
-        ]);
+        $pdf = PDF::loadView('print-request.bukti-donasi', compact(['donation', 'campaign']));
+        return $pdf->setPaper('a4')->stream('Bukti Pembayaran Donasi'." - ".$donation->id.".pdf");
     }
 
     public function indexAdminDonation()
@@ -168,7 +208,7 @@ class CelenganSyahidController extends Controller
         $data = Campaign::where('id',$id)->with(['donation' => function ($q){
             $q->orderBy('created_at', 'DESC');
         }])->first();
-        // dd($data);
+
         return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcamppreview')->with([
             'data' => $data,
             "title" => "Celengan Syahid"
