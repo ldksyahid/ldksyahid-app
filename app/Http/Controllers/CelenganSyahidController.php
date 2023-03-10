@@ -44,11 +44,13 @@ class CelenganSyahidController extends Controller
     //     else
     //     {
     //         $data_request = Http::withHeaders([
-
+    //             'Authorization' => $secret_key
     //         ])->post('https://sandbox.ipay88.co.id/ePayment/WebService/PaymentAPI/Checkout', [
     //             'RefNo' => $external_id,
     //             'Amount' => $jumlah_donasi
     //         ]);
+
+    //         dd($data_request);
 
     //         $response = $data_request->object();
 
@@ -98,7 +100,7 @@ class CelenganSyahidController extends Controller
             ]);
 
             $response = $data_request->object();
-            dd($response);
+            // dd($response);
             $expired_date = Carbon::parse($response->expiry_date)->format('Y-m-d H:i:s');
 
             $postDonation = Donation::create([
