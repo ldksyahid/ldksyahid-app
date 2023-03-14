@@ -17,16 +17,11 @@
             @if ($data->email_verified_at == null)
                 <label for="inputEmail" class="form-label">Not yet</label>
             @else
-                <label for="inputEmail" class="form-label">{{ $data->email_verified_at }}</label>
+                <label for="inputEmail" class="form-label">{{ \Carbon\Carbon::parse( $data->email_verified_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $data->email_verified_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $data->email_verified_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $data->email_verified_at )->format('Y') }} ({{ \Carbon\Carbon::parse( $data->email_verified_at )->format('H:i T') }})</label>
             @endif
         </div>
         <div class="mb-3">
-            <label for="inputPassword1" class="form-label"><b>Password</b></label>
-            <br>
-            <label for="inputPassword1" class="form-label">{{ ($data->password) }}</label>
-        </div>
-        <div class="mb-3">
-            <label for="inputPosition1" class="form-label"><b>Privilage</b></label>
+            <label for="inputPosition1" class="form-label"><b>Role</b></label>
             <br>
             @if ($data->is_admin == 1)
                 <label for="inputPosition" class="form-label">Helper</label>

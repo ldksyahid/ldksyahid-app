@@ -100,7 +100,7 @@ class CelenganSyahidController extends Controller
             ]);
 
             $response = $data_request->object();
-            // dd($response);
+
             $expired_date = Carbon::parse($response->expiry_date)->format('Y-m-d H:i:s');
 
             $postDonation = Donation::create([
@@ -181,9 +181,9 @@ class CelenganSyahidController extends Controller
 
     public function indexAdminDonation()
     {
-        $postcampaign = Campaign::orderBy('created_at','desc')->with('donation')->get();
+        $postDonation = Donation::orderBy('created_at','desc')->get();
 
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidDonation.adminpageviewservicecelsyahdona',compact('postcampaign'), ["title" => "Celengan Syahid"]);
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidDonation.adminpageviewservicecelsyahdona',compact('postDonation'), ["title" => "Celengan Syahid"]);
     }
 
     public function destroyAdminDonation($id){

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Campaign;
 
 class LibraryFunctionController extends Controller
 {
@@ -42,5 +43,12 @@ class LibraryFunctionController extends Controller
         } else {
             return 100;
         }
+    }
+
+    public static function getNameCampaign($campaign_id){
+        $dataCampaign = Campaign::where('id', $campaign_id)->first();
+        $nameCampaign = $dataCampaign->judul;
+        return $nameCampaign;
+
     }
 }
