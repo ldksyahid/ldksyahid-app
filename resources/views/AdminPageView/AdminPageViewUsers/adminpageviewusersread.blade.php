@@ -18,7 +18,7 @@
         <tr class="small">
             <td scope="row" align='center'>{{ $pointer += 1 }}</td>
             <td>{{$item->name}}</td>
-            <td>{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->format('Y') }} <br> ({{ \Carbon\Carbon::parse( $item->created_at )->format('H:i T') }})</td>
+            <td align="center">{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('dddd') }} <br> {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->format('Y') }} <br> ({{ \Carbon\Carbon::parse( $item->created_at )->format('H:i T') }})</td>
             <td >{{$item->email}}</td>
             @if ($item->email_verified_at == null)
                 <td align='center'>Not yet</td>
