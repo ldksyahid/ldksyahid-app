@@ -16,9 +16,9 @@
             <div class="ms-3">
                 <h6 class="mb-0">{{ Auth::user()->name }}</h6>
                 @if (auth()->user()->is_admin == 1)
-                    <span>Helper</span>
+                    <i>Helper</i>
                 @elseif (auth()->user()->is_admin == 2)
-                    <span>Superadmin</span>
+                    <i class="small">Superadmin</i>
                 @endif
             </div>
         </div>

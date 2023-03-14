@@ -11,17 +11,14 @@
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Donations Database</h5>
                 <div class="mt-3">
-                    @forelse($postcampaign  as $key => $data)
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="data_donation_reguler">
                         <thead>
-                            <tr>
-                                <th colspan="7">{{ $data->judul }}</th>
-                            </tr>
                             <tr align='center' class="small">
-                                <th scope="col" style="width: 10px">No</th>
-                                <th scope="col" style="width: 170px">Nama</th>
+                                <th scope="col" style="width: 1%">No</th>
+                                <th scope="col" style="width: 15%">Nama</th>
                                 <th scope="col">Jumlah</th>
-                                <th scope="col">Waktu</th>
+                                <th scope="col" style="width: 18%">Waktu</th>
+                                <th scope="col">Campaign</th>
                                 <th scope="col">Status Pembayaran</th>
                                 <th scope="col">Link Pembayaran</th>
                                 <th scope="col" style="width: 40px">Action</th>
@@ -29,42 +26,28 @@
                         </thead>
                         <tbody>
                             @php
-                                $pointer = 0;
+                            $pointer = 0;
                             @endphp
-                            @if ($data->donation()->count() > 0)
-                            @foreach ( $data->donation->reverse() as $donation)
+                            @forelse ($postDonation as $data)
                             <tr class="small">
-                                <td scope="row" align='center'>{{$pointer += 1}}</td>
-                                <td>{{ $donation->nama_donatur }}</td>
-                                <td align="center">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</td>
-                                <td align="center">{{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $donation->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $donation->created_at )->format('Y') }} ({{ \Carbon\Carbon::parse( $donation->created_at )->format('H:i T') }})</td>
-                                <td align="center">{{ $donation->payment_status }}</td>
-                                <td align="center"><a href="{{ $donation->payment_link }}" target="_blank">Klik Disini</a></td>
+                                <td scope="row" align='center'>{{ $pointer += 1 }}</td>
+                                <td align="center">{{$data->nama_donatur}}</td>
+                                <td align="center">{{ LFC::formatRupiah($data->jumlah_donasi) }}</td>
+                                <td >{{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $data->created_at )->format('Y') }} <br> ({{ \Carbon\Carbon::parse( $data->created_at )->format('H:i T') }})</td>
+                                <td>{{ LFC::getNameCampaign($data->campaign_id) }}</td>
+                                <td align="center">{{ $data->payment_status }}</td>
+                                <td align="center"><a href="{{ $data->payment_link }}" target="_blank" rel="noopener noreferrer">Klik disini</a></td>
                                 <td align="center">
-                                    <button type="submit" onclick="deleteConfirmationDonation('{{ $donation->id }}' )" id="delete-donation" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
+                                    <button class="btn btn-sm btn-primary m-1" onClick="deleteConfirmationDonation('{{ $data->id }}')"><i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
-                            @endforeach
-                            @else
+                            @empty
                             <tr class="small">
-                                <td scope="row" align='center' colspan="7">Data Tidak Ditemukan</td>
+                                <td align='center' colspan="8">Data tidak ditemukan</td>
                             </tr>
-                            @endif
+                            @endforelse
                         </tbody>
                     </table>
-                    @empty
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr align="center">
-                                <th>
-                                    <div style="height: 140px"></div>
-                                    Data Tidak Ditemukan
-                                    <div style="height: 140px"></div>
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
-                    @endforelse
                 </div>
             </div>
         </div>
@@ -74,6 +57,11 @@
 @endsection
 
 @section('scripts')
+<script>
+$(document).ready(function() {
+    $('#data_donation_reguler').DataTable();
+} );
+</script>
 <script>
 // ===== START CRUD DONATION =====
 // ini untuk konfirmasi delete
