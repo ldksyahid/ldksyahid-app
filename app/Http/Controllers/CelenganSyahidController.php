@@ -200,9 +200,8 @@ class CelenganSyahidController extends Controller
     public function createAdminCampaign()
     {
         $provinces = Province::pluck('name', 'id');
-        $cities = City::pluck('name', 'id');
 
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampcreate', compact(['provinces', 'cities']),["title" => "Celengan Syahid"]);
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampcreate', compact(['provinces']),["title" => "Celengan Syahid"]);
     }
 
     public function previewAdminCampaign($id)
@@ -219,9 +218,12 @@ class CelenganSyahidController extends Controller
 
     public function storeAdminCampaign(Request $request)
     {
+
         $target_biaya = LFC::replaceamount($request['target_biaya']);
         $provinsi = ucwords(strtolower($request["provinsi"]));
-        $kota = ucwords(strtolower($request["kota"]));
+
+        $city = City::where('id', $request['kota'])->first();
+        $kota = ucwords(strtolower($city->name));
 
         $filename_poster = time().$request->file('poster')->getClientOriginalName();
         $path_poster = $request->file('poster')->storeAs('Images/uploads/campaigns',$filename_poster);
@@ -257,17 +259,19 @@ class CelenganSyahidController extends Controller
     public function editAdminCampaign($id)
     {
         $provinces = Province::pluck('name', 'id');
-        $cities = City::pluck('name', 'id');
         $data = Campaign::findOrFail($id);
 
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampedit', compact(['provinces', 'cities', 'data']),["title" => "Celengan Syahid"]);
+        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampedit', compact(['provinces', 'data']),["title" => "Celengan Syahid"]);
     }
 
     public function updateAdminCampaign(Request $request, $id)
     {
         $target_biaya = LFC::replaceamount($request['target_biaya']);
         $provinsi = ucwords(strtolower($request["provinsi"]));
-        $kota = ucwords(strtolower($request["kota"]));
+
+        $city = City::where('id', $request['kota'])->first();
+
+        $kota = ucwords(strtolower($city->name));
 
         if ($request->file('poster')) {
             $filename = time().$request->file('poster')->getClientOriginalName();
@@ -326,6 +330,16 @@ class CelenganSyahidController extends Controller
         // hapus data
         Campaign::where('id',$id)->delete();
         return redirect()->back();
+    }
+
+    public function storeKota(request $request)
+    {
+        $dataProvince = Province::where('name', $request['id'])->first();
+        $codeProvince = $dataProvince->code;
+
+        $cities = City::where('province_code', $codeProvince)->pluck('name', 'id');
+
+        return response()->json($cities);
     }
 }
 

@@ -78,11 +78,8 @@
                         </div>
                         <div class="mb-3 col col-lg-6">
                             <label for="kota" class="form-label">Kabupaten/Kota</label>
-                            <select class="mb-3 textSearch" aria-label="" required name="kota" placeholder="Jawaban Anda" type='text' id="kota">
+                            <select class="mb-3 form-select" aria-label="" required name="kota" placeholder="Jawaban Anda" type='text' id="inputKotaCampaign">
                                 <option selected hidden value="{{old('kota', $data->kota)}}">{{strtoupper($data->kota)}}</option>
-                                @foreach ($cities as $id => $name)
-                                    <option value="{{ $name }}">{{ $name }}</option>
-                                @endforeach
                             </select>
                             <div class="invalid-feedback">
                                 Pertanyaan ini wajib diisi
@@ -287,17 +284,6 @@
     }
     });
 
-    const textSearch = document.querySelectorAll('.textSearch');
-    for (let i = 0; i < textSearch.length; i++) {
-        new TomSelect(textSearch[i],{
-        create: false,
-        sortField: {
-            field: "text",
-            direction: "asc"
-        }
-    });
-    }
-
 </script>
 
 <script>
@@ -312,16 +298,23 @@ function cekOrg() {
 }
 </script>
 
-{{-- <script>
+<script>
+    const textSearch = document.querySelectorAll('.textSearch');
+
+    for (let i = 0; i < textSearch.length; i++) {
+        provinceTomSelect = new TomSelect(textSearch[i],{
+            create: false,
+            sortField: {
+                field: "text",
+                direction: "asc"
+            }
+        });
+    }
+
     function storeProvince() {
+
         var provinsi_id = $("#inputProvinsiCampaign").val();
-        $("#inputKotaCampaign").append($('<option>', {
-                    value: 1,
-                    text: 'One'
-                }));
-        console.log(provinsi_id);
         var CSRF_TOKEN = '{{csrf_token()}}';
-        console.log(CSRF_TOKEN);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -335,21 +328,21 @@ function cekOrg() {
             },
             success: function(data) {
                 console.log(data);
+                $('#inputKotaCampaign').empty();
 
-                $('#city').empty();
-                // $('#city').append($('<option>', {
-                //     value: 1,
-                //     text: 'One'
-                // }));
                 $.each(data, function (id, name) {
-                    $('#city').append(new Option(name, id))
+                    $('#inputKotaCampaign').append(new Option(name, id))
                 })
+
             },
             error: function(data){
                 var errors = data.responseJSON;
-                console.log('apa ini error nnyaaaa ' + errors);
+                console.log(errors);
             }
         });
+
     }
-</script> --}}
+</script>
+
+
 @endsection
