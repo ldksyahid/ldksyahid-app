@@ -75,7 +75,7 @@
                         </div>
                         <div class="mb-3 col col-lg-6">
                             <label for="inputKotaCampaign" class="form-label">Kabupaten/Kota</label>
-                            <select class="mb-3 form-select" aria-label="" required name="kota" placeholder="Jawaban Anda" type='text' id="inputKotaCampaign">
+                            <select class="mb-3 textSearch" aria-label="" required name="kota" placeholder="Jawaban Anda" type='text' id="inputKotaCampaign">
                                 <option disabled selected hidden>-- Pilih Kabupaten/Kota --</option>
                             </select>
                             <div class="invalid-feedback">
@@ -293,7 +293,7 @@ function cekOrg() {
     const textSearch = document.querySelectorAll('.textSearch');
 
     for (let i = 0; i < textSearch.length; i++) {
-        provinceTomSelect = new TomSelect(textSearch[i],{
+        tom = new TomSelect(textSearch[i],{
             create: false,
             sortField: {
                 field: "text",
@@ -303,7 +303,6 @@ function cekOrg() {
     }
 
     function storeProvince() {
-
         var provinsi_id = $("#inputProvinsiCampaign").val();
         var CSRF_TOKEN = '{{csrf_token()}}';
         $.ajaxSetup({
@@ -319,11 +318,22 @@ function cekOrg() {
             },
             success: function(data) {
                 console.log(data);
+
+                tom.destroy();
+
                 $('#inputKotaCampaign').empty();
 
                 $.each(data, function (id, name) {
                     $('#inputKotaCampaign').append(new Option(name, id))
                 })
+
+                tom = new TomSelect('#inputKotaCampaign',{
+                    create: false,
+                    sortField: {
+                        field: "text",
+                        direction: "asc"
+                    }
+                });
 
             },
             error: function(data){
