@@ -109,7 +109,7 @@ Route::post('/service/shortlink/store', [RequestShortlinkController::class, 'sto
 Route::get('/service/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
 
 // Route LandingPage Layanan CelenganLDKSyahid
-Route::get('/service/celengansyahid', [CelenganSyahidController::class, 'indexLanding'])->name('service.celengansyahid');
+Route::get('/service/celengansyahid', [CelenganSyahidController::class, 'indexLanding'])->name('service.celengansyahid')->middleware('is_admin');
 Route::get('/service/celengansyahid/{link}', [CelenganSyahidController::class, 'showLanding'])->name('service.celengansyahid.detail');
 Route::get('/service/celengansyahid/yuk-donasi/{link}', [CelenganSyahidController::class, 'donasiSekarang'])->name('service.celengansyahid.detail.donasisekarang');
 Route::get('/service/celengansyahid/yuk-donasi/{link}/status/{id}', [CelenganSyahidController::class, 'statusDonasi'])->name('service.celengansyahid.detail.donasisekarang.status');

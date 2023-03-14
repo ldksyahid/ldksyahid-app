@@ -53,7 +53,7 @@ class LoginController extends Controller
             if (auth()->user()->is_admin == 1 || auth()->user()->is_admin == 2) {
                 return redirect()->route('admin');
             }else{
-                return redirect()->route('home');
+                return redirect()->back();
             }
         }else{
             Alert::error('Tidak Berhasil Masuk', 'Coba Lagi, Email dan Password Belum Benar');
