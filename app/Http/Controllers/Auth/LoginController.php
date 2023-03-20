@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\LibraryFunctionController as LFC;
+
+
 
 class LoginController extends Controller
 {
@@ -39,8 +44,11 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+
+
     public function login(Request $request)
     {
+
         $input = $request->all();
 
         $this->validate($request, [
@@ -50,7 +58,7 @@ class LoginController extends Controller
 
         if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password']), $input['remember'] ?? false))
         {
-            if (auth()->user()->is_admin == 1 || auth()->user()->is_admin == 2) {
+            if (LFC::cekRoleAdmin(auth()->user())) {
                 return redirect()->route('admin');
             }else{
                 return redirect()->back();

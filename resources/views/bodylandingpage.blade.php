@@ -10,6 +10,7 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <meta content="" name="keywords" />
         <meta content="" name="description" />
+        @yield('openGraph')
         <!-- Favicon -->
         <link href="{{ asset('Images/Logos/logoldksyahid.png') }}" rel="icon" />
         {{-- <link rel="shortcut icon" href="{{ asset('KestariHitungProkerbyYuda/images/kestari.ico') }}" type="image/x-icon"> --}}

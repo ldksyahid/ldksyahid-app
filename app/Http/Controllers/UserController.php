@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\LibraryFunctionController as LFC;
 
 // BACKUP START
 class UserController extends Controller
@@ -53,12 +55,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $passwordcr = Hash::make($request->password);
-        $data['name'] = $request->name;
-        $data['email'] = $request->email;
-        $data['password'] = $passwordcr;
-        $data['is_admin'] = $request->is_admin;
-        User::insert($data);
+        // dd($request);
+        $roleName = Role::where('name', $request['roleName'])->first();
+
+        $user = User::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+
+        $user->assignRole($roleName);
+
         Alert::success('Success', 'User created successfully !');
     }
 
@@ -81,9 +88,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $data = User::findOrFail($id);
+        $dataUser = User::findOrFail($id);
         return view('AdminPageView.AdminPageViewUsers.adminpageviewusersedit')->with([
-            'data' => $data,
+            'dataUser' => $dataUser,
             "title" => "User"
         ]);
     }
@@ -106,17 +113,20 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        // $passwordcr = Hash::make($request->password);
+    {   $roleName = Role::where('name', $request['roleName'])->first();
         $data = User::findOrFail($id);
+        $dataRoleName =  LFC::getRoleName($data->getRoleNames());
+        if ($dataRoleName != null) {
+            $data->removeRole($dataRoleName);
+        }
         $data->name = $request->name;
         $data->email = $request->email;
         if ($request->password != null) {
             $data->password = Hash::make($request->password);
         }
-        // $data->password = $passwordcr;
-        $data['is_admin'] = $request->is_admin;
+        $data['updated_at'] = date("Y-m-d H:i:s");
         $data->save();
+        $data->assignRole($roleName);
         toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
     }
 

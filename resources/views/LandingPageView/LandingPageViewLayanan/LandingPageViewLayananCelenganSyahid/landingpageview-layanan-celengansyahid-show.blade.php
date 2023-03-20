@@ -6,6 +6,15 @@
 <link href="{{ asset('css/cardcelengan.css') }}" rel="stylesheet" />
 @endsection
 
+@section('openGraph')
+<meta property="og:title" content="{{ $data->judul }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{url()->current()}}" />
+<meta property="og:image" content="{{ asset($data->poster) }}" />
+<meta property="og:description" content="{!!  substr(strip_tags($data->cerita), 0, 80) !!}" />
+<meta property="og:image:alt" content="{{ $data->link }}" />
+@endsection
+
 
 @section('content')
 @php

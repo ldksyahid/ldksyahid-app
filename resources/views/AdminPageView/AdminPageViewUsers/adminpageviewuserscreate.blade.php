@@ -17,29 +17,64 @@
             <legend class="col-form-label col-sm-2 pt-0"><b>Role</b></legend>
             <div class="col-sm-10">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="is_admin"
-                        id="is_admin" value=2 required>
-                    <label class="form-check-label" for="admin">
+                    <input class="form-check-input roleName" type="radio" name="roleName"
+                        id="roleNameSuperadmin" value='Superadmin' required>
+                    <label class="form-check-label" for="superadmin">
                         Superadmin
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="is_admin"
-                        id="is_admin" value=1 required>
-                    <label class="form-check-label" for="admin">
-                        Helper
+                    <input class="form-check-input roleName" type="radio" name="roleName"
+                        id="roleNameHelperAdmin" value='HelperAdmin' required>
+                    <label class="form-check-label" for="helperadmin">
+                        HelperAdmin
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="is_admin"
-                        id="is_admin" value=0 required>
+                    <input class="form-check-input roleName" type="radio" name="roleName"
+                        id="roleNameHelperCelsyahid" value='HelperCelsyahid' required>
+                    <label class="form-check-label" for="helpercelsyahid">
+                        HelperCelsyahid
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input roleName" type="radio" name="roleName"
+                        id="roleNameHelperLetter" value='HelperLetter' required>
+                    <label class="form-check-label" for="helperletter">
+                        HelperLetter
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input roleName" type="radio" name="roleName"
+                        id="roleNameHelperEvent" value='HelperEventMart' required>
+                    <label class="form-check-label" for="helpereventmart">
+                        HelperEventMart
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input roleName" type="radio" name="roleName"
+                        id="roleNameHelperSPAM" value='HelperSPAM' required>
+                    <label class="form-check-label" for="helperspam">
+                        HelperSPAM
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input roleName" type="radio" name="roleName"
+                        id="roleNameHelperMedia" value='HelperMedia' required>
+                    <label class="form-check-label" for="helpermedia">
+                        HelperMedia
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input roleName" type="radio" name="roleName"
+                        id="user" value='User' required>
                     <label class="form-check-label" for="user">
                         User
                     </label>
                 </div>
             </div>
         </fieldset>
-            <button type="submit" class="btn btn-primary" onClick="store()">Create</button>
+        <button type="submit" class="btn btn-primary" onClick="store()">Create</button>
     </div>
 
 </div>

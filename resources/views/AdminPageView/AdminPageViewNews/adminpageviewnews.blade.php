@@ -40,7 +40,7 @@
                                 <td align="center">
                                         <a href="/admin/news/{{ $postnews->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
                                         <button type="submit" onclick="deleteConfirmationNews({{ $postnews->id }})" id="delete-event" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/news/{{ $postnews->id }}/show" target="_blank"><i class="fa fa-eye"></i></a>
+                                        <a class="btn btn-sm btn-primary" href="/news/{{ $postnews->id }}/{{ strtolower(str_replace(' ', '-', $postnews->title)) }}" target="_blank"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             @empty

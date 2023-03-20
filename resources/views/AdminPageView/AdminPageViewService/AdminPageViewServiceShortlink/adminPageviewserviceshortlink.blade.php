@@ -1,11 +1,14 @@
 @extends('AdminPageView.AdminPageViewTemplate.bodyadminpage')
 
 @section('content')
+@php
+    use App\Http\Controllers\LibraryFunctionController as LFC;
+@endphp
 <div class="container-fluid pt-4 px-4">
     <div class="row p-2 bg-light rounded  justify-content-center mx-0">
         <div class="row">
             <h1 class="my-2 fs-4 fw-bold text-center">LDK Syahid URL Shortener</h1>
-            <form action="{{ route('url.shorten') }}" method="POST" class="my-2">
+            <form action="{{ route('admin.service.shortlink.shorten') }}" method="POST" class="my-2">
                 @csrf
                 @method('POST')
                 <div class="input-group mb-3">
@@ -40,7 +43,7 @@
                         <td align="center">{{ $item->visits->count() }}</td>
                         <td align="center">
                             <button type="button" class="btn btn-sm btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $key }}"><i class="fa fa-edit"></i></button>
-                            @if (Auth::User()->is_admin == 2)
+                            @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
                                 <button type="button" onclick="deleteConfirmationShortlink({{$item->id}})" id="delete-shortlink" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
                             @else
 
@@ -56,7 +59,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('update', $item->id) }}" method="POST">
+                                    <form action="{{ route('admin.service.shortlink.update', $item->id) }}" method="POST">
                                         @csrf
                                         <div class="mb-3">
                                             <label for="key" class="form-label">URL Key</label>

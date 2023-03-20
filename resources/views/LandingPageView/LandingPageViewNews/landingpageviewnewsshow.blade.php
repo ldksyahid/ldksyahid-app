@@ -1,6 +1,18 @@
 @extends('LandingPageView.LandingPageViewTemplate.bodylandingpage')
-
+@section('openGraph')
+<meta property="og:title" content="{{ $postnews->title }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{url()->current()}}" />
+<meta property="og:image" content="{{ config('app.url') }}/{{ $postnews->picture }}" />
+<meta property="og:image:width" content="400" />
+<meta property="og:image:height" content="300" />
+<meta property="og:description" content="{!!  substr(strip_tags($postnews->body), 0, 80) !!}" />
+<meta property="og:image:alt" content="{{ $postnews->descpicture }}" />
+@endsection
 @section('content')
+@php
+    use App\Http\Controllers\LibraryFunctionController as LFC;
+@endphp
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5">
@@ -51,7 +63,7 @@
                             <div>
                                 <p style="text-align: justify">{!!  $comment->body !!}</p>
                             </div>
-                            @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1))
+                            @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin'))
                             <form action="/newscomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_news">
                                 @csrf
                                 @method('DELETE')
@@ -75,7 +87,7 @@
                             <div>
                                 <p style="text-align: justify">{!!  $comment->body !!}</p>
                             </div>
-                            @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1))
+                            @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin'))
                             <form action="/newscomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_news">
                                 @csrf
                                 @method('DELETE')

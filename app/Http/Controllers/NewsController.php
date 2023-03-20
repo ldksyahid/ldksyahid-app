@@ -70,10 +70,11 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,$title)
     {
         $dt = Carbon::now();
         $postnews = News::find($id);
+
         return view('LandingPageView.LandingPageViewNews.landingpageviewnewsshow', compact('postnews'), ["title" => "Berita"]);
     }
 

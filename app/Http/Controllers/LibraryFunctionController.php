@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Campaign;
+use Spatie\Permission\Models\Role;
 
 class LibraryFunctionController extends Controller
 {
@@ -50,5 +51,19 @@ class LibraryFunctionController extends Controller
         $nameCampaign = $dataCampaign->judul;
         return $nameCampaign;
 
+    }
+
+    public static function getRoleName($roleNames){
+        $array = json_decode($roleNames,true);
+        $string = implode(",",$array);
+        return $string;
+    }
+
+    public static function cekRoleAdmin($auth){
+        $array = json_decode($auth->getRoleNames(),true);
+        $role = implode(",",$array);
+        $roleName = $role == 'Superadmin' || $role == 'HelperAdmin' || $role == 'HelperCelsyahid' || $role == 'HelperEventMart' || $role == 'HelperSPAM' || $role == 'HelperMedia' || $role == 'HelperLetter';
+
+        return $roleName;
     }
 }
