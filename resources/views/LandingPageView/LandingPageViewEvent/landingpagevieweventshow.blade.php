@@ -1,5 +1,13 @@
 @extends('LandingPageView.LandingPageViewTemplate.bodylandingpage')
 
+@section('openGraph')
+<meta property="og:title" content="{{ $postevent->title }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{url()->current()}}" />
+<meta property="og:image" content="{{ asset($postevent->poster) }}" />
+<meta property="og:description" content="{!!  substr(strip_tags($postevent->broadcast), 0, 100) !!}" />
+@endsection
+
 @section('content')
 <div class="container-xxl py-5">
     <div class="container">

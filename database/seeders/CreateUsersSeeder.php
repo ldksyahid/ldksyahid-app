@@ -18,19 +18,16 @@ class CreateUsersSeeder extends Seeder
             [
                'name'=>'Admin LDK Syahid',
                'email'=>'ldk@uinjkt.ac.id',
-                'is_admin'=>'1',
                'password'=> bcrypt('bismillahldk26'),
             ],
             [
                 'name'=>'Yusuf Wijaya',
                 'email'=>'yusufwijaya3@gmail.com',
-                'is_admin'=>'1',
                 'password'=> bcrypt('ldk110692'),
             ],
             [
                'name'=>'User testing',
                'email'=>'usertesting@itsolutionstuff.com',
-                'is_admin'=>'0',
                'password'=> bcrypt('123456'),
             ]
         ];

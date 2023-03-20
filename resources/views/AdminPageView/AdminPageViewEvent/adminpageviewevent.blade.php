@@ -45,7 +45,7 @@
                                 <td align="center">
                                         <a href="/admin/event/{{ $postevent->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
                                         <button type="submit" onclick="deleteConfirmationEvent({{ $postevent->id }})" id="delete-event" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/event/{{ $postevent->id }}/show" target="_blank"><i class="fa fa-eye"></i></a>
+                                        <a class="btn btn-sm btn-primary" href="/event/{{ $postevent->id }}/{{ strtolower(str_replace(' ', '-', $postevent->title)) }}" target="_blank"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             @empty

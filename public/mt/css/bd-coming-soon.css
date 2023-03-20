@@ -1,10 +1,10 @@
 body {
     font-family: "Karla", sans-serif;
     background-image: linear-gradient(
-            rgba(0, 167, 157, 0.3),
-            rgba(0, 167, 157, 0.3)
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.6)
         ),
-        url("../../Images/fixImage/mtini.jpg");
+        url("../../Images/fixImage/untuk_contact_us.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

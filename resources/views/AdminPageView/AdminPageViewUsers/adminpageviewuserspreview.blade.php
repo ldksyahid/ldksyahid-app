@@ -1,4 +1,7 @@
 <!-- Form Start -->
+@php
+    use App\Http\Controllers\LibraryFunctionController as LFC;
+@endphp
 <div class="col-sm-12 col-xl-12">
     <form>
         <div class="mb-3">
@@ -23,10 +26,8 @@
         <div class="mb-3">
             <label for="inputPosition1" class="form-label"><b>Role</b></label>
             <br>
-            @if ($data->is_admin == 1)
-                <label for="inputPosition" class="form-label">Helper</label>
-            @elseif ($data->is_admin == 2)
-                <label for="inputPosition" class="form-label">Superadmin</label>
+            @if (LFC::getRoleName($data->getRoleNames()) != null)
+                <label for="inputPosition" class="form-label">{{ LFC::getRoleName($data->getRoleNames()) }}</label>
             @else
                 <label for="inputPosition" class="form-label">User</label>
             @endif

@@ -1,4 +1,7 @@
 <!-- Topbar Start -->
+@php
+    use App\Http\Controllers\LibraryFunctionController as LFC;
+@endphp
 <div class="container-fluid bg-light p-0">
     <div class="row gx-0 d-none d-lg-flex">
         <div class="col-lg-7 px-5 text-start">
@@ -70,7 +73,11 @@
             {{-- ARTICLE NAV END --}}
 
             {{-- NEWS NAV START --}}
-            <a href="/news" class="nav-item nav-link text-capitalize {{($title === "Berita") ? "active" : ""}}">Berita</a>
+            @if ($title === "Berita")
+                <a href="/news" class="nav-item nav-link text-capitalize {{($title === "Berita" || $title === "Berita : $linkTitle") ? "active" : ""}}">Berita</a>
+            @else
+                <a href="/news" class="nav-item nav-link text-capitalize {{($title === "Berita") ? "active" : ""}}">Berita</a>
+            @endif
             {{-- NEWS NAV END --}}
 
             {{-- ACTIVITY NAV START --}}
@@ -112,7 +119,7 @@
                         @endif
                     </span>{{ substr(Auth::user()->name,0, 15) }}</a>
                     <div class="dropdown-menu bg-light m-0">
-                        @if (Auth::user()->is_admin==1 || Auth::user()->is_admin==2)
+                        @if (LFC::cekRoleAdmin(auth()->user()))
                             <a href="/admin/dashboard" class="dropdown-item">Admin Panel</a>
                             <a href="/profile" class="dropdown-item">Profil Aku</a>
                             <a class="dropdown-item" href="{{ route('logout') }}"

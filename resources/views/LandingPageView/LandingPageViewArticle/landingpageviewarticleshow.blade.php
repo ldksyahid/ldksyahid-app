@@ -1,5 +1,11 @@
 @extends('LandingPageView.LandingPageViewTemplate.bodylandingpage')
-
+@section('openGraph')
+<meta property="og:title" content="{{ $postarticle->title }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{url()->current()}}" />
+<meta property="og:image" content="{{ asset($postarticle->poster) }}" />
+<meta property="og:description" content="{{ $postarticle->theme }}" />
+@endsection
 @section('content')
 <!-- Article Start -->
 <div class="container-xxl py-5">
@@ -45,7 +51,7 @@
                         <div>
                             <p style="text-align: justify">{!!  $comment->body !!}</p>
                         </div>
-                        @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1))
+                        @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin'))
                             <form action="/articlecomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_article">
                                 @csrf
                                 @method('DELETE')
@@ -69,7 +75,7 @@
                         <div>
                             <p style="text-align: justify">{!!  $comment->body !!}</p>
                         </div>
-                        @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1))
+                        @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin'))
                             <form action="/articlecomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_article">
                                 @csrf
                                 @method('DELETE')

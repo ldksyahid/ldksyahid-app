@@ -33,7 +33,7 @@
                     {{-- {!! substr($postevent->broadcast, 0, 300) !!} --}}
                     {!!  substr(strip_tags($postevent->broadcast), 0, 100) !!}
                 </p>
-                <a class="mb-0" href="/event/{{ $postevent->id }}/show">Baca Selengkapnya</a>
+                <a class="mb-0" href="/event/{{ $postevent->id }}/{{ strtolower(str_replace(' ', '-', $postevent->title)) }}">Baca Selengkapnya</a>
             </div>
             <div class="col-lg-4 col-md-6 wow fadeInRight" data-wow-delay="0.5s">
                 <img src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px">

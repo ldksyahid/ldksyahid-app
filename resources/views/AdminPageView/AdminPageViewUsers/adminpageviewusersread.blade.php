@@ -1,3 +1,6 @@
+@php
+    use App\Http\Controllers\LibraryFunctionController as LFC;
+@endphp
 <table class=" table table-bordered" id="data_users_reguler">
     <thead>
         <tr align='center' class="small">
@@ -25,10 +28,8 @@
             @else
                 <td align='center'>Yes</td>
             @endif
-            @if ($item->is_admin == 1)
-                <td align='center'>Helper</td>
-            @elseif ($item->is_admin == 2)
-                <td align='center'>Superadmin</td>
+            @if (LFC::getRoleName($item->getRoleNames()) != null)
+                <td align='center'>{{ LFC::getRoleName($item->getRoleNames()) }}</td>
             @else
                 <td align='center'>User</td>
             @endif

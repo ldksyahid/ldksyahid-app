@@ -64,7 +64,7 @@
         var name = $("#inputName1").val();
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
-        var is_admin = $('#is_admin:checked').val();
+        var roleName = $('.roleName:checked').val();
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -79,7 +79,7 @@
                 name: name,
                 email: email,
                 password: password,
-                is_admin:is_admin
+                roleName:roleName
             },
             success: function(data) {
                 $(".btn-close").click();
@@ -116,7 +116,7 @@
         var name = $("#inputName1").val();
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
-        var is_admin = $('#is_admin:checked').val();
+        var roleName = $('.roleName:checked').val();
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -131,7 +131,7 @@
                 name: name,
                 email: email,
                 password: password,
-                is_admin:is_admin },
+                roleName:roleName },
             success: function(data) {
                 $(".btn-close").click();
                 read();
@@ -149,7 +149,6 @@
         var name = $("#inputName1").val();
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
-        var is_admin = $('#is_admin').is(':checked');
         if (id == 1 || id == 2) {
             Swal.fire({
                 icon: 'error',
@@ -183,8 +182,7 @@
                     data: {
                         name: name,
                         email: email,
-                        password: password,
-                        is_admin:is_admin },
+                        password: password},
                         success: function(data) {
                             $(".btn-close").click();
                             read();
