@@ -25,55 +25,6 @@ class CelenganSyahidController extends Controller
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact(['postcampaign']),["title" => "Layanan"]);
     }
 
-    // public function storeDonationCampaign(Request $request)
-    // {
-
-    //     $jumlah_donasi = (int) LFC::replaceamount($request['jumlah_donasi']);
-
-    //     $secret_key = 'Basic '.config('xendit.key_auth');
-    //     $external_id = Str::random(10);
-
-    //     if ($jumlah_donasi < 10000) {
-    //         Alert::warning('Maaf!', 'Silahkan masukkan donasi minimal Rp10.000');
-    //         return Redirect::back();
-    //     }
-    //     elseif($request['g-recaptcha-response'] == null){
-    //         Alert::warning('Maaf!', 'Silahkan verifikasi Captcha terlebih dahulu');
-    //         return Redirect::back();
-    //     }
-    //     else
-    //     {
-    //         $data_request = Http::withHeaders([
-    //             'Authorization' => $secret_key
-    //         ])->post('https://sandbox.ipay88.co.id/ePayment/WebService/PaymentAPI/Checkout', [
-    //             'RefNo' => $external_id,
-    //             'Amount' => $jumlah_donasi
-    //         ]);
-
-    //         dd($data_request);
-
-    //         $response = $data_request->object();
-
-    //         dd($response);
-
-    //         $expired_date = Carbon::parse($response->expiry_date)->format('Y-m-d H:i:s');
-
-    //         $postDonation = Donation::create([
-    //             'doc_no' => $external_id,
-    //             "jumlah_donasi" => $jumlah_donasi,
-    //             "nama_donatur" => $request['nama_donatur'],
-    //             "email_donatur" => $request['email_donatur'],
-    //             "no_telp_donatur" => $request['no_telp_donatur'],
-    //             "pesan_donatur" => $request['pesan_donatur'],
-    //             "captcha" => $request['g-recaptcha-response'],
-    //             "campaign_id" => $request['postdonation'],
-    //             'payment_status' => $response->status,
-    //             'payment_link' => $response->invoice_url
-    //         ]);
-    //         return Redirect::route('service.celengansyahid.detail.donasisekarang.status', array('link' => $request['linkcampaign'],'id' => $postDonation->id));
-    //     }
-    // }
-
     public function storeDonationCampaign(Request $request)
     {
 
