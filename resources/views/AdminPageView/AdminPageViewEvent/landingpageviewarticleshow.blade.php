@@ -1,7 +1,4 @@
 @extends('LandingPageView.LandingPageViewTemplate.bodylandingpage')
-@php
-    use App\Http\Controllers\LibraryFunctionController as LFC;
-@endphp
 @section('openGraph')
 <meta property="og:title" content="{{ $postarticle->title }}" />
 <meta property="og:type" content="website" />
