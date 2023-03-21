@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\File;
 
 class StructureController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $poststructure = Structure::orderBy('created_at','desc')->get();
@@ -26,22 +21,11 @@ class StructureController extends Controller
         return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsStructure.adminpageviewaboutusstructure', compact('poststructure'), ["title" => "About Us"]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsStructure.adminpageviewaboutusstructurecreate', ["title" => "About Us"]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $filenameLogo = time().$request->file('structureLogo')->getClientOriginalName();
@@ -63,36 +47,12 @@ class StructureController extends Controller
         return redirect('/admin/about/structure');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $poststructure = Structure::find($id);
         return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsStructure.adminpageviewaboutusstructureedit', compact('poststructure'), ["title" => "About Us"]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         if ($request->file('structureLogo')) {
@@ -134,12 +94,6 @@ class StructureController extends Controller
         return redirect('/admin/about/structure');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         // hapus file

@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\File;
 
 class NewsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $postnews = News::orderBy('datepublish','desc')->get();
@@ -27,22 +22,11 @@ class NewsController extends Controller
         return view('AdminPageView.AdminPageViewNews.adminpageviewnews', compact('postnews'), ["title" => "News"]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('AdminPageView.AdminPageViewNews.adminpageviewnewscreate', ["title" => "News"]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $filename = time().$request->file('picture')->getClientOriginalName();
@@ -64,12 +48,6 @@ class NewsController extends Controller
         return redirect('/admin/news');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id,$title)
     {
         $dt = Carbon::now();
@@ -78,25 +56,12 @@ class NewsController extends Controller
         return view('LandingPageView.LandingPageViewNews.landingpageviewnewsshow', compact('postnews'), ["title" => "Berita"]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $postnews = News::find($id);
         return view('AdminPageView.AdminPageViewNews.adminpageviewnewsedit', compact('postnews'), ["title" => "News"]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
 
@@ -128,12 +93,6 @@ class NewsController extends Controller
         return redirect('/admin/news');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         // hapus file

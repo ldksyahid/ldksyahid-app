@@ -8,11 +8,6 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class CallKestariController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $data = CallKestari::all();
@@ -40,22 +35,11 @@ class CallKestariController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCallKestari.adminpageviewservicecallkestaricreate', ["title" => "Service"]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $data['buttonName'] = $request->buttonName;
@@ -65,12 +49,6 @@ class CallKestariController extends Controller
         Alert::success('Success', 'Call Kestari created successfully !');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $data = CallKestari::findOrFail($id);
@@ -80,13 +58,6 @@ class CallKestariController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $data = CallKestari::findOrFail($id);
@@ -97,12 +68,6 @@ class CallKestariController extends Controller
         toast('Call Kestari has been updated !', 'success')->autoClose(1500)->width('350px');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $data = CallKestari::findOrFail($id);
