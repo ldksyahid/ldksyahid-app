@@ -20,23 +20,19 @@
                                 <th scope="col" style="width: 170px">Reporter</th>
                                 <th scope="col">Editor</th>
                                 <th scope="col" style="width: 180px">Picture</th>
-                                <th scope="col" style="width: 180px">Picture Description</th>
-                                <th scope="col" style="width: 180px">Content</th>
                                 <th scope="col" style="width: 40px">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($postnews as $key => $postnews)
-                            <tr>
+                            <tr class="small">
                                 <td scope="row" align='center'>{{$key + 1}}</td>
-                                <td>{{ $postnews->datepublish }}</td>
-                                <td>{{ $postnews->publisher }}</td>
-                                <td>{{ substr($postnews->title, 0, 10) }}</td>
-                                <td>{{ $postnews->reporter }}</td>
+                                <td align='center'>{{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('dddd') }} <br> {{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postnews->datepublish )->format('Y') }}</td>
+                                <td align='center'>{{ $postnews->publisher }}</td>
+                                <td align='center'>{{ $postnews->title }}</td>
+                                <td align='center'>{{ $postnews->reporter }}</td>
                                 <td align='center'>{{ $postnews->editor }}</td>
                                 <td align='center'><img style="width: 100px;" src="{{ asset($postnews->picture) }}" alt="{{ $postnews->title }}" class="card-img-top"/></td>
-                                <td align='center'>{{ substr($postnews->descpicture, 0, 10) }}</td>
-                                <td align='center'>{!!  substr(strip_tags($postnews->body), 0, 10) !!}</td>
                                 <td align="center">
                                         <a href="/admin/news/{{ $postnews->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
                                         <button type="submit" onclick="deleteConfirmationNews({{ $postnews->id }})" id="delete-event" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>

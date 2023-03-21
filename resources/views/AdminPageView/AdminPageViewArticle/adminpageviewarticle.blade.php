@@ -28,15 +28,15 @@
                             @forelse($postarticle as $key => $postarticle)
                             <tr>
                                 <td scope="row" align='center'>{{$key + 1}}</td>
-                                <td>{{ $postarticle->title }}</td>
+                                <td align='center'>{{ $postarticle->title }}</td>
                                 <td align='center'>{{ $postarticle->theme }}</td>
-                                <td align='center'>{{ $postarticle->dateevent }}</td>
+                                <td align='center'>{{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('dddd') }} <br> {{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->format('Y') }}</td>
                                 <td align='center'>{{ $postarticle->writer }}</td>
                                 <td align='center'>{{ $postarticle->editor }}</td>
                                 <td align='center'>
                                     <img style="width: 100px;" src="{{ asset($postarticle->poster) }}" alt="{{$postarticle->title}}" class="card-img-top"/>
                                 </td>
-                                <td align='center'><a href="{{ $postarticle->embedpdf }}" target="_blank">{{substr($postarticle->embedpdf, 0, 10)}}</a></td>
+                                <td align='center'><a href="{{ $postarticle->embedpdf }}" target="_blank">Click Here</a></td>
                                 <td align="center">
                                         <a href="/admin/article/{{ $postarticle->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
                                         <button type="submit" onclick="deleteConfirmationArticle({{ $postarticle->id }})" id="delete-article" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>

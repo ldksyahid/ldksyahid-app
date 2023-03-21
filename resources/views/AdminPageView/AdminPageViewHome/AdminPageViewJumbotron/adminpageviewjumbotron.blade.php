@@ -29,7 +29,7 @@
                                 </td>
                                 @if ($postjumbotron->btnname != null || $postjumbotron->btnlink != null)
                                     <td align='center'>{{$postjumbotron->btnname}}</td>
-                                    <td align='center'><a href="{{$postjumbotron->btnlink}}" target="_blank">Link</a></td>
+                                    <td align='center'><a href="{{$postjumbotron->btnlink}}" target="_blank">Click Here</a></td>
                                 @else
                                     <td align='center'>None</td>
                                     <td align='center'>None</td>

@@ -25,7 +25,7 @@
                             @forelse($postschedule as $key => $postschedule)
                             <tr>
                                 <td scope="row" align='center'>{{ $key+1 }}</td>
-                                <td>{{ $postschedule->title }}</td>
+                                <td align='center'>{{ $postschedule->title }}</td>
                                 <td align='center'>{{ $postschedule->month }}</td>
                                 <td align='center'>{{ $postschedule->year }}</td>
                                 <td align='center'>

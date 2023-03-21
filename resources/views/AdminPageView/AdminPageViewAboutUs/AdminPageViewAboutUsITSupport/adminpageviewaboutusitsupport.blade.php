@@ -27,11 +27,11 @@
                             @forelse($postitsupport as $key => $data)
                             <tr>
                                 <td scope="row" align='center'>{{$key + 1}}</td>
-                                <td>{{ $data->name }}</td>
+                                <td align='center'>{{ $data->name }}</td>
                                 <td align='center'>{{ $data->forkat }}</td>
                                 <td align='center'>{{ $data->position }}</td>
-                                <td align='center'>{{ substr($data->linkInstagram, 0, 15) }}</td>
-                                <td align='center'>{{ substr($data->linkLinkedin, 0, 15) }}</td>
+                                <td align='center'><a href="{{ $data->linkInstagram }}" target="_blank" rel="noopener noreferrer">Click Here</a></td>
+                                <td align='center'><a href="{{ $data->linkLinkedin }}" target="_blank" rel="noopener noreferrer">Click Here</a></td>
                                 <td align='center'>
                                     <img style="width: 100px;" src="{{ asset($data->photoProfile) }}" alt="{{$data->name}}" class="card-img-top"/>
                                 </td>
