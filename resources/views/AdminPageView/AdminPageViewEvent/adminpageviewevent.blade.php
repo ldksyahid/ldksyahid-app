@@ -17,7 +17,6 @@
                                 <th scope="col" style="width: 170px">Title</th>
                                 <th scope="col">Poster</th>
                                 <th scope="col">Division</th>
-                                <th scope="col" style="width: 170px">Broadcast</th>
                                 <th scope="col">Date Event</th>
                                 <th scope="col" style="width: 180px">Link Embed Gform</th>
                                 <th scope="col" style="width: 40px">Action</th>
@@ -32,13 +31,12 @@
                                     <img style="width: 100px;" src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="card-img-top"/>
                                 </td>
                                 <td>{{ $postevent->division }}</td>
-                                <td>{!!  substr(strip_tags($postevent->broadcast), 0, 20) !!}</td>
-                                <td align='center'>{{ $postevent->dateevent }}</td>
+                                <td align='center'>{{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('dddd') }} <br> {{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->dateevent )->format('Y') }}</td>
                                 <td align='center'>
                                     @if ($postevent->linkembedgform == null)
                                         <p class="small">Nothing</p>
                                     @else
-                                        <p>{{ substr($postevent->linkembedgform, 0, 10) }}</p>
+                                        <a href="{{ $postevent->linkembedgform }}" target="_blank" rel="noopener noreferrer">Click Here</a>
                                     @endif
                                 </td>
                                 {{-- <td align='center'><p>{{ substr($postevent->linkembedgform, 0, 10) }}</p></td> --}}
