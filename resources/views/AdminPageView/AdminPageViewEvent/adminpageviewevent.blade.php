@@ -26,11 +26,11 @@
                             @forelse($postevent as $key => $postevent)
                             <tr>
                                 <td scope="row" align='center'>{{$key + 1}}</td>
-                                <td>{{ $postevent->title }}</td>
+                                <td align='center'>{{ $postevent->title }}</td>
                                 <td>
-                                    <img style="width: 100px;" src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="card-img-top"/>
+                                    <img style="width: 100px;" src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="card-img"/>
                                 </td>
-                                <td>{{ $postevent->division }}</td>
+                                <td align='center'>{{ $postevent->division }}</td>
                                 <td align='center'>{{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('dddd') }} <br> {{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->dateevent )->format('Y') }}</td>
                                 <td align='center'>
                                     @if ($postevent->linkembedgform == null)

@@ -16,7 +16,6 @@
                                 <th scope="col" style="width: 10px">No</th>
                                 <th scope="col">Event Name</th>
                                 <th scope="col">Event Theme</th>
-                                <th scope="col">Event Description</th>
                                 <th scope="col">Big Photo</th>
                                 <th scope="col">Other Photo</th>
                                 <th scope="col">Link Embed</th>
@@ -27,25 +26,24 @@
                             @forelse($postgallery as $key => $postgallery)
                             <tr>
                                 <td scope="row" align='center'>{{ $key+1 }}</td>
-                                <td>{{ $postgallery->eventName }}</td>
+                                <td align='center'>{{ $postgallery->eventName }}</td>
                                 <td align='center'>{{ $postgallery->eventTheme }}</td>
-                                <td align='center'>{{ substr($postgallery->eventDescription, 0, 10) }}</td>
                                 <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->groupPhoto) }}" alt="" class="card-img-top"/>
+                                    <img style="width: 150px;" src="{{ asset($postgallery->groupPhoto) }}" alt="" class="card-img"/>
                                 </td>
                                 <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo1) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo2) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo3) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo4) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo5) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo6) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo7) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo8) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo9) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo10) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo11) }}" alt="" class="card-img-top"/>
-                                    <img style="width: 100px;" src="{{ asset($postgallery->photo12) }}" alt="" class="card-img-top"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo1) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo2) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo3) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo4) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo5) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo6) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo7) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo8) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo9) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo10) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo11) }}" alt="" class="card-img"/>
+                                    <img style="width: 100px;" src="{{ asset($postgallery->photo12) }}" alt="" class="card-img"/>
                                 </td>
                                 @if ($postgallery->linkEmbedYoutube == null)
                                     <td align='center'>Nothing</td>

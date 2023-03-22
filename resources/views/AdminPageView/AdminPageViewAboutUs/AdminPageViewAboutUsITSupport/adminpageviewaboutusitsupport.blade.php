@@ -33,7 +33,7 @@
                                 <td align='center'><a href="{{ $data->linkInstagram }}" target="_blank" rel="noopener noreferrer">Click Here</a></td>
                                 <td align='center'><a href="{{ $data->linkLinkedin }}" target="_blank" rel="noopener noreferrer">Click Here</a></td>
                                 <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($data->photoProfile) }}" alt="{{$data->name}}" class="card-img-top"/>
+                                    <img style="width: 100px;" src="{{ asset($data->photoProfile) }}" alt="{{$data->name}}" class="card-img"/>
                                 </td>
                                 <td align="center">
                                     <a href="/admin/about/itsupport/{{ $data->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>

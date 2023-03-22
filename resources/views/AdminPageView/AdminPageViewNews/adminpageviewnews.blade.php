@@ -32,7 +32,7 @@
                                 <td align='center'>{{ $postnews->title }}</td>
                                 <td align='center'>{{ $postnews->reporter }}</td>
                                 <td align='center'>{{ $postnews->editor }}</td>
-                                <td align='center'><img style="width: 100px;" src="{{ asset($postnews->picture) }}" alt="{{ $postnews->title }}" class="card-img-top"/></td>
+                                <td align='center'><img style="width: 100px;" src="{{ asset($postnews->picture) }}" alt="{{ $postnews->title }}" class="card-img"/></td>
                                 <td align="center">
                                         <a href="/admin/news/{{ $postnews->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
                                         <button type="submit" onclick="deleteConfirmationNews({{ $postnews->id }})" id="delete-event" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>

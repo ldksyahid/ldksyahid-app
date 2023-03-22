@@ -25,11 +25,11 @@
                             @forelse($posttestimony as $key => $posttestimony)
                             <tr>
                                 <td scope="row" align='center'>{{$key + 1}}</td>
-                                <td>{{ $posttestimony->name }}</td>
-                                <td>{{ $posttestimony->profession }}</td>
-                                <td>{{ $posttestimony->testimony }}</td>
+                                <td align="center">{{ $posttestimony->name }}</td>
+                                <td align="center">{{ $posttestimony->profession }}</td>
+                                <td align="justify">{{ $posttestimony->testimony }}</td>
                                 <td>
-                                    <img style="width: 100px;" src="{{ asset($posttestimony->picture) }}" alt="{{$posttestimony->name}}" class="card-img-top"/>
+                                    <img style="width: 100px;" src="{{ asset($posttestimony->picture) }}" alt="{{$posttestimony->name}}" class="card-img"/>
                                 </td>
                                 <td align="center">
                                         <a href="/admin/testimony/{{$posttestimony->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
