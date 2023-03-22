@@ -27,9 +27,27 @@
             <label for="inputPosition1" class="form-label"><b>Role</b></label>
             <br>
             @if (LFC::getRoleName($data->getRoleNames()) != null)
-                <label for="inputPosition" class="form-label">{{ LFC::getRoleName($data->getRoleNames()) }}</label>
+                <label for="inputPosition" class="form-label" style="font-size: 18px;">
+                    @if (LFC::getRoleName($data->getRoleNames()) == 'Superadmin')
+                        <i class="badge badge-pill bg-danger">{{ LFC::getRoleName($data->getRoleNames()) }}</i>
+                    @elseif (LFC::getRoleName($data->getRoleNames()) == 'HelperAdmin')
+                        <i class="badge badge-pill bg-warning">{{ LFC::getRoleName($data->getRoleNames()) }}</i>
+                    @elseif (LFC::getRoleName($data->getRoleNames()) == 'HelperCelsyahid')
+                        <i class="badge badge-pill bg-success">{{ LFC::getRoleName($data->getRoleNames()) }}</i>
+                    @elseif (LFC::getRoleName($data->getRoleNames()) == 'HelperEventMart')
+                        <i class="badge badge-pill" style="background-color: #5352ed;">{{ LFC::getRoleName($data->getRoleNames()) }}</i>
+                    @elseif (LFC::getRoleName($data->getRoleNames()) == 'HelperSPAM')
+                        <i class="badge badge-pill bg-info">{{ LFC::getRoleName($data->getRoleNames()) }}</i>
+                    @elseif (LFC::getRoleName($data->getRoleNames()) == 'HelperMedia')
+                        <i class="badge badge-pill bg-dark">{{ LFC::getRoleName($data->getRoleNames()) }}</i>
+                    @elseif (LFC::getRoleName($data->getRoleNames()) == 'HelperLetter')
+                        <i class="badge badge-pill bg-secondary">{{ LFC::getRoleName($data->getRoleNames()) }}</i>
+                    @elseif (LFC::getRoleName($data->getRoleNames()) == 'User')
+                        <i class="badge badge-pill bg-primary">{{ LFC::getRoleName($data->getRoleNames()) }}</i>
+                    @endif
+                </label>
             @else
-                <label for="inputPosition" class="form-label">User</label>
+                <label for="inputPosition" class="form-label" style="font-size: 18px;"><i class="badge badge-pill bg-primary">User</i></label>
             @endif
 
         </div>

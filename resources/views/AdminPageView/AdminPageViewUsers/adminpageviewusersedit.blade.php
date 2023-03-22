@@ -26,7 +26,7 @@
                         checked
                         @endif>
                     <label class="form-check-label" for="superadmin">
-                        Superadmin
+                        <i class="badge badge-pill bg-danger">Superadmin</i>
                     </label>
                 </div>
                 <div class="form-check">
@@ -36,7 +36,7 @@
                         checked
                         @endif>
                     <label class="form-check-label" for="helperadmin">
-                        HelperAdmin
+                        <i class="badge badge-pill bg-warning">HelperAdmin</i>
                     </label>
                 </div>
                 <div class="form-check">
@@ -46,7 +46,7 @@
                         checked
                         @endif>
                     <label class="form-check-label" for="helpercelsyahid">
-                        HelperCelsyahid
+                        <i class="badge badge-pill bg-success">HelperCelsyahid</i>
                     </label>
                 </div>
                 <div class="form-check">
@@ -56,7 +56,7 @@
                         checked
                         @endif>
                     <label class="form-check-label" for="helperletter">
-                        HelperLetter
+                        <i class="badge badge-pill bg-secondary">HelperLetter</i>
                     </label>
                 </div>
                 <div class="form-check">
@@ -66,7 +66,7 @@
                         checked
                         @endif>
                     <label class="form-check-label" for="helpereventmart">
-                        HelperEventMart
+                        <i class="badge badge-pill" style="background-color: #5352ed;">HelperEventMart</i>
                     </label>
                 </div>
                 <div class="form-check">
@@ -76,7 +76,7 @@
                         checked
                         @endif>
                     <label class="form-check-label" for="helperspam">
-                        HelperSPAM
+                        <i class="badge badge-pill bg-info">HelperSPAM</i>
                     </label>
                 </div>
                 <div class="form-check">
@@ -86,7 +86,7 @@
                         checked
                         @endif>
                     <label class="form-check-label" for="helpermedia">
-                        HelperMedia
+                        <i class="badge badge-pill bg-dark">HelperMedia</i>
                     </label>
                 </div>
                 <div class="form-check">
@@ -96,7 +96,7 @@
                         checked
                         @endif>
                     <label class="form-check-label" for="user">
-                        User
+                        <i class="badge badge-pill bg-primary">User</i>
                     </label>
                 </div>
             </div>

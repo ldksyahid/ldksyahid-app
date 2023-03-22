@@ -18,7 +18,23 @@
             </div>
             <div class="ms-3">
                 <h6 class="mb-0">{{ Auth::user()->name }}</h6>
-                <i class="small">{{ LFC::getRoleName(auth()->user()->getRoleNames()) }}</i>
+                @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
+                    <i class="badge badge-pill bg-danger">{{ LFC::getRoleName(auth()->user()->getRoleNames()) }}</i>
+                @elseif (LFC::getRoleName(auth()->user()->getRoleNames()) == 'HelperAdmin')
+                    <i class="badge badge-pill bg-warning">{{ LFC::getRoleName(auth()->user()->getRoleNames()) }}</i>
+                @elseif (LFC::getRoleName(auth()->user()->getRoleNames()) == 'HelperCelsyahid')
+                    <i class="badge badge-pill bg-success">{{ LFC::getRoleName(auth()->user()->getRoleNames()) }}</i>
+                @elseif (LFC::getRoleName(auth()->user()->getRoleNames()) == 'HelperEventMart')
+                    <i class="badge badge-pill" style="background-color: #5352ed;">{{ LFC::getRoleName(auth()->user()->getRoleNames()) }}</i>
+                @elseif (LFC::getRoleName(auth()->user()->getRoleNames()) == 'HelperSPAM')
+                    <i class="badge badge-pill bg-info">{{ LFC::getRoleName(auth()->user()->getRoleNames()) }}</i>
+                @elseif (LFC::getRoleName(auth()->user()->getRoleNames()) == 'HelperMedia')
+                    <i class="badge badge-pill bg-dark">{{ LFC::getRoleName(auth()->user()->getRoleNames()) }}</i>
+                @elseif (LFC::getRoleName(auth()->user()->getRoleNames()) == 'HelperLetter')
+                    <i class="badge badge-pill bg-secondary">{{ LFC::getRoleName(auth()->user()->getRoleNames()) }}</i>
+                @elseif (LFC::getRoleName(auth()->user()->getRoleNames()) == 'User')
+                    <i class="badge badge-pill bg-primary">{{ LFC::getRoleName(auth()->user()->getRoleNames()) }}</i>
+                @endif
             </div>
         </div>
 
