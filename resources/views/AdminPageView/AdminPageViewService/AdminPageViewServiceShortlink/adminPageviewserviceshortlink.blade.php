@@ -25,22 +25,30 @@
             <table class="table">
                 <thead>
                     <tr class="small">
-                        <th scope="col">#</th>
-                        <th scope="col">URL Key</th>
-                        <th scope="col">URL Destination</th>
-                        <th scope="col">Short URL</th>
+                        <th scope="col" class="text-start">No</th>
+                        <th scope="col" class="text-center">URL Key</th>
+                        <th scope="col" class="text-center">URL Destination</th>
+                        <th scope="col" class="text-center">Short URL</th>
                         <th scope="col" class="text-center">Visitors</th>
+                        <th scope="col" class="text-center" style="width: 30%">Created At</th>
+                        <th scope="col" class="text-center" style="width: 30%">Created By</th>
                         <th scope="col" class="text-center">action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($urls as $key => $item)
-                    <tr>
+                    <tr class="small">
                         <th scope="row">{{ ++$key }}</th>
-                        <td>{{ $item->url_key }}</td>
-                        <td class="small"><a href="{{ $item->destination_url }}" target="_blank">Click Here</a></td>
-                        <td><a href="{{ $item->default_short_url }}" target="_blank">{{ $item->default_short_url }}</a></td>
+                        <td align="center">{{ $item->url_key }}</td>
+                        <td align="center"><a href="{{ $item->destination_url }}" target="_blank">Click Here</a></td>
+                        <td align="center"><a href="{{ $item->default_short_url }}" target="_blank">{{ $item->default_short_url }}</a></td>
                         <td align="center">{{ $item->visits->count() }}</td>
+                        <td align="center">{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} <br> ({{ \Carbon\Carbon::parse( $item->created_at )->format('H:i T') }})</td>
+                        @if ($item->created_by != null)
+                            <td align="center">{{ $item->created_by }}</td>
+                        @else
+                            <td align="center">Undifined</td>
+                        @endif
                         <td align="center">
                             <button type="button" class="btn btn-sm btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $key }}"><i class="fa fa-edit"></i></button>
                             @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
