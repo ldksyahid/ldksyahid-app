@@ -10,7 +10,7 @@
                     </div>
                     <div class="h-100 wow fadeIn" data-wow-delay="0.5s">
                         <div class="text-center mb-3">
-                            <h5>Sejarah UKM LDK Syahid</h5>
+                            <h5>Sejarah</h5>
                         </div>
                         <div style="text-align: justify">
                             <p>Lembaga Dakwah Kampus Syahid (LDK Syahid) UIN Syarif Hidayatullah Jakarta adalah sebuah organisasi dalam lingkup Unit Kegiatan Mahasiswa (UKM) di lingkungan UIN Syarif Hidayatullah Jakarta yang didirikan pada hari Selasa 10 Muharram 1417 H atau bertepatan dengan tanggal 28 Mei 1996 M.</p>

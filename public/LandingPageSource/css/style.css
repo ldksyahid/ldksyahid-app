@@ -83,7 +83,7 @@
 /*** Navbar ***/
 .navbar.sticky-top {
     top: -100px;
-    transition: 0.5s;
+    transition: 0.3s;
 }
 
 .navbar .navbar-nav .nav-link {
@@ -140,12 +140,18 @@
         opacity: 1;
     }
 }
-/* .hideIfMobile {
+/* .website-responsive {
     display: none;
     visibility: visible;
 } */
-@media (max-width: 768px) {
-    .hideIfMobile {
+@media (max-width: 912px) {
+    .website-responsive {
+        display: none;
+        visibility: visible;
+    }
+}
+@media (min-width: 912px) {
+    .mobile-responsive {
         display: none;
         visibility: visible;
     }
@@ -207,7 +213,7 @@
     .buttonphone {
         padding: 3px 12px 3px 12px;
         font-size: 6px;
-        margin-left: 5%
+        margin-left: 5%;
     }
     #header-carousel .carousel-item {
         position: relative;
@@ -230,21 +236,10 @@
 }
 
 .page-header {
-    background:
-        url(../../Images/fixImage/bg_bilboard.png) center center no-repeat;
+    background: url(../../Images/fixImage/bg_bilboard.png) center center
+        no-repeat;
     background-size: 1350px 325px;
 }
-
-/* @media (max-width: 768px) {
-    .page-header-mobile-article {
-        background:
-            url(../../Images/fixImage/bg_bilboard.png) center center no-repeat;
-        background-size: contain;
-        position: static    ;
-        min-height: 80px;
-    }
-
-} */
 
 .page-header .breadcrumb-item + .breadcrumb-item::before {
     color: #999999;

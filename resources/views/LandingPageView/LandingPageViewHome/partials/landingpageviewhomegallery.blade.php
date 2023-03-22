@@ -20,11 +20,11 @@
         </div>
         <div class="row g-6">
             @forelse($postgallery as $key => $postgallery)
-            <div class="col-lg-12 col-md-6 wow fadeInUp mb-5 text-center" data-wow-delay="0.1s">
+            <div class="col-lg-12 col-md-6 wow fadeInUp mb-5 text-start" data-wow-delay="0.1s">
                 <div class="mb-3">
                     <h6 class="text-body mb-2">{{ $postgallery->eventName }}</h6>
-                    <h2 class="mb-0">{{ $postgallery->eventTheme }}</h2>
-                    <p class="mb-0 mt-2" style="text-align: center">
+                    <h3 class="mb-0">{{ $postgallery->eventTheme }}</h3>
+                    <p class="mb-0 mt-2" style="text-align: justify">
                         {{ $postgallery->eventDescription }}
                     </p>
                 </div>

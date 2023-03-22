@@ -1,0 +1,88 @@
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-img {
+    border: none;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.c-details span {
+    font-weight: 200;
+    font-size: 13px;
+}
+
+.badge span {
+    background-color: #00a79d;
+    width: 100px;
+    height: 25px;
+    padding-bottom: 3px;
+    border-radius: 5px;
+    display: flex;
+    color: #ffff;
+    justify-content: center;
+    align-items: center;
+}
+
+.shadow-c {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.badge-mobile span {
+    background-color: #00a79d;
+    width: 80px;
+    height: 20px;
+    padding-bottom: 3px;
+    border-radius: 5px;
+    display: flex;
+    color: #ffff;
+    justify-content: center;
+    align-items: center;
+}
+
+.badge-mobile-all span {
+    background-color: #00a79d;
+    width: 55px;
+    height: 13px;
+    padding: 3px;
+    border-radius: 3px;
+    display: flex;
+    color: #ffff;
+    justify-content: center;
+}
+
+.progress {
+    height: 20px;
+    border-radius: 10px;
+}
+
+.progress-mobile {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.progress div {
+    background-color: #00a79d;
+}
+
+.progress-mobile div {
+    background-color: #00a79d;
+}
+
+.text1 {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.text2 {
+    color: #a5aec0;
+}
+
+.container-xxxl {
+    width: 100%;
+    padding-right: var(--bs-gutter-x, 0.75rem);
+    padding-left: var(--bs-gutter-x, 0.75rem);
+    margin-right: -40%;
+    margin-left: 60%;
+}

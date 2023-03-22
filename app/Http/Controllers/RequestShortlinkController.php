@@ -4,19 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ReqShortlink;
-use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RequestShortlinkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $data = ReqShortlink::all();
+        $data = ReqShortlink::orderBy('created_at','desc')->get();
         return view('AdminPageView.AdminPageViewRequestService.AdminPageViewRequestServiceShortlink.adminpageviewrequestserviceshortlink')->with([
             'data' => $data,
             "title" => "Request Services"
@@ -25,39 +20,18 @@ class RequestShortlinkController extends Controller
 
     public function read()
     {
-        $data = ReqShortlink::all();
+        $data = ReqShortlink::orderBy('created_at','desc')->get();
         return view('AdminPageView.AdminPageViewRequestService.AdminPageViewRequestServiceShortlink.adminpageviewrequestserviceshortlinkread')->with([
             'data' => $data,
             "title" => "Request Services"
         ]);
     }
-    // public function read()
-    // {
-    //     $data = ReqShortlink::all();
-    //     $urls = \AshAllenDesign\ShortURL\Models\ShortURL::all();
-    //     $all = $data->merge($urls);
-    //     return view('AdminPageView.AdminPageViewRequestService.AdminPageViewRequestServiceShortlink.adminpageviewrequestserviceshortlinkread')->with([
-    //         'all' => $all,
-    //         "title" => "Request Services"
-    //     ]);
-    // }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananShortlink.landingpageviewlayananshortlink', ["title" => "Layanan"]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $reqshortlinkstore = ReqShortlink::create([
@@ -72,12 +46,6 @@ class RequestShortlinkController extends Controller
         return redirect('/service/shortlink');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $data = ReqShortlink::findOrFail($id);
@@ -87,12 +55,6 @@ class RequestShortlinkController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function addFixCustomLinkEdit($id)
     {
         $data = ReqShortlink::findOrFail($id);
@@ -116,24 +78,6 @@ class RequestShortlinkController extends Controller
         $data->save();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $data = ReqShortlink::findOrFail($id);

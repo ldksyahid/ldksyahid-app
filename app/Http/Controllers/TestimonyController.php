@@ -9,33 +9,18 @@ use Illuminate\Support\Facades\File;
 
 class TestimonyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $posttestimony= Testimony::orderBy('created_at','desc')->get();
         return view('AdminPageView.AdminPageViewHome.AdminPageViewTestimony.adminpageviewtestimony', compact('posttestimony'), ["title" => "Home"]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('AdminPageView.AdminPageViewHome.AdminPageViewTestimony.adminpageviewtestimonycreate', ["title" => "Home"]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $filename = time().$request->file('picture')->getClientOriginalName();
@@ -51,36 +36,12 @@ class TestimonyController extends Controller
         return redirect('/admin/testimony');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $posttestimony = Testimony::find($id);
         return view('AdminPageView.AdminPageViewHome.AdminPageViewTestimony.adminpageviewtestimonyedit', compact('posttestimony'), ["title" => "Home"]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         if ($request->file('picture')) {
@@ -107,12 +68,6 @@ class TestimonyController extends Controller
         return redirect('/admin/testimony');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         // hapus file

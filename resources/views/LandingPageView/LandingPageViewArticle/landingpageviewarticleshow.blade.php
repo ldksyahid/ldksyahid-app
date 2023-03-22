@@ -1,5 +1,14 @@
 @extends('LandingPageView.LandingPageViewTemplate.bodylandingpage')
-
+@php
+    use App\Http\Controllers\LibraryFunctionController as LFC;
+@endphp
+@section('openGraph')
+<meta property="og:title" content="{{ $postarticle->title }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{url()->current()}}" />
+<meta property="og:image" content="{{ asset($postarticle->poster) }}" />
+<meta property="og:description" content="{{ $postarticle->theme }}" />
+@endsection
 @section('content')
 <!-- Article Start -->
 <div class="container-xxl py-5">
@@ -30,7 +39,7 @@
             <div class="col-lg-12 col-md-6 wow fadeInRight text-start">
                 @forelse ($postarticle->articlecomments as $key => $comment)
                 @if ($key + 1 == 1)
-                <h3 class="mb-5 h4 font-weight-bold text-center"> {{ $postarticle->articlecomments->count() }}  Komentar</h3>
+                <h3 class="mb-5 h4 font-weight-bold text-center"> {{ $postarticle->articlecomments->count() }} Komentar</h3>
                 <div class="my-5">
                     <div class="m-2">
                         @if ($comment->user->profile == null || $comment->user->profile->profilepicture == null)
@@ -45,7 +54,7 @@
                         <div>
                             <p style="text-align: justify">{!!  $comment->body !!}</p>
                         </div>
-                        @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1))
+                        @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin'))
                             <form action="/articlecomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_article">
                                 @csrf
                                 @method('DELETE')
@@ -69,7 +78,7 @@
                         <div>
                             <p style="text-align: justify">{!!  $comment->body !!}</p>
                         </div>
-                        @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || Auth::User()->is_admin == 1))
+                        @if (!is_null(Auth::User()) && (Auth::User()->is($comment->user) || LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin'))
                             <form action="/articlecomment/{{ $comment->id }}/destroy" method="post" id="form_delete_comment_article">
                                 @csrf
                                 @method('DELETE')
