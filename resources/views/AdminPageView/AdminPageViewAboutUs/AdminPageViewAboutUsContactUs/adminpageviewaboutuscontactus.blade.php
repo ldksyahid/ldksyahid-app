@@ -15,7 +15,6 @@
                                 <th scope="col">Name</th>
                                 <th scope="col" style="width: 20px">Email</th>
                                 <th scope="col">Subject</th>
-                                <th scope="col">Message</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -23,10 +22,9 @@
                             @forelse($data as $key => $item)
                             <tr>
                                 <td scope="row" align='center'>{{$key + 1}}</td>
-                                <td>{{substr($item->name, 0, 20)}}</td>
-                                <td >{{ $item->email }}</td>
-                                <td>{{substr($item->subject, 0, 20)}}</td>
-                                <td align='center'>{{ substr($item->message, 0, 20) }}</td>
+                                <td align='center'>{{$item->name}}</td>
+                                <td align='center'>{{ $item->email }}</td>
+                                <td align='center'>{{$item->subject}}</td>
                                 <td align="center">
                                     <button class="btn btn-sm btn-primary" onClick="destroycontactmessage({{ $item->id }})"><i class="fa fa-trash"></i></button>
                                     <button class="btn btn-sm btn-primary" onClick="preview({{ $item->id }})"><i class="fa fa-eye"></i></button>

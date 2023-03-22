@@ -25,7 +25,7 @@
                             <tr>
                                 <td scope="row" align='center'>{{$key + 1}}</td>
                                 <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($postjumbotron->picture) }}" alt="{{$postjumbotron->title}}" class="card-img-top"/>
+                                    <img style="width: 300px;" src="{{ asset($postjumbotron->picture) }}" alt="{{$postjumbotron->title}}" class="card-img"/>
                                 </td>
                                 @if ($postjumbotron->btnname != null || $postjumbotron->btnlink != null)
                                     <td align='center'>{{$postjumbotron->btnname}}</td>

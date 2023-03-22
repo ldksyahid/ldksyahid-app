@@ -29,7 +29,7 @@
                                 <td align='center'>{{ $postschedule->month }}</td>
                                 <td align='center'>{{ $postschedule->year }}</td>
                                 <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($postschedule->picture) }}" alt="{{$postschedule->title}}" class="card-img-top"/>
+                                    <img style="width: 100px;" src="{{ asset($postschedule->picture) }}" alt="{{$postschedule->title}}" class="card-img"/>
                                 </td>
                                 <td align="center">
                                     <a href="/admin/schedule/{{$postschedule->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>

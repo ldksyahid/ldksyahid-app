@@ -13,10 +13,10 @@
         <tr>
             <td scope="row" align='center'>{{ $key+1 }}</td>
             <td scope="row" align='center'>{{ $item->buttonName }}</td>
-            <td>
-                <a href="{{ $item->link }}" target="_blank">{{substr($item->link, 0, 20)}}</a>
+            <td align='center'>
+                <a href="{{ $item->link }}" target="_blank">Click Here</a>
             </td>
-            <td >{{ $item->appear }}</td>
+            <td align="center">{{ $item->appear }}</td>
             <td align="center">
                 <button class="btn btn-sm btn-primary" onClick="edit({{ $item->id }})"><i class="fa fa-edit"></i></button>
                 <button class="btn btn-sm btn-primary" onClick="destroycallkestari({{ $item->id }})"><i class="fa fa-trash"></i></button>

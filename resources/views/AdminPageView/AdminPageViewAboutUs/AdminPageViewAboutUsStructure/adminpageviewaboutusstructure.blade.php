@@ -29,13 +29,13 @@
                                 <td scope="row" align='center'>{{ $key+1 }}</td>
                                 <td align='center'>{{ $data->batch }}</td>
                                 <td align='center'>{{ $data->period }}</td>
-                                <td align='left'>{{ $data->structureName }}</td>
+                                <td align='center'>{{ $data->structureName }}</td>
                                 <td align='justify'>{{ $data->structureDescription }}</td>
                                 <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($data->structureLogo) }}" alt="{{$data->structureName}}" class="card-img-top"/>
+                                    <img style="width: 100px;" src="{{ asset($data->structureLogo) }}" alt="{{$data->structureName}}" class="card-img"/>
                                 </td>
                                 <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($data->structureImage) }}" alt="{{$data->structureName}}" class="card-img-top"/>
+                                    <img style="width: 100px;" src="{{ asset($data->structureImage) }}" alt="{{$data->structureName}}" class="card-img"/>
                                 </td>
                                 <td align="center">
                                     <a href="/admin/about/structure/{{ $data->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
