@@ -64,8 +64,7 @@
         var name = $("#inputName1").val();
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
-        // var is_admin = $('#is_admin').is(':checked');
-        var is_admin = $('#is_admin:checked').val();
+        var roleName = $('.roleName:checked').val();
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -80,7 +79,7 @@
                 name: name,
                 email: email,
                 password: password,
-                is_admin:is_admin
+                roleName:roleName
             },
             success: function(data) {
                 $(".btn-close").click();
@@ -95,11 +94,21 @@
 
     // Untuk modal halaman edit show
     function edit(id) {
-        $.get("{{ url('admin/user/edit') }}/" + id, {}, function(data, status) {
-            $("#modalLabelCrudUser").html('Edit User')
-            $("#page").html(data);
-            $("#modalCrudUser").modal('show');
-        });
+        if (id == 1 || id == 2) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Edit Failed',
+                text: "^_^ Sory You Can't Edit this Account ^_^",
+                confirmButtonText: 'Shap',
+                confirmButtonColor : '#00d2c5'
+            })
+        } else {
+            $.get("{{ url('admin/user/edit') }}/" + id, {}, function(data, status) {
+                $("#modalLabelCrudUser").html('Edit User')
+                $("#page").html(data);
+                $("#modalCrudUser").modal('show');
+            });
+        }
     }
 
     // untuk update database
@@ -107,9 +116,7 @@
         var name = $("#inputName1").val();
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
-        // var is_admin = $('#is_admin').is(':checked');
-        var is_admin = $('#is_admin:checked').val();
-        console.log(is_admin);
+        var roleName = $('.roleName:checked').val();
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -124,7 +131,7 @@
                 name: name,
                 email: email,
                 password: password,
-                is_admin:is_admin },
+                roleName:roleName },
             success: function(data) {
                 $(".btn-close").click();
                 read();
@@ -142,101 +149,56 @@
         var name = $("#inputName1").val();
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
-        var is_admin = $('#is_admin').is(':checked');
+        if (id == 1 || id == 2) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Delete Failed',
+                text: "^_^ Sory You Can't Delete this Account ^_^",
+                confirmButtonText: 'Shap',
+                confirmButtonColor : '#00d2c5'
+            })
+        } else {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500,
+                width: '350px',
+            })
 
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500,
-            width: '350px',
-        })
-
-        Swal.fire({
-            title: 'Are you sure ?',
-            text: "You won't be able to revert this !",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                type: "get",
-                url: "{{ url('admin/user/destroy') }}/"+id,
-                data: {
-                    name: name,
-                    email: email,
-                    password: password,
-                    is_admin:is_admin },
-                    success: function(data) {
-                        $(".btn-close").click();
-                        read();
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'User has been deleted !'
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        alert(err.Message);
-                    }
-                });
-            }
-        })
+            Swal.fire({
+                title: 'Are you sure ?',
+                text: "You won't be able to revert this !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                    type: "get",
+                    url: "{{ url('admin/user/destroy') }}/"+id,
+                    data: {
+                        name: name,
+                        email: email,
+                        password: password},
+                        success: function(data) {
+                            $(".btn-close").click();
+                            read();
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'User has been deleted !'
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            alert(err.Message);
+                        }
+                    });
+                }
+            })
+        }
     }
-
-    // function destroyuser(id) {
-    //     var name = $("#inputName1").val();
-    //     var email = $("#inputEmail1").val();
-    //     var password = $("#inputPassword1").val();
-    //     var is_admin = $('#is_admin').is(':checked');
-
-    //     const Toast = Swal.mixin({
-    //         toast: true,
-    //         position: 'top-end',
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //         width: '350px',
-    //     })
-
-    //     if (id == 12) {
-    //         Toast.fire({
-    //             icon: 'error',
-    //             title: "Can't delete this user!"
-    //         });
-    //     }else {
-    //         Swal.fire({
-    //         title: 'Are you sure ?',
-    //         text: "You won't be able to revert this !",
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#3085d6',
-    //         cancelButtonColor: '#d33',
-    //         confirmButtonText: 'Yes, delete it!'
-    //         }).then((result) => {
-    //             if (result.isConfirmed) {
-    //                 $.ajax({
-    //                 type: "get",
-    //                 url: "{{ url('admin/user/destroy') }}/"+id,
-    //                 data: {
-    //                     name: name,
-    //                     email: email,
-    //                     password: password,
-    //                     is_admin:is_admin },
-    //                     success: function(data) {
-    //                         $(".btn-close").click();
-    //                         read();
-    //                         Toast.fire({
-    //                             icon: 'success',
-    //                             title: 'User has been deleted !'
-    //                         });
-    //                     }
-    //                 });
-    //             }
-    //         })
-    //     }
-    // }
 
     // untuk modal preview
     function preview(id) {

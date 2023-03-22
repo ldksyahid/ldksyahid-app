@@ -21,15 +21,15 @@
             @forelse($postarticle as $key => $postarticle)
             <div class="col-lg-4 col-md-6 wow fadeInRight" data-wow-delay="0.1s">
                 <div class="service-item bg-light overflow-hidden h-100">
-                    <a href="/article/{{ $postarticle->id }}/show"><img class="img-fluid" src="{{ asset($postarticle->poster) }}" alt="{{$postarticle->title}}" /></a>
+                    <a href="/article/{{ $postarticle->id }}/{{ strtolower(str_replace(' ', '-', $postarticle->title)) }}"><img class="img-fluid" src="{{ asset($postarticle->poster) }}" alt="{{$postarticle->title}}" /></a>
                     <div class="service-text position-relative text-center h-100 p-4">
                         <p class="text-end">{{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->format('Y') }}</p>
                         <h6 class="text-body text-uppercase mb-2 text-start">{{ $postarticle->theme }}</h6>
-                        <a href="/article/{{ $postarticle->id }}/show"><h4 class="" style="text-align: left;">{{ $postarticle->title }}</h4></a>
+                        <a href="/article/{{ $postarticle->id }}/{{ strtolower(str_replace(' ', '-', $postarticle->title)) }}"><h4 class="" style="text-align: left;">{{ $postarticle->title }}</h4></a>
                         <p class="text-start mb-0">Penulis : {{ $postarticle->writer }}</p>
                         <p class="text-start mt-0">Editor : {{ $postarticle->editor }}</p>
                         <div class="text-end">
-                            <a class="small" href="/article/{{ $postarticle->id }}/show">BACA SELENGKAPNYA<i class="fa fa-arrow-right ms-3"></i></a>
+                            <a class="small" href="/article/{{ $postarticle->id }}/{{ strtolower(str_replace(' ', '-', $postarticle->title)) }}">BACA SELENGKAPNYA<i class="fa fa-arrow-right ms-3"></i></a>
                         </div>
                     </div>
                 </div>

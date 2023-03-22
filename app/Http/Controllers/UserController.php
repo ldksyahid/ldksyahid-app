@@ -8,15 +8,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
-
-// BACKUP START
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\LibraryFunctionController as LFC;
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $data = User::all();
@@ -35,55 +30,31 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('AdminPageView.AdminPageViewUsers.adminpageviewuserscreate', ["title" => "User"]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $passwordcr = Hash::make($request->password);
-        $data['name'] = $request->name;
-        $data['email'] = $request->email;
-        $data['password'] = $passwordcr;
-        $data['is_admin'] = $request->is_admin;
-        User::insert($data);
+        $roleName = Role::where('name', $request['roleName'])->first();
+
+        $user = User::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+
+        $user->assignRole($roleName);
+
         Alert::success('Success', 'User created successfully !');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $data = User::findOrFail($id);
+        $dataUser = User::findOrFail($id);
         return view('AdminPageView.AdminPageViewUsers.adminpageviewusersedit')->with([
-            'data' => $data,
+            'dataUser' => $dataUser,
             "title" => "User"
         ]);
     }
@@ -97,35 +68,24 @@ class UserController extends Controller
         ]);
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
-    {
-        // $passwordcr = Hash::make($request->password);
+    {   $roleName = Role::where('name', $request['roleName'])->first();
         $data = User::findOrFail($id);
+        $dataRoleName =  LFC::getRoleName($data->getRoleNames());
+        if ($dataRoleName != null) {
+            $data->removeRole($dataRoleName);
+        }
         $data->name = $request->name;
         $data->email = $request->email;
         if ($request->password != null) {
             $data->password = Hash::make($request->password);
         }
-        // $data->password = $passwordcr;
-        $data['is_admin'] = $request->is_admin;
+        $data['updated_at'] = date("Y-m-d H:i:s");
         $data->save();
+        $data->assignRole($roleName);
         toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $data = User::findOrFail($id);
@@ -141,4 +101,4 @@ class UserController extends Controller
         }
     }
 }
-// BACKUP END
+

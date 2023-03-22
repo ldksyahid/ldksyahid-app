@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\File;
 
 class ArticleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $postarticle = Article::orderBy('dateevent','desc')->get();
@@ -27,22 +22,11 @@ class ArticleController extends Controller
         return view('AdminPageView.AdminPageViewArticle.adminpageviewarticle', compact('postarticle'), ["title" => "Article"]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('AdminPageView.AdminPageViewArticle.adminpageviewarticlecreate', ["title" => "Article"]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $filename = time().$request->file('poster')->getClientOriginalName();
@@ -62,38 +46,19 @@ class ArticleController extends Controller
         return redirect('/admin/article');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show($id,$title)
     {
         $dt = Carbon::now();
         $postarticle = Article::find($id);
         return view('LandingPageView.LandingPageViewArticle.landingpageviewarticleshow',  compact('postarticle'),["title" => "Artikel"]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $postarticle = Article::find($id);
         return view('AdminPageView.AdminPageViewArticle.adminpageviewarticleedit', compact('postarticle'), ["title" => "Article"]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         if ($request->file('poster')) {
@@ -123,12 +88,6 @@ class ArticleController extends Controller
         return redirect('/admin/article');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         // hapus file
