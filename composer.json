@@ -20,10 +20,8 @@
         "laravolt/indonesia": "^0.33.0",
         "mydnic/laravel-subscribers": "^1.8",
         "realrashid/sweet-alert": "^5.1",
-        "shweshi/opengraph": "^1.1",
         "spatie/browsershot": "^3.57",
-        "spatie/laravel-permission": "^5.9",
-        "yajra/laravel-datatables-oracle": "^9.21"
+        "spatie/laravel-permission": "^5.9"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

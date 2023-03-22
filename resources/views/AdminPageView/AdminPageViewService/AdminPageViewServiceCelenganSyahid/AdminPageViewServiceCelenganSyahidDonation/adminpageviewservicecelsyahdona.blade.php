@@ -21,7 +21,9 @@
                                 <th scope="col">Campaign</th>
                                 <th scope="col">Status Pembayaran</th>
                                 <th scope="col">Link Pembayaran</th>
+                                @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
                                 <th scope="col" style="width: 40px">Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -33,13 +35,23 @@
                                 <td scope="row" align='center'>{{ $pointer += 1 }}</td>
                                 <td align="center">{{$data->nama_donatur}}</td>
                                 <td align="center">{{ LFC::formatRupiah($data->jumlah_donasi) }}</td>
-                                <td >{{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $data->created_at )->format('Y') }} <br> ({{ \Carbon\Carbon::parse( $data->created_at )->format('H:i T') }})</td>
-                                <td>{{ LFC::getNameCampaign($data->campaign_id) }}</td>
-                                <td align="center">{{ $data->payment_status }}</td>
-                                <td align="center"><a href="{{ $data->payment_link }}" target="_blank" rel="noopener noreferrer">Klik disini</a></td>
+                                <td align="center" >{{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $data->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $data->created_at )->format('Y') }} <br> ({{ \Carbon\Carbon::parse( $data->created_at )->format('H:i T') }})</td>
+                                <td align="center">{{ LFC::getNameCampaign($data->campaign_id) }}</td>
+                                <td align="center">
+                                    @if ($data->payment_status == 'PENDING')
+                                        <span class="badge badge-pill bg-warning">{{ $data->payment_status }}</span>
+                                    @elseif ($data->payment_status == 'PAID')
+                                        <span class="badge badge-pill bg-success">{{ $data->payment_status }}</span>
+                                    @else
+                                        <span class="badge badge-pill bg-danger">{{ $data->payment_status }}</span>
+                                    @endif
+                                </td>
+                                <td align="center"><a href="{{ $data->payment_link }}" target="_blank" rel="noopener noreferrer">Klik Disini</a></td>
+                                @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
                                 <td align="center">
                                     <button class="btn btn-sm btn-primary m-1" onClick="deleteConfirmationDonation('{{ $data->id }}')"><i class="fa fa-trash"></i></button>
                                 </td>
+                                @endif
                             </tr>
                             @empty
                             <tr class="small">
