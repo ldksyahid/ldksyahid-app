@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6 wow fadeInRight" data-wow-delay="0.5s">
                     <div class="ps-3 mb-5 text-center">
-                        <h5 class="text-body mb-2">Syahid Jadwal-in</h5>
+                        <h5 class="text-body mb-2">Jadwal LDK Syahid</h5>
                         <h6 class="text-body mb-2">Edisi</h6>
                         <h1 class=" mb-0 text-uppercase">{{ $postschedule->month }}</h3>
                         <p class="mb-0">{{ $postschedule->year }}</p>
