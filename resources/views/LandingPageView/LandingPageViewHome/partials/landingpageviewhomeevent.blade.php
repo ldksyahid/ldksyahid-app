@@ -29,7 +29,7 @@
             <div class="col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class=" mb-3">
                 <h6 class="text-body text-uppercase mb-2">{{ $postevent->division }}</h6>
-                <h1 class="display-6 mb-0" style="text-align: left">{{ $postevent->title }}</h1>
+                <a href="/event/{{ $postevent->id }}/{{ strtolower(str_replace(' ', '-', $postevent->title)) }}"><h1 class="display-6 mb-0" style="text-align: left">{{ $postevent->title }}</h1></a>
                 </div>
                 <p class="mb-1">
                     {!!  substr(strip_tags($postevent->broadcast), 0, 100) !!} …
@@ -37,7 +37,7 @@
                 <a class="mb-0" href="/event/{{ $postevent->id }}/{{ strtolower(str_replace(' ', '-', $postevent->title)) }}">Baca Selengkapnya</a>
             </div>
             <div class="col-lg-4 col-md-6 wow fadeInRight" data-wow-delay="0.5s">
-                <img src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px">
+                <a href="/event/{{ $postevent->id }}/{{ strtolower(str_replace(' ', '-', $postevent->title)) }}"><img src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px"></a>
             </div>
         </div>
         @empty
