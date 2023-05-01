@@ -12,7 +12,7 @@ class EventController extends Controller
 {
     public function index()
     {
-        $postevent = Event::orderBy('dateevent','desc')->get();
+        $postevent = Event::orderBy('created_at','desc')->get();
         return view('LandingPageView.LandingPageViewEvent.landingpageviewevent', compact('postevent'), ["title" => "Kegiatan"]);
     }
 
@@ -35,15 +35,25 @@ class EventController extends Controller
             "title" => $request["title"],
             "division" => $request["division"],
             "broadcast" => $request["broadcast"],
-            "linkembedgform" => $request["linkembedgform"],
-            "dateevent" => $request["dateevent"],
+            "tag" => $request["tag"],
+            "closeRegist" => $request["closeRegist"],
+            "linkRegist" => $request["linkRegist"],
+            "start" => $request["start"],
+            "finished" => $request["finished"],
+            "location" => $request["location"],
+            "linkLocation" => $request["linkLocation"],
+            "place" => $request["place"],
+            "linkDoc" => $request["linkDoc"],
+            "linkPresent" => $request["linkPresent"],
+            "linkembedgform" => null,
+            "dateevent" => '2023/01/01',
             'poster' => $path
         ]);
         Alert::success('Success', 'Event has been uploaded !');
         return redirect('/admin/event');
     }
 
-    public function show($id, $title)
+    public function show($id)
     {
         $dt = Carbon::now();
         $postevent = Event::find($id);
@@ -76,8 +86,18 @@ class EventController extends Controller
             "title" => $request["title"],
             "division" => $request["division"],
             "broadcast" => $request["broadcast"],
-            "linkembedgform" => $request["linkembedgform"],
-            "dateevent" => $request["dateevent"],
+            "tag" => $request["tag"],
+            "closeRegist" => $request["closeRegist"],
+            "linkRegist" => $request["linkRegist"],
+            "start" => $request["start"],
+            "finished" => $request["finished"],
+            "location" => $request["location"],
+            "linkLocation" => $request["linkLocation"],
+            "place" => $request["place"],
+            "linkDoc" => $request["linkDoc"],
+            "linkPresent" => $request["linkPresent"],
+            "linkembedgform" => null,
+            "dateevent" => '2023/01/01',
         ]);
 
         toast('Event has been edited !', 'success')->autoClose(1500)->width('400px');

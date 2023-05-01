@@ -81,7 +81,7 @@
             {{-- NEWS NAV END --}}
 
             {{-- ACTIVITY NAV START --}}
-            <a href="/event" class="nav-item nav-link text-capitalize {{($title === "Kegiatan") ? "active" : ""}}">Kegiatan</a>
+            <a href="/events" class="nav-item nav-link text-capitalize {{($title === "Kegiatan") ? "active" : ""}}">Kegiatan</a>
             {{-- ACTIVITY NAV END --}}
 
             {{-- JADWALIN NAV START --}}

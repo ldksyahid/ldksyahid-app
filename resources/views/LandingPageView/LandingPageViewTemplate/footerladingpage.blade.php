@@ -37,7 +37,7 @@
                 <a class="btn btn-link" href="/about/contact">Hubungi Kami</a>
                 <a class="btn btn-link" href="/article">Artikel</a>
                 <a class="btn btn-link" href="/news">Berita</a>
-                <a class="btn btn-link" href="/event">Kegiatan</a>
+                <a class="btn btn-link" href="/events">Kegiatan</a>
                 <a class="btn btn-link" href="/schedule">Jadwal</a>
                 <a class="btn btn-link" href="/service/hitungproker">Kalkulator Kestari</a>
             </div>
