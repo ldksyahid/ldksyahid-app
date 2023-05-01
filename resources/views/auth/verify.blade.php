@@ -1,7 +1,7 @@
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5">
-            <div class="col-lg-12 col-md-6 wow fadeInRight" data-wow-delay="0.1s">
+            <div class="col-lg-12 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-end border-bottom border-top border-5 border-primary mb-5 p-5 text-center">
                     <h6 class="text-body text-uppercase mb-2">Verifikasi Alamat Email</h6>
                     <p class="mb-2">

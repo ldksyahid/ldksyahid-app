@@ -48,7 +48,7 @@ class NewsController extends Controller
         return redirect('/admin/news');
     }
 
-    public function show($id,$title)
+    public function show($id)
     {
         $dt = Carbon::now();
         $postnews = News::find($id);

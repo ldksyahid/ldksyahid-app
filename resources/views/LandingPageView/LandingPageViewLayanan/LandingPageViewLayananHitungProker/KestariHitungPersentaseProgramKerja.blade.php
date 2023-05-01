@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="fadeInLeft wow" data-wow-delay="0.1s">
+        <div class="fadeInUp wow" data-wow-delay="0.1s">
             <article class="proker content shadow">
               <!-- Update untuk multiproker sehingga dapat menghitung 1 divisi sekaligus akan ditambahkan di versi selanjutnya -->
               <!-- Versi yang sudah terintegrasi dengan hosting -->
@@ -244,7 +244,7 @@
               </div>
             </article>
           </div>
-          <div class="text-center fadeInRight wow" data-wow-delay="0.1s">
+          <div class="text-center fadeInDown wow" data-wow-delay="0.1s">
             <p>Program Perhitungan ini dibuat oleh Biro Kestari 25</p>
           </div>
     </div>

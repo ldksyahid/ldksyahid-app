@@ -14,8 +14,8 @@
 <!-- Page Header End -->
 <div class="container-xxl" style="background-color: #f5f6fa">
     <div class="container">
-        <div class="row justify-content-center wow fadeInRight" data-wow-delay="0.1s">
-            <div class="col-lg-4 mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 mt-5 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="card card-margin" style="height: 515px;">
                     <img src="{{asset('Images/fixImage/serviceimage/callkestari.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 mt-5">
+            <div class="col-lg-4 mt-5 wow fadeInUp" data-wow-delay="0.2s">
                 <div class="card card-margin" style="height: 515px;">
                     <img src="{{asset('Images/fixImage/serviceimage/kalkulatorkestari.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 mt-5">
+            <div class="col-lg-4 mt-5 wow fadeInUp" data-wow-delay="0.3s">
                 <div class="card card-margin" style="height: 515px;">
                     <img src="{{asset('Images/fixImage/serviceimage/shortlink.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">
@@ -65,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 mt-0">
+            <div class="col-lg-4 mt-5 wow fadeInUp" data-wow-delay="0.4s">
                 <div class="card card-margin" style="height: 515px;">
                     <img src="{{asset('Images/fixImage/serviceimage/celengan-syahid.png')}}" alt="" class="m-5">
                     <div class="card-body pt-0">

@@ -16,7 +16,7 @@
     <div class="container">
         @forelse($postschedule as $key => $postschedule)
         <div class="row g-5 mt-3">
-            <div class="col-lg-4 col-md-6 wow fadeInLeft" data-wow-delay="0.5s">
+            <div class="col-lg-4 col-md-6 wow fadeIn" data-wow-delay="0.5s">
                 <div class="ps-4 mb-5 text-center">
                     <h5 class="text-body mb-2">Jadwal LDK Syahid</h5>
                     <h6 class="text-body mb-2">Edisi</h6>
@@ -24,7 +24,7 @@
                     <p class="mb-0">{{ $postschedule->year }}</p>
                 </div>
             </div>
-            <div class="col-lg-8 col-md-6 wow fadeInRight" data-wow-delay="0.5s">
+            <div class="col-lg-8 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                 <div class="border-start border-5 border-primary ps-4 mb-3">
                     <h1 class="display-6 mb-0" style="text-align: left">{{ $postschedule->title }}</h1>
                 </div>

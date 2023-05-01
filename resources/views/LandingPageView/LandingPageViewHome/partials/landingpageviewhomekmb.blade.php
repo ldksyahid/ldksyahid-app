@@ -16,7 +16,7 @@
                     Kelas Minat Bakat merupakan Kelas yang Mewadahi bakat dan Minat Anggota LDK Syahid agar dapat mengembangkan potensinya
                 </p>
                 <div class="row gy-5 gx-4 text-center justify-content-center">
-                    <div class="col-sm-4 wow fadeInLeft px-4" data-wow-delay="0.1s">
+                    <div class="col-sm-4 wow fadeInDown px-4" data-wow-delay="0.1s">
                         <div class=" mb-3 text-center">
                             <img src="{{ asset('Images/Icons/KMB-Kepenulisan-Fiksi.png') }}" alt="KMB-Kepenulisan-Fiksi" width="100px" height="100px">
                         </div>
@@ -38,7 +38,7 @@
                             <span>Merupakan kelas yang akan membantu peserta dalam mengembangkan keterampilannya pada kepenulisan berbasis ilmiah dan terstruktur seperti esai ilmiah, karya tulis ilmiah, dan sebagainya</span>
                         </div>
                     </div>
-                    <div class="col-sm-4 wow fadeInRight px-4" data-wow-delay="0.1s">
+                    <div class="col-sm-4 wow fadeInUp px-4" data-wow-delay="0.1s">
                         <div class=" mb-3 text-center">
                             <img src="{{ asset('Images/Icons/KMB-Enterpreneur.png') }}" alt="KMB-Kepenulisan-Fiksi" width="100px" height="100px">
                         </div>
@@ -49,7 +49,7 @@
                             <span>Merupakan kelas yang akan membahas dan mendiskusikan perihal kewirausahaan, sehingga peserta yang memiliki jiwa entrepreneur atau yang sedang belajar dapat menciptakan unit usaha baru yang kompetitif Tidak hanya itu, KMB Entrepreneur juga akan membahas mengenai hal-hal mendasar dalam berwirausaha termasuk business plan.</span>
                         </div>
                     </div>
-                    <div class="col-sm-4 wow fadeInLeft px-4" data-wow-delay="0.1s">
+                    <div class="col-sm-4 wow fadeInDown px-4" data-wow-delay="0.1s">
                         <div class=" mb-3 text-center">
                             <img src="{{ asset('Images/Icons/KMB-Public-Speaking.png') }}" alt="KMB-Kepenulisan-Fiksi" width="100px" height="100px">
                         </div>
@@ -60,7 +60,7 @@
                             <span>Merupakan kelas yang akan mewadahi peserta yang berminat dan/ atau berbakat dalam public speaking dan mengasah kemampuan peserta untuk dapat berbicara di depan umum hingga mencetak da’i yang mampu berkomunikasi dengan baik.</span>
                         </div>
                     </div>
-                    <div class="col-sm-4 wow fadeInRight px-4" data-wow-delay="0.1s">
+                    <div class="col-sm-4 wow fadeInUp px-4" data-wow-delay="0.1s">
                         <div class=" mb-3 text-center">
                             <img src="{{ asset('Images/Icons/KMB-Desain-Grafis.png') }}" alt="KMB-Kepenulisan-Fiksi" width="100px" height="100px">
                         </div>
