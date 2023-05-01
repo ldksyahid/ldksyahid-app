@@ -18,7 +18,7 @@
         <div class="row g-4 justify-content-center">
             @forelse($postarticle as $key => $postarticle)
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="service-item bg-light overflow-hidden h-100">
+                <div class="service-item bg-light overflow-hidden h-100 shadow">
                     <a href="/articles/{{ $postarticle->id }}"><img class="img-fluid" src="{{ asset($postarticle->poster) }}" alt="{{$postarticle->title}}" /></a>
                     <div class="service-text position-relative text-center h-100 p-4">
                         <p class="text-end">{{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->format('Y') }}</p>
