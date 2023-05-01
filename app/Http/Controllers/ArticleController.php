@@ -46,7 +46,7 @@ class ArticleController extends Controller
         return redirect('/admin/article');
     }
 
-    public function show($id,$title)
+    public function show($id)
     {
         $dt = Carbon::now();
         $postarticle = Article::find($id);

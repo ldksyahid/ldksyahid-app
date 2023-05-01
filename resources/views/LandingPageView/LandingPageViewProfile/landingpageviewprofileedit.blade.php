@@ -15,7 +15,7 @@
                     &#9679; (QS. Fussilat 41: Ayat 33)
                 </p>
             </div>
-            <div class="col-lg-7 col-md-6 wow fadeInRight" data-wow-delay="0.5s">
+            <div class="col-lg-7 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                 <form role="form" action='/profile/{{ Auth::user()->profile->id }}/update' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
                 @method('PUT')

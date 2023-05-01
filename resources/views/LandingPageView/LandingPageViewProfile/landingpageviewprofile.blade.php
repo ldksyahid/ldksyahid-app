@@ -8,7 +8,7 @@
     </div>
     <div class="container">
         <div class="row g-5">
-            <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
                 <div class="position-relative overflow-hidden ps-5 pt-5 h-100" style="min-height: 400px">
                         @if (Auth::User()->profile->profilepicture == null)
                             <img class="position-sticky img-fluid" src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setShape('square')->setDimension(500)->setFontSize(250)->toBase64() }}" alt="" style="object-fit: cover;" width= "500px" height= "700px"/>

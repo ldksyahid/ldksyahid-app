@@ -28,13 +28,13 @@
                     </p>
                 </div>
             </div>
-            <div class="col-lg-6 wow fadeInLeft mt-0" data-wow-delay="0.5s">
+            <div class="col-lg-6 wow fadeInUp mt-0" data-wow-delay="0.5s">
                 <h5>Visi</h5>
                 <p style="text-align: justify">
                     “Terciptanya insan-insan dakwah yang memiliki kekokohan spiritualitas, intelektualitas, dan solidaritas dengan etos profesionalisme menuju kampus yang islami dalam rangka mewujudkan khairu ummah.”
                 </p>
             </div>
-            <div class="col-lg-6 wow fadeInRight mt-0" data-wow-delay="0.5s">
+            <div class="col-lg-6 wow fadeInUp mt-0" data-wow-delay="0.5s">
                 <h5>Misi</h5>
                 <ol style="text-align: justify">
                     <li>Tarbiyah Madal Hayah (Pendidikan Sepanjang Hidup)</li>

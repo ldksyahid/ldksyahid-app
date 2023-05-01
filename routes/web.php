@@ -62,8 +62,8 @@ Route::get('/service', function () {
 });
 
 // Route LandingPage Artikel
-Route::get('/article', [ArticleController::class, 'index'])->name('article.index');
-Route::get('/article/{id}/{title}', [ArticleController::class, 'show'])->name('article.show');
+Route::get('/articles', [ArticleController::class, 'index'])->name('article.index');
+Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('article.show');
 
 // Route LandingPage Event
 Route::get('/events', [EventController::class, 'index'])->name('event.index');
@@ -95,7 +95,7 @@ Route::delete('/articlecomment/{id}/destroy', [ArticleCommentController::class, 
 
 // Route LandingPage News
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-Route::get('/news/{id}/{title}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
 
 // Route Article Comment
 Route::post('/newscomment', [NewsCommentController::class, 'addnewscomment'])->name('newscomment')->middleware('auth');

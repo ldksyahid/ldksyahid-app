@@ -16,7 +16,7 @@
     <div class="container">
         @forelse($postevent as $key => $postevent)
         <div class="row g-5 my-1">
-            <div class="col-lg-2 col-md-6 wow fadeInLeft" data-wow-delay="0.1s">
+            <div class="col-lg-2 col-md-6 wow fadeInDown" data-wow-delay="0.1s">
                 @if ($postevent->start != null)
                 <div class="ps-4">
                     <h5 class="text-body text-uppercase mb-2">{{ \Carbon\Carbon::parse( $postevent->start )->format('Y') }}</h5>
@@ -33,7 +33,7 @@
                 </div>
                 @endif
             </div>
-            <div class="col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="col-lg-6 col-md-6 wow fadeIn" data-wow-delay="0.3s">
                 <div class="border-start border-5 border-primary ps-4 mb-3">
                 <h6 class="text-body text-uppercase mb-2">{{ $postevent->division }}</h6>
                 <a href="/events/{{ $postevent->id }}"><h1 class="display-6 mb-0" style="text-align: left">{{ $postevent->title }}</h1></a>
@@ -43,7 +43,7 @@
                 </p>
                 <a class="mb-0" href="/events/{{ $postevent->id }}">Baca Selengkapnya</a>
             </div>
-            <div class="col-lg-4 col-md-6 wow fadeInRight" data-wow-delay="0.5s">
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                 <a href="/events/{{ $postevent->id }}"><img src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px"></a>
             </div>
         </div>

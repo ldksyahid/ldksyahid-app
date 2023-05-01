@@ -18,9 +18,9 @@
             <div class="col-lg-12 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 @forelse($postnews as $key => $postnews)
                 <div class="border-start border-5 border-primary ps-4 mb-4">
-                    <h4 class=" mb-1"><a href="/news/{{ $postnews->id }}/{{ strtolower(str_replace(' ', '-', $postnews->title)) }}">{{ $postnews->title }}</a></h4>
+                    <h4 class=" mb-1"><a href="/news/{{ $postnews->id }}">{{ $postnews->title }}</a></h4>
                     <h6 class="text-body mb-1">{{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('D') }} {{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('Y') }}</h6>
-                    <p class="mb-0" style="text-align: justify">{{ $postnews->title }} Reporter {{ $postnews->reporter }}; Editor {{ $postnews->editor }} {!!  substr(strip_tags($postnews->body), 0, 80) !!} … <a href="/news/{{ $postnews->id }}/{{ strtolower(str_replace(' ', '-', $postnews->title)) }}">Selanjutnya</a></p>
+                    <p class="mb-0" style="text-align: justify">{{ $postnews->title }} Reporter {{ $postnews->reporter }}; Editor {{ $postnews->editor }} {!!  substr(strip_tags($postnews->body), 0, 80) !!} … <a href="/news/{{ $postnews->id }}">Selanjutnya</a></p>
                 </div>
                 @empty
                     <h1 class="text-center">Berita Belum Tersedia</h1>

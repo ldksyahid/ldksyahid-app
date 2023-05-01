@@ -69,7 +69,7 @@
             {{-- ABOUT US NAV END --}}
 
             {{-- ARTICLE NAV START --}}
-            <a href="/article" class="nav-item nav-link text-capitalize {{($title === "Artikel") ? "active" : ""}}">Artikel</a>
+            <a href="/articles" class="nav-item nav-link text-capitalize {{($title === "Artikel") ? "active" : ""}}">Artikel</a>
             {{-- ARTICLE NAV END --}}
 
             {{-- NEWS NAV START --}}
