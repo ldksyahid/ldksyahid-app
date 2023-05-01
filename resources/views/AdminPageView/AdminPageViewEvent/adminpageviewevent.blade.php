@@ -18,7 +18,7 @@
                                 <th scope="col">Poster</th>
                                 <th scope="col">Division</th>
                                 <th scope="col">Date Event</th>
-                                <th scope="col" style="width: 180px">Link Embed Gform</th>
+                                <th scope="col" style="width: 180px">Link Regist</th>
                                 <th scope="col" style="width: 40px">Action</th>
                             </tr>
                         </thead>
@@ -31,19 +31,22 @@
                                     <img style="width: 100px;" src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="card-img"/>
                                 </td>
                                 <td align='center'>{{ $postevent->division }}</td>
-                                <td align='center'>{{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('dddd') }} <br> {{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->dateevent )->format('Y') }}</td>
+                                @if ($postevent->start != null)
+                                <td align='center'>{{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('dddd') }} <br> {{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->start )->format('Y') }}</td>
+                                @else
+                                <td align='center'>Undifined</td>
+                                @endif
                                 <td align='center'>
-                                    @if ($postevent->linkembedgform == null)
-                                        <p class="small">Nothing</p>
+                                    @if ($postevent->linkRegist != null)
+                                        <a href="{{ $postevent->linkRegist }}" target="_blank" rel="noopener noreferrer">Click Here</a>
                                     @else
-                                        <a href="{{ $postevent->linkembedgform }}" target="_blank" rel="noopener noreferrer">Click Here</a>
+                                        Undifined
                                     @endif
                                 </td>
-                                {{-- <td align='center'><p>{{ substr($postevent->linkembedgform, 0, 10) }}</p></td> --}}
                                 <td align="center">
-                                        <a href="/admin/event/{{ $postevent->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
-                                        <button type="submit" onclick="deleteConfirmationEvent({{ $postevent->id }})" id="delete-event" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/event/{{ $postevent->id }}/{{ strtolower(str_replace(' ', '-', $postevent->title)) }}" target="_blank"><i class="fa fa-eye"></i></a>
+                                    <a href="/admin/event/{{ $postevent->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
+                                    <button type="submit" onclick="deleteConfirmationEvent({{ $postevent->id }})" id="delete-event" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
+                                    <a class="btn btn-sm btn-primary" href="/events/{{ $postevent->id }}" target="_blank"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             @empty

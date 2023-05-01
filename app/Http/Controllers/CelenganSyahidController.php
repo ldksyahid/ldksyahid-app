@@ -14,7 +14,7 @@ use Laravolt\Indonesia\Models\City;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class CelenganSyahidController extends Controller
@@ -51,6 +51,7 @@ class CelenganSyahidController extends Controller
             ]);
 
             $response = $data_request->object();
+
 
             $expired_date = Carbon::parse($response->expiry_date)->format('Y-m-d H:i:s');
 

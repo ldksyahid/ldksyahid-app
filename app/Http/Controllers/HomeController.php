@@ -25,7 +25,7 @@ class HomeController extends Controller
     {
         $postarticle= Article::orderBy('dateevent','desc')->limit(3)->get();
         $postgallery= Gallery::orderBy('created_at','desc')->limit(1)->get();
-        $postevent= Event::orderBy('dateevent','desc')->limit(3)->get();
+        $postevent= Event::orderBy('created_at','desc')->limit(3)->get();
         $postnews= News::orderBy('datepublish','desc')->limit(3)->get();
         $postschedule= Schedule::orderBy('created_at','desc')->limit(1)->get();
         $postjumbotron= Jumbotron::orderBy('created_at','desc')->get();

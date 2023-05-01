@@ -66,8 +66,8 @@ Route::get('/article', [ArticleController::class, 'index'])->name('article.index
 Route::get('/article/{id}/{title}', [ArticleController::class, 'show'])->name('article.show');
 
 // Route LandingPage Event
-Route::get('/event', [EventController::class, 'index'])->name('event.index');
-Route::get('/event/{id}/{title}', [EventController::class, 'show'])->name('event.show');
+Route::get('/events', [EventController::class, 'index'])->name('event.index');
+Route::get('/events/{id}', [EventController::class, 'show'])->name('event.show');
 
 //Route LandingPage Schedule
 Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule.index');

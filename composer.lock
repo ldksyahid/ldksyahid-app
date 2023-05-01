@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a91890ff54a1681c2c64831acb91bd45",
+    "content-hash": "5dd9e8c2fe4c87d03f1c815a0753a631",
     "packages": [
         {
             "name": "ashallendesign/short-url",
@@ -10476,5 +10476,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
