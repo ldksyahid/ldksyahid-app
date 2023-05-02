@@ -53,12 +53,12 @@ Route::put('/profile/{profilepicture}/destroy', [ProfileController::class, 'dest
 
 // Route LandingPage Layanan => Hitung Proker Kestari
 Route::get('/service/hitungproker', function () {
-    return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananHitungProker.KestariHitungPersentaseProgramKerja', ["title" => "Layanan"]);
+    return view('landing-page.service.proker-count.index', ["title" => "Layanan"]);
 });
 
 // Route LandingPage Layanan
 Route::get('/service', function () {
-    return view('LandingPageView.LandingPageViewLayanan.landingpageviewlayanan', ["title" => "Layanan"]);
+    return view('landing-page.service.index', ["title" => "Layanan"]);
 });
 
 // Route LandingPage Artikel
@@ -74,7 +74,7 @@ Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule.in
 
 // Route LandingPage Tentang Kami
 Route::get('/about/contact', function () {
-    return view('LandingPageView.LandingPageViewTentang.landingpageviewtentanghubungikami', ["title" => "Tentang Kami"]);
+    return view('landing-page.about.contact-us', ["title" => "Tentang Kami"]);
 })->name('aboutus');
 
 //Route LandingPage Structure
@@ -257,7 +257,7 @@ Route::get('/admin/service/celengansyahid/donation/{id}/destroy', [CelenganSyahi
 // START Route AdminPage Service Shortlink
 Route::get('/admin/service/shortlink', function () {
     $urls = \AshAllenDesign\ShortURL\Models\ShortURL::latest()->get();
-    return view('AdminPageView.AdminPageViewService.AdminPageViewServiceShortlink.adminPageviewserviceshortlink', compact('urls'), ["title" => "Services"]);
+    return view('admin-page.service.short-link.index', compact('urls'), ["title" => "Services"]);
 })->name('admin.service.shortlink.index')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
 Route::post('/', function () {

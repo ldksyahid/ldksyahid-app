@@ -13,18 +13,18 @@ class EventController extends Controller
     public function index()
     {
         $postevent = Event::orderBy('created_at','desc')->get();
-        return view('LandingPageView.LandingPageViewEvent.landingpageviewevent', compact('postevent'), ["title" => "Kegiatan"]);
+        return view('landing-page.event.index', compact('postevent'), ["title" => "Kegiatan"]);
     }
 
     public function indexadmin()
     {
         $postevent = Event::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewEvent.adminpageviewevent', compact('postevent'), ["title" => "Event"]);
+        return view('admin-page.event.index', compact('postevent'), ["title" => "Event"]);
     }
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewEvent.adminpagevieweventcreate', ["title" => "Event"]);
+        return view('admin-page.event.create', ["title" => "Event"]);
     }
 
     public function store(Request $request)
@@ -45,6 +45,10 @@ class EventController extends Controller
             "place" => $request["place"],
             "linkDoc" => $request["linkDoc"],
             "linkPresent" => $request["linkPresent"],
+            "cntctPrsn1" => $request["cntctPrsn1"],
+            "cntctPrsn2" => $request["cntctPrsn2"],
+            "nameCntctPrsn1" => $request["nameCntctPrsn1"],
+            "nameCntctPrsn2" => $request["nameCntctPrsn2"],
             "linkembedgform" => null,
             "dateevent" => '2023/01/01',
             'poster' => $path
@@ -57,13 +61,13 @@ class EventController extends Controller
     {
         $dt = Carbon::now();
         $postevent = Event::find($id);
-        return view('LandingPageView.LandingPageViewEvent.landingpagevieweventshow', compact('postevent'), ["title" => "Kegiatan"]);
+        return view('landing-page.event.detail', compact('postevent'), ["title" => "Kegiatan"]);
     }
 
     public function edit($id)
     {
         $postevent = Event::find($id);
-        return view('AdminPageView.AdminPageViewEvent.adminpagevieweventedit', compact('postevent'), ["title" => "Event"]);
+        return view('admin-page.event.update', compact('postevent'), ["title" => "Event"]);
     }
 
     public function update(Request $request, $id)
@@ -96,6 +100,10 @@ class EventController extends Controller
             "place" => $request["place"],
             "linkDoc" => $request["linkDoc"],
             "linkPresent" => $request["linkPresent"],
+            "cntctPrsn1" => $request["cntctPrsn1"],
+            "cntctPrsn2" => $request["cntctPrsn2"],
+            "nameCntctPrsn1" => $request["nameCntctPrsn1"],
+            "nameCntctPrsn2" => $request["nameCntctPrsn2"],
             "linkembedgform" => null,
             "dateevent" => '2023/01/01',
         ]);

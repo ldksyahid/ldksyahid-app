@@ -12,18 +12,18 @@ class GalleryController extends Controller
     public function index()
     {
         $postgallery = Gallery::orderBy('created_at','desc')->get();
-        return view('LandingPageView.LandingPageViewTentang.landingpageviewtentanggaleri', compact('postgallery'),["title" => "Tentang Kami"]);
+        return view('landing-page.about.gallery', compact('postgallery'),["title" => "Tentang Kami"]);
     }
 
     public function indexadmin()
     {
         $postgallery = Gallery::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsGallery.adminpageviewaboutusgallery', compact('postgallery'), ["title" => "About Us"]);
+        return view('admin-page.about.gallery.index', compact('postgallery'), ["title" => "About Us"]);
     }
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsGallery.adminpageviewaboutusgallerycreate', ["title" => "About Us"]);
+        return view('admin-page.about.gallery.create', ["title" => "About Us"]);
     }
 
     public function store(Request $request)
@@ -133,7 +133,7 @@ class GalleryController extends Controller
     public function edit($id)
     {
         $postgallery = Gallery::find($id);
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsGallery.adminpageviewaboutusgalleryedit',  compact('postgallery'),["title" => "About Us"]);
+        return view('admin-page.about.gallery.update',  compact('postgallery'),["title" => "About Us"]);
     }
 
     public function update(Request $request, $id)

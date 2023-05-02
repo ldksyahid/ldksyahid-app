@@ -35,12 +35,12 @@ class HomeController extends Controller
                 toast('Email Kamu Belum Terverifikasi Oleh Kami', 'warning')->autoClose(10000)->position('bottom-start')->timerProgressBar()->hideCloseButton();
             }
         }
-        return view('LandingPageView.LandingPageViewHome.landingpageviewhome', compact('postjumbotron', 'postarticle', 'posttestimony', 'postgallery', 'postnews', 'postevent', 'postschedule'), ['title' => "Beranda"]);
+        return view('landing-page.home.index', compact('postjumbotron', 'postarticle', 'posttestimony', 'postgallery', 'postnews', 'postevent', 'postschedule'), ['title' => "Beranda"]);
     }
 
     public function adminHome()
     {
         Alert::success('Selamat Datang Admin LDK Syahid UIN Jakarta', 'Bismillah, Berikan yang Terbaik untuk Dakwah');
-        return view('AdminPageView.AdminPageViewDashboard.adminpageviewdashboard', ["title" => "Dashboard"]);
+        return view('admin-page.dashboard.index', ["title" => "Dashboard"]);
     }
 }

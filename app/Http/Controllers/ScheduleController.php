@@ -13,18 +13,18 @@ class ScheduleController extends Controller
     public function index()
     {
         $postschedule = Schedule::orderBy('created_at','desc')->get();
-        return view('LandingPageView.LandingPageViewSchedule.landingpageviewschedule', compact('postschedule'),["title" => "Jadwal"]);
+        return view('landing-page.schedule.index', compact('postschedule'),["title" => "Jadwal"]);
     }
 
     public function indexadmin()
     {
         $postschedule = Schedule::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewSchedule.adminpageviewschedule', compact('postschedule'), ["title" => "Schedule"]);
+        return view('admin-page.schedule.index', compact('postschedule'), ["title" => "Schedule"]);
     }
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewSchedule.adminpageviewschedulecreate', ["title" => "Schedule"]);
+        return view('admin-page.schedule.create', ["title" => "Schedule"]);
     }
 
     public function store(Request $request)
@@ -46,7 +46,7 @@ class ScheduleController extends Controller
     public function edit($id)
     {
         $postschedule = Schedule::find($id);
-        return view('AdminPageView.AdminPageViewSchedule.adminpageviewscheduleedit',  compact('postschedule'),["title" => "Schedule"]);
+        return view('admin-page.schedule.update',  compact('postschedule'),["title" => "Schedule"]);
     }
 
     public function update(Request $request, $id)

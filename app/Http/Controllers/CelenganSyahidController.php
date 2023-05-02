@@ -22,7 +22,7 @@ class CelenganSyahidController extends Controller
     public function indexLanding()
     {
         $postcampaign = Campaign::orderBy('created_at','desc')->with("donation")->get();
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid',compact(['postcampaign']),["title" => "Layanan"]);
+        return view('landing-page.service.celengan-syahid.index',compact(['postcampaign']),["title" => "Layanan"]);
     }
 
     public function storeDonationCampaign(Request $request)
@@ -95,7 +95,7 @@ class CelenganSyahidController extends Controller
             $q->orderBy('created_at', 'DESC');
         }])->first();
 
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show')->with([
+        return view('landing-page.service.celengan-syahid.detail')->with([
             'data' => $data,
             "title" => "Layanan"
         ]);
@@ -104,7 +104,7 @@ class CelenganSyahidController extends Controller
     public function donasiSekarang($link)
     {
         $data = Campaign::where('link',$link)->first();
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasiskrng')->with([
+        return view('landing-page.service.celengan-syahid.donate-now')->with([
             'data' => $data,
             "title" => "Layanan"
         ]);
@@ -115,7 +115,7 @@ class CelenganSyahidController extends Controller
         $data = Donation::where('id',$id)->first();
         $campaign = Campaign::where('link', $link)->first();
 
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCelenganSyahid.landingpageview-layanan-celengansyahid-show-donasistatus')->with([
+        return view('landing-page.service.celengan-syahid.donation-state')->with([
             'data' => $data,
             "title" => "Layanan",
             'campaign' => $campaign,
@@ -127,15 +127,14 @@ class CelenganSyahidController extends Controller
         $donation = Donation::where('id',$id)->first();
         $campaign = Campaign::where('link', $link)->first();
 
-        $pdf = PDF::loadView('print-request.bukti-donasi', compact(['donation', 'campaign']));
+        $pdf = PDF::loadView('print-request.donation-proof', compact(['donation', 'campaign']));
         return $pdf->setPaper('a4')->stream('Bukti Pembayaran Donasi'." - ".$donation->id.".pdf");
     }
 
     public function indexAdminDonation()
     {
         $postDonation = Donation::orderBy('created_at','desc')->get();
-
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidDonation.adminpageviewservicecelsyahdona',compact('postDonation'), ["title" => "Celengan Syahid"]);
+        return view('admin-page.service.celengan-syahid.donation.index',compact('postDonation'), ["title" => "Celengan Syahid"]);
     }
 
     public function destroyAdminDonation($id){
@@ -146,14 +145,14 @@ class CelenganSyahidController extends Controller
     public function indexAdminCampaign()
     {
         $postcampaign = Campaign::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcamp',compact('postcampaign'), ["title" => "Celengan Syahid"]);
+        return view('admin-page.service.celengan-syahid.campaign.index',compact('postcampaign'), ["title" => "Celengan Syahid"]);
     }
 
     public function createAdminCampaign()
     {
         $provinces = Province::pluck('name', 'id');
 
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampcreate', compact(['provinces']),["title" => "Celengan Syahid"]);
+        return view('admin-page.service.celengan-syahid.campaign.create', compact(['provinces']),["title" => "Celengan Syahid"]);
     }
 
     public function previewAdminCampaign($id)
@@ -162,7 +161,7 @@ class CelenganSyahidController extends Controller
             $q->orderBy('created_at', 'DESC');
         }])->first();
 
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcamppreview')->with([
+        return view('admin-page.service.celengan-syahid.campaign.view')->with([
             'data' => $data,
             "title" => "Celengan Syahid"
         ]);
@@ -213,7 +212,7 @@ class CelenganSyahidController extends Controller
         $provinces = Province::pluck('name', 'id');
         $data = Campaign::findOrFail($id);
 
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCelenganSyahid.AdminPageViewServiceCelenganSyahidCampaign.adminpageviewservicecelsyahcampedit', compact(['provinces', 'data']),["title" => "Celengan Syahid"]);
+        return view('admin-page.service.celengan-syahid.campaign.update', compact(['provinces', 'data']),["title" => "Celengan Syahid"]);
     }
 
     public function updateAdminCampaign(Request $request, $id)

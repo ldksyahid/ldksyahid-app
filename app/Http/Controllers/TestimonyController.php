@@ -13,12 +13,12 @@ class TestimonyController extends Controller
     public function index()
     {
         $posttestimony= Testimony::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewHome.AdminPageViewTestimony.adminpageviewtestimony', compact('posttestimony'), ["title" => "Home"]);
+        return view('admin-page.home.testimony.index', compact('posttestimony'), ["title" => "Home"]);
     }
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewHome.AdminPageViewTestimony.adminpageviewtestimonycreate', ["title" => "Home"]);
+        return view('admin-page.home.testimony.create', ["title" => "Home"]);
     }
 
     public function store(Request $request)
@@ -39,7 +39,7 @@ class TestimonyController extends Controller
     public function edit($id)
     {
         $posttestimony = Testimony::find($id);
-        return view('AdminPageView.AdminPageViewHome.AdminPageViewTestimony.adminpageviewtestimonyedit', compact('posttestimony'), ["title" => "Home"]);
+        return view('admin-page.home.testimony.update', compact('posttestimony'), ["title" => "Home"]);
     }
 
     public function update(Request $request, $id)

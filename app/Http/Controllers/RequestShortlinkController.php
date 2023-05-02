@@ -12,7 +12,7 @@ class RequestShortlinkController extends Controller
     public function index()
     {
         $data = ReqShortlink::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewRequestService.AdminPageViewRequestServiceShortlink.adminpageviewrequestserviceshortlink')->with([
+        return view('admin-page.service-request.short-link.index')->with([
             'data' => $data,
             "title" => "Request Services"
         ]);
@@ -21,7 +21,7 @@ class RequestShortlinkController extends Controller
     public function read()
     {
         $data = ReqShortlink::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewRequestService.AdminPageViewRequestServiceShortlink.adminpageviewrequestserviceshortlinkread')->with([
+        return view('admin-page.service-request.short-link.read')->with([
             'data' => $data,
             "title" => "Request Services"
         ]);
@@ -29,7 +29,7 @@ class RequestShortlinkController extends Controller
 
     public function create()
     {
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananShortlink.landingpageviewlayananshortlink', ["title" => "Layanan"]);
+        return view('landing-page.service.short-link.index', ["title" => "Layanan"]);
     }
 
     public function store(Request $request)
@@ -49,7 +49,7 @@ class RequestShortlinkController extends Controller
     public function show($id)
     {
         $data = ReqShortlink::findOrFail($id);
-        return view('AdminPageView.AdminPageViewRequestService.AdminPageViewRequestServiceShortlink.adminpageviewrequestserviceshortlinkpreview')->with([
+        return view('admin-page.service-request.short-link.view')->with([
             'data' => $data,
             "title" => "Request Services"
         ]);
@@ -58,7 +58,7 @@ class RequestShortlinkController extends Controller
     public function addFixCustomLinkEdit($id)
     {
         $data = ReqShortlink::findOrFail($id);
-        return view('AdminPageView.AdminPageViewRequestService.AdminPageViewRequestServiceShortlink.adminpageviewrequestserviceshortlinkaddcustomlink')->with([
+        return view('admin-page.service-request.short-link.add-custom-link')->with([
             'data' => $data,
             "title" => "Request Services"
         ]);

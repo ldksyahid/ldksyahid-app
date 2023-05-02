@@ -13,18 +13,18 @@ class NewsController extends Controller
     public function index()
     {
         $postnews = News::orderBy('datepublish','desc')->get();
-        return view('LandingPageView.LandingPageViewNews.landingpageviewnews', compact('postnews'), ["title" => "Berita"]);
+        return view('landing-page.news.index', compact('postnews'), ["title" => "Berita"]);
     }
 
     public function indexadmin()
     {
         $postnews = News::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewNews.adminpageviewnews', compact('postnews'), ["title" => "News"]);
+        return view('admin-page.news.index', compact('postnews'), ["title" => "News"]);
     }
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewNews.adminpageviewnewscreate', ["title" => "News"]);
+        return view('admin-page.news.create', ["title" => "News"]);
     }
 
     public function store(Request $request)
@@ -53,13 +53,13 @@ class NewsController extends Controller
         $dt = Carbon::now();
         $postnews = News::find($id);
 
-        return view('LandingPageView.LandingPageViewNews.landingpageviewnewsshow', compact('postnews'), ["title" => "Berita"]);
+        return view('landing-page.news.detail', compact('postnews'), ["title" => "Berita"]);
     }
 
     public function edit($id)
     {
         $postnews = News::find($id);
-        return view('AdminPageView.AdminPageViewNews.adminpageviewnewsedit', compact('postnews'), ["title" => "News"]);
+        return view('admin-page.news.update', compact('postnews'), ["title" => "News"]);
     }
 
     public function update(Request $request, $id)

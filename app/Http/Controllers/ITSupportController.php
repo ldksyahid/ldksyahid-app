@@ -12,18 +12,18 @@ class ITSupportController extends Controller
     public function index()
     {
         $postitsupport = ITSupport::orderBy('created_at','desc')->get();
-        return view('LandingPageView.LandingPageViewITSupport.landingpageviewitsupport', compact('postitsupport'),["title" => "Tentang Kami"]);
+        return view('landing-page.it-support.index', compact('postitsupport'),["title" => "Tentang Kami"]);
     }
 
     public function indexadmin()
     {
         $postitsupport = ITSupport::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsITSupport.adminpageviewaboutusitsupport', compact('postitsupport'),["title" => "About Us"]);
+        return view('admin-page.about.it-support.index', compact('postitsupport'),["title" => "About Us"]);
     }
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsITSupport.adminpageviewaboutusitsupportcreate', ["title" => "About Us"]);
+        return view('admin-page.about.it-support.create', ["title" => "About Us"]);
     }
 
     public function store(Request $request)
@@ -47,7 +47,7 @@ class ITSupportController extends Controller
     public function edit($id)
     {
         $postitsupport = ITSupport::find($id);
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsITSupport.adminpageviewaboutusitsupportedit',  compact('postitsupport'),["title" => "About Us"]);
+        return view('admin-page.about.it-support.update',  compact('postitsupport'),["title" => "About Us"]);
     }
 
     public function update(Request $request, $id)

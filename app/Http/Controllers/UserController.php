@@ -15,7 +15,7 @@ class UserController extends Controller
     public function index()
     {
         $data = User::all();
-        return view('AdminPageView.AdminPageViewUsers.adminpageviewusers')->with([
+        return view('admin-page.user.index')->with([
             'data' => $data,
             "title" => "User"
         ]);
@@ -24,7 +24,7 @@ class UserController extends Controller
     public function read()
     {
         $data = User::all();
-        return view('AdminPageView.AdminPageViewUsers.adminpageviewusersread')->with([
+        return view('admin-page.user.read')->with([
             'data' => $data,
             "title" => "User"
         ]);
@@ -32,7 +32,7 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewUsers.adminpageviewuserscreate', ["title" => "User"]);
+        return view('admin-page.user.create', ["title" => "User"]);
     }
 
     public function store(Request $request)
@@ -53,7 +53,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $dataUser = User::findOrFail($id);
-        return view('AdminPageView.AdminPageViewUsers.adminpageviewusersedit')->with([
+        return view('admin-page.user.update')->with([
             'dataUser' => $dataUser,
             "title" => "User"
         ]);
@@ -62,7 +62,7 @@ class UserController extends Controller
     public function preview($id)
     {
         $data = User::findOrFail($id);
-        return view('AdminPageView.AdminPageViewUsers.adminpageviewuserspreview')->with([
+        return view('admin-page.user.view')->with([
             'data' => $data,
             "title" => "User"
         ]);
