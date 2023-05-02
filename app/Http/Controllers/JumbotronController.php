@@ -13,12 +13,12 @@ class JumbotronController extends Controller
     public function index()
     {
         $postjumbotron= Jumbotron::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewHome.AdminPageViewJumbotron.adminpageviewjumbotron', compact('postjumbotron'), ["title" => "Home"]);
+        return view('admin-page.home.jumbotron.index', compact('postjumbotron'), ["title" => "Home"]);
     }
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewHome.AdminPageViewJumbotron.adminpageviewjumbotroncreate', ["title" => "Home"]);
+        return view('admin-page.home.jumbotron.create', ["title" => "Home"]);
     }
 
     public function store(Request $request)
@@ -42,13 +42,13 @@ class JumbotronController extends Controller
     public function show($id)
     {
         $postjumbotron = Jumbotron::find($id);
-        return view('AdminPageView.AdminPageViewHome.AdminPageViewJumbotron.adminpageviewjumbotronpreview', compact('postjumbotron'), ["title" => "Home"]);
+        return view('admin-page.home.jumbotron.view', compact('postjumbotron'), ["title" => "Home"]);
     }
 
     public function edit($id)
     {
         $postjumbotron = Jumbotron::find($id);
-        return view('AdminPageView.AdminPageViewHome.AdminPageViewJumbotron.adminpageviewjumbotronedit', compact('postjumbotron'), ["title" => "Home"]);
+        return view('admin-page.home.jumbotron.update', compact('postjumbotron'), ["title" => "Home"]);
     }
 
     public function update(Request $request, $id)

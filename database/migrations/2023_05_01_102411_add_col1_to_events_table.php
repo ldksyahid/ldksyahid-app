@@ -45,7 +45,7 @@ class AddCol1ToEventsTable extends Migration
             $table->dropColumn('place');
             $table->dropColumn('linkDoc');
             $table->dropColumn('linkPresent');
-            //
+
         });
     }
 }

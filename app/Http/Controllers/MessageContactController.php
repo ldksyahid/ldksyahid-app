@@ -12,7 +12,7 @@ class MessageContactController extends Controller
     public function index()
     {
         $data = MessageContact::all();
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsContactUs.adminpageviewaboutuscontactus')->with([
+        return view('admin-page.about.contact-us.index')->with([
             'data' => $data,
             "title" => "About Us"
         ]);
@@ -33,7 +33,7 @@ class MessageContactController extends Controller
     public function show($id)
     {
         $data = MessageContact::findOrFail($id);
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsContactUs.adminpageviewaboutuscontactuspreview')->with([
+        return view('admin-page.about.contact-us.view')->with([
             'data' => $data,
             "title" => "About Us"
         ]);

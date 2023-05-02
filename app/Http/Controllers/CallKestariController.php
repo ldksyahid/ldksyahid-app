@@ -11,7 +11,7 @@ class CallKestariController extends Controller
     public function index()
     {
         $data = CallKestari::all();
-        return view('LandingPageView.LandingPageViewLayanan.LandingPageViewLayananCallKestari.landingpageviewlayanancallkestari')->with([
+        return view('landing-page.service.call-kestari.index')->with([
             'data' => $data,
             "title" => "Layanan"
         ]);
@@ -20,7 +20,7 @@ class CallKestariController extends Controller
     public function indexadmin()
     {
         $data = CallKestari::all();
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCallKestari.adminpageviewservicecallkestari')->with([
+        return view('admin-page.service.call-kestari.index')->with([
             'data' => $data,
             "title" => "Service"
         ]);
@@ -29,7 +29,7 @@ class CallKestariController extends Controller
     public function read()
     {
         $data = CallKestari::all();
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCallKestari.adminpageviewservicecallkestariread')->with([
+        return view('admin-page.service.call-kestari.read')->with([
             'data' => $data,
             "title" => "Service"
         ]);
@@ -37,7 +37,7 @@ class CallKestariController extends Controller
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCallKestari.adminpageviewservicecallkestaricreate', ["title" => "Service"]);
+        return view('admin-page.service.call-kestari.create', ["title" => "Service"]);
     }
 
     public function store(Request $request)
@@ -52,7 +52,7 @@ class CallKestariController extends Controller
     public function edit($id)
     {
         $data = CallKestari::findOrFail($id);
-        return view('AdminPageView.AdminPageViewService.AdminPageViewServiceCallKestari.adminpageviewservicecallkestariedit')->with([
+        return view('admin-page.service.call-kestari.update')->with([
             'data' => $data,
             "title" => "Service"
         ]);

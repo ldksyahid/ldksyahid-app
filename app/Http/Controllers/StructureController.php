@@ -12,18 +12,18 @@ class StructureController extends Controller
     public function index()
     {
         $poststructure = Structure::orderBy('created_at','desc')->get();
-        return view('LandingPageView.LandingPageViewTentang.landingpageviewtentangstrukturpengurus', compact('poststructure'),["title" => "Tentang Kami"]);
+        return view('landing-page.about.management-structur', compact('poststructure'),["title" => "Tentang Kami"]);
     }
 
     public function indexadmin()
     {
         $poststructure = Structure::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsStructure.adminpageviewaboutusstructure', compact('poststructure'), ["title" => "About Us"]);
+        return view('admin-page.about.management-structure.index', compact('poststructure'), ["title" => "About Us"]);
     }
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsStructure.adminpageviewaboutusstructurecreate', ["title" => "About Us"]);
+        return view('admin-page.about.management-structure.create', ["title" => "About Us"]);
     }
 
     public function store(Request $request)
@@ -50,7 +50,7 @@ class StructureController extends Controller
     public function edit($id)
     {
         $poststructure = Structure::find($id);
-        return view('AdminPageView.AdminPageViewAboutUs.AdminPageViewAboutUsStructure.adminpageviewaboutusstructureedit', compact('poststructure'), ["title" => "About Us"]);
+        return view('admin-page.about.management-structure.update', compact('poststructure'), ["title" => "About Us"]);
     }
 
     public function update(Request $request, $id)

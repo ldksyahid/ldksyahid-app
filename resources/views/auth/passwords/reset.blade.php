@@ -1,4 +1,4 @@
-@extends('LandingPageView.LandingPageViewTemplate.bodylandingpage')
+@extends('landing-page.template.body')
 
 @section('content')
 @php

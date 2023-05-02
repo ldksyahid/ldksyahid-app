@@ -15,10 +15,10 @@ class ProfileController extends Controller
     {
         $query = Profile::where('user_id', Auth::id())->first();
         if ($query == null) {
-            return view('LandingPageView.LandingPageViewProfile.landingpageviewprofilecreate', ["title" => "Profilku"]);
+            return view('landing-page.profile.create', ["title" => "Profilku"]);
         } else {
             $postprofile= Profile::find($id);
-            return view('LandingPageView.LandingPageViewProfile.landingpageviewprofile', compact('postprofile'), ["title" => "Profilku"]);
+            return view('landing-page.profile.index', compact('postprofile'), ["title" => "Profilku"]);
         }
     }
 
@@ -71,7 +71,7 @@ class ProfileController extends Controller
 
     public function edit($id)
     {
-        return view('LandingPageView.LandingPageViewProfile.landingpageviewprofileedit', ["title" => "Profilku"]);
+        return view('landing-page.profile.update', ["title" => "Profilku"]);
     }
 
     public function update(Request $request, $id)

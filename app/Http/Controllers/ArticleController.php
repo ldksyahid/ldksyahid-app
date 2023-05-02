@@ -13,18 +13,18 @@ class ArticleController extends Controller
     public function index()
     {
         $postarticle = Article::orderBy('dateevent','desc')->get();
-        return view('LandingPageView.LandingPageViewArticle.landingpageviewarticle', compact('postarticle'),["title" => "Artikel"]);
+        return view('landing-page.article.index', compact('postarticle'),["title" => "Artikel"]);
     }
 
     public function indexadmin()
     {
         $postarticle = Article::orderBy('created_at','desc')->get();
-        return view('AdminPageView.AdminPageViewArticle.adminpageviewarticle', compact('postarticle'), ["title" => "Article"]);
+        return view('admin-page.article.index', compact('postarticle'), ["title" => "Article"]);
     }
 
     public function create()
     {
-        return view('AdminPageView.AdminPageViewArticle.adminpageviewarticlecreate', ["title" => "Article"]);
+        return view('admin-page.article.create', ["title" => "Article"]);
     }
 
     public function store(Request $request)
@@ -50,13 +50,13 @@ class ArticleController extends Controller
     {
         $dt = Carbon::now();
         $postarticle = Article::find($id);
-        return view('LandingPageView.LandingPageViewArticle.landingpageviewarticleshow',  compact('postarticle'),["title" => "Artikel"]);
+        return view('landing-page.article.detail',  compact('postarticle'),["title" => "Artikel"]);
     }
 
     public function edit($id)
     {
         $postarticle = Article::find($id);
-        return view('AdminPageView.AdminPageViewArticle.adminpageviewarticleedit', compact('postarticle'), ["title" => "Article"]);
+        return view('admin-page.article.update', compact('postarticle'), ["title" => "Article"]);
     }
 
     public function update(Request $request, $id)
