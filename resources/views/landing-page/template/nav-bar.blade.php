@@ -45,7 +45,7 @@
             <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" width="55" height="55" alt="Logo LDK Syahid"> </i>LDK Syahid
         </h3>
         <h6 class="m-0 mobile-responsive">
-            <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" width="33" height="33" alt="Logo LDK Syahid"> </i>LDK Syahid
+            <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" width="44" height="44" alt="Logo LDK Syahid"> </i>
         </h6>
     </a>
     <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
