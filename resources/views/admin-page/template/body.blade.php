@@ -29,14 +29,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="{{ asset('AdminPageSource/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('AdminPageSource/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('admin-page-ext-rsrc/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin-page-ext-rsrc/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="{{ asset('AdminPageSource/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin-page-ext-rsrc/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="{{ asset('AdminPageSource/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin-page-ext-rsrc/css/style.css') }}" rel="stylesheet">
 
     {{-- START Datatable FROM https://brilliansolution.com/tutorial-laravel-8-datatables-yajra-datatables/--}}
     {{-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> --}}
@@ -116,16 +116,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('AdminPageSource/lib/chart/chart.min.js') }}"></script>
-    <script src="{{ asset('AdminPageSource/lib/easing/easing.min.js') }}"></script>
-    <script src="{{ asset('AdminPageSource/lib/waypoints/waypoints.min.js') }}"></script>
-    <script src="{{ asset('AdminPageSource/lib/owlcarousel/owl.carousel.min.js') }}"></script>
-    <script src="{{ asset('AdminPageSource/lib/tempusdominus/js/moment.min.js') }}"></script>
-    <script src="{{ asset('AdminPageSource/lib/tempusdominus/js/moment-timezone.min.js') }}"></script>
-    <script src="{{ asset('AdminPageSource/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <script src="{{ asset('admin-page-ext-rsrc/lib/chart/chart.min.js') }}"></script>
+    <script src="{{ asset('admin-page-ext-rsrc/lib/easing/easing.min.js') }}"></script>
+    <script src="{{ asset('admin-page-ext-rsrc/lib/waypoints/waypoints.min.js') }}"></script>
+    <script src="{{ asset('admin-page-ext-rsrc/lib/owlcarousel/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('admin-page-ext-rsrc/lib/tempusdominus/js/moment.min.js') }}"></script>
+    <script src="{{ asset('admin-page-ext-rsrc/lib/tempusdominus/js/moment-timezone.min.js') }}"></script>
+    <script src="{{ asset('admin-page-ext-rsrc/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js') }}"></script>
 
     <!-- Template Javascript -->
-    <script src="{{ asset('AdminPageSource/js/main.js') }}"></script>
+    <script src="{{ asset('admin-page-ext-rsrc/js/main.js') }}"></script>
 
     {{-- Script Admin Page Start --}}
     @yield('scripts')
