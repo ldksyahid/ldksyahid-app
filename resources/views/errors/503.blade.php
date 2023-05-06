@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{asset('mt/css/bd-coming-soon.css')}}">
+    <link rel="stylesheet" href="{{asset('e503-ext-rsrc/css/bd-coming-soon.css')}}">
 </head>
 
 <body class="min-vh-100 d-flex flex-column">

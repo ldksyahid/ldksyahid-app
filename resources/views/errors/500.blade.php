@@ -12,7 +12,7 @@
 
         <!-- Favicon -->
         <link href="{{ asset('Images/Logos/logoldksyahid.png') }}" rel="icon" />
-        {{-- <link rel="shortcut icon" href="{{ asset('KestariHitungProkerbyYuda/images/kestari.ico') }}" type="image/x-icon"> --}}
+        {{-- <link rel="shortcut icon" href="{{ asset('proker-counter-by-yuda-ext-rsrc/images/kestari.ico') }}" type="image/x-icon"> --}}
 
 
         <!-- Google Web Fonts -->
@@ -34,20 +34,20 @@
         />
 
         <!-- Libraries Stylesheet -->
-        <link rel="stylesheet" href="{{ asset('e500/style.css') }}">
-        <link href="{{ asset('LandingPageSource/lib/animate/animate.min.css') }}" rel="stylesheet" />
-        <link href="{{ asset('LandingPageSource/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet" />
-        <link rel="stylesheet" href="{{ asset('KestariHitungProkerbyYuda/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('e500-ext-rsrc/style.css') }}">
+        <link href="{{ asset('landing-page-ext-rsrc/lib/animate/animate.min.css') }}" rel="stylesheet" />
+        <link href="{{ asset('landing-page-ext-rsrc/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ asset('proker-counter-by-yuda-ext-rsrc/css/style.css') }}">
 
         <!-- Customized Bootstrap Stylesheet -->
-        <link href="{{ asset('LandingPageSource/css/bootstrap.min.css') }}" rel="stylesheet" />
+        <link href="{{ asset('landing-page-ext-rsrc/css/bootstrap.min.css') }}" rel="stylesheet" />
 
         <!-- Template Stylesheet -->
-        <link href="{{ asset('LandingPageSource/css/style.css') }}" rel="stylesheet" />
+        <link href="{{ asset('landing-page-ext-rsrc/css/style.css') }}" rel="stylesheet" />
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
 	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.esm.js"></script>
 	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/"></script>
-        <script src="{{ asset('KestariHitungProkerbyYuda/js/code.js') }}" charset="utf-8" async></script>
+        <script src="{{ asset('proker-counter-by-yuda-ext-rsrc/js/code.js') }}" charset="utf-8" async></script>
     </head>
 
     <body>
@@ -89,13 +89,13 @@
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="{{ asset('LandingPageSource/lib/wow/wow.min.js') }}"></script>
-        <script src="{{ asset('LandingPageSource/lib/easing/easing.min.js') }}"></script>
-        <script src="{{ asset('LandingPageSource/lib/waypoints/waypoints.min.js') }}"></script>
-        <script src="{{ asset('LandingPageSource/lib/owlcarousel/owl.carousel.min.js') }}"></script>
+        <script src="{{ asset('landing-page-ext-rsrc/lib/wow/wow.min.js') }}"></script>
+        <script src="{{ asset('landing-page-ext-rsrc/lib/easing/easing.min.js') }}"></script>
+        <script src="{{ asset('landing-page-ext-rsrc/lib/waypoints/waypoints.min.js') }}"></script>
+        <script src="{{ asset('landing-page-ext-rsrc/lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
         <!-- Template Javascript -->
-        <script src="{{ asset('LandingPageSource/js/main.js') }}"></script>
+        <script src="{{ asset('landing-page-ext-rsrc/js/main.js') }}"></script>
         {{-- Script Landing Page Start --}}
         @yield('scripts')
         {{-- Script Landing Page End --}}

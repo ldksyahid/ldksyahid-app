@@ -53,7 +53,7 @@ Route::put('/profile/{profilepicture}/destroy', [ProfileController::class, 'dest
 
 // Route LandingPage Layanan => Hitung Proker Kestari
 Route::get('/service/hitungproker', function () {
-    return view('landing-page.service.proker-count.index', ["title" => "Layanan"]);
+    return view('landing-page.service.proker-counter.index', ["title" => "Layanan"]);
 });
 
 // Route LandingPage Layanan
