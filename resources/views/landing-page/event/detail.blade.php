@@ -142,9 +142,15 @@
                                             <i class="fa fa-whatsapp fa-2x text-secondary"></i>
                                         </div>
                                         <div class="col-10">
+                                            @if ($postevent->cntctPrsn1 != null && $postevent->cntctPrsn2 != null)
                                             <a href="https://wa.me/{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
                                             <br>
                                             <a href="https://wa.me/{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
+                                            @elseif ($postevent->cntctPrsn1 == null)
+                                            <a href="https://wa.me/{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
+                                            @elseif ($postevent->cntctPrsn2 == null)
+                                            <a href="https://wa.me/{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
+                                            @endif
                                         </div>
                                         @endif
                                     </div>
@@ -314,9 +320,17 @@
                                 <i class="fa fa-whatsapp fa-2x text-secondary"></i>
                             </div>
                             <div class="col-10">
-                                <a href="https://wa.me/{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
-                                <br>
-                                <a href="https://wa.me/{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
+                                <div class="col-10">
+                                    @if ($postevent->cntctPrsn1 != null && $postevent->cntctPrsn2 != null)
+                                    <a href="https://wa.me/{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
+                                    <br>
+                                    <a href="https://wa.me/{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
+                                    @elseif ($postevent->cntctPrsn1 == null)
+                                    <a href="https://wa.me/{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
+                                    @elseif ($postevent->cntctPrsn2 == null)
+                                    <a href="https://wa.me/{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
+                                    @endif
+                                </div>
                             </div>
                             @endif
                         </div>
@@ -339,7 +353,7 @@
                     </div>
                     <br>
                     <div>
-                        <p style="font-size: 16px;" class="mb-0">Presentasi</p>
+                        <p style="font-size: 18px;" class="mb-0">Presentasi</p>
                         @if ($postevent->linkPresent)
                         <a href="{{ $postevent->linkPresent }}" target="_blank" rel="noopener noreferrer" style="font-size: 16px;">klik disini</a>
                         @else
