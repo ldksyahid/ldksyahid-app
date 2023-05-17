@@ -1,4 +1,5 @@
 <!-- Article Start -->
+@if((new \Jenssegers\Agent\Agent())->isDesktop())
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5 align-items-end mb-5">
@@ -42,4 +43,47 @@
         </div>
     </div>
 </div>
+@endif
+
+@if((new \Jenssegers\Agent\Agent())->isMobile())
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-end mb-5 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="col-12" style="margin-bottom: -5px;">
+                <div class="border-start border-5 border-primary ps-4 mb-3">
+                    <h6 class="text-body text-uppercase mb-2 mobile-font-2">&mdash; Artikel</h6>
+                    <h1 class="display-6 mb-0 mobile-font-4">
+                        Karya Tulis Anggota <br> UKM LDK Syahid
+                    </h1>
+                </div>
+                <p class="mb-2 mt-1 mobile-font-2" style="text-align: justify">
+                    Artikel ini merupakan Hasil Karya Tulis dari para Anggota UKM LDK Syahid yang memiliki kemampuan dan sederet Prestasi dibidang Karya Tulis
+                </p>
+            </div>
+            <div class="mt-2">
+                <div class="owl-article owl-carousel owl-theme">
+                @forelse($postarticle as $key => $postarticle)
+                <div class="item">
+                    <div class="my-3">
+                        <a href="/articles/{{ $postarticle->id }}" class="d-flex justify-content-center"><img class="shadow" src="{{ asset($postarticle->poster) }}" alt="{{$postarticle->title}}" style="width: 100%; border-radius: 2%;" /></a>
+                    </div>
+                </div>
+                @empty
+                <div class="text-center">
+                    <h3>Artikel Belum Tersedia</h3>
+                </div>
+                @endforelse
+                <div class="item">
+                    <div class="my-3">
+                        <div class="d-flex justify-content-center" style="margin-top:115px;">
+                            <a href="/articles"><i class="fas fa-angle-right fa-4x text-primary flex-shrink-0 me-3"></i></a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 <!-- Article End -->

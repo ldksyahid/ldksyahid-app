@@ -1,0 +1,43 @@
+.mobile-font-4 {
+    font-size :22px;
+}
+
+.mobile-font-3 {
+    font-size :18px;
+}
+
+.mobile-font-2 {
+    font-size :14px;
+}
+
+.mobile-font-1 {
+    font-size: 12px;
+}
+
+.mobile-font-profesion {
+    .mobile-body-font
+    margin: 0;
+    font-size: 14px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #8d9297;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+}
+
+.mobile-body-font {
+    margin: 0;
+    font-size: 14px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #8d9297;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* .shadow-filter{
+    filter:drop-shadow(2px 2px 4px #000)
+} */
