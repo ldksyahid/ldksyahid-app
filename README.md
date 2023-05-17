@@ -24,9 +24,13 @@
 
 **Xampp** >= 3.3.0
 
+**Composer** = 2.5.5
+
 **Laravel** = 8.x
 
 **Node JS** = 8.15.0
+
+**Git** = 2.33.1
 
 ## Development Setup
 
