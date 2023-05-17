@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\APIAuthController;
 use App\Http\Controllers\API\APITestimonyController;
+use App\Http\Controllers\API\APINewsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +27,6 @@ Route::post('login', [APIAuthController::class, 'login']);
 Route::group(['middleware'=>'auth:sanctum'], function(){
     Route::resource('testimony', APITestimonyController::class);
     Route::post('/testimony/{id}', [APITestimonyController::class, 'update']);
+    Route::resource('news', APINewsController::class);
 });
 

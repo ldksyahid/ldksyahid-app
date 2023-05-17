@@ -72,7 +72,8 @@ class APITestimonyController extends Controller
      */
     public function show($id)
     {
-
+        $data = Testimony::find($id);
+        return response()->json($data);
     }
 
     /**
