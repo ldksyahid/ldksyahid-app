@@ -37,11 +37,11 @@
 ### Prerequisites
 <ul>
     <li><a href="https://code.visualstudio.com/download" target="_blank" rel="noopener noreferrer">Visual Studio Code</a></li>
-    <li><a href="https://docs.google.com/document/d/10Xvm_m-IcQFSjnP-zyUdUItCayjlEMzU/edit?usp=sharing&ouid=101904115063108684048&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer">Apache24 Web Server</a></li>
-    <li><a href="https://docs.google.com/document/d/14UVW91EwH2znZdFcBIESF9zNCw23diPG/edit?usp=sharing&ouid=101904115063108684048&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer">Node JS & Angular</a></li>
-    <li><a href="https://www.freecodecamp.org/news/node-version-manager-nvm-install-guide/" target="_blank" rel="noopener noreferrer">NVM</a></li>
-    <li><a href="https://dev.mysql.com/downloads/workbench/" target="_blank" rel="noopener noreferrer">MySQL Workbench</a></li>
-    <li><a href="https://gitlab.esb.co.id/custom/starbucks/starbucks-backend" target="_blank" rel="noopener noreferrer">starbucks-backend</a></li>
+    <li><a href="https://windows.php.net/download#php-7.4" target="_blank" rel="noopener noreferrer">PHP 7.4.27</a></li>
+    <li><a href="https://www.apachefriends.org/download.html" target="_blank" rel="noopener noreferrer">XAMPP</a></li>
+    <li><a href="https://getcomposer.org/download/" target="_blank" rel="noopener noreferrer">Composer</a></li>
+    <li><a href="https://nodejs.org/en/download" target="_blank" rel="noopener noreferrer">Node JS</a></li>
+    <li><a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">Git</a></li>
 </ul>
 
 ### Setting Up a Project
