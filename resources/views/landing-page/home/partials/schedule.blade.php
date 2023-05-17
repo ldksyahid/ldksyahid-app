@@ -1,3 +1,4 @@
+@if((new \Jenssegers\Agent\Agent())->isDesktop())
 <!-- Article Start -->
 <div class="container-xxl py-5">
     <div class="container">
@@ -38,3 +39,39 @@
     </div>
 </div>
 <!-- Article End -->
+@endif
+
+@if((new \Jenssegers\Agent\Agent())->isMobile())
+<!-- Article Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-end wow fadeInUp" data-wow-delay="0.5s" style="margin-bottom:-40px;">
+            <div class="col-lg-12">
+                <div class="border-start border-5 border-primary ps-4">
+                    <h6 class="text-body text-uppercase mb-2 mobile-font-2">Jadwal &mdash;</h6>
+                    <h1 class="display-6 mb-0 mobile-font-4">
+                        Jadwal Terbaru Kami
+                    </h1>
+                </div>
+                <p class="mb-0 mt-2" style="text-align: justify mobile-font-2">
+                    Yuk catet tanggalnya biar kamu gak ketinggalan Kegiatan UKM LDK Syahid
+                </p>
+            </div>
+            <div>
+                @forelse($postschedule as $key => $postschedule)
+                <div>
+                    <div class="col-lg-9">
+                        <img src="{{ asset($postschedule->picture) }}" alt="{{ $postschedule->title }}" class="img-fluid shadow" width="100%" style="border-radius: 2%">
+                    </div>
+                </div>
+                @empty
+                <div class="text-center">
+                    <h3>Jadwal Belum Tersedia</h3>
+                </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Article End -->
+@endif

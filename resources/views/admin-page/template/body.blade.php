@@ -56,7 +56,7 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     {{-- END Datatable FROM https://www.itsolutionstuff.com/post/laravel-8-yajra-datatables-example-tutorialexample.html--}}
 
-    @yield('style')
+    @yield('head')
 </head>
 
 <body>

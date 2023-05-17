@@ -1,6 +1,6 @@
 @extends('landing-page.template.body')
 
-@section('style')
+@section('head')
 <link href="{{ asset('css/multiselectcelengan.css') }}" rel="stylesheet" />
 @endsection
 

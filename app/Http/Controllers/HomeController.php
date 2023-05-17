@@ -12,6 +12,7 @@ use App\Models\Event;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+use Jenssegers\Agent\Agent;
 
 
 class HomeController extends Controller
@@ -23,9 +24,19 @@ class HomeController extends Controller
 
     public function index()
     {
-        $postarticle= Article::orderBy('dateevent','desc')->limit(3)->get();
+        $agent = new Agent();
+
+        if ($agent->isMobile()) {
+            $postnews= News::orderBy('datepublish','desc')->limit(5)->get();
+            $postarticle= Article::orderBy('dateevent','desc')->limit(4)->get();
+            $postevent= Event::orderBy('created_at','desc')->limit(4)->get();
+        } else {
+            $postnews= News::orderBy('datepublish','desc')->limit(3)->get();
+            $postarticle= Article::orderBy('dateevent','desc')->limit(3)->get();
+            $postevent= Event::orderBy('created_at','desc')->limit(3)->get();
+        }
+
         $postgallery= Gallery::orderBy('created_at','desc')->limit(1)->get();
-        $postevent= Event::orderBy('created_at','desc')->limit(3)->get();
         $postnews= News::orderBy('datepublish','desc')->limit(3)->get();
         $postschedule= Schedule::orderBy('created_at','desc')->limit(1)->get();
         $postjumbotron= Jumbotron::orderBy('created_at','desc')->get();
