@@ -46,6 +46,7 @@
 
 ### Setting Up a Project
 <b>Clone the project</b>
+<br>
 Run in the directory is up to you
 <br>
 ```bash
