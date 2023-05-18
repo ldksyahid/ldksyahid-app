@@ -70,7 +70,7 @@ npm install
 <br>
 <ol>
     <li>Copy paste ".env.example" and rename to ".env"</li>
-    <li>Change all code .env from latest .env by <a href="https://wa.me/0895394755672" target="_blank" rel="noopener noreferrer">Contact Me</a> to get latest .env</li>
+    <li>Change all code .env from latest .env by <a href="https://wa.me/62895394755672" target="_blank" rel="noopener noreferrer">Contact Me</a> to get latest .env</li>
 </ol>
 
 <b>Generate Key</b> 
