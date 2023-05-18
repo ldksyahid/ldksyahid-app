@@ -20,7 +20,7 @@
 ## System Requirement
 **System Operations :** Windows or Unix Base
 
-**PHP** >= 7.4.27
+**PHP** >= 7.4
 
 **Xampp** >= 3.3.0
 
@@ -37,7 +37,7 @@
 ### Prerequisites
 <ul>
     <li><a href="https://code.visualstudio.com/download" target="_blank" rel="noopener noreferrer">Visual Studio Code</a></li>
-    <li><a href="https://windows.php.net/download#php-7.4" target="_blank" rel="noopener noreferrer">PHP 7.4.27</a></li>
+    <li><a href="https://windows.php.net/download#php-7.4" target="_blank" rel="noopener noreferrer">PHP 7.4</a></li>
     <li><a href="https://www.apachefriends.org/download.html" target="_blank" rel="noopener noreferrer">XAMPP</a></li>
     <li><a href="https://getcomposer.org/download/" target="_blank" rel="noopener noreferrer">Composer</a></li>
     <li><a href="https://nodejs.org/en/download" target="_blank" rel="noopener noreferrer">Node JS</a></li>
