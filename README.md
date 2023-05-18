@@ -76,6 +76,7 @@ npm install
 </ol>
 
 <b>Generate Key</b> 
+<br>
 Run in directory `ldksyahid-app/`
 <br>
 ```bash
