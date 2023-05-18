@@ -1,119 +1,110 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# LDK Syahid Web App
+<div align="center" style='text-align : center;'>
+  <div class="row">
+  <img src="https://laravel.com/img/logomark.min.svg" width="100px">
+  </div>
+  <br>
+  <img src="public/Images/Logos/logoldksyahid.png" alt="ldk-logo" width="250px"/>
+  <br>
+  <i>#KitaAdalahSaudara</i>
+  <br>
+</div>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<br>
+<div align="center">
+<img src="https://img.shields.io/badge/version-v1.0.0-blue" />
+<img src="https://img.shields.io/badge/license-LDK Syahid-green" />
+<img src="https://img.shields.io/badge/contributors-11-brightgreen" />
+</div>
 
-## About Laravel
+## System Requirement
+**System Operations :** Windows or Unix Base
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**PHP** >= 7.4
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Xampp** >= 3.3.0
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Composer** = 2.5.5
 
-## Installation ldkshayid-app
+**Laravel** = 8.x
 
-### 1. Clone git to Local Folder
+**Node JS** = 8.15.0
+
+**Git** = 2.33.1
+
+## Development Setup
+
+### Prerequisites
+<ul>
+    <li><a href="https://code.visualstudio.com/download" target="_blank" rel="noopener noreferrer">Visual Studio Code</a></li>
+    <li><a href="https://windows.php.net/download#php-7.4" target="_blank" rel="noopener noreferrer">PHP 7.4</a></li>
+    <li><a href="https://www.apachefriends.org/download.html" target="_blank" rel="noopener noreferrer">XAMPP</a></li>
+    <li><a href="https://getcomposer.org/download/" target="_blank" rel="noopener noreferrer">Composer</a></li>
+    <li><a href="https://nodejs.org/en/download" target="_blank" rel="noopener noreferrer">Node JS</a></li>
+    <li><a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">Git</a></li>
+</ul>
+
+### Setting Up a Project
+<b>Clone the project</b>
+<br>
+Run in the directory is up to you
+<br>
+```bash
+git clone https://github.com/ldksyahid/ldksyahid-app.git
 ```
-git clone https://github.com/My-Dios/ldksyahid-app.git
+
+<b>Create Database</b> 
+<br>
+Run Module Apache and MySQL in xampp and open PHPMyAdmin to create database `ldksyahid_db` and then import database from <a href="https://drive.google.com/drive/folders/1EWyRlyuJNta8OeegRDapp_optXfPEPG_?usp=sharing" target="_blank" rel="noopener noreferrer">latest database</a> 
+
+<b>Vendor</b> 
+<br>
+Remove previous folder vendor and Download <a href="https://drive.google.com/drive/folders/1_tSANdG2LfgsoUkwKqbhRD-7jyAEsuvv?usp=sharing" target="_blank" rel="noopener noreferrer">lates vendor</a> and then exctract file into folder directory `ldksyahid-app/` 
+
+<b>Node Modules</b>
+<br>
+Install node_modules in directory `ldksyahid-app/`
+```bash
+npm install
 ```
 
-### 2. Install Composer
-```
-composer install
-```
+<b>.env</b> 
+<br>
+<ol>
+    <li>Copy paste ".env.example" and rename to ".env"</li>
+    <li>Change all code .env from latest .env by <a href="https://wa.me/62895394755672" target="_blank" rel="noopener noreferrer">Contact Me</a> to get latest .env</li>
+</ol>
 
-### 3. Add .env
-copy paste ".env.example" and rename to ".env"
-
-### 4. Generate Key
-```
+<b>Generate Key</b> 
+<br>
+Run in directory `ldksyahid-app/`
+<br>
+```bash
 php artisan key:generate
 ```
 
-### 5. Configuration .env
-edit .env db_database same with your db created (you must create db from like mysql) and email for notification from email
-```
-DB_HOST=localhost
-DB_DATABASE=your_db_name
-DB_USERNAME=root
-DB_PASSWORD=
-
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.googlemail.com
-MAIL_PORT=587
-MAIL_USERNAME=your@gmail.com
-MAIL_PASSWORD=yourcodepassword
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=your@gmail.com
-MAIL_FROM_NAME="yourname"
-```
-### 6. Edit File VerifyEmail.php
-Open File in vendor/laravel/framework/src/Illuminate/Auth/Notifications/VerifyEmail.php 
-
-Add use
-```
-use Illuminate\Support\HtmlString;
-```
-Change Code in Function buildMailMessage($url)
-```
- protected function buildMailMessage($url)
-    {
-        return (new MailMessage)
-        ->greeting(Lang::get("Assalammu'alaikum Sobat Syahid 😊"))
-        ->subject(Lang::get('Verifikasi Alamat Email Untuk Daftar Akun Website UKM LDK Syahid'))
-        ->line(Lang::get("Silahkan Klik Tombol di bawah ini untuk Memverifikasi Alamat Email"))
-        ->action(Lang::get('Verifikasi Alamat Email'), $url)
-        ->line(Lang::get("Verifikasi Email ini dilakukan untuk Menghindari Penyalahgunaan Akun"))
-        ->salutation(new HtmlString("<br><br>Wassalammu'alaikum 😊<br><br> Salam Semangat,<br>Admin Website UKM LDK Syahid UIN Jakarta"));
-    }
-```
-
-### 7. Edit File ResetPassword.php
-Open File in vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.php
-
-Add Use 
-```
-use Illuminate\Support\HtmlString;
-```
-Change Code in Function buildMailMessage($url)
-```
- protected function buildMailMessage($url)
-    {
-        return (new MailMessage)
-            ->greeting(Lang::get("Assalammu'alaikum Sobat Syahid 😊"))
-            ->subject(Lang::get('Notifikasi Reset Password'))
-            ->line(Lang::get('Kamu Menerima Email ini karena Kami Menerima Permintaan untuk Mereset Password Akun Kamu'))
-            ->action(Lang::get('Reset Password'), $url)
-            ->line(Lang::get('Link Reset Password ini akan berakhir dalam :count Menit', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
-            ->line(Lang::get('Jika Kamu tidak Meminta Reset Password, Maka tidak ada Tindakan lebih lanjut yang perlu Kamu lakukan'))
-            ->salutation(new HtmlString("<br><br>Wassalammu'alaikum 😊<br><br> Salam Semangat,<br>Admin Website UKM LDK Syahid UIN Jakarta"));
-    }
-```
-
-### 8. Migrate Database
-```
-php artisan migrate
-```
-
-### 9. Migrate Seed DB
-```
-php artisan db:seed --class=CreateUsersSeeder
-```
-
-### 10. Run Application
-```
+<b>Run the project</b>
+<br>
+Run in directory `ldksyahid-app/`
+```bash
 php artisan serve
 ```
 
+### Usage a Project
+<b>1. Run the project</b> 
+<br>
 
+<b>2. Login</b> 
+<br>
+<ul>
+    <li>Email : admin@ldksyah.id</li>
+    <li>Password : admin</li>
+</ul>
+
+<b>3. Finally, have fun ^_^</b> 
+<br>
+
+## Version
+| Version | Date         | Update |
+| :---:   |     :---:    |  ---   |
+| `1.0.0`| `2022-12-22` | <ul><li>Initial Version</li></ul> |
