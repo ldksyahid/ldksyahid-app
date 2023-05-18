@@ -46,6 +46,7 @@
 
 ### Setting Up a Project
 <b>Clone the project</b>
+Run in the directory is up to you
 <br>
 ```bash
 git clone https://github.com/ldksyahid/ldksyahid-app.git
@@ -74,6 +75,7 @@ npm install
 </ol>
 
 <b>Generate Key</b> 
+Run in directory `ldksyahid-app/`
 <br>
 ```bash
 php artisan key:generate
