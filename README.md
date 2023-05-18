@@ -47,9 +47,8 @@
 ### Setting Up a Project
 <b>Clone the project</b>
 <br>
-clone into directory `C:\Apache24\htdocs`
 ```bash
-git clone https://gitlab.esb.co.id/custom/starbucks/starbucks-pos.git
+git clone https://github.com/ldksyahid/ldksyahid-app.git
 ```
 
 <b>Create 2 new schema</b> 
