@@ -97,7 +97,7 @@ php artisan serve
     <li>Password : admin</li>
 </ul>
 
-<b>Finally, have fun ^_^</b> 
+<b>3. Finally, have fun ^_^</b> 
 <br>
 
 ## Version
