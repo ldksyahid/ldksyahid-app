@@ -51,124 +51,54 @@
 git clone https://github.com/ldksyahid/ldksyahid-app.git
 ```
 
-<b>Create 2 new schema</b> 
+<b>Create Database</b> 
 <br>
-Open MySQL Workbench and create 2 schema:  
-<ol>
-    <li>fnb_sbux_4</li>
-    <li>fnb_sbux_2</li>
-</ol>
+Run Module Apache and MySQL in xampp and open PHPMyAdmin to create database `ldksyahid_db` and then import database from <a href="https://drive.google.com/drive/folders/1EWyRlyuJNta8OeegRDapp_optXfPEPG_?usp=sharing" target="_blank" rel="noopener noreferrer">latest database</a> 
 
-<b>Configuration</b>
+<b>Vendor</b> 
 <br>
-Create the following file for local environment configuration:  
-- `starbucks-pos/api/config/db.php`
-- `starbucks-pos/frontend/src/assets/params.json`
+Remove previous folder vendor and Download <a href="https://drive.google.com/drive/folders/1_tSANdG2LfgsoUkwKqbhRD-7jyAEsuvv?usp=sharing" target="_blank" rel="noopener noreferrer">lates vendor</a> and then exctract file into folder directory `ldksyahid-app/` 
 
-```php
-<?php 
-        
-return [
-    'dbMain' => [
-        'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=127.0.0.1:3306;dbname=fnb_sbux_4',
-        'username' => 'root',
-        'password' => '',
-        'charset' => 'utf8',
-    ],
-    'db' => [
-        'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=127.0.0.1:3306;dbname=fnb_sbux_2',
-        'username' => 'root',
-        'password' => '',
-        'charset' => 'utf8',
-    ]
-];
-```
-```json
-{
-  "httpBaseUrl": "http://localhost:82/starbucks-pos/api/web/v1",  //adjust localhost port with php version >= 7.2.11
-  "webSocketUrl": "ws://localhost:8081"
-}
-```
-<b>Migration</b>
-<br>
-Run Migration in directory `starbucks-pos/api`
-```bash
-php yii migrate
-```
 <b>Node Modules</b>
 <br>
-Install node_modules in directory `starbucks-pos/frontend`
+Install node_modules in directory `ldksyahid-app/`
 ```bash
 npm install
 ```
+
+<b>.env</b> 
+<br>
+<ol>
+    <li>Copy paste ".env.example" and rename to ".env"</li>
+    <li>Change all code .env from latest .env by <a href="https://wa.me/0895394755672" target="_blank" rel="noopener noreferrer">Contact Me</a> to get latest .env</li>
+</ol>
+
+<b>Generate Key</b> 
+<br>
+```bash
+php artisan key:generate
+```
+
 <b>Run the project</b>
 <br>
-Run in directory `starbucks-pos/frontend`
+Run in directory `ldksyahid-app/`
 ```bash
-npm start
-```
-or
-```bash
-ng serve
+php artisan serve
 ```
 
 ### Usage a Project
 <b>1. Run the project</b> 
 <br>
 
-<b>2. Change link to install </b> 
-<br>
-Change to `http://localhost:4500/install`
-<br>
-
-<b>3. Input and Submit</b> 
+<b>2. Login</b> 
 <br>
 <ul>
-    <li>
-        API URL : http://localhost/starbucks-backend
-        <br>
-        The API URL is obtained from the localhost <a href="https://gitlab.esb.co.id/custom/starbucks/starbucks-backend" target="_blank" rel="noopener                 noreferrer">starbucks-backend</a> link 
-    </li>
-    <li>
-        API Key : authsci
-        <br>
-        The API Key can be obtained from the contents of the companyAuthKey column in the <a href="https://gitlab.esb.co.id/custom/starbucks/starbucks-backend"         target="_blank" rel="noopener noreferrer">starbucks-backend</a> database
-    </li>
-    <li>
-        Branch : STARBUCKS KOTA HARAPAN INDAH
-        <br>
-        You can choose freely but we recommend choosing that branch
-    </li>
+    <li>Email : admin@ldksyah.id</li>
+    <li>Password : admin</li>
 </ul>
-You can run SQL Script for obtained API Key
 
-```sql
-select companyAuthKey from esb_main_sbux.ms_company;
-```
-
-<b>4. Set terminalID</b> 
+<b>Finally, have fun ^_^</b> 
 <br>
-add this `?terminalID=GK01-001` to the link `http://localhost:4500/login` so it becomes `http://localhost:4500/login?terminalID=GK01-001`
-
-<b>5. Login</b> 
-<br>
-You must have a <a href="https://gitlab.esb.co.id/custom/starbucks/starbucks-backend" target="_blank" rel="noopener        noreferrer">starbucks-backend</a> account first
-<br>
-Login with the PIN that was created in the previous <a href="https://gitlab.esb.co.id/custom/starbucks/starbucks-backend" target="_blank" rel="noopener        noreferrer">starbucks-backend</a> project
-<br>
-If you can't login POS, please sync first
-
-<b>6. Setup Cash Drawer</b> 
-<br>
-Run SQL Script to add Cashdrawer in MySQL Workbench
-```sql
-INSERT INTO `fnb_sbux_2`.`ms_cashdrawer` (`cashDrawerID`, `cashDrawerName`, `createdDate`, `editedBy`, `editedDate`) VALUES (NULL, 'CDN-01', NULL, NULL, NULL);
-```
-Then Assign Cashdrawer in POS
-
-<b>7. Finally, you can use Starbucks POS ^_^</b> 
 
 ## Version
 | Version | Date         | Update |
