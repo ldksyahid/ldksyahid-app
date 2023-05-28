@@ -39,7 +39,7 @@
                 <a class="btn btn-link" href="/news">Berita</a>
                 <a class="btn btn-link" href="/events">Kegiatan</a>
                 <a class="btn btn-link" href="/schedule">Jadwal</a>
-                <a class="btn btn-link" href="/service/hitungproker">Kalkulator Kestari</a>
+                <a class="btn btn-link" href="/kalkulatorkestari">Kalkulator Kestari</a>
             </div>
             <div class="col-lg-3 col-md-6">
                 <h4 class="text-light mb-4">Berlangganan</h4>

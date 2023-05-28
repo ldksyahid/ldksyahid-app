@@ -25,7 +25,7 @@
                                 <p style="text-align: justify">Call Kestari merupakan tautan panggilan yang didalamnya terdapat laman khusus berisi informasi penting untuk di bagikan kepada para Sekretaris Bidang/Biro, Sekretaris LDKSF dan Anggota LDK Syahid, yang berfungsi membantu mengarahkan pengguna dalam berkomunikasi lebih personal terkait Kesekretariatan.</p>
                             </div>
                             <div class="widget-49-meeting-action">
-                                <a href="/service/callkestari" target="_blank" class="btn btn-primary w-100 py-2" >Mulai</a>
+                                <a href="/callkestari" target="_blank" class="btn btn-primary w-100 py-2" >Mulai</a>
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                                 <br><br><br>
                             </div>
                             <div class="widget-49-meeting-action">
-                                <a href="/service/hitungproker" target="_blank" class="btn btn-primary w-100 py-2" >Mulai</a>
+                                <a href="/kalkulatorkestari" target="_blank" class="btn btn-primary w-100 py-2" >Mulai</a>
                             </div>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                                 <br><br>
                             </div>
                             <div class="widget-49-meeting-action">
-                                <a href="/service/shortlink" target="_blank" class="btn btn-primary w-100 py-2" >Mulai</a>
+                                <a href="/shortlink" target="_blank" class="btn btn-primary w-100 py-2" >Mulai</a>
                             </div>
                         </div>
                     </div>
@@ -78,8 +78,8 @@
                                 <br><br>
                             </div>
                             <div class="widget-49-meeting-action">
-                                <a href="/service/celengansyahid" target="_blank" class="btn btn-outline-secondary w-100 py-2" style="pointer-events: none;cursor: default;">SEGERA HADIR</a>
-                                {{-- <a href="/service/celengansyahid" target="_blank" class="btn btn-primary w-100 py-2">Mulai</a> --}}
+                                <a href="/celengansyahid" target="_blank" class="btn btn-outline-secondary w-100 py-2" style="pointer-events: none;cursor: default;">SEGERA HADIR</a>
+                                {{-- <a href="/celengansyahid" target="_blank" class="btn btn-primary w-100 py-2">Mulai</a> --}}
                             </div>
                         </div>
                     </div>

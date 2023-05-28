@@ -42,12 +42,12 @@
         @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
             <div class="navbar-nav w-100">
                 <a href="/admin/dashboard" class="nav-item nav-link {{($title === "Dashboard") ? "active" : ""}}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="/admin/user" class="nav-item nav-link {{($title === "User") ? "active" : ""}}"><i class="fa fa-users me-2"></i>Users</a>
+                <a href="/admin/user" class="nav-item nav-link {{($title === "User") ? "active" : ""}}"><i class="fa fa-users me-2"></i>User</a>
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Home") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-home me-2"></i>Home</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/jumbotron" class="dropdown-item">Jumbotron</a>
-                        <a href="/admin/testimony" class="dropdown-item">Testimony</a>
+                        <a href="/admin/jumbotron" class="dropdown-item">&#10070; Jumbotron</a>
+                        <a href="/admin/testimony" class="dropdown-item">&#10070; Testimony</a>
                     </div>
                 </div>
                 <a href="/admin/event" class="nav-item nav-link {{($title === "Event") ? "active" : ""}}"><i class="fas fa-calendar-check me-2"></i>Event</a>
@@ -57,30 +57,30 @@
                 <div class="nav-item dropdown">
                     <a href="/admin/service/celengansyahid" class="nav-link dropdown-toggle {{($title === "Celengan Syahid") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item">Campaigns</a>
-                        <a href="/admin/service/celengansyahid/donations" class="dropdown-item">Donations</a>
+                        <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item">&#10070; Campaign</a>
+                        <a href="/admin/service/celengansyahid/donations" class="dropdown-item">&#10070; Donation</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "About Us") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-hand-holding-heart me-2"></i>About Us</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/about/contact/message" class="dropdown-item">Contact Us Message</a>
-                        <a href="/admin/about/structure" class="dropdown-item">Structure</a>
-                        <a href="/admin/about/gallery" class="dropdown-item">Gallery</a>
-                        <a href="/admin/about/itsupport" class="dropdown-item">IT Support</a>
+                        <a href="/admin/about/contact/message" class="dropdown-item">&#10070; Contact Us Message</a>
+                        <a href="/admin/about/structure" class="dropdown-item">&#10070; Structure</a>
+                        <a href="/admin/about/gallery" class="dropdown-item">&#10070; Gallery</a>
+                        <a href="/admin/about/itsupport" class="dropdown-item">&#10070; IT Support</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Services</a>
+                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/service/shortlink" class="dropdown-item">Shortlink</a>
-                        <a href="/admin/service/callkestari" class="dropdown-item">Call Kestari</a>
+                        <a href="/admin/service/shortlink" class="dropdown-item">&#10070; Shortlink</a>
+                        <a href="/admin/service/callkestari" class="dropdown-item">&#10070; Call Kestari</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Request Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-bullhorn me-2"></i>Req Service</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/reqservice/shortlink" class="dropdown-item">Request Shortlink</a>
+                        <a href="/admin/reqservice/shortlink" class="dropdown-item">&#10070; Request Shortlink</a>
                     </div>
                 </div>
             </div>
@@ -92,15 +92,15 @@
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Home") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-home me-2"></i>Home</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/jumbotron" class="dropdown-item">Jumbotron</a>
-                        <a href="/admin/testimony" class="dropdown-item">Testimony</a>
+                        <a href="/admin/jumbotron" class="dropdown-item">&#10070; Jumbotron</a>
+                        <a href="/admin/testimony" class="dropdown-item">&#10070; Testimony</a>
                     </div>
                 </div>
                 <a href="/admin/event" class="nav-item nav-link {{($title === "Event") ? "active" : ""}}"><i class="fas fa-calendar-check me-2"></i>Event</a>
                 <div class="nav-item dropdown">
-                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Services</a>
+                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/service/shortlink" class="dropdown-item">Shortlink</a>
+                        <a href="/admin/service/shortlink" class="dropdown-item">&#10070; Shortlink</a>
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Home") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-home me-2"></i>Home</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/jumbotron" class="dropdown-item">Jumbotron</a>
+                        <a href="/admin/jumbotron" class="dropdown-item">&#10070; Jumbotron</a>
                     </div>
                 </div>
                 <a href="/admin/article" class="nav-item nav-link {{($title === "Article") ? "active" : ""}}"><i class="fas fa-book-open me-2"></i>Article</a>
@@ -121,14 +121,14 @@
                 <div class="nav-item dropdown">
                     <a href="/admin/service/celengansyahid" class="nav-link dropdown-toggle {{($title === "Celengan Syahid") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item">Campaigns</a>
-                        <a href="/admin/service/celengansyahid/donations" class="dropdown-item">Donations</a>
+                        <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item">&#10070; Campaign</a>
+                        <a href="/admin/service/celengansyahid/donations" class="dropdown-item">&#10070; Donation</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Services</a>
+                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/service/shortlink" class="dropdown-item">Shortlink</a>
+                        <a href="/admin/service/shortlink" class="dropdown-item">&#10070; Shortlink</a>
                     </div>
                 </div>
             </div>
@@ -138,10 +138,10 @@
             <div class="navbar-nav w-100">
                 <a href="/admin/dashboard" class="nav-item nav-link {{($title === "Dashboard") ? "active" : ""}}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <div class="nav-item dropdown">
-                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Services</a>
+                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/service/shortlink" class="dropdown-item">Shortlink</a>
-                        <a href="/admin/service/callkestari" class="dropdown-item">Call Kestari</a>
+                        <a href="/admin/service/shortlink" class="dropdown-item">&#10070; Shortlink</a>
+                        <a href="/admin/service/callkestari" class="dropdown-item">&#10070; Call Kestari</a>
                     </div>
                 </div>
             </div>
@@ -153,13 +153,13 @@
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Home") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-home me-2"></i>Home</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/jumbotron" class="dropdown-item">Jumbotron</a>
+                        <a href="/admin/jumbotron" class="dropdown-item">&#10070; Jumbotron</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Services</a>
+                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/service/shortlink" class="dropdown-item">Shortlink</a>
+                        <a href="/admin/service/shortlink" class="dropdown-item">&#10070; Shortlink</a>
                     </div>
                 </div>
             </div>
@@ -171,8 +171,8 @@
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Home") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-home me-2"></i>Home</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/jumbotron" class="dropdown-item">Jumbotron</a>
-                        <a href="/admin/testimony" class="dropdown-item">Testimony</a>
+                        <a href="/admin/jumbotron" class="dropdown-item">&#10070; Jumbotron</a>
+                        <a href="/admin/testimony" class="dropdown-item">&#10070; Testimony</a>
                     </div>
                 </div>
                 <a href="/admin/event" class="nav-item nav-link {{($title === "Event") ? "active" : ""}}"><i class="fas fa-calendar-check me-2"></i>Event</a>
@@ -180,13 +180,13 @@
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "About Us") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-hand-holding-heart me-2"></i>About Us</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/about/contact/message" class="dropdown-item">Contact Us Message</a>
+                        <a href="/admin/about/contact/message" class="dropdown-item">&#10070; Contact Us Message</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Services</a>
+                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/service/shortlink" class="dropdown-item">Shortlink</a>
+                        <a href="/admin/service/shortlink" class="dropdown-item">&#10070; Shortlink</a>
                     </div>
                 </div>
             </div>
@@ -198,8 +198,8 @@
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Home") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-home me-2"></i>Home</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/jumbotron" class="dropdown-item">Jumbotron</a>
-                        <a href="/admin/testimony" class="dropdown-item">Testimony</a>
+                        <a href="/admin/jumbotron" class="dropdown-item">&#10070; Jumbotron</a>
+                        <a href="/admin/testimony" class="dropdown-item">&#10070; Testimony</a>
                     </div>
                 </div>
                 <a href="/admin/event" class="nav-item nav-link {{($title === "Event") ? "active" : ""}}"><i class="fas fa-calendar-check me-2"></i>Event</a>
@@ -209,22 +209,22 @@
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "About Us") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-hand-holding-heart me-2"></i>About Us</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/about/contact/message" class="dropdown-item">Contact Us Message</a>
-                        <a href="/admin/about/structure" class="dropdown-item">Structure</a>
-                        <a href="/admin/about/gallery" class="dropdown-item">Gallery</a>
+                        <a href="/admin/about/contact/message" class="dropdown-item">&#10070; Contact Us Message</a>
+                        <a href="/admin/about/structure" class="dropdown-item">&#10070; Structure</a>
+                        <a href="/admin/about/gallery" class="dropdown-item">&#10070; Gallery</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Services</a>
+                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/service/shortlink" class="dropdown-item">Shortlink</a>
-                        <a href="/admin/service/callkestari" class="dropdown-item">Call Kestari</a>
+                        <a href="/admin/service/shortlink" class="dropdown-item">&#10070; Shortlink</a>
+                        <a href="/admin/service/callkestari" class="dropdown-item">&#10070; Call Kestari</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Request Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-bullhorn me-2"></i>Req Service</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/reqservice/shortlink" class="dropdown-item">Request Shortlink</a>
+                        <a href="/admin/reqservice/shortlink" class="dropdown-item">&#10070; Request Shortlink</a>
                     </div>
                 </div>
             </div>

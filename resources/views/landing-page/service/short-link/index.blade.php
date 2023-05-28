@@ -17,7 +17,7 @@
                 </p>
             </div>
             <div class="col-lg-8 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                <form role="form" action='/service/shortlink/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
+                <form role="form" action='/shortlink/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
                 @method('POST')
                     <div class="row g-3">

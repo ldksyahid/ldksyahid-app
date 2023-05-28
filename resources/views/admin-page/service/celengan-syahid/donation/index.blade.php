@@ -11,16 +11,16 @@
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Donations Database</h5>
                 <div class="mt-3">
-                    <table class="table table-bordered" id="data_donation_reguler">
+                    <table class="table table-bordered small" id="data_donation_reguler">
                         <thead>
                             <tr align='center' class="small">
                                 <th scope="col" style="width: 1%">No</th>
-                                <th scope="col" style="width: 15%">Nama</th>
-                                <th scope="col">Jumlah</th>
-                                <th scope="col" style="width: 18%">Waktu</th>
+                                <th scope="col" style="width: 15%">Name</th>
+                                <th scope="col">Donation Amount</th>
+                                <th scope="col" style="width: 18%">Date</th>
                                 <th scope="col">Campaign</th>
-                                <th scope="col">Status Pembayaran</th>
-                                <th scope="col">Link Pembayaran</th>
+                                <th scope="col">Payment Status</th>
+                                <th scope="col">Payment Link</th>
                                 @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
                                 <th scope="col" style="width: 40px">Action</th>
                                 @endif
@@ -46,7 +46,7 @@
                                         <span class="badge badge-pill bg-danger">{{ $data->payment_status }}</span>
                                     @endif
                                 </td>
-                                <td align="center"><a href="{{ $data->payment_link }}" target="_blank" rel="noopener noreferrer">Klik Disini</a></td>
+                                <td align="center"><a href="{{ $data->payment_link }}" target="_blank" rel="noopener noreferrer">Click Here</a></td>
                                 @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
                                 <td align="center">
                                     <button class="btn btn-sm btn-primary m-1" onClick="deleteConfirmationDonation('{{ $data->id }}')"><i class="fa fa-trash"></i></button>

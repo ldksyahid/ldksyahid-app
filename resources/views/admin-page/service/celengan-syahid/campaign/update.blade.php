@@ -4,8 +4,6 @@
 {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.0.0-rc.4/dist/css/tom-select.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.0.0-rc.4/dist/js/tom-select.complete.min.js"></script>
-
-
 @endsection
 
 
@@ -16,25 +14,22 @@
 <!-- Form Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
-        <div class="col-sm-6 col-xl-12">
+        <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Edit Campaign "{{$data->judul}}" Celengan Syahid</h5>
+                <h5 class="mb-4">Edit Campaign</h5>
                 <form role="form" action='/admin/service/celengansyahid/campaign/{{ $data->id }}/update' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     @method('PUT')
                     <div class="row">
                         <div class="mb-3 col col-lg-12">
-                            <label for="inputJudulCampaign" class="form-label">Judul</label>
-                            <input type="text" class="form-control" id="inputJudulCampaign" name='judul' placeholder="Jawaban Anda" required value="{{old('judul', $data->judul)}}">
+                            <label for="inputJudulCampaign" class="form-label required">Title</label>
+                            <input type="text" class="form-control" id="inputJudulCampaign" name='judul' required value="{{old('judul', $data->judul)}}">
                             <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-6">
-                            <label for="chooseKategoriCampaign" class="form-label">Kategori</label>
+                            <label for="chooseKategoriCampaign" class="form-label required">Category</label>
                             <select class="form-select mb-3" aria-label="Default select" required name="kategori">
                                 <option selected hidden value="{{old('kategori', $data->kategori)}}">{{ $data->kategori }}</option>
                                 <option value="Pendidikan">Pendidikan</option>
@@ -45,123 +40,96 @@
                                 <option value="Lingkungan">Lingkungan</option>
                             </select>
                             <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-6">
-                            <label for="inputLink" class="form-label">Link</label>
-                            <input type="text" class="form-control" id="inputLink" name='link' required placeholder="Jawaban Anda" style="text-transform: lowercase;" value="{{old('link', $data->link)}}">
+                            <label for="inputLink" class="form-label required">Link</label>
+                            <input type="text" class="form-control" id="inputLink" name='link' required style="text-transform: lowercase;" value="{{old('link', $data->link)}}">
                             <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-6">
-                            <label for="inputProvinsiCampaign" class="form-label">Provinsi</label>
-                            <select class="form-group mb-3 textSearch" aria-label="" required name="provinsi" placeholder="Jawaban Anda" type='text' id="inputProvinsiCampaign" onchange="storeProvince()">
+                            <label for="inputProvinsiCampaign" class="form-label required">Province</label>
+                            <select class="form-group mb-3 textSearch" aria-label="" name="provinsi" type='text' id="inputProvinsiCampaign" onchange="storeProvince()">
                                 <option selected hidden value="{{old('provinsi', $data->provinsi)}}">{{strtoupper($data->provinsi)}}</option>
-                                @foreach ($provinces as $id => $name)
+                                @foreach ($province as $id => $name)
                                     <option value="{{ $name }}">{{ $name }}</option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-6">
-                            <label for="kota" class="form-label">Kabupaten/Kota</label>
-                            <select class="mb-3 textSearch" aria-label="" required name="kota" placeholder="Jawaban Anda" type='text' id="inputKotaCampaign">
+                            <label for="kota" class="form-label required">City</label>
+                            <select class="mb-3 textSearch" aria-label="" name="kota" type='text' id="inputKotaCampaign">
                                 <option selected hidden value="{{old('kota', $data->kota)}}">{{strtoupper($data->kota)}}</option>
                             </select>
                             <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-12">
-                            <label for="inputTargetBiaya" class="form-label">Target Biaya</label>
-                            <input type="text" class="form-control" id="inputTargetBiaya" name='target_biaya' placeholder="Rp0" required value="{{old('target_biaya', LFC::formatRupiah($data->target_biaya))}}">
+                            <label for="inputTargetBiaya" class="form-label">Cost Targets</label>
+                            <input type="text" class="form-control" id="inputTargetBiaya" name='target_biaya' required value="{{old('target_biaya', LFC::formatRupiah($data->target_biaya))}}">
                             <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-12">
-                            <label for="inputCerita" class="form-label">Detail Cerita</label>
+                            <label for="inputCerita" class="form-label required">Story Details</label>
                             <textarea class="form-control summernote" name="cerita" id="inputCerita" required>{{ $data->cerita }}</textarea>
                             <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-4">
-                            <label for="formFile" class="form-label">Poster (1920 x 1080 Pixel)</label>
-                            <input class="form-control" type="file" id="poster" name ='poster'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
-                            @if ($data->poster == !null)
-                                <p><i class="small">{{$data->poster}}</i></p>
-                            @else
-                                <p><i class="small">Tidak ada gambar</i></p>
-                            @endif
+                            <label for="formFile" class="form-label required">Poster (1920 x 1080 Pixel)</label>
+                            <br>
+                            <div>
+                                @if ($data->poster == !null)
+                                <img id="framePoster" src="{{ asset($data->poster) }}" width="250px" height="150px" class="rounded mb-3 border"/>
+                                @else
+                                <img id="framePoster" src="{{ asset('Images/Icons/add_image.svg') }}" width="250px" height="150px" class="rounded mb-3 border"/>
+                                @endif
+                            </div>
+                            <input class="form-control" type="file" id="poster" name ='poster'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="previewPoster()">
                         </div>
                         <div class="mb-3 col col-lg-4">
-                            <label for="inputDeadlineCampaign" class="form-label">Deadline</label>
+                            <label for="inputDeadlineCampaign" class="form-label required">Deadline</label>
                             <input type="date" class="form-control" id="inputDeadlineCampaign" name='deadline' value="{{old('deadline', $data->deadline)}}" required>
                             <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-4">
-                            <label for="inputTelpPJ" class="form-label">Kontak Penanggung Jawab</label>
+                            <label for="inputTelpPJ" class="form-label required">PIC Contact</label>
                             <div class="input-group">
                                 <span class="input-group-text" id="inputTelpPJ">+62</span>
-                                <input type="text" class="form-control" id="inputTelpPJ" name='telp_pj' placeholder="Jawaban Anda" aria-describedby="inputTelpPJ" value="{{old('telp_pj', $data->telp_pj)}}">
-                            </div>
-                            <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                <input type="text" class="form-control" id="inputTelpPJ" name='telp_pj' aria-describedby="inputTelpPJ" value="{{old('telp_pj', $data->telp_pj)}}" required>
+                                <div class="invalid-feedback">
+                                    This is a required question
+                                </div>
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-12">
-                            <label for="inputTujuan" class="form-label">Tujuan</label>
-                            <textarea class="form-control" name="tujuan" id="inputTujuan" style="height: 100px;">{{ $data->tujuan }}</textarea>
+                            <label for="inputTujuan" class="form-label required">Goals</label>
+                            <textarea class="form-control" name="tujuan" id="inputTujuan" style="height: 100px;" required>{{ $data->tujuan }}</textarea>
                             <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-12">
-                            <label for="inputKabarTerbaru" class="form-label">Kabar Terbaru</label>
+                            <label for="inputKabarTerbaru" class="form-label">Latest News</label>
                             <textarea class="form-control summernote" name="kabar_terbaru" id="inputKabarTerbaru">{{ $data->kabar_terbaru }}</textarea>
                             <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
-                            </div>
-                            <div class="valid-feedback">
-                                Okke!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-12">
-                            <label class="form-check-label" for="cekOrganisasi">Organisasi Selain UKM LDK Syahid ?</label>
+                            <label class="form-check-label" for="cekOrganisasi">Organizations other than UKM LDK Syahid ?</label>
                             @if ($data->nama_pj != null || $data->link_pj != null)
                                 <input type="checkbox" class="form-check-input" id="cekOrganisasi" onclick="cekOrg()" checked>
                             @else
@@ -174,41 +142,32 @@
                             style="display: ;"
                         @endif>
                             <div class="row">
+                                <div class="mb-3 col col-lg-4"  >
+                                    <label for="formFile" class="form-label">Organization Logo</label>
+                                    <br>
+                                    <div>
+                                        @if ($data->logo_pj == !null)
+                                        <img id="frameLogo" src="{{ asset($data->logo_pj) }}" width="50%" class="rounded mb-3 border"/>
+                                        @else
+                                        <img id="frameLogo" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                        @endif
+                                    </div>
+                                    <input class="form-control" type="file" id="poster" name ='logo_pj'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="previewLogo()">
+                                </div>
                                 <div class="mb-3 col col-lg-4" >
-                                    <label for="inputNamaPJ" class="form-label">Nama Organisasi</label>
-                                    <input type="text" class="form-control" id="inputNamaPJ" name='nama_pj' placeholder="Jawaban Anda" value="{{old('nama_pj', $data->nama_pj)}}">
-                                    <div class="invalid-feedback">
-                                        Pertanyaan ini wajib diisi
-                                    </div>
-                                    <div class="valid-feedback">
-                                        Okke!
-                                    </div>
+                                    <label for="inputNamaPJ" class="form-label">Organization Name</label>
+                                    <input type="text" class="form-control" id="inputNamaPJ" name='nama_pj' value="{{old('nama_pj', $data->nama_pj)}}">
                                 </div>
                                 <div class="mb-3 col col-lg-4"  >
-                                    <label for="inputLinkPJ" class="form-label">Link Profil Organisasi</label>
-                                    <input type="text" class="form-control" id="inputLinkPJ" name='link_pj' placeholder="Jawaban Anda" value="{{old('link_pj', $data->link_pj)}}">
-                                    <div class="invalid-feedback">
-                                        Pertanyaan ini wajib diisi
-                                    </div>
-                                    <div class="valid-feedback">
-                                        Okke!
-                                    </div>
-                                </div>
-                                <div class="mb-3 col col-lg-4"  >
-                                    <label for="formFile" class="form-label">Logo Organisasi</label>
-                                    <input class="form-control" type="file" id="poster" name ='logo_pj'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG">
-                                    @if ($data->logo_pj == !null)
-                                        <p><i class="small">{{$data->logo_pj}}</i></p>
-                                    @else
-                                        <p><i class="small">Tidak ada gambar</i></p>
-                                    @endif
+                                    <label for="inputLinkPJ" class="form-label">Organization Profile Links</label>
+                                    <input type="text" class="form-control" id="inputLinkPJ" name='link_pj' value="{{old('link_pj', $data->link_pj)}}">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="mt-3">
-                        <button type="submit" class="btn btn-primary">Perbarui</button>
-                        <a type="submit" class="btn btn-primary" href="/admin/service/celengansyahid/campaigns">Batalkan</a>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <a type="submit" class="btn btn-primary" href="/admin/service/celengansyahid/campaigns">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -353,6 +312,13 @@ function cekOrg() {
 
     }
 </script>
-
+<script>
+function previewPoster() {
+    framePoster.src=URL.createObjectURL(event.target.files[0]);
+}
+function previewLogo() {
+    frameLogo.src=URL.createObjectURL(event.target.files[0]);
+}
+</script>
 
 @endsection

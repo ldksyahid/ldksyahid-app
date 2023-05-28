@@ -78,12 +78,16 @@
                 appear: appear,
             },
             success: function(data) {
-                $(".btn-close").click();
-                read();
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Call Kestari has been created!'
-                });
+                if($.isEmptyObject(data.error)){
+                    $(".btn-close").click();
+                    read();
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Call Kestari has been created !'
+                    });
+                }else{
+                    printErrorMsg(data.error);
+                }
             }
         });
     }
@@ -117,14 +121,26 @@
                 link: link,
                 appear: appear, },
             success: function(data) {
-                $(".btn-close").click();
-                read();
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Call Kestari has been updated!'
-                });
+                if($.isEmptyObject(data.error)){
+                    $(".btn-close").click();
+                    read();
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Call Kestari has been updated !'
+                    });
+                }else{
+                    printErrorMsg(data.error);
+                }
 
             }
+        });
+    }
+
+    function printErrorMsg (msg) {
+        $(".print-error-msg").find("ul").html('');
+        $(".print-error-msg").css('display','block');
+        $.each( msg, function( key, value ) {
+            $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
         });
     }
 
@@ -173,6 +189,14 @@
                 });
             }
         })
+    }
+
+    function preview(id) {
+        $.get("{{ url('/admin/service/callkestari/preview') }}/" + id, {}, function(data, status) {
+            $("#modalLabelCrudCallKestari").html('Preview Call Kestari')
+            $("#page").html(data);
+            $("#modalCrudCallKestari").modal('show');
+        });
     }
     // ===== END CRUD Call Kestari =====
 </script>

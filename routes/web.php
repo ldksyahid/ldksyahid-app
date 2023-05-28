@@ -52,7 +52,7 @@ Route::post('/profile/{id}/store', [ProfileController::class, 'store'])->name('p
 Route::put('/profile/{profilepicture}/destroy', [ProfileController::class, 'destroy'])->name('profile.destroy.profilepicture')->middleware('auth');
 
 // Route LandingPage Layanan => Hitung Proker Kestari
-Route::get('/service/hitungproker', function () {
+Route::get('/kalkulatorkestari', function () {
     return view('landing-page.service.proker-counter.index', ["title" => "Layanan"]);
 });
 
@@ -102,22 +102,22 @@ Route::post('/newscomment', [NewsCommentController::class, 'addnewscomment'])->n
 Route::delete('/newscomment/{id}/destroy', [NewsCommentController::class, 'destroy'])->name('newscomment.destroy')->middleware('auth');
 
 // Route Landing Page  Request Service Shortlink
-Route::get('/service/shortlink', [RequestShortlinkController::class, 'create'])->name('service.shortlink.create');
-Route::post('/service/shortlink/store', [RequestShortlinkController::class, 'store'])->name('service.shortlink.strore');
+Route::get('/shortlink', [RequestShortlinkController::class, 'create'])->name('service.shortlink.create');
+Route::post('/shortlink/store', [RequestShortlinkController::class, 'store'])->name('service.shortlink.strore');
 
 // Route LandingPage Layanan Call Kestari
-Route::get('/service/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
+Route::get('/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
 
 // Route LandingPage Layanan CelenganLDKSyahid
-Route::get('/service/celengansyahid', [CelenganSyahidController::class, 'indexLanding'])->name('service.celengansyahid');
-Route::get('/service/celengansyahid/{link}', [CelenganSyahidController::class, 'showLanding'])->name('service.celengansyahid.detail');
-Route::get('/service/celengansyahid/yuk-donasi/{link}', [CelenganSyahidController::class, 'donasiSekarang'])->name('service.celengansyahid.detail.donasisekarang');
-Route::get('/service/celengansyahid/yuk-donasi/{link}/status/{id}', [CelenganSyahidController::class, 'statusDonasi'])->name('service.celengansyahid.detail.donasisekarang.status');
-Route::get('/service/celengansyahid/payment/{id}', [CelenganSyahidController::class, 'openPaymentGateway'])->name('service.celengansyahid.detail.donasisekarang.gateway');
-Route::get('/service/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController::class, 'savePaymentDonation'])->name('service.celengansyahid.savePayment');
+Route::get('/celengansyahid', [CelenganSyahidController::class, 'indexLanding'])->name('service.celengansyahid');
+Route::get('/celengansyahid/{link}', [CelenganSyahidController::class, 'showLanding'])->name('service.celengansyahid.detail');
+Route::get('/celengansyahid/yuk-donasi/{link}', [CelenganSyahidController::class, 'donasiSekarang'])->name('service.celengansyahid.detail.donasisekarang');
+Route::get('/celengansyahid/yuk-donasi/{link}/status/{id}', [CelenganSyahidController::class, 'statusDonasi'])->name('service.celengansyahid.detail.donasisekarang.status');
+Route::get('/celengansyahid/payment/{id}', [CelenganSyahidController::class, 'openPaymentGateway'])->name('service.celengansyahid.detail.donasisekarang.gateway');
+Route::get('/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController::class, 'savePaymentDonation'])->name('service.celengansyahid.savePayment');
 
-Route::post('/service/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
-Route::post('/service/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
+Route::post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
 // ======================================= END ROUTE LANDING PAGE =======================================
 
 
@@ -163,6 +163,7 @@ Route::post('/admin/testimony/store', [TestimonyController::class, 'store'])->na
 Route::get('/admin/testimony/{id}/edit', [TestimonyController::class, 'edit'])->name('admin.testimony.edit')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
 Route::put('/admin/testimony/{id}/update', [TestimonyController::class, 'update'])->name('admin.testimony.update')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
 Route::get('/admin/testimony/{id}/destroy', [TestimonyController::class, 'destroy'])->name('admin.testimony.destroy')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
+Route::get('/admin/testimony/{id}/preview', [TestimonyController::class, 'show'])->name('admin.testimony.preview')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
 
 // Route AdminPage Event
 Route::get('/admin/event', [EventController::class, 'indexadmin'])->name('admin.event.index')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
@@ -171,6 +172,7 @@ Route::post('/admin/event/store', [EventController::class, 'store'])->name('admi
 Route::get('/admin/event/{id}/edit', [EventController::class, 'edit'])->name('admin.event.edit')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
 Route::put('/admin/event/{id}/update', [EventController::class, 'update'])->name('admin.event.update')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
 Route::get('/admin/event/{id}/destroy', [EventController::class, 'destroy'])->name('admin.event.destroy')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
+Route::get('/admin/event/{id}/preview', [EventController::class, 'showInAdmin'])->name('admin.event.preview')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
 
 
 // Route AdminPage Article
@@ -180,6 +182,7 @@ Route::post('/admin/article/store', [ArticleController::class, 'store'])->name('
 Route::get('/admin/article/{id}/edit', [ArticleController::class, 'edit'])->name('admin.article.edit')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 Route::put('/admin/article/{id}/update', [ArticleController::class, 'update'])->name('admin.article.update')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 Route::get('/admin/article/{id}/destroy', [ArticleController::class, 'destroy'])->name('admin.article.destroy')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
+Route::get('/admin/article/{id}/preview', [ArticleController::class, 'showInAdmin'])->name('admin.article.preview')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 
 // Route AdminPage News
 Route::get('/admin/news', [NewsController::class, 'indexadmin'])->name('admin.news.index')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
@@ -188,6 +191,7 @@ Route::post('/admin/news/store', [NewsController::class, 'store'])->name('admin.
 Route::get('/admin/news/{id}/edit', [NewsController::class, 'edit'])->name('admin.news.edit')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 Route::put('/admin/news/{id}/update', [NewsController::class, 'update'])->name('admin.news.update')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 Route::get('/admin/news/{id}/destroy', [NewsController::class, 'destroy'])->name('admin.news.destroy')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
+Route::get('/admin/news/{id}/preview', [NewsController::class, 'showInAdmin'])->name('admin.news.preview')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 
 // Route AdminPage Schedule
 Route::get('/admin/schedule', [ScheduleController::class, 'indexadmin'])->name('admin.schedule.index')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
@@ -196,6 +200,7 @@ Route::post('/admin/schedule/store', [ScheduleController::class, 'store'])->name
 Route::get('/admin/schedule/{id}/edit', [ScheduleController::class, 'edit'])->name('admin.schedule.edit')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
 Route::put('/admin/schedule/{id}/update', [ScheduleController::class, 'update'])->name('admin.schedule.update')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
 Route::get('/admin/schedule/{id}/destroy', [ScheduleController::class, 'destroy'])->name('admin.schedule.destroy')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
+Route::get('/admin/schedule/{id}/preview', [ScheduleController::class, 'showInAdmin'])->name('admin.schedule.preview')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
 
 // Route AdminPage Gallery
 Route::get('/admin/about/gallery', [GalleryController::class, 'indexadmin'])->name('admin.about.gallery.index')->middleware(['role:Superadmin|HelperMedia']);
@@ -204,6 +209,7 @@ Route::post('/admin/about/gallery/store', [GalleryController::class, 'store'])->
 Route::get('/admin/about/gallery/{id}/edit', [GalleryController::class, 'edit'])->name('admin.about.gallery.edit')->middleware(['role:Superadmin|HelperMedia']);
 Route::put('/admin/about/gallery/{id}/update', [GalleryController::class, 'update'])->name('admin.about.gallery.update')->middleware(['role:Superadmin|HelperMedia']);
 Route::get('/admin/about/gallery/{id}/destroy', [GalleryController::class, 'destroy'])->name('admin.about.gallery.destroy')->middleware(['role:Superadmin|HelperMedia']);
+Route::get('/admin/about/gallery/{id}/preview', [GalleryController::class, 'showInAdmin'])->name('admin.gallery.preview')->middleware(['role:Superadmin|HelperMedia']);
 
 // Route AdminPage Structure
 Route::get('/admin/about/structure', [StructureController::class, 'indexadmin'])->name('admin.about.structure.index')->middleware(['role:Superadmin|HelperMedia']);
@@ -212,6 +218,7 @@ Route::post('/admin/about/structure/store', [StructureController::class, 'store'
 Route::get('/admin/about/structure/{id}/edit', [StructureController::class, 'edit'])->name('admin.about.structure.edit')->middleware(['role:Superadmin|HelperMedia']);
 Route::put('/admin/about/structure/{id}/update', [StructureController::class, 'update'])->name('admin.about.structure.update')->middleware(['role:Superadmin|HelperMedia']);
 Route::get('/admin/about/structure/{id}/destroy', [StructureController::class, 'destroy'])->name('admin.about.structure.destroy')->middleware(['role:Superadmin|HelperMedia']);
+Route::get('/admin/about/structure/{id}/preview', [StructureController::class, 'showInAdmin'])->name('admin.about.structure.preview')->middleware(['role:Superadmin|HelperMedia']);
 
 // Route AdminPage Request Service Shortlink
 Route::get('/admin/reqservice/shortlink', [RequestShortlinkController::class, 'index'])->name('admin.reqservice.shortlink.index')->middleware(['role:Superadmin|HelperMedia']);
@@ -229,6 +236,7 @@ Route::get('/admin/service/callkestari/store', [CallKestariController::class, 's
 Route::get('/admin/service/callkestari/edit/{id}', [CallKestariController::class, 'edit'])->name('admin.service.callkestari.edit')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
 Route::get('/admin/service/callkestari/update/{id}', [CallKestariController::class, 'update'])->name('admin.service.callkestari.update')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
 Route::get('/admin/service/callkestari/destroy/{id}', [CallKestariController::class, 'destroy'])->name('admin.service.callkestari.destroy')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
+Route::get('/admin/service/callkestari/preview/{id}', [CallKestariController::class, 'showInAdmin'])->name('admin.service.callkestari.preview')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
 
 // Route AdminPage IT Support
 Route::get('/admin/about/itsupport', [ITSupportController::class, 'indexadmin'])->name('admin.about.itsupport.index')->middleware(['role:Superadmin']);
@@ -237,6 +245,7 @@ Route::post('/admin/about/itsupport/store', [ITSupportController::class, 'store'
 Route::get('/admin/about/itsupport/{id}/edit', [ITSupportController::class, 'edit'])->name('admin.about.itsupport.edit')->middleware(['role:Superadmin']);
 Route::put('/admin/about/itsupport/{id}/update', [ITSupportController::class, 'update'])->name('admin.about.itsupport.update')->middleware(['role:Superadmin']);
 Route::get('/admin/about/itsupport/{id}/destroy', [ITSupportController::class, 'destroy'])->name('admin.about.itsupport.destroy')->middleware(['role:Superadmin']);
+Route::get('/admin/about/itsupport/{id}/preview', [ITSupportController::class, 'showInAdmin'])->name('admin.about.itsupport.preview')->middleware(['role:Superadmin']);
 
 // Route AdminPage Service Campaign
 Route::get('/admin/service/celengansyahid/campaigns', [CelenganSyahidController::class, 'indexAdminCampaign'])->name('admin.service.index.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);

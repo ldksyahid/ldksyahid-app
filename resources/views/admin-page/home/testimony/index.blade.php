@@ -10,7 +10,7 @@
                 <a class='btn btn-primary' href="/admin/testimony/create"><i class="fa fa-plus"></i> Create Testimony</a>
                 {{-- START Data table Testimony --}}
                 <div class="mt-3">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered small">
                         <thead>
                             <tr align='center'>
                                 <th scope="col" style="width: 10px">No</th>
@@ -32,9 +32,9 @@
                                     <img style="width: 100px;" src="{{ asset($posttestimony->picture) }}" alt="{{$posttestimony->name}}" class="card-img"/>
                                 </td>
                                 <td align="center">
-                                        <a href="/admin/testimony/{{$posttestimony->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
-                                        <button type="submit" onclick="deleteConfirmationTestimony({{$posttestimony->id}})" id="delete-testimony" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/"><i class="fa fa-eye"></i></a>
+                                    <a href="/admin/testimony/{{$posttestimony->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
+                                    <button type="submit" onclick="deleteConfirmationTestimony({{$posttestimony->id}})" id="delete-testimony" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
+                                    <a class="btn btn-sm btn-primary" href="/admin/testimony/{{$posttestimony->id}}/preview"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             @empty

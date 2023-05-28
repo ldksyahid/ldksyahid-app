@@ -10,7 +10,7 @@
                 <a class='btn btn-primary' href="/admin/schedule/create"><i class="fa fa-plus"></i> Create Schedule</a>
                 {{-- START Data table Article --}}
                 <div class="mt-3">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered small">
                         <thead>
                             <tr align='center'>
                                 <th scope="col" style="width: 10px">No</th>
@@ -34,7 +34,7 @@
                                 <td align="center">
                                     <a href="/admin/schedule/{{$postschedule->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
                                     <button type="submit" onclick="deleteConfirmationSchedule({{ $postschedule->id }})" id="delete-schedule" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                    <a class="btn btn-sm btn-primary" href="/schedule" target="_blank"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-sm btn-primary" href="/admin/schedule/{{$postschedule->id}}/preview"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             @empty

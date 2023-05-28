@@ -11,7 +11,7 @@ class MessageContactController extends Controller
 {
     public function index()
     {
-        $data = MessageContact::all();
+        $data = MessageContact::orderBy('created_at','desc')->get();
         return view('admin-page.about.contact-us.index')->with([
             'data' => $data,
             "title" => "About Us"

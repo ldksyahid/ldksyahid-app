@@ -9,19 +9,19 @@
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Campaigns Database</h5>
-                <a class='btn btn-primary' href="/admin/service/celengansyahid/campaign/create"><i class="fa fa-plus"></i> Buat Campaign</a>
+                <h5 class="mb-4">Campaign Database</h5>
+                <a class='btn btn-primary' href="/admin/service/celengansyahid/campaign/create"><i class="fa fa-plus"></i> Create Campaign</a>
                 {{-- START Data table Campaign --}}
                 <div class="mt-3">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered small">
                         <thead>
                             <tr align='center'>
                                 <th scope="col" style="width: 10px">No</th>
-                                <th scope="col" style="width: 170px">Judul</th>
-                                <th scope="col">Ketegori</th>
+                                <th scope="col" style="width: 170px">Title</th>
+                                <th scope="col">Category</th>
                                 <th scope="col">Poster</th>
-                                <th scope="col">Penanggung Jawab</th>
-                                <th scope="col">Target Biaya</th>
+                                <th scope="col">PIC</th>
+                                <th scope="col">Cost Target</th>
                                 <th scope="col">Deadline</th>
                                 <th scope="col" style="width: 40px">Action</th>
                             </tr>
@@ -33,7 +33,7 @@
                                 <td>{{ $data->judul }}</td>
                                 <td align="center">{{ $data->kategori }}</td>
                                 <td align="center">
-                                    <img style="width: 200px;" src="{{ asset($data->poster) }}" alt="{{ $data->judul }}"/>
+                                    <img style="width: 200px;" class="rounded" src="{{ asset($data->poster) }}" alt="{{ $data->judul }}"/>
                                 </td>
                                 @if ($data->nama_pj != null && $data->link_pj != null)
                                     <td align="center"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></td>
@@ -50,7 +50,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan='9', align='center'>Data Tidak Ditemukan</td>
+                                <td colspan='9', align='center'>No Campaign Data</td>
                             </tr>
                             @endforelse
                         </tbody>
