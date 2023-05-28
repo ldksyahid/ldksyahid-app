@@ -34,6 +34,7 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ asset('admin-page-ext-rsrc/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/required-field.css') }}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('admin-page-ext-rsrc/css/style.css') }}" rel="stylesheet">

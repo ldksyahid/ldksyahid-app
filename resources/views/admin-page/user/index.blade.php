@@ -82,13 +82,25 @@
                 roleName:roleName
             },
             success: function(data) {
-                $(".btn-close").click();
-                read();
-                Toast.fire({
-                    icon: 'success',
-                    title: 'User has been created !'
-                });
+                if($.isEmptyObject(data.error)){
+                    $(".btn-close").click();
+                    read();
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'User has been created !'
+                    });
+                }else{
+                    printErrorMsg(data.error);
+                }
             }
+        });
+    }
+
+    function printErrorMsg (msg) {
+        $(".print-error-msg").find("ul").html('');
+        $(".print-error-msg").css('display','block');
+        $.each( msg, function( key, value ) {
+            $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
         });
     }
 
@@ -133,13 +145,16 @@
                 password: password,
                 roleName:roleName },
             success: function(data) {
-                $(".btn-close").click();
-                read();
-                Toast.fire({
-                    icon: 'success',
-                    title: 'User has been updated !'
-                });
-
+                if($.isEmptyObject(data.error)){
+                    $(".btn-close").click();
+                    read();
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'User has been updated !'
+                    });
+                }else{
+                    printErrorMsg(data.error);
+                }
             }
         });
     }

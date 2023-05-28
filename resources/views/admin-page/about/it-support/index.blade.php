@@ -10,15 +10,15 @@
                 <a class='btn btn-primary' href="/admin/about/itsupport/create"><i class="fa fa-plus"></i> Create IT Support</a>
                 {{-- START Data table IT Support --}}
                 <div class="mt-3">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered small">
                         <thead>
                             <tr align='center'>
                                 <th scope="col" style="width: 10px">No</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Forkat</th>
                                 <th scope="col">Position</th>
-                                <th scope="col">Link Instagram</th>
-                                <th scope="col">Link Linkedin</th>
+                                <th scope="col">Instagram Link</th>
+                                <th scope="col">Linkedin Link</th>
                                 <th scope="col">Photo Profile</th>
                                 <th scope="col" style="width: 10px">Action</th>
                             </tr>
@@ -38,7 +38,7 @@
                                 <td align="center">
                                     <a href="/admin/about/itsupport/{{ $data->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
                                     <button type="submit" onclick="deleteConfirmationITSupport({{ $data->id }})" id="delete-itsupport" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                    <a class="btn btn-sm btn-primary" href="/itsupport" target="_blank"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-sm btn-primary" href="/admin/about/itsupport/{{ $data->id }}/preview"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             @empty

@@ -95,7 +95,7 @@ $donation_total = 0 ;
                 <div class="mb-0">
                     <div class="row align-items-center">
                         <div class="col-lg-8 text-start">
-                            <a class="btn btn-primary py-2 px-5" style="border-radius: 5px;" href="/service/celengansyahid/yuk-donasi/{{ $data->link }}">Donasi Sekarang</a>
+                            <a class="btn btn-primary py-2 px-5" style="border-radius: 5px;" href="/celengansyahid/yuk-donasi/{{ $data->link }}">Donasi Sekarang</a>
                         </div>
                        <div class="col-lg-4 text-end  align-items-center">
                            <div class="row justify-content-center align-items-center">
@@ -324,7 +324,7 @@ $donation_total = 0 ;
 </div>
 <div class="conteiner-fluid mobile-responsive p-3 shadow wow fadeInUp" style="position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f5f6fa; text-align: center; z-index:3;" data-wow-delay="0.2s">
     <div class="col-lg-12 text-center">
-        <a class="btn btn-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/yuk-donasi/{{ $data->link }}">Donasi Sekarang</a>
+        <a class="btn btn-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/yuk-donasi/{{ $data->link }}">Donasi Sekarang</a>
         <hr>
     </div>
 </div>

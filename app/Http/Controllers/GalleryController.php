@@ -136,6 +136,12 @@ class GalleryController extends Controller
         return view('admin-page.about.gallery.update',  compact('postgallery'),["title" => "About Us"]);
     }
 
+    public function showInAdmin($id)
+    {
+        $postgallery = Gallery::find($id);
+        return view('admin-page.about.gallery.view',  compact('postgallery'),["title" => "About Us"]);
+    }
+
     public function update(Request $request, $id)
     {
         if ($request->file('groupPhoto')) {

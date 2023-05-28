@@ -10,7 +10,7 @@
                 <a class='btn btn-primary' href="/admin/article/create"><i class="fa fa-plus"></i> Create Article</a>
                 {{-- START Data table Article --}}
                 <div class="mt-3">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered small">
                         <thead>
                             <tr align='center'>
                                 <th scope="col" style="width: 10px">No</th>
@@ -40,7 +40,7 @@
                                 <td align="center">
                                         <a href="/admin/article/{{ $postarticle->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
                                         <button type="submit" onclick="deleteConfirmationArticle({{ $postarticle->id }})" id="delete-article" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/articles/{{ $postarticle->id }}" target="_blank"><i class="fa fa-eye"></i></a>
+                                        <a class="btn btn-sm btn-primary" href="/admin/article/{{ $postarticle->id }}/preview"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             @empty
@@ -49,31 +49,6 @@
                             </tr>
                             @endforelse
                         </tbody>
-                        {{-- <tbody>
-                            @forelse($postjumbotron as $key => $postjumbotron)
-                            <tr>
-                                <td scope="row" align='center'>{{$key + 1}}</td>
-                                <td>{{ $postjumbotron->title }}</td>
-                                <td>
-                                    <img style="width: 100px;" src="{{asset('Images/uploads/jumbotrons')}}/{{$postjumbotron->picture}}" alt="{{$postjumbotron->title}}" class="card-img-top"/>
-                                </td>
-                                <td>{{ $postjumbotron->subtitle }}</td>
-                                <td>{{substr($postjumbotron->sentence, 0, 10)}}...</td>
-                                <td align='center'>{{$postjumbotron->btnname}}</td>
-                                <td align='center'><a href="{{$postjumbotron->btnlink}}" target="_blank">Link</a></td>
-                                <td align='center'>{{$postjumbotron->textalign}}</td>
-                                <td align="center">
-                                        <a href="/admin/jumbotron/{{$postjumbotron->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
-                                        <button type="submit" onclick="deleteConfirmation({{$postjumbotron->id}})" id="delete-jumbotron" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/admin/jumbotron/{{$postjumbotron->id}}/preview"><i class="fa fa-eye"></i></a>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan='9', align='center'>No Jumbotron Data</td>
-                            </tr>
-                        @endforelse
-                        </tbody> --}}
                     </table>
                 </div>
                 {{-- END Data table Jumbotron --}}

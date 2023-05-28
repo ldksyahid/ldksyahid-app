@@ -50,7 +50,7 @@
     <div class="container-fluid">
         <div class="container w-75">
             <div class="g-5">
-                <form role="form" action='/service/celengansyahid/donation/store' method='post' enctype="multipart/form-data" class="needs-validation form" novalidate>
+                <form role="form" action='/celengansyahid/donation/store' method='post' enctype="multipart/form-data" class="needs-validation form" novalidate>
                 @csrf
                 @method('POST')
                     <input type="hidden" name="postdonation" value="{{$data->id}}" />
@@ -205,7 +205,7 @@
     </div>
     <div class="container px-4 py-3">
         <div>
-            <form role="form" action='/service/celengansyahid/donation/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
+            <form role="form" action='/celengansyahid/donation/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
             @csrf
             @method('POST')
                 <input type="hidden" name="linkcampaign" value="{{$data->link}}" />

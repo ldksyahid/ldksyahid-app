@@ -10,7 +10,7 @@
                 <a class='btn btn-primary' href="/admin/about/structure/create"><i class="fa fa-plus"></i> Create Structure</a>
                 {{-- START Data table Structure --}}
                 <div class="mt-3">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered small">
                         <thead>
                             <tr align='center'>
                                 <th scope="col" style="width: 10px">No</th>
@@ -40,7 +40,7 @@
                                 <td align="center">
                                     <a href="/admin/about/structure/{{ $data->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
                                     <button type="submit" onclick="deleteConfirmationStructure({{ $data->id }})" id="delete-structure" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                    <a class="btn btn-sm btn-primary" href="/about/structure" target="_blank"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-sm btn-primary" href="/admin/about/structure/{{ $data->id }}/preview"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                             @empty
