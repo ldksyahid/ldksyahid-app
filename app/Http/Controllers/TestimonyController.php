@@ -42,6 +42,12 @@ class TestimonyController extends Controller
         return view('admin-page.home.testimony.update', compact('posttestimony'), ["title" => "Home"]);
     }
 
+    public function show($id)
+    {
+        $posttestimony = Testimony::find($id);
+        return view('admin-page.home.testimony.view', compact('posttestimony'), ["title" => "Home"]);
+    }
+
     public function update(Request $request, $id)
     {
         if ($request->file('picture')) {

@@ -1,0 +1,11 @@
+.required:after {
+    content:" *";
+    color: #d93025;
+}
+
+.error-field {
+    display:none;
+    background-color: #dc3545;
+    color:white;
+    border-radius :3px;
+}

@@ -1832,6 +1832,7 @@ progress {
 }
 .form-control[type="file"] {
     overflow: hidden;
+    cursor: pointer;
 }
 .form-control[type="file"]:not(:disabled):not(:read-only) {
     cursor: pointer;
@@ -2054,7 +2055,7 @@ textarea.form-control-lg {
 }
 .form-check-input:focus {
     border-color: #80ceff;
-    outline: 0;
+    outline: 10;
     box-shadow: 0 0 0 0.25rem rgba(0, 156, 255, 0.25);
 }
 .form-check-input:checked {

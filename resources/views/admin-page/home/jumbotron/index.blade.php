@@ -8,9 +8,8 @@
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Jumbotron Database</h5>
                 <a class='btn btn-primary' href="/admin/jumbotron/create"><i class="fa fa-plus"></i> Create Jumbotron</a>
-
                 <div class="mt-3">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered small">
                         <thead>
                             <tr align='center'>
                                 <th scope="col" style="width: 10px">No</th>
@@ -25,7 +24,7 @@
                             <tr>
                                 <td scope="row" align='center'>{{$key + 1}}</td>
                                 <td align='center'>
-                                    <img style="width: 300px;" src="{{ asset($postjumbotron->picture) }}" alt="{{$postjumbotron->title}}" class="card-img"/>
+                                    <img style="width: 200px;" src="{{ asset($postjumbotron->picture) }}" alt="{{$postjumbotron->title}}" class="card-img"/>
                                 </td>
                                 @if ($postjumbotron->btnname != null || $postjumbotron->btnlink != null)
                                     <td align='center'>{{$postjumbotron->btnname}}</td>

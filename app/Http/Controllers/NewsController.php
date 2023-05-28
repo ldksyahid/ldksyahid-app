@@ -62,6 +62,12 @@ class NewsController extends Controller
         return view('admin-page.news.update', compact('postnews'), ["title" => "News"]);
     }
 
+    public function showInAdmin($id)
+    {
+        $postnews = News::find($id);
+        return view('admin-page.news.view', compact('postnews'), ["title" => "News"]);
+    }
+
     public function update(Request $request, $id)
     {
 

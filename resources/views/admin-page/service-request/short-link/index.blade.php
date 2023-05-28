@@ -85,14 +85,26 @@
                 note: note,
                 fixCustomLink: fixCustomLink },
             success: function(data) {
-                $(".btn-close").click();
-                read();
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Request Shortlink has been edited !'
-                });
+                if($.isEmptyObject(data.error)){
+                    $(".btn-close").click();
+                    read();
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Request Shortlink has been updated !'
+                    });
+                }else{
+                    printErrorMsg(data.error);
+                }
 
             }
+        });
+    }
+
+    function printErrorMsg (msg) {
+        $(".print-error-msg").find("ul").html('');
+        $(".print-error-msg").css('display','block');
+        $.each( msg, function( key, value ) {
+            $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
         });
     }
 
@@ -135,7 +147,7 @@
     // untuk modal preview
     function previewReqShortlink(id) {
         $.get(`{{ url('/admin/reqservice/shortlink/${id}/preview') }}`, {}, function(data, status) {
-            $("#modalLabelCrudReqShortlink").html('Edit Request Shortlink')
+            $("#modalLabelCrudReqShortlink").html('Preview Request Shortlink')
             $("#pageReqShortlink").html(data);
             $("#modalCrudReqShortlink").modal('show');
         });

@@ -50,6 +50,12 @@ class ITSupportController extends Controller
         return view('admin-page.about.it-support.update',  compact('postitsupport'),["title" => "About Us"]);
     }
 
+    public function showInAdmin($id)
+    {
+        $postitsupport = ITSupport::find($id);
+        return view('admin-page.about.it-support.view',  compact('postitsupport'),["title" => "About Us"]);
+    }
+
     public function update(Request $request, $id)
     {
         if ($request->file('photoProfile')) {
