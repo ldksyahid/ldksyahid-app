@@ -10,14 +10,13 @@
                 @csrf
                 @method('POST')
                     <div class="row">
-                        <div class="mb-3 col col-lg-12">
-                            <label for="formFile" class="form-label">Picture (1440 x 560 Pixel)</label>
-                            <input class="form-control" type="file" id="picture" name ='picture' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" required>
+                        <div class="mb-3 col col-4">
+                            <label for="formFile" class="form-label required">Picture (1440 x 560 Pixel)</label>
+                            <br>
+                            <img id="frame" src="{{ asset('Images/Icons/add_image.svg') }}" width="250px" height="150px" class="rounded mb-3 border"/>
+                            <input class="form-control" type="file" id="picture" name ='picture' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="preview()" required>
                             <div class="invalid-feedback">
-                                Please insert a picture here.
-                            </div>
-                            <div class="valid-feedback">
-                                Nice Picture!
+                                This is a required question
                             </div>
                         </div>
                         <div class="mb-3 col col-lg-12">
@@ -28,11 +27,11 @@
                             <div class="row">
                                 <div class="mb-3 col col-lg-6">
                                     <label for="inputButtonName1" class="form-label">Button Name</label>
-                                    <input type="text" class="form-control" id="inputButtonName1" name='buttonname' placeholder="Enter the Button Name like 'More', 'Go', etc">
+                                    <input type="text" class="form-control" id="inputButtonName1" name='buttonname'>
                                 </div>
                                 <div class="mb-3 col col-lg-6">
                                     <label for="inputButtonLink1" class="form-label">Button Link</label>
-                                    <input type="text" class="form-control" id="inputButtonLink1" name='buttonlink' placeholder="Enter the Button Link like 'https://www.instagram.com/ldksyahid/'">
+                                    <input type="text" class="form-control" id="inputButtonLink1" name='buttonlink'>
                                 </div>
                             </div>
                         </div>
@@ -44,29 +43,28 @@
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('scripts')
 <script>
-    // Pemanggilan Validation
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
+// Pemanggilan Validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
 </script>
 
 <script>
@@ -79,6 +77,12 @@ function cekBtn() {
     } else {
         elementFormBtn.style.display = "none";
     }
+}
+</script>
+
+<script>
+function preview() {
+    frame.src=URL.createObjectURL(event.target.files[0]);
 }
 </script>
 @endsection

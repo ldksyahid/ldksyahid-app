@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ReqShortlink;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 
 class RequestShortlinkController extends Controller
 {
@@ -43,7 +44,7 @@ class RequestShortlinkController extends Controller
             "note" => $request->note,
         ]);
         Alert::success('Permintaan Perpendek URL berhasil dikirim', 'Kami akan menghubungimu melalui Whatsapp yang telah di daftarkan setelah Shortlink berhasil kami buat')->autoClose(15000)->width('40%');
-        return redirect('/service/shortlink');
+        return redirect('/shortlink');
     }
 
     public function show($id)
@@ -67,15 +68,31 @@ class RequestShortlinkController extends Controller
     public function addFixCustomLinkUpdate(Request $request, $id)
     {
 
-        $data = ReqShortlink::findOrFail($id);
-        $data->name = $request->name;
-        $data->email = $request->email;
-        $data->whatsapp = $request->whatsapp;
-        $data->defaultLink = $request->defaultLink;
-        $data->customLink = $request->customLink;
-        $data->note = $request->note;
-        $data->fixCustomLink = $request->fixCustomLink;
-        $data->save();
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'whatsapp' => 'required',
+            'whatsapp' => 'required',
+            'defaultLink' => 'required',
+            'customLink' => 'required',
+            'note' => 'required',
+            'fixCustomLink' => 'required',
+        ]);
+
+        if ($validator->passes()) {
+            $data = ReqShortlink::findOrFail($id);
+            $data->name = $request->name;
+            $data->email = $request->email;
+            $data->whatsapp = $request->whatsapp;
+            $data->defaultLink = $request->defaultLink;
+            $data->customLink = $request->customLink;
+            $data->note = $request->note;
+            $data->fixCustomLink = $request->fixCustomLink;
+            $data->save();
+            toast('Request Shortlink has been updated !', 'success')->autoClose(1500)->width('500px');
+        }
+
+        return response()->json(['error'=>$validator->errors()->all()]);
     }
 
     public function destroy($id)

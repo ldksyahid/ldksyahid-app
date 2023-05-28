@@ -116,12 +116,12 @@
                 <div class="col-lg-4 col-md-6 mt-3">
                     <div class="card shadow-c mb-2">
                         <div style="height: 12em;">
-                            <a href="/service/celengansyahid/{{ $data->link }}"><img src="{{ asset($data->poster) }}" alt="poster-{{ $data->link }}" class="card-img w-100"></a>
+                            <a href="/celengansyahid/{{ $data->link }}"><img src="{{ asset($data->poster) }}" alt="poster-{{ $data->link }}" class="card-img w-100"></a>
                         </div>
                         <div class="mt-1 p-3">
                             <div class="badge" style="margin-left:-8px;"> <span>{{ $data->kategori }}</span> </div>
                             <div style="height: 5em;" class="d-flex flex-row align-items-center">
-                                <h5 class="text-body mb-0"><a href="/service/celengansyahid/{{ $data->link }}">{{ $data->judul }}</a></h5>
+                                <h5 class="text-body mb-0"><a href="/celengansyahid/{{ $data->link }}">{{ $data->judul }}</a></h5>
                             </div>
                             <div style="height: 2em;">
                                 <p style="font-size: 14px;">
@@ -198,13 +198,13 @@
                         <div class="col" style="margin-right:-20px;">
                             <div  class="p-3">
                                 <div class="badge-mobile-all pb-1" style="margin-top: -20px"> <span style="font-size:6px; font-weight:575;"><p>{{$data->kategori}}</p></span> </div>
-                                <a href="/service/celengansyahid/{{ $data->link }}"><img src="{{ asset($data->poster) }}" alt="{{ $data->link }}" class="card-img w-100" style="border-radius: 5px;"></a>
+                                <a href="/celengansyahid/{{ $data->link }}"><img src="{{ asset($data->poster) }}" alt="{{ $data->link }}" class="card-img w-100" style="border-radius: 5px;"></a>
                             </div>
                         </div>
                         <div class="col" style="margin-left:-20px;">
                             <div class="p-3">
                                 <div style="line-height: 1.1em">
-                                    <a href="/service/celengansyahid/{{ $data->link }}" style="font-size: 12px ; font-weight:600;">{!!  strip_tags( $data->judul ) !!}</a>
+                                    <a href="/celengansyahid/{{ $data->link }}" style="font-size: 12px ; font-weight:600;">{!!  strip_tags( $data->judul ) !!}</a>
                                 </div>
                             </div>
                             <div class="col p-3" style="margin-top:-30px;">

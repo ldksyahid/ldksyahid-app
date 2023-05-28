@@ -8,13 +8,13 @@
             <div class="bg-light rounded h-100 p-4">
                 <h5 class="mb-4">Contact Message Database</h5>
                 <div  class="mt-3">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered small">
                         <thead>
                             <tr align='center'>
                                 <th scope="col" style="width: 10px">No</th>
                                 <th scope="col">Name</th>
-                                <th scope="col" style="width: 20px">Email</th>
                                 <th scope="col">Subject</th>
+                                <th scope="col">Date</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -23,8 +23,8 @@
                             <tr>
                                 <td scope="row" align='center'>{{$key + 1}}</td>
                                 <td align='center'>{{$item->name}}</td>
-                                <td align='center'>{{ $item->email }}</td>
                                 <td align='center'>{{$item->subject}}</td>
+                                <td align='center'>{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->format('Y') }}</td>
                                 <td align="center">
                                     <button class="btn btn-sm btn-primary" onClick="destroycontactmessage({{ $item->id }})"><i class="fa fa-trash"></i></button>
                                     <button class="btn btn-sm btn-primary" onClick="preview({{ $item->id }})"><i class="fa fa-eye"></i></button>

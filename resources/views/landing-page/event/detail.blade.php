@@ -143,13 +143,13 @@
                                         </div>
                                         <div class="col-10">
                                             @if ($postevent->cntctPrsn1 != null && $postevent->cntctPrsn2 != null)
-                                            <a href="https://wa.me/{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
+                                            <a href="https://wa.me/+62{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
                                             <br>
-                                            <a href="https://wa.me/{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
+                                            <a href="https://wa.me/+62{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
                                             @elseif ($postevent->cntctPrsn1 == null)
-                                            <a href="https://wa.me/{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
+                                            <a href="https://wa.me/+62{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
                                             @elseif ($postevent->cntctPrsn2 == null)
-                                            <a href="https://wa.me/{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
+                                            <a href="https://wa.me/+62{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
                                             @endif
                                         </div>
                                         @endif
@@ -322,13 +322,13 @@
                             <div class="col-10">
                                 <div class="col-10">
                                     @if ($postevent->cntctPrsn1 != null && $postevent->cntctPrsn2 != null)
-                                    <a href="https://wa.me/{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
+                                    <a href="https://wa.me/+62{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
                                     <br>
-                                    <a href="https://wa.me/{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
+                                    <a href="https://wa.me/+62{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
                                     @elseif ($postevent->cntctPrsn1 == null)
-                                    <a href="https://wa.me/{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
+                                    <a href="https://wa.me/+62{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
                                     @elseif ($postevent->cntctPrsn2 == null)
-                                    <a href="https://wa.me/{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
+                                    <a href="https://wa.me/+62{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
                                     @endif
                                 </div>
                             </div>

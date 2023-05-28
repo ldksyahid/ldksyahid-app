@@ -1,11 +1,10 @@
-<table class="table table-bordered">
+<table class="table table-bordered small">
     <thead>
         <tr align='center'>
-            <th scope="col">No</th>
+            <th scope="col" style="width: 10px">No</th>
             <th scope="col">Button Name</th>
             <th scope="col">Link</th>
-            <th scope="col">Appear</th>
-            <th scope="col">Action</th>
+            <th scope="col" style="width: 15%">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -16,11 +15,10 @@
             <td align='center'>
                 <a href="{{ $item->link }}" target="_blank">Click Here</a>
             </td>
-            <td align="center">{{ $item->appear }}</td>
             <td align="center">
                 <button class="btn btn-sm btn-primary" onClick="edit({{ $item->id }})"><i class="fa fa-edit"></i></button>
                 <button class="btn btn-sm btn-primary" onClick="destroycallkestari({{ $item->id }})"><i class="fa fa-trash"></i></button>
-                <a class="btn btn-sm btn-primary" href="/service/callkestari" target="_blank"><i class="fa fa-eye"></i></a>
+                <button class="btn btn-sm btn-primary m-1" onClick="preview({{ $item->id }})"><i class="fa fa-eye"></i></button>
             </td>
         </tr>
     @empty

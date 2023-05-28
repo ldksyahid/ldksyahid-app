@@ -53,6 +53,12 @@ class StructureController extends Controller
         return view('admin-page.about.management-structure.update', compact('poststructure'), ["title" => "About Us"]);
     }
 
+    public function showInAdmin($id)
+    {
+        $poststructure = Structure::find($id);
+        return view('admin-page.about.management-structure.view', compact('poststructure'), ["title" => "About Us"]);
+    }
+
     public function update(Request $request, $id)
     {
         if ($request->file('structureLogo')) {
