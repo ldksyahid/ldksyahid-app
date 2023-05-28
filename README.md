@@ -107,4 +107,5 @@ php artisan serve
 ## Version
 | Version | Date         | Update |
 | :---:   |     :---:    |  ---   |
+| `1.0.1`| `2023-05-28` | <ul><li>Revamp Admin Form</li></ul> |
 | `1.0.0`| `2022-12-22` | <ul><li>Initial Version</li></ul> |
