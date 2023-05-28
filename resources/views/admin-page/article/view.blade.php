@@ -6,62 +6,41 @@
     <div class="row g-4">
         <div class="col-sm-6 col-xl-12">
             <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Edit Article</h5>
-                <form role="form" action='/admin/article/{{ $postarticle->id }}/update' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
-                @csrf
-                @method('PUT')
+                <h5 class="mb-4">Preview Article</h5>
+                <form role="form" action='#' method='post' enctype="multipart/form-data">
                     <div class="row">
                         <div class="mb-3 col-4">
                             <label for="inputTitleEvent" class="form-label required">Title</label>
-                            <input type="text" class="form-control" id="inputTitleArticle" name='title' value="{{old('title', $postarticle->title)}}" required>
-                            <div class="invalid-feedback">
-                                This is a required question
-                            </div>
+                            <input type="text" class="form-control" id="inputTitleArticle" name='title' value="{{old('title', $postarticle->title)}}" disabled>
                         </div>
                         <div class="mb-3 col-4">
                             <label for="inputTheme" class="form-label required">Theme</label>
-                            <input type="text" class="form-control" id="inputTheme" name='theme' value="{{old('theme', $postarticle->theme)}}" required>
-                            <div class="invalid-feedback">
-                                This is a required question
-                            </div>
+                            <input type="text" class="form-control" id="inputTheme" name='theme' value="{{old('theme', $postarticle->theme)}}" disabled>
                         </div>
                         <div class="mb-3 col-4">
                             <label for="inputDateArticle" class="form-label required">Date Article Created</label>
-                            <input type="date" class="form-control" id="inputDateArticle" name='datearticle' value="{{old('dateevent', $postarticle->dateevent)}}" required>
-                            <div class="invalid-feedback">
-                                This is a required question
-                            </div>
+                            <input type="date" class="form-control" id="inputDateArticle" name='datearticle' value="{{old('dateevent', $postarticle->dateevent)}}" disabled>
                         </div>
                         <div class="mb-3 col-6">
                             <label for="inputWriter" class="form-label required">Writer</label>
-                            <input type="text" class="form-control" id="inputWriter" name='writer' value="{{old('writer', $postarticle->writer)}}" required>
-                            <div class="invalid-feedback">
-                                This is a required question
-                            </div>
+                            <input type="text" class="form-control" id="inputWriter" name='writer' value="{{old('writer', $postarticle->writer)}}" disabled>
                         </div>
                         <div class="mb-3 col-6">
                             <label for="inputEditor" class="form-label required">Editor</label>
-                            <input type="text" class="form-control" id="inputWriter" name='editor' value="{{old('editor', $postarticle->editor)}}" required>
-                            <div class="invalid-feedback">
-                                This is a required question
-                            </div>
+                            <input type="text" class="form-control" id="inputWriter" name='editor' value="{{old('editor', $postarticle->editor)}}" disabled>
                         </div>
                         <div class="mb-3 col-6">
                             <label for="formFile" class="form-label required">Poster (550 x 400 Pixel)</label>
                             <br>
                             <img id="frame" src="{{ asset($postarticle->poster) }}" width="150px" height="200px" class="rounded mb-3 border"/>
-                            <input class="form-control" type="file" id="poster" name = 'poster' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="preview()">
+                            <input class="form-control" type="file" id="poster" name = 'poster' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
                         </div>
                         <div class="mb-3 col-6">
                             <label for="inputLinkEmbedPDF" class="form-label required">Link Embed (Platform : <a href="https://anyflip.com/" target="_blank">anyflip.com</a> )</label>
-                            <input type="text" class="form-control" id="inputLinkEmbedPDF" name='embedpdf' value="{{old('embedpdf', $postarticle->embedpdf)}}" required>
-                            <div class="invalid-feedback">
-                                This is a required question
-                            </div>
+                            <input type="text" class="form-control" id="inputLinkEmbedPDF" name='embedpdf' value="{{old('embedpdf', $postarticle->embedpdf)}}" disabled>
                         </div>
                         <div class="mb-3 col-12">
-                            <button type="submit" class="btn btn-primary">Update</button>
-                            <a type="submit" class="btn btn-primary" href="/admin/article">Cancel</a>
+                            <a class="btn btn-primary" href="/admin/article"><i class="fa fa-arrow-left"></i> Back</a>
                         </div>
                     </div>
                 </form>

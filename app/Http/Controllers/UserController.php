@@ -10,6 +10,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\LibraryFunctionController as LFC;
+use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     public function index()
@@ -37,17 +38,28 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $roleName = Role::where('name', $request['roleName'])->first();
-
-        $user = User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'password' => 'required',
+            'email' => 'required|email',
+            'roleName' => 'required'
         ]);
 
-        $user->assignRole($roleName);
+        if ($validator->passes()) {
+            $roleName = Role::where('name', $request['roleName'])->first();
 
-        Alert::success('Success', 'User created successfully !');
+            $user = User::create([
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'password' => Hash::make($request['password']),
+            ]);
+
+            $user->assignRole($roleName);
+
+            Alert::success('Success', 'User created successfully !');
+        }
+
+        return response()->json(['error'=>$validator->errors()->all()]);
     }
 
     public function edit($id)
@@ -69,21 +81,32 @@ class UserController extends Controller
     }
 
     public function update(Request $request, $id)
-    {   $roleName = Role::where('name', $request['roleName'])->first();
-        $data = User::findOrFail($id);
-        $dataRoleName =  LFC::getRoleName($data->getRoleNames());
-        if ($dataRoleName != null) {
-            $data->removeRole($dataRoleName);
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'roleName' => 'required'
+        ]);
+
+        if ($validator->passes()) {
+            $roleName = Role::where('name', $request['roleName'])->first();
+            $data = User::findOrFail($id);
+            $dataRoleName =  LFC::getRoleName($data->getRoleNames());
+            if ($dataRoleName != null) {
+                $data->removeRole($dataRoleName);
+            }
+            $data->name = $request->name;
+            $data->email = $request->email;
+            if ($request->password != null) {
+                $data->password = Hash::make($request->password);
+            }
+            $data['updated_at'] = date("Y-m-d H:i:s");
+            $data->save();
+            $data->assignRole($roleName);
+            toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
         }
-        $data->name = $request->name;
-        $data->email = $request->email;
-        if ($request->password != null) {
-            $data->password = Hash::make($request->password);
-        }
-        $data['updated_at'] = date("Y-m-d H:i:s");
-        $data->save();
-        $data->assignRole($roleName);
-        toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
+
+        return response()->json(['error'=>$validator->errors()->all()]);
     }
 
     public function destroy($id)

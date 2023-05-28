@@ -64,6 +64,13 @@ class EventController extends Controller
         return view('landing-page.event.detail', compact('postevent'), ["title" => "Kegiatan"]);
     }
 
+    public function showInAdmin($id)
+    {
+        $dt = Carbon::now();
+        $postevent = Event::find($id);
+        return view('admin-page.event.view', compact('postevent'), ["title" => "Kegiatan"]);
+    }
+
     public function edit($id)
     {
         $postevent = Event::find($id);

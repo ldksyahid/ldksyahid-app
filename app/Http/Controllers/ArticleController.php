@@ -59,6 +59,12 @@ class ArticleController extends Controller
         return view('admin-page.article.update', compact('postarticle'), ["title" => "Article"]);
     }
 
+    public function showInAdmin($id)
+    {
+        $postarticle = Article::find($id);
+        return view('admin-page.article.view', compact('postarticle'), ["title" => "Article"]);
+    }
+
     public function update(Request $request, $id)
     {
         if ($request->file('poster')) {
