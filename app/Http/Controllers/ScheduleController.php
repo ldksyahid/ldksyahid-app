@@ -49,6 +49,12 @@ class ScheduleController extends Controller
         return view('admin-page.schedule.update',  compact('postschedule'),["title" => "Schedule"]);
     }
 
+    public function showInAdmin($id)
+    {
+        $postschedule = Schedule::find($id);
+        return view('admin-page.schedule.view',  compact('postschedule'),["title" => "Schedule"]);
+    }
+
     public function update(Request $request, $id)
     {
         if ($request->file('picture')) {

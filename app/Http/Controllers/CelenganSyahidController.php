@@ -157,13 +157,15 @@ class CelenganSyahidController extends Controller
 
     public function previewAdminCampaign($id)
     {
+        $province = Province::pluck('name', 'id');
         $data = Campaign::where('id',$id)->with(['donation' => function ($q){
             $q->orderBy('created_at', 'DESC');
         }])->first();
 
         return view('admin-page.service.celengan-syahid.campaign.view')->with([
             'data' => $data,
-            "title" => "Celengan Syahid"
+            "title" => "Celengan Syahid",
+            "province" => $province
         ]);
     }
 
@@ -209,10 +211,10 @@ class CelenganSyahidController extends Controller
 
     public function editAdminCampaign($id)
     {
-        $provinces = Province::pluck('name', 'id');
+        $province = Province::pluck('name', 'id');
         $data = Campaign::findOrFail($id);
 
-        return view('admin-page.service.celengan-syahid.campaign.update', compact(['provinces', 'data']),["title" => "Celengan Syahid"]);
+        return view('admin-page.service.celengan-syahid.campaign.update', compact(['province', 'data']),["title" => "Celengan Syahid"]);
     }
 
     public function updateAdminCampaign(Request $request, $id)
@@ -221,8 +223,11 @@ class CelenganSyahidController extends Controller
         $provinsi = ucwords(strtolower($request["provinsi"]));
 
         $city = City::where('id', $request['kota'])->first();
-
-        $kota = ucwords(strtolower($city->name));
+        if ($city != null) {
+            $kota = ucwords(strtolower($city->name));
+        } else {
+            $kota = $request['kota'];
+        }
 
         if ($request->file('poster')) {
             $filename = time().$request->file('poster')->getClientOriginalName();
@@ -268,17 +273,30 @@ class CelenganSyahidController extends Controller
             "link_pj" => $request["link_pj"],
         ]);
 
-        toast('Campaign has been edited !', 'success')->autoClose(1500)->width('400px');
+        toast('Campaign has been updated !', 'success')->autoClose(1500)->width('400px');
         return redirect('/admin/service/celengansyahid/campaigns');
     }
 
     public function destroyAdminCampaign($id){
         // hapus file
-        $gambar = Campaign::where('id',$id)->first();
-        File::delete($gambar->poster);
-        File::delete($gambar->logo_pj);
+        $dataCampaign = Campaign::where('id',$id)->first();
 
-        // hapus data
+        if ($dataCampaign->poster != null) {
+            File::delete($dataCampaign->poster);
+        }
+
+        if ($dataCampaign->logo_pj) {
+            File::delete($dataCampaign->logo_pj);
+        }
+
+        // hapus data donation
+        $dataDonation = Donation::where('campaign_id',$dataCampaign->id)->first();
+        if ($dataDonation != null) {
+            $campaignID = $dataDonation->campaign_id;
+            Donation::where('campaign_id',$campaignID)->delete();
+        }
+
+        // hapus data campaign
         Campaign::where('id',$id)->delete();
         return redirect()->back();
     }

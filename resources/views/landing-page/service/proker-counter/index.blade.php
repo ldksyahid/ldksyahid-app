@@ -6,7 +6,7 @@
         <div class="row g-5">
             <div class="col-lg-9 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-5 border-primary ps-4 mb-5">
-                    <h6 class="text-body mb-2">Program Perhitungan Proker LDK Syahid</h6>
+                    <h6 class="text-body mb-2">Kalkulator Kestari</h6>
                     <h1 class="display-6 mb-0">Mari Kami Bantu untuk Menghitung Nilai Program Kerja Divisimu</h1>
                     <p class="mb-0 mt-1" style="text-align: justify">
                         "Dan janganlah kamu mengikuti sesuatu yang tidak kamu ketahui. Karena pendengaran, penglihatan, dan hati nurani, semua itu akan diminta pertanggungjawabannya."
@@ -245,7 +245,7 @@
             </article>
           </div>
           <div class="text-center fadeInDown wow" data-wow-delay="0.1s">
-            <p>Program Perhitungan ini dibuat oleh Biro Kestari 25</p>
+            <p>Kalkulator Kestari ini dibuat oleh Biro Kestari 25</p>
           </div>
     </div>
 </div>

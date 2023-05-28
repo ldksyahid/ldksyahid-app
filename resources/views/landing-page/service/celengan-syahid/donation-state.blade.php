@@ -101,12 +101,12 @@
             <div class="row my-4">
                 <div class="col col-lg-6">
                     <div class="text-center">
-                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/">KEMBALI</a>
+                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/">KEMBALI</a>
                     </div>
                 </div>
                 <div class="col col-lg-6">
                     <div class="text-center">
-                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/simpan-bukti/{{ $campaign->link }}/{{ $data->id }}" target="_blank">SIMPAN PEMBAYARAN</a>
+                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/simpan-bukti/{{ $campaign->link }}/{{ $data->id }}" target="_blank">SIMPAN PEMBAYARAN</a>
                     </div>
                 </div>
             </div>
@@ -114,7 +114,7 @@
             <div class="row my-4">
                 <div class="col col-lg-12">
                     <div class="text-center">
-                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/payment/{{ $data->id }}" target="_blank">BAYAR SEKARANG</a>
+                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/payment/{{ $data->id }}" target="_blank">BAYAR SEKARANG</a>
                     </div>
                 </div>
                 <br><br>
@@ -128,7 +128,7 @@
             <div class="row my-4">
                 <div class="col col-lg-6">
                     <div class="text-center">
-                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/" target="_blank">BAYAR SEKARANG</a>
+                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/" target="_blank">BAYAR SEKARANG</a>
                     </div>
                 </div>
                 <div class="col col-lg-6">
@@ -139,7 +139,7 @@
                 <br><br>
                 <div class="col col-lg-12">
                     <div class="text-center">
-                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/">KEMBALI</a>
+                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/">KEMBALI</a>
                     </div>
                 </div>
             </div>
@@ -239,18 +239,18 @@
             <div class="col col-md-12 my-4">
                 <div class="col col-md-12 my-4">
                     <div class="text-center">
-                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/simpan-bukti/{{ $campaign->link }}/{{ $data->id }}" target="_blank">SIMPAN PEMBAYARAN</a>
+                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/simpan-bukti/{{ $campaign->link }}/{{ $data->id }}" target="_blank">SIMPAN PEMBAYARAN</a>
                     </div>
                 </div>
                 <div class="text-center">
-                    <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/">KEMBALI</a>
+                    <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/">KEMBALI</a>
                 </div>
             </div>
             @elseif ($data->payment_status == 'PENDING')
             <div class="col col-md-12 my-4">
                 <div class="col col-md-12 my-4">
                     <div class="text-center">
-                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/payment/{{ $data->id }}" target="_blank">BAYAR SEKARANG</a>
+                        <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/payment/{{ $data->id }}" target="_blank">BAYAR SEKARANG</a>
                     </div>
                 </div>
                 <div class="text-center">
@@ -260,7 +260,7 @@
             @else
             <div class="col col-lg-12 my-4">
                 <div class="text-center">
-                    <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/payment/{{ $data->id }}" target="_blank">BAYAR SEKARANG</a>
+                    <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/payment/{{ $data->id }}" target="_blank">BAYAR SEKARANG</a>
                 </div>
             </div>
             <div class="col col-lg-12 my-4">
@@ -270,7 +270,7 @@
             </div>
             <div class="col col-lg-12 my-4">
                 <div class="text-center">
-                    <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/service/celengansyahid/">KEMBALI</a>
+                    <a class="btn btn-outline-primary py-2 px-5 w-100" style="border-radius: 5px;" href="/celengansyahid/">KEMBALI</a>
                 </div>
             </div>
             @endif
