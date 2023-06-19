@@ -21,6 +21,7 @@ use App\Http\Controllers\CallKestariController;
 use App\Http\Controllers\ITSupportController;
 use App\Http\Controllers\TestimonyController;
 use App\Http\Controllers\CelenganSyahidController;
+use App\Http\Controllers\EkspresiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,7 @@ use App\Http\Controllers\CelenganSyahidController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Auth::routes(['verify' => true]);
 
 // Route Template
@@ -118,6 +120,9 @@ Route::get('/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController
 
 Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
 Route::post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+
+// Route Landing Page EKSPRESI 2023
+Route::get('ekspresi2023', [EkspresiController::class, 'index'])->name('ekspresi.index');
 // ======================================= END ROUTE LANDING PAGE =======================================
 
 
@@ -275,18 +280,17 @@ Route::post('/', function () {
     $shortURLObject = $builder->destinationUrl(request()->url)->make();
     $shortURL = $shortURLObject->default_short_url;
 
-    return back()->with('success','URL shortened successfully. ');
-
+    return back()->with('success', 'URL shortened successfully. ');
 })->name('admin.service.shortlink.shorten')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
 Route::post('{id}', function ($id) {
     $url = \AshAllenDesign\ShortURL\Models\ShortURL::find($id);
     $url->url_key = request()->url;
     $url->destination_url = request()->destination;
-    $url->default_short_url = config('app.url').'/'.request()->url;
+    $url->default_short_url = config('app.url') . '/' . request()->url;
     $url->save();
 
-    return back()->with('success','URL updated successfully. ');
+    return back()->with('success', 'URL updated successfully. ');
 })->name('admin.service.shortlink.update')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
 Route::get('{id}/destroy', function ($id) {
@@ -295,7 +299,7 @@ Route::get('{id}/destroy', function ($id) {
     $url->url_key = request()->url;
     $url->delete();
 
-    return back()->with('success','URL Delete successfully. ');
+    return back()->with('success', 'URL Delete successfully. ');
 })->name('admin.service.shortlink.destroy')->middleware(['role:Superadmin']);
 
 Route::get('/{shortURLKey}', '\AshAllenDesign\ShortURL\Controllers\ShortURLController');
