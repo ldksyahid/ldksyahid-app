@@ -8,8 +8,6 @@ class EkspresiController extends Controller
 {
     public function index()
     {
-        return response()->json([
-            "message" => 'Success!'
-        ], 200);
+        return view('landing-page.ekspresi-2023.ekspresi');
     }
 }

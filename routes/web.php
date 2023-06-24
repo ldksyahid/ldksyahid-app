@@ -122,7 +122,7 @@ Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 
 Route::post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
 
 // Route Landing Page EKSPRESI 2023
-Route::get('ekspresi2023', [EkspresiController::class, 'index'])->name('ekspresi.index');
+Route::get('ekspresi-2023', [EkspresiController::class, 'index'])->name('ekspresi.index');
 // ======================================= END ROUTE LANDING PAGE =======================================
 
 
