@@ -111,9 +111,9 @@ Route::get('/callkestari', [CallKestariController::class, 'index'])->name('servi
 // Route LandingPage Layanan CelenganLDKSyahid
 Route::get('/celengansyahid', [CelenganSyahidController::class, 'indexLanding'])->name('service.celengansyahid');
 Route::get('/celengansyahid/{link}', [CelenganSyahidController::class, 'showLanding'])->name('service.celengansyahid.detail');
-Route::get('/celengansyahid/yuk-donasi/{link}', [CelenganSyahidController::class, 'donasiSekarang'])->name('service.celengansyahid.detail.donasisekarang');
-Route::get('/celengansyahid/yuk-donasi/{link}/status/{id}', [CelenganSyahidController::class, 'statusDonasi'])->name('service.celengansyahid.detail.donasisekarang.status');
-Route::get('/celengansyahid/payment/{id}', [CelenganSyahidController::class, 'openPaymentGateway'])->name('service.celengansyahid.detail.donasisekarang.gateway');
+Route::get('/celengansyahid/yuk-donasi/{link}', [CelenganSyahidController::class, 'donateNow'])->name('service.celengansyahid.detail.donatenow');
+Route::get('/celengansyahid/yuk-donasi/{link}/status/{id}', [CelenganSyahidController::class, 'donationStatus'])->name('service.celengansyahid.detail.donateNow.status');
+Route::get('/celengansyahid/payment/{id}', [CelenganSyahidController::class, 'openPaymentGateway'])->name('service.celengansyahid.detail.donateNow.gateway');
 Route::get('/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController::class, 'savePaymentDonation'])->name('service.celengansyahid.savePayment');
 
 Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
@@ -255,7 +255,7 @@ Route::get('/admin/service/celengansyahid/campaign/{id}/edit', [CelenganSyahidCo
 Route::put('/admin/service/celengansyahid/campaign/{id}/update', [CelenganSyahidController::class, 'updateAdminCampaign'])->name('admin.service.update.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::get('/admin/service/celengansyahid/campaign/{id}/preview', [CelenganSyahidController::class, 'previewAdminCampaign'])->name('admin.service.preview.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::get('/admin/service/celengansyahid/campaign/{id}/destroy', [CelenganSyahidController::class, 'destroyAdminCampaign'])->name('admin.service.destroy.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
-Route::post('/admin/service/celengansyahid/campaign/get-city', [CelenganSyahidController::class, 'storeKota'])->name('dependent-dropdown.store.kota')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::post('/admin/service/celengansyahid/campaign/get-city', [CelenganSyahidController::class, 'storeCity'])->name('dependent-dropdown.store.city')->middleware(['role:Superadmin|HelperCelsyahid']);
 
 // Route AdminPage Service Campaign -> donation
 Route::get('/admin/service/celengansyahid/donations', [CelenganSyahidController::class, 'indexAdminDonation'])->name('admin.service.index.donation')->middleware(['role:Superadmin|HelperCelsyahid']);

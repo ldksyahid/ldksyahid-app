@@ -1,11 +1,13 @@
 @extends('landing-page.template.body')
 
 @section('content')
+<div>
+    <audio src="{{ asset('audio/mars-ldksyahid.mp3') }}" type="audio/mpeg" autoplay loop></audio>
+</div>
 @forelse($poststructure as $key => $data)
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5">
-            <audio src="{{ asset('audio/mars-ldksyahid.mp3') }}" type="audio/mpeg" autoplay loop></audio>
             <div class="col-lg-7 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="border-start border-5 border-primary ps-4 mb-5">
                     <h5 class="text-body">Struktur Pengurus LDK Syahid {{ $data->batch }}</h5>
@@ -27,7 +29,6 @@
 </div>
 @empty
 <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s" style="text-align: center">
-    <audio src="{{ asset('audio/mars-ldksyahid.mp3') }}" type="audio/mpeg" autoplay loop></audio>
     <h2>Struktur Pengurus Belum Tersedia</h2>
 </div>
 @endforelse
