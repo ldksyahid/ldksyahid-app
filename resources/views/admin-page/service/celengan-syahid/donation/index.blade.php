@@ -9,7 +9,7 @@
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Donations Database</h5>
+                <h5 class="mb-4">Donation Database</h5>
                 <div class="mt-3">
                     <table class="table table-bordered small" id="data_donation_reguler">
                         <thead>

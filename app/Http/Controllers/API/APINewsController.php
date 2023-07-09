@@ -40,6 +40,8 @@ class APINewsController extends Controller
 
     public function store(Request $request)
     {
+        var_dump($request->all());
+
         $filename = time().$request->file('picture')->getClientOriginalName();
         $path = $request->file('picture')->storeAs('Images/uploads/news',$filename);
 
