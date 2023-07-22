@@ -1,7 +1,10 @@
+@php
+
+@endphp
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Konfirmasi Donasi</title>
+    <title>Invoice Donasi</title>
     <style>
         body {
             background: linear-gradient(to bottom, #00a79d 50%, #ffffff 50%);
@@ -41,7 +44,7 @@
             margin-bottom: 20px;
         }
         .logo img {
-            width: 15%;
+            width: 30%;
         }
         .success-alert {
             font-size: 16px;
@@ -53,7 +56,7 @@
             margin-bottom: 20px;
         }
         .content {
-            font-size: 16px;
+            font-size: 14px;
             color: #6e7276;
         }
         .content a {
@@ -67,67 +70,62 @@
         <div class="card">
             <div class="card-body" style="margin: 20px 20px 20px 20px;">
                 <div class="logo">
-                    <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo-ldksyahid">
+                    <img src="{{ $logo }}" alt="logo-ldksyahid">
                 </div>
                 <div class="success-alert">
-                    <p>Berhasil Checkout Donasi</p>
+                    <p>Invoice Donasi Kamu</p>
                 </div>
                 <div class="content">
-                    <p>Donasi yang Anda berikan untuk Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi telah berhasil diperiksa. Berikut detail transaksi Anda:</p>
+                    <div>
+                        Assalammualaikum, {{ $donaturName }}
+                        <br>
+                        Jazakallah Khairan Katsiiran karena kamu telah ingin melakukan donasi untuk campaign {{ $campaignName }}, Yuk segera transfer donasimu <a href="{{ $invoiceUrl }}" target="_blank" rel="noopener noreferrer" style="color:blue; text-decoration:underline;">disini</a> sebelum link tersebut kadaluarsa.
+                        <br>
+                        Berikut detail Invoice Kamu :
+                    </div>
                     <table>
                         <tr>
-                            <th>Nama Donasi</th>
+                            <th>Nama Campaign</th>
                             <td style="width: 1px">:</td>
-                            <td>Pojok Baca Pelosok Negeri : Membangun Bangsa Dengan Literasi</td>
+                            <td>{{ $campaignName }}</td>
                         </tr>
                         <tr>
-                            <th>Tanggal & Waktu Checkout Donasi</th>
+                            <th>Jumlah Donasi</th>
                             <td style="width: 1px">:</td>
-                            <td>28 Januari 2023, 01:52:15 WIB</td>
+                            <td>{{ $donationAmount }}</td>
                         </tr>
                         <tr>
                             <th>Mitra Donasi</th>
                             <td style="width: 1px">:</td>
-                            <td>Dompet Dhuafa</td>
+                            <td>{{ $merchantName }}</td>
                         </tr>
                         <tr>
-                            <th>Donasi</th>
+                            <th>Pesan Dari Kamu</th>
                             <td style="width: 1px">:</td>
-                            <td>Rp 10.000</td>
+                            @if ($donaturMessage != null)
+                                <td>{{ $donaturMessage }}</td>
+                            @else
+                                <td>Bismillah Semoga Berkah yaaa ! tetap Semangat Semuanya !!</td>
+                            @endif
                         </tr>
                         <tr>
-                            <th>Kode Unik</th>
+                            <th>Link Status Donasi</th>
                             <td style="width: 1px">:</td>
-                            <td>Rp 1</td>
+                            <td><a href="{{ env('APP_URL') }}/celengansyahid/yuk-donasi/{{ $linkCampaign }}/status/{{ $donationID }}" target="_blank" rel="noopener noreferrer" style="color: blue; font-size:12px; text-decoration:underline;">{{ env('APP_URL') }}/celengansyahid/yuk-donasi/{{ $linkCampaign }}/status/{{ $donationID }}</a></td>
                         </tr>
                         <tr>
-                            <th>Total</th>
+                            <th>Deadline Transfer</th>
                             <td style="width: 1px">:</td>
-                            <td>Rp 10.001</td>
-                        </tr>
-                        <tr>
-                            <th>Metode Pembayaran</th>
-                            <td style="width: 1px">:</td>
-                            <td>Bank Transfer</td>
-                        </tr>
-                        <tr>
-                            <th>Nama Bank</th>
-                            <td style="width: 1px">:</td>
-                            <td>Bank Mandiri</td>
-                        </tr>
-                        <tr>
-                            <th>Nama Akun</th>
-                            <td style="width: 1px">:</td>
-                            <td>Yayasan Dompet Dhuafa Republika</td>
-                        </tr>
-                        <tr>
-                            <th>Nomor Akun</th>
-                            <td style="width: 1px">:</td>
-                            <td>101.00.0662668.1</td>
+                            <td>{{ $expiredDate }}</td>
                         </tr>
                     </table>
-                    <p>Lihat detail transaksi Anda <a href="#">disini</a>.</p>
-                    <p>Silakan salin url berikut jika link tidak bekerja: <a href="https://digital.dompetdhuafa.org/donasi/bayar/status?status=&transId=17025">https://digital.dompetdhuafa.org/donasi/bayar/status?status=&transId=17025</a></p>
+                    <div>
+                        Terimakasih telah menjadi bagian dari Manusia Baik
+                        <br>
+                        Wassalammu'alaikum
+                        <br>
+                        Salam Hangat, UKM LDK Syahid
+                    </div>
                 </div>
             </div>
         </div>

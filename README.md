@@ -12,7 +12,7 @@
 
 <br>
 <div align="center">
-<img src="https://img.shields.io/badge/version-v1.0.1-blue" />
+<img src="https://img.shields.io/badge/version-v1.0.2-blue" />
 <img src="https://img.shields.io/badge/license-LDK Syahid-green" />
 <img src="https://img.shields.io/badge/contributors-11-brightgreen" />
 </div>
@@ -107,5 +107,6 @@ php artisan serve
 ## Version
 | Version | Date         | Update |
 | :---:   |     :---:    |  ---   |
+| `1.0.2`| `2023-07-22` | <ul><li>Update Notify Celengan Syahid</li></ul> |
 | `1.0.1`| `2023-05-28` | <ul><li>Revamp Admin Form</li></ul> |
 | `1.0.0`| `2022-12-22` | <ul><li>Initial Version</li></ul> |
