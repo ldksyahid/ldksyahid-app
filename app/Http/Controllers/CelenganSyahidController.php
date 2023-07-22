@@ -16,7 +16,6 @@ use Laravolt\Indonesia\Models\City;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\DonationInvoice;
-use App\Mail\DonationSuccess;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 
