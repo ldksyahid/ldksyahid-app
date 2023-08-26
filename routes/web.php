@@ -248,7 +248,8 @@ Route::get('/admin/about/itsupport/{id}/destroy', [ITSupportController::class, '
 Route::get('/admin/about/itsupport/{id}/preview', [ITSupportController::class, 'showInAdmin'])->name('admin.about.itsupport.preview')->middleware(['role:Superadmin']);
 
 // Route AdminPage Service Campaign
-Route::get('/admin/service/celengansyahid/campaigns', [CelenganSyahidController::class, 'indexAdminCampaign'])->name('admin.service.index.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::get('/admin/service/celengansyahid/dashboard', [CelenganSyahidController::class, 'dashboardCelenganSyahid'])->name('admin.service.index.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::get('/admin/service/celengansyahid/campaigns', [CelenganSyahidController::class, 'indexAdminCampaign'])->name('admin.service.index.celsyahid.dashboard')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::get('/admin/service/celengansyahid/campaign/create', [CelenganSyahidController::class, 'createAdminCampaign'])->name('admin.service.create.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::post('/admin/service/celengansyahid/campaign/store', [CelenganSyahidController::class, 'storeAdminCampaign'])->name('admin.service.store.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::get('/admin/service/celengansyahid/campaign/{id}/edit', [CelenganSyahidController::class, 'editAdminCampaign'])->name('admin.service.edit.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
