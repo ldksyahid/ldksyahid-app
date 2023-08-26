@@ -57,6 +57,7 @@
                 <div class="nav-item dropdown">
                     <a href="/admin/service/celengansyahid" class="nav-link dropdown-toggle {{($title === "Celengan Syahid") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
                     <div class="dropdown-menu bg-transparent border-0">
+                        <a href="/admin/service/celengansyahid/dashboard" class="dropdown-item">&#10070; Dashboard</a>
                         <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item">&#10070; Campaign</a>
                         <a href="/admin/service/celengansyahid/donations" class="dropdown-item">&#10070; Donation</a>
                     </div>
@@ -121,6 +122,7 @@
                 <div class="nav-item dropdown">
                     <a href="/admin/service/celengansyahid" class="nav-link dropdown-toggle {{($title === "Celengan Syahid") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
                     <div class="dropdown-menu bg-transparent border-0">
+                        <a href="/admin/service/celengansyahid/dashboard" class="dropdown-item">&#10070; Dashboard</a>
                         <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item">&#10070; Campaign</a>
                         <a href="/admin/service/celengansyahid/donations" class="dropdown-item">&#10070; Donation</a>
                     </div>

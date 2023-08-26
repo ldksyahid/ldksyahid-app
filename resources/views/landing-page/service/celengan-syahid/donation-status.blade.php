@@ -224,7 +224,7 @@
                     <p style="font-size: 14px;">Donasi</p>
                 </div>
                 <div class="col col-lg-6 text-end">
-                    <strong style="font-size: 14px;">Rp10.000</strong>
+                    <strong style="font-size: 14px;">{{ LFC::formatRupiah($data->jumlah_donasi) }}</strong>
                 </div>
             </div>
             <div class="row my-4">
