@@ -25,6 +25,7 @@
         <link rel="stylesheet" href="{{ asset('proker-counter-by-yuda-ext-rsrc/css/style.css') }}">
         <link href="{{ asset('landing-page-ext-rsrc/css/bootstrap.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/itsupport.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/pop-up-load-page.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/cardservice.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/pagination.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/cardcelengan.css') }}" rel="stylesheet" />
@@ -67,6 +68,7 @@
         <script src="{{ asset('landing-page-ext-rsrc/lib/waypoints/waypoints.min.js') }}"></script>
         <script src="{{ asset('landing-page-ext-rsrc/lib/owlcarousel/owl.carousel.min.js') }}"></script>
         <script src="{{ asset('landing-page-ext-rsrc/js/main.js') }}"></script>
+        <script src="{{ asset('js/pop-up-load-page.js') }}"></script>
         @yield('scripts')
         @include('sweetalert::alert')
         @if((new \Jenssegers\Agent\Agent())->isMobile())
