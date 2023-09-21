@@ -118,6 +118,11 @@ Route::get('/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController
 
 Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
 Route::post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+
+// Route LandingPage EKSPRESI
+Route::get('/ekspresi', function () {
+    return view('landing-page.ekspresi.index');
+});
 // ======================================= END ROUTE LANDING PAGE =======================================
 
 
