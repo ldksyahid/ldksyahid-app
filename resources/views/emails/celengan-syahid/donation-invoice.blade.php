@@ -102,11 +102,7 @@
                         <tr>
                             <th>Pesan Dari Kamu</th>
                             <td style="width: 1px">:</td>
-                            @if ($donaturMessage != null)
-                                <td>{{ $donaturMessage }}</td>
-                            @else
-                                <td>Bismillah Semoga Berkah yaaa ! tetap Semangat Semuanya !!</td>
-                            @endif
+                            {{ $donaturMessage }}
                         </tr>
                         <tr>
                             <th>Link Status Donasi</th>
