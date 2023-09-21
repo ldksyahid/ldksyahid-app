@@ -1,0 +1,45 @@
+#mask {
+  position:absolute;
+  left:0;
+  top:0;
+  z-index:9000;
+  background-color:#26262c;
+  display:none;
+}
+#boxes .window {
+  position:absolute;
+  left:0;
+  top:0;
+  width:440px;
+  height:850px;
+  display:none;
+  z-index:9999;
+  padding:20px;
+  border-radius: 5px;
+  text-align: center;
+}
+#boxes #dialog {
+  width:450px;
+  height:auto;
+  padding: 10px 10px 10px 10px;
+  font-size: 15pt;
+}
+
+.agree:hover{
+  background-color: #D1D1D1;
+}
+
+#san {
+  left :-100px; /* Ensure the image fits within the container */
+}
+
+/* CSS untuk layar kecil (mobile) */
+@media (max-width: 768px) {
+    #dialog {
+        top: -10%; /* Atur posisi top sesuai kebutuhan */
+        left: 10%; /* Atur posisi left sesuai kebutuhan */
+        width: 100%; /* Sesuaikan lebar pop-up sesuai kebutuhan */
+        height: auto; /* Atur tinggi sesuai kebutuhan */
+    }
+}
+
