@@ -16,7 +16,7 @@
             </div>
         </div>
     </div>
-
+{{--
     <div class="row g-4 mt-4">
         <div class="col-sm-12 col-xl-6">
             <div class="bg-light rounded h-100 p-4">
@@ -30,7 +30,7 @@
                 <div id="pie-chart"></div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 </div>
 @endsection
@@ -64,7 +64,7 @@
                 }
 
                 const heatmapLayout = {
-                    title: 'SVM Predicted Donation Class',
+                    title: 'SVM Predicted Dataset Donation Class',
                     xaxis: { title: 'Predicted' },
                     yaxis: { title: 'Actual' },
                     annotations: annotations
@@ -78,7 +78,7 @@
         fetch('/svm-machine-output/bar_plot_data.json')
             .then(response => response.json())
             .then(data => {
-                const classLabels = data.class_labels;
+                const classLabels = ['0-25k', '26-50k', '51-100k', '101-250k', '>251k'];
                 const classCounts = data.class_counts;
 
                 const barData = [{
@@ -102,64 +102,64 @@
             .catch(error => console.error('Error fetching bar plot data:', error));
     }
 
-    function fetchScatterData() {
-        fetch('/svm-machine-output/scatter_data.json')
-            .then(response => response.json())
-            .then(data => {
-                const scatterData = [{
-                    x: data.x,
-                    y: data.y,
-                    mode: 'markers',
-                    type: 'scatter',
-                    marker: {
-                        size: 10,
-                        color: 'blue'
-                    },
-                    name: 'Donatur Data'
-                }];
+    // function fetchScatterData() {
+    //     fetch('/svm-machine-output/scatter_data.json')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             const scatterData = [{
+    //                 x: data.x,
+    //                 y: data.y,
+    //                 mode: 'markers',
+    //                 type: 'scatter',
+    //                 marker: {
+    //                     size: 10,
+    //                     color: 'blue'
+    //                 },
+    //                 name: 'Donatur Data'
+    //             }];
 
-                const scatterLayout = {
-                    title: 'Relationship Age and Donation Class',
-                    xaxis: { title: 'Age' },
-                    yaxis: { title: 'Donation Class' },
-                    showlegend: true,
-                    legend: {
-                        x: 0.5,
-                        y: 1.15,
-                        orientation: 'h'
-                    }
-                };
+    //             const scatterLayout = {
+    //                 title: 'Relationship Age and Donation Class',
+    //                 xaxis: { title: 'Age' },
+    //                 yaxis: { title: 'Donation Class' },
+    //                 showlegend: true,
+    //                 legend: {
+    //                     x: 0.5,
+    //                     y: 1.15,
+    //                     orientation: 'h'
+    //                 }
+    //             };
 
-                Plotly.newPlot('scatter-plot', scatterData, scatterLayout);
-            })
-            .catch(error => console.error('Error fetching scatter plot data:', error));
-    }
+    //             Plotly.newPlot('scatter-plot', scatterData, scatterLayout);
+    //         })
+    //         .catch(error => console.error('Error fetching scatter plot data:', error));
+    // }
 
-    function fetchPieChart() {
-        fetch('/svm-machine-output/payment_method_data.json')
-            .then(response => response.json())
-            .then(data => {
-                const pieData = [{
-                    values: data.payment_counts,
-                    labels: data.payment_methods,
-                    type: 'pie',
-                    marker: {
-                        colors: ['red', 'orange', 'yellow', 'green', 'blue']
-                    },
-                    name: 'Pie Chart'
-                }];
+    // function fetchPieChart() {
+    //     fetch('/svm-machine-output/payment_method_data.json')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             const pieData = [{
+    //                 values: data.payment_counts,
+    //                 labels: data.payment_methods,
+    //                 type: 'pie',
+    //                 marker: {
+    //                     colors: ['red', 'orange', 'yellow', 'green', 'blue']
+    //                 },
+    //                 name: 'Pie Chart'
+    //             }];
 
-                const pieLayout = {
-                    title: 'Distribution of Payment Methods'
-                };
+    //             const pieLayout = {
+    //                 title: 'Distribution of Payment Methods'
+    //             };
 
-                Plotly.newPlot('pie-chart', pieData, pieLayout);
-            })
-            .catch(error => console.error('Error fetching payment method data:', error));
-    }
-fetchPieChart();
+    //             Plotly.newPlot('pie-chart', pieData, pieLayout);
+    //         })
+    //         .catch(error => console.error('Error fetching payment method data:', error));
+    // }
+// fetchPieChart();
 fetchConfusionMatrix();
-fetchScatterData();
+// fetchScatterData();
 fetchBarData();
 
 </script>

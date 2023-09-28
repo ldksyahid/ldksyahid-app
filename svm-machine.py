@@ -1,43 +1,35 @@
 import mysql.connector
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 import json
-import matplotlib.pyplot as plt
 from collections import Counter
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
 
 # Koneksi ke database
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="ldksyahid_db"
-)
+config = {
+    "host": "127.0.0.1",
+    "user": "root",
+    "password": "",
+    "database": "ldksyahid_db"
+}
+conn = mysql.connector.connect(**config)
 
-# Query data donasi yang sudah dibayar
-query = "SELECT * FROM ldksyahid_db.donations a WHERE a.payment_status = 'PAID'"
+# Query dataset donasi yang sudah dibayar
+query_dataset = "SELECT * FROM ldksyahid_db.ms_donationdataset a WHERE a.payment_status = 'PAID'"
 cursor = conn.cursor()
-cursor.execute(query)
-data = cursor.fetchall()
+cursor.execute(query_dataset)
+fetch_dataset = cursor.fetchall()
 cursor.close()
 
-# Query data metode pembayaran
-payment_query = "SELECT metode_pembayaran FROM ldksyahid_db.donations WHERE payment_status = 'PAID'"
-cursor_payment = conn.cursor()
-cursor_payment.execute(payment_query)
-payment_data = cursor_payment.fetchall()
-cursor_payment.close()
-conn.close()
-
-
 # Definisikan kolom-kolom yang akan digunakan
-columns = ['id', 'jumlah_donasi', 'nama_donatur', 'email_donatur', 'usia', 'domisili', 'pekerjaan', 'no_telp_donatur', 'pesan_donatur', 'captcha', 'metode_pembayaran', 'nama_merchant', 'biaya_admin', 'kode_unik', 'campaign_id', 'doc_no', 'payment_status', 'payment_link', 'total_tagihan', 'created_at', 'updated_at']
+columns = ['id', 'jumlah_donasi', 'nama_donatur', 'email_donatur', 'usia', 'domisili', 'pekerjaan', 'no_telp_donatur', 'pesan_donatur', 'captcha', 'metode_pembayaran', 'nama_merchant', 'biaya_admin', 'kode_unik', 'campaign_id', 'doc_no', 'payment_status', 'payment_link', 'total_tagihan', 'created_at', 'updated_at', 'idInc']
 
 # Buat DataFrame dari data
-dataset = pd.DataFrame(data, columns=columns)
+dataset = pd.DataFrame(fetch_dataset, columns=columns)
 
 # Buat fungsi untuk mengklasifikasikan jumlah donasi ke dalam kelas
 def classify_donation(donation_amount):
@@ -77,60 +69,66 @@ svm_model.fit(X_train, y_train)
 # Lakukan prediksi menggunakan data uji
 y_pred = svm_model.predict(X_test)
 
+# Hitung akurasi
+# accuracy = accuracy_score(y_test, y_pred) * 100
+# print(f"SVM Accuracy: {accuracy:.2f}%")
+
+ # Classification report
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
 # Hitung matriks kebingungan
 cm = confusion_matrix(y_test, y_pred, labels=svm_model.classes_)
-class_frequencies = cm.diagonal()[::-1].tolist()
-
-# Calculate the frequency of each donation class
-class_counts = dataset['donation_class'].value_counts().sort_index()
-
-class_labels = ['Class 0', 'Class 1', 'Class 2', 'Class 3', 'Class 4']
-
-
-# Mengambil metode pembayaran dari hasil query
-payment_methods = [row[0] for row in payment_data]
-
-# Menghitung frekuensi metode pembayaran
-payment_method_counts = Counter(payment_methods)
 
 with open('public/svm-machine-output/confusion_matrix.json', 'w') as f:
-    json.dump( cm.tolist(), f)
+    json.dump(cm.tolist(), f)
 
 print("Confusion matrix has been calculated and saved to JSON file.")
+
+# Ambil data dari hasil query
+query_donations = "SELECT * FROM ldksyahid_db.donations a WHERE a.payment_status = 'PAID'"
+cursor = conn.cursor()
+cursor.execute(query_donations)
+fetch_donations = cursor.fetchall()
+cursor.close()
+
+# Buat DataFrame dari data baru
+new_data_columns = ['id', 'jumlah_donasi', 'nama_donatur', 'email_donatur', 'usia', 'domisili', 'pekerjaan', 'no_telp_donatur', 'pesan_donatur', 'captcha', 'metode_pembayaran', 'nama_merchant', 'biaya_admin', 'kode_unik', 'campaign_id', 'doc_no', 'payment_status', 'payment_link', 'total_tagihan', 'created_at', 'updated_at', 'idInc']
+new_data_df = pd.DataFrame(fetch_donations, columns=new_data_columns)
+
+# Inisialisasi list untuk menyimpan hasil prediksi
+predicted_classes = []
+
+for _, new_data_row in new_data_df.iterrows():
+    new_usia = new_data_row['usia']
+    new_jumlah_donasi = int(new_data_row['jumlah_donasi'])  # Convert to integer
+
+    # Tambahkan kolom klasifikasi berdasarkan jumlah donasi
+    new_donation_class = classify_donation(new_jumlah_donasi)
+
+    # Buat new_data dengan format yang sesuai
+    new_data = [[new_usia, new_donation_class]]
+
+    # Standarisasi data baru menggunakan scaler yang sudah ada
+    scaled_new_data = scaler.transform(new_data)
+
+    # Lakukan prediksi
+    predicted_class = svm_model.predict(scaled_new_data)
+
+    # Simpan kelas prediksi ke dalam list
+    predicted_classes.append(predicted_class[0])
+
+class_labels = ['Class 0', 'Class 1', 'Class 2', 'Class 3', 'Class 4']
+class_counts = [predicted_classes.count(i) for i in range(len(class_labels))]
 
 # Create a dictionary to store bar plot data
 bar_plot_data = {
     'class_labels': class_labels,
-    'class_counts': class_frequencies
+    'class_counts': class_counts
 }
-
 
 # Save bar plot data to JSON file
 with open('public/svm-machine-output/bar_plot_data.json', 'w') as f:
     json.dump(bar_plot_data, f)
 
 print("Bar plot data has been saved to JSON file.")
-
-# Generate scatter plot data
-scatter_data = {
-    'x': X_test[:, 0].tolist(),
-    'y': X_test[:, 1].tolist(),
-    'predicted_class': y_pred.tolist()
-}
-
-# Save scatter plot data to JSON file
-with open('public/svm-machine-output/scatter_data.json', 'w') as f:
-    json.dump(scatter_data, f)
-
-print("Scatter plot data has been calculated and saved to JSON file.")
-
-# Save payment method data to JSON file
-payment_method_data = {
-    'payment_methods': list(payment_method_counts.keys()),
-    'payment_counts': list(payment_method_counts.values())
-}
-
-with open('public/svm-machine-output/payment_method_data.json', 'w') as f:
-    json.dump(payment_method_data, f)
-
-print("Payment method data has been saved to JSON file.")
