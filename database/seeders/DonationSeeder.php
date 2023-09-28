@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Campaign;
 use App\Models\Donation;
+use App\Models\MsDonationDataset;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use Laravolt\Indonesia\Models\City;
@@ -239,7 +240,7 @@ class DonationSeeder extends Seeder
 
                 $pesanDonatur = $faker->randomElement($pesanDonaturOptions);
 
-                Donation::create([
+                MsDonationDataset::create([
                     'id' => $faker->uuid,
                     'jumlah_donasi' => $jumlahDonasi,
                     'total_tagihan' => $totalTagihan,
