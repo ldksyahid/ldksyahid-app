@@ -18,6 +18,9 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\DonationInvoice;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Artisan;
 
 class CelenganSyahidController extends Controller
 {
@@ -178,10 +181,37 @@ class CelenganSyahidController extends Controller
 
     public function dashboardCelenganSyahid()
     {
-        $postCampaign = Campaign::orderBy('created_at','desc')->get();
-        $postDonation = Donation::orderBy('created_at','desc')->get();
-        return view('admin-page.service.celengan-syahid.dashboard',compact(['postCampaign', 'postDonation']), ["title" => "Celengan Syahid"]);
+        // // Path ke interpreter Python
+        // $pythonExecutable = '/home1/mitsaqan/virtualenv/ucupspython/3.9/bin/python';
+
+        // // Path ke skrip Python
+        // $scriptPath = '/home1/mitsaqan/Ldksyah.id/svm-machine.py';
+
+        // // Gabungkan perintah untuk menjalankan skrip Python
+        // $command = [
+        //     $pythonExecutable,
+        //     $scriptPath
+        // ];
+
+        // $process = new Process($command, null, null, null, null);
+
+        // // Start the process
+        // $process->start();
+
+        // // Optionally wait for the process to finish
+        // $process->wait();
+
+        // // Retrieve the output
+        // $output = $process->getOutput();
+
+        // if (!$process->isSuccessful()) {
+        //     throw new ProcessFailedException($process);
+        // }
+
+        return view('admin-page.service.celengan-syahid.dashboard', ["title" => "Celengan Syahid"]);
     }
+
+
 
     public function indexAdminCampaign()
     {
