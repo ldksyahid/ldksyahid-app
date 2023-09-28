@@ -107,6 +107,7 @@ php artisan serve
 ## Version
 | Version | Date         | Update |
 | :---:   |     :---:    |  ---   |
+| `1.0.3`| `2023-09-28` | <ul><li>Add Ekspresi Content and Develop Celsyahid Machine Learning</li></ul> |
 | `1.0.2`| `2023-07-22` | <ul><li>Update Notify Celengan Syahid</li></ul> |
 | `1.0.1`| `2023-05-28` | <ul><li>Revamp Admin Form</li></ul> |
 | `1.0.0`| `2022-12-22` | <ul><li>Initial Version</li></ul> |

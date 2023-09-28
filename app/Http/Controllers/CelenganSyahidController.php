@@ -18,6 +18,9 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\DonationInvoice;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Artisan;
 
 class CelenganSyahidController extends Controller
 {
@@ -79,13 +82,13 @@ class CelenganSyahidController extends Controller
         $response = response()->json($dataXendit);
         $status = $dataXendit['status'];
         $external_id = $dataXendit['external_id'];
-        Donation::updatePaymentStatus($external_id, $status);
+        Donation::updatePaymentStatus($external_id, $dataXendit);
         $donationData = Donation::where('doc_no', $external_id)->first();
         if ($status == 'PAID') {
             $data = [
-                'donaturName' => $donationData->nama_donatur,
-                'donationAmount' => $donationData->jumlah_donasi,
-                'donaturTelp' => $donationData->no_telp_donatur,
+                'donaturName' => $donationData->nama_donatur ?? null,
+                'donationAmount' => $donationData->jumlah_donasi ?? 0,
+                'donaturTelp' => $donationData->no_telp_donatur ?? null,
             ];
             Wablas::sendPaidSimpleText($data);
         }
@@ -104,9 +107,44 @@ class CelenganSyahidController extends Controller
     public function donateNow($link)
     {
         $data = Campaign::where('link',$link)->first();
+        $cities = City::pluck('name', 'id');
+        $jobs = [
+            'Guru', 'Dokter', 'Pengusaha', 'Karyawan', 'Mahasiswa', 'Petani', 'TNI', 'Polisi', 'Nelayan', 'Wirausaha',
+            'PNS', 'Pilot', 'Pemadam Kebakaran', 'Seniman', 'Pedagang', 'Pekerja Konstruksi', 'Penyanyi', 'Penulis', 'Desainer',
+            'Montir', 'Sopir', 'Koki', 'Tukang Kayu', 'Tukang Las', 'Tukang Jahit', 'Tukang Listrik', 'Pelaut', 'Peternak', 'Konsultan',
+            'Arsitek', 'Pemilik Toko', 'Programmer', 'Bidan', 'Pramugari', 'Pramugara', 'Manajer', 'Marketing', 'Bendahara', 'Admin',
+            'Satpam', 'Sekretaris', 'Dosen', 'Peneliti', 'Guru Les', 'Pemandu Wisata', 'Tukang Cukur', 'Petugas Kebersihan', 'Suster',
+            'Pandai Besi', 'Penjaga Toko', 'Karyawan Bank', 'Akuntan', 'Farmasi', 'Quality Assurance', 'Quality Control', 'Software Engineer',
+            'Content Creator', 'Animator', 'HR Specialist', 'Data Analyst', 'Translator', 'Yoga Instructor', 'Fitness Trainer',
+            'Interior Designer', 'Environmental Scientist', 'Event Planner', 'Financial Advisor', 'Travel Blogger', 'Photographer',
+            'Nutritionist', 'Game Developer', 'Social Worker', 'Civil Engineer', 'Robotics Engineer', 'Ethical Hacker', 'Ethnographer',
+            'Meteorologist', 'Political Analyst', 'Fashion Designer', 'Archaeologist', 'Art Therapist', 'Cryptocurrency Trader',
+            'Blockchain Developer', 'Ethical Hacker', 'Marine Biologist', 'Zoologist', 'Personal Chef', 'Astronomer', 'Geologist',
+            'Speech Therapist', 'Neuroscientist', 'Voice Actor', 'Film Director', 'Sound Designer', 'Ethical Hacker', 'AI Researcher',
+            'Astrophysicist', 'Data Scientist', 'Climate Change Analyst', 'Wildlife Biologist', 'Forensic Scientist', 'Futurist',
+            'Food Scientist', 'Neonatal Nurse', 'Cybersecurity Analyst', 'Chemical Engineer', 'Environmental Engineer', 'Bioinformatician',
+            'Content Creator', 'Animator', 'HR Specialist', 'Data Analyst', 'Translator', 'Yoga Instructor', 'Fitness Trainer',
+            'Interior Designer', 'Environmental Scientist', 'Event Planner', 'Financial Advisor', 'Travel Blogger', 'Photographer',
+            'Nutritionist', 'Game Developer', 'Social Worker', 'Civil Engineer', 'Robotics Engineer', 'Ethical Hacker', 'Ethnographer',
+            'Meteorologist', 'Political Analyst', 'Fashion Designer', 'Archaeologist', 'Art Therapist', 'Cryptocurrency Trader',
+            'Blockchain Developer', 'Ethical Hacker', 'Marine Biologist', 'Zoologist', 'Personal Chef', 'Astronomer', 'Geologist',
+            'Speech Therapist', 'Neuroscientist', 'Voice Actor', 'Film Director', 'Sound Designer', 'Ethical Hacker', 'AI Researcher',
+            'Astrophysicist', 'Data Scientist', 'Climate Change Analyst', 'Wildlife Biologist', 'Forensic Scientist', 'Futurist',
+            'Food Scientist', 'Neonatal Nurse', 'Cybersecurity Analyst', 'Chemical Engineer', 'Environmental Engineer', 'Bioinformatician',
+            'Urban Planner', 'Fashion Stylist', 'Interior Decorator', 'User Experience Designer', 'Public Relations Specialist',
+            'Media Buyer', 'Podcaster', 'Motivational Speaker', 'Cartoonist', 'Technical Writer', 'Historian', 'Sociologist',
+            'Dentist', 'Chiropractor', 'Flight Attendant', 'Event Coordinator', 'Investment Banker', 'Clinical Psychologist',
+            'Physical Therapist', 'Geophysicist', 'Horticulturist', 'Automotive Mechanic', 'Physical Education Teacher',
+            'Speech Language Pathologist', 'Nurse Anesthetist', 'Animal Trainer', 'Brand Manager', 'Air Traffic Controller',
+            'Loan Officer', 'Museum Curator', 'Park Ranger', 'Podiatrist', 'Chief Executive Officer', 'Chief Financial Officer',
+            'Chief Operating Officer', 'Chief Technology Officer', 'Chief Marketing Officer', 'Chief Creative Officer',
+            'Chief Human Resources Officer', 'Chief Data Officer', 'Chief Diversity Officer', 'Chief Sustainability Officer', 'Lainnya'
+        ];
         return view('landing-page.service.celengan-syahid.donate-now')->with([
             'data' => $data,
-            "title" => "Layanan"
+            "title" => "Layanan",
+            "cities" => $cities,
+            "jobs" => $jobs
         ]);
     }
 
@@ -140,6 +178,40 @@ class CelenganSyahidController extends Controller
         Donation::deleteDonation($id);
         return redirect()->back();
     }
+
+    public function dashboardCelenganSyahid()
+    {
+        // // Path ke interpreter Python
+        // $pythonExecutable = '/home1/mitsaqan/virtualenv/ucupspython/3.9/bin/python';
+
+        // // Path ke skrip Python
+        // $scriptPath = '/home1/mitsaqan/Ldksyah.id/svm-machine.py';
+
+        // // Gabungkan perintah untuk menjalankan skrip Python
+        // $command = [
+        //     $pythonExecutable,
+        //     $scriptPath
+        // ];
+
+        // $process = new Process($command, null, null, null, null);
+
+        // // Start the process
+        // $process->start();
+
+        // // Optionally wait for the process to finish
+        // $process->wait();
+
+        // // Retrieve the output
+        // $output = $process->getOutput();
+
+        // if (!$process->isSuccessful()) {
+        //     throw new ProcessFailedException($process);
+        // }
+
+        return view('admin-page.service.celengan-syahid.dashboard', ["title" => "Celengan Syahid"]);
+    }
+
+
 
     public function indexAdminCampaign()
     {
