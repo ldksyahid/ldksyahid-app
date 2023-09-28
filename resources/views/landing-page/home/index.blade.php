@@ -1,6 +1,10 @@
 @extends('landing-page.template.body')
 
 @section('content')
+{{-- PopUp Landing Page Start --}}
+@include('landing-page.home.partials.popup')
+{{-- PopUp Landing Page End --}}
+
 {{-- Jumbotron Landing Page Start --}}
 @include('landing-page.home.partials.jumbotron')
 {{-- Jumbptron Landing Page End --}}
@@ -44,4 +48,5 @@
 {{-- Testimony Landing Page Start --}}
 @include('landing-page.home.partials.testimony')
 {{-- Testimony Landing Page End --}}
+
 @endsection

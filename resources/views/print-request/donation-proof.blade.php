@@ -215,7 +215,7 @@
 			</table>
             <div style="text-align: start; font-size:12px;">
                 <br><br><br><br><br><br><br>
-                <p><i>*Bukti Pembayaran yang Sah dan dikeluarkan UKM LDK Syahid UIN Syarif Hidayatullah Jakarta</i></p>
+                <p><i>*Bukti Pembayaran yang Sah yang dikeluarkan oleh UKM LDK Syahid UIN Syarif Hidayatullah Jakarta</i></p>
             </div>
 		</div>
 

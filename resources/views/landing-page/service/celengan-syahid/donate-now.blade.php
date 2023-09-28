@@ -4,10 +4,13 @@
 <link href="{{ asset('css/multiselectcelengan.css') }}" rel="stylesheet" />
 <link href="{{ asset('css/navcelengan.css') }}" rel="stylesheet" />
 <link href="{{ asset('css/cardcelengan.css') }}" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.0.0-rc.4/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.0.0-rc.4/dist/js/tom-select.complete.min.js"></script>
 @endsection
 
 @section('content')
-<div class="website-responsive">
+@if((new \Jenssegers\Agent\Agent())->isDesktop())
+<div>
     <div class="container-fluid" style="background-color: #f5f6fa;">
         <div class="container w-75">
             <div class="row g-5">
@@ -65,9 +68,6 @@
                                 <div class="invalid-feedback">
                                     Pertanyaan ini wajib diisi
                                 </div>
-                                <div class="valid-feedback">
-                                    Okke!
-                                </div>
                             </div>
                         </div>
                         <div class="text-center">
@@ -102,31 +102,52 @@
                         <div class="text-center">
                             <h3 class="text-body mb-3">Profil Donatur</h3>
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control namaDonatur" id="namaDonaturWeb" placeholder="Nama Donatur" style="border-radius: 5px;" name="nama_donatur" required>
-                            <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <input type="text" class="form-control namaDonatur" id="namaDonaturWeb" placeholder="Nama Donatur" style="border-radius: 5px;" name="nama_donatur" required>
+                                <div class="invalid-feedback">
+                                    Pertanyaan ini wajib diisi
+                                </div>
                             </div>
-                            <div class="valid-feedback">
-                                Okke!
+                            <div class="form-group col-4 my-3">
+                                <input type="email" class="form-control" id="emailDonatur" placeholder="Email" style="border-radius: 5px;" name="email_donatur" required>
+                                <div class="invalid-feedback">
+                                    Pertanyaan ini wajib diisi
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group my-3">
-                            <input type="email" class="form-control" id="emailDonatur" placeholder="Email" style="border-radius: 5px;" name="email_donatur" required>
-                            <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
+                            <div class="form-group col-4 my-3">
+                                <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telepon" style="border-radius: 5px;" name="no_telp_donatur" required onkeypress="return isNumber(event)" maxlength="15">
+                                <div class="invalid-feedback">
+                                    Pertanyaan ini wajib diisi
+                                </div>
                             </div>
-                            <div class="valid-feedback">
-                                Okke!
+                            <div class="form-group col-4 my-3">
+                                <input type="text" class="form-control" id="usiaDonatur" placeholder="Usia" style="border-radius: 5px;" name="usia_donatur" required onkeypress="return isNumber(event)" maxlength="2">
+                                <div class="invalid-feedback">
+                                    Pertanyaan ini wajib diisi
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px;" name="no_telp_donatur" required onkeypress="return isNumber(event)">
-                            <div class="invalid-feedback">
-                                Pertanyaan ini wajib diisi
+                            <div class="form-group col-6">
+                                <select type="text" class="textSearch" id="domisiliDonatur" name="domisili_donatur" required placeholder="Domisili" autocomplete="off">
+                                    <option value="">Domisili</option>
+                                    @foreach ($cities as $id => $name)
+                                        <option value="{{ $name }}">{{ $name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">
+                                    Pertanyaan ini wajib diisi
+                                </div>
                             </div>
-                            <div class="valid-feedback">
-                                Okke!
+                            <div class="form-group col-6">
+                                <select type="text" class="textSearch" id="pekerjaanDonatur" name="pekerjaan_donatur" required placeholder="Pekerjaan" autocomplete="off">
+                                    <option value="">Pekerjaan</option>
+                                    @foreach ($jobs as $id => $name)
+                                        <option value="{{ $name }}">{{ $name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">
+                                    Pertanyaan ini wajib diisi
+                                </div>
                             </div>
                         </div>
                         <div class="form-group mt-3">
@@ -140,13 +161,10 @@
                     </div>
                     <div class="col col-lg-12 my-5">
                         <div class="text-center">
-                            <h3 class="text-body mb-3">Dukungan atau Doamu (Optional)</h3>
+                            <h3 class="text-body mb-3">Dukungan atau Do'amu (Opsional)</h3>
                         </div>
                         <div class="form-group">
                             <textarea class="form-control" id="doamu" rows="5" style="border-radius:5px;" name="pesan_donatur"></textarea>
-                            <div class="valid-feedback">
-                                Okke!
-                            </div>
                         </div>
                     </div>
                     <div class="col col-lg-12 my-5 text-end">
@@ -172,8 +190,10 @@
         </div>
     </div>
 </div>
+@endif
 
-<div class="mobile-responsive">
+@if((new \Jenssegers\Agent\Agent())->isMobile())
+<div>
     <div class="container-fluid p-0" style="background-color: #f5f6fa;">
         <div>
             <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image"/>
@@ -220,9 +240,6 @@
                             <div class="invalid-feedback">
                                 Pertanyaan ini wajib diisi
                             </div>
-                            <div class="valid-feedback">
-                                Okke!
-                            </div>
                         </div>
                     </div>
                     <div class="text-center">
@@ -264,26 +281,45 @@
                         <div class="invalid-feedback small">
                             Pertanyaan ini wajib diisi
                         </div>
-                        <div class="valid-feedback small">
-                            Okke!
-                        </div>
                     </div>
                     <div class="form-group my-2">
                         <input type="email" class="form-control" id="emailDonatur" placeholder="Email" style="border-radius: 5px; font-size: 16px" required name="email_donatur">
                         <div class="invalid-feedback small">
                             Pertanyaan ini wajib diisi
                         </div>
-                        <div class="valid-feedback small">
-                            Okke!
-                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px; font-size: 16px" required name="no_telp_donatur" onkeypress="return isNumber(event)">
+                        <input type="text" class="form-control" id="telponDonatur" placeholder="No. Telpon" style="border-radius: 5px; font-size: 16px" required name="no_telp_donatur" onkeypress="return isNumber(event)" maxlength="15">
                         <div class="invalid-feedback small">
                             Pertanyaan ini wajib diisi
                         </div>
-                        <div class="valid-feedback small">
-                            Okke!
+                    </div>
+                    <div class="form-group my-2">
+                        <input type="text" class="form-control" id="usiaDonatur" placeholder="Usia" style="border-radius: 5px;" name="usia_donatur" required onkeypress="return isNumber(event)" maxlength="2">
+                        <div class="invalid-feedback">
+                            Pertanyaan ini wajib diisi
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <select type="text" class="textSearch" id="domisiliDonatur" name="domisili_donatur" required placeholder="Domisili" autocomplete="off">
+                            <option value="">Domisili</option>
+                            @foreach ($cities as $id => $name)
+                                <option value="{{ $name }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback">
+                            Pertanyaan ini wajib diisi
+                        </div>
+                    </div>
+                    <div class="form-group my-2">
+                        <select type="text" class="textSearch" id="pekerjaanDonatur" name="pekerjaan_donatur" required placeholder="Pekerjaan" autocomplete="off">
+                            <option value="">Pekerjaan</option>
+                            @foreach ($jobs as $id => $name)
+                                <option value="{{ $name }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback">
+                            Pertanyaan ini wajib diisi
                         </div>
                     </div>
                     <div class="form-group mt-2">
@@ -297,13 +333,10 @@
                 </div>
                 <div class="col col-md-12 my-4">
                     <div class="text-center">
-                        <h6 class="text-body mb-3" style="font-size: 18px;">Dukungan atau Doamu (Optional)</h6>
+                        <h6 class="text-body mb-3" style="font-size: 18px;">Dukungan atau Do'amu (Opsional)</h6>
                     </div>
                     <div class="form-group">
                         <textarea class="form-control" id="doamu" rows="5" style="border-radius:5px; font-size: 16px" name="pesan_donatur"></textarea>
-                        <div class="valid-feedback small">
-                            Okke!
-                        </div>
                     </div>
                 </div>
                 <div class="col col-md-12 my-4 text-end">
@@ -328,9 +361,24 @@
         </div>
     </div>
 </div>
+@endif
 @endsection
 
 @section('scripts')
+<script>
+    const textSearch = document.querySelectorAll('.textSearch');
+
+    for (let i = 0; i < textSearch.length; i++) {
+        new TomSelect(textSearch[i], {
+            create: false,
+            sortField: {
+                field: "text",
+                direction: "asc"
+            }
+        });
+    }
+</script>
+
 <script>
 const dengan_rupiah = document.querySelectorAll('.inputBiayaDonasi');
 for (let i = 0; i < dengan_rupiah.length; i++) {
