@@ -21,6 +21,7 @@ use App\Http\Controllers\CallKestariController;
 use App\Http\Controllers\ITSupportController;
 use App\Http\Controllers\TestimonyController;
 use App\Http\Controllers\CelenganSyahidController;
+use App\Http\Controllers\MsKTALDKSyahidController;
 
 /*
 |--------------------------------------------------------------------------
@@ -266,6 +267,9 @@ Route::post('/admin/service/celengansyahid/campaign/get-city', [CelenganSyahidCo
 // Route AdminPage Service Campaign -> donation
 Route::get('/admin/service/celengansyahid/donations', [CelenganSyahidController::class, 'indexAdminDonation'])->name('admin.service.index.donation')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::get('/admin/service/celengansyahid/donation/{id}/destroy', [CelenganSyahidController::class, 'destroyAdminDonation'])->name('admin.service.destroy.donation')->middleware(['role:Superadmin|HelperCelsyahid']);
+
+// Route AdminPage User
+Route::get('/admin/ktaldksyahid', [MsKTALDKSyahidController::class, 'indexAdmin'])->name('admin.ktaldksyahid.index')->middleware(['role:Superadmin|HelperLetter']);
 
 
 
