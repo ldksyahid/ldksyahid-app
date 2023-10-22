@@ -11,34 +11,34 @@
                 @csrf
                 @method('PUT')
                     <div class="row">
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputName1" class="form-label required">Name</label>
                             <input type="text" class="form-control" id="inputName1" name='name' value="{{old('name', $posttestimony->name)}}" required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputProfession1" class="form-label required">Profession</label>
                             <input type="text" class="form-control" id="inputProfession" name='profession' value="{{old('profession', $posttestimony->profession)}}" required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-12">
-                            <label for="inputTestimony" class="form-label required">Testimony (Max 250 Letters)</label>
+                        <div class="mb-3 col-12 col-lg-12">
+                            <label for="inputTestimony" class="form-label required">Testimony <span class="small">(Max 250 Letters)</span></label>
                             <textarea class="form-control" name="testimony" id="inputTestimony" maxlength="250" required>{{ $posttestimony->testimony }}</textarea>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
-                            <label for="formFile" class="form-label required">Photo Profile (100 x 100 Pixel)</label>
+                        <div class="mb-3 col-12 col-lg-4">
+                            <label for="formFile" class="form-label required">Photo Profile <span class="small">(100 x 100 Pixel)</span></label>
                             <br>
                             <img id="frame" src="{{ asset($posttestimony->picture) }}" width="150px" height="150px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="picture" name ='picture' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="preview()">
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 col-lg-12">
                             <button type="submit" class="btn btn-primary">Update</button>
                             <a type="submit" class="btn btn-primary" href="/admin/testimony">Cancel</a>
                         </div>

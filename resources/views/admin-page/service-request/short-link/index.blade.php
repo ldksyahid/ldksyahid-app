@@ -1,12 +1,16 @@
 @extends('admin-page.template.body')
 
+@section('head')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+@endsection
+
 @section('content')
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
-        <div class="col-xl-12">
+        <div class="col-lg-12">
             <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Request Shortlink Database</h5>
+                <h5 class="mb-4">Request Shortlink Management System</h5>
                 {{-- START Data Request Shortlink --}}
                 <div id="readReqShortlink" class="mt-3"></div>
                 {{-- END Data Request Shortlink --}}
@@ -32,6 +36,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 <script>
     // ===== START CRUD USER =====
     // untuk load database

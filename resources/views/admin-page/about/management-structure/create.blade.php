@@ -11,45 +11,45 @@
                 @csrf
                 @method('POST')
                     <div class="row">
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputBatch" class="form-label required">Batch</label>
                             <input type="text" class="form-control" id="inputBatch" name='batch' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputPeriod" class="form-label required">Period</label>
                             <input type="text" class="form-control" id="inputPeriod" name='period' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputStructureName" class="form-label required">Structure Name</label>
                             <input type="text" class="form-control" id="inputStructureName" name='structureName' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputStructureDescription" class="form-label required">Structure Description</label>
                             <textarea class="form-control" name="structureDescription" id="inputStructureDescription" required></textarea>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
-                            <label for="formFile" class="form-label required">Structure Logo (No Background 1080 x 1080)</label>
+                        <div class="mb-3 col-12 col-lg-6">
+                            <label for="formFile" class="form-label required">Structure Logo <span class="small">(No Background 1080 x 1080)</span></label>
                             <br>
-                            <img id="frame" src="{{ asset('Images/Icons/add_image.svg') }}" width="300px" height="300px" class="rounded mb-3 border"/>
+                            <img id="frame" src="{{ asset('Images/Icons/add_image.svg') }}" width="250px" height="250px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="structureLogo" name = 'structureLogo' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" required onchange="preview()">
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
-                            <label for="formFile" class="form-label required">Structure Image (1515 x >=2560)</label>
+                        <div class="mb-3 col-12 col-lg-6">
+                            <label for="formFile" class="form-label required">Structure Image <span class="small">(1515 x >=2560)</span></label>
                             <br>
                             <img id="frame2" src="{{ asset('Images/Icons/add_image.svg') }}" width="27.5%" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="structureImage" name = 'structureImage' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" required onchange="preview2()">
