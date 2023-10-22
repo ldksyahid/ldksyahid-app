@@ -1,12 +1,16 @@
 @extends('admin-page.template.body')
 
+@section('head')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+@endsection
+
 @section('content')
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-xl-12">
             <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">User Database</h5>
+                <h5 class="mb-4">User Management System</h5>
                 <button class='btn btn-primary' onClick="create()"><i class="fa fa-plus"></i> Create User</button>
                 {{-- START Data table User --}}
                 <div class="mt-3" id="read">
@@ -34,6 +38,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 <script type="text/javascript">
 
     // ===== START CRUD USER =====
@@ -106,7 +111,7 @@
 
     // Untuk modal halaman edit show
     function edit(id) {
-        if (id == 1 || id == 2) {
+        if (id == 2) {
             Swal.fire({
                 icon: 'error',
                 title: 'Edit Failed',
@@ -164,7 +169,7 @@
         var name = $("#inputName1").val();
         var email = $("#inputEmail1").val();
         var password = $("#inputPassword1").val();
-        if (id == 1 || id == 2) {
+        if (id == 2) {
             Swal.fire({
                 icon: 'error',
                 title: 'Delete Failed',

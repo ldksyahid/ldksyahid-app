@@ -1,11 +1,8 @@
 @extends('admin-page.template.body')
 
 @section('head')
-{{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.0.0-rc.4/dist/css/tom-select.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.0.0-rc.4/dist/js/tom-select.complete.min.js"></script>
-
-
 @endsection
 
 
@@ -20,14 +17,14 @@
                     @csrf
                     @method('POST')
                     <div class="row">
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputJudulCampaign" class="form-label required">Title</label>
                             <input type="text" class="form-control" id="inputJudulCampaign" name='judul' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="chooseKategoriCampaign" class="form-label required">Category</label>
                             <select class="form-select mb-3" aria-label="Default select" required name="kategori">
                                 <option disabled selected hidden>-- Choose Category --</option>
@@ -42,14 +39,14 @@
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputLink" class="form-label required">Link</label>
                             <input type="text" class="form-control" id="inputLink" name='link' required style="text-transform: lowercase;">
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputProvinsiCampaign" class="form-label required">Province</label>
                             <select class="form-group mb-3 textSearch" aria-label=""  name="provinsi" type='text' id="inputProvinsiCampaign" onchange="storeProvince()">
                                 <option disabled selected hidden>-- Choose Province --</option>
@@ -61,7 +58,7 @@
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputKotaCampaign" class="form-label required">City</label>
                             <select class="mb-3 textSearch" aria-label="" name="kota" type='text' id="inputKotaCampaign">
                                 <option disabled selected hidden>-- Choose City --</option>
@@ -70,22 +67,22 @@
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputTargetBiaya" class="form-label required">Cost Targets</label>
                             <input type="text" class="form-control" id="inputTargetBiaya" name='target_biaya' required >
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputCerita" class="form-label required">Story Details</label>
                             <textarea class="form-control summernote" name="cerita" id="inputCerita" required></textarea>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-4">
-                            <label for="formFile" class="form-label required">Poster (1920 x 1080 Pixel)</label>
+                        <div class="mb-3 col-12 col-lg-4">
+                            <label for="formFile" class="form-label required">Poster <span class="small">(1920 x 1080 Pixel)</span></label>
                             <br>
                             <img id="framePoster" src="{{ asset('Images/Icons/add_image.svg') }}" width="250px" height="150px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="poster" name ='poster'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" required onchange="previewPoster()">
@@ -93,14 +90,14 @@
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputDeadlineCampaign" class="form-label required">Deadline</label>
                             <input type="date" class="form-control" id="inputDeadlineCampaign" name='deadline' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputTelpPJ" class="form-label required">PIC Contact</label>
                             <div class="input-group">
                                 <span class="input-group-text" id="inputTelpPJ">+62</span>
@@ -110,34 +107,34 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputTujuan" class="form-label required">Goals</label>
                             <textarea class="form-control" name="tujuan" id="inputTujuan" style="height: 100px;" required></textarea>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputKabarTerbaru" class="form-label">Latest News</label>
                             <textarea class="form-control summernote" name="kabar_terbaru" id="inputKabarTerbaru"></textarea>
                         </div>
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label class="form-check-label" for="cekOrganisasi">Organizations other than UKM LDK Syahid ?</label>
                             <input type="checkbox" class="form-check-input" id="cekOrganisasi" onclick="cekOrg()">
                         </div>
                         <div id="formOrganisasi" style="display: none;">
                             <div class="row">
-                                <div class="mb-3 col col-lg-4"  >
+                                <div class="mb-3 col-12 col-lg-4"  >
                                     <label for="formFile" class="form-label">Organization Logo</label>
                                     <br>
                                     <img id="frameLogo" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
                                     <input class="form-control" type="file" id="poster" name ='logo_pj'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="previewLogo()">
                                 </div>
-                                <div class="mb-3 col col-lg-4" >
+                                <div class="mb-3 col-12 col-lg-4" >
                                     <label for="inputNamaPJ" class="form-label">Organization Name</label>
                                     <input type="text" class="form-control" id="inputNamaPJ" name='nama_pj'>
                                 </div>
-                                <div class="mb-3 col col-lg-4"  >
+                                <div class="mb-3 col-12 col-lg-4"  >
                                     <label for="inputLinkPJ" class="form-label">Organization Profile Links</label>
                                     <input type="text" class="form-control" id="inputLinkPJ" name='link_pj'>
                                 </div>

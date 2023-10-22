@@ -11,29 +11,29 @@
                 @csrf
                 @method('POST')
                     <div class="row">
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputName" class="form-label required">Name</label>
                             <input type="text" class="form-control" id="inputName" name='name' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputForkat" class="form-label required">Forkat</label>
                             <input type="text" class="form-control" id="inputForkat" name='forkat' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputPosition" class="form-label required">Position</label>
                             <input type="text" class="form-control" id="inputPosition" name='position' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
-                            <label for="photoProfile" class="form-label required">Photo Profile (300 x 350 Pixel)</label>
+                        <div class="mb-3 col-12 col-lg-4">
+                            <label for="photoProfile" class="form-label required">Photo Profile <span class="small">(300 x 350 Pixel)</span></label>
                             <br>
                             <img id="frame" src="{{ asset('Images/Icons/add_image.svg') }}" width="200px" height="250px"  class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="photoProfile" name = 'photoProfile' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG, image/webp" required onchange="preview()">
@@ -41,14 +41,14 @@
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputLinkInstagram" class="form-label required">Instagram Link</label>
                             <input type="text" class="form-control" id="inputLinkInstagram" name='linkInstagram' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputLinkInstagram" class="form-label required">Linkedin Link</label>
                             <input type="text" class="form-control" id="inputLinkInstagram" name='linkLinkedin' required>
                             <div class="invalid-feedback">
