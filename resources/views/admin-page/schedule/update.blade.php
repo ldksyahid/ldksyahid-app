@@ -11,27 +11,27 @@
                 @csrf
                 @method('PUT')
                     <div class="row">
-                        <div class="mb-3 col-6">
-                            <label for="formFile" class="form-label required">Picture (1080 x 1350 Pixel)</label>
+                        <div class="mb-3 col-12 col-lg-6">
+                            <label for="formFile" class="form-label required">Picture <span class="small">(1080 x 1350 Pixel)</span></label>
                             <br>
                             <img id="frame" src="{{ asset($postschedule->picture) }}" width="150px" height="200px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="picture" name = 'picture' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="preview()">
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputTitleSchedule" class="form-label required">Title</label>
                             <input type="text" class="form-control" id="inputTitleSchedule" name='title' value="{{old('title', $postschedule->title)}}" required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputMonth" class="form-label required">Month</label>
                             <input type="text" class="form-control" id="inputMonth" name='month' value="{{old('month', $postschedule->month)}}" required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputYear" class="form-label required">Year</label>
                             <input type="text" class="form-control" id="inputYear" name='year' value="{{old('year', $postschedule->year)}}" required>
                             <div class="invalid-feedback">

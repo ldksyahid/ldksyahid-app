@@ -1,51 +1,57 @@
 @extends('admin-page.template.body')
 
+@section('head')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+@endsection
+
 @section('content')
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Schedule Database</h5>
+                <h5 class="mb-4">Schedule Management System</h5>
                 <a class='btn btn-primary' href="/admin/schedule/create"><i class="fa fa-plus"></i> Create Schedule</a>
-                {{-- START Data table Article --}}
+                {{-- START Data table Schedule --}}
                 <div class="mt-3">
-                    <table class="table table-bordered small">
-                        <thead>
-                            <tr align='center'>
-                                <th scope="col" style="width: 10px">No</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Month</th>
-                                <th scope="col">Year</th>
-                                <th scope="col">Picture</th>
-                                <th scope="col" style="width: 10px">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($postschedule as $key => $postschedule)
-                            <tr>
-                                <td scope="row" align='center'>{{ $key+1 }}</td>
-                                <td align='center'>{{ $postschedule->title }}</td>
-                                <td align='center'>{{ $postschedule->month }}</td>
-                                <td align='center'>{{ $postschedule->year }}</td>
-                                <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($postschedule->picture) }}" alt="{{$postschedule->title}}" class="card-img"/>
-                                </td>
-                                <td align="center">
-                                    <a href="/admin/schedule/{{$postschedule->id}}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
-                                    <button type="submit" onclick="deleteConfirmationSchedule({{ $postschedule->id }})" id="delete-schedule" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                    <a class="btn btn-sm btn-primary" href="/admin/schedule/{{$postschedule->id}}/preview"><i class="fa fa-eye"></i></a>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan='9', align='center'>No Schedule Data</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped text-nowrap small" id="dataSchedule">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center">Title</th>
+                                    <th scope="col" class="text-center">Month</th>
+                                    <th scope="col" class="text-center">Year</th>
+                                    <th scope="col" class="text-center">Picture</th>
+                                    <th scope="col" class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($postschedule as $key => $postschedule)
+                                <tr>
+                                    <td align='center'>{{ $key+1 }}</td>
+                                    <td align='center'>{{ $postschedule->title }}</td>
+                                    <td align='center'>{{ $postschedule->month }}</td>
+                                    <td align='center'>{{ $postschedule->year }}</td>
+                                    <td align='center'>
+                                        <img style="width: 100px;" src="{{ asset($postschedule->picture) }}" alt="{{$postschedule->title}}" class="card-img"/>
+                                    </td>
+                                    <td align="center">
+                                        <a href="/admin/schedule/{{$postschedule->id}}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
+                                        <button type="submit" onclick="deleteConfirmationSchedule({{ $postschedule->id }})" id="delete-schedule" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>
+                                        <a class="btn btn-sm btn-primary" href="/admin/schedule/{{$postschedule->id}}/preview"><i class="fa fa-eye"></i></a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan='9', align='center'>No Schedule Data</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                {{-- END Data table Jumbotron --}}
+                {{-- END Data table Schedule --}}
             </div>
         </div>
     </div>
@@ -54,6 +60,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 <script>
 // ===== START CRUD SCHEDULE =====
 // ini untuk konfirmasi delete
@@ -93,5 +100,11 @@ function deleteConfirmationSchedule(id) {
             })
         }
 // ===== END CRUD SCHEDULE =====
+</script>
+<script>
+    $('#dataSchedule').DataTable({
+        responsive: true,
+        fixedHeader: true,
+    });
 </script>
 @endsection

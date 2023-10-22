@@ -19,11 +19,11 @@
                 <h5 class="mb-4">Preview Campaign</h5>
                 <form role="form" action='#' method='post' enctype="multipart/form-data">
                     <div class="row">
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputJudulCampaign" class="form-label required">Title</label>
                             <input type="text" class="form-control" id="inputJudulCampaign" name='judul' required value="{{old('judul', $data->judul)}}" disabled>
                         </div>
-                        <div class="mb-3 col col-lg-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="chooseKategoriCampaign" class="form-label required">Category</label>
                             <select class="form-select mb-3" aria-label="Default select" required name="kategori" disabled>
                                 <option selected hidden value="{{old('kategori', $data->kategori)}}">{{ $data->kategori }}</option>
@@ -35,11 +35,11 @@
                                 <option value="Lingkungan">Lingkungan</option>
                             </select>
                         </div>
-                        <div class="mb-3 col col-lg-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputLink" class="form-label required">Link</label>
                             <input type="text" class="form-control" id="inputLink" name='link' required style="text-transform: lowercase;" value="{{old('link', $data->link)}}" disabled>
                         </div>
-                        <div class="mb-3 col col-lg-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputProvinsiCampaign" class="form-label required">Province</label>
                             <select class="form-group mb-3 textSearch" aria-label="" name="provinsi" type='text' id="inputProvinsiCampaign" onchange="storeProvince()" disabled>
                                 <option selected hidden value="{{old('provinsi', $data->provinsi)}}">{{strtoupper($data->provinsi)}}</option>
@@ -48,24 +48,24 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-3 col col-lg-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="kota" class="form-label required">City</label>
                             <select class="mb-3 textSearch" aria-label="" name="kota" type='text' id="inputKotaCampaign" disabled>
                                 <option selected hidden value="{{old('kota', $data->kota)}}">{{strtoupper($data->kota)}}</option>
                             </select>
                         </div>
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputTargetBiaya" class="form-label">Cost Targets</label>
                             <input type="text" class="form-control" id="inputTargetBiaya" name='target_biaya' required value="{{old('target_biaya', LFC::formatRupiah($data->target_biaya))}}" disabled>
                         </div>
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputCerita" class="form-label required">Story Details</label>
                             <div class="border p-3 rounded">
                                 {!! $data->cerita !!}
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-4">
-                            <label for="formFile" class="form-label required">Poster (1920 x 1080 Pixel)</label>
+                        <div class="mb-3 col-12 col-lg-4">
+                            <label for="formFile" class="form-label required">Poster <span class="small">(1920 x 1080 Pixel)</label>
                             <br>
                             <div>
                                 @if ($data->poster == !null)
@@ -76,11 +76,11 @@
                             </div>
                             <input class="form-control" type="file" id="poster" name ='poster'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="previewPoster()" disabled>
                         </div>
-                        <div class="mb-3 col col-lg-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputDeadlineCampaign" class="form-label required">Deadline</label>
                             <input type="date" class="form-control" id="inputDeadlineCampaign" name='deadline' value="{{old('deadline', $data->deadline)}}" disabled>
                         </div>
-                        <div class="mb-3 col col-lg-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputTelpPJ" class="form-label required">PIC Contact</label>
                             <div class="input-group">
                                 <span class="input-group-text" id="inputTelpPJ">+62</span>
@@ -90,17 +90,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputTujuan" class="form-label required">Goals</label>
                             <textarea class="form-control" name="tujuan" id="inputTujuan" style="height: 100px;" disabled>{{ $data->tujuan }}</textarea>
                         </div>
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputKabarTerbaru" class="form-label">Latest News</label>
                             <div class="border p-3 rounded">
                                 {!! $data->kabar_terbaru !!}
                             </div>
                         </div>
-                        <div class="mb-3 col col-lg-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label class="form-check-label" for="cekOrganisasi">Organizations other than UKM LDK Syahid ?</label>
                             @if ($data->nama_pj != null || $data->link_pj != null)
                                 <input type="checkbox" class="form-check-input" id="cekOrganisasi" onclick="cekOrg()" checked disabled>
@@ -114,7 +114,7 @@
                             style="display: ;"
                         @endif>
                             <div class="row">
-                                <div class="mb-3 col col-lg-4"  >
+                                <div class="mb-3 col-12 col-lg-4"  >
                                     <label for="formFile" class="form-label">Organization Logo</label>
                                     <br>
                                     <div>
@@ -126,11 +126,11 @@
                                     </div>
                                     <input class="form-control" type="file" id="poster" name ='logo_pj'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
                                 </div>
-                                <div class="mb-3 col col-lg-4" >
+                                <div class="mb-3 col-12 col-lg-4" >
                                     <label for="inputNamaPJ" class="form-label">Organization Name</label>
                                     <input type="text" class="form-control" id="inputNamaPJ" name='nama_pj' value="{{old('nama_pj', $data->nama_pj)}}" disabled>
                                 </div>
-                                <div class="mb-3 col col-lg-4"  >
+                                <div class="mb-3 col-12 col-lg-4"  >
                                     <label for="inputLinkPJ" class="form-label">Organization Profile Links</label>
                                     <input type="text" class="form-control" id="inputLinkPJ" name='link_pj' value="{{old('link_pj', $data->link_pj)}}" disabled>
                                 </div>

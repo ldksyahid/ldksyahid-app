@@ -11,43 +11,43 @@
                 @csrf
                 @method('POST')
                     <div class="row">
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputTitleEvent" class="form-label required">Title</label>
                             <input type="text" class="form-control" id="inputTitleArticle" name='title' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputTheme" class="form-label required">Theme</label>
                             <input type="text" class="form-control" id="inputTheme" name='theme' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputDateArticle" class="form-label required">Date Article Created</label>
                             <input type="date" class="form-control" id="inputDateArticle" name='datearticle' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputWriter" class="form-label required">Writer</label>
                             <input type="text" class="form-control" id="inputWriter" name='writer' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputEditor" class="form-label required">Editor</label>
                             <input type="text" class="form-control" id="inputWriter" name='editor' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
-                            <label for="formFile" class="form-label required">Poster (550 x 400 Pixel)</label>
+                        <div class="mb-3 col-12 col-lg-6">
+                            <label for="formFile" class="form-label required">Poster <span class="small">(550 x 400 Pixel)</span></label>
                             <br>
                             <img id="frame" src="{{ asset('Images/Icons/add_image.svg') }}" width="150px" height="200px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="poster" name ='poster' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" required onchange="preview()">
@@ -55,14 +55,14 @@
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
-                            <label for="inputLinkEmbedPDF" class="form-label required">Link Embed (Platform : <a href="https://anyflip.com/" target="_blank">anyflip.com</a> )</label>
+                        <div class="mb-3 col-12 col-lg-6">
+                            <label for="inputLinkEmbedPDF" class="form-label required">Link Embed <span class="small">(Platform : <a href="https://anyflip.com/" target="_blank">anyflip.com</a> )</span></label>
                             <input type="text" class="form-control" id="inputLinkEmbedPDF" name='embedpdf' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <button type="submit" class="btn btn-primary">Create</button>
                             <a type="submit" class="btn btn-primary" href="/admin/article">Cancel</a>
                         </div>

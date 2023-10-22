@@ -16,14 +16,19 @@ class CreateMsKtaldksyahidTable extends Migration
         Schema::create('ms_ktaldksyahid', function (Blueprint $table) {
             $table->id();
             $table->string('fullName')->nullable();
+            $table->string('gender')->nullable();
             $table->string('nim')->nullable();
-            $table->string('faculty')->nullable();
-            $table->string('major')->nullable();
-            $table->string('generation')->nullable();
-            $table->string('about')->nullable();
+            $table->integer('facultyID')->nullable();
+            $table->integer('majorID')->nullable();
+            $table->integer('generationID')->nullable();
             $table->string('memberNumber')->nullable();
-            $table->string('linkProfile')->nullable();
+            $table->string('slogan')->nullable();
+            $table->longText('background')->nullable();
+            $table->string('email')->nullable();
+            $table->string('linkedIn')->nullable();
+            $table->string('instagram')->nullable();
             $table->string('photo')->nullable();
+            $table->string('linkProfile')->nullable();
             $table->timestamps();
         });
     }

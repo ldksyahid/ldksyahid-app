@@ -1,55 +1,59 @@
 @extends('admin-page.template.body')
 
+@section('head')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+@endsection
+
 @section('content')
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Structure Database</h5>
+                <h5 class="mb-4">Structure Management System</h5>
                 <a class='btn btn-primary' href="/admin/about/structure/create"><i class="fa fa-plus"></i> Create Structure</a>
                 {{-- START Data table Structure --}}
                 <div class="mt-3">
-                    <table class="table table-bordered small">
-                        <thead>
-                            <tr align='center'>
-                                <th scope="col" style="width: 10px">No</th>
-                                <th scope="col">Batch</th>
-                                <th scope="col">Period</th>
-                                <th scope="col">Structure Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Logo</th>
-                                <th scope="col">Image</th>
-                                <th scope="col" style="width: 10px">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($poststructure as $key => $data)
-                            <tr>
-                                <td scope="row" align='center'>{{ $key+1 }}</td>
-                                <td align='center'>{{ $data->batch }}</td>
-                                <td align='center'>{{ $data->period }}</td>
-                                <td align='center'>{{ $data->structureName }}</td>
-                                <td align='justify'>{{ $data->structureDescription }}</td>
-                                <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($data->structureLogo) }}" alt="{{$data->structureName}}" class="card-img"/>
-                                </td>
-                                <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($data->structureImage) }}" alt="{{$data->structureName}}" class="card-img"/>
-                                </td>
-                                <td align="center">
-                                    <a href="/admin/about/structure/{{ $data->id }}/edit" class="btn btn-sm btn-primary mb-1"><i class="fa fa-edit"></i></a>
-                                    <button type="submit" onclick="deleteConfirmationStructure({{ $data->id }})" id="delete-structure" class="btn btn-sm btn-primary mb-1"><i class="fa fa-trash"></i></button>
-                                    <a class="btn btn-sm btn-primary" href="/admin/about/structure/{{ $data->id }}/preview"><i class="fa fa-eye"></i></a>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan='9', align='center'>No Structure Data</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped text-nowrap small" id="dataStructure">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center">Batch</th>
+                                    <th scope="col" class="text-center">Period</th>
+                                    <th scope="col" class="text-center">Structure Name</th>
+                                    <th scope="col" class="text-center">Logo</th>
+                                    <th scope="col" class="text-center">Image</th>
+                                    <th scope="col" class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($poststructure as $key => $data)
+                                <tr>
+                                    <td scope="row" align='center'>{{ $key+1 }}</td>
+                                    <td align='center'>{{ $data->batch }}</td>
+                                    <td align='center'>{{ $data->period }}</td>
+                                    <td align='center'>{{ $data->structureName }}</td>
+                                    <td align='center'>
+                                        <img style="width: 100px;" src="{{ asset($data->structureLogo) }}" alt="{{$data->structureName}}" class="card-img"/>
+                                    </td>
+                                    <td align='center'>
+                                        <img style="width: 100px;" src="{{ asset($data->structureImage) }}" alt="{{$data->structureName}}" class="card-img"/>
+                                    </td>
+                                    <td align="center">
+                                        <a href="/admin/about/structure/{{ $data->id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
+                                        <button type="submit" onclick="deleteConfirmationStructure({{ $data->id }})" id="delete-structure" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>
+                                        <a class="btn btn-sm btn-primary" href="/admin/about/structure/{{ $data->id }}/preview"><i class="fa fa-eye"></i></a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan='9', align='center'>No Structure Data</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 {{-- END Data table Structure --}}
             </div>
@@ -60,6 +64,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 <script>
 // ===== START CRUD STRUCTURE =====
 // ini untuk konfirmasi delete
@@ -99,5 +104,11 @@ function deleteConfirmationStructure(id) {
             })
         }
 // ===== END CRUD STRUCTURE =====
+</script>
+<script>
+    $('#dataStructure').DataTable({
+        responsive: true,
+        fixedHeader: true,
+    });
 </script>
 @endsection
