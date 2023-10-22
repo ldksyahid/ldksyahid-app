@@ -11,43 +11,43 @@
                 @csrf
                 @method('POST')
                     <div class="row">
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputDatePublish" class="form-label required">Date Publish</label>
                             <input type="date" class="form-control" id="inputDatePublish" name='datepublish' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputPublisher" class="form-label required">Publisher</label>
                             <input type="text" class="form-control" id="inputPublisher" name='publisher' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputTitle" class="form-label required">Title</label>
                             <input type="text" class="form-control" id="inputTitle" name='title' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputReporter" class="form-label required">Reporter</label>
                             <input type="text" class="form-control" id="inputReporter" name='reporter' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputEditor" class="form-label required">Editor</label>
                             <input type="text" class="form-control" id="inputEditor" name='editor' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
-                            <label for="picture" class="form-label required">Picture (1366 x 768 Pixel)</label>
+                        <div class="mb-3 col-12 col-lg-6">
+                            <label for="picture" class="form-label required">Picture <span class="small">(1366 x 768 Pixel)</span></label>
                             <br>
                             <img id="frame" src="{{ asset('Images/Icons/add_image.svg') }}" width="250px" height="150px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="picture" name = 'picture' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG, image/webp" required onchange="preview()">
@@ -55,14 +55,14 @@
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-12 col-lg-6">
                             <label for="inputDescPicture" class="form-label required">Picture Description</label>
                             <input type="text" class="form-control" id="inputDescPicture" name='descpicture' required>
                             <div class="invalid-feedback">
                                 This is a required question
                             </div>
                         </div>
-                        <div class="mb-3 col-12">
+                        <div class="mb-3 col-12 col-lg-12">
                             <label for="inputBody" class="form-label required">Content News</label>
                             <textarea class="form-control summernote" name="body" id="inputBody" required></textarea>
                             <div class="invalid-feedback">
