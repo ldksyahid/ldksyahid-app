@@ -1,42 +1,48 @@
 @extends('admin-page.template.body')
 
+@section('head')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+@endsection
+
 @section('content')
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
-        <div class="col-xl-12">
+        <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Contact Message Database</h5>
+                <h5 class="mb-4">Contact Message Management System</h5>
                 <div  class="mt-3">
-                    <table class="table table-bordered small">
-                        <thead>
-                            <tr align='center'>
-                                <th scope="col" style="width: 10px">No</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Subject</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($data as $key => $item)
-                            <tr>
-                                <td scope="row" align='center'>{{$key + 1}}</td>
-                                <td align='center'>{{$item->name}}</td>
-                                <td align='center'>{{$item->subject}}</td>
-                                <td align='center'>{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->format('Y') }}</td>
-                                <td align="center">
-                                    <button class="btn btn-sm btn-primary" onClick="destroycontactmessage({{ $item->id }})"><i class="fa fa-trash"></i></button>
-                                    <button class="btn btn-sm btn-primary" onClick="preview({{ $item->id }})"><i class="fa fa-eye"></i></button>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan='9', align='center'>No Contact Message Data</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped text-nowrap small" id="dataContactUs">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center">Name</th>
+                                    <th scope="col" class="text-center">Subject</th>
+                                    <th scope="col" class="text-center">Date</th>
+                                    <th scope="col" class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($data as $key => $item)
+                                <tr>
+                                    <td scope="row" align='center'>{{$key + 1}}</td>
+                                    <td align='center'>{{$item->name}}</td>
+                                    <td align='center'>{{$item->subject}}</td>
+                                    <td align='center'>{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->format('Y') }}</td>
+                                    <td align="center">
+                                        <button class="btn btn-sm btn-primary" onClick="destroycontactmessage({{ $item->id }})"><i class="fa fa-trash"></i></button>
+                                        <button class="btn btn-sm btn-primary" onClick="preview({{ $item->id }})"><i class="fa fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan='9', align='center'>No Contact Message Data</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -60,6 +66,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 <script>
     // ===== START CRUD CONTACT MESSAGE =====
     // untuk destroy database
@@ -108,5 +115,11 @@
         });
     }
     // ===== END CRUD CONTACT MESSAGE =====
+</script>
+<script>
+    $('#dataContactUs').DataTable({
+        responsive: true,
+        fixedHeader: true,
+    });
 </script>
 @endsection

@@ -1,12 +1,16 @@
 @extends('admin-page.template.body')
 
+@section('head')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+@endsection
+
 @section('content')
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
-        <div class="col-xl-12">
+        <div class="col-lg-12">
             <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Call Kestari Database</h5>
+                <h5 class="mb-4">Call Kestari Management System</h5>
                 <button class='btn btn-primary' onClick="create()"><i class="fa fa-plus"></i> Create Call Kestari</button>
                 {{-- START Data table Call Kestari --}}
                 <div id="read" class="mt-3"></div>
@@ -33,6 +37,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 <script>
     // ===== START CRUD Call Kestari =====
     // untuk load database

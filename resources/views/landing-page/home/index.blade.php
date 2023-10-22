@@ -2,7 +2,7 @@
 
 @section('content')
 {{-- PopUp Landing Page Start --}}
-@include('landing-page.home.partials.popup')
+{{-- @include('landing-page.home.partials.popup') --}}
 {{-- PopUp Landing Page End --}}
 
 {{-- Jumbotron Landing Page Start --}}

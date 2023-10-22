@@ -362,7 +362,7 @@
                 </a>
             </div>
             <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                <a style="color: #fff" target="_blank" rel="noopener noreferrer">
+                <a href="https://drive.google.com/drive/folders/1EsAjYPkbTBZmLqICrG-80y3_jxShfTs-" style="color: #fff" target="_blank" rel="noopener noreferrer">
                     <div class="icon-box text-center">
                         <div class="icon"><i class="bi bi-person-badge-fill"></i></div>
                         <h4>Name Tag Peserta</h4>
@@ -370,7 +370,7 @@
                 </a>
             </div>
             <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                <a style="color: #fff" target="_blank" rel="noopener noreferrer">
+                <a href="https://drive.google.com/drive/folders/1-tZIFN0CaAwqJAH26ORm75QBlCT_xkPg?usp=sharing" style="color: #fff" target="_blank" rel="noopener noreferrer">
                     <div class="icon-box text-center">
                         <div class="icon"><i class="bi bi-house-heart"></i></div>
                         <h4>Kelompok Mentoring</h4>

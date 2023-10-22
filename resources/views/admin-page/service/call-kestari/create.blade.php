@@ -8,11 +8,11 @@
                 <ul></ul>
             </div>
         </div>
-        <div class="mb-3 col-8">
+        <div class="mb-3 col-12 col-lg-8">
             <label for="link" class="form-label required"><b>Link</b></label>
             <textarea class="form-control" name="link" id="link"></textarea>
         </div>
-        <div class="mb-3 col-4">
+        <div class="mb-3 col-12 col-lg-4">
             <label for="buttonName" class="form-label required"><b>Button Name</b></label>
             <input type="text" class="form-control" id="buttonName">
         </div>

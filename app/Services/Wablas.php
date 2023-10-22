@@ -7,7 +7,7 @@ use App\Http\Controllers\LibraryFunctionController as LFC;
 
 class Wablas
 {
-    private static $token = "kMIjCKwNwlUrQGqilP7HvBjEs3OphJXoClyrL7y7E2DfzSlE0qRpHNNwwEAYJJrB";
+    private static $token = "vcjV9udzhdRgDEdMgMDQ0cQvQVurz5r5Z2jcVT79mITdqLnoCCWQprFb8Ars87WU";
     private static $urlSendSimpleText = "https://texas.wablas.com/api/send-message";
 
     public static function sendInvoiceSimpleText($data)
