@@ -55,11 +55,50 @@ git clone https://github.com/ldksyahid/ldksyahid-app.git
 
 <b>Create Database</b> 
 <br>
-Run Module Apache and MySQL in xampp and open PHPMyAdmin to create database `ldksyahid_db` and then import database from <a href="https://drive.google.com/drive/folders/1EWyRlyuJNta8OeegRDapp_optXfPEPG_?usp=sharing" target="_blank" rel="noopener noreferrer">latest database</a> 
+<ol>
+    <li>Run Module Apache and MySQL in xampp and open PHPMyAdmin</li>
+    <li>Create New Schema <b>ldksyahid_db</b></li>
+</ol>
 
-<b>Vendor</b> 
+<b>.env</b> 
 <br>
-Remove previous folder vendor and Download <a href="https://drive.google.com/drive/folders/1_tSANdG2LfgsoUkwKqbhRD-7jyAEsuvv?usp=sharing" target="_blank" rel="noopener noreferrer">lates vendor</a> and then exctract file into folder directory `ldksyahid-app/` 
+<ol>
+    <li>Copy paste ".env.example" and rename to ".env"</li>
+    <li>Adjust the database connection environment to the schema you have created</li>
+</ol>
+
+```bash
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ldksyahid_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+<b>Composer</b>
+<br>
+Run Composer Install in directory `ldksyahid-app/`
+```bash
+composer install
+```
+
+<b>Migration</b>
+<br>
+Run migrations in directory `ldksyahid-app/`
+```bash
+php artisan migrate
+```
+
+<b>Seeder</b>
+<br>
+Run Seeder in directory `ldksyahid-app/`
+```bash
+php artisan db:seed --class=CreateUsersSeeder
+```
+```bash
+php artisan db:seed --class=PermissionSeeder
+```
 
 <b>Node Modules</b>
 <br>
@@ -67,13 +106,6 @@ Install node_modules in directory `ldksyahid-app/`
 ```bash
 npm install
 ```
-
-<b>.env</b> 
-<br>
-<ol>
-    <li>Copy paste ".env.example" and rename to ".env"</li>
-    <li>Change all code .env from latest .env by <a href="https://wa.me/62895394755672" target="_blank" rel="noopener noreferrer">Contact Me</a> to get latest .env</li>
-</ol>
 
 <b>Generate Key</b> 
 <br>
