@@ -8,19 +8,19 @@
         <br>
         <ul></ul>
     </div>
-    <div class="col-12 mb-3">
+    <div class="col-12 col-lg-12 mb-3">
         <label for="inputName1" class="form-label required"><b>Name</b></label>
         <input type="text" class="form-control" id="inputName1" value="{{ $dataUser->name }}">
     </div>
-    <div class="col-6 mb-3">
+    <div class="col-12 col-lg-6 mb-3">
         <label for="inputEmail1" class="form-label required"><b>Email</b></label>
         <input type="email" class="form-control" id="inputEmail1" aria-describedby="emailHelp" value="{{ $dataUser->email }}">
     </div>
-    <div class="col-6 mb-3">
+    <div class="col-12 col-lg-6 mb-3">
         <label for="inputPassword1" class="form-label"><b>Password</b></label>
         <input type="password" class="form-control" id="inputPassword1" placeholder="Leave if you wan't change password">
     </div>
-    <div class="col-12">
+    <div class="col-12 col-lg-12">
         <fieldset class="row mb-3">
             <legend class="col-form-label col-sm-2 pt-0 required"><b>Role Name</b></legend>
             <div class="col-sm-10">

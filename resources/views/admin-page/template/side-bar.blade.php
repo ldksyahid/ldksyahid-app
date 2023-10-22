@@ -84,6 +84,7 @@
                         <a href="/admin/reqservice/shortlink" class="dropdown-item">&#10070; Request Shortlink</a>
                     </div>
                 </div>
+                <a href="/admin/ktaldksyahid" class="nav-item nav-link {{($title === "KTA") ? "active" : ""}}"><i class="fa fa-id-card me-2"></i>KTA LDK Syahid</a>
             </div>
 
         {{-- HelperAdmin Sidebar --}}
@@ -146,6 +147,7 @@
                         <a href="/admin/service/callkestari" class="dropdown-item">&#10070; Call Kestari</a>
                     </div>
                 </div>
+                <a href="/admin/ktaldksyahid" class="nav-item nav-link {{($title === "KTA") ? "active" : ""}}"><i class="fa fa-id-card me-2"></i>KTA LDK Syahid</a>
             </div>
 
         {{-- HelperEventMart Sidebar --}}
