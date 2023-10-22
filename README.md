@@ -12,7 +12,7 @@
 
 <br>
 <div align="center">
-<img src="https://img.shields.io/badge/version-v1.0.2-blue" />
+<img src="https://img.shields.io/badge/version-v1.1.0-blue" />
 <img src="https://img.shields.io/badge/license-LDK Syahid-green" />
 <img src="https://img.shields.io/badge/contributors-11-brightgreen" />
 </div>
