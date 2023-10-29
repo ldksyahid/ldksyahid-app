@@ -99,6 +99,9 @@ php artisan db:seed --class=CreateUsersSeeder
 ```bash
 php artisan db:seed --class=PermissionSeeder
 ```
+```bash
+php artisan laravolt:indonesia:seed
+```
 
 <b>Node Modules</b>
 <br>
