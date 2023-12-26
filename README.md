@@ -12,7 +12,7 @@
 
 <br>
 <div align="center">
-<img src="https://img.shields.io/badge/version-v1.1.0-blue" />
+<img src="https://img.shields.io/badge/version-v1.2.0-blue" />
 <img src="https://img.shields.io/badge/license-LDK Syahid-green" />
 <img src="https://img.shields.io/badge/contributors-11-brightgreen" />
 </div>
@@ -139,6 +139,7 @@ php artisan serve
 ## Version
 | Version | Date         | Update |
 | :---:   |     :---:    |  ---   |
+| `1.2.0`| `2023-12-26` | <ul><li>Addition and adjustment of the Machine Learning Donation Celshahid Dashboard Feature</li></ul> |
 | `1.1.0`| `2023-10-25` | <ul><li>Add KTA LDK Syahid Feature</li><li>New Mobile Responsive CMS Admin</li></ul> |
 | `1.0.3`| `2023-09-28` | <ul><li>Add Ekspresi Content and Develop Celsyahid Machine Learning</li></ul> |
 | `1.0.2`| `2023-07-22` | <ul><li>Update Notify Celengan Syahid</li></ul> |
