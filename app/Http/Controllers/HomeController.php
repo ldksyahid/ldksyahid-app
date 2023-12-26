@@ -13,6 +13,7 @@ use App\Models\Schedule;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Jenssegers\Agent\Agent;
+use App\Models\User;
 
 
 class HomeController extends Controller
@@ -51,7 +52,17 @@ class HomeController extends Controller
 
     public function adminHome()
     {
+        $userCount = User::count();
+        $newsCount = News::count();
+        $articleCount = Article::count();
+        $eventCount = Event::count();
         Alert::success('Selamat Datang Admin LDK Syahid UIN Jakarta', 'Bismillah, Berikan yang Terbaik untuk Dakwah');
-        return view('admin-page.dashboard.index', ["title" => "Dashboard"]);
+        return view('admin-page.dashboard.index', [
+            'title' => 'Dashboard',
+            'userCount' => $userCount,
+            'newsCount' => $newsCount,
+            'articleCount' => $articleCount,
+            'eventCount' => $eventCount,
+        ]);
     }
 }

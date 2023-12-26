@@ -18,6 +18,12 @@ class MsKTALDKSyahidController extends Controller
         return view('admin-page.kta-ldksyahid.index', compact('ktaData'), ["title" => "KTA"]);
     }
 
+    public function show($link)
+    {
+        $ktaData = MsKTALDKSyahid::where('linkProfile', $link)->with(['getFaculty', 'getMajor', 'getGeneration'])->orderBy('created_at', 'desc')->first();
+        return view('landing-page.kta-ldksyahid.detail', compact('ktaData'), ["title" => "KTA"]);
+    }
+
     public function create()
     {
         $facultyModel = LkFaculty::pluck('facultyName', 'id');

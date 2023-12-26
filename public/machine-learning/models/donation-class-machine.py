@@ -9,17 +9,18 @@ from collections import Counter
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 
+######## AMBIL DATA QUERY UNTUK MEMBUAT MODEL ########
 # Koneksi ke database
 config = {
-    "host": "127.0.0.1",
-    "user": "root",
-    "password": "",
-    "database": "ldksyahid_db"
+    'host': "localhost",
+    'user': "mitsaqan",
+    'password': "Wkhh2EcsTSJTV8X",
+    'database': "mitsaqan_ldksyahid_db"
 }
 conn = mysql.connector.connect(**config)
 
 # Query dataset donasi yang sudah dibayar
-query_dataset = "SELECT * FROM ldksyahid_db.ms_donationdataset a WHERE a.payment_status = 'PAID'"
+query_dataset = "SELECT * FROM mitsaqan_ldksyahid_db.ms_donationdataset a WHERE a.payment_status = 'PAID'"
 cursor = conn.cursor()
 cursor.execute(query_dataset)
 fetch_dataset = cursor.fetchall()
@@ -50,6 +51,9 @@ dataset['donation_class'] = dataset['jumlah_donasi'].astype(int).apply(classify_
 # Pilih fitur untuk klasifikasi
 classification_features = dataset[['usia', 'donation_class']]
 
+# Beri nama kolom pada dataframe classification_features
+classification_features.columns = ['usia', 'donation_class']
+
 # Standarisasi fitur-fitur
 scaler = StandardScaler()
 scaled_features = scaler.fit_transform(classification_features)
@@ -70,23 +74,12 @@ svm_model.fit(X_train, y_train)
 y_pred = svm_model.predict(X_test)
 
 # Hitung akurasi
-# accuracy = accuracy_score(y_test, y_pred) * 100
-# print(f"SVM Accuracy: {accuracy:.2f}%")
+accuracy = accuracy_score(y_test, y_pred) * 100
+print(f"SVM Accuracy: {accuracy:.2f}%")
 
- # Classification report
-print("\nClassification Report:")
-print(classification_report(y_test, y_pred))
 
-# Hitung matriks kebingungan
-cm = confusion_matrix(y_test, y_pred, labels=svm_model.classes_)
-
-with open('public/svm-machine-output/confusion_matrix.json', 'w') as f:
-    json.dump(cm.tolist(), f)
-
-print("Confusion matrix has been calculated and saved to JSON file.")
-
-# Ambil data dari hasil query
-query_donations = "SELECT * FROM ldksyahid_db.donations a WHERE a.payment_status = 'PAID'"
+######## AMBIL DATA QUERY UNTUK PREDIKSI ########
+query_donations = "SELECT * FROM mitsaqan_ldksyahid_db.donations a WHERE a.payment_status = 'PAID'"
 cursor = conn.cursor()
 cursor.execute(query_donations)
 fetch_donations = cursor.fetchall()
@@ -128,7 +121,71 @@ bar_plot_data = {
 }
 
 # Save bar plot data to JSON file
-with open('public/svm-machine-output/bar_plot_data.json', 'w') as f:
+with open('/home1/mitsaqan/Ldksyah.id/public/machine-learning/output/bar_plot_donation_class.json', 'w') as f:
     json.dump(bar_plot_data, f)
 
-print("Bar plot data has been saved to JSON file.")
+print("Bar plot donation class data has been saved to JSON file.")
+
+# Konversi kolom 'usia' menjadi tipe data integer
+new_data_df['usia'] = pd.to_numeric(new_data_df['usia'], errors='coerce')
+new_data_df['jumlah_donasi'] = pd.to_numeric(new_data_df['jumlah_donasi'], errors='coerce')
+
+# Buat fungsi untuk mengklasifikasikan usia menjadi kategori
+def classify_age(age):
+    if 5 <= age <= 11:
+        return 'Children (5-11 years old)'
+    elif 12 <= age <= 25:
+        return 'Teenagers (12-25 years old)'
+    elif 26 <= age <= 45:
+        return 'Adults (26-45 years old)'
+    elif 46 <= age <= 65:
+        return 'Elderly (46-65 years old)'
+    else:
+        return 'Other Ages'
+
+# Tambahkan kolom klasifikasi usia ke dalam dataset baru
+new_data_df['age_category'] = new_data_df['usia'].apply(classify_age)
+
+# Buat fungsi untuk mengklasifikasikan jumlah donasi menjadi kategori
+def classify_donation(donation_amount):
+    if donation_amount <= 25000:
+        return 'Low (0 - 25k)'
+    elif 26000 <= donation_amount <= 50000:
+        return 'Moderately Low (26k - 50k)'
+    elif 51000 <= donation_amount <= 100000:
+        return 'Moderate (51k - 100k)'
+    elif 101000 <= donation_amount <= 250000:
+        return 'Moderately High (101k - 250k)'
+    else:
+        return 'High (> 251k)'
+
+# Tambahkan kolom klasifikasi jumlah donasi ke dalam dataset baru
+new_data_df['donation_category'] = new_data_df['jumlah_donasi'].apply(classify_donation)
+
+# Mengelompokkan data berdasarkan kategori usia dan kategori donasi serta menghitung jumlah orang yang berdonasi
+donation_count = new_data_df.groupby(['age_category', 'donation_category']).size().reset_index(name='donor_count')
+
+# Simpan data bar plot ke dalam format JSON
+bar_plot_json = {
+    'age_category': donation_count['age_category'].tolist(),
+    'donation_category': donation_count['donation_category'].tolist(),
+    'donor_count': donation_count['donor_count'].tolist()
+}
+
+with open('/home1/mitsaqan/Ldksyah.id/public/machine-learning/output/bar_plot_count_age_donation.json', 'w') as json_file:
+    json.dump(bar_plot_json, json_file)
+
+print("Bar plot count age donation data has been saved to JSON file.")
+
+
+# Hitung jumlah donatur berdasarkan kategori usia
+age_category_counts = new_data_df['age_category'].value_counts()
+
+# Konversi ke dictionary
+age_category_dict = age_category_counts.to_dict()
+
+# Simpan ke dalam file JSON
+with open('/home1/mitsaqan/Ldksyah.id/public/machine-learning/output/pie_chart_age_category_counts.json', 'w') as file:
+    json.dump(age_category_dict, file)
+
+print("Pie chart age category counts data has been saved to JSON file.")

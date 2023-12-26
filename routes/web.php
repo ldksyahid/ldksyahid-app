@@ -109,6 +109,9 @@ Route::post('/shortlink/store', [RequestShortlinkController::class, 'store'])->n
 // Route LandingPage Layanan Call Kestari
 Route::get('/callkestari', [CallKestariController::class, 'index'])->name('service.callkestari');
 
+// Route KTA LDK Syahid
+Route::get('/kta/{link}', [MsKTALDKSyahidController::class, 'show'])->name('kta.show');
+
 // Route LandingPage Layanan CelenganLDKSyahid
 Route::get('/celengansyahid', [CelenganSyahidController::class, 'indexLanding'])->name('service.celengansyahid');
 Route::get('/celengansyahid/{link}', [CelenganSyahidController::class, 'showLanding'])->name('service.celengansyahid.detail');
@@ -290,12 +293,9 @@ Route::get('/admin/service/shortlink', function () {
 
 Route::post('/', function () {
     $builder = new \AshAllenDesign\ShortURL\Classes\Builder();
-
     $shortURLObject = $builder->destinationUrl(request()->url)->make();
     $shortURL = $shortURLObject->default_short_url;
-
     return back()->with('success','URL shortened successfully. ');
-
 })->name('admin.service.shortlink.shorten')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
 Route::post('{id}', function ($id) {
@@ -304,16 +304,13 @@ Route::post('{id}', function ($id) {
     $url->destination_url = request()->destination;
     $url->default_short_url = config('app.url').'/'.request()->url;
     $url->save();
-
     return back()->with('success','URL updated successfully. ');
 })->name('admin.service.shortlink.update')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
 Route::get('{id}/destroy', function ($id) {
-    // hapus data
     $url = \AshAllenDesign\ShortURL\Models\ShortURL::find($id);
     $url->url_key = request()->url;
     $url->delete();
-
     return back()->with('success','URL Delete successfully. ');
 })->name('admin.service.shortlink.destroy')->middleware(['role:Superadmin']);
 
