@@ -18,6 +18,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\DonationInvoice;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class CelenganSyahidController extends Controller
 {
@@ -178,32 +180,26 @@ class CelenganSyahidController extends Controller
 
     public function dashboardCelenganSyahid()
     {
-        // // Path ke interpreter Python
-        // $pythonExecutable = '/home1/mitsaqan/virtualenv/ucupspython/3.9/bin/python';
+        $pythonExecutable = '/home1/mitsaqan/virtualenv/ucupspython/3.9/bin/python';
+        // $pythonExecutable = 'C:\Users\hp\AppData\Local\Programs\Python\Python311\python.exe';
 
-        // // Path ke skrip Python
-        // $scriptPath = '/home1/mitsaqan/Ldksyah.id/svm-machine.py';
+        $scriptPath = '/home1/mitsaqan/Ldksyah.id/public/machine-learning/models/donation-class-machine.py';
+        // $scriptPath = 'machine-learning/models/donation-class-machine.py';
 
-        // // Gabungkan perintah untuk menjalankan skrip Python
-        // $command = [
-        //     $pythonExecutable,
-        //     $scriptPath
-        // ];
+        $command = [
+            $pythonExecutable,
+            $scriptPath
+        ];
 
-        // $process = new Process($command, null, null, null, null);
+        $process = new Process($command, null, null, null, null);
 
-        // // Start the process
-        // $process->start();
+        $process->start();
 
-        // // Optionally wait for the process to finish
-        // $process->wait();
+        $process->wait();
 
-        // // Retrieve the output
-        // $output = $process->getOutput();
-
-        // if (!$process->isSuccessful()) {
-        //     throw new ProcessFailedException($process);
-        // }
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
 
         return view('admin-page.service.celengan-syahid.dashboard', ["title" => "Celengan Syahid"]);
     }

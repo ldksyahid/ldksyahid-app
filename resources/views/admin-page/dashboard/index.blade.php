@@ -4,6 +4,42 @@
 <!-- Widgets Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-users fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Users</p>
+                    <h6 class="mb-0">{{ $userCount }}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fas fa-calendar-check fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Events</p>
+                    <h6 class="mb-0">{{ $eventCount }}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fas fa-book-open fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Articles</p>
+                    <h6 class="mb-0">{{ $articleCount }}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-newspaper fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">News</p>
+                    <h6 class="mb-0">{{ $newsCount }}</h6>
+                </div>
+            </div>
+        </div>
         <div class="col-sm-12 col-md-6 col-xl-6">
             <div class="h-150 bg-light rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">

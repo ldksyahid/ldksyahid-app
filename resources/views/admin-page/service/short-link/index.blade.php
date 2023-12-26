@@ -46,7 +46,10 @@
                             <th scope="row">{{ ++$key }}</th>
                             <td align="center">{{ $item->url_key }}</td>
                             <td align="center"><a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a></td>
-                            <td align="center"><a href="{{ $item->default_short_url }}" target="_blank">{{ $item->default_short_url }}</a></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="copyLink(`ldksyah.id/{{ $item->url_key }}`)"><i class="fa fa-copy small"></i></button>
+                                <a href="{{ $item->default_short_url }}" target="_blank">ldksyah.id/{{ $item->url_key }}</a>
+                            </td>
                             <td align="center">{{ $item->visits->count() }}</td>
                             <td align="center">{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('YYYY') }} ({{ \Carbon\Carbon::parse( $item->created_at )->format('H:i T') }})</td>
                             @if ($item->created_by != null)
@@ -143,6 +146,28 @@ function deleteConfirmationShortlink(id) {
             })
         }
 // ===== END CRUD ARTICLE =====
+</script>
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1000,
+        width: '350px',
+    })
+
+    function copyLink(link) {
+        const input = document.createElement('input');
+        input.value = link;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        Toast.fire({
+            icon: 'success',
+            title: 'Link copied to clipboard !'
+        });
+    }
 </script>
 <script>
 $('#dataShortlinkTable').DataTable({
