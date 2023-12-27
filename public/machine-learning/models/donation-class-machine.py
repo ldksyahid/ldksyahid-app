@@ -12,15 +12,16 @@ from sklearn.metrics import classification_report
 ######## AMBIL DATA QUERY UNTUK MEMBUAT MODEL ########
 # Koneksi ke database
 config = {
-    'host': "localhost",
-    'user': "mitsaqan",
-    'password': "Wkhh2EcsTSJTV8X",
-    'database': "mitsaqan_ldksyahid_db"
+    "host": "127.0.0.1",
+    "user": "root",
+    "password": "",
+    "database": "ldksyahid_db",
+    "port": 3306  # Ganti dengan port yang sesuai
 }
 conn = mysql.connector.connect(**config)
 
 # Query dataset donasi yang sudah dibayar
-query_dataset = "SELECT * FROM mitsaqan_ldksyahid_db.ms_donationdataset a WHERE a.payment_status = 'PAID'"
+query_dataset = "SELECT * FROM ldksyahid_db.ms_donationdataset a WHERE a.payment_status = 'PAID'"
 cursor = conn.cursor()
 cursor.execute(query_dataset)
 fetch_dataset = cursor.fetchall()
@@ -79,7 +80,7 @@ print(f"SVM Accuracy: {accuracy:.2f}%")
 
 
 ######## AMBIL DATA QUERY UNTUK PREDIKSI ########
-query_donations = "SELECT * FROM mitsaqan_ldksyahid_db.donations a WHERE a.payment_status = 'PAID'"
+query_donations = "SELECT * FROM ldksyahid_db.donations a WHERE a.payment_status = 'PAID'"
 cursor = conn.cursor()
 cursor.execute(query_donations)
 fetch_donations = cursor.fetchall()
@@ -121,7 +122,7 @@ bar_plot_data = {
 }
 
 # Save bar plot data to JSON file
-with open('/home1/mitsaqan/Ldksyah.id/public/machine-learning/output/bar_plot_donation_class.json', 'w') as f:
+with open('public/machine-learning/output/bar_plot_donation_class.json', 'w') as f:
     json.dump(bar_plot_data, f)
 
 print("Bar plot donation class data has been saved to JSON file.")
@@ -172,7 +173,7 @@ bar_plot_json = {
     'donor_count': donation_count['donor_count'].tolist()
 }
 
-with open('/home1/mitsaqan/Ldksyah.id/public/machine-learning/output/bar_plot_count_age_donation.json', 'w') as json_file:
+with open('public/machine-learning/output/bar_plot_count_age_donation.json', 'w') as json_file:
     json.dump(bar_plot_json, json_file)
 
 print("Bar plot count age donation data has been saved to JSON file.")
@@ -185,7 +186,7 @@ age_category_counts = new_data_df['age_category'].value_counts()
 age_category_dict = age_category_counts.to_dict()
 
 # Simpan ke dalam file JSON
-with open('/home1/mitsaqan/Ldksyah.id/public/machine-learning/output/pie_chart_age_category_counts.json', 'w') as file:
+with open('public/machine-learning/output/pie_chart_age_category_counts.json', 'w') as file:
     json.dump(age_category_dict, file)
 
 print("Pie chart age category counts data has been saved to JSON file.")

@@ -32,6 +32,5 @@ class Kernel extends ConsoleKernel
 
     protected $commands = [
         Commands\RunDonationClassMachine::class,
-        Commands\RunDonationPaymentStatusMachine::class,
     ];
 }
