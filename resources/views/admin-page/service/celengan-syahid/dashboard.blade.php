@@ -66,9 +66,18 @@
 
                 const barLayout = {
                     title: 'Donation Class',
-                    xaxis: { title: 'Donation Category' },
-                    yaxis: { title: 'Donor Count' },
-                    margin: { t: 50, b: 120, l: 50, r: 60 }
+                    xaxis: {
+                        title: 'Donation Category'
+                    },
+                    yaxis: {
+                        title: 'Donor Count'
+                    },
+                    margin: {
+                        t: 50,
+                        b: 120,
+                        l: 50,
+                        r: 60
+                    }
                 };
 
                 Plotly.newPlot('bar-plot', barData, barLayout);
@@ -101,7 +110,10 @@
                         acc.values.push(ageCounts[index]);
                     }
                     return acc;
-                }, { labels: [], values: [] });
+                }, {
+                    labels: [],
+                    values: []
+                });
 
                 const pieData = [{
                     labels: sortedAgeData.labels,
@@ -178,11 +190,20 @@
                     dataDict[donationCategory].y.push(donorCount);
                     dataDict[donationCategory].text.push(donorCount);
                 }
-
+                console.log(dataDict);
                 const orderedBarData = order.map(category => dataDict[category]);
-                orderedBarData.forEach((bar, index) => {
-                    bar.marker = { color: colors[index % colors.length] }; // Menggunakan palet warna yang sama
-                    bar.hoverinfo = 'name';
+
+                // Filter out undefined values (categories that are not present in the data)
+                const validBarData = orderedBarData.filter(bar => bar !== undefined && bar.x.length > 0);
+
+                validBarData.forEach((bar, index) => {
+                    // Check if bar is defined and has valid data before setting properties
+                    if (bar && bar.x.length > 0) {
+                        bar.marker = {
+                            color: colors[index % colors.length]
+                        };
+                        bar.hoverinfo = 'name';
+                    }
                 });
 
                 const barLayout = {
@@ -194,16 +215,27 @@
                         categoryarray: categoryOrder,
                         automargin: true
                     },
-                    yaxis: { title: 'Donor Count' },
-                    legend: { title: { text: 'Donation Category' } },
-                    margin: { t: 50, b: 100, l: 50, r: 50 },
+                    yaxis: {
+                        title: 'Donor Count'
+                    },
+                    legend: {
+                        title: {
+                            text: 'Donation Category'
+                        }
+                    },
+                    margin: {
+                        t: 50,
+                        b: 100,
+                        l: 50,
+                        r: 50
+                    },
                     transition: {
                         duration: 500,
                         easing: 'cubic-in-out'
                     }
                 };
 
-                Plotly.newPlot('bar-plot-2', orderedBarData, barLayout);
+                Plotly.newPlot('bar-plot-2', validBarData, barLayout);
             })
             .catch(error => console.error('Error fetching bar plot 2 data:', error));
     }
