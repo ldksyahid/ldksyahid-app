@@ -180,27 +180,27 @@ class CelenganSyahidController extends Controller
 
     public function dashboardCelenganSyahid()
     {
-        // $pythonExecutable = '/home1/mitsaqan/virtualenv/ucupspython/3.9/bin/python';
-        $pythonExecutable = 'C:\\Users\\hp\\AppData\\Local\\Programs\\Python\\Python311\\python.exe';
+        // // $pythonExecutable = '/home1/mitsaqan/virtualenv/ucupspython/3.9/bin/python';
+        // $pythonExecutable = 'C:\\Users\\hp\\AppData\\Local\\Programs\\Python\\Python311\\python.exe';
 
-        // $scriptPath = '/home1/mitsaqan/Ldksyah.id/public/machine-learning/models/donation-class-machine.py';
+        // // $scriptPath = '/home1/mitsaqan/Ldksyah.id/public/machine-learning/models/donation-class-machine.py';
 
-        $scriptPath = 'machine-learning\\models\\donation-class-machine.py';
+        // $scriptPath = 'machine-learning\\models\\donation-class-machine.py';
 
-        $command = [
-            $pythonExecutable,
-            $scriptPath
-        ];
+        // $command = [
+        //     $pythonExecutable,
+        //     $scriptPath
+        // ];
 
-        $process = new Process($command, null, null, null, null);
+        // $process = new Process($command, null, null, null, null);
 
-        $process->start();
+        // $process->start();
 
-        $process->wait();
+        // $process->wait();
 
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
+        // if (!$process->isSuccessful()) {
+        //     throw new ProcessFailedException($process);
+        // }
 
         return view('admin-page.service.celengan-syahid.dashboard', ["title" => "Celengan Syahid"]);
     }
