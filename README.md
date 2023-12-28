@@ -102,6 +102,10 @@ php artisan db:seed --class=PermissionSeeder
 ```bash
 php artisan laravolt:indonesia:seed
 ```
+Seeder for Celengansyahid Donation Dataset (Optional)
+```bash
+php artisan db:seed --class=DonationSeeder
+```
 
 <b>Node Modules</b>
 <br>
