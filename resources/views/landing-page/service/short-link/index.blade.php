@@ -18,19 +18,12 @@
             </div>
             <div class="col-lg-8 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                 <form role="form" action='/shortlink/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
-                @csrf
-                @method('POST')
+                    @csrf
+                    @method('POST')
                     <div class="row g-3">
                         <div class="col-sm-12">
                             <div class="form-floating">
-                                <input
-                                    type="text"
-                                    class="form-control bg-light border-0"
-                                    id="name"
-                                    placeholder="Gurdian Name"
-                                    name="name"
-                                    required
-                                />
+                                <input type="text" class="form-control bg-light border-0" id="name" placeholder="Gurdian Name" name="name" required />
                                 <label for="name">Nama Lengkapmu</label>
                                 <div class="invalid-feedback">
                                     Jangan lupa untuk masukkan Nama Lengkapmu ya
@@ -42,14 +35,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-floating">
-                                <input
-                                    type="email"
-                                    class="form-control bg-light border-0"
-                                    id="email"
-                                    placeholder="Gurdian Email"
-                                    name="email"
-                                    required
-                                />
+                                <input type="email" class="form-control bg-light border-0" id="email" placeholder="Gurdian Email" name="email" required />
                                 <label for="email">Emailmu</label>
                                 <div class="invalid-feedback">
                                     Jangan lupa untuk masukkan Email Kamu ya
@@ -61,15 +47,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-floating">
-                                <input
-                                    type="text"
-                                    class="form-control bg-light border-0"
-                                    id="whatsapp"
-                                    placeholder="Child Name"
-                                    name="whatsapp"
-                                    value="+62"
-                                    required
-                                />
+                                <input type="text" class="form-control bg-light border-0" id="whatsapp" placeholder="Child Name" name="whatsapp" value="+62" required />
                                 <label for="whatsapp">Whatsapp Aktif</label>
                                 <div class="invalid-feedback">
                                     Jangan lupa untuk masukkan Nomor Whatsapp kamu ya
@@ -82,14 +60,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-floating">
-                                <input
-                                    type="text"
-                                    class="form-control bg-light border-0"
-                                    id="defaultLink"
-                                    placeholder="Child Age"
-                                    name="defaultLink"
-                                    required
-                                />
+                                <input type="text" class="form-control bg-light border-0" id="defaultLink" placeholder="Child Age" name="defaultLink" required />
                                 <label for="defaultLink">Link Asli</label>
                                 <div class="invalid-feedback">
                                     Jangan lupa untuk masukkan Link Aslinya ya
@@ -101,15 +72,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-floating">
-                                <input
-                                    type="text"
-                                    class="form-control bg-light border-0"
-                                    id="customLink"
-                                    placeholder="Child Age"
-                                    name="customLink"
-                                    value="https://ldksyah.id/"
-                                    required
-                                />
+                                <input type="text" class="form-control bg-light border-0" id="customLink" placeholder="Child Age" name="customLink" value="https://ldksyah.id/" required />
                                 <label for="customLink">Setelah dikustomisasi</label>
                                 <div class="invalid-feedback">
                                     Jangan lupa untuk masukkan Link setelah dikustomisasi ya
@@ -117,19 +80,12 @@
                                 <div class="valid-feedback">
                                     Linknya kreatif ya
                                 </div>
-                                <p style="font-size: 10px">*Link harus diawali dengan https://ldksyah.id/ <br> *Jika link tidak tersedia maka akan diganti secara random <br>*Beri tanda pisah “-” jika 1 kata terdapat > 10 huruf </p>
+                                <p style="font-size: 10px">*Link harus diawali dengan https://ldksyah.id/ <br> *Jika link tidak tersedia maka akan diganti secara random <br>*Beri tanda pisah “-” jika 1 kata terdapat > 10 huruf <br>*Contoh : https://ldksyah.id/Sepuluh-Kata</p>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-floating">
-                                <textarea
-                                    class="form-control bg-light border-0"
-                                    placeholder="Leave a message here"
-                                    id="note"
-                                    style="height: 100px"
-                                    name="note"
-                                    required
-                                ></textarea>
+                                <textarea class="form-control bg-light border-0" placeholder="Leave a message here" id="note" style="height: 100px" name="note" required></textarea>
                                 <label for="note">Catatan</label>
                                 <div class="invalid-feedback">
                                     Kasih catatan dong untuk kami
@@ -141,7 +97,7 @@
                         </div>
                         <div class="col-12">
                             <button class="btn btn-primary w-100 py-3" type="submit">
-                            Kirim
+                                Kirim
                             </button>
                         </div>
                     </div>
@@ -156,12 +112,13 @@
                     <div class="col-sm-6 d-flex wow fadeIn mt-5" data-wow-delay="0.3s">
                         <i class="fa fa-whatsapp fa-3x text-primary flex-shrink-0 me-3"></i>
                         <div class="row">
-                            <h6 class="mb-0"><a href="https://api.whatsapp.com/send?phone=+6287874371243&text=*%5BFOLLOW%20UP%20LAYANAN%20PERPENDEK%20URL%5D*%0A%0A_Assalammu%27alaikum_%0A%0AIzin%20untuk%20*Memfollow%20up%20Layanan%20Perpendek%20URL*%20dan%20saya%20telah%20mengisi%20formulir%20tersebut%0A%0A_Terimakasih%20Sebelumnya_%0A_Wassalammua%27laikum_%0A%0A%23KitaAdalahSaudara%0A%23LDKSyahid%0A%23PijarAskara%0A%23UINJakarta" target="_blank">R Revaldy A</a></h6><br>
+                            <h6 class="mb-0"><a href="https://api.whatsapp.com/send?phone=+62895629660307&text=*%5BFOLLOW%20UP%20LAYANAN%20PERPENDEK%20URL%5D*%0A%0A_Assalammu%27alaikum_%0A%0AIzin%20untuk%20*Memfollow%20up%20Layanan%20Perpendek%20URL*%20dan%20saya%20telah%20mengisi%20formulir%20tersebut%0A%0A_Terimakasih%20Sebelumnya_%0A_Wassalammua%27laikum_%0A%0A%23KitaAdalahSaudara%0A%23LDKSyahid%0A%23UINJakarta" target="_blank">Haris Rizki</a></h6><br>
+                            <!-- <h6 class="mb-0"><a href="https://api.whatsapp.com/send?phone=+62895629660307&text=*%5BFOLLOW%20UP%20LAYANAN%20PERPENDEK%20URL%5D*%0A%0A_Assalammu%27alaikum_%0A%0AIzin%20untuk%20*Memfollow%20up%20Layanan%20Perpendek%20URL*%20dan%20saya%20telah%20mengisi%20formulir%20tersebut%0A%0A_Terimakasih%20Sebelumnya_%0A_Wassalammua%27laikum_%0A%0A%23KitaAdalahSaudara%0A%23LDKSyahid%0A%23PijarAskara%0A%23UINJakarta" target="_blank">Haris Rizki</a></h6><br> -->
                             <p class="mb-0">+6287874371243</p>
                         </div>
                     </div>
                     <p class="mb-0 mt-5">
-                       Kami akan menghubungimu melalui Whatsapp yang telah di daftarkan setelah <i>Shortlink</i> berhasil kami buat
+                        Kami akan menghubungimu melalui Whatsapp yang telah di daftarkan setelah <i>Shortlink</i> berhasil kami buat
                     </p>
                 </div>
             </div>
@@ -183,8 +140,8 @@
             var validation = Array.prototype.filter.call(forms, function(form) {
                 form.addEventListener('submit', function(event) {
                     if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
+                        event.preventDefault();
+                        event.stopPropagation();
                     }
                     form.classList.add('was-validated');
                 }, false);

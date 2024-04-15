@@ -5,7 +5,6 @@ from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 import json
-from collections import Counter
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 
@@ -66,7 +65,7 @@ classification_labels = (dataset['donation_class']).astype(int)
 X_train, X_test, y_train, y_test = train_test_split(scaled_features, classification_labels, test_size=0.2, random_state=0)
 
 # Inisialisasi model SVM
-svm_model = SVC(kernel='linear')
+svm_model = SVC(kernel='poly', C=10, gamma=1)
 
 # Latih model SVM
 svm_model.fit(X_train, y_train)
