@@ -4,7 +4,7 @@
         <div class="carousel-inner">
             @forelse($postjumbotron as $key => $postjumbotron)
             <div class="carousel-item {{($key + 1 === 1) ? "active" : ""}}">
-                <img class="w-100" src="{{ asset($postjumbotron->picture) }}" alt="Image" />
+                <img class="w-100" src="https://drive.google.com/thumbnail?id={{ $postjumbotron->gdrive_id }}" alt="Image" />
                 @if ($postjumbotron->btnname != null || $postjumbotron->btnlink != null)
                     <div class="carousel-caption">
                         <div class="container">
