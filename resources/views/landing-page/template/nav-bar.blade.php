@@ -115,7 +115,7 @@
                         @if (Auth::User()->profile == null || Auth::User()->profile->profilepicture == null)
                             <img class="rounded-circle" src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}" alt="" style="width: 27px; height: 27px;">
                         @else
-                            <img class="rounded-circle" src="/{{Auth::User()->profile->profilepicture}}" alt="" style="width: 20px; height: 20px;">
+                            <img class="rounded-circle" src="https://drive.google.com/thumbnail?id={{Auth::User()->profile->gdrive_id}}" alt="" style="width: 20px; height: 20px;">
                         @endif
                     </span>{{ substr(Auth::user()->name,0, 15) }}</a>
                     <div class="dropdown-menu bg-light m-0">
