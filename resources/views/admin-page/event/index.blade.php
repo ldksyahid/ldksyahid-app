@@ -33,7 +33,7 @@
                                     <td scope="row" align='center'>{{$key + 1}}</td>
                                     <td align='center'>{{ $postevent->title }}</td>
                                     <td align='center'>
-                                        <img style="width: 100px;" src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="card-img"/>
+                                        <img style="width: 100px;" src="https://drive.google.com/thumbnail?id={{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" class="card-img"/>
                                     </td>
                                     <td align='center'>{{ $postevent->division }}</td>
                                     @if ($postevent->start != null)

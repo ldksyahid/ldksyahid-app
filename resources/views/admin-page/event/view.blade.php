@@ -67,7 +67,7 @@
                         <div class="mb-3 col-12 col-lg-4">
                             <label for="formFile" class="form-label required">Poster <span class="small">(1080 x 1350 Pixel)</span></label>
                             <br>
-                            <img id="frame" src="{{ asset($postevent->poster) }}" width="150px" height="200px" class="rounded mb-3 border"/>
+                            <img id="frame" src="https://drive.google.com/thumbnail?id={{ $postevent->gdrive_id }}" width="150px" height="200px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="poster" name ='poster'accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
                         </div>
                         <div class="mb-3 col-12 col-lg-4">
