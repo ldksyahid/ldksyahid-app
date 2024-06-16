@@ -19,7 +19,7 @@
             @forelse($postschedule as $key => $postschedule)
             <div class="row g-5 mt-3">
                 <div class="col-lg-9 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <img src="{{ asset($postschedule->picture) }}" alt="{{ $postschedule->title }}" class="img-fluid rounded" width="1080px" height="1350px">
+                    <img src="https://drive.google.com/thumbnail?id={{ $postschedule->gdrive_id }}" alt="{{ $postschedule->title }}" class="img-fluid rounded" width="1080px" height="1350px">
                 </div>
                 <div class="col-lg-3 col-md-6 wow fadeInDown" data-wow-delay="0.5s">
                     <div class="ps-3 mb-5 text-center">
@@ -61,7 +61,7 @@
                 @forelse($postschedule as $key => $postschedule)
                 <div>
                     <div class="col-lg-9">
-                        <img src="{{ asset($postschedule->picture) }}" alt="{{ $postschedule->title }}" class="img-fluid shadow" width="100%" style="border-radius: 2%">
+                        <img src="https://drive.google.com/thumbnail?id={{ $postschedule->gdrive_id }}" alt="{{ $postschedule->title }}" class="img-fluid shadow" width="100%" style="border-radius: 2%">
                     </div>
                 </div>
                 @empty

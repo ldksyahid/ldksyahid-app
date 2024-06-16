@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Schedule;
 use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\File;
+use App\Services\GoogleDrive;
 
 class ScheduleController extends Controller
 {
+    public $pathScheduleGDrive = '16hEKrP0GhcA1Qrga1_s4dsNaLbIbcdIt';
 
     public function index()
     {
@@ -29,14 +30,19 @@ class ScheduleController extends Controller
 
     public function store(Request $request)
     {
-        $filename = time().$request->file('picture')->getClientOriginalName();
-        $path = $request->file('picture')->storeAs('Images/uploads/schedule',$filename);
+        $gdriveService = new GoogleDrive($this->pathScheduleGDrive);
 
-        $postschedule = Schedule::create([
+        $fileName = time() . '_schedule_' . $request->file('picture')->getClientOriginalName();
+        $filePath = $this->pathScheduleGDrive . '/' . $fileName;
+
+        $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
+
+        Schedule::create([
             "title" => $request["title"],
             "month" => $request["month"],
             "year" => $request["year"],
-            'picture' => $path,
+            'picture' => $uploadResult['fileName'],
+            'gdrive_id' => $uploadResult['gdriveID'],
         ]);
 
         Alert::success('Success', 'Schedule has been uploaded !');
@@ -57,21 +63,29 @@ class ScheduleController extends Controller
 
     public function update(Request $request, $id)
     {
+        $scheduleModel = Schedule::find($id);
+
         if ($request->file('picture')) {
-            $filename = time().$request->file('picture')->getClientOriginalName();
-            $path = $request->file('picture')->storeAs('Images/uploads/schedule',$filename);
+            $gdriveService = new GoogleDrive($this->pathScheduleGDrive);
 
-            // hapus file
-            $gambar = Schedule::where('id',$id)->first();
-            File::delete($gambar->picture);
+            $fileName = time() . '_schedule_' . $request->file('picture')->getClientOriginalName();
+            $filePath = $this->pathScheduleGDrive . '/' . $fileName;
 
-            // upload file
-            $update = Schedule::where("id", $id)-> update([
-                'picture' => $path,
+            $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
+
+            $oldGdriveID = $scheduleModel->gdrive_id;
+
+            if ($oldGdriveID) {
+                $gdriveService->deleteImage($oldGdriveID);
+            }
+
+            $scheduleModel->update([
+                'picture' => $uploadResult['fileName'],
+                'gdrive_id' => $uploadResult['gdriveID'],
             ]);
         }
 
-        $updateschedule = Schedule::where("id", $id)-> update([
+        $scheduleModel->update([
             "title" => $request["title"],
             "month" => $request["month"],
             "year" => $request["year"],
@@ -83,12 +97,14 @@ class ScheduleController extends Controller
 
     public function destroy($id)
     {
-         // hapus file
-         $gambar = Schedule::where('id',$id)->first();
-         File::delete($gambar->picture);
+        $scheduleModel = Schedule::find($id);
+        $gdriveService = new GoogleDrive($this->pathScheduleGDrive);
 
-         // hapus data
-         Schedule::where('id',$id)->delete();
-         return redirect()->back();
+        if ($scheduleModel->gdrive_id) {
+            $gdriveService->deleteImage($scheduleModel->gdrive_id);
+        }
+
+        $scheduleModel->delete();
+        return redirect()->back();
     }
 }
