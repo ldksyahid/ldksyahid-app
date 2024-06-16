@@ -34,7 +34,7 @@
                     <div class="testimonial-item">
                         <img
                             class="img-fluid mb-4"
-                            src="{{ asset($posttestimony->picture) }}"
+                            src="https://drive.google.com/thumbnail?id={{ $posttestimony->gdrive_id }}"
                             alt=""
                         />
                         <p class="fs-5 small">
