@@ -83,7 +83,7 @@
                 @forelse($postevent as $key => $postevent)
                 <div class="item">
                     <div class="my-3">
-                        <a href="/events/{{ $postevent->id }}" class="d-flex justify-content-center"><img class="shadow" src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" style="width: 65%; border-radius: 2%;" /></a>
+                        <a href="/events/{{ $postevent->id }}" class="d-flex justify-content-center"><img class="shadow" src="https://drive.google.com/thumbnail?id={{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" style="width: 65%; border-radius: 2%;" /></a>
                     </div>
                     <div>
                         <div class="row pb-2">
