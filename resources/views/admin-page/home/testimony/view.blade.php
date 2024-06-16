@@ -24,7 +24,7 @@
                         <div class="mb-3 col-12 col-lg-4">
                             <label for="formFile" class="form-label required">Photo Profile <span class="small">(100 x 100 Pixel)</span></label>
                             <br>
-                            <img id="frame" src="{{ asset($posttestimony->picture) }}" width="150px" height="150px" class="rounded mb-3 border"/>
+                            <img id="frame" src="https://drive.google.com/thumbnail?id={{ $posttestimony->gdrive_id }}" width="150px" height="150px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="picture" name ='picture' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG"  required disabled>
                         </div>
                         <div class="mb-3 col-12 col-lg-12">

@@ -32,7 +32,7 @@
                                     <td align="center">{{ $posttestimony->name }}</td>
                                     <td align="center">{{ $posttestimony->profession }}</td>
                                     <td align="center">
-                                        <img style="width: 100px;" src="{{ asset($posttestimony->picture) }}" alt="{{$posttestimony->name}}" class="card-img"/>
+                                        <img style="width: 100px;" src="https://drive.google.com/thumbnail?id={{ $posttestimony->gdrive_id }}" alt="{{$posttestimony->name}}" class="card-img"/>
                                     </td>
                                     <td align="center">
                                         <a href="/admin/testimony/{{$posttestimony->id}}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
