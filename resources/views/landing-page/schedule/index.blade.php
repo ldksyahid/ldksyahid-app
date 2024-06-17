@@ -28,7 +28,7 @@
                 <div class="border-start border-5 border-primary ps-4 mb-3">
                     <h1 class="display-6 mb-0" style="text-align: left">{{ $postschedule->title }}</h1>
                 </div>
-                <img src="https://drive.google.com/thumbnail?id={{ $postschedule->gdrive_id }}" alt="{{ $postschedule->title }}" class="img-fluid rounded" width="1080px" height="1350px">
+                <img src="https://lh3.google.com/u/0/d/{{ $postschedule->gdrive_id }}" alt="{{ $postschedule->title }}" class="img-fluid rounded" width="1080px" height="1350px">
             </div>
         </div>
         @empty
