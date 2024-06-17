@@ -57,7 +57,7 @@
                 <div class="row">
                     <div class="col-5" style="padding-right:2.5px">
                         <div>
-                            <a href="/news/{{ $postnews->id }}"><img src="{{ asset($postnews->picture) }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
+                            <a href="/news/{{ $postnews->id }}"><img src="https://drive.google.com/thumbnail?id={{ $postnews->gdrive_id }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
                         </div>
                     </div>
                     <div class="col-7" style="padding-left:2.5px;">

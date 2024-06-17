@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\News;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\File;
+use App\Services\GoogleDrive;
 
 class NewsController extends Controller
 {
+    public $pathNewsGDrive = '1GyqmtdKal2IxSxAryjfO3CZKfYk6NUB8';
+
     public function index()
     {
         $postnews = News::orderBy('datepublish','desc')->get();
@@ -29,17 +31,22 @@ class NewsController extends Controller
 
     public function store(Request $request)
     {
-        $filename = time().$request->file('picture')->getClientOriginalName();
-        $path = $request->file('picture')->storeAs('Images/uploads/news',$filename);
+        $gdriveService = new GoogleDrive($this->pathNewsGDrive);
+
+        $fileName = time() . '_news_' . $request->file('picture')->getClientOriginalName();
+        $filePath = $this->pathNewsGDrive . '/' . $fileName;
+
+        $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
 
 
-        $postnews = News::create([
+        News::create([
             "datepublish" => $request["datepublish"],
             "publisher" => $request["publisher"],
             "title" => $request["title"],
             "reporter" => $request["reporter"],
             "editor" => $request["editor"],
-            'picture' => $path,
+            'picture' => $uploadResult['fileName'],
+            'gdrive_id' => $uploadResult['gdriveID'],
             "descpicture" => $request["descpicture"],
             "body" => $request["body"],
         ]);
@@ -70,22 +77,29 @@ class NewsController extends Controller
 
     public function update(Request $request, $id)
     {
+        $newsModel = News::find($id);
 
         if ($request->file('picture')) {
-            $filename = time().$request->file('picture')->getClientOriginalName();
-            $path = $request->file('picture')->storeAs('Images/uploads/news',$filename);
+            $gdriveService = new GoogleDrive($this->pathNewsGDrive);
 
-            // hapus file
-            $gambar = News::where('id',$id)->first();
-            File::delete($gambar->picture);
+            $fileName = time() . '_news_' . $request->file('picture')->getClientOriginalName();
+            $filePath = $this->pathNewsGDrive . '/' . $fileName;
 
-            // upload file
-            $update = News::where("id", $id)-> update([
-                'picture' => $path,
+            $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
+
+            $oldGdriveID = $newsModel->gdrive_id;
+
+            if ($oldGdriveID) {
+                $gdriveService->deleteImage($oldGdriveID);
+            }
+
+            $newsModel->update([
+                'picture' => $uploadResult['fileName'],
+                'gdrive_id' => $uploadResult['gdriveID'],
             ]);
         }
 
-        $updatenews = News::where("id", $id)-> update([
+        $newsModel->update([
             "datepublish" => $request["datepublish"],
             "publisher" => $request["publisher"],
             "title" => $request["title"],
@@ -101,12 +115,14 @@ class NewsController extends Controller
 
     public function destroy($id)
     {
-        // hapus file
-        $gambar = News::where('id',$id)->first();
-        File::delete($gambar->picture);
+        $newsModel = News::find($id);
+        $gdriveService = new GoogleDrive($this->pathNewsGDrive);
 
-        // hapus data
-        News::where('id',$id)->delete();
+        if ($newsModel->gdrive_id) {
+            $gdriveService->deleteImage($newsModel->gdrive_id);
+        }
+
+        $newsModel->delete();
         return redirect()->back();
     }
 }
