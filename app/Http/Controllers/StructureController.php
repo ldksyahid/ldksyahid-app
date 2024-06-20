@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Structure;
 use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\File;
+use App\Services\GoogleDrive;
 
 class StructureController extends Controller
 {
+    public $pathStructureGDrive = '1q4xH2GI8i7nd4LJoW97zP4CNWYa8RjZr';
+
     public function index()
     {
         $poststructure = Structure::orderBy('created_at','desc')->get();
@@ -28,19 +30,25 @@ class StructureController extends Controller
 
     public function store(Request $request)
     {
-        $filenameLogo = time().$request->file('structureLogo')->getClientOriginalName();
-        $pathLogo = $request->file('structureLogo')->storeAs('Images/uploads/structure/logostructure',$filenameLogo);
+        $gdriveService = new GoogleDrive($this->pathStructureGDrive);
 
-        $filenameImage = time().$request->file('structureImage')->getClientOriginalName();
-        $pathImage = $request->file('structureImage')->storeAs('Images/uploads/structure/imagestructure',$filenameImage);
+        $fileNameLogo = time() . '_structure-logo_' . $request->file('structureLogo')->getClientOriginalName();
+        $filePathLogo = $this->pathStructureGDrive . '/' . $fileNameLogo;
+        $uploadResultLogo = $gdriveService->uploadImage($request->file('structureLogo'), $fileNameLogo, $filePathLogo);
 
-        $poststructure = Structure::create([
+        $fileNameImage = time() . '_structure-image_' . $request->file('structureImage')->getClientOriginalName();
+        $filePathImage = $this->pathStructureGDrive . '/' . $fileNameImage;
+        $uploadResultImage = $gdriveService->uploadImage($request->file('structureImage'), $fileNameImage, $filePathImage);
+
+        Structure::create([
             "batch" => $request["batch"],
             "period" => $request["period"],
             "structureName" => $request["structureName"],
             "structureDescription" => $request["structureDescription"],
-            'structureLogo' => $pathLogo,
-            'structureImage' => $pathImage,
+            'structureLogo' => $uploadResultLogo['fileName'],
+            'gdrive_id' => $uploadResultLogo['gdriveID'],
+            'structureImage' => $uploadResultImage['fileName'],
+            'gdrive_id_2' => $uploadResultImage['gdriveID'],
         ]);
 
         Alert::success('Success', 'Structure has been uploaded !');
@@ -61,35 +69,49 @@ class StructureController extends Controller
 
     public function update(Request $request, $id)
     {
+        $structureModel = Structure::find($id);
+
         if ($request->file('structureLogo')) {
-            $filenameLogo = time().$request->file('structureLogo')->getClientOriginalName();
-            $pathLogo = $request->file('structureLogo')->storeAs('Images/uploads/structure/logostructure',$filenameLogo);
+            $gdriveService = new GoogleDrive($this->pathStructureGDrive);
 
-            // hapus file
-            $gambar = Structure::where('id',$id)->first();
-            File::delete($gambar->structureLogo);
+            $fileNameLogo = time() . '_structure-logo_' . $request->file('structureLogo')->getClientOriginalName();
+            $filePathLogo = $this->pathStructureGDrive . '/' . $fileNameLogo;
 
-            // upload file
-            $update = Structure::where("id", $id)-> update([
-                'structureLogo' => $pathLogo,
+            $uploadResultLogo = $gdriveService->uploadImage($request->file('structureLogo'), $fileNameLogo, $filePathLogo);
+
+            $oldGdriveID = $structureModel->gdrive_id;
+
+            if ($oldGdriveID) {
+                $gdriveService->deleteImage($oldGdriveID);
+            }
+
+            $structureModel->update([
+                'structureLogo' => $uploadResultLogo['fileName'],
+                'gdrive_id' => $uploadResultLogo['gdriveID'],
             ]);
         }
 
         if ($request->file('structureImage')) {
-            $filenameImage = time().$request->file('structureImage')->getClientOriginalName();
-            $pathImage = $request->file('structureImage')->storeAs('Images/uploads/structure/imagestructure',$filenameImage);
+            $gdriveService = new GoogleDrive($this->pathStructureGDrive);
 
-            // hapus file
-            $gambar = Structure::where('id',$id)->first();
-            File::delete($gambar->structureImage);
+            $fileNameImage = time() . '_structure-image_' . $request->file('structureImage')->getClientOriginalName();
+            $filePathImage = $this->pathStructureGDrive . '/' . $fileNameImage;
 
-            // upload file
-            $update = Structure::where("id", $id)-> update([
-                'structureImage' =>  $pathImage,
+            $uploadResultImage = $gdriveService->uploadImage($request->file('structureImage'), $fileNameImage, $filePathImage);
+
+            $oldGdriveID = $structureModel->gdrive_id_2;
+
+            if ($oldGdriveID) {
+                $gdriveService->deleteImage($oldGdriveID);
+            }
+
+            $structureModel->update([
+                'structureImage' => $uploadResultImage['fileName'],
+                'gdrive_id_2' => $uploadResultImage['gdriveID'],
             ]);
         }
 
-        $updatestructure = Structure::where("id", $id)-> update([
+        $structureModel->update([
             "batch" => $request["batch"],
             "period" => $request["period"],
             "structureName" => $request["structureName"],
@@ -102,13 +124,18 @@ class StructureController extends Controller
 
     public function destroy($id)
     {
-        // hapus file
-        $gambar = Structure::where('id',$id)->first();
-        File::delete($gambar->structureImage);
-        File::delete($gambar->structureLogo);
+        $structureModel = Structure::find($id);
+        $gdriveService = new GoogleDrive($this->pathStructureGDrive);
 
-        // hapus data
-        Structure::where('id',$id)->delete();
+        if ($structureModel->gdrive_id) {
+            $gdriveService->deleteImage($structureModel->gdrive_id);
+        }
+
+        if ($structureModel->gdrive_id_2) {
+            $gdriveService->deleteImage($structureModel->gdrive_id_2);
+        }
+
+        $structureModel->delete();
         return redirect()->back();
     }
 }
