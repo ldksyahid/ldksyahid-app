@@ -42,7 +42,7 @@
                         <div class="mb-3 col-12 col-lg-6">
                             <label for="formFile" class="form-label required">Structure Logo <span class="small">(No Background 1080 x 1080)</span></label>
                             <br>
-                            <img id="frame" src="{{ asset($poststructure->structureLogo) }}" width="250px" height="250px" class="rounded mb-3 border"/>
+                            <img id="frame" src="https://lh3.google.com/u/0/d/{{ $poststructure->gdrive_id }}" width="250px" height="250px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="structureLogo" name = 'structureLogo' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="preview()">
                             <div class="invalid-feedback">
                                 This is a required question
@@ -51,7 +51,7 @@
                         <div class="mb-3 col-12 col-lg-6">
                             <label for="formFile" class="form-label required">Structure Image <span class="small">(1515 x >=2560)</span></label>
                             <br>
-                            <img id="frame2" src="{{ asset($poststructure->structureImage) }}" width="27.5%" class="rounded mb-3 border"/>
+                            <img id="frame2" src="https://lh3.google.com/u/0/d/{{ $poststructure->gdrive_id_2 }}" width="27.5%" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="structureImage" name = 'structureImage' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="preview2()">
                             <div class="invalid-feedback">
                                 This is a required question
