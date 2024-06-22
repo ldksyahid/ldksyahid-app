@@ -13,8 +13,9 @@
                 <h5 class="mb-4">IT Support Management System</h5>
                 <a class='btn btn-primary' href="/admin/about/itsupport/create"><i class="fa fa-plus"></i> Create IT Support</a>
                 {{-- START Data table IT Support --}}
-                <div class="mt-3">
-                    <table class="table table-hover table-striped text-nowrap small" id="dataItSupport">
+                <div class="table-responsive">
+                    <div class="mt-3">
+                        <table class="table table-hover table-striped text-nowrap small" id="dataItSupport">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center">No</th>
@@ -52,6 +53,7 @@
                             @endforelse
                         </tbody>
                     </table>
+                    </div>
                 </div>
                 {{-- END Data table IT Support --}}
             </div>
