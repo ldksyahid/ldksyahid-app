@@ -32,7 +32,7 @@
                         <div class="mb-3 col-12 col-lg-6">
                             <label for="formFile" class="form-label required">Poster <span class="small">(550 x 400 Pixel)</span></label>
                             <br>
-                            <img id="frame" src="https://lh3.google.com/u/0/d/{{ $postarticle->gdrive_id }}" width="150px" height="200px" class="rounded mb-3 border"/>
+                            <img id="frame" src="https://lh3.googleusercontent.com/d/{{ $postarticle->gdrive_id }}" width="150px" height="200px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="poster" name = 'poster' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
                         </div>
                         <div class="mb-3 col-12 col-lg-6">

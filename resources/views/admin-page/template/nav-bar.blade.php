@@ -18,7 +18,7 @@
                 @if (Auth::User()->profile == null || Auth::User()->profile->profilepicture == null)
                     <img class="rounded-circle me-lg-2" src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}" alt="" style="width: 40px; height: 40px;">
                 @else
-                    <img class="rounded-circle me-lg-2" src="https://lh3.google.com/u/0/d/{{Auth::User()->profile->gdrive_id}}" alt="{{Auth::User()->profile->namapanggilan}}" style="width: 40px; height: 40px;">
+                    <img class="rounded-circle me-lg-2" src="https://lh3.googleusercontent.com/d/{{Auth::User()->profile->gdrive_id}}" alt="{{Auth::User()->profile->namapanggilan}}" style="width: 40px; height: 40px;">
                 @endif
                 {{-- <img class="rounded-circle me-lg-2" src="{{ asset('Images/Icons/guesticon.png') }}" alt="" style="width: 40px; height: 40px;"> --}}
                 <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>

@@ -18,11 +18,11 @@
             </div>
             <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class=" mb-1 text-end">
-                    <img src="https://lh3.google.com/u/0/d/{{ $data->gdrive_id }}" alt="LDK Syahid" width="250px" height="250px">
+                    <img src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="LDK Syahid" width="250px" height="250px">
                 </div>
             </div>
             <div class="col-lg-12 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                <img src="https://lh3.google.com/u/0/d/{{ $data->gdrive_id_2 }}" alt="Struktur Pengurus" width="100%" class="shadow rounded">
+                <img src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}" alt="Struktur Pengurus" width="100%" class="shadow rounded">
             </div>
         </div>
     </div>

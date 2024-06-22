@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row g-5">
             <div class="col-3">
-                <img src="https://lh3.google.com/u/0/d/{{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" style="border-radius: 5px;" class="img-fluid shadow">
+                <img src="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" style="border-radius: 5px;" class="img-fluid shadow">
             </div>
             <div class="col-6">
                 @if ($postevent->tag != null)
