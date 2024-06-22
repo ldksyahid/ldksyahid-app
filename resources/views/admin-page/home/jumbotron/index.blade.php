@@ -29,7 +29,7 @@
                                 <tr>
                                     <td scope="row" align='center'>{{$key + 1}}</td>
                                     <td align='center'>
-                                        <img style="width: 100px;" src="https://lh3.google.com/u/0/d/{{ $postjumbotron->gdrive_id }}" alt="{{$postjumbotron->title}}" class="card-img"/>
+                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $postjumbotron->gdrive_id }}" alt="{{$postjumbotron->title}}" class="card-img"/>
                                     </td>
                                     @if ($postjumbotron->btnname != null || $postjumbotron->btnlink != null)
                                         <td align='center'>{{$postjumbotron->btnname}}</td>
