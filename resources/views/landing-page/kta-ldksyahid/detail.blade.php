@@ -12,9 +12,9 @@
                             <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset($ktaData->photo) }}" alt="" width="250px" height="300px" style="border-radius: 5%">
                         @else
                             @if ($ktaData->gender != "Male")
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/akhwat-img.png') }}" alt="" width="250px" height="300px" style="border-radius: 5%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/15Q9hUkS-yvTBCtF4_KZUy9o725MZ9z6n" alt="" width="250px" height="300px" style="border-radius: 5%">
                             @else
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/ikhwan-img.png') }}" alt="" width="250px" height="300px" style="border-radius: 5%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1CACDd_5vjzM82KTR08ND_nGbqtePHRsj" alt="" width="250px" height="300px" style="border-radius: 5%">
                             @endif
                         @endif
                     </div>
@@ -27,7 +27,7 @@
                                 <span class="border border-white p-2 text-white small" style="border-radius: 5px;">{{ $ktaData->memberNumber }}</span>
                             </div>
                             <div class="col-lg-4">
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/kita-adalah-saudara.png') }}" alt="" width="60%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1LsDxFAt1WU66CNp-2CN3J2qWXXJHlWIY" alt="" width="60%">
                             </div>
                         </div>
                     </div>
@@ -130,9 +130,9 @@
                             <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset($ktaData->photo) }}" alt="" width="80%" style="border-radius: 5%">
                         @else
                             @if ($ktaData->gender != "Male")
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/akhwat-img.png') }}" alt="" width="80%" style="border-radius: 5%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/15Q9hUkS-yvTBCtF4_KZUy9o725MZ9z6n" alt="" width="80%" style="border-radius: 5%">
                             @else
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/ikhwan-img.png') }}" alt="" width="80%" style="border-radius: 5%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1CACDd_5vjzM82KTR08ND_nGbqtePHRsj" alt="" width="80%" style="border-radius: 5%">
                             @endif
                         @endif
                     </div>
@@ -145,7 +145,7 @@
                                 <span class="border border-white p-2 text-white small" style="border-radius: 5px;">{{ $ktaData->memberNumber }}</span>
                             </div>
                             <div class="col-4">
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/kita-adalah-saudara.png') }}" alt="" width="100%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1LsDxFAt1WU66CNp-2CN3J2qWXXJHlWIY" alt="" width="100%">
                             </div>
                         </div>
                     </div>

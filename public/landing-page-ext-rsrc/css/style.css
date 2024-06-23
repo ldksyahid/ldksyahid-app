@@ -236,7 +236,7 @@
 }
 
 .page-header {
-    background: url(../../Images/fixImage/bg_bilboard.png) center center
+    background: url(https://lh3.googleusercontent.com/d/1Xfr1y19QzmgXYyZWJbdvfvQJ3mhKz8k4) center center
         no-repeat;
     background-size: 1350px 325px;
 }
@@ -300,7 +300,7 @@
 /*** Appointment ***/
 .appointment {
     background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-        url(../../Images/fixImage/untuk_contact_us.jpg) center center no-repeat;
+        url(https://lh3.googleusercontent.com/d/1MSvjvSPlOTw0IwYAOVeiG5yg_lef1nWa) center center no-repeat;
     background-size: cover;
 }
 
