@@ -6,7 +6,7 @@
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="w-100" src="{{ asset('Images/fixImage/billboardimage/hub_kami.png') }}" alt="Image" />
+                <img class="w-100" src="https://lh3.googleusercontent.com/d/1Xt3HVJLvYBrcxcg-HyNK2pKOQ7WUIQBj" alt="Image" />
             </div>
         </div>
     </div>

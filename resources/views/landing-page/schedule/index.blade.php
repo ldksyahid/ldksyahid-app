@@ -6,7 +6,7 @@
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="w-100" src="{{ asset('Images/fixImage/billboardimage/jadwal.png') }}" alt="Image" />
+                <img class="w-100" src="https://lh3.googleusercontent.com/d/1_8BpRTDUtkXG9_9CMz7ZxH9k834azBWR" alt="Image" />
             </div>
         </div>
     </div>
