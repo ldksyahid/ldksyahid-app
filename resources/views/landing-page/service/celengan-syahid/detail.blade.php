@@ -54,7 +54,7 @@ $donation_total = 0 ;
                         </div>
                     @else
                         <div class="d-flex flex-row align-items-center" style="height: 2em;">
-                            <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="30" height="30">
+                            <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="logo" width="30" height="30">
                             <div class="ms-2 c-details">
                                 <h6 style="font-size: 18px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
                             </div>
@@ -200,7 +200,7 @@ $donation_total = 0 ;
                 </div>
                 @else
                 <div class="d-flex flex-row align-items-center" style="height: 2em;">
-                    <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="25" height="25">
+                    <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="logo" width="25" height="25">
                     <div class="ms-2 c-details my-0">
                         <h6 style="font-size: 14px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
                     </div>

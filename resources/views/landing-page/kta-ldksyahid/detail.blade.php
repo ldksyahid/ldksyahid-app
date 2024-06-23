@@ -90,7 +90,7 @@
                     </div>
                 @endif
                 <div class="col-lg-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="" width="20%">
+                    <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="" width="20%">
                     <p class="mt-5 wow fadeInDown" data-wow-delay="0.1s" style="text-align: justify">LDK Syahid adalah Salah satu Unit Kegiatan Mahasiswa (UKM) bidang keislaman di UIN Jakarta. Kegiatan-kegiatan yang dilakukan oleh LDK Syahid ialah Mentoring Pekanan, Kajian Keislaman, Rihlah, Upgrading Softskill, Menguatkan Ukhuwah Islamiyah, Management SDM, Management Problem Solved, Pembentukan Karakter Kepemimpinan, dan masih banyak lagi. Outputnya adalah Anggota LDK Syahid menjadi generasi emas menyongsong kehidupan masyarakat madani.</p>
                 </div>
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -203,7 +203,7 @@
                 </div>
                 <div>
                     <div class="d-flex justify-content-center">
-                        <img class="my-3" src="{{ asset('Images/Logos/logoldksyahid.png') }}" width="60%">
+                        <img class="my-3" src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" width="60%">
                     </div>
                     <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist" style="font-size: 14px; border-radius: 20px;">
                         <li class="nav-item" role="presentation">

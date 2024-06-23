@@ -10,7 +10,7 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <meta content="" name="keywords" />
         <meta content="" name="description" />
-        <link href="{{ asset('Images/Logos/logoldksyahid.png') }}" rel="icon" />
+        <link href="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" rel="icon" />
         {!! ReCaptcha::htmlScriptTagJsApi() !!}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

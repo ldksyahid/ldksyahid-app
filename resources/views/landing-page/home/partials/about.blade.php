@@ -23,7 +23,7 @@
             </div>
             <div class="col-lg-12 text-center mb-5 mt-3">
                 <div class="" style="min-height: 527px">
-                    <img class="w-70 h-70 wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt=""/>
+                    <img class="w-70 h-70 wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt=""/>
                     <p style="text-align: center" class="mt-5 wow fadeInDown" data-wow-delay="0.1s">
                         <i>LDK Syahid adalah Salah satu Unit Kegiatan Mahasiswa (UKM) bidang keislaman di UIN Jakarta. Kegiatan-kegiatan yang dilakukan oleh LDK Syahid ialah Mentoring Pekanan, Kajian Keislaman, Rihlah, Upgrading Softskill, Menguatkan Ukhuwah Islamiyah, Management SDM, Management Problem Solved, Pembentukan Karakter Kepemimpinan, dan masih banyak lagi. Outputnya adalah Anggota LDK Syahid menjadi generasi emas menyongsong kehidupan masyarakat madani.</i>
                     </p>
@@ -81,7 +81,7 @@
                                     <div class="card shadow">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-center">
-                                                <img class="my-3" src="{{ asset('Images/Logos/logoldksyahid.png') }}" width="175" height="180">
+                                                <img class="my-3" src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" width="175" height="180">
                                             </div>
                                             <div>
                                                 <p class="mobile-body-font" style="text-align: justify">

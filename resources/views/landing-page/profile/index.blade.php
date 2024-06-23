@@ -38,7 +38,7 @@
                                 <h1 class="display-4 mb-0">{{Auth::User()->profile->namapanggilan}}</h1>
                             </div>
                             <div class="col-6 text-end">
-                                <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="LDK Syahid" width="100px" height="100px">
+                                <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="LDK Syahid" width="100px" height="100px">
                             </div>
                         </div>
                     </div>
