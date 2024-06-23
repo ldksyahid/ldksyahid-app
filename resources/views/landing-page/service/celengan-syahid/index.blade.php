@@ -12,7 +12,7 @@
   <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-            <img class="w-100 " src="{{ asset('Images/fixImage/billboardimage/celengan_syahid.png') }}" alt="Image" />
+            <img class="w-100 " src="https://lh3.googleusercontent.com/d/13hUNUJ_oQhmBGMRx37dj380dOhlsKm7O" alt="Image" />
         </div>
         @forelse($postcampaign as $key => $data)
         <div class="carousel-item">

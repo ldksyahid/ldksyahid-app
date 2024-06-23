@@ -20,11 +20,11 @@
                 @endif
             </div>
             <div class="carousel-item">
-                <img class="w-100" src="{{ asset('Images/fixImage/billboardimage/jumbotron.png') }}" alt="Image" />
+                <img class="w-100" src="https://lh3.googleusercontent.com/d/1Cur2mISU8cwkWcyBuiwv9aGYNTxsZMPo" alt="Image" />
             </div>
             @empty
                 <div class="carousel-item active">
-                    <img class="w-100" src="{{ asset('Images/fixImage/billboardimage/jumbotron.png') }}" alt="Image" />
+                    <img class="w-100" src="https://lh3.googleusercontent.com/d/1Cur2mISU8cwkWcyBuiwv9aGYNTxsZMPo" alt="Image" />
                 </div>
             @endforelse
         </div>
