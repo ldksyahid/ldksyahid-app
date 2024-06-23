@@ -35,7 +35,7 @@
                         <div class="mb-3 col-12 col-lg-4">
                             <label for="photoProfile" class="form-label required">Photo Profile <span class="small">(300 x 350 Pixel)</span></label>
                             <br>
-                            <img id="frame" src="{{ asset('Images/Icons/add_image.svg') }}" width="200px" height="250px"  class="rounded mb-3 border"/>
+                            <img id="frame" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="200px" height="250px"  class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="photoProfile" name = 'photoProfile' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG, image/webp" required onchange="preview()">
                             <div class="invalid-feedback">
                                 This is a required question

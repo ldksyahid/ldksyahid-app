@@ -19,7 +19,7 @@
                 <div class="row gy-5 gx-4 text-center justify-content-center">
                     <div class="col-sm-4 wow fadeInDown px-4" data-wow-delay="0.1s">
                         <div class=" mb-3 text-center">
-                            <img src="{{ asset('Images/Icons/KMB-Kepenulisan-Fiksi.png') }}" alt="KMB-Kepenulisan-Fiksi" width="100px" height="100px">
+                            <img src="https://lh3.googleusercontent.com/d/1Libi_zhvvc5nC5IU10puFt_p28fRi5vG" alt="KMB-Kepenulisan-Fiksi" width="100px" height="100px">
                         </div>
                         <div class=" mb-3 text-center">
                             <h6 class="mb-0">Kepenulisan Fiksi</h6>
@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-sm-4 wow fadeIn px-4" data-wow-delay="0.1s">
                         <div class=" mb-3 text-center">
-                            <img src="{{ asset('Images/Icons/KMB-Kepenulisan-Non-Fiksi.png') }}" alt="KMB-Kepenulisan-Fiksi" width="100px" height="100px">
+                            <img src="https://lh3.googleusercontent.com/d/1tl4ZDZRMmAzi0MOGYJkXk-0WYSLWIBIy" alt="KMB-Kepenulisan-Fiksi" width="100px" height="100px">
                         </div>
                         <div class=" mb-3 text-center">
                             <h6 class="mb-0">Kepenulisan Non Fiksi</h6>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="col-sm-4 wow fadeInUp px-4" data-wow-delay="0.1s">
                         <div class=" mb-3 text-center">
-                            <img src="{{ asset('Images/Icons/KMB-Enterpreneur.png') }}" alt="KMB-Enterpreneur" width="100px" height="100px">
+                            <img src="https://lh3.googleusercontent.com/d/16rCOS6itQtju7N6ELYwQpLTkAESQ9PEd" alt="KMB-Enterpreneur" width="100px" height="100px">
                         </div>
                         <div class=" mb-3 text-center">
                             <h6 class="mb-0">Entrepreneur</h6>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-sm-4 wow fadeInDown px-4" data-wow-delay="0.1s">
                         <div class=" mb-3 text-center">
-                            <img src="{{ asset('Images/Icons/KMB-Public-Speaking.png') }}" alt="KMB-Public-Speaking" width="100px" height="100px">
+                            <img src="https://lh3.googleusercontent.com/d/1lfwpEtfLepTOcmu6DcZlmX-7RY01g_Lv" alt="KMB-Public-Speaking" width="100px" height="100px">
                         </div>
                         <div class=" mb-3 text-center">
                             <h6 class="mb-0">Public Speaking</h6>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="col-sm-4 wow fadeInUp px-4" data-wow-delay="0.1s">
                         <div class=" mb-3 text-center">
-                            <img src="{{ asset('Images/Icons/KMB-Desain-Grafis.png') }}" alt="KMB-Desain-Grafis" width="100px" height="100px">
+                            <img src="https://lh3.googleusercontent.com/d/126xPzrizaxfbhH0iQj0rjFh9n19JlI3Y" alt="KMB-Desain-Grafis" width="100px" height="100px">
                         </div>
                         <div class=" mb-3 text-center">
                             <h6 class="mb-0">Desain Grafis</h6>
@@ -103,7 +103,7 @@
                         <div class="item" style="background-color: #f5f6fa">
                             <div class="col-12 p-4">
                                 <div class=" mb-3 d-flex justify-content-center">
-                                    <img src="{{ asset('Images/Icons/KMB-Kepenulisan-Fiksi.png') }}" alt="KMB-Kepenulisan-Fiksi" style="width: 35%">
+                                    <img src="https://lh3.googleusercontent.com/d/1Libi_zhvvc5nC5IU10puFt_p28fRi5vG" alt="KMB-Kepenulisan-Fiksi" style="width: 35%">
                                 </div>
                                 <div class=" mb-3 text-center">
                                     <h6 class="mb-0">Kepenulisan Fiksi</h6>
@@ -116,7 +116,7 @@
                         <div class="item" style="background-color: #f5f6fa">
                             <div class="col-12 p-4">
                                 <div class=" mb-3 d-flex justify-content-center">
-                                    <img src="{{ asset('Images/Icons/KMB-Kepenulisan-Non-Fiksi.png') }}" alt="KMB-Kepenulisan-Non-Fiksi" style="width: 35%">
+                                    <img src="https://lh3.googleusercontent.com/d/1tl4ZDZRMmAzi0MOGYJkXk-0WYSLWIBIy" alt="KMB-Kepenulisan-Non-Fiksi" style="width: 35%">
                                 </div>
                                 <div class=" mb-3 text-center">
                                     <h6 class="mb-0">Kepenulisan Non Fiksi</h6>
@@ -129,7 +129,7 @@
                         <div class="item" style="background-color: #f5f6fa">
                             <div class="col-12 p-4">
                                 <div class=" mb-3 d-flex justify-content-center">
-                                    <img src="{{ asset('Images/Icons/KMB-Enterpreneur.png') }}" alt="KMB-Enterpreneur" style="width: 35%">
+                                    <img src="https://lh3.googleusercontent.com/d/16rCOS6itQtju7N6ELYwQpLTkAESQ9PEd" alt="KMB-Enterpreneur" style="width: 35%">
                                 </div>
                                 <div class=" mb-3 text-center">
                                     <h6 class="mb-0">Entrepreneur</h6>
@@ -142,7 +142,7 @@
                         <div class="item" style="background-color: #f5f6fa">
                             <div class="col-12 p-4">
                                 <div class=" mb-3 d-flex justify-content-center">
-                                    <img src="{{ asset('Images/Icons/KMB-Public-Speaking.png') }}" alt="KMB-Public-Speaking" style="width: 35%">
+                                    <img src="https://lh3.googleusercontent.com/d/1lfwpEtfLepTOcmu6DcZlmX-7RY01g_Lv" alt="KMB-Public-Speaking" style="width: 35%">
                                 </div>
                                 <div class=" mb-3 text-center">
                                     <h6 class="mb-0">Public Speaking</h6>
@@ -155,7 +155,7 @@
                         <div class="" style="background-color: #f5f6fa">
                             <div class="col-12 p-4">
                                 <div class=" mb-3 d-flex justify-content-center">
-                                    <img src="{{ asset('Images/Icons/KMB-Desain-Grafis.png') }}" alt="KMB-Desain-Grafis" style="width: 35%">
+                                    <img src="https://lh3.googleusercontent.com/d/126xPzrizaxfbhH0iQj0rjFh9n19JlI3Y" alt="KMB-Desain-Grafis" style="width: 35%">
                                 </div>
                                 <div class=" mb-3 text-center">
                                     <h6 class="mb-0">Desain Grafis</h6>

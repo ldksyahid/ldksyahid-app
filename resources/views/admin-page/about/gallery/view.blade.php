@@ -32,7 +32,7 @@
                                 @if ($postgallery->groupPhoto == !null)
                                 <img id="frame" src="{{ asset($postgallery->groupPhoto) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="groupPhoto" name = 'groupPhoto' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -44,7 +44,7 @@
                                 @if ($postgallery->photo1 == !null)
                                 <img id="frame1" src="{{ asset($postgallery->photo1) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame1" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame1" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo1" name ='photo1' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -56,7 +56,7 @@
                                 @if ($postgallery->photo2 == !null)
                                 <img id="frame2" src="{{ asset($postgallery->photo2) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame2" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame2" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo2" name ='photo2' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -68,7 +68,7 @@
                                 @if ($postgallery->photo3 == !null)
                                 <img id="frame3" src="{{ asset($postgallery->photo3) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame3" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame3" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo3" name ='photo3' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -80,7 +80,7 @@
                                 @if ($postgallery->photo4 == !null)
                                 <img id="frame4" src="{{ asset($postgallery->photo4) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame4" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame4" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo4" name ='photo4' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -92,7 +92,7 @@
                                 @if ($postgallery->photo5 == !null)
                                 <img id="frame5" src="{{ asset($postgallery->photo5) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame5" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame5" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo5" name ='photo5' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -104,7 +104,7 @@
                                 @if ($postgallery->photo6 == !null)
                                 <img id="frame6" src="{{ asset($postgallery->photo6) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame6" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame6" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo6" name ='photo6' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -116,7 +116,7 @@
                                 @if ($postgallery->photo7 == !null)
                                 <img id="frame7" src="{{ asset($postgallery->photo7) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame7" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame7" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo7" name ='photo7' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -128,7 +128,7 @@
                                 @if ($postgallery->photo8 == !null)
                                 <img id="frame8" src="{{ asset($postgallery->photo8) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame8" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame8" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo8" name ='photo8' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -140,7 +140,7 @@
                                 @if ($postgallery->photo9 == !null)
                                 <img id="frame9" src="{{ asset($postgallery->photo9) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame9" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame9" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo9" name ='photo9' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -152,7 +152,7 @@
                                 @if ($postgallery->photo10 == !null)
                                 <img id="frame10" src="{{ asset($postgallery->photo10) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame10" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame10" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo10" name ='photo10' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -164,7 +164,7 @@
                                 @if ($postgallery->photo11 == !null)
                                 <img id="frame11" src="{{ asset($postgallery->photo11) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame11" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame11" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo11" name ='photo11' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
@@ -176,7 +176,7 @@
                                 @if ($postgallery->photo12 == !null)
                                 <img id="frame12" src="{{ asset($postgallery->photo12) }}" width="50%" class="rounded mb-3 border"/>
                                 @else
-                                <img id="frame12" src="{{ asset('Images/Icons/add_image.svg') }}" width="50%" class="rounded mb-3 border"/>
+                                <img id="frame12" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                 @endif
                             </div>
                             <input class="form-control" type="file" id="photo12" name ='photo12' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" disabled>
