@@ -135,7 +135,7 @@ $donation_total = 0 ;
                             {!! $data->kabar_terbaru !!}
                         @else
                             <div class="col col-lg-12 text-center m-3 text-body">
-                                <img src="{{asset('Images/Icons/empty_file.png')}}" alt="logo" width="150" height="150" >
+                                <img src="https://lh3.googleusercontent.com/d/1Mt02dRq5h_CpiRM7zmmbJbHwc1L5BXje" alt="logo" width="150" height="150" >
                                 <p>Campaign ini belum memiliki kabar terbaru</p>
                             </div>
                         @endif
@@ -147,7 +147,7 @@ $donation_total = 0 ;
                             @if ($donation->payment_status == 'PAID')
                             <div class="row d-flex flex-row align-items-center p-4 my-3" style="background-color: #f5f6fa; border-radius:15px;">
                                 <div class="col-lg-2 text-center">
-                                    <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%;" width="100" height="100">
+                                    <img src="https://lh3.googleusercontent.com/d/1PkiCcrFcXtAUhHI48i47ibfSu8Nun7Ap" alt="user-anonim" style="border-radius:100%;" width="100" height="100">
                                 </div>
                                 <div class="col-lg-10 text-start">
                                     <div class="row d-flex flex-row align-items-center">
@@ -169,7 +169,7 @@ $donation_total = 0 ;
                             @endforeach
                             @else
                             <div class="col col-lg-12 text-center m-3 text-body">
-                                <img src="{{asset('Images/Icons/empty_box.png')}}" alt="logo" width="150" height="150" >
+                                <img src="https://lh3.googleusercontent.com/d/1ee34zO-a0tP8GsHmSbhUF4MDf8BLvkPK" alt="logo" width="150" height="150" >
                                 <p>Campaign ini belum memiliki Donatur</p>
                             </div>
                             @endif
@@ -275,7 +275,7 @@ $donation_total = 0 ;
             </p>
             @else
             <div class="col col-lg-12 text-center m-3 text-body small">
-                <img src="{{asset('Images/Icons/empty_file.png')}}" alt="logo" width="100" height="100" >
+                <img src="https://lh3.googleusercontent.com/d/1Mt02dRq5h_CpiRM7zmmbJbHwc1L5BXje" alt="logo" width="100" height="100" >
                 <p>Campaign ini belum memiliki kabar terbaru</p>
             </div>
             @endif
@@ -289,7 +289,7 @@ $donation_total = 0 ;
             @if ($donation->payment_status == 'PAID')
             <div class="row p-2 my-2" style="background-color: #f5f6fa; border-radius:10px;">
                 <div class="col col-lg-2 text-start w-100" >
-                    <img src="{{asset('Images/Icons/guesticon.png')}}" alt="user-anonim" style="border-radius:100%; margin-top:0px;" width="35" height="35">
+                    <img src="https://lh3.googleusercontent.com/d/1PkiCcrFcXtAUhHI48i47ibfSu8Nun7Ap" alt="user-anonim" style="border-radius:100%; margin-top:0px;" width="35" height="35">
                 </div>
                 <div class="col col-lg-10 text-start" style="margin-left: -200px;">
                     <h6 class="text-body" style="font-size:12px;">{{ $donation->nama_donatur }}</h6>
@@ -305,7 +305,7 @@ $donation_total = 0 ;
             @endforeach
             @else
             <div class="col col-lg-12 text-center m-3 text-body">
-                <img src="{{asset('Images/Icons/empty_box.png')}}" alt="logo" width="100" height="100" >
+                <img src="https://lh3.googleusercontent.com/d/1ee34zO-a0tP8GsHmSbhUF4MDf8BLvkPK" alt="logo" width="100" height="100" >
                 <br><br>
                 <p>Campaign ini belum memiliki Donatur</p>
             </div>

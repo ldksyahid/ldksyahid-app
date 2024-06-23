@@ -178,7 +178,7 @@
                 </div>
                 @empty
                 <div class="col-lg-12 m-5 text-body text-center">
-                    <img src="{{asset('Images/Icons/empty_inbox.png')}}" alt="logo" width="150" height="150" >
+                    <img src="https://lh3.googleusercontent.com/d/1VPmAcyI-BOXt3z0bFAlOvV8BsAgpEOUP" alt="logo" width="150" height="150" >
                     <br><br>
                     <p>Campaign Belum Tersedia</p>
                 </div>
@@ -249,7 +249,7 @@
                 </div>
                 @empty
                 <div class="col-lg-12 m-2 text-body text-center">
-                    <img src="{{asset('Images/Icons/empty_inbox.png')}}" alt="logo" width="90" height="90" >
+                    <img src="https://lh3.googleusercontent.com/d/1VPmAcyI-BOXt3z0bFAlOvV8BsAgpEOUP" alt="logo" width="90" height="90" >
                     <br><br>
                     <p>Campaign Belum Tersedia</p>
                 </div>
