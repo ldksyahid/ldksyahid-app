@@ -67,7 +67,7 @@
             <div class="container text-center">
             <div class="row justify-content-center">
                 <div class="col-lg-12 mb-5" >
-                    <img src="{{ asset('Images/fixImage/404e.png') }}" alt="" width="300" height="300">
+                    <img src="https://lh3.googleusercontent.com/d/1K96icn3irTFOATLyqYgdfAvES8vorV2v" alt="" width="300" height="300">
                     <h1 class="mb-4">Halaman tidak ditemukan</h1>
                     <p class="mb-4">
                         Maaf, halaman yang Kamu cari tidak ada disini!
