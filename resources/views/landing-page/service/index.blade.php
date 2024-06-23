@@ -17,7 +17,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-4 mt-5 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="card card-margin" style="height: 515px;">
-                    <img src="{{asset('Images/fixImage/serviceimage/callkestari.png')}}" alt="" class="m-5">
+                    <img src="https://lh3.googleusercontent.com/d/1q0rUVWPt2doB9_lgKOaKTDyHWbctHChX" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Call kestari</h5>
                         <div class="widget-49">
@@ -33,7 +33,7 @@
             </div>
             <div class="col-lg-4 mt-5 wow fadeInUp" data-wow-delay="0.2s">
                 <div class="card card-margin" style="height: 515px;">
-                    <img src="{{asset('Images/fixImage/serviceimage/kalkulatorkestari.png')}}" alt="" class="m-5">
+                    <img src="https://lh3.googleusercontent.com/d/1DZdc8rblfJUSkN5Q-Faxsur2iOnI_IYm" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Kalkulator Kestari</h5>
                         <div class="widget-49">
@@ -50,7 +50,7 @@
             </div>
             <div class="col-lg-4 mt-5 wow fadeInUp" data-wow-delay="0.3s">
                 <div class="card card-margin" style="height: 515px;">
-                    <img src="{{asset('Images/fixImage/serviceimage/shortlink.png')}}" alt="" class="m-5">
+                    <img src="https://lh3.googleusercontent.com/d/1BoMYgj-B2HNblHjkebs1ZRiVUuVre5Wf" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Perpendek URL</h5>
                         <div class="widget-49">
@@ -67,7 +67,7 @@
             </div>
             <div class="col-lg-4 mt-5 wow fadeInUp" data-wow-delay="0.4s">
                 <div class="card card-margin" style="height: 515px;">
-                    <img src="{{asset('Images/fixImage/serviceimage/celengan-syahid.png')}}" alt="" class="m-5">
+                    <img src="https://lh3.googleusercontent.com/d/1CynJ5fKVEumKQLxLxncZC99ALkEmf_4t" alt="" class="m-5">
                     <div class="card-body pt-0">
                         <h5 class="card-title">Celengan Syahid</h5>
                         <div class="widget-49">
