@@ -17,7 +17,7 @@
             </div>
             <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class=" mb-5 text-end">
-                    <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="LDK Syahid" width="255px" height="255px">
+                    <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="LDK Syahid" width="255px" height="255px">
                 </div>
             </div>
         </div>

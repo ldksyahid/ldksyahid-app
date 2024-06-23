@@ -4,7 +4,7 @@
         <div class="row g-5">
             <div class="col-lg-3 col-md-6">
                 <h2 class="text-white mb-4">
-                    <img src='{{ asset('Images/Logos/logoldksyahid.png') }}' width="55" height="55" alt="Logo LDK Syahid"> LDK Syahid
+                    <img src='https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1' width="55" height="55" alt="Logo LDK Syahid"> LDK Syahid
                 </h2>
                 <p style="text-align: justify">
                     Lembaga Dakwah Kampus UIN Syarif Hidayatullah (LDK Syahid) merupakan Unit Kegiatan Mahasiswa (UKM) yang berada di bawah naungan UIN Syarif Hidayatullah Jakarta.
