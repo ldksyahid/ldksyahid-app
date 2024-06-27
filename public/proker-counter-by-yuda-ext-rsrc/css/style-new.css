@@ -1,0 +1,158 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container-xxl {
+    max-width: 1200px;
+    margin: auto;
+}
+
+fieldset {
+    padding: 10px;
+    border: none;
+}
+
+/* Header and Footer */
+header,
+footer {
+    color: #00A79D;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+td,
+th {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+td.konteneval::after {
+    content: "%";
+}
+
+tr:nth-child(even) {
+    background-color: #e9f7f5;
+}
+
+/* Collapsible Sections */
+.collapsible {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    text-align: left;
+    background-color: #00A79D;
+    color: white;
+    cursor: pointer;
+    border-radius: 16px;
+    transition: background-color 0.3s;
+}
+
+.tambah-button,
+.kurang-button {
+    border-radius: 5px;
+}
+
+.collapsible:hover,
+.collapsible.active {
+    background-color: #017f75;
+}
+
+.collapsible h2 {
+    color: black;
+    /* Mengubah warna teks <h2> menjadi putih */
+}
+
+.collapcontent {
+    display: none;
+    overflow: hidden;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0 0 16px 16px;
+}
+
+/* Content Box */
+.content {
+    background-color: white;
+    color: #333;
+    padding: 20px;
+    border-radius: 16px;
+    margin: 16px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual Sections */
+.unsur {
+    border: 1px solid #00A79D;
+    border-radius: 4px;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.add_element {
+    display: flex;
+    align-items: center;
+}
+
+.add_element p {
+    margin: 0 10px 0 0;
+    flex: 1;
+}
+
+.persentase::after {
+    content: "%";
+}
+
+/* Buttons */
+button {
+    background-color: #00A79D;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #017f75;
+}
+
+button:focus {
+    outline: none;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+input[type="checkbox"]:checked+label,
+input[type="radio"]:checked+label {
+    color: #00A79D;
+}
+

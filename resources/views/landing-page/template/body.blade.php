@@ -22,7 +22,7 @@
         <link rel="stylesheet" type="text/css" href="{{asset('landing-page-ext-rsrc/css/style.css')}}">
         <link href="{{ asset('landing-page-ext-rsrc/lib/animate/animate.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('landing-page-ext-rsrc/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet" />
-        <link rel="stylesheet" href="{{ asset('proker-counter-by-yuda-ext-rsrc/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('proker-counter-by-yuda-ext-rsrc/css/style-new.css') }}">
         <link href="{{ asset('landing-page-ext-rsrc/css/bootstrap.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/itsupport.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/pop-up-load-page.css') }}" rel="stylesheet" />
