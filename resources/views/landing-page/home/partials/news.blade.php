@@ -1,6 +1,6 @@
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f5f6fa" fill-opacity="1" d="M0,160L30,181.3C60,203,120,245,180,256C240,267,300,245,360,202.7C420,160,480,96,540,80C600,64,660,96,720,128C780,160,840,192,900,192C960,192,1020,160,1080,144C1140,128,1200,128,1260,144C1320,160,1380,192,1410,208L1440,224L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"></path></svg>
-<div class="container-xxl py-5" style="background-color: #f5f6fa">
+<div class="py-5" style="background-color: #f5f6fa">
     <div class="container">
         <div class="row g-5 align-items-end mb-5">
             <div class="col-lg-3 text-lg-start wow fadeInUp" data-wow-delay="0.3s">

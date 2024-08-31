@@ -1,6 +1,6 @@
 <!-- About Start -->
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
-<div class="container-xxl">
+<div>
     <div class="container">
         <div class="row g-5">
             <div class="col-lg-12">
