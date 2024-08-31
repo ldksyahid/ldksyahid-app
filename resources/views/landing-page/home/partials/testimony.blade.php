@@ -1,6 +1,6 @@
 <!-- Testimonial Start -->
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
-<div class="container-xxl py-5">
+<div class="py-5">
     <div class="container">
         <div class="row g-5">
             <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
