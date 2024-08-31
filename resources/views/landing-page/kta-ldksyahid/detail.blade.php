@@ -3,7 +3,7 @@
 @section('content')
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
 <div>
-    <div class="container-xxl py-5" style="background-color: #008F8F">
+    <div class="py-5" style="background-color: #008F8F">
         <div class="container">
             <div class="row g-5">
                 <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
