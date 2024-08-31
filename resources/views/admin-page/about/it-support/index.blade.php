@@ -38,7 +38,7 @@
                                 <td align='center'><a href="{{ $data->linkInstagram }}" target="_blank" rel="noopener noreferrer">{{ $data->linkInstagram }}</a></td>
                                 <td align='center'><a href="{{ $data->linkLinkedin }}" target="_blank" rel="noopener noreferrer">{{ $data->linkLinkedin }}</a></td>
                                 <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($data->photoProfile) }}" alt="{{$data->name}}" class="card-img"/>
+                                    <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="{{$data->name}}" class="card-img"/>
                                 </td>
                                 <td align="center">
                                     <a href="/admin/about/itsupport/{{ $data->id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>

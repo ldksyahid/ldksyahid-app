@@ -35,7 +35,7 @@
                         <div class="mb-3 col-12 col-lg-4">
                             <label for="photoProfile" class="form-label required">Photo Profile <span class="small">(300 x 350 Pixel)</span></label>
                             <br>
-                            <img id="frame" src="{{ asset($postitsupport->photoProfile) }}" width="200px" height="250px"  class="rounded mb-3 border"/>
+                            <img id="frame" src="https://lh3.googleusercontent.com/d/{{ $postitsupport->gdrive_id }}" width="200px" height="250px"  class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="photoProfile" name = 'photoProfile' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG, image/webp" onchange="preview()">
                         </div>
                         <div class="mb-3 col-12 col-lg-4">
