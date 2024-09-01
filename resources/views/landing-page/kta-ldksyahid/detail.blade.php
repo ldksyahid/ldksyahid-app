@@ -126,8 +126,8 @@
             <div class="row g-5">
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div style="border-radius: 100%" class="text-center">
-                        @if (!empty($ktaData->photo))
-                            <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset($ktaData->photo) }}" alt="" width="80%" style="border-radius: 5%">
+                        @if (!empty($ktaData->gdrive_id))
+                            <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/{{ $ktaData->gdrive_id }}" alt="" width="80%" style="border-radius: 5%">
                         @else
                             @if ($ktaData->gender != "Male")
                                 <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/15Q9hUkS-yvTBCtF4_KZUy9o725MZ9z6n" alt="" width="80%" style="border-radius: 5%">
