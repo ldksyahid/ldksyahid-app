@@ -10,7 +10,7 @@
 		<title>Bukti Pembayaran Donasi - {{ $donation->id }}</title>
 
 		<!-- Favicon -->
-		<link rel="icon" href="{{ asset('Images/Logos/logoldksyahid.png') }}" type="image/x-icon" />
+		<link rel="icon" href="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" type="image/x-icon" />
 
 		<!-- Invoice styling -->
 		<style>

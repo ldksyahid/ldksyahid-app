@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\File;
+use App\Services\GoogleDrive;
 
 class ArticleController extends Controller
 {
+    public $pathArticleGDrive = '1dSj_B3bkhbCM1S4CuZtO4-6Hq00sHdpD';
+
     public function index()
     {
         $postarticle = Article::orderBy('dateevent','desc')->get();
@@ -29,16 +31,21 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
-        $filename = time().$request->file('poster')->getClientOriginalName();
-        $path = $request->file('poster')->storeAs('Images/uploads/articlesposter',$filename);
+        $gdriveService = new GoogleDrive($this->pathArticleGDrive);
 
-        $postarticle = Article::create([
+        $fileName = time() . '_article_' . $request->file('poster')->getClientOriginalName();
+        $filePath = $this->pathArticleGDrive . '/' . $fileName;
+
+        $uploadResult = $gdriveService->uploadImage($request->file('poster'), $fileName, $filePath);
+
+        Article::create([
             "title" => $request["title"],
             "theme" => $request["theme"],
             "dateevent" => $request["datearticle"],
             "writer" => $request["writer"],
             "editor" => $request["editor"],
-            'poster' => $path,
+            'poster' => $uploadResult['fileName'],
+            'gdrive_id' => $uploadResult['gdriveID'],
             "embedpdf" => $request["embedpdf"],
         ]);
 
@@ -67,21 +74,29 @@ class ArticleController extends Controller
 
     public function update(Request $request, $id)
     {
+        $articleModel = Article::find($id);
+
         if ($request->file('poster')) {
-            $filename = time().$request->file('poster')->getClientOriginalName();
-            $path = $request->file('poster')->storeAs('Images/uploads/articlesposter',$filename);
+            $gdriveService = new GoogleDrive($this->pathArticleGDrive);
 
-            // hapus file
-            $gambar = Article::where('id',$id)->first();
-            File::delete($gambar->poster);
+            $fileName = time() . '_article_' . $request->file('poster')->getClientOriginalName();
+            $filePath = $this->pathArticleGDrive . '/' . $fileName;
 
-            // upload file
-            $update = Article::where("id", $id)-> update([
-                'poster' => $path,
+            $uploadResult = $gdriveService->uploadImage($request->file('poster'), $fileName, $filePath);
+
+            $oldGdriveID = $articleModel->gdrive_id;
+
+            if ($oldGdriveID) {
+                $gdriveService->deleteImage($oldGdriveID);
+            }
+
+            $articleModel->update([
+                'poster' => $uploadResult['fileName'],
+                'gdrive_id' => $uploadResult['gdriveID'],
             ]);
         }
 
-        $update = Article::where("id", $id)-> update([
+        $articleModel->update([
             "title" => $request["title"],
             "theme" => $request["theme"],
             "dateevent" => $request["datearticle"],
@@ -96,12 +111,14 @@ class ArticleController extends Controller
 
     public function destroy($id)
     {
-        // hapus file
-        $gambar = Article::where('id',$id)->first();
-        File::delete($gambar->poster);
+        $articleModel = Article::find($id);
+        $gdriveService = new GoogleDrive($this->pathArticleGDrive);
 
-        // hapus data
-        Article::where('id',$id)->delete();
+        if ($articleModel->gdrive_id) {
+            $gdriveService->deleteImage($articleModel->gdrive_id);
+        }
+
+        $articleModel->delete();
         return redirect()->back();
     }
 }
