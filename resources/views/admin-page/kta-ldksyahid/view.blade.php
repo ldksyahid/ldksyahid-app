@@ -21,13 +21,13 @@
                         <div class="mb-3 col-12 col-lg-4 text-center">
                             <label for="photo" class="form-label">Photo Profile</label>
                             <br>
-                            @if (!empty($ktaData->photo))
-                                <img id="frame" src="{{ asset($ktaData->photo) }}" width="150px" height="200px" class="rounded mb-3 border"/>
+                            @if (!empty($ktaData->gdrive_id))
+                                <img id="frame" src="https://lh3.googleusercontent.com/d/{{ $ktaData->gdrive_id }}" width="150px" height="200px" class="rounded mb-3 border"/>
                             @else
                                 @if ($ktaData->gender != "Male")
-                                    <img id="frame" src="{{ asset('Images/fixImage/akhwat-img.svg') }}" width="150px" height="200px" class="rounded mb-3 border"/>
+                                    <img id="frame" src="https://lh3.googleusercontent.com/d/1wssPqERqsehbQIrUsp9ntd9RHe8m77OQ" width="150px" height="200px" class="rounded mb-3 border"/>
                                 @else
-                                    <img id="frame" src="{{ asset('Images/fixImage/ikhwan-img.svg') }}" width="150px" height="200px" class="rounded mb-3 border"/>
+                                    <img id="frame" src="https://lh3.googleusercontent.com/d/1dpTivBD1VPetcmHj3psiz75si_n1PwTo" width="150px" height="200px" class="rounded mb-3 border"/>
                                 @endif
                             @endif
                             <input class="form-control" type="file" id="photo" name='photo' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG, image/webp">

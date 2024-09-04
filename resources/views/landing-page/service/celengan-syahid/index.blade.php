@@ -12,7 +12,7 @@
   <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-            <img class="w-100 " src="{{ asset('Images/fixImage/billboardimage/celengan_syahid.png') }}" alt="Image" />
+            <img class="w-100 " src="https://lh3.googleusercontent.com/d/13hUNUJ_oQhmBGMRx37dj380dOhlsKm7O" alt="Image" />
         </div>
         @forelse($postcampaign as $key => $data)
         <div class="carousel-item">
@@ -140,7 +140,7 @@
                                     </div>
                                     @else
                                     <div class="d-flex flex-row align-items-center" style="height: 2em;">
-                                        <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="25" height="25">
+                                        <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="logo" width="25" height="25">
                                         <div class="ms-2 c-details">
                                             <h6 style="font-size: 16px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank">UKM LDK Syahid</a></h6>
                                         </div>
@@ -178,7 +178,7 @@
                 </div>
                 @empty
                 <div class="col-lg-12 m-5 text-body text-center">
-                    <img src="{{asset('Images/Icons/empty_inbox.png')}}" alt="logo" width="150" height="150" >
+                    <img src="https://lh3.googleusercontent.com/d/1VPmAcyI-BOXt3z0bFAlOvV8BsAgpEOUP" alt="logo" width="150" height="150" >
                     <br><br>
                     <p>Campaign Belum Tersedia</p>
                 </div>
@@ -218,7 +218,7 @@
                                     </div>
                                     @else
                                     <div class="d-flex flex-row align-items-center">
-                                        <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo" width="15" height="15">
+                                        <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="logo" width="15" height="15">
                                         <div class="ms-2 c-details">
                                             <h6 style="font-size: 10px" class="mb-0 text-body"><a href="https://www.ldksyah.id/" target="_blank" style="font-size: 8px">UKM LDK Syahid</a></h6>
                                         </div>
@@ -249,7 +249,7 @@
                 </div>
                 @empty
                 <div class="col-lg-12 m-2 text-body text-center">
-                    <img src="{{asset('Images/Icons/empty_inbox.png')}}" alt="logo" width="90" height="90" >
+                    <img src="https://lh3.googleusercontent.com/d/1VPmAcyI-BOXt3z0bFAlOvV8BsAgpEOUP" alt="logo" width="90" height="90" >
                     <br><br>
                     <p>Campaign Belum Tersedia</p>
                 </div>

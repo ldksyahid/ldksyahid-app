@@ -6,7 +6,7 @@
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="w-100" src="{{ asset('Images/fixImage/billboardimage/kegiatan.png') }}" alt="Image" />
+                <img class="w-100" src="https://lh3.googleusercontent.com/d/1RGwNt7vN1cUTUOlD4DeDdceeQdRmhFAG" alt="Image" />
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
                 <a class="mb-0" href="/events/{{ $postevent->id }}">Baca Selengkapnya</a>
             </div>
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                <a href="/events/{{ $postevent->id }}"><img src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px"></a>
+                <a href="/events/{{ $postevent->id }}"><img src="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px"></a>
             </div>
         </div>
         @empty

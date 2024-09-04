@@ -6,7 +6,7 @@
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="w-100" src="{{ asset('Images/fixImage/billboardimage/jadwal.png') }}" alt="Image" />
+                <img class="w-100" src="https://lh3.googleusercontent.com/d/1_8BpRTDUtkXG9_9CMz7ZxH9k834azBWR" alt="Image" />
             </div>
         </div>
     </div>
@@ -28,7 +28,7 @@
                 <div class="border-start border-5 border-primary ps-4 mb-3">
                     <h1 class="display-6 mb-0" style="text-align: left">{{ $postschedule->title }}</h1>
                 </div>
-                <img src="{{ asset($postschedule->picture) }}" alt="{{ $postschedule->title }}" class="img-fluid rounded" width="1080px" height="1350px">
+                <img src="https://lh3.googleusercontent.com/d/{{ $postschedule->gdrive_id }}" alt="{{ $postschedule->title }}" class="img-fluid rounded" width="1080px" height="1350px">
             </div>
         </div>
         @empty

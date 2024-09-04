@@ -13,7 +13,7 @@
                         <div class="col-12 col-lg-4">
                             <label for="formFile" class="form-label required">Picture <span class="small">(1440 x 560 Pixel)</span></label>
                             <br>
-                            <img id="frame" src="{{ asset('Images/Icons/add_image.svg') }}" width="250px" height="150px" class="rounded mb-3 border"/>
+                            <img id="frame" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="250px" height="150px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="picture" name ='picture' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="preview()" required>
                             <div class="invalid-feedback">
                                 This is a required question

@@ -177,6 +177,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
+        App\Providers\GoogleDriveServiceProvider::class,
 
     ],
 

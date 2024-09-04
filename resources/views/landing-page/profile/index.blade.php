@@ -13,7 +13,7 @@
                         @if (Auth::User()->profile->profilepicture == null)
                             <img class="position-sticky img-fluid" src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setShape('square')->setDimension(500)->setFontSize(250)->toBase64() }}" alt="" style="object-fit: cover;" width= "500px" height= "700px"/>
                         @else
-                            <img class="position-sticky img-fluid" src="{{Auth::User()->profile->profilepicture}}" alt="" style="object-fit: cover"  width= "500px" height= "700px"/>
+                            <img class="position-sticky img-fluid" src="https://lh3.googleusercontent.com/d/{{Auth::User()->profile->gdrive_id}}" alt="" style="object-fit: cover"  width= "500px" height= "700px"/>
                         @endif
                         @if (Auth::User()->profile->profilepicture == !null )
                         <form  action="/profile/{{Auth::User()->id}}/destroy" method="post" id="form-delete-pp">
@@ -38,7 +38,7 @@
                                 <h1 class="display-4 mb-0">{{Auth::User()->profile->namapanggilan}}</h1>
                             </div>
                             <div class="col-6 text-end">
-                                <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="LDK Syahid" width="100px" height="100px">
+                                <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="LDK Syahid" width="100px" height="100px">
                             </div>
                         </div>
                     </div>

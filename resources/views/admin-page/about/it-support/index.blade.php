@@ -13,8 +13,9 @@
                 <h5 class="mb-4">IT Support Management System</h5>
                 <a class='btn btn-primary' href="/admin/about/itsupport/create"><i class="fa fa-plus"></i> Create IT Support</a>
                 {{-- START Data table IT Support --}}
-                <div class="mt-3">
-                    <table class="table table-hover table-striped text-nowrap small" id="dataItSupport">
+                <div class="table-responsive">
+                    <div class="mt-3">
+                        <table class="table table-hover table-striped text-nowrap small" id="dataItSupport">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center">No</th>
@@ -37,7 +38,7 @@
                                 <td align='center'><a href="{{ $data->linkInstagram }}" target="_blank" rel="noopener noreferrer">{{ $data->linkInstagram }}</a></td>
                                 <td align='center'><a href="{{ $data->linkLinkedin }}" target="_blank" rel="noopener noreferrer">{{ $data->linkLinkedin }}</a></td>
                                 <td align='center'>
-                                    <img style="width: 100px;" src="{{ asset($data->photoProfile) }}" alt="{{$data->name}}" class="card-img"/>
+                                    <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="{{$data->name}}" class="card-img"/>
                                 </td>
                                 <td align="center">
                                     <a href="/admin/about/itsupport/{{ $data->id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
@@ -52,6 +53,7 @@
                             @endforelse
                         </tbody>
                     </table>
+                    </div>
                 </div>
                 {{-- END Data table IT Support --}}
             </div>

@@ -1,5 +1,5 @@
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
-<div class="container-xxl py-5">
+<div class="py-5">
     <div class="container">
         <div class="row g-5 align-items-end mb-5">
             <div class="col-lg-3 text-lg-start wow fadeInUp" data-wow-delay="0.3s">
@@ -47,7 +47,7 @@
                 <a class="mb-0" href="/events/{{ $postevent->id }}">Baca Selengkapnya</a>
             </div>
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                <a href="/events/{{ $postevent->id }}"><img src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px"></a>
+                <a href="/events/{{ $postevent->id }}"><img src="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px"></a>
             </div>
         </div>
         @empty
@@ -83,7 +83,7 @@
                 @forelse($postevent as $key => $postevent)
                 <div class="item">
                     <div class="my-3">
-                        <a href="/events/{{ $postevent->id }}" class="d-flex justify-content-center"><img class="shadow" src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" style="width: 65%; border-radius: 2%;" /></a>
+                        <a href="/events/{{ $postevent->id }}" class="d-flex justify-content-center"><img class="shadow" src="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" style="width: 65%; border-radius: 2%;" /></a>
                     </div>
                     <div>
                         <div class="row pb-2">

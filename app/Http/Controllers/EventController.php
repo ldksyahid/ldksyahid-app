@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\File;
+use App\Services\GoogleDrive;
 
 class EventController extends Controller
 {
+    public $pathEventGDrive = '1iQgMUHmSTJVXG7LbmKvXjFPNz4gmyYak';
+
     public function index()
     {
         $postevent = Event::orderBy('created_at','desc')->get();
@@ -29,9 +31,14 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        $filename = time().$request->file('poster')->getClientOriginalName();
-        $path = $request->file('poster')->storeAs('Images/uploads/eventsposter',$filename);
-        $postevent = Event::create([
+        $gdriveService = new GoogleDrive($this->pathEventGDrive);
+
+        $fileName = time() . '_event_' . $request->file('poster')->getClientOriginalName();
+        $filePath = $this->pathEventGDrive . '/' . $fileName;
+
+        $uploadResult = $gdriveService->uploadImage($request->file('poster'), $fileName, $filePath);
+
+        Event::create([
             "title" => $request["title"],
             "division" => $request["division"],
             "broadcast" => $request["broadcast"],
@@ -51,7 +58,8 @@ class EventController extends Controller
             "nameCntctPrsn2" => $request["nameCntctPrsn2"],
             "linkembedgform" => null,
             "dateevent" => '2023/01/01',
-            'poster' => $path
+            'poster' => $uploadResult['fileName'],
+            'gdrive_id' => $uploadResult['gdriveID'],
         ]);
         Alert::success('Success', 'Event has been uploaded !');
         return redirect('/admin/event');
@@ -79,21 +87,29 @@ class EventController extends Controller
 
     public function update(Request $request, $id)
     {
+        $eventModel = Event::find($id);
+
         if ($request->file('poster')) {
-            $filename = time().$request->file('poster')->getClientOriginalName();
-            $path = $request->file('poster')->storeAs('Images/uploads/eventsposter',$filename);
+            $gdriveService = new GoogleDrive($this->pathEventGDrive);
 
-            // hapus file
-            $gambar = Event::where('id',$id)->first();
-            File::delete($gambar->poster);
+            $fileName = time() . '_event_' . $request->file('poster')->getClientOriginalName();
+            $filePath = $this->pathEventGDrive . '/' . $fileName;
 
-            // upload file
-            $update = Event::where("id", $id)-> update([
-                'poster' => $path,
+            $uploadResult = $gdriveService->uploadImage($request->file('poster'), $fileName, $filePath);
+
+            $oldGdriveID = $eventModel->gdrive_id;
+
+            if ($oldGdriveID) {
+                $gdriveService->deleteImage($oldGdriveID);
+            }
+
+            $eventModel->update([
+                'poster' => $uploadResult['fileName'],
+                'gdrive_id' => $uploadResult['gdriveID'],
             ]);
         }
 
-        $update = Event::where("id", $id)-> update([
+        $eventModel->update([
             "title" => $request["title"],
             "division" => $request["division"],
             "broadcast" => $request["broadcast"],
@@ -121,13 +137,14 @@ class EventController extends Controller
 
     public function destroy($id)
     {
+        $eventModel = Event::find($id);
+        $gdriveService = new GoogleDrive($this->pathEventGDrive);
 
-        // hapus file
-        $gambar = Event::where('id',$id)->first();
-        File::delete($gambar->poster);
+        if ($eventModel->gdrive_id) {
+            $gdriveService->deleteImage($eventModel->gdrive_id);
+        }
 
-        // hapus data
-        Event::where('id',$id)->delete();
+        $eventModel->delete();
         return redirect()->back();
     }
 }

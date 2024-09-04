@@ -67,7 +67,7 @@
         <div class="card">
             <div class="card-body" style="margin: 20px 20px 20px 20px;">
                 <div class="logo">
-                    <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="logo-ldksyahid">
+                    <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="logo-ldksyahid">
                 </div>
                 <div class="success-alert">
                     <p>Berhasil Checkout Donasi</p>

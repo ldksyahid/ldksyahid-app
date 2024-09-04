@@ -7,10 +7,13 @@ use Illuminate\Http\Request;
 use App\Models\LkFaculty;
 use App\Models\LkGeneration;
 use App\Models\LkMajor;
+use App\Services\GoogleDrive;
 use Illuminate\Support\Facades\File;
 
 class MsKTALDKSyahid extends Model
 {
+    public static $pathKtaGDrive = '1gTa-VH6WTPFNsHxjCO0UbZVqnTpWr6t4';
+
     protected $table = 'ms_ktaldksyahid';
 
     protected $fillable = [
@@ -28,6 +31,7 @@ class MsKTALDKSyahid extends Model
         'instagram',
         'photo',
         'linkProfile',
+        'gdrive_id'
     ];
 
     public function getFaculty()
@@ -47,12 +51,16 @@ class MsKTALDKSyahid extends Model
 
     public static function createKTA(Request $request)
     {
+        $uploadResult = [];
         if (!empty($request->photo)) {
-            $filenamePhoto = time().$request->file('photo')->getClientOriginalName();
-            $pathPhoto = $request->file('photo')->storeAs('Images/uploads/kta',$filenamePhoto);
-        } else {
-            $pathPhoto = null;
+            $gdriveService = new GoogleDrive(self::$pathKtaGDrive);
+
+            $fileName = time() . '_kta-ldksyahid_' . $request->file('photo')->getClientOriginalName();
+            $filePath = self::$pathKtaGDrive . '/' . $fileName;
+
+            $uploadResult = $gdriveService->uploadImage($request->file('photo'), $fileName, $filePath);
         }
+
         return self::create([
             'fullName' => $request['fullName'],
             'gender' => $request['gender'],
@@ -66,7 +74,8 @@ class MsKTALDKSyahid extends Model
             'email' => $request['email'],
             'linkedIn' => $request['linkedIn'],
             'instagram' => $request['instagram'],
-            'photo' => $pathPhoto,
+            'photo' => !empty($uploadResult) ? $uploadResult['fileName'] : null,
+            'gdrive_id' => !empty($uploadResult) ? $uploadResult['gdriveID'] : null,
             'linkProfile' => $request['linkProfile'],
         ]);
     }
@@ -76,13 +85,22 @@ class MsKTALDKSyahid extends Model
         $ktaData = Self::where('id', $id)->first();
 
         if ($request->file('photo')) {
-            $filenamePhoto = time() . $request->file('photo')->getClientOriginalName();
-            $pathPhoto = $request->file('photo')->storeAs('Images/uploads/kta', $filenamePhoto);
-            if ($ktaData->photo) {
-                unlink(public_path($ktaData->photo));
+            $gdriveService = new GoogleDrive(self::$pathKtaGDrive);
+
+            $fileName = time() . '_kta-ldksyahid_' . $request->file('photo')->getClientOriginalName();
+            $filePath = self::$pathKtaGDrive . '/' . $fileName;
+
+            $uploadResult = $gdriveService->uploadImage($request->file('photo'), $fileName, $filePath);
+
+            $oldGdriveID = $ktaData->gdrive_id;
+
+            if ($oldGdriveID) {
+                $gdriveService->deleteImage($oldGdriveID);
             }
-            self::where('id', $id)->update([
-                'photo' => $pathPhoto,
+
+            $ktaData->update([
+                'photo' => $uploadResult['fileName'],
+                'gdrive_id' => $uploadResult['gdriveID'],
             ]);
         }
 
@@ -107,9 +125,10 @@ class MsKTALDKSyahid extends Model
     public static function destroyKTA($id)
     {
         $ktaData = MsKTALDKSyahid::find($id);
+        $gdriveService = new GoogleDrive(self::$pathKtaGDrive);
         if ($ktaData) {
-            if (!empty($ktaData->photo)) {
-                File::delete($ktaData->photo);
+            if ($ktaData->gdrive_id) {
+                $gdriveService->deleteImage($ktaData->gdrive_id);
             }
             $ktaData->delete();
         }

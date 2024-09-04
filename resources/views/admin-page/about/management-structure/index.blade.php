@@ -35,10 +35,10 @@
                                     <td align='center'>{{ $data->period }}</td>
                                     <td align='center'>{{ $data->structureName }}</td>
                                     <td align='center'>
-                                        <img style="width: 100px;" src="{{ asset($data->structureLogo) }}" alt="{{$data->structureName}}" class="card-img"/>
+                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="{{$data->structureName}}" class="card-img"/>
                                     </td>
                                     <td align='center'>
-                                        <img style="width: 100px;" src="{{ asset($data->structureImage) }}" alt="{{$data->structureName}}" class="card-img"/>
+                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}" alt="{{$data->structureName}}" class="card-img"/>
                                     </td>
                                     <td align="center">
                                         <a href="/admin/about/structure/{{ $data->id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>

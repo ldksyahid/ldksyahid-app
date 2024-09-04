@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Profile;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\DB;
+use App\Services\GoogleDrive;
 
 class ProfileController extends Controller
 {
+    public $pathProfileGDrive = '1iIQcU849CZSZ5sCCuguq_bhfVGCHv0pX';
+
     public function indexprofilecheck(Request $id)
     {
         $query = Profile::where('user_id', Auth::id())->first();
@@ -24,14 +24,17 @@ class ProfileController extends Controller
 
     public function store(Request $request)
     {
-
         if ($request->file('profilepicture')) {
-            $filename = time().$request->file('profilepicture')->getClientOriginalName();
-            $path = $request->file('profilepicture')->storeAs('Images/uploads/profiles',$filename);
+            $gdriveService = new GoogleDrive($this->pathProfileGDrive);
 
-            // upload file
-            $upload = Profile::create([
-                'profilepicture' => $path,
+            $fileName = time() . '_profile_' . $request->file('profilepicture')->getClientOriginalName();
+            $filePath = $this->pathProfileGDrive . '/' . $fileName;
+
+            $uploadResult = $gdriveService->uploadImage($request->file('profilepicture'), $fileName, $filePath);
+
+            Profile::create([
+                'profilepicture' => $uploadResult['fileName'],
+                'gdrive_id' => $uploadResult['gdriveID'],
                 "namapanggilan" => $request["namapanggilan"],
                 "sifat" => $request["sifat"],
                 "tentangdiri" => $request["tentangdiri"],
@@ -48,7 +51,7 @@ class ProfileController extends Controller
             ]);
             return redirect('/profile');
         } else{
-            $post = Profile::create([
+            Profile::create([
                 "namapanggilan" => $request["namapanggilan"],
                 "sifat" => $request["sifat"],
                 "tentangdiri" => $request["tentangdiri"],
@@ -76,22 +79,29 @@ class ProfileController extends Controller
 
     public function update(Request $request, $id)
     {
+        $profileModel = Profile::find($id);
 
         if ($request->file('profilepicture')) {
-            $filename = time().$request->file('profilepicture')->getClientOriginalName();
-            $path = $request->file('profilepicture')->storeAs('Images/uploads/profiles',$filename);
+            $gdriveService = new GoogleDrive($this->pathProfileGDrive);
 
-            // hapus file
-            $gambar = Profile::where('id',$id)->first();
-            File::delete($gambar->profilepicture);
+            $fileName = time() . '_profile_' . $request->file('profilepicture')->getClientOriginalName();
+            $filePath = $this->pathProfileGDrive . '/' . $fileName;
 
-            // upload file
-            $update = Profile::where("id", $id)-> update([
-                'profilepicture' => $path,
+            $uploadResult = $gdriveService->uploadImage($request->file('profilepicture'), $fileName, $filePath);
+
+            $oldGdriveID = $profileModel->gdrive_id;
+
+            if ($oldGdriveID) {
+                $gdriveService->deleteImage($oldGdriveID);
+            }
+
+            $profileModel->update([
+                'profilepicture' => $uploadResult['fileName'],
+                'gdrive_id' => $uploadResult['gdriveID'],
             ]);
         }
 
-        $update = Profile::where("id", $id)-> update([
+        $profileModel->update([
             "namapanggilan" => $request["namapanggilan"],
             "sifat" => $request["sifat"],
             "tentangdiri" => $request["tentangdiri"],
@@ -112,14 +122,17 @@ class ProfileController extends Controller
     public function destroy(Request $request, $id)
     {
 
-        // hapus file
-        $gambar = Profile::where('user_id',$id)->first();
-        File::delete($gambar->profilepicture);
+        $profileModel = Profile::find($id);
+        $gdriveService = new GoogleDrive($this->pathProfileGDrive);
 
-        // hapus dengan cara edit menjadi null
-        $update = Profile::where("user_id", $id)-> update([
-            'profilepicture' => $request->NULL,
+        if($profileModel->gdrive_id) {
+            $gdriveService->deleteImage($profileModel->gdrive_id);
+        }
+
+        $profileModel->where("user_id", $id)->update([
+            'profilepicture' => null,
         ]);
+
         return redirect()->back();
 
     }

@@ -3,18 +3,18 @@
 @section('content')
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
 <div>
-    <div class="container-xxl py-5" style="background-color: #008F8F">
+    <div class="py-5" style="background-color: #008F8F">
         <div class="container">
             <div class="row g-5">
                 <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
                     <div style="border-radius: 100%">
-                        @if (!empty($ktaData->photo))
-                            <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset($ktaData->photo) }}" alt="" width="250px" height="300px" style="border-radius: 5%">
+                        @if (!empty($ktaData->gdrive_id))
+                            <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/{{ $ktaData->gdrive_id }}" alt="" width="250px" height="300px" style="border-radius: 5%">
                         @else
                             @if ($ktaData->gender != "Male")
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/akhwat-img.png') }}" alt="" width="250px" height="300px" style="border-radius: 5%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/15Q9hUkS-yvTBCtF4_KZUy9o725MZ9z6n" alt="" width="250px" height="300px" style="border-radius: 5%">
                             @else
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/ikhwan-img.png') }}" alt="" width="250px" height="300px" style="border-radius: 5%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1CACDd_5vjzM82KTR08ND_nGbqtePHRsj" alt="" width="250px" height="300px" style="border-radius: 5%">
                             @endif
                         @endif
                     </div>
@@ -27,7 +27,7 @@
                                 <span class="border border-white p-2 text-white small" style="border-radius: 5px;">{{ $ktaData->memberNumber }}</span>
                             </div>
                             <div class="col-lg-4">
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/kita-adalah-saudara.png') }}" alt="" width="60%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1LsDxFAt1WU66CNp-2CN3J2qWXXJHlWIY" alt="" width="60%">
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                     </div>
                 @endif
                 <div class="col-lg-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/Logos/logoldksyahid.png') }}" alt="" width="20%">
+                    <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="" width="20%">
                     <p class="mt-5 wow fadeInDown" data-wow-delay="0.1s" style="text-align: justify">LDK Syahid adalah Salah satu Unit Kegiatan Mahasiswa (UKM) bidang keislaman di UIN Jakarta. Kegiatan-kegiatan yang dilakukan oleh LDK Syahid ialah Mentoring Pekanan, Kajian Keislaman, Rihlah, Upgrading Softskill, Menguatkan Ukhuwah Islamiyah, Management SDM, Management Problem Solved, Pembentukan Karakter Kepemimpinan, dan masih banyak lagi. Outputnya adalah Anggota LDK Syahid menjadi generasi emas menyongsong kehidupan masyarakat madani.</p>
                 </div>
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -126,13 +126,13 @@
             <div class="row g-5">
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div style="border-radius: 100%" class="text-center">
-                        @if (!empty($ktaData->photo))
-                            <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset($ktaData->photo) }}" alt="" width="80%" style="border-radius: 5%">
+                        @if (!empty($ktaData->gdrive_id))
+                            <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/{{ $ktaData->gdrive_id }}" alt="" width="80%" style="border-radius: 5%">
                         @else
                             @if ($ktaData->gender != "Male")
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/akhwat-img.png') }}" alt="" width="80%" style="border-radius: 5%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/15Q9hUkS-yvTBCtF4_KZUy9o725MZ9z6n" alt="" width="80%" style="border-radius: 5%">
                             @else
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/ikhwan-img.png') }}" alt="" width="80%" style="border-radius: 5%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1CACDd_5vjzM82KTR08ND_nGbqtePHRsj" alt="" width="80%" style="border-radius: 5%">
                             @endif
                         @endif
                     </div>
@@ -145,7 +145,7 @@
                                 <span class="border border-white p-2 text-white small" style="border-radius: 5px;">{{ $ktaData->memberNumber }}</span>
                             </div>
                             <div class="col-4">
-                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="{{ asset('Images/fixImage/kita-adalah-saudara.png') }}" alt="" width="100%">
+                                <img class="wow fadeInUp" data-wow-delay="0.5s" src="https://lh3.googleusercontent.com/d/1LsDxFAt1WU66CNp-2CN3J2qWXXJHlWIY" alt="" width="100%">
                             </div>
                         </div>
                     </div>
@@ -203,7 +203,7 @@
                 </div>
                 <div>
                     <div class="d-flex justify-content-center">
-                        <img class="my-3" src="{{ asset('Images/Logos/logoldksyahid.png') }}" width="60%">
+                        <img class="my-3" src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" width="60%">
                     </div>
                     <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist" style="font-size: 14px; border-radius: 20px;">
                         <li class="nav-item" role="presentation">
