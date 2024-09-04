@@ -13,7 +13,7 @@
     <meta property="og:title" content="Ekspresi &#9679; LDK Syahid" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{url()->current()}}" />
-    <meta property="og:image" content="{{ asset('Images/Logos/logo-ekspresi-bg-white.png') }}" />
+    <meta property="og:image" content="https://lh3.googleusercontent.com/d/1dPcaZzubFLe8V2cMIsAiKaEm73nIvGPD" />
     <meta property="og:image:width" content="400" />
     <meta property="og:image:height" content="300" />
     <meta property="og:description" content="Eksplorasi Potensi Diri Islami" />
@@ -174,8 +174,8 @@
     </style>
 
     <!-- Favicons -->
-    <link href="{{ asset('Images/Logos/ekspresi-2023.png') }}" rel="icon">
-    <link href="{{ asset('Images/Logos/ekspresi-2023.png') }}" rel="apple-touch-icon">
+    <link href="https://lh3.googleusercontent.com/d/1FlzBWS4ogRCHtYkOIhBw1h3hoTgK3aV6" rel="icon">
+    <link href="https://lh3.googleusercontent.com/d/1FlzBWS4ogRCHtYkOIhBw1h3hoTgK3aV6" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -212,7 +212,7 @@
 
         <h1 class="logo me-auto"><a href="#"><b>EKSPRESI 2023</b></a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
-        {{-- <a href="index.html" class="logo me-auto"><img src="{{ asset('Images/Logos/ekspresi-2023.png') }}" alt="" class="img-fluid"></a> --}}
+        {{-- <a href="index.html" class="logo me-auto"><img src="https://lh3.googleusercontent.com/d/1FlzBWS4ogRCHtYkOIhBw1h3hoTgK3aV6" alt="" class="img-fluid"></a> --}}
 
         <nav id="navbar" class="navbar">
             <ul>
@@ -245,7 +245,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
-                    <img src="{{ asset('Images/Logos/ekspresi-2023.png') }}" class="img-fluid animated" alt="" style="width: 85%">
+                    <img src="https://lh3.googleusercontent.com/d/1FlzBWS4ogRCHtYkOIhBw1h3hoTgK3aV6" class="img-fluid animated" alt="" style="width: 85%">
                 </div>
             </div>
         </div>
@@ -261,47 +261,47 @@
             <div class="row justify-content-center" data-aos="zoom-in">
 
                 <div class="col-lg-12 col-md-4 col-12 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" class="img-fluid" alt="" style="width: 100px;">
+                    <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" class="img-fluid" alt="" style="width: 100px;">
                 </div>
 
                 <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/ldks-fah-b.png') }}" class="img-fluid" alt="" style="max-width: 65%;">
+                    <img src="https://lh3.googleusercontent.com/d/1Fj4hZRy7SNQ1Kq72JvY4M557noiULg-i" class="img-fluid" alt="" style="max-width: 65%;">
                 </div>
 
                 <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/ldks-fdi.png') }}" class="img-fluid" alt="" style="max-width: 65%;">
+                    <img src="https://lh3.googleusercontent.com/d/1R-3mi9Jzw5vt3-VKVPic9BTvJeFkaikK" class="img-fluid" alt="" style="max-width: 65%;">
                 </div>
 
                 <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/ldks-fdikom.png') }}" class="img-fluid" alt="" style="max-width: 65%;">
+                    <img src="https://lh3.googleusercontent.com/d/1INzkD8YgOvf5_FVIXEnW40wUCsxJdepp" class="img-fluid" alt="" style="max-width: 65%;">
                 </div>
 
                 <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/ldks-fikesfk.png') }}" class="img-fluid" alt="" style="max-width: 65%;">
+                    <img src="https://lh3.googleusercontent.com/d/1t_dDa8IDgpOnH85RvU67DV3W2CxhSetx" class="img-fluid" alt="" style="max-width: 65%;">
                 </div>
 
                 <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/ldks-fisip.png') }}" class="img-fluid" alt="" style="max-width: 65%;">
+                    <img src="https://lh3.googleusercontent.com/d/1yU1Oj1qrFBanjcoj3ZhO1LPFOon7V92-" class="img-fluid" alt="" style="max-width: 65%;">
                 </div>
 
                 <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/ldks-fitk.png') }}" class="img-fluid" alt="" style="max-width: 65%;">
+                    <img src="https://lh3.googleusercontent.com/d/1u6mS175Q2Fbqd2k6CRNqKq0E3q5Sde1U" class="img-fluid" alt="" style="max-width: 65%;">
                 </div>
 
                 <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/ldks-fsh.png') }}" class="img-fluid" alt="" style="max-width: 65%;">
+                    <img src="https://lh3.googleusercontent.com/d/1Iem3JZgYMXRitO1GOb9lTMVeMjiUQFUI" class="img-fluid" alt="" style="max-width: 65%;">
                 </div>
 
                 <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/ldks-fst.png') }}" class="img-fluid" alt="" style="max-width: 65%;">
+                    <img src="https://lh3.googleusercontent.com/d/1HinEWSv90pL0MUZ1F0dAbyHNSmk2L-B5" class="img-fluid" alt="" style="max-width: 65%;">
                 </div>
 
                 <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/ldks-fu.png') }}" class="img-fluid" alt="" style="max-width: 65%;">
+                    <img src="https://lh3.googleusercontent.com/d/1OZXhHsHd0PR994b75R2N8Qvny_k0aqKQ" class="img-fluid" alt="" style="max-width: 65%;">
                 </div>
 
                 <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('Images/Logos/ldks-fpsi.png') }}" class="img-fluid" alt="" style="max-width: 65%;">
+                    <img src="https://lh3.googleusercontent.com/d/1sr4GI8TE-Z2Og4PBm3hqm1Bb38NryJ6U" class="img-fluid" alt="" style="max-width: 65%;">
                 </div>
 
                 </div>
@@ -662,7 +662,7 @@
           </div>
 
           <div class="col-lg-6 col-md-6 d-flex justify-content-center footer-links">
-            <img src="{{ asset('Images/Logos/ekspresi-2023.png') }}" class="" alt="" style="width: 45%">
+            <img src="https://lh3.googleusercontent.com/d/1FlzBWS4ogRCHtYkOIhBw1h3hoTgK3aV6" class="" alt="" style="width: 45%">
           </div>
 
           <div class="col-lg-3 col-md-6 footer-links">

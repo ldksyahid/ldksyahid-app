@@ -11,7 +11,7 @@
 
 
         <!-- Favicon -->
-        <link href="{{ asset('Images/Logos/logoldksyahid.png') }}" rel="icon" />
+        <link href="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" rel="icon" />
         {{-- <link rel="shortcut icon" href="{{ asset('proker-counter-by-yuda-ext-rsrc/images/kestari.ico') }}" type="image/x-icon"> --}}
 
 

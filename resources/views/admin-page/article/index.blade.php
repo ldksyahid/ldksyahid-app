@@ -39,7 +39,7 @@
                                     <td align='center'>{{ $postarticle->writer }}</td>
                                     <td align='center'>{{ $postarticle->editor }}</td>
                                     <td align='center'>
-                                        <img style="width: 100px;" src="{{ asset($postarticle->poster) }}" alt="{{$postarticle->title}}" class="card-img"/>
+                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $postarticle->gdrive_id }}" alt="{{$postarticle->title}}" class="card-img"/>
                                     </td>
                                     <td align='center'><a href="{{ $postarticle->embedpdf }}" target="_blank">{{ $postarticle->embedpdf }}</a></td>
                                     <td align="center">

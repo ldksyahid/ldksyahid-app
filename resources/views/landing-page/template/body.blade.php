@@ -10,7 +10,7 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <meta content="" name="keywords" />
         <meta content="" name="description" />
-        <link href="{{ asset('Images/Logos/logoldksyahid.png') }}" rel="icon" />
+        <link href="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" rel="icon" />
         {!! ReCaptcha::htmlScriptTagJsApi() !!}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,7 +22,7 @@
         <link rel="stylesheet" type="text/css" href="{{asset('landing-page-ext-rsrc/css/style.css')}}">
         <link href="{{ asset('landing-page-ext-rsrc/lib/animate/animate.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('landing-page-ext-rsrc/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet" />
-        <link rel="stylesheet" href="{{ asset('proker-counter-by-yuda-ext-rsrc/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('proker-counter-by-yuda-ext-rsrc/css/style-new.css') }}">
         <link href="{{ asset('landing-page-ext-rsrc/css/bootstrap.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/itsupport.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/pop-up-load-page.css') }}" rel="stylesheet" />

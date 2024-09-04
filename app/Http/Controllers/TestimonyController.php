@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Testimony;
 use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\File;
+use App\Services\GoogleDrive;
 
 class TestimonyController extends Controller
 {
+
+    public $pathTestimonyGDrive = '1w2pq-EYLmaeJ7irJ-KQaXZS0iJvn1pNY';
 
     public function index()
     {
@@ -23,13 +25,19 @@ class TestimonyController extends Controller
 
     public function store(Request $request)
     {
-        $filename = time().$request->file('picture')->getClientOriginalName();
-        $path = $request->file('picture')->storeAs('Images/uploads/testimonies',$filename);
-        $posttestimony = Testimony::create([
+        $gdriveService = new GoogleDrive($this->pathTestimonyGDrive);
+
+        $fileName = time() . '_testimony_' . $request->file('picture')->getClientOriginalName();
+        $filePath = $this->pathTestimonyGDrive . '/' . $fileName;
+
+        $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
+
+        Testimony::create([
             "name" => $request["name"],
             "profession" => $request["profession"],
             "testimony" => $request["testimony"],
-            'picture' => $path,
+            'picture' => $uploadResult['fileName'],
+            'gdrive_id' => $uploadResult['gdriveID'],
         ]);
 
         Alert::success('Success', 'Testimony has been uploaded !');
@@ -50,21 +58,29 @@ class TestimonyController extends Controller
 
     public function update(Request $request, $id)
     {
+        $testimonyModel = Testimony::find($id);
+
         if ($request->file('picture')) {
-            $filename = time().$request->file('picture')->getClientOriginalName();
-            $path = $request->file('picture')->storeAs('Images/uploads/testimonies',$filename);
+            $gdriveService = new GoogleDrive($this->pathTestimonyGDrive);
 
-            // hapus file
-            $gambar = Testimony::where('id',$id)->first();
-            File::delete($gambar->picture);
+            $fileName = time() . '_testimony_' . $request->file('picture')->getClientOriginalName();
+            $filePath = $this->pathTestimonyGDrive . '/' . $fileName;
 
-            // upload file
-            $update = Testimony::where("id", $id)-> update([
-                'picture' => $path,
+            $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
+
+            $oldGdriveID = $testimonyModel->gdrive_id;
+
+            if ($oldGdriveID) {
+                $gdriveService->deleteImage($oldGdriveID);
+            }
+
+            $testimonyModel->update([
+                'picture' => $uploadResult['fileName'],
+                'gdrive_id' => $uploadResult['gdriveID'],
             ]);
         }
 
-        $update = Testimony::where("id", $id)-> update([
+        $testimonyModel->update([
             "name" => $request["name"],
             "profession" => $request["profession"],
             "testimony" => $request["testimony"],
@@ -76,12 +92,14 @@ class TestimonyController extends Controller
 
     public function destroy($id)
     {
-        // hapus file
-        $gambar = Testimony::where('id',$id)->first();
-        File::delete($gambar->picture);
+        $testimonyModel = Testimony::find($id);
+        $gdriveService = new GoogleDrive($this->pathTestimonyGDrive);
 
-        // hapus data
-        Testimony::where('id',$id)->delete();
+        if ($testimonyModel->gdrive_id) {
+            $gdriveService->deleteImage($testimonyModel->gdrive_id);
+        }
+
+        $testimonyModel->delete();
         return redirect()->back();
     }
 }

@@ -14,7 +14,7 @@
                         <div class="mb-3 col-12 col-lg-6">
                             <label for="formFile" class="form-label required">Picture <span class="small">(1080 x 1350 Pixel)</span></label>
                             <br>
-                            <img id="frame" src="{{ asset($postschedule->picture) }}" width="150px" height="200px" class="rounded mb-3 border"/>
+                            <img id="frame" src="https://lh3.googleusercontent.com/d/{{ $postschedule->gdrive_id }}" width="150px" height="200px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="picture" name = 'picture' accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="preview()">
                         </div>
                         <div class="mb-3 col-12 col-lg-6">

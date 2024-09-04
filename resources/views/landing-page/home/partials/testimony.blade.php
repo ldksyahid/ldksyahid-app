@@ -1,6 +1,6 @@
 <!-- Testimonial Start -->
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
-<div class="container-xxl py-5">
+<div class="py-5">
     <div class="container">
         <div class="row g-5">
             <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
@@ -34,7 +34,7 @@
                     <div class="testimonial-item">
                         <img
                             class="img-fluid mb-4"
-                            src="{{ asset($posttestimony->picture) }}"
+                            src="https://lh3.googleusercontent.com/d/{{ $posttestimony->gdrive_id }}"
                             alt=""
                         />
                         <p class="fs-5 small">
@@ -91,7 +91,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-4">
-                                    <img class="img-fluid mb-4" src="{{ asset($posttestimony->picture) }}" alt="" style="border-radius:2px;"/>
+                                    <img class="img-fluid mb-4" src="https://lh3.googleusercontent.com/d/{{ $posttestimony->gdrive_id }}" alt="" style="border-radius:2px;"/>
                                 </div>
                                 <div class="col-8">
                                     <h5 class="mobile-font-3">{{$posttestimony->name}}</h5>

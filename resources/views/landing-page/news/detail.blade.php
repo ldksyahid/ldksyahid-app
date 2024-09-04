@@ -3,7 +3,7 @@
 <meta property="og:title" content="{{ $postnews->title }}" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="{{url()->current()}}" />
-<meta property="og:image" content="{{ config('app.url') }}/{{ $postnews->picture }}" />
+<meta property="og:image" content="https://lh3.googleusercontent.com/d/{{ $postnews->gdrive_id }}" />
 <meta property="og:image:width" content="400" />
 <meta property="og:image:height" content="300" />
 <meta property="og:description" content="{!!  substr(strip_tags($postnews->body), 0, 80) !!}" />
@@ -33,7 +33,7 @@
             <div class="wow fadeInUp " data-wow-delay="1.0s">
                 <div class="col-lg-10 col-md-6 text-start">
                     <p class="mb-2 text-start"><i>Reporter</i> {{ $postnews->reporter }}; <i>Editor</i> {{ $postnews->editor }}</p>
-                    <img src="{{ asset($postnews->picture) }}" alt="{{$postnews->title}}" class="img-fluid rounded">
+                    <img src="https://lh3.googleusercontent.com/d/{{ $postnews->gdrive_id }}" alt="{{$postnews->title}}" class="img-fluid rounded">
                     <p class="mt-1 small text-center"><i>{{ $postnews->descpicture }}</i></p>
                 </div>
                 <div class="mb-1 col-lg-10 col-md-6" style="">

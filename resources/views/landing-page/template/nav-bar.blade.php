@@ -42,10 +42,10 @@
 <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top px-4 px-lg-5 py-lg-0" id="navbar">
     <a href="#" class="navbar-brand d-flex align-items-center">
         <h3 class="m-0 website-responsive">
-            <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" width="55" height="55" alt="Logo LDK Syahid"> </i>LDK Syahid
+            <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" width="55" height="55" alt="Logo LDK Syahid"> </i>LDK Syahid
         </h3>
         <h6 class="m-0 mobile-responsive">
-            <img src="{{ asset('Images/Logos/logoldksyahid.png') }}" width="44" height="44" alt="Logo LDK Syahid"> </i>
+            <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" width="44" height="44" alt="Logo LDK Syahid"> </i>
         </h6>
     </a>
     <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -115,7 +115,7 @@
                         @if (Auth::User()->profile == null || Auth::User()->profile->profilepicture == null)
                             <img class="rounded-circle" src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}" alt="" style="width: 27px; height: 27px;">
                         @else
-                            <img class="rounded-circle" src="/{{Auth::User()->profile->profilepicture}}" alt="" style="width: 20px; height: 20px;">
+                            <img class="rounded-circle" src="https://lh3.googleusercontent.com/d/{{Auth::User()->profile->gdrive_id}}" alt="" style="width: 20px; height: 20px;">
                         @endif
                     </span>{{ substr(Auth::user()->name,0, 15) }}</a>
                     <div class="dropdown-menu bg-light m-0">

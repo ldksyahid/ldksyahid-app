@@ -14,7 +14,7 @@
                         <div class="col-12 col-lg-4">
                             <label for="formFile" class="form-label required">Picture <span class="small">(1440 x 560 Pixel)</span></label>
                             <br>
-                            <img id="frame" src="{{ asset($postjumbotron->picture) }}" width="250px" height="150px" class="rounded mb-3 border"/>
+                            <img id="frame" src="https://lh3.googleusercontent.com/d/{{ $postjumbotron->gdrive_id }}" width="250px" height="150px" class="rounded mb-3 border"/>
                             <input class="form-control" type="file" id="picture" name ='picture' title="Choose a video please" accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="preview()">
                         </div>
                         <div class="my-3 col-12 col-lg-12">

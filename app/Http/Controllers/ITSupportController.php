@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\ITSupport;
+use App\Services\GoogleDrive;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\File;
 
 class ITSupportController extends Controller
 {
+    public $pathITSupportGDrive = '1gE3j9fXZIicfqeFqTYuc5JFpJe-FbSBs';
+
     public function index()
     {
         $postitsupport = ITSupport::orderBy('created_at','desc')->get();
@@ -28,16 +30,21 @@ class ITSupportController extends Controller
 
     public function store(Request $request)
     {
-        $filename = time().$request->file('photoProfile')->getClientOriginalName();
-        $path = $request->file('photoProfile')->storeAs('Images/uploads/itsupport',$filename);
+        $gdriveService = new GoogleDrive($this->pathITSupportGDrive);
 
-        $postitsupport = ITSupport::create([
+        $fileName = time() . '_it-supports_' . $request->file('photoProfile')->getClientOriginalName();
+        $filePath = $this->pathITSupportGDrive . '/' . $fileName;
+
+        $uploadResult = $gdriveService->uploadImage($request->file('photoProfile'), $fileName, $filePath);
+
+        ITSupport::create([
             "name" => $request["name"],
             "forkat" => $request["forkat"],
             "position" => $request["position"],
             "linkInstagram" => $request["linkInstagram"],
             "linkLinkedin" => $request["linkLinkedin"],
-            'photoProfile' => $path,
+            'gdrive_id' => $uploadResult['gdriveID'],
+            'photoProfile' => $uploadResult['fileName'],
         ]);
 
         Alert::success('Success', 'IT Support has been uploaded !');
@@ -58,21 +65,29 @@ class ITSupportController extends Controller
 
     public function update(Request $request, $id)
     {
+        $itSupportModel = ITSupport::find($id);
+
         if ($request->file('photoProfile')) {
-            $filename = time().$request->file('photoProfile')->getClientOriginalName();
-            $path = $request->file('photoProfile')->storeAs('Images/uploads/itsupport',$filename);
+            $gdriveService = new GoogleDrive($this->pathITSupportGDrive);
 
-            // hapus file
-            $gambar = ITSupport::where('id',$id)->first();
-            File::delete($gambar->photoProfile);
+            $fileName = time() . '_it-supports_' . $request->file('photoProfile')->getClientOriginalName();
+            $filePath = $this->pathITSupportGDrive . '/' . $fileName;
 
-            // upload file
-            $update = ITSupport::where("id", $id)-> update([
-                'photoProfile' => $path,
+            $uploadResult = $gdriveService->uploadImage($request->file('photoProfile'), $fileName, $filePath);
+
+            $oldGdriveID = $itSupportModel->gdrive_id;
+
+            if ($oldGdriveID) {
+                $gdriveService->deleteImage($oldGdriveID);
+            }
+
+            $itSupportModel->update([
+                'photoProfile' => $uploadResult['fileName'],
+                'gdrive_id' => $uploadResult['gdriveID'],
             ]);
         }
 
-        $update = ITSupport::where("id", $id)-> update([
+        ITSupport::where("id", $id)-> update([
             "name" => $request["name"],
             "forkat" => $request["forkat"],
             "position" => $request["position"],
@@ -86,12 +101,14 @@ class ITSupportController extends Controller
 
     public function destroy($id)
     {
-        // hapus file
-        $gambar = ITSupport::where('id',$id)->first();
-        File::delete($gambar->photoProfile);
+        $itSupportModel = ITSupport::find($id);
+        $gdriveService = new GoogleDrive($this->pathITSupportGDrive);
 
-        // hapus data
-        ITSupport::where('id',$id)->delete();
+        if ($itSupportModel->gdrive_id) {
+            $gdriveService->deleteImage($itSupportModel->gdrive_id);
+        }
+
+        $itSupportModel->delete();
         return redirect()->back();
     }
 }
