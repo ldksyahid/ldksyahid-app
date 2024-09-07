@@ -22,6 +22,7 @@ use App\Http\Controllers\ITSupportController;
 use App\Http\Controllers\TestimonyController;
 use App\Http\Controllers\CelenganSyahidController;
 use App\Http\Controllers\MsKTALDKSyahidController;
+use App\Http\Controllers\ShortLinkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -283,37 +284,28 @@ Route::middleware(['role:Superadmin|HelperLetter'])->prefix('/admin/ktaldksyahid
     Route::put('/{id}/update', [MsKTALDKSyahidController::class, 'update'])->name('admin.ktaldksyahid.update');
 });
 
-
-
 // START Route AdminPage Service Shortlink
-Route::get('/admin/service/shortlink', function () {
-    $urls = \AshAllenDesign\ShortURL\Models\ShortURL::latest()->get();
-    return view('admin-page.service.short-link.index', compact('urls'), ["title" => "Services"]);
-})->name('admin.service.shortlink.index')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
+Route::get('/admin/service/shortlink', [ShortLinkController::class, 'index'])
+    ->name('admin.service.shortlink.index')
+    ->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
-Route::post('/', function () {
-    $builder = new \AshAllenDesign\ShortURL\Classes\Builder();
-    $shortURLObject = $builder->destinationUrl(request()->url)->make();
-    $shortURL = $shortURLObject->default_short_url;
-    return back()->with('success','URL shortened successfully. ');
-})->name('admin.service.shortlink.shorten')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
+Route::post('/', [ShortLinkController::class, 'shorten'])
+    ->name('admin.service.shortlink.shorten')
+    ->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
-Route::post('{id}', function ($id) {
-    $url = \AshAllenDesign\ShortURL\Models\ShortURL::find($id);
-    $url->url_key = request()->url;
-    $url->destination_url = request()->destination;
-    $url->default_short_url = config('app.url').'/'.request()->url;
-    $url->save();
-    return back()->with('success','URL updated successfully. ');
-})->name('admin.service.shortlink.update')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
+Route::post('{id}', [ShortLinkController::class, 'update'])
+    ->name('admin.service.shortlink.update')
+    ->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
-Route::get('{id}/destroy', function ($id) {
-    $url = \AshAllenDesign\ShortURL\Models\ShortURL::find($id);
-    $url->url_key = request()->url;
-    $url->delete();
-    return back()->with('success','URL Delete successfully. ');
-})->name('admin.service.shortlink.destroy')->middleware(['role:Superadmin']);
+Route::get('{id}/destroy', [ShortLinkController::class, 'destroy'])
+    ->name('admin.service.shortlink.destroy')
+    ->middleware(['role:Superadmin']);
 
-Route::get('/{shortURLKey}', '\AshAllenDesign\ShortURL\Controllers\ShortURLController');
+Route::post('/admin/service/shortlink/bulk-delete', [ShortLinkController::class, 'bulkDelete'])
+    ->name('admin.service.shortlink.bulkDelete')
+    ->middleware(['role:Superadmin']);
+
+Route::get('/{shortURLKey}', [ShortLinkController::class, 'redirect']);
 // END Route AdminPage Service Shortlink
+
 // ======================================= END ROUTE ADMIN PAGE =======================================
