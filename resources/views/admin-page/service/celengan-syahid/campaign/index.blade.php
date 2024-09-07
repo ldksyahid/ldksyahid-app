@@ -38,7 +38,7 @@
                                     <td align='center'>{{ $data->judul }}</td>
                                     <td align="center">{{ $data->kategori }}</td>
                                     <td align="center">
-                                        <img style="width: 125px;" class="rounded" src="{{ asset($data->poster) }}" alt="{{ $data->judul }}"/>
+                                        <img style="width: 125px;" class="rounded" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="{{ $data->poster }}"/>
                                     </td>
                                     @if ($data->nama_pj != null && $data->link_pj != null)
                                         <td align="center"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></td>

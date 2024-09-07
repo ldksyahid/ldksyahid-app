@@ -16,7 +16,7 @@
         </div>
         @forelse($postcampaign as $key => $data)
         <div class="carousel-item">
-            <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image" />
+            <img class="w-100 " src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="Image" />
         </div>
         @empty
         @endforelse
@@ -116,7 +116,7 @@
                 <div class="col-lg-4 col-md-6 mt-3">
                     <div class="card shadow-c mb-2">
                         <div style="height: 12em;">
-                            <a href="/celengansyahid/{{ $data->link }}"><img src="{{ asset($data->poster) }}" alt="poster-{{ $data->link }}" class="card-img w-100"></a>
+                            <a href="/celengansyahid/{{ $data->link }}"><img src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="poster-{{ $data->link }}" class="card-img w-100"></a>
                         </div>
                         <div class="mt-1 p-3">
                             <div class="badge" style="margin-left:-8px;"> <span>{{ $data->kategori }}</span> </div>
@@ -133,7 +133,7 @@
                                 <div class="d-flex justify-content-between">
                                     @if ($data->nama_pj != null && $data->link_pj != null)
                                     <div class="d-flex flex-row align-items-center" style="height: 2em;">
-                                        <img src="{{ asset($data->logo_pj) }}" alt="logo" width="25" height="25">
+                                        <img src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_1 }}" alt="logo" width="25" height="25">
                                         <div class="ms-2 c-details">
                                             <h6 style="font-size: 16px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></h6>
                                         </div>
@@ -198,7 +198,7 @@
                         <div class="col" style="margin-right:-20px;">
                             <div  class="p-3">
                                 <div class="badge-mobile-all pb-1" style="margin-top: -20px"> <span style="font-size:6px; font-weight:575;"><p>{{$data->kategori}}</p></span> </div>
-                                <a href="/celengansyahid/{{ $data->link }}"><img src="{{ asset($data->poster) }}" alt="{{ $data->link }}" class="card-img w-100" style="border-radius: 5px;"></a>
+                                <a href="/celengansyahid/{{ $data->link }}"><img src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="{{ $data->link }}" class="card-img w-100" style="border-radius: 5px;"></a>
                             </div>
                         </div>
                         <div class="col" style="margin-left:-20px;">
@@ -211,7 +211,7 @@
                                 <div class="d-flex justify-content-between">
                                     @if ($data->nama_pj != null && $data->link_pj != null)
                                     <div class="d-flex flex-row align-items-center">
-                                        <img src="{{ asset($data->logo_pj) }}" alt="logo" width="15" height="15">
+                                        <img src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_1 }}" alt="logo" width="15" height="15">
                                         <div class="ms-2 c-details">
                                             <h6 style="font-size: 10px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank" style="font-size: 8px">{{ $data->nama_pj }}</a></h6>
                                         </div>
