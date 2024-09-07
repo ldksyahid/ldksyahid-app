@@ -16,6 +16,7 @@ use Laravolt\Indonesia\Models\City;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\DonationInvoice;
+use App\Services\GoogleDrive;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Symfony\Component\Process\Process;
@@ -23,6 +24,8 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class CelenganSyahidController extends Controller
 {
+    public $pathCampaignsGDrive = '1w48iZmjPCkYwVUL26zIj8fBIX37OMaGT';
+
     public function indexLanding()
     {
         $postcampaign = Campaign::getCampaigns();
@@ -232,18 +235,24 @@ class CelenganSyahidController extends Controller
 
     public function storeAdminCampaign(Request $request)
     {
+        $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
+
         $target_biaya = LFC::replaceamount($request['target_biaya']);
         $provinsi = ucwords(strtolower($request["provinsi"]));
         $city = City::where('id', $request['kota'])->first();
         $kota = ucwords(strtolower($city->name));
-        $filename_poster = time().$request->file('poster')->getClientOriginalName();
-        $path_poster = $request->file('poster')->storeAs('Images/uploads/campaigns',$filename_poster);
-        $path_logo_pj = null;
-        if ($request->logo_pj != null) {
-            $filename_logo_pj = time().$request->file('logo_pj')->getClientOriginalName();
-            $path_logo_pj = $request->file('logo_pj')->storeAs('Images/uploads/logos',$filename_logo_pj);
+
+        $fileNamePoster = time() . '_poster_' . $request->file('poster')->getClientOriginalName();
+        $filePathPoster = $this->pathCampaignsGDrive . '/' . $fileNamePoster;
+        $uploadResultPoster = $gdriveService->uploadImage($request->file('poster'), $fileNamePoster, $filePathPoster);
+
+        $uploadResultLogoPic = [];
+        if (!empty($request->logo_pj)) {
+            $fileNameLogoPic = time() . '_logo-pic_' . $request->file('logo_pj')->getClientOriginalName();
+            $filePathLogoPic = $this->pathCampaignsGDrive . '/' . $fileNameLogoPic;
+            $uploadResultLogoPic = $gdriveService->uploadImage($request->file('logo_pj'), $fileNameLogoPic, $filePathLogoPic);
         }
-        Campaign::createCampaign($request->all(), $provinsi, $kota, $target_biaya, $path_poster, $path_logo_pj);
+        Campaign::createCampaign($request->all(), $provinsi, $kota, $target_biaya, $uploadResultPoster, $uploadResultLogoPic);
         Alert::success('Success', 'Campaign has been uploaded !');
         return redirect('/admin/service/celengansyahid/campaigns');
     }
@@ -257,6 +266,8 @@ class CelenganSyahidController extends Controller
 
     public function updateAdminCampaign(Request $request, $id)
     {
+        $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
+        $campaignModel = Campaign::find($id);
         $target_biaya = LFC::replaceamount($request['target_biaya']);
         $provinsi = ucwords(strtolower($request["provinsi"]));
         $city = City::where('id', $request['kota'])->first();
@@ -265,23 +276,38 @@ class CelenganSyahidController extends Controller
         } else {
             $kota = $request['kota'];
         }
+
         if ($request->file('poster')) {
-            $filename = time().$request->file('poster')->getClientOriginalName();
-            $path = $request->file('poster')->storeAs('Images/uploads/campaigns',$filename);
-            $gambar = Campaign::where('id',$id)->first();
-            File::delete($gambar->poster);
-            Campaign::where("id", $id)-> update([
-                'poster' => $path,
-            ]);
+            $fileNamePoster = time() . '_poster_' . $request->file('poster')->getClientOriginalName();
+            $filePathPoster = $this->pathCampaignsGDrive . '/' . $fileNamePoster;
+            $uploadResultPoster = $gdriveService->uploadImage($request->file('poster'), $fileNamePoster, $filePathPoster);
+            if (!empty($uploadResultPoster)) {
+                $oldGdriveID = $campaignModel->gdrive_id;
+                if ($oldGdriveID) {
+                    $gdriveService->deleteImage($oldGdriveID);
+                }
+
+                $campaignModel->update([
+                    'poster' => $uploadResultPoster['fileName'],
+                    'gdrive_id' => $uploadResultPoster['gdriveID'],
+                ]);
+            }
         }
         if ($request->file('logo_pj')) {
-            $filename = time().$request->file('logo_pj')->getClientOriginalName();
-            $path = $request->file('logo_pj')->storeAs('Images/uploads/logos',$filename);
-            $gambar = Campaign::where('id',$id)->first();
-            File::delete($gambar->logo_pj);
-            Campaign::where("id", $id)-> update([
-                'logo_pj' => $path,
-            ]);
+            $fileNameLogoPic = time() . '_logo-pic_' . $request->file('logo_pj')->getClientOriginalName();
+            $filePathLogoPic = $this->pathCampaignsGDrive . '/' . $fileNameLogoPic;
+            $uploadResultLogoPic = $gdriveService->uploadImage($request->file('logo_pj'), $fileNameLogoPic, $filePathLogoPic);
+            if (!empty($uploadResultLogoPic)) {
+                $oldGdriveID = $campaignModel->gdrive_id_1;
+                if ($oldGdriveID) {
+                    $gdriveService->deleteImage($oldGdriveID);
+                }
+
+                $campaignModel->update([
+                    'logo_pj' => $uploadResultLogoPic['fileName'],
+                    'gdrive_id_1' => $uploadResultLogoPic['gdriveID'],
+                ]);
+            }
         }
         Campaign::updateCampaign($id, $request->all(), $provinsi, $kota, $target_biaya);
         toast('Campaign has been updated !', 'success')->autoClose(1500)->width('400px');
@@ -290,6 +316,17 @@ class CelenganSyahidController extends Controller
 
     public function destroyAdminCampaign($id)
     {
+        $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
+        $campaignModel = Campaign::findOrFail($id);
+
+        if (!empty($campaignModel->gdrive_id)) {
+            $gdriveService->deleteImage($campaignModel->gdrive_id);
+        }
+
+        if (!empty($campaignModel->gdrive_id_1)) {
+            $gdriveService->deleteImage($campaignModel->gdrive_id_1);
+        }
+
         Campaign::deleteCampaign($id);
         return redirect()->back();
     }
