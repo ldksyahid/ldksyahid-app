@@ -203,7 +203,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
     <!-- Template Main CSS File -->
-    <link href="{{ asset('arsha/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('arsha/css/style2024v1.css') }}" rel="stylesheet">
 
     <!-- =======================================================
     * Template Name: Arsha
@@ -255,7 +255,7 @@
                     <div class="d-flex justify-content-center justify-content-lg-start">
                         <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPI2XZQn7fH6ic61R6EKDjBiE7aN3ouHs0LI0ZFtx_z8HaPw/viewform?pli=1"
                             class="btn-get-started scrollto" target="_blank">Daftar Sekarang</a>
-                        <a href="https://youtu.be/bnefWnvfIfc?si=yL-nyIap3phtYUpG" class="glightbox btn-watch-video"><i
+                        <a href="https://youtu.be/xFJR6aA4NQ0?si=tRvLOxeA5EeXTCaS" class="glightbox btn-watch-video"><i
                                 class="bi bi-play-circle"></i><span>Tonton Video</span></a>
                     </div>
                 </div>
