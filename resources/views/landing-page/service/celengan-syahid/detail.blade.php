@@ -10,7 +10,7 @@
 <meta property="og:title" content="{{ $data->judul }}" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="{{url()->current()}}" />
-<meta property="og:image" content="{{ asset($data->poster) }}" />
+<meta property="og:image" content="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" />
 <meta property="og:description" content="{!!  substr(strip_tags($data->cerita), 0, 80) !!}" />
 <meta property="og:image:alt" content="{{ $data->link }}" />
 @endsection
@@ -34,7 +34,7 @@ $donation_total = 0 ;
     <div class="row g-5">
         <div class="col col-lg-8">
             <div class="p-5" style="margin-right: -20px">
-                <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image" style="border-radius: 15px;"/>
+                <img class="w-100 " src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="Image" style="border-radius: 15px;"/>
             </div>
         </div>
         <div class="col col-lg-4 d-flex flex-row align-items-center">
@@ -47,7 +47,7 @@ $donation_total = 0 ;
                 <div class="d-flex justify-content-between">
                     @if ($data->nama_pj != null && $data->link_pj != null)
                         <div class="d-flex flex-row align-items-center" style="height: 2em;">
-                            <img src="{{ asset($data->logo_pj) }}" alt="logo" width="30" height="30">
+                            <img src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_1 }}" alt="logo" width="30" height="30">
                             <div class="ms-2 c-details">
                                 <h6 style="font-size: 18px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></h6>
                             </div>
@@ -184,7 +184,7 @@ $donation_total = 0 ;
 <div class="container-fluid p-0 wow fadeIn mobile-responsive" data-wow-delay="0.2s" style="background-color: #f5f6fa;">
     <div class="p-4">
         <div>
-            <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image" style="border-radius: 15px;"/>
+            <img class="w-100 " src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="Image" style="border-radius: 15px;"/>
             <div class="badge-mobile mt-3"> <span style="font-size:10px;"><b>{{ $data->kategori }}</b></span> </div>
             <div class="d-flex flex-row align-items-center">
                 <h5 class="text-body mb-0">{{ $data->judul }}</h5>
@@ -193,7 +193,7 @@ $donation_total = 0 ;
             <div class="d-flex justify-content-between">
                 @if ($data->nama_pj != null && $data->link_pj != null)
                 <div class="d-flex flex-row align-items-center" style="height: 2em;">
-                    <img src="{{ asset($data->logo_pj) }}" alt="logo" width="25" height="25">
+                    <img src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_1 }}" alt="logo" width="25" height="25">
                     <div class="ms-2 c-details my-0">
                         <h6 style="font-size: 14px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></h6>
                     </div>

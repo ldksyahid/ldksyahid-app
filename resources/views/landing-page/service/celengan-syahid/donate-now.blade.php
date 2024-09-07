@@ -16,7 +16,7 @@
             <div class="row g-5">
                 <div class="col col-lg-6">
                     <div class="py-5">
-                        <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image" style="border-radius: 15px;"/>
+                        <img class="w-100 " src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="Image" style="border-radius: 15px;"/>
                     </div>
                 </div>
                 <div class="col col-lg-6 d-flex flex-row align-items-center">
@@ -29,7 +29,7 @@
                                 <div class="d-flex justify-content-between">
                                    @if ($data->nama_pj != null || $data->link_pj != null)
                                     <div class="d-flex flex-row align-items-center" style="height: 2em;">
-                                        <img src="{{ asset($data->logo_pj) }}" alt="logo" width="30" height="30">
+                                        <img src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_1 }}" alt="logo" width="30" height="30">
                                         <div class="ms-2 c-details">
                                             <h6 style="font-size: 18px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></h6>
                                         </div>
@@ -196,7 +196,7 @@
 <div>
     <div class="container-fluid p-0" style="background-color: #f5f6fa;">
         <div>
-            <img class="w-100 " src="{{ asset($data->poster) }}" alt="Image"/>
+            <img class="w-100 " src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="Image"/>
         </div>
         <div class="px-4 py-4">
             <div style="line-height: 0.1;">
@@ -206,7 +206,7 @@
                 <div class="d-flex justify-content-between">
                     @if ($data->nama_pj != null || $data->link_pj != null)
                     <div class="d-flex flex-row align-items-center" style="height: 0.7em;">
-                        <img src="{{ asset($data->logo_pj) }}" alt="logo" width="20" height="20">
+                        <img src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_1 }}" alt="logo" width="20" height="20">
                         <div class="ms-2 c-details my-0">
                             <h6 style="font-size: 12px" class="mb-0 text-body"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></h6>
                         </div>
@@ -343,7 +343,7 @@
                     <div class="form-group">
                         <div class="input-group mb-2">
                             <div class="input-group-prepend" style="border-radius:5px;">
-                                <div class="input-group-text" style="border-radius:5px 0px 0px 5px;; border-right:none;"><strong style="font-size:16px;">TOTAL</strong></div>
+                                <div class="input-group-text" style="border-radius:5px 0px 0px 5px; border-right:none;"><strong style="font-size:16px;">TOTAL</strong></div>
                             </div>
                             <input type="text" class="form-control text-end totalDonasi" name="totalDonasi" id="totalDonasiWeb"  style="border-radius:0px 5px 5px 0px; border-left:none; padding-left:0px; margin-left:-5px; font-weight:700; font-size:16px; color:#00a79d;" disabled value='Rp0'>
                         </div>
