@@ -32,70 +32,21 @@
                 <div class="row g-0">
                     <div class="col-lg-12 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative m-1">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->groupPhoto) }}" alt="" width="700" height="500"/>
+                            <img class="img-fluid w-100" src="https://lh3.googleusercontent.com/d/{{ $postgallery->gdrive_id }}" alt="" width="700" height="500"/>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo1) }}" alt="" />
+                    @for($i = 1; $i <= 12; $i++)
+                        @php $gdriveKey = 'gdrive_id_' . $i; @endphp
+                        @if ($postgallery->$gdriveKey)
+                        <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
+                            <div class="position-relative m-1 img-hover-zoom">
+                                <img class="img-fluid w-100" src="https://lh3.googleusercontent.com/d/{{ $postgallery->$gdriveKey }}" alt="Photo {{ $i }}" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo2) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo3) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo4) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo5) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo6) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo7) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo8) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo9) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo10) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo11) }}" alt="" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="position-relative m-1 img-hover-zoom">
-                            <img class="img-fluid w-100" src="{{ asset($postgallery->photo12) }}" alt="" />
-                        </div>
-                    </div>
+                        @endif
+                    @endfor
+
                     @if ($postgallery->linkEmbedYoutube == null)
 
                     @else
@@ -144,69 +95,19 @@
                     <div class="row g-0">
                         <div class="col-12 wow fadeIn" data-wow-delay="0.1s">
                             <div class="position-relative m-1">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->groupPhoto) }}" alt="" width="700" height="500"/>
+                                <img class="img-fluid w-100" src="https://lh3.googleusercontent.com/d/{{ $postgallery->gdrive_id }}" alt="" width="700" height="500"/>
                             </div>
                         </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo1) }}" alt="" />
+                        @for($i = 1; $i <= 12; $i++)
+                            @php $gdriveKey = 'gdrive_id_' . $i; @endphp
+                            @if ($postgallery->$gdriveKey)
+                            <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
+                                <div class="position-relative m-1 img-hover-zoom">
+                                    <img class="img-fluid w-100" src="https://lh3.googleusercontent.com/d/{{ $postgallery->$gdriveKey }}" alt="Photo {{ $i }}" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo2) }}" alt="" />
-                            </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo3) }}" alt="" />
-                            </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo4) }}" alt="" />
-                            </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo5) }}" alt="" />
-                            </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo6) }}" alt="" />
-                            </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo7) }}" alt="" />
-                            </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo8) }}" alt="" />
-                            </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo9) }}" alt="" />
-                            </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo10) }}" alt="" />
-                            </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo11) }}" alt="" />
-                            </div>
-                        </div>
-                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
-                            <div class="position-relative m-1 img-hover-zoom">
-                                <img class="img-fluid w-100" src="{{ asset($postgallery->photo12) }}" alt="" />
-                            </div>
-                        </div>
+                            @endif
+                        @endfor
                         @if ($postgallery->linkEmbedYoutube == null)
 
                         @else

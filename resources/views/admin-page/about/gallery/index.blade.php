@@ -33,7 +33,7 @@
                                     <td align='center'>{{ $postgallery->eventName }}</td>
                                     <td align='center'>{{ $postgallery->eventTheme }}</td>
                                     <td align='center'>
-                                        <img style="width: 100px;" src="{{ asset($postgallery->groupPhoto) }}" alt="" class="card-img"/>
+                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $postgallery->gdrive_id }}" alt="" class="card-img"/>
                                     </td>
                                     @if ($postgallery->linkEmbedYoutube == null)
                                         <td align='center'>Nothing</td>
