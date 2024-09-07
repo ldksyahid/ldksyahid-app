@@ -69,7 +69,7 @@
                             <br>
                             <div>
                                 @if ($data->poster == !null)
-                                <img id="framePoster" src="{{ asset($data->poster) }}" width="250px" height="150px" class="rounded mb-3 border"/>
+                                <img id="framePoster" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" width="250px" height="150px" class="rounded mb-3 border"/>
                                 @else
                                 <img id="framePoster" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="250px" height="150px" class="rounded mb-3 border"/>
                                 @endif
@@ -119,7 +119,7 @@
                                     <br>
                                     <div>
                                         @if ($data->logo_pj == !null)
-                                        <img id="frameLogo" src="{{ asset($data->logo_pj) }}" width="50%" class="rounded mb-3 border"/>
+                                        <img id="frameLogo" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_1 }}" width="50%" class="rounded mb-3 border"/>
                                         @else
                                         <img id="frameLogo" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" width="50%" class="rounded mb-3 border"/>
                                         @endif

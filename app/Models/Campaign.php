@@ -20,7 +20,7 @@ class Campaign extends Model
         return self::orderBy('created_at', 'desc')->with("donation")->get();
     }
 
-    public static function createCampaign($requestData, $provinsi, $kota, $targetBiaya, $pathPoster, $pathLogoPj)
+    public static function createCampaign($requestData, $provinsi, $kota, $targetBiaya, $uploadResultPoster, $uploadResultLogoPic)
     {
         return self::create([
             'judul' => $requestData['judul'],
@@ -33,8 +33,10 @@ class Campaign extends Model
             'kabar_terbaru' => $requestData['kabar_terbaru'],
             'deadline' => $requestData['deadline'],
             'tujuan' => $requestData['tujuan'],
-            'poster' => $pathPoster,
-            'logo_pj' => $pathLogoPj,
+            'poster' => !empty($uploadResultPoster['fileName']) ? $uploadResultPoster['fileName'] : null,
+            'gdrive_id' => !empty($uploadResultPoster['gdriveID']) ? $uploadResultPoster['gdriveID'] : null,
+            'logo_pj' => !empty($uploadResultLogoPic['fileName']) ? $uploadResultLogoPic['fileName'] : null,
+            'gdrive_id_1' => !empty($uploadResultLogoPic['gdriveID']) ? $uploadResultLogoPic['gdriveID'] : null,
             'nama_pj' => $requestData['nama_pj'],
             'telp_pj' => $requestData['telp_pj'],
             'link_pj' => $requestData['link_pj'],
@@ -81,12 +83,6 @@ class Campaign extends Model
         $campaign = Campaign::find($id);
 
         if ($campaign) {
-            if ($campaign->poster != null) {
-                File::delete($campaign->poster);
-            }
-            if ($campaign->logo_pj != null) {
-                File::delete($campaign->logo_pj);
-            }
 
             $donations = Donation::where('campaign_id', $campaign->id)->get();
             foreach ($donations as $donation) {
