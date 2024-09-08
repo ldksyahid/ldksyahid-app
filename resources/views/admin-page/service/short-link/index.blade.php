@@ -59,7 +59,7 @@
                                 <button class="btn btn-sm btn-primary" onclick="copyLink('{{ $item->url_key }}')">
                                     <i class="fa fa-copy small"></i>
                                 </button>
-                                <a href="{{ url($item->url_key) }}" target="_blank">{{ url($item->url_key) }}</a>
+                                <a href="{{ url($item->url_key) }}" target="_blank">{{ parse_url(url($item->url_key), PHP_URL_HOST) }}{{ parse_url(url($item->url_key), PHP_URL_PATH) }}</a>
                             </td>
                             <td align="center">{{ $item->visits->count() }}</td>
                             <td align="center">{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('YYYY') }} ({{ \Carbon\Carbon::parse( $item->created_at )->format('H:i T') }})</td>
@@ -111,10 +111,10 @@
 
             @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
             <div class="text-end mt-3">
-            <form id="bulkDeleteForm" action="{{ route('admin.service.shortlink.bulkDelete') }}" method="POST">
+                <form id="bulkDeleteForm" action="{{ route('admin.service.shortlink.bulkDelete') }}" method="POST">
                     @csrf
                     @method('POST')
-                    <button type="button" id="bulkDeleteBtn" class="btn btn-danger" style="display: none;">Bulk Delete</button>
+                    <button type="button" id="bulkDeleteBtn" class="btn btn-danger">Bulk Delete</button>
                 </form>
             </div>
             @endif
@@ -138,9 +138,10 @@
     });
 
     function copyLink(urlKey) {
-        const fullLink = `${baseUrl}/${urlKey}`;
+        const fullLink = new URL(`${baseUrl}/${urlKey}`);
+        const linkWithoutProtocol = `${fullLink.host}${fullLink.pathname}`;
         const input = document.createElement('input');
-        input.value = fullLink;
+        input.value = linkWithoutProtocol;
         document.body.appendChild(input);
         input.select();
         document.execCommand('copy');
@@ -163,13 +164,20 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    type: "get",
+                    type: "GET",
                     url: `{{ url('${id}/destroy') }}`,
                     success: function(data) {
-                        setTimeout(function () { location.reload(1); }, 300);
                         Toast.fire({
                             icon: 'success',
                             title: 'Shortlink has been deleted!'
+                        });
+                        setTimeout(function () { location.reload(); }, 300);
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Something went wrong.',
+                            icon: 'error'
                         });
                     }
                 });
@@ -177,67 +185,65 @@
         });
     }
 
-    function toggleBulkDeleteButton() {
+    function handleBulkDelete() {
         const checkboxes = document.querySelectorAll('input[name="ids[]"]:checked');
-        const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
-        bulkDeleteBtn.style.display = checkboxes.length > 0 ? 'inline-block' : 'none';
+        const ids = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+        if (ids.length === 0) {
+            alert('Please select at least one item to delete.');
+            return;
+        }
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: `{{ route('admin.service.shortlink.bulkDelete') }}`,
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        ids: ids
+                    },
+                    success: function(response) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Selected shortlinks have been deleted!'
+                        });
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Something went wrong.',
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('selectAll')?.addEventListener('change', function() {
             const checkboxes = document.querySelectorAll('input[name="ids[]"]');
             checkboxes.forEach(checkbox => checkbox.checked = this.checked);
-            toggleBulkDeleteButton();
         });
 
         document.querySelectorAll('input[name="ids[]"]').forEach(checkbox => {
-            checkbox.addEventListener('change', toggleBulkDeleteButton);
-        });
-
-        document.getElementById('bulkDeleteBtn')?.addEventListener('click', function() {
-            const checkboxes = document.querySelectorAll('input[name="ids[]"]:checked');
-            const ids = Array.from(checkboxes).map(checkbox => checkbox.value);
-
-            if (ids.length === 0) {
-                alert('Please select at least one item to delete.');
-                return;
-            }
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        type: "POST",
-                        url: `{{ route('admin.service.shortlink.bulkDelete') }}`,
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            ids: ids
-                        },
-                        success: function(response) {
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Selected shortlinks have been deleted!'
-                            });
-                            location.reload();
-                        },
-                        error: function(xhr) {
-                            Swal.fire({
-                                title: 'Error!',
-                                text: 'Something went wrong.',
-                                icon: 'error'
-                            });
-                        }
-                    });
-                }
+            checkbox.addEventListener('change', function() {
+                const anyChecked = document.querySelectorAll('input[name="ids[]"]:checked').length > 0;
+                document.getElementById('bulkDeleteBtn').disabled = !anyChecked;
             });
         });
+
+        document.getElementById('bulkDeleteBtn')?.addEventListener('click', handleBulkDelete);
     });
 
     $('#dataShortlinkTable').DataTable({
