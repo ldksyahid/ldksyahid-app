@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use AshAllenDesign\ShortURL\Models\ShortURL;
+use AshAllenDesign\ShortURL\Models\ShortURLVisit;
+use AshAllenDesign\ShortURL\Classes\Resolver;
 use AshAllenDesign\ShortURL\Classes\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -36,8 +38,16 @@ class ShortLinkController extends Controller
     public function destroy($id)
     {
         $url = ShortURL::find($id);
-        $url->url_key = request()->url;
-        $url->delete();
+        if (!empty($url)) {
+            $url->url_key = request()->url;
+            $visits = ShortURLVisit::where('short_url_id', $url->id)->get();
+            if (!empty($visits)) {
+                foreach ($visits as $visit) {
+                    $visit->delete();
+                }
+            }
+            $url->delete();
+        }
         return back()->with('success', 'URL deleted successfully.');
     }
 
@@ -46,23 +56,34 @@ class ShortLinkController extends Controller
         $ids = $request->input('ids');
 
         if (!empty($ids)) {
-            ShortURL::whereIn('id', $ids)->delete();
             foreach ($ids as $id) {
-                $shortUrl = ShortURL::find($id);
-                if ($shortUrl) {
-                    $shortUrl->url_key = null;
-                    $shortUrl->save();
+                $url = ShortURL::find($id);
+                if (!empty($url)) {
+                    $visits = ShortURLVisit::where('short_url_id', $url->id)->get();
+                    if (!empty($visits)) {
+                        foreach ($visits as $visit) {
+                            $visit->delete();
+                        }
+                    }
+                    foreach ($visits as $visit) {
+                        $visit->delete();
+                    }
+                    $url->delete();
                 }
             }
             return response()->json(['success' => 'Selected shortlinks have been deleted!']);
         }
-
         return response()->json(['error' => 'No items selected for deletion.'], 400);
     }
 
-    public function redirect($shortURLKey)
+    public function redirect($shortURLKey, Resolver $resolver)
     {
         $shortURL = ShortURL::where('url_key', $shortURLKey)->firstOrFail();
+
+        if (!empty($shortURL)) {
+            $resolver->handleVisit(request(), $shortURL);
+        }
+
         return Redirect::to($shortURL->destination_url);
     }
 }
