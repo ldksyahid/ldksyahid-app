@@ -21,7 +21,7 @@
                 <div class="row g-0">
                     <div class="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative">
-                            <img class="img-fluid w-100" src="https://source.unsplash.com/500x600?me" alt="" />
+                            <img class="img-fluid w-100" src="https://loremflickr.com/200/200/mosque" alt="" />
                             <div class="facts-overlay">
                                 <h1 class="display-1">01</h1>
                                 <h4 class="text-white mb-3">Alamat Lengkap</h4>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative">
-                            <img class="img-fluid w-100" src="https://source.unsplash.com/500x600?islamic" alt="" />
+                            <img class="img-fluid w-100" src="https://loremflickr.com/200/200/makkah" alt="" />
                             <div class="facts-overlay text-center">
                                 <h1 class="display-1">02</h1>
                                 <h4 class="text-white mb-3">Kontak</h4>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative">
-                            <img class="img-fluid w-100" src="https://source.unsplash.com/500x600?makkah" alt="" />
+                            <img class="img-fluid w-100" src="https://loremflickr.com/200/200/madinah" alt="" />
                             <div class="facts-overlay text-center">
                                 <h1 class="display-1">03</h1>
                                 <h4 class="text-white mb-3">Alamat Email</h4>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative">
-                            <img class="img-fluid w-100" src="https://source.unsplash.com/500x600?madinah" alt="" />
+                            <img class="img-fluid w-100" src="https://loremflickr.com/200/200/palestine" alt="" />
                             <div class="facts-overlay text-end">
                                 <h1 class="display-1">04</h1>
                                 <h4 class="text-white mb-3">Sosial Media</h4>
