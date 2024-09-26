@@ -30,11 +30,11 @@ class HomeController extends Controller
         if ($agent->isMobile()) {
             $postnews= News::orderBy('datepublish','desc')->limit(5)->get();
             $postarticle= Article::orderBy('dateevent','desc')->limit(4)->get();
-            $postevent= Event::orderBy('created_at','desc')->limit(4)->get();
+            $postevent= Event::orderBy('start','desc')->limit(4)->get();
         } else {
             $postnews= News::orderBy('datepublish','desc')->limit(3)->get();
             $postarticle= Article::orderBy('dateevent','desc')->limit(3)->get();
-            $postevent= Event::orderBy('created_at','desc')->limit(3)->get();
+            $postevent= Event::orderBy('start','desc')->limit(3)->get();
         }
 
         $postgallery= Gallery::orderBy('created_at','desc')->limit(1)->get();
