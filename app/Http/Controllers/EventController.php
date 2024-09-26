@@ -14,7 +14,7 @@ class EventController extends Controller
 
     public function index()
     {
-        $postevent = Event::orderBy('created_at','desc')->get();
+        $postevent = Event::orderBy('start','desc')->get();
         return view('landing-page.event.index', compact('postevent'), ["title" => "Kegiatan"]);
     }
 
