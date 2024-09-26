@@ -4,7 +4,7 @@
 <meta property="og:title" content="{{ $postevent->title }}" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="{{url()->current()}}" />
-<meta property="og:image" content="{{ asset($postevent->poster) }}" />
+<meta property="og:image" content="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" />
 <meta property="og:description" content="{!!  substr(strip_tags($postevent->broadcast), 0, 100) !!}" />
 @endsection
 
