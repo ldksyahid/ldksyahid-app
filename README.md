@@ -146,7 +146,7 @@ php artisan serve
 ## Version
 | Version | Date         | Update |
 | :---:   |     :---:    |  ---   |
-| `1.2.5`| `2023-12-26` | <ul><li>Add New Design Ekspresi 2024</li><li>New Logic Store Image in Google Drive</li><li>Add Field Link Documentation</li></ul> |
+| `1.2.5`| `2024-11-07` | <ul><li>Add New Design Ekspresi 2024</li><li>New Logic Store Image in Google Drive</li><li>Add Field Link Documentation</li></ul> |
 | `1.2.0`| `2023-12-26` | <ul><li>Addition and adjustment of the Machine Learning Donation Celshahid Dashboard Feature</li></ul> |
 | `1.1.0`| `2023-10-25` | <ul><li>Add KTA LDK Syahid Feature</li><li>New Mobile Responsive CMS Admin</li></ul> |
 | `1.0.3`| `2023-09-28` | <ul><li>Add Ekspresi Content and Develop Celsyahid Machine Learning</li></ul> |
