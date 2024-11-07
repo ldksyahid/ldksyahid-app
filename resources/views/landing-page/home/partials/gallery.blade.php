@@ -29,6 +29,11 @@
                         {{ $postgallery->eventDescription }}
                     </p>
                 </div>
+                @if (!empty($postgallery->linkDoc))
+                <div class="mb-3">
+                    <p>Link Dokumentasi : <a href="{{ $postgallery->linkDoc }}" target="_blank" rel="noopener noreferrer">{{ \Illuminate\Support\Str::limit($postgallery->linkDoc, 70, '...') }}</a></p>
+                </div>
+                @endif
                 <div class="row g-0">
                     <div class="col-lg-12 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="position-relative m-1">
@@ -81,15 +86,20 @@
                         Dokumentasi <br> Kegiatan Kami
                     </h1>
                 </div>
-                <p class="mb-0 mt-2 mobile-font-2 text-justify">
+                <p class="mb-0 mt-2 mobile-font-2 text-center">
                     Dokumentasi Terbaru dari kegiatan UKM LDK Syahid yang memberikan banyak Manfaat untuk Umat
                 </p>
             </div>
             <div class="mt-3">
                 @forelse($postgallery as $key => $postgallery)
-                <div class="mb-3 text-center">
-                    <h6 class="text-body mobile-font-1">{{ $postgallery->eventName }}</h6>
+                <div class="mb-3">
+                   <h6 class="text-body mobile-font-1 text-center">{{ $postgallery->eventName }}</h6>
                     <h3 class="mb-0 mobile-font-2">{{ $postgallery->eventTheme }}</h3>
+                    @if (!empty($postgallery->linkDoc))
+                    <div class="mobile-font-1">
+                        <p>Link Dokumentasi : <a href="{{ $postgallery->linkDoc }}" target="_blank" rel="noopener noreferrer">{{ \Illuminate\Support\Str::limit($postgallery->linkDoc, 40, '...') }}</a></p>
+                    </div>
+                    @endif
                 </div>
                 <div class="col-12 mb-3 text-start" data-wow-delay="0.1s">
                     <div class="row g-0">

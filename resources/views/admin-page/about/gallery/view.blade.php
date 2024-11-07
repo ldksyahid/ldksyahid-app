@@ -17,13 +17,17 @@
                             <label for="inputEventTheme" class="form-label required">Event Theme</label>
                             <input type="text" class="form-control" id="inputEventTheme" name='eventTheme' value="{{old('eventTheme', $postgallery->eventTheme)}}" disabled>
                         </div>
-                        <div class="mb-3 col-12 col-lg-6">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputEventDescription" class="form-label required">Event Description</label>
                             <textarea class="form-control" name="eventDescription" id="inputEventDescription" disabled>{{$postgallery->eventDescription}}</textarea>
                         </div>
-                        <div class="mb-3 col-12 col-lg-6">
+                        <div class="mb-3 col-12 col-lg-4">
                             <label for="inputLinkEmbedYoutube" class="form-label">Embed Youtube Link</label>
                             <input type="text" class="form-control" id="inputLinkEmbedYoutube" name='linkEmbedYoutube' value="{{old('linkEmbedYoutube', $postgallery->linkEmbedYoutube)}}" disabled>
+                        </div>
+                        <div class="mb-5 col-12 col-lg-4">
+                            <label for="inputLinkDocinputLinkDoc" class="form-label">Documentation Link</label>
+                            <input type="text" class="form-control" id="inputLinkDoc" name='linkDoc' value="{{old('linkDoc', $postgallery->linkDoc)}}" disabled>
                         </div>
                         <div class="mb-3 col-12">
                             <label for="groupPhoto" class="form-label required">Group Photo</label>

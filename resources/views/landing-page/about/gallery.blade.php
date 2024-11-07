@@ -26,6 +26,11 @@
                         {{ $post->eventDescription }}
                     </p>
                 </div>
+                @if (!empty($post->linkDoc))
+                <div class="mb-3">
+                    <p>Link Dokumentasi : <a href="{{ $post->linkDoc }}" target="_blank" rel="noopener noreferrer">{{ \Illuminate\Support\Str::limit($post->linkDoc, 80, '...') }}</a></p>
+                </div>
+                @endif
 
                 <div class="row g-0">
                     <div class="col-lg-12 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
