@@ -59,6 +59,7 @@ class GalleryController extends Controller
             "eventTheme" => $request->input("eventTheme"),
             "eventDescription" => $request->input("eventDescription"),
             "linkEmbedYoutube" => $request->input("linkEmbedYoutube"),
+            "linkDoc" => $request->input("linkDoc"),
             'groupPhoto' => !empty($uploadResultGroupPhoto) ? $uploadResultGroupPhoto['fileName'] : null,
             'gdrive_id' => !empty($uploadResultGroupPhoto) ? $uploadResultGroupPhoto['gdriveID'] : null,
         ];
@@ -142,6 +143,7 @@ class GalleryController extends Controller
             "eventTheme" => $request["eventTheme"],
             "eventDescription" => $request["eventDescription"],
             "linkEmbedYoutube" => $request["linkEmbedYoutube"],
+            "linkDoc" => $request["linkDoc"],
         ]);
 
         toast('Gallery has been edited!', 'success')->autoClose(1500)->width('400px');
