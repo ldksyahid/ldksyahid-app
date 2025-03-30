@@ -18,7 +18,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col" class="text-center">No</th>
-                                    <th scope="col" class="text-center">Picture</th>
+                                    <th scope="col" class="text-center">Title</th>
                                     <th scope="col" class="text-center">Button Name</th>
                                     <th scope="col" class="text-center">Button Link</th>
                                     <th scope="col" class="text-center">Action</th>
@@ -28,9 +28,7 @@
                                 @forelse($postjumbotron as $key => $postjumbotron)
                                 <tr>
                                     <td scope="row" align='center'>{{$key + 1}}</td>
-                                    <td align='center'>
-                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $postjumbotron->gdrive_id }}" alt="{{$postjumbotron->title}}" class="card-img"/>
-                                    </td>
+                                    <td align='center'>{{$postjumbotron->title}}</td>
                                     @if ($postjumbotron->btnname != null || $postjumbotron->btnlink != null)
                                         <td align='center'>{{$postjumbotron->btnname}}</td>
                                         <td align='center'><a href="{{$postjumbotron->btnlink}}" target="_blank">{{$postjumbotron->btnlink}}</a></td>
