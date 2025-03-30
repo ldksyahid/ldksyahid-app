@@ -10,6 +10,15 @@
                 @csrf
                 @method('POST')
                     <div class="row">
+                        <div class="mb-3 col-12">
+                            <div class="col-6">
+                                <label for="inputTitleJumbotron" class="form-label required">Title</label>
+                                <input type="text" class="form-control" id="inputTitleJumbotron" name='title' required>
+                                <div class="invalid-feedback">
+                                    This is a required question
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-12 col-lg-4">
                             <label for="formFile" class="form-label required">Picture <span class="small">(1440 x 560 Pixel)</span></label>
                             <br>

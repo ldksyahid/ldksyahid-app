@@ -21,7 +21,6 @@
                                     <th scope="col" class="text-center">No</th>
                                     <th scope="col" class="text-center">Name</th>
                                     <th scope="col" class="text-center">Profession</th>
-                                    <th scope="col" class="text-center">Photo Profile</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -31,9 +30,6 @@
                                     <td scope="row" align='center'>{{$key + 1}}</td>
                                     <td align="center">{{ $posttestimony->name }}</td>
                                     <td align="center">{{ $posttestimony->profession }}</td>
-                                    <td align="center">
-                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $posttestimony->gdrive_id }}" alt="{{$posttestimony->name}}" class="card-img"/>
-                                    </td>
                                     <td align="center">
                                         <a href="/admin/testimony/{{$posttestimony->id}}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
                                         <button type="submit" onclick="deleteConfirmationTestimony({{$posttestimony->id}})" id="delete-testimony" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>

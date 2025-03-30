@@ -24,7 +24,6 @@
                                     <th scope="col" class="text-center">Publish Date</th>
                                     <th scope="col" class="text-center">Writer</th>
                                     <th scope="col" class="text-center">Editor</th>
-                                    <th scope="col" class="text-center">Poster</th>
                                     <th scope="col" class="text-center">Embed anyflip</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>
@@ -38,9 +37,6 @@
                                     <td align='center'>{{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('dddd') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postarticle->dateevent )->format('Y') }}</td>
                                     <td align='center'>{{ $postarticle->writer }}</td>
                                     <td align='center'>{{ $postarticle->editor }}</td>
-                                    <td align='center'>
-                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $postarticle->gdrive_id }}" alt="{{$postarticle->title}}" class="card-img"/>
-                                    </td>
                                     <td align='center'><a href="{{ $postarticle->embedpdf }}" target="_blank">{{ $postarticle->embedpdf }}</a></td>
                                     <td align="center">
                                             <a href="/admin/article/{{ $postarticle->id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
