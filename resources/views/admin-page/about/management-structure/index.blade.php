@@ -22,8 +22,6 @@
                                     <th scope="col" class="text-center">Batch</th>
                                     <th scope="col" class="text-center">Period</th>
                                     <th scope="col" class="text-center">Structure Name</th>
-                                    <th scope="col" class="text-center">Logo</th>
-                                    <th scope="col" class="text-center">Image</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -34,12 +32,6 @@
                                     <td align='center'>{{ $data->batch }}</td>
                                     <td align='center'>{{ $data->period }}</td>
                                     <td align='center'>{{ $data->structureName }}</td>
-                                    <td align='center'>
-                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="{{$data->structureName}}" class="card-img"/>
-                                    </td>
-                                    <td align='center'>
-                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}" alt="{{$data->structureName}}" class="card-img"/>
-                                    </td>
                                     <td align="center">
                                         <a href="/admin/about/structure/{{ $data->id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
                                         <button type="submit" onclick="deleteConfirmationStructure({{ $data->id }})" id="delete-structure" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>
