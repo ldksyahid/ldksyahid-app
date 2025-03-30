@@ -6,9 +6,9 @@ use App\Models\User;
 use App\Models\News;
 use App\Models\Article;
 use App\Models\Event;
+use App\Models\MsKTALDKSyahid;
 use AshAllenDesign\ShortURL\Models\ShortURL;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
@@ -20,6 +20,7 @@ class DashboardController extends Controller
         $articleCount = Article::count();
         $eventCount = Event::count();
         $shortLinkCount = ShortURL::count();
+        $idCardCount = MsKTALDKSyahid::count();
 
         // Ambil data waktu solat dari API Kemenag
         $cityId = 1301; // ID kota untuk Jakarta Pusat (ganti sesuai lokasi)
@@ -36,6 +37,7 @@ class DashboardController extends Controller
             'eventCount' => $eventCount,
             'shortLinkCount' => $shortLinkCount,
             'prayerTimes' => $prayerTimes,
+            'idCardCount' => $idCardCount,
         ]);
     }
 }

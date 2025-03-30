@@ -11,6 +11,7 @@
                 ['icon' => 'fa-book-open', 'title' => 'Articles', 'count' => $articleCount],
                 ['icon' => 'fa-newspaper', 'title' => 'News', 'count' => $newsCount],
                 ['icon' => 'fa-link', 'title' => 'Shortlinks', 'count' => $shortLinkCount],
+                ['icon' => 'fa-id-card', 'title' => 'ID Cards', 'count' => $idCardCount],
             ];
         @endphp
         @foreach ($widgets as $widget)
@@ -29,13 +30,13 @@
         <div class="col-sm-12 col-xl-12">
             <div class="bg-white shadow-sm rounded p-4">
                 <h4 class="text-center mb-3">Prayer Times - Jakarta</h4>
-                <div class="row text-center">
+                            <div class="row text-center">
                     @php
                         $prayers = ['Imsak', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
                         $icons = ['fa-moon', 'fa-sun', 'fa-sun', 'fa-cloud-sun', 'fa-moon', 'fa-star'];
                     @endphp
                     @foreach ($prayers as $index => $name)
-                        <div class="col-2">
+                        <div class="col-6 col-md-4 col-lg-2 mb-2">
                             <div class="bg-light shadow-sm rounded p-3">
                                 <i class="fa {{ $icons[$index] }} fa-2x text-primary mb-2"></i>
                                 <h6 class="mb-1">{{ $name }}</h6>
