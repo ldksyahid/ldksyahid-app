@@ -21,7 +21,6 @@
                                     <th scope="col" class="text-center">No</th>
                                     <th scope="col" class="text-center">Event Name</th>
                                     <th scope="col" class="text-center">Event Theme</th>
-                                    <th scope="col" class="text-center">Group Photo</th>
                                     <th scope="col" class="text-center">Embed Youtube Link</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>
@@ -32,9 +31,6 @@
                                     <td scope="row" align='center'>{{ $key+1 }}</td>
                                     <td align='center'>{{ $postgallery->eventName }}</td>
                                     <td align='center'>{{ $postgallery->eventTheme }}</td>
-                                    <td align='center'>
-                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $postgallery->gdrive_id }}" alt="" class="card-img"/>
-                                    </td>
                                     @if ($postgallery->linkEmbedYoutube == null)
                                         <td align='center'>Nothing</td>
                                     @else
