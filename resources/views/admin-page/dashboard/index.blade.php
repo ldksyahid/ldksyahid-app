@@ -11,7 +11,6 @@
                 ['icon' => 'fa-book-open', 'title' => 'Articles', 'count' => $articleCount],
                 ['icon' => 'fa-newspaper', 'title' => 'News', 'count' => $newsCount],
                 ['icon' => 'fa-link', 'title' => 'Shortlinks', 'count' => $shortLinkCount],
-                ['icon' => 'fa-eye', 'title' => 'Visitors', 'count' => $visitorCount],
             ];
         @endphp
         @foreach ($widgets as $widget)
