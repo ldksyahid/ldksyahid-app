@@ -24,7 +24,6 @@
                                 <th scope="col" class="text-center">Position</th>
                                 <th scope="col" class="text-center">Instagram Link</th>
                                 <th scope="col" class="text-center">Linkedin Link</th>
-                                <th scope="col" class="text-center">Photo Profile</th>
                                 <th scope="col" class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -37,9 +36,6 @@
                                 <td align='center'>{{ $data->position }}</td>
                                 <td align='center'><a href="{{ $data->linkInstagram }}" target="_blank" rel="noopener noreferrer">{{ $data->linkInstagram }}</a></td>
                                 <td align='center'><a href="{{ $data->linkLinkedin }}" target="_blank" rel="noopener noreferrer">{{ $data->linkLinkedin }}</a></td>
-                                <td align='center'>
-                                    <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="{{$data->name}}" class="card-img"/>
-                                </td>
                                 <td align="center">
                                     <a href="/admin/about/itsupport/{{ $data->id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
                                     <button type="submit" onclick="deleteConfirmationITSupport({{ $data->id }})" id="delete-itsupport" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>

@@ -37,6 +37,7 @@ class JumbotronController extends Controller
             "sentence" => "none",
             "btnname" => $request["buttonname"],
             "btnlink" => $request["buttonlink"],
+            "title" => $request["title"],
             'picture' => $uploadResult['fileName'],
             'gdrive_id' => $uploadResult['gdriveID'],
             "textalign" => "start",
@@ -86,6 +87,7 @@ class JumbotronController extends Controller
             "sentence" => "none",
             "btnname" => $request["buttonname"],
             "btnlink" => $request["buttonlink"],
+            "title" => $request["title"],
             "textalign" => "start",
         ]);
 

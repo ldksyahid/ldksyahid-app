@@ -24,7 +24,6 @@
                                     <th scope="col" class="text-center">No</th>
                                     <th scope="col" class="text-center">Title</th>
                                     <th scope="col" class="text-center">Category</th>
-                                    <th scope="col" class="text-center">Poster</th>
                                     <th scope="col" class="text-center">PIC</th>
                                     <th scope="col" class="text-center">Cost Target</th>
                                     <th scope="col" class="text-center">Deadline</th>
@@ -37,9 +36,6 @@
                                     <td scope="row" align='center'>{{$key + 1}}</td>
                                     <td align='center'>{{ $data->judul }}</td>
                                     <td align="center">{{ $data->kategori }}</td>
-                                    <td align="center">
-                                        <img style="width: 125px;" class="rounded" src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}" alt="{{ $data->poster }}"/>
-                                    </td>
                                     @if ($data->nama_pj != null && $data->link_pj != null)
                                         <td align="center"><a href="{{ $data->link_pj }}" target="_blank">{{ $data->nama_pj }}</a></td>
                                     @else
