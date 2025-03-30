@@ -9,6 +9,12 @@
                 <h5 class="mb-4">Preview Jumbotron</h5>
                 <form role="form" action='#' method='post' enctype="multipart/form-data">
                     <div class="row">
+                        <div class="mb-3 col-12">
+                            <div class="col-6">
+                                <label for="inputTitleJumbotron" class="form-label required">Title</label>
+                                < <input type="text" class="form-control" id="inputTitleJumbotron" name='title' value="{{old('title', $postjumbotron->title)}}" required disabled>
+                            </div>
+                        </div>
                         <div class="col-12 col-lg-4">
                             <label for="formFile" class="form-label required">Picture <span class="small">(1440 x 560 Pixel)</span></label>
                             <br>
