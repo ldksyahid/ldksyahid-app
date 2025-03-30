@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" href="{{asset('Images/Logos/logoldksyahid.png')}}">
+    <link rel="icon" href="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1">
     <title>Kami akan segera kembali!</title>
     <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
@@ -18,7 +18,7 @@
         <div class="container">
             <nav class="navbar navbar-dark bg-transparenet">
                 <a class="navbar-brand">
-                    <img src="{{asset('Images/Logos/logoldksyahid.png')}}" alt="logo">
+                    <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="logo">
                 </a>
                 <span class="navbar-text ml-auto d-none d-sm-inline-block">+62 851-5936-0504</span>
                 <span class="navbar-text d-none d-sm-inline-block">ldk@uinjkt.ac.id</span>
