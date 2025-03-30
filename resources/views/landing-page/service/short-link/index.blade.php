@@ -112,9 +112,9 @@
                     <div class="col-sm-6 d-flex wow fadeIn mt-5" data-wow-delay="0.3s">
                         <i class="fa fa-whatsapp fa-3x text-primary flex-shrink-0 me-3"></i>
                         <div class="row">
-                            <h6 class="mb-0"><a href="https://api.whatsapp.com/send?phone=+62895629660307&text=*%5BFOLLOW%20UP%20LAYANAN%20PERPENDEK%20URL%5D*%0A%0A_Assalammu%27alaikum_%0A%0AIzin%20untuk%20*Memfollow%20up%20Layanan%20Perpendek%20URL*%20dan%20saya%20telah%20mengisi%20formulir%20tersebut%0A%0A_Terimakasih%20Sebelumnya_%0A_Wassalammua%27laikum_%0A%0A%23KitaAdalahSaudara%0A%23LDKSyahid%0A%23UINJakarta" target="_blank">Haris Rizki</a></h6><br>
-                            <!-- <h6 class="mb-0"><a href="https://api.whatsapp.com/send?phone=+62895629660307&text=*%5BFOLLOW%20UP%20LAYANAN%20PERPENDEK%20URL%5D*%0A%0A_Assalammu%27alaikum_%0A%0AIzin%20untuk%20*Memfollow%20up%20Layanan%20Perpendek%20URL*%20dan%20saya%20telah%20mengisi%20formulir%20tersebut%0A%0A_Terimakasih%20Sebelumnya_%0A_Wassalammua%27laikum_%0A%0A%23KitaAdalahSaudara%0A%23LDKSyahid%0A%23PijarAskara%0A%23UINJakarta" target="_blank">Haris Rizki</a></h6><br> -->
-                            <p class="mb-0">+6287874371243</p>
+                            <h6 class="mb-0"><a href="https://api.whatsapp.com/send?phone=+6285795323281&text=*%5BFOLLOW%20UP%20LAYANAN%20PERPENDEK%20URL%5D*%0A%0A_Assalammu%27alaikum_%0A%0AIzin%20untuk%20*Memfollow%20up%20Layanan%20Perpendek%20URL*%20dan%20saya%20telah%20mengisi%20formulir%20tersebut%0A%0A_Terimakasih%20Sebelumnya_%0A_Wassalammua%27laikum_%0A%0A%23KitaAdalahSaudara%0A%23LDKSyahid%0A%23UINJakarta" target="_blank">ARDIKA DEWA NUGROH0</a></h6><br>
+                            <!-- <h6 class="mb-0"><a href="https://api.whatsapp.com/send?phone=+6285795323281&text=*%5BFOLLOW%20UP%20LAYANAN%20PERPENDEK%20URL%5D*%0A%0A_Assalammu%27alaikum_%0A%0AIzin%20untuk%20*Memfollow%20up%20Layanan%20Perpendek%20URL*%20dan%20saya%20telah%20mengisi%20formulir%20tersebut%0A%0A_Terimakasih%20Sebelumnya_%0A_Wassalammua%27laikum_%0A%0A%23KitaAdalahSaudara%0A%23LDKSyahid%0A%23PijarAskara%0A%23UINJakarta" target="_blank">Haris Rizki</a></h6><br> -->
+                            <p class="mb-0">+62 857-9532-3281</p>
                         </div>
                     </div>
                     <p class="mb-0 mt-5">

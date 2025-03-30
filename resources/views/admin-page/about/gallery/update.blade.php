@@ -149,5 +149,3 @@ function preview12() {
 }
 </script>
 @endsection
-
-

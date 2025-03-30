@@ -140,7 +140,7 @@ class DonationSeeder extends Seeder
             }
         }
 
-        for ($i = 0; $i < 10000 - count($emailsAndCounts); $i++) {
+        for ($i = 0; $i < 5000 - count($emailsAndCounts); $i++) {
             $nameParts = explode(' ', $faker->name);
             $firstName = strtolower($nameParts[0]);
             $lastName = strtolower($nameParts[1] ?? '');
