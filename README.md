@@ -4,7 +4,7 @@
   <img src="https://laravel.com/img/logomark.min.svg" width="100px">
   </div>
   <br>
-  <img src="public/Images/Logos/logoldksyahid.png" alt="ldk-logo" width="250px"/>
+  <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="ldk-logo" width="250px"/>
   <br>
   <i>#KitaAdalahSaudara</i>
   <br>
