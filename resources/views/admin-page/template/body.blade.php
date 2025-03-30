@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- Off This Meta For Development --}}
-    {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> --}}
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <title>Admin Panel &#9679; {{ Auth::User()->name }}</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">

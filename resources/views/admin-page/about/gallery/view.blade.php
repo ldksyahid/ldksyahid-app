@@ -71,6 +71,3 @@
 </div>
 <!-- Form End -->
 @endsection
-
-
-

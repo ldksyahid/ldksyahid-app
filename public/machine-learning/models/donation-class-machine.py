@@ -5,22 +5,22 @@ from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 import json
+from collections import Counter
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 
 ######## AMBIL DATA QUERY UNTUK MEMBUAT MODEL ########
 # Koneksi ke database
 config = {
-    "host": "127.0.0.1",
-    "user": "root",
-    "password": "",
-    "database": "ldksyahid_db",
-    "port": 3306  # Ganti dengan port yang sesuai
+    'host': "localhost",
+    'user': "ldksyah1",
+    'password': "7@O2(p0vqYRHu1",
+    'database': "ldksyah1_ldksyahid_db"
 }
 conn = mysql.connector.connect(**config)
 
 # Query dataset donasi yang sudah dibayar
-query_dataset = "SELECT * FROM ldksyahid_db.ms_donationdataset a WHERE a.payment_status = 'PAID'"
+query_dataset = "SELECT * FROM ldksyah1_ldksyahid_db.ms_donationdataset a WHERE a.payment_status = 'PAID'"
 cursor = conn.cursor()
 cursor.execute(query_dataset)
 fetch_dataset = cursor.fetchall()
@@ -65,7 +65,7 @@ classification_labels = (dataset['donation_class']).astype(int)
 X_train, X_test, y_train, y_test = train_test_split(scaled_features, classification_labels, test_size=0.2, random_state=0)
 
 # Inisialisasi model SVM
-svm_model = SVC(kernel='poly', C=10, gamma=1)
+svm_model = SVC(kernel='linear')
 
 # Latih model SVM
 svm_model.fit(X_train, y_train)
@@ -79,7 +79,7 @@ print(f"SVM Accuracy: {accuracy:.2f}%")
 
 
 ######## AMBIL DATA QUERY UNTUK PREDIKSI ########
-query_donations = "SELECT * FROM ldksyahid_db.donations a WHERE a.payment_status = 'PAID'"
+query_donations = "SELECT * FROM ldksyah1_ldksyahid_db.donations a WHERE a.payment_status = 'PAID'"
 cursor = conn.cursor()
 cursor.execute(query_donations)
 fetch_donations = cursor.fetchall()
@@ -121,7 +121,7 @@ bar_plot_data = {
 }
 
 # Save bar plot data to JSON file
-with open('public/machine-learning/output/bar_plot_donation_class.json', 'w') as f:
+with open('/home/ldksyah1/public_html/public/machine-learning/output/bar_plot_donation_class.json', 'w') as f:
     json.dump(bar_plot_data, f)
 
 print("Bar plot donation class data has been saved to JSON file.")
@@ -172,7 +172,7 @@ bar_plot_json = {
     'donor_count': donation_count['donor_count'].tolist()
 }
 
-with open('public/machine-learning/output/bar_plot_count_age_donation.json', 'w') as json_file:
+with open('/home/ldksyah1/public_html/public/machine-learning/output/bar_plot_count_age_donation.json', 'w') as json_file:
     json.dump(bar_plot_json, json_file)
 
 print("Bar plot count age donation data has been saved to JSON file.")
@@ -185,7 +185,7 @@ age_category_counts = new_data_df['age_category'].value_counts()
 age_category_dict = age_category_counts.to_dict()
 
 # Simpan ke dalam file JSON
-with open('public/machine-learning/output/pie_chart_age_category_counts.json', 'w') as file:
+with open('/home/ldksyah1/public_html/public/machine-learning/output/pie_chart_age_category_counts.json', 'w') as file:
     json.dump(age_category_dict, file)
 
 print("Pie chart age category counts data has been saved to JSON file.")

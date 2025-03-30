@@ -13,7 +13,8 @@ class ShortLinkController extends Controller
 {
     public function index()
     {
-        $urls = ShortURL::latest()->get();
+        // $urls = ShortURL::latest()->get();
+        $urls = ShortURL::latest()->take(100)->get();
         return view('admin-page.service.short-link.index', compact('urls'))->with("title", "Services");
     }
 
