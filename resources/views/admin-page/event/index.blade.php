@@ -20,7 +20,6 @@
                                 <tr>
                                     <th scope="col" class="text-center">No</th>
                                     <th scope="col" class="text-center">Title</th>
-                                    <th scope="col" class="text-center">Poster</th>
                                     <th scope="col" class="text-center">Event Organizer</th>
                                     <th scope="col" class="text-center">Date Event</th>
                                     <th scope="col" class="text-center">Link Regist</th>
@@ -32,9 +31,6 @@
                                 <tr>
                                     <td scope="row" align='center'>{{$key + 1}}</td>
                                     <td align='center'>{{ $postevent->title }}</td>
-                                    <td align='center'>
-                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" class="card-img"/>
-                                    </td>
                                     <td align='center'>{{ $postevent->division }}</td>
                                     @if ($postevent->start != null)
                                     <td align='center'>{{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('dddd') }} {{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->start )->format('Y') }}</td>

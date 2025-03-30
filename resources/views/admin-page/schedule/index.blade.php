@@ -22,7 +22,6 @@
                                     <th scope="col" class="text-center">Title</th>
                                     <th scope="col" class="text-center">Month</th>
                                     <th scope="col" class="text-center">Year</th>
-                                    <th scope="col" class="text-center">Picture</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -33,9 +32,6 @@
                                     <td align='center'>{{ $postschedule->title }}</td>
                                     <td align='center'>{{ $postschedule->month }}</td>
                                     <td align='center'>{{ $postschedule->year }}</td>
-                                    <td align='center'>
-                                        <img style="width: 100px;" src="https://lh3.googleusercontent.com/d/{{ $postschedule->gdrive_id }}" alt="{{$postschedule->title}}" class="card-img"/>
-                                    </td>
                                     <td align="center">
                                         <a href="/admin/schedule/{{$postschedule->id}}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
                                         <button type="submit" onclick="deleteConfirmationSchedule({{ $postschedule->id }})" id="delete-schedule" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>
