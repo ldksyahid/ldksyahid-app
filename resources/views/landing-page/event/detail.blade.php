@@ -196,7 +196,7 @@
 <div class="container-xxl py-5">
     <div class="container">
         <div class="text-center mb-4">
-            <img src="{{ asset($postevent->poster) }}" alt="{{ $postevent->title }}" style="border-radius: 5px;" class="img-fluid shadow" width="65%">
+            <img src="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" style="border-radius: 5px;" class="img-fluid shadow" width="65%">
         </div>
         <div class="mb-4">
             @if ($postevent->tag != null)

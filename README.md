@@ -4,7 +4,7 @@
   <img src="https://laravel.com/img/logomark.min.svg" width="100px">
   </div>
   <br>
-  <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="ldk-logo" width="250px"/>
+  <img src="public/Images/Logos/logoldksyahid.png" alt="ldk-logo" width="250px"/>
   <br>
   <i>#KitaAdalahSaudara</i>
   <br>
@@ -12,7 +12,7 @@
 
 <br>
 <div align="center">
-<img src="https://img.shields.io/badge/version-v1.2.5-blue" />
+<img src="https://img.shields.io/badge/version-v1.0.2-blue" />
 <img src="https://img.shields.io/badge/license-LDK Syahid-green" />
 <img src="https://img.shields.io/badge/contributors-11-brightgreen" />
 </div>
@@ -55,57 +55,11 @@ git clone https://github.com/ldksyahid/ldksyahid-app.git
 
 <b>Create Database</b> 
 <br>
-<ol>
-    <li>Run Module Apache and MySQL in xampp and open PHPMyAdmin</li>
-    <li>Create New Schema <b>ldksyahid_db</b></li>
-</ol>
+Run Module Apache and MySQL in xampp and open PHPMyAdmin to create database `ldksyahid_db` and then import database from <a href="https://drive.google.com/drive/folders/1EWyRlyuJNta8OeegRDapp_optXfPEPG_?usp=sharing" target="_blank" rel="noopener noreferrer">latest database</a> 
 
-<b>.env</b> 
+<b>Vendor</b> 
 <br>
-<ol>
-    <li>Copy paste ".env.example" and rename to ".env"</li>
-    <li>Adjust the database connection environment to the schema you have created</li>
-</ol>
-
-```bash
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=ldksyahid_db
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-<b>Composer</b>
-<br>
-Run Composer Install in directory `ldksyahid-app/`
-```bash
-composer install
-```
-
-<b>Migration</b>
-<br>
-Run migrations in directory `ldksyahid-app/`
-```bash
-php artisan migrate
-```
-
-<b>Seeder</b>
-<br>
-Run Seeder in directory `ldksyahid-app/`
-```bash
-php artisan db:seed --class=CreateUsersSeeder
-```
-```bash
-php artisan db:seed --class=PermissionSeeder
-```
-```bash
-php artisan laravolt:indonesia:seed
-```
-Seeder for Celengansyahid Donation Dataset (Optional)
-```bash
-php artisan db:seed --class=DonationSeeder
-```
+Remove previous folder vendor and Download <a href="https://drive.google.com/drive/folders/1_tSANdG2LfgsoUkwKqbhRD-7jyAEsuvv?usp=sharing" target="_blank" rel="noopener noreferrer">lates vendor</a> and then exctract file into folder directory `ldksyahid-app/` 
 
 <b>Node Modules</b>
 <br>
@@ -113,6 +67,13 @@ Install node_modules in directory `ldksyahid-app/`
 ```bash
 npm install
 ```
+
+<b>.env</b> 
+<br>
+<ol>
+    <li>Copy paste ".env.example" and rename to ".env"</li>
+    <li>Change all code .env from latest .env by <a href="https://wa.me/62895394755672" target="_blank" rel="noopener noreferrer">Contact Me</a> to get latest .env</li>
+</ol>
 
 <b>Generate Key</b> 
 <br>
@@ -146,8 +107,6 @@ php artisan serve
 ## Version
 | Version | Date         | Update |
 | :---:   |     :---:    |  ---   |
-| `1.2.5`| `2024-11-07` | <ul><li>Add New Design Ekspresi 2024</li><li>New Logic Store Image in Google Drive</li><li>Add Field Link Documentation</li><li>Other Bug Fixing & Improvement</li></ul> |
-| `1.2.0`| `2023-12-26` | <ul><li>Addition and adjustment of the Machine Learning Donation Celshahid Dashboard Feature</li></ul> |
 | `1.1.0`| `2023-10-25` | <ul><li>Add KTA LDK Syahid Feature</li><li>New Mobile Responsive CMS Admin</li></ul> |
 | `1.0.3`| `2023-09-28` | <ul><li>Add Ekspresi Content and Develop Celsyahid Machine Learning</li></ul> |
 | `1.0.2`| `2023-07-22` | <ul><li>Update Notify Celengan Syahid</li></ul> |

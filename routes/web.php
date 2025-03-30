@@ -300,12 +300,11 @@ Route::post('{id}', [ShortLinkController::class, 'update'])
 Route::get('{id}/destroy', [ShortLinkController::class, 'destroy'])
     ->name('admin.service.shortlink.destroy')
     ->middleware(['role:Superadmin']);
-
+    
 Route::post('/admin/service/shortlink/bulk-delete', [ShortLinkController::class, 'bulkDelete'])
     ->name('admin.service.shortlink.bulkDelete')
     ->middleware(['role:Superadmin']);
 
 Route::get('/{shortURLKey}', [ShortLinkController::class, 'redirect']);
 // END Route AdminPage Service Shortlink
-
 // ======================================= END ROUTE ADMIN PAGE =======================================

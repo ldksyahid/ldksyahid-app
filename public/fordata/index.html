@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+
+<html>
+
+
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FORDATA #1 2025</title>
+
+<link rel="icon" href="https://i.ibb.co/F8RStnM/Logo-LDK-Syahid.png">
+
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+
+  <style>
+
+    body,
+
+    h1 {
+
+      font-family: "Montserrat", sans-serif
+
+    }
+
+
+
+    body,
+
+    html {
+
+      height: 100%
+
+    }
+
+
+
+    .bgimg {
+
+      background-color: #51ddea25;
+
+      min-height: 100%;
+
+      background-position: center;
+
+      background-size: cover;
+
+    }
+
+
+
+    /* The Modal (background) */
+
+    .modal {
+
+      display: none;
+
+      /* Hidden by default */
+
+      position: fixed;
+
+      /* Stay in place */
+
+      z-index: 1;
+
+      /* Sit on top */
+
+      padding-top: 100px;
+
+      /* Location of the box */
+
+      left: 0;
+
+      top: 0;
+
+      width: 100%;
+
+      /* Full width */
+
+      height: 100%;
+
+      /* Full height */
+
+      overflow: auto;
+
+      /* Enable scroll if needed */
+
+      background-color: rgb(0, 0, 0);
+
+      /* Fallback color */
+
+      background-color: rgba(0, 0, 0, 0.4);
+
+      /* Black w/ opacity */
+
+    }
+
+
+
+    /* Modal Content */
+
+    .modal-content {
+
+      background-color: #fefefe;
+
+      margin: auto;
+
+      padding: 20px;
+
+      border: 1px solid #888;
+
+      width: 80%;
+
+    }
+
+
+
+    /* The Close Button */
+
+    .close {
+
+      color: #aaaaaa;
+
+      float: right;
+
+      font-size: 28px;
+
+      font-weight: bold;
+
+    }
+
+
+
+    .close:hover,
+
+    .close:focus {
+
+      color: #000;
+
+      text-decoration: none;
+
+      cursor: pointer;
+
+    }
+
+  </style>
+
+  <base target="_top">
+
+</head>
+
+
+
+<body>
+
+  <div class="bgimg w3-display-container w3-animate-opacity w3-text-black" id="hemmaindiv">
+
+    <div style="margin-left:auto; margin-right:auto">
+
+      <!-- GAMBAR YG ADA KABINETNYA, JANLUP DIGANTI -->
+
+      <img src="https://i.ibb.co.com/nqrYsXzd/FORDATA.jpg" class="w3-image"
+
+           style="display:block;margin-left:auto;margin-right:auto;padding: 32px;padding-bottom:0px;" width="1008" height="auto">
+
+
+
+      <h1 class="w3-large w3-margin" style="text-align: center">FORDATA #1</h1>
+
+      <hr class="w3-border-grey" style="margin:auto;width:50%;max-width:350px">
+
+
+
+      <div id="loading" align="center" style="display:none">
+
+        <p class="w3-small w3-margin" style="text-align:center">Sedang mengambil data.. Mohon sabar sebentar
+
+          ya..</p>
+
+        <!-- <img class="w3-animate-fading" src="https://i.ibb.co/1Gsp6pN/Asset-13.png" style="width:100%;max-width:300px;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);"> -->
+
+      </div>
+
+
+
+      <div id="awalan" align="center">
+
+        <!-- ini bakal ditampilin suatu kata -->
+
+        <p id="kata2" class="w3-small w3-margin" style="text-align:center">Assalamu'alaikum
+
+          Saudaraku<br>Silahkan masukkan NIM dan Tanggal Lahir kamu yaa</p>
+
+
+
+        <form id="myform" class="w3-container w3-small" style="display:none">
+
+
+
+          <label id="label">NIM:</label>
+
+          <div style="display:flex; flex-flow: row wrap;row-gap:1; justify-content: center;margin:0">
+
+            <input id="nim" name="nim" class="w3-input w3-border" type="number" style="text-align: center; max-width:150px;" placeholder="##############" required/>
+
+            <button type="button" id="cek" class="w3-button w3-gray w3-hover-black w3-hover-text-white w3-round">Cek</button>
+
+          </div>
+
+
+
+          <label id="label">Tanggal Lahir:</label>
+
+
+
+          <input id="ultah" name="ultah" class="w3-input w3-border" type="date" style="text-align: center;max-width:205px;"
+
+       min="1990-01-01" max="2021-12-31" required/>
+
+
+
+          </p>
+
+          <br>
+
+          <input id="login" type="submit" value="Login" class="w3-button w3-gray w3-hover-black w3-hover-text-white w3-round"/>
+
+        </form>
+
+      </div>
+
+
+
+      <div id="bismillah" align="center" style="display:none">
+
+        <p style="text-align:center" class="w3-small w3-margin">
+
+          Assalamu'alaikum saudaraku<br>
+
+          <b id="dari-awal-ga"></b><br>
+
+        <p id="sebar_p" style="text-align:center" class="w3-small">Tolong ingatkan temen-temen kamu untuk
+
+          ngisi ini dulu yaa, syukron 🙏
+
+          <!-- <br><small>silahkan kembali ke browser ini setelah dari aplikasi whatsapp ya</small> --><br>
+
+          <a id="sebar"
+
+            href="https://api.whatsapp.com/send?text=Assalamu%27alaikum%2C%20gais%20Yuk%20isi%20FORDATA%20http%3A%2F%2Fldksyah.id%2Ffordata"
+
+            target="_blank" class="w3-button w3-gray w3-hover-black w3-hover-text-white w3-round">
+
+            Ingatkan temanmu
+
+          </a>
+
+        </p>
+
+        <a href="javascript:void(0)" id="gform"
+
+          class="w3-button w3-gray w3-hover-black w3-hover-text-white w3-round w3-small">
+
+          Isi FORDATA</a>
+
+        </p>
+
+      </div>
+
+
+
+      <div id="closed" align="center" style="display:none">
+
+        <p style="text-align:center" class="w3-small w3-margin">
+
+          Assalamu'alaikum saudaraku<br>
+
+        Alhamdulillah kamu sudah submit FORDATA 1 sebelumnya. Jazakumullah khair ya<br>
+
+        Jangan lupa follow media sosial LDK Syahid yaa<br><br>
+
+          <a href="https://linktr.ee/ldksyahidjkt"
+
+            class="w3-button w3-gray w3-hover-black w3-hover-text-white w3-round">Buka Linktr.ee</a>
+
+        </p>
+
+      </div>
+
+
+
+      <div class="w3-display-bottomleft w3-padding-large">
+
+        <p class="w3-tiny">Dibuat dengan mengharap Ridho Allah<br>Jazakumullah khair <a
+
+            href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>, <a
+
+            href="https://www.script.google.com/" target="_blank">GAS</a>, <a href="https://imgbb.com/"
+
+            target="_blank">ImgBB</a> &#128591</p>
+
+      </div>
+
+
+
+      <div id="kel" class="w3-display-bottomright w3-padding-large" style="display:none">
+
+        <p class="w3-tiny"><a id="keluar" class="w3-button w3-gray w3-hover-red w3-hover-text-white w3-round"
+
+            href="javascript:window.location.reload(true)">keluar</a>
+
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- The Modal -->
+
+  <div id="myModal" class="modal">
+
+
+
+    <!-- Modal content -->
+
+    <div class="modal-content">
+
+      <span class="close">&times;</span>
+
+      <p id="nnnim" style="text-align:center"></p>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+
+    document.getElementById('keluar').addEventListener('click',function(){
+
+        keluarin();
+
+      })
+
+
+
+      try{
+
+        var nim = localStorage.getItem("nim")
+
+        var ultah = localStorage.getItem("ultah")
+
+      }catch(e){
+
+        var nim = null
+
+        var ultah = null
+
+        console.log(e)
+
+      }
+
+
+
+      var yasabar = 0
+
+
+
+      var anak_mana
+
+      if(!nim){
+
+        document.getElementById('myform').style.display = 'block';
+
+        document.getElementById('myform')
+
+          .addEventListener('submit', function(event) {
+
+            event.preventDefault();
+
+            cek()
+
+            if(bolehlanjut){
+
+              nim = document.getElementById('nim').value
+
+              ultah = document.getElementById('ultah').value
+
+            //   console.log(""+nim+ultah)
+
+              try{
+
+                localStorage.setItem("nim",nim)
+
+                localStorage.setItem("ultah",ultah)
+
+              }catch(e){console.log(e)}
+
+              serpersaided()
+
+            }else{
+
+              modal.style.display = "block";
+
+            }
+
+          });
+
+      }else{
+
+        document.getElementById('kel').style.display = 'block';
+
+        cek();
+
+        serpersaided()
+
+      }
+
+
+
+      var exportnim
+
+      function serpersaided(){
+
+        document.getElementById('awalan').style.display = 'none'
+
+        document.getElementById('loading').style.display = 'block'
+
+        //google.script.run.withSuccessHandler(antiredir).withFailureHandler(yahgagal).logic(nim,ultah,exportnim)
+        var anakmana
+        if(anak_mana[0] == "Fakultas Ekonomi dan Bisnis (FEB)" && anak_mana[1] != "2019"){
+            // anakmana = 'csi'
+            anakmana = 'pusat'
+        } else {
+            anakmana = 'pusat'
+        }
+
+        var url = `appscript.php?nim=${nim}&ultah=${ultah}&exportnim=${JSON.stringify(exportnim)}&anakmana=${anakmana}`
+
+        // console.log(url)
+        $.ajax({
+
+            crossDomain: true,
+
+            url: url,
+
+            method: "GET",
+
+            dataType: "script"
+
+        })
+        
+        // .done((data)=>{
+        //     console.log(data)
+        // })
+
+        .fail((j,s,e)=>{
+            // console.log(e)
+            yahgagal()
+
+        })
+
+        yasabar = 3
+        
+        // console.log(yasabar)
+
+        timer()
+
+      }
+
+
+
+      function timer(){
+
+        setTimeout(function(){
+
+        yasabar -= 0.5
+
+        if(yasabar>0)timer()
+
+        }, 500 )
+
+      }
+
+
+
+      function antiredir(obj){
+
+        if(yasabar<=0){
+
+        document.getElementById('loading').style.display = 'none'
+
+        try{
+
+          document.getElementById(obj.ui).style.display = 'block'
+
+        }catch(e){}
+
+
+
+        if(obj.ui=='awalan'){//ada tapi tidak cocok
+
+          document.getElementById('kata2').innerHTML += obj.teks
+
+          document.getElementById('myform').style.display = 'block';
+
+          document.getElementById('nim').value = nim
+
+          document.getElementById('ultah').value = ultah
+
+          document.getElementById('myform').addEventListener('submit', function(event) {
+
+            event.preventDefault();
+
+            cek()
+
+            if(bolehlanjut){
+
+              nim = document.getElementById('nim').value
+
+              ultah = document.getElementById('ultah').value
+
+            //   console.log(""+nim+ultah)
+
+              try{
+
+                localStorage.setItem("nim",nim)
+
+                localStorage.setItem("ultah",ultah)
+
+              }catch(e){console.log(e)}
+
+              serpersaided()
+
+            }else{
+
+              modal.style.display = "block";
+
+            }
+
+          });
+
+          //document.getElementById('')
+
+        }
+
+
+
+        //closed supposed to work isnt it
+
+        if(obj.ui=='closed'){//udah ngisi
+
+
+
+        }
+
+
+
+        //bismillah IS WORKING
+
+        if(obj.ui=='bismillah'){//tidak ada atau ada+cocok
+
+          document.getElementById('dari-awal-ga').innerHTML = obj.teks
+
+          bolehinklikgform(obj)
+
+          document.getElementById('sebar').addEventListener('click',function(){
+
+            try{
+
+              //localStorage.setItem("shared","1")
+
+            }catch(e){console.log(e)}
+
+            document.getElementById('sebar_p').style.display = 'none'
+
+            bolehinklikgform(obj)
+
+          })
+
+        }
+
+        
+
+        document.getElementById('kata2').style.display = 'block';
+
+        document.getElementById('kel').style.display = 'block';
+
+        }else{
+
+          console.log('kecepetan load datanya awokwk...'+yasabar)
+
+          setTimeout(function(){
+
+            antiredir(obj)
+
+          },yasabar*1000)
+
+        }
+
+      }
+
+
+
+      function yahgagal(){
+
+        if(yasabar<=0){
+
+          document.getElementById('loading').innerHTML = 'wah afwan ada kendala di server, silahkan <a href="http://ldksyah.id/fordata">refresh laman ini</a> atau <a href="https://api.whatsapp.com/send?phone=6282272718061&text=Lapor%20Failure%20Handler%20"'+new Date()+'>laporkan ke KDR ya</a>'
+
+        }else{
+
+          console.log('kecepetan gagalnya awokwk...'+yasabar)
+
+          setTimeout(function(){
+
+            yahgagal()
+
+          },yasabar*1000)
+
+        }
+
+      }
+
+
+
+      function bolehinklikgform(obj){
+
+        document.getElementById('gform').classList.remove('w3-disabled')
+
+
+
+        // buat anak FEB
+
+        // cek dulu dia anak mana
+
+        // if(anak_mana[0] == "Fakultas Ekonomi dan Bisnis (FEB)" && anak_mana[1] != "19"){
+
+          document.getElementById('gform').href = obj.link
+
+        // } else {
+
+        // // ini buat anak LDK
+
+        // document.getElementById('gform').href = "https://docs.google.com/forms/d/e/1FAIpQLSeXpanfc50dkZA5nfLLpWgWyHD7mYmK2cFrCk-PV7GF6S3dOQ/viewform?usp=pp_url"+obj.link
+
+        // }
+
+
+
+        // document.getElementById('gform').href = "https://docs.google.com/forms/d/e/"+anak_mana+"/viewform?usp=pp_url"+obj.link
+
+
+
+      }
+
+
+
+      function keluarin(){
+
+        try{
+
+          localStorage.removeItem("nim")
+
+          localStorage.removeItem("ultah")
+
+        }catch(e){console.log(e)}
+
+      }
+
+
+
+      function validateNIM(nim){
+
+        nim = nim.toString()
+        var vnim = '{' 
+        if(Number(nim.slice(1,2))>1){nim="0"+nim}
+        vnim += '"angkatan":"'+(Number(nim.slice(2,4))+2000)+'"' //ang
+        vnim += ',"ang_form":0'
+        var id_fak = Number(["01","02","03","04","05","06","07","08","09","10","11","13"].indexOf(nim.slice(4,6))) //id_fak
+        vnim += ',"id_fak":'+id_fak+''
+        vnim += ',"fakultas":"'+(["Fakultas Ilmu Tarbiyah dan Keguruan (FITK)","Fakultas Adab dan Humaniora (FAH)","Fakultas Ushuluddin (FU)","Fakultas Syariah dan Hukum (FSH)","Fakultas Dakwah dan Ilmu Komunikasi (FIDIKOM)","Fakultas Dirasat Islamiyah (FDI)","Fakultas Psikologi (FPSI)","Fakultas Ekonomi dan Bisnis (FEB)","Fakultas Sains dan Teknologi (FST)","Fakultas Ilmu Kesehatan (FIKES)","Fakultas Ilmu Sosial dan Ilmu Politik (FISIP)","Fakultas Kedokteran (FK)"][id_fak])+'"'
+        var temp_jur
+        if(Number(nim.slice(0,1))==0){
+          temp_jur = (["0101","0102","0103","0104","0105","0107","0108","0109","0106","0110","0111","0112","0201","0202","0203","0205","0204","0301","0302","0303","0304","0305","0401","0402","0405","0406","0403","0404","0501","0502","0503","0504","0505","0506","0601","0701","0801","0802","0803","0804","0805","0901","0902","0903","0904","0905","0906","0906","0907","1001","1002","1003","1101","1102","1103","1301"].indexOf(nim.slice(4,8))) //jur
+        }else{
+          temp_jur = (["0110","0120","0130","0140","0150","0161","0162","0163","0170","0182","0183","0184","0210","0220","0240","0251","0260","0321","0331","0340","0360","0380","0430","0440","0453","0454","0480","0490","0510","0511","0520","0530","0540","0541","0600","0700","0810","0820","0840","0850","0860","0910","0920","0930","0940","0950","0960","0970","0980","1010","1020","1040","1110","1120","1130","1330"].indexOf(nim.slice(4,8))) //jur
+        }
+        vnim += ',"jurusan":"'+["Pendidikan Agama Islam","Pendidikan Bahasa Arab","Pendidikan Bahasa dan Sastra Indonesia","Pendidikan Bahasa Inggris","Pendidikan Ilmu Pengetahuan Sosial","Pendidikan Biologi","Pendidikan Kimia","Pendidikan Fisika","Pendidikan Matematika","Manajemen Pendidikan","Pendidikan Guru Madrasah Ibtidaiyah","Pendidikan Islam Anak Usia Dini","Bahasa dan Sastra Arab","Sejarah dan Kebudayaan Islam","Tarjamah","Ilmu Perpustakaan","Bahasa dan Sastra Inggris","Studi Agama-Agama","Aqidah dan Filsafat Islam","Ilmu Al-Quran dan Tafsir","Ilmu Hadist","Ilmu Tasawuf","Perbandingan Mazhab dan Hukum","Hukum Keluarga Islam","Hukum Tatanegara","Hukum Pidana Islam","Ilmu hukum","Hukum Ekonomi Syariah","Komunikasi dan Penyiaran Islam","Jurnalistik","Bimbingan dan Penyuluhan Islam","Manajemen Dakwah","Pengembangan Masyarakat Islam","Kesejahteraan Sosial","Dirasat Islamiyah","Psikologi","Manajemen","Akuntansi","Studi pembangunan","Perbankan Syariah","Ekonomi Syariah","Teknik Informatika","Agribisnis","Sistem Informatika","Matematika","Biologi","Kimia","Fisika","Teknik Pertambangan","Kesehatan Masyarakat","Farmasi","Ilmu Keperawatan","Sosiologi","Ilmu Politik","Ilmu Hubungan Internasional","Kedokteran"][temp_jur]+'"'
+        if(Number(nim.slice(0,1))==0){nim=nim.slice(1,15)}
+        vnim += ',"nim":"'+nim+'"';
+        vnim += ',"status":1}';
+        vnim = JSON.parse(vnim)
+        vnim.ang_form = (43-(vnim.angkatan-2000)*2)
+        if(vnim.ang_form==1){vnim.ang_form+=' (Satu)'}else if(vnim.ang_form==3){vnim.ang_form+=' (Tiga)'}else if(vnim.ang_form==5){vnim.ang_form+=' (Lima)'}
+        if(vnim.angkatan<2018||2050<vnim.angkatan){vnim.status=0}
+        if(vnim.fakultas==undefined){vnim.status=0}
+        if(vnim.jurusan=="undefined"){vnim.status=0}
+        return vnim
+
+      }
+
+
+
+      function cek(){
+
+        var nnim = document.getElementById('nim').value
+
+        if(!nnim){
+
+          nnim = nim
+
+        }
+
+        if(nnim.toString().length<14){
+
+          document.getElementById('nnnim').innerHTML = 'Yak terusin dulu... Masih kurang angkanya'
+
+        }else
+
+        if(nnim.toString().length==14){
+
+          //ALLOW CLICK CEK
+
+          var datanim = validateNIM(nnim)
+
+          if(datanim.status==1){
+
+            document.getElementById('nnnim').innerHTML = 'Angkatan '+datanim.angkatan+'<br>'+datanim.fakultas+'<br>Jurusan '+datanim.jurusan
+
+            bolehlanjut = 1
+
+            var ejur = ["&entry.1360851078=","&entry.718342684=","&entry.886150094=","&entry.1106153282=","&entry.3573348=","&entry.1403196155=","&entry.1870609775=","&entry.193691470=","&entry.2076898732=","&entry.1467803691=","&entry.681610042=","&entry.1393829889="][datanim.id_fak]
+
+
+
+            exportnim = {"fakultas":datanim.fakultas,"angkatan":datanim.angkatan,"jurusan":datanim.jurusan, "nim":nnim}
+            
+            anak_mana = [datanim.fakultas, datanim.angkatan]
+
+        }else{
+
+          document.getElementById('nnnim').innerHTML = 'Ada yang salah, coba di cek lagi'
+
+        }}else{
+
+          document.getElementById('nnnim').innerHTML = '...Eh kelebihan angkanya'
+
+        }
+
+      }
+
+
+
+      // Get the modal
+
+var modal = document.getElementById("myModal");
+
+
+
+// Get the button that opens the modal
+
+var btn = document.getElementById("cek");
+
+
+
+// Get the <span> element that closes the modal
+
+var span = document.getElementsByClassName("close")[0];
+
+
+
+// When the user clicks the button, open the modal 
+
+btn.onclick = function() {
+
+  cek()
+
+  modal.style.display = "block";
+
+}
+
+
+
+// When the user clicks on <span> (x), close the modal
+
+span.onclick = function() {
+
+  modal.style.display = "none";
+
+}
+
+
+
+// When the user clicks anywhere outside of the modal, close it
+
+window.onclick = function(event) {
+
+  if (event.target == modal) {
+
+    modal.style.display = "none";
+
+  }
+
+}
+
+  </script>
+
+</body>
+
+
+
+</html>

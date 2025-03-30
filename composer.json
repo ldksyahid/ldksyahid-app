@@ -20,7 +20,7 @@
         "laravel/ui": "^3.4",
         "laravolt/avatar": "^4.1",
         "laravolt/indonesia": "^0.33.0",
-        "masbug/flysystem-google-drive-ext": "*",
+        "masbug/flysystem-google-drive-ext": "^1.0.0",
         "mydnic/laravel-subscribers": "^1.8",
         "nao-pon/flysystem-google-drive": "~1.1",
         "realrashid/sweet-alert": "^5.1",
