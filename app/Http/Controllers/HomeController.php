@@ -9,12 +9,14 @@ use App\Models\Testimony;
 use App\Models\Gallery;
 use App\Models\News;
 use App\Models\Event;
+use App\Models\MsKTALDKSyahid;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Jenssegers\Agent\Agent;
 use App\Models\User;
-
+use AshAllenDesign\ShortURL\Models\ShortURL;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -52,17 +54,30 @@ class HomeController extends Controller
 
     public function adminHome()
     {
+        // Hitung total data
         $userCount = User::count();
         $newsCount = News::count();
         $articleCount = Article::count();
         $eventCount = Event::count();
-        Alert::success('Selamat Datang Admin LDK Syahid UIN Jakarta', 'Bismillah, Berikan yang Terbaik untuk Dakwah');
+        $shortLinkCount = ShortURL::count();
+        $idCardCount = MsKTALDKSyahid::count();
+
+        // Ambil data waktu solat dari API Kemenag
+        $cityId = 1301; // ID kota untuk Jakarta Pusat (ganti sesuai lokasi)
+        $date = date('Y-m-d'); // Tanggal hari ini
+
+        $response = Http::get("https://api.myquran.com/v2/sholat/jadwal/$cityId/$date");
+        $prayerTimes = $response->json()['data']['jadwal'] ?? [];
+
         return view('admin-page.dashboard.index', [
             'title' => 'Dashboard',
             'userCount' => $userCount,
             'newsCount' => $newsCount,
             'articleCount' => $articleCount,
             'eventCount' => $eventCount,
+            'shortLinkCount' => $shortLinkCount,
+            'prayerTimes' => $prayerTimes,
+            'idCardCount' => $idCardCount,
         ]);
     }
 }
