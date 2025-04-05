@@ -49,26 +49,27 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row align-items-stretch">
         <!-- Calendar -->
-        <div class="col-sm-12 col-md-6 col-xl-6">
+        <div class="col-sm-12 col-md-6 col-xl-6 mb-4 mb-md-0">
             <div class="bg-white shadow-sm rounded p-4">
                 <h4 class="text-center mb-3">Calendar</h4>
-                <div id="calender"></div>
+                <div id="calender" style="height: 100%; min-height: 300px;"></div>
             </div>
         </div>
 
         <!-- Location -->
-        <div class="col-sm-12 col-xl-6">
+        <div class="col-sm-12 col-md-6 col-xl-6 mb-4 mb-md-0">
             <div class="bg-white shadow-sm rounded p-4">
                 <h4 class="text-center mb-3">Location</h4>
-                <iframe class="position-relative rounded w-100 h-100"
+                <iframe class="position-relative rounded w-100" style="height: 100%; min-height: 294px;"
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.6773009952885!2d106.75319361449397!3d-6.306059963469107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69efd9636c9d6b%3A0x71fbe6e9045945ff!2sLDK%20Syahid%20UIN%20Syarif%20Hidayatullah%20Jakarta!5e0!3m2!1sen!2sid!4v1664242233249!5m2!1sen!2sid"
                     frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
                     tabindex="0"></iframe>
             </div>
         </div>
     </div>
+
 </div>
 <!-- Dashboard End -->
 @endsection
