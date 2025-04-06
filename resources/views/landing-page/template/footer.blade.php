@@ -10,18 +10,10 @@
                     Lembaga Dakwah Kampus UIN Syarif Hidayatullah (LDK Syahid) merupakan Unit Kegiatan Mahasiswa (UKM) yang berada di bawah naungan UIN Syarif Hidayatullah Jakarta.
                 </p>
                 <div class="d-flex pt-2">
-                    <a class="btn btn-square btn-outline-primary me-1" href="https://www.facebook.com/ldksyahid/" target="_blank"
-                    ><i class="fab fa-facebook-f"></i
-                    ></a>
-                    <a class="btn btn-square btn-outline-primary me-1" href="https://twitter.com/ldksyahid/" target="_blank"
-                    ><i class="fab fa-twitter"></i
-                    ></a>
-                    <a class="btn btn-square btn-outline-primary me-1" href="https://www.youtube.com/channel/UCJ-SyxQN5sG4CzO0waSYpBQ?app=desktop/" target="_blank"
-                    ><i class="fab fa-youtube"></i
-                    ></a>
-                    <a class="btn btn-square btn-outline-primary me-0" href="https://www.instagram.com/ldksyahid/" target="_blank"
-                    ><i class="fab fa-instagram"></i
-                    ></a>
+                    <a class="btn btn-icon me-2" href="https://www.facebook.com/ldksyahid/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-icon me-2" href="https://twitter.com/ldksyahid/" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a class="btn btn-icon me-2" href="https://www.youtube.com/channel/UCJ-SyxQN5sG4CzO0waSYpBQ?app=desktop/" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a class="btn btn-icon" href="https://www.instagram.com/ldksyahid/" target="_blank"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
@@ -45,10 +37,10 @@
                 <h4 class="text-light mb-4">Berlangganan</h4>
                 <p style="text-align: justify">Dapatkan Informasi terkini yang akan dikirimkan melewati Email kamu Seputar LDK Syahid UIN Syarif Hidayatullah Jakarta dengan cara berlangganan bersama Kami</p>
                 <form action="{{ route('subscribers.store') }}" method="post">
-                @csrf
+                    @csrf
                     <div class="position-relative mx-auto" style="max-width: 400px">
-                        <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="email" name="email" placeholder="Email kamu"/>
-                        <input type="submit" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2" value="Daftar">
+                        <input class="form-control subscribe-input" type="email" name="email" placeholder="Email kamu" required />
+                        <button type="submit" class="btn subscribe-btn">Daftar</button>
                     </div>
                 </form>
             </div>
@@ -76,3 +68,79 @@
     </div>
 </div>
 <!-- Footer End -->
+<style>
+.subscribe-input {
+    border-radius: 30px;
+    padding: 12px 20px;
+    padding-right: 110px;
+    background-color: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border: 1px solid #555;
+    width: 100%;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.subscribe-input:focus {
+    outline: none;
+    border-color: var(--bs-primary);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.subscribe-input::placeholder {
+    color: #ccc;
+    font-style: italic;
+}
+
+.subscribe-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: calc(100% - 10px);
+    padding: 0 20px;
+    border-radius: 30px;
+    background-color: var(--bs-primary);
+    color: #fff;
+    font-weight: normal; /* <- ini agar tidak bold */
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.subscribe-btn:hover {
+    transform: scale(1.05); /* <- hanya membesar */
+    color: #fff;
+    background-color: var(--bs-primary);
+    /* Tidak ubah background-color dan color */
+}
+
+
+.btn-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid var(--bs-primary);
+    color: var(--bs-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 18px;
+}
+
+.btn-icon:hover {
+    background-color: var(--bs-primary);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.btn-icon:hover {
+    background-color: var(--bs-primary);
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+
+</style>
+
