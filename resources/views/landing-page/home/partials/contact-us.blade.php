@@ -1,5 +1,15 @@
 <!-- Contact Us Start -->
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
+<style>
+    .form-floating .form-control {
+        border-radius: 12px !important;
+    }
+
+    textarea.form-control {
+        border-radius: 12px !important;
+    }
+</style>
+
 <div class="container-fluid appointment my-5 py-5 wow fadeIn" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="row g-5">
@@ -44,7 +54,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <button class="btn btn-primary w-100 py-3" type="submit">
+                        <button class="btn btn-primary w-100 py-3 rounded-pill" type="submit">
                           Kirim Pesan
                         </button>
                     </div>
