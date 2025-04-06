@@ -1,65 +1,82 @@
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
+
+<!-- Hover Animation Style -->
+<style>
+    .event-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px; /* bisa kamu atur, misalnya 8px, 16px, dst */
+    }
+
+    .event-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .event-image {
+        transition: transform 0.3s ease;
+        border-radius: 12px;
+    }
+
+    .event-image:hover {
+        transform: scale(1.05);
+    }
+</style>
+
 <div class="py-5">
     <div class="container">
-        <div class="row g-5 align-items-end mb-5">
-            <div class="col-lg-3 text-lg-start wow fadeInUp" data-wow-delay="0.3s">
-                <a class="btn btn-primary py-3 px-5" href="/events">Kegiatan Lainnya</a>
+        <div class="row mb-5 align-items-center justify-content-between wow fadeInUp" data-wow-delay="0.5s">
+            <div class="col-lg-8">
+                <h6 class="text-primary text-uppercase">Yuk Ikuti Kegiatan Kami!</h6>
+                <h1 class="display-5 fw-bold">Kegiatan Terbaru Kami</h1>
+                <p class="text-muted">Kegiatan terbaru UKM LDK Syahid untuk kamu yang ingin menambah teman dan ilmu</p>
             </div>
-            <div class="col-lg-9 wow fadeInUp text-end" data-wow-delay="0.1s">
-                <div class="border-end border-5 border-primary px-4">
-                    <h6 class="text-body text-uppercase mb-2">Yuk Ikuti Kegiatan Kami!</h6>
-                    <h1 class="display-6 mb-0">
-                        Kegiatan Terbaru Kami
-                    </h1>
-                    <p class="mb-0 mt-1">
-                        Kegiatan Terbaru UKM LDK Syahid untuk Kamu yang ingin menambah Teman dan Ilmu
-                    </p>
-                </div>
+            <div class="col-lg-4 text-end">
+                <a href="/events" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-medium shadow-sm">
+                    Lihat Semua Kegiatan <i class="fas fa-arrow-right ms-2"></i>
+                </a>
             </div>
         </div>
-        @forelse($postevent as $key => $postevent)
-        <div class="row g-5 my-1">
-            <div class="col-lg-2 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                @if ($postevent->start != null)
-                <div class="ps-4">
-                    <h5 class="text-body text-uppercase mb-2">{{ \Carbon\Carbon::parse( $postevent->start )->format('Y') }}</h5>
-                    <h6 class="text-body text-uppercase mb-2">{{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('MMMM') }}</h6>
-                    <h1 class="display-6 mb-0">{{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('DD') }}</h1>
-                    <p class="mb-0">{{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('dddd') }}</p>
+
+        @forelse($postevent as $event)
+        @php $date = \Carbon\Carbon::parse($event->start ?? $event->dateevent); @endphp
+        <div class="row mb-4 align-items-center bg-white shadow p-3 overflow-hidden wow fadeInUp event-card" data-wow-delay="0.5s">
+            <!-- Text Content -->
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center mb-2">
+                    <div class="text-center me-4 border-end pe-4">
+                        <div class="fw-bold text-primary fs-3">{{ $date->format('d') }}</div>
+                        <small class="text-muted d-block">{{ $date->isoFormat('MMMM Y') }}</small>
+                        <div class="text-muted small">{{ $date->isoFormat('dddd') }}</div>
+                    </div>
+                    <div>
+                        <span class="badge bg-primary mb-2 rounded-pill">{{ $event->division }}</span>
+                        <h4 class="fw-bold mb-1">
+                            <a href="/events/{{ $event->id }}" class="text-dark text-decoration-none">{{ $event->title }}</a>
+                        </h4>
+                        <p class="text-muted mb-2" style="max-width: 90%">
+                            {!! \Illuminate\Support\Str::limit(strip_tags($event->broadcast), 120, '...') !!}
+                        </p>
+                        <a href="/events/{{ $event->id }}" class="text-primary fw-semibold">Baca Selengkapnya</a>
+                    </div>
                 </div>
-                @else
-                <div class="ps-4">
-                    <h5 class="text-body text-uppercase mb-2">{{ \Carbon\Carbon::parse( $postevent->dateevent )->format('Y') }}</h5>
-                    <h6 class="text-body text-uppercase mb-2">{{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('MMMM') }}</h6>
-                    <h1 class="display-6 mb-0">{{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('DD') }}</h1>
-                    <p class="mb-0">{{ \Carbon\Carbon::parse( $postevent->dateevent )->isoFormat('dddd') }}</p>
-                </div>
-                @endif
             </div>
-            <div class="col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class=" mb-3">
-                <h6 class="text-body text-uppercase mb-2">{{ $postevent->division }}</h6>
-                <a href="/events/{{ $postevent->id }}"><h1 class="display-6 mb-0" style="text-align: left">{{ $postevent->title }}</h1></a>
-                </div>
-                <p class="mb-1">
-                    {!!  substr(strip_tags($postevent->broadcast), 0, 100) !!} …
-                </p>
-                <a class="mb-0" href="/events/{{ $postevent->id }}">Baca Selengkapnya</a>
-            </div>
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                <a href="/events/{{ $postevent->id }}"><img src="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" class="img-fluid" width="300px" height="400px"></a>
+            <!-- Image -->
+            <div class="col-lg-4 text-end">
+                <a href="/events/{{ $event->id }}">
+                    <img src="https://lh3.googleusercontent.com/d/{{ $event->gdrive_id }}" alt="{{ $event->title }}"
+                         class="img-fluid shadow-sm event-image" style="max-height: 220px; object-fit: cover;">
+                </a>
             </div>
         </div>
         @empty
-        <div class="row g-5 my-1">
-            <div class="col-lg-12 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                <h3 class="mb-0" style="text-align: center">Kegiatan Belum Tersedia</h3>
-            </div>
+        <div class="text-center py-5">
+            <h5 class="text-muted">Kegiatan Belum Tersedia</h5>
         </div>
         @endforelse
     </div>
 </div>
 @endif
+
 
 @if((new \Jenssegers\Agent\Agent())->isMobile())
 <div class="container-xxl py-5">
