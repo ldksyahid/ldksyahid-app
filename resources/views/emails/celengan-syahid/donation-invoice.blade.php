@@ -70,7 +70,7 @@
         <div class="card">
             <div class="card-body" style="margin: 20px 20px 20px 20px;">
                 <div class="logo">
-                    <img src="{{ $logo }}" alt="logo-ldksyahid">
+                    <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="logo-ldksyahid">
                 </div>
                 <div class="success-alert">
                     <p>Invoice Donasi Kamu</p>
