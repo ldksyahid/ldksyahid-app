@@ -48,26 +48,25 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-
-        $input = $request->all();
+        $input = $request->only('email', 'password');
 
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password']), $input['remember'] ?? false))
-        {
+        $remember = $request->has('remember');
+
+        if (auth()->attempt($input, $remember)) {
             if (LFC::cekRoleAdmin(auth()->user())) {
                 return redirect()->route('admin');
-            }else{
+            } else {
                 return redirect()->back();
             }
-        }else{
+        } else {
             Alert::error('Tidak Berhasil Masuk', 'Coba Lagi, Email dan Password Belum Benar');
             return redirect()->route('login');
         }
-
     }
 
     public function showLoginForm()
