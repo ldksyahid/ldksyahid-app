@@ -33,7 +33,7 @@
                             ],
                             [
                                 'title' => 'Alamat Email',
-                                'content' => '<a href="mailto:ldk@apps.uinjkt.ac.id" target="_blank" class="text-white text-decoration-underline">ldk@apps.uinjkt.ac.id</a><br><small class="text-white">(Admin LDK Syahid UIN Jakarta)</small>',
+                                'content' => '<a href="mailto:ldk.ormawa@apps.uinjkt.ac.id" target="_blank" class="text-white text-decoration-underline">ldk.ormawa@apps.uinjkt.ac.id</a><br><small class="text-white">(Admin LDK Syahid UIN Jakarta)</small>',
                                 'bg' => '#20c997' // bs-teal
                             ],
                             [
