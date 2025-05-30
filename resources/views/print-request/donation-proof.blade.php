@@ -152,7 +152,7 @@
 								<td>
 									UKM LDK Syahid <br />
 									UIN Syarif Hidayatullah Jakarta<br />
-									ldk@uinjkt.ac.id
+									ldk@apps.uinjkt.ac.id
 								</td>
 							</tr>
 						</table>
