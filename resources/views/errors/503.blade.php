@@ -21,7 +21,7 @@
                     <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="logo">
                 </a>
                 <span class="navbar-text ml-auto d-none d-sm-inline-block">+62 851-5936-0504</span>
-                <span class="navbar-text d-none d-sm-inline-block">ldk@uinjkt.ac.id</span>
+                <span class="navbar-text d-none d-sm-inline-block">ldk.ormawa@apps.uinjkt.ac.id</span>
             </nav>
         </div>
     </header>
