@@ -11,7 +11,7 @@
             </div>
             <div class="h-100 d-inline-flex align-items-center border-end px-3">
                 <small class="far fa-envelope-open me-2"></small>
-                <small>ldk@uinjkt.ac.id</small>
+                <small>ldk.ormawa@apps.uinjkt.ac.id</small>
             </div>
             <div class="h-100 d-inline-flex align-items-center border-end px-3">
               <small class="far fa-clock me-2"></small>
