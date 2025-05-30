@@ -790,7 +790,7 @@
                             Tangerang Selatan, Banten<br>
                             Indonesia <br><br>
                             <strong>Kontak:</strong> +62 851-5936-0504<br>
-                            <strong>Email:</strong> ldk@apps.uinjkt.ac.id<br>
+                            <strong>Email:</strong> ldk.ormawa@apps.uinjkt.ac.id<br>
                         </p>
                     </div>
 

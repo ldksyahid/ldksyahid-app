@@ -22,7 +22,7 @@
                     <i class="fas fa-map-marker-alt me-3"></i>Lt. 3 Gedung SC UIN Jakarta
                 </p>
                 <p><i class="fas fa-phone-alt me-3"></i>+62 851-5936-0504</p>
-                <p><i class="fa fa-envelope me-3"></i>ldk@apps.uinjkt.ac.id</p>
+                <p><i class="fa fa-envelope me-3"></i>ldk.ormawa@apps.uinjkt.ac.id</p>
             </div>
             <div class="col-lg-3 col-md-6">
                 <h4 class="text-light mb-4">Akses Cepat</h4>
