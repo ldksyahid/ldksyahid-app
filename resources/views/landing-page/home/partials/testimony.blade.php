@@ -4,13 +4,15 @@
         <div class="row g-5">
             <!-- Side Content -->
             <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="border-start border-5 border-primary ps-4 mb-4">
-                    <h6 class="text-body text-uppercase mb-2">Apa Kata Mereka?</h6>
-                    <h1 class="display-6 mb-0">Kenapa Mereka Memilih UKM LDK Syahid?</h1>
+                <div class="row mb-4 align-items-center justify-content-between">
+                    <div class="col-12">
+                        <h6 class="text-primary text-uppercase">Apa Kata Mereka?</h6>
+                        <h1 class="display-6 fw-bold mb-3">Kenapa Mereka Memilih UKM LDK Syahid?</h1>
+                        <p class="text-muted text-justify mb-4">
+                            Banyak dari Mahasiswa/i UIN Syarif Hidayatullah Jakarta bergabung bersama UKM LDK Syahid karena ingin belajar dan berkembang bersama-sama di lingkungan Islami.
+                        </p>
+                    </div>
                 </div>
-                <p class="mb-4 text-muted text-justify">
-                    Banyak dari Mahasiswa/i UIN Syarif Hidayatullah Jakarta bergabung bersama UKM LDK Syahid karena ingin belajar dan berkembang bersama-sama di lingkungan Islami.
-                </p>
                 <div class="row g-4">
                     <div class="col-sm-6">
                         <div class="d-flex align-items-center mb-2">
