@@ -1,5 +1,6 @@
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
 <style>
+<style>
 .gallery-hover {
   transition: transform 0.4s ease, box-shadow 0.4s ease;
   border-radius: 1rem;
@@ -15,7 +16,47 @@
   border-radius: 1.5rem;
 }
 
+.youtube-thumbnail {
+    display: block;
+    position: relative;
+    transition: all 0.3s ease;
+}
 
+.youtube-thumbnail:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background: rgba(255, 0, 0, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+}
+
+.play-button i {
+    color: white;
+    font-size: 30px;
+    margin-left: 5px;
+}
+
+.youtube-thumbnail:hover .play-button {
+    background: rgba(255, 0, 0, 1);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.rounded-custom {
+  border-radius: 1.5rem;
+}
 
 </style>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f5f6fa" fill-opacity="1" d="M0,192L34.3,197.3C68.6,203,137,213,206,202.7C274.3,192,343,160,411,133.3C480,107,549,85,617,112C685.7,139,754,213,823,218.7C891.4,224,960,160,1029,112C1097.1,64,1166,32,1234,37.3C1302.9,43,1371,85,1406,106.7L1440,128L1440,320L0,320Z"></path></svg>
@@ -72,11 +113,46 @@
                         @endfor
 
                         @if ($postgallery->linkEmbedYoutube)
+                        @php
+                            // Improved YouTube video ID extraction
+                            $url = $postgallery->linkEmbedYoutube;
+                            $videoId = '';
+
+                            // Check for embed URL format
+                            if (preg_match('/youtube\.com\/embed\/([^\&\?\/]+)/', $url, $matches)) {
+                                $videoId = $matches[1];
+                            }
+                            // Check for regular URL format
+                            elseif (preg_match('/youtube\.com\/watch\?v=([^\&\?\/]+)/', $url, $matches)) {
+                                $videoId = $matches[1];
+                            }
+                            // Check for youtu.be format
+                            elseif (preg_match('/youtu\.be\/([^\&\?\/]+)/', $url, $matches)) {
+                                $videoId = $matches[1];
+                            }
+                            // Check for shortened youtu.be format
+                            elseif (preg_match('/youtube\.com\/v\/([^\&\?\/]+)/', $url, $matches)) {
+                                $videoId = $matches[1];
+                            }
+
+                            // Get thumbnail (try maxres first, then hqdefault as fallback)
+                            $thumbnailUrl = $videoId ? "https://img.youtube.com/vi/{$videoId}/maxresdefault.jpg" : '';
+                        @endphp
+                        @if($videoId)
                         <div class="col-lg-12 mt-4">
-                            <div class="ratio ratio-16x9 rounded-4 overflow-hidden gallery-hover">
-                                <iframe class="rounded-4" src="{{ $postgallery->linkEmbedYoutube }}" title="YouTube video player" allowfullscreen></iframe>
-                            </div>
+                            <a href="{{ $postgallery->linkEmbedYoutube }}" class="glightbox youtube-thumbnail">
+                                <div class="position-relative rounded-4 overflow-hidden gallery-hover">
+                                    <img src="{{ $thumbnailUrl }}"
+                                         class="img-fluid w-100 rounded-4"
+                                         alt="YouTube Thumbnail"
+                                         onerror="this.onerror=null;this.src='https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg'">
+                                    <div class="play-button">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
+                        @endif
                         @endif
                     </div>
                 </div>
@@ -91,6 +167,31 @@
 </div>
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f5f6fa" fill-opacity="1" d="M0,192L34.3,192C68.6,192,137,192,206,208C274.3,224,343,256,411,245.3C480,235,549,181,617,144C685.7,107,754,85,823,74.7C891.4,64,960,64,1029,96C1097.1,128,1166,192,1234,186.7C1302.9,181,1371,107,1406,69.3L1440,32L1440,0L0,0Z"></path></svg>
+
+<!-- GLightbox CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
+<!-- GLightbox JS -->
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const lightbox = GLightbox({
+            selector: '.glightbox',
+            touchNavigation: true,
+            loop: true,
+            autoplayVideos: true,
+            plyr: {
+                css: 'https://cdn.plyr.io/3.7.8/plyr.css',
+                js: 'https://cdn.plyr.io/3.7.8/plyr.js',
+                config: {
+                    ratio: '16:9',
+                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+                    fullscreen: { enabled: true, fallback: true, iosNative: false }
+                }
+            }
+        });
+    });
+</script>
 @endif
 
 
@@ -162,3 +263,4 @@
     </div>
 </div>
 @endif
+
