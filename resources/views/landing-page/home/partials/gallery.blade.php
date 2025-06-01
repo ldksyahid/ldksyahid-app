@@ -1,6 +1,5 @@
 @if((new \Jenssegers\Agent\Agent())->isDesktop())
 <style>
-<style>
 .gallery-hover {
   transition: transform 0.4s ease, box-shadow 0.4s ease;
   border-radius: 1rem;
