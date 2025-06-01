@@ -142,7 +142,7 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-primary py-3 px-5" type="submit">Kirim Pesan</button>
+                            <button class="btn btn-primary py-3 px-5" type="submit" style="border-radius: 50rem !important;">Kirim Pesan</button>
                         </div>
                     </div>
                 </form>
