@@ -13,16 +13,16 @@
 <div class="container-fluid appointment my-5 py-5 wow fadeIn" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="row g-5">
-            <div class="col-lg-6 col-md-6 wow fadeIn" data-wow-delay="0.3s">
-                <div class="border-start border-5 border-primary ps-4 mb-3">
-                    <h6 class="text-white text-uppercase mb-2">Hubungi Kami</h6>
-                    <h1 class="display-6 text-white mb-0">
+            <div class="col-lg-6 col-md-6 row mb-5 align-items-center justify-content-between wow fadeInUp" data-wow-delay="0.3s">
+                <div class="col-lg-12">
+                    <h6 class="text-primary text-uppercase">Hubungi Kami</h6>
+                    <h1 class="display-5 fw-bold text-white">
                         Jika Kamu Memiliki Pertanyaan, Kritik dan saran, Silahkan Hubungi Kami
                     </h1>
+                    <p class="text-white mb-0" style="text-align: justify">
+                        "Dan Kami tidak mengutus sebelum engkau (Muhammad), melainkan orang laki-laki yang Kami beri wahyu kepada mereka; maka bertanyalah kepada orang yang mempunyai pengetahuan jika kamu tidak mengetahui," &#9679; (QS. An-Nahl 16: Ayat 43)
+                    </p>
                 </div>
-                <p class="text-white mb-0" style="text-align: justify">
-                    "Dan Kami tidak mengutus sebelum engkau (Muhammad), melainkan orang laki-laki yang Kami beri wahyu kepada mereka; maka bertanyalah kepada orang yang mempunyai pengetahuan jika kamu tidak mengetahui," &#9679; (QS. An-Nahl 16: Ayat 43)
-                </p>
             </div>
             <div class="col-lg-6 col-md-6 wow fadeIn" data-wow-delay="0.5s">
                 <form role="form" action='/about/contact/message/store' method='post' enctype="multipart/form-data" class="needs-validation" novalidate>
