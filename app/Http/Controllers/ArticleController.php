@@ -12,10 +12,23 @@ class ArticleController extends Controller
 {
     public $pathArticleGDrive = '1dSj_B3bkhbCM1S4CuZtO4-6Hq00sHdpD';
 
-    public function index()
+    public function index(Request $request)
     {
-        $postarticle = Article::orderBy('dateevent','desc')->get();
-        return view('landing-page.article.index', compact('postarticle'),["title" => "Artikel"]);
+        $query = Article::query()->orderBy('dateevent', 'desc');
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhere('theme', 'like', "%{$search}%")
+                ->orWhere('writer', 'like', "%{$search}%")
+                ->orWhere('editor', 'like', "%{$search}%");
+            });
+        }
+
+        $postarticle = $query->paginate(9);
+
+        return view('landing-page.article.index', compact('postarticle'), ["title" => "Artikel"]);
     }
 
     public function indexadmin()
