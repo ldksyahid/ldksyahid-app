@@ -41,7 +41,7 @@
     </div>
     <div class="row">
         <div class="col-md-3 mb-5">
-            <div class="card shadow rounded-4 p-3 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="card shadow rounded-4 p-3 wow fadeInUp sticky-filter" data-wow-delay="0.2s">
                 <h5 class="mb-3" style="color: #6c757d">Filter Artikel</h5>
                 <form method="GET" action="{{ url('/articles') }}" id="filter-form">
                     <div class="mb-3">
@@ -453,6 +453,13 @@ input.form-control:focus {
     color: white;
     outline: none;
     background-color: #1ee8ce;
+}
+@media (min-width: 992px) {
+    .sticky-filter {
+        position: sticky;
+        top: 90px;
+        z-index: 900;
+    }
 }
 </style>
 @endsection
