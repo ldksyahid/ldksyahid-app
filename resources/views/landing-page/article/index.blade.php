@@ -345,6 +345,7 @@ input.form-control:focus {
 }
 .btn.btn-outline-secondary.rounded-pill:hover {
     background-color: #f2f2f2;
+    color:  #6c757d;
 }
 .select2-container--default.select2-container--focus .select2-selection--multiple{
     border: 1px solid #00bfa6;
