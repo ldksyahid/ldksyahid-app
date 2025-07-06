@@ -22,14 +22,44 @@ class ArticleController extends Controller
                 $q->where('title', 'like', "%{$search}%")
                 ->orWhere('theme', 'like', "%{$search}%")
                 ->orWhere('writer', 'like', "%{$search}%")
-                ->orWhere('editor', 'like', "%{$search}%");
+                ->orWhere('editor', 'like', "%{$search}%")
+                ->orWhereYear('created_at', $search);
             });
         }
 
-        $postarticle = $query->paginate(9);
+        if ($request->filled('theme')) {
+            $themes = (array) $request->theme;
+            $query->whereIn('theme', $themes);
+        }
 
-        return view('landing-page.article.index', compact('postarticle'), ["title" => "Artikel"]);
+        if ($request->filled('writer')) {
+            $writers = (array) $request->writer;
+            $query->whereIn('writer', $writers);
+        }
+
+        if ($request->filled('editor')) {
+            $editors = (array) $request->editor;
+            $query->whereIn('editor', $editors);
+        }
+
+        if ($request->filled('created_year')) {
+            $years = (array) $request->created_year;
+            $query->whereRaw('YEAR(created_at) IN (' . implode(',', array_map('intval', $years)) . ')');
+        }
+
+
+        $postarticle = $query->paginate(9)->withQueryString();
+
+        $themes = Article::select('theme')->distinct()->orderBy('theme')->pluck('theme');
+        $writers = Article::select('writer')->distinct()->orderBy('writer')->pluck('writer');
+        $editors = Article::select('editor')->distinct()->orderBy('editor')->pluck('editor');
+        $years = Article::selectRaw('YEAR(created_at) as year')->distinct()->orderByDesc('year')->pluck('year');
+
+        return view('landing-page.article.index', compact('postarticle', 'themes', 'writers', 'editors', 'years'), [
+            "title" => "Artikel"
+        ]);
     }
+
 
     public function indexadmin()
     {
