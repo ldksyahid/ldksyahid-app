@@ -12,11 +12,54 @@ class ArticleController extends Controller
 {
     public $pathArticleGDrive = '1dSj_B3bkhbCM1S4CuZtO4-6Hq00sHdpD';
 
-    public function index()
+    public function index(Request $request)
     {
-        $postarticle = Article::orderBy('dateevent','desc')->get();
-        return view('landing-page.article.index', compact('postarticle'),["title" => "Artikel"]);
+        $query = Article::query()->orderBy('dateevent', 'desc');
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhere('theme', 'like', "%{$search}%")
+                ->orWhere('writer', 'like', "%{$search}%")
+                ->orWhere('editor', 'like', "%{$search}%")
+                ->orWhereYear('created_at', $search);
+            });
+        }
+
+        if ($request->filled('theme')) {
+            $themes = (array) $request->theme;
+            $query->whereIn('theme', $themes);
+        }
+
+        if ($request->filled('writer')) {
+            $writers = (array) $request->writer;
+            $query->whereIn('writer', $writers);
+        }
+
+        if ($request->filled('editor')) {
+            $editors = (array) $request->editor;
+            $query->whereIn('editor', $editors);
+        }
+
+        if ($request->filled('created_year')) {
+            $years = (array) $request->created_year;
+            $query->whereRaw('YEAR(created_at) IN (' . implode(',', array_map('intval', $years)) . ')');
+        }
+
+
+        $postarticle = $query->paginate(9)->withQueryString();
+
+        $themes = Article::select('theme')->distinct()->orderBy('theme')->pluck('theme');
+        $writers = Article::select('writer')->distinct()->orderBy('writer')->pluck('writer');
+        $editors = Article::select('editor')->distinct()->orderBy('editor')->pluck('editor');
+        $years = Article::selectRaw('YEAR(created_at) as year')->distinct()->orderByDesc('year')->pluck('year');
+
+        return view('landing-page.article.index', compact('postarticle', 'themes', 'writers', 'editors', 'years'), [
+            "title" => "Artikel"
+        ]);
     }
+
 
     public function indexadmin()
     {
