@@ -100,7 +100,11 @@ class ArticleController extends Controller
     {
         $dt = Carbon::now();
         $postarticle = Article::find($id);
-        return view('landing-page.article.detail',  compact('postarticle'),["title" => "Artikel"]);
+        $relatedArticles = Article::where('id', '!=', $postarticle->id)
+            ->latest()
+            ->take(5)
+            ->get();
+        return view('landing-page.article.detail',  compact('postarticle', 'relatedArticles'),["title" => "Artikel"]);
     }
 
     public function edit($id)
