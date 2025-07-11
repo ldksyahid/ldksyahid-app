@@ -11,11 +11,40 @@ use Illuminate\Support\Facades\Redirect;
 
 class ShortLinkController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // $urls = ShortURL::latest()->get();
-        $urls = ShortURL::latest()->take(500)->get();
-        return view('admin-page.service.short-link.index', compact('urls'))->with("title", "Services");
+        $search     = $request->input('search');
+        $sortBy     = $request->input('sort_by', 'created_at');
+        $sortOrder  = $request->input('sort_order', 'desc');
+
+        $allowedSorts = [
+            'url_key',
+            'destination_url',
+            'default_short_url',
+            'created_by',
+            'created_at',
+            'visits_count'
+        ];
+
+        if (!in_array($sortBy, $allowedSorts)) {
+            $sortBy = 'created_at';
+        }
+
+        $urls = ShortURL::withCount('visits')           // <— penting
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('url_key',          'like', "%{$search}%")
+                        ->orWhere('created_by',      'like', "%{$search}%")
+                        ->orWhere('default_short_url', 'like', "%{$search}%")
+                        ->orWhere('destination_url', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy($sortBy, $sortOrder)              // bisa pakai visits_count
+            ->paginate(20)
+            ->appends($request->all());
+
+        return view('admin-page.service.short-link.index', compact('urls'))
+            ->with('title', 'Services');
     }
 
     public function shorten(Request $request)

@@ -1,9 +1,5 @@
 @extends('admin-page.template.body')
 
-@section('head')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
-@endsection
-
 @section('content')
 @php
     use App\Http\Controllers\LibraryFunctionController as LFC;
@@ -11,16 +7,30 @@
 <div class="container-fluid pt-4 px-4">
     <div class="row p-2 bg-light rounded justify-content-center mx-0">
         <div class="row">
-            <h1 class="my-2 fs-4 fw-bold text-center">LDK Syahid URL Shortener Management System</h1>
+            <h1 class="my-2 fs-4 fw-bold text-center text-secondary">LDK Syahid URL Shortener Management System</h1>
 
-            <form action="{{ route('admin.service.shortlink.shorten') }}" method="POST" class="my-2">
-                @csrf
-                @method('POST')
-                <div class="input-group mb-3">
-                    <input type="text" name="url" class="form-control" placeholder="URL Shortener">
-                    <button class="btn btn-outline-secondary" type="submit">Shorten</button>
-                </div>
-            </form>
+            <div class="col-md-8 my-3">
+                <form action="{{ route('admin.service.shortlink.index') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" name="search" class="form-control" placeholder="Search by URL Key, URL Destination, Short URL, or Created By" value="{{ request('search') }}">
+                        <button class="btn btn-custom-primary d-none" type="button" id="clearSearchBtn">
+                            <i class="fa fa-times small"></i>
+                        </button>
+                        <button class="btn btn-custom-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-4 my-3">
+                <form action="{{ route('admin.service.shortlink.shorten') }}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <div class="input-group">
+                        <input type="text" name="url" class="form-control" placeholder="Enter URL to shorten">
+                        <button class="btn btn-custom-primary" type="submit">Shorten</button>
+                    </div>
+                </form>
+            </div>
 
             @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -30,48 +40,97 @@
             @endif
 
             <div class="table-responsive">
-                <table class="table table-hover table-striped text-nowrap small" id="dataShortlinkTable">
+                <table class="table table-striped table-hover table-borderless text-nowrap align-middle small table-shortlink" id="dataShortlinkTable">
                     <thead>
-                        <tr class="small">
+                        <tr>
                             @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
-                                <th scope="col"><input type="checkbox" id="selectAll"></th>
+                                <th><input type="checkbox" id="selectAll" class="form-check-input m-0"></th>
                             @endif
-                            <th scope="col" class="text-start">No</th>
-                            <th scope="col" class="text-center">URL Key</th>
-                            <th scope="col" class="text-center">URL Destination</th>
-                            <th scope="col" class="text-center">Short URL</th>
-                            <th scope="col" class="text-center">Visitors</th>
-                            <th scope="col" class="text-center">Created At</th>
-                            <th scope="col" class="text-center">Created By</th>
-                            <th scope="col" class="text-center">Action</th>
+                            <th class="text-start">No</th>
+
+                            <th class="text-center">
+                                <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'url_key', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'url_key' ? 'desc' : 'asc'])) }}">
+                                    <span>URL Key</span>
+                                    @if(request('sort_by') === 'url_key')
+                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                    @endif
+                                </a>
+                            </th>
+
+                            <th class="text-center">
+                                <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'destination_url', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'destination_url' ? 'desc' : 'asc'])) }}">
+                                    <span>URL Destination</span>
+                                    @if(request('sort_by') === 'destination_url')
+                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                    @endif
+                                </a>
+                            </th>
+
+                            <th class="text-center">
+                                <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'default_short_url', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'default_short_url' ? 'desc' : 'asc'])) }}">
+                                    <span>Short URL</span>
+                                    @if(request('sort_by') === 'default_short_url')
+                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                    @endif
+                                </a>
+                            </th>
+
+                            <th class="text-center">
+                                <a href="{{ route('admin.service.shortlink.index',
+                                        array_merge(request()->all(), [
+                                            'sort_by'   => 'visits_count',
+                                            'sort_order'=> request('sort_order') === 'asc' && request('sort_by') === 'visits_count' ? 'desc' : 'asc'
+                                        ])) }}">
+                                    <span>Visitors</span>
+                                    @if(request('sort_by') === 'visits_count')
+                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                    @endif
+                                </a>
+                            </th>
+
+                            <th class="text-center">
+                                <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'created_at', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'created_at' ? 'desc' : 'asc'])) }}">
+                                    <span>Created At</span>
+                                    @if(request('sort_by') === 'created_at')
+                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                    @endif
+                                </a>
+                            </th>
+
+                            <th class="text-center">
+                                <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'created_by', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'created_by' ? 'desc' : 'asc'])) }}">
+                                    <span>Created By</span>
+                                    @if(request('sort_by') === 'created_by')
+                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                    @endif
+                                </a>
+                            </th>
+
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($urls as $key => $item)
-                        <tr class="small">
+                        <tr>
                             @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
                                 <td><input type="checkbox" name="ids[]" value="{{ $item->id }}"></td>
                             @endif
                             <th scope="row">{{ ++$key }}</th>
-                            <td align="center">{{ $item->url_key }}</td>
-                            <td align="center"><a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a></td>
+                            <td class="text-center">{{ $item->url_key }}</td>
+                            <td class="text-center"><a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a></td>
                             <td>
                                 <button class="btn btn-sm btn-primary" onclick="copyLink('{{ $item->url_key }}')">
                                     <i class="fa fa-copy small"></i>
                                 </button>
                                 <a href="{{ url($item->url_key) }}" target="_blank">{{ parse_url(url($item->url_key), PHP_URL_HOST) }}{{ parse_url(url($item->url_key), PHP_URL_PATH) }}</a>
                             </td>
-                            <td align="center">{{ $item->visits->count() }}</td>
-                            <td align="center">{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('YYYY') }} ({{ \Carbon\Carbon::parse( $item->created_at )->format('H:i T') }})</td>
-                            @if (!empty($item->created_by))
-                                <td align="center">{{ $item->created_by }}</td>
-                            @else
-                                <td align="center">Undefined</td>
-                            @endif
-                            <td align="center">
+                            <td class="text-center">{{ $item->visits->count() }}</td>
+                            <td class="text-center">{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('YYYY') }} ({{ \Carbon\Carbon::parse( $item->created_at )->format('H:i T') }})</td>
+                            <td class="text-center">{{ $item->created_by ?? 'Undefined' }}</td>
+                            <td class="text-center">
                                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $key }}"><i class="fa fa-edit"></i></button>
                                 @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
-                                    <button type="button" onclick="deleteConfirmationShortlink({{ $item->id }})" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>
+                                    <button type="button" onclick="deleteConfirmationShortlink({{ $item->id }})" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                                 @endif
                             </td>
                         </tr>
@@ -102,11 +161,15 @@
                         </div>
                         @empty
                         <tr>
-                            <td colspan='9' align='center'>No URL Shortener Data</td>
+                            <td colspan="9" class="text-center">No URL Shortener Data</td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            <div class="mt-3 d-flex justify-content-end">
+                {{ $urls->appends(['search' => request('search')])->links() }}
             </div>
 
             @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
@@ -123,8 +186,85 @@
 </div>
 @endsection
 
+@section('styles')
+<style>
+    .table-shortlink thead th {
+        background-color: #00a79d !important;
+        color: #fff !important;
+        border-color: #00a79d !important;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+    .table-shortlink tbody tr:hover {
+        background-color: #e0f7f5 !important;
+    }
+    .table-shortlink td,
+    .table-shortlink th {
+        vertical-align: middle !important;
+    }
+    .table-shortlink a {
+        color: #00a79d;
+        text-decoration: none;
+    }
+    .table-shortlink a:hover {
+        text-decoration: underline;
+        color: #008b84;
+    }
+    .pagination .page-link {
+        color: #00a79d;
+    }
+    .pagination .page-link:hover {
+        background-color: #e0f7f5;
+        color: #008b84;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #00a79d;
+        color: #fff;
+    }
+    .pagination .page-link:focus {
+        box-shadow: none;
+    }
+    .btn-custom-primary {
+        color: #fff;
+        background-color: #00a79d;
+        border: 1px solid #00a79d;
+        transition: all 0.3s ease;
+    }
+    .btn-custom-primary:hover {
+        background-color: #008b84;
+        border-color: #008b84;
+        color: #fff;
+    }
+    .btn-custom-primary:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 167, 157, 0.25);
+    }
+    .text-secondary {
+        color: #191C24 !important;
+    }
+    .input-group input:focus {
+        box-shadow: none !important;
+        border-color: #00a79d !important;
+        outline: none;
+    }
+    .table-shortlink thead th a span {
+        color: #fff !important;
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+    }
+    .table-shortlink thead th a {
+        text-decoration: none !important;
+        display: inline-block;
+        width: 100%;
+    }
+    .sort-arrow {
+        color: #fff !important;
+        font-weight: bold;
+    }
+</style>
+@endsection
+
 @section('scripts')
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     const baseUrl = '{{ url('/') }}';
@@ -165,7 +305,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "GET",
-                    url: `{{ url('${id}/destroy') }}`,
+                    url: `{{ url('${id}/destroy') }}`.replace('${id}', id),
                     success: function(data) {
                         Toast.fire({
                             icon: 'success',
@@ -231,6 +371,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+
         document.getElementById('selectAll')?.addEventListener('change', function() {
             const checkboxes = document.querySelectorAll('input[name="ids[]"]');
             checkboxes.forEach(checkbox => checkbox.checked = this.checked);
@@ -244,11 +387,24 @@
         });
 
         document.getElementById('bulkDeleteBtn')?.addEventListener('click', handleBulkDelete);
-    });
 
-    $('#dataShortlinkTable').DataTable({
-        responsive: true,
-        fixedHeader: true,
+        function toggleClearButton() {
+            if (searchInput.value.trim() !== '') {
+                clearSearchBtn.classList.remove('d-none');
+            } else {
+                clearSearchBtn.classList.add('d-none');
+            }
+        }
+
+        searchInput.addEventListener('input', toggleClearButton);
+
+        clearSearchBtn.addEventListener('click', function () {
+            searchInput.value = '';
+            toggleClearButton();
+            searchInput.form.submit();
+        });
+
+        toggleClearButton();
     });
 </script>
 @endsection
