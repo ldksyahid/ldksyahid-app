@@ -168,8 +168,10 @@
                 </table>
             </div>
 
-            <div class="mt-3 d-flex justify-content-end">
-                {{ $urls->appends(['search' => request('search')])->links() }}
+            <div class="mt-3">
+                <nav class="d-flex justify-content-between flex-wrap">
+                    {{ $urls->appends(['search' => request('search')])->links() }}
+                </nav>
             </div>
 
             @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
@@ -260,6 +262,22 @@
     .sort-arrow {
         color: #fff !important;
         font-weight: bold;
+    }
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    .pagination .page-item {
+        flex: 0 0 auto;
+    }
+    @media (max-width: 576px) {
+        .pagination {
+            font-size: 0.8rem;
+        }
+        .pagination .page-link {
+            padding: 0.25rem 0.5rem;
+        }
     }
 </style>
 @endsection
