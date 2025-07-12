@@ -273,6 +273,8 @@
         border-spacing: 0;
         border-radius: 10px;
         overflow: hidden;
+
+        box-shadow: inset 0 0 12\px rgba(0, 0, 0, 0.15);
     }
 
     .table-shortlink thead th:first-child {
