@@ -3,11 +3,61 @@
 @section('content')
 @php
     use App\Http\Controllers\LibraryFunctionController as LFC;
+
+    $isSuperadmin = LFC::getRoleName(auth()->user()->getRoleNames()) === 'Superadmin';
 @endphp
 <div class="container-fluid pt-4 px-4">
     <div class="row p-2 bg-light rounded justify-content-center mx-0">
         <div class="row">
-            <h1 class="my-2 fs-4 fw-bold text-center text-secondary">LDK Syahid URL Shortener Management System</h1>
+            <h1 class="page-title">
+                <i class="fa fa-link me-2"></i>
+                <span>LDK&nbsp;Syahid</span>
+                <span class="highlighted-text ms-1">Shortlink System</span>
+            </h1>
+            <div class="col-md-12 mb-3">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+                    <div class="col">
+                        <div class="card card-guide h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title text-custom fw-bold"><i class="fa fa-magic me-1"></i> How to Create a Shortlink</h6>
+                                <p class="card-text small text-muted">
+                                    Enter a full URL and an optional custom key, then click <strong>"Shorten"</strong>. You can edit the shortlink afterward as needed.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card card-guide h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title text-custom fw-bold"><i class="fa fa-search me-1"></i> Search Feature</h6>
+                                <p class="card-text small text-muted">
+                                    Use the search bar to look for a shortlink based on the <strong>URL Key</strong>, <strong>Destination</strong>, or <strong>Creator</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card card-guide h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title text-custom fw-bold"><i class="fa fa-copy me-1"></i> Copy Link</h6>
+                                <p class="card-text small text-muted">
+                                    Click the <i class="fa fa-copy small"></i> icon next to the shortlink to copy it to your clipboard.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card card-guide h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title text-custom fw-bold"><i class="fa fa-edit me-1"></i> Edit & Delete</h6>
+                                <p class="card-text small text-muted">
+                                    Click <i class="fa fa-edit small"></i> to edit a shortlink (available for all roles), or <i class="fa fa-trash small text-danger"></i> to delete it (only Superadmins are allowed to delete).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="col-md-8 my-3">
                 <form action="{{ route('admin.service.shortlink.index') }}" method="GET">
@@ -59,9 +109,9 @@
                 <table class="table table-striped table-hover table-borderless text-nowrap align-middle small table-shortlink" id="dataShortlinkTable">
                     <thead>
                         <tr>
-                            @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
-                                <th><input type="checkbox" id="selectAll" class="form-check-input m-0"></th>
-                            @endif
+                            <th>
+                                <input type="checkbox" id="selectAll" class="form-check-input m-0" {{ $isSuperadmin ? '' : 'disabled' }}>
+                            </th>
                             <th class="text-start">No</th>
 
                             <th class="text-center">
@@ -128,9 +178,9 @@
                     <tbody>
                         @forelse ($urls as $key => $item)
                         <tr>
-                            @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
-                                <td><input type="checkbox" name="ids[]" value="{{ $item->id }}"></td>
-                            @endif
+                            <td>
+                                <input type="checkbox" name="ids[]" value="{{ $item->id }}" {{ $isSuperadmin ? '' : 'disabled' }}>
+                            </td>
                             <th scope="row">{{ $urls->firstItem() + $key }}</th>
                             <td class="text-center">{{ $item->url_key }}</td>
                             <td class="text-center"><a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a></td>
@@ -145,9 +195,12 @@
                             <td class="text-center">{{ $item->created_by ?? 'Undefined' }}</td>
                             <td class="text-center">
                                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $key }}"><i class="fa fa-edit"></i></button>
-                                @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
-                                    <button type="button" onclick="deleteConfirmationShortlink({{ $item->id }})" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                                @endif
+                                <button type="button"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="{{ $isSuperadmin ? 'deleteConfirmationShortlink(' . $item->id . ')' : 'void(0)' }}"
+                                    {{ $isSuperadmin ? '' : 'disabled' }}>
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
 
@@ -184,30 +237,33 @@
                 </table>
             </div>
 
-            <div class="mt-3">
-                <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+                <div>
                     @if ($urls->count())
-                        <p class="small text-muted">
-                            Menampilkan {{ $urls->firstItem() }}&ndash;{{ $urls->lastItem() }} dari {{ $urls->total() }} Shortlinks
+                        <p class="small text-muted mb-0">
+                            Showing {{ $urls->firstItem() }}–{{ $urls->lastItem() }} of {{ $urls->total() }} shortlinks
                         </p>
                     @else
-                        <p class="small text-muted">Tidak ada data untuk ditampilkan</p>
+                        <p class="small text-muted mb-0">No data to display</p>
                     @endif
                 </div>
-                <nav class="d-flex justify-content-end">
+
+                <div class="d-flex align-items-center gap-2 flex-wrap">
                     {{ $urls->appends(['search' => request('search')])->links() }}
-                </nav>
+                </div>
             </div>
 
-            @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
-            <div class="text-end mt-3">
-                <form id="bulkDeleteForm" action="{{ route('admin.service.shortlink.bulkDelete') }}" method="POST">
-                    @csrf
-                    @method('POST')
-                    <button type="button" id="bulkDeleteBtn" class="btn btn-danger">Bulk Delete</button>
+            <div class="d-flex justify-content-end align-items-center mb-3 flex-wrap gap-2">
+                <form id="bulkDeleteForm" action="{{ route('admin.service.shortlink.bulkDelete') }}" method="POST" class="mb-0">
+                    @csrf @method('POST')
+                    <button type="button"
+                            id="bulkDeleteBtn"
+                            class="btn btn-danger btn-sm"
+                            {{ $isSuperadmin ? '' : 'disabled title=Only Superadmin can perform bulk delete' }}>
+                        Bulk Delete
+                    </button>
                 </form>
             </div>
-            @endif
         </div>
     </div>
 </div>
@@ -313,6 +369,60 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 0.0rem;
+    }
+    .page-title {
+        font-size: 1.65rem;
+        font-weight: 600;
+        text-align: center;
+        color: #00a79d;
+        margin: .75rem 0 1.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .page-title {
+        font-size: 1.65rem;
+        font-weight: 600;
+        text-align: center;
+        color: #00a79d;
+        margin: .75rem 0 1.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .page-title .highlighted-text {
+        color: #008b84;
+        font-weight: 700;
+    }
+    #bulkDeleteBtn {
+        min-width: 100px;
+    }
+    .page-title::after {
+        content: '';
+        display: block;
+        height: 4px;
+        width: 120px;
+        margin: .35rem auto 0;
+        border-radius: 3px;
+        background: linear-gradient(90deg,#00a79d 0%,#008b84 100%);
+    }
+    .text-custom {
+        color: #00a79d;
+    }
+    .card .card-title {
+        font-size: 0.95rem;
+    }
+    .card .card-text {
+        font-size: 0.8rem;
+    }
+   .card-guide {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    .card-guide:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+        cursor: pointer;
     }
     .pagination .page-item {
         flex: 0 0 auto;

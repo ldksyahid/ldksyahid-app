@@ -42,7 +42,7 @@ class ShortLinkController extends Controller
                 });
             })
             ->orderBy($sortBy, $sortOrder)
-            ->paginate(20)
+            ->paginate(15)
             ->appends($request->all());
 
         return view('admin-page.service.short-link.index', compact('urls'))
