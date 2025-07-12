@@ -12,7 +12,50 @@
                 <span>LDK&nbsp;Syahid</span>
                 <span class="highlighted-text ms-1">Shortlink System</span>
             </h1>
-
+            <div class="col-md-12 mb-3">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+                    <div class="col">
+                        <div class="card card-guide h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title text-custom fw-bold"><i class="fa fa-magic me-1"></i> How to Create a Shortlink</h6>
+                                <p class="card-text small text-muted">
+                                    Enter a full URL and an optional custom key, then click <strong>"Shorten"</strong>. You can edit the shortlink afterward as needed.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card card-guide h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title text-custom fw-bold"><i class="fa fa-search me-1"></i> Search Feature</h6>
+                                <p class="card-text small text-muted">
+                                    Use the search bar to look for a shortlink based on the <strong>URL Key</strong>, <strong>Destination</strong>, or <strong>Creator</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card card-guide h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title text-custom fw-bold"><i class="fa fa-copy me-1"></i> Copy Link</h6>
+                                <p class="card-text small text-muted">
+                                    Click the <i class="fa fa-copy small"></i> icon next to the shortlink to copy it to your clipboard.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card card-guide h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title text-custom fw-bold"><i class="fa fa-edit me-1"></i> Edit & Delete</h6>
+                                <p class="card-text small text-muted">
+                                    Click <i class="fa fa-edit small"></i> to edit a shortlink (available for all roles), or <i class="fa fa-trash small text-danger"></i> to delete it (only Superadmins are allowed to delete).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="col-md-8 my-3">
                 <form action="{{ route('admin.service.shortlink.index') }}" method="GET">
@@ -352,6 +395,24 @@
         margin: .35rem auto 0;
         border-radius: 3px;
         background: linear-gradient(90deg,#00a79d 0%,#008b84 100%);
+    }
+    .text-custom {
+        color: #00a79d;
+    }
+    .card .card-title {
+        font-size: 0.95rem;
+    }
+    .card .card-text {
+        font-size: 0.8rem;
+    }
+   .card-guide {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    .card-guide:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+        cursor: pointer;
     }
     .pagination .page-item {
         flex: 0 0 auto;
