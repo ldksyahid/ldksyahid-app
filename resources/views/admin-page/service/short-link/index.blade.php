@@ -115,7 +115,7 @@
                             @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
                                 <td><input type="checkbox" name="ids[]" value="{{ $item->id }}"></td>
                             @endif
-                            <th scope="row">{{ ++$key }}</th>
+                            <th scope="row">{{ $urls->firstItem() + $key }}</th>
                             <td class="text-center">{{ $item->url_key }}</td>
                             <td class="text-center"><a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a></td>
                             <td>
@@ -169,6 +169,15 @@
             </div>
 
             <div class="mt-3">
+                <div class="d-flex justify-content-end">
+                    @if ($urls->count())
+                        <p class="small text-muted">
+                            Menampilkan {{ $urls->firstItem() }}&ndash;{{ $urls->lastItem() }} dari {{ $urls->total() }} Shortlinks
+                        </p>
+                    @else
+                        <p class="small text-muted">Tidak ada data untuk ditampilkan</p>
+                    @endif
+                </div>
                 <nav class="d-flex justify-content-end">
                     {{ $urls->appends(['search' => request('search')])->links() }}
                 </nav>
