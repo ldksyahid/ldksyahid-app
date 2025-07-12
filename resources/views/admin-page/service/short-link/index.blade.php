@@ -268,6 +268,25 @@
         display: inline-block;
         width: 100%;
     }
+    .table-shortlink {
+        border-collapse: separate !important;
+        border-spacing: 0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .table-shortlink thead th:first-child {
+        border-top-left-radius: 10px;
+    }
+    .table-shortlink thead th:last-child {
+        border-top-right-radius: 10px;
+    }
+    .table-shortlink tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 10px;
+    }
+    .table-shortlink tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 10px;
+    }
     .sort-arrow {
         color: #fff !important;
         font-weight: bold;
