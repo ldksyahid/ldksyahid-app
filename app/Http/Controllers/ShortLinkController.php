@@ -8,6 +8,8 @@ use AshAllenDesign\ShortURL\Classes\Resolver;
 use AshAllenDesign\ShortURL\Classes\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class ShortLinkController extends Controller
 {
@@ -30,7 +32,7 @@ class ShortLinkController extends Controller
             $sortBy = 'created_at';
         }
 
-        $urls = ShortURL::withCount('visits')           // <— penting
+        $urls = ShortURL::withCount('visits')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('url_key',          'like', "%{$search}%")
@@ -39,7 +41,7 @@ class ShortLinkController extends Controller
                         ->orWhere('destination_url', 'like', "%{$search}%");
                 });
             })
-            ->orderBy($sortBy, $sortOrder)              // bisa pakai visits_count
+            ->orderBy($sortBy, $sortOrder)
             ->paginate(20)
             ->appends($request->all());
 
@@ -57,11 +59,35 @@ class ShortLinkController extends Controller
 
     public function update(Request $request, $id)
     {
-        $url = ShortURL::find($id);
+        $validator = Validator::make($request->all(), [
+            'url' => [
+                'required',
+                'string',
+                'alpha_dash',
+                Rule::unique('short_urls', 'url_key')->ignore($id),
+            ],
+            'destination' => 'required|url',
+        ], [
+            'url.required' => 'URL Key is required.',
+            'url.alpha_dash' => 'URL Key may only contain letters, numbers, dashes, and underscores.',
+            'url.unique' => 'This URL Key is already taken. Please choose another.',
+            'destination.required' => 'Destination URL is required.',
+            'destination.url' => 'The destination must be a valid URL.',
+        ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('failed', 'Update failed due to input validation errors.');
+        }
+
+        $url = ShortURL::findOrFail($id);
         $url->url_key = $request->url;
         $url->destination_url = $request->destination;
         $url->default_short_url = config('app.url') . '/' . $request->url;
         $url->save();
+
         return back()->with('success', 'URL updated successfully.');
     }
 
