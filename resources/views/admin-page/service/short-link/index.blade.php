@@ -3,6 +3,8 @@
 @section('content')
 @php
     use App\Http\Controllers\LibraryFunctionController as LFC;
+
+    $isSuperadmin = LFC::getRoleName(auth()->user()->getRoleNames()) === 'Superadmin';
 @endphp
 <div class="container-fluid pt-4 px-4">
     <div class="row p-2 bg-light rounded justify-content-center mx-0">
@@ -107,9 +109,9 @@
                 <table class="table table-striped table-hover table-borderless text-nowrap align-middle small table-shortlink" id="dataShortlinkTable">
                     <thead>
                         <tr>
-                            @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
-                                <th><input type="checkbox" id="selectAll" class="form-check-input m-0"></th>
-                            @endif
+                            <th>
+                                <input type="checkbox" id="selectAll" class="form-check-input m-0" {{ $isSuperadmin ? '' : 'disabled' }}>
+                            </th>
                             <th class="text-start">No</th>
 
                             <th class="text-center">
@@ -176,9 +178,9 @@
                     <tbody>
                         @forelse ($urls as $key => $item)
                         <tr>
-                            @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
-                                <td><input type="checkbox" name="ids[]" value="{{ $item->id }}"></td>
-                            @endif
+                            <td>
+                                <input type="checkbox" name="ids[]" value="{{ $item->id }}" {{ $isSuperadmin ? '' : 'disabled' }}>
+                            </td>
                             <th scope="row">{{ $urls->firstItem() + $key }}</th>
                             <td class="text-center">{{ $item->url_key }}</td>
                             <td class="text-center"><a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a></td>
@@ -193,9 +195,12 @@
                             <td class="text-center">{{ $item->created_by ?? 'Undefined' }}</td>
                             <td class="text-center">
                                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $key }}"><i class="fa fa-edit"></i></button>
-                                @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
-                                    <button type="button" onclick="deleteConfirmationShortlink({{ $item->id }})" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                                @endif
+                                <button type="button"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="{{ $isSuperadmin ? 'deleteConfirmationShortlink(' . $item->id . ')' : 'void(0)' }}"
+                                    {{ $isSuperadmin ? '' : 'disabled' }}>
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
 
@@ -232,30 +237,33 @@
                 </table>
             </div>
 
-            <div class="mt-3">
-                <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+                <div>
                     @if ($urls->count())
-                        <p class="small text-muted">
-                            Menampilkan {{ $urls->firstItem() }}&ndash;{{ $urls->lastItem() }} dari {{ $urls->total() }} Shortlinks
+                        <p class="small text-muted mb-0">
+                            Showing {{ $urls->firstItem() }}–{{ $urls->lastItem() }} of {{ $urls->total() }} shortlinks
                         </p>
                     @else
-                        <p class="small text-muted">Tidak ada data untuk ditampilkan</p>
+                        <p class="small text-muted mb-0">No data to display</p>
                     @endif
                 </div>
-                <nav class="d-flex justify-content-end">
+
+                <div class="d-flex align-items-center gap-2 flex-wrap">
                     {{ $urls->appends(['search' => request('search')])->links() }}
-                </nav>
+                </div>
             </div>
 
-            @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
-            <div class="text-end mt-3">
-                <form id="bulkDeleteForm" action="{{ route('admin.service.shortlink.bulkDelete') }}" method="POST">
-                    @csrf
-                    @method('POST')
-                    <button type="button" id="bulkDeleteBtn" class="btn btn-danger">Bulk Delete</button>
+            <div class="d-flex justify-content-end align-items-center mb-3 flex-wrap gap-2">
+                <form id="bulkDeleteForm" action="{{ route('admin.service.shortlink.bulkDelete') }}" method="POST" class="mb-0">
+                    @csrf @method('POST')
+                    <button type="button"
+                            id="bulkDeleteBtn"
+                            class="btn btn-danger btn-sm"
+                            {{ $isSuperadmin ? '' : 'disabled title=Only Superadmin can perform bulk delete' }}>
+                        Bulk Delete
+                    </button>
                 </form>
             </div>
-            @endif
         </div>
     </div>
 </div>
@@ -386,7 +394,9 @@
         color: #008b84;
         font-weight: 700;
     }
-
+    #bulkDeleteBtn {
+        min-width: 100px;
+    }
     .page-title::after {
         content: '';
         display: block;
