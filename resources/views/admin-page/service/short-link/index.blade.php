@@ -7,7 +7,12 @@
 <div class="container-fluid pt-4 px-4">
     <div class="row p-2 bg-light rounded justify-content-center mx-0">
         <div class="row">
-            <h1 class="my-2 fs-4 fw-bold text-center text-secondary">LDK Syahid URL Shortener Management System</h1>
+            <h1 class="page-title">
+                <i class="fa fa-link me-2"></i>
+                <span>LDK&nbsp;Syahid</span>
+                <span class="highlighted-text ms-1">Shortlink System</span>
+            </h1>
+
 
             <div class="col-md-8 my-3">
                 <form action="{{ route('admin.service.shortlink.index') }}" method="GET">
@@ -313,6 +318,40 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 0.0rem;
+    }
+    .page-title {
+        font-size: 1.65rem;
+        font-weight: 600;
+        text-align: center;
+        color: #00a79d;
+        margin: .75rem 0 1.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .page-title {
+        font-size: 1.65rem;
+        font-weight: 600;
+        text-align: center;
+        color: #00a79d;
+        margin: .75rem 0 1.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .page-title .highlighted-text {
+        color: #008b84;
+        font-weight: 700;
+    }
+
+    .page-title::after {
+        content: '';
+        display: block;
+        height: 4px;
+        width: 120px;
+        margin: .35rem auto 0;
+        border-radius: 3px;
+        background: linear-gradient(90deg,#00a79d 0%,#008b84 100%);
     }
     .pagination .page-item {
         flex: 0 0 auto;
