@@ -169,7 +169,7 @@
             </div>
 
             <div class="mt-3">
-                <nav class="d-flex justify-content-between flex-wrap">
+                <nav class="d-flex justify-content-end flex-wrap">
                     {{ $urls->appends(['search' => request('search')])->links() }}
                 </nav>
             </div>
@@ -262,14 +262,6 @@
     .sort-arrow {
         color: #fff !important;
         font-weight: bold;
-    }
-    .pagination {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
-    }
-    .pagination .page-item {
-        flex: 0 0 auto;
     }
     @media (max-width: 576px) {
         .pagination {
