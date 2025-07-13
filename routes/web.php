@@ -18,6 +18,7 @@ use App\Http\Controllers\RequestShortlinkController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\StructureController;
 use App\Http\Controllers\CallKestariController;
+use App\Http\Controllers\CatalogBooksController;
 use App\Http\Controllers\ITSupportController;
 use App\Http\Controllers\TestimonyController;
 use App\Http\Controllers\CelenganSyahidController;
@@ -123,6 +124,10 @@ Route::get('/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController
 
 Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
 Route::post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+
+// Route LandingPage Catalog Books
+Route::get('/catalog/books', [CatalogBooksController::class, 'index'])->name('catalog.books.index');
+Route::get('/catalog/books/{slug}', [CatalogBooksController::class, 'show'])->name('catalog.books.show');
 
 // Route LandingPage EKSPRESI
 Route::get('/ekspresi', function () {
@@ -300,11 +305,26 @@ Route::post('{id}', [ShortLinkController::class, 'update'])
 Route::get('{id}/destroy', [ShortLinkController::class, 'destroy'])
     ->name('admin.service.shortlink.destroy')
     ->middleware(['role:Superadmin']);
-    
+
 Route::post('/admin/service/shortlink/bulk-delete', [ShortLinkController::class, 'bulkDelete'])
     ->name('admin.service.shortlink.bulkDelete')
     ->middleware(['role:Superadmin']);
 
 Route::get('/{shortURLKey}', [ShortLinkController::class, 'redirect']);
 // END Route AdminPage Service Shortlink
+
+// Route AdminPage Catalog Books
+Route::middleware(['role:Superadmin|HelperLetter|HelperMedia'])
+    ->prefix('/admin/catalog/books')
+    ->name('admin.catalog.books.')
+    ->group(function () {
+        Route::get('/', [CatalogBooksController::class, 'indexAdmin'])->name('index');
+        Route::get('/create', [CatalogBooksController::class, 'create'])->name('create');
+        Route::post('/', [CatalogBooksController::class, 'store'])->name('store');
+        Route::get('/{book}', [CatalogBooksController::class, 'show'])->name('show');
+        Route::get('/{book}/edit', [CatalogBooksController::class, 'edit'])->name('edit');
+        Route::put('/{book}', [CatalogBooksController::class, 'update'])->name('update');
+        Route::delete('/{book}', [CatalogBooksController::class, 'destroy'])->name('destroy');
+    });
+
 // ======================================= END ROUTE ADMIN PAGE =======================================
