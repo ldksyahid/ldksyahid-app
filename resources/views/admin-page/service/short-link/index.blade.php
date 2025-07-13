@@ -21,7 +21,7 @@
                             <div class="card-body">
                                 <h6 class="card-title text-custom fw-bold"><i class="fa fa-magic me-1"></i> How to Create a Shortlink</h6>
                                 <p class="card-text small text-muted">
-                                    Enter a full URL and an optional custom key, then click <strong>"Shorten"</strong>. You can edit the shortlink afterward as needed.
+                                    Enter the complete URL you wish to shorten, click <strong>"Shorten"</strong>, and afterward, feel free to edit the shortlink according to your needs.
                                 </p>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
             <div class="col-md-8 my-3">
                 <form action="{{ route('admin.service.shortlink.index') }}" method="GET">
                     <div class="input-group">
-                        <input type="text" id="searchInput" name="search" class="form-control" placeholder="Search by URL Key, URL Destination, Short URL, or Created By" value="{{ request('search') }}">
+                        <input type="text" id="searchInput" name="search" class="form-control" placeholder="Search by URL Key, URL Destination, Short URL, or Creator" value="{{ request('search') }}">
                         <button class="btn btn-custom-primary d-none" type="button" id="clearSearchBtn">
                             <i class="fa fa-times small"></i>
                         </button>
@@ -165,7 +165,7 @@
 
                             <th class="text-center">
                                 <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'created_by', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'created_by' ? 'desc' : 'asc'])) }}">
-                                    <span>Created By</span>
+                                    <span>Creator</span>
                                     @if(request('sort_by') === 'created_by')
                                         {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
                                     @endif
