@@ -230,7 +230,7 @@
                         </div>
                         @empty
                         <tr>
-                            <td colspan="9" class="text-center">No URL Shortener Data</td>
+                            <td colspan="9" class="text-center">No Shortlink Data</td>
                         </tr>
                         @endforelse
                     </tbody>
