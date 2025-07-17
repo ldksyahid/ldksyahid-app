@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class MsCatalogBook extends Model
 {
@@ -86,5 +88,26 @@ class MsCatalogBook extends Model
             'editedBy' => 'Edited By',
             'editedDate' => 'Edited Date',
         ];
+    }
+
+    public static function validateRequest(Request $request, $ignoreId = null) {
+
+    }
+
+    public static function generateSlug(string $title, ?int $ignoreId = null): string
+    {
+        $slug = Str::slug($title);
+        $original = $slug;
+        $counter = 1;
+
+        while (
+            self::where('slug', $slug)
+            ->when($ignoreId, fn($q) => $q->where('bookID', '!=', $ignoreId))
+            ->exists()
+        ) {
+            $slug = $original . '-' . $counter++;
+        }
+
+        return $slug;
     }
 }
