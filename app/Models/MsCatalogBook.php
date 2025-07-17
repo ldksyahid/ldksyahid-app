@@ -90,6 +90,22 @@ class MsCatalogBook extends Model
         ];
     }
 
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->createdBy = auth()->check() ? auth()->user()->username : 'SYSTEM';
+            $model->createdDate = now();
+            $model->editedBy = auth()->check() ? auth()->user()->username : 'SYSTEM';
+            $model->editedDate = now();
+        });
+
+        static::updating(function ($model) {
+            $model->editedBy = auth()->check() ? auth()->user()->username : 'SYSTEM';
+            $model->editedDate = now();
+        });
+    }
+
+
     public static function validateRequest(Request $request, $ignoreId = null) {
 
     }
