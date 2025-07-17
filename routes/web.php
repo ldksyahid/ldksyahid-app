@@ -318,13 +318,14 @@ Route::middleware(['role:Superadmin|HelperLetter|HelperMedia'])
     ->prefix('/admin/catalog/books')
     ->name('admin.catalog.books.')
     ->group(function () {
-        Route::get('/', [CatalogBooksController::class, 'indexAdmin'])->name('index');
+        Route::get('/', [CatalogBooksController::class, 'indexAdmin'])->name('indexAdmin');
         Route::get('/create', [CatalogBooksController::class, 'create'])->name('create');
         Route::post('/', [CatalogBooksController::class, 'store'])->name('store');
         Route::get('/{book}', [CatalogBooksController::class, 'show'])->name('show');
         Route::get('/{book}/edit', [CatalogBooksController::class, 'edit'])->name('edit');
         Route::put('/{book}', [CatalogBooksController::class, 'update'])->name('update');
         Route::delete('/{book}', [CatalogBooksController::class, 'destroy'])->name('destroy');
+        Route::post('/bulk-delete', [CatalogBooksController::class, 'bulkDelete'])->name('bulkDelete');
     });
 
 // ======================================= END ROUTE ADMIN PAGE =======================================
