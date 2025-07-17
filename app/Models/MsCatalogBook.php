@@ -8,7 +8,7 @@ class MsCatalogBook extends Model
 {
     protected $table = 'ms_catalog_book';
 
-    public static function getTableName()
+    public static function getTableName() :string
     {
         return (new static)->getTable();
     }
