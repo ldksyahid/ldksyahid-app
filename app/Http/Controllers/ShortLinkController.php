@@ -15,9 +15,8 @@ class ShortLinkController extends Controller
 {
     public function index(Request $request)
     {
-        $search     = $request->input('search');
-        $sortBy     = $request->input('sort_by', 'created_at');
-        $sortOrder  = $request->input('sort_order', 'desc');
+        $sortBy = $request->input('sort_by', 'created_at');
+        $sortOrder = $request->input('sort_order', 'desc');
 
         $allowedSorts = [
             'url_key',
@@ -33,13 +32,23 @@ class ShortLinkController extends Controller
         }
 
         $urls = ShortURL::withCount('visits')
-            ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('url_key',          'like', "%{$search}%")
-                        ->orWhere('created_by',      'like', "%{$search}%")
-                        ->orWhere('default_short_url', 'like', "%{$search}%")
-                        ->orWhere('destination_url', 'like', "%{$search}%");
-                });
+            ->when($request->filled('url_key'), function ($query) use ($request) {
+                $query->where('url_key', 'like', '%' . $request->url_key . '%');
+            })
+            ->when($request->filled('destination_url'), function ($query) use ($request) {
+                $query->where('destination_url', 'like', '%' . $request->destination_url . '%');
+            })
+            ->when($request->filled('default_short_url'), function ($query) use ($request) {
+                $query->where('default_short_url', 'like', '%' . $request->default_short_url . '%');
+            })
+            ->when($request->filled('created_by'), function ($query) use ($request) {
+                $query->where('created_by', 'like', '%' . $request->created_by . '%');
+            })
+            ->when($request->filled('created_at'), function ($query) use ($request) {
+                $query->where('created_at', 'like', '%' . $request->created_at . '%');
+            })
+            ->when($request->filled('visits_count'), function ($query) use ($request) {
+                $query->having('visits_count', '=', $request->visits_count);
             })
             ->orderBy($sortBy, $sortOrder)
             ->paginate(15)
