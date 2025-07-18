@@ -31,7 +31,7 @@
                             <div class="card-body">
                                 <h6 class="card-title text-custom fw-bold"><i class="fa fa-search me-1"></i> Search Feature</h6>
                                 <p class="card-text small text-muted">
-                                    Use the search bar to look for a shortlink based on the <strong>URL Key</strong>, <strong>Destination</strong>, or <strong>Creator</strong>.
+                                    You can now search in each column by typing in the search field below each column header.
                                 </p>
                             </div>
                         </div>
@@ -59,19 +59,7 @@
                 </div>
             </div>
 
-            <div class="col-md-8 my-3">
-                <form action="{{ route('admin.service.shortlink.index') }}" method="GET">
-                    <div class="input-group">
-                        <input type="text" id="searchInput" name="search" class="form-control" placeholder="Search by URL Key, URL Destination, Short URL, or Creator" value="{{ request('search') }}">
-                        <button class="btn btn-custom-primary d-none" type="button" id="clearSearchBtn">
-                            <i class="fa fa-times small"></i>
-                        </button>
-                        <button class="btn btn-custom-primary" type="submit">Search</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="col-md-4 my-3">
+            <div class="col-md-12 my-3">
                 <form action="{{ route('admin.service.shortlink.shorten') }}" method="POST">
                     @csrf
                     @method('POST')
@@ -115,61 +103,87 @@
                             <th class="text-start">No</th>
 
                             <th class="text-center">
-                                <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'url_key', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'url_key' ? 'desc' : 'asc'])) }}">
-                                    <span>URL Key</span>
-                                    @if(request('sort_by') === 'url_key')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
+                                <div class="d-flex flex-column">
+                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'url_key', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'url_key' ? 'desc' : 'asc'])) }}">
+                                        <span>URL Key</span>
+                                        @if(request('sort_by') === 'url_key')
+                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                        @endif
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="url_key" placeholder="Search URL Key" value="{{ request('url_key') }}">
+                                    </div>
+                                </div>
                             </th>
 
                             <th class="text-center">
-                                <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'destination_url', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'destination_url' ? 'desc' : 'asc'])) }}">
-                                    <span>URL Destination</span>
-                                    @if(request('sort_by') === 'destination_url')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
+                                <div class="d-flex flex-column">
+                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'destination_url', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'destination_url' ? 'desc' : 'asc'])) }}">
+                                        <span>URL Destination</span>
+                                        @if(request('sort_by') === 'destination_url')
+                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                        @endif
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="destination_url" placeholder="Search Destination" value="{{ request('destination_url') }}">
+                                    </div>
+                                </div>
                             </th>
 
                             <th class="text-center">
-                                <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'default_short_url', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'default_short_url' ? 'desc' : 'asc'])) }}">
-                                    <span>Short URL</span>
-                                    @if(request('sort_by') === 'default_short_url')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
+                                <div class="d-flex flex-column">
+                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'default_short_url', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'default_short_url' ? 'desc' : 'asc'])) }}">
+                                        <span>Short URL</span>
+                                        @if(request('sort_by') === 'default_short_url')
+                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                        @endif
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="default_short_url" placeholder="Search Short URL" value="{{ request('default_short_url') }}">
+                                    </div>
+                                </div>
                             </th>
 
                             <th class="text-center">
-                                <a href="{{ route('admin.service.shortlink.index',
-                                        array_merge(request()->all(), [
-                                            'sort_by'   => 'visits_count',
-                                            'sort_order'=> request('sort_order') === 'asc' && request('sort_by') === 'visits_count' ? 'desc' : 'asc'
-                                        ])) }}">
-                                    <span>Visitors</span>
-                                    @if(request('sort_by') === 'visits_count')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
+                                <div class="d-flex flex-column">
+                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'visits_count', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'visits_count' ? 'desc' : 'asc'])) }}">
+                                        <span>Visitors</span>
+                                        @if(request('sort_by') === 'visits_count')
+                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                        @endif
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="visits_count" placeholder="Search Visitors" value="{{ request('visits_count') }}">
+                                    </div>
+                                </div>
                             </th>
 
                             <th class="text-center">
-                                <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'created_at', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'created_at' ? 'desc' : 'asc'])) }}">
-                                    <span>Created At</span>
-                                    @if(request('sort_by') === 'created_at')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
+                                <div class="d-flex flex-column">
+                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'created_at', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'created_at' ? 'desc' : 'asc'])) }}">
+                                        <span>Created At</span>
+                                        @if(request('sort_by') === 'created_at')
+                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                        @endif
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="created_at" placeholder="Search Created At" value="{{ request('created_at') }}">
+                                    </div>
+                                </div>
                             </th>
 
                             <th class="text-center">
-                                <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'created_by', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'created_by' ? 'desc' : 'asc'])) }}">
-                                    <span>Creator</span>
-                                    @if(request('sort_by') === 'created_by')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
+                                <div class="d-flex flex-column">
+                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'created_by', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'created_by' ? 'desc' : 'asc'])) }}">
+                                        <span>Creator</span>
+                                        @if(request('sort_by') === 'created_by')
+                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                        @endif
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="created_by" placeholder="Search Creator" value="{{ request('created_by') }}">
+                                    </div>
+                                </div>
                             </th>
 
                             <th class="text-center">Action</th>
@@ -249,7 +263,7 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                    {{ $urls->appends(['search' => request('search')])->links() }}
+                    {{ $urls->appends(request()->query())->links() }}
                 </div>
             </div>
 
@@ -345,8 +359,7 @@
         border-spacing: 0;
         border-radius: 10px;
         overflow: hidden;
-
-        box-shadow: inset 0 0 12\px rgba(0, 0, 0, 0.15);
+        box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.15);
     }
 
     .table-shortlink thead th:first-child {
@@ -434,6 +447,40 @@
         .pagination .page-link {
             padding: 0.25rem 0.5rem;
         }
+    }
+    .table-shortlink thead th .form-control-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        height: calc(1.5em + 0.5rem + 2px);
+    }
+    .table-shortlink thead th .form-control-sm:focus {
+        border-color: #00a79d;
+        box-shadow: 0 0 0 0.2rem rgba(0, 167, 157, 0.25);
+    }
+    .position-relative {
+        position: relative;
+    }
+    .position-absolute {
+        position: absolute;
+    }
+    .end-0 {
+        right: 0;
+    }
+    .top-50 {
+        top: 50%;
+    }
+    .translate-middle-y {
+        transform: translateY(-50%);
+    }
+    .column-search-clear {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
     }
 </style>
 @endsection
@@ -545,8 +592,50 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        document.querySelectorAll('.column-search').forEach(input => {
+            const clearBtn = document.createElement('button');
+            clearBtn.innerHTML = '<i class="fa fa-times"></i>';
+            clearBtn.className = 'column-search-clear';
+            clearBtn.style.display = input.value ? 'block' : 'none';
+
+            clearBtn.addEventListener('click', function() {
+                input.value = '';
+                this.style.display = 'none';
+                performColumnSearch(input);
+            });
+
+            const wrapper = input.parentNode;
+            wrapper.appendChild(clearBtn);
+
+            input.addEventListener('input', function() {
+                clearBtn.style.display = this.value ? 'block' : 'none';
+            });
+
+            input.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    performColumnSearch(input);
+                }
+            });
+        });
+
+        function performColumnSearch(input) {
+            const column = input.dataset.column;
+            const value = input.value;
+
+            const currentUrl = new URL(window.location.href);
+
+            if (value) {
+                currentUrl.searchParams.set(column, value);
+            } else {
+                currentUrl.searchParams.delete(column);
+            }
+
+            if (value) {
+                currentUrl.searchParams.delete('page');
+            }
+
+            window.location.href = currentUrl.toString();
+        }
 
         document.getElementById('selectAll')?.addEventListener('change', function() {
             const checkboxes = document.querySelectorAll('input[name="ids[]"]');
@@ -561,24 +650,6 @@
         });
 
         document.getElementById('bulkDeleteBtn')?.addEventListener('click', handleBulkDelete);
-
-        function toggleClearButton() {
-            if (searchInput.value.trim() !== '') {
-                clearSearchBtn.classList.remove('d-none');
-            } else {
-                clearSearchBtn.classList.add('d-none');
-            }
-        }
-
-        searchInput.addEventListener('input', toggleClearButton);
-
-        clearSearchBtn.addEventListener('click', function () {
-            searchInput.value = '';
-            toggleClearButton();
-            searchInput.form.submit();
-        });
-
-        toggleClearButton();
     });
 </script>
 @endsection
