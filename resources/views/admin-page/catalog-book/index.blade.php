@@ -59,7 +59,13 @@
                 </div>
             </div>
 
-            <div class="col-md-12 my-3">
+            <div class="col-md-2 my-3 text-start">
+                <a href="{{ route('admin.catalog.books.create') }}" class="btn btn-custom-primary">
+                    <i class="fa fa-plus me-1"></i> Add Book
+                </a>
+            </div>
+
+            <div class="col-md-10 my-3">
                 <form action="{{ route('admin.catalog.books.indexAdmin') }}" method="GET">
                     <div class="input-group">
                         <input type="text" id="searchInput" name="search" class="form-control" placeholder="Search by title, author, publisher, ISBN, or category" value="{{ request('search') }}">
@@ -69,12 +75,6 @@
                         <button class="btn btn-custom-primary" type="submit">Search</button>
                     </div>
                 </form>
-            </div>
-
-            <div class="col-md-12 my-3 text-end">
-                <a href="{{ route('admin.catalog.books.create') }}" class="btn btn-custom-primary">
-                    <i class="fa fa-plus me-1"></i> Add Book
-                </a>
             </div>
 
             <div class="col-md-12 my-3">
