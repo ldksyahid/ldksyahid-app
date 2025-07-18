@@ -236,6 +236,7 @@
 @endsection
 
 @section('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .page-title {
         font-size: 1.65rem;
@@ -295,26 +296,169 @@
     .invalid-feedback {
         font-size: 0.85rem;
     }
+    .select2-container .select2-selection--single {
+        height: 38px;
+        padding: 6px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 24px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 38px;
+        right: 10px;
+    }
+    .select2-container--bootstrap-5 .select2-results__option {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+        color: #333;
+        transition: background-color 0.2s ease-in-out;
+    }
+    .select2-container--bootstrap-5 .select2-results__option--highlighted[aria-selected] {
+        background-color: #00a79d !important;
+        color: #fff;
+    }
+    .select2-container--bootstrap-5 .select2-results__option[aria-selected="true"] {
+        background-color: #e0f7f5;
+        color: #008b84;
+        font-weight: 600;
+    }
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+        color: #212529;
+        font-weight: 500;
+    }
+    .select2-container--bootstrap-5 .select2-selection__arrow b {
+        border-color: #00a79d transparent transparent transparent;
+    }
+    .select2-container--open .select2-selection--single {
+        border: 1px solid #00bfa6 !important;
+    }
+    .select2-container--bootstrap-5 .select2-results__option--highlighted[aria-selected],
+    .select2-container--bootstrap-5 .select2-results__option--highlighted {
+        background-color: #00a79d !important;
+        color: white !important;
+    }
+    .select2-container--bootstrap-5 .select2-results__option[aria-selected="true"] {
+        background-color: #e0f7f5 !important;
+        color: #008b84 !important;
+        font-weight: 600;
+    }
+    .select2-container--bootstrap-5 .select2-search__field {
+        border: 1px solid #ced4da !important;
+        border-radius: 4px;
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        color: #212529;
+        outline: none;
+        box-shadow: none !important;
+    }
+    .select2-container--bootstrap-5 .select2-search__field:focus {
+        border-color: #00a79d !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 167, 157, 0.25) !important;
+    }
+    .select2-container--bootstrap-5 .select2-selection__placeholder {
+        color: #6c757d;
+    }
+    .select2-container--bootstrap-5 .select2-selection__rendered {
+        color: #6c757d!important;
+        font-weight: 600;
+    }
+
+    .select2-container--bootstrap-5 .select2-selection {
+        background-color: #ffffff !important;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+    }
+    .select2-container--bootstrap-5 .select2-selection--single {
+        height: calc(2.5rem + 2px);
+        padding: 0.375rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ced4da;
+        background-color: #fff;
+        font-size: 1rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    .select2-container--bootstrap-5 .select2-selection__rendered {
+        line-height: 1.8rem;
+        color: #6c757d;
+    }
+
+    .select2-container--bootstrap-5 .select2-selection__arrow {
+        top: 8px;
+        right: 10px;
+    }
+
+    .select2-dropdown {
+        border-radius: 0.75rem;
+        border: 1px solid #00bfa6;
+        font-size: 0.95rem;
+        overflow: hidden;
+        animation: dropdownFadeIn 0.2s ease forwards;
+    }
+
+    .select2-results__option {
+        padding: 10px 14px;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #e0f2ef;
+        cursor: pointer;
+    }
+
+    .select2-results__option:last-child {
+        border-bottom: none;
+    }
+
+    .select2-results__option--highlighted {
+        background-color: #00bfa6 !important;
+        color: white !important;
+    }
+
+    .select2-results__option[aria-selected="true"] {
+        background-color: #e6f9f6;
+        color: #007f73;
+    }
+    .select2-search__field {
+        outline: none !important;
+        box-shadow: none !important;
+        color: #6c757d;
+    }
+
+    @keyframes dropdownFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-4px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 @endsection
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    // Preview cover image before upload
+    $(document).ready(function () {
+        $('#language').select2({
+            placeholder: 'Select Language',
+            width: '100%',
+            dropdownPosition: 'below'
+        });
+    });
+
     document.getElementById('coverImage').addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file && file.type.match('image.*')) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                // You can add a preview element here if needed
-                // document.getElementById('coverPreview').src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
     });
 
-    // Form submission handling
     document.querySelector('form').addEventListener('submit', function(e) {
         const title = document.getElementById('titleBook').value;
         if (!title) {
@@ -327,8 +471,6 @@
             });
             return;
         }
-
-        // Add additional validation if needed
     });
 </script>
 @endsection
