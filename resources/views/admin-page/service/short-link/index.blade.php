@@ -255,7 +255,7 @@
 
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
                 <div>
-                    @if ($urls->count()))
+                    @if ($urls->count())
                         <p class="small text-muted mb-0">
                             Showing {{ $urls->firstItem() }}–{{ $urls->lastItem() }} of {{ $urls->total() }} shortlinks
                         </p>
