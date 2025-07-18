@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            <div class="col-md-2 my-3 text-start">
+            <div class="col-md-12 my-3 text-end">
                 <a href="{{ route('admin.catalog.books.create') }}" class="btn btn-custom-primary">
                     <i class="fa fa-plus me-1"></i> Add Book
                 </a>
@@ -97,6 +97,19 @@
                                     <input type="checkbox" id="selectAll" class="form-check-input m-0" {{ $isSuperadmin ? '' : 'disabled' }}>
                                 </th>
                                 <th class="text-start">No</th>
+                                <th class="text-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'createdDate', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'createdDate' ? 'desc' : 'asc'])) }}">
+                                            <span>Added Date</span>
+                                            @if(request('sort_by') === 'createdDate'))
+                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                            @endif
+                                        </a>
+                                        <div class="position-relative">
+                                            <input type="text" name="added_date" class="form-control form-control-sm mt-1 daterangepicker-input" placeholder="Filter Added Date" value="{{ request('added_date') }}" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
                                         <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'isbn', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'isbn' ? 'desc' : 'asc'])) }}">
@@ -201,19 +214,6 @@
                                         </div>
                                     </div>
                                 </th>
-                                <th class="text-center">
-                                    <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'createdDate', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'createdDate' ? 'desc' : 'asc'])) }}">
-                                            <span>Added Date</span>
-                                            @if(request('sort_by') === 'createdDate'))
-                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                            @endif
-                                        </a>
-                                        <div class="position-relative">
-                                            <input type="text" name="added_date" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Added Date" value="{{ request('added_date') }}">
-                                        </div>
-                                    </div>
-                                </th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -224,6 +224,7 @@
                                     <input type="checkbox" name="ids[]" value="{{ $book->bookID }}" {{ $isSuperadmin ? '' : 'disabled' }}>
                                 </td>
                                 <th scope="row">{{ $books->firstItem() + $key }}</th>
+                                <td class="text-center">{{ \Carbon\Carbon::parse($book->createdDate)->isoFormat('DD MMMM YYYY') }}</td>
                                 <td class="text-center">{{ $book->isbn }}</td>
                                 <td class="text-center">{{ $book->titleBook }}</td>
                                 <td class="text-center">{{ $book->authorName }}</td>
@@ -232,7 +233,6 @@
                                 <td class="text-center">{{ $book->language }}</td>
                                 <td class="text-center">{{ $book->year }}</td>
                                 <td class="text-center">{{ $book->readCount }}</td>
-                                <td class="text-center">{{ \Carbon\Carbon::parse($book->createdDate)->isoFormat('DD MMMM YYYY') }}</td>
                                 <td class="text-center">
                                     <div class="btn-group" role="group">
                                         <a href="{{ route('admin.catalog.books.show', $book->bookID) }}" class="btn btn-sm btn-info" title="View">
@@ -293,6 +293,7 @@
 @endsection
 
 @section('styles')
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <style>
     .table-books thead th {
         background-color: #00a79d !important;
@@ -472,11 +473,50 @@
     .column-search-clear:hover {
         color: #495057;
     }
+
+    .daterangepicker {
+        font-family: inherit;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        border: 1px solid #e0e0e0;
+    }
+
+    .daterangepicker td.active,
+    .daterangepicker td.active:hover {
+        background-color: #00a79d;
+    }
+
+    .daterangepicker .drp-buttons .btn {
+        padding: 5px 15px;
+        border-radius: 4px;
+        font-size: 0.875rem;
+    }
+
+    .daterangepicker .drp-buttons .btn.applyBtn {
+        background-color: #00a79d;
+        border-color: #00a79d;
+    }
+
+    .daterangepicker .drp-buttons .btn.applyBtn:hover {
+        background-color: #008b84;
+        border-color: #008b84;
+    }
+
+    .daterangepicker .drp-buttons .btn.cancelBtn {
+        color: #495057;
+    }
+
+    .daterangepicker .drp-buttons .btn.cancelBtn:hover {
+        background-color: #f8f9fa;
+    }
 </style>
 @endsection
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
 <script>
     const Toast = Swal.mixin({
         toast: true,
@@ -567,7 +607,36 @@
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
+        $('input[name="added_date"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear',
+                format: 'YYYY-MM-DD',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                firstDay: 1
+            },
+            opens: 'right',
+            drops: 'down'
+        });
+
+        $('input[name="added_date"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            $('#searchForm').submit();
+        });
+
+        $('input[name="added_date"]').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            $('#searchForm').submit();
+        });
+
         document.querySelectorAll('.column-search').forEach(input => {
             const clearBtn = document.createElement('button');
             clearBtn.innerHTML = '<i class="fa fa-times"></i>';
