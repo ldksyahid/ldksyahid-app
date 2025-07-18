@@ -6,6 +6,7 @@ use AshAllenDesign\ShortURL\Models\ShortURL;
 use AshAllenDesign\ShortURL\Models\ShortURLVisit;
 use AshAllenDesign\ShortURL\Classes\Resolver;
 use AshAllenDesign\ShortURL\Classes\Builder;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
@@ -45,7 +46,13 @@ class ShortLinkController extends Controller
                 $query->where('created_by', 'like', '%' . $request->created_by . '%');
             })
             ->when($request->filled('created_at'), function ($query) use ($request) {
-                $query->where('created_at', 'like', '%' . $request->created_at . '%');
+                $dates = explode(' - ', $request->created_at);
+                if (count($dates) == 2) {
+                    $query->whereBetween('created_at', [
+                        Carbon::parse($dates[0])->startOfDay(),
+                        Carbon::parse($dates[1])->endOfDay()
+                    ]);
+                }
             })
             ->when($request->filled('visits_count'), function ($query) use ($request) {
                 $query->having('visits_count', '=', $request->visits_count);
