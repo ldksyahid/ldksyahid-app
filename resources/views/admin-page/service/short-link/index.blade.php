@@ -475,7 +475,7 @@
     .column-search-clear {
         position: absolute;
         right: 5px;
-        top: 50%;
+        top: 60%;
         transform: translateY(-50%);
         background: transparent;
         border: none;
