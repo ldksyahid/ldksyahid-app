@@ -8,6 +8,9 @@ use Illuminate\Support\Str;
 
 class MsCatalogBook extends Model
 {
+    public const PATH_PDF_FILE_NAME_GDRIVE_ID = '1ypgrC-wOqzGFZCxMapG4ULieMtfK752a';
+    public const PATH_COVER_IMAGE_GDRIVE_ID = '1XeDE0FxSppCyaEZA-Vdzol4sLgERmx1p';
+
     protected $table = 'ms_catalog_book';
     protected $primaryKey = 'bookID';
     public $timestamps = false;
