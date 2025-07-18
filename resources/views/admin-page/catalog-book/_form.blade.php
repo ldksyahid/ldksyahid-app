@@ -38,8 +38,8 @@
 
             <form action="{{ route('admin.catalog.books.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="col-md-12 mb-4 rounded">
-                    <div class="card border-0 shadow-sm rounded-3">
+            <div class="col-md-12 mb-4">
+                    <div class="card border-0 shadow-sm">
                         <div class="card-body">
                             <div class="row">
                                 <!-- Basic Information -->
@@ -302,75 +302,67 @@
         border: 1px solid #ced4da;
         border-radius: 6px;
     }
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 24px;
-    }
     .select2-container--default .select2-selection--single .select2-selection__arrow {
         height: 38px;
         right: 10px;
     }
-    .select2-container--bootstrap-5 .select2-results__option {
+    .select2-container--default .select2-results__option {
         padding: 10px 12px;
         font-size: 0.95rem;
         color: #333;
         transition: background-color 0.2s ease-in-out;
     }
-    .select2-container--bootstrap-5 .select2-results__option--highlighted[aria-selected] {
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
         background-color: #00a79d !important;
         color: #fff;
     }
-    .select2-container--bootstrap-5 .select2-results__option[aria-selected="true"] {
+    .select2-container--default .select2-results__option[aria-selected="true"] {
         background-color: #e0f7f5;
         color: #008b84;
         font-weight: 600;
     }
-    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
-        color: #212529;
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #6c757d;
         font-weight: 500;
     }
-    .select2-container--bootstrap-5 .select2-selection__arrow b {
+    .select2-container--default .select2-selection__arrow b {
         border-color: #00a79d transparent transparent transparent;
     }
     .select2-container--open .select2-selection--single {
         border: 1px solid #00bfa6 !important;
     }
-    .select2-container--bootstrap-5 .select2-results__option--highlighted[aria-selected],
-    .select2-container--bootstrap-5 .select2-results__option--highlighted {
+    .select2-container--default .select2-results__option--highlighted[aria-selected],
+    .select2-container--default .select2-results__option--highlighted {
         background-color: #00a79d !important;
         color: white !important;
     }
-    .select2-container--bootstrap-5 .select2-results__option[aria-selected="true"] {
+    .select2-container--default .select2-results__option[aria-selected="true"] {
         background-color: #e0f7f5 !important;
         color: #008b84 !important;
         font-weight: 600;
     }
-    .select2-container--bootstrap-5 .select2-search__field {
+    .select2-container--default .select2-search__field {
         border: 1px solid #ced4da !important;
         border-radius: 4px;
         padding: 6px 10px;
         font-size: 0.9rem;
-        color: #212529;
+        color: #6c757d;
         outline: none;
         box-shadow: none !important;
     }
-    .select2-container--bootstrap-5 .select2-search__field:focus {
+    .select2-container--default .select2-search__field:focus {
         border-color: #00a79d !important;
         box-shadow: 0 0 0 0.2rem rgba(0, 167, 157, 0.25) !important;
     }
-    .select2-container--bootstrap-5 .select2-selection__placeholder {
+    .select2-container--default .select2-selection__placeholder {
         color: #6c757d;
     }
-    .select2-container--bootstrap-5 .select2-selection__rendered {
-        color: #6c757d!important;
-        font-weight: 600;
-    }
-
-    .select2-container--bootstrap-5 .select2-selection {
+    .select2-container--default .select2-selection {
         background-color: #ffffff !important;
         border: 1px solid #ced4da;
         border-radius: 6px;
     }
-    .select2-container--bootstrap-5 .select2-selection--single {
+    .select2-container--default .select2-selection--single {
         height: calc(2.5rem + 2px);
         padding: 0.375rem 1rem;
         border-radius: 0.5rem;
@@ -379,17 +371,10 @@
         font-size: 1rem;
         transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     }
-
-    .select2-container--bootstrap-5 .select2-selection__rendered {
-        line-height: 1.8rem;
-        color: #6c757d;
-    }
-
-    .select2-container--bootstrap-5 .select2-selection__arrow {
+    .select2-container--default .select2-selection__arrow {
         top: 8px;
         right: 10px;
     }
-
     .select2-dropdown {
         border-radius: 0.75rem;
         border: 1px solid #00bfa6;
@@ -397,23 +382,19 @@
         overflow: hidden;
         animation: dropdownFadeIn 0.2s ease forwards;
     }
-
     .select2-results__option {
         padding: 10px 14px;
         transition: all 0.2s ease;
         border-bottom: 1px solid #e0f2ef;
         cursor: pointer;
     }
-
     .select2-results__option:last-child {
         border-bottom: none;
     }
-
     .select2-results__option--highlighted {
         background-color: #00bfa6 !important;
         color: white !important;
     }
-
     .select2-results__option[aria-selected="true"] {
         background-color: #e6f9f6;
         color: #007f73;
@@ -423,7 +404,6 @@
         box-shadow: none !important;
         color: #6c757d;
     }
-
     @keyframes dropdownFadeIn {
         from {
             opacity: 0;

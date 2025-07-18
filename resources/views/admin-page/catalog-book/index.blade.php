@@ -567,7 +567,17 @@
         const ids = Array.from(checkboxes).map(checkbox => checkbox.value);
 
         if (ids.length === 0) {
-            alert('Please select at least one book to delete.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'No books selected',
+                text: 'Please select at least one book to delete.',
+                confirmButtonText: 'OK',
+                didOpen: () => {
+                    const confirmBtn = document.querySelector('.swal2-confirm');
+                    confirmBtn.style.backgroundColor = '#00a79d';
+                    confirmBtn.style.color = 'white';
+                }
+            });
             return;
         }
 
