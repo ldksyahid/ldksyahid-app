@@ -126,4 +126,72 @@ class MsCatalogBook extends Model
 
         return $slug;
     }
+
+    public static function searchAdminBooks(Request $request)
+    {
+        $sortBy = $request->input('sort_by', 'createdDate');
+        $sortOrder = $request->input('sort_order', 'desc');
+
+        $allowedSorts = [
+            'isbn',
+            'titleBook',
+            'authorName',
+            'publisherName',
+            'categoryName',
+            'language',
+            'year',
+            'pages',
+            'readCount',
+            'downloadCount',
+            'rating',
+            'createdBy',
+            'createdDate',
+        ];
+
+        if (!in_array($sortBy, $allowedSorts)) {
+            $sortBy = 'createdDate';
+        }
+
+        $query = self::query();
+
+        if ($request->filled('isbn')) {
+            $query->where('isbn', 'like', "%{$request->isbn}%");
+        }
+
+        if ($request->filled('title')) {
+            $query->where('titleBook', 'like', "%{$request->title}%");
+        }
+
+        if ($request->filled('author')) {
+            $query->where('authorName', 'like', "%{$request->author}%");
+        }
+
+        if ($request->filled('publisher')) {
+            $query->where('publisherName', 'like', "%{$request->publisher}%");
+        }
+
+        if ($request->filled('category')) {
+            $query->where('categoryName', 'like', "%{$request->category}%");
+        }
+
+        if ($request->filled('language')) {
+            $query->where('language', 'like', "%{$request->language}%");
+        }
+
+        if ($request->filled('year')) {
+            $query->where('year', $request->year);
+        }
+
+        if ($request->filled('reads')) {
+            $query->where('readCount', 'like', "%{$request->reads}%");
+        }
+
+        if ($request->filled('added_date')) {
+            $query->where('createdDate', 'like', "%{$request->added_date}%");
+        }
+
+        return $query->orderBy($sortBy, $sortOrder)
+            ->paginate(15)
+            ->appends($request->all());
+    }
 }

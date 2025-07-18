@@ -31,7 +31,7 @@
                             <div class="card-body">
                                 <h6 class="card-title text-custom fw-bold"><i class="fa fa-search me-1"></i> Search Feature</h6>
                                 <p class="card-text small text-muted">
-                                    Use the search bar to look for books by <strong>title</strong>, <strong>author</strong>, <strong>publisher</strong>, <strong>ISBN</strong>, or <strong>category</strong>.
+                                    Use the search filters in each column to find books more precisely.
                                 </p>
                             </div>
                         </div>
@@ -65,18 +65,6 @@
                 </a>
             </div>
 
-            <div class="col-md-10 my-3">
-                <form action="{{ route('admin.catalog.books.indexAdmin') }}" method="GET">
-                    <div class="input-group">
-                        <input type="text" id="searchInput" name="search" class="form-control" placeholder="Search by title, author, publisher, ISBN, or category" value="{{ request('search') }}">
-                        <button class="btn btn-custom-primary d-none" type="button" id="clearSearchBtn">
-                            <i class="fa fa-times small"></i>
-                        </button>
-                        <button class="btn btn-custom-primary" type="submit">Search</button>
-                    </div>
-                </form>
-            </div>
-
             <div class="col-md-12 my-3">
                 @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -86,7 +74,7 @@
                 @endif
 
                 @if (session('failed'))
-                    @if ($errors->any())
+                    @if ($errors->any()))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>There were some problems with your input:</strong>
                         <ul class="mb-0">
@@ -101,115 +89,180 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-borderless text-nowrap align-middle table-books" id="dataBookTable">
-                    <thead>
-                        <tr>
-                            <th>
-                                <input type="checkbox" id="selectAll" class="form-check-input m-0" {{ $isSuperadmin ? '' : 'disabled' }}>
-                            </th>
-                            <th class="text-start">No</th>
-                            <th class="text-center">
-                                <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'isbn', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'isbn' ? 'desc' : 'asc'])) }}">
-                                    <span>ISBN</span>
-                                    @if(request('sort_by') === 'isbn')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'titleBook', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'titleBook' ? 'desc' : 'asc'])) }}">
-                                    <span>Title</span>
-                                    @if(request('sort_by') === 'titleBook')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'authorName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'authorName' ? 'desc' : 'asc'])) }}">
-                                    <span>Author</span>
-                                    @if(request('sort_by') === 'authorName')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'publisherName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'publisherName' ? 'desc' : 'asc'])) }}">
-                                    <span>Publisher</span>
-                                    @if(request('sort_by') === 'publisherName')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'categoryName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'categoryName' ? 'desc' : 'asc'])) }}">
-                                    <span>Category</span>
-                                    @if(request('sort_by') === 'categoryName')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'readCount', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'readCount' ? 'desc' : 'asc'])) }}">
-                                    <span>Reads</span>
-                                    @if(request('sort_by') === 'readCount')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
-                            </th>
-                            <th class="text-center">
-                                <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'createdDate', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'createdDate' ? 'desc' : 'asc'])) }}">
-                                    <span>Added Date</span>
-                                    @if(request('sort_by') === 'createdDate')
-                                        {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                    @endif
-                                </a>
-                            </th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($books as $key => $book)
-                        <tr>
-                            <td>
-                                <input type="checkbox" name="ids[]" value="{{ $book->id }}" {{ $isSuperadmin ? '' : 'disabled' }}>
-                            </td>
-                            <th scope="row">{{ $books->firstItem() + $key }}</th>
-                            <td class="text-center">{{ $book->isbn }}</td>
-                            <td class="text-center">{{ $book->titleBook }}</td>
-                            <td class="text-center">{{ $book->authorName }}</td>
-                            <td class="text-center">{{ $book->publisherName }}</td>
-                            <td class="text-center">{{ $book->categoryName }}</td>
-                            <td class="text-center">{{ $book->readCount }}</td>
-                            <td class="text-center">{{ \Carbon\Carbon::parse($book->createdDate)->isoFormat('DD MMMM YYYY') }}</td>
-                            <td class="text-center">
-                                <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.catalog.books.show', $book->id) }}" class="btn btn-sm btn-info" title="View">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('admin.catalog.books.edit', $book->id) }}" class="btn btn-sm btn-primary" title="Edit">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    <button type="button"
-                                        class="btn btn-sm btn-danger"
-                                        onclick="{{ 'deleteConfirmationBook(' . $book->id . ')' }}"
-                                        title="Delete">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="10" class="text-center">No books found in the catalog</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                <form id="searchForm" action="{{ route('admin.catalog.books.indexAdmin') }}" method="GET">
+                    <table class="table table-striped table-hover table-borderless text-nowrap align-middle table-books" id="dataBookTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAll" class="form-check-input m-0" {{ $isSuperadmin ? '' : 'disabled' }}>
+                                </th>
+                                <th class="text-start">No</th>
+                                <th class="text-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'isbn', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'isbn' ? 'desc' : 'asc'])) }}">
+                                            <span>ISBN</span>
+                                            @if(request('sort_by') === 'isbn'))
+                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                            @endif
+                                        </a>
+                                        <div class="position-relative">
+                                            <input type="text" name="isbn" class="form-control form-control-sm mt-1 column-search" placeholder="Filter ISBN" value="{{ request('isbn') }}">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'titleBook', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'titleBook' ? 'desc' : 'asc'])) }}">
+                                            <span>Title</span>
+                                            @if(request('sort_by') === 'titleBook'))
+                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                            @endif
+                                        </a>
+                                        <div class="position-relative">
+                                            <input type="text" name="title" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Title" value="{{ request('title') }}">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'authorName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'authorName' ? 'desc' : 'asc'])) }}">
+                                            <span>Author</span>
+                                            @if(request('sort_by') === 'authorName'))
+                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                            @endif
+                                        </a>
+                                        <div class="position-relative">
+                                            <input type="text" name="author" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Author" value="{{ request('author') }}">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'publisherName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'publisherName' ? 'desc' : 'asc'])) }}">
+                                            <span>Publisher</span>
+                                            @if(request('sort_by') === 'publisherName'))
+                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                            @endif
+                                        </a>
+                                        <div class="position-relative">
+                                            <input type="text" name="publisher" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Publisher" value="{{ request('publisher') }}">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'categoryName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'categoryName' ? 'desc' : 'asc'])) }}">
+                                            <span>Category</span>
+                                            @if(request('sort_by') === 'categoryName'))
+                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                            @endif
+                                        </a>
+                                        <div class="position-relative">
+                                            <input type="text" name="category" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Category" value="{{ request('category') }}">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'language', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'language' ? 'desc' : 'asc'])) }}">
+                                            <span>Language</span>
+                                            @if(request('sort_by') === 'language'))
+                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                            @endif
+                                        </a>
+                                        <div class="position-relative">
+                                            <input type="text" name="language" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Language" value="{{ request('language') }}">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'year', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'year' ? 'desc' : 'asc'])) }}">
+                                            <span>Year</span>
+                                            @if(request('sort_by') === 'year'))
+                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                            @endif
+                                        </a>
+                                        <div class="position-relative">
+                                            <input type="text" name="year" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Year" value="{{ request('year') }}">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'readCount', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'readCount' ? 'desc' : 'asc'])) }}">
+                                            <span>Reads</span>
+                                            @if(request('sort_by') === 'readCount'))
+                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                            @endif
+                                        </a>
+                                        <div class="position-relative">
+                                            <input type="text" name="reads" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Reads" value="{{ request('reads') }}">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'createdDate', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'createdDate' ? 'desc' : 'asc'])) }}">
+                                            <span>Added Date</span>
+                                            @if(request('sort_by') === 'createdDate'))
+                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
+                                            @endif
+                                        </a>
+                                        <div class="position-relative">
+                                            <input type="text" name="added_date" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Added Date" value="{{ request('added_date') }}">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($books as $key => $book)
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="ids[]" value="{{ $book->bookID }}" {{ $isSuperadmin ? '' : 'disabled' }}>
+                                </td>
+                                <th scope="row">{{ $books->firstItem() + $key }}</th>
+                                <td class="text-center">{{ $book->isbn }}</td>
+                                <td class="text-center">{{ $book->titleBook }}</td>
+                                <td class="text-center">{{ $book->authorName }}</td>
+                                <td class="text-center">{{ $book->publisherName }}</td>
+                                <td class="text-center">{{ $book->categoryName }}</td>
+                                <td class="text-center">{{ $book->language }}</td>
+                                <td class="text-center">{{ $book->year }}</td>
+                                <td class="text-center">{{ $book->readCount }}</td>
+                                <td class="text-center">{{ \Carbon\Carbon::parse($book->createdDate)->isoFormat('DD MMMM YYYY') }}</td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('admin.catalog.books.show', $book->bookID) }}" class="btn btn-sm btn-info" title="View">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.catalog.books.edit', $book->bookID) }}" class="btn btn-sm btn-primary" title="Edit">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <button type="button"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="{{ 'deleteConfirmationBook(' . $book->bookID . ')' }}"
+                                            title="Delete">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="12" class="text-center">No books found in the catalog</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </form>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
                 <div>
-                    @if ($books->count())
+                    @if ($books->count()))
                         <p class="small text-muted mb-0">
                             Showing {{ $books->firstItem() }}–{{ $books->lastItem() }} of {{ $books->total() }} books
                         </p>
@@ -317,7 +370,6 @@
         overflow: hidden;
         box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.15);
     }
-
     .table-books thead th:first-child {
         border-top-left-radius: 10px;
     }
@@ -348,23 +400,9 @@
         position: relative;
         display: inline-block;
     }
-
-    .page-title {
-        font-size: 1.65rem;
-        font-weight: 600;
-        text-align: center;
-        color: #00a79d;
-        margin: .75rem 0 1.5rem;
-        position: relative;
-        display: inline-block;
-    }
-
     .page-title .highlighted-text {
         color: #008b84;
         font-weight: 700;
-    }
-    #bulkDeleteBtn {
-        min-width: 100px;
     }
     .page-title::after {
         content: '';
@@ -384,7 +422,7 @@
     .card .card-text {
         font-size: 0.8rem;
     }
-   .card-guide {
+    .card-guide {
         border-radius: 12px;
         transition: all 0.3s ease;
     }
@@ -396,13 +434,43 @@
     .pagination .page-item {
         flex: 0 0 auto;
     }
-    @media (max-width: 576px) {
-        .pagination {
-            font-size: 0.8rem;
-        }
-        .pagination .page-link {
-            padding: 0.25rem 0.5rem;
-        }
+    .form-control-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    .table-books input[type="text"]:focus,
+    .table-books input[type="number"]:focus {
+        border-color: #00a79d !important;
+        box-shadow: 0 0 0 0.15rem rgba(0, 167, 157, 0.25) !important;
+        outline: none !important;
+    }
+    .table-books input[type="text"]:hover,
+    .table-books input[type="number"]:hover {
+        border-color: #00a79d;
+    }
+
+    #bulkDeleteBtn {
+        min-width: 100px;
+    }
+
+    .position-relative {
+        position: relative;
+    }
+
+    .column-search-clear {
+        position: absolute;
+        right: 5px;
+        top: 60%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
+        display: none;
+    }
+
+    .column-search-clear:hover {
+        color: #495057;
     }
 </style>
 @endsection
@@ -500,8 +568,31 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        document.querySelectorAll('.column-search').forEach(input => {
+            const clearBtn = document.createElement('button');
+            clearBtn.innerHTML = '<i class="fa fa-times"></i>';
+            clearBtn.className = 'column-search-clear';
+            clearBtn.style.display = input.value ? 'block' : 'none';
+
+            clearBtn.addEventListener('click', function() {
+                input.value = '';
+                this.style.display = 'none';
+                document.getElementById('searchForm').submit();
+            });
+
+            const wrapper = input.parentNode;
+            wrapper.appendChild(clearBtn);
+
+            input.addEventListener('input', function() {
+                clearBtn.style.display = this.value ? 'block' : 'none';
+            });
+
+            input.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('searchForm').submit();
+                }
+            });
+        });
 
         document.getElementById('selectAll')?.addEventListener('change', function() {
             const checkboxes = document.querySelectorAll('input[name="ids[]"]');
@@ -516,24 +607,6 @@
         });
 
         document.getElementById('bulkDeleteBtn')?.addEventListener('click', handleBulkDelete);
-
-        function toggleClearButton() {
-            if (searchInput.value.trim() !== '') {
-                clearSearchBtn.classList.remove('d-none');
-            } else {
-                clearSearchBtn.classList.add('d-none');
-            }
-        }
-
-        searchInput.addEventListener('input', toggleClearButton);
-
-        clearSearchBtn.addEventListener('click', function () {
-            searchInput.value = '';
-            toggleClearButton();
-            searchInput.form.submit();
-        });
-
-        toggleClearButton();
     });
 </script>
 @endsection
