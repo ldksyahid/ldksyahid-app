@@ -187,7 +187,20 @@ class MsCatalogBook extends Model
         }
 
         if ($request->filled('added_date')) {
-            $query->where('createdDate', 'like', "%{$request->added_date}%");
+            $dates = explode(' - ', $request->added_date);
+
+            if (count($dates) == 2) {
+                try {
+                    $startDate = \Carbon\Carbon::createFromFormat('Y-m-d', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('Y-m-d', trim($dates[1]))->endOfDay();
+
+                    $query->whereBetween('createdDate', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    $query->where('createdDate', 'like', "%{$request->added_date}%");
+                }
+            } else {
+                $query->whereDate('createdDate', $request->added_date);
+            }
         }
 
         return $query->orderBy($sortBy, $sortOrder)
