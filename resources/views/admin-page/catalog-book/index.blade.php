@@ -612,7 +612,7 @@
             autoUpdateInput: false,
             locale: {
                 cancelLabel: 'Clear',
-                format: 'YYYY-MM-DD',
+                format: 'DD-MM-YYYY',
                 separator: ' - ',
                 applyLabel: 'Apply',
                 cancelLabel: 'Cancel',
@@ -628,7 +628,7 @@
         });
 
         $('input[name="added_date"]').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
             $('#searchForm').submit();
         });
 
