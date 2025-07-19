@@ -3,7 +3,6 @@
 @section('content')
 @php
     use App\Http\Controllers\LibraryFunctionController as LFC;
-
     $isSuperadmin = LFC::getRoleName(auth()->user()->getRoleNames()) === 'Superadmin';
 @endphp
 <div class="container-fluid pt-4 px-4">
@@ -74,7 +73,7 @@
                 @endif
 
                 @if (session('failed'))
-                    @if ($errors->any())
+                    @if ($errors->any()))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>There were some problems with your input:</strong>
                         <ul class="mb-0">
@@ -99,11 +98,9 @@
                                 <th class="text-start">No</th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'createdDate', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'createdDate' ? 'desc' : 'asc'])) }}">
+                                        <a href="#" class="sort-link" data-sort-by="createdDate">
                                             <span>Added Date</span>
-                                            @if(request('sort_by') === 'createdDate')
-                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                            @endif
+                                            <span class="sort-arrow" id="sortArrowCreatedDate"></span>
                                         </a>
                                         <div class="position-relative">
                                             <input type="text" name="added_date" class="form-control form-control-sm mt-1 daterangepicker-input" placeholder="Filter Added Date" value="{{ request('added_date') }}" autocomplete="off">
@@ -112,11 +109,9 @@
                                 </th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'isbn', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'isbn' ? 'desc' : 'asc'])) }}">
+                                        <a href="#" class="sort-link" data-sort-by="isbn">
                                             <span>ISBN</span>
-                                            @if(request('sort_by') === 'isbn')
-                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                            @endif
+                                            <span class="sort-arrow" id="sortArrowIsbn"></span>
                                         </a>
                                         <div class="position-relative">
                                             <input type="text" name="isbn" class="form-control form-control-sm mt-1 column-search" placeholder="Filter ISBN" value="{{ request('isbn') }}">
@@ -125,11 +120,9 @@
                                 </th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'titleBook', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'titleBook' ? 'desc' : 'asc'])) }}">
+                                        <a href="#" class="sort-link" data-sort-by="titleBook">
                                             <span>Title</span>
-                                            @if(request('sort_by') === 'titleBook')
-                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                            @endif
+                                            <span class="sort-arrow" id="sortArrowTitleBook"></span>
                                         </a>
                                         <div class="position-relative">
                                             <input type="text" name="title" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Title" value="{{ request('title') }}">
@@ -138,11 +131,9 @@
                                 </th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'authorName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'authorName' ? 'desc' : 'asc'])) }}">
+                                        <a href="#" class="sort-link" data-sort-by="authorName">
                                             <span>Author</span>
-                                            @if(request('sort_by') === 'authorName')
-                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                            @endif
+                                            <span class="sort-arrow" id="sortArrowAuthorName"></span>
                                         </a>
                                         <div class="position-relative">
                                             <input type="text" name="author" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Author" value="{{ request('author') }}">
@@ -151,11 +142,9 @@
                                 </th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'publisherName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'publisherName' ? 'desc' : 'asc'])) }}">
+                                        <a href="#" class="sort-link" data-sort-by="publisherName">
                                             <span>Publisher</span>
-                                            @if(request('sort_by') === 'publisherName')
-                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                            @endif
+                                            <span class="sort-arrow" id="sortArrowPublisherName"></span>
                                         </a>
                                         <div class="position-relative">
                                             <input type="text" name="publisher" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Publisher" value="{{ request('publisher') }}">
@@ -164,11 +153,9 @@
                                 </th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'categoryName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'categoryName' ? 'desc' : 'asc'])) }}">
+                                        <a href="#" class="sort-link" data-sort-by="categoryName">
                                             <span>Category</span>
-                                            @if(request('sort_by') === 'categoryName')
-                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                            @endif
+                                            <span class="sort-arrow" id="sortArrowCategoryName"></span>
                                         </a>
                                         <div class="position-relative">
                                             <input type="text" name="category" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Category" value="{{ request('category') }}">
@@ -177,11 +164,9 @@
                                 </th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'language', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'language' ? 'desc' : 'asc'])) }}">
+                                        <a href="#" class="sort-link" data-sort-by="language">
                                             <span>Language</span>
-                                            @if(request('sort_by') === 'language')
-                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                            @endif
+                                            <span class="sort-arrow" id="sortArrowLanguage"></span>
                                         </a>
                                         <div class="position-relative">
                                             <input type="text" name="language" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Language" value="{{ request('language') }}">
@@ -190,11 +175,9 @@
                                 </th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'year', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'year' ? 'desc' : 'asc'])) }}">
+                                        <a href="#" class="sort-link" data-sort-by="year">
                                             <span>Year</span>
-                                            @if(request('sort_by') === 'year')
-                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                            @endif
+                                            <span class="sort-arrow" id="sortArrowYear"></span>
                                         </a>
                                         <div class="position-relative">
                                             <input type="text" name="year" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Year" value="{{ request('year') }}">
@@ -203,11 +186,9 @@
                                 </th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'readCount', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'readCount' ? 'desc' : 'asc'])) }}">
+                                        <a href="#" class="sort-link" data-sort-by="readCount">
                                             <span>Reads</span>
-                                            @if(request('sort_by') === 'readCount')
-                                                {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                            @endif
+                                            <span class="sort-arrow" id="sortArrowReadCount"></span>
                                         </a>
                                         <div class="position-relative">
                                             <input type="text" name="reads" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Reads" value="{{ request('reads') }}">
@@ -217,44 +198,8 @@
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @forelse ($books as $key => $book)
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="ids[]" value="{{ $book->bookID }}" {{ $isSuperadmin ? '' : 'disabled' }}>
-                                </td>
-                                <th scope="row">{{ $books->firstItem() + $key }}</th>
-                                <td class="text-center">{{ \Carbon\Carbon::parse($book->createdDate)->isoFormat('DD MMMM YYYY') }}</td>
-                                <td class="text-center">{{ $book->isbn }}</td>
-                                <td class="text-center">{{ $book->titleBook }}</td>
-                                <td class="text-center">{{ $book->authorName }}</td>
-                                <td class="text-center">{{ $book->publisherName }}</td>
-                                <td class="text-center">{{ $book->categoryName }}</td>
-                                <td class="text-center">{{ $book->language }}</td>
-                                <td class="text-center">{{ $book->year }}</td>
-                                <td class="text-center">{{ $book->readCount }}</td>
-                                <td class="text-center">
-                                    <div class="btn-group" role="group  ">
-                                        <a href="{{ route('admin.catalog.books.show', $book->bookID) }}" class="btn btn-sm btn-custom-primary" title="View">
-                                            <i class="fa fa-eye" style="color: white;"></i>
-                                        </a>
-                                        <a href="{{ route('admin.catalog.books.edit', $book->bookID) }}" class="btn btn-sm btn-custom-primary" title="Edit">
-                                            <i class="fa fa-edit" style="color: white;"></i>
-                                        </a>
-                                        <button type="button"
-                                            class="btn btn-sm btn-custom-primary"
-                                            onclick="{{ 'deleteConfirmationBook(' . $book->bookID . ')' }}"
-                                            title="Delete">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="12" class="text-center">No books found in the catalog</td>
-                            </tr>
-                            @endforelse
+                        <tbody id="bookTableBody">
+                            @include('admin-page.catalog-book._index_table', ['books' => $books])
                         </tbody>
                     </table>
                 </form>
@@ -262,16 +207,16 @@
 
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
                 <div>
-                    @if ($books->count())
-                        <p class="small text-muted mb-0">
+                    <p class="small text-muted mb-0 result-count">
+                        @if ($books->count())
                             Showing {{ $books->firstItem() }}-{{ $books->lastItem() }} of {{ $books->total() }} books
-                        </p>
-                    @else
-                        <p class="small text-muted mb-0">No data to display</p>
-                    @endif
+                        @else
+                            No data to display
+                        @endif
+                    </p>
                 </div>
 
-                <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="d-flex align-items-center gap-2 flex-wrap" id="paginationContainer">
                     {{ $books->appends(request()->query())->links() }}
                 </div>
             </div>
@@ -526,98 +471,93 @@
         width: '350px',
     });
 
-    function deleteConfirmationBook(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "DELETE",
-                    url: `{{ url('admin/catalog/books/${id}') }}`,
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                    },
-                    success: function(data) {
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Book has been deleted!'
-                        });
-                        setTimeout(function () { location.reload(); }, 300);
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Something went wrong.',
-                            icon: 'error'
-                        });
-                    }
-                });
-            }
-        });
-    }
-
-    function handleBulkDelete() {
-        const checkboxes = document.querySelectorAll('input[name="ids[]"]:checked');
-        const ids = Array.from(checkboxes).map(checkbox => checkbox.value);
-
-        if (ids.length === 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'No books selected',
-                text: 'Please select at least one book to delete.',
-                confirmButtonText: 'OK',
-                didOpen: () => {
-                    const confirmBtn = document.querySelector('.swal2-confirm');
-                    confirmBtn.style.backgroundColor = '#00a79d';
-                    confirmBtn.style.color = 'white';
-                }
-            });
-            return;
-        }
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete them!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "POST",
-                    url: `{{ route('admin.catalog.books.bulkDelete') }}`,
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        ids: ids
-                    },
-                    success: function(response) {
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Selected books have been deleted!'
-                        });
-                        location.reload();
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Something went wrong.',
-                            icon: 'error'
-                        });
-                    }
-                });
-            }
-        });
-    }
+    let sortBy = '{{ request("sort_by", "createdDate") }}';
+    let sortOrder = '{{ request("sort_order", "desc") }}';
 
     $(document).ready(function() {
+        updateSortArrows();
+        initColumnSearch();
+
+        $(document).ajaxComplete(function() {
+            initColumnSearch();
+        });
+
+
+        function loadBooks(params = {}) {
+            $('#bookTableBody').html('<tr><td colspan="12" class="text-center">Loading...</td></tr>');
+
+            params.sort_by = sortBy;
+            params.sort_order = sortOrder;
+
+            $.ajax({
+                url: "{{ route('admin.catalog.books.indexAdmin') }}",
+                data: params,
+                success: function(response) {
+                    if (response) {
+                        if (response.tableBody) {
+                            $('#bookTableBody').html(response.tableBody);
+                        } else if (response) {
+                            $('#bookTableBody').html(response);
+                        } else {
+                            $('#bookTableBody').html('<tr><td colspan="12" class="text-center">Error loading data</td></tr>');
+                        }
+
+                        if (response.pagination) {
+                            $('#paginationContainer').html(response.pagination);
+                        } else {
+                            $('#paginationContainer').empty();
+                        }
+
+                        if (response.from !== null && response.to !== null && response.total !== null) {
+                            $('.result-count').text(`Showing ${response.from}-${response.to} of ${response.total} books`);
+                        } else if (response.total === 0) {
+                            $('.result-count').text('No data to display');
+                        }
+                    } else {
+                        console.error('Empty response received');
+                        $('#bookTableBody').html('<tr><td colspan="12" class="text-center">Error: Empty response from server</td></tr>');
+                    }
+                },
+                error: function(xhr) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Error loading data'
+                    });
+                    $('#bookTableBody').html('<tr><td colspan="12" class="text-center">Error loading data</td></tr>');
+                }
+            });
+        }
+
+        function updateSortArrows() {
+            $('.sort-arrow').html('');
+            if (sortBy) {
+                const arrowElement = $(`#sortArrow${sortBy.charAt(0).toUpperCase() + sortBy.slice(1)}`);
+                if (arrowElement.length) {
+                    arrowElement.html(sortOrder === 'asc' ? '↑' : '↓');
+                }
+            }
+        }
+
+        $(document).on('click', '.sort-link', function(e) {
+            e.preventDefault();
+            const newSortBy = $(this).data('sort-by');
+
+            if (sortBy === newSortBy) {
+                sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortBy = newSortBy;
+                sortOrder = 'desc';
+            }
+
+            updateSortArrows();
+            loadBooks($('#searchForm').serializeArray());
+        });
+
+        $('#searchForm').on('submit', function(e) {
+            e.preventDefault();
+            loadBooks($(this).serializeArray());
+        });
+
         $('input[name="added_date"]').daterangepicker({
             autoUpdateInput: false,
             locale: {
@@ -639,53 +579,179 @@
 
         $('input[name="added_date"]').on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
-            $('#searchForm').submit();
+            loadBooks($('#searchForm').serializeArray());
         });
 
         $('input[name="added_date"]').on('cancel.daterangepicker', function(ev, picker) {
             $(this).val('');
-            $('#searchForm').submit();
+            loadBooks($('#searchForm').serializeArray());
         });
 
-        document.querySelectorAll('.column-search').forEach(input => {
-            const clearBtn = document.createElement('button');
-            clearBtn.innerHTML = '<i class="fa fa-times"></i>';
-            clearBtn.className = 'column-search-clear';
-            clearBtn.style.display = input.value ? 'block' : 'none';
+        $('.column-search').on('keyup', function(e) {
+            if (e.key === 'Enter') {
+                loadBooks($('#searchForm').serializeArray());
+            }
+        });
 
-            clearBtn.addEventListener('click', function() {
-                input.value = '';
-                this.style.display = 'none';
-                document.getElementById('searchForm').submit();
+        function initColumnSearch() {
+            document.querySelectorAll('.column-search').forEach(input => {
+                if (input.nextElementSibling && input.nextElementSibling.classList.contains('column-search-clear')) {
+                    return;
+                }
+
+                const clearBtn = document.createElement('button');
+                clearBtn.innerHTML = '<i class="fa fa-times"></i>';
+                clearBtn.className = 'column-search-clear';
+                clearBtn.style.display = input.value ? 'block' : 'none';
+                clearBtn.type = 'button';
+
+                input.insertAdjacentElement('afterend', clearBtn);
+
+                clearBtn.addEventListener('click', function() {
+                    input.value = '';
+                    this.style.display = 'none';
+                    loadBooks($('#searchForm').serializeArray());
+                });
+
+                input.addEventListener('input', function() {
+                    clearBtn.style.display = this.value ? 'block' : 'none';
+                });
+
+                input.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        loadBooks($('#searchForm').serializeArray());
+                    }
+                });
             });
+        }
 
-            const wrapper = input.parentNode;
-            wrapper.appendChild(clearBtn);
+        $(document).on('click', '.column-search-clear', function() {
+            const input = $(this).prev('.column-search');
+            input.val('');
+            $(this).hide();
+            loadBooks($('#searchForm').serializeArray());
+        });
 
-            input.addEventListener('input', function() {
-                clearBtn.style.display = this.value ? 'block' : 'none';
-            });
+        $(document).on('click', '.pagination a', function(e) {
+            e.preventDefault();
+            const url = new URL($(this).attr('href'));
+            const page = url.searchParams.get('page');
+            loadBooks([...$('#searchForm').serializeArray(), {name: 'page', value: page}]);
+        });
 
-            input.addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    document.getElementById('searchForm').submit();
+        $('#selectAll').on('change', function() {
+            $('input[name="ids[]"]').prop('checked', this.checked);
+            updateBulkDeleteButton();
+        });
+
+        $(document).on('change', 'input[name="ids[]"]', function() {
+            updateBulkDeleteButton();
+
+            const allChecked = $('input[name="ids[]"]:checked').length === $('input[name="ids[]"]').length;
+            $('#selectAll').prop('checked', allChecked);
+        });
+
+        function updateBulkDeleteButton() {
+            const anyChecked = $('input[name="ids[]"]:checked').length > 0;
+            $('#bulkDeleteBtn').prop('disabled', !anyChecked);
+        }
+
+        function deleteConfirmationBook(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: `{{ url('admin/catalog/books/') }}/${id}`,
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                        },
+                        success: function(data) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Book has been deleted!'
+                            });
+                            loadBooks($('#searchForm').serializeArray());
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Something went wrong.',
+                                icon: 'error'
+                            });
+                        }
+                    });
                 }
             });
-        });
+        }
 
-        document.getElementById('selectAll')?.addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('input[name="ids[]"]');
-            checkboxes.forEach(checkbox => checkbox.checked = this.checked);
-        });
+        function handleBulkDelete() {
+            const checkboxes = $('input[name="ids[]"]:checked');
+            const ids = checkboxes.map(function() {
+                return $(this).val();
+            }).get();
 
-        document.querySelectorAll('input[name="ids[]"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const anyChecked = document.querySelectorAll('input[name="ids[]"]:checked').length > 0;
-                document.getElementById('bulkDeleteBtn').disabled = !anyChecked;
+            if (ids.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No books selected',
+                    text: 'Please select at least one book to delete.',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `You are about to delete ${ids.length} book(s). This action cannot be undone!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete them!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('admin.catalog.books.bulkDelete') }}",
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            ids: ids
+                        },
+                        success: function(response) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Selected books have been deleted!'
+                            });
+                            loadBooks($('#searchForm').serializeArray());
+                            $('#selectAll').prop('checked', false);
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Something went wrong.',
+                                icon: 'error'
+                            });
+                        }
+                    });
+                }
             });
-        });
+        }
 
-        document.getElementById('bulkDeleteBtn')?.addEventListener('click', handleBulkDelete);
+        $('#bulkDeleteBtn').on('click', handleBulkDelete);
+
+        $('.column-search').each(function() {
+            if ($(this).val()) {
+                $(this).next('.column-search-clear').show();
+            }
+        });
     });
 </script>
 @endsection
