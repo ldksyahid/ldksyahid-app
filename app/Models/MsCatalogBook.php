@@ -93,7 +93,7 @@ class MsCatalogBook extends Model
         ];
     }
 
-    protected static function booted()
+    protected static function booted(): void
     {
         static::creating(function ($model) {
             $model->createdBy = auth()->check() ? auth()->user()->username : 'SYSTEM';
@@ -109,8 +109,28 @@ class MsCatalogBook extends Model
     }
 
 
-    public static function validateRequest(Request $request, $ignoreId = null) {
+    public static function validateRequest(Request $request, $ignoreId = null): array
+    {
+        $maxYear = date('Y');
 
+        return $request->validate([
+            'isbn' => 'required|string|max:20',
+            'titleBook' => 'required|string|max:255|unique:ms_catalog_book,titleBook',
+            'authorName' => 'required|string|max:100',
+            'publisherName' => 'required|string|max:100',
+            'categoryName' => 'required|string|max:100',
+            'language' => 'required|string|max:50',
+            'year' => "required|integer|min:1900|max:$maxYear",
+            'pages' => 'required|integer|min:1',
+            'description' => 'required|string',
+            'synopsis' => 'nullable|string',
+            'edition' => 'nullable|string|max:50',
+            'coverImage' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'pdfFileName' => 'required|file|mimes:pdf|max:10240',
+            'tags' => 'nullable|string|max:255',
+            'metaKeywords' => 'nullable|string|max:255',
+            'metaDescription' => 'nullable|string|max:255',
+        ]);
     }
 
     public static function generateSlug(string $title, ?int $ignoreId = null): string
@@ -130,7 +150,7 @@ class MsCatalogBook extends Model
         return $slug;
     }
 
-    public static function searchAdminBooks(Request $request)
+    public static function searchAdminBooks(Request $request): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         $sortBy = $request->input('sort_by', 'createdDate');
         $sortOrder = $request->input('sort_order', 'desc');
@@ -209,5 +229,55 @@ class MsCatalogBook extends Model
         return $query->orderBy($sortBy, $sortOrder)
             ->paginate(15)
             ->appends($request->all());
+    }
+
+    public static function saveModel(Request $request): self
+    {
+        $slug = self::generateSlug($request->titleBook);
+
+        $coverImageFileName = null;
+        $coverImageGDriveID = null;
+        if ($request->hasFile('coverImage')) {
+            $file = $request->file('coverImage');
+            $fileName = time() . '_cover_' . $file->getClientOriginalName();
+            $gdriveService = new \App\Services\GoogleDrive(self::PATH_COVER_IMAGE_GDRIVE_ID);
+            $uploadResult = $gdriveService->uploadImage($file, $fileName, self::PATH_COVER_IMAGE_GDRIVE_ID . '/' . $fileName);
+            $coverImageFileName = $uploadResult['fileName'];
+            $coverImageGDriveID = $uploadResult['gdriveID'];
+        }
+
+        $pdfFileName = null;
+        $pdfFileGDriveID = null;
+        if ($request->hasFile('pdfFileName')) {
+            $file = $request->file('pdfFileName');
+            $fileName = time() . '_book_' . $file->getClientOriginalName();
+            $gdriveService = new \App\Services\GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
+            $uploadResult = $gdriveService->uploadFile($file, $fileName, self::PATH_PDF_FILE_NAME_GDRIVE_ID . '/' . $fileName);
+            $pdfFileName = $uploadResult['fileName'];
+            $pdfFileGDriveID = $uploadResult['gdriveID'];
+        }
+
+        return self::create([
+            'slug' => $slug,
+            'isbn' => $request->isbn,
+            'titleBook' => $request->titleBook,
+            'authorName' => $request->authorName,
+            'publisherName' => $request->publisherName,
+            'categoryName' => $request->categoryName,
+            'language' => $request->language,
+            'year' => $request->year,
+            'pages' => $request->pages,
+            'description' => $request->description,
+            'synopsis' => $request->synopsis,
+            'edition' => $request->edition,
+            'coverImage' => $coverImageFileName,
+            'coverImageGdriveID' => $coverImageGDriveID,
+            'pdfFileName' => $pdfFileName,
+            'pdfFileNameGdriveID' => $pdfFileGDriveID,
+            'tags' => $request->tags,
+            'metaKeywords' => $request->metaKeywords,
+            'metaDescription' => $request->metaDescription,
+            'flagActive' => $request->has('flagActive') ? 1 : 0,
+        ]);
     }
 }
