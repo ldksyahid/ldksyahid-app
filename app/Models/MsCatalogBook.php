@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Services\GoogleDrive;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MsCatalogBook extends Model
@@ -240,7 +242,7 @@ class MsCatalogBook extends Model
         if ($request->hasFile('coverImage')) {
             $file = $request->file('coverImage');
             $fileName = time() . '_cover_' . $file->getClientOriginalName();
-            $gdriveService = new \App\Services\GoogleDrive(self::PATH_COVER_IMAGE_GDRIVE_ID);
+            $gdriveService = new GoogleDrive(self::PATH_COVER_IMAGE_GDRIVE_ID);
             $uploadResult = $gdriveService->uploadImage($file, $fileName, self::PATH_COVER_IMAGE_GDRIVE_ID . '/' . $fileName);
             $coverImageFileName = $uploadResult['fileName'];
             $coverImageGDriveID = $uploadResult['gdriveID'];
@@ -251,7 +253,7 @@ class MsCatalogBook extends Model
         if ($request->hasFile('pdfFileName')) {
             $file = $request->file('pdfFileName');
             $fileName = time() . '_book_' . $file->getClientOriginalName();
-            $gdriveService = new \App\Services\GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
+            $gdriveService = new GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
             $uploadResult = $gdriveService->uploadFile($file, $fileName, self::PATH_PDF_FILE_NAME_GDRIVE_ID . '/' . $fileName);
             $pdfFileName = $uploadResult['fileName'];
             $pdfFileGDriveID = $uploadResult['gdriveID'];
@@ -279,5 +281,49 @@ class MsCatalogBook extends Model
             'metaDescription' => $request->metaDescription,
             'flagActive' => $request->has('flagActive') ? 1 : 0,
         ]);
+    }
+
+    public function deleteBookWithFiles(): void
+    {
+        try {
+            $this->deleteFilesFromDrive();
+
+            $this->delete();
+        } catch (\Exception $e) {
+            Log::error("Error deleting book ID {$this->bookID}: " . $e->getMessage());
+            throw new \Exception('Failed to delete book and its files');
+        }
+    }
+
+    public static function bulkDeleteBooks(array $ids): void
+    {
+        try {
+            $books = self::whereIn('bookID', $ids)->get();
+
+            foreach ($books as $book) {
+                $book->deleteBookWithFiles();
+            }
+        } catch (\Exception $e) {
+            Log::error("Error bulk deleting books: " . $e->getMessage());
+            throw new \Exception('Failed to delete selected books');
+        }
+    }
+
+    protected function deleteFilesFromDrive(): void
+    {
+        try {
+            if ($this->coverImageGdriveID) {
+                $gdriveService = new GoogleDrive(self::PATH_COVER_IMAGE_GDRIVE_ID);
+                $gdriveService->deleteImage($this->coverImageGdriveID);
+            }
+
+            if ($this->pdfFileNameGdriveID) {
+                $gdriveService = new GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
+                $gdriveService->deleteImage($this->pdfFileNameGdriveID);
+            }
+        } catch (\Exception $e) {
+            Log::error("Error deleting files for book ID {$this->bookID}: " . $e->getMessage());
+            throw new \Exception('Failed to delete associated files');
+        }
     }
 }

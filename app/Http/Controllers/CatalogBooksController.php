@@ -76,11 +76,44 @@ class CatalogBooksController extends Controller
 
     public function destroy(MsCatalogBook $book)
     {
+        try {
+            $book->deleteBookWithFiles();
 
+            return response()->json([
+                'success' => true,
+                'message' => 'Book has been deleted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting book: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function bulkDelete(Request $request)
     {
+        try {
+            $ids = $request->input('ids', []);
 
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No books selected for deletion'
+                ], 400);
+            }
+
+            MsCatalogBook::bulkDeleteBooks($ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Selected books have been deleted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting books: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
