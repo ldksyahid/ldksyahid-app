@@ -44,26 +44,26 @@ class CatalogBooksController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'isbn' => 'required|string|max:20',
-                'titleBook' => 'required|string|max:255',
-                'authorName' => 'required|string|max:100',
-                'publisherName' => 'required|string|max:100',
-                'categoryName' => 'required|string|max:100',
-                'language' => 'required|string|max:50',
-                'year' => 'required|integer|min:1900|max:' . date('Y'),
-                'pages' => 'nullable|integer|min:1',
-                'description' => 'nullable|string',
-                'synopsis' => 'nullable|string',
-                'edition' => 'nullable|string|max:50',
-                'coverImage' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'pdfFileName' => 'nullable|file|mimes:pdf|max:10240',
-                'tags' => 'nullable|string|max:255',
-                'metaKeywords' => 'nullable|string|max:255',
-                'metaDescription' => 'nullable|string|max:255',
-            ]);
+        $validated = $request->validate([
+            'isbn' => 'required|string|max:20',
+            'titleBook' => 'required|string|max:255',
+            'authorName' => 'required|string|max:100',
+            'publisherName' => 'required|string|max:100',
+            'categoryName' => 'required|string|max:100',
+            'language' => 'required|string|max:50',
+            'year' => 'required|integer|min:1900|max:' . date('Y'),
+            'pages' => 'required|integer|min:1',
+            'description' => 'required|string',
+            'synopsis' => 'nullable|string',
+            'edition' => 'nullable|string|max:50',
+            'coverImage' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'pdfFileName' => 'required|file|mimes:pdf|max:10240',
+            'tags' => 'nullable|string|max:255',
+            'metaKeywords' => 'nullable|string|max:255',
+            'metaDescription' => 'nullable|string|max:255',
+        ]);
 
+        try {
             $slug = MsCatalogBook::generateSlug($request->titleBook);
 
             $coverImageFileName = null;
@@ -115,11 +115,10 @@ class CatalogBooksController extends Controller
                 ->with('success', 'Book has been added successfully!');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('failed', 'Error adding book: ' . $e->getMessage())
-                ->withInput();
+                ->withInput()
+                ->withErrors(['error' => 'Error adding book: ' . $e->getMessage()]);
         }
     }
-
 
     public function showAdmin(MsCatalogBook $book)
     {

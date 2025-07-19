@@ -21,8 +21,7 @@
                 </div>
                 @endif
 
-                @if (session('failed'))
-                    @if ($errors->any())
+                @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>There were some problems with your input:</strong>
                         <ul class="mb-0">
@@ -32,7 +31,13 @@
                         </ul>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    @endif
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 @endif
             </div>
 
@@ -113,9 +118,9 @@
                                         @enderror
                                     </div>
 
-                                    <div class="mb-3">
-                                        <label for="pages" class="form-label">Pages</label>
-                                        <input type="number" class="form-control @error('pages') is-invalid @enderror" id="pages" name="pages" value="{{ old('pages') }}" min="1">
+                                   <div class="mb-3">
+                                        <label for="pages" class="form-label">Pages <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control @error('pages') is-invalid @enderror" id="pages" name="pages" value="{{ old('pages') }}" min="1" required>
                                         @error('pages')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -137,8 +142,8 @@
                                     <h5 class="section-title mb-3"><i class="fas fa-align-left me-2"></i>Description</h5>
 
                                     <div class="mb-3">
-                                        <label for="description" class="form-label">Short Description</label>
-                                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description') }}</textarea>
+                                        <label for="description" class="form-label">Short Description <span class="text-danger">*</span></label>
+                                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3" required>{{ old('description') }}</textarea>
                                         @error('description')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -173,8 +178,8 @@
                                     <h5 class="section-title mb-3"><i class="fas fa-file-pdf me-2"></i>PDF File</h5>
 
                                     <div class="mb-3">
-                                        <label for="pdfFileName" class="form-label">Upload PDF File</label>
-                                        <input type="file" class="form-control @error('pdfFileName') is-invalid @enderror" id="pdfFileName" name="pdfFileName" accept=".pdf">
+                                        <label for="pdfFileName" class="form-label">Upload PDF File <span class="text-danger">*</span></label>
+                                        <input type="file" class="form-control @error('pdfFileName') is-invalid @enderror" id="pdfFileName" name="pdfFileName" accept=".pdf" required>
                                         @error('pdfFileName')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
