@@ -77,7 +77,7 @@ class CatalogBooksController extends Controller
     public function destroy(MsCatalogBook $book)
     {
         try {
-            $book->deleteBookWithFiles();
+            $book->deleteModel();
 
             return response()->json([
                 'success' => true,
@@ -103,7 +103,7 @@ class CatalogBooksController extends Controller
                 ], 400);
             }
 
-            MsCatalogBook::bulkDeleteBooks($ids);
+            MsCatalogBook::bulkDeleteModel($ids);
 
             return response()->json([
                 'success' => true,

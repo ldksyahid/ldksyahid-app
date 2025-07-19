@@ -283,7 +283,7 @@ class MsCatalogBook extends Model
         ]);
     }
 
-    public function deleteBookWithFiles(): void
+    public function deleteModel(): void
     {
         try {
             $this->deleteFilesFromDrive();
@@ -295,13 +295,13 @@ class MsCatalogBook extends Model
         }
     }
 
-    public static function bulkDeleteBooks(array $ids): void
+    public static function bulkDeleteModel(array $ids): void
     {
         try {
             $books = self::whereIn('bookID', $ids)->get();
 
             foreach ($books as $book) {
-                $book->deleteBookWithFiles();
+                $book->deleteModel();
             }
         } catch (\Exception $e) {
             Log::error("Error bulk deleting books: " . $e->getMessage());
@@ -319,7 +319,7 @@ class MsCatalogBook extends Model
 
             if ($this->pdfFileNameGdriveID) {
                 $gdriveService = new GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
-                $gdriveService->deleteImage($this->pdfFileNameGdriveID);
+                $gdriveService->deleteFile($this->pdfFileNameGdriveID);
             }
         } catch (\Exception $e) {
             Log::error("Error deleting files for book ID {$this->bookID}: " . $e->getMessage());
