@@ -257,7 +257,7 @@
                 <div>
                     @if ($urls->count())
                         <p class="small text-muted mb-0">
-                            Showing {{ $urls->firstItem() }}–{{ $urls->lastItem() }} of {{ $urls->total() }} shortlinks
+                            Showing {{ $urls->firstItem() }}-{{ $urls->lastItem() }} of {{ $urls->total() }} shortlinks
                         </p>
                     @else
                         <p class="small text-muted mb-0">No data to display</p>

@@ -27,4 +27,18 @@ class GoogleDrive
     {
         Storage::disk('google')->delete($this->folderID . '/' . $fileID);
     }
+
+    public function uploadFile($file, $fileName, $filePath)
+    {
+        Storage::cloud()->put($filePath, File::get($file));
+        $fileMetaData = Storage::disk("google")->getAdapter()->getMetadata($filePath);
+        $gdriveID = basename($fileMetaData['path']);
+
+        return ['fileName' => $fileName, 'gdriveID' => $gdriveID];
+    }
+
+    public function deleteFile($fileID)
+    {
+        Storage::disk('google')->delete($this->folderID . '/' . $fileID);
+    }
 }
