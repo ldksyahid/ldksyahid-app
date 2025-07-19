@@ -74,7 +74,7 @@
                 @endif
 
                 @if (session('failed'))
-                    @if ($errors->any()))
+                    @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>There were some problems with your input:</strong>
                         <ul class="mb-0">
@@ -101,7 +101,7 @@
                                     <div class="d-flex flex-column">
                                         <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'createdDate', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'createdDate' ? 'desc' : 'asc'])) }}">
                                             <span>Added Date</span>
-                                            @if(request('sort_by') === 'createdDate'))
+                                            @if(request('sort_by') === 'createdDate')
                                                 {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
                                             @endif
                                         </a>
@@ -114,7 +114,7 @@
                                     <div class="d-flex flex-column">
                                         <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'isbn', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'isbn' ? 'desc' : 'asc'])) }}">
                                             <span>ISBN</span>
-                                            @if(request('sort_by') === 'isbn'))
+                                            @if(request('sort_by') === 'isbn')
                                                 {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
                                             @endif
                                         </a>
@@ -127,7 +127,7 @@
                                     <div class="d-flex flex-column">
                                         <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'titleBook', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'titleBook' ? 'desc' : 'asc'])) }}">
                                             <span>Title</span>
-                                            @if(request('sort_by') === 'titleBook'))
+                                            @if(request('sort_by') === 'titleBook')
                                                 {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
                                             @endif
                                         </a>
@@ -140,7 +140,7 @@
                                     <div class="d-flex flex-column">
                                         <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'authorName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'authorName' ? 'desc' : 'asc'])) }}">
                                             <span>Author</span>
-                                            @if(request('sort_by') === 'authorName'))
+                                            @if(request('sort_by') === 'authorName')
                                                 {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
                                             @endif
                                         </a>
@@ -153,7 +153,7 @@
                                     <div class="d-flex flex-column">
                                         <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'publisherName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'publisherName' ? 'desc' : 'asc'])) }}">
                                             <span>Publisher</span>
-                                            @if(request('sort_by') === 'publisherName'))
+                                            @if(request('sort_by') === 'publisherName')
                                                 {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
                                             @endif
                                         </a>
@@ -166,7 +166,7 @@
                                     <div class="d-flex flex-column">
                                         <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'categoryName', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'categoryName' ? 'desc' : 'asc'])) }}">
                                             <span>Category</span>
-                                            @if(request('sort_by') === 'categoryName'))
+                                            @if(request('sort_by') === 'categoryName')
                                                 {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
                                             @endif
                                         </a>
@@ -179,7 +179,7 @@
                                     <div class="d-flex flex-column">
                                         <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'language', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'language' ? 'desc' : 'asc'])) }}">
                                             <span>Language</span>
-                                            @if(request('sort_by') === 'language'))
+                                            @if(request('sort_by') === 'language')
                                                 {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
                                             @endif
                                         </a>
@@ -192,7 +192,7 @@
                                     <div class="d-flex flex-column">
                                         <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'year', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'year' ? 'desc' : 'asc'])) }}">
                                             <span>Year</span>
-                                            @if(request('sort_by') === 'year'))
+                                            @if(request('sort_by') === 'year')
                                                 {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
                                             @endif
                                         </a>
@@ -205,7 +205,7 @@
                                     <div class="d-flex flex-column">
                                         <a href="{{ route('admin.catalog.books.indexAdmin', array_merge(request()->all(), ['sort_by' => 'readCount', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'readCount' ? 'desc' : 'asc'])) }}">
                                             <span>Reads</span>
-                                            @if(request('sort_by') === 'readCount'))
+                                            @if(request('sort_by') === 'readCount')
                                                 {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
                                             @endif
                                         </a>
@@ -234,15 +234,15 @@
                                 <td class="text-center">{{ $book->year }}</td>
                                 <td class="text-center">{{ $book->readCount }}</td>
                                 <td class="text-center">
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('admin.catalog.books.show', $book->bookID) }}" class="btn btn-sm btn-info" title="View">
-                                            <i class="fa fa-eye"></i>
+                                    <div class="btn-group" role="group  ">
+                                        <a href="{{ route('admin.catalog.books.show', $book->bookID) }}" class="btn btn-sm btn-custom-primary" title="View">
+                                            <i class="fa fa-eye" style="color: white;"></i>
                                         </a>
-                                        <a href="{{ route('admin.catalog.books.edit', $book->bookID) }}" class="btn btn-sm btn-primary" title="Edit">
-                                            <i class="fa fa-edit"></i>
+                                        <a href="{{ route('admin.catalog.books.edit', $book->bookID) }}" class="btn btn-sm btn-custom-primary" title="Edit">
+                                            <i class="fa fa-edit" style="color: white;"></i>
                                         </a>
                                         <button type="button"
-                                            class="btn btn-sm btn-danger"
+                                            class="btn btn-sm btn-custom-primary"
                                             onclick="{{ 'deleteConfirmationBook(' . $book->bookID . ')' }}"
                                             title="Delete">
                                             <i class="fa fa-trash"></i>
@@ -262,9 +262,9 @@
 
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
                 <div>
-                    @if ($books->count()))
+                    @if ($books->count())
                         <p class="small text-muted mb-0">
-                            Showing {{ $books->firstItem() }}–{{ $books->lastItem() }} of {{ $books->total() }} books
+                            Showing {{ $books->firstItem() }}-{{ $books->lastItem() }} of {{ $books->total() }} books
                         </p>
                     @else
                         <p class="small text-muted mb-0">No data to display</p>
