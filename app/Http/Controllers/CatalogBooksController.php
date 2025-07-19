@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\MsCatalogBook;
+use App\Services\GoogleDrive;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class CatalogBooksController extends Controller
@@ -43,7 +45,6 @@ class CatalogBooksController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validasi input
             $validated = $request->validate([
                 'isbn' => 'required|string|max:20',
                 'titleBook' => 'required|string|max:255',
@@ -57,32 +58,36 @@ class CatalogBooksController extends Controller
                 'synopsis' => 'nullable|string',
                 'edition' => 'nullable|string|max:50',
                 'coverImage' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'coverImageGdriveID' => 'nullable|string|max:255',
                 'pdfFileName' => 'nullable|file|mimes:pdf|max:10240',
-                'pdfFileNameGdriveID' => 'nullable|string|max:255',
                 'tags' => 'nullable|string|max:255',
                 'metaKeywords' => 'nullable|string|max:255',
                 'metaDescription' => 'nullable|string|max:255',
-                'flagActive' => 'boolean',
             ]);
 
-            // Generate slug dari title
             $slug = MsCatalogBook::generateSlug($request->titleBook);
 
-            // Handle file uploads
-            $coverImagePath = null;
+            $coverImageFileName = null;
+            $coverImageGDriveID = null;
             if ($request->hasFile('coverImage')) {
-                $coverImagePath = $request->file('coverImage')->store('public/book-covers');
-                $coverImagePath = str_replace('public/', '', $coverImagePath);
+                $file = $request->file('coverImage');
+                $fileName = time() . '_cover_' . $file->getClientOriginalName();
+                $gdriveService = new GoogleDrive(MsCatalogBook::PATH_COVER_IMAGE_GDRIVE_ID);
+                $uploadResult = $gdriveService->uploadImage($file, $fileName, MsCatalogBook::PATH_COVER_IMAGE_GDRIVE_ID . '/' . $fileName);
+                $coverImageFileName = $uploadResult['fileName'];
+                $coverImageGDriveID = $uploadResult['gdriveID'];
             }
 
-            $pdfFilePath = null;
+            $pdfFileName = null;
+            $pdfFileGDriveID = null;
             if ($request->hasFile('pdfFileName')) {
-                $pdfFilePath = $request->file('pdfFileName')->store('public/book-pdfs');
-                $pdfFilePath = str_replace('public/', '', $pdfFilePath);
+                $file = $request->file('pdfFileName');
+                $fileName = time() . '_book_' . $file->getClientOriginalName();
+                $gdriveService = new GoogleDrive(MsCatalogBook::PATH_PDF_FILE_NAME_GDRIVE_ID);
+                $uploadResult = $gdriveService->uploadFile($file, $fileName, MsCatalogBook::PATH_PDF_FILE_NAME_GDRIVE_ID . '/' . $fileName);
+                $pdfFileName = $uploadResult['fileName'];
+                $pdfFileGDriveID = $uploadResult['gdriveID'];
             }
 
-            // Buat data buku baru
             $book = new MsCatalogBook();
             $book->slug = $slug;
             $book->isbn = $request->isbn;
@@ -96,10 +101,10 @@ class CatalogBooksController extends Controller
             $book->description = $request->description;
             $book->synopsis = $request->synopsis;
             $book->edition = $request->edition;
-            $book->coverImage = $coverImagePath;
-            $book->coverImageGdriveID = $request->coverImageGdriveID;
-            $book->pdfFileName = $pdfFilePath;
-            $book->pdfFileNameGdriveID = $request->pdfFileNameGdriveID;
+            $book->coverImage = $coverImageFileName;
+            $book->coverImageGdriveID = $coverImageGDriveID;
+            $book->pdfFileName = $pdfFileName;
+            $book->pdfFileNameGdriveID = $pdfFileGDriveID;
             $book->tags = $request->tags;
             $book->metaKeywords = $request->metaKeywords;
             $book->metaDescription = $request->metaDescription;
@@ -114,6 +119,7 @@ class CatalogBooksController extends Controller
                 ->withInput();
         }
     }
+
 
     public function showAdmin(MsCatalogBook $book)
     {
