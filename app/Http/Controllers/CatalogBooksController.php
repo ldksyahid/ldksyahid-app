@@ -31,6 +31,16 @@ class CatalogBooksController extends Controller
     {
         $books = MsCatalogBook::searchAdminBooks($request);
 
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('admin-page.catalog-book._index_table', compact('books'))->render(),
+                'pagination' => $books->appends($request->query()),
+                'total' => $books->total(),
+                'from' => $books->firstItem(),
+                'to' => $books->lastItem()
+            ]);
+        }
+
         return view('admin-page.catalog-book.index', compact('books'))
             ->with('title', 'Book Catalog');
     }
