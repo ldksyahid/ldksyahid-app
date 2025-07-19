@@ -595,7 +595,8 @@
             $('#bulkDeleteBtn').prop('disabled', !anyChecked);
         }
 
-        function copyLink(urlKey) {
+        $(document).on('click', '.btn-copy', function() {
+            const urlKey = $(this).data('url');
             const fullUrl = new URL(`{{ url('/') }}/${urlKey}`);
             const linkWithoutProtocol = `${fullUrl.host}${fullUrl.pathname}`;
             navigator.clipboard.writeText(linkWithoutProtocol).then(() => {
@@ -609,9 +610,10 @@
                     title: 'Failed to copy link'
                 });
             });
-        }
+        });
 
-        function deleteConfirmationShortlink(id) {
+        $(document).on('click', '.btn-delete', function() {
+            const id = $(this).data('id');
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -624,7 +626,7 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type: "DELETE",
-                        url: `{{ url('admin/service/shortlink') }}/${id}`,
+                        url: `{{ route('admin.service.shortlink.destroy', '') }}/${id}`,
                         data: {
                             _token: '{{ csrf_token() }}',
                         },
@@ -645,7 +647,7 @@
                     });
                 }
             });
-        }
+        });
 
         function handleBulkDelete() {
             const checkboxes = $('input[name="ids[]"]:checked');

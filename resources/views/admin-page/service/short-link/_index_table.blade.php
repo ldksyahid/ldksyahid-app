@@ -12,7 +12,7 @@
     <td class="text-center">{{ $item->url_key }}</td>
     <td class="text-center"><a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a></td>
     <td>
-        <button class="btn btn-sm btn-primary" onclick="copyLink('{{ $item->url_key }}')">
+        <button class="btn btn-sm btn-primary btn-copy" data-url="{{ $item->url_key }}">
             <i class="fa fa-copy small"></i>
         </button>
         <a href="{{ url($item->url_key) }}" target="_blank">{{ parse_url(url($item->url_key), PHP_URL_HOST) }}{{ parse_url(url($item->url_key), PHP_URL_PATH) }}</a>
@@ -21,10 +21,10 @@
     <td class="text-center">{{ \Carbon\Carbon::parse($item->created_at)->isoFormat('DD') }} {{ \Carbon\Carbon::parse($item->created_at)->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse($item->created_at)->isoFormat('YYYY') }} ({{ \Carbon\Carbon::parse($item->created_at)->format('H:i T') }})</td>
     <td class="text-center">{{ $item->created_by ?? 'Undefined' }}</td>
     <td class="text-center">
-        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal-{{ $item->id }}">
+        <button type="button" class="btn btn-sm btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editModal-{{ $item->id }}">
             <i class="fa fa-edit"></i>
         </button>
-        <button type="button" class="btn btn-sm btn-danger" onclick="deleteConfirmationShortlink({{ $item->id }})" {{ $isSuperadmin ? '' : 'disabled' }}>
+        <button type="button" class="btn btn-sm btn-danger btn-delete" data-id="{{ $item->id }}" {{ $isSuperadmin ? '' : 'disabled' }}>
             <i class="fa fa-trash"></i>
         </button>
     </td>

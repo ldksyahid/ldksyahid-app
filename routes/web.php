@@ -297,10 +297,10 @@ Route::post('{id}', [ShortLinkController::class, 'update'])
     ->name('admin.service.shortlink.update')
     ->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
-Route::get('{id}/destroy', [ShortLinkController::class, 'destroy'])
+Route::delete('{id}', [ShortLinkController::class, 'destroy'])
     ->name('admin.service.shortlink.destroy')
     ->middleware(['role:Superadmin']);
-    
+
 Route::post('/admin/service/shortlink/bulk-delete', [ShortLinkController::class, 'bulkDelete'])
     ->name('admin.service.shortlink.bulkDelete')
     ->middleware(['role:Superadmin']);

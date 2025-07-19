@@ -16,83 +16,95 @@ class ShortLinkController extends Controller
 {
     public function index(Request $request)
     {
-        $sortBy = $request->input('sort_by', 'created_at');
-        $sortOrder = $request->input('sort_order', 'desc');
+        try {
+            $sortBy = $request->input('sort_by', 'created_at');
+            $sortOrder = $request->input('sort_order', 'desc');
 
-        $allowedSorts = [
-            'url_key',
-            'destination_url',
-            'default_short_url',
-            'created_by',
-            'created_at',
-            'visits_count'
-        ];
+            $allowedSorts = [
+                'url_key',
+                'destination_url',
+                'default_short_url',
+                'created_by',
+                'created_at',
+                'visits_count'
+            ];
 
-        if (!in_array($sortBy, $allowedSorts)) {
-            $sortBy = 'created_at';
+            if (!in_array($sortBy, $allowedSorts)) {
+                $sortBy = 'created_at';
+            }
+
+            $urls = ShortURL::withCount('visits')
+                ->when($request->filled('url_key'), function ($query) use ($request) {
+                    $query->where('url_key', 'like', '%' . $request->url_key . '%');
+                })
+                ->when($request->filled('destination_url'), function ($query) use ($request) {
+                    $query->where('destination_url', 'like', '%' . $request->destination_url . '%');
+                })
+                ->when($request->filled('default_short_url'), function ($query) use ($request) {
+                    $query->where('default_short_url', 'like', '%' . $request->default_short_url . '%');
+                })
+                ->when($request->filled('created_by'), function ($query) use ($request) {
+                    $query->where('created_by', 'like', '%' . $request->created_by . '%');
+                })
+                ->when($request->filled('created_at'), function ($query) use ($request) {
+                    $dates = explode(' - ', $request->created_at);
+                    if (count($dates) == 2) {
+                        $query->whereBetween('created_at', [
+                            Carbon::parse($dates[0])->startOfDay(),
+                            Carbon::parse($dates[1])->endOfDay()
+                        ]);
+                    }
+                })
+                ->when($request->filled('visits_count'), function ($query) use ($request) {
+                    $query->having('visits_count', '=', $request->visits_count);
+                })
+                ->orderBy($sortBy, $sortOrder)
+                ->paginate(15);
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'tableBody' => view('admin-page.service.short-link._index_table', compact('urls'))->render(),
+                    'pagination' => (string)$urls->links(),
+                    'total' => $urls->total(),
+                    'from' => $urls->firstItem(),
+                    'to' => $urls->lastItem()
+                ]);
+            }
+
+            return view('admin-page.service.short-link.index', compact('urls'))->with('title', 'Services');
+        } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error loading shortlinks: ' . $e->getMessage()
+                ], 500);
+            }
+            return back()->with('error', 'Error loading shortlinks: ' . $e->getMessage());
         }
-
-        $urls = ShortURL::withCount('visits')
-            ->when($request->filled('url_key'), function ($query) use ($request) {
-                $query->where('url_key', 'like', '%' . $request->url_key . '%');
-            })
-            ->when($request->filled('destination_url'), function ($query) use ($request) {
-                $query->where('destination_url', 'like', '%' . $request->destination_url . '%');
-            })
-            ->when($request->filled('default_short_url'), function ($query) use ($request) {
-                $query->where('default_short_url', 'like', '%' . $request->default_short_url . '%');
-            })
-            ->when($request->filled('created_by'), function ($query) use ($request) {
-                $query->where('created_by', 'like', '%' . $request->created_by . '%');
-            })
-            ->when($request->filled('created_at'), function ($query) use ($request) {
-                $dates = explode(' - ', $request->created_at);
-                if (count($dates) == 2) {
-                    $query->whereBetween('created_at', [
-                        Carbon::parse($dates[0])->startOfDay(),
-                        Carbon::parse($dates[1])->endOfDay()
-                    ]);
-                }
-            })
-            ->when($request->filled('visits_count'), function ($query) use ($request) {
-                $query->having('visits_count', '=', $request->visits_count);
-            })
-            ->orderBy($sortBy, $sortOrder)
-            ->paginate(15);
-
-        if ($request->ajax()) {
-            return response()->json([
-                'tableBody' => view('admin-page.service.short-link._index_table', compact('urls'))->render(),
-                'pagination' => (string)$urls->links(),
-                'total' => $urls->total(),
-                'from' => $urls->firstItem(),
-                'to' => $urls->lastItem()
-            ]);
-        }
-
-        return view('admin-page.service.short-link.index', compact('urls'))->with('title', 'Services');
     }
 
     public function shorten(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'url' => 'required|url'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
         try {
+            $validator = Validator::make($request->all(), [
+                'url' => 'required|url'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
             $builder = new Builder();
             $shortURLObject = $builder->destinationUrl($request->url)->make();
 
             return response()->json([
                 'success' => true,
-                'message' => 'URL shortened successfully.'
+                'message' => 'URL shortened successfully.',
+                'short_url' => $shortURLObject->default_short_url
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -104,30 +116,30 @@ class ShortLinkController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'url' => [
-                'required',
-                'string',
-                'alpha_dash',
-                Rule::unique('short_urls', 'url_key')->ignore($id),
-            ],
-            'destination' => 'required|url',
-        ], [
-            'url.required' => 'URL Key is required.',
-            'url.alpha_dash' => 'URL Key may only contain letters, numbers, dashes, and underscores.',
-            'url.unique' => 'This URL Key is already taken. Please choose another.',
-            'destination.required' => 'Destination URL is required.',
-            'destination.url' => 'The destination must be a valid URL.',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
         try {
+            $validator = Validator::make($request->all(), [
+                'url' => [
+                    'required',
+                    'string',
+                    'alpha_dash',
+                    Rule::unique('short_urls', 'url_key')->ignore($id),
+                ],
+                'destination' => 'required|url',
+            ], [
+                'url.required' => 'URL Key is required.',
+                'url.alpha_dash' => 'URL Key may only contain letters, numbers, dashes, and underscores.',
+                'url.unique' => 'This URL Key is already taken. Please choose another.',
+                'destination.required' => 'Destination URL is required.',
+                'destination.url' => 'The destination must be a valid URL.',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
             $url = ShortURL::findOrFail($id);
             $url->url_key = $request->url;
             $url->destination_url = $request->destination;
@@ -148,53 +160,62 @@ class ShortLinkController extends Controller
 
     public function destroy($id)
     {
-        $url = ShortURL::find($id);
-        if (!empty($url)) {
-            $url->url_key = request()->url;
-            $visits = ShortURLVisit::where('short_url_id', $url->id)->get();
-            if (!empty($visits)) {
-                foreach ($visits as $visit) {
-                    $visit->delete();
-                }
-            }
+        try {
+            $url = ShortURL::findOrFail($id);
+            ShortURLVisit::where('short_url_id', $id)->delete();
             $url->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'URL deleted successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete URL: ' . $e->getMessage()
+            ], 500);
         }
-        return back()->with('success', 'URL deleted successfully.');
     }
 
     public function bulkDelete(Request $request)
     {
-        $ids = $request->input('ids');
+        try {
+            $validator = Validator::make($request->all(), [
+                'ids' => 'required|array',
+                'ids.*' => 'exists:short_urls,id'
+            ]);
 
-        if (!empty($ids)) {
-            foreach ($ids as $id) {
-                $url = ShortURL::find($id);
-                if (!empty($url)) {
-                    $visits = ShortURLVisit::where('short_url_id', $url->id)->get();
-                    if (!empty($visits)) {
-                        foreach ($visits as $visit) {
-                            $visit->delete();
-                        }
-                    }
-                    foreach ($visits as $visit) {
-                        $visit->delete();
-                    }
-                    $url->delete();
-                }
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
             }
-            return response()->json(['success' => 'Selected shortlinks have been deleted!']);
+
+            $ids = $request->input('ids');
+            ShortURLVisit::whereIn('short_url_id', $ids)->delete();
+            ShortURL::whereIn('id', $ids)->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Selected shortlinks have been deleted!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete shortlinks: ' . $e->getMessage()
+            ], 500);
         }
-        return response()->json(['error' => 'No items selected for deletion.'], 400);
     }
 
     public function redirect($shortURLKey, Resolver $resolver)
     {
-        $shortURL = ShortURL::where('url_key', $shortURLKey)->firstOrFail();
-
-        if (!empty($shortURL)) {
+        try {
+            $shortURL = ShortURL::where('url_key', $shortURLKey)->firstOrFail();
             $resolver->handleVisit(request(), $shortURL);
+            return Redirect::to($shortURL->destination_url);
+        } catch (\Exception $e) {
+            abort(404, 'Short URL not found');
         }
-
-        return Redirect::to($shortURL->destination_url);
     }
 }
