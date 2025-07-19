@@ -595,7 +595,9 @@
             $('#bulkDeleteBtn').prop('disabled', !anyChecked);
         }
 
-        $(document).on('click', '.btn-copy', function() {
+        $(document).on('click', '.btn-copy', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             const urlKey = $(this).data('url');
             const fullUrl = new URL(`{{ url('/') }}/${urlKey}`);
             const linkWithoutProtocol = `${fullUrl.host}${fullUrl.pathname}`;
