@@ -58,19 +58,48 @@ class ShortLinkController extends Controller
                 $query->having('visits_count', '=', $request->visits_count);
             })
             ->orderBy($sortBy, $sortOrder)
-            ->paginate(15)
-            ->appends($request->all());
+            ->paginate(15);
 
-        return view('admin-page.service.short-link.index', compact('urls'))
-            ->with('title', 'Services');
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('admin-page.service.short-link._index_table', compact('urls'))->render(),
+                'pagination' => (string)$urls->links(),
+                'total' => $urls->total(),
+                'from' => $urls->firstItem(),
+                'to' => $urls->lastItem()
+            ]);
+        }
+
+        return view('admin-page.service.short-link.index', compact('urls'))->with('title', 'Services');
     }
 
     public function shorten(Request $request)
     {
-        $builder = new Builder();
-        $shortURLObject = $builder->destinationUrl($request->url)->make();
-        $shortURL = $shortURLObject->default_short_url;
-        return back()->with('success', 'URL shortened successfully.');
+        $validator = Validator::make($request->all(), [
+            'url' => 'required|url'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $builder = new Builder();
+            $shortURLObject = $builder->destinationUrl($request->url)->make();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'URL shortened successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to shorten URL: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function update(Request $request, $id)
@@ -92,19 +121,29 @@ class ShortLinkController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return back()
-                ->withErrors($validator)
-                ->withInput()
-                ->with('failed', 'Update failed due to input validation errors.');
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
         }
 
-        $url = ShortURL::findOrFail($id);
-        $url->url_key = $request->url;
-        $url->destination_url = $request->destination;
-        $url->default_short_url = config('app.url') . '/' . $request->url;
-        $url->save();
+        try {
+            $url = ShortURL::findOrFail($id);
+            $url->url_key = $request->url;
+            $url->destination_url = $request->destination;
+            $url->default_short_url = config('app.url') . '/' . $request->url;
+            $url->save();
 
-        return back()->with('success', 'URL updated successfully.');
+            return response()->json([
+                'success' => true,
+                'message' => 'URL updated successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update URL: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function destroy($id)
