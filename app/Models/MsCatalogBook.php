@@ -114,7 +114,7 @@ class MsCatalogBook extends Model
         $maxYear = date('Y');
 
         return $request->validate([
-            'isbn' => 'required|string|max:20',
+            'isbn' => 'required|string|max:20|unique:ms_catalog_book,isbn',
             'titleBook' => 'required|string|max:255|unique:ms_catalog_book,titleBook',
             'authorName' => 'required|string|max:100',
             'publisherName' => 'required|string|max:100',
