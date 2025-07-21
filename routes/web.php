@@ -285,26 +285,28 @@ Route::middleware(['role:Superadmin|HelperLetter'])->prefix('/admin/ktaldksyahid
 });
 
 // START Route AdminPage Service Shortlink
-Route::get('/admin/service/shortlink', [ShortLinkController::class, 'index'])
-    ->name('admin.service.shortlink.index')
-    ->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
+Route::prefix('admin/service/shortlink')->group(function () {
+    Route::get('/', [ShortLinkController::class, 'index'])
+        ->name('admin.service.shortlink.index')
+        ->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
-Route::post('/', [ShortLinkController::class, 'shorten'])
-    ->name('admin.service.shortlink.shorten')
-    ->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
+    Route::post('/', [ShortLinkController::class, 'shorten'])
+        ->name('admin.service.shortlink.shorten')
+        ->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
-Route::post('{id}', [ShortLinkController::class, 'update'])
-    ->name('admin.service.shortlink.update')
-    ->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
+    Route::put('/{shortLink}', [ShortLinkController::class, 'update'])
+        ->name('admin.service.shortlink.update')
+        ->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
-Route::get('{id}/destroy', [ShortLinkController::class, 'destroy'])
-    ->name('admin.service.shortlink.destroy')
-    ->middleware(['role:Superadmin']);
-    
-Route::post('/admin/service/shortlink/bulk-delete', [ShortLinkController::class, 'bulkDelete'])
-    ->name('admin.service.shortlink.bulkDelete')
-    ->middleware(['role:Superadmin']);
+    Route::delete('/{shortLink}', [ShortLinkController::class, 'destroy'])
+        ->name('admin.service.shortlink.destroy')
+        ->middleware(['role:Superadmin']);
 
-Route::get('/{shortURLKey}', [ShortLinkController::class, 'redirect']);
+    Route::post('/bulk-delete', [ShortLinkController::class, 'bulkDelete'])
+        ->name('admin.service.shortlink.bulkDelete')
+        ->middleware(['role:Superadmin']);
+});
+
+Route::get('/{shortURLKey}', [ShortLinkController::class, 'redirect']);;
 // END Route AdminPage Service Shortlink
 // ======================================= END ROUTE ADMIN PAGE =======================================
