@@ -3,7 +3,6 @@
 @section('content')
 @php
     use App\Http\Controllers\LibraryFunctionController as LFC;
-
     $isSuperadmin = LFC::getRoleName(auth()->user()->getRoleNames()) === 'Superadmin';
 @endphp
 <div class="container-fluid pt-4 px-4">
@@ -60,9 +59,8 @@
             </div>
 
             <div class="col-md-12 my-3">
-                <form action="{{ route('admin.service.shortlink.shorten') }}" method="POST">
+                <form id="shortenForm">
                     @csrf
-                    @method('POST')
                     <div class="input-group">
                         <input type="text" name="url" class="form-control" placeholder="Enter URL to shorten">
                         <button class="btn btn-custom-primary" type="submit">Shorten</button>
@@ -70,27 +68,8 @@
                 </form>
             </div>
 
-            <div class="col-md-12 my-3">
-                @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                @endif
-
-                @if (session('failed'))
-                    @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>There were some problems with your input:</strong>
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    @endif
-                @endif
+            <div class="col-md-12 my-3" id="alertContainer">
+                <!-- Alerts will be placed here dynamically -->
             </div>
 
             <div class="table-responsive">
@@ -104,84 +83,66 @@
 
                             <th class="text-center">
                                 <div class="d-flex flex-column">
-                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'url_key', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'url_key' ? 'desc' : 'asc'])) }}">
+                                    <a href="#" class="sort-link" data-sort="url_key">
                                         <span>URL Key</span>
-                                        @if(request('sort_by') === 'url_key')
-                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                        @endif
+                                        <span class="sort-arrow" id="url_key_arrow"></span>
                                     </a>
                                     <div class="position-relative">
-                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="url_key" placeholder="Search URL Key" value="{{ request('url_key') }}">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="url_key" placeholder="Search URL Key">
                                     </div>
                                 </div>
                             </th>
 
                             <th class="text-center">
                                 <div class="d-flex flex-column">
-                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'destination_url', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'destination_url' ? 'desc' : 'asc'])) }}">
+                                    <a href="#" class="sort-link" data-sort="destination_url">
                                         <span>URL Destination</span>
-                                        @if(request('sort_by') === 'destination_url')
-                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                        @endif
+                                        <span class="sort-arrow" id="destination_url_arrow"></span>
                                     </a>
                                     <div class="position-relative">
-                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="destination_url" placeholder="Search Destination" value="{{ request('destination_url') }}">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="destination_url" placeholder="Search Destination">
                                     </div>
                                 </div>
                             </th>
 
                             <th class="text-center">
                                 <div class="d-flex flex-column">
-                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'default_short_url', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'default_short_url' ? 'desc' : 'asc'])) }}">
+                                    <a href="#" class="sort-link" data-sort="default_short_url">
                                         <span>Short URL</span>
-                                        @if(request('sort_by') === 'default_short_url')
-                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                        @endif
+                                        <span class="sort-arrow" id="default_short_url_arrow"></span>
                                     </a>
                                     <div class="position-relative">
-                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="default_short_url" placeholder="Search Short URL" value="{{ request('default_short_url') }}">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="default_short_url" placeholder="Search Short URL">
                                     </div>
                                 </div>
                             </th>
 
                             <th class="text-center">
                                 <div class="d-flex flex-column">
-                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'visits_count', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'visits_count' ? 'desc' : 'asc'])) }}">
+                                    <a href="#" class="sort-link" data-sort="visits_count">
                                         <span>Visitors</span>
-                                        @if(request('sort_by') === 'visits_count')
-                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                        @endif
+                                        <span class="sort-arrow" id="visits_count_arrow"></span>
                                     </a>
-                                    <div class="position-relative">
-                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="visits_count" placeholder="Search Visitors" value="{{ request('visits_count') }}">
-                                    </div>
                                 </div>
                             </th>
 
                             <th class="text-center">
                                 <div class="d-flex flex-column">
-                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'created_at', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'created_at' ? 'desc' : 'asc'])) }}">
+                                    <a href="#" class="sort-link" data-sort="created_at">
                                         <span>Created At</span>
-                                        @if(request('sort_by') === 'created_at')
-                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                        @endif
+                                        <span class="sort-arrow" id="created_at_arrow"></span>
                                     </a>
-                                    <div class="position-relative">
-                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="created_at" placeholder="Search Created At" value="{{ request('created_at') }}">
-                                    </div>
                                 </div>
                             </th>
 
                             <th class="text-center">
                                 <div class="d-flex flex-column">
-                                    <a href="{{ route('admin.service.shortlink.index', array_merge(request()->all(), ['sort_by' => 'created_by', 'sort_order' => request('sort_order') === 'asc' && request('sort_by') === 'created_by' ? 'desc' : 'asc'])) }}">
+                                    <a href="#" class="sort-link" data-sort="created_by">
                                         <span>Creator</span>
-                                        @if(request('sort_by') === 'created_by')
-                                            {!! request('sort_order') === 'asc' ? '<span class="sort-arrow">↑</span>' : '<span class="sort-arrow">↓</span>' !!}
-                                        @endif
+                                        <span class="sort-arrow" id="created_by_arrow"></span>
                                     </a>
                                     <div class="position-relative">
-                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="created_by" placeholder="Search Creator" value="{{ request('created_by') }}">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="created_by" placeholder="Search Creator">
                                     </div>
                                 </div>
                             </th>
@@ -189,93 +150,58 @@
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @forelse ($urls as $key => $item)
-                        <tr>
-                            <td>
-                                <input type="checkbox" name="ids[]" value="{{ $item->id }}" {{ $isSuperadmin ? '' : 'disabled' }}>
-                            </td>
-                            <th scope="row">{{ $urls->firstItem() + $key }}</th>
-                            <td class="text-center">{{ $item->url_key }}</td>
-                            <td class="text-center"><a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary" onclick="copyLink('{{ $item->url_key }}')">
-                                    <i class="fa fa-copy small"></i>
-                                </button>
-                                <a href="{{ url($item->url_key) }}" target="_blank">{{ parse_url(url($item->url_key), PHP_URL_HOST) }}{{ parse_url(url($item->url_key), PHP_URL_PATH) }}</a>
-                            </td>
-                            <td class="text-center">{{ $item->visits->count() }}</td>
-                            <td class="text-center">{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('YYYY') }} ({{ \Carbon\Carbon::parse( $item->created_at )->format('H:i T') }})</td>
-                            <td class="text-center">{{ $item->created_by ?? 'Undefined' }}</td>
-                            <td class="text-center">
-                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $key }}"><i class="fa fa-edit"></i></button>
-                                <button type="button"
-                                    class="btn btn-sm btn-danger"
-                                    onclick="{{ $isSuperadmin ? 'deleteConfirmationShortlink(' . $item->id . ')' : 'void(0)' }}"
-                                    {{ $isSuperadmin ? '' : 'disabled' }}>
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-
-                        <div class="modal fade" id="exampleModal-{{ $key }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="{{ route('admin.service.shortlink.update', $item->id) }}" method="POST">
-                                            @csrf
-                                            <div class="mb-3">
-                                                <label for="key" class="form-label">URL Key</label>
-                                                <input type="text" name="url" value="{{ $item->url_key }}" class="form-control" id="key">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="destination" class="form-label">Destination URL</label>
-                                                <input type="text" name="destination" value="{{ $item->destination_url }}" class="form-control" id="destination">
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Update</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @empty
-                        <tr>
-                            <td colspan="9" class="text-center">No Shortlink Data</td>
-                        </tr>
-                        @endforelse
+                    <tbody id="shortlinkTableBody">
+                        <!-- Table content will be loaded via AJAX -->
                     </tbody>
                 </table>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
-                <div>
-                    @if ($urls->count())
-                        <p class="small text-muted mb-0">
-                            Showing {{ $urls->firstItem() }}–{{ $urls->lastItem() }} of {{ $urls->total() }} shortlinks
-                        </p>
-                    @else
-                        <p class="small text-muted mb-0">No data to display</p>
-                    @endif
+                <div id="showingInfo">
+                    <!-- Showing info will be loaded via AJAX -->
                 </div>
 
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    {{ $urls->appends(request()->query())->links() }}
+                <div class="d-flex align-items-center gap-2 flex-wrap" id="paginationLinks">
+                    <!-- Pagination links will be loaded via AJAX -->
                 </div>
             </div>
 
             <div class="d-flex justify-content-end align-items-center mb-3 flex-wrap gap-2">
-                <form id="bulkDeleteForm" action="{{ route('admin.service.shortlink.bulkDelete') }}" method="POST" class="mb-0">
-                    @csrf @method('POST')
+                <form id="bulkDeleteForm" method="POST" class="mb-0">
+                    @csrf
                     <button type="button"
                             id="bulkDeleteBtn"
                             class="btn btn-danger btn-sm"
                             {{ $isSuperadmin ? '' : 'disabled title=Only Superadmin can perform bulk delete' }}>
                         Bulk Delete
                     </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Shortlink</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    @csrf
+                    <input type="hidden" name="id" id="editId">
+                    <div class="mb-3">
+                        <label for="editUrl" class="form-label">URL Key</label>
+                        <input type="text" name="url" class="form-control" id="editUrl">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDestination" class="form-label">Destination URL</label>
+                        <input type="text" name="destination" class="form-control" id="editDestination">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </form>
             </div>
         </div>
@@ -488,168 +414,375 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const baseUrl = '{{ url('/') }}';
+    $(document).ready(function() {
+        const baseUrl = '{{ url('/') }}';
+        let currentParams = {
+            sort_by: 'created_at',
+            sort_order: 'desc'
+        };
 
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 1500,
-        width: '350px',
-    });
-
-    function copyLink(urlKey) {
-        const fullLink = new URL(`${baseUrl}/${urlKey}`);
-        const linkWithoutProtocol = `${fullLink.host}${fullLink.pathname}`;
-        const input = document.createElement('input');
-        input.value = linkWithoutProtocol;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-        Toast.fire({
-            icon: 'success',
-            title: 'Link copied to clipboard!'
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            width: '400px',
         });
-    }
 
-    function deleteConfirmationShortlink(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "GET",
-                    url: `{{ url('${id}/destroy') }}`.replace('${id}', id),
-                    success: function(data) {
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Shortlink has been deleted!'
-                        });
-                        setTimeout(function () { location.reload(); }, 300);
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Something went wrong.',
-                            icon: 'error'
-                        });
-                    }
-                });
-            }
-        });
-    }
+        // Initial load
+        loadTableData();
 
-    function handleBulkDelete() {
-        const checkboxes = document.querySelectorAll('input[name="ids[]"]:checked');
-        const ids = Array.from(checkboxes).map(checkbox => checkbox.value);
+        // Function to load table data via AJAX
+        function loadTableData() {
+            showLoading();
 
-        if (ids.length === 0) {
-            alert('Please select at least one item to delete.');
-            return;
+            $.ajax({
+                url: '{{ route("admin.service.shortlink.index") }}',
+                type: 'GET',
+                data: currentParams,
+                success: function(response) {
+                    $('#shortlinkTableBody').html(response.html);
+                    $('#paginationLinks').html(response.pagination);
+
+                    // Update showing info
+                    const showingInfo = `Showing ${response.showing.first}–${response.showing.last} of ${response.total} shortlinks`;
+                    $('#showingInfo').html(`<p class="small text-muted mb-0">${showingInfo}</p>`);
+
+                    // Update sort arrows
+                    updateSortArrows();
+                },
+                error: function(xhr) {
+                    showAlert('danger', 'Error loading data');
+                }
+            });
         }
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "POST",
-                    url: `{{ route('admin.service.shortlink.bulkDelete') }}`,
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        ids: ids
-                    },
-                    success: function(response) {
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Selected shortlinks have been deleted!'
-                        });
-                        location.reload();
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Something went wrong.',
-                            icon: 'error'
-                        });
-                    }
-                });
+        // Show loading state
+        function showLoading() {
+            $('#shortlinkTableBody').html('<tr><td colspan="9" class="text-center">Loading...</td></tr>');
+        }
+
+        // Show alert message
+        function showAlert(type, message) {
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            $('#alertContainer').html(alertHtml);
+
+            // Auto dismiss after 3 seconds
+            setTimeout(() => {
+                $('.alert').alert('close');
+            }, 10000);
+        }
+
+        // Update sort arrows
+        function updateSortArrows() {
+            $('.sort-arrow').html('');
+            if (currentParams.sort_by) {
+                const arrow = currentParams.sort_order === 'asc' ? '↑' : '↓';
+                $(`#${currentParams.sort_by}_arrow`).html(arrow);
+            }
+        }
+
+        // Sort link click handler
+        $(document).on('click', '.sort-link', function(e) {
+            e.preventDefault();
+            const sortBy = $(this).data('sort');
+
+            if (currentParams.sort_by === sortBy) {
+                currentParams.sort_order = currentParams.sort_order === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentParams.sort_by = sortBy;
+                currentParams.sort_order = 'desc';
+            }
+
+            loadTableData();
+        });
+
+        // Column search handler
+        $(document).on('keyup', '.column-search', function(e) {
+            if (e.key === 'Enter') {
+                const column = $(this).data('column');
+                const value = $(this).val();
+
+                if (value) {
+                    currentParams[column] = value;
+                } else {
+                    delete currentParams[column];
+                }
+
+                loadTableData();
             }
         });
-    }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.column-search').forEach(input => {
-            const clearBtn = document.createElement('button');
-            clearBtn.innerHTML = '<i class="fa fa-times"></i>';
-            clearBtn.className = 'column-search-clear';
-            clearBtn.style.display = input.value ? 'block' : 'none';
+        // Clear column search
+        $(document).on('click', '.column-search-clear', function() {
+            const input = $(this).siblings('.column-search');
+            input.val('');
+            const column = input.data('column');
+            delete currentParams[column];
+            loadTableData();
+        });
 
-            clearBtn.addEventListener('click', function() {
-                input.value = '';
-                this.style.display = 'none';
-                performColumnSearch(input);
-            });
+        // Shorten form submission
+        $('#shortenForm').on('submit', function(e) {
+            e.preventDefault();
 
-            const wrapper = input.parentNode;
-            wrapper.appendChild(clearBtn);
+            $.ajax({
+                url: '{{ route("admin.service.shortlink.shorten") }}',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: response.message,
+                        showCloseButton: true,
+                        timer: 1500,
+                        width: '400px'
+                    });
+                    $('#shortenForm')[0].reset();
+                    loadTableData();
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        const errors = xhr.responseJSON.errors;
+                        let errorMessages = '';
 
-            input.addEventListener('input', function() {
-                clearBtn.style.display = this.value ? 'block' : 'none';
-            });
+                        for (const field in errors) {
+                            errorMessages += errors[field].join('<br>') + '<br>';
+                        }
 
-            input.addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    performColumnSearch(input);
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            html: errorMessages,
+                            showCloseButton: true,
+                            timer: 4500,
+                            timerProgressBar: true,
+                            width: '500px'
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Error shortening URL',
+                            showCloseButton: true,
+                            timer: 4500,
+                            timerProgressBar: true,
+                            width: '500px'
+                        });
+                    }
                 }
             });
         });
 
-        function performColumnSearch(input) {
-            const column = input.dataset.column;
-            const value = input.value;
+        // Edit button click handler
+        $(document).on('click', '.edit-btn', function() {
+            const id = $(this).data('id');
+            const url = $(this).data('url');
+            const destination = $(this).data('destination');
 
-            const currentUrl = new URL(window.location.href);
+            $('#editId').val(id);
+            $('#editUrl').val(url);
+            $('#editDestination').val(destination);
 
-            if (value) {
-                currentUrl.searchParams.set(column, value);
-            } else {
-                currentUrl.searchParams.delete(column);
-            }
-
-            if (value) {
-                currentUrl.searchParams.delete('page');
-            }
-
-            window.location.href = currentUrl.toString();
-        }
-
-        document.getElementById('selectAll')?.addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('input[name="ids[]"]');
-            checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+            $('#editModal').modal('show');
         });
 
-        document.querySelectorAll('input[name="ids[]"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const anyChecked = document.querySelectorAll('input[name="ids[]"]:checked').length > 0;
-                document.getElementById('bulkDeleteBtn').disabled = !anyChecked;
+        // Edit form submission
+        $('#editForm').on('submit', function(e) {
+            e.preventDefault();
+            const id = $('#editId').val();
+
+            $.ajax({
+                url: `/admin/service/shortlink/${id}`,
+                type: 'PUT',
+                data: $(this).serialize(),
+                success: function(response) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: response.message,
+                        showCloseButton: true,
+                        timer: 1500,
+                        width: '400px'
+                    });
+                    loadTableData();
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        const errors = xhr.responseJSON.errors;
+                        let errorMessages = '';
+
+                        for (const field in errors) {
+                            errorMessages += errors[field].join('<br>') + '<br>';
+                        }
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            html: errorMessages,
+                            showCloseButton: true,
+                            timer: 4500,
+                            timerProgressBar: true,
+                            width: '500px'
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Error updating URL',
+                            showCloseButton: true,
+                            timer: 4500,
+                            timerProgressBar: true,
+                            width: '500px'
+                        });
+                    }
+                },
+                complete: function() {
+                    $('#editModal').modal('hide');
+                }
             });
         });
 
-        document.getElementById('bulkDeleteBtn')?.addEventListener('click', handleBulkDelete);
+        // Delete button click handler
+        $(document).on('click', '.delete-btn', function() {
+            const id = $(this).data('id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/admin/service/shortlink/${id}`,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.message,
+                                showCloseButton: true,
+                                timer: 1500,
+                                width: '400px'
+                            });
+                            loadTableData();
+                        },
+                        error: function(xhr) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Error deleting URL',
+                                text: xhr.responseJSON?.message || 'Something went wrong',
+                                showCloseButton: true,
+                                timer: 4500,
+                                timerProgressBar: true,
+                                width: '500px'
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        // Select all checkbox
+        $('#selectAll').on('change', function() {
+            $('input[name="ids[]"]').prop('checked', this.checked);
+            toggleBulkDeleteButton();
+        });
+
+        // Individual checkbox change
+        $(document).on('change', 'input[name="ids[]"]', function() {
+            toggleBulkDeleteButton();
+
+            // Uncheck "select all" if not all checkboxes are checked
+            const totalCheckboxes = $('input[name="ids[]"]').length;
+            const checkedCheckboxes = $('input[name="ids[]"]:checked').length;
+            $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
+        });
+
+        // Toggle bulk delete button based on checked items
+        function toggleBulkDeleteButton() {
+            const anyChecked = $('input[name="ids[]"]:checked').length > 0;
+            $('#bulkDeleteBtn').prop('disabled', !anyChecked);
+        }
+
+        // Bulk delete
+        $('#bulkDeleteBtn').on('click', function() {
+            const ids = $('input[name="ids[]"]:checked').map(function() {
+                return $(this).val();
+            }).get();
+
+            if (ids.length === 0) {
+                showAlert('danger', 'Please select at least one item to delete.');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete them!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '{{ route("admin.service.shortlink.bulkDelete") }}',
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            ids: ids
+                        },
+                        success: function(response) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.message,
+                                showCloseButton: true,
+                                timer: 1500,
+                                width: '400px'
+                            });
+                            loadTableData();
+                            $('#selectAll').prop('checked', false);
+                        },
+                        error: function(xhr) {
+                            showAlert('danger', 'Error deleting URLs');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Copy link function
+        window.copyLink = function(urlKey) {
+            const fullLink = new URL(`${baseUrl}/${urlKey}`);
+            const linkWithoutProtocol = `${fullLink.host}${fullLink.pathname}`;
+            navigator.clipboard.writeText(linkWithoutProtocol).then(() => {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Link copied to clipboard!',
+                    showCloseButton: true,
+                    timer: 1500,
+                    width: '400px'
+                });
+            });
+        };
+
+        // Pagination link click handler
+        $(document).on('click', '.pagination a', function(e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            const page = url.split('page=')[1];
+            currentParams.page = page;
+            loadTableData();
+        });
     });
 </script>
 @endsection
