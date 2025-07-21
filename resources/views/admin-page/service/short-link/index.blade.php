@@ -584,6 +584,32 @@
             loadTableData();
         });
 
+        document.querySelectorAll('.column-search').forEach(input => {
+            const clearBtn = document.createElement('button');
+            clearBtn.innerHTML = '<i class="fa fa-times"></i>';
+            clearBtn.className = 'column-search-clear';
+            clearBtn.style.display = input.value ? 'block' : 'none';
+
+            clearBtn.addEventListener('click', function() {
+                input.value = '';
+                this.style.display = 'none';
+                document.getElementById('searchForm').submit();
+            });
+
+            const wrapper = input.parentNode;
+            wrapper.appendChild(clearBtn);
+
+            input.addEventListener('input', function() {
+                clearBtn.style.display = this.value ? 'block' : 'none';
+            });
+
+            input.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('searchForm').submit();
+                }
+            });
+        });
+
         $(document).on('keyup', '.column-search', function(e) {
             if (e.key === 'Enter') {
                 const column = $(this).data('column');
