@@ -9,8 +9,18 @@
         <input type="checkbox" name="ids[]" value="{{ $item->id }}" {{ $isSuperadmin ? '' : 'disabled' }}>
     </td>
     <th scope="row">{{ $urls->firstItem() + $key }}</th>
-    <td class="text-center">{{ $item->url_key }}</td>
-    <td class="text-center"><a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a></td>
+    <td>
+        <button class="btn btn-sm btn-primary" onclick="copyLink('{{ $item->url_key }}', false)">
+            <i class="fa fa-copy small"></i>
+        </button>
+        {{ $item->url_key }}
+    </td>
+    <td>
+        <button class="btn btn-sm btn-primary" onclick="copyLink('{{ $item->destination_url }}', false)">
+            <i class="fa fa-copy small"></i>
+        </button>
+        <a href="{{ $item->destination_url }}" target="_blank">{{ $item->destination_url }}</a>
+    </td>
     <td>
         <button class="btn btn-sm btn-primary" onclick="copyLink('{{ $item->url_key }}')">
             <i class="fa fa-copy small"></i>

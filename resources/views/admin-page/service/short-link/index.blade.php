@@ -38,9 +38,11 @@
                     <div class="col">
                         <div class="card card-guide h-100 border-0 shadow-sm">
                             <div class="card-body">
-                                <h6 class="card-title text-custom fw-bold"><i class="fa fa-copy me-1"></i> Copy Link</h6>
+                                <h6 class="card-title text-custom fw-bold">
+                                    <i class="fa fa-copy me-1"></i> Copy Values
+                                </h6>
                                 <p class="card-text small text-muted">
-                                    Click the <i class="fa fa-copy small"></i> icon next to the shortlink to copy it to your clipboard.
+                                    Click the <i class="fa fa-copy small"></i> icon next to the URL Key, Destination URL, or Short URL to copy the value to your clipboard.
                                 </p>
                             </div>
                         </div>
@@ -408,11 +410,53 @@
         color: #6c757d;
         cursor: pointer;
     }
+    .table-shortlink th:nth-child(1) { width: 50px; } /* Checkbox */
+    .table-shortlink th:nth-child(2) { width: 60px; } /* No */
+    .table-shortlink th:nth-child(3) { width: 150px; } /* URL Key */
+    .table-shortlink th:nth-child(4) { width: 250px; } /* Destination */
+    .table-shortlink th:nth-child(5) { width: 150px; } /* Short URL */
+    .table-shortlink th:nth-child(6) { width: 80px; } /* Visitors */
+    .table-shortlink th:nth-child(7) { width: 120px; } /* Created At */
+    .table-shortlink th:nth-child(8) { width: 120px; } /* Creator */
+    .table-shortlink th:nth-child(9) { width: 100px; } /* Action */
+
+    /* Style untuk memotong teks panjang */
+    .table-shortlink td {
+        max-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Tooltip styling */
+    .tooltip-inner {
+        max-width: 500px;
+        text-align: left;
+    }
+
+    .skeleton-row {
+        animation: pulse 1.5s infinite ease-in-out;
+    }
+    .skeleton {
+        height: 20px;
+        background: #e0f7f5;
+        border-radius: 4px;
+        margin: 5px 0;
+    }
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
 </style>
 @endsection
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function() {
         const baseUrl = '{{ url('/') }}';
@@ -450,6 +494,26 @@
 
                     // Update sort arrows
                     updateSortArrows();
+
+                    $('#shortlinkTableBody [data-bs-toggle="tooltip"]').tooltip('dispose'); // Hapus tooltip lama
+                    $('#shortlinkTableBody td').each(function() {
+                        if (this.offsetWidth < this.scrollWidth) {
+                            $(this).attr('data-bs-toggle', 'tooltip')
+                                .attr('data-bs-placement', 'top')
+                                .attr('title', $(this).text().trim());
+                        }
+                    });
+                    $('[data-bs-toggle="tooltip"]').tooltip();
+
+                    $('#shortlinkTableBody .btn').each(function() {
+                        const title = $(this).attr('title') || $(this).data('original-title');
+                        if (title) {
+                            $(this).tooltip({
+                                placement: 'top',
+                                trigger: 'hover'
+                            });
+                        }
+                    });
                 },
                 error: function(xhr) {
                     showAlert('danger', 'Error loading data');
@@ -459,7 +523,23 @@
 
         // Show loading state
         function showLoading() {
-            $('#shortlinkTableBody').html('<tr><td colspan="9" class="text-center">Loading...</td></tr>');
+            let skeletonRows = '';
+            for (let i = 0; i < 15; i++) { // Show 5 skeleton rows
+                skeletonRows += `
+                <tr class="skeleton-row">
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                </tr>`;
+            }
+
+            $('#shortlinkTableBody').html(skeletonRows);
         }
 
         // Show alert message
@@ -761,19 +841,34 @@
         });
 
         // Copy link function
-        window.copyLink = function(urlKey) {
-            const fullLink = new URL(`${baseUrl}/${urlKey}`);
-            const linkWithoutProtocol = `${fullLink.host}${fullLink.pathname}`;
-            navigator.clipboard.writeText(linkWithoutProtocol).then(() => {
+        // Ganti fungsi copyLink dengan ini
+        window.copyLink = function(urlKey, withBaseUrl = true) {
+            let fullLink;
+
+            if (withBaseUrl) {
+                fullLink = `${baseUrl}/${urlKey}`;
+            } else {
+                fullLink = urlKey;
+            }
+
+            navigator.clipboard.writeText(fullLink).then(() => {
                 Toast.fire({
                     icon: 'success',
-                    title: 'Link copied to clipboard!',
+                    title: 'Copied to clipboard!',
                     showCloseButton: true,
                     timer: 1500,
                     width: '400px'
                 });
+            }).catch(err => {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Failed to copy text',
+                    showCloseButton: true,
+                    timer: 3000
+                });
             });
         };
+
 
         // Pagination link click handler
         $(document).on('click', '.pagination a', function(e) {
