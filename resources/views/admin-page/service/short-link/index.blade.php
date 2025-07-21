@@ -70,10 +70,6 @@
                 </form>
             </div>
 
-            <div class="col-md-12 my-3" id="alertContainer">
-                <!-- Alerts will be placed here dynamically -->
-            </div>
-
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-borderless text-nowrap align-middle small table-shortlink" id="dataShortlinkTable">
                     <thead>
@@ -436,8 +432,6 @@
 
     .table-shortlink th:nth-child(9),
     .table-shortlink td:nth-child(9) { width: 100px; max-width: 100px; } /* Action */
-
-    /* General text overflow styling */
     .table-shortlink td {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -446,7 +440,6 @@
     .table-shortlink {
         table-layout: fixed;
     }
-    /* Tooltip styling */
     .tooltip-inner {
         max-width: 500px;
         text-align: left;
@@ -491,10 +484,8 @@
             width: '400px',
         });
 
-        // Initial load
         loadTableData();
 
-        // Function to load table data via AJAX
         function loadTableData() {
             showLoading();
 
@@ -506,14 +497,12 @@
                     $('#shortlinkTableBody').html(response.html);
                     $('#paginationLinks').html(response.pagination);
 
-                    // Update showing info
                     const showingInfo = `Showing ${response.showing.first}–${response.showing.last} of ${response.total} shortlinks`;
                     $('#showingInfo').html(`<p class="small text-muted mb-0">${showingInfo}</p>`);
 
-                    // Update sort arrows
                     updateSortArrows();
 
-                    $('#shortlinkTableBody [data-bs-toggle="tooltip"]').tooltip('dispose'); // Hapus tooltip lama
+                    $('#shortlinkTableBody [data-bs-toggle="tooltip"]').tooltip('dispose');
                     $('#shortlinkTableBody td').each(function() {
                         if (this.offsetWidth < this.scrollWidth) {
                             $(this).attr('data-bs-toggle', 'tooltip')
@@ -539,7 +528,6 @@
             });
         }
 
-        // Show loading state
         function showLoading() {
             let skeletonRows = '';
             for (let i = 0; i < 15; i++) { // Show 5 skeleton rows
@@ -560,7 +548,6 @@
             $('#shortlinkTableBody').html(skeletonRows);
         }
 
-        // Show alert message
         function showAlert(type, message) {
             const alertHtml = `
                 <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -570,13 +557,11 @@
             `;
             $('#alertContainer').html(alertHtml);
 
-            // Auto dismiss after 3 seconds
             setTimeout(() => {
                 $('.alert').alert('close');
             }, 10000);
         }
 
-        // Update sort arrows
         function updateSortArrows() {
             $('.sort-arrow').html('');
             if (currentParams.sort_by) {
@@ -585,7 +570,6 @@
             }
         }
 
-        // Sort link click handler
         $(document).on('click', '.sort-link', function(e) {
             e.preventDefault();
             const sortBy = $(this).data('sort');
@@ -600,7 +584,6 @@
             loadTableData();
         });
 
-        // Column search handler
         $(document).on('keyup', '.column-search', function(e) {
             if (e.key === 'Enter') {
                 const column = $(this).data('column');
@@ -616,7 +599,6 @@
             }
         });
 
-        // Clear column search
         $(document).on('click', '.column-search-clear', function() {
             const input = $(this).siblings('.column-search');
             input.val('');
@@ -625,7 +607,6 @@
             loadTableData();
         });
 
-        // Shorten form submission
         $('#shortenForm').on('submit', function(e) {
             e.preventDefault();
 
@@ -676,7 +657,6 @@
             });
         });
 
-        // Edit button click handler
         $(document).on('click', '.edit-btn', function() {
             const id = $(this).data('id');
             const url = $(this).data('url');
@@ -689,7 +669,6 @@
             $('#editModal').modal('show');
         });
 
-        // Edit form submission
         $('#editForm').on('submit', function(e) {
             e.preventDefault();
             const id = $('#editId').val();
@@ -743,7 +722,6 @@
             });
         });
 
-        // Delete button click handler
         $(document).on('click', '.delete-btn', function() {
             const id = $(this).data('id');
 
@@ -789,29 +767,24 @@
             });
         });
 
-        // Select all checkbox
         $('#selectAll').on('change', function() {
             $('input[name="ids[]"]').prop('checked', this.checked);
             toggleBulkDeleteButton();
         });
 
-        // Individual checkbox change
         $(document).on('change', 'input[name="ids[]"]', function() {
             toggleBulkDeleteButton();
 
-            // Uncheck "select all" if not all checkboxes are checked
             const totalCheckboxes = $('input[name="ids[]"]').length;
             const checkedCheckboxes = $('input[name="ids[]"]:checked').length;
             $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
         });
 
-        // Toggle bulk delete button based on checked items
         function toggleBulkDeleteButton() {
             const anyChecked = $('input[name="ids[]"]:checked').length > 0;
             $('#bulkDeleteBtn').prop('disabled', !anyChecked);
         }
 
-        // Bulk delete
         $('#bulkDeleteBtn').on('click', function() {
             const ids = $('input[name="ids[]"]:checked').map(function() {
                 return $(this).val();
@@ -858,8 +831,6 @@
             });
         });
 
-        // Copy link function
-        // Ganti fungsi copyLink dengan ini
         window.copyLink = function(urlKey, withBaseUrl = true) {
             let fullLink;
 
@@ -887,8 +858,6 @@
             });
         };
 
-
-        // Pagination link click handler
         $(document).on('click', '.pagination a', function(e) {
             e.preventDefault();
             const url = $(this).attr('href');
