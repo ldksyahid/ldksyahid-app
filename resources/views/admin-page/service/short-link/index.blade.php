@@ -410,24 +410,42 @@
         color: #6c757d;
         cursor: pointer;
     }
-    .table-shortlink th:nth-child(1) { width: 50px; } /* Checkbox */
-    .table-shortlink th:nth-child(2) { width: 60px; } /* No */
-    .table-shortlink th:nth-child(3) { width: 150px; } /* URL Key */
-    .table-shortlink th:nth-child(4) { width: 250px; } /* Destination */
-    .table-shortlink th:nth-child(5) { width: 150px; } /* Short URL */
-    .table-shortlink th:nth-child(6) { width: 80px; } /* Visitors */
-    .table-shortlink th:nth-child(7) { width: 120px; } /* Created At */
-    .table-shortlink th:nth-child(8) { width: 120px; } /* Creator */
-    .table-shortlink th:nth-child(9) { width: 100px; } /* Action */
+    .table-shortlink th:nth-child(1),
+    .table-shortlink td:nth-child(1) { width: 50px; max-width: 50px; } /* Checkbox */
 
-    /* Style untuk memotong teks panjang */
+    .table-shortlink th:nth-child(2),
+    .table-shortlink td:nth-child(2) { width: 60px; max-width: 60px; } /* No */
+
+    .table-shortlink th:nth-child(3),
+    .table-shortlink td:nth-child(3) { width: 300px; max-width: 300px; } /* URL Key */
+
+    .table-shortlink th:nth-child(4),
+    .table-shortlink td:nth-child(4) { width: 350px; max-width: 350px; } /* Destination */
+
+    .table-shortlink th:nth-child(5),
+    .table-shortlink td:nth-child(5) { width: 400px; max-width: 400px; } /* Short URL */
+
+    .table-shortlink th:nth-child(6),
+    .table-shortlink td:nth-child(6) { width: 80px; max-width: 80px; } /* Visitors */
+
+    .table-shortlink th:nth-child(7),
+    .table-shortlink td:nth-child(7) { width: 120px; max-width: 120px; } /* Created At */
+
+    .table-shortlink th:nth-child(8),
+    .table-shortlink td:nth-child(8) { width: 120px; max-width: 120px; } /* Creator */
+
+    .table-shortlink th:nth-child(9),
+    .table-shortlink td:nth-child(9) { width: 100px; max-width: 100px; } /* Action */
+
+    /* General text overflow styling */
     .table-shortlink td {
-        max-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-
+    .table-shortlink {
+        table-layout: fixed;
+    }
     /* Tooltip styling */
     .tooltip-inner {
         max-width: 500px;
