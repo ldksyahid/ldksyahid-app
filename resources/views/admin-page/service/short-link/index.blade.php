@@ -166,18 +166,15 @@
                         </tr>
                     </thead>
                     <tbody id="shortlinkTableBody">
-                        <!-- Table content will be loaded via AJAX -->
                     </tbody>
                 </table>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
                 <div id="showingInfo">
-                    <!-- Showing info will be loaded via AJAX -->
                 </div>
 
                 <div class="d-flex align-items-center gap-2 flex-wrap" id="paginationLinks">
-                    <!-- Pagination links will be loaded via AJAX -->
                 </div>
             </div>
 
@@ -196,27 +193,53 @@
     </div>
 </div>
 
-<!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Shortlink</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-header bg-gradient-primary text-white">
+                <h5 class="modal-title fw-semibold text-white">
+                    <i class="fas fa-pencil-alt me-2"></i>Edit Shortlink
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body p-4">
                 <form id="editForm">
                     @csrf
                     <input type="hidden" name="id" id="editId">
-                    <div class="mb-3">
-                        <label for="editUrl" class="form-label">URL Key</label>
-                        <input type="text" name="url" class="form-control" id="editUrl">
+
+                    <div class="mb-4">
+                        <label for="editUrl" class="form-label fw-semibold text-dark">
+                            <i class="fas fa-key me-2 text-primary"></i>URL Key
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-link text-primary"></i>
+                            </span>
+                            <input type="text" name="url" class="form-control border-start-0" id="editUrl" placeholder="e.g. yusuf">
+                        </div>
+                        <small class="text-muted mt-1 d-block">Customize your short URL identifier</small>
                     </div>
-                    <div class="mb-3">
-                        <label for="editDestination" class="form-label">Destination URL</label>
-                        <input type="text" name="destination" class="form-control" id="editDestination">
+
+                    <div class="mb-4">
+                        <label for="editDestination" class="form-label fw-semibold text-dark">
+                            <i class="fas fa-external-link-alt me-2 text-primary"></i>Destination URL
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-globe text-primary"></i>
+                            </span>
+                            <input type="text" name="destination" class="form-control border-start-0" id="editDestination" placeholder="e.g. https://example.com">
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update</button>
+
+                    <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -334,7 +357,6 @@
         position: relative;
         display: inline-block;
     }
-
     .page-title {
         font-size: 1.65rem;
         font-weight: 600;
@@ -344,7 +366,6 @@
         position: relative;
         display: inline-block;
     }
-
     .page-title .highlighted-text {
         color: #008b84;
         font-weight: 700;
@@ -425,31 +446,23 @@
         cursor: pointer;
     }
     .table-shortlink th:nth-child(1),
-    .table-shortlink td:nth-child(1) { width: 50px; max-width: 50px; } /* Checkbox */
-
+    .table-shortlink td:nth-child(1) { width: 50px; max-width: 50px; }
     .table-shortlink th:nth-child(2),
-    .table-shortlink td:nth-child(2) { width: 60px; max-width: 60px; } /* No */
-
+    .table-shortlink td:nth-child(2) { width: 60px; max-width: 60px; }
     .table-shortlink th:nth-child(3),
-    .table-shortlink td:nth-child(3) { width: 300px; max-width: 300px; } /* URL Key */
-
+    .table-shortlink td:nth-child(3) { width: 300px; max-width: 300px; }
     .table-shortlink th:nth-child(4),
-    .table-shortlink td:nth-child(4) { width: 350px; max-width: 350px; } /* Destination */
-
+    .table-shortlink td:nth-child(4) { width: 350px; max-width: 350px; }
     .table-shortlink th:nth-child(5),
-    .table-shortlink td:nth-child(5) { width: 400px; max-width: 400px; } /* Short URL */
-
+    .table-shortlink td:nth-child(5) { width: 400px; max-width: 400px; }
     .table-shortlink th:nth-child(6),
-    .table-shortlink td:nth-child(6) { width: 80px; max-width: 80px; } /* Visitors */
-
+    .table-shortlink td:nth-child(6) { width: 80px; max-width: 80px; }
     .table-shortlink th:nth-child(7),
-    .table-shortlink td:nth-child(7) { width: 120px; max-width: 120px; } /* Created At */
-
+    .table-shortlink td:nth-child(7) { width: 120px; max-width: 120px; }
     .table-shortlink th:nth-child(8),
-    .table-shortlink td:nth-child(8) { width: 120px; max-width: 120px; } /* Creator */
-
+    .table-shortlink td:nth-child(8) { width: 120px; max-width: 120px; }
     .table-shortlink th:nth-child(9),
-    .table-shortlink td:nth-child(9) { width: 100px; max-width: 100px; } /* Action */
+    .table-shortlink td:nth-child(9) { width: 100px; max-width: 100px; }
     .table-shortlink td {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -462,7 +475,6 @@
         max-width: 500px;
         text-align: left;
     }
-
     .skeleton-row {
         animation: pulse 1.5s infinite ease-in-out;
     }
@@ -486,32 +498,26 @@
         box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         border: 1px solid #e0e0e0;
     }
-
     .daterangepicker td.active,
     .daterangepicker td.active:hover {
         background-color: #00a79d;
     }
-
     .daterangepicker .drp-buttons .btn {
         padding: 5px 15px;
         border-radius: 4px;
         font-size: 0.875rem;
     }
-
     .daterangepicker .drp-buttons .btn.applyBtn {
         background-color: #00a79d;
         border-color: #00a79d;
     }
-
     .daterangepicker .drp-buttons .btn.applyBtn:hover {
         background-color: #008b84;
         border-color: #008b84;
     }
-
     .daterangepicker .drp-buttons .btn.cancelBtn {
         color: #495057;
     }
-
     .daterangepicker .drp-buttons .btn.cancelBtn:hover {
         background-color: #f8f9fa;
     }
@@ -520,9 +526,43 @@
         align-items: center;
         justify-content: center;
     }
-
     #clearFiltersBtn {
         white-space: nowrap;
+    }
+    .modal-content {
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #00a79d 0%, #008b84 100%);
+        border-bottom: none;
+    }
+    .modal-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .modal-title {
+        font-size: 1.25rem;
+        letter-spacing: 0.5px;
+    }
+    .modal-body {
+        padding: 1.75rem;
+    }
+    .btn-light {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        color: #495057;
+    }
+    .btn-light:hover {
+        background-color: #e9ecef;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .modal.fade .modal-dialog {
+        animation: fadeIn 0.3s ease-out;
     }
 </style>
 @endsection
