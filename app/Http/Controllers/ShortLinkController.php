@@ -46,8 +46,16 @@ class ShortLinkController extends Controller
             ->when($request->filled('created_by'), function ($query) use ($request) {
                 $query->where('created_by', 'like', '%' . $request->created_by . '%');
             })
-            ->when($request->filled('visits_count'), function ($query) use ($request) {
-                $query->having('visits_count', '=', $request->visits_count);
+            ->when($request->filled('visits_range'), function ($query) use ($request) {
+                $range = $request->visits_range;
+
+                if ($range === '1001+') {
+                    $query->having('visits_count', '>=', 1001);
+                } else {
+                    list($min, $max) = explode('-', $range);
+                    $query->having('visits_count', '>=', $min)
+                        ->having('visits_count', '<=', $max);
+                }
             })
             ->when($request->filled('created_at_start') && $request->filled('created_at_end'), function ($query) use ($request) {
                 $start = Carbon::createFromFormat('d-m-Y', $request->created_at_start)->startOfDay();
