@@ -44,6 +44,9 @@ class ShortLinkController extends Controller
             ->when($request->filled('created_by'), function ($query) use ($request) {
                 $query->where('created_by', 'like', '%' . $request->created_by . '%');
             })
+            ->when($request->filled('visits_count'), function ($query) use ($request) {
+                $query->having('visits_count', '=', $request->visits_count);
+            })
             ->orderBy($sortBy, $sortOrder)
             ->paginate(15)
             ->appends($request->all());
