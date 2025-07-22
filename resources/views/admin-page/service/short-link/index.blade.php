@@ -121,6 +121,9 @@
                                         <span>Visitors</span>
                                         <span class="sort-arrow" id="visits_count_arrow"></span>
                                     </a>
+                                     <div class="position-relative">
+                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="visits_count" placeholder="Visitors">
+                                    </div>
                                 </div>
                             </th>
 
@@ -529,7 +532,7 @@
 
         function showLoading() {
             let skeletonRows = '';
-            for (let i = 0; i < 15; i++) { // Show 5 skeleton rows
+            for (let i = 0; i < 15; i++) {
                 skeletonRows += `
                 <tr class="skeleton-row">
                     <td><div class="skeleton"></div></td>
