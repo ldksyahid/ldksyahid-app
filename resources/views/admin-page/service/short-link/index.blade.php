@@ -60,7 +60,7 @@
                 </div>
             </div>
 
-            <div class="col-md-12 my-3">
+            <div class="col-md-12">
                 <form id="shortenForm">
                     @csrf
                     <div class="input-group">
@@ -68,6 +68,17 @@
                         <button class="btn btn-custom-primary" type="submit">Shorten</button>
                     </div>
                 </form>
+            </div>
+
+           <div class="col-md-12 my-3 d-flex justify-content-end">
+                <div>
+                    <button type="button" id="refreshBtn" class="btn btn-custom-primary me-2">
+                        <i class="fa fa-sync-alt"></i> Refresh
+                    </button>
+                    <button type="button" id="clearFiltersBtn" class="btn btn-custom-primary">
+                        <i class="fa fa-times"></i> Clear Filters
+                    </button>
+                </div>
             </div>
 
             <div class="table-responsive">
@@ -503,6 +514,15 @@
 
     .daterangepicker .drp-buttons .btn.cancelBtn:hover {
         background-color: #f8f9fa;
+    }
+    #refreshBtn {
+        min-width: 42px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #clearFiltersBtn {
+        white-space: nowrap;
     }
 </style>
 @endsection
@@ -956,6 +976,23 @@
             $(this).val('');
             delete currentParams.created_at_start;
             delete currentParams.created_at_end;
+            loadTableData();
+        });
+
+        $('#refreshBtn').on('click', function() {
+            loadTableData();
+        });
+
+        $('#clearFiltersBtn').on('click', function() {
+            currentParams = {
+                sort_by: 'created_at',
+                sort_order: 'desc'
+            };
+
+            $('.column-search').val('');
+            $('.date-range-filter').val('');
+            $('.column-search-clear').hide();
+
             loadTableData();
         });
     });
