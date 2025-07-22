@@ -6,7 +6,9 @@ use AshAllenDesign\ShortURL\Models\ShortURL;
 use AshAllenDesign\ShortURL\Models\ShortURLVisit;
 use AshAllenDesign\ShortURL\Classes\Resolver;
 use AshAllenDesign\ShortURL\Classes\Builder;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -43,6 +45,14 @@ class ShortLinkController extends Controller
             })
             ->when($request->filled('created_by'), function ($query) use ($request) {
                 $query->where('created_by', 'like', '%' . $request->created_by . '%');
+            })
+            ->when($request->filled('visits_count'), function ($query) use ($request) {
+                $query->having('visits_count', '=', $request->visits_count);
+            })
+            ->when($request->filled('created_at_start') && $request->filled('created_at_end'), function ($query) use ($request) {
+                $start = Carbon::createFromFormat('d-m-Y', $request->created_at_start)->startOfDay();
+                $end = Carbon::createFromFormat('d-m-Y', $request->created_at_end)->endOfDay();
+                $query->whereBetween('created_at', [$start, $end]);
             })
             ->orderBy($sortBy, $sortOrder)
             ->paginate(15)
