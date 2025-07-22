@@ -133,6 +133,9 @@
                                         <span>Created At</span>
                                         <span class="sort-arrow" id="created_at_arrow"></span>
                                     </a>
+                                    <div class="position-relative">
+                                        <input type="text" name="created_at" class="form-control form-control-sm mt-1 date-range-filter" placeholder="Filter Created At" value="{{ request('created_at') }}" autocomplete="off">
+                                    </div>
                                 </div>
                             </th>
 
@@ -211,6 +214,7 @@
 @endsection
 
 @section('styles')
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <style>
     .table-shortlink thead th {
         background-color: #00a79d !important;
@@ -465,11 +469,48 @@
             opacity: 0.5;
         }
     }
+    .daterangepicker {
+        font-family: inherit;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        border: 1px solid #e0e0e0;
+    }
+
+    .daterangepicker td.active,
+    .daterangepicker td.active:hover {
+        background-color: #00a79d;
+    }
+
+    .daterangepicker .drp-buttons .btn {
+        padding: 5px 15px;
+        border-radius: 4px;
+        font-size: 0.875rem;
+    }
+
+    .daterangepicker .drp-buttons .btn.applyBtn {
+        background-color: #00a79d;
+        border-color: #00a79d;
+    }
+
+    .daterangepicker .drp-buttons .btn.applyBtn:hover {
+        background-color: #008b84;
+        border-color: #008b84;
+    }
+
+    .daterangepicker .drp-buttons .btn.cancelBtn {
+        color: #495057;
+    }
+
+    .daterangepicker .drp-buttons .btn.cancelBtn:hover {
+        background-color: #f8f9fa;
+    }
 </style>
 @endsection
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
     $(document).ready(function() {
         const baseUrl = '{{ url('/') }}';
@@ -595,7 +636,6 @@
             clearBtn.addEventListener('click', function() {
                 input.value = '';
                 this.style.display = 'none';
-                document.getElementById('searchForm').submit();
             });
 
             const wrapper = input.parentNode;
@@ -604,27 +644,21 @@
             input.addEventListener('input', function() {
                 clearBtn.style.display = this.value ? 'block' : 'none';
             });
-
-            input.addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    document.getElementById('searchForm').submit();
-                }
-            });
         });
 
-        $(document).on('keyup', '.column-search', function(e) {
-            if (e.key === 'Enter') {
-                const column = $(this).data('column');
-                const value = $(this).val();
+        $(document).on('keyup blur', '.column-search', function(e) {
+            const value = $(this).val();
 
-                if (value) {
-                    currentParams[column] = value;
-                } else {
-                    delete currentParams[column];
-                }
+            if (!value) return;
 
-                loadTableData();
+            if (e.type === 'keyup' && e.key !== 'Enter') {
+                return;
             }
+
+            const column = $(this).data('column');
+            currentParams[column] = value;
+
+            loadTableData();
         });
 
         $(document).on('click', '.column-search-clear', function() {
@@ -891,6 +925,37 @@
             const url = $(this).attr('href');
             const page = url.split('page=')[1];
             currentParams.page = page;
+            loadTableData();
+        });
+
+        $('.date-range-filter').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'DD-MM-YYYY',
+                cancelLabel: 'Clear',
+                applyLabel: 'Apply',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                firstDay: 1
+            },
+            opens: 'right',
+            drops: 'down'
+        });
+
+        $('.date-range-filter').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+            currentParams.created_at_start = picker.startDate.format('DD-MM-YYYY');
+            currentParams.created_at_end = picker.endDate.format('DD-MM-YYYY');
+            loadTableData();
+        });
+
+        $('.date-range-filter').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            delete currentParams.created_at_start;
+            delete currentParams.created_at_end;
             loadTableData();
         });
     });
