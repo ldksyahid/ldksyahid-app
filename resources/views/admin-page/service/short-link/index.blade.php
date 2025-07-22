@@ -132,8 +132,21 @@
                                         <span>Visitors</span>
                                         <span class="sort-arrow" id="visits_count_arrow"></span>
                                     </a>
-                                     <div class="position-relative">
-                                        <input type="text" class="form-control form-control-sm mt-1 column-search" data-column="visits_count" placeholder="Visitors">
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm dropdown-toggle visits-dropdown" type="button" id="visitsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span id="visitsDropdownLabel">All Visitors</span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end visits-dropdown-menu" aria-labelledby="visitsDropdown">
+                                            <li><h6 class="dropdown-header">Visitor Range</h6></li>
+                                            <li><a class="dropdown-item visits-option" href="#" data-range="">All Visitors</a></li>
+                                            <li><hr class="dropdown-divider m-0"></li>
+                                            <li><a class="dropdown-item visits-option" href="#" data-range="0-10">0 - 10 visitors</a></li>
+                                            <li><a class="dropdown-item visits-option" href="#" data-range="11-50">11 - 50 visitors</a></li>
+                                            <li><a class="dropdown-item visits-option" href="#" data-range="51-100">51 - 100 visitors</a></li>
+                                            <li><a class="dropdown-item visits-option" href="#" data-range="101-500">101 - 500 visitors</a></li>
+                                            <li><a class="dropdown-item visits-option" href="#" data-range="501-1000">501 - 1000 visitors</a></li>
+                                            <li><a class="dropdown-item visits-option" href="#" data-range="1001+">1000+ visitors</a></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </th>
@@ -456,9 +469,9 @@
     .table-shortlink th:nth-child(5),
     .table-shortlink td:nth-child(5) { width: 400px; max-width: 400px; }
     .table-shortlink th:nth-child(6),
-    .table-shortlink td:nth-child(6) { width: 80px; max-width: 80px; }
+    .table-shortlink td:nth-child(6) { width: 180px; max-width: 180px; }
     .table-shortlink th:nth-child(7),
-    .table-shortlink td:nth-child(7) { width: 120px; max-width: 120px; }
+    .table-shortlink td:nth-child(7) { width: 225px; max-width: 225px; }
     .table-shortlink th:nth-child(8),
     .table-shortlink td:nth-child(8) { width: 120px; max-width: 120px; }
     .table-shortlink th:nth-child(9),
@@ -563,6 +576,79 @@
     }
     .modal.fade .modal-dialog {
         animation: fadeIn 0.3s ease-out;
+    }
+    /* Visits Dropdown Styles */
+    .visits-dropdown {
+        background-color: white;
+        border: 1px solid #dee2e6;
+        color: #495057;
+        width: 100%;
+        text-align: left;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        border-radius: 0.25rem;
+        transition: all 0.2s ease;
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .visits-dropdown::after {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .visits-dropdown:hover {
+        background-color: #f8f9fa;
+    }
+
+    .visits-dropdown:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 167, 157, 0.25);
+        border-color: #00a79d;
+    }
+
+    .visits-dropdown-menu {
+        min-width: 160px;
+        max-width: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 0;
+    }
+
+    .visits-dropdown-menu .dropdown-header {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #00a79d;
+        padding: 0.25rem 0.75rem;
+    }
+
+    .visits-dropdown-menu .dropdown-item {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.75rem;
+        color: #212529;
+        transition: all 0.2s ease;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    .visits-dropdown-menu .dropdown-item:hover,
+    .visits-dropdown-menu .dropdown-item:focus {
+        background-color: #e0f7f5;
+        color: #008b84;
+    }
+
+    .visits-dropdown-menu .dropdown-item.active {
+        background-color: #00a79d;
+        color: white;
+    }
+
+    .visits-dropdown-menu .dropdown-divider {
+        margin: 0;
+        border-color: #e9ecef;
     }
 </style>
 @endsection
@@ -1019,6 +1105,28 @@
             loadTableData();
         });
 
+        $(document).on('click', '.visits-option', function(e) {
+            e.preventDefault();
+            const range = $(this).data('range');
+            const label = $(this).text().trim();
+
+            $('#visitsDropdownLabel').text(label.split(' ')[0] === 'All' ? 'All Visitors' : label);
+
+            if (range) {
+                currentParams.visits_range = range;
+            } else {
+                delete currentParams.visits_range;
+            }
+
+            loadTableData();
+        });
+
+       $(document).on('shown.bs.dropdown', '#visitsDropdown', function() {
+            const currentRange = currentParams.visits_range || '';
+            $('.visits-option').removeClass('active');
+            $(`.visits-option[data-range="${currentRange}"]`).addClass('active');
+        });
+
         $('#refreshBtn').on('click', function() {
             loadTableData();
         });
@@ -1032,6 +1140,7 @@
             $('.column-search').val('');
             $('.date-range-filter').val('');
             $('.column-search-clear').hide();
+            $('#visitsDropdownLabel').text('All Visitors');
 
             loadTableData();
         });
