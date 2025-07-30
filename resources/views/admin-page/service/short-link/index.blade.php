@@ -82,14 +82,13 @@
             </div>
 
             <div class="table-responsive">
-                <form id="searchForm" action="{{ route('admin.service.shortlink.index') }}" method="GET">
-                    <table class="table table-striped table-hover table-borderless text-nowrap align-middle small table-shortlink" id="dataShortlinkTable">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" id="selectAll" class="form-check-input m-0" {{ $isSuperadmin ? '' : 'disabled' }}>
-                                </th>
-                                <th class="text-start">No</th>
+                <table class="table table-striped table-hover table-borderless text-nowrap align-middle small table-shortlink" id="dataShortlinkTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectAll" class="form-check-input m-0" {{ $isSuperadmin ? '' : 'disabled' }}>
+                            </th>
+                            <th class="text-start">No</th>
 
                             <th class="text-center">
                                 <div class="d-flex flex-column">
