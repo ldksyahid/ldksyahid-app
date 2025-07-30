@@ -515,73 +515,45 @@
                 url: "{{ route('admin.catalog.books.indexAdmin') }}",
                 data: queryParams,
                 success: function(response) {
-                    if (response) {
-                        // Pastikan untuk menangani response baik yang berupa HTML langsung atau JSON
-                        if (typeof response === 'object' && response.html) {
-                            $('#bookTableBody').html(response.html);
-                            if (response.pagination) {
-                                $('#paginationContainer').html(response.pagination);
-                            } else {
-                                $('#paginationContainer').html('');
-                            }
+                    if (response && typeof response === 'object') {
+                        $('#bookTableBody').html(response.tableBody);
+                        $('#paginationContainer').html(response.pagination);
 
-                            if (response.total === 0) {
-                                $('#showingInfo').html('<p class="small text-muted mb-0">No books found</p>');
-                            } else {
-                                $('#showingInfo').html(`<p class="small text-muted mb-0">Showing ${response.from}-${response.to} of ${response.total} books</p>`);
-                            }
-                        } else {
-                            $('#bookTableBody').html(response);
-                            if ($('#bookTableBody tr[data-book-id]').length === 0 &&
-                                $('#bookTableBody tr:contains("No books found")').length === 0) {
-                                $('#bookTableBody').html(`
-                                    <tr>
-                                        <td colspan="12" class="text-center py-4">
-                                            <div class="d-flex flex-column align-items-center">
-                                                <i class="fa fa-book-open fa-2x mb-2 text-muted"></i>
-                                                <span class="text-muted">No books found in the catalog</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `);
-                            }
+                        if (response.total === 0) {
                             $('#showingInfo').html('<p class="small text-muted mb-0">No books found</p>');
-                            $('#paginationContainer').html('');
+                        } else {
+                            $('#showingInfo').html(`<p class="small text-muted mb-0">Showing ${response.from}-${response.to} of ${response.total} books</p>`);
                         }
+                    } else if (response) {
+                        $('#bookTableBody').html(response);
                     } else {
-                        $('#bookTableBody').html(`
-                            <tr>
-                                <td colspan="12" class="text-center py-4">
-                                    <div class="d-flex flex-column align-items-center">
-                                        <i class="fa fa-book-open fa-2x mb-2 text-muted"></i>
-                                        <span class="text-muted">No books found in the catalog</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        `);
-                        $('#showingInfo').html('<p class="small text-muted mb-0">No books found</p>');
-                        $('#paginationContainer').html('');
+                        showNoDataMessage();
                     }
                 },
                 error: function(xhr) {
+                    console.error('Error:', xhr);
                     Toast.fire({
                         icon: 'error',
                         title: 'Error loading data'
                     });
-                    $('#bookTableBody').html(`
-                        <tr>
-                            <td colspan="12" class="text-center py-4">
-                                <div class="d-flex flex-column align-items-center">
-                                    <i class="fa fa-exclamation-triangle fa-2x mb-2 text-muted"></i>
-                                    <span class="text-muted">Error loading data</span>
-                                </div>
-                            </td>
-                        </tr>
-                    `);
-                    $('#showingInfo').html('<p class="small text-muted mb-0">Error loading data</p>');
-                    $('#paginationContainer').html('');
+                    showNoDataMessage();
                 }
             });
+        }
+
+        function showNoDataMessage() {
+            $('#bookTableBody').html(`
+                <tr>
+                    <td colspan="12" class="text-center py-4">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="fa fa-book-open fa-2x mb-2 text-muted"></i>
+                            <span class="text-muted">No books found in the catalog</span>
+                        </div>
+                    </td>
+                </tr>
+            `);
+            $('#showingInfo').html('<p class="small text-muted mb-0">No data available</p>');
+            $('#paginationContainer').html('');
         }
 
         function showLoading() {
