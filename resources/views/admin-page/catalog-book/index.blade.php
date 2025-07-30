@@ -472,6 +472,35 @@
             opacity: 0.5;
         }
     }
+    .table-books {
+        table-layout: fixed;
+    }
+    .table-books th:nth-child(1),
+    .table-books td:nth-child(1) { width: 50px; max-width: 50px; } /* Checkbox column */
+    .table-books th:nth-child(2),
+    .table-books td:nth-child(2) { width: 60px; max-width: 60px; } /* No column */
+    .table-books th:nth-child(3),
+    .table-books td:nth-child(3) { width: 120px; max-width: 120px; } /* Added Date */
+    .table-books th:nth-child(4),
+    .table-books td:nth-child(4) { width: 150px; max-width: 150px; } /* ISBN */
+    .table-books th:nth-child(5),
+    .table-books td:nth-child(5) { width: 250px; max-width: 250px; } /* Title */
+    .table-books th:nth-child(6),
+    .table-books td:nth-child(6) { width: 180px; max-width: 180px; } /* Author */
+    .table-books th:nth-child(7),
+    .table-books td:nth-child(7) { width: 180px; max-width: 180px; } /* Publisher */
+    .table-books th:nth-child(8),
+    .table-books td:nth-child(8) { width: 150px; max-width: 150px; } /* Category */
+    .table-books th:nth-child(9),
+    .table-books td:nth-child(9) { width: 80px; max-width: 80px; } /* Year */
+    .table-books th:nth-child(10),
+    .table-books td:nth-child(10) { width: 120px; max-width: 120px; } /* Action */
+
+    .table-books td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 </style>
 @endsection
 
