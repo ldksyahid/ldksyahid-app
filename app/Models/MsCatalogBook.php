@@ -127,7 +127,7 @@ class MsCatalogBook extends Model
             'description' => 'required|string',
             'synopsis' => 'nullable|string',
             'edition' => 'nullable|string|max:50',
-            'coverImage' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'coverImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'pdfFileName' => 'required|file|mimes:pdf|max:10240',
             'tags' => 'nullable|string|max:255',
             'metaKeywords' => 'nullable|string|max:255',
