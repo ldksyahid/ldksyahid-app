@@ -58,10 +58,20 @@
                 </div>
             </div>
 
-            <div class="col-md-12 my-3 text-end">
-                <a href="{{ route('admin.catalog.books.create') }}" class="btn btn-custom-primary">
-                    <i class="fa fa-plus me-1"></i> Add Book
-                </a>
+            <div class="col-md-12 my-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <a href="{{ route('admin.catalog.books.create') }}" class="btn btn-custom-primary">
+                        <i class="fa fa-plus me-1"></i> Add Book
+                    </a>
+                </div>
+                <div>
+                    <button type="button" id="refreshBtn" class="btn btn-custom-primary me-2">
+                        <i class="fa fa-sync-alt"></i> Refresh
+                    </button>
+                    <button type="button" id="clearFiltersBtn" class="btn btn-custom-primary">
+                        <i class="fa fa-times"></i> Clear Filters
+                    </button>
+                </div>
             </div>
 
             <div class="col-md-12 my-3">
@@ -184,8 +194,8 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
-                <div>
-                    <p class="small text-muted mb-0 result-count">
+                <div id="showingInfo">
+                    <p class="small text-muted mb-0">
                         @if ($books->count())
                             Showing {{ $books->firstItem() }}-{{ $books->lastItem() }} of {{ $books->total() }} books
                         @else
@@ -432,6 +442,36 @@
     .daterangepicker .drp-buttons .btn.cancelBtn:hover {
         background-color: #f8f9fa;
     }
+
+    #refreshBtn {
+        min-width: 42px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #clearFiltersBtn {
+        white-space: nowrap;
+    }
+
+    .skeleton-row {
+        animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    .skeleton {
+        height: 20px;
+        background: #e0f7f5;
+        border-radius: 4px;
+        margin: 5px 0;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
 </style>
 @endsection
 
@@ -451,49 +491,76 @@
 
     let sortBy = '{{ request("sort_by", "createdDate") }}';
     let sortOrder = '{{ request("sort_order", "desc") }}';
+    let currentParams = {};
 
     $(document).ready(function() {
+        currentParams = Object.fromEntries(new URLSearchParams(window.location.search));
+
         updateSortArrows();
         initColumnSearch();
+        initDateRangePicker();
 
         $(document).ajaxComplete(function() {
             initColumnSearch();
         });
 
-
         function loadBooks(params = {}) {
-            $('#bookTableBody').html('<tr><td colspan="12" class="text-center">Loading...</td></tr>');
+            showLoading();
 
-            params.sort_by = sortBy;
-            params.sort_order = sortOrder;
+            const queryParams = {...currentParams, ...params};
+            const queryString = new URLSearchParams(queryParams).toString();
+            window.history.pushState(null, null, `?${queryString}`);
 
             $.ajax({
                 url: "{{ route('admin.catalog.books.indexAdmin') }}",
-                data: params,
+                data: queryParams,
                 success: function(response) {
                     if (response) {
-                        if (response.tableBody) {
-                            $('#bookTableBody').html(response.tableBody);
-                        } else if (response) {
+                        // Pastikan untuk menangani response baik yang berupa HTML langsung atau JSON
+                        if (typeof response === 'object' && response.html) {
+                            $('#bookTableBody').html(response.html);
+                            if (response.pagination) {
+                                $('#paginationContainer').html(response.pagination);
+                            } else {
+                                $('#paginationContainer').html('');
+                            }
+
+                            if (response.total === 0) {
+                                $('#showingInfo').html('<p class="small text-muted mb-0">No books found</p>');
+                            } else {
+                                $('#showingInfo').html(`<p class="small text-muted mb-0">Showing ${response.from}-${response.to} of ${response.total} books</p>`);
+                            }
+                        } else {
                             $('#bookTableBody').html(response);
-                        } else {
-                            $('#bookTableBody').html('<tr><td colspan="12" class="text-center">Error loading data</td></tr>');
-                        }
-
-                        if (response.pagination) {
-                            $('#paginationContainer').html(response.pagination);
-                        } else {
-                            $('#paginationContainer').empty();
-                        }
-
-                        if (response.from !== null && response.to !== null && response.total !== null) {
-                            $('.result-count').text(`Showing ${response.from}-${response.to} of ${response.total} books`);
-                        } else if (response.total === 0) {
-                            $('.result-count').text('No data to display');
+                            if ($('#bookTableBody tr[data-book-id]').length === 0 &&
+                                $('#bookTableBody tr:contains("No books found")').length === 0) {
+                                $('#bookTableBody').html(`
+                                    <tr>
+                                        <td colspan="12" class="text-center py-4">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <i class="fa fa-book-open fa-2x mb-2 text-muted"></i>
+                                                <span class="text-muted">No books found in the catalog</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `);
+                            }
+                            $('#showingInfo').html('<p class="small text-muted mb-0">No books found</p>');
+                            $('#paginationContainer').html('');
                         }
                     } else {
-                        console.error('Empty response received');
-                        $('#bookTableBody').html('<tr><td colspan="12" class="text-center">Error: Empty response from server</td></tr>');
+                        $('#bookTableBody').html(`
+                            <tr>
+                                <td colspan="12" class="text-center py-4">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <i class="fa fa-book-open fa-2x mb-2 text-muted"></i>
+                                        <span class="text-muted">No books found in the catalog</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        `);
+                        $('#showingInfo').html('<p class="small text-muted mb-0">No books found</p>');
+                        $('#paginationContainer').html('');
                     }
                 },
                 error: function(xhr) {
@@ -501,9 +568,40 @@
                         icon: 'error',
                         title: 'Error loading data'
                     });
-                    $('#bookTableBody').html('<tr><td colspan="12" class="text-center">Error loading data</td></tr>');
+                    $('#bookTableBody').html(`
+                        <tr>
+                            <td colspan="12" class="text-center py-4">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fa fa-exclamation-triangle fa-2x mb-2 text-muted"></i>
+                                    <span class="text-muted">Error loading data</span>
+                                </div>
+                            </td>
+                        </tr>
+                    `);
+                    $('#showingInfo').html('<p class="small text-muted mb-0">Error loading data</p>');
+                    $('#paginationContainer').html('');
                 }
             });
+        }
+
+        function showLoading() {
+            let skeletonRows = '';
+            for (let i = 0; i < 15; i++) {
+                skeletonRows += `
+                <tr class="skeleton-row">
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                </tr>`;
+            }
+            $('#bookTableBody').html(skeletonRows);
         }
 
         function updateSortArrows() {
@@ -514,6 +612,41 @@
                     arrowElement.html(sortOrder === 'asc' ? '↑' : '↓');
                 }
             }
+        }
+
+        function initDateRangePicker() {
+            $('input[name="added_date"]').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear',
+                    format: 'DD-MM-YYYY',
+                    separator: ' - ',
+                    applyLabel: 'Apply',
+                    cancelLabel: 'Cancel',
+                    fromLabel: 'From',
+                    toLabel: 'To',
+                    customRangeLabel: 'Custom',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1
+                },
+                opens: 'right',
+                drops: 'down'
+            });
+
+            $('input[name="added_date"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+                currentParams.added_date_start = picker.startDate.format('DD-MM-YYYY');
+                currentParams.added_date_end = picker.endDate.format('DD-MM-YYYY');
+                loadBooks();
+            });
+
+            $('input[name="added_date"]').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+                delete currentParams.added_date_start;
+                delete currentParams.added_date_end;
+                loadBooks();
+            });
         }
 
         $(document).on('click', '.sort-link', function(e) {
@@ -527,48 +660,26 @@
                 sortOrder = 'desc';
             }
 
+            currentParams.sort_by = sortBy;
+            currentParams.sort_order = sortOrder;
+
             updateSortArrows();
-            loadBooks($('#searchForm').serializeArray());
+            loadBooks();
         });
 
         $('#searchForm').on('submit', function(e) {
             e.preventDefault();
-            loadBooks($(this).serializeArray());
-        });
+            const formData = $(this).serializeArray();
 
-        $('input[name="added_date"]').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-                cancelLabel: 'Clear',
-                format: 'DD-MM-YYYY',
-                separator: ' - ',
-                applyLabel: 'Apply',
-                cancelLabel: 'Cancel',
-                fromLabel: 'From',
-                toLabel: 'To',
-                customRangeLabel: 'Custom',
-                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
-                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                firstDay: 1
-            },
-            opens: 'right',
-            drops: 'down'
-        });
+            formData.forEach(item => {
+                if (item.value) {
+                    currentParams[item.name] = item.value;
+                } else {
+                    delete currentParams[item.name];
+                }
+            });
 
-        $('input[name="added_date"]').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
-            loadBooks($('#searchForm').serializeArray());
-        });
-
-        $('input[name="added_date"]').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-            loadBooks($('#searchForm').serializeArray());
-        });
-
-        $('.column-search').on('keyup', function(e) {
-            if (e.key === 'Enter') {
-                loadBooks($('#searchForm').serializeArray());
-            }
+            loadBooks();
         });
 
         function initColumnSearch() {
@@ -588,33 +699,39 @@
                 clearBtn.addEventListener('click', function() {
                     input.value = '';
                     this.style.display = 'none';
-                    loadBooks($('#searchForm').serializeArray());
+                    delete currentParams[input.name];
+                    loadBooks();
                 });
 
                 input.addEventListener('input', function() {
                     clearBtn.style.display = this.value ? 'block' : 'none';
                 });
-
-                input.addEventListener('keyup', function(e) {
-                    if (e.key === 'Enter') {
-                        loadBooks($('#searchForm').serializeArray());
-                    }
-                });
             });
         }
 
-        $(document).on('click', '.column-search-clear', function() {
-            const input = $(this).prev('.column-search');
-            input.val('');
-            $(this).hide();
-            loadBooks($('#searchForm').serializeArray());
+        $(document).on('keyup blur', '.column-search', function(e) {
+            if (e.type === 'keyup' && e.key !== 'Enter') {
+                return;
+            }
+
+            const value = $(this).val();
+            const name = $(this).attr('name');
+
+            if (value) {
+                currentParams[name] = value;
+            } else {
+                delete currentParams[name];
+            }
+
+            loadBooks();
         });
 
         $(document).on('click', '.pagination a', function(e) {
             e.preventDefault();
             const url = new URL($(this).attr('href'));
             const page = url.searchParams.get('page');
-            loadBooks([...$('#searchForm').serializeArray(), {name: 'page', value: page}]);
+            currentParams.page = page;
+            loadBooks();
         });
 
         $('#selectAll').on('change', function() {
@@ -658,7 +775,7 @@
                                 icon: 'success',
                                 title: 'Book has been deleted!'
                             });
-                            loadBooks($('#searchForm').serializeArray());
+                            loadBooks();
                         },
                         error: function(xhr) {
                             Swal.fire({
@@ -710,7 +827,7 @@
                                 icon: 'success',
                                 title: 'Selected books have been deleted!'
                             });
-                            loadBooks($('#searchForm').serializeArray());
+                            loadBooks();
                             $('#selectAll').prop('checked', false);
                         },
                         error: function(xhr) {
@@ -731,6 +848,23 @@
             if ($(this).val()) {
                 $(this).next('.column-search-clear').show();
             }
+        });
+
+        $('#refreshBtn').on('click', function() {
+            loadBooks();
+        });
+
+        $('#clearFiltersBtn').on('click', function() {
+            currentParams = {
+                sort_by: sortBy,
+                sort_order: sortOrder
+            };
+
+            $('.column-search').val('');
+            $('input[name="added_date"]').val('');
+            $('.column-search-clear').hide();
+
+            loadBooks();
         });
     });
 </script>
