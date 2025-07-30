@@ -73,7 +73,7 @@
                 @endif
 
                 @if (session('failed'))
-                    @if ($errors->any()))
+                    @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>There were some problems with your input:</strong>
                         <ul class="mb-0">
@@ -164,34 +164,12 @@
                                 </th>
                                 <th class="text-center">
                                     <div class="d-flex flex-column">
-                                        <a href="#" class="sort-link" data-sort-by="language">
-                                            <span>Language</span>
-                                            <span class="sort-arrow" id="sortArrowLanguage"></span>
-                                        </a>
-                                        <div class="position-relative">
-                                            <input type="text" name="language" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Language" value="{{ request('language') }}">
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="text-center">
-                                    <div class="d-flex flex-column">
                                         <a href="#" class="sort-link" data-sort-by="year">
                                             <span>Year</span>
                                             <span class="sort-arrow" id="sortArrowYear"></span>
                                         </a>
                                         <div class="position-relative">
                                             <input type="text" name="year" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Year" value="{{ request('year') }}">
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="text-center">
-                                    <div class="d-flex flex-column">
-                                        <a href="#" class="sort-link" data-sort-by="readCount">
-                                            <span>Reads</span>
-                                            <span class="sort-arrow" id="sortArrowReadCount"></span>
-                                        </a>
-                                        <div class="position-relative">
-                                            <input type="text" name="reads" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Reads" value="{{ request('reads') }}">
                                         </div>
                                     </div>
                                 </th>

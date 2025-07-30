@@ -163,13 +163,7 @@ class MsCatalogBook extends Model
             'authorName',
             'publisherName',
             'categoryName',
-            'language',
             'year',
-            'pages',
-            'readCount',
-            'downloadCount',
-            'rating',
-            'createdBy',
             'createdDate',
         ];
 
@@ -199,16 +193,8 @@ class MsCatalogBook extends Model
             $query->where('categoryName', 'like', "%{$request->category}%");
         }
 
-        if ($request->filled('language')) {
-            $query->where('language', 'like', "%{$request->language}%");
-        }
-
         if ($request->filled('year')) {
             $query->where('year', $request->year);
-        }
-
-        if ($request->filled('reads')) {
-            $query->where('readCount', 'like', "%{$request->reads}%");
         }
 
         if ($request->filled('added_date')) {
