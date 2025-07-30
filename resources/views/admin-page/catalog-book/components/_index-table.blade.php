@@ -27,8 +27,8 @@
                 <i class="fa fa-edit" style="color: white;"></i>
             </a>
             <button type="button"
-                class="btn btn-sm btn-custom-primary"
-                onclick="deleteConfirmationBook({{ $book->bookID }})"
+                class="btn btn-sm btn-custom-primary delete-book-btn"
+                data-id="{{ $book->bookID }}"
                 title="Delete">
                 <i class="fa fa-trash"></i>
             </button>

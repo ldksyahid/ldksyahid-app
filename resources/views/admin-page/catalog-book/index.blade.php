@@ -634,7 +634,9 @@
             $('#bulkDeleteBtn').prop('disabled', !anyChecked);
         }
 
-        function deleteConfirmationBook(id) {
+        $(document).on('click', '.delete-book-btn', function() {
+            const bookId = $(this).data('id');
+
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -647,7 +649,7 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type: "DELETE",
-                        url: `{{ url('admin/catalog/books/') }}/${id}`,
+                        url: `{{ url('admin/catalog/books/') }}/${bookId}`,
                         data: {
                             _token: '{{ csrf_token() }}',
                         },
@@ -668,7 +670,7 @@
                     });
                 }
             });
-        }
+        });
 
         function handleBulkDelete() {
             const checkboxes = $('input[name="ids[]"]:checked');
