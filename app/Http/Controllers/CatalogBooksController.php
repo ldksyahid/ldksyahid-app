@@ -64,6 +64,7 @@ class CatalogBooksController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
+                ->with('failed', true)
                 ->withErrors(['error' => 'Error adding book: ' . $e->getMessage()]);
         }
     }
@@ -93,6 +94,7 @@ class CatalogBooksController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
+                ->with('failed', true)
                 ->withErrors(['error' => 'Error updating book: ' . $e->getMessage()]);
         }
     }

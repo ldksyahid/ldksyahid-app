@@ -74,29 +74,6 @@
                 </div>
             </div>
 
-            <div class="col-md-12 my-3">
-                @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                @endif
-
-                @if (session('failed'))
-                    @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>There were some problems with your input:</strong>
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    @endif
-                @endif
-            </div>
-
             <div class="table-responsive">
                 <form id="searchForm" action="{{ route('admin.catalog.books.indexAdmin') }}" method="GET">
                     <table class="table table-striped table-hover table-borderless text-nowrap align-middle table-books" id="dataBookTable">
@@ -789,6 +766,45 @@
                 }
             });
         });
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        @if(session('success'))
+            Toast.fire({
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showCloseButton: true,
+                width: '400px'
+            });
+        @endif
+
+        @if(session('failed'))
+            @if($errors->any())
+                Toast.fire({
+                    icon: 'error',
+                    title: 'There were some problems with your input',
+                    html: `
+                        <ul class="text-start small">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    `,
+                    showCloseButton: true,
+                    width: '500px'
+                });
+            @endif
+        @endif
 
         function handleBulkDelete() {
             const checkboxes = $('input[name="ids[]"]:checked');
