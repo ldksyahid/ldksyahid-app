@@ -15,9 +15,7 @@
     <td class="text-center">{{ $book->authorName }}</td>
     <td class="text-center">{{ $book->publisherName }}</td>
     <td class="text-center">{{ $book->categoryName }}</td>
-    <td class="text-center">{{ $book->language }}</td>
     <td class="text-center">{{ $book->year }}</td>
-    <td class="text-center">{{ $book->readCount }}</td>
     <td class="text-center">
         <div class="btn-group" role="group">
             <a href="{{ route('admin.catalog.books.show', $book->bookID) }}"
