@@ -199,7 +199,7 @@
                             </tr>
                         </thead>
                         <tbody id="bookTableBody">
-                            @include('admin-page.catalog-book._index_table', ['books' => $books])
+                            @include('admin-page.catalog-book.components._index-table', ['books' => $books])
                         </tbody>
                     </table>
                 </form>

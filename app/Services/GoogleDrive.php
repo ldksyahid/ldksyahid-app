@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Exception;
+use InvalidArgumentException;
 use RuntimeException;
 
 class GoogleDrive
@@ -136,6 +137,63 @@ class GoogleDrive
             }
         } catch (Exception $e) {
             throw new RuntimeException('File deletion failed: ' . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Get a shareable URL for a file in Google Drive
+     *
+     * @param string $fileID The ID of the file
+     * @return string The shareable URL
+     * @throws RuntimeException If the URL cannot be generated
+     */
+    public function getFileUrl(string $fileID): string
+    {
+        try {
+            if (empty($fileID)) {
+                throw new InvalidArgumentException('File ID cannot be empty');
+            }
+
+            $filePath = $this->folderID . '/' . $fileID;
+            $fileMetaData = Storage::disk("google")->getAdapter()->getMetadata($filePath);
+
+            if (!$fileMetaData) {
+                throw new RuntimeException('File not found in Google Drive');
+            }
+
+            $baseUrl = 'https://drive.google.com/file/d/';
+
+            return $baseUrl . $fileID . '/view';
+
+        } catch (Exception $e) {
+            throw new RuntimeException('Failed to get file URL: ' . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Get Google Drive image URL in lh3.googleusercontent.com format
+     *
+     * @param string $fileID The ID of the file
+     * @return string The image URL
+     * @throws RuntimeException If the URL cannot be generated
+     */
+    public function getImageUrl(string $fileID): string
+    {
+        try {
+            if (empty($fileID)) {
+                throw new InvalidArgumentException('File ID cannot be empty');
+            }
+
+            $filePath = $this->folderID . '/' . $fileID;
+            $fileMetaData = Storage::disk("google")->getAdapter()->getMetadata($filePath);
+
+            if (!$fileMetaData) {
+                throw new RuntimeException('File not found in Google Drive');
+            }
+
+            return "https://lh3.googleusercontent.com/d/" . $fileID;
+        } catch (Exception $e) {
+            throw new RuntimeException('Failed to get image URL: ' . $e->getMessage(), 0, $e);
         }
     }
 }

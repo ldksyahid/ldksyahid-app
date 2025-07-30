@@ -323,7 +323,7 @@ Route::middleware(['role:Superadmin|HelperLetter|HelperMedia'])
         Route::get('/', [CatalogBooksController::class, 'indexAdmin'])->name('indexAdmin');
         Route::get('/create', [CatalogBooksController::class, 'create'])->name('create');
         Route::post('/', [CatalogBooksController::class, 'store'])->name('store');
-        Route::get('/{book}', [CatalogBooksController::class, 'show'])->name('show');
+        Route::get('/{book}', [CatalogBooksController::class, 'showAdmin'])->name('show');
         Route::get('/{book}/edit', [CatalogBooksController::class, 'edit'])->name('edit');
         Route::put('/{book}', [CatalogBooksController::class, 'update'])->name('update');
         Route::delete('/{book}', [CatalogBooksController::class, 'destroy'])->name('destroy');

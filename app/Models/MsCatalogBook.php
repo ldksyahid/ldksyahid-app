@@ -283,6 +283,58 @@ class MsCatalogBook extends Model
         ]);
     }
 
+    public function coverImageUrl()
+    {
+        if ($this->coverImageGdriveID) {
+            $gdriveService = new GoogleDrive(self::PATH_COVER_IMAGE_GDRIVE_ID);
+            return $gdriveService->getImageUrl($this->coverImageGdriveID);
+        }
+        return null;
+    }
+
+    public function pdfFileUrl()
+    {
+        if ($this->pdfFileNameGdriveID) {
+            $gdriveService = new GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
+            return $gdriveService->getFileUrl($this->pdfFileNameGdriveID);
+        }
+        return null;
+    }
+
+    public function updateModel(Request $request): void
+    {
+        $data = $request->all();
+
+        if ($request->hasFile('coverImage')) {
+            if ($this->coverImageGdriveID) {
+                $this->deleteFilesFromDrive([$this->coverImageGdriveID], self::PATH_COVER_IMAGE_GDRIVE_ID);
+            }
+
+            $file = $request->file('coverImage');
+            $fileName = time() . '_cover_' . $file->getClientOriginalName();
+            $gdriveService = new GoogleDrive(self::PATH_COVER_IMAGE_GDRIVE_ID);
+            $uploadResult = $gdriveService->uploadImage($file, $fileName, self::PATH_COVER_IMAGE_GDRIVE_ID . '/' . $fileName);
+            $data['coverImage'] = $uploadResult['fileName'];
+            $data['coverImageGdriveID'] = $uploadResult['gdriveID'];
+        }
+
+        if ($request->hasFile('pdfFileName')) {
+            if ($this->pdfFileNameGdriveID) {
+                $this->deleteFilesFromDrive([$this->pdfFileNameGdriveID], self::PATH_PDF_FILE_NAME_GDRIVE_ID);
+            }
+
+            $file = $request->file('pdfFileName');
+            $fileName = time() . '_book_' . $file->getClientOriginalName();
+            $gdriveService = new GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
+            $uploadResult = $gdriveService->uploadFile($file, $fileName, self::PATH_PDF_FILE_NAME_GDRIVE_ID . '/' . $fileName);
+            $data['pdfFileName'] = $uploadResult['fileName'];
+            $data['pdfFileNameGdriveID'] = $uploadResult['gdriveID'];
+        }
+
+        $this->update($data);
+    }
+
+
     public function deleteModel(): void
     {
         try {

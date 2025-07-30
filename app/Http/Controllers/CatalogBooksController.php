@@ -33,7 +33,7 @@ class CatalogBooksController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'tableBody' => view('admin-page.catalog-book._index_table', compact('books'))->render(),
+                'tableBody' => view('admin-page.catalog-book.components._index-table', compact('books'))->render(),
                 'pagination' => $books->appends($request->query()),
                 'total' => $books->total(),
                 'from' => $books->firstItem(),
@@ -48,7 +48,7 @@ class CatalogBooksController extends Controller
 
     public function create()
     {
-        return view('admin-page.catalog-book._form')
+        return view('admin-page.catalog-book.create')
             ->with('title', 'Book Catalog');
     }
 
@@ -71,17 +71,30 @@ class CatalogBooksController extends Controller
 
     public function showAdmin(MsCatalogBook $book)
     {
-
+        return view('admin-page.catalog-book.view', compact('book'))
+            ->with('title', 'Book Catalog');
     }
 
     public function edit(MsCatalogBook $book)
     {
-
+        return view('admin-page.catalog-book.edit', compact('book'))
+            ->with('title', 'Book Catalog');
     }
 
     public function update(Request $request, MsCatalogBook $book)
     {
+        MsCatalogBook::validateRequest($request, $book->bookID);
 
+        try {
+            $book->updateModel($request);
+
+            return redirect()->route('admin.catalog.books.indexAdmin')
+                ->with('success', 'Book has been updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'Error updating book: ' . $e->getMessage()]);
+        }
     }
 
     public function destroy(MsCatalogBook $book)
