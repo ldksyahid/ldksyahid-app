@@ -20,7 +20,7 @@
     <td class="text-center">{{ $book->readCount }}</td>
     <td class="text-center">
         <div class="btn-group" role="group">
-            <a href="{{ route('admin.catalog.books.showAdmin', $book->bookID) }}"
+            <a href="{{ route('admin.catalog.books.show', $book->bookID) }}"
                class="btn btn-sm btn-custom-primary" title="View">
                 <i class="fa fa-eye" style="color: white;"></i>
             </a>
