@@ -193,4 +193,32 @@
             transform: translateY(0);
         }
     }
+    .no-image-placeholder {
+        padding: 2rem;
+        background-color: #f8f9fa;
+        border: 1px dashed #dee2e6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+    }
+    .no-image-placeholder i {
+        opacity: 0.5;
+    }
+    .btn-outline-primary {
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        color: white !important;
+        background-color: #008b84;
+        border-color: #008b84;
+    }
+
+    .btn-custom-primary:hover {
+        color: white !important;
+        background-color: #008b84;
+        border-color: #008b84;
+    }
 </style>

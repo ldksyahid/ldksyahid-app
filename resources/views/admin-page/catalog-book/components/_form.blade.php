@@ -202,21 +202,28 @@
                             <div class="col-md-6">
                                 <h5 class="section-title mb-3"><i class="fas fa-image me-2"></i>Cover Image</h5>
 
-                                @if ($operation === 'view' && $book->coverImage)
+                                @if ($operation === 'view')
                                     <div class="mb-3">
-                                        <label class="form-label">Current Cover</label>
+                                        <label class="form-label">Cover Image</label>
                                         <div>
-                                            <img src="{{ $book->coverImageUrl() }}" alt="Book Cover" class="img-thumbnail" style="max-height: 300px;">
+                                            @if($book->coverImageGdriveID)
+                                                <img src="{{ $book->coverImageUrl() }}" alt="Book Cover" class="img-thumbnail" style="max-height: 300px;">
+                                            @else
+                                                <div class="no-image-placeholder bg-light p-4 text-center rounded border" style="max-height: 300px;">
+                                                    <i class="fas fa-image fa-3x text-muted mb-2"></i>
+                                                    <p class="mb-0">No Cover Image</p>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @else
                                     <div class="mb-3">
                                         <label for="coverImage" class="form-label">
                                             {{ $operation === 'create' ? 'Upload Cover Image' : 'Update Cover Image' }}
-                                            @if ($operation === 'create') <span class="text-danger">*</span> @endif
+                                            (Optional)
                                         </label>
                                         <input type="file" class="form-control @error('coverImage') is-invalid @enderror" id="coverImage" name="coverImage"
-                                            accept="image/*" {{ $operation === 'create' ? 'required' : '' }}>
+                                            accept="image/*">
                                         @error('coverImage')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
