@@ -8,6 +8,7 @@ use AshAllenDesign\ShortURL\Classes\Resolver;
 use AshAllenDesign\ShortURL\Classes\Builder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -45,32 +46,61 @@ class ShortLinkController extends Controller
             ->when($request->filled('created_by'), function ($query) use ($request) {
                 $query->where('created_by', 'like', '%' . $request->created_by . '%');
             })
-            ->when($request->filled('created_at'), function ($query) use ($request) {
-                $dates = explode(' - ', $request->created_at);
-                if (count($dates) == 2) {
-                    $query->whereBetween('created_at', [
-                        Carbon::parse($dates[0])->startOfDay(),
-                        Carbon::parse($dates[1])->endOfDay()
-                    ]);
+            ->when($request->filled('visits_range'), function ($query) use ($request) {
+                $range = $request->visits_range;
+
+                if ($range === '1001+') {
+                    $query->having('visits_count', '>=', 1001);
+                } else {
+                    list($min, $max) = explode('-', $range);
+                    $query->having('visits_count', '>=', $min)
+                        ->having('visits_count', '<=', $max);
                 }
             })
-            ->when($request->filled('visits_count'), function ($query) use ($request) {
-                $query->having('visits_count', '=', $request->visits_count);
+            ->when($request->filled('created_at_start') && $request->filled('created_at_end'), function ($query) use ($request) {
+                $start = Carbon::createFromFormat('d-m-Y', $request->created_at_start)->startOfDay();
+                $end = Carbon::createFromFormat('d-m-Y', $request->created_at_end)->endOfDay();
+                $query->whereBetween('created_at', [$start, $end]);
             })
             ->orderBy($sortBy, $sortOrder)
             ->paginate(15)
             ->appends($request->all());
 
-        return view('admin-page.service.short-link.index', compact('urls'))
-            ->with('title', 'Services');
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin-page.service.short-link._index_table', compact('urls'))->render(),
+                'pagination' => (string) $urls->links(),
+                'total' => $urls->total(),
+                'showing' => [
+                    'first' => $urls->firstItem(),
+                    'last' => $urls->lastItem()
+                ]
+            ]);
+        }
+
+        return view('admin-page.service.short-link.index')->with('title', 'Services');
     }
 
     public function shorten(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'url' => 'required|url'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
         $builder = new Builder();
         $shortURLObject = $builder->destinationUrl($request->url)->make();
-        $shortURL = $shortURLObject->default_short_url;
-        return back()->with('success', 'URL shortened successfully.');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'URL shortened successfully.'
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -92,10 +122,10 @@ class ShortLinkController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return back()
-                ->withErrors($validator)
-                ->withInput()
-                ->with('failed', 'Update failed due to input validation errors.');
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
         }
 
         $url = ShortURL::findOrFail($id);
@@ -104,58 +134,48 @@ class ShortLinkController extends Controller
         $url->default_short_url = config('app.url') . '/' . $request->url;
         $url->save();
 
-        return back()->with('success', 'URL updated successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'URL updated successfully.'
+        ]);
     }
 
     public function destroy($id)
     {
-        $url = ShortURL::find($id);
-        if (!empty($url)) {
-            $url->url_key = request()->url;
-            $visits = ShortURLVisit::where('short_url_id', $url->id)->get();
-            if (!empty($visits)) {
-                foreach ($visits as $visit) {
-                    $visit->delete();
-                }
-            }
-            $url->delete();
-        }
-        return back()->with('success', 'URL deleted successfully.');
+        $url = ShortURL::findOrFail($id);
+        ShortURLVisit::where('short_url_id', $url->id)->delete();
+        $url->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'URL deleted successfully.'
+        ]);
     }
 
     public function bulkDelete(Request $request)
     {
-        $ids = $request->input('ids');
+        $ids = $request->input('ids', []);
 
-        if (!empty($ids)) {
-            foreach ($ids as $id) {
-                $url = ShortURL::find($id);
-                if (!empty($url)) {
-                    $visits = ShortURLVisit::where('short_url_id', $url->id)->get();
-                    if (!empty($visits)) {
-                        foreach ($visits as $visit) {
-                            $visit->delete();
-                        }
-                    }
-                    foreach ($visits as $visit) {
-                        $visit->delete();
-                    }
-                    $url->delete();
-                }
-            }
-            return response()->json(['success' => 'Selected shortlinks have been deleted!']);
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No items selected for deletion.'
+            ], 400);
         }
-        return response()->json(['error' => 'No items selected for deletion.'], 400);
+
+        ShortURL::whereIn('id', $ids)->delete();
+        ShortURLVisit::whereIn('short_url_id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Selected shortlinks have been deleted!'
+        ]);
     }
 
     public function redirect($shortURLKey, Resolver $resolver)
     {
         $shortURL = ShortURL::where('url_key', $shortURLKey)->firstOrFail();
-
-        if (!empty($shortURL)) {
-            $resolver->handleVisit(request(), $shortURL);
-        }
-
+        $resolver->handleVisit(request(), $shortURL);
         return Redirect::to($shortURL->destination_url);
     }
 }
