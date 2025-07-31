@@ -200,9 +200,9 @@
 @endsection
 
 @section('styles')
-    @include('admin-page.catalog-book.components._index-styles')
+    @include('admin-page.catalog-book.components._index._index-styles')
 @endsection
 
 @section('scripts')
-    @include('admin-page.catalog-book.components._index-scripts')
+    @include('admin-page.catalog-book.components._index._index-scripts')
 @endsection
