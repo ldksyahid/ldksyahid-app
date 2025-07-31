@@ -87,7 +87,7 @@
             {{-- ACTIVITY NAV END --}}
 
             {{-- BOOK CATALOG NAV START --}}
-            <a href="/catalog/books" class="nav-item nav-link text-capitalize {{($title === "Katalog Buku") ? "active" : ""}}">Katalog Buku</a>
+            {{-- <a href="/catalog/books" class="nav-item nav-link text-capitalize {{($title === "Katalog Buku") ? "active" : ""}}">Katalog Buku</a> --}}
             {{-- BOOK CATALOG END --}}
 
             {{-- LAYANAN NAV START --}}
@@ -203,7 +203,7 @@
                 <a href="/events" class="nav-item nav-link text-capitalize {{($title === "Kegiatan") ? "active" : ""}}">Kegiatan</a>
 
                 <!-- Book Catalog -->
-                <a href="/catalog/books" class="nav-item nav-link text-capitalize {{($title === "Katalog Buku") ? "active" : ""}}">Katalog Buku</a>
+                {{-- <a href="/catalog/books" class="nav-item nav-link text-capitalize {{($title === "Katalog Buku") ? "active" : ""}}">Katalog Buku</a> --}}
 
                 <!-- Service -->
                 <a href="/service" class="nav-item nav-link text-capitalize {{($title === "Layanan") ? "active" : ""}}">Layanan</a>
