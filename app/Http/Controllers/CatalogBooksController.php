@@ -34,7 +34,7 @@ class CatalogBooksController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'tableBody' => view('admin-page.catalog-book.components._index-table', compact('books'))->render(),
-                'pagination' => $books->appends($request->query()),
+                'pagination' => $books->appends($request->query())->links()->render(),
                 'total' => $books->total(),
                 'from' => $books->firstItem(),
                 'to' => $books->lastItem()
