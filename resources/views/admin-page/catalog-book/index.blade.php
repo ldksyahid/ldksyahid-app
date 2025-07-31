@@ -626,8 +626,7 @@
 
             $('input[name="added_date"]').on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
-                currentParams.added_date_start = picker.startDate.format('DD-MM-YYYY');
-                currentParams.added_date_end = picker.endDate.format('DD-MM-YYYY');
+                currentParams.added_date = picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY');
                 loadBooks();
             });
 
