@@ -75,98 +75,96 @@
             </div>
 
             <div class="table-responsive">
-                <form id="searchForm" action="{{ route('admin.catalog.books.indexAdmin') }}" method="GET">
-                    <table class="table table-striped table-hover table-borderless text-nowrap align-middle table-books" id="dataBookTable">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" id="selectAll" class="form-check-input m-0" {{ $isSuperadmin ? '' : 'disabled' }}>
-                                </th>
-                                <th class="text-start">No</th>
-                                <th class="text-center">
-                                    <div class="d-flex flex-column">
-                                        <a href="#" class="sort-link" data-sort-by="createdDate">
-                                            <span>Added Date</span>
-                                            <span class="sort-arrow" id="sortArrowCreatedDate"></span>
-                                        </a>
-                                        <div class="position-relative">
-                                            <input type="text" name="added_date" class="form-control form-control-sm mt-1 daterangepicker-input" placeholder="Filter Added Date" value="{{ request('added_date') }}" autocomplete="off">
-                                        </div>
+               <table class="table table-striped table-hover table-borderless text-nowrap align-middle table-books" id="dataBookTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectAll" class="form-check-input m-0" {{ $isSuperadmin ? '' : 'disabled' }}>
+                            </th>
+                            <th class="text-start">No</th>
+                            <th class="text-center">
+                                <div class="d-flex flex-column">
+                                    <a href="#" class="sort-link" data-sort-by="createdDate">
+                                        <span>Added Date</span>
+                                        <span class="sort-arrow" id="sortArrowCreatedDate"></span>
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" name="added_date" class="form-control form-control-sm mt-1 daterangepicker-input" placeholder="Filter Added Date" value="{{ request('added_date') }}" autocomplete="off">
                                     </div>
-                                </th>
-                                <th class="text-center">
-                                    <div class="d-flex flex-column">
-                                        <a href="#" class="sort-link" data-sort-by="isbn">
-                                            <span>ISBN</span>
-                                            <span class="sort-arrow" id="sortArrowIsbn"></span>
-                                        </a>
-                                        <div class="position-relative">
-                                            <input type="text" name="isbn" class="form-control form-control-sm mt-1 column-search" placeholder="Filter ISBN" value="{{ request('isbn') }}">
-                                        </div>
+                                </div>
+                            </th>
+                            <th class="text-center">
+                                <div class="d-flex flex-column">
+                                    <a href="#" class="sort-link" data-sort-by="isbn">
+                                        <span>ISBN</span>
+                                        <span class="sort-arrow" id="sortArrowIsbn"></span>
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" name="isbn" class="form-control form-control-sm mt-1 column-search" placeholder="Filter ISBN" value="{{ request('isbn') }}">
                                     </div>
-                                </th>
-                                <th class="text-center">
-                                    <div class="d-flex flex-column">
-                                        <a href="#" class="sort-link" data-sort-by="titleBook">
-                                            <span>Title</span>
-                                            <span class="sort-arrow" id="sortArrowTitleBook"></span>
-                                        </a>
-                                        <div class="position-relative">
-                                            <input type="text" name="title" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Title" value="{{ request('title') }}">
-                                        </div>
+                                </div>
+                            </th>
+                            <th class="text-center">
+                                <div class="d-flex flex-column">
+                                    <a href="#" class="sort-link" data-sort-by="titleBook">
+                                        <span>Title</span>
+                                        <span class="sort-arrow" id="sortArrowTitleBook"></span>
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" name="title" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Title" value="{{ request('title') }}">
                                     </div>
-                                </th>
-                                <th class="text-center">
-                                    <div class="d-flex flex-column">
-                                        <a href="#" class="sort-link" data-sort-by="authorName">
-                                            <span>Author</span>
-                                            <span class="sort-arrow" id="sortArrowAuthorName"></span>
-                                        </a>
-                                        <div class="position-relative">
-                                            <input type="text" name="author" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Author" value="{{ request('author') }}">
-                                        </div>
+                                </div>
+                            </th>
+                            <th class="text-center">
+                                <div class="d-flex flex-column">
+                                    <a href="#" class="sort-link" data-sort-by="authorName">
+                                        <span>Author</span>
+                                        <span class="sort-arrow" id="sortArrowAuthorName"></span>
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" name="author" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Author" value="{{ request('author') }}">
                                     </div>
-                                </th>
-                                <th class="text-center">
-                                    <div class="d-flex flex-column">
-                                        <a href="#" class="sort-link" data-sort-by="publisherName">
-                                            <span>Publisher</span>
-                                            <span class="sort-arrow" id="sortArrowPublisherName"></span>
-                                        </a>
-                                        <div class="position-relative">
-                                            <input type="text" name="publisher" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Publisher" value="{{ request('publisher') }}">
-                                        </div>
+                                </div>
+                            </th>
+                            <th class="text-center">
+                                <div class="d-flex flex-column">
+                                    <a href="#" class="sort-link" data-sort-by="publisherName">
+                                        <span>Publisher</span>
+                                        <span class="sort-arrow" id="sortArrowPublisherName"></span>
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" name="publisher" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Publisher" value="{{ request('publisher') }}">
                                     </div>
-                                </th>
-                                <th class="text-center">
-                                    <div class="d-flex flex-column">
-                                        <a href="#" class="sort-link" data-sort-by="categoryName">
-                                            <span>Category</span>
-                                            <span class="sort-arrow" id="sortArrowCategoryName"></span>
-                                        </a>
-                                        <div class="position-relative">
-                                            <input type="text" name="category" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Category" value="{{ request('category') }}">
-                                        </div>
+                                </div>
+                            </th>
+                            <th class="text-center">
+                                <div class="d-flex flex-column">
+                                    <a href="#" class="sort-link" data-sort-by="categoryName">
+                                        <span>Category</span>
+                                        <span class="sort-arrow" id="sortArrowCategoryName"></span>
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" name="category" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Category" value="{{ request('category') }}">
                                     </div>
-                                </th>
-                                <th class="text-center">
-                                    <div class="d-flex flex-column">
-                                        <a href="#" class="sort-link" data-sort-by="year">
-                                            <span>Year</span>
-                                            <span class="sort-arrow" id="sortArrowYear"></span>
-                                        </a>
-                                        <div class="position-relative">
-                                            <input type="text" name="year" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Year" value="{{ request('year') }}">
-                                        </div>
+                                </div>
+                            </th>
+                            <th class="text-center">
+                                <div class="d-flex flex-column">
+                                    <a href="#" class="sort-link" data-sort-by="year">
+                                        <span>Year</span>
+                                        <span class="sort-arrow" id="sortArrowYear"></span>
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="text" name="year" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Year" value="{{ request('year') }}">
                                     </div>
-                                </th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bookTableBody">
-                        </tbody>
-                    </table>
-                </form>
+                                </div>
+                            </th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookTableBody">
+                    </tbody>
+                </table>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
@@ -519,10 +517,10 @@
 
             const queryParams = {...currentParams, ...params};
             const queryString = new URLSearchParams(queryParams).toString();
-            window.history.pushState(null, null, `?${queryString}`);
 
             $.ajax({
                 url: "{{ route('admin.catalog.books.indexAdmin') }}",
+                type: 'GET',
                 data: queryParams,
                 success: function(response) {
                     if (response && typeof response === 'object') {
@@ -656,21 +654,6 @@
             currentParams.sort_order = sortOrder;
 
             updateSortArrows();
-            loadBooks();
-        });
-
-        $('#searchForm').on('submit', function(e) {
-            e.preventDefault();
-            const formData = $(this).serializeArray();
-
-            formData.forEach(item => {
-                if (item.value) {
-                    currentParams[item.name] = item.value;
-                } else {
-                    delete currentParams[item.name];
-                }
-            });
-
             loadBooks();
         });
 
