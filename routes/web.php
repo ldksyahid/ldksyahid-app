@@ -18,6 +18,7 @@ use App\Http\Controllers\RequestShortlinkController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\StructureController;
 use App\Http\Controllers\CallKestariController;
+use App\Http\Controllers\CatalogBooksController;
 use App\Http\Controllers\ITSupportController;
 use App\Http\Controllers\TestimonyController;
 use App\Http\Controllers\CelenganSyahidController;
@@ -123,6 +124,10 @@ Route::get('/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController
 
 Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
 Route::post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+
+// Route LandingPage Catalog Books
+Route::get('/catalog/books', [CatalogBooksController::class, 'index'])->name('catalog.books.index');
+Route::get('/catalog/books/{slug}', [CatalogBooksController::class, 'show'])->name('catalog.books.show');
 
 // Route LandingPage EKSPRESI
 Route::get('/ekspresi', function () {
@@ -309,4 +314,20 @@ Route::prefix('admin/service/shortlink')->group(function () {
 
 Route::get('/{shortURLKey}', [ShortLinkController::class, 'redirect']);;
 // END Route AdminPage Service Shortlink
+
+// Route AdminPage Catalog Books
+Route::middleware(['role:Superadmin|HelperLetter|HelperMedia'])
+    ->prefix('/admin/catalog/books')
+    ->name('admin.catalog.books.')
+    ->group(function () {
+        Route::get('/', [CatalogBooksController::class, 'indexAdmin'])->name('indexAdmin');
+        Route::get('/create', [CatalogBooksController::class, 'create'])->name('create');
+        Route::post('/', [CatalogBooksController::class, 'store'])->name('store');
+        Route::get('/{book}', [CatalogBooksController::class, 'showAdmin'])->name('show');
+        Route::get('/{book}/edit', [CatalogBooksController::class, 'edit'])->name('edit');
+        Route::put('/{book}', [CatalogBooksController::class, 'update'])->name('update');
+        Route::delete('/{book}', [CatalogBooksController::class, 'destroy'])->name('destroy');
+        Route::post('/bulk-delete', [CatalogBooksController::class, 'bulkDelete'])->name('bulkDelete');
+    });
+
 // ======================================= END ROUTE ADMIN PAGE =======================================

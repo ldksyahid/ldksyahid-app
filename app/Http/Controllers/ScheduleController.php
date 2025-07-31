@@ -14,7 +14,7 @@ class ScheduleController extends Controller
     public function index()
     {
         $postschedule = Schedule::orderBy('created_at','desc')->get();
-        return view('landing-page.schedule.index', compact('postschedule'),["title" => "Jadwal"]);
+        return view('landing-page.schedule.index', compact('postschedule'),["title" => "Lainnya"]);
     }
 
     public function indexadmin()
