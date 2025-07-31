@@ -164,7 +164,6 @@
                             </tr>
                         </thead>
                         <tbody id="bookTableBody">
-                            @include('admin-page.catalog-book.components._index-table', ['books' => $books])
                         </tbody>
                     </table>
                 </form>
@@ -478,6 +477,10 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+    .tooltip-inner {
+        max-width: 500px;
+        text-align: left;
+    }
 </style>
 @endsection
 
@@ -502,6 +505,7 @@
     $(document).ready(function() {
         currentParams = Object.fromEntries(new URLSearchParams(window.location.search));
 
+        loadBooks();
         updateSortArrows();
         initColumnSearch();
         initDateRangePicker();
@@ -535,6 +539,16 @@
                     } else {
                         showNoDataMessage();
                     }
+
+                    $('#bookTableBody [data-bs-toggle="tooltip"]').tooltip('dispose');
+                    $('#bookTableBody td').each(function() {
+                        if (this.offsetWidth < this.scrollWidth) {
+                            $(this).attr('data-bs-toggle', 'tooltip')
+                                .attr('data-bs-placement', 'top')
+                                .attr('title', $(this).text().trim());
+                        }
+                    });
+                    $('[data-bs-toggle="tooltip"]').tooltip();
                 },
                 error: function(xhr) {
                     console.error('Error:', xhr);
