@@ -872,14 +872,19 @@
         });
 
         $('#clearFiltersBtn').on('click', function() {
+            sortBy = 'createdDate';
+            sortOrder = 'desc';
+
             currentParams = {
                 sort_by: sortBy,
-                sort_order: sortOrder
+                sort_order: sortOrder,
+                page: 1
             };
 
             $('.column-search').val('');
             $('input[name="added_date"]').val('');
             $('.column-search-clear').hide();
+            updateSortArrows();
 
             loadBooks();
         });
