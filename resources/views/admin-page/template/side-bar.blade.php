@@ -85,6 +85,7 @@
                     </div>
                 </div>
                 <a href="/admin/ktaldksyahid" class="nav-item nav-link {{($title === "KTA") ? "active" : ""}}"><i class="fa fa-id-card me-2"></i>KTA LDK Syahid</a>
+                <a href="/admin/catalog/books" class="nav-item nav-link {{($title === "Book Catalog") ? "active" : ""}}"><i class="fa fa-book me-2"></i>Book Catalog</a>
             </div>
 
         {{-- HelperAdmin Sidebar --}}
@@ -148,6 +149,7 @@
                     </div>
                 </div>
                 <a href="/admin/ktaldksyahid" class="nav-item nav-link {{($title === "KTA") ? "active" : ""}}"><i class="fa fa-id-card me-2"></i>KTA LDK Syahid</a>
+                <a href="/admin/catalog/books" class="nav-item nav-link {{($title === "Book Catalog") ? "active" : ""}}"><i class="fa fa-book me-2"></i>Book Catalog</a>
             </div>
 
         {{-- HelperEventMart Sidebar --}}
@@ -231,6 +233,7 @@
                         <a href="/admin/reqservice/shortlink" class="dropdown-item">&#10070; Request Shortlink</a>
                     </div>
                 </div>
+                <a href="/admin/catalog/books" class="nav-item nav-link {{($title === "Book Catalog") ? "active" : ""}}"><i class="fa fa-book me-2"></i>Book Catalog</a>
             </div>
         @endif
     </nav>
