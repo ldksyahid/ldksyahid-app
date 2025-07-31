@@ -86,13 +86,22 @@
             <a href="/events" class="nav-item nav-link text-capitalize {{($title === "Kegiatan") ? "active" : ""}}">Kegiatan</a>
             {{-- ACTIVITY NAV END --}}
 
-            {{-- JADWALIN NAV START --}}
-            <a href="/schedule" class="nav-item nav-link text-capitalize {{($title === "Jadwal") ? "active" : ""}}">Jadwal</a>
-            {{-- JADWALIN NAV END --}}
+            {{-- BOOK CATALOG NAV START --}}
+            <a href="/catalog/books" class="nav-item nav-link text-capitalize {{($title === "Katalog Buku") ? "active" : ""}}">Katalog Buku</a>
+            {{-- BOOK CATALOG END --}}
 
             {{-- LAYANAN NAV START --}}
             <a href="/service" class="nav-item nav-link text-capitalize {{($title === "Layanan") ? "active" : ""}}">Layanan</a>
             {{-- LAYANAN NAV END --}}
+
+            {{-- OTHER NAV START --}}
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle text-capitalize {{($title === "Lainnya") ? "active" : ""}}" data-bs-toggle="dropdown">Lainnya</a>
+                <div class="dropdown-menu bg-light m-0" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <a href="/schedule" class="dropdown-item">Jadwal</a>
+                </div>
+            </div>
+            {{-- OTHER NAV END --}}
 
             {{-- USER NAV START --}}
             @guest
@@ -193,11 +202,19 @@
                 <!-- Activity -->
                 <a href="/events" class="nav-item nav-link text-capitalize {{($title === "Kegiatan") ? "active" : ""}}">Kegiatan</a>
 
-                <!-- Schedule -->
-                <a href="/schedule" class="nav-item nav-link text-capitalize {{($title === "Jadwal") ? "active" : ""}}">Jadwal</a>
+                <!-- Book Catalog -->
+                <a href="/catalog/books" class="nav-item nav-link text-capitalize {{($title === "Katalog Buku") ? "active" : ""}}">Katalog Buku</a>
 
                 <!-- Service -->
                 <a href="/service" class="nav-item nav-link text-capitalize {{($title === "Layanan") ? "active" : ""}}">Layanan</a>
+
+                <!-- Other -->
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle text-capitalize {{($title === "Lainnya") ? "active" : ""}}" data-bs-toggle="dropdown" role="button" aria-expanded="false">Lainnya</a>
+                    <div class="dropdown-menu" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <a href="/schedule" class="dropdown-item">Jadwal</a>
+                    </div>
+                </div>
 
                 <!-- User Section -->
                 @guest
