@@ -202,8 +202,8 @@ class MsCatalogBook extends Model
 
             if (count($dates) == 2) {
                 try {
-                    $startDate = \Carbon\Carbon::createFromFormat('Y-m-d', trim($dates[0]))->startOfDay();
-                    $endDate = \Carbon\Carbon::createFromFormat('Y-m-d', trim($dates[1]))->endOfDay();
+                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
 
                     $query->whereBetween('createdDate', [$startDate, $endDate]);
                 } catch (\Exception $e) {
