@@ -204,7 +204,6 @@
 
                                 @if ($operation === 'view')
                                     <div class="mb-3">
-                                        <label class="form-label">Cover Image</label>
                                         <div>
                                             @if($book->coverImageGdriveID)
                                                 <img src="{{ $book->coverImageUrl() }}" alt="Book Cover" class="img-thumbnail" style="max-height: 300px;">
@@ -240,11 +239,21 @@
 
                                 @if ($operation === 'view' && $book->pdfFileName)
                                     <div class="mb-3">
-                                        <label class="form-label">Current PDF</label>
-                                        <div>
-                                            <a href="{{ $book->pdfFileUrl() }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                                <i class="fas fa-file-pdf me-1"></i> View PDF
-                                            </a>
+                                        <div class="pdf-preview text-center">
+                                            @if($book->pdfFileName)
+                                                <div class="pdf-preview-content">
+                                                    <i class="fas fa-file-pdf fa-3x text-danger mb-2"></i>
+                                                    <p class="mb-2">{{ $book->pdfFileName }}</p>
+                                                    <a href="{{ $book->pdfFileUrl() }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye me-1"></i> View PDF
+                                                    </a>
+                                                </div>
+                                            @else
+                                                <div class="no-media-placeholder">
+                                                    <i class="fas fa-file-pdf fa-2x"></i>
+                                                    <p>No PDF file</p>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @else
