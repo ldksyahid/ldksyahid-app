@@ -152,7 +152,7 @@ class MsCatalogBook extends Model
         return $slug;
     }
 
-    public static function searchAdminBooks(Request $request): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public static function searchAdminBooks(Request $request)
     {
         $sortBy = $request->input('sort_by', 'createdDate');
         $sortOrder = $request->input('sort_order', 'desc');
