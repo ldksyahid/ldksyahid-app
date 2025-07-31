@@ -28,6 +28,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
-        Blade::component('admin-page.catalog-book.components._form', 'catalog-book.form');
+        Blade::component('admin-page.catalog-book.components._form._form', 'catalog-book.form');
     }
 }

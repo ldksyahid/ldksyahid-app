@@ -5,9 +5,9 @@
 @endsection
 
 @section('styles')
-    @include('admin-page.catalog-book.components._form-styles')
+    @include('admin-page.catalog-book.components._form._form-styles')
 @endsection
 
 @section('scripts')
-    @include('admin-page.catalog-book.components._form-scripts')
+    @include('admin-page.catalog-book.components._form._form-scripts')
 @endsection
