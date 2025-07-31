@@ -115,9 +115,9 @@ class MsCatalogBook extends Model
     {
         $maxYear = date('Y');
 
-        return $request->validate([
-            'isbn' => 'required|string|max:20|unique:ms_catalog_book,isbn',
-            'titleBook' => 'required|string|max:255|unique:ms_catalog_book,titleBook',
+        $rules = [
+            'isbn' => 'required|string|max:20',
+            'titleBook' => 'required|string|max:255',
             'authorName' => 'required|string|max:100',
             'publisherName' => 'required|string|max:100',
             'categoryName' => 'required|string|max:100',
@@ -128,11 +128,22 @@ class MsCatalogBook extends Model
             'synopsis' => 'nullable|string',
             'edition' => 'nullable|string|max:50',
             'coverImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'pdfFileName' => 'required|file|mimes:pdf|max:10240',
+            'pdfFileName' => 'nullable|file|mimes:pdf|max:10240',
             'tags' => 'nullable|string|max:255',
             'metaKeywords' => 'nullable|string|max:255',
             'metaDescription' => 'nullable|string|max:255',
-        ]);
+        ];
+
+        if ($ignoreId === null) {
+            $rules['isbn'] .= '|unique:ms_catalog_book,isbn';
+            $rules['titleBook'] .= '|unique:ms_catalog_book,titleBook';
+            $rules['pdfFileName'] = 'required|file|mimes:pdf|max:10240';
+        } else {
+            $rules['isbn'] .= '|unique:ms_catalog_book,isbn,' . $ignoreId . ',bookID';
+            $rules['titleBook'] .= '|unique:ms_catalog_book,titleBook,' . $ignoreId . ',bookID';
+        }
+
+        return $request->validate($rules);
     }
 
     public static function generateSlug(string $title, ?int $ignoreId = null): string
