@@ -13,27 +13,28 @@ class CreateDonationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('donations', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->string('jumlah_donasi')->nullable();
-            $table->string('nama_donatur')->nullable();
-            $table->string('email_donatur')->nullable();
-            $table->string('no_telp_donatur')->nullable();
-            $table->string('pesan_donatur')->nullable();
-            $table->longText('captcha')->nullable();
-            $table->string('metode_pembayaran')->nullable();
-            $table->string('nama_merchant')->nullable();
-            $table->string('biaya_admin')->nullable();
-            $table->string('kode_unik')->nullable();
-            $table->uuid('campaign_id');
-            $table->foreign('campaign_id')->references('id')->on('campaigns')->onDelete('cascade');
-            $table->string('doc_no')->nullable();
-            $table->string('payment_status')->nullable();
-            $table->text('payment_link')->nullable();
-            $table->bigInteger('total_tagihan')->nullable();
-
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('donations')) {
+            Schema::create('donations', function (Blueprint $table) {
+                $table->uuid('id');
+                $table->string('jumlah_donasi')->nullable();
+                $table->string('nama_donatur')->nullable();
+                $table->string('email_donatur')->nullable();
+                $table->string('no_telp_donatur')->nullable();
+                $table->string('pesan_donatur')->nullable();
+                $table->longText('captcha')->nullable();
+                $table->string('metode_pembayaran')->nullable();
+                $table->string('nama_merchant')->nullable();
+                $table->string('biaya_admin')->nullable();
+                $table->string('kode_unik')->nullable();
+                $table->uuid('campaign_id');
+                $table->foreign('campaign_id')->references('id')->on('campaigns')->onDelete('cascade');
+                $table->string('doc_no')->nullable();
+                $table->string('payment_status')->nullable();
+                $table->text('payment_link')->nullable();
+                $table->bigInteger('total_tagihan')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

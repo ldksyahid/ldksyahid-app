@@ -4,27 +4,196 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Exception;
+use InvalidArgumentException;
+use RuntimeException;
 
 class GoogleDrive
 {
-    private $folderID;
+    private string $folderID;
 
-    public function __construct($folderID)
+    public function __construct(string $folderID)
     {
+        if (empty($folderID)) {
+            throw new InvalidArgumentException('Folder ID cannot be empty');
+        }
         $this->folderID = $folderID;
     }
 
-    public function uploadImage($file, $fileName, $filePath)
+    /**
+     * Upload an image file to Google Drive
+     *
+     * @param mixed $file The file to upload
+     * @param string $fileName The desired file name
+     * @param string $filePath The path where to store the file
+     * @return array ['fileName' => string, 'gdriveID' => string]
+     * @throws RuntimeException If the upload fails
+     */
+    public function uploadImage($file, string $fileName, string $filePath): array
     {
-        Storage::cloud()->put($filePath, File::get($file));
-        $fileMetaData = Storage::disk("google")->getAdapter()->getMetadata($filePath);
-        $gdriveID = basename($fileMetaData['path']);
+        try {
+            if (!is_uploaded_file($file->getPathname())) {
+                throw new RuntimeException('Invalid file upload');
+            }
 
-        return ['fileName' => $fileName, 'gdriveID' => $gdriveID];
+            if (!Storage::cloud()->put($filePath, File::get($file))) {
+                throw new RuntimeException('Failed to store file in Google Drive');
+            }
+
+            $fileMetaData = Storage::disk("google")->getAdapter()->getMetadata($filePath);
+
+            if (!$fileMetaData) {
+                throw new RuntimeException('Failed to retrieve file metadata from Google Drive');
+            }
+
+            $gdriveID = basename($fileMetaData['path']);
+
+            if (empty($gdriveID)) {
+                throw new RuntimeException('Invalid Google Drive file ID');
+            }
+
+            return [
+                'fileName' => $fileName,
+                'gdriveID' => $gdriveID
+            ];
+        } catch (Exception $e) {
+            throw new RuntimeException('Image upload failed: ' . $e->getMessage(), 0, $e);
+        }
     }
 
-    public function deleteImage($fileID)
+    /**
+     * Upload any file to Google Drive
+     *
+     * @param mixed $file The file to upload
+     * @param string $fileName The desired file name
+     * @param string $filePath The path where to store the file
+     * @return array ['fileName' => string, 'gdriveID' => string]
+     * @throws RuntimeException If the upload fails
+     */
+    public function uploadFile($file, string $fileName, string $filePath): array
     {
-        Storage::disk('google')->delete($this->folderID . '/' . $fileID);
+        try {
+            if (!is_uploaded_file($file->getPathname())) {
+                throw new RuntimeException('Invalid file upload');
+            }
+
+            if (!Storage::cloud()->put($filePath, File::get($file))) {
+                throw new RuntimeException('Failed to store file in Google Drive');
+            }
+
+            $fileMetaData = Storage::disk("google")->getAdapter()->getMetadata($filePath);
+
+            if (!$fileMetaData) {
+                throw new RuntimeException('Failed to retrieve file metadata from Google Drive');
+            }
+
+            $gdriveID = basename($fileMetaData['path']);
+
+            if (empty($gdriveID)) {
+                throw new RuntimeException('Invalid Google Drive file ID');
+            }
+
+            return [
+                'fileName' => $fileName,
+                'gdriveID' => $gdriveID
+            ];
+        } catch (Exception $e) {
+            throw new RuntimeException('File upload failed: ' . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Delete an image file from Google Drive
+     *
+     * @param string $fileID The ID of the file to delete
+     * @throws RuntimeException If the deletion fails
+     */
+    public function deleteImage(string $fileID): void
+    {
+        $this->deleteFile($fileID);
+    }
+
+    /**
+     * Delete any file from Google Drive
+     *
+     * @param string $fileID The ID of the file to delete
+     * @throws RuntimeException If the deletion fails
+     */
+    public function deleteFile(string $fileID): void
+    {
+        try {
+            if (empty($fileID)) {
+                throw new InvalidArgumentException('File ID cannot be empty');
+            }
+
+            $fullPath = $this->folderID . '/' . $fileID;
+
+            if (!Storage::disk('google')->exists($fullPath)) {
+                throw new RuntimeException('File not found in Google Drive');
+            }
+
+            if (!Storage::disk('google')->delete($fullPath)) {
+                throw new RuntimeException('Failed to delete file from Google Drive');
+            }
+        } catch (Exception $e) {
+            throw new RuntimeException('File deletion failed: ' . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Get a shareable URL for a file in Google Drive
+     *
+     * @param string $fileID The ID of the file
+     * @return string The shareable URL
+     * @throws RuntimeException If the URL cannot be generated
+     */
+    public function getFileUrl(string $fileID): string
+    {
+        try {
+            if (empty($fileID)) {
+                throw new InvalidArgumentException('File ID cannot be empty');
+            }
+
+            $filePath = $this->folderID . '/' . $fileID;
+            $fileMetaData = Storage::disk("google")->getAdapter()->getMetadata($filePath);
+
+            if (!$fileMetaData) {
+                throw new RuntimeException('File not found in Google Drive');
+            }
+
+            $baseUrl = 'https://drive.google.com/file/d/';
+
+            return $baseUrl . $fileID . '/view';
+
+        } catch (Exception $e) {
+            throw new RuntimeException('Failed to get file URL: ' . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Get Google Drive image URL in lh3.googleusercontent.com format
+     *
+     * @param string $fileID The ID of the file
+     * @return string The image URL
+     * @throws RuntimeException If the URL cannot be generated
+     */
+    public function getImageUrl(string $fileID): string
+    {
+        try {
+            if (empty($fileID)) {
+                throw new InvalidArgumentException('File ID cannot be empty');
+            }
+
+            $filePath = $this->folderID . '/' . $fileID;
+            $fileMetaData = Storage::disk("google")->getAdapter()->getMetadata($filePath);
+
+            if (!$fileMetaData) {
+                throw new RuntimeException('File not found in Google Drive');
+            }
+
+            return "https://lh3.googleusercontent.com/d/" . $fileID;
+        } catch (Exception $e) {
+            throw new RuntimeException('Failed to get image URL: ' . $e->getMessage(), 0, $e);
+        }
     }
 }
