@@ -21,7 +21,7 @@ class MsKTALDKSyahidController extends Controller
     public function show($link)
     {
         $ktaData = MsKTALDKSyahid::where('linkProfile', $link)->with(['getFaculty', 'getMajor', 'getGeneration'])->orderBy('created_at', 'desc')->first();
-        return view('landing-page.kta-ldksyahid.detail', compact('ktaData'), ["title" => "KTA"]);
+        return view('landing-page.kta-ldksyahid.index', compact('ktaData'), ["title" => "KTA"]);
     }
 
     public function create()
