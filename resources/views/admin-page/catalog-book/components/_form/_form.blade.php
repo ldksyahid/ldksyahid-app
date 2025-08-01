@@ -60,11 +60,11 @@
                             <div class="col-md-6">
                                 <h5 class="section-title mb-3"><i class="fas fa-info-circle me-2"></i>Basic Information</h5>
 
-                                <div class="mb-3">
-                                    <label for="isbn" class="form-label">ISBN <span class="text-danger">*</span></label>
+                               <div class="mb-3">
+                                    <label for="isbn" class="form-label">ISBN</label>
                                     <input type="text" class="form-control @error('isbn') is-invalid @enderror" id="isbn" name="isbn"
                                         value="{{ old('isbn', $book->isbn ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}>
+                                        {{ $operation === 'view' ? 'readonly' : '' }}>
                                     @error('isbn')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

@@ -116,7 +116,7 @@ class MsCatalogBook extends Model
         $maxYear = date('Y');
 
         $rules = [
-            'isbn' => 'required|string|max:20',
+            'isbn' => 'nullable|string|max:20',
             'titleBook' => 'required|string|max:255',
             'authorName' => 'required|string|max:100',
             'publisherName' => 'required|string|max:100',
