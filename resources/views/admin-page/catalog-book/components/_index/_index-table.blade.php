@@ -11,7 +11,7 @@
         </td>
         <th scope="row">{{ $books->firstItem() + $key }}</th>
         <td class="text-center">{{ \Carbon\Carbon::parse($book->createdDate)->isoFormat('DD MMMM YYYY') }}</td>
-        <td class="text-center">{{ $book->isbn }}</td>
+        <td class="text-center">{{ $book->isbn ?: '-' }}</td>
         <td class="text-center">{{ $book->titleBook }}</td>
         <td class="text-center">{{ $book->authorName }}</td>
         <td class="text-center">{{ $book->publisherName }}</td>
