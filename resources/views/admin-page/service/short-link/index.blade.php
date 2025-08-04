@@ -1043,7 +1043,9 @@
             let fullLink;
 
             if (withBaseUrl) {
-                fullLink = `${baseUrl}/${urlKey}`;
+                const cleanBaseUrl = baseUrl.replace(/^(https?:\/\/)?(www\.)?/i, '')
+                                   .replace(/\/+$/, '');
+                fullLink = `${cleanBaseUrl}/${urlKey.replace(/^\//, '')}`;
             } else {
                 fullLink = urlKey;
             }
