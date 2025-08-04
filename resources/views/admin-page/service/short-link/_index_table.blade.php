@@ -25,7 +25,7 @@
         <button class="btn btn-sm btn-primary" onclick="copyLink('{{ $item->url_key }}')">
             <i class="fa fa-copy small"></i>
         </button>
-        <a href="{{ url($item->url_key) }}" target="_blank">{{ parse_url(url($item->url_key), PHP_URL_HOST) }}{{ parse_url(url($item->url_key), PHP_URL_PATH) }}</a>
+        <a href="{{ url($item->url_key) }}" target="_blank">{{ str_replace('www.', '', parse_url(url($item->url_key), PHP_URL_HOST)) }}{{ parse_url(url($item->url_key), PHP_URL_PATH) }}</a>
     </td>
     <td class="text-center">{{ $item->visits->count() }}</td>
     <td class="text-center">{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('YYYY') }} ({{ \Carbon\Carbon::parse( $item->created_at )->format('H:i T') }})</td>
