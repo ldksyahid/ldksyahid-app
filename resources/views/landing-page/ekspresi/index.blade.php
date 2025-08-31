@@ -156,7 +156,7 @@
                         </a>
                     </div>
                     <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a style="color: #fff" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
+                        <a href="https://wa.me/6287725850526"  target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-whatsapp"></i></div>
                                 <h4>Pembayaran Ekspresi</h4>
