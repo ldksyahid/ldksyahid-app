@@ -45,7 +45,7 @@
                     <h1>Menjadi Muslim Visioner di Era Digital : Menjaga Nilai Islam di Tengah Disrupsi Teknologi dan Budaya</h1>
                     <h2>Berkembang Dalam Digitalisasi, Bangkitkan Muslim Sejati</h2>
                     <div class="d-flex flex-column flex-md-row justify-content-center justify-content-lg-start">
-                        <a href="https://ldksyah.id/PendaftaranEKSPRESI2025"
+                        <a href="https://ldksyah.id/EKSPRESI25"
                             class="btn-get-started scrollto mb-3 mb-md-0 me-md-3" target="_blank">Daftar Sekarang</a>
                         <a href="https://youtu.be/oReHVyhX8xQ?si=rqtMWSf-LcY88ViQ" class="glightbox btn-watch-video d-flex align-items-center"><i
                                 class="bi bi-play-circle me-2"></i><span>Tonton Video</span></a>
@@ -113,7 +113,7 @@
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1OZXhHsHd0PR994b75R2N8Qvny_k0aqKQ"
+                            <img src="https://lh3.googleusercontent.com/d/1zgyRIwgN-wnFHAquVyBvSuyhb4ZzpJ0R"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
 
@@ -140,7 +140,7 @@
 
                 <div class="row text-center justify-content-center">
                     <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://ldksyah.id/PendaftaranEKSPRESI2025" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
+                        <a href="https://ldksyah.id/EKSPRESI25" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-rocket-takeoff"></i></div>
                                 <h4>Pendaftaran Ekspresi</h4>
@@ -341,20 +341,20 @@
                         <br>
                         <div class="border-rules">
                             <div class="p-2">
-                                <p><b>2 September 2025 - 6 Oktober 2025</b> <br> Pendaftaran (Mengisi Form Pendaftaran)
+                                <p><b>1 September 2025 - 6 Oktober 2025</b> <br> Pendaftaran (Mengisi Form Pendaftaran)
                                 </p>
                             </div>
                         </div>
                         <br>
                         <div class="border-rules">
                             <div class="p-2">
-                                <p><b>09 Oktober 2025</b> <br> Technical Meeting</p>
+                                <p><b>08 Oktober 2025</b> <br> Technical Meeting</p>
                             </div>
                         </div>
                         <br>
                         <div class="border-rules">
                             <div class="p-2">
-                                <p><b>11 - 13 Oktober 2025</b> <br> Mengikuti EKSPRESI </p>
+                                <p><b>10 - 12 Oktober 2025</b> <br> Mengikuti EKSPRESI </p>
                             </div>
                         </div>
                     </div>
@@ -370,7 +370,7 @@
                                     <p>Masuk ke website Ekspresi LDK syahid <a href="https://www.ldksyah.id/ekspresi"
                                             target="_blank" rel="noopener noreferrer">(ldksyah.id/ekspresi)</a> dan
                                         klik <a
-                                            href="https://ldksyah.id/PendaftaranEKSPRESI2025"
+                                            href="https://ldksyah.id/EKSPRESI25"
                                             target="_blank" rel="noopener noreferrer">Daftar Sekarang</a></p>
                                 </div>
                             </li>
@@ -509,7 +509,7 @@
                             <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
                                 <p class="answere">
                                     Di Catat yah, jangan sampai kamu ketinggalan!! Untuk tanggal pendaftarannya kita
-                                    buka dari 2 September - 6 Oktober 2025
+                                    buka dari 1 September - 6 Oktober 2025
                                 </p>
                             </div>
                         </li>

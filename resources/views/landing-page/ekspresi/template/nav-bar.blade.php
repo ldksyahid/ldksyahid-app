@@ -13,7 +13,7 @@
                 <li><a class="nav-link scrollto" href="#pendaftaran">Pendaftaran</a></li>
                 <li><a class="nav-link scrollto" href="#QnA">Q&A</a></li>
                 <li><a class="getstarted scrollto"
-                        href="https://ldksyah.id/PendaftaranEKSPRESI2025"
+                        href="https://ldksyah.id/EKSPRESI25"
                         target="_blank">Daftar Sekarang</a></li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
