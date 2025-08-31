@@ -447,6 +447,41 @@
     }
   }
 
+  /* Responsive adjustments for Why Us section */
+  @media (max-width: 768px) {
+    .why-us .section-title h2 {
+      font-size: 1.8rem; /* Diperbesar dari 1.5rem */
+    }
+    
+    .why-us .owl-carousel .content h4 {
+      font-size: 1.1rem; /* Diperbesar dari 0.9rem */
+      line-height: 1.5;
+    }
+    
+    .why-us .owl-carousel .content h3 {
+      font-size: 1.3rem; /* Diperbesar dari 1rem */
+      line-height: 1.5;
+    }
+    
+    .why-us .owl-carousel .content {
+      padding: 20px; /* Ditambah untuk ruang lebih */
+    }
+  }
+
+  @media (max-width: 576px) {
+    .why-us .owl-carousel .content h4 {
+      font-size: 1rem; /* Diperbesar dari 0.8rem */
+    }
+    
+    .why-us .owl-carousel .content h3 {
+      font-size: 1.1rem; /* Diperbesar dari 0.9rem */
+    }
+    
+    .why-us .owl-carousel .content {
+      padding: 15px;
+    }
+  }
+
   /**
   * Mobile Navigation
   */
