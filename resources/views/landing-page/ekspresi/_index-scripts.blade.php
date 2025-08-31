@@ -8,4 +8,11 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('landing-page-ext-rsrc/lib/owlcarousel/owl.carousel.min.js') }}"></script>
 <script src="{{ asset('arsha/js/main.js') }}"></script>
-<script></script>
+<script>
+    $(".owl-ekspresi-aboutus").owlCarousel({
+        dots: true,
+        items: 1,
+        loop: true,
+        nav: false,
+    });
+</script>
