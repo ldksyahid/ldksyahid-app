@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="col-lg-6 col-md-6 d-flex justify-content-center footer-links">
-                    <img src="https://lh3.googleusercontent.com/d/1ZUo19ZkNHE_fkWp4wiEpzr2Zjvca-VCm"
+                    <img src="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI"
                         class="" alt="" style="width: 35%">
                 </div>
 

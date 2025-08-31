@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="col-lg-6 order-1 order-lg-2 hero-img text-center" data-aos="zoom-in" data-aos-delay="200">
-                <img src="https://lh3.googleusercontent.com/d/1ZUo19ZkNHE_fkWp4wiEpzr2Zjvca-VCm"
+                <img src="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI"
                     class="img-fluid animated" alt="" style="width: 60%">
             </div>
         </div>
@@ -226,8 +226,8 @@
                         class="col-lg-12 d-flex flex-column justify-content-center align-items-stretch order-2 order-lg-1">
                         <div class="content">
                             <h4>Berpijak pada pemikiran tersebut, LDK Syahid bermaksud melaksanakan kegiatan Latihan
-                                Kader Dakwah (LKD) 2024 yang dinamakan "EKSPRESI - Eksplorasi Potensi Diri Islami
-                                2024.</h4>
+                                Kader Dakwah (LKD) 2025 yang dinamakan "EKSPRESI - Eksplorasi Potensi Diri Islami
+                                2025.</h4>
                         </div>
                     </div>
                     <div
@@ -317,27 +317,27 @@
                     <br>
                     <div class="border-rules">
                         <div class="p-2">
-                            <p><b>2 September 2024 - 6 Oktober 2024</b> <br> Pendaftaran (Mengisi Form Pendaftaran)
+                            <p><b>2 September 2025 - 6 Oktober 2025</b> <br> Pendaftaran (Mengisi Form Pendaftaran)
                             </p>
                         </div>
                     </div>
                     <br>
                     <div class="border-rules">
                         <div class="p-2">
-                            <p><b>09 Oktober 2024</b> <br> Technical Meeting</p>
+                            <p><b>09 Oktober 2025</b> <br> Technical Meeting</p>
                         </div>
                     </div>
                     <br>
                     <div class="border-rules">
                         <div class="p-2">
-                            <p><b>11 - 13 Oktober 2024</b> <br> Mengikuti EKSPRESI </p>
+                            <p><b>11 - 13 Oktober 2025</b> <br> Mengikuti EKSPRESI </p>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-8 pt-4 pt-lg-0 content timeline" data-aos="fade-right" data-aos-delay="100">
                     <h3 class="text-end">Tata Cara Pendaftaran</h3>
                     <ul class="mt-5">
-                        <li style="--accent-color:#CFAF76">
+                        <li style="--accent-color:#a20007">
                             <div class="date">Langkah 1</div>
                             <div class="title">
                                 <p>Buka Website</p>
@@ -350,7 +350,7 @@
                                         target="_blank" rel="noopener noreferrer">Daftar Sekarang</a></p>
                             </div>
                         </li>
-                        <li style="--accent-color:#5aa7a8">
+                        <li style="--accent-color:#a20007">
                             <div class="date">Langkah 2</div>
                             <div class="title">
                                 <p>Siapkan Berkas</p>
@@ -368,7 +368,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li style="--accent-color:#366566">
+                        <li style="--accent-color:#a20007">
                             <div class="date">Langkah 3</div>
                             <div class="title">
                                 <p>Download File Izin Orang Tua</p>
@@ -378,7 +378,7 @@
                                     pastikan kamu tidak lupa mendownload file tersebut</p>
                             </div>
                         </li>
-                        <li style="--accent-color:#CFAF76">
+                        <li style="--accent-color:#a20007">
                             <div class="date">Langkah 4</div>
                             <div class="title">
                                 <p>Isi Semua Pertanyaan Dan Kirim</p>
@@ -388,7 +388,7 @@
                                     join grup yang ada di akhir informasi pendaftaran</p>
                             </div>
                         </li>
-                        <li style="--accent-color:#5aa7a8">
+                        <li style="--accent-color:#a20007">
                             <div class="date">Langkah 5</div>
                             <div class="title">
                                 <p>Pergi ke stand Ekspresi Membawa File Izin Orang Tua</p>
@@ -399,7 +399,7 @@
                                     mengisi pendaftaran (wajib diserahkan)</p>
                             </div>
                         </li>
-                        <li style="--accent-color:#366566">
+                        <li style="--accent-color:#a20007">
                             <div class="date">Langkah 6</div>
                             <div class="title">
                                 <p>Contact Person</p>
@@ -487,7 +487,7 @@
                         <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
                             <p class="answere">
                                 Di Catat yah, jangan sampai kamu ketinggalan!! Untuk tanggal pendaftarannya kita
-                                buka dari 2 September - 6 Oktober 2024
+                                buka dari 2 September - 6 Oktober 2025
                             </p>
                         </div>
                     </li>

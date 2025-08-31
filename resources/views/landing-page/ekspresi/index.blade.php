@@ -13,15 +13,15 @@
     <meta property="og:title" content="Ekspresi &#9679; LDK Syahid" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ url()->current() }}" />
-    <meta property="og:image" content="https://lh3.googleusercontent.com/d/1ZUo19ZkNHE_fkWp4wiEpzr2Zjvca-VCm" />
+    <meta property="og:image" content="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI" />
     <meta property="og:image:width" content="400" />
     <meta property="og:image:height" content="300" />
     <meta property="og:description" content="Eksplorasi Potensi Diri Islami" />
 
     <title>Ekspresi &#9679; LDK Syahid</title>
 
-    <link href="https://lh3.googleusercontent.com/d/1ZUo19ZkNHE_fkWp4wiEpzr2Zjvca-VCm" rel="icon">
-    <link href="https://lh3.googleusercontent.com/d/1ZUo19ZkNHE_fkWp4wiEpzr2Zjvca-VCm" rel="apple-touch-icon">
+    <link href="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI" rel="icon">
+    <link href="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI" rel="apple-touch-icon">
 
 
     @include('landing-page.ekspresi._index-styles')
