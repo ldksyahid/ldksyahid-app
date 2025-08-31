@@ -4,8 +4,8 @@
         <div class="row">
             <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
                 data-aos="fade-up" data-aos-delay="200">
-                <h1>Esensi Keislaman : Menjadi Pribadi Muslim Sejati di Era Modernisasi</h1>
-                <h2>Berkembang Dalam Inovasi, Bangkitkan Muslim Sejati</h2>
+                <h1>Menjadi Muslim Visioner di Era Digital : Menjaga Nilai Islam di Tengah Disrupsi Teknologi dan Budaya</h1>
+                <h2>Berkembang Dalam Digitalisasi, Bangkitkan Muslim Sejati</h2>
                 <div class="d-flex justify-content-center justify-content-lg-start">
                     <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPI2XZQn7fH6ic61R6EKDjBiE7aN3ouHs0LI0ZFtx_z8HaPw/viewform?pli=1"
                         class="btn-get-started scrollto" target="_blank">Daftar Sekarang</a>
