@@ -9,10 +9,24 @@
 <script src="{{ asset('landing-page-ext-rsrc/lib/owlcarousel/owl.carousel.min.js') }}"></script>
 <script src="{{ asset('arsha/js/main.js') }}"></script>
 <script>
-    $(".owl-ekspresi-aboutus").owlCarousel({
-        dots: true,
-        items: 1,
-        loop: true,
-        nav: false,
+    $(document).ready(function() {
+        $(".owl-ekspresi-aboutus").owlCarousel({
+            dots: true,
+            items: 1,
+            loop: true,
+            nav: false,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            autoplayHoverPause: true
+        });
+
+        function handleResponsive() {
+            if ($(window).width() < 768) {
+
+            }
+        }
+
+        handleResponsive();
+        $(window).resize(handleResponsive);
     });
 </script>

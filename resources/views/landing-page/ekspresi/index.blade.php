@@ -23,7 +23,6 @@
     <link href="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI" rel="icon">
     <link href="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI" rel="apple-touch-icon">
 
-
     @include('landing-page.ekspresi._index-styles')
 
     <!-- =======================================================
@@ -45,11 +44,11 @@
                     data-aos="fade-up" data-aos-delay="200">
                     <h1>Menjadi Muslim Visioner di Era Digital : Menjaga Nilai Islam di Tengah Disrupsi Teknologi dan Budaya</h1>
                     <h2>Berkembang Dalam Digitalisasi, Bangkitkan Muslim Sejati</h2>
-                    <div class="d-flex justify-content-center justify-content-lg-start">
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPI2XZQn7fH6ic61R6EKDjBiE7aN3ouHs0LI0ZFtx_z8HaPw/viewform?pli=1"
-                            class="btn-get-started scrollto" target="_blank">Daftar Sekarang</a>
-                        <a href="https://youtu.be/xFJR6aA4NQ0?si=tRvLOxeA5EeXTCaS" class="glightbox btn-watch-video"><i
-                                class="bi bi-play-circle"></i><span>Tonton Video</span></a>
+                    <div class="d-flex flex-column flex-md-row justify-content-center justify-content-lg-start">
+                        <a href="https://ldksyah.id/PendaftaranEKSPRESI2025"
+                            class="btn-get-started scrollto mb-3 mb-md-0 me-md-3" target="_blank">Daftar Sekarang</a>
+                        <a href="https://youtu.be/oReHVyhX8xQ?si=rqtMWSf-LcY88ViQ" class="glightbox btn-watch-video d-flex align-items-center"><i
+                                class="bi bi-play-circle me-2"></i><span>Tonton Video</span></a>
                     </div>
                 </div>
                 <div class="col-lg-6 order-1 order-lg-2 hero-img text-center" data-aos="zoom-in" data-aos-delay="200">
@@ -68,57 +67,57 @@
                 <div class="container rounded border-0" style="background-color: #fff">
                     <div class="row justify-content-center" data-aos="zoom-in">
 
-                        <div class="col-lg-12 col-md-4 col-12 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-12 col-md-4 col-12 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1"
                                 class="img-fluid" alt="" style="width: 100px;">
                         </div>
 
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1Fj4hZRy7SNQ1Kq72JvY4M557noiULg-i"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
 
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1R-3mi9Jzw5vt3-VKVPic9BTvJeFkaikK"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
 
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1INzkD8YgOvf5_FVIXEnW40wUCsxJdepp"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
 
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1t_dDa8IDgpOnH85RvU67DV3W2CxhSetx"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
 
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1yU1Oj1qrFBanjcoj3ZhO1LPFOon7V92-"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
 
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1u6mS175Q2Fbqd2k6CRNqKq0E3q5Sde1U"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
 
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1Iem3JZgYMXRitO1GOb9lTMVeMjiUQFUI"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
 
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1HinEWSv90pL0MUZ1F0dAbyHNSmk2L-B5"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
 
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1OZXhHsHd0PR994b75R2N8Qvny_k0aqKQ"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
 
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
                             <img src="https://lh3.googleusercontent.com/d/1sr4GI8TE-Z2Og4PBm3hqm1Bb38NryJ6U"
                                 class="img-fluid" alt="" style="max-width: 65%;">
                         </div>
@@ -140,85 +139,72 @@
                 </div>
 
                 <div class="row text-center justify-content-center">
-                    <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in"
-                        data-aos-delay="100">
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPI2XZQn7fH6ic61R6EKDjBiE7aN3ouHs0LI0ZFtx_z8HaPw/viewform?pli=1"
-                            target="_blank" rel="noopener noreferrer">
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://ldksyah.id/PendaftaranEKSPRESI2025" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-rocket-takeoff"></i></div>
                                 <h4>Pendaftaran Ekspresi</h4>
                             </div>
                         </a>
                     </div>
-                    <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in"
-                        data-aos-delay="100">
-                        <a href="https://drive.google.com/file/d/1SNIv1BS2MMVMS5x1e3JQxwy-h51ELqQW/view?usp=sharing"
-                            target="_blank" rel="noopener noreferrer">
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://ldksyah.id/SuratIzinOrtu_EKSPRESI2025" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-file-earmark-check"></i></div>
                                 <h4>Surat Izin Orangtua</h4>
                             </div>
                         </a>
                     </div>
-                    <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in"
-                        data-aos-delay="100">
-                        <a href="https://wa.me/6283830793225" target="_blank" rel="noopener noreferrer">
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
+                        <a style="color: #fff" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-whatsapp"></i></div>
                                 <h4>Pembayaran Ekspresi</h4>
                             </div>
                         </a>
                     </div>
-                    <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in"
-                        data-aos-delay="100">
-                        <a href="https://twb.nz/ekspresi24" target="_blank" rel="noopener noreferrer">
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://ldksyah.id/TwibonEkspresi25" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-reddit"></i></div>
                                 <h4>Twibbon Ekspresi</h4>
                             </div>
                         </a>
                     </div>
-                    <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in"
-                        data-aos-delay="100">
-                        <a style="color: #fff" target="_blank" rel="noopener noreferrer">
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://ldksyah.id/TMEkspresi25" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-building-fill-exclamation"></i></div>
                                 <h4>Technical Meeting</h4>
                             </div>
                         </a>
                     </div>
-                    <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in"
-                        data-aos-delay="100">
-                        <a href="https://drive.google.com/drive/folders/1NjbGU6lY0NddyRHfZ8wOpI5UbJjVjURz"
-                            style="color: #fff" target="_blank" rel="noopener noreferrer">
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://ldksyah.id/NameTagEkspresi25" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-person-badge-fill"></i></div>
                                 <h4>Name Tag Peserta</h4>
                             </div>
                         </a>
                     </div>
-                    <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in"
-                        data-aos-delay="100">
-                        <a href="https://drive.google.com/drive/folders/1NltFSepC7yO0VqeyKG3f0yBYGJ3sokD6"
-                            style="color: #fff" target="_blank" rel="noopener noreferrer">
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://ldksyah.id/KelompokMentoring" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-house-heart"></i></div>
                                 <h4>Kelompok Mentoring</h4>
                             </div>
                         </a>
                     </div>
-                    <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in"
-                        data-aos-delay="100">
-                        <a href="https://wa.me/6281294158813" target="_blank" rel="noopener noreferrer">
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://wa.me/62085213041492" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-whatsapp"></i></div>
                                 <h4>Narahubung Ikhwan</h4>
                             </div>
                         </a>
                     </div>
-                    <div class="col-xl-3 col-md-6 d-flex justify-content-center m-3" data-aos="zoom-in"
-                        data-aos-delay="100">
-                        <a href="https://wa.me/6282113530522" target="_blank" rel="noopener noreferrer">
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://wa.me/628978386874" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-whatsapp"></i></div>
                                 <h4>Narahubung Akhwat</h4>
@@ -226,7 +212,6 @@
                         </a>
                     </div>
                 </div>
-
             </div>
         </section>
         <!-- End Services Section -->
@@ -327,7 +312,7 @@
                     </div>
 
                     <div class="row content">
-                        <div class="col-lg-5 border-rules">
+                        <div class="col-lg-5 border-rules mb-4 mb-lg-0">
                             <p class="p-2">
                                 Mahasiswa aktif UIN Syarif Hidayatullah Jakarta semester 1 & 3 (Dibuktikan dengan
                                 KTM/KRS)
@@ -385,7 +370,7 @@
                                     <p>Masuk ke website Ekspresi LDK syahid <a href="https://www.ldksyah.id/ekspresi"
                                             target="_blank" rel="noopener noreferrer">(ldksyah.id/ekspresi)</a> dan
                                         klik <a
-                                            href="https://docs.google.com/forms/d/e/1FAIpQLSdPI2XZQn7fH6ic61R6EKDjBiE7aN3ouHs0LI0ZFtx_z8HaPw/viewform?pli=1"
+                                            href="https://ldksyah.id/PendaftaranEKSPRESI2025"
                                             target="_blank" rel="noopener noreferrer">Daftar Sekarang</a></p>
                                 </div>
                             </li>
@@ -446,16 +431,14 @@
                                 <div>
                                     <p>Jika ada pertanyaan lebih lanjut silahkan menghubungi nomor berikut</p>
                                     <div class="border-rules">
-                                        <p class="p-2">Ikhwan : <a href="http://wa.me/6281294158813"
-                                                target="_blank" rel="noopener noreferrer">081294158813 </a><br>(Aldi
-                                            Tri
-                                            Prasetyo)</p>
+                                        <p class="p-2">Ikhwan : <a href="http://wa.me/6285213041492"
+                                                target="_blank" rel="noopener noreferrer">085213041492 </a><br>(M. Azzam Alhanif)</p>
                                     </div>
                                     <br>
                                     <div class="border-rules">
-                                        <p class="p-2">Akhwat : <a href="http://wa.me/6282113530522"
-                                                target="_blank" rel="noopener noreferrer">082113530522
-                                            </a><br>(Ananda Nurul Aziza)</p>
+                                        <p class="p-2">Akhwat : <a href="http://wa.me/628978386874"
+                                                target="_blank" rel="noopener noreferrer">08978386874
+                                            </a><br>(Adinda Kamilaturrahma)</p>
                                     </div>
                                 </div>
                             </li>
