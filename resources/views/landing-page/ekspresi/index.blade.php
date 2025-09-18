@@ -164,7 +164,7 @@
                         </a>
                     </div>
                     <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://ldksyah.id/TwibonEkspresi25" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
+                        <a href="https://ldksyah.id/TwibbonEkspresi25" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
                             <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-reddit"></i></div>
                                 <h4>Twibbon Ekspresi</h4>
