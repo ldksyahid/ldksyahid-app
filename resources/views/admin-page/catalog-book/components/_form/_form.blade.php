@@ -2,7 +2,8 @@
     'operation' => 'create',
     'book' => null,
     'titleForm' => '',
-    'entityLabel' => 'Book'
+    'entityLabel' => 'Book',
+    'languages' => []
 ])
 
 <div class="container-fluid pt-4 px-4">
@@ -116,19 +117,21 @@
                                 <h5 class="section-title mb-3"><i class="fas fa-book-open me-2"></i>Additional Information</h5>
 
                                 <div class="mb-3">
-                                    <label for="language" class="form-label">Language <span class="text-danger">*</span></label>
+                                    <label for="languageID" class="form-label">Language <span class="text-danger">*</span></label>
                                     @if ($operation === 'view')
-                                        <input type="text" class="form-control" value="{{ $book->language }}" readonly>
+                                        <input type="text" class="form-control" value="{{ $book->getLanguage->languageName ?? 'N/A' }}" readonly>
                                     @else
-                                        <select class="form-select @error('language') is-invalid @enderror" id="language" name="language" required>
+                                        <select class="form-select @error('languageID') is-invalid @enderror" id="languageID" name="languageID" required>
                                             <option value="">Select Language</option>
-                                            <option value="English" {{ old('language', $book->language ?? '') == 'English' ? 'selected' : '' }}>English</option>
-                                            <option value="Indonesian" {{ old('language', $book->language ?? '') == 'Indonesian' ? 'selected' : '' }}>Indonesian</option>
-                                            <option value="Arabic" {{ old('language', $book->language ?? '') == 'Arabic' ? 'selected' : '' }}>Arabic</option>
-                                            <option value="Other" {{ old('language', $book->language ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
+                                            @foreach($languages as $language)
+                                                <option value="{{ $language->languageID }}" 
+                                                    {{ old('languageID', $book->languageID ?? '') == $language->languageID ? 'selected' : '' }}>
+                                                    {{ $language->languageName }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     @endif
-                                    @error('language')
+                                    @error('languageID')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

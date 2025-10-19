@@ -10,7 +10,9 @@ class LkLanguage extends Model
     protected $primaryKey = 'languageID';
     public $timestamps = false;
 
-    protected $fillable = ['languageName'];
+    protected $fillable = [
+        'languageName'
+    ];
 
     public static function getTableName(): string
     {
@@ -23,5 +25,10 @@ class LkLanguage extends Model
             'languageID' => 'Language ID',
             'languageName' => 'Language Name',
         ];
+    }
+
+    public function books()
+    {
+        return $this->hasMany(MsCatalogBook::class, 'languageID', 'languageID');
     }
 }
