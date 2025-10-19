@@ -1,4 +1,6 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
 .table-books thead th {
     background-color: #00a79d !important;
@@ -276,5 +278,197 @@
 .tooltip-inner {
     max-width: 500px;
     text-align: left;
+}
+.select2-container .select2-selection--single {
+    height: 31px !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    border-radius: 0.375rem !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    transition: all 0.3s ease !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 29px !important;
+    font-size: 0.75rem !important;
+    padding-left: 8px !important;
+    color: #495057 !important;
+    font-weight: 500 !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #6c757d !important;
+    font-size: 0.75rem !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 29px !important;
+    right: 6px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #495057 transparent transparent transparent !important;
+    border-width: 5px 4px 0 4px !important;
+}
+
+.select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+    border-color: transparent transparent #495057 transparent !important;
+    border-width: 0 4px 5px 4px !important;
+}
+
+.select2-dropdown {
+    border: 1px solid #ced4da !important;
+    border-radius: 0.375rem !important;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1) !important;
+    font-size: 0.875rem !important;
+}
+
+.select2-container--default .select2-results__option {
+    padding: 6px 12px !important;
+    font-size: 0.875rem !important;
+    color: #495057 !important;
+    transition: all 0.2s ease !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #00a79d !important;
+    color: white !important;
+}
+
+.select2-container--default .select2-results__option[aria-selected="true"] {
+    background-color: #e0f7f5 !important;
+    color: #008b84 !important;
+    font-weight: 500 !important;
+}
+
+.select2-search--dropdown {
+    padding: 8px !important;
+}
+
+.select2-search--dropdown .select2-search__field {
+    border: 1px solid #ced4da !important;
+    border-radius: 0.375rem !important;
+    padding: 4px 8px !important;
+    font-size: 0.875rem !important;
+    outline: none !important;
+}
+
+.select2-search--dropdown .select2-search__field:focus {
+    border-color: #00a79d !important;
+    box-shadow: 0 0 0 0.15rem rgba(0, 167, 157, 0.25) !important;
+}
+
+.table-books thead th .select2-container--default .select2-selection--single:focus {
+    border-color: rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 0 0 0.15rem rgba(255, 255, 255, 0.3) !important;
+    outline: none !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.table-books thead th .select2-container--default .select2-selection--single:hover {
+    border-color: rgba(255, 255, 255, 0.7) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    color: #6c757d !important;
+    font-size: 1.2rem !important;
+    margin-right: 20px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__clear:hover {
+    color: #495057 !important;
+}
+
+.table-books thead th .select2-container {
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single:focus {
+    outline: none !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered .select2-selection__placeholder {
+    color: #6c757d !important;
+}
+
+@media (max-width: 768px) {
+    .select2-container .select2-selection--single {
+        height: 35px !important;
+    }
+    
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 33px !important;
+        font-size: 0.8rem !important;
+    }
+}
+
+.table-books thead th:nth-child(8) .select2-container .select2-selection--single {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+.table-books thead th:nth-child(8) .select2-container .select2-selection--single:hover {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.table-books thead th:nth-child(8) .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #495057 !important;
+    font-weight: 500 !important;
+}
+
+.select2-container--open .select2-dropdown {
+    z-index: 9999 !important;
+}
+
+.select2-dropdown {
+    animation: dropdownFadeIn 0.2s ease forwards !important;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.table-books thead th:nth-child(8) .column-search-clear {
+    display: none !important;
+}
+
+.table-books thead th .select2-container {
+    min-width: 100% !important;
+}
+
+.select2-container--default .select2-results__option:hover {
+    background-color: #f8f9fa !important;
+    color: #495057 !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
+    background-color: #008b84 !important;
+    color: white !important;
+}
+
+.table-books thead th .select2-selection__rendered {
+    color: #495057 !important;
+}
+
+.table-books thead th .select2-container .select2-selection--single {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.table-books thead th .select2-container--open .select2-selection--single {
+    background-color: rgba(255, 255, 255, 1) !important;
+    border-color: rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important;
+}
+
+.table-books thead th .select2-selection__placeholder {
+    color: #6c757d !important;
 }
 </style>
