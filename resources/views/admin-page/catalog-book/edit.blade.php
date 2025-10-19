@@ -1,7 +1,13 @@
 @extends('admin-page.template.body')
 
 @section('content')
-    <x-catalog-book.form operation="update" :book="$book" titleForm="Edit Book:" entityLabel="{{ $book->titleBook }}"/>
+    <x-catalog-book.form 
+        operation="update" 
+        :book="$book" 
+        titleForm="Edit Book:" 
+        entityLabel="{{ $book->titleBook }}"
+        :languages="$languages"
+    />
 @endsection
 
 @section('styles')

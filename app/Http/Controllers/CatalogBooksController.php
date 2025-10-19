@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\MsCatalogBook;
-use App\Services\GoogleDrive;
+use App\Models\LkLanguage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class CatalogBooksController extends Controller
 {
@@ -48,7 +46,9 @@ class CatalogBooksController extends Controller
 
     public function create()
     {
-        return view('admin-page.catalog-book.create')
+        $languages = LkLanguage::all();
+        
+        return view('admin-page.catalog-book.create', compact('languages'))
             ->with('title', 'Book Catalog');
     }
 
@@ -72,13 +72,18 @@ class CatalogBooksController extends Controller
 
     public function showAdmin(MsCatalogBook $book)
     {
+        $book->load('getLanguage');
+        
         return view('admin-page.catalog-book.view', compact('book'))
             ->with('title', 'Book Catalog');
     }
 
     public function edit(MsCatalogBook $book)
     {
-        return view('admin-page.catalog-book.edit', compact('book'))
+        $languages = LkLanguage::all();
+        $book->load('getLanguage');
+        
+        return view('admin-page.catalog-book.edit', compact('book', 'languages'))
             ->with('title', 'Book Catalog');
     }
 
