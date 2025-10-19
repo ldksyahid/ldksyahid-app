@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LkAuthorType;
+use App\Models\LkAvailabilityType;
+use App\Models\LkBookCategory;
 use App\Models\MsCatalogBook;
-use App\Services\GoogleDrive;
+use App\Models\LkLanguage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class CatalogBooksController extends Controller
 {
@@ -30,6 +31,7 @@ class CatalogBooksController extends Controller
     public function indexAdmin(Request $request)
     {
         $books = MsCatalogBook::searchAdminBooks($request);
+        $bookCategories = LkBookCategory::all();
 
         if ($request->ajax()) {
             return response()->json([
@@ -41,14 +43,19 @@ class CatalogBooksController extends Controller
             ]);
         }
 
-        return view('admin-page.catalog-book.index', compact('books'))
+        return view('admin-page.catalog-book.index', compact('books', 'bookCategories'))
             ->with('title', 'Book Catalog');
     }
 
 
     public function create()
     {
-        return view('admin-page.catalog-book.create')
+        $languages = LkLanguage::all();
+        $bookCategories = LkBookCategory::all();
+        $authorTypes = LkAuthorType::all();
+        $availabilityTypes = LkAvailabilityType::all();
+        
+        return view('admin-page.catalog-book.create', compact('languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
 
@@ -72,13 +79,25 @@ class CatalogBooksController extends Controller
 
     public function showAdmin(MsCatalogBook $book)
     {
-        return view('admin-page.catalog-book.view', compact('book'))
+        $languages = LkLanguage::all();
+        $bookCategories = LkBookCategory::all();
+        $authorTypes = LkAuthorType::all();
+        $availabilityTypes = LkAvailabilityType::all();
+        $book->load('getLanguage', 'getBookCategory', 'getAuthorType', 'getAvailabilityType');
+        
+        return view('admin-page.catalog-book.view', compact('book', 'languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
 
     public function edit(MsCatalogBook $book)
     {
-        return view('admin-page.catalog-book.edit', compact('book'))
+        $languages = LkLanguage::all();
+        $bookCategories = LkBookCategory::all();
+        $authorTypes = LkAuthorType::all();
+        $availabilityTypes = LkAvailabilityType::all();
+        $book->load('getLanguage', 'getBookCategory', 'getAuthorType', 'getAvailabilityType');
+        
+        return view('admin-page.catalog-book.edit', compact('book', 'languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
 

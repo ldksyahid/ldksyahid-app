@@ -22,9 +22,13 @@ class MsCatalogBook extends Model
         'isbn',
         'titleBook',
         'authorName',
+        'authorTypeID',
         'publisherName',
-        'categoryName',
-        'language',
+        'bookCategoryID',
+        'languageID',
+        'availabilityTypeID',
+        'purchaseLink',
+        'borrowLink',
         'year',
         'pages',
         'description',
@@ -34,9 +38,7 @@ class MsCatalogBook extends Model
         'coverImageGdriveID',
         'pdfFileName',
         'pdfFileNameGdriveID',
-        'readCount',
-        'downloadCount',
-        'rating',
+        'favoriteCount',
         'tags',
         'metaKeywords',
         'metaDescription',
@@ -68,10 +70,14 @@ class MsCatalogBook extends Model
             'slug' => 'Slug',
             'isbn' => 'ISBN',
             'titleBook' => 'Title',
-            'authorName' => 'Author',
+            'authorName' => 'Author Name',
+            'authorTypeID' => 'Author Type',
             'publisherName' => 'Publisher',
-            'categoryName' => 'Category',
-            'language' => 'Language',
+            'bookCategoryID' => 'Book Category',
+            'languageID' => 'Language',
+            'availabilityTypeID' => 'Availability Type',
+            'purchaseLink' => 'Purchase Link',
+            'borrowLink' => 'Borrow Link',
             'year' => 'Year',
             'pages' => 'Pages',
             'description' => 'Description',
@@ -81,9 +87,7 @@ class MsCatalogBook extends Model
             'coverImageGdriveID' => 'Cover Image GDrive ID',
             'pdfFileName' => 'PDF File Name',
             'pdfFileNameGdriveID' => 'PDF File GDrive ID',
-            'readCount' => 'Read Count',
-            'downloadCount' => 'Download Count',
-            'rating' => 'Rating',
+            'favoriteCount' => 'Favorite Count',
             'tags' => 'Tags',
             'metaKeywords' => 'Meta Keywords',
             'metaDescription' => 'Meta Description',
@@ -93,6 +97,26 @@ class MsCatalogBook extends Model
             'editedBy' => 'Edited By',
             'editedDate' => 'Edited Date',
         ];
+    }
+
+    public function getBookCategory()
+    {
+        return $this->belongsTo(LkBookCategory::class, 'bookCategoryID', 'bookCategoryID');
+    }
+
+    public function getLanguage()
+    {
+        return $this->belongsTo(LkLanguage::class, 'languageID', 'languageID');
+    }
+
+    public function getAuthorType()
+    {
+        return $this->belongsTo(LkAuthorType::class, 'authorTypeID', 'authorTypeID');
+    }
+
+    public function getAvailabilityType()
+    {
+        return $this->belongsTo(LkAvailabilityType::class, 'availabilityTypeID', 'availabilityTypeID');
     }
 
     protected static function booted(): void
@@ -120,8 +144,11 @@ class MsCatalogBook extends Model
             'titleBook' => 'required|string|max:255',
             'authorName' => 'required|string|max:100',
             'publisherName' => 'required|string|max:100',
-            'categoryName' => 'required|string|max:100',
-            'language' => 'required|string|max:50',
+            'bookCategoryID' => 'required|exists:lk_book_category,bookCategoryID',
+            'languageID' => 'required|exists:lk_language,languageID',
+            'authorTypeID' => 'required',
+            'authorTypeID' => 'required',
+            'availabilityTypeID' => 'required',
             'year' => "required|integer|min:1900|max:$maxYear",
             'pages' => 'required|integer|min:1',
             'description' => 'required|string',
@@ -132,6 +159,9 @@ class MsCatalogBook extends Model
             'tags' => 'nullable|string|max:255',
             'metaKeywords' => 'nullable|string|max:255',
             'metaDescription' => 'nullable|string|max:255',
+            'favoriteCount' => 'nullable|integer',
+            'purchaseLink' => 'nullable|string|max:255',
+            'borrowLink' => 'nullable|string|max:255',
         ];
 
         if ($ignoreId === null) {
@@ -173,7 +203,7 @@ class MsCatalogBook extends Model
             'titleBook',
             'authorName',
             'publisherName',
-            'categoryName',
+            'bookCategoryID',
             'year',
             'createdDate',
         ];
@@ -182,7 +212,7 @@ class MsCatalogBook extends Model
             $sortBy = 'createdDate';
         }
 
-        $query = self::query();
+        $query = self::with(['getBookCategory']);
 
         if ($request->filled('isbn')) {
             $query->where('isbn', 'like', "%{$request->isbn}%");
@@ -201,7 +231,9 @@ class MsCatalogBook extends Model
         }
 
         if ($request->filled('category')) {
-            $query->where('categoryName', 'like', "%{$request->category}%");
+            $query->whereHas('getBookCategory', function($q) use ($request) {
+                $q->where('bookCategoryName', 'like', "%{$request->category}%");
+            });
         }
 
         if ($request->filled('year')) {
@@ -223,6 +255,14 @@ class MsCatalogBook extends Model
             } else {
                 $query->whereDate('createdDate', $request->added_date);
             }
+        }
+
+        if ($sortBy === 'bookCategoryID') {
+            $query->join('lk_book_category', 'ms_catalog_book.bookCategoryID', '=', 'lk_book_category.bookCategoryID')
+                ->orderBy('lk_book_category.bookCategoryName', $sortOrder)
+                ->select('ms_catalog_book.*');
+        } else {
+            $query->orderBy($sortBy, $sortOrder);
         }
 
         return $query->orderBy($sortBy, $sortOrder)
@@ -262,8 +302,10 @@ class MsCatalogBook extends Model
             'titleBook' => $request->titleBook,
             'authorName' => $request->authorName,
             'publisherName' => $request->publisherName,
-            'categoryName' => $request->categoryName,
-            'language' => $request->language,
+            'bookCategoryID' => $request->bookCategoryID,
+            'languageID' => $request->languageID,
+            'authorTypeID' => $request->authorTypeID,
+            'availabilityTypeID' => $request->availabilityTypeID,
             'year' => $request->year,
             'pages' => $request->pages,
             'description' => $request->description,
@@ -276,6 +318,9 @@ class MsCatalogBook extends Model
             'tags' => $request->tags,
             'metaKeywords' => $request->metaKeywords,
             'metaDescription' => $request->metaDescription,
+            'favoriteCount' => 0,
+            'purchaseLink' => $request->purchaseLink,
+            'borrowLink' => $request->borrowLink,
             'flagActive' => $request->has('flagActive') ? 1 : 0,
         ]);
     }
