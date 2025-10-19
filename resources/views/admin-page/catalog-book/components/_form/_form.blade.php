@@ -125,21 +125,22 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="bookCategoryID" class="form-label">Category <span class="text-danger">*</span></label>
+                                    <label for="availabilityTypeID" class="form-label">Availability Type <span class="text-danger">*</span></label>
                                     @if ($operation === 'view')
-                                        <input type="text" class="form-control" value="{{ $book->getBookCategory->bookCategoryName ?? 'N/A' }}" readonly>
+                                        <input type="text" class="form-control" value="{{ $book->getAvailabilityType->availabilityTypeName ?? 'N/A' }}" readonly>
+                                        <input type="hidden" id="availabilityTypeID" value="{{ $book->availabilityTypeID ?? '' }}">
                                     @else
-                                        <select class="form-select @error('bookCategoryID') is-invalid @enderror" id="bookCategoryID" name="bookCategoryID" required>
-                                            <option value="">Select Category</option>
-                                            @foreach($bookCategories as $category)
-                                                <option value="{{ $category->bookCategoryID }}" 
-                                                    {{ old('bookCategoryID', $book->bookCategoryID ?? '') == $category->bookCategoryID ? 'selected' : '' }}>
-                                                    {{ $category->bookCategoryName }}
+                                        <select class="form-select @error('availabilityTypeID') is-invalid @enderror" id="availabilityTypeID" name="availabilityTypeID" required>
+                                            <option value="">Select Availability Type</option>
+                                            @foreach($availabilityTypes as $availabilityType)
+                                                <option value="{{ $availabilityType->availabilityTypeID }}" 
+                                                    {{ old('availabilityTypeID', $book->availabilityTypeID ?? '') == $availabilityType->availabilityTypeID ? 'selected' : '' }}>
+                                                    {{ $availabilityType->availabilityTypeName }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     @endif
-                                    @error('bookCategoryID')
+                                    @error('availabilityTypeID')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -170,21 +171,21 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="availabilityTypeID" class="form-label">Availability Type <span class="text-danger">*</span></label>
+                                    <label for="bookCategoryID" class="form-label">Category <span class="text-danger">*</span></label>
                                     @if ($operation === 'view')
-                                        <input type="text" class="form-control" value="{{ $book->getAvailabilityType->availabilityTypeName ?? 'N/A' }}" readonly>
+                                        <input type="text" class="form-control" value="{{ $book->getBookCategory->bookCategoryName ?? 'N/A' }}" readonly>
                                     @else
-                                        <select class="form-select @error('availabilityTypeID') is-invalid @enderror" id="availabilityTypeID" name="availabilityTypeID" required>
-                                            <option value="">Select Availability Type</option>
-                                            @foreach($availabilityTypes as $availabilityType)
-                                                <option value="{{ $availabilityType->availabilityTypeID }}" 
-                                                    {{ old('availabilityTypeID', $book->availabilityTypeID ?? '') == $availabilityType->availabilityTypeID ? 'selected' : '' }}>
-                                                    {{ $availabilityType->availabilityTypeName }}
+                                        <select class="form-select @error('bookCategoryID') is-invalid @enderror" id="bookCategoryID" name="bookCategoryID" required>
+                                            <option value="">Select Category</option>
+                                            @foreach($bookCategories as $category)
+                                                <option value="{{ $category->bookCategoryID }}" 
+                                                    {{ old('bookCategoryID', $book->bookCategoryID ?? '') == $category->bookCategoryID ? 'selected' : '' }}>
+                                                    {{ $category->bookCategoryName }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     @endif
-                                    @error('availabilityTypeID')
+                                    @error('bookCategoryID')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
