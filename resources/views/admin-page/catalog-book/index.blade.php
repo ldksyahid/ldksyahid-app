@@ -139,12 +139,20 @@
                             </th>
                             <th class="text-center">
                                 <div class="d-flex flex-column">
-                                    <a href="#" class="sort-link" data-sort-by="categoryName">
+                                    <a href="#" class="sort-link" data-sort-by="bookCategoryID">
                                         <span>Category</span>
-                                        <span class="sort-arrow" id="sortArrowCategoryName"></span>
+                                        <span class="sort-arrow" id="sortArrowBookCategoryID"></span>
                                     </a>
                                     <div class="position-relative">
-                                        <input type="text" name="category" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Category" value="{{ request('category') }}">
+                                        <select name="category" class="form-control form-control-sm mt-1 column-search" style="width: 100%">
+                                            <option value="">All Categories</option>
+                                            @foreach($bookCategories as $category)
+                                                <option value="{{ $category->bookCategoryName }}" 
+                                                    {{ request('category') == $category->bookCategoryName ? 'selected' : '' }}>
+                                                    {{ $category->bookCategoryName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </th>

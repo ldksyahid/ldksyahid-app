@@ -15,7 +15,7 @@
         <td class="text-center">{{ $book->titleBook }}</td>
         <td class="text-center">{{ $book->authorName }}</td>
         <td class="text-center">{{ $book->publisherName }}</td>
-        <td class="text-center">{{ $book->categoryName }}</td>
+        <td class="text-center">{{ $book->getBookCategory->bookCategoryName ?? 'N/A' }}</td>
         <td class="text-center">{{ $book->year }}</td>
         <td class="text-center">
             <div class="btn-group" role="group">

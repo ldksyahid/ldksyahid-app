@@ -1,4 +1,5 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
@@ -18,6 +19,8 @@ let currentParams = {};
 $(document).ready(function() {
     currentParams = Object.fromEntries(new URLSearchParams(window.location.search));
 
+    initSelect2();
+    
     loadBooks();
     updateSortArrows();
     initColumnSearch();
@@ -25,7 +28,18 @@ $(document).ready(function() {
 
     $(document).ajaxComplete(function() {
         initColumnSearch();
+        initSelect2();
     });
+
+    function initSelect2() {
+        $('select[name="category"]').select2({
+            placeholder: "All Categories",
+            allowClear: true,
+            width: '100%',
+            dropdownPosition: 'below',
+            dropdownParent: $('select[name="category"]').parent()
+        });
+    }
 
     function loadBooks(params = {}) {
         showLoading();
@@ -173,6 +187,8 @@ $(document).ready(function() {
 
     function initColumnSearch() {
         document.querySelectorAll('.column-search').forEach(input => {
+            if (input.type === 'select-one') return; // Skip select elements
+            
             if (input.nextElementSibling && input.nextElementSibling.classList.contains('column-search-clear')) {
                 return;
             }
@@ -198,7 +214,22 @@ $(document).ready(function() {
         });
     }
 
+    $(document).on('change', 'select[name="category"]', function() {
+        const value = $(this).val();
+        const name = $(this).attr('name');
+
+        if (value) {
+            currentParams[name] = value;
+        } else {
+            delete currentParams[name];
+        }
+
+        loadBooks();
+    });
+
     $(document).on('keyup blur', '.column-search', function(e) {
+        if (this.type === 'select-one') return;
+        
         if (e.type === 'keyup' && e.key !== 'Enter') {
             return;
         }
@@ -373,7 +404,7 @@ $(document).ready(function() {
     $('#bulkDeleteBtn').on('click', handleBulkDelete);
 
     $('.column-search').each(function() {
-        if ($(this).val()) {
+        if ($(this).val() && this.type !== 'select-one') {
             $(this).next('.column-search-clear').show();
         }
     });
@@ -393,6 +424,7 @@ $(document).ready(function() {
         };
 
         $('.column-search').val('');
+        $('select[name="category"]').val('').trigger('change'); // Clear Select2
         $('input[name="added_date"]').val('');
         $('.column-search-clear').hide();
         updateSortArrows();
