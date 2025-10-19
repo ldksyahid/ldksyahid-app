@@ -3,7 +3,8 @@
     'book' => null,
     'titleForm' => '',
     'entityLabel' => 'Book',
-    'languages' => []
+    'languages' => [],
+    'bookCategories' => []
 ])
 
 <div class="container-fluid pt-4 px-4">
@@ -102,11 +103,21 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="categoryName" class="form-label">Category <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('categoryName') is-invalid @enderror" id="categoryName" name="categoryName"
-                                        value="{{ old('categoryName', $book->categoryName ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}>
-                                    @error('categoryName')
+                                    <label for="bookCategoryID" class="form-label">Category <span class="text-danger">*</span></label>
+                                    @if ($operation === 'view')
+                                        <input type="text" class="form-control" value="{{ $book->getBookCategory->bookCategoryName ?? 'N/A' }}" readonly>
+                                    @else
+                                        <select class="form-select @error('bookCategoryID') is-invalid @enderror" id="bookCategoryID" name="bookCategoryID" required>
+                                            <option value="">Select Category</option>
+                                            @foreach($bookCategories as $category)
+                                                <option value="{{ $category->bookCategoryID }}" 
+                                                    {{ old('bookCategoryID', $book->bookCategoryID ?? '') == $category->bookCategoryID ? 'selected' : '' }}>
+                                                    {{ $category->bookCategoryName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                    @error('bookCategoryID')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

@@ -24,4 +24,9 @@ class LkBookCategory extends Model
             'bookCategoryName' => 'Book Category Name',
         ];
     }
+
+    public function books()
+    {
+        return $this->hasMany(MsCatalogBook::class, 'bookCategoryID', 'bookCategoryID');
+    }
 }

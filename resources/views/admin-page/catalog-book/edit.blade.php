@@ -7,6 +7,7 @@
         titleForm="Edit Book:" 
         entityLabel="{{ $book->titleBook }}"
         :languages="$languages"
+        :bookCategories="$bookCategories"
     />
 @endsection
 
