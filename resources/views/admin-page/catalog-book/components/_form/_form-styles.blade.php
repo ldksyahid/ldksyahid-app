@@ -221,4 +221,9 @@
         background-color: #008b84;
         border-color: #008b84;
     }
+
+    .link-field {
+        transition: all 0.3s ease-in-out;
+        overflow: hidden;
+    }
 </style>

@@ -2,7 +2,11 @@
     'operation' => 'create',
     'book' => null,
     'titleForm' => '',
-    'entityLabel' => 'Book'
+    'entityLabel' => 'Book',
+    'languages' => [],
+    'bookCategories' => [],
+    'authorTypes' => [],
+    'availabilityTypes' => []
 ])
 
 <div class="container-fluid pt-4 px-4">
@@ -60,7 +64,7 @@
                             <div class="col-md-6">
                                 <h5 class="section-title mb-3"><i class="fas fa-info-circle me-2"></i>Basic Information</h5>
 
-                               <div class="mb-3">
+                                <div class="mb-3">
                                     <label for="isbn" class="form-label">ISBN</label>
                                     <input type="text" class="form-control @error('isbn') is-invalid @enderror" id="isbn" name="isbn"
                                         value="{{ old('isbn', $book->isbn ?? '') }}"
@@ -101,11 +105,42 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="categoryName" class="form-label">Category <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('categoryName') is-invalid @enderror" id="categoryName" name="categoryName"
-                                        value="{{ old('categoryName', $book->categoryName ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}>
-                                    @error('categoryName')
+                                    <label for="authorTypeID" class="form-label">Author Type <span class="text-danger">*</span></label>
+                                    @if ($operation === 'view')
+                                        <input type="text" class="form-control" value="{{ $book->getAuthorType->authorTypeName ?? 'N/A' }}" readonly>
+                                    @else
+                                        <select class="form-select @error('authorTypeID') is-invalid @enderror" id="authorTypeID" name="authorTypeID" required>
+                                            <option value="">Select Author Type</option>
+                                            @foreach($authorTypes as $authorType)
+                                                <option value="{{ $authorType->authorTypeID }}" 
+                                                    {{ old('authorTypeID', $book->authorTypeID ?? '') == $authorType->authorTypeID ? 'selected' : '' }}>
+                                                    {{ $authorType->authorTypeName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                    @error('authorTypeID')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="availabilityTypeID" class="form-label">Availability Type <span class="text-danger">*</span></label>
+                                    @if ($operation === 'view')
+                                        <input type="text" class="form-control" value="{{ $book->getAvailabilityType->availabilityTypeName ?? 'N/A' }}" readonly>
+                                        <input type="hidden" id="availabilityTypeID" value="{{ $book->availabilityTypeID ?? '' }}">
+                                    @else
+                                        <select class="form-select @error('availabilityTypeID') is-invalid @enderror" id="availabilityTypeID" name="availabilityTypeID" required>
+                                            <option value="">Select Availability Type</option>
+                                            @foreach($availabilityTypes as $availabilityType)
+                                                <option value="{{ $availabilityType->availabilityTypeID }}" 
+                                                    {{ old('availabilityTypeID', $book->availabilityTypeID ?? '') == $availabilityType->availabilityTypeID ? 'selected' : '' }}>
+                                                    {{ $availabilityType->availabilityTypeName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                    @error('availabilityTypeID')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -116,19 +151,41 @@
                                 <h5 class="section-title mb-3"><i class="fas fa-book-open me-2"></i>Additional Information</h5>
 
                                 <div class="mb-3">
-                                    <label for="language" class="form-label">Language <span class="text-danger">*</span></label>
+                                    <label for="languageID" class="form-label">Language <span class="text-danger">*</span></label>
                                     @if ($operation === 'view')
-                                        <input type="text" class="form-control" value="{{ $book->language }}" readonly>
+                                        <input type="text" class="form-control" value="{{ $book->getLanguage->languageName ?? 'N/A' }}" readonly>
                                     @else
-                                        <select class="form-select @error('language') is-invalid @enderror" id="language" name="language" required>
+                                        <select class="form-select @error('languageID') is-invalid @enderror" id="languageID" name="languageID" required>
                                             <option value="">Select Language</option>
-                                            <option value="English" {{ old('language', $book->language ?? '') == 'English' ? 'selected' : '' }}>English</option>
-                                            <option value="Indonesian" {{ old('language', $book->language ?? '') == 'Indonesian' ? 'selected' : '' }}>Indonesian</option>
-                                            <option value="Arabic" {{ old('language', $book->language ?? '') == 'Arabic' ? 'selected' : '' }}>Arabic</option>
-                                            <option value="Other" {{ old('language', $book->language ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
+                                            @foreach($languages as $language)
+                                                <option value="{{ $language->languageID }}" 
+                                                    {{ old('languageID', $book->languageID ?? '') == $language->languageID ? 'selected' : '' }}>
+                                                    {{ $language->languageName }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     @endif
-                                    @error('language')
+                                    @error('languageID')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="bookCategoryID" class="form-label">Category <span class="text-danger">*</span></label>
+                                    @if ($operation === 'view')
+                                        <input type="text" class="form-control" value="{{ $book->getBookCategory->bookCategoryName ?? 'N/A' }}" readonly>
+                                    @else
+                                        <select class="form-select @error('bookCategoryID') is-invalid @enderror" id="bookCategoryID" name="bookCategoryID" required>
+                                            <option value="">Select Category</option>
+                                            @foreach($bookCategories as $category)
+                                                <option value="{{ $category->bookCategoryID }}" 
+                                                    {{ old('bookCategoryID', $book->bookCategoryID ?? '') == $category->bookCategoryID ? 'selected' : '' }}>
+                                                    {{ $category->bookCategoryName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                    @error('bookCategoryID')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -162,6 +219,30 @@
                                     @error('edition')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                </div>
+
+                                <div class="mb-3 link-field">
+                                    <label for="purchaseLink" class="form-label">Purchase Link</label>
+                                    <input type="url" class="form-control @error('purchaseLink') is-invalid @enderror" id="purchaseLink" name="purchaseLink"
+                                        value="{{ old('purchaseLink', $book->purchaseLink ?? '') }}"
+                                        {{ $operation === 'view' ? 'readonly' : '' }}
+                                        placeholder="https://example.com">
+                                    @error('purchaseLink')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="form-text">Optional - Link to purchase the book</div>
+                                </div>
+
+                                <div class="mb-3 link-field">
+                                    <label for="borrowLink" class="form-label">Borrow Link</label>
+                                    <input type="url" class="form-control @error('borrowLink') is-invalid @enderror" id="borrowLink" name="borrowLink"
+                                        value="{{ old('borrowLink', $book->borrowLink ?? '') }}"
+                                        {{ $operation === 'view' ? 'readonly' : '' }}
+                                        placeholder="https://example.com">
+                                    @error('borrowLink')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="form-text">Optional - Link to borrow the book</div>
                                 </div>
                             </div>
                         </div>
