@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LkBookCategory;
 use App\Models\MsCatalogBook;
 use App\Models\LkLanguage;
 use Illuminate\Http\Request;
@@ -47,8 +48,9 @@ class CatalogBooksController extends Controller
     public function create()
     {
         $languages = LkLanguage::all();
+        $bookCategories = LkBookCategory::all();
         
-        return view('admin-page.catalog-book.create', compact('languages'))
+        return view('admin-page.catalog-book.create', compact('languages', 'bookCategories'))
             ->with('title', 'Book Catalog');
     }
 
@@ -72,7 +74,7 @@ class CatalogBooksController extends Controller
 
     public function showAdmin(MsCatalogBook $book)
     {
-        $book->load('getLanguage');
+        $book->load('getLanguage', 'getBookCategory');
         
         return view('admin-page.catalog-book.view', compact('book'))
             ->with('title', 'Book Catalog');
@@ -81,9 +83,10 @@ class CatalogBooksController extends Controller
     public function edit(MsCatalogBook $book)
     {
         $languages = LkLanguage::all();
-        $book->load('getLanguage');
+        $bookCategories = LkBookCategory::all();
+         $book->load('getLanguage', 'getBookCategory');
         
-        return view('admin-page.catalog-book.edit', compact('book', 'languages'))
+        return view('admin-page.catalog-book.edit', compact('book', 'languages', 'bookCategories'))
             ->with('title', 'Book Catalog');
     }
 

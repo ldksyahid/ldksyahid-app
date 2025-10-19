@@ -144,7 +144,7 @@ class MsCatalogBook extends Model
             'titleBook' => 'required|string|max:255',
             'authorName' => 'required|string|max:100',
             'publisherName' => 'required|string|max:100',
-            'bookCategoryID' => 'required',
+            'bookCategoryID' => 'required|exists:lk_book_category,bookCategoryID',
             'languageID' => 'required|exists:lk_language,languageID',
             'authorTypeID' => 'required',
             'authorTypeID' => 'required',

@@ -6,6 +6,7 @@
         titleForm="Add New" 
         entityLabel="Book"
         :languages="$languages"
+        :bookCategories="$bookCategories"
     />
 @endsection
 
