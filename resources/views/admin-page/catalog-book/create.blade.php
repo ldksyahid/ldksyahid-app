@@ -1,7 +1,15 @@
 @extends('admin-page.template.body')
 
 @section('content')
-    <x-catalog-book.form operation="create" titleForm="Add New" entityLabel="Book"/>
+    <x-catalog-book.form 
+        operation="create" 
+        titleForm="Add New" 
+        entityLabel="Book"
+        :languages="$languages"
+        :bookCategories="$bookCategories"
+        :authorTypes="$authorTypes"
+        :availabilityTypes="$availabilityTypes"
+    />
 @endsection
 
 @section('styles')
