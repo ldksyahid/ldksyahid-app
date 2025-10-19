@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LkAuthorType;
+use App\Models\LkAvailabilityType;
 use App\Models\LkBookCategory;
 use App\Models\MsCatalogBook;
 use App\Models\LkLanguage;
@@ -49,8 +51,10 @@ class CatalogBooksController extends Controller
     {
         $languages = LkLanguage::all();
         $bookCategories = LkBookCategory::all();
+        $authorTypes = LkAuthorType::all();
+        $availabilityTypes = LkAvailabilityType::all();
         
-        return view('admin-page.catalog-book.create', compact('languages', 'bookCategories'))
+        return view('admin-page.catalog-book.create', compact('languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
 
@@ -74,7 +78,7 @@ class CatalogBooksController extends Controller
 
     public function showAdmin(MsCatalogBook $book)
     {
-        $book->load('getLanguage', 'getBookCategory');
+        $book->load('getLanguage', 'getBookCategory', 'getAuthorType', 'getAvailabilityType');
         
         return view('admin-page.catalog-book.view', compact('book'))
             ->with('title', 'Book Catalog');
@@ -84,9 +88,11 @@ class CatalogBooksController extends Controller
     {
         $languages = LkLanguage::all();
         $bookCategories = LkBookCategory::all();
-         $book->load('getLanguage', 'getBookCategory');
+        $authorTypes = LkAuthorType::all();
+        $availabilityTypes = LkAvailabilityType::all();
+        $book->load('getLanguage', 'getBookCategory', 'getAuthorType', 'getAvailabilityType');
         
-        return view('admin-page.catalog-book.edit', compact('book', 'languages', 'bookCategories'))
+        return view('admin-page.catalog-book.edit', compact('book', 'languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
 

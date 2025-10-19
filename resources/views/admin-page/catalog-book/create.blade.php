@@ -7,6 +7,8 @@
         entityLabel="Book"
         :languages="$languages"
         :bookCategories="$bookCategories"
+        :authorTypes="$authorTypes"
+        :availabilityTypes="$availabilityTypes"
     />
 @endsection
 
