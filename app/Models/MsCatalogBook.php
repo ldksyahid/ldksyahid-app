@@ -203,7 +203,7 @@ class MsCatalogBook extends Model
             'titleBook',
             'authorName',
             'publisherName',
-            'categoryName',
+            'bookCategoryID',
             'year',
             'createdDate',
         ];
@@ -212,7 +212,7 @@ class MsCatalogBook extends Model
             $sortBy = 'createdDate';
         }
 
-        $query = self::query();
+        $query = self::with(['getBookCategory']);
 
         if ($request->filled('isbn')) {
             $query->where('isbn', 'like', "%{$request->isbn}%");
@@ -231,7 +231,9 @@ class MsCatalogBook extends Model
         }
 
         if ($request->filled('category')) {
-            $query->where('categoryName', 'like', "%{$request->category}%");
+            $query->whereHas('getBookCategory', function($q) use ($request) {
+                $q->where('bookCategoryName', 'like', "%{$request->category}%");
+            });
         }
 
         if ($request->filled('year')) {
@@ -253,6 +255,14 @@ class MsCatalogBook extends Model
             } else {
                 $query->whereDate('createdDate', $request->added_date);
             }
+        }
+
+        if ($sortBy === 'bookCategoryID') {
+            $query->join('lk_book_category', 'ms_catalog_book.bookCategoryID', '=', 'lk_book_category.bookCategoryID')
+                ->orderBy('lk_book_category.bookCategoryName', $sortOrder)
+                ->select('ms_catalog_book.*');
+        } else {
+            $query->orderBy($sortBy, $sortOrder);
         }
 
         return $query->orderBy($sortBy, $sortOrder)

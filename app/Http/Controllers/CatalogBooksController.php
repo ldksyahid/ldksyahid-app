@@ -31,6 +31,7 @@ class CatalogBooksController extends Controller
     public function indexAdmin(Request $request)
     {
         $books = MsCatalogBook::searchAdminBooks($request);
+        $bookCategories = LkBookCategory::all();
 
         if ($request->ajax()) {
             return response()->json([
@@ -42,7 +43,7 @@ class CatalogBooksController extends Controller
             ]);
         }
 
-        return view('admin-page.catalog-book.index', compact('books'))
+        return view('admin-page.catalog-book.index', compact('books', 'bookCategories'))
             ->with('title', 'Book Catalog');
     }
 
