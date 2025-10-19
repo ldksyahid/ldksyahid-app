@@ -6,6 +6,10 @@
         :book="$book" 
         titleForm="View Book:" 
         entityLabel="{{ $book->titleBook }}"
+        :languages="$languages"
+        :bookCategories="$bookCategories"
+        :authorTypes="$authorTypes"
+        :availabilityTypes="$availabilityTypes"
     />
 @endsection
 

@@ -79,9 +79,13 @@ class CatalogBooksController extends Controller
 
     public function showAdmin(MsCatalogBook $book)
     {
+        $languages = LkLanguage::all();
+        $bookCategories = LkBookCategory::all();
+        $authorTypes = LkAuthorType::all();
+        $availabilityTypes = LkAvailabilityType::all();
         $book->load('getLanguage', 'getBookCategory', 'getAuthorType', 'getAvailabilityType');
         
-        return view('admin-page.catalog-book.view', compact('book'))
+        return view('admin-page.catalog-book.view', compact('book', 'languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
 
