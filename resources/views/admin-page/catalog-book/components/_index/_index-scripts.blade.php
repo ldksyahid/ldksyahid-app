@@ -36,8 +36,9 @@ $(document).ready(function() {
             placeholder: "All Categories",
             allowClear: true,
             width: '100%',
+            dropdownParent: $('body'),
             dropdownPosition: 'below',
-            dropdownParent: $('select[name="category"]').parent()
+            closeOnSelect: true,
         });
     }
 
