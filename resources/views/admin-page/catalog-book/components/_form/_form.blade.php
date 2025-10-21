@@ -318,7 +318,7 @@
                             <div class="col-md-6">
                                 <h5 class="section-title mb-3"><i class="fas fa-file-pdf me-2"></i>PDF File</h5>
 
-                                @if ($operation === 'view' && $book->pdfFileName)
+                                @if ($operation === 'view')
                                     <div class="mb-3">
                                         <div class="pdf-preview text-center">
                                             @if($book->pdfFileName)
@@ -341,10 +341,10 @@
                                     <div class="mb-3">
                                         <label for="pdfFileName" class="form-label">
                                             {{ $operation === 'create' ? 'Upload PDF File' : 'Update PDF File' }}
-                                            @if ($operation === 'create') <span class="text-danger">*</span> @endif
+                                            (Optional)
                                         </label>
                                         <input type="file" class="form-control @error('pdfFileName') is-invalid @enderror" id="pdfFileName" name="pdfFileName"
-                                            accept=".pdf" {{ $operation === 'create' ? 'required' : '' }}>
+                                            accept=".pdf">
                                         @error('pdfFileName')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
