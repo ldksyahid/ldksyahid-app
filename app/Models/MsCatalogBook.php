@@ -167,7 +167,6 @@ class MsCatalogBook extends Model
         if ($ignoreId === null) {
             $rules['isbn'] .= '|unique:ms_catalog_book,isbn';
             $rules['titleBook'] .= '|unique:ms_catalog_book,titleBook';
-            $rules['pdfFileName'] = 'required|file|mimes:pdf|max:10240';
         } else {
             $rules['isbn'] .= '|unique:ms_catalog_book,isbn,' . $ignoreId . ',bookID';
             $rules['titleBook'] .= '|unique:ms_catalog_book,titleBook,' . $ignoreId . ',bookID';
