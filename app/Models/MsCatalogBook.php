@@ -204,6 +204,7 @@ class MsCatalogBook extends Model
             'publisherName',
             'bookCategoryID',
             'year',
+            'favoriteCount',
             'createdDate',
         ];
 
@@ -237,6 +238,10 @@ class MsCatalogBook extends Model
 
         if ($request->filled('year')) {
             $query->where('year', $request->year);
+        }
+
+        if ($request->filled('favorite_count')) {
+            $query->where('favoriteCount', $request->favorite_count);
         }
 
         if ($request->filled('added_date')) {

@@ -20,7 +20,7 @@ $(document).ready(function() {
     currentParams = Object.fromEntries(new URLSearchParams(window.location.search));
 
     initSelect2();
-    
+
     loadBooks();
     updateSortArrows();
     initColumnSearch();
@@ -119,6 +119,7 @@ $(document).ready(function() {
                 <td><div class="skeleton"></div></td>
                 <td><div class="skeleton"></div></td>
                 <td><div class="skeleton"></div></td>
+                <td><div class="skeleton"></div></td>
             </tr>`;
         }
         $('#bookTableBody').html(skeletonRows);
@@ -189,7 +190,7 @@ $(document).ready(function() {
     function initColumnSearch() {
         document.querySelectorAll('.column-search').forEach(input => {
             if (input.type === 'select-one') return; // Skip select elements
-            
+
             if (input.nextElementSibling && input.nextElementSibling.classList.contains('column-search-clear')) {
                 return;
             }
@@ -230,7 +231,7 @@ $(document).ready(function() {
 
     $(document).on('keyup blur', '.column-search', function(e) {
         if (this.type === 'select-one') return;
-        
+
         if (e.type === 'keyup' && e.key !== 'Enter') {
             return;
         }
@@ -425,7 +426,7 @@ $(document).ready(function() {
         };
 
         $('.column-search').val('');
-        $('select[name="category"]').val('').trigger('change'); // Clear Select2
+        $('select[name="category"]').val('').trigger('change');
         $('input[name="added_date"]').val('');
         $('.column-search-clear').hide();
         updateSortArrows();
