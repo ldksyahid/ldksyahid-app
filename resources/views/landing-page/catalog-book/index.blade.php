@@ -108,6 +108,13 @@
     <div class="row mb-3 wow fadeInUp" data-wow-delay="0.4s">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
+                <p class="text-muted mb-0">
+                    @if($books->total() > 0)
+                        Menampilkan {{ $books->firstItem() }}–{{ $books->lastItem() }} dari {{ $books->total() }} buku
+                    @else
+                        Tidak ada buku yang ditemukan
+                    @endif
+                </p>
                 <div class="dropdown">
                     <button class="btn btn-outline-primary btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-sort me-1"></i> Urutkan
@@ -122,82 +129,133 @@
         </div>
     </div>
 
-    <!-- Books Grid -->
-    <div class="row g-4 justify-content-start">
+    <!-- Books Grid - 2 Cards per Row -->
+    <div class="row g-4">
         @forelse($books as $book)
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 border-0 shadow rounded-4 overflow-hidden book-card wow fadeInUp" data-wow-delay="0.{{ $loop->index % 3 + 1 }}s">
-                    <div class="position-relative">
-                        @if($book->coverImageUrl())
-                            <a href="{{ route('catalog.books.show', $book->slug) }}">
-                                <div class="ratio ratio-16x9">
-                                    <img src="{{ $book->coverImageUrl() }}"
-                                         alt="{{ $book->titleBook }}"
-                                         class="w-100 h-100 object-fit-cover">
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="item-new-book h-100 wow fadeInUp" data-wow-delay="0.{{ $loop->index % 2 + 1 }}s">
+                    <div class="row g-0 h-100">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                            <div class="wrp-cover-book-new h-100">
+                                <!-- INI TITLE BOOK MOBILENYA YA A -->
+                                <div class="title-book-mb d-lg-none d-md-none d-sm-flex d-flex">
+                                    <div class="title-of-new">
+                                        <h2>{{ $book->titleBook }}</h2>
+                                        <div class="date-publish-book">
+                                            <div class="icon-date-publish">
+                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-publish-date">
+                                                <p>{{ \Carbon\Carbon::parse($book->createdDate)->format('d M Y') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </a>
-                        @else
-                            <div class="ratio ratio-16x9 bg-light d-flex align-items-center justify-content-center">
-                                <i class="fas fa-book fa-4x text-muted"></i>
-                            </div>
-                        @endif
-                        <div class="position-absolute top-0 end-0 m-3">
-                            <span class="badge bg-primary rounded-pill">{{ $book->year }}</span>
-                        </div>
-                        @if($book->favoriteCount > 0)
-                            <div class="position-absolute top-0 start-0 m-3">
-                                <span class="badge bg-warning text-dark rounded-pill">
-                                    <i class="fas fa-star me-1"></i> {{ $book->favoriteCount }}
-                                </span>
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="card-body d-flex flex-column p-4">
-                        <div class="mb-2">
-                            <span class="badge bg-light text-primary rounded-pill small">{{ $book->getBookCategory->bookCategoryName ?? 'Umum' }}</span>
-                        </div>
-
-                        <h5 class="fw-bold mb-2 line-clamp-2" style="min-height: 3rem;">
-                            <a href="{{ route('catalog.books.show', $book->slug) }}" class="text-dark text-decoration-none">
-                                {{ $book->titleBook }}
-                            </a>
-                        </h5>
-
-                        <div class="mb-2">
-                            <small class="text-muted">
-                                <i class="fas fa-user-edit me-1"></i> {{ $book->authorName }}
-                            </small>
-                        </div>
-
-                        <div class="mb-3">
-                            <small class="text-muted">
-                                <i class="fas fa-building me-1"></i> {{ $book->publisherName }}
-                            </small>
-                        </div>
-
-                        <p class="text-muted small line-clamp-3 mb-3 flex-grow-1">
-                            {{ Str::limit($book->description, 120) }}
-                        </p>
-
-                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <div class="d-flex gap-2">
-                                @if($book->pdfFileUrl())
-                                    <span class="badge bg-success rounded-pill">
-                                        <i class="fas fa-file-pdf me-1"></i> PDF
-                                    </span>
+                                <!-- INI TITLE BOOK MOBILENYA YA A -->
+                                @if($book->coverImageUrl())
+                                    <a href="{{ route('catalog.books.show', $book->slug) }}">
+                                        <div class="centered-cover-frame h-100">
+                                            <img src="{{ $book->coverImageUrl() }}" alt="{{ $book->titleBook }}">
+                                        </div>
+                                    </a>
+                                @else
+                                    <a href="{{ route('catalog.books.show', $book->slug) }}">
+                                        <div class="centered-cover-frame h-100">
+                                            <img src="https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd" alt="{{ $book->titleBook }}">
+                                        </div>
+                                    </a>
                                 @endif
-                                <span class="badge bg-info text-dark rounded-pill">
-                                    <i class="fas fa-language me-1"></i> {{ $book->getLanguage->languageName ?? 'Indonesia' }}
-                                </span>
                             </div>
-                            <a href="{{ route('catalog.books.show', $book->slug) }}" class="btn btn-outline-primary btn-sm rounded-pill">
-                                Detail <i class="fa fa-arrow-right ms-1"></i>
-                            </a>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                            <div class="right-new-catalog h-100">
+                                <div class="title-of-new d-none d-lg-block d-md-block">
+                                    <h2 class="book-title-truncate">{{ $book->titleBook }}</h2>
+                                    <div class="date-publish-book">
+                                        <div class="icon-date-publish">
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="text-publish-date">
+                                            <p>{{ \Carbon\Carbon::parse($book->createdDate)->format('d M Y') }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="nav nav-tabs" id="tab-newbook-{{ $book->bookID }}" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" id="spesifikasi-tab-{{ $book->bookID }}" data-bs-toggle="tab" data-bs-target="#book-spesifikasi-tab-{{ $book->bookID }}" type="button" role="tab" aria-controls="spesifikasi-tab" aria-selected="true">Spesifikasi</a>
+                                    </li>
+                                    @if($book->description)
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="sinopsis-tab-{{ $book->bookID }}" data-bs-toggle="tab" data-bs-target="#book-sinopsis-tab-{{ $book->bookID }}" type="button" role="tab" aria-controls="sinopsis-tab" aria-selected="false" tabindex="-1">Sinopsis</a>
+                                        </li>
+                                    @endif
+                                </ul>
+                                <div class="tab-content tab-content-new" id="newbook-{{ $book->bookID }}">
+                                    <div class="tab-pane fade show active" id="book-spesifikasi-tab-{{ $book->bookID }}" role="tabpanel" aria-labelledby="spesifikasi-tab" tabindex="0">
+                                        <div class="desc-of-new">
+                                            <h3>Spesifikasi</h3>
+                                            <ul>
+                                                <li>
+                                                    <p>Judul: {{ $book->titleBook }}</p>
+                                                </li>
+                                                @if($book->isbn)
+                                                    <li>
+                                                        <p>ISBN: {{ $book->isbn }}</p>
+                                                    </li>
+                                                @endif
+                                                @if($book->publisherName)
+                                                    <li>
+                                                        <p>Penerbit: {{ $book->publisherName }}</p>
+                                                    </li>
+                                                @endif
+                                                @if($book->authorName)
+                                                    <li>
+                                                        <p>Penulis: {{ $book->authorName }}</p>
+                                                    </li>
+                                                @endif
+                                                @if($book->pages)
+                                                    <li>
+                                                        <p>Halaman: {{ $book->pages }}</p>
+                                                    </li>
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    @if($book->description)
+                                        <div class="tab-pane fade" id="book-sinopsis-tab-{{ $book->bookID }}" role="tabpanel" aria-labelledby="sinopsis-tab" tabindex="0">
+                                            <div class="desc-of-new">
+                                                <h3>Sinopsis:</h3>
+                                                <p class="synopsis-text">{!! nl2br(e(Str::limit($book->description, 150))) !!}</p>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="act-new-book mt-auto">
+                                    <div class="row align-items-center g-2">
+                                        <div class="col-12">
+                                            <a href="{{ route('catalog.books.show', $book->slug) }}" class="btn btn-detail-catalog">
+                                                <div class="text-button">
+                                                    <p>Lihat Detail</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Clearfix for every 2 items -->
+            @if($loop->iteration % 2 == 0)
+                <div class="w-100 d-none d-lg-block"></div>
+            @endif
         @empty
             <div class="col-12 text-center py-5 wow fadeIn" data-wow-delay="0.3s">
                 <div class="mb-4">
