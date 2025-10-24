@@ -126,8 +126,8 @@ Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 
 Route::post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
 
 // Route LandingPage Catalog Books
-Route::get('/catalog/books', [CatalogBooksController::class, 'index'])->name('catalog.books.index');
-Route::get('/catalog/books/{slug}', [CatalogBooksController::class, 'show'])->name('catalog.books.show');
+Route::get('/perpustakaan', [CatalogBooksController::class, 'index'])->name('catalog.books.index');
+Route::get('/perpustakaan/buku/{slug}', [CatalogBooksController::class, 'show'])->name('catalog.books.show');
 
 // Route LandingPage EKSPRESI
 Route::get('/ekspresi', function () {

@@ -192,6 +192,55 @@ class MsCatalogBook extends Model
         return $slug;
     }
 
+    public static function searchIndexBooks(Request $request)
+    {
+        $query = self::with(['getBookCategory', 'getLanguage', 'getAuthorType', 'getAvailabilityType'])
+                    ->where('flagActive', true)
+                    ->orderBy('createdDate', 'desc');
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('titleBook', 'like', "%{$search}%")
+                  ->orWhere('authorName', 'like', "%{$search}%")
+                  ->orWhere('publisherName', 'like', "%{$search}%")
+                  ->orWhere('isbn', 'like', "%{$search}%")
+                  ->orWhere('year', $search)
+                  ->orWhere('tags', 'like', "%{$search}%")
+                  ->orWhereHas('getBookCategory', function($q) use ($search) {
+                      $q->where('bookCategoryName', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->filled('category')) {
+            $categories = (array) $request->category;
+            $query->whereIn('bookCategoryID', $categories);
+        }
+
+        if ($request->filled('author')) {
+            $authors = (array) $request->author;
+            $query->whereIn('authorName', $authors);
+        }
+
+        if ($request->filled('publisher')) {
+            $publishers = (array) $request->publisher;
+            $query->whereIn('publisherName', $publishers);
+        }
+
+        if ($request->filled('year')) {
+            $years = (array) $request->year;
+            $query->whereIn('year', $years);
+        }
+
+        if ($request->filled('language')) {
+            $languages = (array) $request->language;
+            $query->whereIn('languageID', $languages);
+        }
+
+        return $query;
+    }
+
     public static function searchAdminBooks(Request $request)
     {
         $sortBy = $request->input('sort_by', 'createdDate');

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MsCatalogBook;
+use App\Models\LkBookCategory;
+use App\Models\LkLanguage;
 use App\Models\LkAuthorType;
 use App\Models\LkAvailabilityType;
-use App\Models\LkBookCategory;
-use App\Models\MsCatalogBook;
-use App\Models\LkLanguage;
 use Illuminate\Http\Request;
 
 class CatalogBooksController extends Controller
@@ -15,14 +15,29 @@ class CatalogBooksController extends Controller
        SECTION A — LANDING PAGE (Public)
        ========================================================================= */
 
-    public function index()
+    public function index(Request $request)
     {
+        $query = MsCatalogBook::searchIndexBooks($request);
 
+        $books = $query->paginate(9)->withQueryString();
+
+        $categories = LkBookCategory::select('bookCategoryID', 'bookCategoryName')->distinct()->orderBy('bookCategoryName')->get();
+        $authors = MsCatalogBook::select('authorName')->distinct()->orderBy('authorName')->pluck('authorName');
+        $publishers = MsCatalogBook::select('publisherName')->distinct()->orderBy('publisherName')->pluck('publisherName');
+        $years = MsCatalogBook::select('year')->distinct()->orderByDesc('year')->pluck('year');
+
+        return view('landing-page.catalog-book.index', compact('books', 'categories', 'authors', 'publishers', 'years'), [
+            "title" => "Perpustakaan",
+        ]);
     }
 
     public function show($slug)
     {
+        $book = MsCatalogBook::where('slug', $slug)->firstOrFail();
 
+        return view('landing-page.catalog-book.show', compact('book'), [
+            "title" => $book->titleBook,
+        ]);
     }
 
     /* =========================================================================
@@ -47,14 +62,13 @@ class CatalogBooksController extends Controller
             ->with('title', 'Book Catalog');
     }
 
-
     public function create()
     {
         $languages = LkLanguage::all();
         $bookCategories = LkBookCategory::all();
         $authorTypes = LkAuthorType::all();
         $availabilityTypes = LkAvailabilityType::all();
-        
+
         return view('admin-page.catalog-book.create', compact('languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
@@ -76,7 +90,6 @@ class CatalogBooksController extends Controller
         }
     }
 
-
     public function showAdmin(MsCatalogBook $book)
     {
         $languages = LkLanguage::all();
@@ -84,7 +97,7 @@ class CatalogBooksController extends Controller
         $authorTypes = LkAuthorType::all();
         $availabilityTypes = LkAvailabilityType::all();
         $book->load('getLanguage', 'getBookCategory', 'getAuthorType', 'getAvailabilityType');
-        
+
         return view('admin-page.catalog-book.view', compact('book', 'languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
@@ -96,7 +109,7 @@ class CatalogBooksController extends Controller
         $authorTypes = LkAuthorType::all();
         $availabilityTypes = LkAvailabilityType::all();
         $book->load('getLanguage', 'getBookCategory', 'getAuthorType', 'getAvailabilityType');
-        
+
         return view('admin-page.catalog-book.edit', compact('book', 'languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
