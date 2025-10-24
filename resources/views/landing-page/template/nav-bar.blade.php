@@ -87,7 +87,7 @@
             {{-- ACTIVITY NAV END --}}
 
             {{-- BOOK CATALOG NAV START --}}
-            {{-- <a href="/catalog/books" class="nav-item nav-link text-capitalize {{($title === "Katalog Buku") ? "active" : ""}}">Katalog Buku</a> --}}
+            <a href="/perpustakaan" class="nav-item nav-link text-capitalize {{($title === "Perpustakaan") ? "active" : ""}}">Perpustakaan</a>
             {{-- BOOK CATALOG END --}}
 
             {{-- LAYANAN NAV START --}}
