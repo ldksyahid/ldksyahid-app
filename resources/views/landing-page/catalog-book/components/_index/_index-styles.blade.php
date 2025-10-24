@@ -272,23 +272,308 @@ input.form-control:focus {
         z-index: 900;
     }
 }
-.line-clamp-2 {
+
+/* Updated styles for 2 cards per row layout */
+.item-new-book {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+    height: 100%;
+}
+
+.item-new-book:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.wrp-cover-book-new {
+    padding: 1.25rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.title-book-mb {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.centered-cover-frame {
+    width: 100%;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+}
+
+.centered-cover-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+.centered-cover-frame:hover img {
+    transform: scale(1.05);
+}
+
+.right-new-catalog {
+    padding: 1.25rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.title-of-new h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+}
+
+.book-title-truncate {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    height: 3.2rem;
 }
-.line-clamp-3 {
+
+.date-publish-book {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.icon-date-publish svg {
+    width: 16px;
+    height: 16px;
+    color: #6c757d;
+}
+
+.text-publish-date p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+/* Tabs Styling */
+.nav-tabs {
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 1rem;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    background: none;
+    color: #6c757d;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+    border-radius: 6px 6px 0 0;
+    margin-bottom: -2px;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #00bfa6;
+    border: none;
+}
+
+.nav-tabs .nav-link.active {
+    color: #00bfa6;
+    background: none;
+    border: none;
+    border-bottom: 2px solid #00bfa6;
+}
+
+.tab-content-new {
+    flex: 1;
+    min-height: 180px;
+}
+
+.desc-of-new h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.75rem;
+}
+
+.desc-of-new ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.desc-of-new ul li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #f8f9fa;
+    font-size: 0.85rem;
+}
+
+.desc-of-new ul li:last-child {
+    border-bottom: none;
+}
+
+.desc-of-new ul li p {
+    margin: 0;
+    color: #495057;
+    line-height: 1.4;
+    display: flex;
+    justify-content: space-between;
+}
+
+.desc-of-new ul li p span.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+}
+
+.desc-of-new p {
+    color: #495057;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+.synopsis-text {
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    max-height: 6rem;
 }
-.book-card .card-body {
-    min-height: 280px;
+
+/* Action Buttons */
+.act-new-book {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
 }
-.badge.rounded-pill {
-    font-size: 0.7rem;
-    padding: 0.35em 0.65em;
+
+.btn-detail-catalog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    width: 100%;
+    border: none;
+    font-size: 0.85rem;
+    background: linear-gradient(135deg, #00bfa6 0%, #009b89 100%);
+    color: white;
+}
+
+.btn-detail-catalog:hover {
+    background: linear-gradient(135deg, #009b89 0%, #007f73 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 191, 166, 0.3);
+}
+
+.text-button p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .item-new-book {
+        margin-bottom: 1rem;
+    }
+
+    .centered-cover-frame {
+        height: 200px;
+    }
+
+    .title-of-new h2 {
+        font-size: 1.2rem;
+    }
+
+    .tab-content-new {
+        min-height: 160px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wrp-cover-book-new {
+        padding: 1rem;
+    }
+
+    .right-new-catalog {
+        padding: 1rem;
+    }
+
+    .title-of-new h2 {
+        font-size: 1.1rem;
+    }
+
+    .centered-cover-frame {
+        height: 180px;
+    }
+
+    .nav-tabs .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .btn-detail-catalog {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .tab-content-new {
+        min-height: 140px;
+    }
+}
+
+@media (max-width: 576px) {
+    .item-new-book {
+        margin-bottom: 1rem;
+    }
+
+    .title-of-new h2 {
+        font-size: 1rem;
+    }
+
+    .centered-cover-frame {
+        height: 160px;
+    }
+
+    .desc-of-new ul li {
+        font-size: 0.8rem;
+    }
+
+    .desc-of-new ul li p span.text-truncate {
+        max-width: 120px;
+    }
+
+    .tab-content-new {
+        min-height: 120px;
+    }
+}
+
+/* Ensure equal height for cards in the same row */
+.row.g-4 {
+    align-items: stretch;
 }
 </style>
