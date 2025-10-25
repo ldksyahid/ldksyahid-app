@@ -1,3 +1,4 @@
+<!-- resources\views\landing-page\catalog-book\index.blade.php -->
 @extends('landing-page.template.body')
 
 @section('content')
@@ -140,7 +141,15 @@
                                 <!-- INI TITLE BOOK MOBILENYA YA A -->
                                 <div class="title-book-mb d-lg-none d-md-none d-sm-flex d-flex">
                                     <div class="title-of-new">
-                                        <h2>{{ $book->titleBook }}</h2>
+                                       <div class="d-flex justify-content-between align-items-start">
+                                            <h2>{{ $book->titleBook }}</h2>
+                                            <!-- Crown Icon -->
+                                            @if($book->authorTypeID == 1 || $book->authorTypeID == 2)
+                                                <div class="crown-icon {{ $book->authorTypeID == 1 ? 'crown-premium' : 'crown-gold' }}">
+                                                    <i class="fas fa-crown"></i>
+                                                </div>
+                                            @endif
+                                        </div>
                                         <div class="date-publish-book">
                                             <div class="icon-date-publish">
                                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -150,6 +159,19 @@
                                             <div class="text-publish-date">
                                                 <p>{{ \Carbon\Carbon::parse($book->createdDate)->format('d M Y') }}</p>
                                             </div>
+                                            <div class="favorite-section ms-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="icon-date-publish">
+                                                        <i class="fas fa-heart"></i>
+                                                    </div>
+                                                    <span class="favorite-count">{{ $book->favoriteCount ?? 0 }}</span>
+                                                </div>
+                                            </div>
+                                            @if($book->getBookCategory)
+                                                <div class="category-badge">
+                                                    <span class="badge bg-primary rounded-pill">{{ $book->getBookCategory->bookCategoryName }}</span>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +194,15 @@
                         <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                             <div class="right-new-catalog h-100">
                                 <div class="title-of-new d-none d-lg-block d-md-block">
-                                    <h2 class="book-title-truncate">{{ $book->titleBook }}</h2>
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <h2 class="book-title-truncate">{{ $book->titleBook }}</h2>
+                                        <!-- Crown Icon -->
+                                        @if($book->authorTypeID == 1 || $book->authorTypeID == 2)
+                                            <div class="crown-icon {{ $book->authorTypeID == 1 ? 'crown-premium' : 'crown-gold' }}">
+                                                <i class="fas fa-crown"></i>
+                                            </div>
+                                        @endif
+                                    </div>
                                     <div class="date-publish-book">
                                         <div class="icon-date-publish">
                                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -182,13 +212,26 @@
                                         <div class="text-publish-date">
                                             <p>{{ \Carbon\Carbon::parse($book->createdDate)->format('d M Y') }}</p>
                                         </div>
+                                        <div class="favorite-section ms-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-date-publish">
+                                                    <i class="fas fa-heart"></i>
+                                                </div>
+                                                <span class="favorite-count">{{ $book->favoriteCount ?? 0 }}</span>
+                                            </div>
+                                        </div>
+                                        @if($book->getBookCategory)
+                                        <div class="category-badge">
+                                            <span class="badge bg-primary rounded-pill">{{ $book->getBookCategory->bookCategoryName }}</span>
+                                        </div>
+                                    @endif
                                     </div>
                                 </div>
                                 <ul class="nav nav-tabs" id="tab-newbook-{{ $book->bookID }}" role="tablist">
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link active" id="spesifikasi-tab-{{ $book->bookID }}" data-bs-toggle="tab" data-bs-target="#book-spesifikasi-tab-{{ $book->bookID }}" type="button" role="tab" aria-controls="spesifikasi-tab" aria-selected="true">Spesifikasi</a>
                                     </li>
-                                    @if($book->description)
+                                    @if($book->synopsis)
                                         <li class="nav-item" role="presentation">
                                             <a class="nav-link" id="sinopsis-tab-{{ $book->bookID }}" data-bs-toggle="tab" data-bs-target="#book-sinopsis-tab-{{ $book->bookID }}" type="button" role="tab" aria-controls="sinopsis-tab" aria-selected="false" tabindex="-1">Sinopsis</a>
                                         </li>
@@ -197,52 +240,75 @@
                                 <div class="tab-content tab-content-new" id="newbook-{{ $book->bookID }}">
                                     <div class="tab-pane fade show active" id="book-spesifikasi-tab-{{ $book->bookID }}" role="tabpanel" aria-labelledby="spesifikasi-tab" tabindex="0">
                                         <div class="desc-of-new">
-                                            <h3>Spesifikasi</h3>
                                             <ul>
-                                                <li>
-                                                    <p>Judul: {{ $book->titleBook }}</p>
-                                                </li>
-                                                @if($book->isbn)
-                                                    <li>
-                                                        <p>ISBN: {{ $book->isbn }}</p>
-                                                    </li>
-                                                @endif
-                                                @if($book->publisherName)
-                                                    <li>
-                                                        <p>Penerbit: {{ $book->publisherName }}</p>
-                                                    </li>
-                                                @endif
+                                                <li><p>Judul: {{ $book->titleBook }}</p></li>
+
                                                 @if($book->authorName)
-                                                    <li>
-                                                        <p>Penulis: {{ $book->authorName }}</p>
-                                                    </li>
+                                                    <li><p>Penulis: {{ $book->authorName }}</p></li>
                                                 @endif
+
+                                                @if($book->publisherName)
+                                                    <li><p>Penerbit: {{ $book->publisherName }}</p></li>
+                                                @endif
+
+                                                @if($book->year)
+                                                    <li><p>Tahun Terbit: {{ $book->year }}</p></li>
+                                                @endif
+
+                                                @if($book->edition)
+                                                    <li><p>Edisi: {{ $book->edition }}</p></li>
+                                                @endif
+
+                                                @if($book->isbn)
+                                                    <li><p>ISBN: {{ $book->isbn }}</p></li>
+                                                @endif
+
+                                                @if($book->getLanguage)
+                                                    <li><p>Bahasa: {{ $book->getLanguage->languageName }}</p></li>
+                                                @endif
+
                                                 @if($book->pages)
-                                                    <li>
-                                                        <p>Halaman: {{ $book->pages }}</p>
-                                                    </li>
+                                                    <li><p>Jumlah Halaman: {{ $book->pages }}</p></li>
                                                 @endif
                                             </ul>
                                         </div>
                                     </div>
 
-                                    @if($book->description)
+                                    @if($book->synopsis)
                                         <div class="tab-pane fade" id="book-sinopsis-tab-{{ $book->bookID }}" role="tabpanel" aria-labelledby="sinopsis-tab" tabindex="0">
                                             <div class="desc-of-new">
-                                                <h3>Sinopsis:</h3>
-                                                <p class="synopsis-text">{!! nl2br(e(Str::limit($book->description, 150))) !!}</p>
+                                                <p class="synopsis-text">{{ $book->synopsis }}</p>
                                             </div>
                                         </div>
                                     @endif
                                 </div>
                                 <div class="act-new-book mt-auto">
                                     <div class="row align-items-center g-2">
-                                        <div class="col-12">
+                                        <div class="col-8">
                                             <a href="{{ route('catalog.books.show', $book->slug) }}" class="btn btn-detail-catalog">
                                                 <div class="text-button">
                                                     <p>Lihat Detail</p>
                                                 </div>
                                             </a>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-outline-secondary btn-share w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-share-alt"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li>
+                                                        <a class="dropdown-item copy-link" href="#" data-link="{{ route('catalog.books.show', $book->slug) }}">
+                                                            <i class="fas fa-copy me-2"></i> Copy Link
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item share-wa" href="#" data-link="{{ route('catalog.books.show', $book->slug) }}" data-title="{{ $book->titleBook }}">
+                                                            <i class="fab fa-whatsapp me-2"></i> Bagikan via WhatsApp
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
