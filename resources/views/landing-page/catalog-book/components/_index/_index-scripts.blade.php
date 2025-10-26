@@ -255,7 +255,7 @@
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 const link = this.getAttribute('data-link');
-                const fullLink = window.location.origin + link;
+                const fullLink = link;
 
                 navigator.clipboard.writeText(fullLink).then(() => {
                     showCopySuccess('Link berhasil disalin!');
