@@ -222,11 +222,7 @@ class MsCatalogBook extends Model
                   ->orWhere('authorName', 'like', "%{$search}%")
                   ->orWhere('publisherName', 'like', "%{$search}%")
                   ->orWhere('isbn', 'like', "%{$search}%")
-                  ->orWhere('year', $search)
-                  ->orWhere('tags', 'like', "%{$search}%")
-                  ->orWhereHas('getBookCategory', function($q) use ($search) {
-                      $q->where('bookCategoryName', 'like', "%{$search}%");
-                  });
+                  ->orWhere('year', $search);
             });
         }
 

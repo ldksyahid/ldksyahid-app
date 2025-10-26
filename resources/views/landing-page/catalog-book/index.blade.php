@@ -23,7 +23,7 @@
                         <input type="text" name="search"
                             id="search-input"
                             class="form-control border-0 ps-4 py-2 rounded-0"
-                            placeholder="Cari buku berdasarkan judul, penulis, penerbit, atau tahun..."
+                            placeholder="Cari buku berdasarkan judul, penulis, penerbit, ISBN, atau tahun..."
                             value="{{ request('search') }}"
                             style="flex: 1 1 auto; box-shadow: none; padding-right: 2.5rem;">
 
@@ -184,9 +184,9 @@
                     <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
                         <i class="fas fa-times me-2"></i>Batal
                     </button>
-                    <a href="{{ url('/perpustakaan') }}" class="btn btn-outline-warning rounded-pill px-4">
+                    <button type="button" class="btn btn-outline-warning rounded-pill px-4 clear-all-filters">
                         <i class="fas fa-refresh me-2"></i>Reset
-                    </a>
+                    </button>
                     <button type="submit" form="filter-form" class="btn btn-primary rounded-pill px-4">
                         <i class="fas fa-check me-2"></i>Terapkan Filter
                     </button>
