@@ -829,4 +829,24 @@ input.form-control:focus {
     opacity: 0;
     pointer-events: none;
 }
+.btn-outline-primary.btn-sm.dropdown-toggle.rounded-pill:focus,
+.btn-outline-primary.btn-sm.dropdown-toggle.rounded-pill:active,
+.btn-outline-primary.btn-sm.dropdown-toggle.rounded-pill.show {
+    background-color: white !important;
+    color: #00bfa6 !important;
+    border-color: #00bfa6 !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 191, 166, 0.25) !important;
+}
+
+.btn-outline-primary.btn-sm.dropdown-toggle.rounded-pill:hover {
+    background-color: #00bfa6 !important;
+    color: white !important;
+    border-color: #00bfa6 !important;
+}
+
+.btn-outline-primary.btn-sm.dropdown-toggle.rounded-pill.show:hover {
+    background-color: white !important;
+    color: #00bfa6 !important;
+    border-color: #00bfa6 !important;
+}
 </style>
