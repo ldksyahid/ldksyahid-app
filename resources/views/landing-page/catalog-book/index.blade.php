@@ -13,93 +13,183 @@
 </div>
 
 <div class="container-xxl py-5">
-    <!-- Search Section -->
+    <!-- Search Section with Filter Button -->
     <div class="row mb-5 justify-content-center wow fadeInUp" data-wow-delay="0.2s">
-        <div class="col-lg-8">
-            <form action="{{ url('/perpustakaan') }}" method="GET" id="search-form">
-                <div class="d-flex shadow rounded-pill overflow-hidden position-relative" style="background: white;">
-                    <input type="text" name="search"
-                        id="search-input"
-                        class="form-control border-0 ps-4 py-2 rounded-0"
-                        placeholder="Cari buku berdasarkan judul, penulis, penerbit, atau tahun..."
-                        value="{{ request('search') }}"
-                        style="flex: 1 1 auto; box-shadow: none; padding-right: 2.5rem;">
+        <div class="col-lg-10">
+            <div class="d-flex align-items-center gap-3">
+                <!-- Search Form -->
+                <form action="{{ url('/perpustakaan') }}" method="GET" id="search-form" class="flex-grow-1">
+                    <div class="d-flex shadow rounded-pill overflow-hidden position-relative" style="background: white;">
+                        <input type="text" name="search"
+                            id="search-input"
+                            class="form-control border-0 ps-4 py-2 rounded-0"
+                            placeholder="Cari buku berdasarkan judul, penulis, penerbit, atau tahun..."
+                            value="{{ request('search') }}"
+                            style="flex: 1 1 auto; box-shadow: none; padding-right: 2.5rem;">
 
-                    <span id="clear-search"
-                        class="position-absolute top-50 translate-middle-y"
-                        style="right: 120px; cursor: pointer; z-index: 10; display: {{ request('search') ? 'block' : 'none' }};">
-                        <span style="font-size: 1.5rem; color: #999;">&times;</span>
-                    </span>
+                        <span id="clear-search"
+                            class="position-absolute top-50 translate-middle-y"
+                            style="right: 120px; cursor: pointer; z-index: 10; display: {{ request('search') ? 'block' : 'none' }};">
+                            <span style="font-size: 1.5rem; color: #999;">&times;</span>
+                        </span>
 
-                    <button type="submit"
-                            class="btn search-btn d-flex align-items-center justify-content-center rounded-0 px-4"
-                            style="background-color: #00bfa6; color: white; z-index: 1;">
-                        <i class="fas fa-search me-2"></i> Cari
-                    </button>
-                </div>
-            </form>
+                        <button type="submit"
+                                class="btn search-btn d-flex align-items-center justify-content-center rounded-0 px-4"
+                                style="background-color: #00bfa6; color: white; z-index: 1;">
+                            <i class="fas fa-search me-2"></i> Cari
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Filter Button -->
+                <button type="button" class="btn btn-outline-primary rounded-pill d-flex align-items-center gap-2"
+                        data-bs-toggle="modal" data-bs-target="#filterModal"
+                        style="min-width: 120px; border-color: #00bfa6; color: #00bfa6;">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Filter</span>
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Filter Section -->
-    <div class="row mb-4 wow fadeInUp" data-wow-delay="0.3s">
-        <div class="col-12">
-            <div class="card p-3 shadow-sm border-0 rounded-4">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label for="category" class="form-label fw-semibold text-primary">Kategori</label>
-                        <select class="form-select rounded-pill" id="category" name="category[]" multiple>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->bookCategoryID }}"
-                                    {{ in_array($category->bookCategoryID, (array)request('category')) ? 'selected' : '' }}>
-                                    {{ $category->bookCategoryName }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="author" class="form-label fw-semibold text-primary">Penulis</label>
-                        <select class="form-select rounded-pill" id="author" name="author[]" multiple>
-                            @foreach($authors as $author)
-                                <option value="{{ $author }}"
-                                    {{ in_array($author, (array)request('author')) ? 'selected' : '' }}>
-                                    {{ $author }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="publisher" class="form-label fw-semibold text-primary">Penerbit</label>
-                        <select class="form-select rounded-pill" id="publisher" name="publisher[]" multiple>
-                            @foreach($publishers as $publisher)
-                                <option value="{{ $publisher }}"
-                                    {{ in_array($publisher, (array)request('publisher')) ? 'selected' : '' }}>
-                                    {{ $publisher }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="year" class="form-label fw-semibold text-primary">Tahun</label>
-                        <select class="form-select rounded-pill" id="year" name="year[]" multiple>
-                            @foreach($years as $year)
-                                <option value="{{ $year }}"
-                                    {{ in_array($year, (array)request('year')) ? 'selected' : '' }}>
-                                    {{ $year }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <div class="d-flex gap-2 w-100">
-                            <button type="submit" form="search-form" class="btn btn-primary rounded-pill flex-fill">
-                                <i class="fas fa-filter me-1"></i> Terapkan
-                            </button>
-                            <a href="{{ url('/perpustakaan') }}" class="btn btn-outline-secondary rounded-pill">
-                                <i class="fas fa-refresh me-1"></i>
-                            </a>
+    <!-- Filter Modal -->
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="border-radius: 20px; border: none;">
+                <!-- Modal Header -->
+                <div class="modal-header" style="border-bottom: 1px solid #e9ecef; border-radius: 20px 20px 0 0; padding: 1.5rem;">
+                    <h5 class="modal-title fw-bold text-primary" id="filterModalLabel">
+                        <i class="fas fa-sliders-h me-2"></i>Filter Buku
+                    </h5>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body p-4">
+                    <form action="{{ url('/perpustakaan') }}" method="GET" id="filter-form">
+                        <div class="row g-4">
+                            <!-- Kategori -->
+                            <div class="col-md-6">
+                                <label for="category" class="form-label fw-semibold text-primary mb-3">
+                                    <i class="fas fa-tag me-2"></i>Kategori
+                                </label>
+                                <select class="form-select rounded-pill" id="category" name="category[]" multiple style="height: auto;">
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->bookCategoryID }}"
+                                            {{ in_array($category->bookCategoryID, (array)request('category')) ? 'selected' : '' }}>
+                                            {{ $category->bookCategoryName }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Penulis -->
+                            <div class="col-md-6">
+                                <label for="author" class="form-label fw-semibold text-primary mb-3">
+                                    <i class="fas fa-user-edit me-2"></i>Penulis
+                                </label>
+                                <select class="form-select rounded-pill" id="author" name="author[]" multiple style="height: auto;">
+                                    @foreach($authors as $author)
+                                        <option value="{{ $author }}"
+                                            {{ in_array($author, (array)request('author')) ? 'selected' : '' }}>
+                                            {{ $author }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Penerbit -->
+                            <div class="col-md-6">
+                                <label for="publisher" class="form-label fw-semibold text-primary mb-3">
+                                    <i class="fas fa-building me-2"></i>Penerbit
+                                </label>
+                                <select class="form-select rounded-pill" id="publisher" name="publisher[]" multiple style="height: auto;">
+                                    @foreach($publishers as $publisher)
+                                        <option value="{{ $publisher }}"
+                                            {{ in_array($publisher, (array)request('publisher')) ? 'selected' : '' }}>
+                                            {{ $publisher }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Tahun -->
+                            <div class="col-md-6">
+                                <label for="year" class="form-label fw-semibold text-primary mb-3">
+                                    <i class="fas fa-calendar-alt me-2"></i>Tahun
+                                </label>
+                                <select class="form-select rounded-pill" id="year" name="year[]" multiple style="height: auto;">
+                                    @foreach($years as $year)
+                                        <option value="{{ $year }}"
+                                            {{ in_array($year, (array)request('year')) ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
+
+                        <!-- Active Filters Badges -->
+                        @if(request('category') || request('author') || request('publisher') || request('year'))
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h6 class="fw-semibold text-primary mb-3">Filter Aktif:</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @if(request('category'))
+                                        @php
+                                            $selectedCategories = $categories->whereIn('bookCategoryID', (array)request('category'));
+                                        @endphp
+                                        @foreach($selectedCategories as $category)
+                                            <span class="badge bg-primary rounded-pill d-flex align-items-center gap-1">
+                                                <i class="fas fa-tag"></i>
+                                                {{ $category->bookCategoryName }}
+                                            </span>
+                                        @endforeach
+                                    @endif
+
+                                    @if(request('author'))
+                                        @foreach((array)request('author') as $author)
+                                            <span class="badge bg-success rounded-pill d-flex align-items-center gap-1">
+                                                <i class="fas fa-user-edit"></i>
+                                                {{ $author }}
+                                            </span>
+                                        @endforeach
+                                    @endif
+
+                                    @if(request('publisher'))
+                                        @foreach((array)request('publisher') as $publisher)
+                                            <span class="badge bg-info rounded-pill d-flex align-items-center gap-1">
+                                                <i class="fas fa-building"></i>
+                                                {{ $publisher }}
+                                            </span>
+                                        @endforeach
+                                    @endif
+
+                                    @if(request('year'))
+                                        @foreach((array)request('year') as $year)
+                                            <span class="badge bg-warning rounded-pill d-flex align-items-center gap-1">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                {{ $year }}
+                                            </span>
+                                        @endforeach
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                    </form>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer" style="border-top: 1px solid #e9ecef; border-radius: 0 0 20px 20px; padding: 1.5rem;">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Batal
+                    </button>
+                    <a href="{{ url('/perpustakaan') }}" class="btn btn-outline-warning rounded-pill px-4">
+                        <i class="fas fa-refresh me-2"></i>Reset
+                    </a>
+                    <button type="submit" form="filter-form" class="btn btn-primary rounded-pill px-4">
+                        <i class="fas fa-check me-2"></i>Terapkan Filter
+                    </button>
                 </div>
             </div>
         </div>
@@ -109,21 +199,47 @@
     <div class="row mb-3 wow fadeInUp" data-wow-delay="0.4s">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-                <p class="text-muted mb-0">
-                    @if($books->total() > 0)
-                        @if(request('search'))
-                            Hasil pencarian untuk "{{ request('search') }}"
+                <div>
+                    <p class="text-muted mb-0">
+                        @if($books->total() > 0)
+                            @if(request('search'))
+                                Hasil pencarian untuk "{{ request('search') }}"
+                            @else
+                                Semua buku perpustakaan
+                            @endif
                         @else
-                            Semua buku perpustakaan
+                            @if(request('search'))
+                                Tidak ditemukan buku dengan kata kunci "{{ request('search') }}"
+                            @else
+                                Tidak ada buku yang tersedia
+                            @endif
                         @endif
-                    @else
-                        @if(request('search'))
-                            Tidak ditemukan buku dengan kata kunci "{{ request('search') }}"
-                        @else
-                            Tidak ada buku yang tersedia
-                        @endif
+                    </p>
+
+                    <!-- Active Filters Summary -->
+                    @if(request('category') || request('author') || request('publisher') || request('year'))
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <i class="fas fa-sliders-h me-1"></i>
+                            Filter aktif:
+                            @if(request('category'))
+                                {{ count((array)request('category')) }} kategori
+                            @endif
+                            @if(request('author'))
+                                {{ request('category') ? ', ' : '' }}{{ count((array)request('author')) }} penulis
+                            @endif
+                            @if(request('publisher'))
+                                {{ request('category') || request('author') ? ', ' : '' }}{{ count((array)request('publisher')) }} penerbit
+                            @endif
+                            @if(request('year'))
+                                {{ request('category') || request('author') || request('publisher') ? ', ' : '' }}{{ count((array)request('year')) }} tahun
+                            @endif
+                        </small>
+                    </div>
                     @endif
-                </p>
+                </div>
+
+                <!-- Sort Dropdown -->
                 <div class="dropdown">
                     <button class="btn btn-outline-primary btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-sort me-1"></i> Urutkan
