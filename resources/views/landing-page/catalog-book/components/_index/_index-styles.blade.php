@@ -573,16 +573,43 @@ input.form-control:focus {
 }
 
 /* Filter Badge */
+/* Circle Badge Styles */
 .filter-badge {
-    font-size: 0.7rem;
-    padding: 0.25rem 0.4rem;
-    font-weight: 600;
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    background: white !important;
+    color: #00bfa6 !important;
+    border: 1px solid #00bfa6 !important;
+    margin-left: 0.5rem !important;
 }
 
+/* Untuk button primary state */
 .btn-primary .filter-badge {
-    background-color: white !important;
+    background: white !important;
     color: #00bfa6 !important;
-    font-weight: 600;
+    border: 1px solid white !important;
+}
+
+/* Untuk button outline state */
+.btn-outline-primary .filter-badge {
+    background: #00bfa6 !important;
+    color: white !important;
+    border: 1px solid #00bfa6 !important;
+}
+
+/* Hover effects */
+.btn-outline-primary:hover .filter-badge {
+    background: white !important;
+    color: #00bfa6 !important;
+    border: 1px solid white !important;
 }
 
 /* Active Filter Badges */
@@ -618,6 +645,12 @@ input.form-control:focus {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .filter-badge {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 0.65rem !important;
+        margin-left: 0.25rem !important;
+    }
     #filterModal .modal-dialog {
         margin: 1rem;
     }

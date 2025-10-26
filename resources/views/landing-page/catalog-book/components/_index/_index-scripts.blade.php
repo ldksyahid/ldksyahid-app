@@ -177,9 +177,8 @@
                     'color': 'white'
                 });
 
-                // Add badge to button
                 if (!filterButton.find('.filter-badge').length) {
-                    filterText.after('<span class="filter-badge badge bg-white text-primary ms-1">' + activeCount + '</span>');
+                    filterText.after('<span class="filter-badge badge rounded-circle bg-white text-primary ms-1">' + activeCount + '</span>');
                 } else {
                     filterButton.find('.filter-badge').text(activeCount);
                 }
