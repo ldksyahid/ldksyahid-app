@@ -138,44 +138,6 @@
                     <div class="row g-0 h-100">
                         <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                             <div class="wrp-cover-book-new h-100">
-                                <!-- INI TITLE BOOK MOBILENYA YA A -->
-                                <div class="title-book-mb d-lg-none d-md-none d-sm-flex d-flex">
-                                    <div class="title-of-new">
-                                       <div class="d-flex justify-content-between align-items-start">
-                                            <h2>{{ $book->titleBook }}</h2>
-                                            <!-- Crown Icon -->
-                                            @if($book->authorTypeID == 1 || $book->authorTypeID == 2)
-                                                <div class="crown-icon {{ $book->authorTypeID == 1 ? 'crown-premium' : 'crown-gold' }}">
-                                                    <i class="fas fa-crown"></i>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="date-publish-book">
-                                            <div class="icon-date-publish">
-                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"></path>
-                                                </svg>
-                                            </div>
-                                            <div class="text-publish-date">
-                                                <p>{{ \Carbon\Carbon::parse($book->createdDate)->format('d M Y') }}</p>
-                                            </div>
-                                            <div class="favorite-section ms-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="icon-date-publish">
-                                                        <i class="fas fa-heart"></i>
-                                                    </div>
-                                                    <span class="favorite-count">{{ $book->favoriteCount ?? 0 }}</span>
-                                                </div>
-                                            </div>
-                                            @if($book->getBookCategory)
-                                                <div class="category-badge">
-                                                    <span class="badge bg-primary rounded-pill">{{ $book->getBookCategory->bookCategoryName }}</span>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- INI TITLE BOOK MOBILENYA YA A -->
                                 @if($book->coverImageUrl())
                                     <a href="{{ route('catalog.books.show', $book->slug) }}">
                                         <div class="centered-cover-frame h-100">
@@ -193,7 +155,7 @@
                         </div>
                         <div class="col-lg-8 col-md-8 col-sm-12 col-12">
                             <div class="right-new-catalog h-100">
-                                <div class="title-of-new d-none d-lg-block d-md-block">
+                                <div class="title-of-new">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <h2 class="book-title-truncate">{{ $book->titleBook }}</h2>
                                         <!-- Crown Icon -->
