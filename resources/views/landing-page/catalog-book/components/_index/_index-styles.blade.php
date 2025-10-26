@@ -821,5 +821,79 @@ input.form-control:focus {
     font-size: 0.8rem !important;
     font-weight: 600;
 }
+/* Dropdown item active state - FIXED */
+.dropdown-menu .dropdown-item.active {
+    background-color: #00bfa6 !important;
+    color: white !important;
+    border: none;
+}
+
+.dropdown-menu .dropdown-item.active i {
+    color: white !important;
+}
+
+.dropdown-menu .dropdown-item.active:hover {
+    background-color: #009b89 !important;
+    color: white !important;
+}
+
+.dropdown-menu .dropdown-item.active:hover i {
+    color: white !important;
+}
+
+/* Tambahkan jarak antara button dan dropdown */
+.dropdown-menu {
+    margin-top: 8px !important;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+}
+
+/* Pastikan dropdown item memiliki padding yang cukup */
+.dropdown-menu .dropdown-item {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    margin: 2px 0;
+    transition: all 0.2s ease;
+}
+
+/* Hover state untuk semua dropdown items */
+.dropdown-menu .dropdown-item:not(.active):hover {
+    background-color: #f8f9fa;
+    color: #00bfa6;
+}
+
+/* Untuk button dropdown utama */
+.btn-outline-primary.dropdown-toggle {
+    border-color: #00bfa6;
+    color: #00bfa6;
+    font-weight: 500;
+}
+
+.btn-outline-primary.dropdown-toggle:hover,
+.btn-outline-primary.dropdown-toggle:focus {
+    background-color: #00bfa6;
+    border-color: #00bfa6;
+    color: white;
+    box-shadow: 0 0 0 0.2rem rgba(0, 191, 166, 0.25);
+}
+
+/* Show dropdown animation */
+.dropdown-menu.show {
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 </style>
