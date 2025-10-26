@@ -95,32 +95,6 @@ input.form-control:focus {
     border-top-left-radius: 14px;
     border-bottom-left-radius: 14px;
 }
-
-@media (max-width: 576px) {
-    .custom-pagination {
-        gap: 0.25rem;
-    }
-
-    .custom-pagination .page-link {
-        font-size: 0.75rem;
-        padding: 4px 10px;
-        min-width: 28px;
-    }
-}
-
-@media (max-width: 400px) {
-    .custom-pagination {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 0.5rem;
-    }
-
-    .custom-pagination .page-link {
-        font-size: 0.7rem;
-        padding: 4px 8px;
-    }
-}
-
 /* Book Card Layout */
 .item-new-book {
     background: #fff;
@@ -643,112 +617,6 @@ input.form-control:focus {
     100% { transform: rotate(360deg); }
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .filter-badge {
-        width: 18px !important;
-        height: 18px !important;
-        font-size: 0.65rem !important;
-        margin-left: 0.25rem !important;
-    }
-    #filterModal .modal-dialog {
-        margin: 1rem;
-    }
-
-    #filterModal .modal-content {
-        border-radius: 15px;
-    }
-
-    .btn-outline-primary.rounded-pill {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-    }
-
-    .btn-outline-primary.rounded-pill span {
-        display: none;
-    }
-
-    .btn-outline-primary.rounded-pill i {
-        margin-right: 0;
-    }
-
-    #filterModal .modal-title {
-        font-size: 1.1rem;
-    }
-
-    #filterModal .select2-dropdown {
-        margin-top: 6px !important;
-        padding: 6px 0 !important;
-    }
-
-    #filterModal .select2-results__option {
-        padding: 0.6rem 0.8rem !important;
-        margin: 2px 6px !important;
-    }
-}
-
-@media (max-width: 576px) {
-    .copy-success {
-        bottom: 20px;
-        left: 20px;
-        right: 20px;
-        transform: none;
-        min-width: auto;
-        text-align: center;
-    }
-
-    .crown-icon {
-        font-size: 1rem;
-    }
-
-    .category-badge .badge {
-        font-size: 0.6rem;
-        padding: 0.25rem 0.5rem;
-    }
-
-    .date-publish-book {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-
-    .favorite-section {
-        margin-left: 0 !important;
-    }
-
-    .item-new-book {
-        margin-bottom: 1rem;
-    }
-
-    .title-of-new h2 {
-        font-size: 1rem;
-    }
-
-    .centered-cover-frame {
-        height: 140px;
-    }
-
-    .desc-of-new ul li {
-        font-size: 0.8rem;
-    }
-
-    .desc-of-new ul li p span.text-truncate {
-        max-width: 120px;
-    }
-
-    .tab-content-new {
-        min-height: 120px;
-    }
-
-    .container-xxl.py-5 {
-        padding-top: 1.5rem !important;
-        padding-bottom: 1.5rem !important;
-    }
-
-    .row.mb-5.justify-content-center {
-        margin-bottom: 1.5rem !important;
-    }
-}
-
 /* Ensure equal height for cards */
 .row.g-4 {
     align-items: stretch;
@@ -761,21 +629,6 @@ input.form-control:focus {
 
 .small-tab-text {
     font-size: 0.8rem !important;
-}
-
-/* Fix for mobile layout */
-@media (max-width: 768px) {
-    .item-new-book .row {
-        flex-direction: column;
-    }
-
-    .wrp-cover-book-new {
-        padding-bottom: 0.5rem;
-    }
-
-    .right-new-catalog {
-        padding-top: 0.5rem;
-    }
 }
 
 /* PERPUSTAKAAN SPECIFIC DROPDOWN STYLES - ONLY FOR THIS PAGE */
@@ -921,12 +774,5 @@ input.form-control:focus {
     color: white;
     outline: none;
     background-color: #1ee8ce;
-}
-@media (min-width: 992px) {
-    .sticky-filter {
-        position: sticky;
-        top: 90px;
-        z-index: 900;
-    }
 }
 </style>
