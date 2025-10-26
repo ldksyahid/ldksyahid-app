@@ -244,7 +244,7 @@
                     <button class="btn btn-outline-primary btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-sort me-1"></i> Urutkan
                     </button>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu my-2">
                         <li>
                             <a class="dropdown-item {{ request('sort') == 'newest' || !request('sort') ? 'active' : '' }}"
                             href="{{ request()->fullUrlWithQuery(['sort' => 'newest']) }}">
@@ -401,7 +401,7 @@
                                                 <button class="btn btn-outline-secondary btn-share w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="fas fa-share-alt"></i>
                                                 </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                <ul class="dropdown-menu dropdown-menu-end my-2">
                                                     <li>
                                                         <a class="dropdown-item copy-link" href="#" data-link="{{ route('catalog.books.show', $book->slug) }}">
                                                             <i class="fas fa-copy me-2"></i> Copy Link
