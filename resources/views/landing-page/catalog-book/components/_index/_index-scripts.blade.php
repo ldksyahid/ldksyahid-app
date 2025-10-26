@@ -448,11 +448,7 @@
         e.preventDefault();
         const url = $(this).attr('href');
 
-        $('html, body').animate({
-            scrollTop: $('.container-xxl.py-5').offset().top - 100
-        }, 500, function() {
-            window.location.href = url;
-        });
+        window.location.href = url;
     });
 
     // Loading state untuk filter form
