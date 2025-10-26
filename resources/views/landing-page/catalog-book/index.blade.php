@@ -67,10 +67,10 @@
                 <div class="modal-body p-4">
                     <form action="{{ url('/perpustakaan') }}" method="GET" id="filter-form">
                         <div class="row g-4">
-                            <!-- Kategori -->
+                            <!-- Kategori Buku -->
                             <div class="col-md-6">
                                 <label for="category" class="form-label fw-semibold text-primary mb-3">
-                                    <i class="fas fa-tag me-2"></i>Kategori
+                                    <i class="fas fa-tag me-2"></i>Kategori Buku
                                 </label>
                                 <select class="form-select rounded-pill" id="category" name="category[]" multiple style="height: auto;">
                                     @foreach($categories as $category)
@@ -126,10 +126,55 @@
                                     @endforeach
                                 </select>
                             </div>
+
+                            <!-- Bahasa -->
+                            <div class="col-md-6">
+                                <label for="language" class="form-label fw-semibold text-primary mb-3">
+                                    <i class="fas fa-language me-2"></i>Bahasa
+                                </label>
+                                <select class="form-select rounded-pill" id="language" name="language[]" multiple style="height: auto;">
+                                    @foreach($languages as $language)
+                                        <option value="{{ $language->languageID }}"
+                                            {{ in_array($language->languageID, (array)request('language')) ? 'selected' : '' }}>
+                                            {{ $language->languageName }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Kategori Penulis -->
+                            <div class="col-md-6">
+                                <label for="author_type" class="form-label fw-semibold text-primary mb-3">
+                                    <i class="fas fa-users me-2"></i>Kategori Penulis
+                                </label>
+                                <select class="form-select rounded-pill" id="author_type" name="author_type[]" multiple style="height: auto;">
+                                    @foreach($authorTypes as $authorType)
+                                        <option value="{{ $authorType->authorTypeID }}"
+                                            {{ in_array($authorType->authorTypeID, (array)request('author_type')) ? 'selected' : '' }}>
+                                            {{ $authorType->authorTypeName }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Ketersediaan Buku -->
+                            <div class="col-md-6">
+                                <label for="availability" class="form-label fw-semibold text-primary mb-3">
+                                    <i class="fas fa-bookmark me-2"></i>Ketersediaan Buku
+                                </label>
+                                <select class="form-select rounded-pill" id="availability" name="availability[]" multiple style="height: auto;">
+                                    @foreach($availabilityTypes as $availabilityType)
+                                        <option value="{{ $availabilityType->availabilityTypeID }}"
+                                            {{ in_array($availabilityType->availabilityTypeID, (array)request('availability')) ? 'selected' : '' }}>
+                                            {{ $availabilityType->availabilityTypeName }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
                         <!-- Active Filters Badges -->
-                        @if(request('category') || request('author') || request('publisher') || request('year'))
+                        @if(request('category') || request('author') || request('publisher') || request('year') || request('language') || request('author_type') || request('availability'))
                         <div class="row mt-4">
                             <div class="col-12">
                                 <h6 class="fw-semibold text-primary mb-3">Filter Aktif:</h6>
@@ -169,6 +214,42 @@
                                             <span class="badge bg-warning rounded-pill d-flex align-items-center gap-1">
                                                 <i class="fas fa-calendar-alt"></i>
                                                 {{ $year }}
+                                            </span>
+                                        @endforeach
+                                    @endif
+
+                                    @if(request('language'))
+                                        @php
+                                            $selectedLanguages = $languages->whereIn('languageID', (array)request('language'));
+                                        @endphp
+                                        @foreach($selectedLanguages as $language)
+                                            <span class="badge bg-secondary rounded-pill d-flex align-items-center gap-1">
+                                                <i class="fas fa-language"></i>
+                                                {{ $language->languageName }}
+                                            </span>
+                                        @endforeach
+                                    @endif
+
+                                    @if(request('author_type'))
+                                        @php
+                                            $selectedAuthorTypes = $authorTypes->whereIn('authorTypeID', (array)request('author_type'));
+                                        @endphp
+                                        @foreach($selectedAuthorTypes as $authorType)
+                                            <span class="badge bg-dark rounded-pill d-flex align-items-center gap-1">
+                                                <i class="fas fa-users"></i>
+                                                {{ $authorType->authorTypeName }}
+                                            </span>
+                                        @endforeach
+                                    @endif
+
+                                    @if(request('availability'))
+                                        @php
+                                            $selectedAvailabilityTypes = $availabilityTypes->whereIn('availabilityTypeID', (array)request('availability'));
+                                        @endphp
+                                        @foreach($selectedAvailabilityTypes as $availabilityType)
+                                            <span class="badge bg-danger rounded-pill d-flex align-items-center gap-1">
+                                                <i class="fas fa-bookmark"></i>
+                                                {{ $availabilityType->availabilityTypeName }}
                                             </span>
                                         @endforeach
                                     @endif
@@ -217,29 +298,28 @@
                     </p>
 
                     <!-- Active Filters Summary -->
-                    @if(request('category') || request('author') || request('publisher') || request('year'))
+                    @if(request('category') || request('author') || request('publisher') || request('year') || request('language') || request('author_type') || request('availability'))
                     <div class="mt-2">
                         <small class="text-muted">
                             <i class="fas fa-sliders-h me-1"></i>
                             Filter aktif:
-                            @if(request('category'))
-                                {{ count((array)request('category')) }} kategori
-                            @endif
-                            @if(request('author'))
-                                {{ request('category') ? ', ' : '' }}{{ count((array)request('author')) }} penulis
-                            @endif
-                            @if(request('publisher'))
-                                {{ request('category') || request('author') ? ', ' : '' }}{{ count((array)request('publisher')) }} penerbit
-                            @endif
-                            @if(request('year'))
-                                {{ request('category') || request('author') || request('publisher') ? ', ' : '' }}{{ count((array)request('year')) }} tahun
-                            @endif
+                            @php
+                                $activeFilters = [];
+                                if (request('category')) $activeFilters[] = count((array)request('category')) . ' kategori buku';
+                                if (request('author')) $activeFilters[] = count((array)request('author')) . ' penulis';
+                                if (request('publisher')) $activeFilters[] = count((array)request('publisher')) . ' penerbit';
+                                if (request('year')) $activeFilters[] = count((array)request('year')) . ' tahun';
+                                if (request('language')) $activeFilters[] = count((array)request('language')) . ' bahasa';
+                                if (request('author_type')) $activeFilters[] = count((array)request('author_type')) . ' kategori penulis';
+                                if (request('availability')) $activeFilters[] = count((array)request('availability')) . ' ketersediaan';
+                            @endphp
+                            {{ implode(', ', $activeFilters) }}
                         </small>
                     </div>
                     @endif
                 </div>
 
-                <!-- Sort Dropdown -->
+                <!-- Sort Dropdown (tetap sama) -->
                 <div class="dropdown">
                     <button class="btn btn-outline-primary btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-sort me-1"></i> Urutkan
