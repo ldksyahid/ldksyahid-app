@@ -321,6 +321,55 @@
 
         // Inisialisasi clear button saat pertama kali load
         updateClearButton();
+
+        // Fix untuk dropdown di mobile
+        function fixMobileDropdowns() {
+            if ($(window).width() <= 576) {
+                // Reposition dropdown menus untuk mobile
+                $('.dropdown-menu').each(function() {
+                    const $dropdown = $(this);
+                    const $toggle = $dropdown.prev('.dropdown-toggle');
+
+                    if ($toggle.length) {
+                        $toggle.off('click.mobile-fix').on('click.mobile-fix', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            // Close other open dropdowns
+                            $('.dropdown-menu').not($dropdown).removeClass('show');
+
+                            // Toggle current dropdown
+                            $dropdown.toggleClass('show');
+
+                            // Position dropdown
+                            if ($dropdown.hasClass('show')) {
+                                const rect = $toggle[0].getBoundingClientRect();
+                                $dropdown.css({
+                                    'position': 'fixed',
+                                    'top': '50%',
+                                    'left': '50%',
+                                    'transform': 'translate(-50%, -50%)',
+                                    'width': '90%',
+                                    'max-width': '300px',
+                                    'z-index': '1060'
+                                });
+                            }
+                        });
+                    }
+                });
+
+                // Close dropdowns when clicking outside
+                $(document).on('click touchstart', function(e) {
+                    if (!$(e.target).closest('.dropdown').length) {
+                        $('.dropdown-menu').removeClass('show');
+                    }
+                });
+            }
+        }
+
+        // Panggil fungsi fix saat load dan resize
+        fixMobileDropdowns();
+        $(window).on('resize', fixMobileDropdowns);
     });
 
     // Share Functionality

@@ -16,9 +16,9 @@
     <!-- Search Section with Filter Button -->
     <div class="row mb-5 justify-content-center wow fadeInUp" data-wow-delay="0.2s">
         <div class="col-lg-10">
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3 flex-column flex-md-row">
                 <!-- Search Form -->
-                <form action="{{ url('/perpustakaan') }}" method="GET" id="search-form" class="flex-grow-1">
+                <form action="{{ url('/perpustakaan') }}" method="GET" id="search-form" class="flex-grow-1 w-100">
                     <div class="d-flex shadow rounded-pill overflow-hidden position-relative" style="background: white;">
                         <input type="text" name="search"
                             id="search-input"
@@ -36,13 +36,13 @@
                         <button type="submit"
                                 class="btn search-btn d-flex align-items-center justify-content-center rounded-0 px-4"
                                 style="background-color: #00bfa6; color: white; z-index: 1;">
-                            <i class="fas fa-search me-2"></i> Cari
+                            <i class="fas fa-search me-2"></i> <span class="d-none d-sm-inline">Cari</span>
                         </button>
                     </div>
                 </form>
 
                 <!-- Filter Button -->
-                <button type="button" class="btn btn-outline-primary rounded-pill d-flex align-items-center gap-2"
+                <button type="button" class="btn btn-outline-primary rounded-pill d-flex align-items-center gap-2 mt-3 mt-md-0"
                         data-bs-toggle="modal" data-bs-target="#filterModal"
                         style="min-width: 120px; border-color: #00bfa6; color: #00bfa6;">
                     <i class="fas fa-sliders-h"></i>
@@ -279,8 +279,8 @@
     <!-- Results Info -->
     <div class="row mb-3 wow fadeInUp" data-wow-delay="0.4s">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="col-6">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                <div class="col-12 col-md-6 mb-3 mb-md-0">
                     <p class="text-muted mb-0">
                         @if($books->total() > 0)
                             @if(request('search'))
@@ -319,12 +319,12 @@
                     @endif
                 </div>
 
-                <!-- Sort Dropdown (tetap sama) -->
-                <div class="text-end dropdown col-6">
-                    <button class="btn btn-outline-primary btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
+                <!-- Sort Dropdown - FIXED WIDTH -->
+                <div class="text-end dropdown col-12 col-md-auto">
+                    <button class="btn btn-outline-primary btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 140px;">
                         <i class="fas fa-sort me-1"></i> Urutkan
                     </button>
-                    <ul class="dropdown-menu my-2">
+                    <ul class="dropdown-menu my-2" style="z-index: 1060; min-width: 200px;">
                         <li>
                             <a class="dropdown-item {{ request('sort') == 'newest' || !request('sort') ? 'active' : '' }}"
                             href="{{ request()->fullUrlWithQuery(['sort' => 'newest']) }}">
@@ -360,13 +360,13 @@
                                 @if($book->coverImageUrl())
                                     <a href="{{ route('catalog.books.show', $book->slug) }}">
                                         <div class="centered-cover-frame h-100">
-                                            <img src="{{ $book->coverImageUrl() }}" alt="{{ $book->titleBook }}">
+                                            <img src="{{ $book->coverImageUrl() }}" alt="{{ $book->titleBook }}" class="img-fluid">
                                         </div>
                                     </a>
                                 @else
                                     <a href="{{ route('catalog.books.show', $book->slug) }}">
                                         <div class="centered-cover-frame h-100">
-                                            <img src="https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd" alt="{{ $book->titleBook }}">
+                                            <img src="https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd" alt="{{ $book->titleBook }}" class="img-fluid">
                                         </div>
                                     </a>
                                 @endif
@@ -481,7 +481,7 @@
                                                 <button class="btn btn-outline-secondary btn-share w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="fas fa-share-alt"></i>
                                                 </button>
-                                                <ul class="dropdown-menu dropdown-menu-end my-2">
+                                                <ul class="dropdown-menu dropdown-menu-end my-2" style="z-index: 1060;">
                                                     <li>
                                                         <a class="dropdown-item copy-link" href="#" data-link="{{ route('catalog.books.show', $book->slug) }}">
                                                             <i class="fas fa-copy me-2"></i> Copy Link
@@ -540,7 +540,7 @@
                 @endphp
 
                 <nav>
-                    <ul class="pagination custom-pagination justify-content-center">
+                    <ul class="pagination custom-pagination justify-content-center flex-wrap">
                         <li class="page-item {{ $currentPage <= 1 ? 'disabled' : '' }}">
                             <a class="page-link" href="{{ $books->url(1) }}" aria-label="First">&laquo;</a>
                         </li>

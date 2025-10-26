@@ -95,6 +95,7 @@ input.form-control:focus {
     border-top-left-radius: 14px;
     border-bottom-left-radius: 14px;
 }
+
 /* Book Card Layout */
 .item-new-book {
     background: #fff;
@@ -172,6 +173,7 @@ input.form-control:focus {
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
 }
 
 .icon-date-publish svg {
@@ -638,6 +640,7 @@ input.form-control:focus {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
     padding: 0.5rem !important;
     margin-top: 8px !important;
+    z-index: 1060 !important;
 }
 
 .container-xxl.py-5 .dropdown-item {
@@ -774,5 +777,225 @@ input.form-control:focus {
     color: white;
     outline: none;
     background-color: #1ee8ce;
+}
+
+/* MOBILE RESPONSIVE STYLES */
+@media (max-width: 768px) {
+    /* Search Section */
+    .d-flex.align-items-center.gap-3 {
+        gap: 1rem !important;
+    }
+
+    /* Search Form */
+    #search-form {
+        width: 100%;
+    }
+
+    .d-flex.shadow.rounded-pill.overflow-hidden {
+        flex-direction: column;
+        border-radius: 12px !important;
+        overflow: visible;
+    }
+
+    #search-input {
+        border-radius: 12px 12px 0 0 !important;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .search-btn {
+        border-radius: 0 0 12px 12px !important;
+        padding: 0.75rem;
+    }
+
+    #clear-search {
+        right: 20px !important;
+        top: 18px !important;
+    }
+
+    /* Filter Button */
+    .btn-outline-primary.rounded-pill {
+        width: 100%;
+        justify-content: center;
+        padding: 0.75rem;
+    }
+
+    /* Book Cards */
+    .item-new-book {
+        margin-bottom: 1rem;
+    }
+
+    .wrp-cover-book-new {
+        padding: 1rem;
+    }
+
+    .centered-cover-frame {
+        height: 200px;
+    }
+
+    .right-new-catalog {
+        padding: 1rem;
+    }
+
+    .title-of-new h2 {
+        font-size: 1.1rem;
+    }
+
+    .book-title-truncate {
+        height: 2.8rem;
+    }
+
+    .date-publish-book {
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+
+    .category-badge {
+        margin-left: 0;
+        padding-left: 0;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    /* Tabs */
+    .nav-tabs .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    .small-tab-text {
+        font-size: 0.7rem !important;
+    }
+
+    /* Action Buttons */
+    .act-new-book .row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .act-new-book .col-8,
+    .act-new-book .col-4 {
+        width: 100% !important;
+    }
+
+    /* Modal */
+    #filterModal .modal-dialog {
+        margin: 1rem;
+    }
+
+    #filterModal .modal-body {
+        padding: 1rem;
+    }
+
+    #filterModal .row.g-4 > div {
+        margin-bottom: 1rem;
+    }
+
+    /* Pagination */
+    .custom-pagination {
+        gap: 0.25rem;
+    }
+
+    .custom-pagination .page-link {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+    }
+
+    /* Results Info */
+    .d-flex.justify-content-between.align-items-center {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+
+    .text-end.dropdown {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .btn-outline-primary.btn-sm.dropdown-toggle.rounded-pill {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-xxl.py-5 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .centered-cover-frame {
+        height: 180px;
+    }
+
+    .title-of-new h2 {
+        font-size: 1rem;
+    }
+
+    .book-title-truncate {
+        height: 2.4rem;
+    }
+
+    .desc-of-new ul li p {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .desc-of-new ul li p span.text-truncate {
+        max-width: 100%;
+    }
+
+    .synopsis-text {
+        -webkit-line-clamp: 6;
+        max-height: 9rem;
+    }
+
+    /* Dropdown menus */
+    .dropdown-menu {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 90% !important;
+        max-width: 300px !important;
+        z-index: 1060 !important;
+    }
+
+    .dropdown-menu.dropdown-menu-end {
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, -50%) !important;
+    }
+}
+
+/* Fix untuk dropdown di mobile */
+@media (max-width: 768px) {
+    .dropdown-menu {
+        z-index: 1060 !important;
+    }
+
+    /* Pastikan backdrop tidak menutupi dropdown */
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+
+    .select2-dropdown {
+        z-index: 1060 !important;
+    }
+}
+
+/* High z-index untuk dropdown yang penting */
+.dropdown-menu[style*="z-index: 1060"] {
+    z-index: 1060 !important;
+}
+
+/* Fix untuk dropdown share di card buku */
+.act-new-book .dropdown-menu {
+    z-index: 1060 !important;
+}
+
+/* Fix untuk dropdown sort */
+.text-end.dropdown .dropdown-menu {
+    z-index: 1060 !important;
 }
 </style>
