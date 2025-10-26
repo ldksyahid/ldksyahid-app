@@ -895,5 +895,23 @@ input.form-control:focus {
         transform: translateY(0);
     }
 }
+/* Target khusus dropdown urutkan */
+.d-flex.justify-content-between.align-items-center .dropdown .dropdown-menu {
+    margin-top: 0.5rem !important;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+    /* Fix positioning */
+    position: absolute !important;
+    inset: 0px auto auto 0px !important;
+    margin: 0px !important;
+    transform: translate(0px, 38px) !important;
+}
+
+/* Override Bootstrap default */
+.bs-dropdown .dropdown-menu {
+    transition: none !important;
+}
 
 </style>
