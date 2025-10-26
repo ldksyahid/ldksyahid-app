@@ -432,7 +432,7 @@
                 e.preventDefault();
                 const link = this.getAttribute('data-link');
                 const title = this.getAttribute('data-title');
-                const fullLink = window.location.origin + link;
+                const fullLink = link;
 
                 const message = `📚 *${title}* \n\nBaca buku ini di: ${fullLink}`;
                 const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
