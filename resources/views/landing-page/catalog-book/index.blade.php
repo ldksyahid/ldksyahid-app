@@ -129,9 +129,24 @@
                         <i class="fas fa-sort me-1"></i> Urutkan
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'newest']) }}">Terbaru</a></li>
-                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'popular']) }}">Terpopuler</a></li>
-                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'title']) }}">Judul A-Z</a></li>
+                        <li>
+                            <a class="dropdown-item {{ request('sort') == 'newest' || !request('sort') ? 'active' : '' }}"
+                            href="{{ request()->fullUrlWithQuery(['sort' => 'newest']) }}">
+                                <i class="fas fa-clock me-2"></i>Terbaru
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {{ request('sort') == 'popular' ? 'active' : '' }}"
+                            href="{{ request()->fullUrlWithQuery(['sort' => 'popular']) }}">
+                                <i class="fas fa-fire me-2"></i>Terpopuler
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {{ request('sort') == 'title' ? 'active' : '' }}"
+                            href="{{ request()->fullUrlWithQuery(['sort' => 'title']) }}">
+                                <i class="fas fa-sort-alpha-down me-2"></i>Judul A-Z
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

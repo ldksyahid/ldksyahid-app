@@ -195,8 +195,25 @@ class MsCatalogBook extends Model
     public static function searchIndexBooks(Request $request)
     {
         $query = self::with(['getBookCategory', 'getLanguage', 'getAuthorType', 'getAvailabilityType'])
-                    ->where('flagActive', true)
+                    ->where('flagActive', true);
+
+        $sort = $request->input('sort', 'newest');
+
+        switch ($sort) {
+            case 'newest':
+                $query->orderBy('createdDate', 'desc');
+                break;
+            case 'popular':
+                $query->orderBy('favoriteCount', 'desc')
                     ->orderBy('createdDate', 'desc');
+                break;
+            case 'title':
+                $query->orderBy('titleBook', 'asc');
+                break;
+            default:
+                $query->orderBy('createdDate', 'desc');
+                break;
+        }
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
