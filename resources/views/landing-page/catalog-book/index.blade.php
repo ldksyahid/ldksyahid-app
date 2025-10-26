@@ -280,7 +280,7 @@
     <div class="row mb-3 wow fadeInUp" data-wow-delay="0.4s">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-                <div>
+                <div class="col-6">
                     <p class="text-muted mb-0">
                         @if($books->total() > 0)
                             @if(request('search'))
@@ -320,7 +320,7 @@
                 </div>
 
                 <!-- Sort Dropdown (tetap sama) -->
-                <div class="dropdown">
+                <div class="text-end dropdown col-6">
                     <button class="btn btn-outline-primary btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-sort me-1"></i> Urutkan
                     </button>
