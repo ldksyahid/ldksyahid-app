@@ -111,9 +111,17 @@
             <div class="d-flex justify-content-between align-items-center">
                 <p class="text-muted mb-0">
                     @if($books->total() > 0)
-                        Menampilkan {{ $books->firstItem() }}–{{ $books->lastItem() }} dari {{ $books->total() }} buku
+                        @if(request('search'))
+                            Hasil pencarian untuk "{{ request('search') }}"
+                        @else
+                            Semua buku perpustakaan
+                        @endif
                     @else
-                        Tidak ada buku yang ditemukan
+                        @if(request('search'))
+                            Tidak ditemukan buku dengan kata kunci "{{ request('search') }}"
+                        @else
+                            Tidak ada buku yang tersedia
+                        @endif
                     @endif
                 </p>
                 <div class="dropdown">
