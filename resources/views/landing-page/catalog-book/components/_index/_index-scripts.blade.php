@@ -466,4 +466,52 @@
             submitButton.prop('disabled', false).html(originalText);
         }, 2000);
     });
+
+    // Mobile Share Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Copy Link for Mobile
+        document.querySelectorAll('.copy-link-mobile').forEach(button => {
+            button.addEventListener('click', function() {
+                const link = this.getAttribute('data-link');
+                copyToClipboard(link);
+                showCopySuccess();
+            });
+        });
+
+        // WhatsApp Share for Mobile
+        document.querySelectorAll('.share-wa-mobile').forEach(button => {
+            button.addEventListener('click', function() {
+                const link = this.getAttribute('data-link');
+                const title = this.getAttribute('data-title');
+                const text = `Lihat buku "${title}" di: ${link}`;
+                const encodedText = encodeURIComponent(text);
+                window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+            });
+        });
+
+        // Copy to Clipboard Function
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+
+        // Show Copy Success Message
+        function showCopySuccess() {
+            const successMsg = document.createElement('div');
+            successMsg.className = 'copy-success';
+            successMsg.innerHTML = '<i class="fas fa-check-circle me-2"></i>Link berhasil disalin!';
+            document.body.appendChild(successMsg);
+
+            setTimeout(() => {
+                successMsg.classList.add('fade-out');
+                setTimeout(() => {
+                    document.body.removeChild(successMsg);
+                }, 300);
+            }, 2000);
+        }
+    });
 </script>

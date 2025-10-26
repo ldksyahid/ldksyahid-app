@@ -476,25 +476,54 @@
                                                 </div>
                                             </a>
                                         </div>
-                                        <div class="col-4">
-                                            <div class="dropdown">
-                                                <button class="btn btn-outline-secondary btn-share w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fas fa-share-alt"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end my-2" style="z-index: 1060;">
-                                                    <li>
-                                                        <a class="dropdown-item copy-link" href="#" data-link="{{ route('catalog.books.show', $book->slug) }}">
-                                                            <i class="fas fa-copy me-2"></i> Copy Link
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item share-wa" href="#" data-link="{{ route('catalog.books.show', $book->slug) }}" data-title="{{ $book->titleBook }}">
-                                                            <i class="fab fa-whatsapp me-2"></i> Bagikan via WhatsApp
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                        @if((new \Jenssegers\Agent\Agent())->isDesktop())
+                                            <div class="col-4">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-secondary btn-share w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fas fa-share-alt"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end my-2" style="z-index: 1060;">
+                                                        <li>
+                                                            <a class="dropdown-item copy-link" href="#" data-link="{{ route('catalog.books.show', $book->slug) }}">
+                                                                <i class="fas fa-copy me-2"></i> Copy Link
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item share-wa" href="#" data-link="{{ route('catalog.books.show', $book->slug) }}" data-title="{{ $book->titleBook }}">
+                                                                <i class="fab fa-whatsapp me-2"></i> Bagikan via WhatsApp
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
+                                        @if((new \Jenssegers\Agent\Agent())->isMobile())
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <!-- Icon Share -->
+                                                    <div class="share-icon-mobile">
+                                                        <i class="fas fa-share-alt text-muted"></i>
+                                                    </div>
+
+                                                    <div class="btn-group flex-grow-1" role="group">
+                                                        <!-- Copy Link Button -->
+                                                        <button type="button" class="btn btn-outline-secondary btn-share copy-link-mobile"
+                                                                data-link="{{ route('catalog.books.show', $book->slug) }}"
+                                                                title="Copy Link">
+                                                            <i class="fas fa-copy"></i>
+                                                        </button>
+
+                                                        <!-- WhatsApp Share Button -->
+                                                        <button type="button" class="btn btn-outline-secondary btn-share share-wa-mobile"
+                                                                data-link="{{ route('catalog.books.show', $book->slug) }}"
+                                                                data-title="{{ $book->titleBook }}"
+                                                                title="Bagikan via WhatsApp">
+                                                            <i class="fab fa-whatsapp"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

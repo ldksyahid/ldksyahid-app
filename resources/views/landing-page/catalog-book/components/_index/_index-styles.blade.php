@@ -1010,4 +1010,93 @@ input.form-control:focus {
 .text-end.dropdown .dropdown-menu {
     z-index: 1060 !important;
 }
+/* Mobile Share Button Group Styles */
+.btn-group {
+    display: flex;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-group .btn-share {
+    flex: 1;
+    border: 1px solid #00bfa6;
+    color: #00bfa6;
+    background: white;
+    padding: 0.6rem 0.5rem;
+    border-radius: 0;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Remove borders between buttons */
+.btn-group .btn-share:not(:first-child) {
+    border-left: none;
+}
+
+/* First button rounded left */
+.btn-group .btn-share:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+/* Last button rounded right */
+.btn-group .btn-share:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+/* Hover effects */
+.btn-group .btn-share:hover {
+    background-color: #00bfa6;
+    color: white;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-group .btn-share:active {
+    background-color: #009b89;
+    transform: scale(0.98);
+}
+
+/* Tooltip styles for mobile buttons */
+.btn-share[title] {
+    position: relative;
+}
+
+.btn-share[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    z-index: 1070;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .btn-group .btn-share {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .act-new-book .col-4 {
+        width: 100% !important;
+        margin-top: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-group .btn-share {
+        padding: 0.4rem;
+        font-size: 0.75rem;
+    }
+}
 </style>
