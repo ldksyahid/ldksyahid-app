@@ -138,7 +138,7 @@
                         <li>
                             <a class="dropdown-item {{ request('sort') == 'popular' ? 'active' : '' }}"
                             href="{{ request()->fullUrlWithQuery(['sort' => 'popular']) }}">
-                                <i class="fas fa-fire me-2"></i>Terpopuler
+                                <i class="fas fa-heart me-2"></i>Terpopuler
                             </a>
                         </li>
                         <li>
