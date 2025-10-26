@@ -378,7 +378,7 @@
                                     <div class="d-flex justify-content-between align-items-start">
                                         <h2 class="book-title-truncate">{{ $book->titleBook }}</h2>
                                         <!-- Crown Icon -->
-                                        @if($book->authorTypeID == 1 || $book->authorTypeID == 2)
+                                        @if(($book->authorTypeID == 1 || $book->authorTypeID == 2) && $book->availabilityTypeID == 2)
                                             <div class="crown-icon {{ $book->authorTypeID == 1 ? 'crown-premium' : 'crown-gold' }}">
                                                 <i class="fas fa-crown"></i>
                                             </div>
