@@ -191,11 +191,15 @@
                                 </div>
                                 <ul class="nav nav-tabs" id="tab-newbook-{{ $book->bookID }}" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link active" id="spesifikasi-tab-{{ $book->bookID }}" data-bs-toggle="tab" data-bs-target="#book-spesifikasi-tab-{{ $book->bookID }}" type="button" role="tab" aria-controls="spesifikasi-tab" aria-selected="true">Spesifikasi</a>
+                                        <a class="nav-link active" id="spesifikasi-tab-{{ $book->bookID }}" data-bs-toggle="tab" data-bs-target="#book-spesifikasi-tab-{{ $book->bookID }}" type="button" role="tab" aria-controls="spesifikasi-tab" aria-selected="true">
+                                            <h6 class="mb-0 small-tab-text">Spesifikasi</h6>
+                                        </a>
                                     </li>
                                     @if($book->synopsis)
                                         <li class="nav-item" role="presentation">
-                                            <a class="nav-link" id="sinopsis-tab-{{ $book->bookID }}" data-bs-toggle="tab" data-bs-target="#book-sinopsis-tab-{{ $book->bookID }}" type="button" role="tab" aria-controls="sinopsis-tab" aria-selected="false" tabindex="-1">Sinopsis</a>
+                                            <a class="nav-link" id="sinopsis-tab-{{ $book->bookID }}" data-bs-toggle="tab" data-bs-target="#book-sinopsis-tab-{{ $book->bookID }}" type="button" role="tab" aria-controls="sinopsis-tab" aria-selected="false" tabindex="-1">
+                                                <h6 class="mb-0 small-tab-text">Sinopsis</h6>
+                                            </a>
                                         </li>
                                     @endif
                                 </ul>

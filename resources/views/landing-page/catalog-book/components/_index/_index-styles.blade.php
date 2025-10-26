@@ -817,5 +817,9 @@ input.form-control:focus {
         opacity: 0;
     }
 }
+.small-tab-text {
+    font-size: 0.8rem !important;
+    font-weight: 600;
+}
 
 </style>
