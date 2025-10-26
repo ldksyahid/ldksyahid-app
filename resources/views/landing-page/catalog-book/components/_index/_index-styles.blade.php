@@ -849,4 +849,51 @@ input.form-control:focus {
     color: #00bfa6 !important;
     border-color: #00bfa6 !important;
 }
+.select2-selection__clear {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #999;
+    margin-right: 8px;
+    transition: color 0.2s ease;
+}
+.select2-selection__clear:hover {
+    color: #ccc;
+}
+.select2-search--dropdown .select2-search__field {
+  border: none;
+  box-shadow: none;
+}
+.select2-search__field {
+    border: none;
+    box-shadow: none;
+    outline: none;
+    background-color: transparent;
+    color: #8d9297;
+}
+.select2-selection__choice{
+    border: #00bfa6 !important;
+    background-color: #00bfa6 !important;
+    color: white;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: white;
+    transition: all 0.2s ease;
+    border-right: 1px solid white;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: white;
+    background-color: #1ee8ce
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:focus {
+    color: white;
+    outline: none;
+    background-color: #1ee8ce;
+}
+@media (min-width: 992px) {
+    .sticky-filter {
+        position: sticky;
+        top: 90px;
+        z-index: 900;
+    }
+}
 </style>
