@@ -951,20 +951,32 @@ input.form-control:focus {
     }
 
     /* Dropdown menus */
-    .dropdown-menu {
-        position: fixed !important;
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        width: 90% !important;
-        max-width: 300px !important;
+   .dropdown-menu {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: none !important;
         z-index: 1060 !important;
+        margin-top: 0.5rem !important;
     }
 
     .dropdown-menu.dropdown-menu-end {
-        left: 50% !important;
-        right: auto !important;
-        transform: translate(-50%, -50%) !important;
+        left: auto !important;
+        right: 0 !important;
+        transform: none !important;
+    }
+
+    /* Untuk dropdown sort khusus */
+    .text-end.dropdown .dropdown-menu {
+        position: absolute !important;
+        top: 100% !important;
+        left: auto !important;
+        right: 0 !important;
+        transform: none !important;
+        width: 200px !important;
+        margin-top: 0.5rem !important;
     }
 }
 
