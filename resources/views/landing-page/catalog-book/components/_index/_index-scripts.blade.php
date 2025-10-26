@@ -23,6 +23,7 @@
             updateClearButton();
         }
 
+        // Initialize Select2 for filter modal
         $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year').each(function () {
             $(this).select2({
                 placeholder: $(this).attr('name') === 'category[]' ? "Pilih kategori" :
@@ -36,44 +37,115 @@
             });
         });
 
-        // Submit filter form when apply button is clicked
+        // Set initial values for Select2 based on URL parameters when modal is shown
+        $('#filterModal').on('show.bs.modal', function() {
+            const currentCategories = @json(request('category', []));
+            const currentAuthors = @json(request('author', []));
+            const currentPublishers = @json(request('publisher', []));
+            const currentYears = @json(request('year', []));
+
+            $('#filterModal #category').val(currentCategories).trigger('change');
+            $('#filterModal #author').val(currentAuthors).trigger('change');
+            $('#filterModal #publisher').val(currentPublishers).trigger('change');
+            $('#filterModal #year').val(currentYears).trigger('change');
+        });
+
+        // Submit filter form when apply button is clicked - FIXED VERSION
         $('#filter-form').on('submit', function(e) {
             e.preventDefault();
             $('#filterModal').modal('hide');
 
-            // Get all selected values
-            const formData = $(this).serialize();
+            // Build clean URL base
             const currentUrl = "{{ url('/perpustakaan') }}";
-            const searchParams = new URLSearchParams(window.location.search);
 
-            // Remove existing filter parameters
-            ['category', 'author', 'publisher', 'year', 'page'].forEach(param => {
-                searchParams.delete(param);
-            });
+            // Get search and sort parameters if exist
+            const currentSearchParams = new URLSearchParams(window.location.search);
+            const currentSearch = currentSearchParams.get('search');
+            const currentSort = currentSearchParams.get('sort');
 
-            // Add new filter parameters
-            const newParams = new URLSearchParams(formData);
-            newParams.forEach((value, key) => {
-                if (value) {
-                    searchParams.append(key, value);
-                }
-            });
+            // Build new search params
+            const newSearchParams = new URLSearchParams();
+
+            // Add search parameter if exists
+            if (currentSearch) {
+                newSearchParams.append('search', currentSearch);
+            }
+
+            // Add sort parameter if exists
+            if (currentSort) {
+                newSearchParams.append('sort', currentSort);
+            }
+
+            // Get unique values from Select2 (remove duplicates)
+            const getUniqueValues = (selector) => {
+                const values = $(selector).val();
+                return values && Array.isArray(values)
+                    ? [...new Set(values.filter(v => v && v !== ''))]
+                    : [];
+            };
+
+            // Add filter parameters
+            const addFilterParams = (values, paramName) => {
+                values.forEach(value => {
+                    newSearchParams.append(`${paramName}[]`, value);
+                });
+            };
+
+            addFilterParams(getUniqueValues('#filterModal #category'), 'category');
+            addFilterParams(getUniqueValues('#filterModal #author'), 'author');
+            addFilterParams(getUniqueValues('#filterModal #publisher'), 'publisher');
+            addFilterParams(getUniqueValues('#filterModal #year'), 'year');
 
             // Build final URL
-            let finalUrl = currentUrl + '?' + searchParams.toString();
+            let finalUrl = currentUrl;
+            if (newSearchParams.toString()) {
+                finalUrl += '?' + newSearchParams.toString();
+            }
+
             window.location.href = finalUrl;
         });
 
-        // Reset form when reset button is clicked
+        // Function to clear all filters
+        function clearAllFilters() {
+            // Clear all Select2 filters in modal
+            $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year').val(null).trigger('change');
+
+            // Build clean URL - hanya pertahankan search dan sort
+            const currentUrl = "{{ url('/perpustakaan') }}";
+            const currentSearchParams = new URLSearchParams(window.location.search);
+            const newSearchParams = new URLSearchParams();
+
+            // Hanya pertahankan search dan sort parameters
+            const search = currentSearchParams.get('search');
+            const sort = currentSearchParams.get('sort');
+
+            if (search) newSearchParams.append('search', search);
+            if (sort) newSearchParams.append('sort', sort);
+
+            // Build final URL
+            let finalUrl = currentUrl;
+            if (newSearchParams.toString()) {
+                finalUrl += '?' + newSearchParams.toString();
+            }
+
+            window.location.href = finalUrl;
+        }
+
+        // Reset all filters when reset button is clicked
         $('a[href="{{ url('/perpustakaan') }}"]').on('click', function(e) {
             e.preventDefault();
             $('#filterModal').modal('hide');
-            window.location.href = "{{ url('/perpustakaan') }}";
+            clearAllFilters();
         });
 
         // Close modal when cancel button is clicked
         $('button[data-bs-dismiss="modal"]').on('click', function() {
             $('#filterModal').modal('hide');
+        });
+
+        // Clear all filters in modal (without applying)
+        $('.clear-all-filters').on('click', function() {
+            $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year').val(null).trigger('change');
         });
 
         // Search functionality dengan loading state
@@ -143,7 +215,7 @@
             });
         });
 
-        // Show active filter count on filter button
+        // Show active filter count on filter button (TANPA TOMBOL X)
         function updateFilterButton() {
             // Fix: Use proper JSON syntax for Blade
             const activeFilters = {
@@ -177,6 +249,7 @@
                     'color': 'white'
                 });
 
+                // Hanya badge tanpa tombol X
                 if (!filterButton.find('.filter-badge').length) {
                     filterText.after('<span class="filter-badge badge rounded-circle bg-white text-primary ms-1">' + activeCount + '</span>');
                 } else {
@@ -201,9 +274,8 @@
             updateFilterButton();
         });
 
-        // Clear all filters function
-        $('.clear-all-filters').on('click', function() {
-            $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year').val(null).trigger('change');
+        $('#filterModal').on('hidden.bs.modal', function() {
+            updateFilterButton();
         });
 
         // Reset state ketika halaman selesai load
@@ -214,6 +286,9 @@
 
             // Update clear button
             updateClearButton();
+
+            // Update filter button
+            updateFilterButton();
         });
 
         // Inisialisasi clear button saat pertama kali load
