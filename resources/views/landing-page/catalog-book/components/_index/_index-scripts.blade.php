@@ -24,12 +24,15 @@
         }
 
         // Initialize Select2 for filter modal
-        $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year').each(function () {
+        $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year, #filterModal #language, #filterModal #author_type, #filterModal #availability').each(function () {
             $(this).select2({
-                placeholder: $(this).attr('name') === 'category[]' ? "Pilih kategori" :
+                placeholder: $(this).attr('name') === 'category[]' ? "Pilih kategori buku" :
                             $(this).attr('name') === 'author[]' ? "Pilih penulis" :
                             $(this).attr('name') === 'publisher[]' ? "Pilih penerbit" :
-                            $(this).attr('name') === 'year[]' ? "Pilih tahun" : "Pilih opsi",
+                            $(this).attr('name') === 'year[]' ? "Pilih tahun" :
+                            $(this).attr('name') === 'language[]' ? "Pilih bahasa" :
+                            $(this).attr('name') === 'author_type[]' ? "Pilih kategori penulis" :
+                            $(this).attr('name') === 'availability[]' ? "Pilih ketersediaan" : "Pilih opsi",
                 allowClear: true,
                 width: '100%',
                 dropdownParent: $('#filterModal'),
@@ -43,11 +46,17 @@
             const currentAuthors = @json(request('author', []));
             const currentPublishers = @json(request('publisher', []));
             const currentYears = @json(request('year', []));
+            const currentLanguages = @json(request('language', []));
+            const currentAuthorTypes = @json(request('author_type', []));
+            const currentAvailabilities = @json(request('availability', []));
 
             $('#filterModal #category').val(currentCategories).trigger('change');
             $('#filterModal #author').val(currentAuthors).trigger('change');
             $('#filterModal #publisher').val(currentPublishers).trigger('change');
             $('#filterModal #year').val(currentYears).trigger('change');
+            $('#filterModal #language').val(currentLanguages).trigger('change');
+            $('#filterModal #author_type').val(currentAuthorTypes).trigger('change');
+            $('#filterModal #availability').val(currentAvailabilities).trigger('change');
         });
 
         // Submit filter form when apply button is clicked - FIXED VERSION
@@ -76,7 +85,7 @@
                 newSearchParams.append('sort', currentSort);
             }
 
-            // Get unique values from Select2 (remove duplicates)
+            // Get unique values dari semua filter
             const getUniqueValues = (selector) => {
                 const values = $(selector).val();
                 return values && Array.isArray(values)
@@ -84,7 +93,7 @@
                     : [];
             };
 
-            // Add filter parameters
+            // Add filter parameters untuk semua filter
             const addFilterParams = (values, paramName) => {
                 values.forEach(value => {
                     newSearchParams.append(`${paramName}[]`, value);
@@ -95,6 +104,9 @@
             addFilterParams(getUniqueValues('#filterModal #author'), 'author');
             addFilterParams(getUniqueValues('#filterModal #publisher'), 'publisher');
             addFilterParams(getUniqueValues('#filterModal #year'), 'year');
+            addFilterParams(getUniqueValues('#filterModal #language'), 'language');
+            addFilterParams(getUniqueValues('#filterModal #author_type'), 'author_type');
+            addFilterParams(getUniqueValues('#filterModal #availability'), 'availability');
 
             // Build final URL
             let finalUrl = currentUrl;
@@ -105,10 +117,10 @@
             window.location.href = finalUrl;
         });
 
-        // Function to clear all filters
+        // Function to clear all filters - PERBAIKAN
         function clearAllFilters() {
-            // Clear all Select2 filters in modal
-            $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year').val(null).trigger('change');
+            // Clear all Select2 filters in modal (SEMUA FILTER)
+            $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year, #filterModal #language, #filterModal #author_type, #filterModal #availability').val(null).trigger('change');
 
             // Build clean URL - hanya pertahankan search dan sort
             const currentUrl = "{{ url('/perpustakaan') }}";
@@ -130,6 +142,19 @@
 
             window.location.href = finalUrl;
         }
+
+        // Reset all filters when reset button is clicked - PERBAIKAN
+        $('a[href="{{ url('/perpustakaan') }}"]').on('click', function(e) {
+            e.preventDefault();
+            $('#filterModal').modal('hide');
+            clearAllFilters();
+        });
+
+        // Clear all filters in modal (without applying) - PERBAIKAN
+        $('.clear-all-filters').on('click', function() {
+            // Clear semua filter di modal
+            $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year, #filterModal #language, #filterModal #author_type, #filterModal #availability').val(null).trigger('change');
+        });
 
         // Reset all filters when reset button is clicked
         $('a[href="{{ url('/perpustakaan') }}"]').on('click', function(e) {
@@ -222,7 +247,10 @@
                 category: @json(request('category', [])),
                 author: @json(request('author', [])),
                 publisher: @json(request('publisher', [])),
-                year: @json(request('year', []))
+                year: @json(request('year', [])),
+                language: @json(request('language', [])),
+                author_type: @json(request('author_type', [])),
+                availability: @json(request('availability', []))
             };
 
             let activeCount = 0;

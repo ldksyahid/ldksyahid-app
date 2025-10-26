@@ -147,7 +147,6 @@ class MsCatalogBook extends Model
             'bookCategoryID' => 'required|exists:lk_book_category,bookCategoryID',
             'languageID' => 'required|exists:lk_language,languageID',
             'authorTypeID' => 'required',
-            'authorTypeID' => 'required',
             'availabilityTypeID' => 'required',
             'year' => "required|integer|min:1900|max:$maxYear",
             'pages' => 'required|integer|min:1',
@@ -219,36 +218,85 @@ class MsCatalogBook extends Model
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('titleBook', 'like', "%{$search}%")
-                  ->orWhere('authorName', 'like', "%{$search}%")
-                  ->orWhere('publisherName', 'like', "%{$search}%")
-                  ->orWhere('isbn', 'like', "%{$search}%")
-                  ->orWhere('year', $search);
+                ->orWhere('authorName', 'like', "%{$search}%")
+                ->orWhere('publisherName', 'like', "%{$search}%")
+                ->orWhere('isbn', 'like', "%{$search}%")
+                ->orWhere('year', $search);
             });
         }
 
-        if ($request->filled('category')) {
+        // PERBAIKAN: Gunakan has() untuk array parameters dan filter nilai kosong
+        if ($request->has('category')) {
             $categories = (array) $request->category;
-            $query->whereIn('bookCategoryID', $categories);
+            $filteredCategories = array_filter($categories, function($value) {
+                return !is_null($value) && $value !== '';
+            });
+            if (!empty($filteredCategories)) {
+                $query->whereIn('bookCategoryID', $filteredCategories);
+            }
         }
 
-        if ($request->filled('author')) {
+        if ($request->has('author')) {
             $authors = (array) $request->author;
-            $query->whereIn('authorName', $authors);
+            $filteredAuthors = array_filter($authors, function($value) {
+                return !is_null($value) && $value !== '';
+            });
+            if (!empty($filteredAuthors)) {
+                $query->whereIn('authorName', $filteredAuthors);
+            }
         }
 
-        if ($request->filled('publisher')) {
+        if ($request->has('publisher')) {
             $publishers = (array) $request->publisher;
-            $query->whereIn('publisherName', $publishers);
+            $filteredPublishers = array_filter($publishers, function($value) {
+                return !is_null($value) && $value !== '';
+            });
+            if (!empty($filteredPublishers)) {
+                $query->whereIn('publisherName', $filteredPublishers);
+            }
         }
 
-        if ($request->filled('year')) {
+        if ($request->has('year')) {
             $years = (array) $request->year;
-            $query->whereIn('year', $years);
+            $filteredYears = array_filter($years, function($value) {
+                return !is_null($value) && $value !== '';
+            });
+            if (!empty($filteredYears)) {
+                $query->whereIn('year', $filteredYears);
+            }
         }
 
-        if ($request->filled('language')) {
+        // FILTER BARU: Bahasa
+        if ($request->has('language')) {
             $languages = (array) $request->language;
-            $query->whereIn('languageID', $languages);
+            $filteredLanguages = array_filter($languages, function($value) {
+                return !is_null($value) && $value !== '';
+            });
+            if (!empty($filteredLanguages)) {
+                $query->whereIn('languageID', $filteredLanguages);
+            }
+        }
+
+        // FILTER BARU: Kategori Penulis
+        if ($request->has('author_type')) {
+            $authorTypes = (array) $request->author_type;
+            $filteredAuthorTypes = array_filter($authorTypes, function($value) {
+                return !is_null($value) && $value !== '';
+            });
+            if (!empty($filteredAuthorTypes)) {
+                $query->whereIn('authorTypeID', $filteredAuthorTypes);
+            }
+        }
+
+        // FILTER BARU: Ketersediaan Buku
+        if ($request->has('availability')) {
+            $availabilities = (array) $request->availability;
+            $filteredAvailabilities = array_filter($availabilities, function($value) {
+                return !is_null($value) && $value !== '';
+            });
+            if (!empty($filteredAvailabilities)) {
+                $query->whereIn('availabilityTypeID', $filteredAvailabilities);
+            }
         }
 
         return $query;

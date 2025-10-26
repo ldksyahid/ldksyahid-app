@@ -25,8 +25,11 @@ class CatalogBooksController extends Controller
         $authors = MsCatalogBook::select('authorName')->distinct()->orderBy('authorName')->pluck('authorName');
         $publishers = MsCatalogBook::select('publisherName')->distinct()->orderBy('publisherName')->pluck('publisherName');
         $years = MsCatalogBook::select('year')->distinct()->orderByDesc('year')->pluck('year');
+        $languages = LkLanguage::select('languageID', 'languageName')->distinct()->orderBy('languageName')->get();
+        $authorTypes = LkAuthorType::select('authorTypeID', 'authorTypeName')->distinct()->orderBy('authorTypeName')->get();
+        $availabilityTypes = LkAvailabilityType::select('availabilityTypeID', 'availabilityTypeName')->distinct()->orderBy('availabilityTypeName')->get();
 
-        return view('landing-page.catalog-book.index', compact('books', 'categories', 'authors', 'publishers', 'years'), [
+        return view('landing-page.catalog-book.index', compact('books', 'categories', 'authors', 'publishers', 'years', 'languages', 'authorTypes', 'availabilityTypes'), [
             "title" => "Perpustakaan",
         ]);
     }
