@@ -542,7 +542,7 @@
                     <i class="fas fa-book-open fa-4x text-muted mb-3"></i>
                     <h3 class="text-muted">Buku Belum Tersedia</h3>
                     <p class="text-muted">Maaf, saat ini tidak ada buku yang sesuai dengan kriteria pencarian Anda.</p>
-                    <a href="{{ url('/perpustakaan') }}" class="btn btn-primary rounded-pill mt-2">
+                    <a href="{{ url('/perpustakaan') }}?sort={{ request('sort', 'newest') }}" class="btn btn-primary rounded-pill mt-2">
                         <i class="fas fa-refresh me-2"></i> Tampilkan Semua Buku
                     </a>
                 </div>
