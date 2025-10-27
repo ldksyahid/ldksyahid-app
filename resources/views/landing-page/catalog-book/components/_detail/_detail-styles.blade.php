@@ -260,8 +260,8 @@
 /* === SHARE OPTIONS FLOATING === */
 .share-options-floating {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 70%;
+    left: 72%;
     transform: translate(-50%, -50%) scale(0.8);
     background: var(--white);
     border-radius: var(--radius-lg);
