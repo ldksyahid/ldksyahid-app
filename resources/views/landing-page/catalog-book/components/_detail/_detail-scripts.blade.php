@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         navigator.clipboard.writeText(bookLink).then(() => {
             showSuccessMessage('Link buku berhasil disalin!');
+            closeShareDropdown();
         }).catch(() => {
             // Fallback for older browsers
             const textArea = document.createElement('textarea');
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.execCommand('copy');
             document.body.removeChild(textArea);
             showSuccessMessage('Link buku berhasil disalin!');
+            closeShareDropdown();
         });
     };
 
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
 
         window.open(whatsappUrl, '_blank');
+        closeShareDropdown();
     };
 
     window.openPdfReader = function() {
@@ -46,6 +49,27 @@ document.addEventListener('DOMContentLoaded', function() {
         showSuccessMessage('Buku telah ditambahkan ke favorit!');
         // In real implementation, this would be an API call
     };
+
+    // Share Dropdown functionality
+    window.toggleShareDropdown = function() {
+        const dropdown = document.getElementById('shareDropdown');
+        dropdown.classList.toggle('show');
+    }
+
+    function closeShareDropdown() {
+        const dropdown = document.getElementById('shareDropdown');
+        dropdown.classList.remove('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('shareDropdown');
+        const shareButton = document.querySelector('.btn-share');
+
+        if (!shareButton.contains(event.target) && !dropdown.contains(event.target)) {
+            closeShareDropdown();
+        }
+    });
 
     // Show success message - FIXED VERSION
     function showSuccessMessage(message) {
@@ -292,7 +316,8 @@ document.addEventListener('DOMContentLoaded', function() {
         openPdfReader: window.openPdfReader,
         addToFavorites: window.addToFavorites,
         shareOnFacebook: window.shareOnFacebook,
-        shareOnTwitter: window.shareOnTwitter
+        shareOnTwitter: window.shareOnTwitter,
+        toggleShareDropdown: window.toggleShareDropdown
     };
 
     // Replace with safe versions

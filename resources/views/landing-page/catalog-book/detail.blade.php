@@ -54,15 +54,41 @@
                         </button>
                     @endif
 
+                    <!-- Purchase Link Button -->
+                    @if($book->availabilityTypeID == 2 && $book->purchaseLink)
+                        <a href="{{ $book->purchaseLink }}" target="_blank" class="btn btn-success btn-purchase w-100">
+                            <i class="fas fa-shopping-cart me-2"></i>Beli Buku
+                        </a>
+                    @endif
+
+                    <!-- Borrow Link Button -->
+                    @if($book->availabilityTypeID == 3 && $book->borrowLink)
+                        <a href="{{ $book->borrowLink }}" target="_blank" class="btn btn-warning btn-borrow w-100">
+                            <i class="fas fa-hand-holding-usd me-2"></i>Pinjam Buku
+                        </a>
+                    @endif
+
                     <div class="action-group">
                         <button class="btn btn-outline btn-favorite" onclick="addToFavorites()">
                             <i class="far fa-heart"></i>
                             <span>Favorit</span>
                         </button>
-                        <button class="btn btn-outline btn-share" onclick="copyBookLink()">
-                            <i class="fas fa-share-alt"></i>
-                            <span>Share</span>
-                        </button>
+
+                        <!-- Share Button with Dropdown -->
+                        <div class="share-dropdown">
+                            <button class="btn btn-outline btn-share" onclick="toggleShareDropdown()">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Share</span>
+                            </button>
+                            <div class="share-dropdown-menu" id="shareDropdown">
+                                <button class="share-dropdown-item" onclick="copyBookLink()">
+                                    <i class="fas fa-copy me-2"></i>Copy Link
+                                </button>
+                                <button class="share-dropdown-item" onclick="shareOnWhatsApp()">
+                                    <i class="fab fa-whatsapp me-2"></i>Share WhatsApp
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -248,6 +274,12 @@
                 <div class="related-books-grid">
                     @foreach($relatedBooks as $relatedBook)
                     <div class="related-book-card">
+                        <!-- Crown Icon untuk Related Books -->
+                        @if(($relatedBook->authorTypeID == 1 || $relatedBook->authorTypeID == 2) && $relatedBook->availabilityTypeID == 2)
+                            <div class="related-book-crown {{ $relatedBook->authorTypeID == 1 ? 'crown-premium' : 'crown-gold' }}">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                        @endif
                         <div class="book-cover-small">
                             @if($relatedBook->coverImageUrl())
                                 <img src="{{ $relatedBook->coverImageUrl() }}" alt="{{ $relatedBook->titleBook }}">
