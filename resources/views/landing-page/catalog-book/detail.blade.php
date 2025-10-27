@@ -23,7 +23,7 @@
 
     <!-- Main Content -->
     <div class="row g-5">
-        <!-- Left Column - Book Cover & Author -->
+        <!-- Left Column - Book Cover & Actions -->
         <div class="col-lg-4 col-md-5">
             <!-- Book Cover -->
             <div class="book-cover-elegant wow fadeInUp" data-wow-delay="0.2s">
@@ -74,23 +74,46 @@
                             <span>Favorit</span>
                         </button>
 
-                        <!-- Share Button with Dropdown -->
-                        <div class="share-dropdown">
-                            <button class="btn btn-outline btn-share" onclick="toggleShareDropdown()">
-                                <i class="fas fa-share-alt"></i>
-                                <span>Share</span>
-                            </button>
-                            <div class="share-dropdown-menu" id="shareDropdown">
-                                <button class="share-dropdown-item" onclick="copyBookLink()">
-                                    <i class="fas fa-copy me-2"></i>Copy Link
-                                </button>
-                                <button class="share-dropdown-item" onclick="shareOnWhatsApp()">
-                                    <i class="fab fa-whatsapp me-2"></i>Share WhatsApp
-                                </button>
-                            </div>
-                        </div>
+                        <!-- Share Button -->
+                        <button class="btn btn-outline btn-share" onclick="toggleShareOptions()">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share</span>
+                        </button>
                     </div>
                 </div>
+
+                <!-- Share Options -->
+                <div class="share-options" id="shareOptions">
+                    <div class="share-options-content">
+                        <button class="share-option-btn" onclick="copyBookLink()">
+                            <i class="fas fa-copy"></i>
+                            <span>Copy Link</span>
+                        </button>
+                        <button class="share-option-btn" onclick="shareOnWhatsApp()">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tags Section -->
+                @if($book->tags)
+                <div class="tags-section wow fadeInUp" data-wow-delay="0.5s">
+                    <h5 class="tags-title">
+                        <i class="fas fa-tags me-2"></i>Tags
+                    </h5>
+                    <div class="tags-container">
+                        @php
+                            $tags = explode(',', $book->tags);
+                        @endphp
+                        @foreach($tags as $tag)
+                            <span class="tag-elegant">
+                                <i class="fas fa-hashtag me-1"></i>{{ trim($tag) }}
+                            </span>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
 
@@ -117,11 +140,6 @@
                         @if($book->synopsis)
                         <button class="nav-tab" data-tab="synopsis">
                             <i class="fas fa-book me-2"></i>Sinopsis
-                        </button>
-                        @endif
-                        @if($book->tags)
-                        <button class="nav-tab" data-tab="tags">
-                            <i class="fas fa-tags me-2"></i>Tags
                         </button>
                         @endif
                     </div>
@@ -232,27 +250,6 @@
                             </h3>
                             <div class="content-text">
                                 {!! nl2br(e($book->synopsis)) !!}
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-
-                    <!-- Tags Tab -->
-                    @if($book->tags)
-                    <div class="tab-pane" id="tags-tab">
-                        <div class="content-card">
-                            <h3 class="content-title">
-                                <i class="fas fa-tags me-2"></i>Kategori & Tags
-                            </h3>
-                            <div class="tags-container">
-                                @php
-                                    $tags = explode(',', $book->tags);
-                                @endphp
-                                @foreach($tags as $tag)
-                                    <span class="tag-elegant">
-                                        <i class="fas fa-hashtag me-1"></i>{{ trim($tag) }}
-                                    </span>
-                                @endforeach
                             </div>
                         </div>
                     </div>
