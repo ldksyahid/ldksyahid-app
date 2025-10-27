@@ -38,7 +38,7 @@ class CatalogBooksController extends Controller
     {
         $book = MsCatalogBook::where('slug', $slug)->firstOrFail();
 
-        return view('landing-page.catalog-book.show', compact('book'), [
+        return view('landing-page.catalog-book.detail', compact('book'), [
             "title" => $book->titleBook,
         ]);
     }
