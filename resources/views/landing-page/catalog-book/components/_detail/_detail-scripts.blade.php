@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         navigator.clipboard.writeText(bookLink).then(() => {
             showSuccessMessage('Link buku berhasil disalin!');
-            closeShareDropdown();
+            closeShareOptions();
         }).catch(() => {
             // Fallback for older browsers
             const textArea = document.createElement('textarea');
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.execCommand('copy');
             document.body.removeChild(textArea);
             showSuccessMessage('Link buku berhasil disalin!');
-            closeShareDropdown();
+            closeShareOptions();
         });
     };
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
 
         window.open(whatsappUrl, '_blank');
-        closeShareDropdown();
+        closeShareOptions();
     };
 
     window.openPdfReader = function() {
@@ -50,28 +50,28 @@ document.addEventListener('DOMContentLoaded', function() {
         // In real implementation, this would be an API call
     };
 
-    // Share Dropdown functionality
-    window.toggleShareDropdown = function() {
-        const dropdown = document.getElementById('shareDropdown');
-        dropdown.classList.toggle('show');
+    // Share Options functionality
+    window.toggleShareOptions = function() {
+        const shareOptions = document.getElementById('shareOptions');
+        shareOptions.classList.toggle('show');
     }
 
-    function closeShareDropdown() {
-        const dropdown = document.getElementById('shareDropdown');
-        dropdown.classList.remove('show');
+    function closeShareOptions() {
+        const shareOptions = document.getElementById('shareOptions');
+        shareOptions.classList.remove('show');
     }
 
-    // Close dropdown when clicking outside
+    // Close share options when clicking outside
     document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('shareDropdown');
+        const shareOptions = document.getElementById('shareOptions');
         const shareButton = document.querySelector('.btn-share');
 
-        if (!shareButton.contains(event.target) && !dropdown.contains(event.target)) {
-            closeShareDropdown();
+        if (!shareButton.contains(event.target) && !shareOptions.contains(event.target)) {
+            closeShareOptions();
         }
     });
 
-    // Show success message - FIXED VERSION
+    // Show success message
     function showSuccessMessage(message) {
         // Remove existing message
         const existingMessage = document.querySelector('.success-message');
@@ -154,9 +154,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function initElegantBookDetail() {
-        // Add loading states to buttons
-        initElegantButtonLoading();
-
         // Add hover effects
         initElegantHoverEffects();
 
@@ -190,29 +187,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const targetPane = document.getElementById(`${targetTab}-tab`);
                 if (targetPane) {
                     targetPane.classList.add('active');
-                }
-            });
-        });
-    }
-
-    function initElegantButtonLoading() {
-        document.querySelectorAll('.btn-read, .btn-outline').forEach(button => {
-            button.addEventListener('click', function(e) {
-                // Only add loading for buttons that don't navigate away
-                if (!this.href && !this.hasAttribute('target')) {
-                    const originalText = this.innerHTML;
-                    const originalWidth = this.offsetWidth;
-
-                    // Set fixed width to prevent button from resizing
-                    this.style.width = `${originalWidth}px`;
-                    this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Memproses...';
-                    this.disabled = true;
-
-                    setTimeout(() => {
-                        this.innerHTML = originalText;
-                        this.disabled = false;
-                        this.style.width = '';
-                    }, 2000);
                 }
             });
         });
@@ -317,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
         addToFavorites: window.addToFavorites,
         shareOnFacebook: window.shareOnFacebook,
         shareOnTwitter: window.shareOnTwitter,
-        toggleShareDropdown: window.toggleShareDropdown
+        toggleShareOptions: window.toggleShareOptions
     };
 
     // Replace with safe versions
