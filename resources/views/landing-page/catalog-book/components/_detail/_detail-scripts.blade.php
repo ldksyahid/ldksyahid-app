@@ -51,22 +51,76 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Share Options functionality
+    let shareOptionsVisible = false;
+
     window.toggleShareOptions = function() {
         const shareOptions = document.getElementById('shareOptions');
-        shareOptions.classList.toggle('show');
+
+        if (shareOptionsVisible) {
+            closeShareOptions();
+        } else {
+            openShareOptions();
+        }
+    }
+
+    function openShareOptions() {
+        const shareOptions = document.getElementById('shareOptions');
+        shareOptions.classList.add('show');
+        shareOptionsVisible = true;
+
+        // Create overlay if it doesn't exist
+        let overlay = document.querySelector('.share-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'share-overlay';
+            document.body.appendChild(overlay);
+
+            // Add styles for overlay
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1040;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            `;
+        }
+
+        overlay.classList.add('show');
+
+        // Close on overlay click
+        overlay.onclick = closeShareOptions;
     }
 
     function closeShareOptions() {
         const shareOptions = document.getElementById('shareOptions');
         shareOptions.classList.remove('show');
+        shareOptionsVisible = false;
+
+        const overlay = document.querySelector('.share-overlay');
+        if (overlay) {
+            overlay.classList.remove('show');
+        }
     }
 
-    // Close share options when clicking outside
+    // Close share options when clicking outside or pressing ESC
     document.addEventListener('click', function(event) {
         const shareOptions = document.getElementById('shareOptions');
         const shareButton = document.querySelector('.btn-share');
 
-        if (!shareButton.contains(event.target) && !shareOptions.contains(event.target)) {
+        if (shareOptionsVisible &&
+            !shareButton.contains(event.target) &&
+            !shareOptions.contains(event.target)) {
+            closeShareOptions();
+        }
+    });
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && shareOptionsVisible) {
             closeShareOptions();
         }
     });
@@ -79,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
             existingMessage.remove();
         }
 
-        // Create new message element directly
+        // Create new message element
         const successMessage = document.createElement('div');
         successMessage.className = 'success-message';
         successMessage.innerHTML = `
@@ -87,60 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <span class="message-text">${message}</span>
         `;
 
-        // Add styles if not already in CSS
-        successMessage.style.cssText = `
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.4);
-            z-index: 9999;
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        `;
-
         document.body.appendChild(successMessage);
-
-        // Add keyframes for animation if not in CSS
-        if (!document.querySelector('#success-message-animations')) {
-            const style = document.createElement('style');
-            style.id = 'success-message-animations';
-            style.textContent = `
-                @keyframes slideUp {
-                    from {
-                        transform: translateX(-50%) translateY(100%);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: translateX(-50%) translateY(0);
-                        opacity: 1;
-                    }
-                }
-                @keyframes slideDown {
-                    from {
-                        transform: translateX(-50%) translateY(0);
-                        opacity: 1;
-                    }
-                    to {
-                        transform: translateX(-50%) translateY(100%);
-                        opacity: 0;
-                    }
-                }
-                .success-message.fade-out {
-                    animation: slideDown 0.3s ease forwards;
-                }
-            `;
-            document.head.appendChild(style);
-        }
 
         // Remove message after 3 seconds with fade out effect
         setTimeout(() => {
@@ -260,18 +261,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Social media sharing
-    window.shareOnFacebook = function() {
-        const bookLink = encodeURIComponent(window.location.href);
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${bookLink}`, '_blank');
-    };
-
-    window.shareOnTwitter = function() {
-        const bookLink = encodeURIComponent(window.location.href);
-        const bookTitle = encodeURIComponent('{{ $book->titleBook }}');
-        window.open(`https://twitter.com/intent/tweet?text=${bookTitle}&url=${bookLink}`, '_blank');
-    };
-
     // Error handling for all functions
     function safeFunctionCall(fn, fallbackMessage = 'Terjadi kesalahan. Silakan coba lagi.') {
         try {
@@ -289,8 +278,6 @@ document.addEventListener('DOMContentLoaded', function() {
         shareOnWhatsApp: window.shareOnWhatsApp,
         openPdfReader: window.openPdfReader,
         addToFavorites: window.addToFavorites,
-        shareOnFacebook: window.shareOnFacebook,
-        shareOnTwitter: window.shareOnTwitter,
         toggleShareOptions: window.toggleShareOptions
     };
 
@@ -300,37 +287,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return safeFunctionCall(() => originalFunctions[funcName].apply(this, args));
         };
     });
-
-    // Update meta tags for social sharing
-    function updateMetaTags() {
-        try {
-            const metaTitle = document.querySelector('title');
-            if (metaTitle) {
-                metaTitle.textContent = '{{ $book->titleBook }} - Perpustakaan Digital';
-            }
-
-            // Update Open Graph tags
-            const ogTitle = document.querySelector('meta[property="og:title"]');
-            if (ogTitle) {
-                ogTitle.setAttribute('content', '{{ $book->titleBook }}');
-            }
-
-            const ogDescription = document.querySelector('meta[property="og:description"]');
-            if (ogDescription) {
-                ogDescription.setAttribute('content', '{{ Str::limit($book->description, 150) }}');
-            }
-
-            const ogImage = document.querySelector('meta[property="og:image"]');
-            if (ogImage && '{{ $book->coverImageUrl() }}') {
-                ogImage.setAttribute('content', '{{ $book->coverImageUrl() }}');
-            }
-        } catch (error) {
-            console.error('Error updating meta tags:', error);
-        }
-    }
-
-    // Initialize meta tags
-    updateMetaTags();
 
     // Track book view
     function trackBookView() {
@@ -354,15 +310,4 @@ window.addEventListener('load', function() {
 window.addEventListener('error', function(e) {
     console.error('Global error:', e.error);
 });
-
-// Service Worker registration for PWA features (optional)
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js').then(function(registration) {
-            console.log('ServiceWorker registration successful');
-        }, function(err) {
-            console.log('ServiceWorker registration failed: ', err);
-        });
-    });
-}
 </script>

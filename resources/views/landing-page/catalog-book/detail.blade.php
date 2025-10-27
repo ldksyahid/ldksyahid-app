@@ -82,16 +82,14 @@
                     </div>
                 </div>
 
-                <!-- Share Options -->
-                <div class="share-options" id="shareOptions">
+                <!-- Share Options Floating -->
+                <div class="share-options-floating" id="shareOptions">
                     <div class="share-options-content">
-                        <button class="share-option-btn" onclick="copyBookLink()">
+                        <button class="share-option-btn" onclick="copyBookLink()" title="Copy Link">
                             <i class="fas fa-copy"></i>
-                            <span>Copy Link</span>
                         </button>
-                        <button class="share-option-btn" onclick="shareOnWhatsApp()">
+                        <button class="share-option-btn" onclick="shareOnWhatsApp()" title="Share via WhatsApp">
                             <i class="fab fa-whatsapp"></i>
-                            <span>WhatsApp</span>
                         </button>
                     </div>
                 </div>
@@ -100,7 +98,7 @@
                 @if($book->tags)
                 <div class="tags-section wow fadeInUp" data-wow-delay="0.5s">
                     <h5 class="tags-title">
-                        <i class="fas fa-tags me-2"></i>Tags
+                        <i class="fas fa-tags me-2"></i>Kategori & Tags
                     </h5>
                     <div class="tags-container">
                         @php
