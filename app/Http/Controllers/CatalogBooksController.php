@@ -34,11 +34,19 @@ class CatalogBooksController extends Controller
         ]);
     }
 
+    // Di CatalogBooksController.php, dalam method show()
     public function show($slug)
     {
         $book = MsCatalogBook::where('slug', $slug)->firstOrFail();
 
-        return view('landing-page.catalog-book.detail', compact('book'), [
+        // Get related books (same category)
+        $relatedBooks = MsCatalogBook::where('bookCategoryID', $book->bookCategoryID)
+            ->where('bookID', '!=', $book->bookID)
+            ->where('flagActive', true)
+            ->limit(4)
+            ->get();
+
+        return view('landing-page.catalog-book.detail', compact('book', 'relatedBooks'), [
             "title" => $book->titleBook,
         ]);
     }
