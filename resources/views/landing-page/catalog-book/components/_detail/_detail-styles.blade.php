@@ -181,10 +181,55 @@
     box-shadow: 0 10px 25px rgba(0, 191, 166, 0.4);
 }
 
+.btn-purchase {
+    background: linear-gradient(135deg, var(--success) 0%, #20c997 100%);
+    border: none;
+    color: var(--white);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.btn-purchase:hover {
+    background: linear-gradient(135deg, #20c997 0%, #199c7a 100%);
+    color: var(--white);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
+}
+
+.btn-borrow {
+    background: linear-gradient(135deg, var(--warning) 0%, #ffb300 100%);
+    border: none;
+    color: var(--dark);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.btn-borrow:hover {
+    background: linear-gradient(135deg, #ffb300 0%, #e6a200 100%);
+    color: var(--dark);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 193, 7, 0.4);
+}
+
 .action-group {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
+    position: relative;
 }
 
 .btn-outline {
@@ -200,6 +245,7 @@
     align-items: center;
     gap: 0.5rem;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .btn-outline:hover {
@@ -208,6 +254,57 @@
     border-color: var(--primary);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 191, 166, 0.3);
+}
+
+/* === SHARE DROPDOWN === */
+.share-dropdown {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.share-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-elegant);
+    padding: 0.5rem;
+    min-width: 160px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 191, 166, 0.1);
+}
+
+.share-dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.share-dropdown-item {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    color: var(--dark);
+    font-weight: 500;
+    text-align: left;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.share-dropdown-item:hover {
+    background: var(--primary-light);
+    color: var(--primary);
 }
 
 /* === BOOK HEADER ELEGANT === */
@@ -456,12 +553,29 @@
     border-radius: var(--radius-lg);
     transition: var(--transition);
     border: 1px solid rgba(0, 191, 166, 0.1);
+    position: relative;
 }
 
 .related-book-card:hover {
     background: var(--white);
     transform: translateY(-5px);
     box-shadow: var(--shadow-hover);
+}
+
+.related-book-crown {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    border: 2px solid var(--white);
 }
 
 .book-cover-small {
@@ -619,6 +733,15 @@
     .book-header-elegant {
         padding: 1.5rem;
     }
+
+    .share-dropdown-menu {
+        left: 0;
+        transform: translateX(0) translateY(10px);
+    }
+
+    .share-dropdown-menu.show {
+        transform: translateX(0) translateY(0);
+    }
 }
 
 @media (max-width: 576px) {
@@ -659,6 +782,14 @@
 
     .detail-value {
         text-align: left;
+    }
+
+    .related-book-crown {
+        top: -6px;
+        right: -6px;
+        width: 24px;
+        height: 24px;
+        font-size: 0.8rem;
     }
 }
 
