@@ -34,37 +34,13 @@
                         <img src="https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd" alt="{{ $book->titleBook }}" class="cover-image">
                     @endif
                     <div class="cover-overlay">
-                        <div class="premium-badge">
-                            <i class="fas fa-crown me-1"></i>
-                            <span>Premium</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Author Profile -->
-            <div class="author-profile wow fadeInUp" data-wow-delay="0.3s">
-                <div class="profile-header">
-                    <div class="author-avatar">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div class="author-info">
-                        <h4 class="author-name">{{ $book->authorName }}</h4>
-                        <p class="author-type">{{ $book->getAuthorType->authorTypeName ?? 'Penulis' }}</p>
-                    </div>
-                </div>
-                <div class="profile-stats">
-                    <div class="stat">
-                        <div class="stat-number">24</div>
-                        <div class="stat-label">Buku</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number">1.2K</div>
-                        <div class="stat-label">Pembaca</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number">4.8</div>
-                        <div class="stat-label">Rating</div>
+                        <!-- Crown Icon dengan Validasi -->
+                        @if(($book->authorTypeID == 1 || $book->authorTypeID == 2) && $book->availabilityTypeID == 2)
+                            <div class="{{ $book->authorTypeID == 1 ? 'crown-premium premium-badge' : 'crown-gold premium-badge-gold' }}">
+                                <i class="fas fa-crown me-1"></i>
+                                <span>Premium</span>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -87,10 +63,6 @@
                             <i class="fas fa-share-alt"></i>
                             <span>Share</span>
                         </button>
-                        <button class="btn btn-outline btn-download" onclick="downloadBook()">
-                            <i class="fas fa-download"></i>
-                            <span>Download</span>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -101,76 +73,8 @@
             <!-- Book Header -->
             <div class="book-header-elegant wow fadeInUp" data-wow-delay="0.2s">
                 <div class="header-content">
-                    <div class="book-meta-badges">
-                        <span class="badge category-badge">
-                            <i class="fas fa-tag me-1"></i>{{ $book->getBookCategory->bookCategoryName ?? 'Umum' }}
-                        </span>
-                        <span class="badge rating-badge">
-                            <i class="fas fa-star me-1"></i>{{ number_format($book->rating ?? 0, 1) }}
-                        </span>
-                        <span class="badge year-badge">
-                            <i class="fas fa-calendar me-1"></i>{{ $book->year }}
-                        </span>
-                    </div>
                     <h1 class="book-title-elegant">{{ $book->titleBook }}</h1>
-                    <p class="book-subtitle">Sebuah Karya Menakjubkan oleh {{ $book->authorName }}</p>
-
-                    <div class="publication-info">
-                        <div class="info-item">
-                            <i class="fas fa-building"></i>
-                            <span>{{ $book->publisherName }}</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-language"></i>
-                            <span>{{ $book->getLanguage->languageName ?? 'Indonesia' }}</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-clock"></i>
-                            <span>Terbit: {{ \Carbon\Carbon::parse($book->createdDate)->format('d M Y') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Book Stats -->
-            <div class="book-stats-elegant wow fadeInUp" data-wow-delay="0.3s">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon readers">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-number">{{ $book->readCount ?? 0 }}</div>
-                            <div class="stat-label">Pembaca</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon favorites">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-number">{{ $book->favoriteCount ?? 0 }}</div>
-                            <div class="stat-label">Favorit</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon downloads">
-                            <i class="fas fa-download"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-number">{{ $book->downloadCount ?? 0 }}</div>
-                            <div class="stat-label">Download</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon pages">
-                            <i class="fas fa-file"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-number">{{ $book->pages ?? 0 }}</div>
-                            <div class="stat-label">Halaman</div>
-                        </div>
-                    </div>
+                    <p class="book-subtitle">Oleh {{ $book->authorName }} • {{ $book->getAuthorType->authorTypeName ?? 'Penulis' }}</p>
                 </div>
             </div>
 
@@ -178,11 +82,11 @@
             <div class="book-tabs-elegant wow fadeInUp" data-wow-delay="0.4s">
                 <div class="tabs-navigation">
                     <div class="nav-tabs-elegant">
-                        <button class="nav-tab active" data-tab="description">
-                            <i class="fas fa-file-alt me-2"></i>Deskripsi
-                        </button>
-                        <button class="nav-tab" data-tab="details">
+                        <button class="nav-tab active" data-tab="details">
                             <i class="fas fa-info-circle me-2"></i>Detail Buku
+                        </button>
+                        <button class="nav-tab" data-tab="description">
+                            <i class="fas fa-file-alt me-2"></i>Deskripsi
                         </button>
                         @if($book->synopsis)
                         <button class="nav-tab" data-tab="synopsis">
@@ -198,25 +102,55 @@
                 </div>
 
                 <div class="tabs-content">
-                    <!-- Description Tab -->
-                    <div class="tab-pane active" id="description-tab">
-                        <div class="content-card">
-                            <h3 class="content-title">
-                                <i class="fas fa-file-alt me-2"></i>Tentang Buku Ini
-                            </h3>
-                            <div class="content-text">
-                                {!! nl2br(e($book->description)) !!}
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Details Tab -->
-                    <div class="tab-pane" id="details-tab">
+                    <div class="tab-pane active" id="details-tab">
                         <div class="content-card">
                             <h3 class="content-title">
-                                <i class="fas fa-info-circle me-2"></i>Informasi Detail
+                                <i class="fas fa-info-circle me-2"></i>Informasi Detail Buku
                             </h3>
                             <div class="details-grid">
+                                <div class="detail-item">
+                                    <div class="detail-label">
+                                        <i class="fas fa-user-edit"></i>
+                                        <span>Penulis</span>
+                                    </div>
+                                    <div class="detail-value">{{ $book->authorName }}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">
+                                        <i class="fas fa-users"></i>
+                                        <span>Kategori Penulis</span>
+                                    </div>
+                                    <div class="detail-value">{{ $book->getAuthorType->authorTypeName ?? 'Penulis' }}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">
+                                        <i class="fas fa-tag"></i>
+                                        <span>Kategori Buku</span>
+                                    </div>
+                                    <div class="detail-value">{{ $book->getBookCategory->bookCategoryName ?? 'Umum' }}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">
+                                        <i class="fas fa-building"></i>
+                                        <span>Penerbit</span>
+                                    </div>
+                                    <div class="detail-value">{{ $book->publisherName }}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Tahun Terbit</span>
+                                    </div>
+                                    <div class="detail-value">{{ $book->year }}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">
+                                        <i class="fas fa-language"></i>
+                                        <span>Bahasa</span>
+                                    </div>
+                                    <div class="detail-value">{{ $book->getLanguage->languageName ?? 'Indonesia' }}</div>
+                                </div>
                                 <div class="detail-item">
                                     <div class="detail-label">
                                         <i class="fas fa-barcode"></i>
@@ -247,20 +181,18 @@
                                     </div>
                                     <div class="detail-value">{{ $book->pages ?? 0 }} halaman</div>
                                 </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        <span>Tahun Terbit</span>
-                                    </div>
-                                    <div class="detail-value">{{ $book->year }}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">
-                                        <i class="fas fa-language"></i>
-                                        <span>Bahasa</span>
-                                    </div>
-                                    <div class="detail-value">{{ $book->getLanguage->languageName ?? 'Indonesia' }}</div>
-                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description Tab -->
+                    <div class="tab-pane" id="description-tab">
+                        <div class="content-card">
+                            <h3 class="content-title">
+                                <i class="fas fa-file-alt me-2"></i>Deskripsi Buku
+                            </h3>
+                            <div class="content-text">
+                                {!! nl2br(e($book->description)) !!}
                             </div>
                         </div>
                     </div>
@@ -346,8 +278,6 @@
         </div>
     </div>
 </div>
-
-<!-- Success Message Template - DIPINDAHKAN KE BAGIAN BODY -->
 @endsection
 
 @section('styles')

@@ -47,11 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // In real implementation, this would be an API call
     };
 
-    window.downloadBook = function() {
-        showSuccessMessage('Memulai download buku...');
-        // In real implementation, this would trigger the download
-    };
-
     // Show success message - FIXED VERSION
     function showSuccessMessage(message) {
         // Remove existing message
@@ -152,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const tabs = document.querySelectorAll('.nav-tab');
         const panes = document.querySelectorAll('.tab-pane');
 
-        // Set initial active state
+        // Set initial active state - DETAILS tab first
         if (tabs.length > 0 && panes.length > 0) {
             tabs[0].classList.add('active');
             panes[0].classList.add('active');
@@ -219,14 +214,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Add hover effects to stat cards
-        const statCards = document.querySelectorAll('.stat-card, .detail-item, .related-book-card');
-        statCards.forEach(card => {
-            card.addEventListener('mouseenter', function() {
+        // Add hover effects to detail items
+        const detailItems = document.querySelectorAll('.detail-item, .related-book-card');
+        detailItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-5px)';
             });
 
-            card.addEventListener('mouseleave', function() {
+            item.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0)';
             });
         });
@@ -249,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, observerOptions);
 
         // Observe elements for scroll animations
-        document.querySelectorAll('.stat-card, .detail-item, .related-book-card, .author-profile').forEach(el => {
+        document.querySelectorAll('.detail-item, .related-book-card').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(20px)';
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
@@ -296,7 +291,6 @@ document.addEventListener('DOMContentLoaded', function() {
         shareOnWhatsApp: window.shareOnWhatsApp,
         openPdfReader: window.openPdfReader,
         addToFavorites: window.addToFavorites,
-        downloadBook: window.downloadBook,
         shareOnFacebook: window.shareOnFacebook,
         shareOnTwitter: window.shareOnTwitter
     };
