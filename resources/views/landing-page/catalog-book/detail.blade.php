@@ -347,11 +347,7 @@
     </div>
 </div>
 
-<!-- Success Message Template -->
-<div id="success-message" class="success-message" style="display: none;">
-    <i class="fas fa-check-circle me-2"></i>
-    <span class="message-text"></span>
-</div>
+<!-- Success Message Template - DIPINDAHKAN KE BAGIAN BODY -->
 @endsection
 
 @section('styles')

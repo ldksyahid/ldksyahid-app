@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // In real implementation, this would trigger the download
     };
 
-    // Show success message
+    // Show success message - FIXED VERSION
     function showSuccessMessage(message) {
         // Remove existing message
         const existingMessage = document.querySelector('.success-message');
@@ -60,12 +60,68 @@ document.addEventListener('DOMContentLoaded', function() {
             existingMessage.remove();
         }
 
-        // Create new message
-        const successMessage = document.getElementById('success-message').cloneNode(true);
-        successMessage.id = '';
-        successMessage.style.display = 'flex';
-        successMessage.querySelector('.message-text').textContent = message;
+        // Create new message element directly
+        const successMessage = document.createElement('div');
+        successMessage.className = 'success-message';
+        successMessage.innerHTML = `
+            <i class="fas fa-check-circle me-2"></i>
+            <span class="message-text">${message}</span>
+        `;
+
+        // Add styles if not already in CSS
+        successMessage.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.4);
+            z-index: 9999;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        `;
+
         document.body.appendChild(successMessage);
+
+        // Add keyframes for animation if not in CSS
+        if (!document.querySelector('#success-message-animations')) {
+            const style = document.createElement('style');
+            style.id = 'success-message-animations';
+            style.textContent = `
+                @keyframes slideUp {
+                    from {
+                        transform: translateX(-50%) translateY(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(-50%) translateY(0);
+                        opacity: 1;
+                    }
+                }
+                @keyframes slideDown {
+                    from {
+                        transform: translateX(-50%) translateY(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(-50%) translateY(100%);
+                        opacity: 0;
+                    }
+                }
+                .success-message.fade-out {
+                    animation: slideDown 0.3s ease forwards;
+                }
+            `;
+            document.head.appendChild(style);
+        }
 
         // Remove message after 3 seconds with fade out effect
         setTimeout(() => {
@@ -96,6 +152,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const tabs = document.querySelectorAll('.nav-tab');
         const panes = document.querySelectorAll('.tab-pane');
 
+        // Set initial active state
+        if (tabs.length > 0 && panes.length > 0) {
+            tabs[0].classList.add('active');
+            panes[0].classList.add('active');
+        }
+
         tabs.forEach(tab => {
             tab.addEventListener('click', function() {
                 const targetTab = this.getAttribute('data-tab');
@@ -106,7 +168,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Add active class to clicked tab and corresponding pane
                 this.classList.add('active');
-                document.getElementById(`${targetTab}-tab`).classList.add('active');
+                const targetPane = document.getElementById(`${targetTab}-tab`);
+                if (targetPane) {
+                    targetPane.classList.add('active');
+                }
             });
         });
     }
@@ -114,14 +179,20 @@ document.addEventListener('DOMContentLoaded', function() {
     function initElegantButtonLoading() {
         document.querySelectorAll('.btn-read, .btn-outline').forEach(button => {
             button.addEventListener('click', function(e) {
-                if (!this.href || this.hasAttribute('target')) {
+                // Only add loading for buttons that don't navigate away
+                if (!this.href && !this.hasAttribute('target')) {
                     const originalText = this.innerHTML;
+                    const originalWidth = this.offsetWidth;
+
+                    // Set fixed width to prevent button from resizing
+                    this.style.width = `${originalWidth}px`;
                     this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Memproses...';
                     this.disabled = true;
 
                     setTimeout(() => {
                         this.innerHTML = originalText;
                         this.disabled = false;
+                        this.style.width = '';
                     }, 2000);
                 }
             });
@@ -208,27 +279,60 @@ document.addEventListener('DOMContentLoaded', function() {
         window.open(`https://twitter.com/intent/tweet?text=${bookTitle}&url=${bookLink}`, '_blank');
     };
 
+    // Error handling for all functions
+    function safeFunctionCall(fn, fallbackMessage = 'Terjadi kesalahan. Silakan coba lagi.') {
+        try {
+            return fn();
+        } catch (error) {
+            console.error('Error:', error);
+            showSuccessMessage(fallbackMessage);
+            return null;
+        }
+    }
+
+    // Wrap all window functions with error handling
+    const originalFunctions = {
+        copyBookLink: window.copyBookLink,
+        shareOnWhatsApp: window.shareOnWhatsApp,
+        openPdfReader: window.openPdfReader,
+        addToFavorites: window.addToFavorites,
+        downloadBook: window.downloadBook,
+        shareOnFacebook: window.shareOnFacebook,
+        shareOnTwitter: window.shareOnTwitter
+    };
+
+    // Replace with safe versions
+    Object.keys(originalFunctions).forEach(funcName => {
+        window[funcName] = function(...args) {
+            return safeFunctionCall(() => originalFunctions[funcName].apply(this, args));
+        };
+    });
+
     // Update meta tags for social sharing
     function updateMetaTags() {
-        const metaTitle = document.querySelector('title');
-        if (metaTitle) {
-            metaTitle.textContent = '{{ $book->titleBook }} - Perpustakaan Digital';
-        }
+        try {
+            const metaTitle = document.querySelector('title');
+            if (metaTitle) {
+                metaTitle.textContent = '{{ $book->titleBook }} - Perpustakaan Digital';
+            }
 
-        // Update Open Graph tags
-        const ogTitle = document.querySelector('meta[property="og:title"]');
-        if (ogTitle) {
-            ogTitle.setAttribute('content', '{{ $book->titleBook }}');
-        }
+            // Update Open Graph tags
+            const ogTitle = document.querySelector('meta[property="og:title"]');
+            if (ogTitle) {
+                ogTitle.setAttribute('content', '{{ $book->titleBook }}');
+            }
 
-        const ogDescription = document.querySelector('meta[property="og:description"]');
-        if (ogDescription) {
-            ogDescription.setAttribute('content', '{{ Str::limit($book->description, 150) }}');
-        }
+            const ogDescription = document.querySelector('meta[property="og:description"]');
+            if (ogDescription) {
+                ogDescription.setAttribute('content', '{{ Str::limit($book->description, 150) }}');
+            }
 
-        const ogImage = document.querySelector('meta[property="og:image"]');
-        if (ogImage && '{{ $book->coverImageUrl() }}') {
-            ogImage.setAttribute('content', '{{ $book->coverImageUrl() }}');
+            const ogImage = document.querySelector('meta[property="og:image"]');
+            if (ogImage && '{{ $book->coverImageUrl() }}') {
+                ogImage.setAttribute('content', '{{ $book->coverImageUrl() }}');
+            }
+        } catch (error) {
+            console.error('Error updating meta tags:', error);
         }
     }
 
@@ -251,6 +355,11 @@ window.addEventListener('load', function() {
         const loadTime = perfData.loadEventEnd - perfData.navigationStart;
         console.log(`Elegant book detail page loaded in ${loadTime}ms`);
     }
+});
+
+// Global error handler
+window.addEventListener('error', function(e) {
+    console.error('Global error:', e.error);
 });
 
 // Service Worker registration for PWA features (optional)
