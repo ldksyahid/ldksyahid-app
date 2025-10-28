@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add visual feedback
             const copyBtn = document.querySelector('[onclick="copyBookLink()"]');
             const originalHtml = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fas fa-check"></i><span>Disalin!</span>';
+            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
             copyBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
             copyBtn.style.color = 'var(--white)';
             copyBtn.style.borderColor = '#28a745';
