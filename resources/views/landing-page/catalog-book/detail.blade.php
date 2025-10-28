@@ -76,23 +76,25 @@
                             <span class="like-count" id="likeCount">({{ $book->favoriteCount ?? 0 }})</span>
                         </button>
 
-                        <!-- Share Button -->
-                        <button class="btn btn-outline btn-share" onclick="toggleShareOptions()">
-                            <i class="fas fa-share-alt"></i>
-                            <span>Bagikan</span>
-                        </button>
-                    </div>
-                </div>
+                        <!-- Share Button Container - Fixed Structure -->
+                        <div class="share-button-container">
+                            <button class="btn btn-outline btn-share" onclick="toggleShareOptions()">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Bagikan</span>
+                            </button>
 
-                <!-- Share Options Floating -->
-                <div class="share-options-floating" id="shareOptions">
-                    <div class="share-options-content">
-                        <button class="share-option-btn" onclick="copyBookLink()" title="Copy Link">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                        <button class="share-option-btn" onclick="shareOnWhatsApp()" title="Share via WhatsApp">
-                            <i class="fab fa-whatsapp"></i>
-                        </button>
+                            <!-- Share Options Floating - Fixed -->
+                            <div class="share-options-floating" id="shareOptions">
+                                <div class="share-options-content">
+                                    <button class="share-option-btn" onclick="copyBookLink()" title="Salin Link">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button class="share-option-btn" onclick="shareOnWhatsApp()" title="Bagikan via WhatsApp">
+                                    <i class="fab fa-whatsapp"></i>
+                                </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

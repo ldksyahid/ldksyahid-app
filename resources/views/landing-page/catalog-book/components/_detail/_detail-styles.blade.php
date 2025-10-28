@@ -390,28 +390,49 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* === SHARE OPTIONS FLOATING === */
+/* === SHARE BUTTON CONTAINER - FIXED === */
+.share-button-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* === SHARE OPTIONS FLOATING - APPEARS BELOW === */
 .share-options-floating {
     position: absolute;
-    top: 70%;
-    left: 72%;
-    transform: translate(-50%, -50%) scale(0.8);
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
     background: var(--white);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-elegant);
-    padding: 1rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 1.5rem;
     z-index: 1050;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid rgba(0, 191, 166, 0.1);
-    min-width: auto;
+    min-width: 200px;
 }
 
 .share-options-floating.show {
     opacity: 1;
     visibility: visible;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translateX(-50%) translateY(0);
+}
+
+.share-options-floating::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--white);
+    filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.1));
 }
 
 .share-options-content {
@@ -439,16 +460,23 @@
 }
 
 .share-option-btn:hover {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: var(--white);
     border-color: var(--primary);
-    transform: translateY(-3px) scale(1.1);
-    box-shadow: 0 8px 20px rgba(0, 191, 166, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 191, 166, 0.3);
+}
+
+.share-option-btn span {
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 /* WhatsApp specific styling */
 .share-option-btn .fa-whatsapp {
     color: #25D366;
+    transition: var(--transition);
 }
 
 .share-option-btn:hover .fa-whatsapp {
@@ -458,10 +486,65 @@
 /* Copy specific styling */
 .share-option-btn .fa-copy {
     color: var(--primary);
+    transition: var(--transition);
 }
 
 .share-option-btn:hover .fa-copy {
     color: var(--white);
+}
+
+/* Share button active state */
+.btn-share.active {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
+/* Responsive adjustments for share options */
+@media (max-width: 768px) {
+    .share-options-floating {
+        padding: 1rem;
+        min-width: 180px;
+        top: calc(100% + 8px);
+    }
+
+    .share-options-content {
+        gap: 0.75rem;
+    }
+
+    .share-option-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.1rem;
+        padding: 0.5rem;
+    }
+
+    .share-option-btn span {
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .share-options-floating {
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+        min-width: 160px;
+        top: calc(100% + 5px);
+    }
+
+    .share-options-content {
+        gap: 0.5rem;
+    }
+
+    .share-option-btn {
+        width: 55px;
+        height: 55px;
+        font-size: 1rem;
+    }
+
+    .share-option-btn span {
+        font-size: 0.6rem;
+    }
 }
 
 /* === TAGS SECTION === */
@@ -860,23 +943,24 @@
     position: fixed;
     bottom: 30px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(100%);
     background: linear-gradient(135deg, var(--success) 0%, #20c997 100%);
     color: var(--white);
     padding: 1rem 2rem;
     border-radius: var(--radius-lg);
-    box-shadow: 0 10px 30px rgba(40, 167, 69, 0.4);
+    box-shadow: 0 15px 35px rgba(40, 167, 69, 0.4);
     z-index: 9999;
-    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 600;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.95rem;
+    animation: slideUpMessage 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-@keyframes slideUp {
+@keyframes slideUpMessage {
     from {
         transform: translateX(-50%) translateY(100%);
         opacity: 0;
@@ -884,22 +968,22 @@
     to {
         transform: translateX(-50%) translateY(0);
         opacity: 1;
+    }
+}
+
+@keyframes slideDownMessage {
+    from {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-50%) translateY(100%);
+        opacity: 0;
     }
 }
 
 .success-message.fade-out {
-    animation: slideDown 0.3s ease forwards;
-}
-
-@keyframes slideDown {
-    from {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(-50%) translateY(100%);
-        opacity: 0;
-    }
+    animation: slideDownMessage 0.3s ease forwards;
 }
 
 /* === RESPONSIVE DESIGN === */
@@ -941,22 +1025,22 @@
     }
 
     .share-options-floating {
-        left: 50%;
-        transform: translateX(-50%) scale(0.8);
-    }
-
-    .share-options-floating.show {
-        transform: translateX(-50%) scale(1);
+        padding: 1rem;
+        margin-bottom: 5px;
     }
 
     .share-options-content {
-        flex-direction: row;
+        gap: 1rem;
     }
 
     .share-option-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 1.1rem;
+        width: 70px;
+        height: 70px;
+        font-size: 1.3rem;
+    }
+
+    .share-option-btn span {
+        font-size: 0.7rem;
     }
 
     .action-group {
@@ -1017,13 +1101,19 @@
     }
 
     .share-options-content {
+        flex-direction: row;
         gap: 0.75rem;
     }
 
     .share-option-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
+        width: 65px;
+        height: 65px;
+        font-size: 1.2rem;
+        padding: 0.75rem;
+    }
+
+    .share-option-btn span {
+        font-size: 0.65rem;
     }
 
     .btn-like {
@@ -1081,5 +1171,53 @@
 .share-overlay.show {
     opacity: 1;
     visibility: visible;
+}
+/* Responsive adjustments for share options */
+@media (max-width: 768px) {
+    .share-options-floating {
+        padding: 1rem;
+        min-width: 180px;
+    }
+
+    .share-options-content {
+        gap: 0.75rem;
+    }
+
+    .share-option-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.1rem;
+        padding: 0.5rem;
+    }
+
+    .share-option-btn span {
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .share-options-floating {
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        min-width: 160px;
+    }
+
+    .share-options-content {
+        gap: 0.5rem;
+    }
+
+    .share-option-btn {
+        width: 55px;
+        height: 55px;
+        font-size: 1rem;
+    }
+
+    .share-option-btn span {
+        font-size: 0.6rem;
+    }
+
+    .action-group {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
