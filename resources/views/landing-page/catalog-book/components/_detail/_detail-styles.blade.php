@@ -431,6 +431,7 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    position: relative;
 }
 
 .nav-tab:hover {
@@ -487,6 +488,39 @@
 
 .content-text p:last-child {
     margin-bottom: 0;
+}
+
+/* Comments Description */
+.comments-description {
+    color: var(--secondary);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* === DISQUS CONTAINER STYLES === */
+.disqus-container {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+#disqus_thread {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 0;
+}
+
+/* Custom styling for Disqus elements */
+#disqus_thread iframe {
+    border-radius: var(--radius-lg) !important;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 /* === DETAILS GRID === */
