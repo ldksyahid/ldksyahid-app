@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize Disqus
     initDisqusComments();
 
+    // Initialize Like Button
+    initLikeButton();
+
     // Share functionality
     window.copyBookLink = function() {
         const bookLink = window.location.href;
@@ -46,11 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             showSuccessMessage('Buku tidak tersedia untuk dibaca online.');
         }
-    };
-
-    window.addToFavorites = function() {
-        showSuccessMessage('Buku telah ditambahkan ke favorit!');
-        // In real implementation, this would be an API call
     };
 
     // Share Options functionality
@@ -157,6 +155,153 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 2700);
     }
 
+    // Like functionality
+    function initLikeButton() {
+        const likeButton = document.getElementById('likeButton');
+        if (!likeButton) return;
+
+        const likeIcon = document.getElementById('likeIcon');
+        const likeText = document.getElementById('likeText');
+        const likeCount = document.getElementById('likeCount');
+
+        // Check if already liked in this session
+        const bookId = likeButton.getAttribute('data-book-id');
+        const alreadyLiked = localStorage.getItem(`book_${bookId}_liked`);
+
+        if (alreadyLiked === 'true') {
+            setLikedState(true);
+        }
+
+        likeButton.addEventListener('click', function() {
+            if (this.classList.contains('liked') || this.classList.contains('loading')) {
+                return; // Prevent multiple clicks
+            }
+
+            handleLikeBook();
+        });
+    }
+
+    function handleLikeBook() {
+        const likeButton = document.getElementById('likeButton');
+        const likeIcon = document.getElementById('likeIcon');
+        const likeText = document.getElementById('likeText');
+        const likeCount = document.getElementById('likeCount');
+        const bookId = likeButton.getAttribute('data-book-id');
+
+        // Show loading state
+        likeButton.classList.add('loading');
+        likeButton.disabled = true;
+
+        // AJAX request to like the book
+        fetch(`/perpustakaan/buku/${bookId}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Update UI
+                setLikedState(true);
+
+                // Update count
+                if (likeCount) {
+                    likeCount.textContent = `(${data.favoriteCount})`;
+                }
+
+                // Store in localStorage to prevent multiple likes
+                localStorage.setItem(`book_${bookId}_liked`, 'true');
+
+                // Show success message
+                showLikeSuccessMessage(data.message);
+            } else {
+                showSuccessMessage('Gagal menyukai buku: ' + data.message);
+                resetLikeButton();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showSuccessMessage('Terjadi kesalahan saat menyukai buku');
+            resetLikeButton();
+        })
+        .finally(() => {
+            likeButton.classList.remove('loading');
+        });
+    }
+
+    function setLikedState(liked) {
+        const likeButton = document.getElementById('likeButton');
+        const likeIcon = document.getElementById('likeIcon');
+        const likeText = document.getElementById('likeText');
+
+        if (liked) {
+            likeButton.classList.add('liked');
+            if (likeIcon) {
+                likeIcon.classList.remove('far', 'fa-heart');
+                likeIcon.classList.add('fas', 'fa-heart');
+            }
+            if (likeText) {
+                likeText.textContent = 'Disukai';
+            }
+            likeButton.disabled = true;
+        } else {
+            likeButton.classList.remove('liked');
+            if (likeIcon) {
+                likeIcon.classList.remove('fas', 'fa-heart');
+                likeIcon.classList.add('far', 'fa-heart');
+            }
+            if (likeText) {
+                likeText.textContent = 'Suka';
+            }
+            likeButton.disabled = false;
+        }
+    }
+
+    function resetLikeButton() {
+        const likeButton = document.getElementById('likeButton');
+        if (likeButton) {
+            likeButton.disabled = false;
+            likeButton.classList.remove('loading');
+        }
+    }
+
+    function showLikeSuccessMessage(message) {
+        // Remove existing message
+        const existingMessage = document.querySelector('.like-success-message');
+        if (existingMessage) {
+            existingMessage.remove();
+        }
+
+        // Create new message element
+        const successMessage = document.createElement('div');
+        successMessage.className = 'like-success-message';
+        successMessage.innerHTML = `
+            <i class="fas fa-heart me-2"></i>
+            <span class="message-text">${message}</span>
+        `;
+
+        document.body.appendChild(successMessage);
+
+        // Remove message after 3 seconds with fade out effect
+        setTimeout(() => {
+            successMessage.classList.add('fade-out');
+            setTimeout(() => {
+                if (successMessage.parentNode) {
+                    successMessage.remove();
+                }
+            }, 300);
+        }, 2700);
+    }
+
     function initElegantBookDetail() {
         // Add hover effects
         initElegantHoverEffects();
@@ -212,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Disqus configuration
         var disqus_config = function () {
             this.page.url = '{{ url()->current() }}';
-            this.page.identifier = 'book-{{ $book->id }}';
+            this.page.identifier = 'book-{{ $book->bookID }}';
             this.page.title = '{{ $book->titleBook }} - Diskusi Buku';
         };
 
@@ -223,7 +368,6 @@ document.addEventListener('DOMContentLoaded', function() {
             s.setAttribute('data-timestamp', +new Date());
             (d.head || d.body).appendChild(s);
         })();
-
     }
 
     function initElegantHoverEffects() {
@@ -310,7 +454,6 @@ document.addEventListener('DOMContentLoaded', function() {
         copyBookLink: window.copyBookLink,
         shareOnWhatsApp: window.shareOnWhatsApp,
         openPdfReader: window.openPdfReader,
-        addToFavorites: window.addToFavorites,
         toggleShareOptions: window.toggleShareOptions
     };
 
@@ -344,6 +487,13 @@ window.addEventListener('error', function(e) {
     console.error('Global error:', e.error);
 });
 
+// CSRF Token setup for AJAX requests
+(function() {
+    const token = document.querySelector('meta[name="csrf-token"]');
+    if (token) {
+        window.csrfToken = token.getAttribute('content');
+    }
+})();
 </script>
 
 <!-- Disqus Fallback for No JavaScript -->

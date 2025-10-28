@@ -534,4 +534,19 @@ class MsCatalogBook extends Model
             throw new \Exception('Failed to delete associated files');
         }
     }
+
+    public static function incrementFavoriteCount($bookID)
+    {
+        try {
+            $book = self::find($bookID);
+            if ($book) {
+                $book->increment('favoriteCount');
+                return $book->favoriteCount;
+            }
+            return false;
+        } catch (\Exception $e) {
+            Log::error("Error incrementing favorite count for book ID {$bookID}: " . $e->getMessage());
+            return false;
+        }
+    }
 }
