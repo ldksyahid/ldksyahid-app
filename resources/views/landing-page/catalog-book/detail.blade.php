@@ -22,7 +22,7 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="row g-5">
+    <div class="row g-4">
         <!-- Left Column - Book Cover & Actions -->
         <div class="col-lg-4 col-md-5">
             <!-- Book Cover -->
