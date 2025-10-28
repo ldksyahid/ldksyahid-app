@@ -69,15 +69,17 @@
                     @endif
 
                     <div class="action-group">
-                        <button class="btn btn-outline btn-favorite" onclick="addToFavorites()">
-                            <i class="far fa-heart"></i>
-                            <span>Favorit</span>
+                        <!-- Like Button -->
+                        <button class="btn btn-outline btn-like" id="likeButton" data-book-id="{{ $book->bookID }}">
+                            <i class="far fa-heart like-icon" id="likeIcon"></i>
+                            <span id="likeText">Suka</span>
+                            <span class="like-count" id="likeCount">({{ $book->favoriteCount ?? 0 }})</span>
                         </button>
 
                         <!-- Share Button -->
                         <button class="btn btn-outline btn-share" onclick="toggleShareOptions()">
                             <i class="fas fa-share-alt"></i>
-                            <span>Share</span>
+                            <span>Bagikan</span>
                         </button>
                     </div>
                 </div>
@@ -98,7 +100,7 @@
                 @if($book->tags)
                 <div class="tags-section wow fadeInUp" data-wow-delay="0.5s">
                     <h5 class="tags-title">
-                        <i class="fas fa-tags me-2"></i>Kategori & Tags
+                        <i class="fas fa-tags me-2"></i>Tags
                     </h5>
                     <div class="tags-container">
                         @php

@@ -184,4 +184,23 @@ class CatalogBooksController extends Controller
             ], 500);
         }
     }
+
+    public function likeBook($id)
+    {
+        try {
+            $newCount = MsCatalogBook::incrementFavoriteCount($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Terima kasih telah menyukai buku ini!',
+                'favoriteCount' => $newCount,
+                'bookId' => $id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyukai buku: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
