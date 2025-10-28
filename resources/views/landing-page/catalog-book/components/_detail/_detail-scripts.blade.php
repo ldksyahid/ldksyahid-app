@@ -15,10 +15,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Share functionality
     window.copyBookLink = function() {
         const bookLink = window.location.href;
+        const bookTitle = '{{ $book->titleBook }}';
 
         navigator.clipboard.writeText(bookLink).then(() => {
-            showSuccessMessage('Link buku berhasil disalin!');
+            showSuccessMessage('📚 Link buku berhasil disalin!');
             closeShareOptions();
+
+            // Add visual feedback
+            const copyBtn = document.querySelector('[onclick="copyBookLink()"]');
+            const originalHtml = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i><span>Disalin!</span>';
+            copyBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+            copyBtn.style.color = 'var(--white)';
+            copyBtn.style.borderColor = '#28a745';
+
+            setTimeout(() => {
+                copyBtn.innerHTML = originalHtml;
+                copyBtn.style.background = '';
+                copyBtn.style.color = '';
+                copyBtn.style.borderColor = '';
+            }, 2000);
+
         }).catch(() => {
             // Fallback for older browsers
             const textArea = document.createElement('textarea');
@@ -27,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
             textArea.select();
             document.execCommand('copy');
             document.body.removeChild(textArea);
-            showSuccessMessage('Link buku berhasil disalin!');
+            showSuccessMessage('📚 Link buku berhasil disalin!');
             closeShareOptions();
         });
     };
@@ -35,9 +52,16 @@ document.addEventListener('DOMContentLoaded', function() {
     window.shareOnWhatsApp = function() {
         const bookLink = window.location.href;
         const bookTitle = '{{ $book->titleBook }}';
-        const message = `📚 *{{ $book->titleBook }}* \n\nBaca buku "${bookTitle}" di: ${bookLink}`;
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        const authorName = '{{ $book->authorName }}';
+        const message = `📚 *${bookTitle}* oleh ${authorName}
 
+🔖 Sinopsis: {{ Str::limit(strip_tags($book->description), 100) }}
+
+📖 Baca buku ini di: ${bookLink}
+
+#Buku #Literasi #Membaca`;
+
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
         closeShareOptions();
     };
@@ -51,16 +75,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Share Options functionality
+    // Share Options functionality - Updated Slide Down
     let shareOptionsVisible = false;
 
     window.toggleShareOptions = function() {
         const shareOptions = document.getElementById('shareOptions');
+        const shareButton = document.querySelector('.btn-share');
 
         if (shareOptionsVisible) {
             closeShareOptions();
+            shareButton.classList.remove('active');
         } else {
             openShareOptions();
+            shareButton.classList.add('active');
         }
     }
 
@@ -91,7 +118,10 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }
 
-        overlay.classList.add('show');
+        // Show overlay with animation
+        setTimeout(() => {
+            overlay.classList.add('show');
+        }, 10);
 
         // Close on overlay click
         overlay.onclick = closeShareOptions;
@@ -99,12 +129,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function closeShareOptions() {
         const shareOptions = document.getElementById('shareOptions');
+        const shareButton = document.querySelector('.btn-share');
+
         shareOptions.classList.remove('show');
         shareOptionsVisible = false;
+        shareButton.classList.remove('active');
 
         const overlay = document.querySelector('.share-overlay');
         if (overlay) {
             overlay.classList.remove('show');
+            // Remove overlay after animation
+            setTimeout(() => {
+                if (overlay.parentNode && !shareOptionsVisible) {
+                    overlay.remove();
+                }
+            }, 300);
         }
     }
 
@@ -213,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update UI
                 setLikedState(true);
 
-                // Update count
+                // Update count - PASTIKAN COUNT SELALU DIPERBARUI
                 if (likeCount) {
                     likeCount.textContent = `(${data.favoriteCount})`;
                 }
@@ -242,6 +281,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const likeButton = document.getElementById('likeButton');
         const likeIcon = document.getElementById('likeIcon');
         const likeText = document.getElementById('likeText');
+        const likeCount = document.getElementById('likeCount');
 
         if (liked) {
             likeButton.classList.add('liked');
@@ -252,6 +292,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (likeText) {
                 likeText.textContent = 'Disukai';
             }
+            // COUNT TETAP ADA, HANYA UBAH STYLING JIKA PERLU
+            if (likeCount) {
+                likeCount.style.color = 'var(--white)'; // Ubah warna count jadi putih saat liked
+            }
             likeButton.disabled = true;
         } else {
             likeButton.classList.remove('liked');
@@ -261,6 +305,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (likeText) {
                 likeText.textContent = 'Suka';
+            }
+            // KEMBALIKAN WARNA COUNT KE SEMULA
+            if (likeCount) {
+                likeCount.style.color = ''; // Kembalikan ke warna default
             }
             likeButton.disabled = false;
         }
