@@ -140,6 +140,9 @@
                             <i class="fas fa-book me-2"></i>Sinopsis
                         </button>
                         @endif
+                        <button class="nav-tab" data-tab="comments">
+                            <i class="fas fa-comments me-2"></i>Diskusi
+                        </button>
                     </div>
                 </div>
 
@@ -252,6 +255,21 @@
                         </div>
                     </div>
                     @endif
+
+                    <!-- Comments Tab -->
+                    <div class="tab-pane" id="comments-tab">
+                        <div class="content-card">
+                            <h3 class="content-title">
+                                <i class="fas fa-comments me-2"></i>Diskusi Buku
+                            </h3>
+                            <p class="comments-description">
+                                Bagikan pendapat, review, atau diskusikan buku ini dengan pembaca lainnya.
+                            </p>
+                            <div class="disqus-container">
+                                <div id="disqus_thread"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
