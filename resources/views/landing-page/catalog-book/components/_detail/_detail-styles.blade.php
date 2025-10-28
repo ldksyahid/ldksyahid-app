@@ -231,6 +231,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
     position: relative;
+    align-items: stretch;
 }
 
 .btn-outline {
@@ -502,6 +503,12 @@
 
 /* Responsive adjustments for share options */
 @media (max-width: 768px) {
+    .btn-like, .btn-share {
+        min-height: 70px;
+        flex-direction: row; /* Ubah ke horizontal di mobile */
+        justify-content: center;
+        gap: 0.75rem;
+    }
     .share-options-floating {
         padding: 1rem;
         min-width: 180px;

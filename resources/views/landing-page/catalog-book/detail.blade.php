@@ -71,18 +71,23 @@
                     <div class="action-group">
                         <!-- Like Button -->
                         <button class="btn btn-outline btn-like" id="likeButton" data-book-id="{{ $book->bookID }}">
-                            <i class="far fa-heart like-icon" id="likeIcon"></i>
-                            <span id="likeText">Suka</span>
-                            <span class="like-count" id="likeCount">({{ $book->favoriteCount ?? 0 }})</span>
+                            <div class="button-content">
+                                <i class="far fa-heart like-icon" id="likeIcon"></i>
+                                <span class="button-text">
+                                    <span id="likeText"> Suka </span>
+                                    <span class="like-count" id="likeCount">({{ $book->favoriteCount ?? 0 }})</span>
+                                </span>
+                            </div>
                         </button>
-
                         <!-- Share Button Container - Fixed Structure -->
                         <div class="share-button-container">
+                            <!-- Share Button -->
                             <button class="btn btn-outline btn-share" onclick="toggleShareOptions()">
-                                <i class="fas fa-share-alt"></i>
-                                <span>Bagikan</span>
+                                <div class="button-content">
+                                    <i class="fas fa-share-alt"></i>
+                                    <span class="button-text">Bagikan</span>
+                                </div>
                             </button>
-
                             <!-- Share Options Floating - Fixed -->
                             <div class="share-options-floating" id="shareOptions">
                                 <div class="share-options-content">
