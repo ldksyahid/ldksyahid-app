@@ -47,7 +47,7 @@ class CatalogBooksController extends Controller
             ->get();
 
         return view('landing-page.catalog-book.detail', compact('book', 'relatedBooks'), [
-            "title" => $book->titleBook,
+            "title" => "Perpustakaan",
         ]);
     }
 
