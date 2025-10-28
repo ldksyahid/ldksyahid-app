@@ -143,7 +143,7 @@
 
 .crown-gold {
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: #000;
+    color: var(--white);
 }
 
 /* === QUICK ACTIONS === */
