@@ -146,9 +146,9 @@
 @endsection
 
 @section('styles')
-    @include('landing-page.catalog-book.components._detail._pdf-reader-styles')
+    @include('landing-page.catalog-book.components._pdf-reader._pdf-reader-styles')
 @endsection
 
 @section('scripts')
-    @include('landing-page.catalog-book.components._detail._pdf-reader-scripts')
+    @include('landing-page.catalog-book.components._pdf-reader._pdf-reader-scripts')
 @endsection
