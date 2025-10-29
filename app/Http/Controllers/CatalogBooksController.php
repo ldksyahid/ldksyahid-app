@@ -60,37 +60,34 @@ class CatalogBooksController extends Controller
             abort(404, 'Buku tidak tersedia untuk dibaca online.');
         }
 
-        // Try to get local PDF path (will download if needed)
-        $localPath = $book->getLocalPdfPath();
+        try {
+            // Download PDF to temporary storage
+            $localPdfPath = $book->downloadPdfToTemp();
 
-        if (!$localPath || !file_exists($localPath)) {
-            abort(404, 'Gagal memuat buku. Silakan coba lagi.');
+            return view('landing-page.catalog-book.pdf-reader', compact('book'), [
+                "title" => "Perpustakaan",
+            ]);
+
+        } catch (\Exception $e) {
+            abort(500, 'Gagal memuat buku: ' . $e->getMessage());
         }
-
-        return view('landing-page.catalog-book.pdf-reader', compact('book'), [
-            "title" => "Perpustakaan",
-        ]);
     }
 
     /**
-     * Serve the local PDF file
+     * Serve PDF file for flipbook
      */
-    public function viewPdf(MsCatalogBook $book): BinaryFileResponse
+    public function servePdf($bookID)
     {
-        if (!$book->pdfFileNameGdriveID) {
-            abort(404);
-        }
-
+        $book = MsCatalogBook::findOrFail($bookID);
         $localPath = $book->getLocalPdfPath();
 
         if (!$localPath || !file_exists($localPath)) {
-            abort(404);
+            abort(404, 'PDF tidak ditemukan');
         }
 
         return response()->file($localPath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . ($book->pdfFileName ?: 'book.pdf') . '"',
-            'Cache-Control' => 'public, max-age=3600',
+            'Content-Disposition' => 'inline; filename="' . $book->titleBook . '.pdf"'
         ]);
     }
 
