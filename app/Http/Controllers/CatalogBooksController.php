@@ -51,6 +51,19 @@ class CatalogBooksController extends Controller
         ]);
     }
 
+    public function pdfReader($slug)
+    {
+        $book = MsCatalogBook::where('slug', $slug)->firstOrFail();
+
+        if (!$book->pdfFileUrl()) {
+            abort(404, 'Buku tidak tersedia untuk dibaca online.');
+        }
+
+        return view('landing-page.catalog-book.components._detail._pdf-reader', compact('book'), [
+            "title" => "Perpustakaan",
+        ]);
+    }
+
     /* =========================================================================
        SECTION B — ADMIN AREA (with RESTful routing)
        ========================================================================= */

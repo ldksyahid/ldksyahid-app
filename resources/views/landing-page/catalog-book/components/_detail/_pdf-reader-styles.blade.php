@@ -1,0 +1,511 @@
+<style>
+/* === VARIABLES === */
+:root {
+    --primary: #00bfa6;
+    --primary-dark: #009b89;
+    --primary-light: #e0f7f5;
+    --secondary: #6c757d;
+    --dark: #2c3e50;
+    --light: #f8f9fa;
+    --white: #ffffff;
+
+    --radius: 12px;
+    --radius-lg: 16px;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* === READER HEADER === */
+.reader-header {
+    background: linear-gradient(135deg, var(--white) 0%, var(--light) 100%);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 191, 166, 0.1);
+}
+
+.book-title-reader {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.book-author-reader {
+    font-size: 1.2rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin: 0;
+}
+
+/* === FLIPBOOK CONTAINER === */
+.flipbook-container {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 191, 166, 0.1);
+    min-height: 600px;
+    position: relative;
+    overflow: hidden;
+}
+
+.flipbook-viewer {
+    width: 100%;
+    height: 70vh;
+    min-height: 600px;
+    background: #f8f9fa;
+}
+
+/* 3D Flipbook Custom Styles */
+.flip-book {
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 8px !important;
+}
+
+.page {
+    background: white !important;
+    border-radius: 4px !important;
+}
+
+/* === LOADING & ERROR STATES === */
+.loading-state, .error-state {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    z-index: 10;
+}
+
+.error-icon {
+    font-size: 4rem;
+    color: var(--secondary);
+    margin-bottom: 1rem;
+}
+
+.error-state h4 {
+    color: var(--dark);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.error-state p {
+    color: var(--secondary);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* === BUTTON STYLES === */
+.btn-retry {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border: none;
+    color: var(--white);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-retry:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, #007f73 100%);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 191, 166, 0.4);
+}
+
+.btn-back {
+    background: linear-gradient(135deg, var(--white) 0%, var(--light) 100%);
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-back:hover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 191, 166, 0.4);
+}
+
+/* === READER CONTROLS === */
+.reader-controls {
+    background: linear-gradient(135deg, var(--white) 0%, var(--light) 100%);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 191, 166, 0.1);
+}
+
+.controls-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--white);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 191, 166, 0.1);
+}
+
+.btn-control {
+    background: transparent;
+    border: 2px solid var(--primary-light);
+    color: var(--primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-control:hover {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 191, 166, 0.3);
+}
+
+.btn-control.active {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
+.page-info, .zoom-info {
+    font-weight: 600;
+    color: var(--dark);
+    min-width: 120px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* === BOOK INFO FOOTER === */
+.book-info-footer {
+    background: linear-gradient(135deg, var(--white) 0%, var(--light) 100%);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 191, 166, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.info-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    flex: 1;
+}
+
+.info-item {
+    color: var(--dark);
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+}
+
+.info-item strong {
+    color: var(--primary);
+}
+
+.action-container {
+    flex-shrink: 0;
+}
+
+/* === FULLSCREEN MODE === */
+.flipbook-container.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    border-radius: 0;
+    margin: 0;
+}
+
+.flipbook-container.fullscreen .flipbook-viewer {
+    height: calc(100vh - 80px);
+}
+
+body.fullscreen-mode {
+    overflow: hidden;
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 768px) {
+    .book-title-reader {
+        font-size: 1.5rem;
+    }
+
+    .book-author-reader {
+        font-size: 1rem;
+    }
+
+    .controls-container {
+        gap: 1rem;
+    }
+
+    .control-group {
+        padding: 0.5rem 1rem;
+    }
+
+    .page-info, .zoom-info {
+        min-width: 100px;
+        font-size: 0.8rem;
+    }
+
+    .book-info-footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .info-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .action-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .flipbook-viewer {
+        height: 50vh;
+        min-height: 400px;
+    }
+
+    .controls-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .control-group {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-retry, .btn-back {
+        width: 100%;
+        padding: 1rem 1.5rem;
+    }
+}
+
+/* === CUSTOM SCROLLBAR === */
+.flipbook-viewer::-webkit-scrollbar {
+    width: 6px;
+}
+
+.flipbook-viewer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.flipbook-viewer::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+.flipbook-viewer::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.wow.fadeIn {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* === BREADCRUMB (Reuse from detail) === */
+.elegant-breadcrumb {
+    background: linear-gradient(135deg, var(--white) 0%, var(--light) 100%);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(0, 191, 166, 0.1);
+    box-shadow: var(--shadow);
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-link:hover {
+    color: var(--primary-dark);
+    background: var(--primary-light);
+    transform: translateY(-1px);
+}
+
+.breadcrumb-item.active {
+    color: var(--dark);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+/* Turn.js Flipbook Styles */
+.flipbook {
+    background: #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.page {
+    background: white;
+    position: relative;
+}
+
+.page.hard {
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+    color: white;
+}
+
+.page-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.cover-front, .cover-back {
+    text-align: center;
+    flex-direction: column;
+}
+
+.cover-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: inherit;
+}
+
+.cover-content .author {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.cover-image {
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.cover-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.book-info {
+    margin-top: 2rem;
+    text-align: left;
+}
+
+.book-info p {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Canvas styling for PDF pages */
+.page-content canvas {
+    max-width: 100%;
+    max-height: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+/* Turn.js animation improvements */
+.turn-page {
+    background: white !important;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .flipbook {
+        width: 100% !important;
+        height: 400px !important;
+    }
+
+    .cover-content h2 {
+        font-size: 1.4rem;
+    }
+
+    .cover-content .author {
+        font-size: 1rem;
+    }
+}
+
+/* Fullscreen adjustments */
+.flipbook-container.fullscreen .flipbook {
+    width: 90vw !important;
+    height: 90vh !important;
+}
+</style>
