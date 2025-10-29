@@ -59,7 +59,7 @@ class CatalogBooksController extends Controller
             abort(404, 'Buku tidak tersedia untuk dibaca online.');
         }
 
-        return view('landing-page.catalog-book.components._detail._pdf-reader', compact('book'), [
+        return view('landing-page.catalog-book.pdf-reader', compact('book'), [
             "title" => "Perpustakaan",
         ]);
     }
