@@ -552,43 +552,7 @@ class MsCatalogBook extends Model
     }
 
     /**
-     * Get local PDF file path - download if not exists
-     */
-    public function getLocalPdfPath(): ?string
-    {
-        if (!$this->pdfFileNameGdriveID) {
-            return null;
-        }
-
-        $localPath = $this->getTemporaryPdfPath();
-
-        // If file doesn't exist or is older than 11 hours, download it
-        if (!file_exists($localPath) || (time() - filemtime($localPath)) > 39600) {
-            try {
-                $gdriveService = new GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
-                $gdriveService->downloadFile($this->pdfFileNameGdriveID, $localPath);
-
-                Log::info("PDF downloaded for book {$this->bookID}: {$localPath}");
-            } catch (\Exception $e) {
-                Log::error("Failed to download PDF for book {$this->bookID}: " . $e->getMessage());
-                return null;
-            }
-        }
-
-        return $localPath;
-    }
-
-    /**
-     * Get temporary PDF file path
-     */
-    public function getTemporaryPdfPath(): string
-    {
-        $filename = $this->pdfFileName ?: 'book_' . $this->bookID . '.pdf';
-        return storage_path('app/temp/pdfs/' . $this->pdfFileNameGdriveID . '_' . $filename);
-    }
-
-        /**
-     * Download PDF to temporary storage
+     * Download PDF to temporary storage (SINGLE SOURCE OF TRUTH)
      */
     public function downloadPdfToTemp(): string
     {
@@ -616,45 +580,55 @@ class MsCatalogBook extends Model
         $gdriveService = new GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
         $gdriveService->downloadFile($this->pdfFileNameGdriveID, $localPath);
 
+        Log::info("PDF downloaded for book {$this->bookID}: {$localPath}");
+
         return $localPath;
     }
 
     /**
-     * Get temporary PDF URL for web access
+     * Get local PDF file path - uses downloadPdfToTemp internally
      */
-    public function getTempPdfUrl(): string
+    public function getLocalPdfPath(): ?string
     {
-        $localPath = $this->downloadPdfToTemp();
-        $webPath = 'temp/pdfs/' . basename($localPath);
-
-        // Create symbolic link if doesn't exist
-        $publicPath = public_path('storage/temp/pdfs');
-        if (!File::isDirectory($publicPath)) {
-            File::makeDirectory($publicPath, 0755, true);
+        try {
+            return $this->downloadPdfToTemp();
+        } catch (\Exception $e) {
+            Log::error("Failed to get local PDF path for book {$this->bookID}: " . $e->getMessage());
+            return null;
         }
-
-        $targetPath = storage_path('app/' . $webPath);
-        $linkPath = $publicPath . '/' . basename($localPath);
-
-        if (!File::exists($linkPath)) {
-            File::link($targetPath, $linkPath);
-        }
-
-        return asset('storage/temp/pdfs/' . basename($localPath));
     }
 
+    /**
+     * Get temporary PDF file path (without downloading)
+     */
+    public function getTemporaryPdfPath(): string
+    {
+        $filename = $this->pdfFileName ?: 'book_' . $this->bookID . '.pdf';
+        return storage_path('app/temp/pdfs/' . $this->bookID . '_' . Str::slug($this->titleBook) . '.pdf');
+    }
+
+    /**
+     * Get PDF URL for flipbook (gunakan ini saja)
+     */
     public function getFlipbookPdfUrl(): string
     {
         return route('catalog.books.pdf.serve', ['bookID' => $this->bookID]);
     }
 
+    /**
+     * Check if PDF is available for reading
+     */
     public function isPdfAvailable(): bool
     {
         if (!$this->pdfFileNameGdriveID) {
             return false;
         }
 
-        $localPath = $this->getLocalPdfPath();
-        return $localPath && file_exists($localPath);
+        try {
+            $localPath = $this->getLocalPdfPath();
+            return $localPath && file_exists($localPath);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
