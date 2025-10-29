@@ -31,6 +31,12 @@
             <div class="reader-header text-center">
                 <h1 class="book-title-reader">{{ $book->titleBook }}</h1>
                 <p class="book-author-reader">Oleh {{ $book->authorName }}</p>
+                <div class="download-info mt-2">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Buku akan dihapus otomatis setiap 12 jam
+                    </small>
+                </div>
             </div>
         </div>
     </div>
@@ -47,6 +53,10 @@
                         <span class="visually-hidden">Memuat buku...</span>
                     </div>
                     <p class="mt-3">Sedang memuat buku, harap tunggu...</p>
+                    <div class="progress mt-3" style="width: 200px;">
+                        <div id="download-progress" class="progress-bar progress-bar-striped progress-bar-animated"
+                             role="progressbar" style="width: 0%"></div>
+                    </div>
                 </div>
 
                 <!-- Error State -->
@@ -55,7 +65,7 @@
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <h4>Gagal Memuat Buku</h4>
-                    <p>Maaf, terjadi kesalahan saat memuat buku. Silakan coba lagi.</p>
+                    <p id="error-message">Maaf, terjadi kesalahan saat memuat buku. Silakan coba lagi.</p>
                     <button class="btn btn-primary btn-retry mt-3" onclick="location.reload()">
                         <i class="fas fa-redo me-2"></i>Coba Lagi
                     </button>
@@ -111,6 +121,13 @@
                             <i class="fas fa-expand"></i>
                         </button>
                     </div>
+
+                    <!-- Download -->
+                    <div class="control-group">
+                        <a href="{{ $book->pdfFileUrl() }}" class="btn-control" title="Download Buku" target="_blank" download>
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -132,6 +149,12 @@
                     </div>
                     <div class="info-item">
                         <strong>Tahun:</strong> {{ $book->year }}
+                    </div>
+                    <div class="info-item">
+                        <strong>Halaman:</strong> {{ $book->pages }}
+                    </div>
+                    <div class="info-item">
+                        <strong>Status:</strong> <span id="file-status">Mempersiapkan...</span>
                     </div>
                 </div>
                 <div class="action-container">

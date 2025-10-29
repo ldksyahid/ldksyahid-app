@@ -8,6 +8,7 @@ use App\Models\LkLanguage;
 use App\Models\LkAuthorType;
 use App\Models\LkAvailabilityType;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CatalogBooksController extends Controller
 {
@@ -55,12 +56,41 @@ class CatalogBooksController extends Controller
     {
         $book = MsCatalogBook::where('slug', $slug)->firstOrFail();
 
-        if (!$book->pdfFileUrl()) {
+        if (!$book->pdfFileNameGdriveID) {
             abort(404, 'Buku tidak tersedia untuk dibaca online.');
+        }
+
+        // Try to get local PDF path (will download if needed)
+        $localPath = $book->getLocalPdfPath();
+
+        if (!$localPath || !file_exists($localPath)) {
+            abort(404, 'Gagal memuat buku. Silakan coba lagi.');
         }
 
         return view('landing-page.catalog-book.pdf-reader', compact('book'), [
             "title" => "Perpustakaan",
+        ]);
+    }
+
+    /**
+     * Serve the local PDF file
+     */
+    public function viewPdf(MsCatalogBook $book): BinaryFileResponse
+    {
+        if (!$book->pdfFileNameGdriveID) {
+            abort(404);
+        }
+
+        $localPath = $book->getLocalPdfPath();
+
+        if (!$localPath || !file_exists($localPath)) {
+            abort(404);
+        }
+
+        return response()->file($localPath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . ($book->pdfFileName ?: 'book.pdf') . '"',
+            'Cache-Control' => 'public, max-age=3600',
         ]);
     }
 

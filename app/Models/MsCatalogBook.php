@@ -549,4 +549,55 @@ class MsCatalogBook extends Model
             return false;
         }
     }
+
+    /**
+     * Get local PDF file path - download if not exists
+     */
+    public function getLocalPdfPath(): ?string
+    {
+        if (!$this->pdfFileNameGdriveID) {
+            return null;
+        }
+
+        $localPath = $this->getTemporaryPdfPath();
+
+        // If file doesn't exist or is older than 11 hours, download it
+        if (!file_exists($localPath) || (time() - filemtime($localPath)) > 39600) {
+            try {
+                $gdriveService = new GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
+                $gdriveService->downloadFile($this->pdfFileNameGdriveID, $localPath);
+
+                Log::info("PDF downloaded for book {$this->bookID}: {$localPath}");
+            } catch (\Exception $e) {
+                Log::error("Failed to download PDF for book {$this->bookID}: " . $e->getMessage());
+                return null;
+            }
+        }
+
+        return $localPath;
+    }
+
+    /**
+     * Get temporary PDF file path
+     */
+    public function getTemporaryPdfPath(): string
+    {
+        $filename = $this->pdfFileName ?: 'book_' . $this->bookID . '.pdf';
+        return storage_path('app/temp/pdfs/' . $this->pdfFileNameGdriveID . '_' . $filename);
+    }
+
+    /**
+     * Get public URL for temporary PDF file
+     */
+    public function getLocalPdfUrl(): ?string
+    {
+        $localPath = $this->getLocalPdfPath();
+
+        if (!$localPath || !file_exists($localPath)) {
+            return null;
+        }
+
+        // Create a route to serve the PDF file
+        return route('catalog.books.pdf.view', ['book' => $this->bookID, 't' => time()]);
+    }
 }
