@@ -631,4 +631,20 @@ class MsCatalogBook extends Model
             return false;
         }
     }
+
+    /**
+     * Get public PDF URL for 3D flipbook
+     */
+    public function getPublicPdfUrl(): string
+    {
+        return route('catalog.books.pdf.serve', ['bookID' => $this->bookID]);
+    }
+
+    /**
+     * Get PDF URL with cache busting
+     */
+    public function getPdfUrlWithCacheBusting(): string
+    {
+        return $this->getPublicPdfUrl() . '?t=' . time();
+    }
 }
