@@ -3,9 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 
 class CleanTempPdfFiles extends Command
 {
@@ -14,26 +12,24 @@ class CleanTempPdfFiles extends Command
 
     public function handle()
     {
-        $tempPath = storage_path('app/temp/pdfs');
+        $tempDir = storage_path('app/temp/pdfs');
 
-        if (!file_exists($tempPath)) {
-            $this->info('Temporary directory does not exist.');
+        if (!File::isDirectory($tempDir)) {
+            $this->info('No temporary PDF directory found.');
             return;
         }
 
-        $files = File::files($tempPath);
-        $deletedCount = 0;
-        $threshold = now()->subHours(12)->getTimestamp();
+        $files = File::files($tempDir);
+        $cleanedCount = 0;
+        $cutoffTime = now()->subHours(12)->getTimestamp();
 
         foreach ($files as $file) {
-            if (filemtime($file) < $threshold) {
+            if (File::lastModified($file) < $cutoffTime) {
                 File::delete($file);
-                $deletedCount++;
+                $cleanedCount++;
             }
         }
 
-        $this->info("Deleted {$deletedCount} temporary PDF files.");
-
-        Log::info("Temporary PDF cleanup: {$deletedCount} files deleted.");
+        $this->info("Cleaned {$cleanedCount} temporary PDF files.");
     }
 }
