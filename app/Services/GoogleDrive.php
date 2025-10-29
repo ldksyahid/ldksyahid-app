@@ -21,7 +21,7 @@ class GoogleDrive
     }
 
     /**
-     * Download file from Google Drive to local storage
+     * Download file from Google Drive to local temporary storage
      *
      * @param string $fileID The ID of the file to download
      * @param string $localPath The local path to save the file
@@ -37,7 +37,6 @@ class GoogleDrive
 
             $filePath = $this->folderID . '/' . $fileID;
 
-            // Check if file exists in Google Drive
             if (!Storage::disk('google')->exists($filePath)) {
                 throw new RuntimeException('File not found in Google Drive');
             }
@@ -45,53 +44,21 @@ class GoogleDrive
             // Get file content
             $fileContent = Storage::disk('google')->get($filePath);
 
-            if (!$fileContent) {
-                throw new RuntimeException('Failed to get file content from Google Drive');
-            }
-
             // Ensure directory exists
             $directory = dirname($localPath);
-            if (!file_exists($directory)) {
-                mkdir($directory, 0755, true);
+            if (!File::isDirectory($directory)) {
+                File::makeDirectory($directory, 0755, true);
             }
 
-            // Save file locally
-            if (!file_put_contents($localPath, $fileContent)) {
-                throw new RuntimeException('Failed to save file locally');
+            // Save to local storage
+            if (!File::put($localPath, $fileContent)) {
+                throw new RuntimeException('Failed to save file to local storage');
             }
 
             return $localPath;
 
         } catch (Exception $e) {
             throw new RuntimeException('File download failed: ' . $e->getMessage(), 0, $e);
-        }
-    }
-
-    /**
-     * Get file size from Google Drive
-     *
-     * @param string $fileID The ID of the file
-     * @return int File size in bytes
-     * @throws RuntimeException If cannot get file size
-     */
-    public function getFileSize(string $fileID): int
-    {
-        try {
-            if (empty($fileID)) {
-                throw new InvalidArgumentException('File ID cannot be empty');
-            }
-
-            $filePath = $this->folderID . '/' . $fileID;
-            $fileMetaData = Storage::disk("google")->getAdapter()->getMetadata($filePath);
-
-            if (!$fileMetaData) {
-                throw new RuntimeException('File not found in Google Drive');
-            }
-
-            return $fileMetaData['size'] ?? 0;
-
-        } catch (Exception $e) {
-            throw new RuntimeException('Failed to get file size: ' . $e->getMessage(), 0, $e);
         }
     }
 
@@ -307,5 +274,4 @@ class GoogleDrive
             throw new RuntimeException('Failed to get direct file URL: ' . $e->getMessage(), 0, $e);
         }
     }
-
 }
