@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\GoogleDrive;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -586,18 +587,74 @@ class MsCatalogBook extends Model
         return storage_path('app/temp/pdfs/' . $this->pdfFileNameGdriveID . '_' . $filename);
     }
 
-    /**
-     * Get public URL for temporary PDF file
+        /**
+     * Download PDF to temporary storage
      */
-    public function getLocalPdfUrl(): ?string
+    public function downloadPdfToTemp(): string
     {
-        $localPath = $this->getLocalPdfPath();
-
-        if (!$localPath || !file_exists($localPath)) {
-            return null;
+        if (!$this->pdfFileNameGdriveID) {
+            throw new \Exception('PDF file not available');
         }
 
-        // Create a route to serve the PDF file
-        return route('catalog.books.pdf.view', ['book' => $this->bookID, 't' => time()]);
+        $tempDir = storage_path('app/temp/pdfs');
+        $localPath = $tempDir . '/' . $this->bookID . '_' . Str::slug($this->titleBook) . '.pdf';
+
+        // Check if file already exists and is less than 1 hour old
+        if (File::exists($localPath)) {
+            $fileTime = File::lastModified($localPath);
+            if (time() - $fileTime < 3600) { // 1 hour cache
+                return $localPath;
+            }
+        }
+
+        // Ensure temp directory exists
+        if (!File::isDirectory($tempDir)) {
+            File::makeDirectory($tempDir, 0755, true);
+        }
+
+        // Download from Google Drive
+        $gdriveService = new GoogleDrive(self::PATH_PDF_FILE_NAME_GDRIVE_ID);
+        $gdriveService->downloadFile($this->pdfFileNameGdriveID, $localPath);
+
+        return $localPath;
+    }
+
+    /**
+     * Get temporary PDF URL for web access
+     */
+    public function getTempPdfUrl(): string
+    {
+        $localPath = $this->downloadPdfToTemp();
+        $webPath = 'temp/pdfs/' . basename($localPath);
+
+        // Create symbolic link if doesn't exist
+        $publicPath = public_path('storage/temp/pdfs');
+        if (!File::isDirectory($publicPath)) {
+            File::makeDirectory($publicPath, 0755, true);
+        }
+
+        $targetPath = storage_path('app/' . $webPath);
+        $linkPath = $publicPath . '/' . basename($localPath);
+
+        if (!File::exists($linkPath)) {
+            File::link($targetPath, $linkPath);
+        }
+
+        return asset('storage/temp/pdfs/' . basename($localPath));
+    }
+
+    public function getFlipbookPdfUrl(): string
+    {
+        return route('catalog.books.pdf.serve', ['bookID' => $this->bookID]);
+    }
+
+    public function isPdfAvailable(): bool
+    {
+        if (!$this->pdfFileNameGdriveID) {
+            return false;
+        }
+
+        $localPath = $this->getLocalPdfPath();
+        return $localPath && file_exists($localPath);
     }
 }

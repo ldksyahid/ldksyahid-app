@@ -130,7 +130,7 @@ Route::get('/perpustakaan', [CatalogBooksController::class, 'index'])->name('cat
 Route::get('/perpustakaan/buku/{slug}', [CatalogBooksController::class, 'show'])->name('catalog.books.show');
 Route::post('/perpustakaan/buku/{id}/like', [CatalogBooksController::class, 'likeBook'])->name('catalog.books.like');
 Route::get('/perpustakaan/buku/{slug}/baca', [CatalogBooksController::class, 'pdfReader'])->name('catalog.books.reader');
-Route::get('/perpustakaan/buku/{book}/pdf', [CatalogBooksController::class, 'viewPdf'])->name('catalog.books.pdf.view');
+Route::get('/perpustakaan/pdf/{bookID}', [CatalogBooksController::class, 'servePdf'])->name('catalog.books.pdf.serve');
 
 // Route LandingPage EKSPRESI
 Route::get('/ekspresi', function () {
