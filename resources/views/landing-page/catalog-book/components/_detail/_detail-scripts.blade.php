@@ -67,9 +67,9 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     window.openPdfReader = function() {
-        const pdfUrl = '{{ $book->pdfFileUrl() }}';
-        if (pdfUrl) {
-            window.open(pdfUrl, '_blank');
+        const readerLink = '{{ $book->getReaderLink() }}';
+        if (readerLink) {
+            window.open(readerLink, '_blank');
         } else {
             showSuccessMessage('Buku tidak tersedia untuk dibaca online.');
         }

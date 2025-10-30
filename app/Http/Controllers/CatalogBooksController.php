@@ -56,38 +56,8 @@ class CatalogBooksController extends Controller
     {
         $book = MsCatalogBook::where('slug', $slug)->firstOrFail();
 
-        if (!$book->pdfFileNameGdriveID) {
-            abort(404, 'Buku tidak tersedia untuk dibaca online.');
-        }
-
-        try {
-            // Download PDF to temporary storage
-            $localPdfPath = $book->downloadPdfToTemp();
-
-            return view('landing-page.catalog-book.pdf-reader', compact('book'), [
-                "title" => "Perpustakaan",
-            ]);
-
-        } catch (\Exception $e) {
-            abort(500, 'Gagal memuat buku: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Serve PDF file for flipbook
-     */
-    public function servePdf($bookID)
-    {
-        $book = MsCatalogBook::findOrFail($bookID);
-        $localPath = $book->getLocalPdfPath();
-
-        if (!$localPath || !file_exists($localPath)) {
-            abort(404, 'PDF tidak ditemukan');
-        }
-
-        return response()->file($localPath, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $book->titleBook . '.pdf"'
+        return view('landing-page.catalog-book.pdf-reader', compact('book'), [
+            "title" => "Perpustakaan",
         ]);
     }
 

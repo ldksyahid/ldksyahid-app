@@ -48,7 +48,7 @@
             <!-- Quick Actions -->
             <div class="quick-actions wow fadeInUp" data-wow-delay="0.4s">
                 <div class="action-buttons">
-                    @if($book->pdfFileUrl())
+                    @if($book->getReaderLink())
                         <a href="{{ route('catalog.books.reader', $book->slug) }}" class="btn btn-primary btn-read w-100" target="_blank">
                             <i class="fas fa-book-open me-2"></i>Baca Buku
                         </a>

@@ -2,6 +2,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Initialize Select2 for dropdowns
         const languageElement = $('#languageID');
         if (languageElement.length && languageElement.is('select')) {
             languageElement.select2({
@@ -38,26 +39,27 @@
             });
         }
 
+        // Function to toggle link fields based on availability type
         function toggleLinkFields() {
             const availabilityTypeID = $('#availabilityTypeID').val();
             const purchaseLinkField = $('#purchaseLink').closest('.mb-3');
             const borrowLinkField = $('#borrowLink').closest('.mb-3');
             const purchaseLinkInput = $('#purchaseLink');
             const borrowLinkInput = $('#borrowLink');
-            
+
             switch(availabilityTypeID) {
-                case '1':
+                case '1': // Physical Copy
                     purchaseLinkField.hide();
                     borrowLinkField.hide();
                     purchaseLinkInput.val('');
                     borrowLinkInput.val('');
                     break;
-                case '2':
+                case '2': // Purchase Online
                     purchaseLinkField.show();
                     borrowLinkField.hide();
                     borrowLinkInput.val('');
                     break;
-                case '3':
+                case '3': // Borrow Online
                     purchaseLinkField.hide();
                     borrowLinkField.show();
                     purchaseLinkInput.val('');
@@ -70,6 +72,7 @@
                     break;
             }
 
+            // Clear validation errors when fields are hidden
             if (purchaseLinkField.is(':hidden')) {
                 purchaseLinkInput.removeClass('is-invalid');
                 purchaseLinkInput.next('.invalid-feedback').hide();
@@ -80,8 +83,10 @@
             }
         }
 
+        // Initialize link fields visibility
         toggleLinkFields();
 
+        // Add change event listener for availability type
         const availabilityTypeElementForEvent = $('#availabilityTypeID');
         if (availabilityTypeElementForEvent.is('select')) {
             availabilityTypeElementForEvent.on('change', function() {
@@ -89,17 +94,20 @@
             });
         }
 
+        // Cover image preview functionality
         document.getElementById('coverImage')?.addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file && file.type.match('image.*')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     // You can add image preview functionality here if needed
+                    console.log('Cover image selected:', file.name);
                 };
                 reader.readAsDataURL(file);
             }
         });
 
+        // Form validation and submission
         document.querySelector('form')?.addEventListener('submit', function(e) {
             const title = document.getElementById('titleBook').value;
             if (!title) {
@@ -113,6 +121,7 @@
                 return;
             }
 
+            // Validate required select fields
             const requiredSelects = ['languageID', 'bookCategoryID', 'authorTypeID', 'availabilityTypeID'];
             for (const selectId of requiredSelects) {
                 const select = document.getElementById(selectId);
@@ -129,6 +138,7 @@
                 }
             }
 
+            // Validate availability type specific fields
             const availabilityTypeID = $('#availabilityTypeID').val();
             const purchaseLink = $('#purchaseLink').val();
             const borrowLink = $('#borrowLink').val();
@@ -157,14 +167,47 @@
                 return;
             }
 
+            // Clear hidden link fields before submission
             if ($('#purchaseLink').closest('.mb-3').is(':hidden')) {
                 $('#purchaseLink').val('');
             }
             if ($('#borrowLink').closest('.mb-3').is(':hidden')) {
                 $('#borrowLink').val('');
             }
+
+            // Validate reader link format if provided
+            const readerLink = $('#readerLink').val();
+            if (readerLink && !isValidUrl(readerLink) && !isValidAnyFlipPath(readerLink)) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Invalid Reader Link!',
+                    text: 'Please enter a valid AnyFlip URL or path (e.g., https://anyflip.com/ueiyz/goae/ or ueiyz/goae)',
+                    icon: 'error',
+                    confirmButtonColor: '#00a79d'
+                });
+                $('#readerLink').focus();
+                return;
+            }
         });
 
+        // Helper function to validate URLs
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        // Helper function to validate AnyFlip path format
+        function isValidAnyFlipPath(string) {
+            // Matches patterns like: ueiyz/goae, abc123/def456, etc.
+            const anyFlipPathRegex = /^[a-zA-Z0-9]+\/[a-zA-Z0-9]+$/;
+            return anyFlipPathRegex.test(string);
+        }
+
+        // Apply CSS transitions to link fields
         $('.link-field').css({
             'transition': 'all 0.3s ease-in-out',
             'overflow': 'hidden'
