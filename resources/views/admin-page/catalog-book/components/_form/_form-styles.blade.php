@@ -74,7 +74,67 @@
         max-width: 100%;
         height: auto;
     }
-    /* Select2 styles remain the same as before */
+
+    /* Reader Link Preview Styles */
+    .reader-link-preview {
+        padding: 2rem;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+    }
+    .reader-link-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .no-media-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+    }
+    .no-media-placeholder i {
+        opacity: 0.5;
+        margin-bottom: 0.5rem;
+    }
+    .no-image-placeholder {
+        padding: 2rem;
+        background-color: #f8f9fa;
+        border: 1px dashed #dee2e6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+    }
+    .no-image-placeholder i {
+        opacity: 0.5;
+    }
+
+    /* Button Styles */
+    .btn-outline-primary {
+        transition: all 0.3s ease;
+    }
+    .btn-outline-primary:hover {
+        color: white !important;
+        background-color: #008b84;
+        border-color: #008b84;
+    }
+    .btn-custom-primary:hover {
+        color: white !important;
+        background-color: #008b84;
+        border-color: #008b84;
+    }
+
+    /* Link Field Animation */
+    .link-field {
+        transition: all 0.3s ease-in-out;
+        overflow: hidden;
+    }
+
+    /* Select2 Styles */
     .select2-container .select2-selection--single {
         height: 38px;
         padding: 6px 12px;
@@ -192,38 +252,5 @@
             opacity: 1;
             transform: translateY(0);
         }
-    }
-    .no-image-placeholder {
-        padding: 2rem;
-        background-color: #f8f9fa;
-        border: 1px dashed #dee2e6;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #6c757d;
-    }
-    .no-image-placeholder i {
-        opacity: 0.5;
-    }
-    .btn-outline-primary {
-        transition: all 0.3s ease;
-    }
-
-    .btn-outline-primary:hover {
-        color: white !important;
-        background-color: #008b84;
-        border-color: #008b84;
-    }
-
-    .btn-custom-primary:hover {
-        color: white !important;
-        background-color: #008b84;
-        border-color: #008b84;
-    }
-
-    .link-field {
-        transition: all 0.3s ease-in-out;
-        overflow: hidden;
     }
 </style>
