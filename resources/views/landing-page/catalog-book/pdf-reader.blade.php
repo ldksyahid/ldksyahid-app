@@ -110,7 +110,7 @@
                 </div>
 
                 <div class="controls-info">
-                    <span class="reader-status">Siap membaca</span>
+                    <span class="reader-status">Status: Dimuat</span>
                 </div>
             </div>
         </div>
