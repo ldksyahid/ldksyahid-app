@@ -489,9 +489,9 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    /* Prevent being cut off by viewport edges */
-    width: calc(100% - 2rem);
-    max-width: 600px;
+    width: auto;
+    min-width: 300px;
+    max-width: 90vw;
 }
 
 .floating-controls-panel-elegant {
