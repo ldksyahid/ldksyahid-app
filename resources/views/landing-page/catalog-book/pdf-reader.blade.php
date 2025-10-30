@@ -101,8 +101,8 @@
                             </div>
                         </div>
                         <div class="loading-content-premium">
-                            <h4>Mempersiapkan Buku Digital</h4>
-                            <p id="loading-text">Memuat konten buku...</p>
+                            <h4 class="loading-title">Mempersiapkan Buku Digital</h4>
+                            <p class="loading-text" id="loading-text">Memuat konten buku...</p>
                             <div class="progress-container-premium">
                                 <div class="progress-bar-premium" id="loading-progress"></div>
                             </div>
@@ -116,8 +116,8 @@
                         <div class="error-icon-premium">
                             <i class="fas fa-book-open"></i>
                         </div>
-                        <h4>Buku Tidak Dapat Dimuat</h4>
-                        <p id="error-message">Terjadi gangguan saat memuat buku digital</p>
+                        <h4 class="error-title">Buku Tidak Dapat Dimuat</h4>
+                        <p class="error-message" id="error-message">Terjadi gangguan saat memuat buku digital</p>
                         <div class="error-actions-premium">
                             <button class="btn-retry-premium" onclick="location.reload()">
                                 <i class="fas fa-redo me-2"></i>Muat Ulang

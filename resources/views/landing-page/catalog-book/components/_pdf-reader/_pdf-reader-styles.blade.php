@@ -356,15 +356,19 @@
     flex: 1;
 }
 
-.loading-content-premium h4 {
+/* FIXED: White text for loading state */
+.loading-title {
     font-size: 1.5rem;
     margin-bottom: 1rem;
     font-weight: 600;
+    color: var(--white) !important;
 }
 
-.loading-content-premium p {
+.loading-text {
     margin-bottom: 1.5rem;
     opacity: 0.9;
+    color: var(--white) !important;
+    font-size: 1.1rem;
 }
 
 .progress-container-premium {
@@ -417,17 +421,20 @@
     opacity: 0.9;
 }
 
-.error-content-premium h4 {
+/* FIXED: White text for error state */
+.error-title {
     font-size: 1.8rem;
     margin-bottom: 1rem;
     font-weight: 700;
+    color: var(--white) !important;
 }
 
-.error-content-premium p {
+.error-message {
     font-size: 1.1rem;
     margin-bottom: 2.5rem;
     opacity: 0.9;
     line-height: 1.6;
+    color: var(--white) !important;
 }
 
 .error-actions-premium {
@@ -448,28 +455,31 @@
     justify-content: center;
     cursor: pointer;
     border: none;
+    color: var(--white) !important;
 }
 
 .btn-retry-premium {
     background: linear-gradient(135deg, var(--gold) 0%, #e6c260 100%);
-    color: var(--dark);
+    color: var(--white) !important;
 }
 
 .btn-retry-premium:hover {
     background: linear-gradient(135deg, #e6c260 0%, var(--gold) 100%);
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    color: var(--white) !important;
 }
 
 .btn-back-premium {
     background: rgba(255, 255, 255, 0.2);
-    color: white;
+    color: var(--white) !important;
     border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .btn-back-premium:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
+    color: var(--white) !important;
 }
 
 /* === ENHANCED FLOATING CONTROLS === */
@@ -618,12 +628,14 @@
     font-size: 2.2rem;
     margin-bottom: 1rem;
     font-weight: 700;
+    color: var(--white) !important;
 }
 
 .cover-content .author {
     font-size: 1.3rem;
     margin-bottom: 2rem;
     opacity: 0.9;
+    color: var(--white) !important;
 }
 
 .cover-image {
@@ -644,6 +656,7 @@
 .book-info p {
     margin: 0.5rem 0;
     font-size: 1rem;
+    color: var(--white) !important;
 }
 
 .library-info {
@@ -655,10 +668,12 @@
 .library-info p {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
+    color: var(--white) !important;
 }
 
 .library-info small {
     opacity: 0.8;
+    color: var(--white) !important;
 }
 
 /* Page loader styles */
@@ -950,24 +965,6 @@ body.fullscreen-mode .floating-controls-elegant {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-/* === ELEGANT SCROLLBAR === */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--gray-100);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-dark);
 }
 
 /* === SAFE AREA INSETS FOR NOTCHED DEVICES === */
