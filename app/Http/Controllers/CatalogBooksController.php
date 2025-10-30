@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MsCatalogBook;
+use App\Models\LkBookCategory;
+use App\Models\LkLanguage;
 use App\Models\LkAuthorType;
 use App\Models\LkAvailabilityType;
-use App\Models\LkBookCategory;
-use App\Models\MsCatalogBook;
-use App\Models\LkLanguage;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CatalogBooksController extends Controller
 {
@@ -15,14 +16,49 @@ class CatalogBooksController extends Controller
        SECTION A — LANDING PAGE (Public)
        ========================================================================= */
 
-    public function index()
+    public function index(Request $request)
     {
+        $query = MsCatalogBook::searchIndexBooks($request);
 
+        $books = $query->paginate(8)->withQueryString();
+
+        $categories = LkBookCategory::select('bookCategoryID', 'bookCategoryName')->distinct()->orderBy('bookCategoryName')->get();
+        $authors = MsCatalogBook::select('authorName')->distinct()->orderBy('authorName')->pluck('authorName');
+        $publishers = MsCatalogBook::select('publisherName')->distinct()->orderBy('publisherName')->pluck('publisherName');
+        $years = MsCatalogBook::select('year')->distinct()->orderByDesc('year')->pluck('year');
+        $languages = LkLanguage::select('languageID', 'languageName')->distinct()->orderBy('languageName')->get();
+        $authorTypes = LkAuthorType::select('authorTypeID', 'authorTypeName')->distinct()->orderBy('authorTypeName')->get();
+        $availabilityTypes = LkAvailabilityType::select('availabilityTypeID', 'availabilityTypeName')->distinct()->orderBy('availabilityTypeName')->get();
+
+        return view('landing-page.catalog-book.index', compact('books', 'categories', 'authors', 'publishers', 'years', 'languages', 'authorTypes', 'availabilityTypes'), [
+            "title" => "Perpustakaan",
+        ]);
     }
 
+    // Di CatalogBooksController.php, dalam method show()
     public function show($slug)
     {
+        $book = MsCatalogBook::where('slug', $slug)->firstOrFail();
 
+        // Get related books (same category)
+        $relatedBooks = MsCatalogBook::where('bookCategoryID', $book->bookCategoryID)
+            ->where('bookID', '!=', $book->bookID)
+            ->where('flagActive', true)
+            ->limit(4)
+            ->get();
+
+        return view('landing-page.catalog-book.detail', compact('book', 'relatedBooks'), [
+            "title" => "Perpustakaan",
+        ]);
+    }
+
+    public function pdfReader($slug)
+    {
+        $book = MsCatalogBook::where('slug', $slug)->firstOrFail();
+
+        return view('landing-page.catalog-book.pdf-reader', compact('book'), [
+            "title" => "Perpustakaan",
+        ]);
     }
 
     /* =========================================================================
@@ -47,14 +83,13 @@ class CatalogBooksController extends Controller
             ->with('title', 'Book Catalog');
     }
 
-
     public function create()
     {
         $languages = LkLanguage::all();
         $bookCategories = LkBookCategory::all();
         $authorTypes = LkAuthorType::all();
         $availabilityTypes = LkAvailabilityType::all();
-        
+
         return view('admin-page.catalog-book.create', compact('languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
@@ -76,7 +111,6 @@ class CatalogBooksController extends Controller
         }
     }
 
-
     public function showAdmin(MsCatalogBook $book)
     {
         $languages = LkLanguage::all();
@@ -84,7 +118,7 @@ class CatalogBooksController extends Controller
         $authorTypes = LkAuthorType::all();
         $availabilityTypes = LkAvailabilityType::all();
         $book->load('getLanguage', 'getBookCategory', 'getAuthorType', 'getAvailabilityType');
-        
+
         return view('admin-page.catalog-book.view', compact('book', 'languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
@@ -96,7 +130,7 @@ class CatalogBooksController extends Controller
         $authorTypes = LkAuthorType::all();
         $availabilityTypes = LkAvailabilityType::all();
         $book->load('getLanguage', 'getBookCategory', 'getAuthorType', 'getAvailabilityType');
-        
+
         return view('admin-page.catalog-book.edit', compact('book', 'languages', 'bookCategories', 'authorTypes', 'availabilityTypes'))
             ->with('title', 'Book Catalog');
     }
@@ -157,6 +191,25 @@ class CatalogBooksController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting books: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function likeBook($id)
+    {
+        try {
+            $newCount = MsCatalogBook::incrementFavoriteCount($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Terima kasih telah menyukai buku ini!',
+                'favoriteCount' => $newCount,
+                'bookId' => $id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyukai buku: ' . $e->getMessage()
             ], 500);
         }
     }

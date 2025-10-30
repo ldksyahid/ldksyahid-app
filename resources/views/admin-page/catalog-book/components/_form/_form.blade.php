@@ -112,7 +112,7 @@
                                         <select class="form-select @error('authorTypeID') is-invalid @enderror" id="authorTypeID" name="authorTypeID" required>
                                             <option value="">Select Author Type</option>
                                             @foreach($authorTypes as $authorType)
-                                                <option value="{{ $authorType->authorTypeID }}" 
+                                                <option value="{{ $authorType->authorTypeID }}"
                                                     {{ old('authorTypeID', $book->authorTypeID ?? '') == $authorType->authorTypeID ? 'selected' : '' }}>
                                                     {{ $authorType->authorTypeName }}
                                                 </option>
@@ -133,7 +133,7 @@
                                         <select class="form-select @error('availabilityTypeID') is-invalid @enderror" id="availabilityTypeID" name="availabilityTypeID" required>
                                             <option value="">Select Availability Type</option>
                                             @foreach($availabilityTypes as $availabilityType)
-                                                <option value="{{ $availabilityType->availabilityTypeID }}" 
+                                                <option value="{{ $availabilityType->availabilityTypeID }}"
                                                     {{ old('availabilityTypeID', $book->availabilityTypeID ?? '') == $availabilityType->availabilityTypeID ? 'selected' : '' }}>
                                                     {{ $availabilityType->availabilityTypeName }}
                                                 </option>
@@ -158,7 +158,7 @@
                                         <select class="form-select @error('languageID') is-invalid @enderror" id="languageID" name="languageID" required>
                                             <option value="">Select Language</option>
                                             @foreach($languages as $language)
-                                                <option value="{{ $language->languageID }}" 
+                                                <option value="{{ $language->languageID }}"
                                                     {{ old('languageID', $book->languageID ?? '') == $language->languageID ? 'selected' : '' }}>
                                                     {{ $language->languageName }}
                                                 </option>
@@ -178,7 +178,7 @@
                                         <select class="form-select @error('bookCategoryID') is-invalid @enderror" id="bookCategoryID" name="bookCategoryID" required>
                                             <option value="">Select Category</option>
                                             @foreach($bookCategories as $category)
-                                                <option value="{{ $category->bookCategoryID }}" 
+                                                <option value="{{ $category->bookCategoryID }}"
                                                     {{ old('bookCategoryID', $book->bookCategoryID ?? '') == $category->bookCategoryID ? 'selected' : '' }}>
                                                     {{ $category->bookCategoryName }}
                                                 </option>
@@ -316,41 +316,47 @@
                             </div>
 
                             <div class="col-md-6">
-                                <h5 class="section-title mb-3"><i class="fas fa-file-pdf me-2"></i>PDF File</h5>
+                                <h5 class="section-title mb-3"><i class="fas fa-external-link-alt me-2"></i>Reader Link</h5>
 
                                 @if ($operation === 'view')
                                     <div class="mb-3">
-                                        <div class="pdf-preview text-center">
-                                            @if($book->pdfFileName)
-                                                <div class="pdf-preview-content">
-                                                    <i class="fas fa-file-pdf fa-3x text-danger mb-2"></i>
-                                                    <p class="mb-2">{{ $book->pdfFileName }}</p>
-                                                    <a href="{{ $book->pdfFileUrl() }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                                        <i class="fas fa-eye me-1"></i> View PDF
+                                        <div class="reader-link-preview text-center">
+                                            @if($book->readerLink)
+                                                <div class="reader-link-content">
+                                                    <i class="fas fa-external-link-alt fa-3x text-primary mb-2"></i>
+                                                    <p class="mb-2">AnyFlip Reader Link Available</p>
+                                                    <a href="{{ $book->getFormattedReaderLink() }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-external-link-alt me-1"></i> Open Reader
                                                     </a>
+                                                    <div class="mt-2">
+                                                        <small class="text-muted">{{ $book->readerLink }}</small>
+                                                    </div>
                                                 </div>
                                             @else
                                                 <div class="no-media-placeholder">
-                                                    <i class="fas fa-file-pdf fa-2x"></i>
-                                                    <p>No PDF file</p>
+                                                    <i class="fas fa-external-link-alt fa-2x text-muted"></i>
+                                                    <p>No Reader Link</p>
                                                 </div>
                                             @endif
                                         </div>
                                     </div>
                                 @else
                                     <div class="mb-3">
-                                        <label for="pdfFileName" class="form-label">
-                                            {{ $operation === 'create' ? 'Upload PDF File' : 'Update PDF File' }}
+                                        <label for="readerLink" class="form-label">
+                                            AnyFlip Reader Link
                                             (Optional)
                                         </label>
-                                        <input type="file" class="form-control @error('pdfFileName') is-invalid @enderror" id="pdfFileName" name="pdfFileName"
-                                            accept=".pdf">
-                                        @error('pdfFileName')
+                                        <input type="url" class="form-control @error('readerLink') is-invalid @enderror" id="readerLink" name="readerLink"
+                                            value="{{ old('readerLink', $book->readerLink ?? '') }}"
+                                            placeholder="https://anyflip.com/...">
+                                        @error('readerLink')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                        <div class="form-text">Max file size: 10MB</div>
-                                        @if ($operation === 'update' && $book->pdfFileName)
-                                            <div class="form-text">Leave blank to keep current file</div>
+                                        <div class="form-text">
+                                            Enter AnyFlip URL or path (e.g., https://anyflip.com/ueiyz/goae/ or ueiyz/goae)
+                                        </div>
+                                        @if ($operation === 'update' && $book->readerLink)
+                                            <div class="form-text">Leave blank to remove current reader link</div>
                                         @endif
                                     </div>
                                 @endif

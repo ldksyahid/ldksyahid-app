@@ -21,6 +21,48 @@ class GoogleDrive
     }
 
     /**
+     * Download file from Google Drive to local temporary storage
+     *
+     * @param string $fileID The ID of the file to download
+     * @param string $localPath The local path to save the file
+     * @return string The local file path
+     * @throws RuntimeException If the download fails
+     */
+    public function downloadFile(string $fileID, string $localPath): string
+    {
+        try {
+            if (empty($fileID)) {
+                throw new InvalidArgumentException('File ID cannot be empty');
+            }
+
+            $filePath = $this->folderID . '/' . $fileID;
+
+            if (!Storage::disk('google')->exists($filePath)) {
+                throw new RuntimeException('File not found in Google Drive');
+            }
+
+            // Get file content
+            $fileContent = Storage::disk('google')->get($filePath);
+
+            // Ensure directory exists
+            $directory = dirname($localPath);
+            if (!File::isDirectory($directory)) {
+                File::makeDirectory($directory, 0755, true);
+            }
+
+            // Save to local storage
+            if (!File::put($localPath, $fileContent)) {
+                throw new RuntimeException('Failed to save file to local storage');
+            }
+
+            return $localPath;
+
+        } catch (Exception $e) {
+            throw new RuntimeException('File download failed: ' . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
      * Upload an image file to Google Drive
      *
      * @param mixed $file The file to upload
@@ -194,6 +236,42 @@ class GoogleDrive
             return "https://lh3.googleusercontent.com/d/" . $fileID;
         } catch (Exception $e) {
             throw new RuntimeException('Failed to get image URL: ' . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Get a direct download URL for a file in Google Drive
+     *
+     * This method generates a direct binary access link to a file stored in Google Drive,
+     * using the `uc?export=download` endpoint. The returned URL allows the file (e.g. a PDF)
+     * to be downloaded or displayed directly — unlike the `/view` URL which opens
+     * the Google Drive viewer.
+     *
+     * Example:
+     *   Input:  1dKLlFgqXU5bXU7ZWvSzwVYiPPegggaLy
+     *   Output: https://drive.google.com/uc?export=download&id=1dKLlFgqXU5bXU7ZWvSzwVYiPPegggaLy
+     *
+     * @param string $fileID The unique Google Drive file ID
+     * @return string The direct binary file URL suitable for embedding or downloading
+     * @throws RuntimeException If the file does not exist or URL generation fails
+     */
+    public function getFileDownloadUrl(string $fileID): string
+    {
+        try {
+            if (empty($fileID)) {
+                throw new InvalidArgumentException('File ID cannot be empty');
+            }
+
+            $filePath = $this->folderID . '/' . $fileID;
+            $fileMetaData = Storage::disk("google")->getAdapter()->getMetadata($filePath);
+
+            if (!$fileMetaData) {
+                throw new RuntimeException('File not found in Google Drive');
+            }
+
+            return "https://drive.google.com/uc?export=download&id=" . $fileID;
+        } catch (Exception $e) {
+            throw new RuntimeException('Failed to get direct file URL: ' . $e->getMessage(), 0, $e);
         }
     }
 }
