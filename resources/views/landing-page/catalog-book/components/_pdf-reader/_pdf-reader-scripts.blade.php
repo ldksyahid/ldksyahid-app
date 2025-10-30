@@ -1,9 +1,9 @@
+<!-- jQuery harus dimuat PERTAMA -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Turn.js Library - Local -->
+<script src="{{ asset('js/turn.min.js') }}"></script>
 <!-- PDF.js Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-<!-- Turn.js Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.1/turn.min.js"></script>
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
 // Global variables
