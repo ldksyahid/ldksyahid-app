@@ -268,7 +268,9 @@
 .table-books th:nth-child(9),
 .table-books td:nth-child(9) { width: 80px; max-width: 80px; } /* Year */
 .table-books th:nth-child(10),
-.table-books td:nth-child(10) { width: 120px; max-width: 120px; } /* Action */
+.table-books td:nth-child(10) { width: 100px; max-width: 100px; } /* Fav Count */
+.table-books th:nth-child(11),
+.table-books td:nth-child(11) { width: 120px; max-width: 120px; } /* Action */
 
 .table-books td {
     overflow: hidden;
@@ -395,7 +397,7 @@
     .select2-container .select2-selection--single {
         height: 35px !important;
     }
-    
+
     .select2-container--default .select2-selection--single .select2-selection__rendered {
         line-height: 33px !important;
         font-size: 0.8rem !important;
