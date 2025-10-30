@@ -87,7 +87,7 @@
             {{-- ACTIVITY NAV END --}}
 
             {{-- BOOK CATALOG NAV START --}}
-            {{-- <a href="/catalog/books" class="nav-item nav-link text-capitalize {{($title === "Katalog Buku") ? "active" : ""}}">Katalog Buku</a> --}}
+            <a href="/perpustakaan" class="nav-item nav-link text-capitalize {{($title === "Perpustakaan") ? "active" : ""}}">Perpustakaan</a>
             {{-- BOOK CATALOG END --}}
 
             {{-- LAYANAN NAV START --}}
@@ -203,7 +203,7 @@
                 <a href="/events" class="nav-item nav-link text-capitalize {{($title === "Kegiatan") ? "active" : ""}}">Kegiatan</a>
 
                 <!-- Book Catalog -->
-                {{-- <a href="/catalog/books" class="nav-item nav-link text-capitalize {{($title === "Katalog Buku") ? "active" : ""}}">Katalog Buku</a> --}}
+                <a href="/perpustakaan" class="nav-item nav-link text-capitalize {{($title === "Perpustakaan") ? "active" : ""}}">Perpustakaan</a>
 
                 <!-- Service -->
                 <a href="/service" class="nav-item nav-link text-capitalize {{($title === "Layanan") ? "active" : ""}}">Layanan</a>
@@ -393,10 +393,60 @@
         height: 100vh !important;
     }
 
+    .navbar-nav .nav-link {
+        padding: 12px 15px !important;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .nav-item.dropdown .dropdown-toggle::after {
+        float: right;
+        margin-top: 8px;
+    }
+
+    .dropdown-menu .dropdown-item {
+        padding: 10px 20px;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .dropdown-menu .dropdown-item:last-child {
+        border-bottom: none;
+    }
+
 </style>
 
-
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownToggles = document.querySelectorAll('.nav-item.dropdown .nav-link');
 
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                if (window.innerWidth < 992) {
+                    e.preventDefault();
+                    const dropdownMenu = this.nextElementSibling;
+                    const isOpen = dropdownMenu.classList.contains('show');
+
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        if (menu !== dropdownMenu) {
+                            menu.classList.remove('show');
+                        }
+                    });
+
+                    if (!isOpen) {
+                        dropdownMenu.classList.add('show');
+                    } else {
+                        dropdownMenu.classList.remove('show');
+                    }
+                }
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.matches('.nav-link') && !e.target.closest('.dropdown-menu')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
+        });
+    });
 </script>
 @endif

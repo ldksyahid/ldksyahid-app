@@ -18,6 +18,9 @@
         <td class="text-center">{{ $book->getBookCategory->bookCategoryName ?? 'N/A' }}</td>
         <td class="text-center">{{ $book->year }}</td>
         <td class="text-center">
+            <span class="badge bg-primary">{{ $book->favoriteCount }}</span>
+        </td>
+        <td class="text-center">
             <div class="btn-group" role="group">
                 <a href="{{ route('admin.catalog.books.show', $book->bookID) }}"
                    class="btn btn-sm btn-custom-primary" title="View">
@@ -39,7 +42,7 @@
     @endforeach
 @else
     <tr>
-        <td colspan="12" class="text-center py-4">
+        <td colspan="11" class="text-center py-4">
             <div class="d-flex flex-column align-items-center">
                 <i class="fa fa-book-open fa-2x mb-2 text-muted"></i>
                 <span class="text-muted">No books found in the catalog</span>

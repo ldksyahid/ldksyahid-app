@@ -147,7 +147,7 @@
                                         <select name="category" class="form-control form-control-sm mt-1 column-search" style="width: 100%">
                                             <option value="">All Categories</option>
                                             @foreach($bookCategories as $category)
-                                                <option value="{{ $category->bookCategoryName }}" 
+                                                <option value="{{ $category->bookCategoryName }}"
                                                     {{ request('category') == $category->bookCategoryName ? 'selected' : '' }}>
                                                     {{ $category->bookCategoryName }}
                                                 </option>
@@ -164,6 +164,17 @@
                                     </a>
                                     <div class="position-relative">
                                         <input type="text" name="year" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Year" value="{{ request('year') }}">
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="text-center">
+                                <div class="d-flex flex-column">
+                                    <a href="#" class="sort-link" data-sort-by="favoriteCount">
+                                        <span>Fav Count</span>
+                                        <span class="sort-arrow" id="sortArrowFavoriteCount"></span>
+                                    </a>
+                                    <div class="position-relative">
+                                        <input type="number" name="favorite_count" class="form-control form-control-sm mt-1 column-search" placeholder="Filter Favorite" value="{{ request('favorite_count') }}" min="0">
                                     </div>
                                 </div>
                             </th>
