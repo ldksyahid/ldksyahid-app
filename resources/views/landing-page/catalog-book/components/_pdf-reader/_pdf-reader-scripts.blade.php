@@ -1,34 +1,38 @@
 <!-- PDF.js Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<!-- Turn.js Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.1/turn.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
 // Global variables
+let flipbook = null;
 let pdfDoc = null;
 let currentPage = 1;
 let totalPages = 0;
 let currentZoom = 1.0;
 let isFullscreen = false;
-let viewMode = 'single';
-let isAnimating = false;
 let renderedPages = new Set();
 
 // Set PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-    initializeFlipbook();
+    initializeTurnJS();
     setupEventListeners();
+    updateProgressBar();
 });
 
-async function initializeFlipbook() {
+async function initializeTurnJS() {
     try {
-        document.getElementById('pdf-loading').style.display = 'flex';
+        showLoadingState('Memuat buku digital...');
 
-        // Get PDF URL
-        const pdfUrl = '{{ $book->getFlipbookPdfUrl() }}';
+        const pdfUrl = '{{ $book->getPublicPdfUrl() }}';
+        console.log('Loading PDF from:', pdfUrl);
 
         if (!pdfUrl) {
-            throw new Error('PDF URL not available');
+            throw new Error('PDF URL tidak tersedia');
         }
 
         // Load PDF document
@@ -36,128 +40,187 @@ async function initializeFlipbook() {
         pdfDoc = await loadingTask.promise;
 
         totalPages = pdfDoc.numPages;
+        updateLoadingState(`Memuat ${totalPages} halaman...`);
 
-        // Create flipbook structure
-        await createFlipbook();
+        // Initialize Turn.js
+        await createTurnJSBook();
 
-        // Hide loading state
-        document.getElementById('pdf-loading').style.display = 'none';
-
-        // Update page info
-        updatePageInfo();
+        hideLoadingState();
+        showNotification('Buku siap dibaca! 📖', 'success');
 
     } catch (error) {
-        console.error('Error initializing flipbook:', error);
+        console.error('Error initializing turn.js:', error);
         showErrorState('Gagal memuat buku: ' + error.message);
     }
 }
 
-async function createFlipbook() {
+async function createTurnJSBook() {
     const flipbookElement = document.getElementById('flipbook');
 
-    // Generate pages HTML
-    let pagesHTML = generatePagesHTML();
-    flipbookElement.innerHTML = pagesHTML;
+    // Clear existing content
+    flipbookElement.innerHTML = '';
 
-    // Load initial page
-    await loadPage(1);
-
-    // Update navigation buttons
-    updateNavigation();
-}
-
-function generatePagesHTML() {
-    let html = '';
-
-    // Front cover
-    html += `
-        <div class="flipbook-page active cover-page" data-page="0">
-            <div class="page-content">
-                <div class="cover-content">
-                    <h2>{{ $book->titleBook }}</h2>
-                    <p class="author">Oleh {{ $book->authorName }}</p>
-                    @if($book->coverImageUrl())
-                        <div class="cover-image">
-                            <img src="{{ $book->coverImageUrl() }}" alt="{{ $book->titleBook }}">
-                        </div>
-                    @endif
-                    <div class="book-info">
-                        <p><strong>Penerbit:</strong> {{ $book->publisherName }}</p>
-                        <p><strong>Tahun:</strong> {{ $book->year }}</p>
-                        <p><strong>ISBN:</strong> {{ $book->isbn ?? '-' }}</p>
+    // Add cover page
+    const coverPage = document.createElement('div');
+    coverPage.className = 'page hard cover';
+    coverPage.innerHTML = `
+        <div class="page-content">
+            <div class="cover-content">
+                <h2>{{ $book->titleBook }}</h2>
+                <p class="author">Oleh {{ $book->authorName }}</p>
+                @if($book->coverImageUrl())
+                    <div class="cover-image">
+                        <img src="{{ $book->coverImageUrl() }}" alt="{{ $book->titleBook }}">
                     </div>
-                    <button class="btn btn-start-reading" onclick="goToPage(1)" style="margin-top: 2rem; padding: 10px 20px; background: white; color: #8B4513; border: none; border-radius: 5px; cursor: pointer;">
-                        <i class="fas fa-play me-2"></i>Mulai Membaca
-                    </button>
+                @endif
+                <div class="book-info">
+                    <p><strong>Penerbit:</strong> {{ $book->publisherName }}</p>
+                    <p><strong>Tahun:</strong> {{ $book->year }}</p>
+                    <p><strong>Halaman:</strong> ${totalPages}</p>
                 </div>
             </div>
         </div>
     `;
+    flipbookElement.appendChild(coverPage);
 
-    // PDF pages
+    // Add PDF pages
     for (let i = 1; i <= totalPages; i++) {
-        html += `
-            <div class="flipbook-page hidden" data-page="${i}">
-                <div class="page-content">
-                    <canvas id="page-canvas-${i}"></canvas>
-                    <div class="page-number">${i}</div>
+        const pageElement = document.createElement('div');
+        pageElement.className = 'page';
+        pageElement.setAttribute('data-page', i);
+        pageElement.innerHTML = `
+            <div class="page-content">
+                <div class="page-loader">
+                    <div class="spinner"></div>
+                    <p>Memuat halaman ${i}</p>
                 </div>
+                <canvas class="page-canvas" id="canvas-${i}"></canvas>
+                <div class="page-number">${i}</div>
             </div>
         `;
+        flipbookElement.appendChild(pageElement);
     }
 
-    // Back cover
-    html += `
-        <div class="flipbook-page hidden cover-page" data-page="${totalPages + 1}">
-            <div class="page-content">
-                <div class="cover-content">
-                    <h3>Terima Kasih</h3>
-                    <p>Selamat membaca!</p>
-                    <div class="book-info">
-                        <p><strong>Total Halaman:</strong> ${totalPages}</p>
-                        <p><strong>Kategori:</strong> {{ $book->getBookCategory->bookCategoryName ?? '-' }}</p>
-                        <p><strong>Bahasa:</strong> {{ $book->getLanguage->languageName ?? '-' }}</p>
-                    </div>
+    // Add back cover
+    const backCover = document.createElement('div');
+    backCover.className = 'page hard cover';
+    backCover.innerHTML = `
+        <div class="page-content">
+            <div class="cover-content">
+                <h3>Terima Kasih</h3>
+                <p>Selamat membaca dan semoga bermanfaat!</p>
+                <div class="library-info">
+                    <p>Perpustakaan Digital</p>
+                    <small>{{ config('app.name') }}</small>
                 </div>
             </div>
         </div>
     `;
+    flipbookElement.appendChild(backCover);
 
-    return html;
+    // Initialize Turn.js
+    flipbook = $(flipbookElement).turn({
+        width: 900,
+        height: 600,
+        autoCenter: true,
+        display: 'double',
+        acceleration: true,
+        elevation: 50,
+        gradients: true,
+        duration: 800,
+        pages: totalPages + 2,
+        when: {
+            turning: function(e, page, view) {
+                currentPage = page;
+                updatePageInfo();
+                updateNavigation();
+                updateProgressBar();
+
+                // Preload adjacent pages
+                preloadPages(page);
+            },
+            turned: function(e, page) {
+                // Render current page if not rendered
+                renderPage(page);
+            }
+        }
+    });
+
+    // Render first page immediately
+    setTimeout(() => {
+        renderPage(1);
+    }, 300);
 }
 
-async function loadPage(pageNum) {
-    if (!pdfDoc || pageNum < 1 || pageNum > totalPages || renderedPages.has(pageNum)) return;
+async function renderPage(pageNumber) {
+    if (renderedPages.has(pageNumber) || pageNumber === 1 || pageNumber === totalPages + 2) {
+        return; // Skip covers and already rendered pages
+    }
+
+    const pdfPageNumber = pageNumber - 1; // Adjust for cover
+    if (pdfPageNumber < 1 || pdfPageNumber > totalPages) return;
+
+    const pageElement = document.querySelector(`[data-page="${pdfPageNumber}"]`);
+    if (!pageElement) return;
+
+    const canvas = pageElement.querySelector('.page-canvas');
+    const loader = pageElement.querySelector('.page-loader');
+
+    if (!canvas || renderedPages.has(pdfPageNumber)) return;
 
     try {
-        const page = await pdfDoc.getPage(pageNum);
-        const canvas = document.getElementById(`page-canvas-${pageNum}`);
+        const page = await pdfDoc.getPage(pdfPageNumber);
+        const viewport = page.getViewport({ scale: 1.5 });
 
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        const viewport = page.getViewport({ scale: currentZoom });
-
-        canvas.height = viewport.height;
         canvas.width = viewport.width;
+        canvas.height = viewport.height;
 
+        const context = canvas.getContext('2d');
         const renderContext = {
-            canvasContext: ctx,
+            canvasContext: context,
             viewport: viewport
         };
 
         await page.render(renderContext).promise;
-        renderedPages.add(pageNum);
+
+        // Hide loader and show canvas
+        if (loader) loader.style.display = 'none';
+        canvas.style.display = 'block';
+
+        renderedPages.add(pdfPageNumber);
 
     } catch (error) {
-        console.error(`Error rendering page ${pageNum}:`, error);
+        console.error('Error rendering page:', error);
+        if (loader) {
+            loader.innerHTML = '<p>Gagal memuat halaman</p>';
+        }
     }
 }
 
+function preloadPages(currentPage) {
+    const pagesToPreload = [currentPage - 1, currentPage + 1, currentPage - 2, currentPage + 2];
+
+    pagesToPreload.forEach(page => {
+        if (page > 1 && page <= totalPages + 1 && !renderedPages.has(page - 1)) {
+            renderPage(page);
+        }
+    });
+}
+
 function updatePageInfo() {
-    document.getElementById('current-page').textContent = currentPage;
+    const actualPage = Math.max(1, currentPage - 1);
+    document.getElementById('current-page').textContent = actualPage;
     document.getElementById('total-pages').textContent = totalPages;
-    document.getElementById('zoom-level').textContent = Math.round(currentZoom * 100) + '%';
+    document.getElementById('current-page-display').textContent = actualPage;
+    document.getElementById('total-pages-display').textContent = totalPages;
+}
+
+function updateProgressBar() {
+    const progressBar = document.getElementById('page-progress-bar');
+    if (progressBar && totalPages > 0) {
+        const progress = ((currentPage - 1) / (totalPages + 1)) * 100;
+        progressBar.style.width = `${progress}%`;
+    }
 }
 
 function updateNavigation() {
@@ -165,135 +228,206 @@ function updateNavigation() {
     const nextBtn = document.querySelector('.next-btn');
 
     if (prevBtn) {
-        prevBtn.disabled = currentPage <= 0;
+        prevBtn.disabled = currentPage <= 1;
     }
     if (nextBtn) {
-        nextBtn.disabled = currentPage >= totalPages + 1;
+        nextBtn.disabled = currentPage >= totalPages + 2;
     }
 }
 
-async function flipToNextPage() {
-    if (isAnimating || currentPage >= totalPages + 1) return;
-
-    isAnimating = true;
-    const currentPageElement = document.querySelector(`[data-page="${currentPage}"]`);
-    const nextPage = currentPage + 1;
-    const nextPageElement = document.querySelector(`[data-page="${nextPage}"]`);
-
-    if (currentPageElement && nextPageElement) {
-        // Add flipping animation
-        currentPageElement.classList.add('flipping-next');
-        nextPageElement.classList.remove('hidden');
-        nextPageElement.classList.add('next');
-
-        // Load the page content if it's a PDF page
-        if (nextPage >= 1 && nextPage <= totalPages) {
-            await loadPage(nextPage);
-        }
-
-        setTimeout(() => {
-            currentPageElement.classList.remove('active', 'flipping-next');
-            currentPageElement.classList.add('prev');
-            nextPageElement.classList.remove('next');
-            nextPageElement.classList.add('active');
-
-            currentPage = nextPage;
-            updatePageInfo();
-            updateNavigation();
-            isAnimating = false;
-        }, 600);
+// Navigation functions
+function nextPage() {
+    if (flipbook) {
+        flipbook.turn('next');
     }
 }
 
-async function flipToPrevPage() {
-    if (isAnimating || currentPage <= 0) return;
-
-    isAnimating = true;
-    const currentPageElement = document.querySelector(`[data-page="${currentPage}"]`);
-    const prevPage = currentPage - 1;
-    const prevPageElement = document.querySelector(`[data-page="${prevPage}"]`);
-
-    if (currentPageElement && prevPageElement) {
-        // Add flipping animation
-        currentPageElement.classList.add('flipping-prev');
-        prevPageElement.classList.remove('hidden');
-        prevPageElement.classList.add('prev');
-
-        setTimeout(() => {
-            currentPageElement.classList.remove('active', 'flipping-prev');
-            currentPageElement.classList.add('next');
-            prevPageElement.classList.remove('prev');
-            prevPageElement.classList.add('active');
-
-            currentPage = prevPage;
-            updatePageInfo();
-            updateNavigation();
-            isAnimating = false;
-        }, 600);
+function prevPage() {
+    if (flipbook) {
+        flipbook.turn('previous');
     }
 }
 
 function goToPage(pageNum) {
-    if (pageNum < 0 || pageNum > totalPages + 1 || isAnimating) return;
+    if (flipbook) {
+        // Adjust for cover page
+        const turnPage = pageNum + 1;
+        flipbook.turn('page', turnPage);
+    }
+}
 
-    // Simple page jump without animation for cover
-    const allPages = document.querySelectorAll('.flipbook-page');
-    allPages.forEach(page => {
-        page.classList.remove('active', 'prev', 'next', 'flipping-next', 'flipping-prev');
-        page.classList.add('hidden');
-    });
+function goToMiddlePage() {
+    const middlePage = Math.ceil(totalPages / 2);
+    goToPage(middlePage);
+}
 
-    const targetPage = document.querySelector(`[data-page="${pageNum}"]`);
-    if (targetPage) {
-        targetPage.classList.remove('hidden');
-        targetPage.classList.add('active');
-        currentPage = pageNum;
-        updatePageInfo();
-        updateNavigation();
+function goToLastPage() {
+    goToPage(totalPages);
+}
 
-        // Load the page content if it's a PDF page
-        if (pageNum >= 1 && pageNum <= totalPages) {
-            loadPage(pageNum);
+function zoomIn() {
+    if (flipbook) {
+        currentZoom = Math.min(currentZoom + 0.2, 3.0);
+        updateBookSize();
+        document.getElementById('zoom-level').textContent = Math.round(currentZoom * 100) + '%';
+        showNotification(`Zoom: ${Math.round(currentZoom * 100)}%`, 'info');
+    }
+}
+
+function zoomOut() {
+    if (flipbook) {
+        currentZoom = Math.max(currentZoom - 0.2, 0.5);
+        updateBookSize();
+        document.getElementById('zoom-level').textContent = Math.round(currentZoom * 100) + '%';
+        showNotification(`Zoom: ${Math.round(currentZoom * 100)}%`, 'info');
+    }
+}
+
+function updateBookSize() {
+    if (flipbook) {
+        const newWidth = 900 * currentZoom;
+        const newHeight = 600 * currentZoom;
+
+        flipbook.turn('size', newWidth, newHeight);
+        flipbook.turn('resize');
+    }
+}
+
+function setViewMode(mode) {
+    const singleBtn = document.getElementById('single-view-btn');
+    const doubleBtn = document.getElementById('double-view-btn');
+
+    if (mode === 'single') {
+        singleBtn.classList.add('active');
+        doubleBtn.classList.remove('active');
+        if (flipbook) {
+            flipbook.turn('display', 'single');
         }
+        showNotification('Mode satu halaman diaktifkan', 'info');
+    } else {
+        singleBtn.classList.remove('active');
+        doubleBtn.classList.add('active');
+        if (flipbook) {
+            flipbook.turn('display', 'double');
+        }
+        showNotification('Mode dua halaman diaktifkan', 'info');
+    }
+}
+
+function toggleFullscreen() {
+    const container = document.querySelector('.flipbook-container-enhanced');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+    if (!isFullscreen) {
+        if (container.requestFullscreen) {
+            container.requestFullscreen();
+        } else if (container.webkitRequestFullscreen) {
+            container.webkitRequestFullscreen();
+        } else if (container.mozRequestFullScreen) {
+            container.mozRequestFullScreen();
+        } else if (container.msRequestFullscreen) {
+            container.msRequestFullscreen();
+        }
+
+        container.classList.add('fullscreen');
+        document.body.classList.add('fullscreen-mode');
+        fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+        fullscreenBtn.title = 'Keluar Layar Penuh';
+        isFullscreen = true;
+
+        // Resize book for fullscreen
+        setTimeout(() => {
+            if (flipbook) {
+                flipbook.turn('size', 1200, 800);
+                flipbook.turn('resize');
+            }
+        }, 300);
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+
+        container.classList.remove('fullscreen');
+        document.body.classList.remove('fullscreen-mode');
+        fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+        fullscreenBtn.title = 'Layar Penuh';
+        isFullscreen = false;
+
+        // Resize book back to normal
+        setTimeout(() => {
+            if (flipbook) {
+                flipbook.turn('size', 900 * currentZoom, 600 * currentZoom);
+                flipbook.turn('resize');
+            }
+        }, 300);
+    }
+}
+
+function handleFullscreenChange() {
+    const container = document.querySelector('.flipbook-container-enhanced');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+    if (!document.fullscreenElement &&
+        !document.webkitFullscreenElement &&
+        !document.mozFullScreenElement &&
+        !document.msFullscreenElement) {
+        container.classList.remove('fullscreen');
+        document.body.classList.remove('fullscreen-mode');
+        fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+        fullscreenBtn.title = 'Layar Penuh';
+        isFullscreen = false;
+
+        // Resize book back to normal
+        setTimeout(() => {
+            if (flipbook) {
+                flipbook.turn('size', 900 * currentZoom, 600 * currentZoom);
+                flipbook.turn('resize');
+            }
+        }, 300);
     }
 }
 
 function setupEventListeners() {
     // Keyboard navigation
     document.addEventListener('keydown', function(e) {
-        if (isAnimating) return;
+        if (!flipbook) return;
 
         switch(e.key) {
             case 'ArrowLeft':
             case 'ArrowUp':
+            case 'PageUp':
                 e.preventDefault();
-                flipToPrevPage();
+                prevPage();
                 break;
             case 'ArrowRight':
             case 'ArrowDown':
+            case 'PageDown':
+            case ' ':
                 e.preventDefault();
-                flipToNextPage();
+                nextPage();
                 break;
             case 'Escape':
                 if (isFullscreen) {
-                    exitFullscreen();
+                    toggleFullscreen();
                 }
-                break;
-            case '+':
-                e.preventDefault();
-                zoomIn();
-                break;
-            case '-':
-                e.preventDefault();
-                zoomOut();
                 break;
             case 'Home':
                 e.preventDefault();
-                goToPage(0);
+                goToPage(1);
                 break;
             case 'End':
                 e.preventDefault();
-                goToPage(totalPages + 1);
+                goToPage(totalPages);
+                break;
+            case 'F11':
+                e.preventDefault();
+                toggleFullscreen();
                 break;
         }
     });
@@ -306,168 +440,161 @@ function setupEventListeners() {
 
     // Touch swipe support
     let touchStartX = 0;
-    let touchStartY = 0;
 
     document.addEventListener('touchstart', function(e) {
         touchStartX = e.changedTouches[0].screenX;
-        touchStartY = e.changedTouches[0].screenY;
     }, false);
 
     document.addEventListener('touchend', function(e) {
-        if (isAnimating) return;
+        if (!flipbook) return;
 
         const touchEndX = e.changedTouches[0].screenX;
-        const touchEndY = e.changedTouches[0].screenY;
+        const deltaX = touchEndX - touchStartX;
         const swipeThreshold = 50;
-        const verticalThreshold = 30;
 
-        // Only process horizontal swipes with minimal vertical movement
-        if (Math.abs(touchEndY - touchStartY) > verticalThreshold) return;
-
-        if (touchEndX < touchStartX - swipeThreshold) {
-            flipToNextPage();
-        } else if (touchEndX > touchStartX + swipeThreshold) {
-            flipToPrevPage();
+        if (deltaX < -swipeThreshold) {
+            nextPage();
+        } else if (deltaX > swipeThreshold) {
+            prevPage();
         }
     }, false);
 }
 
-function zoomIn() {
-    currentZoom = Math.min(currentZoom + 0.2, 3.0);
-    applyZoom();
+// Loading state functions
+function showLoadingState(message) {
+    const loadingState = document.getElementById('pdf-loading');
+    const loadingText = document.getElementById('loading-text');
+
+    if (loadingState) loadingState.style.display = 'flex';
+    if (loadingText && message) loadingText.textContent = message;
 }
 
-function zoomOut() {
-    currentZoom = Math.max(currentZoom - 0.2, 0.5);
-    applyZoom();
+function updateLoadingState(message) {
+    const loadingText = document.getElementById('loading-text');
+    if (loadingText && message) loadingText.textContent = message;
 }
 
-async function applyZoom() {
-    updatePageInfo();
-
-    // Clear rendered pages and reload with new zoom
-    renderedPages.clear();
-
-    // Reload current page and adjacent pages
-    const pagesToLoad = [currentPage, currentPage - 1, currentPage + 1];
-    for (const pageNum of pagesToLoad) {
-        if (pageNum >= 1 && pageNum <= totalPages) {
-            await loadPage(pageNum);
-        }
-    }
-}
-
-function setViewMode(mode) {
-    viewMode = mode;
-
-    // Update button states
-    document.getElementById('single-page-btn').classList.toggle('active', mode === 'single');
-    document.getElementById('double-page-btn').classList.toggle('active', mode === 'double');
-
-    // Note: Single/Double page view would require more complex layout changes
-    // For now, we'll keep it as single page flipbook
-}
-
-function toggleFullscreen() {
-    if (!isFullscreen) {
-        enterFullscreen();
-    } else {
-        exitFullscreen();
-    }
-}
-
-function enterFullscreen() {
-    const container = document.querySelector('.flipbook-container');
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-
-    if (container.requestFullscreen) {
-        container.requestFullscreen();
-    } else if (container.webkitRequestFullscreen) {
-        container.webkitRequestFullscreen();
-    } else if (container.mozRequestFullScreen) {
-        container.mozRequestFullScreen();
-    } else if (container.msRequestFullscreen) {
-        container.msRequestFullscreen();
-    }
-
-    container.classList.add('fullscreen');
-    document.body.classList.add('fullscreen-mode');
-    fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
-    isFullscreen = true;
-
-    // Resize flipbook for fullscreen
-    setTimeout(() => {
-        const flipbook = document.querySelector('.custom-flipbook');
-        if (flipbook) {
-            flipbook.style.width = '90vw';
-            flipbook.style.height = '90vh';
-        }
-    }, 100);
-}
-
-function exitFullscreen() {
-    const container = document.querySelector('.flipbook-container');
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-    } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-    }
-
-    container.classList.remove('fullscreen');
-    document.body.classList.remove('fullscreen-mode');
-    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-    isFullscreen = false;
-
-    // Resize flipbook back to normal
-    setTimeout(() => {
-        const flipbook = document.querySelector('.custom-flipbook');
-        if (flipbook) {
-            flipbook.style.width = '800px';
-            flipbook.style.height = '600px';
-        }
-    }, 100);
-}
-
-function handleFullscreenChange() {
-    const container = document.querySelector('.flipbook-container');
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-
-    if (!document.fullscreenElement &&
-        !document.webkitFullscreenElement &&
-        !document.mozFullScreenElement &&
-        !document.msFullscreenElement) {
-        container.classList.remove('fullscreen');
-        document.body.classList.remove('fullscreen-mode');
-        fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-        isFullscreen = false;
-    }
+function hideLoadingState() {
+    const loadingState = document.getElementById('pdf-loading');
+    if (loadingState) loadingState.style.display = 'none';
 }
 
 function showErrorState(message) {
     const loadingState = document.getElementById('pdf-loading');
     const errorState = document.getElementById('pdf-error');
 
-    loadingState.style.display = 'none';
-    errorState.style.display = 'flex';
+    if (loadingState) loadingState.style.display = 'none';
+    if (errorState) errorState.style.display = 'flex';
 
     if (message) {
         document.getElementById('error-message').textContent = message;
     }
 }
 
-// Cleanup
-window.addEventListener('beforeunload', function() {
-    if (pdfDoc) {
-        pdfDoc.destroy();
-    }
-});
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'}-circle"></i>
+            <span>${message}</span>
+        </div>
+    `;
 
-// Initialize view mode
-document.getElementById('single-page-btn').classList.add('active');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#00bfa6' : type === 'error' ? '#ff6b6b' : '#3498db'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        z-index: 10000;
+        animation: slideInRight 0.3s ease;
+        max-width: 400px;
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Like book function
+async function likeBook(bookID) {
+    try {
+        const response = await fetch(`/perpustakaan/buku/${bookID}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showNotification('Terima kasih telah menyukai buku ini! 💖', 'success');
+            // Update like count
+            const likeCount = document.querySelector('.like-count');
+            if (likeCount) {
+                likeCount.textContent = result.favoriteCount;
+            }
+        } else {
+            showNotification(result.message || 'Gagal menyukai buku', 'error');
+        }
+    } catch (error) {
+        console.error('Error liking book:', error);
+        showNotification('Terjadi kesalahan saat menyukai buku', 'error');
+    }
+}
+
+// Initialize double page view by default
+setTimeout(() => {
+    setViewMode('double');
+}, 1000);
+
+// Add notification styles
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+
+    .notification-content {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .notification-content i {
+        font-size: 1.2rem;
+    }
+`;
+document.head.appendChild(style);
 </script>
