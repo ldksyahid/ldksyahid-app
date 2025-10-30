@@ -2,9 +2,10 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <!-- Simplified Header -->
+    <!-- Elegant Header -->
     <div class="row mb-4">
         <div class="col-12">
+            <!-- Enhanced Breadcrumb -->
             <nav aria-label="breadcrumb" class="wow fadeIn" data-wow-delay="0.1s">
                 <ol class="breadcrumb elegant-breadcrumb">
                     <li class="breadcrumb-item">
@@ -14,110 +15,117 @@
                     </li>
                     <li class="breadcrumb-item">
                         <a href="{{ route('catalog.books.show', $book->slug) }}" class="breadcrumb-link">
-                            <i class="fas fa-arrow-left me-2"></i>Kembali ke Buku
+                            <i class="fas fa-book me-2"></i>{{ Str::limit($book->titleBook, 50) }}
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <i class="fas fa-book-open me-2"></i>Membaca
+                        <a href="#" class="breadcrumb-link">
+                            <i class="fas fa-book-reader me-2"></i>Membaca
+                        </a>
                     </li>
                 </ol>
             </nav>
 
-            <!-- Compact Book Info -->
-            <div class="book-header-compact wow fadeIn" data-wow-delay="0.15s">
-                <div class="book-cover-mini">
+            <!-- Minimalist Book Info -->
+            <div class="book-header-minimalist wow fadeIn" data-wow-delay="0.15s">
+                <div class="book-cover-elegant">
                     @if($book->coverImageUrl())
-                        <img src="{{ $book->coverImageUrl() }}" alt="{{ $book->titleBook }}" class="cover-img">
+                        <img src="{{ $book->coverImageUrl() }}" alt="{{ $book->titleBook }}" class="cover-img-elegant">
                     @else
-                        <div class="cover-placeholder">
-                            <i class="fas fa-book"></i>
+                        <div class="cover-placeholder-elegant">
+                            <i class="fas fa-book-open"></i>
                         </div>
                     @endif
                 </div>
-                <div class="book-info-mini">
-                    <h1 class="book-title">{{ Str::limit($book->titleBook, 50) }}</h1>
-                    <p class="book-author">
-                        <i class="fas fa-user-edit me-1"></i>{{ $book->authorName }}
+                <div class="book-info-elegant">
+                    <h1 class="book-title-elegant">{{ $book->titleBook }}</h1>
+                    <p class="book-author-elegant">
+                        <i class="fas fa-pen-nib me-2"></i>{{ $book->authorName }}
                     </p>
-                    <div class="book-meta-compact">
-                        <span class="meta-badge">
-                            <i class="fas fa-building me-1"></i>{{ Str::limit($book->publisherName, 20) }}
-                        </span>
-                        <span class="meta-badge">
-                            <i class="fas fa-calendar me-1"></i>{{ $book->year }}
-                        </span>
-                        <span class="meta-badge">
-                            <i class="fas fa-file-alt me-1"></i>{{ $book->pages }}hlm
-                        </span>
+                    <div class="book-meta-elegant">
+                        <div class="meta-item">
+                            <i class="fas fa-building me-1"></i>
+                            <span>{{ Str::limit($book->publisherName, 25) }}</span>
+                        </div>
+                        <div class="meta-divider"></div>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar me-1"></i>
+                            <span>{{ $book->year }}</span>
+                        </div>
+                        <div class="meta-divider"></div>
+                        <div class="meta-item">
+                            <i class="fas fa-file-alt me-1"></i>
+                            <span>{{ $book->pages }} halaman</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Enhanced FlipBook Container -->
+    <!-- Premium FlipBook Container -->
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="flipbook-container-enhanced wow fadeIn" data-wow-delay="0.2s">
+            <div class="flipbook-container-premium wow fadeIn" data-wow-delay="0.2s">
                 <!-- Turn.js Container -->
-                <div id="flipbook-container" class="flipbook-wrapper-enhanced">
-                    <div id="flipbook" class="flipbook-viewer-enhanced"></div>
+                <div id="flipbook-container" class="flipbook-wrapper-premium">
+                    <div id="flipbook" class="flipbook-viewer-premium"></div>
 
-                    <!-- Enhanced Navigation Controls -->
-                    <div class="flipbook-controls-enhanced">
-                        <button class="control-btn-enhanced prev-btn" onclick="prevPage()" title="Halaman Sebelumnya">
+                    <!-- Premium Navigation Controls -->
+                    <div class="flipbook-controls-premium">
+                        <button class="control-btn-premium prev-btn" onclick="prevPage()" title="Halaman Sebelumnya">
                             <i class="fas fa-chevron-left"></i>
                         </button>
 
-                        <div class="page-info-enhanced">
-                            <div class="page-progress">
-                                <div class="progress-bar" id="page-progress-bar"></div>
+                        <div class="page-info-premium">
+                            <div class="page-progress-premium">
+                                <div class="progress-bar-premium" id="page-progress-bar"></div>
                             </div>
-                            <span class="page-numbers">
+                            <span class="page-numbers-premium">
                                 <span id="current-page">0</span> / <span id="total-pages">0</span>
                             </span>
                         </div>
 
-                        <button class="control-btn-enhanced next-btn" onclick="nextPage()" title="Halaman Berikutnya">
+                        <button class="control-btn-premium next-btn" onclick="nextPage()" title="Halaman Berikutnya">
                             <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Enhanced Loading State -->
-                <div id="pdf-loading" class="loading-state-enhanced">
-                    <div class="flipbook-loader-enhanced">
-                        <div class="book-spinner">
-                            <div class="book">
-                                <div class="page"></div>
-                                <div class="page"></div>
-                                <div class="page"></div>
+                <!-- Premium Loading State -->
+                <div id="pdf-loading" class="loading-state-premium">
+                    <div class="flipbook-loader-premium">
+                        <div class="book-spinner-premium">
+                            <div class="book-premium">
+                                <div class="page-premium"></div>
+                                <div class="page-premium"></div>
+                                <div class="page-premium"></div>
                             </div>
                         </div>
-                        <div class="loading-content">
+                        <div class="loading-content-premium">
                             <h4>Mempersiapkan Buku Digital</h4>
                             <p id="loading-text">Memuat konten buku...</p>
-                            <div class="progress-container-enhanced">
-                                <div class="progress-bar-enhanced" id="loading-progress"></div>
+                            <div class="progress-container-premium">
+                                <div class="progress-bar-premium" id="loading-progress"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Enhanced Error State -->
-                <div id="pdf-error" class="error-state-enhanced" style="display: none;">
-                    <div class="error-content">
-                        <div class="error-icon">
-                            <i class="fas fa-book-skull"></i>
+                <!-- Premium Error State -->
+                <div id="pdf-error" class="error-state-premium" style="display: none;">
+                    <div class="error-content-premium">
+                        <div class="error-icon-premium">
+                            <i class="fas fa-book-open"></i>
                         </div>
                         <h4>Buku Tidak Dapat Dimuat</h4>
                         <p id="error-message">Terjadi gangguan saat memuat buku digital</p>
-                        <div class="error-actions">
-                            <button class="btn-retry-enhanced" onclick="location.reload()">
+                        <div class="error-actions-premium">
+                            <button class="btn-retry-premium" onclick="location.reload()">
                                 <i class="fas fa-redo me-2"></i>Muat Ulang
                             </button>
-                            <a href="{{ route('catalog.books.show', $book->slug) }}" class="btn-back-enhanced">
-                                <i class="fas fa-arrow-left me-2"></i>Kembali
+                            <a href="{{ route('catalog.books.show', $book->slug) }}" class="btn-back-premium">
+                                <i class="fas fa-arrow-left me-2"></i>Kembali ke Detail
                             </a>
                         </div>
                     </div>
@@ -126,59 +134,59 @@
         </div>
     </div>
 
-    <!-- Floating Reader Controls -->
-    <div class="floating-controls">
-        <div class="floating-controls-panel">
+    <!-- Elegant Floating Reader Controls -->
+    <div class="floating-controls-elegant">
+        <div class="floating-controls-panel-elegant">
             <!-- Navigation -->
-            <div class="control-section">
-                <button class="floating-btn" onclick="prevPage()" title="Halaman Sebelumnya">
+            <div class="control-section-elegant">
+                <button class="floating-btn-elegant" onclick="prevPage()" title="Halaman Sebelumnya">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <div class="page-display">
+                <div class="page-display-elegant">
                     <span id="current-page-display">0</span>/<span id="total-pages-display">0</span>
                 </div>
-                <button class="floating-btn" onclick="nextPage()" title="Halaman Berikutnya">
+                <button class="floating-btn-elegant" onclick="nextPage()" title="Halaman Berikutnya">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
 
             <!-- Zoom -->
-            <div class="control-section">
-                <button class="floating-btn" onclick="zoomOut()" title="Perkecil">
+            <div class="control-section-elegant">
+                <button class="floating-btn-elegant" onclick="zoomOut()" title="Perkecil">
                     <i class="fas fa-search-minus"></i>
                 </button>
-                <span class="zoom-display" id="zoom-level">100%</span>
-                <button class="floating-btn" onclick="zoomIn()" title="Perbesar">
+                <span class="zoom-display-elegant" id="zoom-level">100%</span>
+                <button class="floating-btn-elegant" onclick="zoomIn()" title="Perbesar">
                     <i class="fas fa-search-plus"></i>
                 </button>
             </div>
 
             <!-- View Mode -->
-            <div class="control-section">
-                <button class="floating-btn view-mode-btn" id="single-view-btn" onclick="setViewMode('single')" title="Satu Halaman">
+            <div class="control-section-elegant">
+                <button class="floating-btn-elegant view-mode-btn" id="single-view-btn" onclick="setViewMode('single')" title="Satu Halaman">
                     <i class="fas fa-file"></i>
                 </button>
-                <button class="floating-btn view-mode-btn active" id="double-view-btn" onclick="setViewMode('double')" title="Dua Halaman">
+                <button class="floating-btn-elegant view-mode-btn active" id="double-view-btn" onclick="setViewMode('double')" title="Dua Halaman">
                     <i class="fas fa-copy"></i>
                 </button>
             </div>
 
             <!-- Quick Navigation -->
-            <div class="control-section">
-                <button class="floating-btn" onclick="goToPage(1)" title="Halaman Pertama">
-                    <i class="fas fa-fast-backward"></i>
+            <div class="control-section-elegant">
+                <button class="floating-btn-elegant" onclick="goToPage(1)" title="Halaman Pertama">
+                    <i class="fas fa-step-backward"></i>
                 </button>
-                <button class="floating-btn" onclick="goToMiddlePage()" title="Halaman Tengah">
+                <button class="floating-btn-elegant" onclick="goToMiddlePage()" title="Halaman Tengah">
                     <i class="fas fa-pause"></i>
                 </button>
-                <button class="floating-btn" onclick="goToLastPage()" title="Halaman Terakhir">
-                    <i class="fas fa-fast-forward"></i>
+                <button class="floating-btn-elegant" onclick="goToLastPage()" title="Halaman Terakhir">
+                    <i class="fas fa-step-forward"></i>
                 </button>
             </div>
 
             <!-- Fullscreen -->
-            <div class="control-section">
-                <button class="floating-btn" onclick="toggleFullscreen()" title="Layar Penuh" id="fullscreen-btn">
+            <div class="control-section-elegant">
+                <button class="floating-btn-elegant" onclick="toggleFullscreen()" title="Layar Penuh" id="fullscreen-btn">
                     <i class="fas fa-expand"></i>
                 </button>
             </div>

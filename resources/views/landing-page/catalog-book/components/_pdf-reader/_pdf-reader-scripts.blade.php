@@ -111,7 +111,7 @@ async function createTurnJSBook() {
                 <p>Selamat membaca dan semoga bermanfaat!</p>
                 <div class="library-info">
                     <p>Perpustakaan Digital</p>
-                    <small>{{ config('app.name') }}</small>
+                    <small>UKM LDK Syahid</small>
                 </div>
             </div>
         </div>
