@@ -28,6 +28,10 @@
     --shadow-hover: 0 5px 25px rgba(0, 0, 0, 0.08);
     --shadow-floating: 0 8px 30px rgba(0, 0, 0, 0.12);
     --shadow-elegant: 0 10px 40px rgba(0, 0, 0, 0.1);
+
+    /* Mobile spacing variables */
+    --mobile-padding: 1rem;
+    --mobile-margin: 0.5rem;
 }
 
 /* === ELEGANT BREADCRUMB === */
@@ -195,7 +199,8 @@
     min-height: 600px;
     position: relative;
     overflow: hidden;
-    margin: 0 1rem;
+    /* Improved mobile spacing */
+    margin: 0 var(--mobile-margin);
 }
 
 .flipbook-wrapper-premium {
@@ -467,13 +472,16 @@
     transform: translateY(-2px);
 }
 
-/* === ELEGANT FLOATING CONTROLS === */
+/* === ENHANCED FLOATING CONTROLS === */
 .floating-controls-elegant {
     position: fixed;
     bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
+    /* Prevent being cut off by viewport edges */
+    width: calc(100% - 2rem);
+    max-width: 600px;
 }
 
 .floating-controls-panel-elegant {
@@ -486,6 +494,16 @@
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.4);
     animation: slideUp 0.5s ease;
+    /* Ensure it stays within viewport */
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.floating-controls-panel-elegant::-webkit-scrollbar {
+    display: none;
 }
 
 @keyframes slideUp {
@@ -504,6 +522,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0 0.5rem;
+    flex-shrink: 0; /* Prevent shrinking on mobile */
 }
 
 .control-section-elegant:not(:last-child) {
@@ -524,6 +543,7 @@
     transition: all 0.3s ease;
     cursor: pointer;
     font-size: 0.9rem;
+    flex-shrink: 0; /* Prevent button shrinking */
 }
 
 .floating-btn-elegant:hover {
@@ -545,6 +565,7 @@
     font-size: 0.85rem;
     min-width: 50px;
     text-align: center;
+    flex-shrink: 0; /* Prevent text shrinking */
 }
 
 /* === TURN.JS ENHANCEMENTS === */
@@ -694,6 +715,7 @@ body.fullscreen-mode {
 
 body.fullscreen-mode .floating-controls-elegant {
     bottom: 1rem;
+    width: calc(100% - 2rem);
 }
 
 /* === TURN.JS CUSTOM STYLES === */
@@ -732,7 +754,7 @@ body.fullscreen-mode .floating-controls-elegant {
     background-image: linear-gradient(left, #fff 95%, #c4c4c4 100%);
 }
 
-/* === RESPONSIVE DESIGN === */
+/* === ENHANCED RESPONSIVE DESIGN === */
 @media (max-width: 1200px) {
     .flipbook-viewer-premium {
         width: 800px;
@@ -751,6 +773,7 @@ body.fullscreen-mode .floating-controls-elegant {
         justify-content: center;
         border-radius: var(--radius-lg);
         padding: 1rem;
+        gap: 0.75rem;
     }
 
     .control-section-elegant:not(:last-child) {
@@ -760,15 +783,30 @@ body.fullscreen-mode .floating-controls-elegant {
 }
 
 @media (max-width: 768px) {
+    /* Improved mobile container spacing */
+    .container-fluid {
+        padding-left: var(--mobile-padding);
+        padding-right: var(--mobile-padding);
+    }
+
     .book-header-minimalist {
         flex-direction: column;
         text-align: center;
         gap: 1rem;
+        padding: 1.5rem;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .flipbook-container-premium {
+        margin: 0;
+        border-radius: var(--radius-lg);
     }
 
     .flipbook-viewer-premium {
         width: 100% !important;
         height: 400px !important;
+        border-radius: 12px;
     }
 
     .flipbook-wrapper-premium {
@@ -780,6 +818,7 @@ body.fullscreen-mode .floating-controls-elegant {
     .flipbook-controls-premium {
         padding: 0.8rem 1.5rem;
         gap: 1rem;
+        margin-top: 1.5rem;
     }
 
     .control-btn-premium {
@@ -792,22 +831,46 @@ body.fullscreen-mode .floating-controls-elegant {
         flex-direction: column;
         text-align: center;
         gap: 2rem;
+        padding: 1rem;
     }
 
+    /* Enhanced floating controls for mobile */
     .floating-controls-elegant {
         bottom: 1rem;
-        left: 1rem;
-        right: 1rem;
-        transform: none;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 2rem);
+        max-width: none;
     }
 
     .floating-controls-panel-elegant {
         justify-content: space-between;
-        border-radius: var(--radius);
+        border-radius: var(--radius-lg);
+        padding: 0.8rem 1rem;
+        gap: 0.5rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .control-section-elegant {
+        padding: 0 0.25rem;
     }
 
     .book-meta-elegant {
         justify-content: center;
+    }
+
+    /* Improved breadcrumb for mobile */
+    .elegant-breadcrumb {
+        padding: 0.8rem 1rem;
+        height: auto;
+        flex-wrap: wrap;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .breadcrumb-item {
+        height: auto;
     }
 }
 
@@ -817,33 +880,59 @@ body.fullscreen-mode .floating-controls-elegant {
     }
 
     .flipbook-container-premium {
-        margin: 0 0.5rem;
+        margin: 0;
     }
 
     .floating-controls-panel-elegant {
-        padding: 0.8rem;
-        gap: 0.5rem;
+        padding: 0.7rem 0.8rem;
+        gap: 0.4rem;
     }
 
     .floating-btn-elegant {
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
         font-size: 0.8rem;
     }
 
     .page-display-elegant, .zoom-display-elegant {
         font-size: 0.8rem;
-        min-width: 40px;
+        min-width: 45px;
     }
 
     .elegant-breadcrumb {
-        padding: 0.8rem 1rem;
-        height: auto;
-        flex-wrap: wrap;
+        padding: 0.7rem 0.8rem;
     }
 
-    .breadcrumb-item {
-        height: auto;
+    /* Extra small devices */
+    .flipbook-viewer-premium {
+        height: 350px !important;
+    }
+
+    .flipbook-wrapper-premium {
+        min-height: 400px;
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 400px) {
+    /* Ultra-small mobile optimization */
+    .floating-controls-panel-elegant {
+        padding: 0.6rem;
+        gap: 0.3rem;
+    }
+
+    .floating-btn-elegant {
+        width: 36px;
+        height: 36px;
+    }
+
+    .page-display-elegant, .zoom-display-elegant {
+        font-size: 0.75rem;
+        min-width: 40px;
+    }
+
+    .control-section-elegant {
+        gap: 0.3rem;
     }
 }
 
@@ -879,5 +968,18 @@ body.fullscreen-mode .floating-controls-elegant {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-dark);
+}
+
+/* === SAFE AREA INSETS FOR NOTCHED DEVICES === */
+@supports(padding: max(0px)) {
+    .floating-controls-elegant {
+        bottom: max(2rem, env(safe-area-inset-bottom));
+    }
+
+    @media (max-width: 768px) {
+        .floating-controls-elegant {
+            bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+    }
 }
 </style>

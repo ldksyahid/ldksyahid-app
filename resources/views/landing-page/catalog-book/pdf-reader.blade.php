@@ -15,13 +15,11 @@
                     </li>
                     <li class="breadcrumb-item">
                         <a href="{{ route('catalog.books.show', $book->slug) }}" class="breadcrumb-link">
-                            <i class="fas fa-book me-2"></i>{{ Str::limit($book->titleBook, 50) }}
+                            <i class="fas fa-book me-2"></i>{{ Str::limit($book->titleBook, 25) }}
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <a href="#" class="breadcrumb-link">
-                            <i class="fas fa-book-reader me-2"></i>Membaca
-                        </a>
+                        <i class="fas fa-book-reader me-2"></i>Membaca
                     </li>
                 </ol>
             </nav>
@@ -134,7 +132,7 @@
         </div>
     </div>
 
-    <!-- Elegant Floating Reader Controls -->
+    <!-- Enhanced Floating Reader Controls -->
     <div class="floating-controls-elegant">
         <div class="floating-controls-panel-elegant">
             <!-- Navigation -->
