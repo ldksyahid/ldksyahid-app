@@ -20,7 +20,7 @@ class CatalogBooksController extends Controller
     {
         $query = MsCatalogBook::searchIndexBooks($request);
 
-        $books = $query->paginate(8)->withQueryString();
+        $books = $query->paginate(8);
 
         $categories = LkBookCategory::select('bookCategoryID', 'bookCategoryName')->distinct()->orderBy('bookCategoryName')->get();
         $authors = MsCatalogBook::select('authorName')->distinct()->orderBy('authorName')->pluck('authorName');
