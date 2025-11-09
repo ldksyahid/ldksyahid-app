@@ -227,8 +227,7 @@ class MsCatalogBook extends Model
      */
     public static function searchIndexBooks(Request $request)
     {
-        $query = self::with(['getBookCategory', 'getLanguage', 'getAuthorType', 'getAvailabilityType'])
-                    ->where('flagActive', true);
+        $query = self::with(['getBookCategory', 'getLanguage', 'getAuthorType', 'getAvailabilityType']);
 
         $sort = $request->input('sort', 'newest');
 
