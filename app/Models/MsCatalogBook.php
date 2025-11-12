@@ -472,7 +472,7 @@ class MsCatalogBook extends Model
             'favoriteCount' => 0,
             'purchaseLink' => $request->purchaseLink,
             'borrowLink' => $request->borrowLink,
-            'flagActive' => $request->has('flagActive') ? 1 : 0,
+            'flagActive' => 1,
         ]);
     }
 
