@@ -227,7 +227,8 @@ class MsCatalogBook extends Model
      */
     public static function searchIndexBooks(Request $request)
     {
-        $query = self::with(['getBookCategory', 'getLanguage', 'getAuthorType', 'getAvailabilityType']);
+        $query = self::with(['getBookCategory', 'getLanguage', 'getAuthorType', 'getAvailabilityType'])
+                    ->where('flagActive', true);
 
         $sort = $request->input('sort', 'newest');
 
@@ -472,7 +473,7 @@ class MsCatalogBook extends Model
             'favoriteCount' => 0,
             'purchaseLink' => $request->purchaseLink,
             'borrowLink' => $request->borrowLink,
-            'flagActive' => $request->has('flagActive') ? 1 : 0,
+            'flagActive' => 1,
         ]);
     }
 
