@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-use App\Services\GoogleDrive;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class MsFinanceReport extends Model
 {
@@ -35,6 +32,14 @@ class MsFinanceReport extends Model
         'createdDate' => 'datetime',
         'editedDate' => 'datetime',
     ];
+
+    /**
+     * Relationship to LkLDK model
+     */
+    public function ldk()
+    {
+        return $this->belongsTo(LkLDK::class, 'ldkID', 'ldkID');
+    }
 
     /**
      * Get the table name for the model
@@ -88,5 +93,67 @@ class MsFinanceReport extends Model
         $rules = [];
 
         return $request->validate($rules);
+    }
+
+    /**
+     * Search finance reports for admin panel with filters
+     */
+    public static function searchAdminFinanceReport(Request $request)
+    {
+        $sortBy = $request->input('sort_by', 'createdDate');
+        $sortOrder = $request->input('sort_order', 'desc');
+
+        $allowedSorts = [
+            'fileName',
+            'createdDate',
+        ];
+
+        if (!in_array($sortBy, $allowedSorts)) {
+            $sortBy = 'createdDate';
+        }
+
+        $query = self::with(['ldk']);
+
+        // Filter by file name
+        if ($request->filled('file_name')) {
+            $query->where('fileName', 'like', "%{$request->file_name}%");
+        }
+
+        // Filter by LDK Tag
+        if ($request->filled('ldk_tag')) {
+            $query->whereHas('ldk', function($q) use ($request) {
+                $q->where('ldkTag', $request->ldk_tag);
+            });
+        }
+
+        // Date range filter for createdDate
+        if ($request->filled('created_date')) {
+            $dates = explode(' - ', $request->created_date);
+
+            if (count($dates) == 2) {
+                try {
+                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+
+                    $query->whereBetween('createdDate', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    $query->whereDate('createdDate', $request->created_date);
+                }
+            } else {
+                $query->whereDate('createdDate', $request->created_date);
+            }
+        }
+
+        $query->orderBy($sortBy, $sortOrder);
+
+        return $query->paginate(15)->appends($request->all());
+    }
+
+    /**
+     * Get all unique LDK tags for dropdown
+     */
+    public static function getUniqueLdkTags()
+    {
+        return LkLDK::orderBy('ldkTag')->pluck('ldkTag')->unique();
     }
 }
