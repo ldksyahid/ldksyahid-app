@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class MsFinanceReport extends Model
 {
-    // Google Drive folder ID for cover images
+    // Google Drive folder ID for file report
     public const PATH_FINANCE_REPORT_FILE_GDRIVE_ID = '1nDojsRpdH6obhzTeqiFxBcPk1Z7OOJao';
 
     protected $table = 'ms_finance_report';
