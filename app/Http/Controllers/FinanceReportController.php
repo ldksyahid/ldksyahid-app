@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\MsCatalogBook;
-use App\Models\LkBookCategory;
-use App\Models\LkLanguage;
-use App\Models\LkAuthorType;
-use App\Models\LkAvailabilityType;
+use App\Models\LkLDK;
+use App\Models\MsFinanceReport;
 use Illuminate\Http\Request;
 
 class FinanceReportController extends Controller
@@ -16,7 +14,21 @@ class FinanceReportController extends Controller
        ========================================================================= */
     public function indexAdmin(Request $request)
     {
+        $financeReports = MsFinanceReport::searchAdminFinanceReport($request);
+        $ldkTags = LkLDK::orderBy('ldkTag')->pluck('ldkTag')->unique();
 
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('admin-page.finance-report.components._index._index-table', compact('financeReports'))->render(),
+                'pagination' => $financeReports->appends($request->query())->links()->render(),
+                'total' => $financeReports->total(),
+                'from' => $financeReports->firstItem(),
+                'to' => $financeReports->lastItem()
+            ]);
+        }
+
+        return view('admin-page.finance-report.index', compact('financeReports', 'ldkTags'))
+            ->with('title', 'Finance Reports');
     }
 
     public function create()

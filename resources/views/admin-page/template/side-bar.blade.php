@@ -89,7 +89,7 @@
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Reports") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-file-alt me-2"></i>Reports</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/report/finance" class="dropdown-item">&#10070; Finance Report</a>
+                        <a href="/admin/finance-report" class="dropdown-item">&#10070; Finance Report</a>
                     </div>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Reports") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-file-alt me-2"></i>Reports</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/report/finance" class="dropdown-item">&#10070; Finance Report</a>
+                        <a href="/admin/finance-report" class="dropdown-item">&#10070; Finance Report</a>
                     </div>
                 </div>
             </div>
@@ -249,7 +249,7 @@
                 <div class="nav-item dropdown">
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Reports") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-file-alt me-2"></i>Reports</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin/report/finance" class="dropdown-item">&#10070; Finance Report</a>
+                        <a href="/admin/finance-report" class="dropdown-item">&#10070; Finance Report</a>
                     </div>
                 </div>
             </div>
