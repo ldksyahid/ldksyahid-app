@@ -144,9 +144,9 @@ class MsFinanceReport extends Model
             }
         }
 
-        $query->orderBy($sortBy, $sortOrder);
-
-        return $query->paginate(15)->appends($request->all());
+        return $query->orderBy($sortBy, $sortOrder)
+            ->paginate(15)
+            ->appends($request->all());
     }
 
     /**
