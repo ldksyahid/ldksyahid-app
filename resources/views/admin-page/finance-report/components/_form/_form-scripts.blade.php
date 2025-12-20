@@ -2,7 +2,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Initialize Select2 for LDK tag dropdown
+        // Initialize Select2 for LDK tag dropdown (only for create/edit mode)
         const ldkElement = $('#ldkID');
         if (ldkElement.length && ldkElement.is('select')) {
             ldkElement.select2({
@@ -12,7 +12,7 @@
             });
         }
 
-        // PDF file validation
+        // PDF file validation (only for create/edit mode)
         const pdfFileInput = document.getElementById('pdfFile');
         if (pdfFileInput) {
             pdfFileInput.addEventListener('change', function(event) {
@@ -41,19 +41,15 @@
                         this.value = '';
                         return;
                     }
-
-                    console.log('PDF file selected:', file.name);
                 }
             });
         }
 
-        // Form validation and submission
+        // Form validation and submission (only for create/edit mode)
         document.querySelector('form')?.addEventListener('submit', function(e) {
             const fileName = document.getElementById('fileName');
             const ldkID = document.getElementById('ldkID');
             const pdfFile = document.getElementById('pdfFile');
-
-            let hasError = false;
 
             // Validate file name
             if (fileName && !fileName.value.trim()) {
@@ -65,7 +61,6 @@
                     confirmButtonColor: '#00a79d'
                 });
                 fileName.focus();
-                hasError = true;
                 return;
             }
 
@@ -79,13 +74,11 @@
                     confirmButtonColor: '#00a79d'
                 });
                 ldkID.focus();
-                hasError = true;
                 return;
             }
 
             // Validate PDF file for create operation
-            const form = e.target;
-            const isCreateForm = form.action.includes('store');
+            const isCreateForm = this.action.includes('store');
             if (isCreateForm && pdfFile && !pdfFile.value) {
                 e.preventDefault();
                 Swal.fire({
@@ -95,12 +88,13 @@
                     confirmButtonColor: '#00a79d'
                 });
                 pdfFile.focus();
-                hasError = true;
                 return;
             }
 
-            if (hasError) {
-                e.preventDefault();
+            // Show loading on form submit
+            const submitBtn = $(this).find('button[type="submit"]');
+            if (submitBtn.length) {
+                submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin me-1"></i> Processing...');
             }
         });
 
@@ -123,13 +117,5 @@
                 title: '{{ session('success') }}'
             });
         @endif
-
-        // Show loading on form submit
-        $('form').on('submit', function() {
-            const submitBtn = $(this).find('button[type="submit"]');
-            if (submitBtn.length) {
-                submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin me-1"></i> Processing...');
-            }
-        });
     });
 </script>

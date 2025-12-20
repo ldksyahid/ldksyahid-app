@@ -6,7 +6,6 @@ use App\Models\MsCatalogBook;
 use App\Models\LkLDK;
 use App\Models\MsFinanceReport;
 use Illuminate\Http\Request;
-use App\Services\GoogleDrive;
 
 class FinanceReportController extends Controller
 {
@@ -59,7 +58,8 @@ class FinanceReportController extends Controller
     public function showAdmin(MsFinanceReport $financeReport)
     {
         $financeReport->load('ldk');
-        return view('admin-page.finance-report.view', compact('financeReport'))
+        $ldkTags = LkLDK::orderBy('ldkTag')->get();
+        return view('admin-page.finance-report.view', compact('financeReport', 'ldkTags'))
             ->with('title', 'View Finance Report');
     }
 

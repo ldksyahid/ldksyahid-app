@@ -65,15 +65,21 @@
         background-color: transparent;
         border: solid transparent;
         border-width: 1px 0;
+        min-height: 38px;
+        display: flex;
+        align-items: center;
     }
     .badge {
         font-size: 0.85rem;
         padding: 0.35rem 0.65rem;
     }
 
-    /* PDF Preview Styles */
-    iframe {
-        background-color: #f8f9fa;
+    /* Status icons */
+    .fa-check-circle.text-success {
+        color: #28a745;
+    }
+    .fa-times-circle.text-danger {
+        color: #dc3545;
     }
 
     /* Button Styles */
@@ -87,24 +93,32 @@
         background-color: #00a79d;
         border-color: #00a79d;
     }
+    .btn-outline-secondary {
+        color: #6c757d;
+        border-color: #6c757d;
+    }
+    .btn-outline-secondary:hover {
+        color: white !important;
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
 
-    /* File Upload Preview */
-    .file-preview {
-        border: 2px dashed #dee2e6;
-        border-radius: 8px;
-        padding: 20px;
-        text-align: center;
-        background-color: #f8f9fa;
-        transition: all 0.3s ease;
+    /* File Card */
+    .card.bg-light {
+        border: 1px solid #dee2e6;
+        border-left: 4px solid #00a79d;
+        background-color: #f8f9fa !important;
     }
-    .file-preview:hover {
-        border-color: #00a79d;
-        background-color: #e0f7f5;
+
+    /* View mode specific */
+    .form-label.fw-bold {
+        color: #495057;
+        font-weight: 600;
     }
-    .file-preview i {
-        font-size: 3rem;
-        color: #dc3545;
-        margin-bottom: 1rem;
+
+    /* File info styling */
+    .form-control-plaintext .d-flex.align-items-center.gap-2 {
+        gap: 0.5rem;
     }
 
     /* Select2 Styles */
@@ -166,13 +180,19 @@
         .page-title {
             font-size: 1.35rem;
         }
-        .btn-group {
-            flex-wrap: wrap;
-            gap: 0.25rem;
+        .d-flex.justify-content-between,
+        .d-flex.align-items-center {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 0.5rem;
         }
-        .btn-group .btn {
-            flex: 1;
-            min-width: 70px;
+        .d-flex.justify-content-between .btn,
+        .d-flex.align-items-center .btn {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        .section-title {
+            font-size: 1rem;
         }
     }
 </style>
