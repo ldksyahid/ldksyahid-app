@@ -145,15 +145,15 @@ class MsCatalogBook extends Model
     {
         // Set createdBy and editedBy before creating
         static::creating(function ($model) {
-            $model->createdBy = auth()->check() ? auth()->user()->username : 'SYSTEM';
+            $model->createdBy = auth()->check() ? auth()->user()->name : 'SYSTEM';
             $model->createdDate = now();
-            $model->editedBy = auth()->check() ? auth()->user()->username : 'SYSTEM';
+            $model->editedBy = auth()->check() ? auth()->user()->name : 'SYSTEM';
             $model->editedDate = now();
         });
 
         // Set editedBy before updating
         static::updating(function ($model) {
-            $model->editedBy = auth()->check() ? auth()->user()->username : 'SYSTEM';
+            $model->editedBy = auth()->check() ? auth()->user()->name : 'SYSTEM';
             $model->editedDate = now();
         });
     }
