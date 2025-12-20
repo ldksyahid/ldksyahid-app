@@ -224,29 +224,19 @@
                                             {{ $operation === 'create' ? 'Select PDF File' : 'Update PDF File' }}
                                             @if($operation === 'create') <span class="text-danger">*</span> @endif
                                         </label>
-                                        @if ($operation === 'view')
-                                            <div class="form-control-plaintext">
-                                                @if($financeReport->fileGdriveID)
-                                                    <span>PDF file is available</span>
-                                                @else
-                                                    <span class="text-muted">No PDF file uploaded</span>
-                                                @endif
-                                            </div>
-                                        @else
-                                            <input type="file" class="form-control @error('pdfFile') is-invalid @enderror" id="pdfFile" name="pdfFile"
-                                                accept=".pdf"
-                                                {{ $operation === 'create' ? 'required' : '' }}>
-                                            @error('pdfFile')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                            <div class="form-text">
-                                                @if($operation === 'create')
-                                                    Upload a PDF file (max 5MB)
-                                                @else
-                                                    Upload a new PDF file to replace the current one (max 5MB)
-                                                @endif
-                                            </div>
-                                        @endif
+                                        <input type="file" class="form-control @error('pdfFile') is-invalid @enderror" id="pdfFile" name="pdfFile"
+                                            accept=".pdf"
+                                            {{ $operation === 'create' ? 'required' : '' }}>
+                                        @error('pdfFile')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">
+                                            @if($operation === 'create')
+                                                Upload a PDF file (max 5MB)
+                                            @else
+                                                Upload a new PDF file to replace the current one (max 5MB)
+                                            @endif
+                                        </div>
                                     </div>
                                 @endif
                             </div>
