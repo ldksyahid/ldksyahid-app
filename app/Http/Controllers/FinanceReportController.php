@@ -28,7 +28,7 @@ class FinanceReportController extends Controller
         }
 
         return view('admin-page.finance-report.index', compact('financeReports', 'ldkTags'))
-            ->with('title', 'Finance Reports');
+            ->with('title', 'Reports');
     }
 
     public function create()
