@@ -2,17 +2,19 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Initialize Select2 for LDK tag dropdown (only for create/edit mode)
+        // Initialize Select2
         const ldkElement = $('#ldkID');
         if (ldkElement.length && ldkElement.is('select')) {
             ldkElement.select2({
                 placeholder: 'Select LDK Tag',
                 width: '100%',
-                dropdownPosition: 'below'
+                dropdownPosition: 'below',
+                allowClear: false,
+                dropdownParent: ldkElement.closest('.mb-3')
             });
         }
 
-        // PDF file validation (only for create/edit mode)
+        // PDF file validation
         const pdfFileInput = document.getElementById('pdfFile');
         if (pdfFileInput) {
             pdfFileInput.addEventListener('change', function(event) {
@@ -45,7 +47,7 @@
             });
         }
 
-        // Form validation and submission (only for create/edit mode)
+        // Form validation and submission
         document.querySelector('form')?.addEventListener('submit', function(e) {
             const fileName = document.getElementById('fileName');
             const ldkID = document.getElementById('ldkID');
@@ -65,7 +67,7 @@
             }
 
             // Validate LDK tag
-            if (ldkID && !ldkID.value) {
+            if (ldkID && (!ldkID.value || ldkID.value === '')) {
                 e.preventDefault();
                 Swal.fire({
                     title: 'LDK Tag Required!',
@@ -73,7 +75,8 @@
                     icon: 'error',
                     confirmButtonColor: '#00a79d'
                 });
-                ldkID.focus();
+                // Focus pada Select2
+                $(ldkID).select2('open');
                 return;
             }
 
@@ -117,5 +120,25 @@
                 title: '{{ session('success') }}'
             });
         @endif
+
+        // Handle Select2 styling for error state
+        $('select.select2-hidden-accessible').on('change', function() {
+            if ($(this).hasClass('is-invalid')) {
+                $(this).removeClass('is-invalid');
+                $(this).next('.select2-container').find('.select2-selection').css('border-color', '#ced4da');
+            }
+        });
+
+        // Apply error styling to Select2 when there's an error
+        @error('ldkID')
+            $(document).ready(function() {
+                const ldkSelect = $('#ldkID');
+                if (ldkSelect.length) {
+                    ldkSelect.next('.select2-container').find('.select2-selection')
+                        .css('border-color', '#dc3545')
+                        .css('box-shadow', '0 0 0 0.2rem rgba(220, 53, 69, 0.25)');
+                }
+            });
+        @enderror
     });
 </script>
