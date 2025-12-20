@@ -76,15 +76,15 @@ class MsFinanceReport extends Model
     protected static function booted(): void
     {
         static::creating(function ($model) {
-            $model->createdBy = auth()->check() ? auth()->user()->username : 'SYSTEM';
+            $model->createdBy = auth()->check() ? auth()->user()->name : 'SYSTEM';
             $model->createdDate = now();
-            $model->editedBy = auth()->check() ? auth()->user()->username : 'SYSTEM';
+            $model->editedBy = auth()->check() ? auth()->user()->name : 'SYSTEM';
             $model->editedDate = now();
             $model->flagActive = 1;
         });
 
         static::updating(function ($model) {
-            $model->editedBy = auth()->check() ? auth()->user()->username : 'SYSTEM';
+            $model->editedBy = auth()->check() ? auth()->user()->name : 'SYSTEM';
             $model->editedDate = now();
         });
     }
