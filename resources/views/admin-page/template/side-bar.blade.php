@@ -86,6 +86,12 @@
                 </div>
                 <a href="/admin/ktaldksyahid" class="nav-item nav-link {{($title === "KTA") ? "active" : ""}}"><i class="fa fa-id-card me-2"></i>KTA LDK Syahid</a>
                 <a href="/admin/catalog/books" class="nav-item nav-link {{($title === "Book Catalog") ? "active" : ""}}"><i class="fa fa-book me-2"></i>Book Catalog</a>
+                <div class="nav-item dropdown">
+                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Reports") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-file-alt me-2"></i>Reports</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="/admin/finance-report" class="dropdown-item">&#10070; Finance Report</a>
+                    </div>
+                </div>
             </div>
 
         {{-- HelperAdmin Sidebar --}}
@@ -104,6 +110,12 @@
                     <a href="/admin" class="nav-link dropdown-toggle {{($title === "Services") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0">
                         <a href="/admin/service/shortlink" class="dropdown-item">&#10070; Shortlink</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Reports") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-file-alt me-2"></i>Reports</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="/admin/finance-report" class="dropdown-item">&#10070; Finance Report</a>
                     </div>
                 </div>
             </div>
@@ -234,6 +246,12 @@
                     </div>
                 </div>
                 <a href="/admin/catalog/books" class="nav-item nav-link {{($title === "Book Catalog") ? "active" : ""}}"><i class="fa fa-book me-2"></i>Book Catalog</a>
+                <div class="nav-item dropdown">
+                    <a href="/admin" class="nav-link dropdown-toggle {{($title === "Reports") ? "active" : ""}}" data-bs-toggle="dropdown"><i class="fa fa-file-alt me-2"></i>Reports</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="/admin/finance-report" class="dropdown-item">&#10070; Finance Report</a>
+                    </div>
+                </div>
             </div>
         @endif
     </nav>

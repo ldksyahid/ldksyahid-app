@@ -22,6 +22,7 @@ use App\Http\Controllers\CatalogBooksController;
 use App\Http\Controllers\ITSupportController;
 use App\Http\Controllers\TestimonyController;
 use App\Http\Controllers\CelenganSyahidController;
+use App\Http\Controllers\FinanceReportController;
 use App\Http\Controllers\MsKTALDKSyahidController;
 use App\Http\Controllers\ShortLinkController;
 
@@ -330,6 +331,20 @@ Route::middleware(['role:Superadmin|HelperLetter|HelperMedia'])
         Route::put('/{book}', [CatalogBooksController::class, 'update'])->name('update');
         Route::delete('/{book}', [CatalogBooksController::class, 'destroy'])->name('destroy');
         Route::post('/bulk-delete', [CatalogBooksController::class, 'bulkDelete'])->name('bulkDelete');
+    });
+
+Route::middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter'])
+    ->prefix('/admin/finance-report')
+    ->name('admin.finance-report.')
+    ->group(function () {
+        Route::get('/', [FinanceReportController::class, 'indexAdmin'])->name('index');
+        Route::get('/create', [FinanceReportController::class, 'create'])->name('create');
+        Route::post('/', [FinanceReportController::class, 'store'])->name('store');
+        Route::get('/{financeReport}', [FinanceReportController::class, 'showAdmin'])->name('show');
+        Route::get('/{financeReport}/edit', [FinanceReportController::class, 'edit'])->name('edit');
+        Route::put('/{financeReport}', [FinanceReportController::class, 'update'])->name('update');
+        Route::delete('/{financeReport}', [FinanceReportController::class, 'destroy'])->name('destroy');
+        Route::post('/bulk-delete', [FinanceReportController::class, 'bulkDelete'])->name('bulk-delete');
     });
 
 // ======================================= END ROUTE ADMIN PAGE =======================================
