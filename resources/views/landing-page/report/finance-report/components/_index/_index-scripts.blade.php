@@ -41,33 +41,30 @@
             modal.find('.btn-share-telegram').attr('href', `https://t.me/share/url?url=${encodeURIComponent(reportViewUrl)}&text=${telegramText}`);
         });
 
-        // Copy URL function with better feedback
+        // Copy URL function - click on input field or button
         window.copyShareUrl = function() {
             var copyText = document.getElementById("shareReportUrl");
-            var copyBtn = document.getElementById("copyLinkBtn");
+            var originalValue = copyText.value;
 
             copyText.select();
             copyText.setSelectionRange(0, 99999);
 
-            var originalText = copyBtn.innerHTML;
-            var originalBg = copyBtn.style.backgroundColor;
-            var originalColor = copyBtn.style.color;
+            var originalBg = copyText.style.backgroundColor;
+            var originalBorder = copyText.style.borderColor;
 
             try {
                 navigator.clipboard.writeText(copyText.value);
 
-                // Visual feedback
-                copyBtn.innerHTML = '<i class="fas fa-check me-1"></i> Disalin!';
-                copyBtn.style.backgroundColor = '#2ecc71';
-                copyBtn.style.color = 'white';
-                copyBtn.style.borderColor = '#2ecc71';
+                // Visual feedback on input field
+                copyText.style.backgroundColor = '#d4edda';
+                copyText.style.borderColor = '#c3e6cb';
+                copyText.value = '✓ Link telah disalin!';
 
                 // Reset after 2 seconds
                 setTimeout(function() {
-                    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
-                    copyBtn.style.backgroundColor = '';
-                    copyBtn.style.color = '';
-                    copyBtn.style.borderColor = '';
+                    copyText.style.backgroundColor = originalBg;
+                    copyText.style.borderColor = originalBorder;
+                    copyText.value = originalValue;
                 }, 2000);
 
                 showToast('Link berhasil disalin ke clipboard!', 'success');
@@ -75,18 +72,16 @@
                 // Fallback for older browsers
                 document.execCommand("copy");
 
-                // Visual feedback
-                copyBtn.innerHTML = '<i class="fas fa-check me-1"></i> Disalin!';
-                copyBtn.style.backgroundColor = '#2ecc71';
-                copyBtn.style.color = 'white';
-                copyBtn.style.borderColor = '#2ecc71';
+                // Visual feedback on input field
+                copyText.style.backgroundColor = '#d4edda';
+                copyText.style.borderColor = '#c3e6cb';
+                copyText.value = '✓ Link telah disalin!';
 
                 // Reset after 2 seconds
                 setTimeout(function() {
-                    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
-                    copyBtn.style.backgroundColor = '';
-                    copyBtn.style.color = '';
-                    copyBtn.style.borderColor = '';
+                    copyText.style.backgroundColor = originalBg;
+                    copyText.style.borderColor = originalBorder;
+                    copyText.value = originalValue;
                 }, 2000);
 
                 showToast('Link berhasil disalin!', 'success');
@@ -210,6 +205,14 @@
                 #shareModal .btn {
                     transition: all 0.3s ease;
                 }
+
+                /* Input field copy feedback */
+                #shareModal #shareReportUrl.copied {
+                    background-color: #d4edda !important;
+                    border-color: #c3e6cb !important;
+                    color: #155724 !important;
+                    transition: all 0.3s ease;
+                }
             `)
             .appendTo('head');
 
@@ -287,6 +290,11 @@
         // Auto-focus input field when modal opens
         $('#shareModal').on('shown.bs.modal', function () {
             $('#shareReportUrl').focus();
+        });
+
+        // Auto-select text when input is focused
+        $('#shareReportUrl').on('click focus', function() {
+            $(this).select();
         });
     });
 </script>

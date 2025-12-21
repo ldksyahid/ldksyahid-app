@@ -284,17 +284,9 @@
                 </div>
                 <div class="mb-4">
                     <label class="form-label fw-medium" style="color: #495057; margin-bottom: 8px;">Link Laporan</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="shareReportUrl" readonly
-                               style="border-radius: 8px 0 0 8px; border: 1px solid #dee2e6; padding: 10px 15px; background-color: #f8f9fa;">
-                        <button class="btn btn-outline-primary" type="button" onclick="copyShareUrl()"
-                                id="copyLinkBtn" style="border-radius: 0 8px 8px 0; padding: 10px 15px; border-left: none;">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                    </div>
-                    <small class="text-muted mt-2 d-block" style="font-size: 0.8rem;">
-                        Klik tombol copy untuk menyalin link ke clipboard
-                    </small>
+                    <input type="text" class="form-control" id="shareReportUrl" readonly
+                           style="border-radius: 8px; border: 1px solid #dee2e6; padding: 10px 15px; background-color: #f8f9fa; cursor: pointer;"
+                           onclick="copyShareUrl()">
                 </div>
                 <div class="text-center mt-4 pt-3 border-top">
                     <p class="mb-3 fw-medium" style="color: #495057;">Bagikan melalui:</p>
