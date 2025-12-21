@@ -16,6 +16,25 @@
 <!-- Report Section Start -->
 <div class="container-xxl" style="background-color: #f5f6fa">
     <div class="container py-5">
+        <!-- Breadcrumbs Card -->
+        <div class="card border-0 shadow-sm mb-4 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="card-body py-3 px-4">
+                <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('home') }}" class="text-decoration-none">
+                                <i class="fas fa-home me-1"></i> Beranda
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <i class="fas fa-file-alt me-1"></i> Laporan
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- End Breadcrumbs Card -->
+
         <div class="row justify-content-center">
             @if($reports && $reports->count() > 0)
                 @foreach($reports as $report)
