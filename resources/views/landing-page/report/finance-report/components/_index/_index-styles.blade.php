@@ -133,18 +133,6 @@
         border-top-right-radius: 10px;
     }
 
-    #shareModal .btn-share-whatsapp {
-        background-color: #25D366;
-        border-color: #25D366;
-        color: white;
-    }
-
-    #shareModal .btn-share-telegram {
-        background-color: #0088cc;
-        border-color: #0088cc;
-        color: white;
-    }
-
     /* Responsive Design */
     @media (max-width: 768px) {
         .finance-accordion-container .accordion-button {

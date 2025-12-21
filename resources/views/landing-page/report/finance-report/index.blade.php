@@ -284,7 +284,7 @@
                     <label class="form-label">Link Laporan</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="shareReportUrl" readonly>
-                        <button class="btn btn-outline-secondary" type="button" onclick="copyShareUrl()">
+                        <button class="btn btn-outline-primary" type="button" onclick="copyShareUrl()">
                             <i class="fas fa-copy"></i>
                         </button>
                     </div>
@@ -292,13 +292,13 @@
                 <div class="text-center">
                     <p class="mb-2">Bagikan melalui:</p>
                     <div class="d-flex justify-content-center gap-3">
-                        <a href="#" class="btn btn-success btn-share-whatsapp" target="_blank">
+                        <a href="#" class="btn btn-primary" target="_blank">
                             <i class="fab fa-whatsapp me-1"></i> WhatsApp
                         </a>
-                        <a href="#" class="btn btn-primary btn-share-telegram" target="_blank">
+                        <a href="#" class="btn btn-primary" target="_blank">
                             <i class="fab fa-telegram me-1"></i> Telegram
                         </a>
-                        <button class="btn btn-outline-dark" onclick="copyShareUrl()">
+                        <button class="btn btn-outline-primary" onclick="copyShareUrl()">
                             <i class="fas fa-link me-1"></i> Copy Link
                         </button>
                     </div>
