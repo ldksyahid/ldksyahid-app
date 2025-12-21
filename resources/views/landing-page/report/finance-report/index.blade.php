@@ -217,7 +217,6 @@
                                                     <!-- View Button -->
                                                     <a href="{{ $report->fileViewUrl() }}"
                                                        class="btn btn-outline-primary"
-                                                       title="Lihat Laporan"
                                                        target="_blank"
                                                        data-bs-toggle="tooltip">
                                                         <i class="fas fa-eye"></i>
@@ -226,7 +225,6 @@
                                                     <!-- Download Button -->
                                                     <a href="{{ $report->fileUrl() }}"
                                                        class="btn btn-outline-primary ms-2"
-                                                       title="Download Laporan"
                                                        download
                                                        data-bs-toggle="tooltip">
                                                         <i class="fas fa-download"></i>
@@ -235,7 +233,6 @@
                                                     <!-- Share Button -->
                                                     <button type="button"
                                                             class="btn btn-outline-primary ms-2"
-                                                            title="Bagikan"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#shareModal"
                                                             data-report-name="{{ $report->fileName }}"
