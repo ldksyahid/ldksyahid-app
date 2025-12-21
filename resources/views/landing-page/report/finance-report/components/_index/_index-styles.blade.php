@@ -183,22 +183,20 @@
         background-color: white;
     }
 
-    #shareModal .input-group .btn {
-        border-radius: 0 8px 8px 0;
-        padding: 10px 15px;
-        border-left: none;
-        font-weight: 500;
+    /* Link input field clickable style */
+    #shareModal #shareReportUrl {
+        cursor: pointer;
         transition: all 0.3s ease;
     }
 
-    #shareModal .input-group .btn:hover {
-        background-color: #00a79d;
-        color: white;
+    #shareModal #shareReportUrl:hover {
+        background-color: #e9ecef;
         border-color: #00a79d;
     }
 
-    #shareModal .input-group .form-control {
-        border-radius: 8px 0 0 8px;
+    #shareModal #shareReportUrl:active {
+        background-color: #dee2e6;
+        transform: scale(0.995);
     }
 
     #shareModal .border-top {
@@ -382,11 +380,6 @@
     /* Tooltip Styling */
     .tooltip {
         font-size: 0.85rem;
-    }
-
-    /* Toast Styling */
-    .toast-alert {
-        z-index: 9999;
     }
 
     /* Empty State */
