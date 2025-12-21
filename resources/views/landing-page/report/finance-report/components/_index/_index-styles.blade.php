@@ -125,12 +125,185 @@
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
     }
 
-    /* Modal Styling */
+    /* ========== CUSTOM MODAL STYLING ========== */
+
+    /* Share Modal Custom Styling */
+    #shareModal .modal-content {
+        border-radius: 12px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
     #shareModal .modal-header {
         background-color: #00a79d;
         color: white;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
+        border-bottom: none;
+        padding: 20px 25px;
+    }
+
+    #shareModal .modal-title {
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+
+    #shareModal .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
+    }
+
+    #shareModal .modal-header .btn-close:hover {
+        opacity: 1;
+    }
+
+    #shareModal .modal-body {
+        padding: 25px;
+    }
+
+    #shareModal .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    #shareModal .form-control {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        padding: 10px 15px;
+        font-size: 0.95rem;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+    }
+
+    #shareModal .form-control:focus {
+        border-color: #00a79d;
+        box-shadow: 0 0 0 0.25rem rgba(0, 167, 157, 0.25);
+        background-color: white;
+    }
+
+    #shareModal .input-group .btn {
+        border-radius: 0 8px 8px 0;
+        padding: 10px 15px;
+        border-left: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    #shareModal .input-group .btn:hover {
+        background-color: #00a79d;
+        color: white;
+        border-color: #00a79d;
+    }
+
+    #shareModal .input-group .form-control {
+        border-radius: 8px 0 0 8px;
+    }
+
+    #shareModal .border-top {
+        border-top: 1px solid #e9ecef !important;
+        padding-top: 20px;
+    }
+
+    /* Share buttons in modal */
+    #shareModal .btn-success {
+        background-color: #25D366;
+        border-color: #25D366;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    #shareModal .btn-success:hover {
+        background-color: #128C7E;
+        border-color: #128C7E;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(18, 140, 126, 0.3);
+    }
+
+    #shareModal .btn-primary {
+        background-color: #0088cc;
+        border-color: #0088cc;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    #shareModal .btn-primary:hover {
+        background-color: #0077b5;
+        border-color: #0077b5;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 119, 181, 0.3);
+    }
+
+    #shareModal .btn-outline-primary {
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        color: #00a79d;
+        border-color: #00a79d;
+    }
+
+    #shareModal .btn-outline-primary:hover {
+        background-color: #00a79d;
+        border-color: #00a79d;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 167, 157, 0.3);
+    }
+
+    /* Modal responsive design */
+    @media (max-width: 576px) {
+        #shareModal .modal-dialog {
+            margin: 10px;
+        }
+
+        #shareModal .modal-body {
+            padding: 20px;
+        }
+
+        #shareModal .d-flex.justify-content-center.gap-3 {
+            flex-direction: column;
+            gap: 10px !important;
+        }
+
+        #shareModal .btn {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    }
+
+    /* Toast notification styling */
+    .toast-alert {
+        z-index: 1060;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: 500;
+    }
+
+    /* Tooltip customization */
+    .custom-tooltip .tooltip-inner {
+        background-color: #00a79d;
+        color: white;
+        border-radius: 12px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .custom-tooltip.bs-tooltip-top .tooltip-arrow::before {
+        border-top-color: #00a79d;
+    }
+
+    .custom-tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+        border-bottom-color: #00a79d;
     }
 
     /* Responsive Design */

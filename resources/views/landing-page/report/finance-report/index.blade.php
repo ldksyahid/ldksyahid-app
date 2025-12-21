@@ -268,38 +268,48 @@
 <!-- Share Modal -->
 <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="shareModalLabel">
-                    <i class="fas fa-share-alt me-2"></i>Bagikan Laporan
+        <div class="modal-content" style="border-radius: 12px; overflow: hidden;">
+            <div class="modal-header" style="background-color: #00a79d; color: white; border-bottom: none;">
+                <h5 class="modal-title" id="shareModalLabel" style="font-weight: 600;">
+                    <i class="fas fa-share-alt me-2" style="color: white !important;"></i><span style="color: white !important;">Bagikan Laporan</span>
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+                        style="filter: brightness(0) invert(1); opacity: 0.8;"></button>
             </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Nama Laporan</label>
-                    <input type="text" class="form-control" id="shareReportName" readonly>
+            <div class="modal-body p-4">
+                <div class="mb-4">
+                    <label class="form-label fw-medium" style="color: #495057; margin-bottom: 8px;">Nama Laporan</label>
+                    <input type="text" class="form-control" id="shareReportName" readonly
+                           style="border-radius: 8px; border: 1px solid #dee2e6; padding: 10px 15px; background-color: #f8f9fa;">
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Link Laporan</label>
+                <div class="mb-4">
+                    <label class="form-label fw-medium" style="color: #495057; margin-bottom: 8px;">Link Laporan</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="shareReportUrl" readonly>
-                        <button class="btn btn-outline-primary" type="button" onclick="copyShareUrl()">
+                        <input type="text" class="form-control" id="shareReportUrl" readonly
+                               style="border-radius: 8px 0 0 8px; border: 1px solid #dee2e6; padding: 10px 15px; background-color: #f8f9fa;">
+                        <button class="btn btn-outline-primary" type="button" onclick="copyShareUrl()"
+                                id="copyLinkBtn" style="border-radius: 0 8px 8px 0; padding: 10px 15px; border-left: none;">
                             <i class="fas fa-copy"></i>
                         </button>
                     </div>
+                    <small class="text-muted mt-2 d-block" style="font-size: 0.8rem;">
+                        Klik tombol copy untuk menyalin link ke clipboard
+                    </small>
                 </div>
-                <div class="text-center">
-                    <p class="mb-2">Bagikan melalui:</p>
+                <div class="text-center mt-4 pt-3 border-top">
+                    <p class="mb-3 fw-medium" style="color: #495057;">Bagikan melalui:</p>
                     <div class="d-flex justify-content-center gap-3">
-                        <a href="#" class="btn btn-primary" target="_blank">
-                            <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                        <a href="#" class="btn btn-success btn-share-whatsapp" target="_blank"
+                           style="border-radius: 8px; padding: 10px 20px; font-weight: 500;">
+                            <i class="fab fa-whatsapp me-2"></i> WhatsApp
                         </a>
-                        <a href="#" class="btn btn-primary" target="_blank">
-                            <i class="fab fa-telegram me-1"></i> Telegram
+                        <a href="#" class="btn btn-primary btn-share-telegram" target="_blank"
+                           style="border-radius: 8px; padding: 10px 20px; font-weight: 500; background-color: #0088cc; border-color: #0088cc;">
+                            <i class="fab fa-telegram me-2"></i> Telegram
                         </a>
-                        <button class="btn btn-outline-primary" onclick="copyShareUrl()">
-                            <i class="fas fa-link me-1"></i> Copy Link
+                        <button class="btn btn-outline-primary" onclick="copyShareUrl()"
+                                style="border-radius: 8px; padding: 10px 20px; font-weight: 500;">
+                            <i class="fas fa-link me-2"></i> Salin Link
                         </button>
                     </div>
                 </div>
