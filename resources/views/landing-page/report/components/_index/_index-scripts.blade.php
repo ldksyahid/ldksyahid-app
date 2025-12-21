@@ -1,6 +1,9 @@
 <!-- Animation Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
 <script>
+    document.body.style.backgroundColor = "#f5f6fa";
+</script>
+<script>
     new WOW().init();
 </script>
 

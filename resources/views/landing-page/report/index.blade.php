@@ -35,6 +35,113 @@
         </div>
         <!-- End Breadcrumbs Card -->
 
+        <div class="card border-0 shadow-sm mb-5 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <h3 class="mb-3" style="color: #00a79d;">
+                        <i class="fas fa-file-contract me-2"></i>Laporan LDK Syahid
+                    </h3>
+                    <div class="divider-custom mx-auto" style="width: 100px; height: 3px; background-color: #00a79d;"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4 mb-3 mb-lg-0">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
+                                    <i class="fas fa-check-circle" style="color: #00a79d;"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">Akurat dan Terverifikasi</h6>
+                                <p class="mb-0 text-muted small">Data yang disajikan telah melalui proses validasi ketat</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-3 mb-lg-0">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
+                                    <i class="fas fa-eye" style="color: #00a79d;"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">Terbuka dan Transparan</h6>
+                                <p class="mb-0 text-muted small">Dapat diakses publik tanpa batasan akses</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
+                                    <i class="fas fa-history" style="color: #00a79d;"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">Tepat Waktu dan Teratur</h6>
+                                <p class="mb-0 text-muted small">Diterbitkan sesuai jadwal yang telah ditetapkan</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-4 mb-3 mb-lg-0">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
+                                    <i class="fas fa-balance-scale" style="color: #00a79d;"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">Komprehensif dan Lengkap</h6>
+                                <p class="mb-0 text-muted small">Mencakup seluruh aspek yang diperlukan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-3 mb-lg-0">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
+                                    <i class="fas fa-chart-line" style="color: #00a79d;"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">Analitis dan Informatif</h6>
+                                <p class="mb-0 text-muted small">Disertai analisis mendalam untuk pengambilan keputusan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
+                                    <i class="fas fa-file-alt" style="color: #00a79d;"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">Terstruktur dan Sistematis</h6>
+                                <p class="mb-0 text-muted small">Format penyajian yang mudah dipahami</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-justify mt-4">
+                    <p class="mb-0 text-justify" style="line-height: 1.6;">
+                        UKM LDK Syahid menyajikan berbagai laporan dengan standar kualitas tinggi yang mencerminkan
+                        integritas organisasi. Setiap laporan dirancang untuk memberikan gambaran utuh tentang kinerja,
+                        keuangan, dan program kerja kepada seluruh anggota dan stakeholders.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <div class="row justify-content-center">
             @if($reports && $reports->count() > 0)
                 @foreach($reports as $report)
@@ -56,7 +163,7 @@
 
                         <!-- Card Body -->
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title mb-3" style="color: #2c3e50;">
+                            <h5 class="card-title mb-3">
                                 {{ $report->reportName }}
                             </h5>
 
@@ -99,9 +206,6 @@
 @endsection
 
 @section('scripts')
-<script>
-    document.body.style.backgroundColor = "#f5f6fa";
-</script>
 @include('landing-page.report.components._index._index-scripts')
 @endsection
 
