@@ -216,7 +216,7 @@
                                                 <div class="btn-group" role="group">
                                                     <!-- View Button -->
                                                     <a href="{{ $report->fileViewUrl() }}"
-                                                       class="btn btn-outline-primary btn-sm btn-view"
+                                                       class="btn btn-outline-primary"
                                                        title="Lihat Laporan"
                                                        target="_blank"
                                                        data-bs-toggle="tooltip">
@@ -225,7 +225,7 @@
 
                                                     <!-- Download Button -->
                                                     <a href="{{ $report->fileUrl() }}"
-                                                       class="btn btn-outline-success btn-sm btn-download ms-2"
+                                                       class="btn btn-outline-primary ms-2"
                                                        title="Download Laporan"
                                                        download
                                                        data-bs-toggle="tooltip">
@@ -234,7 +234,7 @@
 
                                                     <!-- Share Button -->
                                                     <button type="button"
-                                                            class="btn btn-outline-info btn-sm btn-share ms-2"
+                                                            class="btn btn-outline-primary ms-2"
                                                             title="Bagikan"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#shareModal"

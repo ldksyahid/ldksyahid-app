@@ -125,39 +125,6 @@
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
     }
 
-    .btn-view {
-        color: #3498db;
-        border-color: #3498db;
-        background-color: transparent;
-    }
-
-    .btn-view:hover {
-        background-color: #3498db;
-        color: white;
-    }
-
-    .btn-download {
-        color: #2ecc71;
-        border-color: #2ecc71;
-        background-color: transparent;
-    }
-
-    .btn-download:hover {
-        background-color: #2ecc71;
-        color: white;
-    }
-
-    .btn-share {
-        color: #9b59b6;
-        border-color: #9b59b6;
-        background-color: transparent;
-    }
-
-    .btn-share:hover {
-        background-color: #9b59b6;
-        color: white;
-    }
-
     /* Modal Styling */
     #shareModal .modal-header {
         background-color: #00a79d;
