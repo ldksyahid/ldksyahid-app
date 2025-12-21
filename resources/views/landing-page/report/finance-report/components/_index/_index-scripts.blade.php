@@ -57,7 +57,7 @@
             // Create toast element
             var toast = $('<div class="toast-alert"></div>');
             toast.html(`
-                <div class="toast-content">
+                <div class="toast-content d-flex align-items-center">
                     <i class="fas fa-check-circle me-2"></i>
                     ${message}
                 </div>
@@ -68,13 +68,14 @@
                 'position': 'fixed',
                 'top': '20px',
                 'right': '20px',
-                'padding': '15px 20px',
+                'padding': '12px 16px',
                 'background': type === 'success' ? '#2ecc71' : '#e74c3c',
                 'color': 'white',
                 'border-radius': '8px',
-                'box-shadow': '0 5px 15px rgba(0,0,0,0.2)',
+                'box-shadow': '0 5px 15px rgba(0,0,0,0.15)',
                 'z-index': '9999',
-                'animation': 'slideInRight 0.3s ease'
+                'animation': 'slideInRight 0.3s ease',
+                'font-size': '0.9rem'
             });
 
             // Add to body
@@ -101,16 +102,21 @@
                         opacity: 1;
                     }
                 }
-
-                .toast-content {
-                    display: flex;
-                    align-items: center;
-                }
             `)
             .appendTo('head');
 
-        // Row hover effect
-        $('.report-row').hover(
+        // Accordion hover effects
+        $('.accordion-item').hover(
+            function() {
+                $(this).css('box-shadow', '0 5px 20px rgba(0, 0, 0, 0.15)');
+            },
+            function() {
+                $(this).css('box-shadow', '0 3px 10px rgba(0, 0, 0, 0.08)');
+            }
+        );
+
+        // Report item hover effects
+        $('.report-item').hover(
             function() {
                 $(this).css({
                     'background-color': 'rgba(0, 167, 157, 0.05)',
@@ -125,75 +131,20 @@
             }
         );
 
-        // Table responsive labels
-        if ($(window).width() <= 768) {
-            $('.finance-report-container table tbody td').each(function() {
-                var $this = $(this);
-                var index = $this.index();
-                var label = '';
-
-                switch(index) {
-                    case 0:
-                        label = 'Nama Laporan';
-                        break;
-                    case 1:
-                        label = 'Tanggal Unggah';
-                        break;
-                    case 2:
-                        label = 'Aksi';
-                        break;
-                }
-
-                $this.attr('data-label', label);
-            });
-        }
-
-        // Update on window resize
-        $(window).resize(function() {
-            if ($(window).width() <= 768) {
-                $('.finance-report-container table tbody td').each(function() {
-                    var $this = $(this);
-                    var index = $this.index();
-                    var label = '';
-
-                    switch(index) {
-                        case 0:
-                            label = 'Nama Laporan';
-                            break;
-                        case 1:
-                            label = 'Tanggal Unggah';
-                            break;
-                        case 2:
-                            label = 'Aksi';
-                            break;
-                    }
-
-                    $this.attr('data-label', label);
-                });
-            } else {
-                $('.finance-report-container table tbody td').removeAttr('data-label');
-            }
-        });
-
-        // Download button click tracking
+        // Button click tracking
         $('.btn-download').click(function(e) {
-            var reportName = $(this).closest('tr').find('h6').text();
+            var reportName = $(this).closest('.report-item').find('h6').text();
             console.log('Download started:', reportName);
-            // You can add analytics tracking here
         });
 
-        // View button click tracking
         $('.btn-view').click(function(e) {
-            var reportName = $(this).closest('tr').find('h6').text();
+            var reportName = $(this).closest('.report-item').find('h6').text();
             console.log('Viewing report:', reportName);
-            // You can add analytics tracking here
         });
 
-        // Share button click tracking
         $('.btn-share').click(function(e) {
-            var reportName = $(this).closest('tr').find('h6').text();
+            var reportName = $(this).closest('.report-item').find('h6').text();
             console.log('Sharing report:', reportName);
-            // You can add analytics tracking here
         });
 
         // Smooth scroll for page sections
@@ -207,14 +158,41 @@
             }
         });
 
-        // Add loading animation to empty state
-        if ($('.finance-report-container').children().length === 0) {
-            $('.finance-report-container').html(`
-                <div class="skeleton-loading-card">
-                    <div class="skeleton-loading" style="height: 150px; border-radius: 10px; margin-bottom: 20px;"></div>
-                    <div class="skeleton-loading" style="height: 150px; border-radius: 10px;"></div>
-                </div>
-            `);
-        }
+        // Expand/Collapse all button functionality
+        $('<div class="text-center mb-4">')
+            .html(`
+                <button id="expandAllBtn" class="btn btn-outline-primary btn-sm me-2">
+                    <i class="fas fa-expand-alt me-1"></i> Buka Semua
+                </button>
+                <button id="collapseAllBtn" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-compress-alt me-1"></i> Tutup Semua
+                </button>
+            `)
+            .insertBefore('#ldkAccordion');
+
+        $('#expandAllBtn').click(function() {
+            $('.accordion-collapse').collapse('show');
+        });
+
+        $('#collapseAllBtn').click(function() {
+            $('.accordion-collapse').collapse('hide');
+        });
+
+        // Update button text based on accordion state
+        $('#ldkAccordion').on('shown.bs.collapse hidden.bs.collapse', function () {
+            var expandedCount = $('.accordion-collapse.show').length;
+            var totalCount = $('.accordion-collapse').length;
+
+            if (expandedCount === totalCount) {
+                $('#expandAllBtn').hide();
+                $('#collapseAllBtn').show();
+            } else if (expandedCount === 0) {
+                $('#expandAllBtn').show();
+                $('#collapseAllBtn').hide();
+            } else {
+                $('#expandAllBtn').show();
+                $('#collapseAllBtn').show();
+            }
+        });
     });
 </script>
