@@ -307,4 +307,16 @@ class MsFinanceReport extends Model
     {
         return $this->ldk ? $this->ldk->ldkTag : 'N/A';
     }
+
+     /**
+     * Get active finance reports grouped by LDK for landing page
+     */
+    public static function getReports()
+    {
+        return self::with(['ldk'])
+            ->where('flagActive', 1)
+            ->orderBy('ldkID')
+            ->orderBy('createdDate', 'desc')
+            ->get();
+    }
 }

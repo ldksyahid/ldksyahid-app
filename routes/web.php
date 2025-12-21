@@ -135,6 +135,7 @@ Route::get('/perpustakaan/buku/{slug}/baca', [CatalogBooksController::class, 'pd
 
 // Route LandingPage Report
 Route::get('/laporan', [ReportController::class, 'index'])->name('report.index');
+Route::get('/laporan-keuangan', [ReportController::class, 'financeReport'])->name('report.finance.index');
 
 // Route LandingPage EKSPRESI
 Route::get('/ekspresi', function () {
