@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Page Header Start -->
-<div class="container-fluid p-0 mb-0 wow fadeIn" data-wow-delay="0.2s">
+<div class="container-fluid p-0 mb-0 wow fadeIn" data-wow-delay="0.25s">
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
@@ -17,7 +17,7 @@
 <div class="container-xxl" style="background-color: #f5f6fa">
     <div class="container py-5">
         <!-- Breadcrumbs Card -->
-        <div class="card border-0 shadow-sm mb-4 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="card border-0 shadow-sm mb-4 wow fadeInUp" data-wow-delay="0.25s">
             <div class="card-body py-3 px-4">
                 <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
@@ -41,7 +41,7 @@
         <!-- End Breadcrumbs Card -->
 
         <!-- Introduction Card -->
-        <div class="card border-0 shadow-sm mb-5 wow fadeInUp" data-wow-delay="0.2s">
+        <div class="card border-0 shadow-sm mb-5 wow fadeInUp" data-wow-delay="0.25s">
             <div class="card-body p-4">
                 <div class="text-center mb-4">
                     <h3 class="mb-3" style="color: #00a79d;">
@@ -119,7 +119,7 @@
         </div>
 
         <!-- LDK Accordion -->
-        <div class="finance-accordion-container">
+        <div class="finance-accordion-container wow fadeInUp" data-wow-delay="0.25s">
             @php
                 $groupedReports = $reports->groupBy('ldkID');
 
@@ -128,10 +128,8 @@
                 foreach ($groupedReports as $ldkID => $ldkReports) {
                     if ($ldkReports->first() && $ldkReports->first()->ldk) {
                         $ldkName = $ldkReports->first()->ldk->ldkName;
-                        $ldkTag = $ldkReports->first()->ldk->ldkTag;
                     } else {
                         $ldkName = 'LDK Tidak Diketahui';
-                        $ldkTag = 'N/A';
                     }
 
                     $sortedLdks[$ldkID] = [
@@ -145,9 +143,6 @@
                 uasort($sortedLdks, function($a, $b) {
                     return strcmp($a['name'], $b['name']);
                 });
-
-                // Determine default open accordion (first one)
-                $firstLdkId = key($sortedLdks);
             @endphp
 
             @if($reports && $reports->count() > 0)
@@ -156,24 +151,23 @@
                         @php
                             $accordionId = 'ldkAccordion_' . $ldkID;
                             $collapseId = 'collapse_' . $ldkID;
-                            $isFirst = $loop->first;
                         @endphp
 
                         <!-- LDK Accordion Item -->
-                        <div class="accordion-item border-0 mb-3 wow fadeInUp" data-wow-delay="{{ $loop->iteration * 0.1 }}s">
+                        <div class="accordion-item border-0 mb-3">
                             <div class="accordion-header" id="heading_{{ $ldkID }}">
                                 <button class="accordion-button collapsed d-flex justify-content-between align-items-center p-4"
                                         type="button"
                                         data-bs-toggle="collapse"
                                         data-bs-target="#{{ $collapseId }}"
-                                        aria-expanded="{{ $isFirst ? 'true' : 'false' }}"
+                                        aria-expanded="false"
                                         aria-controls="{{ $collapseId }}"
-                                        style="background-color: {{ $isFirst ? 'rgba(0, 167, 157, 0.1)' : '#fff' }}; border-left: 4px solid #00a79d;">
+                                        style="background-color: #fff; border-left: 4px solid #00a79d;">
 
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0">
                                             <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
-                                                 style="width: 50px; height: 50px; background-color: rgba(0, 167, 157, 0.2);">
+                                                 style="width: 50px; height: 50px; background-color: rgba(0, 167, 157, 0.1);">
                                                 <i class="fas fa-university" style="color: #00a79d; font-size: 1.2rem;"></i>
                                             </div>
                                         </div>
@@ -195,7 +189,7 @@
                             </div>
 
                             <div id="{{ $collapseId }}"
-                                 class="accordion-collapse collapse {{ $isFirst ? 'show' : '' }}"
+                                 class="accordion-collapse collapse"
                                  aria-labelledby="heading_{{ $ldkID }}"
                                  data-bs-parent="#ldkAccordion">
 

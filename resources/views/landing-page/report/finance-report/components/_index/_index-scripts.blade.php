@@ -157,42 +157,5 @@
                 }, 800);
             }
         });
-
-        // Expand/Collapse all button functionality
-        $('<div class="text-center mb-4">')
-            .html(`
-                <button id="expandAllBtn" class="btn btn-outline-primary btn-sm me-2">
-                    <i class="fas fa-expand-alt me-1"></i> Buka Semua
-                </button>
-                <button id="collapseAllBtn" class="btn btn-outline-secondary btn-sm">
-                    <i class="fas fa-compress-alt me-1"></i> Tutup Semua
-                </button>
-            `)
-            .insertBefore('#ldkAccordion');
-
-        $('#expandAllBtn').click(function() {
-            $('.accordion-collapse').collapse('show');
-        });
-
-        $('#collapseAllBtn').click(function() {
-            $('.accordion-collapse').collapse('hide');
-        });
-
-        // Update button text based on accordion state
-        $('#ldkAccordion').on('shown.bs.collapse hidden.bs.collapse', function () {
-            var expandedCount = $('.accordion-collapse.show').length;
-            var totalCount = $('.accordion-collapse').length;
-
-            if (expandedCount === totalCount) {
-                $('#expandAllBtn').hide();
-                $('#collapseAllBtn').show();
-            } else if (expandedCount === 0) {
-                $('#expandAllBtn').show();
-                $('#collapseAllBtn').hide();
-            } else {
-                $('#expandAllBtn').show();
-                $('#collapseAllBtn').show();
-            }
-        });
     });
 </script>
