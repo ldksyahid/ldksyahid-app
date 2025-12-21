@@ -82,7 +82,6 @@
 
     .finance-accordion-container .report-item {
         background-color: white;
-        transition: all 0.3s ease;
         padding: 15px 25px !important;
     }
 
