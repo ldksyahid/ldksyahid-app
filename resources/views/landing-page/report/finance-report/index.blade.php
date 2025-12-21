@@ -118,128 +118,148 @@
             </div>
         </div>
 
-        <!-- LDK Grouping -->
-        <div class="finance-report-container">
+        <!-- LDK Accordion -->
+        <div class="finance-accordion-container">
             @php
                 $groupedReports = $reports->groupBy('ldkID');
-                $ldkNames = [];
 
-                // Get LDK names
+                // Create sorted array of LDKs with their reports
+                $sortedLdks = [];
                 foreach ($groupedReports as $ldkID => $ldkReports) {
                     if ($ldkReports->first() && $ldkReports->first()->ldk) {
-                        $ldkNames[$ldkID] = $ldkReports->first()->ldk->ldkName;
+                        $ldkName = $ldkReports->first()->ldk->ldkName;
+                        $ldkTag = $ldkReports->first()->ldk->ldkTag;
                     } else {
-                        $ldkNames[$ldkID] = 'LDK Tidak Diketahui';
+                        $ldkName = 'LDK Tidak Diketahui';
+                        $ldkTag = 'N/A';
                     }
+
+                    $sortedLdks[$ldkID] = [
+                        'name' => $ldkName,
+                        'reports' => $ldkReports,
+                        'count' => $ldkReports->count()
+                    ];
                 }
 
                 // Sort by LDK name
-                uasort($ldkNames, function($a, $b) {
-                    return strcmp($a, $b);
+                uasort($sortedLdks, function($a, $b) {
+                    return strcmp($a['name'], $b['name']);
                 });
+
+                // Determine default open accordion (first one)
+                $firstLdkId = key($sortedLdks);
             @endphp
 
             @if($reports && $reports->count() > 0)
-                @foreach($ldkNames as $ldkID => $ldkName)
-                    @php
-                        $ldkReports = $groupedReports[$ldkID] ?? collect();
-                    @endphp
+                <div class="accordion" id="ldkAccordion">
+                    @foreach($sortedLdks as $ldkID => $ldkData)
+                        @php
+                            $accordionId = 'ldkAccordion_' . $ldkID;
+                            $collapseId = 'collapse_' . $ldkID;
+                            $isFirst = $loop->first;
+                        @endphp
 
-                    @if($ldkReports->count() > 0)
-                        <!-- LDK Group Card -->
-                        <div class="card border-0 shadow-sm mb-5 wow fadeInUp" data-wow-delay="{{ $loop->iteration * 0.1 }}s">
-                            <div class="card-header bg-white border-0 py-4">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="mb-1" style="color: #00a79d;">
-                                            <i class="fas fa-university me-2"></i>{{ $ldkName }}
-                                        </h4>
-                                        <p class="text-muted mb-0 small">
-                                            <i class="fas fa-file-pdf me-1"></i>{{ $ldkReports->count() }} laporan keuangan tersedia
-                                        </p>
+                        <!-- LDK Accordion Item -->
+                        <div class="accordion-item border-0 mb-3 wow fadeInUp" data-wow-delay="{{ $loop->iteration * 0.1 }}s">
+                            <div class="accordion-header" id="heading_{{ $ldkID }}">
+                                <button class="accordion-button collapsed d-flex justify-content-between align-items-center p-4"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#{{ $collapseId }}"
+                                        aria-expanded="{{ $isFirst ? 'true' : 'false' }}"
+                                        aria-controls="{{ $collapseId }}"
+                                        style="background-color: {{ $isFirst ? 'rgba(0, 167, 157, 0.1)' : '#fff' }}; border-left: 4px solid #00a79d;">
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                                                 style="width: 50px; height: 50px; background-color: rgba(0, 167, 157, 0.2);">
+                                                <i class="fas fa-university" style="color: #00a79d; font-size: 1.2rem;"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 text-start">
+                                            <h5 class="mb-1" style="color: #00a79d; font-weight: 600;">
+                                                {{ $ldkData['name'] }}
+                                            </h5>
+                                            <p class="text-muted mb-0 small">
+                                                <i class="fas fa-file-pdf me-1"></i>
+                                                {{ $ldkData['count'] }} laporan keuangan
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="badge bg-primary rounded-pill px-3 py-2">
-                                        {{ $ldkReports->first()->ldk->ldkTag ?? 'N/A' }}
+
+                                    <div class="ms-3">
+                                        <i class="fas fa-chevron-down accordion-icon"></i>
                                     </div>
-                                </div>
+                                </button>
                             </div>
 
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-hover mb-0">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th style="width: 60%;" class="ps-4">Nama Laporan</th>
-                                                <th class="text-center">Tanggal</th>
-                                                <th class="text-center">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($ldkReports as $report)
-                                            <tr class="report-row">
-                                                <td class="ps-4">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0">
-                                                            <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
-                                                                <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex-grow-1 ms-3">
-                                                            <h6 class="mb-1">{{ $report->fileName }}</h6>
-                                                            <small class="text-muted">
-                                                                <i class="far fa-clock me-1"></i>
-                                                                Diunggah: {{ $report->createdDate->format('d M Y') }}
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <span class="badge bg-light text-dark">
-                                                        {{ $report->createdDate->format('d/m/Y') }}
-                                                    </span>
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <div class="btn-group btn-group-sm" role="group">
-                                                        <!-- View Button -->
-                                                        <a href="{{ $report->fileViewUrl() }}"
-                                                           class="btn btn-outline-primary btn-view"
-                                                           title="Lihat Laporan"
-                                                           target="_blank"
-                                                           data-bs-toggle="tooltip">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
+                            <div id="{{ $collapseId }}"
+                                 class="accordion-collapse collapse {{ $isFirst ? 'show' : '' }}"
+                                 aria-labelledby="heading_{{ $ldkID }}"
+                                 data-bs-parent="#ldkAccordion">
 
-                                                        <!-- Download Button -->
-                                                        <a href="{{ $report->fileUrl() }}"
-                                                           class="btn btn-outline-success btn-download"
-                                                           title="Download Laporan"
-                                                           download
-                                                           data-bs-toggle="tooltip">
-                                                            <i class="fas fa-download"></i>
-                                                        </a>
-
-                                                        <!-- Share Button -->
-                                                        <button type="button"
-                                                                class="btn btn-outline-info btn-share"
-                                                                title="Bagikan"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#shareModal"
-                                                                data-report-name="{{ $report->fileName }}"
-                                                                data-report-url="{{ $report->fileUrl() }}"
-                                                                data-report-view-url="{{ $report->fileViewUrl() }}">
-                                                            <i class="fas fa-share-alt"></i>
-                                                        </button>
+                                <div class="accordion-body p-0">
+                                    <div class="report-list">
+                                        @foreach($ldkData['reports'] as $report)
+                                        <div class="report-item d-flex align-items-center justify-content-between p-3 border-bottom">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                                                         style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
+                                                        <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-1">{{ $report->fileName }}</h6>
+                                                    <small class="text-muted">
+                                                        <i class="far fa-clock me-1"></i>
+                                                        Diunggah: {{ $report->createdDate->format('d M Y') }}
+                                                    </small>
+                                                </div>
+                                            </div>
+
+                                            <div class="action-buttons">
+                                                <div class="btn-group" role="group">
+                                                    <!-- View Button -->
+                                                    <a href="{{ $report->fileViewUrl() }}"
+                                                       class="btn btn-outline-primary btn-sm btn-view"
+                                                       title="Lihat Laporan"
+                                                       target="_blank"
+                                                       data-bs-toggle="tooltip">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+
+                                                    <!-- Download Button -->
+                                                    <a href="{{ $report->fileUrl() }}"
+                                                       class="btn btn-outline-success btn-sm btn-download ms-2"
+                                                       title="Download Laporan"
+                                                       download
+                                                       data-bs-toggle="tooltip">
+                                                        <i class="fas fa-download"></i>
+                                                    </a>
+
+                                                    <!-- Share Button -->
+                                                    <button type="button"
+                                                            class="btn btn-outline-info btn-sm btn-share ms-2"
+                                                            title="Bagikan"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#shareModal"
+                                                            data-report-name="{{ $report->fileName }}"
+                                                            data-report-url="{{ $report->fileUrl() }}"
+                                                            data-report-view-url="{{ $report->fileViewUrl() }}">
+                                                        <i class="fas fa-share-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    @endif
-                @endforeach
+                    @endforeach
+                </div>
             @else
                 <!-- Empty State -->
                 <div class="card border-0 shadow-sm">
