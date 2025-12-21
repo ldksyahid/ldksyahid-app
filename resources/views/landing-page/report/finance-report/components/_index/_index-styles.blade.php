@@ -48,11 +48,12 @@
         padding: 20px 25px;
         font-weight: 500;
         transition: all 0.3s ease;
+        border-left: 4px solid #00a79d !important;
     }
 
     .finance-accordion-container .accordion-button:not(.collapsed) {
-        background-color: rgba(0, 167, 157, 0.05);
-        color: #00a79d;
+        background-color: white !important;
+        color: inherit;
     }
 
     .finance-accordion-container .accordion-button:focus {
@@ -225,22 +226,6 @@
             padding: 5px 8px;
             font-size: 0.75rem;
         }
-    }
-
-    /* Animation */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .wow.fadeInUp {
-        animation: fadeInUp 0.5s ease forwards;
     }
 
     /* PDF Icon Animation */
