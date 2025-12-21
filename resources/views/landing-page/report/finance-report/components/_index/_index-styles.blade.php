@@ -155,6 +155,7 @@
 
     #shareModal .modal-header .btn-close:hover {
         opacity: 1;
+        background-color: transparent;
     }
 
     #shareModal .modal-body {
