@@ -1,4 +1,16 @@
 <style>
+    /* Breadcrumb Styling */
+
+    .breadcrumb .breadcrumb-item a {
+        color: #6c757d;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .breadcrumb .breadcrumb-item a:hover {
+        color: #00d8cb !important;
+    }
+
     /* Card Styling */
     .report-card {
         border-radius: 15px;
@@ -6,7 +18,7 @@
         border: 1px solid rgba(0,0,0,0.1);
         background: white;
         box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
-        height: 515px; /* Fixed height like template */
+        height: 515px;
     }
 
     .report-card .card-body {
@@ -47,7 +59,6 @@
     .btn-primary:hover {
         transform: translateY(-2px);
     }
-
 
     /* Responsive */
     @media (max-width: 768px) {
