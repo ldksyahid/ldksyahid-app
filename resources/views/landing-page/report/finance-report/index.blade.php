@@ -127,13 +127,17 @@
                 $sortedLdks = [];
                 foreach ($groupedReports as $ldkID => $ldkReports) {
                     if ($ldkReports->first() && $ldkReports->first()->ldk) {
-                        $ldkName = $ldkReports->first()->ldk->ldkName;
+                        $ldk = $ldkReports->first()->ldk;
+                        $ldkName = $ldk->ldkName;
+                        $logoGdriveID = $ldk->logoGdriveID;
                     } else {
                         $ldkName = 'LDK Tidak Diketahui';
+                        $logoGdriveID = null;
                     }
 
                     $sortedLdks[$ldkID] = [
                         'name' => $ldkName,
+                        'logo' => $logoGdriveID,
                         'reports' => $ldkReports,
                         'count' => $ldkReports->count()
                     ];
@@ -166,10 +170,19 @@
 
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
-                                                 style="width: 50px; height: 50px; background-color: rgba(0, 167, 157, 0.1);">
-                                                <i class="fas fa-university" style="color: #00a79d; font-size: 1.2rem;"></i>
-                                            </div>
+                                            @if($ldkData['logo'])
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                                                     style="width: 50px; height: 50px; background-color: rgba(0, 167, 157, 0.1); border: 2px solid #e9ecef; overflow: hidden; position: relative;">
+                                                    <img src="https://lh3.googleusercontent.com/d/{{ $ldkData['logo'] }}"
+                                                         alt="{{ $ldkData['name'] }} Logo"
+                                                         style="width: 36px; height: 36px; object-fit: contain; display: block;">
+                                                </div>
+                                            @else
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                                                     style="width: 50px; height: 50px; background-color: rgba(0, 167, 157, 0.1); border: 2px solid #e9ecef;">
+                                                    <i class="fas fa-university" style="color: #00a79d; font-size: 1.2rem;"></i>
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="flex-grow-1 text-start">
                                             <h5 class="mb-1" style="color: #00a79d; font-weight: 600;">
