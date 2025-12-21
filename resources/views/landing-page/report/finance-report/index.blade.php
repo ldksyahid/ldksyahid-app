@@ -190,8 +190,7 @@
 
                             <div id="{{ $collapseId }}"
                                  class="accordion-collapse collapse"
-                                 aria-labelledby="heading_{{ $ldkID }}"
-                                 data-bs-parent="#ldkAccordion">
+                                 aria-labelledby="heading_{{ $ldkID }}">
 
                                 <div class="accordion-body p-0">
                                     <div class="report-list">
