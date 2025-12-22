@@ -195,22 +195,33 @@
                                         <div class="mb-4">
                                             <label class="form-label">Current PDF File</label>
                                             <div class="card bg-light">
-                                                <div class="card-body">
-                                                    <div class="d-flex align-items-center justify-content-between">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="fa fa-file-pdf text-danger fa-2x me-3"></i>
-                                                            <div>
-                                                                <div class="fw-bold">{{ $financeReport->fileName }}.pdf</div>
-                                                                <small class="text-muted">Uploaded on {{ \Carbon\Carbon::parse($financeReport->createdDate)->isoFormat('DD MMMM YYYY') }}</small>
+                                                <div class="card-body p-3">
+                                                    <div class="row align-items-center">
+                                                        <!-- Icon and File Info -->
+                                                        <div class="col-8">
+                                                            <div class="d-flex align-items-start">
+                                                                <i class="fa fa-file-pdf text-danger fa-lg mt-1 me-3 flex-shrink-0"></i>
+                                                                <div class="flex-grow-1" style="min-width: 0;">
+                                                                    <div class="fw-bold text-truncate" title="{{ $financeReport->fileName }}.pdf">
+                                                                        {{ $financeReport->fileName }}.pdf
+                                                                    </div>
+                                                                    <small class="text-muted">
+                                                                        Uploaded on {{ \Carbon\Carbon::parse($financeReport->createdDate)->isoFormat('DD MMMM YYYY') }}
+                                                                    </small>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div>
-                                                            <a href="{{ $financeReport->fileUrl() }}" target="_blank" class="btn btn-sm btn-outline-primary me-2">
-                                                                <i class="fa fa-download"></i> Download
-                                                            </a>
-                                                            <a href="{{ $financeReport->fileViewUrl() }}" target="_blank" class="btn btn-sm btn-outline-secondary">
-                                                                <i class="fa fa-eye"></i> View
-                                                            </a>
+
+                                                        <!-- Action Buttons -->
+                                                        <div class="col-4">
+                                                            <div class="d-flex justify-content-end gap-2">
+                                                                <a href="{{ $financeReport->fileUrl() }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                                    <i class="fa fa-download"></i>
+                                                                </a>
+                                                                <a href="{{ $financeReport->fileViewUrl() }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -98,6 +98,7 @@
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle text-capitalize {{($title === "Lainnya") ? "active" : ""}}" data-bs-toggle="dropdown">Lainnya</a>
                 <div class="dropdown-menu bg-light m-0" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <a href="/laporan" class="dropdown-item">Laporan</a>
                     <a href="/schedule" class="dropdown-item">Jadwal</a>
                 </div>
             </div>
@@ -212,6 +213,7 @@
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle text-capitalize {{($title === "Lainnya") ? "active" : ""}}" data-bs-toggle="dropdown" role="button" aria-expanded="false">Lainnya</a>
                     <div class="dropdown-menu" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <a href="/laporan" class="dropdown-item">Laporan</a>
                         <a href="/schedule" class="dropdown-item">Jadwal</a>
                     </div>
                 </div>
