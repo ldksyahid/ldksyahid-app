@@ -6,7 +6,7 @@
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="w-100" src="https://lh3.googleusercontent.com/d/1GmgV8Pussl5orvOXnVfVePWxXjH866_x" alt="Report Header Image" />
+                <img class="w-100" src="https://lh3.googleusercontent.com/d/15FZ7gsz6x_2uH90iPqi0OVZY-OMISAVf" alt="Report Header Image" />
             </div>
         </div>
     </div>
