@@ -24,6 +24,7 @@ use App\Http\Controllers\TestimonyController;
 use App\Http\Controllers\CelenganSyahidController;
 use App\Http\Controllers\FinanceReportController;
 use App\Http\Controllers\MsKTALDKSyahidController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShortLinkController;
 
 /*
@@ -131,6 +132,10 @@ Route::get('/perpustakaan', [CatalogBooksController::class, 'index'])->name('cat
 Route::get('/perpustakaan/buku/{slug}', [CatalogBooksController::class, 'show'])->name('catalog.books.show');
 Route::post('/perpustakaan/buku/{id}/like', [CatalogBooksController::class, 'likeBook'])->name('catalog.books.like');
 Route::get('/perpustakaan/buku/{slug}/baca', [CatalogBooksController::class, 'pdfReader'])->name('catalog.books.reader');
+
+// Route LandingPage Report
+Route::get('/laporan', [ReportController::class, 'index'])->name('report.index');
+Route::get('/laporan-keuangan', [ReportController::class, 'financeReport'])->name('report.finance.index');
 
 // Route LandingPage EKSPRESI
 Route::get('/ekspresi', function () {
