@@ -1,8 +1,7 @@
 @extends('admin-page.template.body')
 
 @php
-    use App\Http\Controllers\LibraryFunctionController as LFC;
-    $isSuperadmin = LFC::getRoleName(auth()->user()->getRoleNames()) === 'Superadmin';
+    // $isSuperadmin is automatically available via View Composer
 
     // Guide Cards Config
     $guideCards = [

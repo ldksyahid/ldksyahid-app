@@ -68,10 +68,14 @@ class CatalogBooksController extends Controller
     {
         $books = MsCatalogBook::searchAdminBooks($request);
         $bookCategories = LkBookCategory::all();
+        $tableConfig = MsCatalogBook::getTableConfig();
 
         if ($request->ajax()) {
             return response()->json([
-                'tableBody' => view('admin-page.catalog-book.components._index._index-table', compact('books'))->render(),
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $books,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
                 'pagination' => $books->appends($request->query())->links()->render(),
                 'total' => $books->total(),
                 'from' => $books->firstItem(),
@@ -79,7 +83,7 @@ class CatalogBooksController extends Controller
             ]);
         }
 
-        return view('admin-page.catalog-book.index', compact('books', 'bookCategories'))
+        return view('admin-page.catalog-book.index', compact('books', 'bookCategories', 'tableConfig'))
             ->with('title', 'Book Catalog');
     }
 
