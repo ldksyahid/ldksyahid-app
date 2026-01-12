@@ -1,6 +1,6 @@
 {{--
     Reusable Admin Index Scripts Component
-    Usage langsung di index.blade.php:
+    Use directly in index.blade.php:
 
     @section('scripts')
     <x-admin-index.base-scripts
