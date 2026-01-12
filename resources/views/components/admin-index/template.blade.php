@@ -1,7 +1,7 @@
 {{--
     Admin Index Template Component
 
-    Usage di index.blade.php:
+    Usage in index.blade.php:
 
     <x-admin-index.template
         pageTitle="Finance Report"
@@ -17,12 +17,12 @@
         ajaxUrl="{{ route('admin.finance-report.index') }}"
         ...
     >
-        <!-- Slot untuk content tambahan di atas table -->
+        <!-- Slot for additional content above table -->
         <x-slot name="beforeTable">
             <!-- custom content -->
         </x-slot>
 
-        <!-- Slot untuk modal -->
+        <!-- Slot for modals -->
         <x-slot name="modals">
             <!-- modal html -->
         </x-slot>
@@ -129,7 +129,7 @@
             </div>
             @endif
 
-            {{-- Slot: Before Table (untuk form atau content custom) --}}
+            {{-- Slot: Before Table (for forms or custom content) --}}
             {{ $beforeTable ?? '' }}
 
             {{-- Action Buttons Row --}}
