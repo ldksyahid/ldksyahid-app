@@ -5,123 +5,178 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\LibraryFunctionController as LFC;
-use Illuminate\Support\Facades\Validator;
+
 class UserController extends Controller
 {
-    public function index()
+    /* =========================================================================
+       SECTION — ADMIN AREA (with RESTful routing)
+       ========================================================================= */
+
+    /**
+     * Display a listing of users (Admin Index)
+     */
+    public function indexAdmin(Request $request)
     {
-        $data = User::all();
-        return view('admin-page.user.index')->with([
-            'data' => $data,
-            "title" => "User"
-        ]);
+        $users = User::searchAdminUsers($request);
+        $roles = User::getRoles();
+        $tableConfig = User::getTableConfig();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $users,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
+                'pagination' => $users->appends($request->query())->links()->render(),
+                'total' => $users->total(),
+                'from' => $users->firstItem(),
+                'to' => $users->lastItem()
+            ]);
+        }
+
+        return view('admin-page.user.index', compact('users', 'roles', 'tableConfig'))
+            ->with('title', 'User');
     }
 
-    public function read()
-    {
-        $data = User::all();
-        return view('admin-page.user.read')->with([
-            'data' => $data,
-            "title" => "User"
-        ]);
-    }
-
+    /**
+     * Show the form for creating a new user
+     */
     public function create()
     {
-        return view('admin-page.user.create', ["title" => "User"]);
+        $roles = Role::all();
+        return view('admin-page.user.create', compact('roles'))
+            ->with('title', 'Create User');
     }
 
+    /**
+     * Store a newly created user
+     */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'password' => 'required',
-            'email' => 'required|email',
-            'roleName' => 'required'
-        ]);
+        $result = User::saveModel($request);
 
-        if ($validator->passes()) {
-            $roleName = Role::where('name', $request['roleName'])->first();
-
-            $user = User::create([
-                'name' => $request['name'],
-                'email' => $request['email'],
-                'password' => Hash::make($request['password']),
+        if ($request->ajax()) {
+            if (!$result['success']) {
+                return response()->json(['error' => $result['errors']]);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => $result['message']
             ]);
-
-            $user->assignRole($roleName);
-
-            Alert::success('Success', 'User created successfully !');
         }
 
-        return response()->json(['error'=>$validator->errors()->all()]);
+        if (!$result['success']) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($result['errors']);
+        }
+
+        return redirect()->route('admin.user.index')
+            ->with('success', $result['message']);
     }
 
+    /**
+     * Display the specified user (Admin Preview)
+     */
+    public function showAdmin($id)
+    {
+        $user = User::findOrFail($id);
+        $roleName = LFC::getRoleName($user->getRoleNames()) ?? 'User';
+
+        return view('admin-page.user.view', compact('user', 'roleName'))
+            ->with('title', 'View User');
+    }
+
+    /**
+     * Show the form for editing the specified user
+     */
     public function edit($id)
     {
-        $dataUser = User::findOrFail($id);
-        return view('admin-page.user.update')->with([
-            'dataUser' => $dataUser,
-            "title" => "User"
-        ]);
-    }
+        $user = User::findOrFail($id);
 
-    public function preview($id)
-    {
-        $data = User::findOrFail($id);
-        return view('admin-page.user.view')->with([
-            'data' => $data,
-            "title" => "User"
-        ]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'roleName' => 'required'
-        ]);
-
-        if ($validator->passes()) {
-            $roleName = Role::where('name', $request['roleName'])->first();
-            $data = User::findOrFail($id);
-            $dataRoleName =  LFC::getRoleName($data->getRoleNames());
-            if ($dataRoleName != null) {
-                $data->removeRole($dataRoleName);
-            }
-            $data->name = $request->name;
-            $data->email = $request->email;
-            if ($request->password != null) {
-                $data->password = Hash::make($request->password);
-            }
-            $data['updated_at'] = date("Y-m-d H:i:s");
-            $data->save();
-            $data->assignRole($roleName);
-            toast('User has been edited !', 'success')->autoClose(1500)->width('350px');
+        if ($user->isProtected()) {
+            return redirect()->route('admin.user.index')
+                ->with('error', "You can't edit this protected account.");
         }
 
-        return response()->json(['error'=>$validator->errors()->all()]);
+        $roles = Role::all();
+        $currentRole = LFC::getRoleName($user->getRoleNames());
+
+        return view('admin-page.user.update', compact('user', 'roles', 'currentRole'))
+            ->with('title', 'Edit User');
     }
 
+    /**
+     * Update the specified user
+     */
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $result = $user->updateModel($request);
+
+        if ($request->ajax()) {
+            if (!$result['success']) {
+                return response()->json(['error' => $result['errors']]);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => $result['message']
+            ]);
+        }
+
+        if (!$result['success']) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($result['errors']);
+        }
+
+        return redirect()->route('admin.user.index')
+            ->with('success', $result['message']);
+    }
+
+    /**
+     * Remove the specified user
+     */
     public function destroy($id)
     {
-        $data = User::findOrFail($id);
+        try {
+            $user = User::findOrFail($id);
+            $result = $user->deleteModel();
 
-        if ($data->id == 2) {
-            Alert::error('Delete Failed', "^_^ Sory You Can't Delete Ucup ^_^");
-            return redirect('/admin/user');
-        } else {
-            if ($data->profile == !null) {
-                File::delete($data->profile->profilepicture);
+            return response()->json($result, $result['success'] ? 200 : 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting user: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Bulk delete users
+     */
+    public function bulkDelete(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No users selected for deletion'
+                ], 400);
             }
-            $data->delete();
+
+            $result = User::bulkDeleteModel($ids);
+
+            return response()->json($result, $result['success'] ? 200 : 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting users: ' . $e->getMessage()
+            ], 500);
         }
     }
 }
-
