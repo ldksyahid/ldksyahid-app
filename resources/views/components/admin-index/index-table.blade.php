@@ -98,7 +98,7 @@
                         @break
 
                     @case('date')
-                        @if($value)
+                        @if($value && $value !== $fallback && strtotime($value) !== false)
                             {{ \Carbon\Carbon::parse($value)->isoFormat($col['dateFormat'] ?? 'DD MMMM YYYY') }}
                         @else
                             {{ $fallback }}
@@ -106,7 +106,7 @@
                         @break
 
                     @case('datetime')
-                        @if($value)
+                        @if($value && $value !== $fallback && strtotime($value) !== false)
                             {{ \Carbon\Carbon::parse($value)->isoFormat($col['dateFormat'] ?? 'DD MMMM YYYY') }} ({{ \Carbon\Carbon::parse($value)->format($col['timeFormat'] ?? 'H:i T') }})
                         @else
                             {{ $fallback }}

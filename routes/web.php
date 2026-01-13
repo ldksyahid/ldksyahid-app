@@ -189,13 +189,14 @@ Route::get('/admin/testimony/{id}/destroy', [TestimonyController::class, 'destro
 Route::get('/admin/testimony/{id}/preview', [TestimonyController::class, 'show'])->name('admin.testimony.preview')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
 
 // Route AdminPage Event
-Route::get('/admin/event', [EventController::class, 'indexadmin'])->name('admin.event.index')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
+Route::get('/admin/event', [EventController::class, 'indexAdmin'])->name('admin.event.index')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
 Route::get('/admin/event/create', [EventController::class, 'create'])->name('admin.event.create')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
 Route::post('/admin/event/store', [EventController::class, 'store'])->name('admin.event.store')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
 Route::get('/admin/event/{id}/edit', [EventController::class, 'edit'])->name('admin.event.edit')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
 Route::put('/admin/event/{id}/update', [EventController::class, 'update'])->name('admin.event.update')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
-Route::get('/admin/event/{id}/destroy', [EventController::class, 'destroy'])->name('admin.event.destroy')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
-Route::get('/admin/event/{id}/preview', [EventController::class, 'showInAdmin'])->name('admin.event.preview')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
+Route::delete('/admin/event/{id}', [EventController::class, 'destroy'])->name('admin.event.destroy')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
+Route::post('/admin/event/bulk-delete', [EventController::class, 'bulkDelete'])->name('admin.event.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/event/{id}/preview', [EventController::class, 'showAdmin'])->name('admin.event.preview')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
 
 
 // Route AdminPage Article
