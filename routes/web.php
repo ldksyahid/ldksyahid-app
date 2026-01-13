@@ -156,14 +156,14 @@ Route::get('/admin', [HomeController::class, 'adminHome'])->name('admin')->middl
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
 // Route AdminPage User
-Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user.index')->middleware(['role:Superadmin']);
-Route::get('/admin/user/read', [UserController::class, 'read'])->name('admin.user.read')->middleware(['role:Superadmin']);
+Route::get('/admin/user', [UserController::class, 'indexAdmin'])->name('admin.user.index')->middleware(['role:Superadmin']);
 Route::get('/admin/user/create', [UserController::class, 'create'])->name('admin.user.create')->middleware(['role:Superadmin']);
-Route::get('/admin/user/store', [UserController::class, 'store'])->name('admin.user.store')->middleware(['role:Superadmin']);
-Route::get('/admin/user/edit/{id}', [UserController::class, 'edit'])->name('admin.user.edit')->middleware(['role:Superadmin']);
-Route::get('/admin/user/update/{id}', [UserController::class, 'update'])->name('admin.user.update')->middleware(['role:Superadmin']);
-Route::get('/admin/user/destroy/{id}', [UserController::class, 'destroy'])->name('admin.user.destroy')->middleware(['role:Superadmin']);
-Route::get('/admin/user/preview/{id}', [UserController::class, 'preview'])->name('admin.user.preview')->middleware(['role:Superadmin']);
+Route::post('/admin/user/store', [UserController::class, 'store'])->name('admin.user.store')->middleware(['role:Superadmin']);
+Route::get('/admin/user/{id}/edit', [UserController::class, 'edit'])->name('admin.user.edit')->middleware(['role:Superadmin']);
+Route::put('/admin/user/{id}/update', [UserController::class, 'update'])->name('admin.user.update')->middleware(['role:Superadmin']);
+Route::delete('/admin/user/{id}', [UserController::class, 'destroy'])->name('admin.user.destroy')->middleware(['role:Superadmin']);
+Route::post('/admin/user/bulk-delete', [UserController::class, 'bulkDelete'])->name('admin.user.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/user/{id}/preview', [UserController::class, 'showAdmin'])->name('admin.user.preview')->middleware(['role:Superadmin']);
 
 // Route AdminPage AboutUs in Contact Message
 Route::get('/admin/about/contact/message', [MessageContactController::class, 'index'])->name('admin.about.contact.index')->middleware(['role:Superadmin|HelperMedia|HelperSPAM']);

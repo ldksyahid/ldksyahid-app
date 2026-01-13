@@ -181,6 +181,31 @@
                         {{ $relationValue ?: $fallback }}
                         @break
 
+                    @case('verification-badge')
+                        @if($value)
+                            <span class="badge bg-success">Verified</span>
+                        @else
+                            <span class="badge bg-secondary">Not Verified</span>
+                        @endif
+                        @break
+
+                    @case('role-badge')
+                        @php
+                            $roleClasses = [
+                                'Superadmin' => 'bg-danger',
+                                'HelperAdmin' => 'bg-warning',
+                                'HelperCelsyahid' => 'bg-success',
+                                'HelperEventMart' => 'bg-indigo',
+                                'HelperSPAM' => 'bg-info',
+                                'HelperMedia' => 'bg-dark',
+                                'HelperLetter' => 'bg-secondary',
+                                'User' => 'bg-primary',
+                            ];
+                            $roleClass = $roleClasses[$value] ?? 'bg-primary';
+                        @endphp
+                        <span class="badge {{ $roleClass }}" @if($value === 'HelperEventMart') style="background-color: #5352ed;" @endif>{{ $value ?: 'User' }}</span>
+                        @break
+
                     @default
                         {{ $value ?: $fallback }}
                 @endswitch
@@ -200,30 +225,44 @@
 
                 {{-- Edit Button --}}
                 @if(isset($actions['edit']) && $actions['edit']['enabled'])
+                    @php
+                        $isEditProtected = isset($actions['edit']['protectedId']) && $item->{$idKey} == $actions['edit']['protectedId'];
+                    @endphp
                     @if(($actions['edit']['type'] ?? 'link') === 'modal')
                         <button type="button"
                             class="btn btn-sm {{ $actions['edit']['class'] ?? 'btn-primary' }} edit-btn"
                             @foreach($actions['edit']['modalData'] ?? [] as $dataKey => $dataField)
                                 data-{{ $dataKey }}="{{ data_get($item, $dataField) }}"
                             @endforeach
-                            title="Edit">
+                            title="Edit"
+                            {{ $isEditProtected ? 'disabled' : '' }}>
                             <i class="fa fa-edit"></i>
                         </button>
                     @else
-                        <a href="{{ route($actions['edit']['route'], $item->{$actions['edit']['routeKey'] ?? $idKey}) }}"
-                           class="btn btn-sm {{ $actions['edit']['class'] ?? 'btn-custom-primary' }}" title="Edit">
-                            <i class="fa fa-edit" style="color: white;"></i>
-                        </a>
+                        @if($isEditProtected)
+                            <button type="button" class="btn btn-sm {{ $actions['edit']['class'] ?? 'btn-custom-primary' }}" disabled title="Protected">
+                                <i class="fa fa-edit" style="color: white;"></i>
+                            </button>
+                        @else
+                            <a href="{{ route($actions['edit']['route'], $item->{$actions['edit']['routeKey'] ?? $idKey}) }}"
+                               class="btn btn-sm {{ $actions['edit']['class'] ?? 'btn-custom-primary' }}" title="Edit">
+                                <i class="fa fa-edit" style="color: white;"></i>
+                            </a>
+                        @endif
                     @endif
                 @endif
 
                 {{-- Delete Button --}}
                 @if(isset($actions['delete']) && $actions['delete']['enabled'])
+                    @php
+                        $isDeleteProtected = isset($actions['delete']['protectedId']) && $item->{$idKey} == $actions['delete']['protectedId'];
+                        $isSuperadminOnly = ($actions['delete']['superadminOnly'] ?? false) && !$isSuperadmin;
+                    @endphp
                     <button type="button"
                         class="btn btn-sm {{ $actions['delete']['class'] ?? 'btn-custom-primary' }} {{ $actions['delete']['btnClass'] ?? 'delete-btn' }}"
                         data-id="{{ $item->{$idKey} }}"
-                        title="Delete"
-                        {{ ($actions['delete']['superadminOnly'] ?? false) && !$isSuperadmin ? 'disabled' : '' }}>
+                        title="{{ $isDeleteProtected ? 'Protected' : 'Delete' }}"
+                        {{ $isDeleteProtected || $isSuperadminOnly ? 'disabled' : '' }}>
                         <i class="fa fa-trash"></i>
                     </button>
                 @endif
