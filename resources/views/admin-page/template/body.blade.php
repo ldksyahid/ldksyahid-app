@@ -67,19 +67,19 @@
             color: #6c757d;
         }
 
-        /* Fix navbar connection - extend navbar background to cover the gap */
+        /* Fix navbar connection with sidebar - remove the gap */
+        .container-xxl {
+            background: var(--light) !important;
+        }
+
+        .content {
+            background: #FFFFFF;
+        }
+
         .content > .navbar {
             position: sticky;
             top: 0;
             z-index: 998;
-            margin-left: -15px;
-            padding-left: 15px !important;
-        }
-
-        /* Remove any shadow/border that causes visual separation */
-        .content > .navbar.sticky-top {
-            box-shadow: none;
-            border: none;
         }
     </style>
     <div class="container-xxl position-relative bg-white d-flex p-0">
