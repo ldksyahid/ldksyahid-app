@@ -182,7 +182,11 @@
                         @break
 
                     @case('verification-badge')
-                        @if($value)
+                        @php
+                            // Get the actual value without fallback for proper null check
+                            $actualValue = data_get($item, $colKey);
+                        @endphp
+                        @if($actualValue)
                             <span class="badge bg-success">Verified</span>
                         @else
                             <span class="badge bg-secondary">Not Verified</span>
