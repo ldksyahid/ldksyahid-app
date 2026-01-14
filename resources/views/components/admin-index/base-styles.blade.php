@@ -103,6 +103,37 @@
     border-color: #00a79d;
     box-shadow: 0 0 0 0.2rem rgba(0, 167, 157, 0.25);
 }
+/* Native Select Styles in Table Header */
+.{{ $tableClass }} thead th select.column-search {
+    height: 31px !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    border-radius: 0.375rem !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    transition: all 0.3s ease !important;
+    font-size: 0.75rem !important;
+    color: #495057 !important;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    appearance: auto;
+    -webkit-appearance: menulist;
+    -moz-appearance: menulist;
+}
+.{{ $tableClass }} thead th select.column-search:hover {
+    border-color: rgba(255, 255, 255, 0.7) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+.{{ $tableClass }} thead th select.column-search:focus {
+    border-color: rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 0 0 0.15rem rgba(255, 255, 255, 0.3) !important;
+    outline: none !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+.{{ $tableClass }} thead th select.column-search option {
+    background-color: white;
+    color: #495057;
+    padding: 8px;
+}
 
 /* Column Widths */
 @foreach($columnWidths as $index => $width)
@@ -440,7 +471,7 @@
 .{{ $tableClass }} thead th .select2-selection__placeholder {
     color: #6c757d !important;
 }
-.{{ $tableClass }} thead th .column-search-clear {
+.{{ $tableClass }} thead th .select2-container + .column-search-clear {
     display: none !important;
 }
 @keyframes dropdownFadeIn {

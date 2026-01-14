@@ -176,15 +176,22 @@
     }
     window.loadData = loadData;
 
-    @if($includeSelect2 && $select2Field)
+    @if($includeSelect2)
     function initSelect2() {
-        $('select[name="{{ $select2Field }}"]').select2({
-            placeholder: AdminIndexConfig.select2Placeholder,
-            allowClear: true,
-            width: '100%',
-            dropdownParent: $('body'),
-            dropdownPosition: 'below',
-            closeOnSelect: true,
+        // Initialize Select2 on all select elements with .select2-filter class
+        $('.select2-filter').each(function() {
+            // Skip if already initialized
+            if ($(this).hasClass('select2-hidden-accessible')) return;
+
+            const placeholder = $(this).data('placeholder') || 'All';
+            $(this).select2({
+                placeholder: placeholder,
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('body'),
+                dropdownPosition: 'below',
+                closeOnSelect: true,
+            });
         });
     }
     @endif
@@ -306,7 +313,7 @@
         currentParams = Object.fromEntries(new URLSearchParams(window.location.search));
         window.currentParams = currentParams;
 
-        @if($includeSelect2 && $select2Field)
+        @if($includeSelect2)
         initSelect2();
         @endif
 
@@ -322,7 +329,7 @@
 
         $(document).ajaxComplete(function() {
             initColumnSearch();
-            @if($includeSelect2 && $select2Field)
+            @if($includeSelect2)
             initSelect2();
             @endif
         });
@@ -346,8 +353,9 @@
             loadData();
         });
 
-        @if($includeSelect2 && $select2Field)
-        $(document).on('change', 'select[name="{{ $select2Field }}"]', function() {
+        @if($includeSelect2)
+        // Select2 Change Handler (all Select2 dropdowns)
+        $(document).on('change', '.select2-filter', function() {
             const value = $(this).val();
             const name = $(this).attr('name');
             if (value) { currentParams[name] = value; } else { delete currentParams[name]; }
@@ -355,10 +363,21 @@
         });
         @endif
 
-        // Column Search Handler
+        // Column Search Handler (text inputs)
         $(document).on('keyup blur', '.column-search', function(e) {
             if (this.type === 'select-one') return;
             if (e.type === 'keyup' && e.key !== 'Enter') return;
+
+            const value = $(this).val();
+            const name = $(this).attr('name') || $(this).data('column');
+            if (value) { currentParams[name] = value; } else { delete currentParams[name]; }
+            loadData();
+        });
+
+        // Native Select Handler (non-Select2 dropdowns)
+        $(document).on('change', 'select.column-search', function() {
+            // Skip if this select is initialized with Select2
+            if ($(this).hasClass('select2-hidden-accessible')) return;
 
             const value = $(this).val();
             const name = $(this).attr('name') || $(this).data('column');
@@ -456,8 +475,9 @@
             window.currentParams = currentParams;
 
             $('.column-search').val('');
-            @if($includeSelect2 && $select2Field)
-            $('select[name="{{ $select2Field }}"]').val('').trigger('change');
+            @if($includeSelect2)
+            // Reset all Select2 dropdowns
+            $('.select2-filter').val('').trigger('change');
             @endif
             @if($dateRangeField)
             $('input[name="{{ $dateRangeField }}"]').val('');

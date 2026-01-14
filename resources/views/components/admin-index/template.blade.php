@@ -197,7 +197,8 @@
                                         @elseif($col['filter'] === 'select' && isset($col['options']))
                                         <div class="position-relative">
                                             <select name="{{ $col['filterKey'] ?? $col['key'] }}"
-                                                class="form-control form-control-sm mt-1 column-search"
+                                                class="form-control form-control-sm mt-1 column-search select2-filter"
+                                                data-placeholder="{{ $col['placeholder'] ?? 'All' }}"
                                                 style="width: 100%">
                                                 <option value="">{{ $col['placeholder'] ?? 'All' }}</option>
                                                 @foreach($col['options'] as $optValue => $optLabel)
