@@ -25,25 +25,6 @@
         ],
     ];
 
-    // Visitors dropdown filter HTML
-    $visitorsDropdownHtml = '
-        <div class="dropdown">
-            <button class="btn btn-sm dropdown-toggle visits-dropdown" type="button" id="visitsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <span id="visitsDropdownLabel">All Visitors</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end visits-dropdown-menu" aria-labelledby="visitsDropdown">
-                <li><h6 class="dropdown-header">Visitor Range</h6></li>
-                <li><a class="dropdown-item visits-option" href="#" data-range="">All Visitors</a></li>
-                <li><hr class="dropdown-divider m-0"></li>
-                <li><a class="dropdown-item visits-option" href="#" data-range="0-10">0 - 10 visitors</a></li>
-                <li><a class="dropdown-item visits-option" href="#" data-range="11-50">11 - 50 visitors</a></li>
-                <li><a class="dropdown-item visits-option" href="#" data-range="51-100">51 - 100 visitors</a></li>
-                <li><a class="dropdown-item visits-option" href="#" data-range="101-500">101 - 500 visitors</a></li>
-                <li><a class="dropdown-item visits-option" href="#" data-range="501-1000">501 - 1000 visitors</a></li>
-                <li><a class="dropdown-item visits-option" href="#" data-range="1001+">1000+ visitors</a></li>
-            </ul>
-        </div>';
-
     // Columns Config
     $columns = [
         [
@@ -79,8 +60,17 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'visits_count',
-            'filter' => 'custom',
-            'filterHtml' => $visitorsDropdownHtml,
+            'filter' => 'select',
+            'filterKey' => 'visits_range',
+            'placeholder' => 'All Visitors',
+            'options' => [
+                '0-10' => '0 - 10 visitors',
+                '11-50' => '11 - 50 visitors',
+                '51-100' => '51 - 100 visitors',
+                '101-500' => '101 - 500 visitors',
+                '501-1000' => '501 - 1000 visitors',
+                '1001+' => '1000+ visitors',
+            ],
         ],
         [
             'key' => 'createdAt',
@@ -117,73 +107,11 @@
 
     // Extra Styles
     $extraStyles = '
-        /* Visits Dropdown Styles */
-        .visits-dropdown {
-            background-color: white;
-            border: 1px solid #dee2e6;
-            color: #495057;
-            width: 100%;
-            text-align: left;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            border-radius: 0.25rem;
-            transition: all 0.2s ease;
-        }
-        .visits-dropdown:hover { background-color: #f8f9fa; }
-        .visits-dropdown:focus {
-            box-shadow: 0 0 0 0.2rem rgba(0, 167, 157, 0.25);
-            border-color: #00a79d;
-        }
-        .visits-dropdown-menu {
-            min-width: 160px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 0;
-        }
-        .visits-dropdown-menu .dropdown-header {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #00a79d;
-            padding: 0.25rem 0.75rem;
-        }
-        .visits-dropdown-menu .dropdown-item {
-            font-size: 0.75rem;
-            padding: 0.35rem 0.75rem;
-        }
-        .visits-dropdown-menu .dropdown-item:hover {
-            background-color: #e0f7f5;
-            color: #008b84;
-        }
-        .visits-dropdown-menu .dropdown-item.active {
-            background-color: #00a79d;
-            color: white;
-        }
         /* Modal Styles */
         .bg-gradient-primary {
             background: linear-gradient(135deg, #00a79d 0%, #008b84 100%);
         }
     ';
-
-    // Extra Scripts
-    $extraScripts = "
-        // Visits dropdown filter handler
-        $(document).on('click', '.visits-option', function(e) {
-            e.preventDefault();
-            var range = $(this).data('range');
-            var label = $(this).text().trim();
-            $('#visitsDropdownLabel').text(label.split(' ')[0] === 'All' ? 'All Visitors' : label);
-            if (range) { currentParams.visits_range = range; } else { delete currentParams.visits_range; }
-            loadData();
-        });
-
-        // Mark active dropdown item
-        $(document).on('shown.bs.dropdown', '#visitsDropdown', function() {
-            var currentRange = currentParams.visits_range || '';
-            $('.visits-option').removeClass('active');
-            $('.visits-option[data-range=\"' + currentRange + '\"]').addClass('active');
-        });
-    ";
 @endphp
 
 @section('content')
@@ -202,14 +130,16 @@
     csrfToken="{{ csrf_token() }}"
     deleteUrl="{{ url('admin/service/shortlink') }}"
     bulkDeleteUrl="{{ route('admin.service.shortlink.bulkDelete') }}"
+    :includeSelect2="true"
     defaultSortBy="created_at"
     defaultSortOrder="desc"
     entityName="shortlinks"
     entityIcon="fa-link"
     dateRangeField="created_at"
+    select2Field="visits_range"
+    select2Placeholder="All Visitors"
     :isSuperadmin="$isSuperadmin"
     :extraStyles="$extraStyles"
-    :extraScripts="$extraScripts"
 >
     {{-- Shorten Form --}}
     <x-slot name="beforeTable">
@@ -335,11 +265,6 @@ $(document).ready(function() {
             Toast.fire({ icon: 'success', title: 'Copied to clipboard!' });
         });
     };
-
-    // Reset visits dropdown on clear filters
-    $(document).on('click', '#clearFiltersBtn', function() {
-        $('#visitsDropdownLabel').text('All Visitors');
-    });
 });
 </script>
 @endpush
