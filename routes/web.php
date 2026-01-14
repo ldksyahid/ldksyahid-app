@@ -221,13 +221,14 @@ Route::get('/admin/news/{id}/destroy', [NewsController::class, 'destroy'])->name
 Route::get('/admin/news/{id}/preview', [NewsController::class, 'showInAdmin'])->name('admin.news.preview')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 
 // Route AdminPage Schedule
-Route::get('/admin/schedule', [ScheduleController::class, 'indexadmin'])->name('admin.schedule.index')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
+Route::get('/admin/schedule', [ScheduleController::class, 'indexAdmin'])->name('admin.schedule.index')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
 Route::get('/admin/schedule/create', [ScheduleController::class, 'create'])->name('admin.schedule.create')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
 Route::post('/admin/schedule/store', [ScheduleController::class, 'store'])->name('admin.schedule.store')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
 Route::get('/admin/schedule/{id}/edit', [ScheduleController::class, 'edit'])->name('admin.schedule.edit')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
 Route::put('/admin/schedule/{id}/update', [ScheduleController::class, 'update'])->name('admin.schedule.update')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
-Route::get('/admin/schedule/{id}/destroy', [ScheduleController::class, 'destroy'])->name('admin.schedule.destroy')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
-Route::get('/admin/schedule/{id}/preview', [ScheduleController::class, 'showInAdmin'])->name('admin.schedule.preview')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
+Route::delete('/admin/schedule/{id}', [ScheduleController::class, 'destroy'])->name('admin.schedule.destroy')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
+Route::post('/admin/schedule/bulk-delete', [ScheduleController::class, 'bulkDelete'])->name('admin.schedule.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/schedule/{id}/preview', [ScheduleController::class, 'showAdmin'])->name('admin.schedule.preview')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
 
 // Route AdminPage Gallery
 Route::get('/admin/about/gallery', [GalleryController::class, 'indexadmin'])->name('admin.about.gallery.index')->middleware(['role:Superadmin|HelperMedia']);
