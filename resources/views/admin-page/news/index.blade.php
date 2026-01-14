@@ -1,111 +1,117 @@
 @extends('admin-page.template.body')
 
-@section('head')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
-@endsection
+@php
+    // $isSuperadmin is automatically available via View Composer
+
+    // Guide Cards Config
+    $guideCards = [
+        [
+            'icon' => 'fa-plus-circle',
+            'title' => 'How to Add News',
+            'description' => 'Click the <strong>"Add News"</strong> button to create a new news article. Fill in the title, date, publisher, reporter, editor, and upload the featured image.'
+        ],
+        [
+            'icon' => 'fa-search',
+            'title' => 'Search Feature',
+            'description' => 'Use the search filters to find news by title, publisher, reporter, or editor.'
+        ],
+        [
+            'icon' => 'fa-eye',
+            'title' => 'View Details',
+            'description' => 'Click <i class="fa fa-eye small"></i> to view complete news details including the full article content.'
+        ],
+        [
+            'icon' => 'fa-edit',
+            'title' => 'Edit & Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit news details. Use <i class="fa fa-trash small text-danger"></i> to delete.'
+        ],
+    ];
+
+    // Columns Config
+    $columns = [
+        [
+            'key' => 'title',
+            'label' => 'Title',
+            'width' => '250px',
+            'sortable' => true,
+            'sortKey' => 'title',
+            'filter' => 'text',
+            'filterKey' => 'title',
+        ],
+        [
+            'key' => 'datepublish',
+            'label' => 'Date Publish',
+            'width' => '150px',
+            'sortable' => true,
+            'sortKey' => 'datepublish',
+            'filter' => 'date',
+            'filterKey' => 'datepublish',
+        ],
+        [
+            'key' => 'publisher',
+            'label' => 'Publisher',
+            'width' => '150px',
+            'sortable' => true,
+            'sortKey' => 'publisher',
+            'filter' => 'text',
+            'filterKey' => 'publisher',
+        ],
+        [
+            'key' => 'reporter',
+            'label' => 'Reporter',
+            'width' => '150px',
+            'sortable' => true,
+            'sortKey' => 'reporter',
+            'filter' => 'text',
+            'filterKey' => 'reporter',
+        ],
+        [
+            'key' => 'editor',
+            'label' => 'Editor',
+            'width' => '150px',
+            'sortable' => true,
+            'sortKey' => 'editor',
+            'filter' => 'text',
+            'filterKey' => 'editor',
+        ],
+    ];
+
+    // Column Widths for CSS
+    $columnWidths = [
+        1 => '50px',   // Checkbox
+        2 => '50px',   // No
+        3 => '250px',  // Title
+        4 => '150px',  // Date Publish
+        5 => '150px',  // Publisher
+        6 => '150px',  // Reporter
+        7 => '150px',  // Editor
+        8 => '120px',  // Action
+    ];
+@endphp
 
 @section('content')
-<!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">News Management System</h5>
-                <a class='btn btn-primary' href="/admin/news/create"><i class="fa fa-plus"></i> Create News</a>
-                {{-- START Data table News --}}
-                <div class="mt-3">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped text-nowrap small" id="dataNews">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="text-center">No</th>
-                                    <th scope="col" class="text-center">Date Publish</th>
-                                    <th scope="col" class="text-center">Publisher</th>
-                                    <th scope="col" class="text-center">Title</th>
-                                    <th scope="col" class="text-center">Reporter</th>
-                                    <th scope="col" class="text-center">Editor</th>
-                                    <th scope="col" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($postnews as $key => $postnews)
-                                <tr class="small">
-                                    <td scope="row" align='center'>{{$key + 1}}</td>
-                                    <td align='center'>{{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('dddd') }} {{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postnews->datepublish )->format('Y') }}</td>
-                                    <td align='center'>{{ $postnews->publisher }}</td>
-                                    <td align='center'>{{ $postnews->title }}</td>
-                                    <td align='center'>{{ $postnews->reporter }}</td>
-                                    <td align='center'>{{ $postnews->editor }}</td>
-                                    <td align="center">
-                                            <a href="/admin/news/{{ $postnews->id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
-                                            <button type="submit" onclick="deleteConfirmationNews({{ $postnews->id }})" id="delete-event" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>
-                                            <a class="btn btn-sm btn-primary" href="/admin/news/{{ $postnews->id }}/preview"><i class="fa fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan='9', align='center'>No News Data</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {{-- END Data table News --}}
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Table End -->
+<x-admin-index.template
+    pageTitle="News Management"
+    pageIcon="fa-newspaper"
+    highlightedText="News Management System"
+    :guideCards="$guideCards"
+    addButtonText="Add News"
+    addButtonRoute="admin.news.create"
+    tableClass="table-news"
+    tableId="dataNewsTable"
+    tableBodyId="newsTableBody"
+    :columns="$columns"
+    :columnWidths="$columnWidths"
+    ajaxUrl="{{ route('admin.news.index') }}"
+    csrfToken="{{ csrf_token() }}"
+    deleteUrl="{{ url('admin/news') }}"
+    bulkDeleteUrl="{{ route('admin.news.bulk-delete') }}"
+    :includeSelect2="false"
+    defaultSortBy="created_at"
+    defaultSortOrder="desc"
+    entityName="news"
+    entityIcon="fa-newspaper"
+    dateRangeField="created_at"
+    :isSuperadmin="$isSuperadmin"
+/>
 @endsection
-
-@section('scripts')
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-<script>
-// ===== START CRUD EVENT =====
-// ini untuk konfirmasi delete
-function deleteConfirmationNews(id) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500,
-                width: '350px',
-            })
-
-            Swal.fire({
-                title: 'Are you sure ?',
-                text: "You won't be able to revert this !",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $.ajax({
-                    type: "get",
-                    url: `{{ url('/admin/news/${id}/destroy') }}`,
-                        success: function(data) {
-                            setTimeout(function () { location.reload(1); }, 300);
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'News has been deleted !'
-                            });
-                        }
-                    });
-
-                }
-            })
-        }
-// ===== END CRUD EVENT =====
-</script>
-<script>
-    $('#dataNews').DataTable({
-        responsive: true,
-        fixedHeader: true,
-    });
-</script>
-@endsection
-
