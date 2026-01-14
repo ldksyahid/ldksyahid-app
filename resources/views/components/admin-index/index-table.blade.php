@@ -259,7 +259,7 @@
                         $isSuperadminOnly = ($actions['delete']['superadminOnly'] ?? false) && !$isSuperadmin;
                     @endphp
                     <button type="button"
-                        class="btn btn-sm {{ $actions['delete']['class'] ?? 'btn-custom-primary' }} {{ $actions['delete']['btnClass'] ?? 'delete-btn' }}"
+                        class="btn btn-sm {{ $actions['delete']['class'] ?? 'btn-custom-primary' }} {{ $actions['delete']['btnClass'] ?? 'delete-btn' }} delete-action-btn"
                         data-id="{{ $item->{$idKey} }}"
                         title="{{ $isDeleteProtected ? 'Protected' : 'Delete' }}"
                         {{ $isDeleteProtected || $isSuperadminOnly ? 'disabled' : '' }}>
