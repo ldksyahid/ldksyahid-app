@@ -181,13 +181,14 @@ Route::post('/admin/jumbotron/bulk-delete', [JumbotronController::class, 'bulkDe
 Route::get('/admin/jumbotron/{id}/preview', [JumbotronController::class, 'showAdmin'])->name('admin.jumbotron.preview')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
 
 // Route AdminPage Home Testimony
-Route::get('/admin/testimony', [TestimonyController::class, 'index'])->name('admin.testimony.index')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
+Route::get('/admin/testimony', [TestimonyController::class, 'indexAdmin'])->name('admin.testimony.index')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
 Route::get('/admin/testimony/create', [TestimonyController::class, 'create'])->name('admin.testimony.create')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
 Route::post('/admin/testimony/store', [TestimonyController::class, 'store'])->name('admin.testimony.store')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
 Route::get('/admin/testimony/{id}/edit', [TestimonyController::class, 'edit'])->name('admin.testimony.edit')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
 Route::put('/admin/testimony/{id}/update', [TestimonyController::class, 'update'])->name('admin.testimony.update')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
-Route::get('/admin/testimony/{id}/destroy', [TestimonyController::class, 'destroy'])->name('admin.testimony.destroy')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
-Route::get('/admin/testimony/{id}/preview', [TestimonyController::class, 'show'])->name('admin.testimony.preview')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
+Route::delete('/admin/testimony/{id}', [TestimonyController::class, 'destroy'])->name('admin.testimony.destroy')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
+Route::post('/admin/testimony/bulk-delete', [TestimonyController::class, 'bulkDelete'])->name('admin.testimony.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/testimony/{id}/preview', [TestimonyController::class, 'showAdmin'])->name('admin.testimony.preview')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
 
 // Route AdminPage Event
 Route::get('/admin/event', [EventController::class, 'indexAdmin'])->name('admin.event.index')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia|HelperCelsyahid']);
