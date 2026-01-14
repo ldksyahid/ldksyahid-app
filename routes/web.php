@@ -202,13 +202,14 @@ Route::get('/admin/event/{id}/preview', [EventController::class, 'showAdmin'])->
 
 
 // Route AdminPage Article
-Route::get('/admin/article', [ArticleController::class, 'indexadmin'])->name('admin.article.index')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
+Route::get('/admin/article', [ArticleController::class, 'indexAdmin'])->name('admin.article.index')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 Route::get('/admin/article/create', [ArticleController::class, 'create'])->name('admin.article.create')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 Route::post('/admin/article/store', [ArticleController::class, 'store'])->name('admin.article.store')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 Route::get('/admin/article/{id}/edit', [ArticleController::class, 'edit'])->name('admin.article.edit')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 Route::put('/admin/article/{id}/update', [ArticleController::class, 'update'])->name('admin.article.update')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
-Route::get('/admin/article/{id}/destroy', [ArticleController::class, 'destroy'])->name('admin.article.destroy')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
-Route::get('/admin/article/{id}/preview', [ArticleController::class, 'showInAdmin'])->name('admin.article.preview')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
+Route::delete('/admin/article/{id}', [ArticleController::class, 'destroy'])->name('admin.article.destroy')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
+Route::post('/admin/article/bulk-delete', [ArticleController::class, 'bulkDelete'])->name('admin.article.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/article/{id}/preview', [ArticleController::class, 'showAdmin'])->name('admin.article.preview')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 
 // Route AdminPage News
 Route::get('/admin/news', [NewsController::class, 'indexadmin'])->name('admin.news.index')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);

@@ -6,12 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
-use App\Services\GoogleDrive;
 
 class ArticleController extends Controller
 {
-    public $pathArticleGDrive = '1dSj_B3bkhbCM1S4CuZtO4-6Hq00sHdpD';
-
+    /**
+     * Display a listing of articles (Landing Page)
+     */
     public function index(Request $request)
     {
         $query = Article::query()->orderBy('dateevent', 'desc');
@@ -47,7 +47,6 @@ class ArticleController extends Controller
             $query->whereRaw('YEAR(created_at) IN (' . implode(',', array_map('intval', $years)) . ')');
         }
 
-
         $postarticle = $query->paginate(9)->withQueryString();
 
         $themes = Article::select('theme')->distinct()->orderBy('theme')->pluck('theme');
@@ -60,42 +59,9 @@ class ArticleController extends Controller
         ]);
     }
 
-
-    public function indexadmin()
-    {
-        $postarticle = Article::orderBy('created_at','desc')->get();
-        return view('admin-page.article.index', compact('postarticle'), ["title" => "Article"]);
-    }
-
-    public function create()
-    {
-        return view('admin-page.article.create', ["title" => "Article"]);
-    }
-
-    public function store(Request $request)
-    {
-        $gdriveService = new GoogleDrive($this->pathArticleGDrive);
-
-        $fileName = time() . '_article_' . $request->file('poster')->getClientOriginalName();
-        $filePath = $this->pathArticleGDrive . '/' . $fileName;
-
-        $uploadResult = $gdriveService->uploadImage($request->file('poster'), $fileName, $filePath);
-
-        Article::create([
-            "title" => $request["title"],
-            "theme" => $request["theme"],
-            "dateevent" => $request["datearticle"],
-            "writer" => $request["writer"],
-            "editor" => $request["editor"],
-            'poster' => $uploadResult['fileName'],
-            'gdrive_id' => $uploadResult['gdriveID'],
-            "embedpdf" => $request["embedpdf"],
-        ]);
-
-        Alert::success('Success', 'Article has been uploaded !');
-        return redirect('/admin/article');
-    }
-
+    /**
+     * Display the specified article (Landing Page)
+     */
     public function show($id)
     {
         $dt = Carbon::now();
@@ -104,68 +70,163 @@ class ArticleController extends Controller
             ->latest()
             ->take(5)
             ->get();
-        return view('landing-page.article.detail',  compact('postarticle', 'relatedArticles'),["title" => "Artikel"]);
+        return view('landing-page.article.detail', compact('postarticle', 'relatedArticles'), ["title" => "Artikel"]);
     }
 
-    public function edit($id)
+    /**
+     * Display a listing of articles (Admin Index)
+     */
+    public function indexAdmin(Request $request)
     {
-        $postarticle = Article::find($id);
-        return view('admin-page.article.update', compact('postarticle'), ["title" => "Article"]);
-    }
+        $items = Article::searchAdminArticles($request);
+        $tableConfig = Article::getTableConfig();
 
-    public function showInAdmin($id)
-    {
-        $postarticle = Article::find($id);
-        return view('admin-page.article.view', compact('postarticle'), ["title" => "Article"]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $articleModel = Article::find($id);
-
-        if ($request->file('poster')) {
-            $gdriveService = new GoogleDrive($this->pathArticleGDrive);
-
-            $fileName = time() . '_article_' . $request->file('poster')->getClientOriginalName();
-            $filePath = $this->pathArticleGDrive . '/' . $fileName;
-
-            $uploadResult = $gdriveService->uploadImage($request->file('poster'), $fileName, $filePath);
-
-            $oldGdriveID = $articleModel->gdrive_id;
-
-            if ($oldGdriveID) {
-                $gdriveService->deleteImage($oldGdriveID);
-            }
-
-            $articleModel->update([
-                'poster' => $uploadResult['fileName'],
-                'gdrive_id' => $uploadResult['gdriveID'],
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $items,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
+                'pagination' => $items->appends($request->query())->links()->render(),
+                'total' => $items->total(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem()
             ]);
         }
 
-        $articleModel->update([
-            "title" => $request["title"],
-            "theme" => $request["theme"],
-            "dateevent" => $request["datearticle"],
-            "writer" => $request["writer"],
-            "editor" => $request["editor"],
-            "embedpdf" => $request["embedpdf"],
-        ]);
-
-        toast('Article has been edited !', 'success')->autoClose(1500)->width('400px');
-        return redirect('/admin/article');
+        return view('admin-page.article.index', compact('items', 'tableConfig'))
+            ->with('title', 'Article');
     }
 
+    /**
+     * Show the form for creating a new article
+     */
+    public function create()
+    {
+        return view('admin-page.article.create')
+            ->with('title', 'Article');
+    }
+
+    /**
+     * Store a newly created article
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'theme' => 'required|string|max:255',
+            'datearticle' => 'required|date',
+            'writer' => 'required|string|max:255',
+            'editor' => 'required|string|max:255',
+            'poster' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'embedpdf' => 'required|url',
+        ]);
+
+        try {
+            Article::saveModel($request);
+            Alert::success('Success', 'Article has been created!');
+            return redirect()->route('admin.article.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to create article: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+    }
+
+    /**
+     * Display the specified article (Admin Preview)
+     */
+    public function showAdmin($id)
+    {
+        $article = Article::findOrFail($id);
+
+        return view('admin-page.article.view', compact('article'))
+            ->with('title', 'Article');
+    }
+
+    /**
+     * Show the form for editing the specified article
+     */
+    public function edit($id)
+    {
+        $article = Article::findOrFail($id);
+
+        return view('admin-page.article.update', compact('article'))
+            ->with('title', 'Article');
+    }
+
+    /**
+     * Update the specified article
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'theme' => 'required|string|max:255',
+            'datearticle' => 'required|date',
+            'writer' => 'required|string|max:255',
+            'editor' => 'required|string|max:255',
+            'poster' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'embedpdf' => 'required|url',
+        ]);
+
+        try {
+            $article = Article::findOrFail($id);
+            $article->updateModel($request);
+            Alert::success('Success', 'Article has been updated!');
+            return redirect()->route('admin.article.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to update article: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+    }
+
+    /**
+     * Remove the specified article
+     */
     public function destroy($id)
     {
-        $articleModel = Article::find($id);
-        $gdriveService = new GoogleDrive($this->pathArticleGDrive);
+        try {
+            $article = Article::findOrFail($id);
+            $article->deleteModel();
 
-        if ($articleModel->gdrive_id) {
-            $gdriveService->deleteImage($articleModel->gdrive_id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Article has been deleted!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting article: ' . $e->getMessage()
+            ], 500);
         }
+    }
 
-        $articleModel->delete();
-        return redirect()->back();
+    /**
+     * Bulk delete articles
+     */
+    public function bulkDelete(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No articles selected for deletion'
+                ], 400);
+            }
+
+            $deleted = Article::bulkDeleteModel($ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$deleted} article(s) have been deleted!"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting articles: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
