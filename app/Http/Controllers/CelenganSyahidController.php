@@ -25,7 +25,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 class CelenganSyahidController extends Controller
 {
     public $pathCampaignsGDrive = '1w48iZmjPCkYwVUL26zIj8fBIX37OMaGT';
-    
+
     public function indexLanding()
     {
         $postcampaign = Campaign::getCampaigns();
@@ -183,26 +183,26 @@ class CelenganSyahidController extends Controller
 
     public function dashboardCelenganSyahid()
     {
-        $pythonExecutable = '/home/ldksyah1/virtualenv/ucupspython/3.9/bin/python';
-        // $pythonExecutable = 'C:\Users\hp\AppData\Local\Programs\Python\Python311\python.exe';
+        // $pythonExecutable = '/home/ldksyah1/virtualenv/ucupspython/3.9/bin/python';
+        // $pythonExecutable = '';
 
-        $scriptPath = '/home/ldksyah1/public_html/public/machine-learning/models/donation-class-machine.py';
-        // $scriptPath = 'machine-learning/models/donation-class-machine.py';
+        // // $scriptPath = '/home/ldksyah1/public_html/public/machine-learning/models/donation-class-machine.py';
+        // $scriptPath = '';
 
-        $command = [
-            $pythonExecutable,
-            $scriptPath
-        ];
+        // $command = [
+        //     $pythonExecutable,
+        //     $scriptPath
+        // ];
 
-        $process = new Process($command, null, null, null, null);
+        // $process = new Process($command, null, null, null, null);
 
-        $process->start();
+        // $process->start();
 
-        $process->wait();
+        // $process->wait();
 
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
+        // if (!$process->isSuccessful()) {
+        //     throw new ProcessFailedException($process);
+        // }
 
         return view('admin-page.service.celengan-syahid.dashboard', ["title" => "Celengan Syahid"]);
     }
