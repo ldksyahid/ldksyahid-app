@@ -4,175 +4,175 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Gallery;
-use App\Services\GoogleDrive;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class GalleryController extends Controller
 {
-    public $pathGalleryGDrive = '1d_ZOMfeFVkATb6gWYVFtttTNE-k0nCsv';
-
+    /**
+     * Landing page - Display all galleries
+     */
     public function index()
     {
-        $postgallery = Gallery::orderBy('created_at','desc')->get();
-        return view('landing-page.about.gallery', compact('postgallery'),["title" => "Tentang Kami"]);
+        $postgallery = Gallery::orderBy('created_at', 'desc')->get();
+        return view('landing-page.about.gallery', compact('postgallery'), ["title" => "Tentang Kami"]);
     }
 
-    public function indexadmin()
+    /**
+     * Admin - Display gallery list with AJAX support
+     */
+    public function indexAdmin(Request $request)
     {
-        $postgallery = Gallery::orderBy('created_at','desc')->get();
-        return view('admin-page.about.gallery.index', compact('postgallery'), ["title" => "About Us"]);
+        $items = Gallery::searchAdminGalleries($request);
+        $tableConfig = Gallery::getTableConfig();
+
+        // Get select2 options
+        $eventNameOptions = Gallery::getEventNameOptions();
+        $eventThemeOptions = Gallery::getEventThemeOptions();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $items,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
+                'pagination' => $items->appends($request->query())->links()->render(),
+                'total' => $items->total(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem()
+            ]);
+        }
+
+        return view('admin-page.about.gallery.index', compact('items', 'tableConfig', 'eventNameOptions', 'eventThemeOptions'))
+            ->with('title', 'Gallery');
     }
 
+    /**
+     * Admin - Show create form
+     */
     public function create()
     {
-        return view('admin-page.about.gallery.create', ["title" => "About Us"]);
+        return view('admin-page.about.gallery.create')
+            ->with('title', 'Gallery');
     }
 
+    /**
+     * Admin - Store new gallery
+     */
     public function store(Request $request)
     {
-        $gdriveService = new GoogleDrive($this->pathGalleryGDrive);
-
-        $fileNameGroupPhoto = time() . '_groupPhoto_' . $request->file('groupPhoto')->getClientOriginalName();
-        $filePathGroupPhoto = $this->pathGalleryGDrive . '/' . $fileNameGroupPhoto;
-        $uploadResultGroupPhoto = $gdriveService->uploadImage($request->file('groupPhoto'), $fileNameGroupPhoto, $filePathGroupPhoto);
-
-        $photos = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $photoKey = 'photo' . $i;
-            if ($request->file($photoKey)) {
-                $fileName = time() . '_' . $photoKey . '_' . $request->file($photoKey)->getClientOriginalName();
-                $filePath = $this->pathGalleryGDrive . '/' . $fileName;
-
-                $uploadResult = $gdriveService->uploadImage($request->file($photoKey), $fileName, $filePath);
-
-                $photos[$photoKey] = [
-                    'fileName' => !empty($uploadResult) ? $uploadResult['fileName'] : null,
-                    'gdriveID' => !empty($uploadResult) ? $uploadResult['gdriveID'] : null
-                ];
-            } else {
-                $photos[$photoKey] = ['fileName' => null, 'gdriveID' => null];
-            }
-        }
-
-        $galleryData = [
-            "eventName" => $request->input("eventName"),
-            "eventTheme" => $request->input("eventTheme"),
-            "eventDescription" => $request->input("eventDescription"),
-            "linkEmbedYoutube" => $request->input("linkEmbedYoutube"),
-            "linkDoc" => $request->input("linkDoc"),
-            'groupPhoto' => !empty($uploadResultGroupPhoto) ? $uploadResultGroupPhoto['fileName'] : null,
-            'gdrive_id' => !empty($uploadResultGroupPhoto) ? $uploadResultGroupPhoto['gdriveID'] : null,
-        ];
-
-        for ($i = 1; $i <= 12; $i++) {
-            $photoKey = 'photo' . $i;
-            $gdriveKey = 'gdrive_id_' . $i;
-            $galleryData[$photoKey] = $photos[$photoKey]['fileName'];
-            $galleryData[$gdriveKey] = $photos[$photoKey]['gdriveID'];
-        }
-
-        Gallery::create($galleryData);
-
-        Alert::success('Success', 'Gallery has been uploaded!');
-        return redirect('/admin/about/gallery');
-    }
-
-    public function edit($id)
-    {
-        $postgallery = Gallery::find($id);
-        return view('admin-page.about.gallery.update',  compact('postgallery'),["title" => "About Us"]);
-    }
-
-    public function showInAdmin($id)
-    {
-        $postgallery = Gallery::find($id);
-        return view('admin-page.about.gallery.view',  compact('postgallery'),["title" => "About Us"]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $gdriveService = new GoogleDrive($this->pathGalleryGDrive);
-        $gallery = Gallery::findOrFail($id);
-
-        if ($request->file('groupPhoto')) {
-            $fileNameGroupPhoto = time() . '_groupPhoto_' . $request->file('groupPhoto')->getClientOriginalName();
-            $filePathGroupPhoto = $this->pathGalleryGDrive . '/' . $fileNameGroupPhoto;
-
-            $uploadResultGroupPhoto = $gdriveService->uploadImage($request->file('groupPhoto'), $fileNameGroupPhoto, $filePathGroupPhoto);
-
-            if (!empty($uploadResultGroupPhoto)) {
-                $oldGdriveID = $gallery->gdrive_id;
-                if ($oldGdriveID) {
-                    $gdriveService->deleteImage($oldGdriveID);
-                }
-
-                $gallery->update([
-                    'groupPhoto' => $uploadResultGroupPhoto['fileName'],
-                    'gdrive_id' => $uploadResultGroupPhoto['gdriveID'],
-                ]);
-            }
-        }
-
-
-        for ($i = 1; $i <= 12; $i++) {
-            $photoKey = 'photo' . $i;
-            $gdriveKey = 'gdrive_id_' . $i;
-
-            if ($request->file($photoKey)) {
-                $fileNamePhoto = time() . '_' . $photoKey . '_' . $request->file($photoKey)->getClientOriginalName();
-                $filePathPhoto = $this->pathGalleryGDrive . '/' . $fileNamePhoto;
-
-                $uploadResultPhoto = $gdriveService->uploadImage($request->file($photoKey), $fileNamePhoto, $filePathPhoto);
-
-                if (!empty($uploadResultPhoto)) {
-                    $oldGdriveID = $gallery->$gdriveKey;
-                    if ($oldGdriveID) {
-                        $gdriveService->deleteImage($oldGdriveID);
-                    }
-
-                    $gallery->update([
-                        $photoKey => $uploadResultPhoto['fileName'],
-                        $gdriveKey => $uploadResultPhoto['gdriveID'],
-                    ]);
-                }
-            }
-        }
-
-        $gallery->update([
-            "eventName" => $request["eventName"],
-            "eventTheme" => $request["eventTheme"],
-            "eventDescription" => $request["eventDescription"],
-            "linkEmbedYoutube" => $request["linkEmbedYoutube"],
-            "linkDoc" => $request["linkDoc"],
+        $request->validate([
+            'eventName' => 'required|string|max:255',
+            'eventTheme' => 'required|string|max:255',
+            'eventDescription' => 'required|string',
+            'groupPhoto' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'linkEmbedYoutube' => 'nullable|url',
+            'linkDoc' => 'nullable|url',
         ]);
 
-        toast('Gallery has been edited!', 'success')->autoClose(1500)->width('400px');
-        return redirect('/admin/about/gallery');
+        try {
+            Gallery::saveModel($request);
+            Alert::success('Success', 'Gallery has been created!');
+            return redirect()->route('admin.about.gallery.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to create gallery: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
-
-
-    public function destroy($id)
+    /**
+     * Admin - Show edit form
+     */
+    public function edit($id)
     {
-        $gdriveService = new GoogleDrive($this->pathGalleryGDrive);
-
         $gallery = Gallery::findOrFail($id);
 
-        if ($gallery->gdrive_id) {
-            $gdriveService->deleteImage($gallery->gdrive_id);
-        }
-
-        for ($i = 1; $i <= 12; $i++) {
-            $gdriveKey = 'gdrive_id_' . $i;
-            if ($gallery->$gdriveKey) {
-                $gdriveService->deleteImage($gallery->$gdriveKey);
-            }
-        }
-
-        $gallery->delete();
-
-
-        return redirect()->back()->with('success', 'Gallery has been deleted successfully!');
+        return view('admin-page.about.gallery.update', compact('gallery'))
+            ->with('title', 'Gallery');
     }
 
+    /**
+     * Admin - Show gallery detail (view mode)
+     */
+    public function showAdmin($id)
+    {
+        $gallery = Gallery::findOrFail($id);
+
+        return view('admin-page.about.gallery.view', compact('gallery'))
+            ->with('title', 'Gallery');
+    }
+
+    /**
+     * Admin - Update gallery
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'eventName' => 'required|string|max:255',
+            'eventTheme' => 'required|string|max:255',
+            'eventDescription' => 'required|string',
+            'groupPhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'linkEmbedYoutube' => 'nullable|url',
+            'linkDoc' => 'nullable|url',
+        ]);
+
+        try {
+            $gallery = Gallery::findOrFail($id);
+            $gallery->updateModel($request);
+            Alert::success('Success', 'Gallery has been updated!');
+            return redirect()->route('admin.about.gallery.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to update gallery: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+    }
+
+    /**
+     * Admin - Delete gallery
+     */
+    public function destroy($id)
+    {
+        try {
+            $gallery = Gallery::findOrFail($id);
+            $gallery->deleteModel();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Gallery has been deleted!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting gallery: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Admin - Bulk delete galleries
+     */
+    public function bulkDelete(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No galleries selected for deletion'
+                ], 400);
+            }
+
+            $deleted = Gallery::bulkDeleteModel($ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$deleted} gallery(s) have been deleted!"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting galleries: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

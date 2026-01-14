@@ -232,13 +232,14 @@ Route::post('/admin/schedule/bulk-delete', [ScheduleController::class, 'bulkDele
 Route::get('/admin/schedule/{id}/preview', [ScheduleController::class, 'showAdmin'])->name('admin.schedule.preview')->middleware(['role:Superadmin|HelperSPAM|HelperMedia']);
 
 // Route AdminPage Gallery
-Route::get('/admin/about/gallery', [GalleryController::class, 'indexadmin'])->name('admin.about.gallery.index')->middleware(['role:Superadmin|HelperMedia']);
+Route::get('/admin/about/gallery', [GalleryController::class, 'indexAdmin'])->name('admin.about.gallery.index')->middleware(['role:Superadmin|HelperMedia']);
 Route::get('/admin/about/gallery/create', [GalleryController::class, 'create'])->name('admin.about.gallery.create')->middleware(['role:Superadmin|HelperMedia']);
 Route::post('/admin/about/gallery/store', [GalleryController::class, 'store'])->name('admin.about.gallery.store')->middleware(['role:Superadmin|HelperMedia']);
 Route::get('/admin/about/gallery/{id}/edit', [GalleryController::class, 'edit'])->name('admin.about.gallery.edit')->middleware(['role:Superadmin|HelperMedia']);
 Route::put('/admin/about/gallery/{id}/update', [GalleryController::class, 'update'])->name('admin.about.gallery.update')->middleware(['role:Superadmin|HelperMedia']);
-Route::get('/admin/about/gallery/{id}/destroy', [GalleryController::class, 'destroy'])->name('admin.about.gallery.destroy')->middleware(['role:Superadmin|HelperMedia']);
-Route::get('/admin/about/gallery/{id}/preview', [GalleryController::class, 'showInAdmin'])->name('admin.gallery.preview')->middleware(['role:Superadmin|HelperMedia']);
+Route::delete('/admin/about/gallery/{id}', [GalleryController::class, 'destroy'])->name('admin.about.gallery.destroy')->middleware(['role:Superadmin|HelperMedia']);
+Route::post('/admin/about/gallery/bulk-delete', [GalleryController::class, 'bulkDelete'])->name('admin.about.gallery.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/about/gallery/{id}/preview', [GalleryController::class, 'showAdmin'])->name('admin.gallery.preview')->middleware(['role:Superadmin|HelperMedia']);
 
 // Route AdminPage Structure
 Route::get('/admin/about/structure', [StructureController::class, 'indexadmin'])->name('admin.about.structure.index')->middleware(['role:Superadmin|HelperMedia']);
