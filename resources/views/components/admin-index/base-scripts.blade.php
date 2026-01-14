@@ -387,7 +387,7 @@
         });
 
         @if($deleteUrl)
-        $(document).on('click', '.delete-btn, .delete-report-btn, .delete-book-btn', function() {
+        $(document).on('click', '.delete-action-btn', function() {
             const itemId = $(this).data('id');
 
             Swal.fire({
