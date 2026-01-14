@@ -171,13 +171,14 @@ Route::get('/admin/about/contact/message/{id}/destroy', [MessageContactControlle
 Route::get('/admin/about/contact/message/{id}/preview', [MessageContactController::class, 'show'])->name('admin.about.contact.show')->middleware(['role:Superadmin|HelperMedia|HelperSPAM']);
 
 // Route AdminPage Home Jumbotron
-Route::get('/admin/jumbotron', [JumbotronController::class, 'index'])->name('admin.jumbotron.index')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
+Route::get('/admin/jumbotron', [JumbotronController::class, 'indexAdmin'])->name('admin.jumbotron.index')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
 Route::get('/admin/jumbotron/create', [JumbotronController::class, 'create'])->name('admin.jumbotron.create')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
 Route::post('/admin/jumbotron/store', [JumbotronController::class, 'store'])->name('admin.jumbotron.store')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
 Route::get('/admin/jumbotron/{id}/edit', [JumbotronController::class, 'edit'])->name('admin.jumbotron.edit')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
 Route::put('/admin/jumbotron/{id}/update', [JumbotronController::class, 'update'])->name('admin.jumbotron.update')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
-Route::get('/admin/jumbotron/{id}/destroy', [JumbotronController::class, 'destroy'])->name('admin.jumbotron.destroy')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
-Route::get('/admin/jumbotron/{id}/preview', [JumbotronController::class, 'show'])->name('admin.jumbotron.preview')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
+Route::delete('/admin/jumbotron/{id}', [JumbotronController::class, 'destroy'])->name('admin.jumbotron.destroy')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
+Route::post('/admin/jumbotron/bulk-delete', [JumbotronController::class, 'bulkDelete'])->name('admin.jumbotron.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/jumbotron/{id}/preview', [JumbotronController::class, 'showAdmin'])->name('admin.jumbotron.preview')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
 
 // Route AdminPage Home Testimony
 Route::get('/admin/testimony', [TestimonyController::class, 'index'])->name('admin.testimony.index')->middleware(['role:Superadmin|HelperAdmin|HelperSPAM|HelperMedia']);
