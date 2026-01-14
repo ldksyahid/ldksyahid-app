@@ -1,104 +1,97 @@
 @extends('admin-page.template.body')
 
-@section('head')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
-@endsection
+@php
+    // $isSuperadmin is automatically available via View Composer
+
+    // Guide Cards Config
+    $guideCards = [
+        [
+            'icon' => 'fa-plus-circle',
+            'title' => 'How to Add Testimony',
+            'description' => 'Click the <strong>"Add Testimony"</strong> button to create a new testimony. Fill in the name, profession, and testimony content.'
+        ],
+        [
+            'icon' => 'fa-search',
+            'title' => 'Search Feature',
+            'description' => 'Use the search filters to find testimonies by name or profession.'
+        ],
+        [
+            'icon' => 'fa-eye',
+            'title' => 'View Details',
+            'description' => 'Click <i class="fa fa-eye small"></i> to view complete testimony details including the profile picture.'
+        ],
+        [
+            'icon' => 'fa-edit',
+            'title' => 'Edit & Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit testimony details. Use <i class="fa fa-trash small text-danger"></i> to delete.'
+        ],
+    ];
+
+    // Columns Config
+    $columns = [
+        [
+            'key' => 'name',
+            'label' => 'Name',
+            'width' => '200px',
+            'sortable' => true,
+            'sortKey' => 'name',
+            'filter' => 'text',
+            'filterKey' => 'name',
+        ],
+        [
+            'key' => 'profession',
+            'label' => 'Profession',
+            'width' => '200px',
+            'sortable' => true,
+            'sortKey' => 'profession',
+            'filter' => 'text',
+            'filterKey' => 'profession',
+        ],
+        [
+            'key' => 'created_at',
+            'label' => 'Created At',
+            'width' => '180px',
+            'sortable' => true,
+            'sortKey' => 'created_at',
+            'filter' => 'daterange',
+            'filterKey' => 'created_at',
+        ],
+    ];
+
+    // Column Widths for CSS
+    $columnWidths = [
+        1 => '50px',   // Checkbox
+        2 => '50px',   // No
+        3 => '200px',  // Name
+        4 => '200px',  // Profession
+        5 => '180px',  // Created At
+        6 => '120px',  // Action
+    ];
+@endphp
 
 @section('content')
-<!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Testimony Management System</h5>
-                <a class='btn btn-primary' href="/admin/testimony/create"><i class="fa fa-plus"></i> Create Testimony</a>
-                {{-- START Data table Testimony --}}
-                <div class="mt-3">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped text-nowrap small" id="dataTestimony">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="text-center">No</th>
-                                    <th scope="col" class="text-center">Name</th>
-                                    <th scope="col" class="text-center">Profession</th>
-                                    <th scope="col" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($posttestimony as $key => $posttestimony)
-                                <tr>
-                                    <td scope="row" align='center'>{{$key + 1}}</td>
-                                    <td align="center">{{ $posttestimony->name }}</td>
-                                    <td align="center">{{ $posttestimony->profession }}</td>
-                                    <td align="center">
-                                        <a href="/admin/testimony/{{$posttestimony->id}}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
-                                        <button type="submit" onclick="deleteConfirmationTestimony({{$posttestimony->id}})" id="delete-testimony" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/admin/testimony/{{$posttestimony->id}}/preview"><i class="fa fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan='9', align='center'>No Testimony Data</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {{-- END Data table Testimony --}}
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Table End -->
-@endsection
-
-@section('scripts')
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-<script>
-// ===== START CRUD TESTIMONY =====
-// ini untuk konfirmasi delete
-        function deleteConfirmationTestimony(id) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500,
-                width: '350px',
-            })
-
-            Swal.fire({
-                title: 'Are you sure ?',
-                text: "You won't be able to revert this !",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $.ajax({
-                    type: "get",
-                    url: `{{ url('/admin/testimony/${id}/destroy') }}`,
-                        success: function(data) {
-                            setTimeout(function () { location.reload(1); }, 300);
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Testimony has been deleted !'
-                            });
-                        }
-                    });
-
-                }
-            })
-        }
-// ===== END CRUD TESTIMONY =====
-</script>
-<script>
-    $('#dataTestimony').DataTable({
-        responsive: true,
-        fixedHeader: true,
-    });
-</script>
+<x-admin-index.template
+    pageTitle="Testimony Management"
+    pageIcon="fa-comments"
+    highlightedText="Testimony Management System"
+    :guideCards="$guideCards"
+    addButtonText="Add Testimony"
+    addButtonRoute="admin.testimony.create"
+    tableClass="table-testimonies"
+    tableId="dataTestimonyTable"
+    tableBodyId="testimonyTableBody"
+    :columns="$columns"
+    :columnWidths="$columnWidths"
+    ajaxUrl="{{ route('admin.testimony.index') }}"
+    csrfToken="{{ csrf_token() }}"
+    deleteUrl="{{ url('admin/testimony') }}"
+    bulkDeleteUrl="{{ route('admin.testimony.bulk-delete') }}"
+    :includeSelect2="false"
+    defaultSortBy="created_at"
+    defaultSortOrder="desc"
+    entityName="testimonies"
+    entityIcon="fa-comments"
+    dateRangeField="created_at"
+    :isSuperadmin="$isSuperadmin"
+/>
 @endsection
