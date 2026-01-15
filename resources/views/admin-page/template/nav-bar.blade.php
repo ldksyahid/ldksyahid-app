@@ -102,7 +102,7 @@
                 </li>
                 @if($breadcrumb['hasParent'])
                 <li class="breadcrumb-item">
-                    <i class="fas {{ $breadcrumb['parentIcon'] }} me-1 text-muted small"></i>
+                    <i class="fas {{ $breadcrumb['parentIcon'] }} me-1 text-primary"></i>
                     <span class="text-muted">{{ $breadcrumb['parent'] }}</span>
                 </li>
                 @endif
