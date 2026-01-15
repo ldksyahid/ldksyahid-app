@@ -242,13 +242,15 @@ Route::post('/admin/about/gallery/bulk-delete', [GalleryController::class, 'bulk
 Route::get('/admin/about/gallery/{id}/preview', [GalleryController::class, 'showAdmin'])->name('admin.gallery.preview')->middleware(['role:Superadmin|HelperMedia']);
 
 // Route AdminPage Structure
-Route::get('/admin/about/structure', [StructureController::class, 'indexadmin'])->name('admin.about.structure.index')->middleware(['role:Superadmin|HelperMedia']);
+// Route AdminPage Structure
+Route::get('/admin/about/structure', [StructureController::class, 'indexAdmin'])->name('admin.about.structure.index')->middleware(['role:Superadmin|HelperMedia']);
 Route::get('/admin/about/structure/create', [StructureController::class, 'create'])->name('admin.about.structure.create')->middleware(['role:Superadmin|HelperMedia']);
 Route::post('/admin/about/structure/store', [StructureController::class, 'store'])->name('admin.about.structure.store')->middleware(['role:Superadmin|HelperMedia']);
 Route::get('/admin/about/structure/{id}/edit', [StructureController::class, 'edit'])->name('admin.about.structure.edit')->middleware(['role:Superadmin|HelperMedia']);
 Route::put('/admin/about/structure/{id}/update', [StructureController::class, 'update'])->name('admin.about.structure.update')->middleware(['role:Superadmin|HelperMedia']);
-Route::get('/admin/about/structure/{id}/destroy', [StructureController::class, 'destroy'])->name('admin.about.structure.destroy')->middleware(['role:Superadmin|HelperMedia']);
-Route::get('/admin/about/structure/{id}/preview', [StructureController::class, 'showInAdmin'])->name('admin.about.structure.preview')->middleware(['role:Superadmin|HelperMedia']);
+Route::delete('/admin/about/structure/{id}', [StructureController::class, 'destroy'])->name('admin.about.structure.destroy')->middleware(['role:Superadmin|HelperMedia']);
+Route::post('/admin/about/structure/bulk-delete', [StructureController::class, 'bulkDelete'])->name('admin.about.structure.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/about/structure/{id}/preview', [StructureController::class, 'showAdmin'])->name('admin.about.structure.preview')->middleware(['role:Superadmin|HelperMedia']);
 
 // Route AdminPage Request Service Shortlink
 Route::get('/admin/reqservice/shortlink', [RequestShortlinkController::class, 'index'])->name('admin.reqservice.shortlink.index')->middleware(['role:Superadmin|HelperMedia']);
