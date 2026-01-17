@@ -74,12 +74,12 @@
                                         @else
                                             <input type="text" class="form-control @error('batch') is-invalid @enderror" id="batch" name="batch"
                                                 value="{{ old('batch', $structure->batch ?? '') }}"
-                                                placeholder="e.g., 2023"
+                                                placeholder="e.g., 25"
                                                 required>
                                             @error('batch')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
-                                            <div class="form-text">Enter the batch number/year</div>
+                                            <div class="form-text">Enter the batch number</div>
                                         @endif
                                     </div>
 
@@ -92,12 +92,12 @@
                                         @else
                                             <input type="text" class="form-control @error('period') is-invalid @enderror" id="period" name="period"
                                                 value="{{ old('period', $structure->period ?? '') }}"
-                                                placeholder="e.g., 2023-2024"
+                                                placeholder="e.g., 2023"
                                                 required>
                                             @error('period')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
-                                            <div class="form-text">Enter the period (e.g., 2023-2024)</div>
+                                            <div class="form-text">Enter the period (e.g., 2023)</div>
                                         @endif
                                     </div>
                                 </div>
