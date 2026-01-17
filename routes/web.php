@@ -261,14 +261,19 @@ Route::get('/admin/reqservice/shortlink/{id}/addcustomlink', [RequestShortlinkCo
 Route::get('/admin/reqservice/shortlink/{id}/addcustomlink/update', [RequestShortlinkController::class, 'addFixCustomLinkUpdate'])->name('admin.reqservice.shortlink.addFixCustomLinkUpdate')->middleware(['role:Superadmin|HelperMedia']);
 
 // Route AdminPage Service Call Kestari
-Route::get('/admin/service/callkestari', [CallKestariController::class, 'indexadmin'])->name('admin.service.callkestari.index')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
-Route::get('/admin/service/callkestari/read', [CallKestariController::class, 'read'])->name('admin.service.callkestari.read')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
-Route::get('/admin/service/callkestari/create', [CallKestariController::class, 'create'])->name('admin.service.callkestari.create')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
-Route::get('/admin/service/callkestari/store', [CallKestariController::class, 'store'])->name('admin.service.callkestari.store')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
-Route::get('/admin/service/callkestari/edit/{id}', [CallKestariController::class, 'edit'])->name('admin.service.callkestari.edit')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
-Route::get('/admin/service/callkestari/update/{id}', [CallKestariController::class, 'update'])->name('admin.service.callkestari.update')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
-Route::get('/admin/service/callkestari/destroy/{id}', [CallKestariController::class, 'destroy'])->name('admin.service.callkestari.destroy')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
-Route::get('/admin/service/callkestari/preview/{id}', [CallKestariController::class, 'showInAdmin'])->name('admin.service.callkestari.preview')->middleware(['role:Superadmin|HelperLetter|HelperMedia']);
+Route::middleware(['role:Superadmin|HelperLetter|HelperMedia'])
+    ->prefix('/admin/service/callkestari')
+    ->name('admin.service.callkestari.')
+    ->group(function () {
+        Route::get('/', [CallKestariController::class, 'indexAdmin'])->name('index');
+        Route::get('/create', [CallKestariController::class, 'create'])->name('create');
+        Route::post('/', [CallKestariController::class, 'store'])->name('store');
+        Route::get('/{callKestari}', [CallKestariController::class, 'showAdmin'])->name('show');
+        Route::get('/{callKestari}/edit', [CallKestariController::class, 'edit'])->name('edit');
+        Route::put('/{callKestari}', [CallKestariController::class, 'update'])->name('update');
+        Route::delete('/{callKestari}', [CallKestariController::class, 'destroy'])->name('destroy');
+        Route::post('/bulk-delete', [CallKestariController::class, 'bulkDelete'])->name('bulk-delete');
+    });
 
 // Route AdminPage IT Support
 Route::get('/admin/about/itsupport', [ITSupportController::class, 'indexadmin'])->name('admin.about.itsupport.index')->middleware(['role:Superadmin']);
