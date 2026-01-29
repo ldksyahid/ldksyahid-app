@@ -254,12 +254,12 @@ Route::post('/admin/about/structure/bulk-delete', [StructureController::class, '
 Route::get('/admin/about/structure/{id}/preview', [StructureController::class, 'showAdmin'])->name('admin.about.structure.preview')->middleware(['role:Superadmin|HelperMedia']);
 
 // Route AdminPage Request Service Shortlink
-Route::get('/admin/reqservice/shortlink', [RequestShortlinkController::class, 'index'])->name('admin.reqservice.shortlink.index')->middleware(['role:Superadmin|HelperMedia']);
-Route::get('/admin/reqservice/shortlink/read', [RequestShortlinkController::class, 'read'])->name('admin.reqservice.shortlink.read')->middleware(['role:Superadmin|HelperMedia']);
-Route::get('/admin/reqservice/shortlink/{id}/destroy', [RequestShortlinkController::class, 'destroy'])->name('admin.reqservice.shortlink.destroy')->middleware(['role:Superadmin|HelperMedia']);
-Route::get('/admin/reqservice/shortlink/{id}/preview', [RequestShortlinkController::class, 'show'])->name('admin.reqservice.shortlink.show')->middleware(['role:Superadmin|HelperMedia']);
-Route::get('/admin/reqservice/shortlink/{id}/addcustomlink', [RequestShortlinkController::class, 'addFixCustomLinkEdit'])->name('admin.reqservice.shortlink.addFixCustomLinkEdit')->middleware(['role:Superadmin|HelperMedia']);
-Route::get('/admin/reqservice/shortlink/{id}/addcustomlink/update', [RequestShortlinkController::class, 'addFixCustomLinkUpdate'])->name('admin.reqservice.shortlink.addFixCustomLinkUpdate')->middleware(['role:Superadmin|HelperMedia']);
+Route::get('/admin/reqservice/shortlink', [RequestShortlinkController::class, 'indexAdmin'])->name('admin.reqservice.shortlink.index')->middleware(['role:Superadmin|HelperMedia']);
+Route::get('/admin/reqservice/shortlink/{id}/edit', [RequestShortlinkController::class, 'edit'])->name('admin.reqservice.shortlink.edit')->middleware(['role:Superadmin|HelperMedia']);
+Route::put('/admin/reqservice/shortlink/{id}/update', [RequestShortlinkController::class, 'update'])->name('admin.reqservice.shortlink.update')->middleware(['role:Superadmin|HelperMedia']);
+Route::delete('/admin/reqservice/shortlink/{id}', [RequestShortlinkController::class, 'destroy'])->name('admin.reqservice.shortlink.destroy')->middleware(['role:Superadmin|HelperMedia']);
+Route::post('/admin/reqservice/shortlink/bulk-delete', [RequestShortlinkController::class, 'bulkDelete'])->name('admin.reqservice.shortlink.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/reqservice/shortlink/{id}/preview', [RequestShortlinkController::class, 'showAdmin'])->name('admin.reqservice.shortlink.show')->middleware(['role:Superadmin|HelperMedia']);
 
 // Route AdminPage Service Call Kestari
 Route::middleware(['role:Superadmin|HelperLetter|HelperMedia'])

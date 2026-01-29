@@ -6,7 +6,7 @@
 
 @section('content')
     @include('admin-page.service-request.short-link.components._form._form', [
-        'operation' => 'view',
+        'operation' => 'update',
         'reqshortlink' => $reqshortlink
     ])
 @endsection
