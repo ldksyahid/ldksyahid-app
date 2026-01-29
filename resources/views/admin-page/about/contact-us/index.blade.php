@@ -1,125 +1,106 @@
 @extends('admin-page.template.body')
 
-@section('head')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
-@endsection
+@php
+    // $isSuperadmin is automatically available via View Composer
+
+    // Guide Cards Config
+    $guideCards = [
+        [
+            'icon' => 'fa-envelope',
+            'title' => 'Contact Messages',
+            'description' => 'View all contact messages submitted by visitors through the contact form.'
+        ],
+        [
+            'icon' => 'fa-search',
+            'title' => 'Search Feature',
+            'description' => 'Use the dropdown filters to find messages by sender name or subject.'
+        ],
+        [
+            'icon' => 'fa-eye',
+            'title' => 'View Details',
+            'description' => 'Click <i class="fa fa-eye small"></i> to view the complete message details.'
+        ],
+        [
+            'icon' => 'fa-trash',
+            'title' => 'Delete Messages',
+            'description' => 'Use <i class="fa fa-trash small text-danger"></i> to delete messages. Superadmins can perform bulk delete.'
+        ],
+    ];
+
+    // Columns Config
+    $columns = [
+        [
+            'key' => 'name',
+            'label' => 'Name',
+            'width' => '180px',
+            'sortable' => true,
+            'sortKey' => 'name',
+            'filter' => 'select',
+            'filterKey' => 'name',
+            'options' => $nameOptions ?? [],
+        ],
+        [
+            'key' => 'email',
+            'label' => 'Email',
+            'width' => '200px',
+            'sortable' => true,
+            'sortKey' => 'email',
+        ],
+        [
+            'key' => 'subject',
+            'label' => 'Subject',
+            'width' => '200px',
+            'sortable' => true,
+            'sortKey' => 'subject',
+            'filter' => 'select',
+            'filterKey' => 'subject',
+            'options' => $subjectOptions ?? [],
+        ],
+        [
+            'key' => 'created_at',
+            'label' => 'Date',
+            'width' => '180px',
+            'sortable' => true,
+            'sortKey' => 'created_at',
+            'filter' => 'daterange',
+            'filterKey' => 'created_at',
+        ],
+    ];
+
+    // Column Widths for CSS
+    $columnWidths = [
+        1 => '50px',   // Checkbox
+        2 => '50px',   // No
+        3 => '180px',  // Name
+        4 => '200px',  // Email
+        5 => '200px',  // Subject
+        6 => '180px',  // Date
+        7 => '120px',  // Action
+    ];
+@endphp
 
 @section('content')
-<!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Contact Message Management System</h5>
-                <div  class="mt-3">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped text-nowrap small" id="dataContactUs">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="text-center">No</th>
-                                    <th scope="col" class="text-center">Name</th>
-                                    <th scope="col" class="text-center">Subject</th>
-                                    <th scope="col" class="text-center">Date</th>
-                                    <th scope="col" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($data as $key => $item)
-                                <tr>
-                                    <td scope="row" align='center'>{{$key + 1}}</td>
-                                    <td align='center'>{{$item->name}}</td>
-                                    <td align='center'>{{$item->subject}}</td>
-                                    <td align='center'>{{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $item->created_at )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $item->created_at )->format('Y') }}</td>
-                                    <td align="center">
-                                        <button class="btn btn-sm btn-primary" onClick="destroycontactmessage({{ $item->id }})"><i class="fa fa-trash"></i></button>
-                                        <button class="btn btn-sm btn-primary" onClick="preview({{ $item->id }})"><i class="fa fa-eye"></i></button>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan='9', align='center'>No Contact Message Data</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Table End -->
-<!-- Modal -->
-<div class="modal fade" id="modalCrudContactMessage" tabindex="-1" aria-labelledby="modalLabelContactMessage" aria-hidden="true">
-    <div class="modal-dialog modal-lg ">
-        <div class="modal-content bg-light rounded h-100 p-4">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabelContactMessage">Modal title</h5>
-                <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="pagecontactmessage"></div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
-
-@section('scripts')
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-<script>
-    // ===== START CRUD CONTACT MESSAGE =====
-    // untuk destroy database
-    function destroycontactmessage(id) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500,
-            width: '350px',
-        })
-
-        Swal.fire({
-            title: 'Are you sure ?',
-            text: "You won't be able to revert this !",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                type: "get",
-                url: `{{ url('/admin/about/contact/message/${id}/destroy') }}`,
-                data: {},
-                    success: function(data) {
-                        $(".btn-close").click();
-                        setTimeout(function () { location.reload(1); }, 300);
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Message has been deleted !'
-                        });
-                    }
-                });
-            }
-        })
-    }
-
-    // untuk modal preview
-    function preview(id) {
-        $.get(`{{ url('/admin/about/contact/message/${id}/preview') }}`, {}, function(data, status) {
-            $("#modalLabelContactMessage").html('Preview Message')
-            $("#pagecontactmessage").html(data);
-            $("#modalCrudContactMessage").modal('show');
-        });
-    }
-    // ===== END CRUD CONTACT MESSAGE =====
-</script>
-<script>
-    $('#dataContactUs').DataTable({
-        responsive: true,
-        fixedHeader: true,
-    });
-</script>
+<x-admin-index.template
+    pageTitle="Contact Message Management"
+    pageIcon="fa-envelope"
+    highlightedText="Contact Message Management System"
+    :guideCards="$guideCards"
+    :showAddButton="false"
+    tableClass="table-messages"
+    tableId="dataMessageTable"
+    tableBodyId="messageTableBody"
+    :columns="$columns"
+    :columnWidths="$columnWidths"
+    ajaxUrl="{{ route('admin.about.contact.index') }}"
+    csrfToken="{{ csrf_token() }}"
+    deleteUrl="{{ url('admin/about/contact/message') }}"
+    bulkDeleteUrl="{{ route('admin.about.contact.bulk-delete') }}"
+    :includeSelect2="true"
+    defaultSortBy="created_at"
+    defaultSortOrder="desc"
+    entityName="messages"
+    entityIcon="fa-envelope"
+    dateRangeField="created_at"
+    :isSuperadmin="$isSuperadmin"
+/>
 @endsection

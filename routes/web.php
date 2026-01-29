@@ -166,9 +166,10 @@ Route::post('/admin/user/bulk-delete', [UserController::class, 'bulkDelete'])->n
 Route::get('/admin/user/{id}/preview', [UserController::class, 'showAdmin'])->name('admin.user.preview')->middleware(['role:Superadmin']);
 
 // Route AdminPage AboutUs in Contact Message
-Route::get('/admin/about/contact/message', [MessageContactController::class, 'index'])->name('admin.about.contact.index')->middleware(['role:Superadmin|HelperMedia|HelperSPAM']);
-Route::get('/admin/about/contact/message/{id}/destroy', [MessageContactController::class, 'destroy'])->name('admin.about.contact.destroy')->middleware(['role:Superadmin|HelperMedia|HelperSPAM']);
-Route::get('/admin/about/contact/message/{id}/preview', [MessageContactController::class, 'show'])->name('admin.about.contact.show')->middleware(['role:Superadmin|HelperMedia|HelperSPAM']);
+Route::get('/admin/about/contact/message', [MessageContactController::class, 'indexAdmin'])->name('admin.about.contact.index')->middleware(['role:Superadmin|HelperMedia|HelperSPAM']);
+Route::delete('/admin/about/contact/message/{id}', [MessageContactController::class, 'destroy'])->name('admin.about.contact.destroy')->middleware(['role:Superadmin|HelperMedia|HelperSPAM']);
+Route::post('/admin/about/contact/message/bulk-delete', [MessageContactController::class, 'bulkDelete'])->name('admin.about.contact.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/about/contact/message/{id}/preview', [MessageContactController::class, 'showAdmin'])->name('admin.about.contact.show')->middleware(['role:Superadmin|HelperMedia|HelperSPAM']);
 
 // Route AdminPage Home Jumbotron
 Route::get('/admin/jumbotron', [JumbotronController::class, 'indexAdmin'])->name('admin.jumbotron.index')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia']);
