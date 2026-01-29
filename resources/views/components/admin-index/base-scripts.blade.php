@@ -69,6 +69,16 @@
     });
     window.Toast = Toast;
 
+    // Copy link function (used by copy-button, destination-link, shortlink, url-key column types)
+    const baseUrl = '{{ url('/') }}';
+    window.copyLink = function(urlKey, withBaseUrl) {
+        if (withBaseUrl === undefined) withBaseUrl = true;
+        var link = withBaseUrl ? baseUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') + '/' + urlKey : urlKey;
+        navigator.clipboard.writeText(link).then(function() {
+            Toast.fire({ icon: 'success', title: 'Copied to clipboard!' });
+        });
+    };
+
     // State Variables
     let sortBy = '{{ request("sort_by", $defaultSortBy) }}';
     let sortOrder = '{{ request("sort_order", $defaultSortOrder) }}';
