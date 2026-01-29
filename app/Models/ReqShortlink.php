@@ -36,7 +36,7 @@ class ReqShortlink extends Model
             'idKey' => 'id',
             'emptyMessage' => 'No request shortlink found',
             'emptyIcon' => 'fa-link',
-            'colspan' => 8,
+            'colspan' => 9,
             'columns' => [
                 [
                     'key' => 'name',
@@ -82,6 +82,20 @@ class ReqShortlink extends Model
                 'delete' => [
                     'enabled' => true,
                     'btnClass' => 'delete-reqshortlink-btn',
+                ],
+                'custom' => [
+                    [
+                        'enabled' => true,
+                        'icon' => 'fa-paper-plane',
+                        'class' => 'btn-primary',
+                        'title' => 'Send via WhatsApp',
+                        'target' => '_blank',
+                        'urlBuilder' => function ($item) {
+                            $adminName = \Illuminate\Support\Facades\Auth::user()->name ?? '';
+                            return "https://api.whatsapp.com/send?phone={$item->whatsapp}&text="
+                                . urlencode("*[KUSTOM URL KAMU SUDAH JADI]*\n\n_Assalammu'alaikum_\n\nHalo {$item->name} 😀, Perkenalkan Saya _{$adminName}_, Berikut hasil link yang telah kami Kustom menggunakan layanan kami :\n\n{$item->fixCustomLink}\n\n**Link Tersebut Wajib digunakan dengan Sebagaimana Mestinya*\n\nTerimakasih {$item->name} karena telah menggunakan layanan kami 😉\n\n_Wassalammua'laikum_\n\n#KitaAdalahSaudara\n#LDKSyahid\n#PijarAskara\n#UINJakarta");
+                        },
+                    ],
                 ],
             ],
         ];
