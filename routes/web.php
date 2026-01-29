@@ -277,13 +277,14 @@ Route::middleware(['role:Superadmin|HelperLetter|HelperMedia'])
     });
 
 // Route AdminPage IT Support
-Route::get('/admin/about/itsupport', [ITSupportController::class, 'indexadmin'])->name('admin.about.itsupport.index')->middleware(['role:Superadmin']);
+Route::get('/admin/about/itsupport', [ITSupportController::class, 'indexAdmin'])->name('admin.about.itsupport.index')->middleware(['role:Superadmin']);
 Route::get('/admin/about/itsupport/create', [ITSupportController::class, 'create'])->name('admin.about.itsupport.create')->middleware(['role:Superadmin']);
 Route::post('/admin/about/itsupport/store', [ITSupportController::class, 'store'])->name('admin.about.itsupport.store')->middleware(['role:Superadmin']);
 Route::get('/admin/about/itsupport/{id}/edit', [ITSupportController::class, 'edit'])->name('admin.about.itsupport.edit')->middleware(['role:Superadmin']);
 Route::put('/admin/about/itsupport/{id}/update', [ITSupportController::class, 'update'])->name('admin.about.itsupport.update')->middleware(['role:Superadmin']);
-Route::get('/admin/about/itsupport/{id}/destroy', [ITSupportController::class, 'destroy'])->name('admin.about.itsupport.destroy')->middleware(['role:Superadmin']);
-Route::get('/admin/about/itsupport/{id}/preview', [ITSupportController::class, 'showInAdmin'])->name('admin.about.itsupport.preview')->middleware(['role:Superadmin']);
+Route::delete('/admin/about/itsupport/{id}', [ITSupportController::class, 'destroy'])->name('admin.about.itsupport.destroy')->middleware(['role:Superadmin']);
+Route::post('/admin/about/itsupport/bulk-delete', [ITSupportController::class, 'bulkDelete'])->name('admin.about.itsupport.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/about/itsupport/{id}/preview', [ITSupportController::class, 'showAdmin'])->name('admin.about.itsupport.preview')->middleware(['role:Superadmin']);
 
 // Route AdminPage Service Campaign
 Route::get('/admin/service/celengansyahid/dashboard', [CelenganSyahidController::class, 'dashboardCelenganSyahid'])->name('admin.service.index.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
