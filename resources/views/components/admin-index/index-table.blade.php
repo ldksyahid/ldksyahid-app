@@ -127,11 +127,14 @@
 
                     @case('copy-button')
                         @if($value)
+                            @php
+                                $fullUrl = ($col['copyWithBaseUrl'] ?? false) ? url(($col['linkPrefix'] ?? '') . $value) : (($col['linkPrefix'] ?? '') . $value);
+                            @endphp
                             <button class="btn btn-sm btn-primary" onclick="copyLink('{{ $value }}', {{ ($col['copyWithBaseUrl'] ?? false) ? 'true' : 'false' }})">
                                 <i class="fa fa-copy small"></i>
                             </button>
                             @if(isset($col['showAsLink']) && $col['showAsLink'])
-                                <a href="{{ $col['linkPrefix'] ?? '' }}{{ $value }}" target="_blank">{{ $value }}</a>
+                                <a href="{{ $fullUrl }}" target="_blank">{{ $fullUrl }}</a>
                             @else
                                 {{ $value }}
                             @endif

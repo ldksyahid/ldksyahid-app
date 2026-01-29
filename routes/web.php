@@ -307,7 +307,8 @@ Route::middleware(['role:Superadmin|HelperLetter'])->prefix('/admin/ktaldksyahid
     Route::get('/create', [MsKTALDKSyahidController::class, 'create'])->name('admin.ktaldksyahid.create');
     Route::post('/get-major', [MsKTALDKSyahidController::class, 'getMajor'])->name('admin.ktaldksyahid.getMajor');
     Route::post('/store', [MsKTALDKSyahidController::class, 'store'])->name('admin.ktaldksyahid.store');
-    Route::get('/{id}/destroy', [MsKTALDKSyahidController::class, 'destroy'])->name('admin.ktaldksyahid.destroy');
+    Route::delete('/{id}', [MsKTALDKSyahidController::class, 'destroy'])->name('admin.ktaldksyahid.destroy');
+    Route::post('/bulk-delete', [MsKTALDKSyahidController::class, 'bulkDelete'])->name('admin.ktaldksyahid.bulk-delete')->middleware(['role:Superadmin']);
     Route::get('/{id}/preview', [MsKTALDKSyahidController::class, 'preview'])->name('admin.ktaldksyahid.preview');
     Route::get('/{id}/edit', [MsKTALDKSyahidController::class, 'edit'])->name('admin.ktaldksyahid.edit');
     Route::put('/{id}/update', [MsKTALDKSyahidController::class, 'update'])->name('admin.ktaldksyahid.update');

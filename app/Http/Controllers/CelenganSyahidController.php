@@ -183,11 +183,11 @@ class CelenganSyahidController extends Controller
 
     public function dashboardCelenganSyahid()
     {
-        $pythonExecutable = '/home/ldksyah1/virtualenv/ucupspython/3.9/bin/python';
-        // $pythonExecutable = 'C:\Users\hp\AppData\Local\Programs\Python\Python311\python.exe';
+        // $pythonExecutable = '/home/ldksyah1/virtualenv/ucupspython/3.9/bin/python';
+        $pythonExecutable = 'C:\Users\ESB\AppData\Local\Programs\Python\Python313\python.exe';
 
-        $scriptPath = '/home/ldksyah1/public_html/public/machine-learning/models/donation-class-machine.py';
-        // $scriptPath = 'machine-learning/models/donation-class-machine.py';
+        // $scriptPath = '/home/ldksyah1/public_html/public/machine-learning/models/donation-class-machine.py';
+        $scriptPath = 'machine-learning/models/donation-class-machine.py';
 
         $command = [
             $pythonExecutable,
