@@ -1,162 +1,114 @@
 @extends('admin-page.template.body')
 
-@section('head')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
-@endsection
+@php
+    // $isSuperadmin is automatically available via View Composer
+
+    // Guide Cards Config
+    $guideCards = [
+        [
+            'icon' => 'fa-link',
+            'title' => 'Request Shortlinks',
+            'description' => 'View all shortlink requests submitted by users. Edit to add the final custom link.'
+        ],
+        [
+            'icon' => 'fa-search',
+            'title' => 'Search Feature',
+            'description' => 'Use the dropdown filters to find requests by name, status, or date range.'
+        ],
+        [
+            'icon' => 'fa-eye',
+            'title' => 'View Details',
+            'description' => 'Click <i class="fa fa-eye small"></i> to view full request details and send WhatsApp notification.'
+        ],
+        [
+            'icon' => 'fa-edit',
+            'title' => 'Edit & Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to add or edit the fix custom link. Use <i class="fa fa-trash small text-danger"></i> to delete.'
+        ],
+    ];
+
+    // Columns Config
+    $columns = [
+        [
+            'key' => 'name',
+            'label' => 'Full Name',
+            'width' => '180px',
+            'sortable' => true,
+            'sortKey' => 'name',
+            'filter' => 'select',
+            'filterKey' => 'name',
+            'options' => $nameOptions ?? [],
+        ],
+        [
+            'key' => 'whatsapp',
+            'label' => 'Whatsapp',
+            'width' => '150px',
+            'sortable' => true,
+            'sortKey' => 'whatsapp',
+        ],
+        [
+            'key' => 'customLink',
+            'label' => 'Custom Link',
+            'width' => '180px',
+            'sortable' => true,
+            'sortKey' => 'customLink',
+        ],
+        [
+            'key' => 'fixCustomLink',
+            'label' => 'Fix Custom Link',
+            'width' => '180px',
+            'sortable' => false,
+            'filter' => 'select',
+            'filterKey' => 'status',
+            'placeholder' => 'All Status',
+            'options' => $statusOptions ?? [],
+        ],
+        [
+            'key' => 'created_at',
+            'label' => 'Date',
+            'width' => '180px',
+            'sortable' => true,
+            'sortKey' => 'created_at',
+            'filter' => 'daterange',
+            'filterKey' => 'created_at',
+        ],
+    ];
+
+    // Column Widths for CSS
+    $columnWidths = [
+        1 => '50px',   // Checkbox
+        2 => '50px',   // No
+        3 => '180px',  // Full Name
+        4 => '150px',  // Whatsapp
+        5 => '180px',  // Custom Link
+        6 => '180px',  // Fix Custom Link
+        7 => '180px',  // Date
+        8 => '120px',  // Action
+    ];
+@endphp
 
 @section('content')
-<!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-lg-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Request Shortlink Management System</h5>
-                {{-- START Data Request Shortlink --}}
-                <div id="readReqShortlink" class="mt-3"></div>
-                {{-- END Data Request Shortlink --}}
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Table End -->
-<!-- Modal -->
-<div class="modal fade" id="modalCrudReqShortlink" tabindex="-1" aria-labelledby="modalLabelCrudReqShortlink" aria-hidden="true">
-    <div class="modal-dialog modal-lg ">
-        <div class="modal-content bg-light rounded h-100 p-4">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabelCrudReqShortlink">Modal title</h5>
-                <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="pageReqShortlink"></div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
-
-@section('scripts')
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-<script>
-    // ===== START CRUD USER =====
-    // untuk load database
-    $(document).ready(function(){
-        read();
-    });
-
-
-    //untuk read database
-    function read() {
-        $.get("{{ url('/admin/reqservice/shortlink/read') }}", {}, function(data, status){
-            $('#readReqShortlink').html(data);
-        });
-    }
-
-    // Untuk modal halaman edit show
-    function addFixCustomLink(id) {
-        $.get(`{{ url('/admin/reqservice/shortlink/${id}/addcustomlink') }}`, {}, function(data, status) {
-            $("#modalLabelCrudReqShortlink").html('Edit Request Shortlink')
-            $("#pageReqShortlink").html(data);
-            $("#modalCrudReqShortlink").modal('show');
-        });
-    }
-
-    // untuk update database
-    function updateFixCustomLink(id) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500,
-            width: '350px',
-        })
-        var name = $("#name").val();
-        var email = $("#email").val();
-        var whatsapp = $("#whatsapp").val();
-        var defaultLink = $("#defaultLink").val();
-        var customLink = $("#customLink").val();
-        var note = $("#note").val();
-        var fixCustomLink = $("#fixCustomLink").val();
-        console.log(customLink );
-        $.ajax({
-            type: "get",
-            url: `{{ url('/admin/reqservice/shortlink/${id}/addcustomlink/update') }}`,
-            data: {
-                name: name,
-                email: email,
-                whatsapp: whatsapp,
-                defaultLink: defaultLink,
-                customLink: customLink,
-                note: note,
-                fixCustomLink: fixCustomLink },
-            success: function(data) {
-                if($.isEmptyObject(data.error)){
-                    $(".btn-close").click();
-                    read();
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Request Shortlink has been updated !'
-                    });
-                }else{
-                    printErrorMsg(data.error);
-                }
-
-            }
-        });
-    }
-
-    function printErrorMsg (msg) {
-        $(".print-error-msg").find("ul").html('');
-        $(".print-error-msg").css('display','block');
-        $.each( msg, function( key, value ) {
-            $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
-        });
-    }
-
-    // untuk destroy database
-    function destroyReqShortlink(id) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500,
-            width: '350px',
-        })
-
-        Swal.fire({
-            title: 'Are you sure ?',
-            text: "You won't be able to revert this !",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "get",
-                    url: `{{ url('/admin/reqservice/shortlink/${id}/destroy') }}`,
-                    success: function(data) {
-                        $(".btn-close").click();
-                        read();
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Request Shortlink has been deleted !'
-                        });
-                    }
-                });
-            }
-        })
-    }
-
-    // untuk modal preview
-    function previewReqShortlink(id) {
-        $.get(`{{ url('/admin/reqservice/shortlink/${id}/preview') }}`, {}, function(data, status) {
-            $("#modalLabelCrudReqShortlink").html('Preview Request Shortlink')
-            $("#pageReqShortlink").html(data);
-            $("#modalCrudReqShortlink").modal('show');
-        });
-    }
-    // ===== END CRUD USER =====
-</script>
+<x-admin-index.template
+    pageTitle="Request Shortlink Management"
+    pageIcon="fa-link"
+    highlightedText="Request Shortlink Management System"
+    :guideCards="$guideCards"
+    :showAddButton="false"
+    tableClass="table-reqshortlinks"
+    tableId="dataReqShortlinkTable"
+    tableBodyId="reqshortlinkTableBody"
+    :columns="$columns"
+    :columnWidths="$columnWidths"
+    ajaxUrl="{{ route('admin.reqservice.shortlink.index') }}"
+    csrfToken="{{ csrf_token() }}"
+    deleteUrl="{{ url('admin/reqservice/shortlink') }}"
+    bulkDeleteUrl="{{ route('admin.reqservice.shortlink.bulk-delete') }}"
+    :includeSelect2="true"
+    defaultSortBy="created_at"
+    defaultSortOrder="desc"
+    entityName="request shortlinks"
+    entityIcon="fa-link"
+    dateRangeField="created_at"
+    :isSuperadmin="$isSuperadmin"
+/>
 @endsection

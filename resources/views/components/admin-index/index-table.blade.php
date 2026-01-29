@@ -270,6 +270,28 @@
                         <i class="fa fa-trash"></i>
                     </button>
                 @endif
+
+                {{-- Custom Action Buttons --}}
+                @if(isset($actions['custom']) && is_array($actions['custom']))
+                    @foreach($actions['custom'] as $customAction)
+                        @if($customAction['enabled'] ?? true)
+                            @php
+                                $customUrl = '';
+                                if (isset($customAction['urlBuilder'])) {
+                                    $customUrl = $customAction['urlBuilder']($item);
+                                } elseif (isset($customAction['route'])) {
+                                    $customUrl = route($customAction['route'], $item->{$customAction['routeKey'] ?? $idKey});
+                                }
+                            @endphp
+                            <a href="{{ $customUrl }}"
+                               target="{{ $customAction['target'] ?? '_self' }}"
+                               class="btn btn-sm {{ $customAction['class'] ?? 'btn-success' }}"
+                               title="{{ $customAction['title'] ?? '' }}">
+                                <i class="fa {{ $customAction['icon'] ?? 'fa-link' }}" style="color: white;"></i>
+                            </a>
+                        @endif
+                    @endforeach
+                @endif
             </div>
         </td>
     </tr>
