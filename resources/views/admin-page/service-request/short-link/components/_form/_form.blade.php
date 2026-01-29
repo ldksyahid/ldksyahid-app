@@ -238,10 +238,6 @@
                         <a href="{{ route('admin.reqservice.shortlink.index') }}" class="btn btn-secondary">
                             <i class="fa fa-arrow-left me-1"></i> Back
                         </a>
-                        <a href="https://api.whatsapp.com/send?phone={{ $reqshortlink->whatsapp }}&text=*%5BKUSTOM%20URL%20KAMU%20SUDAH%20JADI%5D*%0A%0A_Assalammu%27alaikum_%0A%0AHalo%20{{ $reqshortlink->name }}%20%F0%9F%98%80%2C%20Perkenalkan%20Saya%20_{{ Auth::User()->name }}_%2C%20Berikut%20hasil%20link%20yang%20telah%20kami%20Kustom%20menggunakan%20layanan%20kami%20%3A%0A%0A{{ $reqshortlink->fixCustomLink }}%0A%0A**Link%20Tersebut%20Wajib%20digunakan%20dengan%20Sebagaimana%20Mestinya*%0A%0ATerimakasih%20{{ $reqshortlink->name }}%20karena%20telah%20menggunakan%20layanan%20kami%20%F0%9F%98%89%0A%0A_Wassalammua%27laikum_%0A%0A%23KitaAdalahSaudara%0A%23LDKSyahid%0A%23PijarAskara%0A%23UINJakarta"
-                           target="_blank" class="btn btn-success">
-                            <i class="fa fa-paper-plane me-1"></i> Send via WhatsApp
-                        </a>
                         <a href="{{ route('admin.reqservice.shortlink.edit', $reqshortlink->id) }}" class="btn btn-custom-primary">
                             <i class="fa fa-edit me-1"></i> Edit
                         </a>

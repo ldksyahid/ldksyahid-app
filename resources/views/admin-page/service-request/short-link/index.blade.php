@@ -83,7 +83,7 @@
         5 => '180px',  // Custom Link
         6 => '180px',  // Fix Custom Link
         7 => '180px',  // Date
-        8 => '120px',  // Action
+        8 => '160px',  // Action
     ];
 @endphp
 
