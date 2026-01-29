@@ -50,13 +50,14 @@ class ReqShortlink extends Model
                 ],
                 [
                     'key' => 'customLink',
-                    'type' => 'text',
+                    'type' => 'destination-link',
                     'class' => 'text-center',
+                    'fallback' => '-',
                 ],
                 [
                     'key' => 'fixCustomLink',
-                    'type' => 'link',
-                    'class' => 'text-center',
+                    'type' => 'destination-link',
+                    'class' => 'text-start',
                     'fallback' => 'Not Set',
                 ],
                 [
