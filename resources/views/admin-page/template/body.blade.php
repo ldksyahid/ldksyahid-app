@@ -79,7 +79,7 @@
         .content > .navbar {
             position: sticky;
             top: 0;
-            z-index: 998;
+            z-index: 1000;
         }
     </style>
     <div class="container-xxl position-relative bg-white d-flex p-0">
