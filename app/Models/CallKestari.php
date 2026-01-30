@@ -30,7 +30,7 @@ class CallKestari extends Model
             'idKey' => 'id',
             'emptyMessage' => 'No Call Kestari data found',
             'emptyIcon' => 'fa-phone',
-            'colspan' => 6,
+            'colspan' => 5,
             'columns' => [
                 [
                     'key' => 'buttonName',
@@ -41,12 +41,6 @@ class CallKestari extends Model
                     'key' => 'link',
                     'type' => 'link',
                     'fallback' => 'No link',
-                    'class' => 'text-center',
-                ],
-                [
-                    'key' => 'appear',
-                    'type' => 'badge',
-                    'badgeClass' => 'bg-primary',
                     'class' => 'text-center',
                 ],
                 [

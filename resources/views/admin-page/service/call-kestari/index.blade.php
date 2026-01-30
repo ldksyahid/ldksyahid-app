@@ -13,7 +13,7 @@
         [
             'icon' => 'fa-search',
             'title' => 'Search Feature',
-            'description' => 'Use the search filters in each column to find call kestari more precisely. Filter by appear status using dropdown.'
+            'description' => 'Use the search filters in each column to find call kestari more precisely.'
         ],
         [
             'icon' => 'fa-eye',
@@ -48,17 +48,6 @@
             'filterKey' => 'link',
         ],
         [
-            'key' => 'appear',
-            'label' => 'Appear',
-            'width' => '100px',
-            'sortable' => true,
-            'sortKey' => 'appear',
-            'filter' => 'select',
-            'filterKey' => 'appear',
-            'placeholder' => 'All Status',
-            'options' => $appearOptions,
-        ],
-        [
             'key' => 'created_at',
             'label' => 'Created Date',
             'width' => '180px',
@@ -75,9 +64,8 @@
         2 => '50px',   // No
         3 => '150px',  // Button Name
         4 => '300px',  // Link
-        5 => '100px',  // Appear
-        6 => '180px',  // Created Date
-        7 => '120px',  // Action
+        5 => '180px',  // Created Date
+        6 => '120px',  // Action
     ];
 @endphp
 
@@ -98,14 +86,12 @@
     csrfToken="{{ csrf_token() }}"
     deleteUrl="{{ url('admin/service/callkestari') }}"
     bulkDeleteUrl="{{ route('admin.service.callkestari.bulk-delete') }}"
-    :includeSelect2="true"
+    :includeSelect2="false"
     defaultSortBy="created_at"
     defaultSortOrder="desc"
     entityName="call kestari"
     entityIcon="fa-phone"
     dateRangeField="created_at"
-    select2Field="appear"
-    select2Placeholder="All Status"
     :isSuperadmin="$isSuperadmin"
 />
 @endsection

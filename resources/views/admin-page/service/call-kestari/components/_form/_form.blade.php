@@ -74,30 +74,9 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="appear" class="form-label">Appear Position <span class="text-danger">*</span></label>
-                                    @if ($operation === 'view')
-                                        <div class="mt-2">
-                                            @if($callKestari->appear == 'Up')
-                                                <span class="badge bg-primary">Up</span>
-                                            @else
-                                                <span class="badge bg-secondary">Down</span>
-                                            @endif
-                                        </div>
-                                    @else
-                                        <select class="form-select @error('appear') is-invalid @enderror" id="appear" name="appear" required>
-                                            <option value="">Select Position</option>
-                                            <option value="Up" {{ old('appear', $callKestari->appear ?? '') == 'Up' ? 'selected' : '' }}>Up</option>
-                                            <option value="Down" {{ old('appear', $callKestari->appear ?? '') == 'Down' ? 'selected' : '' }}>Down</option>
-                                        </select>
-                                        @error('appear')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    @endif
-                                    <div class="form-text">Position where this button will appear</div>
-                                </div>
-                            </div>
+                            @if ($operation !== 'view')
+                                <input type="hidden" name="appear" value="Up">
+                            @endif
                         </div>
 
                         <div class="mb-3">
