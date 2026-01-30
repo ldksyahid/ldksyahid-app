@@ -51,6 +51,8 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'memberNumber',
+            'filter' => 'text',
+            'filterKey' => 'memberNumber',
         ],
         [
             'key' => 'linkProfile',

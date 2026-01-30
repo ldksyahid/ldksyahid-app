@@ -22,8 +22,8 @@
         ],
         [
             'icon' => 'fa-edit',
-            'title' => 'Edit & Delete',
-            'description' => 'Click <i class="fa fa-edit small"></i> to edit gallery details. Use <i class="fa fa-trash small text-danger"></i> to delete.'
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit gallery details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
         ],
     ];
 
@@ -54,6 +54,8 @@
             'label' => 'Youtube Link',
             'width' => '200px',
             'sortable' => false,
+            'filter' => 'text',
+            'filterKey' => 'linkEmbedYoutube',
         ],
     ];
 

@@ -63,7 +63,8 @@
             'label' => 'Link Registration',
             'width' => '200px',
             'sortable' => false,
-            'filter' => 'none',
+            'filter' => 'text',
+            'filterKey' => 'linkRegist',
         ],
     ];
 

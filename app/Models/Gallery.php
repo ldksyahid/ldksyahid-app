@@ -121,6 +121,11 @@ class Gallery extends Model
             $query->where('eventTheme', $request->eventTheme);
         }
 
+        // Search by linkEmbedYoutube
+        if ($request->filled('linkEmbedYoutube')) {
+            $query->where('linkEmbedYoutube', 'like', '%' . $request->linkEmbedYoutube . '%');
+        }
+
         // Filter by created date range
         if ($request->filled('created_at')) {
             $dates = explode(' - ', $request->created_at);
