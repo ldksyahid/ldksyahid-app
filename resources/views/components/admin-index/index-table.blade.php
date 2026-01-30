@@ -114,7 +114,15 @@
                         @break
 
                     @case('badge')
-                        <span class="badge {{ $col['badgeClass'] ?? 'bg-primary' }}">{{ $value ?: $fallback }}</span>
+                        @php
+                            $badgeClass = $col['badgeClass'] ?? 'bg-primary';
+                            if (isset($col['badgeMap']) && isset($col['badgeMap'][$value])) {
+                                $badgeClass = $col['badgeMap'][$value];
+                            } elseif (isset($col['badgeMap']) && isset($col['badgeDefault'])) {
+                                $badgeClass = $col['badgeDefault'];
+                            }
+                        @endphp
+                        <span class="badge {{ $badgeClass }}">{{ $value ?: $fallback }}</span>
                         @break
 
                     @case('link')

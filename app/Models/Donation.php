@@ -12,6 +12,121 @@ class Donation extends Model
     use HasFactory, UsesUuid;
     protected $guarded =[];
 
+    protected static array $allowedSorts = [
+        'nama_donatur',
+        'jumlah_donasi',
+        'created_at',
+        'payment_status',
+    ];
+
+    public static function getTableConfig(): array
+    {
+        return [
+            'idKey' => 'id',
+            'emptyMessage' => 'No donations found',
+            'emptyIcon' => 'fa-donate',
+            'colspan' => 9,
+            'columns' => [
+                [
+                    'key' => 'nama_donatur',
+                    'type' => 'text',
+                    'class' => 'text-start',
+                ],
+                [
+                    'key' => 'jumlah_donasi',
+                    'type' => 'text',
+                    'class' => 'text-center',
+                    'formatter' => 'rupiah',
+                ],
+                [
+                    'key' => 'created_at',
+                    'type' => 'datetime',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'campaign_name',
+                    'type' => 'text',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'payment_status',
+                    'type' => 'badge',
+                    'class' => 'text-center',
+                    'badgeMap' => [
+                        'PENDING' => 'bg-warning',
+                        'PAID' => 'bg-success',
+                    ],
+                    'badgeDefault' => 'bg-danger',
+                ],
+                [
+                    'key' => 'payment_link',
+                    'type' => 'link',
+                    'class' => 'text-center',
+                    'fallback' => '-',
+                ],
+            ],
+            'actions' => [
+                'delete' => [
+                    'enabled' => true,
+                    'btnClass' => 'delete-donation-btn',
+                ],
+            ],
+        ];
+    }
+
+    public static function getPaymentStatusOptions(): array
+    {
+        return self::select('payment_status')
+            ->distinct()
+            ->orderBy('payment_status')
+            ->pluck('payment_status', 'payment_status')
+            ->filter()
+            ->toArray();
+    }
+
+    public static function getCampaignOptions(): array
+    {
+        return Campaign::select('id', 'judul')
+            ->orderBy('judul')
+            ->pluck('judul', 'id')
+            ->toArray();
+    }
+
+    public static function searchAdminDonations(Request $request)
+    {
+        $query = self::query();
+
+        if ($request->filled('payment_status')) {
+            $query->where('payment_status', $request->payment_status);
+        }
+
+        if ($request->filled('campaign_id')) {
+            $query->where('campaign_id', $request->campaign_id);
+        }
+
+        if ($request->filled('created_at_start') && $request->filled('created_at_end')) {
+            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->created_at_start)->startOfDay();
+            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->created_at_end)->endOfDay();
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+
+        $sortBy = $request->input('sort_by', 'created_at');
+        $sortOrder = $request->input('sort_order', 'desc');
+
+        if (!in_array($sortBy, static::$allowedSorts)) {
+            $sortBy = 'created_at';
+        }
+
+        $query->orderBy($sortBy, $sortOrder);
+
+        return $query->paginate(15)->appends($request->query());
+    }
+
+    public static function bulkDeleteDonations(array $ids): int
+    {
+        return self::whereIn('id', $ids)->delete();
+    }
+
     public static function createDonation(Request $request, $external_id, $jumlah_donasi, $payment_status, $payment_link)
     {
         $pesan_donatur = $request->input('pesan_donatur') ?? "Bismillah Semoga Berkah yaaa ! tetap Semangat Semuanya !!";
@@ -61,6 +176,6 @@ class Donation extends Model
     }
 
     public function campaign() {
-        return $this->belongTo('App\Models\Campaign', 'campaign_id');
+        return $this->belongsTo('App\Models\Campaign', 'campaign_id');
     }
 }

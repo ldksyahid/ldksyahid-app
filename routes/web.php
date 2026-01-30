@@ -294,12 +294,14 @@ Route::post('/admin/service/celengansyahid/campaign/store', [CelenganSyahidContr
 Route::get('/admin/service/celengansyahid/campaign/{id}/edit', [CelenganSyahidController::class, 'editAdminCampaign'])->name('admin.service.edit.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::put('/admin/service/celengansyahid/campaign/{id}/update', [CelenganSyahidController::class, 'updateAdminCampaign'])->name('admin.service.update.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::get('/admin/service/celengansyahid/campaign/{id}/preview', [CelenganSyahidController::class, 'previewAdminCampaign'])->name('admin.service.preview.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
-Route::get('/admin/service/celengansyahid/campaign/{id}/destroy', [CelenganSyahidController::class, 'destroyAdminCampaign'])->name('admin.service.destroy.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::delete('/admin/service/celengansyahid/campaign/{id}', [CelenganSyahidController::class, 'destroyAdminCampaign'])->name('admin.service.destroy.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::post('/admin/service/celengansyahid/campaign/bulk-delete', [CelenganSyahidController::class, 'bulkDeleteCampaign'])->name('admin.service.campaign.bulk-delete')->middleware(['role:Superadmin']);
 Route::post('/admin/service/celengansyahid/campaign/get-city', [CelenganSyahidController::class, 'storeCity'])->name('dependent-dropdown.store.city')->middleware(['role:Superadmin|HelperCelsyahid']);
 
 // Route AdminPage Service Campaign -> donation
 Route::get('/admin/service/celengansyahid/donations', [CelenganSyahidController::class, 'indexAdminDonation'])->name('admin.service.index.donation')->middleware(['role:Superadmin|HelperCelsyahid']);
-Route::get('/admin/service/celengansyahid/donation/{id}/destroy', [CelenganSyahidController::class, 'destroyAdminDonation'])->name('admin.service.destroy.donation')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::delete('/admin/service/celengansyahid/donation/{id}', [CelenganSyahidController::class, 'destroyAdminDonation'])->name('admin.service.destroy.donation')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::post('/admin/service/celengansyahid/donation/bulk-delete', [CelenganSyahidController::class, 'bulkDeleteDonation'])->name('admin.service.donation.bulk-delete')->middleware(['role:Superadmin']);
 
 // Route AdminPage KTA LDK Syahid
 Route::middleware(['role:Superadmin|HelperLetter'])->prefix('/admin/ktaldksyahid')->group(function () {
