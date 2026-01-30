@@ -1,13 +1,13 @@
 @extends('admin-page.template.body')
 
 @section('content')
-    <x-finance-report.form
-        operation="update"
-        :financeReport="$financeReport"
-        titleForm="Edit"
-        entityLabel="Finance Report"
-        :ldkTags="$ldkTags"
-    />
+    @include('admin-page.finance-report.components._form._form', [
+        'operation' => 'update',
+        'financeReport' => $financeReport,
+        'titleForm' => 'Edit',
+        'entityLabel' => 'Finance Report',
+        'ldkTags' => $ldkTags,
+    ])
 @endsection
 
 @section('styles')
