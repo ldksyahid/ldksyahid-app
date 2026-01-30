@@ -89,14 +89,29 @@ class Campaign extends Model
     {
         $query = self::query();
 
+        if ($request->filled('judul')) {
+            $query->where('judul', 'like', '%' . $request->judul . '%');
+        }
+
+        if ($request->filled('target_biaya')) {
+            $query->where('target_biaya', 'like', '%' . $request->target_biaya . '%');
+        }
+
         if ($request->filled('kategori')) {
             $query->where('kategori', $request->kategori);
         }
 
-        if ($request->filled('deadline_start') && $request->filled('deadline_end')) {
-            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->deadline_start)->startOfDay();
-            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->deadline_end)->endOfDay();
-            $query->whereBetween('deadline', [$startDate, $endDate]);
+        if ($request->filled('deadline')) {
+            $dates = explode(' - ', $request->deadline);
+            if (count($dates) == 2) {
+                try {
+                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+                    $query->whereBetween('deadline', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    // Invalid date format, skip filter
+                }
+            }
         }
 
         $sortBy = $request->input('sort_by', 'created_at');

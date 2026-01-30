@@ -136,17 +136,31 @@ class Article extends Model
         }
 
         // Filter by publish date range
-        if ($request->filled('dateevent_start') && $request->filled('dateevent_end')) {
-            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->dateevent_start)->startOfDay();
-            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->dateevent_end)->endOfDay();
-            $query->whereBetween('dateevent', [$startDate, $endDate]);
+        if ($request->filled('dateevent')) {
+            $dates = explode(' - ', $request->dateevent);
+            if (count($dates) == 2) {
+                try {
+                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+                    $query->whereBetween('dateevent', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    // Invalid date format, skip filter
+                }
+            }
         }
 
         // Filter by created date range
-        if ($request->filled('created_at_start') && $request->filled('created_at_end')) {
-            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->created_at_start)->startOfDay();
-            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->created_at_end)->endOfDay();
-            $query->whereBetween('created_at', [$startDate, $endDate]);
+        if ($request->filled('created_at')) {
+            $dates = explode(' - ', $request->created_at);
+            if (count($dates) == 2) {
+                try {
+                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    // Invalid date format, skip filter
+                }
+            }
         }
 
         // Sorting

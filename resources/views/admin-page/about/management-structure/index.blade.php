@@ -22,8 +22,8 @@
         ],
         [
             'icon' => 'fa-edit',
-            'title' => 'Edit & Delete',
-            'description' => 'Click <i class="fa fa-edit small"></i> to edit structure details. Use <i class="fa fa-trash small text-danger"></i> to delete.'
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit structure details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
         ],
     ];
 
@@ -62,7 +62,7 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'created_at',
-            'filter' => 'date-range',
+            'filter' => 'daterange',
             'filterKey' => 'created_at',
         ],
     ];

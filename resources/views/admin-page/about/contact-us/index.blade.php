@@ -45,6 +45,8 @@
             'width' => '200px',
             'sortable' => true,
             'sortKey' => 'email',
+            'filter' => 'text',
+            'filterKey' => 'email',
         ],
         [
             'key' => 'subject',

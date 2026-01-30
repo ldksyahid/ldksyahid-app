@@ -105,9 +105,18 @@ class News extends Model
             $query->where('title', 'like', '%' . $request->title . '%');
         }
 
-        // Search by datepublish
+        // Filter by datepublish date range
         if ($request->filled('datepublish')) {
-            $query->whereDate('datepublish', $request->datepublish);
+            $dates = explode(' - ', $request->datepublish);
+            if (count($dates) == 2) {
+                try {
+                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+                    $query->whereBetween('datepublish', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    // Invalid date format, skip filter
+                }
+            }
         }
 
         // Search by publisher
@@ -126,10 +135,17 @@ class News extends Model
         }
 
         // Filter by created date range
-        if ($request->filled('created_at_start') && $request->filled('created_at_end')) {
-            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->created_at_start)->startOfDay();
-            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->created_at_end)->endOfDay();
-            $query->whereBetween('created_at', [$startDate, $endDate]);
+        if ($request->filled('created_at')) {
+            $dates = explode(' - ', $request->created_at);
+            if (count($dates) == 2) {
+                try {
+                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    // Invalid date format, skip filter
+                }
+            }
         }
 
         // Sorting

@@ -96,6 +96,14 @@ class Donation extends Model
     {
         $query = self::query();
 
+        if ($request->filled('nama_donatur')) {
+            $query->where('nama_donatur', 'like', '%' . $request->nama_donatur . '%');
+        }
+
+        if ($request->filled('jumlah_donasi')) {
+            $query->where('jumlah_donasi', 'like', '%' . $request->jumlah_donasi . '%');
+        }
+
         if ($request->filled('payment_status')) {
             $query->where('payment_status', $request->payment_status);
         }
@@ -104,10 +112,17 @@ class Donation extends Model
             $query->where('campaign_id', $request->campaign_id);
         }
 
-        if ($request->filled('created_at_start') && $request->filled('created_at_end')) {
-            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->created_at_start)->startOfDay();
-            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->created_at_end)->endOfDay();
-            $query->whereBetween('created_at', [$startDate, $endDate]);
+        if ($request->filled('created_at')) {
+            $dates = explode(' - ', $request->created_at);
+            if (count($dates) == 2) {
+                try {
+                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    // Invalid date format, skip filter
+                }
+            }
         }
 
         $sortBy = $request->input('sort_by', 'created_at');

@@ -100,10 +100,17 @@ class Event extends Model
         }
 
         // Filter by date range
-        if ($request->filled('start_date_start') && $request->filled('start_date_end')) {
-            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->start_date_start)->startOfDay();
-            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->start_date_end)->endOfDay();
-            $query->whereBetween('start', [$startDate, $endDate]);
+        if ($request->filled('start_date')) {
+            $dates = explode(' - ', $request->start_date);
+            if (count($dates) == 2) {
+                try {
+                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+                    $query->whereBetween('start', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    // Invalid date format, skip filter
+                }
+            }
         }
 
         // Sorting
