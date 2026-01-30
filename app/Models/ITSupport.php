@@ -136,6 +136,16 @@ class ITSupport extends Model
             $query->where('position', $request->position);
         }
 
+        // Search by linkInstagram
+        if ($request->filled('linkInstagram')) {
+            $query->where('linkInstagram', 'like', '%' . $request->linkInstagram . '%');
+        }
+
+        // Search by linkLinkedin
+        if ($request->filled('linkLinkedin')) {
+            $query->where('linkLinkedin', 'like', '%' . $request->linkLinkedin . '%');
+        }
+
         // Filter by created date range
         if ($request->filled('created_at')) {
             $dates = explode(' - ', $request->created_at);

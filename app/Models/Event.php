@@ -99,6 +99,11 @@ class Event extends Model
             $query->where('division', 'like', '%' . $request->division . '%');
         }
 
+        // Search by linkRegist
+        if ($request->filled('linkRegist')) {
+            $query->where('linkRegist', 'like', '%' . $request->linkRegist . '%');
+        }
+
         // Filter by date range
         if ($request->filled('start_date')) {
             $dates = explode(' - ', $request->start_date);

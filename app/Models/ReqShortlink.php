@@ -149,6 +149,16 @@ class ReqShortlink extends Model
             }
         }
 
+        // Search by whatsapp
+        if ($request->filled('whatsapp')) {
+            $query->where('whatsapp', 'like', '%' . $request->whatsapp . '%');
+        }
+
+        // Search by customLink
+        if ($request->filled('customLink')) {
+            $query->where('customLink', 'like', '%' . $request->customLink . '%');
+        }
+
         // Filter by created date range
         if ($request->filled('created_at')) {
             $dates = explode(' - ', $request->created_at);

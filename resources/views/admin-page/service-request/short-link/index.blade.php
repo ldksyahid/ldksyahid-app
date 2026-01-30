@@ -22,8 +22,8 @@
         ],
         [
             'icon' => 'fa-edit',
-            'title' => 'Edit & Delete',
-            'description' => 'Click <i class="fa fa-edit small"></i> to add or edit the fix custom link. Use <i class="fa fa-trash small text-danger"></i> to delete.'
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to add or edit the fix custom link. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
         ],
     ];
 
@@ -45,6 +45,8 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'whatsapp',
+            'filter' => 'text',
+            'filterKey' => 'whatsapp',
         ],
         [
             'key' => 'customLink',
@@ -52,6 +54,8 @@
             'width' => '180px',
             'sortable' => true,
             'sortKey' => 'customLink',
+            'filter' => 'text',
+            'filterKey' => 'customLink',
         ],
         [
             'key' => 'fixCustomLink',

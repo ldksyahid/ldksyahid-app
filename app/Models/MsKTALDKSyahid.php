@@ -138,6 +138,11 @@ class MsKTALDKSyahid extends Model
             $query->where('facultyID', $request->facultyID);
         }
 
+        // Search by memberNumber
+        if ($request->filled('memberNumber')) {
+            $query->where('memberNumber', 'like', '%' . $request->memberNumber . '%');
+        }
+
         if ($request->filled('linkProfile')) {
             $query->where('linkProfile', 'like', '%' . $request->linkProfile . '%');
         }
