@@ -166,8 +166,12 @@
         .section-title { font-size: 1rem; }
         .widget-card .widget-count { font-size: 1.25rem; }
         .widget-card .widget-icon { width: 44px; height: 44px; font-size: 1.1rem; }
-        .greeting-card .greeting-text { font-size: 1.2rem; }
-        .greeting-card .live-clock { font-size: 1.5rem; }
+        .greeting-card { padding: 1rem 1.25rem; flex-direction: column; align-items: flex-start !important; gap: 0.75rem; }
+        .greeting-card .greeting-text { font-size: 1.1rem; }
+        .greeting-card .greeting-sub { font-size: 0.8rem; }
+        .greeting-card .live-clock { font-size: 1.3rem; }
+        .greeting-card .live-date { font-size: 0.8rem; }
+        .greeting-card .text-end { text-align: left !important; }
         .chart-container { height: 250px; }
     }
 </style>
