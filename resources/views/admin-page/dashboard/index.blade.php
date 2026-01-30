@@ -192,7 +192,7 @@
                 <div class="greeting-card d-flex justify-content-between align-items-center flex-wrap">
                     <div>
                         <div class="greeting-text" id="greetingText">Selamat Datang</div>
-                        <div class="greeting-sub">{{ Auth::user()->name ?? 'Admin' }} &mdash; Semoga harimu produktif!</div>
+                        <div class="greeting-sub" id="greetingSub">{{ Auth::user()->name ?? 'Admin' }} &mdash; Semoga harimu produktif!</div>
                     </div>
                     <div class="text-end mt-2 mt-md-0">
                         <div class="live-clock" id="liveClock">--:--:--</div>
@@ -336,6 +336,32 @@ $(document).ready(function() {
     }
     updateClock();
     setInterval(updateClock, 1000);
+
+    // === Rotating Greeting Messages ===
+    var userName = '{{ Auth::user()->name ?? "Admin" }}';
+    var greetingMessages = [
+        'Semoga harimu produktif!',
+        'Tetap semangat dan istiqomah!',
+        'Jangan lupa istirahat ya!',
+        'Bismillah, semoga dimudahkan!',
+        'Keep up the great work!',
+        'Yuk, kelola data dengan rapi!',
+        'Semoga selalu dalam lindungan-Nya!',
+        'Senyum dulu, baru kerja~',
+        'Have a wonderful day!',
+        'Jaga kesehatan, jaga ibadah!',
+    ];
+    var currentMsgIndex = 0;
+
+    function rotateGreeting() {
+        currentMsgIndex = (currentMsgIndex + 1) % greetingMessages.length;
+        var $sub = $('#greetingSub');
+        $sub.animate({ opacity: 0 }, 400, function() {
+            $sub.html(userName + ' &mdash; ' + greetingMessages[currentMsgIndex]);
+            $sub.animate({ opacity: 1 }, 400);
+        });
+    }
+    setInterval(rotateGreeting, 30000);
 
     // === Animated Counter (Count-Up) ===
     var counterAnimated = false;
