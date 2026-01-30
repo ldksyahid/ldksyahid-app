@@ -22,8 +22,8 @@
         ],
         [
             'icon' => 'fa-edit',
-            'title' => 'Edit & Delete',
-            'description' => 'Click <i class="fa fa-edit small"></i> to edit schedule details. Use <i class="fa fa-trash small text-danger"></i> to delete.'
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit schedule details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
         ],
     ];
 
@@ -44,8 +44,10 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'month',
-            'filter' => 'text',
+            'filter' => 'select',
             'filterKey' => 'month',
+            'placeholder' => 'All Months',
+            'options' => $monthOptions,
         ],
         [
             'key' => 'year',
@@ -53,8 +55,10 @@
             'width' => '100px',
             'sortable' => true,
             'sortKey' => 'year',
-            'filter' => 'text',
+            'filter' => 'select',
             'filterKey' => 'year',
+            'placeholder' => 'All Years',
+            'options' => $yearOptions,
         ],
     ];
 
@@ -86,12 +90,14 @@
     csrfToken="{{ csrf_token() }}"
     deleteUrl="{{ url('admin/schedule') }}"
     bulkDeleteUrl="{{ route('admin.schedule.bulk-delete') }}"
-    :includeSelect2="false"
+    :includeSelect2="true"
     defaultSortBy="created_at"
     defaultSortOrder="desc"
     entityName="schedules"
     entityIcon="fa-calendar-alt"
     dateRangeField="created_at"
+    select2Field="month"
+    select2Placeholder="All Months"
     :isSuperadmin="$isSuperadmin"
 />
 @endsection

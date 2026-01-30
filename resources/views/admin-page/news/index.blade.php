@@ -22,8 +22,8 @@
         ],
         [
             'icon' => 'fa-edit',
-            'title' => 'Edit & Delete',
-            'description' => 'Click <i class="fa fa-edit small"></i> to edit news details. Use <i class="fa fa-trash small text-danger"></i> to delete.'
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit news details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
         ],
     ];
 
@@ -44,7 +44,7 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'datepublish',
-            'filter' => 'date',
+            'filter' => 'daterange',
             'filterKey' => 'datepublish',
         ],
         [
@@ -53,8 +53,10 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'publisher',
-            'filter' => 'text',
+            'filter' => 'select',
             'filterKey' => 'publisher',
+            'placeholder' => 'All Publishers',
+            'options' => $publisherOptions,
         ],
         [
             'key' => 'reporter',
@@ -62,8 +64,10 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'reporter',
-            'filter' => 'text',
+            'filter' => 'select',
             'filterKey' => 'reporter',
+            'placeholder' => 'All Reporters',
+            'options' => $reporterOptions,
         ],
         [
             'key' => 'editor',
@@ -71,8 +75,10 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'editor',
-            'filter' => 'text',
+            'filter' => 'select',
             'filterKey' => 'editor',
+            'placeholder' => 'All Editors',
+            'options' => $editorOptions,
         ],
     ];
 
@@ -106,12 +112,14 @@
     csrfToken="{{ csrf_token() }}"
     deleteUrl="{{ url('admin/news') }}"
     bulkDeleteUrl="{{ route('admin.news.bulk-delete') }}"
-    :includeSelect2="false"
+    :includeSelect2="true"
     defaultSortBy="created_at"
     defaultSortOrder="desc"
     entityName="news"
     entityIcon="fa-newspaper"
-    dateRangeField="created_at"
+    dateRangeField="datepublish"
+    select2Field="publisher"
+    select2Placeholder="All Publishers"
     :isSuperadmin="$isSuperadmin"
 />
 @endsection

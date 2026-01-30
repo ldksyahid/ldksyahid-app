@@ -22,8 +22,8 @@
         ],
         [
             'icon' => 'fa-edit',
-            'title' => 'Edit & Delete',
-            'description' => 'Click <i class="fa fa-edit small"></i> to edit article details. Use <i class="fa fa-trash small text-danger"></i> to delete.'
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit article details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
         ],
     ];
 
@@ -44,8 +44,10 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'theme',
-            'filter' => 'text',
+            'filter' => 'select',
             'filterKey' => 'theme',
+            'placeholder' => 'All Themes',
+            'options' => $themeOptions,
         ],
         [
             'key' => 'dateevent',
@@ -62,8 +64,10 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'writer',
-            'filter' => 'text',
+            'filter' => 'select',
             'filterKey' => 'writer',
+            'placeholder' => 'All Writers',
+            'options' => $writerOptions,
         ],
         [
             'key' => 'editor',
@@ -71,8 +75,10 @@
             'width' => '150px',
             'sortable' => true,
             'sortKey' => 'editor',
-            'filter' => 'text',
+            'filter' => 'select',
             'filterKey' => 'editor',
+            'placeholder' => 'All Editors',
+            'options' => $editorOptions,
         ],
     ];
 
@@ -106,12 +112,14 @@
     csrfToken="{{ csrf_token() }}"
     deleteUrl="{{ url('admin/article') }}"
     bulkDeleteUrl="{{ route('admin.article.bulk-delete') }}"
-    :includeSelect2="false"
+    :includeSelect2="true"
     defaultSortBy="dateevent"
     defaultSortOrder="desc"
     entityName="articles"
     entityIcon="fa-newspaper"
     dateRangeField="dateevent"
+    select2Field="theme"
+    select2Placeholder="All Themes"
     :isSuperadmin="$isSuperadmin"
 />
 @endsection

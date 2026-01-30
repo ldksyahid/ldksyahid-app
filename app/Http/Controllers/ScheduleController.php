@@ -38,7 +38,10 @@ class ScheduleController extends Controller
             ]);
         }
 
-        return view('admin-page.schedule.index', compact('items', 'tableConfig'))
+        $monthOptions = Schedule::select('month')->distinct()->orderBy('month')->pluck('month', 'month')->toArray();
+        $yearOptions = Schedule::select('year')->distinct()->orderByDesc('year')->pluck('year', 'year')->toArray();
+
+        return view('admin-page.schedule.index', compact('items', 'tableConfig', 'monthOptions', 'yearOptions'))
             ->with('title', 'Schedule');
     }
 
