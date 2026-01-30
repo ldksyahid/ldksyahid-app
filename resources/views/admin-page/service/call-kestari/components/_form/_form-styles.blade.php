@@ -67,15 +67,15 @@
         border-width: 1px 0;
     }
 
-    /* Badge Styles */
-    .badge {
+    /* Badge Styles - scoped to form content only */
+    .card .badge {
         font-size: 0.9rem;
         padding: 0.5rem 1rem;
     }
-    .badge.bg-primary {
+    .card .badge.bg-primary {
         background-color: #00a79d !important;
     }
-    .badge.bg-secondary {
+    .card .badge.bg-secondary {
         background-color: #6c757d !important;
     }
 
