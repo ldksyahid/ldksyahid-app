@@ -274,8 +274,11 @@
 {{-- Script untuk membuka dropdown yang memiliki submenu aktif --}}
 <script>
 $(document).ready(function() {
-    // Custom dropdown handler for sidebar (to avoid Bootstrap conflicts)
-    $('.sidebar .dropdown-toggle').off('click').on('click', function(e) {
+    // Remove Bootstrap data-bs-toggle to prevent conflict
+    $('.sidebar .dropdown-toggle').removeAttr('data-bs-toggle');
+
+    // Custom dropdown handler for sidebar
+    $('.sidebar .dropdown-toggle').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
 
