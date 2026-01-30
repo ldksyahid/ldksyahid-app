@@ -94,7 +94,11 @@ class ArticleController extends Controller
             ]);
         }
 
-        return view('admin-page.article.index', compact('items', 'tableConfig'))
+        $themeOptions = Article::select('theme')->distinct()->orderBy('theme')->pluck('theme', 'theme')->toArray();
+        $writerOptions = Article::select('writer')->distinct()->orderBy('writer')->pluck('writer', 'writer')->toArray();
+        $editorOptions = Article::select('editor')->distinct()->orderBy('editor')->pluck('editor', 'editor')->toArray();
+
+        return view('admin-page.article.index', compact('items', 'tableConfig', 'themeOptions', 'writerOptions', 'editorOptions'))
             ->with('title', 'Article');
     }
 

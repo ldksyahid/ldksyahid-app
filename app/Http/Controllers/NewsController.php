@@ -47,7 +47,11 @@ class NewsController extends Controller
             ]);
         }
 
-        return view('admin-page.news.index', compact('items', 'tableConfig'))
+        $publisherOptions = News::select('publisher')->distinct()->orderBy('publisher')->pluck('publisher', 'publisher')->toArray();
+        $reporterOptions = News::select('reporter')->distinct()->orderBy('reporter')->pluck('reporter', 'reporter')->toArray();
+        $editorOptions = News::select('editor')->distinct()->orderBy('editor')->pluck('editor', 'editor')->toArray();
+
+        return view('admin-page.news.index', compact('items', 'tableConfig', 'publisherOptions', 'reporterOptions', 'editorOptions'))
             ->with('title', 'News');
     }
 
