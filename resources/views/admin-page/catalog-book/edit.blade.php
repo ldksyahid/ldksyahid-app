@@ -1,16 +1,16 @@
 @extends('admin-page.template.body')
 
 @section('content')
-    <x-catalog-book.form 
-        operation="update" 
-        :book="$book" 
-        titleForm="Edit Book:" 
-        entityLabel="{{ $book->titleBook }}"
-        :languages="$languages"
-        :bookCategories="$bookCategories"
-        :authorTypes="$authorTypes"
-        :availabilityTypes="$availabilityTypes"
-    />
+    @include('admin-page.catalog-book.components._form._form', [
+        'operation' => 'update',
+        'book' => $book,
+        'titleForm' => 'Edit Book:',
+        'entityLabel' => $book->titleBook,
+        'languages' => $languages,
+        'bookCategories' => $bookCategories,
+        'authorTypes' => $authorTypes,
+        'availabilityTypes' => $availabilityTypes,
+    ])
 @endsection
 
 @section('styles')
