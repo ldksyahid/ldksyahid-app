@@ -19,8 +19,8 @@
         ],
         [
             'icon' => 'fa-edit',
-            'title' => 'Edit & Delete',
-            'description' => 'Click <i class="fa fa-edit small"></i> to edit campaign details. Use <i class="fa fa-trash small text-danger"></i> to delete.'
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit campaign details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
         ],
     ];
 
@@ -31,6 +31,8 @@
             'width' => '250px',
             'sortable' => true,
             'sortKey' => 'judul',
+            'filter' => 'text',
+            'filterKey' => 'judul',
         ],
         [
             'key' => 'kategori',
@@ -40,6 +42,7 @@
             'sortKey' => 'kategori',
             'filter' => 'select',
             'filterKey' => 'kategori',
+            'placeholder' => 'All Categories',
             'options' => $categoryOptions ?? [],
         ],
         [
@@ -47,6 +50,8 @@
             'label' => 'Cost Target',
             'width' => '150px',
             'sortable' => false,
+            'filter' => 'text',
+            'filterKey' => 'target_biaya',
         ],
         [
             'key' => 'deadline',
@@ -93,6 +98,8 @@
     entityName="campaigns"
     entityIcon="fa-hand-holding-heart"
     dateRangeField="deadline"
+    select2Field="kategori"
+    select2Placeholder="All Categories"
     :isSuperadmin="$isSuperadmin"
 />
 @endsection

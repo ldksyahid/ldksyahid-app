@@ -3,9 +3,14 @@
 @php
     $guideCards = [
         [
+            'icon' => 'fa-donate',
+            'title' => 'Donation Overview',
+            'description' => 'This page displays all incoming donations from various campaigns. Monitor donor activity and payment statuses in real-time.'
+        ],
+        [
             'icon' => 'fa-search',
             'title' => 'Search Feature',
-            'description' => 'Use the dropdown filters to find donations by payment status, campaign, or date range.'
+            'description' => 'Use the search filters to find donations by donor name, amount, payment status, campaign, or date range.'
         ],
         [
             'icon' => 'fa-eye',
@@ -13,9 +18,9 @@
             'description' => 'View donation details including donor name, amount, payment status, and payment link.'
         ],
         [
-            'icon' => 'fa-trash',
-            'title' => 'Delete',
-            'description' => 'Use <i class="fa fa-trash small text-danger"></i> to delete a donation record.'
+            'icon' => 'fa-edit',
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit donation details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
         ],
     ];
 
@@ -26,12 +31,16 @@
             'width' => '180px',
             'sortable' => true,
             'sortKey' => 'nama_donatur',
+            'filter' => 'text',
+            'filterKey' => 'nama_donatur',
         ],
         [
             'key' => 'jumlah_donasi',
             'label' => 'Amount',
             'width' => '150px',
             'sortable' => false,
+            'filter' => 'text',
+            'filterKey' => 'jumlah_donasi',
         ],
         [
             'key' => 'created_at',
@@ -49,6 +58,7 @@
             'sortable' => false,
             'filter' => 'select',
             'filterKey' => 'campaign_id',
+            'placeholder' => 'All Campaigns',
             'options' => $campaignOptions ?? [],
         ],
         [
@@ -58,6 +68,7 @@
             'sortable' => false,
             'filter' => 'select',
             'filterKey' => 'payment_status',
+            'placeholder' => 'All Status',
             'options' => $paymentStatusOptions ?? [],
         ],
         [
@@ -103,6 +114,8 @@
     entityName="donations"
     entityIcon="fa-donate"
     dateRangeField="created_at"
+    select2Field="campaign_id"
+    select2Placeholder="All Campaigns"
     :isSuperadmin="$isSuperadmin"
 />
 @endsection

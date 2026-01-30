@@ -115,16 +115,28 @@ class MessageContact extends Model
             $query->where('name', $request->name);
         }
 
+        // Search by email
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+
         // Search by subject
         if ($request->filled('subject')) {
             $query->where('subject', $request->subject);
         }
 
         // Filter by created date range
-        if ($request->filled('created_at_start') && $request->filled('created_at_end')) {
-            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->created_at_start)->startOfDay();
-            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->created_at_end)->endOfDay();
-            $query->whereBetween('created_at', [$startDate, $endDate]);
+        if ($request->filled('created_at')) {
+            $dates = explode(' - ', $request->created_at);
+            if (count($dates) == 2) {
+                try {
+                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } catch (\Exception $e) {
+                    // Invalid date format, skip filter
+                }
+            }
         }
 
         // Sorting

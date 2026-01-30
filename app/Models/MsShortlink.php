@@ -140,16 +140,15 @@ class MsShortlink extends ShortURL
             })
             ->when($request->filled('created_at'), function ($query) use ($request) {
                 $dates = explode(' - ', $request->created_at);
-                if (count($dates) === 2) {
-                    $start = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
-                    $end = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
-                    $query->whereBetween('created_at', [$start, $end]);
+                if (count($dates) == 2) {
+                    try {
+                        $start = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                        $end = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+                        $query->whereBetween('created_at', [$start, $end]);
+                    } catch (\Exception $e) {
+                        // Invalid date format, skip filter
+                    }
                 }
-            })
-            ->when($request->filled('created_at_start') && $request->filled('created_at_end'), function ($query) use ($request) {
-                $start = Carbon::createFromFormat('d-m-Y', $request->created_at_start)->startOfDay();
-                $end = Carbon::createFromFormat('d-m-Y', $request->created_at_end)->endOfDay();
-                $query->whereBetween('created_at', [$start, $end]);
             })
             ->orderBy($sortBy, $sortOrder)
             ->paginate($perPage)
