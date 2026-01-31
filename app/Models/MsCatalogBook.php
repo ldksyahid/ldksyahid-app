@@ -662,4 +662,80 @@ class MsCatalogBook extends Model
         // or by adding embed parameter
         return $readerLink . (str_contains($readerLink, '?') ? '&embed=true' : '?embed=true');
     }
+
+    /**
+     * Get table configuration for admin index table component
+     */
+    public static function getTableConfig(): array
+    {
+        return [
+            'idKey' => 'bookID',
+            'emptyMessage' => 'No books found in the catalog',
+            'emptyIcon' => 'fa-book-open',
+            'colspan' => 11,
+            'columns' => [
+                [
+                    'key' => 'createdDate',
+                    'type' => 'date',
+                    'dateFormat' => 'DD MMMM YYYY',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'isbn',
+                    'type' => 'text',
+                    'fallback' => '-',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'titleBook',
+                    'type' => 'text',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'authorName',
+                    'type' => 'text',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'publisherName',
+                    'type' => 'text',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'getBookCategory.bookCategoryName',
+                    'type' => 'text',
+                    'fallback' => 'N/A',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'year',
+                    'type' => 'text',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'favoriteCount',
+                    'type' => 'badge',
+                    'badgeClass' => 'bg-primary',
+                    'class' => 'text-center',
+                ],
+            ],
+            'actions' => [
+                'view' => [
+                    'enabled' => true,
+                    'route' => 'admin.catalog.books.show',
+                    'routeKey' => 'bookID',
+                ],
+                'edit' => [
+                    'enabled' => true,
+                    'type' => 'link',
+                    'route' => 'admin.catalog.books.edit',
+                    'routeKey' => 'bookID',
+                ],
+                'delete' => [
+                    'enabled' => true,
+                    'btnClass' => 'delete-book-btn',
+                ],
+            ],
+        ];
+    }
 }

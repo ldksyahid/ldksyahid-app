@@ -1,82 +1,16 @@
 @extends('admin-page.template.body')
 
+@section('styles')
+    @include('admin-page.home.jumbotron.components._form._form-styles')
+@endsection
+
 @section('content')
-<!-- Form Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Edit Jumbotron</h5>
-                <form role="form" action='/admin/jumbotron/{{$postjumbotron->id}}/update' method='post' enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                    <div class="row">
-                        <div class="mb-3 col-12">
-                            <div class="col-6">
-                                <label for="inputTitleJumbotron" class="form-label required">Title</label>
-                                <input type="text" class="form-control" id="inputTitleJumbotron" name='title' value="{{old('title', $postjumbotron->title)}}" required>
-                                <div class="invalid-feedback">
-                                    This is a required question
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-4">
-                            <label for="formFile" class="form-label required">Picture <span class="small">(1440 x 560 Pixel)</span></label>
-                            <br>
-                            <img id="frame" src="https://lh3.googleusercontent.com/d/{{ $postjumbotron->gdrive_id }}" width="250px" height="150px" class="rounded mb-3 border"/>
-                            <input class="form-control" type="file" id="picture" name ='picture' title="Choose a video please" accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG" onchange="preview()">
-                        </div>
-                        <div class="my-3 col-12 col-lg-12">
-                            <label class="form-check-label" for="cekBtn">Add Button ?</label>
-                            @if ($postjumbotron->btnname != null || $postjumbotron->btnlink != null)
-                                <input type="checkbox" class="form-check-input" id="cekButton" onclick="cekBtn()" checked>
-                            @else
-                                <input type="checkbox" class="form-check-input" id="cekButton" onclick="cekBtn()">
-                            @endif
-                        </div>
-                        <div id="formButton" @if ($postjumbotron->btnname != null || $postjumbotron->btnlink != null)
-                            style="display: ;"
-                        @else
-                            style="display: none;"
-                        @endif>
-                            <div class="row">
-                                <div class="mb-3 col-12 col-lg-6">
-                                    <label for="inputButtonName1" class="form-label">Button Name</label>
-                                    <input type="text" class="form-control" id="inputButtonName1" name='buttonname' value="{{old('buttonname', $postjumbotron->btnname)}}">
-                                </div>
-                                <div class="mb-3 col-12 col-lg-6">
-                                    <label for="inputButtonLink1" class="form-label">Button Link</label>
-                                    <input type="text" class="form-control" id="inputButtonLink1" name='buttonlink' value="{{old('buttonlink', $postjumbotron->btnlink)}}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <a type="submit" class="btn btn-primary" href="/admin/jumbotron">Cancel</a>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Form End -->
+    @include('admin-page.home.jumbotron.components._form._form', [
+        'operation' => 'update',
+        'jumbotron' => $jumbotron
+    ])
 @endsection
 
 @section('scripts')
-<script>
-function cekBtn() {
-    var checkBoxBtn = document.getElementById("cekButton");
-    var elementFormBtn = document.getElementById("formButton");
-    if (checkBoxBtn.checked == true){
-        elementFormBtn.style.display = "block";
-    } else {
-        elementFormBtn.style.display = "none";
-    }
-}
-</script>
-
-<script>
-function preview() {
-    frame.src=URL.createObjectURL(event.target.files[0]);
-}
-</script>
+    @include('admin-page.home.jumbotron.components._form._form-scripts')
 @endsection

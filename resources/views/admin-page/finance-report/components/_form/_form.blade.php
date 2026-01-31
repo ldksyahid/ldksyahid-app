@@ -1,8 +1,8 @@
-@props([
-    'operation' => 'create',
-    'financeReport' => null,
-    'ldkTags' => []
-])
+@php
+    $operation = $operation ?? 'create';
+    $financeReport = $financeReport ?? null;
+    $ldkTags = $ldkTags ?? [];
+@endphp
 
 <div class="container-fluid pt-4 px-4">
     <div class="row p-2 bg-light rounded justify-content-center mx-0">

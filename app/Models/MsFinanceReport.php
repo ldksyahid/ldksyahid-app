@@ -319,4 +319,54 @@ class MsFinanceReport extends Model
             ->orderBy('createdDate', 'desc')
             ->get();
     }
+
+    /**
+     * Get table configuration for admin index table component
+     */
+    public static function getTableConfig(): array
+    {
+        return [
+            'idKey' => 'financeReportID',
+            'emptyMessage' => 'No finance reports found',
+            'emptyIcon' => 'fa-file-invoice-dollar',
+            'colspan' => 6,
+            'columns' => [
+                [
+                    'key' => 'createdDate',
+                    'type' => 'date',
+                    'dateFormat' => 'DD MMMM YYYY',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'fileName',
+                    'type' => 'text',
+                    'class' => 'text-center',
+                ],
+                [
+                    'key' => 'ldk.ldkTag',
+                    'type' => 'badge',
+                    'badgeClass' => 'bg-primary',
+                    'fallback' => 'N/A',
+                    'class' => 'text-center',
+                ],
+            ],
+            'actions' => [
+                'view' => [
+                    'enabled' => true,
+                    'route' => 'admin.finance-report.show',
+                    'routeKey' => 'financeReportID',
+                ],
+                'edit' => [
+                    'enabled' => true,
+                    'type' => 'link',
+                    'route' => 'admin.finance-report.edit',
+                    'routeKey' => 'financeReportID',
+                ],
+                'delete' => [
+                    'enabled' => true,
+                    'btnClass' => 'delete-report-btn',
+                ],
+            ],
+        ];
+    }
 }

@@ -1,109 +1,98 @@
 @extends('admin-page.template.body')
 
-@section('head')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
-@endsection
+@php
+    // $isSuperadmin is automatically available via View Composer
+
+    // Guide Cards Config
+    $guideCards = [
+        [
+            'icon' => 'fa-plus-circle',
+            'title' => 'How to Add Gallery',
+            'description' => 'Click the <strong>"Add Gallery"</strong> button to create a new gallery. Fill in the event name, theme, description, and upload photos.'
+        ],
+        [
+            'icon' => 'fa-search',
+            'title' => 'Search Feature',
+            'description' => 'Use the dropdown filters to find galleries by event name or theme.'
+        ],
+        [
+            'icon' => 'fa-eye',
+            'title' => 'View Details',
+            'description' => 'Click <i class="fa fa-eye small"></i> to view complete gallery details including all photos.'
+        ],
+        [
+            'icon' => 'fa-edit',
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit gallery details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
+        ],
+    ];
+
+    // Columns Config
+    $columns = [
+        [
+            'key' => 'eventName',
+            'label' => 'Event Name',
+            'width' => '250px',
+            'sortable' => true,
+            'sortKey' => 'eventName',
+            'filter' => 'select',
+            'filterKey' => 'eventName',
+            'options' => $eventNameOptions ?? [],
+        ],
+        [
+            'key' => 'eventTheme',
+            'label' => 'Event Theme',
+            'width' => '200px',
+            'sortable' => true,
+            'sortKey' => 'eventTheme',
+            'filter' => 'select',
+            'filterKey' => 'eventTheme',
+            'options' => $eventThemeOptions ?? [],
+        ],
+        [
+            'key' => 'linkEmbedYoutube',
+            'label' => 'Youtube Link',
+            'width' => '200px',
+            'sortable' => false,
+            'filter' => 'text',
+            'filterKey' => 'linkEmbedYoutube',
+        ],
+    ];
+
+    // Column Widths for CSS
+    $columnWidths = [
+        1 => '50px',   // Checkbox
+        2 => '50px',   // No
+        3 => '250px',  // Event Name
+        4 => '200px',  // Event Theme
+        5 => '200px',  // Youtube Link
+        6 => '120px',  // Action
+    ];
+@endphp
 
 @section('content')
-<!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Gallery Management System</h5>
-                <a class='btn btn-primary' href="/admin/about/gallery/create"><i class="fa fa-plus"></i> Create Gallery</a>
-                {{-- START Data table Gallery --}}
-                <div class="mt-3">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped text-nowrap small" id="dataGallery">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="text-center">No</th>
-                                    <th scope="col" class="text-center">Event Name</th>
-                                    <th scope="col" class="text-center">Event Theme</th>
-                                    <th scope="col" class="text-center">Embed Youtube Link</th>
-                                    <th scope="col" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($postgallery as $key => $postgallery)
-                                <tr>
-                                    <td scope="row" align='center'>{{ $key+1 }}</td>
-                                    <td align='center'>{{ $postgallery->eventName }}</td>
-                                    <td align='center'>{{ $postgallery->eventTheme }}</td>
-                                    @if ($postgallery->linkEmbedYoutube == null)
-                                        <td align='center'>Nothing</td>
-                                    @else
-                                        <td align='center'><a href="{{ $postgallery->linkEmbedYoutube }}" target="_blank" rel="noopener noreferrer">{{ $postgallery->linkEmbedYoutube }}</a></td>
-                                    @endif
-                                    <td align="center">
-                                        <a href="/admin/about/gallery/{{ $postgallery->id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
-                                        <button type="submit" onclick="deleteConfirmationGallery({{ $postgallery->id }})" id="delete-gallery" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/admin/about/gallery/{{ $postgallery->id }}/preview"><i class="fa fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan='9', align='center'>No Gallery Data</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {{-- END Data table Gallery --}}
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Table End -->
-@endsection
-
-@section('scripts')
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-<script>
-// ===== START CRUD GALLERY =====
-// ini untuk konfirmasi delete
-function deleteConfirmationGallery(id) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500,
-                width: '350px',
-            })
-
-            Swal.fire({
-                title: 'Are you sure ?',
-                text: "You won't be able to revert this !",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                    type: "get",
-                    url: `{{ url('/admin/about/gallery/${id}/destroy') }}`,
-                        success: function(data) {
-                            setTimeout(function () { location.reload(1); }, 300);
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Gallery has been deleted !'
-                            });
-                        }
-                    });
-
-                }
-            })
-        }
-// ===== END CRUD GALLERY =====
-</script>
-<script>
-    $('#dataGallery').DataTable({
-        responsive: true,
-        fixedHeader: true,
-    });
-</script>
+<x-admin-index.template
+    pageTitle="Gallery Management"
+    pageIcon="fa-images"
+    highlightedText="Gallery Management System"
+    :guideCards="$guideCards"
+    addButtonText="Add Gallery"
+    addButtonRoute="admin.about.gallery.create"
+    tableClass="table-galleries"
+    tableId="dataGalleryTable"
+    tableBodyId="galleryTableBody"
+    :columns="$columns"
+    :columnWidths="$columnWidths"
+    ajaxUrl="{{ route('admin.about.gallery.index') }}"
+    csrfToken="{{ csrf_token() }}"
+    deleteUrl="{{ url('admin/about/gallery') }}"
+    bulkDeleteUrl="{{ route('admin.about.gallery.bulk-delete') }}"
+    :includeSelect2="true"
+    defaultSortBy="created_at"
+    defaultSortOrder="desc"
+    entityName="galleries"
+    entityIcon="fa-images"
+    dateRangeField="created_at"
+    :isSuperadmin="$isSuperadmin"
+/>
 @endsection
