@@ -410,18 +410,24 @@
                 }
             }
 
-            // Remove loading class after a short delay
-            setTimeout(() => {
+            // Remove loading class when DOM is ready
+            function enableTransitions() {
                 document.documentElement.classList.remove('dark-mode-loading');
 
-                // Also apply to body now that it exists
+                // Apply to body now that it exists
                 if (isDark && document.body) {
                     document.body.classList.add('dark-mode');
                 }
 
                 // Update CSS variable for transitions
                 document.documentElement.style.setProperty('--transition-duration', '0.3s');
-            }, 100);
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', enableTransitions);
+            } else {
+                enableTransitions();
+            }
         })();
     </script>
 </head>
