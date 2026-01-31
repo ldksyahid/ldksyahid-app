@@ -46,14 +46,13 @@ class Handler extends ExceptionHandler
             }
 
             // User logged in but doesn't have the required role/permission
-            alert()->error('Akses Ditolak', 'Anda tidak memiliki izin untuk mengakses halaman ini.')->showConfirmButton('Ok', '#00a79d');
-
             $user = auth()->user();
             if ($user->hasAnyRole(['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter'])) {
+                alert()->error('Akses Ditolak', 'Anda tidak memiliki izin untuk mengakses halaman ini.')->showConfirmButton('Ok', '#00a79d');
                 return redirect('/admin/dashboard');
             }
 
-            return redirect()->back()->withInput();
+            return redirect('/')->with('sweetalert_error', true);
         });
     }
 }
