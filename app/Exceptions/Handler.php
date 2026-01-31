@@ -41,13 +41,18 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (UnauthorizedException $e, $request) {
             if (!auth()->check()) {
-                alert()->info('Maaf', 'Harap Masuk Terlebih Dahulu!');
+                alert()->info('Maaf', 'Harap Masuk Terlebih Dahulu!')->showConfirmButton('Ok', '#00a79d');
                 return redirect()->route('login');
             }
 
             // User logged in but doesn't have the required role/permission
-            alert()->error('Akses Ditolak', 'Anda tidak memiliki izin untuk mengakses halaman ini.');
-            return redirect('/admin/dashboard');
+            $user = auth()->user();
+            if ($user->hasAnyRole(['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter'])) {
+                alert()->error('Akses Ditolak', 'Anda tidak memiliki izin untuk mengakses halaman ini.')->showConfirmButton('Ok', '#00a79d');
+                return redirect('/admin/dashboard');
+            }
+
+            return redirect('/')->with('sweetalert_error', true);
         });
     }
 }
