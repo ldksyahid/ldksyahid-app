@@ -1,208 +1,97 @@
 @extends('admin-page.template.body')
 
-@section('head')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
-@endsection
+@php
+    // $isSuperadmin is automatically available via View Composer
+
+    // Guide Cards Config
+    $guideCards = [
+        [
+            'icon' => 'fa-plus-circle',
+            'title' => 'How to Add Call Kestari',
+            'description' => 'Click the <strong>"Add Call Kestari"</strong> button to create a new call kestari entry. Fill in all required fields including button name and link.'
+        ],
+        [
+            'icon' => 'fa-search',
+            'title' => 'Search Feature',
+            'description' => 'Use the search filters in each column to find call kestari more precisely.'
+        ],
+        [
+            'icon' => 'fa-eye',
+            'title' => 'View Details',
+            'description' => 'Click <i class="fa fa-eye small"></i> to view complete call kestari details including link and appear status.'
+        ],
+        [
+            'icon' => 'fa-edit',
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit call kestari details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
+        ],
+    ];
+
+    // Columns Config
+    $columns = [
+        [
+            'key' => 'buttonName',
+            'label' => 'Button Name',
+            'width' => '150px',
+            'sortable' => true,
+            'sortKey' => 'buttonName',
+            'filter' => 'text',
+            'filterKey' => 'buttonName',
+        ],
+        [
+            'key' => 'link',
+            'label' => 'Link',
+            'width' => '300px',
+            'sortable' => true,
+            'sortKey' => 'link',
+            'filter' => 'text',
+            'filterKey' => 'link',
+        ],
+        [
+            'key' => 'created_at',
+            'label' => 'Created Date',
+            'width' => '180px',
+            'sortable' => true,
+            'sortKey' => 'created_at',
+            'filter' => 'daterange',
+            'filterKey' => 'created_at',
+        ],
+    ];
+
+    // Column Widths for CSS
+    $columnWidths = [
+        1 => '50px',   // Checkbox
+        2 => '50px',   // No
+        3 => '150px',  // Button Name
+        4 => '300px',  // Link
+        5 => '180px',  // Created Date
+        6 => '120px',  // Action
+    ];
+@endphp
 
 @section('content')
-<!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-lg-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Call Kestari Management System</h5>
-                <button class='btn btn-primary' onClick="create()"><i class="fa fa-plus"></i> Create Call Kestari</button>
-                {{-- START Data table Call Kestari --}}
-                <div id="read" class="mt-3"></div>
-                {{-- END Data table Call Kestari --}}
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Table End -->
-<!-- Modal -->
-<div class="modal fade" id="modalCrudCallKestari" tabindex="-1" aria-labelledby="modalLabelCrudCallKestari" aria-hidden="true">
-    <div class="modal-dialog modal-lg ">
-        <div class="modal-content bg-light rounded h-100 p-4">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabelCrudCallKestari">Modal title</h5>
-                <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="page"></div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
-
-@section('scripts')
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-<script>
-    // ===== START CRUD Call Kestari =====
-    // untuk load database
-    $(document).ready(function(){
-        read();
-    });
-
-
-    //untuk read database
-    function read() {
-        $.get("{{ url('/admin/service/callkestari/read') }}", {}, function(data, status){
-            $('#read').html(data);
-        });
-    }
-
-    // untuk modal create
-    function create() {
-        $.get("{{ url('/admin/service/callkestari/create') }}", {}, function(data, status){
-            $("#modalLabelCrudCallKestari").html('Create Call Kestari')
-            $("#page").html(data);
-            $("#modalCrudCallKestari").modal('show');
-        });
-    }
-
-    // untuk menyimpan database
-    function store() {
-        var buttonName = $("#buttonName").val();
-        var link = $("#link").val();
-        var appear = $("#appear").val();
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500,
-            width: '350px',
-        })
-        $.ajax({
-            type: "get",
-            url: "{{ url('/admin/service/callkestari/store') }}",
-            data: {
-                buttonName: buttonName,
-                link: link,
-                appear: appear,
-            },
-            success: function(data) {
-                if($.isEmptyObject(data.error)){
-                    $(".btn-close").click();
-                    read();
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Call Kestari has been created !'
-                    });
-                }else{
-                    printErrorMsg(data.error);
-                }
-            }
-        });
-    }
-
-    // Untuk modal halaman edit show
-    function edit(id) {
-        $.get("{{ url('/admin/service/callkestari/edit') }}/" + id, {}, function(data, status) {
-            $("#modalLabelCrudCallKestari").html('Edit CallKestari')
-            $("#page").html(data);
-            $("#modalCrudCallKestari").modal('show');
-        });
-    }
-
-    // untuk update database
-    function update(id) {
-        var buttonName = $("#buttonName").val();
-        var link = $("#link").val();
-        var appear = $("#appear").val();
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500,
-            width: '350px',
-        })
-        $.ajax({
-            type: "get",
-            url: "{{ url('/admin/service/callkestari/update') }}/"+id,
-            data: {
-                buttonName: buttonName,
-                link: link,
-                appear: appear, },
-            success: function(data) {
-                if($.isEmptyObject(data.error)){
-                    $(".btn-close").click();
-                    read();
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Call Kestari has been updated !'
-                    });
-                }else{
-                    printErrorMsg(data.error);
-                }
-
-            }
-        });
-    }
-
-    function printErrorMsg (msg) {
-        $(".print-error-msg").find("ul").html('');
-        $(".print-error-msg").css('display','block');
-        $.each( msg, function( key, value ) {
-            $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
-        });
-    }
-
-    //untuk destroy database
-    function destroycallkestari(id) {
-        var buttonName = $("#buttonName").val();
-        var link = $("#link").val();
-        var appear = $("#appear").val();
-
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500,
-            width: '350px',
-        })
-
-        Swal.fire({
-            title: 'Are you sure ?',
-            text: "You won't be able to revert this !",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                type: "get",
-                url: "{{ url('/admin/service/callkestari/destroy') }}/"+id,
-                data: {
-                    buttonName: buttonName,
-                    link: link,
-                    appear: appear, },
-                    success: function(data) {
-                        $(".btn-close").click();
-                        read();
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Call Kestari has been deleted!'
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        alert(err.Message);
-                    }
-                });
-            }
-        })
-    }
-
-    function preview(id) {
-        $.get("{{ url('/admin/service/callkestari/preview') }}/" + id, {}, function(data, status) {
-            $("#modalLabelCrudCallKestari").html('Preview Call Kestari')
-            $("#page").html(data);
-            $("#modalCrudCallKestari").modal('show');
-        });
-    }
-    // ===== END CRUD Call Kestari =====
-</script>
+<x-admin-index.template
+    pageTitle="Call Kestari"
+    pageIcon="fa-phone"
+    highlightedText="Call Kestari Management"
+    :guideCards="$guideCards"
+    addButtonText="Add Call Kestari"
+    addButtonRoute="admin.service.callkestari.create"
+    tableClass="table-callkestari"
+    tableId="dataCallKestariTable"
+    tableBodyId="callKestariTableBody"
+    :columns="$columns"
+    :columnWidths="$columnWidths"
+    ajaxUrl="{{ route('admin.service.callkestari.index') }}"
+    csrfToken="{{ csrf_token() }}"
+    deleteUrl="{{ url('admin/service/callkestari') }}"
+    bulkDeleteUrl="{{ route('admin.service.callkestari.bulk-delete') }}"
+    :includeSelect2="false"
+    defaultSortBy="created_at"
+    defaultSortOrder="desc"
+    entityName="call kestari"
+    entityIcon="fa-phone"
+    dateRangeField="created_at"
+    :isSuperadmin="$isSuperadmin"
+/>
 @endsection

@@ -1,106 +1,107 @@
 @extends('admin-page.template.body')
 
-@section('head')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
-@endsection
+@php
+    // $isSuperadmin is automatically available via View Composer
+
+    // Guide Cards Config
+    $guideCards = [
+        [
+            'icon' => 'fa-plus-circle',
+            'title' => 'How to Add Structure',
+            'description' => 'Click the <strong>"Add Structure"</strong> button to create a new organizational structure. Fill in the batch, period, structure name, description, and upload both logo and structure image.'
+        ],
+        [
+            'icon' => 'fa-search',
+            'title' => 'Search Feature',
+            'description' => 'Use the search filters to find structures by batch, period, or structure name.'
+        ],
+        [
+            'icon' => 'fa-eye',
+            'title' => 'View Details',
+            'description' => 'Click <i class="fa fa-eye small"></i> to view complete structure details including logo and structure image.'
+        ],
+        [
+            'icon' => 'fa-edit',
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit structure details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
+        ],
+    ];
+
+    // Columns Config
+    $columns = [
+        [
+            'key' => 'batch',
+            'label' => 'Batch',
+            'width' => '120px',
+            'sortable' => true,
+            'sortKey' => 'batch',
+            'filter' => 'text',
+            'filterKey' => 'batch',
+        ],
+        [
+            'key' => 'period',
+            'label' => 'Period',
+            'width' => '150px',
+            'sortable' => true,
+            'sortKey' => 'period',
+            'filter' => 'text',
+            'filterKey' => 'period',
+        ],
+        [
+            'key' => 'structureName',
+            'label' => 'Structure Name',
+            'width' => '200px',
+            'sortable' => true,
+            'sortKey' => 'structureName',
+            'filter' => 'text',
+            'filterKey' => 'structureName',
+        ],
+        [
+            'key' => 'created_at',
+            'label' => 'Created At',
+            'width' => '150px',
+            'sortable' => true,
+            'sortKey' => 'created_at',
+            'filter' => 'daterange',
+            'filterKey' => 'created_at',
+        ],
+    ];
+
+    // Column Widths for CSS
+    $columnWidths = [
+        1 => '50px',   // Checkbox
+        2 => '50px',   // No
+        3 => '120px',  // Batch
+        4 => '150px',  // Period
+        5 => '200px',  // Structure Name
+        6 => '150px',  // Created At
+        7 => '120px',  // Action
+    ];
+@endphp
 
 @section('content')
-<!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Structure Management System</h5>
-                <a class='btn btn-primary' href="/admin/about/structure/create"><i class="fa fa-plus"></i> Create Structure</a>
-                {{-- START Data table Structure --}}
-                <div class="mt-3">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped text-nowrap small" id="dataStructure">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="text-center">No</th>
-                                    <th scope="col" class="text-center">Batch</th>
-                                    <th scope="col" class="text-center">Period</th>
-                                    <th scope="col" class="text-center">Structure Name</th>
-                                    <th scope="col" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($poststructure as $key => $data)
-                                <tr>
-                                    <td scope="row" align='center'>{{ $key+1 }}</td>
-                                    <td align='center'>{{ $data->batch }}</td>
-                                    <td align='center'>{{ $data->period }}</td>
-                                    <td align='center'>{{ $data->structureName }}</td>
-                                    <td align="center">
-                                        <a href="/admin/about/structure/{{ $data->id }}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
-                                        <button type="submit" onclick="deleteConfirmationStructure({{ $data->id }})" id="delete-structure" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/admin/about/structure/{{ $data->id }}/preview"><i class="fa fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan='9', align='center'>No Structure Data</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {{-- END Data table Structure --}}
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Table End -->
-@endsection
-
-@section('scripts')
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-<script>
-// ===== START CRUD STRUCTURE =====
-// ini untuk konfirmasi delete
-function deleteConfirmationStructure(id) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500,
-                width: '350px',
-            })
-
-            Swal.fire({
-                title: 'Are you sure ?',
-                text: "You won't be able to revert this !",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $.ajax({
-                    type: "get",
-                    url: `{{ url('/admin/about/structure/${id}/destroy') }}`,
-                        success: function(data) {
-                            setTimeout(function () { location.reload(1); }, 300);
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Structure has been deleted !'
-                            });
-                        }
-                    });
-
-                }
-            })
-        }
-// ===== END CRUD STRUCTURE =====
-</script>
-<script>
-    $('#dataStructure').DataTable({
-        responsive: true,
-        fixedHeader: true,
-    });
-</script>
+<x-admin-index.template
+    pageTitle="Structure Management"
+    pageIcon="fa-sitemap"
+    highlightedText="Organizational Structure System"
+    :guideCards="$guideCards"
+    addButtonText="Add Structure"
+    addButtonRoute="admin.about.structure.create"
+    tableClass="table-structure"
+    tableId="dataStructureTable"
+    tableBodyId="structureTableBody"
+    :columns="$columns"
+    :columnWidths="$columnWidths"
+    ajaxUrl="{{ route('admin.about.structure.index') }}"
+    csrfToken="{{ csrf_token() }}"
+    deleteUrl="{{ url('admin/about/structure') }}"
+    bulkDeleteUrl="{{ route('admin.about.structure.bulk-delete') }}"
+    :includeSelect2="false"
+    defaultSortBy="created_at"
+    defaultSortOrder="desc"
+    entityName="structure"
+    entityIcon="fa-sitemap"
+    dateRangeField="created_at"
+    :isSuperadmin="$isSuperadmin"
+/>
 @endsection

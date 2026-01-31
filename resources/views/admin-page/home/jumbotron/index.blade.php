@@ -1,108 +1,105 @@
 @extends('admin-page.template.body')
 
-@section('head')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
-@endsection
+@php
+    // $isSuperadmin is automatically available via View Composer
+
+    // Guide Cards Config
+    $guideCards = [
+        [
+            'icon' => 'fa-plus-circle',
+            'title' => 'How to Add Jumbotron',
+            'description' => 'Click the <strong>"Add Jumbotron"</strong> button to create a new jumbotron slide. Upload an image and optionally add a button.'
+        ],
+        [
+            'icon' => 'fa-search',
+            'title' => 'Search Feature',
+            'description' => 'Use the search filters to find jumbotrons by title or button name.'
+        ],
+        [
+            'icon' => 'fa-eye',
+            'title' => 'View Details',
+            'description' => 'Click <i class="fa fa-eye small"></i> to view complete jumbotron details including the image preview.'
+        ],
+        [
+            'icon' => 'fa-edit',
+            'title' => 'Edit & Bulk Delete',
+            'description' => 'Click <i class="fa fa-edit small"></i> to edit jumbotron details. Only Superadmins can perform <i class="fa fa-trash small text-danger"></i> bulk delete.'
+        ],
+    ];
+
+    // Columns Config
+    $columns = [
+        [
+            'key' => 'title',
+            'label' => 'Title',
+            'width' => '200px',
+            'sortable' => true,
+            'sortKey' => 'title',
+            'filter' => 'text',
+            'filterKey' => 'title',
+        ],
+        [
+            'key' => 'btnname',
+            'label' => 'Button Name',
+            'width' => '150px',
+            'sortable' => true,
+            'sortKey' => 'btnname',
+            'filter' => 'text',
+            'filterKey' => 'btnname',
+        ],
+        [
+            'key' => 'btnlink',
+            'label' => 'Button Link',
+            'width' => '200px',
+            'sortable' => false,
+            'filter' => 'none',
+        ],
+        [
+            'key' => 'created_at',
+            'label' => 'Created At',
+            'width' => '180px',
+            'sortable' => true,
+            'sortKey' => 'created_at',
+            'filter' => 'daterange',
+            'filterKey' => 'created_at',
+        ],
+    ];
+
+    // Column Widths for CSS
+    $columnWidths = [
+        1 => '50px',   // Checkbox
+        2 => '50px',   // No
+        3 => '200px',  // Title
+        4 => '150px',  // Button Name
+        5 => '200px',  // Button Link
+        6 => '180px',  // Created At
+        7 => '120px',  // Action
+    ];
+@endphp
 
 @section('content')
-<!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h5 class="mb-4">Jumbotron Management System</h5>
-                <a class='btn btn-primary' href="/admin/jumbotron/create"><i class="fa fa-plus"></i> Create Jumbotron</a>
-                <div class="mt-3">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped text-nowrap small" id="dataJumbotron">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="text-center">No</th>
-                                    <th scope="col" class="text-center">Title</th>
-                                    <th scope="col" class="text-center">Button Name</th>
-                                    <th scope="col" class="text-center">Button Link</th>
-                                    <th scope="col" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($postjumbotron as $key => $postjumbotron)
-                                <tr>
-                                    <td scope="row" align='center'>{{$key + 1}}</td>
-                                    <td align='center'>{{$postjumbotron->title}}</td>
-                                    @if ($postjumbotron->btnname != null || $postjumbotron->btnlink != null)
-                                        <td align='center'>{{$postjumbotron->btnname}}</td>
-                                        <td align='center'><a href="{{$postjumbotron->btnlink}}" target="_blank">{{$postjumbotron->btnlink}}</a></td>
-                                    @else
-                                        <td align='center'>None</td>
-                                        <td align='center'>None</td>
-                                    @endif
-                                    <td align="center">
-                                        <a href="/admin/jumbotron/{{$postjumbotron->id}}/edit" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
-                                        <button type="submit" onclick="deleteConfirmationJumbotron({{$postjumbotron->id}})" id="delete-jumbotron" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i></button>
-                                        <a class="btn btn-sm btn-primary" href="/admin/jumbotron/{{$postjumbotron->id}}/preview"><i class="fa fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan='9', align='center'>No Jumbotron Data</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
-
-@section('scripts')
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-<script>
-// ===== START CRUD JUMBOTRON =====
-// ini untuk konfirmasi delete
-        function deleteConfirmationJumbotron(id) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1500,
-                width: '350px',
-            })
-
-            Swal.fire({
-                title: 'Are you sure ?',
-                text: "You won't be able to revert this !",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $.ajax({
-                    type: "get",
-                    url: `{{ url('/admin/jumbotron/${id}/destroy') }}`,
-                        success: function(data) {
-                            setTimeout(function () { location.reload(1); }, 300);
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Jumbotron has been deleted !'
-                            });
-                        }
-                    });
-
-                }
-            })
-        }
-// ===== END CRUD JUMBOTRON =====
-</script>
-<script>
-    $('#dataJumbotron').DataTable({
-        responsive: true,
-        fixedHeader: true,
-    });
-</script>
+<x-admin-index.template
+    pageTitle="Jumbotron Management"
+    pageIcon="fa-images"
+    highlightedText="Jumbotron Management System"
+    :guideCards="$guideCards"
+    addButtonText="Add Jumbotron"
+    addButtonRoute="admin.jumbotron.create"
+    tableClass="table-jumbotrons"
+    tableId="dataJumbotronTable"
+    tableBodyId="jumbotronTableBody"
+    :columns="$columns"
+    :columnWidths="$columnWidths"
+    ajaxUrl="{{ route('admin.jumbotron.index') }}"
+    csrfToken="{{ csrf_token() }}"
+    deleteUrl="{{ url('admin/jumbotron') }}"
+    bulkDeleteUrl="{{ route('admin.jumbotron.bulk-delete') }}"
+    :includeSelect2="false"
+    defaultSortBy="created_at"
+    defaultSortOrder="desc"
+    entityName="jumbotrons"
+    entityIcon="fa-images"
+    dateRangeField="created_at"
+    :isSuperadmin="$isSuperadmin"
+/>
 @endsection

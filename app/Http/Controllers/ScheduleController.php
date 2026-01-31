@@ -5,106 +5,169 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Schedule;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Services\GoogleDrive;
 
 class ScheduleController extends Controller
 {
-    public $pathScheduleGDrive = '16hEKrP0GhcA1Qrga1_s4dsNaLbIbcdIt';
-
+    /**
+     * Display a listing of schedules (Landing Page)
+     */
     public function index()
     {
-        $postschedule = Schedule::orderBy('created_at','desc')->get();
-        return view('landing-page.schedule.index', compact('postschedule'),["title" => "Lainnya"]);
+        $postschedule = Schedule::orderBy('created_at', 'desc')->get();
+        return view('landing-page.schedule.index', compact('postschedule'), ["title" => "Lainnya"]);
     }
 
-    public function indexadmin()
+    /**
+     * Display a listing of schedules (Admin Index)
+     */
+    public function indexAdmin(Request $request)
     {
-        $postschedule = Schedule::orderBy('created_at','desc')->get();
-        return view('admin-page.schedule.index', compact('postschedule'), ["title" => "Schedule"]);
-    }
+        $items = Schedule::searchAdminSchedules($request);
+        $tableConfig = Schedule::getTableConfig();
 
-    public function create()
-    {
-        return view('admin-page.schedule.create', ["title" => "Schedule"]);
-    }
-
-    public function store(Request $request)
-    {
-        $gdriveService = new GoogleDrive($this->pathScheduleGDrive);
-
-        $fileName = time() . '_schedule_' . $request->file('picture')->getClientOriginalName();
-        $filePath = $this->pathScheduleGDrive . '/' . $fileName;
-
-        $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
-
-        Schedule::create([
-            "title" => $request["title"],
-            "month" => $request["month"],
-            "year" => $request["year"],
-            'picture' => $uploadResult['fileName'],
-            'gdrive_id' => $uploadResult['gdriveID'],
-        ]);
-
-        Alert::success('Success', 'Schedule has been uploaded !');
-        return redirect('/admin/schedule');
-    }
-
-    public function edit($id)
-    {
-        $postschedule = Schedule::find($id);
-        return view('admin-page.schedule.update',  compact('postschedule'),["title" => "Schedule"]);
-    }
-
-    public function showInAdmin($id)
-    {
-        $postschedule = Schedule::find($id);
-        return view('admin-page.schedule.view',  compact('postschedule'),["title" => "Schedule"]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $scheduleModel = Schedule::find($id);
-
-        if ($request->file('picture')) {
-            $gdriveService = new GoogleDrive($this->pathScheduleGDrive);
-
-            $fileName = time() . '_schedule_' . $request->file('picture')->getClientOriginalName();
-            $filePath = $this->pathScheduleGDrive . '/' . $fileName;
-
-            $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
-
-            $oldGdriveID = $scheduleModel->gdrive_id;
-
-            if ($oldGdriveID) {
-                $gdriveService->deleteImage($oldGdriveID);
-            }
-
-            $scheduleModel->update([
-                'picture' => $uploadResult['fileName'],
-                'gdrive_id' => $uploadResult['gdriveID'],
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $items,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
+                'pagination' => $items->appends($request->query())->links()->render(),
+                'total' => $items->total(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem()
             ]);
         }
 
-        $scheduleModel->update([
-            "title" => $request["title"],
-            "month" => $request["month"],
-            "year" => $request["year"],
-        ]);
+        $monthOptions = Schedule::select('month')->distinct()->orderBy('month')->pluck('month', 'month')->toArray();
+        $yearOptions = Schedule::select('year')->distinct()->orderByDesc('year')->pluck('year', 'year')->toArray();
 
-        toast('Schedule has been edited !', 'success')->autoClose(1500)->width('400px');
-        return redirect('/admin/schedule');
+        return view('admin-page.schedule.index', compact('items', 'tableConfig', 'monthOptions', 'yearOptions'))
+            ->with('title', 'Schedule');
     }
 
+    /**
+     * Show the form for creating a new schedule
+     */
+    public function create()
+    {
+        return view('admin-page.schedule.create')
+            ->with('title', 'Schedule');
+    }
+
+    /**
+     * Store a newly created schedule
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'month' => 'required|string|max:255',
+            'year' => 'required|string|max:10',
+            'picture' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+        ]);
+
+        try {
+            Schedule::saveModel($request);
+            Alert::success('Success', 'Schedule has been created!');
+            return redirect()->route('admin.schedule.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to create schedule: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+    }
+
+    /**
+     * Display the specified schedule (Admin Preview)
+     */
+    public function showAdmin($id)
+    {
+        $schedule = Schedule::findOrFail($id);
+
+        return view('admin-page.schedule.view', compact('schedule'))
+            ->with('title', 'Schedule');
+    }
+
+    /**
+     * Show the form for editing the specified schedule
+     */
+    public function edit($id)
+    {
+        $schedule = Schedule::findOrFail($id);
+
+        return view('admin-page.schedule.update', compact('schedule'))
+            ->with('title', 'Schedule');
+    }
+
+    /**
+     * Update the specified schedule
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'month' => 'required|string|max:255',
+            'year' => 'required|string|max:10',
+            'picture' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+        ]);
+
+        try {
+            $schedule = Schedule::findOrFail($id);
+            $schedule->updateModel($request);
+            Alert::success('Success', 'Schedule has been updated!');
+            return redirect()->route('admin.schedule.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to update schedule: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+    }
+
+    /**
+     * Remove the specified schedule
+     */
     public function destroy($id)
     {
-        $scheduleModel = Schedule::find($id);
-        $gdriveService = new GoogleDrive($this->pathScheduleGDrive);
+        try {
+            $schedule = Schedule::findOrFail($id);
+            $schedule->deleteModel();
 
-        if ($scheduleModel->gdrive_id) {
-            $gdriveService->deleteImage($scheduleModel->gdrive_id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Schedule has been deleted!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting schedule: ' . $e->getMessage()
+            ], 500);
         }
+    }
 
-        $scheduleModel->delete();
-        return redirect()->back();
+    /**
+     * Bulk delete schedules
+     */
+    public function bulkDelete(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No schedules selected for deletion'
+                ], 400);
+            }
+
+            $deleted = Schedule::bulkDeleteModel($ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$deleted} schedule(s) have been deleted!"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting schedules: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

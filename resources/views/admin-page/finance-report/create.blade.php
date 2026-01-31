@@ -1,12 +1,13 @@
 @extends('admin-page.template.body')
 
 @section('content')
-    <x-finance-report.form
-        operation="create"
-        titleForm="Add New"
-        entityLabel="Finance Report"
-        :ldkTags="$ldkTags"
-    />
+    @include('admin-page.finance-report.components._form._form', [
+        'operation' => 'create',
+        'financeReport' => null,
+        'titleForm' => 'Add New',
+        'entityLabel' => 'Finance Report',
+        'ldkTags' => $ldkTags,
+    ])
 @endsection
 
 @section('styles')
