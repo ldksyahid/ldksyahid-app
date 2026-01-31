@@ -39,6 +39,9 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         imagePreview.src = e.target.result;
+                        imagePreview.style.display = '';
+                        var svgEl = imagePreview.parentElement.querySelector('.svg-placeholder');
+                        if (svgEl) svgEl.style.display = 'none';
                         if (previewContainer) {
                             previewContainer.classList.add('has-image');
                         }

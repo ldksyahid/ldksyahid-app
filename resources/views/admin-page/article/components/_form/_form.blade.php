@@ -3,7 +3,6 @@
     $operation = $operation ?? 'create';
     $article = $article ?? null;
 
-    $defaultImage = 'https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm';
 @endphp
 
 <div class="container-fluid pt-4 px-4">
@@ -216,9 +215,12 @@
                                     </label>
 
                                     <div class="image-preview-container {{ ($article && $article->gdrive_id) ? 'has-image' : '' }} mb-3">
-                                        <img id="imagePreview"
-                                            src="{{ ($article && $article->gdrive_id) ? $article->getPosterUrl() : $defaultImage }}"
-                                            alt="Article Poster Preview">
+                                        @if($article && $article->gdrive_id)
+                                            <img id="imagePreview" src="{{ $article->getPosterUrl() }}" alt="Article Poster Preview">
+                                        @else
+                                            <img id="imagePreview" src="" alt="Article Poster Preview" style="display:none;">
+                                            <x-svg-placeholder />
+                                        @endif
                                     </div>
 
                                     @if ($operation !== 'view')

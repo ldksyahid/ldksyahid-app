@@ -5,17 +5,8 @@
     $data = $data ?? null;
     $provinces = $provinces ?? collect();
 
-    $defaultImage = 'https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm';
-
-    $currentPoster = $defaultImage;
-    if ($data && $data->gdrive_id) {
-        $currentPoster = 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id;
-    }
-
-    $currentLogo = $defaultImage;
-    if ($data && $data->gdrive_id_1) {
-        $currentLogo = 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id_1;
-    }
+    $currentPoster = ($data && $data->gdrive_id) ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id : null;
+    $currentLogo = ($data && $data->gdrive_id_1) ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id_1 : null;
 
     $hasOrganization = $data && ($data->nama_pj != null || $data->link_pj != null);
 @endphp
@@ -236,7 +227,12 @@
                                     </label>
                                     <div class="text-center mb-3">
                                         <div class="image-preview-container {{ ($data && $data->gdrive_id) ? 'has-image' : '' }}">
-                                            <img id="framePoster" src="{{ $currentPoster }}" alt="Poster Preview">
+                                            @if($currentPoster)
+                                                <img id="framePoster" src="{{ $currentPoster }}" alt="Poster Preview">
+                                            @else
+                                                <img id="framePoster" src="" alt="Poster Preview" style="display:none;">
+                                                <x-svg-placeholder />
+                                            @endif
                                         </div>
                                     </div>
                                     @if ($operation !== 'view')
@@ -305,7 +301,12 @@
                                             <label for="logoPj" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Organization Logo</label>
                                             <div class="text-center mb-3">
                                                 <div class="image-preview-container {{ ($data && $data->gdrive_id_1) ? 'has-image' : '' }}">
-                                                    <img id="frameLogo" src="{{ $currentLogo }}" alt="Logo Preview" style="width: 150px; height: 150px; object-fit: contain;">
+                                                    @if($currentLogo)
+                                                        <img id="frameLogo" src="{{ $currentLogo }}" alt="Logo Preview" style="width: 150px; height: 150px; object-fit: contain;">
+                                                    @else
+                                                        <img id="frameLogo" src="" alt="Logo Preview" style="display:none; width: 150px; height: 150px; object-fit: contain;">
+                                                        <x-svg-placeholder height="150" />
+                                                    @endif
                                                 </div>
                                             </div>
                                             @if ($operation !== 'view')

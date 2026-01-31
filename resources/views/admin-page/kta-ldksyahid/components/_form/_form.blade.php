@@ -6,9 +6,7 @@
 
     $defaultMaleImage = 'https://lh3.googleusercontent.com/d/1dpTivBD1VPetcmHj3psiz75si_n1PwTo';
     $defaultFemaleImage = 'https://lh3.googleusercontent.com/d/1wssPqERqsehbQIrUsp9ntd9RHe8m77OQ';
-    $defaultImage = 'https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm';
-
-    $currentPhoto = $defaultImage;
+    $currentPhoto = null;
     if ($ktaData) {
         if ($ktaData->gdrive_id) {
             $currentPhoto = $ktaData->getPhotoUrl();
@@ -230,7 +228,12 @@
                         <h5 class="section-title mb-3"><i class="fas fa-image me-2"></i>Photo Profile</h5>
                         <div class="text-center mb-3">
                             <div class="image-preview-container {{ ($ktaData && $ktaData->gdrive_id) ? 'has-image' : '' }}">
-                                <img id="frame" src="{{ $currentPhoto }}" alt="Photo Profile Preview">
+                                @if($currentPhoto)
+                                    <img id="frame" src="{{ $currentPhoto }}" alt="Photo Profile Preview">
+                                @else
+                                    <img id="frame" src="" alt="Photo Profile Preview" style="display:none;">
+                                    <x-svg-placeholder />
+                                @endif
                             </div>
                         </div>
                         @if ($operation !== 'view')

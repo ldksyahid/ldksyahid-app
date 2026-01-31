@@ -3,7 +3,6 @@
     $operation = $operation ?? 'create';
     $itsupport = $itsupport ?? null;
 
-    $defaultImage = 'https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm';
 @endphp
 
 <div class="container-fluid pt-4 px-4">
@@ -152,9 +151,12 @@
                         </h5>
                         <div class="text-center mb-3">
                             <div class="image-preview-container {{ ($itsupport && $itsupport->gdrive_id) ? 'has-image' : '' }}">
-                                <img id="photoProfilePreview"
-                                    src="{{ ($itsupport && $itsupport->gdrive_id) ? $itsupport->getPhotoProfileUrl() : $defaultImage }}"
-                                    alt="Photo Profile Preview">
+                                @if($itsupport && $itsupport->gdrive_id)
+                                    <img id="photoProfilePreview" src="{{ $itsupport->getPhotoProfileUrl() }}" alt="Photo Profile Preview">
+                                @else
+                                    <img id="photoProfilePreview" src="" alt="Photo Profile Preview" style="display:none;">
+                                    <x-svg-placeholder />
+                                @endif
                             </div>
                         </div>
                         @if ($operation !== 'view')

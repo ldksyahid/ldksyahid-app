@@ -3,7 +3,6 @@
     $operation = $operation ?? 'create';
     $gallery = $gallery ?? null;
 
-    $defaultImage = 'https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm';
 @endphp
 
 <div class="container-fluid pt-4 px-4">
@@ -196,9 +195,12 @@
                         </h5>
                         <div class="text-center mb-3">
                             <div class="image-preview-container group-photo {{ ($gallery && $gallery->gdrive_id) ? 'has-image' : '' }}">
-                                <img id="groupPhotoPreview"
-                                    src="{{ ($gallery && $gallery->gdrive_id) ? $gallery->getGroupPhotoUrl() : $defaultImage }}"
-                                    alt="Group Photo Preview">
+                                @if($gallery && $gallery->gdrive_id)
+                                    <img id="groupPhotoPreview" src="{{ $gallery->getGroupPhotoUrl() }}" alt="Group Photo Preview">
+                                @else
+                                    <img id="groupPhotoPreview" src="" alt="Group Photo Preview" style="display:none;">
+                                    <x-svg-placeholder />
+                                @endif
                             </div>
                         </div>
                         @if ($operation !== 'view')
@@ -230,9 +232,12 @@
                                 <div class="col-md-4 col-lg-3 mb-3">
                                     <label for="photo{{ $i }}" class="form-label">Photo {{ $i }}</label>
                                     <div class="image-preview-container small-preview {{ ($gallery && $gallery->getPhotoUrl($i)) ? 'has-image' : '' }} mb-2">
-                                        <img id="photoPreview{{ $i }}"
-                                            src="{{ ($gallery && $gallery->getPhotoUrl($i)) ? $gallery->getPhotoUrl($i) : $defaultImage }}"
-                                            alt="Photo {{ $i }} Preview">
+                                        @if($gallery && $gallery->getPhotoUrl($i))
+                                            <img id="photoPreview{{ $i }}" src="{{ $gallery->getPhotoUrl($i) }}" alt="Photo {{ $i }} Preview">
+                                        @else
+                                            <img id="photoPreview{{ $i }}" src="" alt="Photo {{ $i }} Preview" style="display:none;">
+                                            <x-svg-placeholder height="150" />
+                                        @endif
                                     </div>
                                     @if ($operation !== 'view')
                                         <input type="file" class="form-control form-control-sm" id="photo{{ $i }}" name="photo{{ $i }}"
