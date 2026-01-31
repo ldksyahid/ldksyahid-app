@@ -220,7 +220,8 @@
         }
 
         .navbar .dark-mode-toggle-container {
-            margin-right: 0.5rem;
+            margin-right: -10px;
+            margin-top: 7px;
         }
 
         /* Responsive adjustments */
