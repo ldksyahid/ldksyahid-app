@@ -256,7 +256,7 @@
 }
 .card-guide {
     border-radius: 12px;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
 }
 .card-guide:hover {
     transform: translateY(-3px);
