@@ -74,6 +74,28 @@
             background-color: var(--dark-mode-bg) !important;
         }
 
+        /* Profile Dropdown Animation */
+        .dropdown-profile {
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 8px 0;
+            transform-origin: top center;
+        }
+        .dropdown-profile.dropdown-animate-in {
+            animation: dropdownFadeIn 0.25s ease-out forwards;
+        }
+        .dropdown-profile.dropdown-animate-out {
+            animation: dropdownFadeOut 0.2s ease-in forwards;
+        }
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes dropdownFadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-8px); }
+        }
+
         /* Prevent transitions during initial load */
         .dark-mode-loading * {
             transition: none !important;
@@ -430,6 +452,39 @@
             }
         })();
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var profileDropdowns = document.querySelectorAll('.dropdown-profile');
+            profileDropdowns.forEach(function(menu) {
+                var parent = menu.closest('.dropdown') || menu.closest('.nav-item');
+                if (!parent) return;
+                var closing = false;
+
+                parent.addEventListener('shown.bs.dropdown', function() {
+                    menu.classList.remove('dropdown-animate-out');
+                    menu.classList.add('dropdown-animate-in');
+                });
+
+                parent.addEventListener('hide.bs.dropdown', function(e) {
+                    if (closing) {
+                        closing = false;
+                        return;
+                    }
+                    e.preventDefault();
+                    menu.classList.remove('dropdown-animate-in');
+                    menu.classList.add('dropdown-animate-out');
+                    menu.addEventListener('animationend', function handler() {
+                        menu.classList.remove('dropdown-animate-out');
+                        menu.removeEventListener('animationend', handler);
+                        closing = true;
+                        var toggle = parent.querySelector('[data-bs-toggle="dropdown"]');
+                        var instance = bootstrap.Dropdown.getInstance(toggle);
+                        if (instance) instance.hide();
+                    });
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -594,20 +649,6 @@
         html.dark-mode .content .navbar .dropdown-menu {
             background: #2b2f33 !important;
             border-color: #373b3e !important;
-            border-radius: 0 0 12px 12px;
-            animation: dropdownSlide 0.25s ease-out;
-            transform-origin: top center;
-        }
-
-        @keyframes dropdownSlide {
-            from {
-                opacity: 0;
-                transform: translateY(-8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         html.dark-mode .content .navbar .dropdown-item {
