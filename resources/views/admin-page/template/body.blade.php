@@ -531,10 +531,7 @@
                         box-shadow 0.3s ease;
         }
 
-        /* Spinner transition */
-        #spinner {
-            transition: background-color 0.3s ease;
-        }
+        /* Spinner transition - handled in style.css with !important */
 
         /* LDK Logo Spinner */
         .spinner-ldk {
