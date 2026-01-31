@@ -97,7 +97,7 @@
         }
 
         /* Prevent transitions during initial load */
-        .dark-mode-loading * {
+        .dark-mode-loading *:not(.sidebar):not(.content) {
             transition: none !important;
         }
 
@@ -320,8 +320,6 @@
 
         /* Transition classes */
         .dark-mode-transition-ready .container-xxl,
-        .dark-mode-transition-ready .content,
-        .dark-mode-transition-ready .sidebar,
         .dark-mode-transition-ready .card,
         .dark-mode-transition-ready .navbar,
         .dark-mode-transition-ready .form-control,
@@ -333,6 +331,17 @@
                         border-color 0.3s ease,
                         color 0.3s ease,
                         box-shadow 0.3s ease;
+        }
+        .dark-mode-transition-ready .sidebar {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        background-color 0.3s ease,
+                        border-color 0.3s ease !important;
+        }
+        .dark-mode-transition-ready .content {
+            transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        background-color 0.3s ease,
+                        border-color 0.3s ease !important;
         }
 
         .dark-mode-transition {
@@ -400,8 +409,6 @@
             .dark-mode-toggle .toggle-thumb,
             .dark-mode-notification,
             .dark-mode-transition-ready .container-xxl,
-            .dark-mode-transition-ready .content,
-            .dark-mode-transition-ready .sidebar,
             .dark-mode-transition-ready .card,
             .dark-mode-transition-ready .navbar,
             .dark-mode-transition-ready .form-control,
