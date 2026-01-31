@@ -316,6 +316,32 @@
                 </div>
             </div>
 
+            <!-- Prayer Times -->
+            <div class="col-md-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="section-title mb-3"><i class="fas fa-mosque me-2"></i>Prayer Times - Jakarta</h5>
+                        <div class="row g-3">
+                            @php
+                                $prayers = ['Imsak', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
+                                $icons = ['fa-moon', 'fa-sun', 'fa-sun', 'fa-cloud-sun', 'fa-moon', 'fa-star'];
+                            @endphp
+                            @foreach ($prayers as $index => $name)
+                            <div class="col-6 col-md-4 col-lg-2">
+                                <div class="prayer-card text-center p-3">
+                                    <div class="prayer-icon mx-auto mb-2">
+                                        <i class="fa {{ $icons[$index] }}"></i>
+                                    </div>
+                                    <div class="prayer-name mb-1">{{ $name }}</div>
+                                    <div class="prayer-time">{{ $prayerTimes[strtolower($name)] ?? '-' }}</div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Statistics Widgets -->
             <div class="col-md-12 mb-4">
                 <div class="card border-0 shadow-sm">
@@ -421,32 +447,6 @@
                                     <canvas id="doughnutChart"></canvas>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Prayer Times -->
-            <div class="col-md-12 mb-4">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="section-title mb-3"><i class="fas fa-mosque me-2"></i>Prayer Times - Jakarta</h5>
-                        <div class="row g-3">
-                            @php
-                                $prayers = ['Imsak', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
-                                $icons = ['fa-moon', 'fa-sun', 'fa-sun', 'fa-cloud-sun', 'fa-moon', 'fa-star'];
-                            @endphp
-                            @foreach ($prayers as $index => $name)
-                            <div class="col-6 col-md-4 col-lg-2">
-                                <div class="prayer-card text-center p-3">
-                                    <div class="prayer-icon mx-auto mb-2">
-                                        <i class="fa {{ $icons[$index] }}"></i>
-                                    </div>
-                                    <div class="prayer-name mb-1">{{ $name }}</div>
-                                    <div class="prayer-time">{{ $prayerTimes[strtolower($name)] ?? '-' }}</div>
-                                </div>
-                            </div>
-                            @endforeach
                         </div>
                     </div>
                 </div>
