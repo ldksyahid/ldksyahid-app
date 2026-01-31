@@ -986,11 +986,6 @@
             color: #e4e6eb !important;
         }
 
-        html.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
-            background-color: #373b3e !important;
-            color: var(--primary) !important;
-        }
-
         html.dark-mode .select2-search--dropdown .select2-search__field {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
@@ -1273,16 +1268,25 @@
         html.dark-mode .select2-container--default .select2-results__option {
             color: #e4e6eb !important;
         }
-        html.dark-mode .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        html.dark-mode .select2-container--default .select2-results__option--highlighted,
+        html.dark-mode .select2-container--default .select2-results__option--highlighted[aria-selected],
+        html.dark-mode .select2-container--default .select2-results__option--highlighted[aria-selected="true"] {
             background-color: #00a79d !important;
             color: #fff !important;
         }
-        html.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
+        html.dark-mode .select2-container--default .select2-results__option[aria-selected="true"]:not(.select2-results__option--highlighted),
+        html.dark-mode .select2-container--default .select2-results__option--selected:not(.select2-results__option--highlighted) {
             background-color: #373b3e !important;
             color: var(--primary) !important;
         }
         html.dark-mode .select2-container--default .select2-results__option:hover {
             background-color: #373b3e !important;
+        }
+        html.dark-mode .select2-container--default .select2-selection--single .select2-selection__clear {
+            color: #b0b3b8 !important;
+        }
+        html.dark-mode .select2-container--default .select2-selection--single .select2-selection__clear:hover {
+            color: #e4e6eb !important;
         }
 
         /* SVG Placeholder dark mode */
@@ -1404,6 +1408,22 @@
             -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
             -webkit-text-fill-color: #212529 !important;
             transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* Match Select2 dropdown height with text input */
+        .select2-container .select2-selection--single {
+            height: calc(2.5rem + 2px) !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100% !important;
+            top: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        .form-select:not(.select2-hidden-accessible) {
+            height: calc(2.5rem + 2px) !important;
         }
 
         /* Light mode specific overrides */
