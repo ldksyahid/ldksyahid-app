@@ -572,7 +572,9 @@
         }
 
         html.dark-mode .content {
-            background: #1a1d21;
+            background-color: #1a1d21;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M20 10l-3 5h6l-3-5zm0 2.5l1.5 2.5h-3l1.5-2.5z' fill='%23ffffff' fill-opacity='0.12'/%3E%3Ccircle cx='60' cy='15' r='4' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3Ccircle cx='60' cy='15' r='1.5' fill='%23ffffff' fill-opacity='0.12'/%3E%3Crect x='8' y='50' width='8' height='10' rx='1' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3Cline x1='10' y1='53' x2='14' y2='53' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.6'/%3E%3Cline x1='10' y1='55' x2='14' y2='55' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.6'/%3E%3Cline x1='10' y1='57' x2='13' y2='57' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.6'/%3E%3Cpath d='M55 48l5 3-5 3z' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3Ccircle cx='40' cy='35' r='5' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3Cpath d='M38 35l1.5 1.5 3-3' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3Cpath d='M55 65a4 4 0 01-4 4h-1v2l-3-2h-2a4 4 0 01-4-4v-2a4 4 0 014-4h6a4 4 0 014 4z' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3C/svg%3E");
+            background-size: 80px 80px;
         }
 
         html.dark-mode .sidebar {
