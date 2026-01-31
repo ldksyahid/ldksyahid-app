@@ -8,7 +8,7 @@
                 if ($("#spinner").length > 0) {
                     $("#spinner").removeClass("show");
                 }
-            }, 300);
+            }, 500);
         });
     };
     spinner();
