@@ -64,28 +64,27 @@
         }
 
         /* Dark mode class akan ditambahkan oleh JavaScript */
-        body.dark-mode {
+        html.dark-mode,
+        html.dark-mode body {
             background-color: var(--dark-mode-bg) !important;
         }
     </style>
 
     <script>
-        // Cek localStorage saat halaman dimuat
-        document.addEventListener('DOMContentLoaded', function() {
-            const darkModeEnabled = localStorage.getItem('darkMode') === 'enabled';
-
-            if (darkModeEnabled) {
-                document.documentElement.classList.add('dark-mode');
-                document.body.classList.add('dark-mode');
-            } else {
-                document.documentElement.classList.remove('dark-mode');
-                document.body.classList.remove('dark-mode');
-            }
-        });
+        // Synchronous - runs immediately before any rendering
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.documentElement.classList.add('dark-mode');
+        }
     </script>
 </head>
 
 <body>
+    <script>
+        // Runs immediately when body is available - ensures body has the class
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
     <!-- Custom Styles untuk dark/light mode -->
     <style>
         /* Light mode default */
@@ -96,8 +95,7 @@
         }
 
         /* Dark mode overrides - digunakan saat class dark-mode ada di html atau body */
-        html.dark-mode body,
-        body.dark-mode {
+        html.dark-mode body {
             background-color: #1a1d21 !important;
             color: #e4e6eb;
         }
@@ -139,87 +137,87 @@
             padding-right: 1 !important;
         }
 
-        /* Dark Mode Overrides - menggunakan selector body.dark-mode */
-        body.dark-mode .container-xxl {
+        /* Dark Mode Overrides - menggunakan selector html.dark-mode */
+        html.dark-mode .container-xxl {
             background: #212529 !important;
         }
 
-        body.dark-mode .content {
+        html.dark-mode .content {
             background: #1a1d21;
         }
 
-        body.dark-mode .sidebar {
+        html.dark-mode .sidebar {
             background: #212529;
         }
 
-        body.dark-mode .sidebar .navbar {
+        html.dark-mode .sidebar .navbar {
             background: #212529 !important;
         }
 
-        body.dark-mode .sidebar .navbar .navbar-nav .nav-link {
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link {
             color: #e4e6eb;
             border-left-color: #212529;
         }
 
-        body.dark-mode .sidebar .navbar .navbar-nav .nav-link:hover,
-        body.dark-mode .sidebar .navbar .navbar-nav .nav-link.active {
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link:hover,
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link.active {
             color: var(--primary);
             background: #2b2f33;
             border-color: var(--primary);
         }
 
-        body.dark-mode .sidebar .navbar .navbar-nav .nav-link i {
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link i {
             background: #2b2f33;
         }
 
-        body.dark-mode .sidebar .navbar .navbar-nav .nav-link:hover i,
-        body.dark-mode .sidebar .navbar .navbar-nav .nav-link.active i {
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link:hover i,
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link.active i {
             background: #373b3e;
         }
 
-        body.dark-mode .sidebar .navbar .dropdown-item {
+        html.dark-mode .sidebar .navbar .dropdown-item {
             color: #b0b3b8;
         }
 
-        body.dark-mode .sidebar .navbar .dropdown-item:hover,
-        body.dark-mode .sidebar .navbar .dropdown-item.active {
+        html.dark-mode .sidebar .navbar .dropdown-item:hover,
+        html.dark-mode .sidebar .navbar .dropdown-item.active {
             color: var(--primary);
             background: #2b2f33;
         }
 
-        body.dark-mode .content .navbar {
+        html.dark-mode .content .navbar {
             background: #212529 !important;
             border-radius: 0 0 12px 12px;
         }
 
-        body.dark-mode .content .navbar .navbar-nav .nav-link {
+        html.dark-mode .content .navbar .navbar-nav .nav-link {
             color: #e4e6eb;
         }
 
-        body.dark-mode .content .navbar .navbar-nav .nav-link:hover,
-        body.dark-mode .content .navbar .navbar-nav .nav-link.active {
+        html.dark-mode .content .navbar .navbar-nav .nav-link:hover,
+        html.dark-mode .content .navbar .navbar-nav .nav-link.active {
             color: var(--primary);
         }
 
-        body.dark-mode .content .navbar .sidebar-toggler,
-        body.dark-mode .content .navbar .navbar-nav .nav-link i {
+        html.dark-mode .content .navbar .sidebar-toggler,
+        html.dark-mode .content .navbar .navbar-nav .nav-link i {
             background: #2b2f33;
             color: #e4e6eb;
         }
 
-        body.dark-mode .breadcrumb-item + .breadcrumb-item::before {
+        html.dark-mode .breadcrumb-item + .breadcrumb-item::before {
             color: #b0b3b8;
         }
 
-        body.dark-mode .breadcrumb-item .text-muted {
+        html.dark-mode .breadcrumb-item .text-muted {
             color: #b0b3b8 !important;
         }
 
-        body.dark-mode .breadcrumb-item .text-dark {
+        html.dark-mode .breadcrumb-item .text-dark {
             color: #e4e6eb !important;
         }
 
-        body.dark-mode .content .navbar .dropdown-menu {
+        html.dark-mode .content .navbar .dropdown-menu {
             background: #2b2f33 !important;
             border-color: #373b3e !important;
             border-radius: 0 0 12px 12px;
@@ -238,564 +236,564 @@
             }
         }
 
-        body.dark-mode .content .navbar .dropdown-item {
+        html.dark-mode .content .navbar .dropdown-item {
             color: #e4e6eb;
         }
 
-        body.dark-mode .content .navbar .dropdown-item:hover {
+        html.dark-mode .content .navbar .dropdown-item:hover {
             background: #373b3e;
             color: var(--primary);
         }
 
-        body.dark-mode #spinner {
+        html.dark-mode #spinner {
             background: #1a1d21 !important;
         }
 
-        body.dark-mode .card,
-        body.dark-mode .bg-light {
+        html.dark-mode .card,
+        html.dark-mode .bg-light {
             background: #2b2f33 !important;
             border-color: #373b3e !important;
         }
 
-        body.dark-mode .card {
+        html.dark-mode .card {
             box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }
 
-        body.dark-mode .card-header {
+        html.dark-mode .card-header {
             background: #212529 !important;
             border-color: #373b3e !important;
             color: #e4e6eb;
         }
 
-        body.dark-mode .card-body,
-        body.dark-mode .card-footer {
+        html.dark-mode .card-body,
+        html.dark-mode .card-footer {
             color: #e4e6eb;
         }
 
-        body.dark-mode h1,
-        body.dark-mode h2,
-        body.dark-mode h3,
-        body.dark-mode h4,
-        body.dark-mode h5,
-        body.dark-mode h6,
-        body.dark-mode p,
-        body.dark-mode span,
-        body.dark-mode label,
-        body.dark-mode .text-dark {
+        html.dark-mode h1,
+        html.dark-mode h2,
+        html.dark-mode h3,
+        html.dark-mode h4,
+        html.dark-mode h5,
+        html.dark-mode h6,
+        html.dark-mode p,
+        html.dark-mode span,
+        html.dark-mode label,
+        html.dark-mode .text-dark {
             color: #e4e6eb !important;
         }
 
-        body.dark-mode .text-muted {
+        html.dark-mode .text-muted {
             color: #b0b3b8 !important;
         }
 
-        body.dark-mode .text-secondary {
+        html.dark-mode .text-secondary {
             color: #b0b3b8 !important;
         }
 
-        body.dark-mode .form-control,
-        body.dark-mode .form-select {
+        html.dark-mode .form-control,
+        html.dark-mode .form-select {
             background-color: #1a1d21;
             border-color: #373b3e;
             color: #e4e6eb;
         }
 
-        body.dark-mode .form-control:focus,
-        body.dark-mode .form-select:focus {
+        html.dark-mode .form-control:focus,
+        html.dark-mode .form-select:focus {
             background-color: #1a1d21;
             border-color: var(--primary);
             color: #e4e6eb;
         }
 
-        body.dark-mode .form-control::placeholder {
+        html.dark-mode .form-control::placeholder {
             color: #6c757d;
         }
 
-        body.dark-mode .input-group-text {
+        html.dark-mode .input-group-text {
             background-color: #212529;
             border-color: #373b3e;
             color: #b0b3b8;
         }
 
-        body.dark-mode .table {
+        html.dark-mode .table {
             color: #e4e6eb;
         }
 
-        body.dark-mode .table thead th {
+        html.dark-mode .table thead th {
             border-color: #373b3e;
         }
 
-        body.dark-mode .table td,
-        body.dark-mode .table th {
+        html.dark-mode .table td,
+        html.dark-mode .table th {
             border-color: #373b3e;
         }
 
-        body.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+        html.dark-mode .table-striped tbody tr:nth-of-type(odd) {
             background-color: rgba(255,255,255,0.02);
         }
 
-        body.dark-mode .table-hover tbody tr:hover {
+        html.dark-mode .table-hover tbody tr:hover {
             background-color: rgba(0,167,157,0.1) !important;
             color: #e4e6eb;
         }
 
-        body.dark-mode .modal-content {
+        html.dark-mode .modal-content {
             background-color: #2b2f33;
             border-color: #373b3e;
             color: #e4e6eb;
         }
 
-        body.dark-mode .modal-header {
+        html.dark-mode .modal-header {
             border-color: #373b3e;
         }
 
-        body.dark-mode .modal-footer {
+        html.dark-mode .modal-footer {
             border-color: #373b3e;
         }
 
-        body.dark-mode .dropdown-menu {
+        html.dark-mode .dropdown-menu {
             background-color: #2b2f33;
             border-color: #373b3e;
         }
 
-        body.dark-mode .dropdown-item {
+        html.dark-mode .dropdown-item {
             color: #e4e6eb;
         }
 
-        body.dark-mode .dropdown-item:hover {
+        html.dark-mode .dropdown-item:hover {
             background-color: #373b3e;
             color: var(--primary);
         }
 
-        body.dark-mode .list-group-item {
+        html.dark-mode .list-group-item {
             background-color: #2b2f33;
             border-color: #373b3e;
             color: #e4e6eb;
         }
 
-        body.dark-mode .border {
+        html.dark-mode .border {
             border-color: #373b3e !important;
         }
 
-        body.dark-mode hr {
+        html.dark-mode hr {
             border-color: #373b3e;
         }
 
-        body.dark-mode .bg-white {
+        html.dark-mode .bg-white {
             background-color: #1a1d21 !important;
         }
 
-        body.dark-mode .shadow,
-        body.dark-mode .shadow-sm {
+        html.dark-mode .shadow,
+        html.dark-mode .shadow-sm {
             box-shadow: 0 0 10px rgba(0,0,0,0.4) !important;
         }
 
         /* SweetAlert dark mode */
-        body.dark-mode .swal2-popup {
+        html.dark-mode .swal2-popup {
             background: #2b2f33 !important;
             color: #e4e6eb !important;
         }
 
-        body.dark-mode .swal2-title {
+        html.dark-mode .swal2-title {
             color: #e4e6eb !important;
         }
 
-        body.dark-mode .swal2-html-container {
+        html.dark-mode .swal2-html-container {
             color: #b0b3b8 !important;
         }
 
-        body.dark-mode .swal2-input {
+        html.dark-mode .swal2-input {
             background: #1a1d21 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
 
         /* Scrollbar dark mode */
-        body.dark-mode ::-webkit-scrollbar {
+        html.dark-mode ::-webkit-scrollbar {
             width: 8px;
         }
 
-        body.dark-mode ::-webkit-scrollbar-track {
+        html.dark-mode ::-webkit-scrollbar-track {
             background: #1a1d21;
         }
 
-        body.dark-mode ::-webkit-scrollbar-thumb {
+        html.dark-mode ::-webkit-scrollbar-thumb {
             background: #373b3e;
             border-radius: 4px;
         }
 
-        body.dark-mode ::-webkit-scrollbar-thumb:hover {
+        html.dark-mode ::-webkit-scrollbar-thumb:hover {
             background: #4a4f54;
         }
 
         /* DataTables dark mode */
-        body.dark-mode .dataTables_wrapper .dataTables_length,
-        body.dark-mode .dataTables_wrapper .dataTables_filter,
-        body.dark-mode .dataTables_wrapper .dataTables_info,
-        body.dark-mode .dataTables_wrapper .dataTables_paginate {
+        html.dark-mode .dataTables_wrapper .dataTables_length,
+        html.dark-mode .dataTables_wrapper .dataTables_filter,
+        html.dark-mode .dataTables_wrapper .dataTables_info,
+        html.dark-mode .dataTables_wrapper .dataTables_paginate {
             color: #b0b3b8;
         }
 
-        body.dark-mode .dataTables_wrapper .dataTables_filter input,
-        body.dark-mode .dataTables_wrapper .dataTables_length select {
+        html.dark-mode .dataTables_wrapper .dataTables_filter input,
+        html.dark-mode .dataTables_wrapper .dataTables_length select {
             background-color: #1a1d21;
             border-color: #373b3e;
             color: #e4e6eb;
         }
 
-        body.dark-mode .page-link {
+        html.dark-mode .page-link {
             background-color: #2b2f33;
             border-color: #373b3e;
             color: #e4e6eb;
         }
 
-        body.dark-mode .page-link:hover {
+        html.dark-mode .page-link:hover {
             background-color: #373b3e;
             color: var(--primary);
         }
 
-        body.dark-mode .page-item.active .page-link {
+        html.dark-mode .page-item.active .page-link {
             background-color: var(--primary);
             border-color: var(--primary);
             color: #fff;
         }
 
         /* Select2 dark mode */
-        body.dark-mode .select2-container--default .select2-selection--single {
+        html.dark-mode .select2-container--default .select2-selection--single {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
         }
 
-        body.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
+        html.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
             color: #e4e6eb !important;
         }
 
-        body.dark-mode .select2-dropdown {
+        html.dark-mode .select2-dropdown {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
         }
 
-        body.dark-mode .select2-container--default .select2-results__option {
+        html.dark-mode .select2-container--default .select2-results__option {
             color: #e4e6eb !important;
         }
 
-        body.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
+        html.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
             background-color: #373b3e !important;
             color: var(--primary) !important;
         }
 
-        body.dark-mode .select2-search--dropdown .select2-search__field {
+        html.dark-mode .select2-search--dropdown .select2-search__field {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
 
         /* Footer dark mode */
-        body.dark-mode footer,
-        body.dark-mode .footer {
+        html.dark-mode footer,
+        html.dark-mode .footer {
             background: #212529 !important;
             color: #b0b3b8 !important;
         }
 
-        body.dark-mode footer a {
+        html.dark-mode footer a {
             color: var(--primary) !important;
         }
 
         /* Sidebar brand/logo area */
-        body.dark-mode .sidebar .navbar-brand {
+        html.dark-mode .sidebar .navbar-brand {
             color: #e4e6eb;
         }
 
         /* Daterangepicker dark mode (global) */
-        body.dark-mode .daterangepicker {
+        html.dark-mode .daterangepicker {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
-        body.dark-mode .daterangepicker::before,
-        body.dark-mode .daterangepicker::after {
+        html.dark-mode .daterangepicker::before,
+        html.dark-mode .daterangepicker::after {
             border-bottom-color: #2b2f33 !important;
         }
-        body.dark-mode .daterangepicker .calendar-table {
+        html.dark-mode .daterangepicker .calendar-table {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
         }
-        body.dark-mode .daterangepicker .calendar-table thead tr:first-child th,
-        body.dark-mode .daterangepicker .calendar-table thead tr:last-child th {
+        html.dark-mode .daterangepicker .calendar-table thead tr:first-child th,
+        html.dark-mode .daterangepicker .calendar-table thead tr:last-child th {
             color: #e4e6eb !important;
         }
-        body.dark-mode .daterangepicker td,
-        body.dark-mode .daterangepicker th {
+        html.dark-mode .daterangepicker td,
+        html.dark-mode .daterangepicker th {
             color: #e4e6eb !important;
         }
-        body.dark-mode .daterangepicker td.off,
-        body.dark-mode .daterangepicker td.off.in-range,
-        body.dark-mode .daterangepicker td.off.start-date,
-        body.dark-mode .daterangepicker td.off.end-date {
+        html.dark-mode .daterangepicker td.off,
+        html.dark-mode .daterangepicker td.off.in-range,
+        html.dark-mode .daterangepicker td.off.start-date,
+        html.dark-mode .daterangepicker td.off.end-date {
             color: #6c757d !important;
             background-color: transparent !important;
         }
-        body.dark-mode .daterangepicker td.available:hover,
-        body.dark-mode .daterangepicker th.available:hover {
+        html.dark-mode .daterangepicker td.available:hover,
+        html.dark-mode .daterangepicker th.available:hover {
             background-color: #373b3e !important;
             color: #e4e6eb !important;
         }
-        body.dark-mode .daterangepicker td.in-range {
+        html.dark-mode .daterangepicker td.in-range {
             background-color: rgba(0, 167, 157, 0.2) !important;
             color: #e4e6eb !important;
         }
-        body.dark-mode .daterangepicker td.active,
-        body.dark-mode .daterangepicker td.active:hover,
-        body.dark-mode .daterangepicker td.start-date,
-        body.dark-mode .daterangepicker td.end-date {
+        html.dark-mode .daterangepicker td.active,
+        html.dark-mode .daterangepicker td.active:hover,
+        html.dark-mode .daterangepicker td.start-date,
+        html.dark-mode .daterangepicker td.end-date {
             background-color: #00a79d !important;
             color: #fff !important;
         }
-        body.dark-mode .daterangepicker td.today {
+        html.dark-mode .daterangepicker td.today {
             color: #00a79d !important;
             font-weight: bold;
         }
-        body.dark-mode .daterangepicker td.today.active {
+        html.dark-mode .daterangepicker td.today.active {
             color: #fff !important;
         }
-        body.dark-mode .daterangepicker .drp-buttons {
+        html.dark-mode .daterangepicker .drp-buttons {
             border-top-color: #373b3e !important;
         }
-        body.dark-mode .daterangepicker .drp-buttons .btn.cancelBtn {
+        html.dark-mode .daterangepicker .drp-buttons .btn.cancelBtn {
             color: #b0b3b8 !important;
             background-color: transparent !important;
         }
-        body.dark-mode .daterangepicker .drp-buttons .btn.cancelBtn:hover {
+        html.dark-mode .daterangepicker .drp-buttons .btn.cancelBtn:hover {
             background-color: #373b3e !important;
             color: #e4e6eb !important;
         }
-        body.dark-mode .daterangepicker .drp-selected {
+        html.dark-mode .daterangepicker .drp-selected {
             color: #b0b3b8 !important;
         }
-        body.dark-mode .daterangepicker select.monthselect,
-        body.dark-mode .daterangepicker select.yearselect {
+        html.dark-mode .daterangepicker select.monthselect,
+        html.dark-mode .daterangepicker select.yearselect {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
-        body.dark-mode .daterangepicker .ranges li {
+        html.dark-mode .daterangepicker .ranges li {
             color: #e4e6eb !important;
         }
-        body.dark-mode .daterangepicker .ranges li:hover {
+        html.dark-mode .daterangepicker .ranges li:hover {
             background-color: #373b3e !important;
         }
-        body.dark-mode .daterangepicker .ranges li.active {
+        html.dark-mode .daterangepicker .ranges li.active {
             background-color: #00a79d !important;
             color: #fff !important;
         }
 
         /* Global form dark mode overrides (all admin forms) */
-        body.dark-mode .section-title {
+        html.dark-mode .section-title {
             color: #00a79d;
             border-bottom-color: #373b3e;
         }
-        body.dark-mode .form-text {
+        html.dark-mode .form-text {
             color: #b0b3b8 !important;
         }
-        body.dark-mode .form-label,
-        body.dark-mode .form-label.fw-bold {
+        html.dark-mode .form-label,
+        html.dark-mode .form-label.fw-bold {
             color: #e4e6eb !important;
         }
-        body.dark-mode .form-control-plaintext {
+        html.dark-mode .form-control-plaintext {
             color: #e4e6eb;
         }
-        body.dark-mode .info-card {
+        html.dark-mode .info-card {
             border-color: #373b3e !important;
             border-left-color: #00a79d !important;
             background-color: #2b2f33 !important;
             color: #e4e6eb;
         }
-        body.dark-mode .image-preview-container {
+        html.dark-mode .image-preview-container {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
         }
-        body.dark-mode .no-image-placeholder {
+        html.dark-mode .no-image-placeholder {
             color: #b0b3b8 !important;
         }
-        body.dark-mode .role-option {
+        html.dark-mode .role-option {
             background-color: #1a1d21;
             border-color: #373b3e;
             color: #e4e6eb;
         }
-        body.dark-mode .role-option:hover {
+        html.dark-mode .role-option:hover {
             border-color: #00a79d;
             background-color: #2b2f33;
         }
-        body.dark-mode .role-option.selected {
+        html.dark-mode .role-option.selected {
             border-color: #00a79d;
             background-color: rgba(0, 167, 157, 0.15);
         }
-        body.dark-mode .role-option input[type="radio"] {
+        html.dark-mode .role-option input[type="radio"] {
             border-color: #373b3e;
             background-color: #1a1d21;
         }
-        body.dark-mode .role-option input[type="radio"]:checked {
+        html.dark-mode .role-option input[type="radio"]:checked {
             border-color: #00a79d;
             background-color: #1a1d21;
         }
         /* Card guide (index pages) */
-        body.dark-mode .card-guide {
+        html.dark-mode .card-guide {
             background: #2b2f33 !important;
             border-color: #373b3e !important;
         }
-        body.dark-mode .card-guide .card-title {
+        html.dark-mode .card-guide .card-title {
             color: #e4e6eb !important;
         }
-        body.dark-mode .card-guide .card-text {
+        html.dark-mode .card-guide .card-text {
             color: #b0b3b8 !important;
         }
         /* Summernote editor dark mode */
-        body.dark-mode .note-editor {
+        html.dark-mode .note-editor {
             border-color: #373b3e !important;
         }
-        body.dark-mode .note-editor .note-toolbar {
+        html.dark-mode .note-editor .note-toolbar {
             background-color: #212529 !important;
             border-color: #373b3e !important;
         }
-        body.dark-mode .note-editor .note-editing-area .note-editable {
+        html.dark-mode .note-editor .note-editing-area .note-editable {
             background-color: #1a1d21 !important;
             color: #e4e6eb !important;
         }
-        body.dark-mode .note-editor .note-statusbar {
+        html.dark-mode .note-editor .note-statusbar {
             background-color: #212529 !important;
             border-color: #373b3e !important;
         }
-        body.dark-mode .note-btn {
+        html.dark-mode .note-btn {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
         /* Toggle switch (jumbotron) */
-        body.dark-mode .toggle-switch {
+        html.dark-mode .toggle-switch {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
-        body.dark-mode .toggle-switch:hover {
+        html.dark-mode .toggle-switch:hover {
             border-color: #00a79d !important;
             background-color: rgba(0, 167, 157, 0.1) !important;
         }
-        body.dark-mode .toggle-switch input[type="checkbox"] {
+        html.dark-mode .toggle-switch input[type="checkbox"] {
             border-color: #373b3e;
             background-color: #1a1d21;
         }
         /* Button fields container (jumbotron) */
-        body.dark-mode .button-fields {
+        html.dark-mode .button-fields {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
         /* Content preview (news) */
-        body.dark-mode .news-content-preview {
+        html.dark-mode .news-content-preview {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
         /* Container fluid bg-light inside content - slightly different shade for contrast */
-        body.dark-mode .content .container-fluid .bg-light {
+        html.dark-mode .content .container-fluid .bg-light {
             background: #212529 !important;
             border: 1px solid #373b3e !important;
         }
         /* File input dark mode */
-        body.dark-mode .form-control[type="file"] {
+        html.dark-mode .form-control[type="file"] {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
             color: #b0b3b8 !important;
         }
-        body.dark-mode .form-control[type="file"]::file-selector-button {
+        html.dark-mode .form-control[type="file"]::file-selector-button {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
         /* Input group (event contact, etc.) */
-        body.dark-mode .input-group .input-group-text {
+        html.dark-mode .input-group .input-group-text {
             background-color: #212529 !important;
             border-color: #373b3e !important;
             color: #b0b3b8 !important;
         }
         /* Link field (call-kestari) */
-        body.dark-mode .link-field {
+        html.dark-mode .link-field {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
         }
         /* Reader link preview (catalog-book) */
-        body.dark-mode .reader-link-preview,
-        body.dark-mode .reader-link-content {
+        html.dark-mode .reader-link-preview,
+        html.dark-mode .reader-link-content {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
         /* Finance report card bg-light */
-        body.dark-mode .card.bg-light {
+        html.dark-mode .card.bg-light {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
         }
         /* Campaign progress info (celsyahid) */
-        body.dark-mode .progress {
+        html.dark-mode .progress {
             background-color: #373b3e !important;
         }
         /* No media/image placeholder */
-        body.dark-mode .no-media-placeholder,
-        body.dark-mode .no-image-placeholder {
+        html.dark-mode .no-media-placeholder,
+        html.dark-mode .no-image-placeholder {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
             color: #b0b3b8 !important;
         }
         /* Select2 in forms (all modules) */
-        body.dark-mode .select2-container--default .select2-selection--single {
+        html.dark-mode .select2-container--default .select2-selection--single {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
-        body.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
+        html.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
             color: #e4e6eb !important;
         }
-        body.dark-mode .select2-container--default .select2-selection--single .select2-selection__placeholder {
+        html.dark-mode .select2-container--default .select2-selection--single .select2-selection__placeholder {
             color: #6c757d !important;
         }
-        body.dark-mode .select2-dropdown {
+        html.dark-mode .select2-dropdown {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
         }
-        body.dark-mode .select2-search--dropdown .select2-search__field {
+        html.dark-mode .select2-search--dropdown .select2-search__field {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
-        body.dark-mode .select2-container--default .select2-results__option {
+        html.dark-mode .select2-container--default .select2-results__option {
             color: #e4e6eb !important;
         }
-        body.dark-mode .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        html.dark-mode .select2-container--default .select2-results__option--highlighted[aria-selected] {
             background-color: #00a79d !important;
             color: #fff !important;
         }
-        body.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
+        html.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
             background-color: #373b3e !important;
             color: var(--primary) !important;
         }
-        body.dark-mode .select2-container--default .select2-results__option:hover {
+        html.dark-mode .select2-container--default .select2-results__option:hover {
             background-color: #373b3e !important;
         }
 
         /* Light mode specific overrides */
-        body:not(.dark-mode) {
+        html:not(.dark-mode) {
             background-color: #ffffff !important;
         }
 
-        body:not(.dark-mode) .container-xxl {
+        html:not(.dark-mode) .container-xxl {
             background: #FFFFFF !important;
         }
 
-        body:not(.dark-mode) .content {
+        html:not(.dark-mode) .content {
             background: #FFFFFF;
         }
 
-        body:not(.dark-mode) .content > .navbar {
+        html:not(.dark-mode) .content > .navbar {
             background: var(--light) !important;
         }
     </style>
@@ -875,11 +873,12 @@
             }
 
             // Initialize based on current state
-            var isDark = document.body.classList.contains('dark-mode');
+            var isDark = document.documentElement.classList.contains('dark-mode');
+            if (isDark) document.body.classList.add('dark-mode');
             updateToggleSwitch(isDark);
 
             $('#darkModeToggle').on('click', function() {
-                isDark = !document.body.classList.contains('dark-mode');
+                isDark = !document.documentElement.classList.contains('dark-mode');
 
                 if (isDark) {
                     document.documentElement.classList.add('dark-mode');
