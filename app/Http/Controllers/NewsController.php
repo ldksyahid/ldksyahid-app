@@ -5,124 +5,182 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\News;
 use RealRashid\SweetAlert\Facades\Alert;
-use Carbon\Carbon;
-use App\Services\GoogleDrive;
 
 class NewsController extends Controller
 {
-    public $pathNewsGDrive = '1GyqmtdKal2IxSxAryjfO3CZKfYk6NUB8';
-
+    /**
+     * Landing page - Display all news
+     */
     public function index()
     {
-        $postnews = News::orderBy('datepublish','desc')->get();
+        $postnews = News::orderBy('datepublish', 'desc')->get();
         return view('landing-page.news.index', compact('postnews'), ["title" => "Berita"]);
     }
 
-    public function indexadmin()
+    /**
+     * Landing page - Show single news detail
+     */
+    public function show($id)
     {
-        $postnews = News::orderBy('created_at','desc')->get();
-        return view('admin-page.news.index', compact('postnews'), ["title" => "News"]);
+        $postnews = News::find($id);
+        return view('landing-page.news.detail', compact('postnews'), ["title" => "Berita"]);
     }
 
+    /**
+     * Admin - Display news list with AJAX support
+     */
+    public function indexAdmin(Request $request)
+    {
+        $items = News::searchAdminNews($request);
+        $tableConfig = News::getTableConfig();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $items,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
+                'pagination' => $items->appends($request->query())->links()->render(),
+                'total' => $items->total(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem()
+            ]);
+        }
+
+        $publisherOptions = News::select('publisher')->distinct()->orderBy('publisher')->pluck('publisher', 'publisher')->toArray();
+        $reporterOptions = News::select('reporter')->distinct()->orderBy('reporter')->pluck('reporter', 'reporter')->toArray();
+        $editorOptions = News::select('editor')->distinct()->orderBy('editor')->pluck('editor', 'editor')->toArray();
+
+        return view('admin-page.news.index', compact('items', 'tableConfig', 'publisherOptions', 'reporterOptions', 'editorOptions'))
+            ->with('title', 'News');
+    }
+
+    /**
+     * Admin - Show create form
+     */
     public function create()
     {
         return view('admin-page.news.create', ["title" => "News"]);
     }
 
+    /**
+     * Admin - Store new news
+     */
     public function store(Request $request)
     {
-        $gdriveService = new GoogleDrive($this->pathNewsGDrive);
-
-        $fileName = time() . '_news_' . $request->file('picture')->getClientOriginalName();
-        $filePath = $this->pathNewsGDrive . '/' . $fileName;
-
-        $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
-
-
-        News::create([
-            "datepublish" => $request["datepublish"],
-            "publisher" => $request["publisher"],
-            "title" => $request["title"],
-            "reporter" => $request["reporter"],
-            "editor" => $request["editor"],
-            'picture' => $uploadResult['fileName'],
-            'gdrive_id' => $uploadResult['gdriveID'],
-            "descpicture" => $request["descpicture"],
-            "body" => $request["body"],
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'datepublish' => 'required|date',
+            'publisher' => 'required|string|max:255',
+            'reporter' => 'required|string|max:255',
+            'editor' => 'required|string|max:255',
+            'picture' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'descpicture' => 'required|string|max:255',
+            'body' => 'required|string',
         ]);
 
-        Alert::success('Success', 'News has been uploaded !');
-        return redirect('/admin/news');
+        try {
+            News::saveModel($request);
+            Alert::success('Success', 'News has been created!');
+            return redirect()->route('admin.news.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to create news: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
-    public function show($id)
-    {
-        $dt = Carbon::now();
-        $postnews = News::find($id);
-
-        return view('landing-page.news.detail', compact('postnews'), ["title" => "Berita"]);
-    }
-
+    /**
+     * Admin - Show edit form
+     */
     public function edit($id)
     {
-        $postnews = News::find($id);
-        return view('admin-page.news.update', compact('postnews'), ["title" => "News"]);
+        $news = News::findOrFail($id);
+        return view('admin-page.news.update', compact('news'), ["title" => "News"]);
     }
 
-    public function showInAdmin($id)
+    /**
+     * Admin - Show news detail (view mode)
+     */
+    public function showAdmin($id)
     {
-        $postnews = News::find($id);
-        return view('admin-page.news.view', compact('postnews'), ["title" => "News"]);
+        $news = News::findOrFail($id);
+        return view('admin-page.news.view', compact('news'), ["title" => "News"]);
     }
 
+    /**
+     * Admin - Update news
+     */
     public function update(Request $request, $id)
     {
-        $newsModel = News::find($id);
-
-        if ($request->file('picture')) {
-            $gdriveService = new GoogleDrive($this->pathNewsGDrive);
-
-            $fileName = time() . '_news_' . $request->file('picture')->getClientOriginalName();
-            $filePath = $this->pathNewsGDrive . '/' . $fileName;
-
-            $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
-
-            $oldGdriveID = $newsModel->gdrive_id;
-
-            if ($oldGdriveID) {
-                $gdriveService->deleteImage($oldGdriveID);
-            }
-
-            $newsModel->update([
-                'picture' => $uploadResult['fileName'],
-                'gdrive_id' => $uploadResult['gdriveID'],
-            ]);
-        }
-
-        $newsModel->update([
-            "datepublish" => $request["datepublish"],
-            "publisher" => $request["publisher"],
-            "title" => $request["title"],
-            "reporter" => $request["reporter"],
-            "editor" => $request["editor"],
-            "descpicture" => $request["descpicture"],
-            "body" => $request["body"],
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'datepublish' => 'required|date',
+            'publisher' => 'required|string|max:255',
+            'reporter' => 'required|string|max:255',
+            'editor' => 'required|string|max:255',
+            'picture' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'descpicture' => 'required|string|max:255',
+            'body' => 'required|string',
         ]);
 
-        toast('News has been edited !', 'success')->autoClose(1500)->width('400px');
-        return redirect('/admin/news');
+        try {
+            $news = News::findOrFail($id);
+            $news->updateModel($request);
+            Alert::success('Success', 'News has been updated!');
+            return redirect()->route('admin.news.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to update news: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
+    /**
+     * Admin - Delete news
+     */
     public function destroy($id)
     {
-        $newsModel = News::find($id);
-        $gdriveService = new GoogleDrive($this->pathNewsGDrive);
+        try {
+            $news = News::findOrFail($id);
+            $news->deleteModel();
 
-        if ($newsModel->gdrive_id) {
-            $gdriveService->deleteImage($newsModel->gdrive_id);
+            return response()->json([
+                'success' => true,
+                'message' => 'News has been deleted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete news: ' . $e->getMessage()
+            ], 500);
         }
+    }
 
-        $newsModel->delete();
-        return redirect()->back();
+    /**
+     * Admin - Bulk delete news
+     */
+    public function bulkDelete(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No news selected for deletion'
+                ], 400);
+            }
+
+            $deleted = News::bulkDeleteModel($ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$deleted} news have been deleted!"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting news: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

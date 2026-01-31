@@ -16,10 +16,14 @@ class FinanceReportController extends Controller
     {
         $financeReports = MsFinanceReport::searchAdminFinanceReport($request);
         $ldkTags = LkLDK::orderBy('ldkTag')->pluck('ldkTag')->unique();
+        $tableConfig = MsFinanceReport::getTableConfig();
 
         if ($request->ajax()) {
             return response()->json([
-                'tableBody' => view('admin-page.finance-report.components._index._index-table', compact('financeReports'))->render(),
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $financeReports,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
                 'pagination' => $financeReports->appends($request->query())->links()->render(),
                 'total' => $financeReports->total(),
                 'from' => $financeReports->firstItem(),
@@ -27,7 +31,7 @@ class FinanceReportController extends Controller
             ]);
         }
 
-        return view('admin-page.finance-report.index', compact('financeReports', 'ldkTags'))
+        return view('admin-page.finance-report.index', compact('financeReports', 'ldkTags', 'tableConfig'))
             ->with('title', 'Reports');
     }
 

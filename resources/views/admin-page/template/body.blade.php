@@ -5,7 +5,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- Off This Meta For Development --}}
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-    <title>Admin Panel &#9679; {{ Auth::User()->name }}</title>
+    <title>{{ $title ?? 'Admin Panel' }} &#9679; LDK Syahid</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -52,6 +52,36 @@
 
 <body>
     @yield('styles')
+    @stack('styles')
+    <style>
+        /* Active dropdown item styling */
+        .sidebar .navbar .dropdown-item.active {
+            color: var(--primary);
+            background: #FFFFFF;
+            font-weight: 500;
+        }
+
+        /* Breadcrumb styling */
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "/" !important;
+            color: #6c757d;
+        }
+
+        /* Fix navbar connection with sidebar - remove the gap */
+        .container-xxl {
+            background: var(--light) !important;
+        }
+
+        .content {
+            background: #FFFFFF;
+        }
+
+        .content > .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+    </style>
     <div class="container-xxl position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -121,6 +151,7 @@
 
     {{-- Script Admin Page Start --}}
     @yield('scripts')
+    @stack('scripts')
     {{-- Script Admin Page End --}}
     @include('sweetalert::alert')
 </body>

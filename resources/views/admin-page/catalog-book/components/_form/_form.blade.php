@@ -1,13 +1,13 @@
-@props([
-    'operation' => 'create',
-    'book' => null,
-    'titleForm' => '',
-    'entityLabel' => 'Book',
-    'languages' => [],
-    'bookCategories' => [],
-    'authorTypes' => [],
-    'availabilityTypes' => []
-])
+@php
+    $operation = $operation ?? 'create';
+    $book = $book ?? null;
+    $titleForm = $titleForm ?? '';
+    $entityLabel = $entityLabel ?? 'Book';
+    $languages = $languages ?? [];
+    $bookCategories = $bookCategories ?? [];
+    $authorTypes = $authorTypes ?? [];
+    $availabilityTypes = $availabilityTypes ?? [];
+@endphp
 
 <div class="container-fluid pt-4 px-4">
     <div class="row p-2 bg-light rounded justify-content-center mx-0">

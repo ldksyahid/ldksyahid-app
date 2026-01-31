@@ -5,137 +5,165 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Structure;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Services\GoogleDrive;
 
 class StructureController extends Controller
 {
-    public $pathStructureGDrive = '1q4xH2GI8i7nd4LJoW97zP4CNWYa8RjZr';
-
+    /**
+     * Landing page - Display all structures
+     */
     public function index()
     {
         $poststructure = Structure::orderBy('created_at','desc')->get();
         return view('landing-page.about.management-structur', compact('poststructure'),["title" => "Tentang Kami"]);
     }
 
-    public function indexadmin()
+    /**
+     * Admin - Display structure list with AJAX support
+     */
+    public function indexAdmin(Request $request)
     {
-        $poststructure = Structure::orderBy('created_at','desc')->get();
-        return view('admin-page.about.management-structure.index', compact('poststructure'), ["title" => "About Us"]);
+        $items = Structure::searchAdminStructures($request);
+        $tableConfig = Structure::getTableConfig();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $items,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
+                'pagination' => $items->appends($request->query())->links()->render(),
+                'total' => $items->total(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem()
+            ]);
+        }
+
+        return view('admin-page.about.management-structure.index', compact('items', 'tableConfig'))
+            ->with('title', 'Structure Management');
     }
 
+    /**
+     * Admin - Show create form
+     */
     public function create()
     {
-        return view('admin-page.about.management-structure.create', ["title" => "About Us"]);
+        return view('admin-page.about.management-structure.create', ["title" => "Structure Management"]);
     }
 
+    /**
+     * Admin - Store new structure
+     */
     public function store(Request $request)
     {
-        $gdriveService = new GoogleDrive($this->pathStructureGDrive);
-
-        $fileNameLogo = time() . '_structure-logo_' . $request->file('structureLogo')->getClientOriginalName();
-        $filePathLogo = $this->pathStructureGDrive . '/' . $fileNameLogo;
-        $uploadResultLogo = $gdriveService->uploadImage($request->file('structureLogo'), $fileNameLogo, $filePathLogo);
-
-        $fileNameImage = time() . '_structure-image_' . $request->file('structureImage')->getClientOriginalName();
-        $filePathImage = $this->pathStructureGDrive . '/' . $fileNameImage;
-        $uploadResultImage = $gdriveService->uploadImage($request->file('structureImage'), $fileNameImage, $filePathImage);
-
-        Structure::create([
-            "batch" => $request["batch"],
-            "period" => $request["period"],
-            "structureName" => $request["structureName"],
-            "structureDescription" => $request["structureDescription"],
-            'structureLogo' => $uploadResultLogo['fileName'],
-            'gdrive_id' => $uploadResultLogo['gdriveID'],
-            'structureImage' => $uploadResultImage['fileName'],
-            'gdrive_id_2' => $uploadResultImage['gdriveID'],
+        $request->validate([
+            'batch' => 'required|string|max:50',
+            'period' => 'required|string|max:50',
+            'structureName' => 'required|string|max:255',
+            'structureDescription' => 'required|string',
+            'structureLogo' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'structureImage' => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
-        Alert::success('Success', 'Structure has been uploaded !');
-        return redirect('/admin/about/structure');
+        try {
+            Structure::saveModel($request);
+            Alert::success('Success', 'Structure has been created!');
+            return redirect()->route('admin.about.structure.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to create structure: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
+    /**
+     * Admin - Show edit form
+     */
     public function edit($id)
     {
-        $poststructure = Structure::find($id);
-        return view('admin-page.about.management-structure.update', compact('poststructure'), ["title" => "About Us"]);
+        $structure = Structure::findOrFail($id);
+        return view('admin-page.about.management-structure.update', compact('structure'), ["title" => "Structure Management"]);
     }
 
-    public function showInAdmin($id)
+    /**
+     * Admin - Show structure detail (view mode)
+     */
+    public function showAdmin($id)
     {
-        $poststructure = Structure::find($id);
-        return view('admin-page.about.management-structure.view', compact('poststructure'), ["title" => "About Us"]);
+        $structure = Structure::findOrFail($id);
+        return view('admin-page.about.management-structure.view', compact('structure'), ["title" => "Structure Management"]);
     }
 
+    /**
+     * Admin - Update structure
+     */
     public function update(Request $request, $id)
     {
-        $structureModel = Structure::find($id);
-
-        if ($request->file('structureLogo')) {
-            $gdriveService = new GoogleDrive($this->pathStructureGDrive);
-
-            $fileNameLogo = time() . '_structure-logo_' . $request->file('structureLogo')->getClientOriginalName();
-            $filePathLogo = $this->pathStructureGDrive . '/' . $fileNameLogo;
-
-            $uploadResultLogo = $gdriveService->uploadImage($request->file('structureLogo'), $fileNameLogo, $filePathLogo);
-
-            $oldGdriveID = $structureModel->gdrive_id;
-
-            if ($oldGdriveID) {
-                $gdriveService->deleteImage($oldGdriveID);
-            }
-
-            $structureModel->update([
-                'structureLogo' => $uploadResultLogo['fileName'],
-                'gdrive_id' => $uploadResultLogo['gdriveID'],
-            ]);
-        }
-
-        if ($request->file('structureImage')) {
-            $gdriveService = new GoogleDrive($this->pathStructureGDrive);
-
-            $fileNameImage = time() . '_structure-image_' . $request->file('structureImage')->getClientOriginalName();
-            $filePathImage = $this->pathStructureGDrive . '/' . $fileNameImage;
-
-            $uploadResultImage = $gdriveService->uploadImage($request->file('structureImage'), $fileNameImage, $filePathImage);
-
-            $oldGdriveID = $structureModel->gdrive_id_2;
-
-            if ($oldGdriveID) {
-                $gdriveService->deleteImage($oldGdriveID);
-            }
-
-            $structureModel->update([
-                'structureImage' => $uploadResultImage['fileName'],
-                'gdrive_id_2' => $uploadResultImage['gdriveID'],
-            ]);
-        }
-
-        $structureModel->update([
-            "batch" => $request["batch"],
-            "period" => $request["period"],
-            "structureName" => $request["structureName"],
-            "structureDescription" => $request["structureDescription"],
+        $request->validate([
+            'batch' => 'required|string|max:50',
+            'period' => 'required|string|max:50',
+            'structureName' => 'required|string|max:255',
+            'structureDescription' => 'required|string',
+            'structureLogo' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'structureImage' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
-        toast('Structure has been edited !', 'success')->autoClose(1500)->width('400px');
-        return redirect('/admin/about/structure');
+        try {
+            $structure = Structure::findOrFail($id);
+            $structure->updateModel($request);
+            Alert::success('Success', 'Structure has been updated!');
+            return redirect()->route('admin.about.structure.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to update structure: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
+    /**
+     * Admin - Delete structure
+     */
     public function destroy($id)
     {
-        $structureModel = Structure::find($id);
-        $gdriveService = new GoogleDrive($this->pathStructureGDrive);
+        try {
+            $structure = Structure::findOrFail($id);
+            $structure->deleteModel();
 
-        if ($structureModel->gdrive_id) {
-            $gdriveService->deleteImage($structureModel->gdrive_id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Structure has been deleted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete structure: ' . $e->getMessage()
+            ], 500);
         }
+    }
 
-        if ($structureModel->gdrive_id_2) {
-            $gdriveService->deleteImage($structureModel->gdrive_id_2);
+    /**
+     * Admin - Bulk delete structures
+     */
+    public function bulkDelete(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No structures selected for deletion'
+                ], 400);
+            }
+
+            $deleted = Structure::bulkDeleteModel($ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$deleted} structures have been deleted!"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting structures: ' . $e->getMessage()
+            ], 500);
         }
-
-        $structureModel->delete();
-        return redirect()->back();
     }
 }
