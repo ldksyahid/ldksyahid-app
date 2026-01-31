@@ -71,6 +71,18 @@
         <script src="{{ asset('js/pop-up-load-page.js') }}"></script>
         @yield('scripts')
         @include('sweetalert::alert')
+        @if(session('sweetalert_error'))
+        <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Akses Ditolak',
+                text: 'Anda tidak memiliki izin untuk mengakses halaman ini.',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#00a79d'
+            });
+        </script>
+        @endif
         @if((new \Jenssegers\Agent\Agent())->isMobile())
         <script src="{{ asset('js/landing-page-owl-carousel-mobile.js') }}"></script>
         @endif
