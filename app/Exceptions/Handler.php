@@ -45,8 +45,9 @@ class Handler extends ExceptionHandler
                 return redirect()->route('login');
             }
 
+            // User logged in but doesn't have the required role/permission
             alert()->error('Akses Ditolak', 'Anda tidak memiliki izin untuk mengakses halaman ini.');
-            return redirect()->route('login');
+            return redirect('/admin/dashboard');
         });
     }
 }
