@@ -87,6 +87,10 @@
             z-index: 1000;
         }
 
+        .sidebar.pe-4 {
+            padding-right: 1 !important;
+        }
+
         /* Dark Mode Overrides */
         html.dark-mode body {
             background: #1a1d21 !important;
@@ -102,9 +106,6 @@
         }
         html.dark-mode .sidebar .navbar {
             background: #212529 !important;
-        }
-        html.dark-mode .sidebar.pe-4 {
-            padding-right: 0 !important;
         }
         html.dark-mode .sidebar .navbar .navbar-nav .nav-link {
             color: #e4e6eb;
