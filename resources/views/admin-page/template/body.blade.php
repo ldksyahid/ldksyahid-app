@@ -48,17 +48,60 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     @yield('head')
-    <script>
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.documentElement.classList.add('dark-mode');
+
+    <!-- Anti-flash script untuk mencegah flash konten putih -->
+    <style>
+        /* Anti-flash styling - diterapkan sebelum JavaScript berjalan */
+        :root {
+            --dark-mode-bg: #1a1d21;
+            --light-mode-bg: #ffffff;
         }
+
+        /* Initial state - menggunakan localStorage jika ada, default light mode */
+        body {
+            background-color: var(--light-mode-bg);
+            transition: background-color 0.3s ease;
+        }
+
+        /* Dark mode class akan ditambahkan oleh JavaScript */
+        body.dark-mode {
+            background-color: var(--dark-mode-bg) !important;
+        }
+    </style>
+
+    <script>
+        // Cek localStorage saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeEnabled = localStorage.getItem('darkMode') === 'enabled';
+
+            if (darkModeEnabled) {
+                document.documentElement.classList.add('dark-mode');
+                document.body.classList.add('dark-mode');
+            } else {
+                document.documentElement.classList.remove('dark-mode');
+                document.body.classList.remove('dark-mode');
+            }
+        });
     </script>
 </head>
 
 <body>
-    @yield('styles')
-    @stack('styles')
+    <!-- Custom Styles untuk dark/light mode -->
     <style>
+        /* Light mode default */
+        body {
+            background-color: #ffffff !important;
+            color: #212529;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark mode overrides - digunakan saat class dark-mode ada di html atau body */
+        html.dark-mode body,
+        body.dark-mode {
+            background-color: #1a1d21 !important;
+            color: #e4e6eb;
+        }
+
         /* Active dropdown item styling */
         .sidebar .navbar .dropdown-item.active {
             color: var(--primary);
@@ -75,10 +118,12 @@
         /* Fix navbar connection with sidebar - remove the gap */
         .container-xxl {
             background: #FFFFFF !important;
+            transition: background-color 0.3s ease;
         }
 
         .content {
             background: #FFFFFF;
+            transition: background-color 0.3s ease;
         }
 
         .content > .navbar {
@@ -86,86 +131,102 @@
             top: 0;
             z-index: 1000;
             background: var(--light) !important;
-            border-radius: 0 0 0px 12px;
+            border-radius: 0 0 12px 12px;
+            transition: background-color 0.3s ease;
         }
 
         .sidebar.pe-4 {
             padding-right: 1 !important;
         }
 
-        /* Dark Mode Overrides */
-        html.dark-mode body {
-            background: #1a1d21 !important;
-        }
-        html.dark-mode .container-xxl {
+        /* Dark Mode Overrides - menggunakan selector body.dark-mode */
+        body.dark-mode .container-xxl {
             background: #212529 !important;
         }
-        html.dark-mode .content {
+
+        body.dark-mode .content {
             background: #1a1d21;
         }
-        html.dark-mode .sidebar {
+
+        body.dark-mode .sidebar {
             background: #212529;
         }
-        html.dark-mode .sidebar .navbar {
+
+        body.dark-mode .sidebar .navbar {
             background: #212529 !important;
         }
-        html.dark-mode .sidebar .navbar .navbar-nav .nav-link {
+
+        body.dark-mode .sidebar .navbar .navbar-nav .nav-link {
             color: #e4e6eb;
             border-left-color: #212529;
         }
-        html.dark-mode .sidebar .navbar .navbar-nav .nav-link:hover,
-        html.dark-mode .sidebar .navbar .navbar-nav .nav-link.active {
+
+        body.dark-mode .sidebar .navbar .navbar-nav .nav-link:hover,
+        body.dark-mode .sidebar .navbar .navbar-nav .nav-link.active {
             color: var(--primary);
             background: #2b2f33;
             border-color: var(--primary);
         }
-        html.dark-mode .sidebar .navbar .navbar-nav .nav-link i {
+
+        body.dark-mode .sidebar .navbar .navbar-nav .nav-link i {
             background: #2b2f33;
         }
-        html.dark-mode .sidebar .navbar .navbar-nav .nav-link:hover i,
-        html.dark-mode .sidebar .navbar .navbar-nav .nav-link.active i {
+
+        body.dark-mode .sidebar .navbar .navbar-nav .nav-link:hover i,
+        body.dark-mode .sidebar .navbar .navbar-nav .nav-link.active i {
             background: #373b3e;
         }
-        html.dark-mode .sidebar .navbar .dropdown-item {
+
+        body.dark-mode .sidebar .navbar .dropdown-item {
             color: #b0b3b8;
         }
-        html.dark-mode .sidebar .navbar .dropdown-item:hover,
-        html.dark-mode .sidebar .navbar .dropdown-item.active {
+
+        body.dark-mode .sidebar .navbar .dropdown-item:hover,
+        body.dark-mode .sidebar .navbar .dropdown-item.active {
             color: var(--primary);
             background: #2b2f33;
         }
-        html.dark-mode .content .navbar {
+
+        body.dark-mode .content .navbar {
             background: #212529 !important;
             border-radius: 0 0 12px 12px;
         }
-        html.dark-mode .content .navbar .navbar-nav .nav-link {
+
+        body.dark-mode .content .navbar .navbar-nav .nav-link {
             color: #e4e6eb;
         }
-        html.dark-mode .content .navbar .navbar-nav .nav-link:hover,
-        html.dark-mode .content .navbar .navbar-nav .nav-link.active {
+
+        body.dark-mode .content .navbar .navbar-nav .nav-link:hover,
+        body.dark-mode .content .navbar .navbar-nav .nav-link.active {
             color: var(--primary);
         }
-        html.dark-mode .content .navbar .sidebar-toggler,
-        html.dark-mode .content .navbar .navbar-nav .nav-link i {
+
+        body.dark-mode .content .navbar .sidebar-toggler,
+        body.dark-mode .content .navbar .navbar-nav .nav-link i {
             background: #2b2f33;
             color: #e4e6eb;
         }
-        html.dark-mode .breadcrumb-item + .breadcrumb-item::before {
+
+        body.dark-mode .breadcrumb-item + .breadcrumb-item::before {
             color: #b0b3b8;
         }
-        html.dark-mode .breadcrumb-item .text-muted {
+
+        body.dark-mode .breadcrumb-item .text-muted {
             color: #b0b3b8 !important;
         }
-        html.dark-mode .breadcrumb-item .text-dark {
+
+        body.dark-mode .breadcrumb-item .text-dark {
             color: #e4e6eb !important;
         }
-        html.dark-mode .content .navbar .dropdown-menu {
+
+        body.dark-mode .content .navbar .dropdown-menu {
             background: #2b2f33 !important;
             border-color: #373b3e !important;
             border-radius: 0 0 12px 12px;
             animation: dropdownSlide 0.25s ease-out;
             transform-origin: top center;
         }
+
         @keyframes dropdownSlide {
             from {
                 opacity: 0;
@@ -176,217 +237,296 @@
                 transform: translateY(0);
             }
         }
-        html.dark-mode .content .navbar .dropdown-item {
+
+        body.dark-mode .content .navbar .dropdown-item {
             color: #e4e6eb;
         }
-        html.dark-mode .content .navbar .dropdown-item:hover {
+
+        body.dark-mode .content .navbar .dropdown-item:hover {
             background: #373b3e;
             color: var(--primary);
         }
-        html.dark-mode #spinner {
+
+        body.dark-mode #spinner {
             background: #1a1d21 !important;
         }
-        html.dark-mode .card,
-        html.dark-mode .bg-light {
+
+        body.dark-mode .card,
+        body.dark-mode .bg-light {
             background: #2b2f33 !important;
             border-color: #373b3e !important;
         }
-        html.dark-mode .card {
+
+        body.dark-mode .card {
             box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }
-        html.dark-mode .card-header {
+
+        body.dark-mode .card-header {
             background: #212529 !important;
             border-color: #373b3e !important;
             color: #e4e6eb;
         }
-        html.dark-mode .card-body,
-        html.dark-mode .card-footer {
+
+        body.dark-mode .card-body,
+        body.dark-mode .card-footer {
             color: #e4e6eb;
         }
-        html.dark-mode h1, html.dark-mode h2, html.dark-mode h3,
-        html.dark-mode h4, html.dark-mode h5, html.dark-mode h6,
-        html.dark-mode p, html.dark-mode span, html.dark-mode label,
-        html.dark-mode .text-dark {
+
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode h3,
+        body.dark-mode h4,
+        body.dark-mode h5,
+        body.dark-mode h6,
+        body.dark-mode p,
+        body.dark-mode span,
+        body.dark-mode label,
+        body.dark-mode .text-dark {
             color: #e4e6eb !important;
         }
-        html.dark-mode .text-muted {
+
+        body.dark-mode .text-muted {
             color: #b0b3b8 !important;
         }
-        html.dark-mode .text-secondary {
+
+        body.dark-mode .text-secondary {
             color: #b0b3b8 !important;
         }
-        html.dark-mode .form-control,
-        html.dark-mode .form-select {
+
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
             background-color: #1a1d21;
             border-color: #373b3e;
             color: #e4e6eb;
         }
-        html.dark-mode .form-control:focus,
-        html.dark-mode .form-select:focus {
+
+        body.dark-mode .form-control:focus,
+        body.dark-mode .form-select:focus {
             background-color: #1a1d21;
             border-color: var(--primary);
             color: #e4e6eb;
         }
-        html.dark-mode .form-control::placeholder {
+
+        body.dark-mode .form-control::placeholder {
             color: #6c757d;
         }
-        html.dark-mode .input-group-text {
+
+        body.dark-mode .input-group-text {
             background-color: #212529;
             border-color: #373b3e;
             color: #b0b3b8;
         }
-        html.dark-mode .table {
+
+        body.dark-mode .table {
             color: #e4e6eb;
         }
-        html.dark-mode .table thead th {
+
+        body.dark-mode .table thead th {
             border-color: #373b3e;
         }
-        html.dark-mode .table td,
-        html.dark-mode .table th {
+
+        body.dark-mode .table td,
+        body.dark-mode .table th {
             border-color: #373b3e;
         }
-        html.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+
+        body.dark-mode .table-striped tbody tr:nth-of-type(odd) {
             background-color: rgba(255,255,255,0.02);
         }
-        html.dark-mode .table-hover tbody tr:hover {
+
+        body.dark-mode .table-hover tbody tr:hover {
             background-color: rgba(0,167,157,0.1) !important;
             color: #e4e6eb;
         }
-        html.dark-mode .modal-content {
+
+        body.dark-mode .modal-content {
             background-color: #2b2f33;
             border-color: #373b3e;
             color: #e4e6eb;
         }
-        html.dark-mode .modal-header {
+
+        body.dark-mode .modal-header {
             border-color: #373b3e;
         }
-        html.dark-mode .modal-footer {
+
+        body.dark-mode .modal-footer {
             border-color: #373b3e;
         }
-        html.dark-mode .dropdown-menu {
+
+        body.dark-mode .dropdown-menu {
             background-color: #2b2f33;
             border-color: #373b3e;
         }
-        html.dark-mode .dropdown-item {
+
+        body.dark-mode .dropdown-item {
             color: #e4e6eb;
         }
-        html.dark-mode .dropdown-item:hover {
+
+        body.dark-mode .dropdown-item:hover {
             background-color: #373b3e;
             color: var(--primary);
         }
-        html.dark-mode .list-group-item {
+
+        body.dark-mode .list-group-item {
             background-color: #2b2f33;
             border-color: #373b3e;
             color: #e4e6eb;
         }
-        html.dark-mode .border {
+
+        body.dark-mode .border {
             border-color: #373b3e !important;
         }
-        html.dark-mode hr {
+
+        body.dark-mode hr {
             border-color: #373b3e;
         }
-        html.dark-mode .bg-white {
+
+        body.dark-mode .bg-white {
             background-color: #1a1d21 !important;
         }
-        html.dark-mode .shadow,
-        html.dark-mode .shadow-sm {
+
+        body.dark-mode .shadow,
+        body.dark-mode .shadow-sm {
             box-shadow: 0 0 10px rgba(0,0,0,0.4) !important;
         }
+
         /* SweetAlert dark mode */
-        html.dark-mode .swal2-popup {
+        body.dark-mode .swal2-popup {
             background: #2b2f33 !important;
             color: #e4e6eb !important;
         }
-        html.dark-mode .swal2-title {
+
+        body.dark-mode .swal2-title {
             color: #e4e6eb !important;
         }
-        html.dark-mode .swal2-html-container {
+
+        body.dark-mode .swal2-html-container {
             color: #b0b3b8 !important;
         }
-        html.dark-mode .swal2-input {
+
+        body.dark-mode .swal2-input {
             background: #1a1d21 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
+
         /* Scrollbar dark mode */
-        html.dark-mode ::-webkit-scrollbar {
+        body.dark-mode ::-webkit-scrollbar {
             width: 8px;
         }
-        html.dark-mode ::-webkit-scrollbar-track {
+
+        body.dark-mode ::-webkit-scrollbar-track {
             background: #1a1d21;
         }
-        html.dark-mode ::-webkit-scrollbar-thumb {
+
+        body.dark-mode ::-webkit-scrollbar-thumb {
             background: #373b3e;
             border-radius: 4px;
         }
-        html.dark-mode ::-webkit-scrollbar-thumb:hover {
+
+        body.dark-mode ::-webkit-scrollbar-thumb:hover {
             background: #4a4f54;
         }
+
         /* DataTables dark mode */
-        html.dark-mode .dataTables_wrapper .dataTables_length,
-        html.dark-mode .dataTables_wrapper .dataTables_filter,
-        html.dark-mode .dataTables_wrapper .dataTables_info,
-        html.dark-mode .dataTables_wrapper .dataTables_paginate {
+        body.dark-mode .dataTables_wrapper .dataTables_length,
+        body.dark-mode .dataTables_wrapper .dataTables_filter,
+        body.dark-mode .dataTables_wrapper .dataTables_info,
+        body.dark-mode .dataTables_wrapper .dataTables_paginate {
             color: #b0b3b8;
         }
-        html.dark-mode .dataTables_wrapper .dataTables_filter input,
-        html.dark-mode .dataTables_wrapper .dataTables_length select {
+
+        body.dark-mode .dataTables_wrapper .dataTables_filter input,
+        body.dark-mode .dataTables_wrapper .dataTables_length select {
             background-color: #1a1d21;
             border-color: #373b3e;
             color: #e4e6eb;
         }
-        html.dark-mode .page-link {
+
+        body.dark-mode .page-link {
             background-color: #2b2f33;
             border-color: #373b3e;
             color: #e4e6eb;
         }
-        html.dark-mode .page-link:hover {
+
+        body.dark-mode .page-link:hover {
             background-color: #373b3e;
             color: var(--primary);
         }
-        html.dark-mode .page-item.active .page-link {
+
+        body.dark-mode .page-item.active .page-link {
             background-color: var(--primary);
             border-color: var(--primary);
             color: #fff;
         }
+
         /* Select2 dark mode */
-        html.dark-mode .select2-container--default .select2-selection--single {
+        body.dark-mode .select2-container--default .select2-selection--single {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
         }
-        html.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
+
+        body.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
             color: #e4e6eb !important;
         }
-        html.dark-mode .select2-dropdown {
+
+        body.dark-mode .select2-dropdown {
             background-color: #2b2f33 !important;
             border-color: #373b3e !important;
         }
-        html.dark-mode .select2-container--default .select2-results__option {
+
+        body.dark-mode .select2-container--default .select2-results__option {
             color: #e4e6eb !important;
         }
-        html.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
+
+        body.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
             background-color: #373b3e !important;
             color: var(--primary) !important;
         }
-        html.dark-mode .select2-search--dropdown .select2-search__field {
+
+        body.dark-mode .select2-search--dropdown .select2-search__field {
             background-color: #1a1d21 !important;
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
+
         /* Footer dark mode */
-        html.dark-mode footer,
-        html.dark-mode .footer {
+        body.dark-mode footer,
+        body.dark-mode .footer {
             background: #212529 !important;
             color: #b0b3b8 !important;
         }
-        html.dark-mode footer a {
+
+        body.dark-mode footer a {
             color: var(--primary) !important;
         }
+
         /* Sidebar brand/logo area */
-        html.dark-mode .sidebar .navbar-brand {
+        body.dark-mode .sidebar .navbar-brand {
             color: #e4e6eb;
         }
+
+        /* Light mode specific overrides */
+        body:not(.dark-mode) {
+            background-color: #ffffff !important;
+        }
+
+        body:not(.dark-mode) .container-xxl {
+            background: #FFFFFF !important;
+        }
+
+        body:not(.dark-mode) .content {
+            background: #FFFFFF;
+        }
+
+        body:not(.dark-mode) .content > .navbar {
+            background: var(--light) !important;
+        }
     </style>
+
+    @yield('styles')
+    @stack('styles')
+
     <div class="container-xxl position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -396,11 +536,9 @@
         </div>
         <!-- Spinner End -->
 
-
         <!-- Sidebar Start -->
         @include('admin-page.template.side-bar')
         <!-- Sidebar End -->
-
 
         <!-- Content Start -->
         <div class="content">
@@ -408,18 +546,15 @@
             @include('admin-page.template.nav-bar')
             <!-- Navbar End -->
 
-
             {{-- Body Admin Page Start --}}
             @yield('content')
             {{-- Body Admin Page End --}}
-
 
             <!-- Footer Start -->
             @include('admin-page.template.footer')
             <!-- Footer End -->
         </div>
         <!-- Content End -->
-
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -435,11 +570,6 @@
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
     {{-- END Datatable FROM https://brilliansolution.com/tutorial-laravel-8-datatables-yajra-datatables/--}}
-
-    {{-- DEFAULT NGARUH KE ADANYA DATATABLE--}}
-    {{-- <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> --}}
-    {{-- DEFAULT NGARUH KE ADANYA DATATABLE--}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -468,21 +598,21 @@
                 }
             }
 
-            // Apply dark mode class to body if html has it (from anti-flash script)
-            if (document.documentElement.classList.contains('dark-mode')) {
-                $('body').addClass('dark-mode');
-                updateToggleSwitch(true);
-            }
+            // Initialize based on current state
+            var isDark = document.body.classList.contains('dark-mode');
+            updateToggleSwitch(isDark);
 
             $('#darkModeToggle').on('click', function() {
-                var isDark = !document.documentElement.classList.contains('dark-mode');
+                isDark = !document.body.classList.contains('dark-mode');
+
                 if (isDark) {
                     document.documentElement.classList.add('dark-mode');
-                    $('body').addClass('dark-mode');
+                    document.body.classList.add('dark-mode');
                 } else {
                     document.documentElement.classList.remove('dark-mode');
-                    $('body').removeClass('dark-mode');
+                    document.body.classList.remove('dark-mode');
                 }
+
                 localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
                 updateToggleSwitch(isDark);
             });
