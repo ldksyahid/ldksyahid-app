@@ -192,7 +192,7 @@
                 <div class="greeting-card d-flex justify-content-between align-items-center flex-wrap">
                     <div>
                         <div class="greeting-text" id="greetingText">Selamat Datang</div>
-                        <div class="greeting-sub" id="greetingSub">{{ Auth::user()->name ?? 'Admin' }} &mdash; Semoga harimu produktif!</div>
+                        <div class="greeting-sub" id="greetingSub">Semoga harimu produktif!</div>
                     </div>
                     <div class="text-end mt-2 mt-md-0">
                         <div class="live-clock" id="liveClock">--:--:--</div>
@@ -317,6 +317,8 @@
 @section('scripts')
 <script>
 $(document).ready(function() {
+    var userName = '{{ Auth::user()->name ?? "Admin" }}';
+
     // === Live Clock + Greeting ===
     function updateClock() {
         var now = new Date();
@@ -332,13 +334,12 @@ $(document).ready(function() {
         var h = now.getHours();
         var greeting = h < 11 ? 'Selamat Pagi' : h < 15 ? 'Selamat Siang' : h < 18 ? 'Selamat Sore' : 'Selamat Malam';
         var icon = h < 11 ? '&#9728;' : h < 15 ? '&#9728;' : h < 18 ? '&#127749;' : '&#127769;';
-        $('#greetingText').html(icon + ' ' + greeting + ',');
+        $('#greetingText').html(icon + ' ' + greeting + ', ' + userName);
     }
     updateClock();
     setInterval(updateClock, 1000);
 
     // === Rotating Greeting Messages ===
-    var userName = '{{ Auth::user()->name ?? "Admin" }}';
     var greetingMessages = [
         'Semoga harimu produktif!',
         'Tetap semangat dan istiqomah!',
@@ -366,12 +367,12 @@ $(document).ready(function() {
     }
 
     // Random on page load
-    $('#greetingSub').html(userName + ' &mdash; ' + randomMsg());
+    $('#greetingSub').html(randomMsg());
 
     function rotateGreeting() {
         var $sub = $('#greetingSub');
         $sub.animate({ opacity: 0 }, 400, function() {
-            $sub.html(userName + ' &mdash; ' + randomMsg());
+            $sub.html(randomMsg());
             $sub.animate({ opacity: 1 }, 400);
         });
     }
