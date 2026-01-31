@@ -201,6 +201,79 @@
         border: 2px solid #e0f7f5;
     }
 
+    /* Dark Mode Overrides - Dashboard */
+    html.dark-mode .quick-action-btn {
+        background: #2b2f33;
+        border-color: #373b3e;
+        color: #e4e6eb;
+    }
+    html.dark-mode .quick-action-btn:hover {
+        background: linear-gradient(135deg, #00a79d 0%, #008b84 100%);
+        color: #fff;
+        border-color: #00a79d;
+    }
+    html.dark-mode .prayer-card {
+        background: #2b2f33;
+        border-color: #373b3e;
+    }
+    html.dark-mode .prayer-card:hover {
+        border-color: #00a79d;
+        box-shadow: 0 6px 16px rgba(0, 167, 157, 0.25);
+    }
+    html.dark-mode .prayer-card .prayer-name {
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .widget-card {
+        background: #2b2f33 !important;
+        border-color: #373b3e !important;
+    }
+    html.dark-mode .widget-card .widget-label {
+        color: #b0b3b8 !important;
+    }
+    html.dark-mode .map-iframe {
+        border-color: #373b3e;
+    }
+    /* Calendar (datetimepicker) dark mode */
+    html.dark-mode .bootstrap-datetimepicker-widget {
+        background: #2b2f33 !important;
+        border-color: #373b3e !important;
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th,
+    html.dark-mode .bootstrap-datetimepicker-widget table td {
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.day:hover,
+    html.dark-mode .bootstrap-datetimepicker-widget table td span:hover {
+        background: #373b3e !important;
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.active,
+    html.dark-mode .bootstrap-datetimepicker-widget table td.active:hover {
+        background: #00a79d !important;
+        color: #fff !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.today::before {
+        border-bottom-color: #00a79d !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.old,
+    html.dark-mode .bootstrap-datetimepicker-widget table td.new {
+        color: #6c757d !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th.prev,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.next,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.picker-switch {
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th.prev:hover,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.next:hover,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.picker-switch:hover {
+        background: #373b3e !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th.dow {
+        color: #b0b3b8 !important;
+    }
+
     @media (max-width: 768px) {
         .page-title { font-size: 1.35rem; }
         .section-title { font-size: 1rem; }
