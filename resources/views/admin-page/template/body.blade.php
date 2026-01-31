@@ -405,12 +405,19 @@
 
             if (isDark) {
                 document.documentElement.classList.add('dark-mode');
-                document.body.classList.add('dark-mode');
+                if (document.body) {
+                    document.body.classList.add('dark-mode');
+                }
             }
 
             // Remove loading class after a short delay
             setTimeout(() => {
                 document.documentElement.classList.remove('dark-mode-loading');
+
+                // Also apply to body now that it exists
+                if (isDark && document.body) {
+                    document.body.classList.add('dark-mode');
+                }
 
                 // Update CSS variable for transitions
                 document.documentElement.style.setProperty('--transition-duration', '0.3s');
