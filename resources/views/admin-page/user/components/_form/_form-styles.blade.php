@@ -97,6 +97,9 @@
         margin-right: 0.75rem;
         width: 18px;
         height: 18px;
+        min-width: 18px;
+        min-height: 18px;
+        flex-shrink: 0;
         appearance: none;
         -webkit-appearance: none;
         border: 2px solid #dee2e6;
@@ -197,22 +200,31 @@
         .page-title {
             font-size: 1.35rem;
         }
-        .d-flex.justify-content-between,
-        .d-flex.align-items-center {
-            flex-direction: column;
-            align-items: flex-start !important;
-            gap: 0.5rem;
-        }
-        .d-flex.justify-content-between .btn,
-        .d-flex.align-items-center .btn {
-            width: 100%;
-            margin-top: 0.5rem;
+        .card-body {
+            padding: 1rem;
         }
         .section-title {
             font-size: 1rem;
         }
         .role-option {
-            padding: 0.5rem 0.75rem;
+            padding: 0.6rem 0.75rem;
+            font-size: 0.85rem;
+        }
+        .role-option .role-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .form-label {
+            font-size: 0.9rem;
+        }
+        .form-text {
+            font-size: 0.75rem;
+        }
+        .d-flex.justify-content-end.gap-2 {
+            flex-direction: column;
+        }
+        .d-flex.justify-content-end.gap-2 .btn {
+            width: 100%;
         }
     }
 </style>

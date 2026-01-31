@@ -310,6 +310,7 @@
                                 ['icon' => 'fa-id-card', 'label' => 'Add KTA', 'route' => 'admin.ktaldksyahid.create'],
                                 ['icon' => 'fa-book', 'label' => 'Add Book Catalog', 'route' => 'admin.catalog.books.create'],
                                 ['icon' => 'fa-file-alt', 'label' => 'Add Finance Report', 'route' => 'admin.finance-report.create'],
+                                ['icon' => 'fa-link', 'label' => 'Add Shortlink', 'route' => 'admin.service.shortlink.index'],
                             ];
                         @endphp
                         <div class="row g-2">
