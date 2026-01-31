@@ -74,7 +74,7 @@
 
         /* Fix navbar connection with sidebar - remove the gap */
         .container-xxl {
-            background: var(--light) !important;
+            background: #FFFFFF !important;
         }
 
         .content {
@@ -85,6 +85,8 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            background: var(--light) !important;
+            border-radius: 0 0 12px 12px;
         }
 
         .sidebar.pe-4 {
