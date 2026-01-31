@@ -252,7 +252,7 @@
                                             {{ $data->deadline ? \Carbon\Carbon::parse($data->deadline)->isoFormat('dddd, DD MMMM YYYY') : '-' }}
                                         </div>
                                     @else
-                                        <input type="date" class="form-control @error('deadline') is-invalid @enderror" id="inputDeadlineCampaign" name="deadline"
+                                        <input type="text" class="form-control flatpickr-date @error('deadline') is-invalid @enderror" id="inputDeadlineCampaign" name="deadline"
                                             value="{{ old('deadline', $data->deadline ?? '') }}" {{ $operation === 'create' ? 'required' : '' }}>
                                         @error('deadline') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                     @endif

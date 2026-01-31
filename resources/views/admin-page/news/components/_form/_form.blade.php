@@ -90,7 +90,7 @@
                                             {{ \Carbon\Carbon::parse($news->datepublish)->isoFormat('dddd, DD MMMM YYYY') }}
                                         </div>
                                     @else
-                                        <input type="date" class="form-control @error('datepublish') is-invalid @enderror" id="datepublish" name="datepublish"
+                                        <input type="text" class="form-control flatpickr-date @error('datepublish') is-invalid @enderror" id="datepublish" name="datepublish"
                                             value="{{ old('datepublish', $news->datepublish ?? '') }}"
                                             required>
                                         @error('datepublish')
