@@ -549,13 +549,13 @@ html.dark-mode .{{ $tableClass }} tbody tr {
     color: #e4e6eb;
 }
 html.dark-mode .{{ $tableClass }} tbody tr:nth-child(even) {
-    background-color: #252829;
+    background-color: #323639;
 }
 html.dark-mode .{{ $tableClass }} tbody tr:hover {
-    background-color: rgba(0, 167, 157, 0.15) !important;
+    background-color: rgba(0, 167, 157, 0.18) !important;
 }
 html.dark-mode .{{ $tableClass }} td {
-    border-color: #373b3e;
+    border-color: #3a3f44;
     color: #e4e6eb;
 }
 html.dark-mode .{{ $tableClass }} a {

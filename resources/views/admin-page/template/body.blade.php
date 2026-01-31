@@ -696,9 +696,10 @@
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
-        /* Container fluid bg-light inside content */
+        /* Container fluid bg-light inside content - slightly different shade for contrast */
         body.dark-mode .content .container-fluid .bg-light {
-            background: #1a1d21 !important;
+            background: #212529 !important;
+            border: 1px solid #373b3e !important;
         }
         /* File input dark mode */
         body.dark-mode .form-control[type="file"] {
