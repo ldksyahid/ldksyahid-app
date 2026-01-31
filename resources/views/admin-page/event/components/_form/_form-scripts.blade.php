@@ -56,6 +56,8 @@
                     if (frame) {
                         frame.src = e.target.result;
                         frame.style.display = 'block';
+                        var svgEl = frame.parentElement.querySelector('.svg-placeholder');
+                        if (svgEl) svgEl.style.display = 'none';
                     }
                 };
                 reader.readAsDataURL(file);

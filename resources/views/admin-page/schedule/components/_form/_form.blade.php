@@ -3,7 +3,6 @@
     $operation = $operation ?? 'create';
     $schedule = $schedule ?? null;
 
-    $defaultImage = 'https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm';
 @endphp
 
 <div class="container-fluid pt-4 px-4">
@@ -78,9 +77,12 @@
                                     </label>
 
                                     <div class="image-preview-container {{ ($schedule && $schedule->gdrive_id) ? 'has-image' : '' }} mb-3">
-                                        <img id="imagePreview"
-                                            src="{{ ($schedule && $schedule->gdrive_id) ? $schedule->getPictureUrl() : $defaultImage }}"
-                                            alt="Schedule Preview">
+                                        @if($schedule && $schedule->gdrive_id)
+                                            <img id="imagePreview" src="{{ $schedule->getPictureUrl() }}" alt="Schedule Preview">
+                                        @else
+                                            <img id="imagePreview" src="" alt="Schedule Preview" style="display:none;">
+                                            <x-svg-placeholder />
+                                        @endif
                                     </div>
 
                                     @if ($operation !== 'view')

@@ -55,6 +55,9 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     previewElement.src = e.target.result;
+                    previewElement.style.display = '';
+                    var svgEl = previewElement.parentElement.querySelector('.svg-placeholder');
+                    if (svgEl) svgEl.style.display = 'none';
                     if (previewContainer) {
                         previewContainer.classList.add('has-image');
                     }

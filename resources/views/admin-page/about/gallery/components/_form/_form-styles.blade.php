@@ -91,8 +91,12 @@
         width: 100%;
     }
     .image-preview-container.small-preview {
-        width: 100%;
-        max-height: 150px;
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid #dee2e6;
+        background-color: #f8f9fa;
+        display: inline-block;
     }
     .image-preview-container.small-preview img {
         max-height: 150px;
