@@ -1518,11 +1518,7 @@
                     }
                 });
 
-                // Initialize tooltips
-                this.$toggle.tooltip({
-                    trigger: 'hover',
-                    placement: 'bottom'
-                });
+                // Tooltip handled via CSS ::after pseudo-element
             },
 
             loadSavedMode: function() {
