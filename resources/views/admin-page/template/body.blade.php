@@ -97,7 +97,7 @@
         }
 
         /* Prevent transitions during initial load */
-        .dark-mode-loading *:not(.sidebar):not(.content) {
+        .dark-mode-loading *:not(.sidebar):not(.content):not(#spinner) {
             transition: none !important;
         }
 
@@ -536,6 +536,74 @@
             transition: background-color 0.3s ease;
         }
 
+        /* LDK Logo Spinner */
+        .spinner-ldk {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ldk-logo-spinner {
+            animation: ldkPulse 2s ease-in-out infinite, ldkGlow 2s ease-in-out infinite;
+            border-radius: 12px;
+        }
+
+        .ldk-orbit-ring {
+            position: absolute;
+            width: 95px;
+            height: 95px;
+            border: 3px solid transparent;
+            border-top-color: var(--primary);
+            border-right-color: var(--primary);
+            border-radius: 50%;
+            animation: ldkOrbit 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes ldkPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        @keyframes ldkGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 10px rgba(0, 167, 157, 0.4)) brightness(1.1);
+            }
+            50% {
+                filter: drop-shadow(0 0 25px rgba(0, 167, 157, 0.8)) drop-shadow(0 0 50px rgba(0, 167, 157, 0.4)) brightness(1.3);
+            }
+        }
+
+        @keyframes ldkOrbit {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Dark mode spinner */
+        html.dark-mode #spinner {
+            background: #1a1d21 !important;
+        }
+
+        html.dark-mode .ldk-logo-spinner {
+            animation: ldkPulse 2s ease-in-out infinite, ldkGlowDark 2s ease-in-out infinite;
+        }
+
+        @keyframes ldkGlowDark {
+            0%, 100% {
+                filter: drop-shadow(0 0 15px rgba(0, 167, 157, 0.6)) brightness(1.2);
+            }
+            50% {
+                filter: drop-shadow(0 0 35px rgba(0, 167, 157, 1)) drop-shadow(0 0 70px rgba(0, 167, 157, 0.5)) brightness(1.5);
+            }
+        }
+
+        html.dark-mode .ldk-orbit-ring {
+            opacity: 0.8;
+            border-top-color: rgba(0, 167, 157, 0.9);
+            border-right-color: rgba(0, 167, 157, 0.9);
+        }
+
         /* Active dropdown item styling */
         .sidebar .navbar .dropdown-item.active {
             color: var(--primary);
@@ -667,10 +735,6 @@
         html.dark-mode .content .navbar .dropdown-item:hover {
             background: #373b3e;
             color: var(--primary);
-        }
-
-        html.dark-mode #spinner {
-            background: #1a1d21 !important;
         }
 
         html.dark-mode .card,
@@ -1354,7 +1418,10 @@
     <div class="container-xxl position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <div class="spinner-ldk" role="status">
+                <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="Loading" class="ldk-logo-spinner" width="70" height="70">
+                <!-- Orbiting ring -->
+                <div class="ldk-orbit-ring"></div>
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
