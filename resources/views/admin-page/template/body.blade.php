@@ -86,7 +86,7 @@
             top: 0;
             z-index: 1000;
             background: var(--light) !important;
-            border-radius: 0 0 12px 12px;
+            border-radius: 0 0 0px 12px;
         }
 
         .sidebar.pe-4 {
