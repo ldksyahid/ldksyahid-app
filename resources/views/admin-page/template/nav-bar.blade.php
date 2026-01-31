@@ -115,6 +115,13 @@
     </div>
 
     <div class="navbar-nav align-items-center ms-auto">
+        <div class="nav-item d-flex align-items-center me-2">
+            <i class="fa fa-sun me-2" style="color: #f39c12; font-size: 14px;"></i>
+            <div class="dark-mode-switch" id="darkModeToggle" title="Toggle Dark Mode" style="cursor:pointer; width:44px; height:24px; border-radius:12px; background:#ccc; position:relative; transition:background 0.3s;">
+                <div class="dark-mode-knob" style="width:20px; height:20px; border-radius:50%; background:#fff; position:absolute; top:2px; left:2px; transition:transform 0.3s; box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div>
+            </div>
+            <i class="fa fa-moon ms-2" style="color: #b0b3b8; font-size: 14px;"></i>
+        </div>
         <div class="nav-item">
             <a href="/" class="nav-link">
                 <i class="fa fa-globe me-lg-2"></i>

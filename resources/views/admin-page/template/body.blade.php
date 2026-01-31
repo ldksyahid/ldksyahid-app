@@ -48,6 +48,11 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     @yield('head')
+    <script>
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
 </head>
 
 <body>
@@ -80,6 +85,281 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+        }
+
+        /* Dark Mode Overrides */
+        html.dark-mode body,
+        html.dark-mode .container-xxl {
+            background: #1a1d21 !important;
+        }
+        html.dark-mode .content {
+            background: #1a1d21;
+        }
+        html.dark-mode .sidebar {
+            background: #212529;
+        }
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link {
+            color: #e4e6eb;
+            border-left-color: #212529;
+        }
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link:hover,
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link.active {
+            color: var(--primary);
+            background: #2b2f33;
+            border-color: var(--primary);
+        }
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link i {
+            background: #2b2f33;
+        }
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link:hover i,
+        html.dark-mode .sidebar .navbar .navbar-nav .nav-link.active i {
+            background: #373b3e;
+        }
+        html.dark-mode .sidebar .navbar .dropdown-item {
+            color: #b0b3b8;
+        }
+        html.dark-mode .sidebar .navbar .dropdown-item:hover,
+        html.dark-mode .sidebar .navbar .dropdown-item.active {
+            color: var(--primary);
+            background: #2b2f33;
+        }
+        html.dark-mode .content .navbar {
+            background: #212529 !important;
+        }
+        html.dark-mode .content .navbar .navbar-nav .nav-link {
+            color: #e4e6eb;
+        }
+        html.dark-mode .content .navbar .navbar-nav .nav-link:hover,
+        html.dark-mode .content .navbar .navbar-nav .nav-link.active {
+            color: var(--primary);
+        }
+        html.dark-mode .content .navbar .sidebar-toggler,
+        html.dark-mode .content .navbar .navbar-nav .nav-link i {
+            background: #2b2f33;
+            color: #e4e6eb;
+        }
+        html.dark-mode .breadcrumb-item + .breadcrumb-item::before {
+            color: #b0b3b8;
+        }
+        html.dark-mode .breadcrumb-item .text-muted {
+            color: #b0b3b8 !important;
+        }
+        html.dark-mode .breadcrumb-item .text-dark {
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .content .navbar .dropdown-menu {
+            background: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .content .navbar .dropdown-item {
+            color: #e4e6eb;
+        }
+        html.dark-mode .content .navbar .dropdown-item:hover {
+            background: #373b3e;
+            color: var(--primary);
+        }
+        html.dark-mode #spinner {
+            background: #1a1d21 !important;
+        }
+        html.dark-mode .card,
+        html.dark-mode .bg-light {
+            background: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .card {
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        html.dark-mode .card-header {
+            background: #212529 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb;
+        }
+        html.dark-mode .card-body,
+        html.dark-mode .card-footer {
+            color: #e4e6eb;
+        }
+        html.dark-mode h1, html.dark-mode h2, html.dark-mode h3,
+        html.dark-mode h4, html.dark-mode h5, html.dark-mode h6,
+        html.dark-mode p, html.dark-mode span, html.dark-mode label,
+        html.dark-mode .text-dark {
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .text-muted {
+            color: #b0b3b8 !important;
+        }
+        html.dark-mode .text-secondary {
+            color: #b0b3b8 !important;
+        }
+        html.dark-mode .form-control,
+        html.dark-mode .form-select {
+            background-color: #1a1d21;
+            border-color: #373b3e;
+            color: #e4e6eb;
+        }
+        html.dark-mode .form-control:focus,
+        html.dark-mode .form-select:focus {
+            background-color: #1a1d21;
+            border-color: var(--primary);
+            color: #e4e6eb;
+        }
+        html.dark-mode .form-control::placeholder {
+            color: #6c757d;
+        }
+        html.dark-mode .input-group-text {
+            background-color: #212529;
+            border-color: #373b3e;
+            color: #b0b3b8;
+        }
+        html.dark-mode .table {
+            color: #e4e6eb;
+        }
+        html.dark-mode .table thead th {
+            border-color: #373b3e;
+        }
+        html.dark-mode .table td,
+        html.dark-mode .table th {
+            border-color: #373b3e;
+        }
+        html.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(255,255,255,0.02);
+        }
+        html.dark-mode .table-hover tbody tr:hover {
+            background-color: rgba(0,167,157,0.1) !important;
+            color: #e4e6eb;
+        }
+        html.dark-mode .modal-content {
+            background-color: #2b2f33;
+            border-color: #373b3e;
+            color: #e4e6eb;
+        }
+        html.dark-mode .modal-header {
+            border-color: #373b3e;
+        }
+        html.dark-mode .modal-footer {
+            border-color: #373b3e;
+        }
+        html.dark-mode .dropdown-menu {
+            background-color: #2b2f33;
+            border-color: #373b3e;
+        }
+        html.dark-mode .dropdown-item {
+            color: #e4e6eb;
+        }
+        html.dark-mode .dropdown-item:hover {
+            background-color: #373b3e;
+            color: var(--primary);
+        }
+        html.dark-mode .list-group-item {
+            background-color: #2b2f33;
+            border-color: #373b3e;
+            color: #e4e6eb;
+        }
+        html.dark-mode .border {
+            border-color: #373b3e !important;
+        }
+        html.dark-mode hr {
+            border-color: #373b3e;
+        }
+        html.dark-mode .bg-white {
+            background-color: #1a1d21 !important;
+        }
+        html.dark-mode .shadow,
+        html.dark-mode .shadow-sm {
+            box-shadow: 0 0 10px rgba(0,0,0,0.4) !important;
+        }
+        /* SweetAlert dark mode */
+        html.dark-mode .swal2-popup {
+            background: #2b2f33 !important;
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .swal2-title {
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .swal2-html-container {
+            color: #b0b3b8 !important;
+        }
+        html.dark-mode .swal2-input {
+            background: #1a1d21 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        /* Scrollbar dark mode */
+        html.dark-mode ::-webkit-scrollbar {
+            width: 8px;
+        }
+        html.dark-mode ::-webkit-scrollbar-track {
+            background: #1a1d21;
+        }
+        html.dark-mode ::-webkit-scrollbar-thumb {
+            background: #373b3e;
+            border-radius: 4px;
+        }
+        html.dark-mode ::-webkit-scrollbar-thumb:hover {
+            background: #4a4f54;
+        }
+        /* DataTables dark mode */
+        html.dark-mode .dataTables_wrapper .dataTables_length,
+        html.dark-mode .dataTables_wrapper .dataTables_filter,
+        html.dark-mode .dataTables_wrapper .dataTables_info,
+        html.dark-mode .dataTables_wrapper .dataTables_paginate {
+            color: #b0b3b8;
+        }
+        html.dark-mode .dataTables_wrapper .dataTables_filter input,
+        html.dark-mode .dataTables_wrapper .dataTables_length select {
+            background-color: #1a1d21;
+            border-color: #373b3e;
+            color: #e4e6eb;
+        }
+        html.dark-mode .page-link {
+            background-color: #2b2f33;
+            border-color: #373b3e;
+            color: #e4e6eb;
+        }
+        html.dark-mode .page-link:hover {
+            background-color: #373b3e;
+            color: var(--primary);
+        }
+        html.dark-mode .page-item.active .page-link {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+        /* Select2 dark mode */
+        html.dark-mode .select2-container--default .select2-selection--single {
+            background-color: #1a1d21 !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .select2-dropdown {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .select2-container--default .select2-results__option {
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
+            background-color: #373b3e !important;
+            color: var(--primary) !important;
+        }
+        html.dark-mode .select2-search--dropdown .select2-search__field {
+            background-color: #1a1d21 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        /* Footer dark mode */
+        html.dark-mode footer,
+        html.dark-mode .footer {
+            background: #212529 !important;
+            color: #b0b3b8 !important;
+        }
+        html.dark-mode footer a {
+            color: var(--primary) !important;
+        }
+        /* Sidebar brand/logo area */
+        html.dark-mode .sidebar .navbar-brand {
+            color: #e4e6eb;
         }
     </style>
     <div class="container-xxl position-relative bg-white d-flex p-0">
@@ -148,6 +428,41 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('admin-page-ext-rsrc/js/main.js') }}"></script>
+
+    {{-- Dark Mode Toggle Script --}}
+    <script>
+        $(function() {
+            function updateToggleSwitch(isDark) {
+                var $toggle = $('#darkModeToggle');
+                if (isDark) {
+                    $toggle.css('background', '#00a79d');
+                    $toggle.find('.dark-mode-knob').css('transform', 'translateX(20px)');
+                } else {
+                    $toggle.css('background', '#ccc');
+                    $toggle.find('.dark-mode-knob').css('transform', 'translateX(0)');
+                }
+            }
+
+            // Apply dark mode class to body if html has it (from anti-flash script)
+            if (document.documentElement.classList.contains('dark-mode')) {
+                $('body').addClass('dark-mode');
+                updateToggleSwitch(true);
+            }
+
+            $('#darkModeToggle').on('click', function() {
+                var isDark = !document.documentElement.classList.contains('dark-mode');
+                if (isDark) {
+                    document.documentElement.classList.add('dark-mode');
+                    $('body').addClass('dark-mode');
+                } else {
+                    document.documentElement.classList.remove('dark-mode');
+                    $('body').removeClass('dark-mode');
+                }
+                localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+                updateToggleSwitch(isDark);
+            });
+        });
+    </script>
 
     {{-- Script Admin Page Start --}}
     @yield('scripts')

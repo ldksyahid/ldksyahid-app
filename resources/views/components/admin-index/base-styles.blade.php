@@ -540,6 +540,132 @@
     padding: 0.25rem 0.5rem;
 }
 
+/* Dark Mode Overrides for Admin Index */
+html.dark-mode .{{ $tableClass }} {
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4);
+}
+html.dark-mode .{{ $tableClass }} tbody tr {
+    background-color: #2b2f33;
+    color: #e4e6eb;
+}
+html.dark-mode .{{ $tableClass }} tbody tr:hover {
+    background-color: rgba(0, 167, 157, 0.15) !important;
+}
+html.dark-mode .{{ $tableClass }} td {
+    border-color: #373b3e;
+    color: #e4e6eb;
+}
+html.dark-mode .{{ $tableClass }} a {
+    color: var(--primary);
+}
+html.dark-mode .{{ $tableClass }} a:hover {
+    color: #00c4b8;
+}
+html.dark-mode .{{ $tableClass }} thead th select.column-search {
+    background-color: rgba(43, 47, 51, 0.9) !important;
+    border-color: rgba(55, 59, 62, 0.7) !important;
+    color: #e4e6eb !important;
+}
+html.dark-mode .{{ $tableClass }} thead th select.column-search option {
+    background-color: #2b2f33;
+    color: #e4e6eb;
+}
+html.dark-mode .{{ $tableClass }} thead th .form-control-sm {
+    background-color: rgba(43, 47, 51, 0.9);
+    border-color: rgba(55, 59, 62, 0.7);
+    color: #e4e6eb;
+}
+html.dark-mode .{{ $tableClass }} input[type="text"],
+html.dark-mode .{{ $tableClass }} input[type="number"] {
+    background-color: #1a1d21;
+    border-color: #373b3e;
+    color: #e4e6eb;
+}
+html.dark-mode .pagination .page-link {
+    background-color: #2b2f33;
+    border-color: #373b3e;
+    color: var(--primary);
+}
+html.dark-mode .pagination .page-link:hover {
+    background-color: #373b3e;
+    color: #00c4b8;
+}
+html.dark-mode .pagination .page-item.active .page-link {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+html.dark-mode .skeleton {
+    background: #373b3e;
+}
+html.dark-mode .card-guide {
+    background: #2b2f33;
+    border-color: #373b3e;
+}
+html.dark-mode .card-guide:hover {
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+html.dark-mode .text-secondary {
+    color: #b0b3b8 !important;
+}
+html.dark-mode .column-search-clear {
+    color: #b0b3b8;
+}
+html.dark-mode .column-search-clear:hover {
+    color: #e4e6eb;
+}
+html.dark-mode .daterangepicker {
+    background-color: #2b2f33;
+    border-color: #373b3e;
+    color: #e4e6eb;
+}
+html.dark-mode .daterangepicker .calendar-table {
+    background-color: #2b2f33;
+    border-color: #373b3e;
+}
+html.dark-mode .daterangepicker td,
+html.dark-mode .daterangepicker th {
+    color: #e4e6eb;
+}
+html.dark-mode .daterangepicker td.off {
+    color: #6c757d;
+}
+html.dark-mode .daterangepicker td.available:hover {
+    background-color: #373b3e;
+}
+html.dark-mode .daterangepicker .drp-buttons .btn.cancelBtn {
+    color: #b0b3b8;
+}
+html.dark-mode .daterangepicker .drp-buttons .btn.cancelBtn:hover {
+    background-color: #373b3e;
+}
+@if($includeSelect2)
+html.dark-mode .{{ $tableClass }} thead th .select2-container .select2-selection--single {
+    background-color: rgba(43, 47, 51, 0.9) !important;
+    border-color: rgba(55, 59, 62, 0.7) !important;
+}
+html.dark-mode .{{ $tableClass }} thead th .select2-selection__rendered {
+    color: #e4e6eb !important;
+}
+@endif
+@if($includeModal)
+html.dark-mode .modal-content {
+    background-color: #2b2f33;
+    border-color: #373b3e;
+}
+html.dark-mode .modal-body {
+    color: #e4e6eb;
+}
+html.dark-mode .btn-light {
+    background-color: #373b3e;
+    border-color: #373b3e;
+    color: #e4e6eb;
+}
+html.dark-mode .btn-light:hover {
+    background-color: #4a4f54;
+}
+@endif
+
 /* Extra Custom Styles */
 {!! $extraStyles !!}
 </style>
