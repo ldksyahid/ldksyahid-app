@@ -3,7 +3,6 @@
     $operation = $operation ?? 'create';
     $testimony = $testimony ?? null;
 
-    $defaultImage = 'https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm';
 @endphp
 
 <div class="container-fluid pt-4 px-4">
@@ -69,9 +68,12 @@
 
                                 <div class="mb-3 d-flex flex-column align-items-center">
                                     <div class="image-preview-container {{ ($testimony && $testimony->gdrive_id) ? 'has-image' : '' }} mb-3">
-                                        <img id="imagePreview"
-                                            src="{{ ($testimony && $testimony->gdrive_id) ? $testimony->getPictureUrl() : $defaultImage }}"
-                                            alt="Profile Preview">
+                                        @if($testimony && $testimony->gdrive_id)
+                                            <img id="imagePreview" src="{{ $testimony->getPictureUrl() }}" alt="Profile Preview">
+                                        @else
+                                            <img id="imagePreview" src="" alt="Profile Preview" style="display:none;">
+                                            <x-svg-placeholder />
+                                        @endif
                                     </div>
 
                                     @if ($operation !== 'view')

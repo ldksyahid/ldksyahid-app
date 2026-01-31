@@ -201,6 +201,79 @@
         border: 2px solid #e0f7f5;
     }
 
+    /* Dark Mode Overrides - Dashboard */
+    html.dark-mode .quick-action-btn {
+        background: #2b2f33;
+        border-color: #373b3e;
+        color: #e4e6eb;
+    }
+    html.dark-mode .quick-action-btn:hover {
+        background: linear-gradient(135deg, #00a79d 0%, #008b84 100%);
+        color: #fff;
+        border-color: #00a79d;
+    }
+    html.dark-mode .prayer-card {
+        background: #2b2f33;
+        border-color: #373b3e;
+    }
+    html.dark-mode .prayer-card:hover {
+        border-color: #00a79d;
+        box-shadow: 0 6px 16px rgba(0, 167, 157, 0.25);
+    }
+    html.dark-mode .prayer-card .prayer-name {
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .widget-card {
+        background: #2b2f33 !important;
+        border-color: #373b3e !important;
+    }
+    html.dark-mode .widget-card .widget-label {
+        color: #b0b3b8 !important;
+    }
+    html.dark-mode .map-iframe {
+        border-color: #373b3e;
+    }
+    /* Calendar (datetimepicker) dark mode */
+    html.dark-mode .bootstrap-datetimepicker-widget {
+        background: #2b2f33 !important;
+        border-color: #373b3e !important;
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th,
+    html.dark-mode .bootstrap-datetimepicker-widget table td {
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.day:hover,
+    html.dark-mode .bootstrap-datetimepicker-widget table td span:hover {
+        background: #373b3e !important;
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.active,
+    html.dark-mode .bootstrap-datetimepicker-widget table td.active:hover {
+        background: #00a79d !important;
+        color: #fff !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.today::before {
+        border-bottom-color: #00a79d !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.old,
+    html.dark-mode .bootstrap-datetimepicker-widget table td.new {
+        color: #6c757d !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th.prev,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.next,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.picker-switch {
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th.prev:hover,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.next:hover,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.picker-switch:hover {
+        background: #373b3e !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th.dow {
+        color: #b0b3b8 !important;
+    }
+
     @media (max-width: 768px) {
         .page-title { font-size: 1.35rem; }
         .section-title { font-size: 1rem; }
@@ -239,6 +312,32 @@
                     <div class="text-end mt-2 mt-md-0">
                         <div class="live-clock" id="liveClock">--:--:--</div>
                         <div class="live-date" id="liveDate">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prayer Times -->
+            <div class="col-md-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="section-title mb-3"><i class="fas fa-mosque me-2"></i>Prayer Times - Jakarta</h5>
+                        <div class="row g-3">
+                            @php
+                                $prayers = ['Imsak', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
+                                $icons = ['fa-moon', 'fa-sun', 'fa-sun', 'fa-cloud-sun', 'fa-moon', 'fa-star'];
+                            @endphp
+                            @foreach ($prayers as $index => $name)
+                            <div class="col-6 col-md-4 col-lg-2">
+                                <div class="prayer-card text-center p-3">
+                                    <div class="prayer-icon mx-auto mb-2">
+                                        <i class="fa {{ $icons[$index] }}"></i>
+                                    </div>
+                                    <div class="prayer-name mb-1">{{ $name }}</div>
+                                    <div class="prayer-time">{{ $prayerTimes[strtolower($name)] ?? '-' }}</div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
@@ -348,32 +447,6 @@
                                     <canvas id="doughnutChart"></canvas>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Prayer Times -->
-            <div class="col-md-12 mb-4">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="section-title mb-3"><i class="fas fa-mosque me-2"></i>Prayer Times - Jakarta</h5>
-                        <div class="row g-3">
-                            @php
-                                $prayers = ['Imsak', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
-                                $icons = ['fa-moon', 'fa-sun', 'fa-sun', 'fa-cloud-sun', 'fa-moon', 'fa-star'];
-                            @endphp
-                            @foreach ($prayers as $index => $name)
-                            <div class="col-6 col-md-4 col-lg-2">
-                                <div class="prayer-card text-center p-3">
-                                    <div class="prayer-icon mx-auto mb-2">
-                                        <i class="fa {{ $icons[$index] }}"></i>
-                                    </div>
-                                    <div class="prayer-name mb-1">{{ $name }}</div>
-                                    <div class="prayer-time">{{ $prayerTimes[strtolower($name)] ?? '-' }}</div>
-                                </div>
-                            </div>
-                            @endforeach
                         </div>
                     </div>
                 </div>

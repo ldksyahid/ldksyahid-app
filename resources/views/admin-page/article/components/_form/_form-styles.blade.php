@@ -72,8 +72,8 @@
     /* Image Preview */
     .image-preview-container {
         position: relative;
-        width: 150px;
-        height: 200px;
+        width: 100%;
+        max-height: 300px;
         border-radius: 12px;
         overflow: hidden;
         border: 2px solid #dee2e6;
@@ -84,6 +84,11 @@
         height: 100%;
         object-fit: cover;
         display: block;
+    }
+    .image-preview-container .svg-placeholder {
+        width: 100% !important;
+        height: auto !important;
+        border: none !important;
     }
     .image-preview-container.has-image {
         border-color: #00a79d;
