@@ -1505,7 +1505,7 @@
 
         /* Match Select2 dropdown height with text input */
         .select2-container .select2-selection--single {
-            height: calc(2.5rem + 2px) !important;
+            height: calc(2.2rem + 2px) !important;
             display: flex !important;
             align-items: center !important;
         }
