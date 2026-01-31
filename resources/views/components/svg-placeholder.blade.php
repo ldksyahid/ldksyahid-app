@@ -1,6 +1,6 @@
 @props(['width' => '100%', 'height' => '200'])
 
-<svg xmlns="http://www.w3.org/2000/svg" width="{{ $width }}" height="{{ $height }}" viewBox="0 0 400 300" class="svg-placeholder" style="width: 100%; height: auto; display: block; border-radius: 12px;">
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ $width }}" height="{{ $height }}" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" class="svg-placeholder" style="width: 100%; max-width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid #ced4da;">
     <rect width="400" height="300" fill="#e9ecef" class="svg-placeholder-bg"/>
     <!-- Mountains -->
     <polygon points="80,240 200,120 320,240" fill="#ced4da" class="svg-placeholder-mountain"/>

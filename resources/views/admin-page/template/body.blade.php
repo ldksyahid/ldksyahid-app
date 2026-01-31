@@ -794,6 +794,9 @@
         }
 
         /* SVG Placeholder dark mode */
+        html.dark-mode .svg-placeholder {
+            border-color: #373b3e !important;
+        }
         html.dark-mode .svg-placeholder-bg { fill: #2b2f33; }
         html.dark-mode .svg-placeholder-mountain { fill: #373b3e; }
         html.dark-mode .svg-placeholder-mountain-sm { fill: #4a4f54; }
