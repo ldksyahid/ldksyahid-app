@@ -1788,14 +1788,14 @@
     {{-- Global Flatpickr Init --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            flatpickr('.flatpickr-date', {
+            flatpickr('.flatpickr-date:not([readonly]):not([disabled])', {
                 dateFormat: 'Y-m-d',
                 altInput: true,
                 altFormat: 'd/m/Y',
                 allowInput: true,
                 monthSelectorType: 'static'
             });
-            flatpickr('.flatpickr-datetime', {
+            flatpickr('.flatpickr-datetime:not([readonly]):not([disabled])', {
                 dateFormat: 'Y-m-d H:i',
                 altInput: true,
                 altFormat: 'd/m/Y H:i',
@@ -1808,12 +1808,12 @@
     </script>
 
     {{-- Fix: browser back/forward button showing raw JSON from DataTables AJAX --}}
-    {{-- <script>
+    <script>
         // Register service worker to intercept navigation and prevent cached JSON
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/admin-sw.js', { scope: '/admin/' });
         }
-    </script> --}}
+    </script>
 
     {{-- Script Admin Page Start --}}
     @yield('scripts')
