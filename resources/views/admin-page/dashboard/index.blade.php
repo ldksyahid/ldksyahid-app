@@ -155,6 +155,46 @@
         color: #00a79d;
     }
 
+    /* Quick Actions */
+    .quick-action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.6rem 1rem;
+        border-radius: 10px;
+        border: 1px solid #e0f7f5;
+        background: #fff;
+        color: #495057;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    .quick-action-btn:hover {
+        background: linear-gradient(135deg, #00a79d 0%, #008b84 100%);
+        color: #fff;
+        border-color: #00a79d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 167, 157, 0.25);
+        text-decoration: none;
+    }
+    .quick-action-btn .qa-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        color: #fff;
+        background: linear-gradient(135deg, #00a79d 0%, #008b84 100%);
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+    .quick-action-btn:hover .qa-icon {
+        background: rgba(255,255,255,0.25);
+    }
+
     /* Calendar & Map */
     .map-iframe {
         border-radius: 10px;
@@ -225,6 +265,41 @@
                                     </div>
                                     <div class="widget-count" data-target="{{ $widget['count'] }}">0</div>
                                     <div class="widget-label">{{ $widget['title'] }}</div>
+                                </a>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="col-md-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="section-title mb-3"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                        @php
+                            $quickActions = [
+                                ['icon' => 'fa-book-open', 'label' => 'Add Article', 'route' => 'admin.article.create'],
+                                ['icon' => 'fa-calendar-check', 'label' => 'Add Event', 'route' => 'admin.event.create'],
+                                ['icon' => 'fa-newspaper', 'label' => 'Add News', 'route' => 'admin.news.create'],
+                                ['icon' => 'fa-id-card', 'label' => 'Add KTA', 'route' => 'admin.ktaldksyahid.create'],
+                                ['icon' => 'fa-clock', 'label' => 'Add Schedule', 'route' => 'admin.schedule.create'],
+                                ['icon' => 'fa-images', 'label' => 'Add Gallery', 'route' => 'admin.about.gallery.create'],
+                                ['icon' => 'fa-star', 'label' => 'Add Testimony', 'route' => 'admin.testimony.create'],
+                                ['icon' => 'fa-image', 'label' => 'Add Jumbotron', 'route' => 'admin.jumbotron.create'],
+                                ['icon' => 'fa-user-plus', 'label' => 'Add User', 'route' => 'admin.user.create'],
+                                ['icon' => 'fa-sitemap', 'label' => 'Add Structure', 'route' => 'admin.about.structure.create'],
+                                ['icon' => 'fa-headset', 'label' => 'Add IT Support', 'route' => 'admin.about.itsupport.create'],
+                                ['icon' => 'fa-phone', 'label' => 'Add Call Kestari', 'route' => 'admin.service.callkestari.create'],
+                            ];
+                        @endphp
+                        <div class="row g-2">
+                            @foreach ($quickActions as $action)
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <a href="{{ route($action['route']) }}" class="quick-action-btn">
+                                    <div class="qa-icon"><i class="fa {{ $action['icon'] }}"></i></div>
+                                    {{ $action['label'] }}
                                 </a>
                             </div>
                             @endforeach
