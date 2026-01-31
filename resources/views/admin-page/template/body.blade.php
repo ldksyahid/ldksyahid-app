@@ -1172,6 +1172,99 @@
             border-color: #373b3e !important;
             color: #e4e6eb !important;
         }
+        html.dark-mode .note-btn:hover,
+        html.dark-mode .note-btn.active {
+            background-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        /* Summernote modal/dialog dark mode */
+        html.dark-mode .note-modal .modal-content,
+        html.dark-mode .note-modal .note-modal-content {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .note-modal .modal-header,
+        html.dark-mode .note-modal .note-modal-header {
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .note-modal .modal-header .close,
+        html.dark-mode .note-modal .note-modal-header .close {
+            color: #b0b3b8 !important;
+        }
+        html.dark-mode .note-modal .modal-title,
+        html.dark-mode .note-modal .note-modal-title {
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .note-modal .modal-body,
+        html.dark-mode .note-modal .note-modal-body {
+            background-color: #2b2f33 !important;
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .note-modal .modal-body label,
+        html.dark-mode .note-modal .note-modal-body label {
+            color: #b0b3b8 !important;
+        }
+        html.dark-mode .note-modal .modal-body .form-control,
+        html.dark-mode .note-modal .note-modal-body .form-control,
+        html.dark-mode .note-modal .note-form-group .form-control,
+        html.dark-mode .note-modal .note-input {
+            background-color: #1a1d21 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .note-modal .modal-body .form-control:focus,
+        html.dark-mode .note-modal .note-modal-body .form-control:focus,
+        html.dark-mode .note-modal .note-input:focus {
+            border-color: #00a79d !important;
+        }
+        html.dark-mode .note-modal .modal-footer,
+        html.dark-mode .note-modal .note-modal-footer {
+            border-color: #373b3e !important;
+            background-color: #2b2f33 !important;
+        }
+        .note-modal-footer {
+            height: 60px !important;
+            padding: 15px !important;
+            margin-top: 15px !important;
+            border-top: 1px solid #e0e0e0;
+        }
+        html.dark-mode .note-modal-footer {
+            border-top-color: #373b3e !important;
+        }
+        html.dark-mode .note-modal .modal-body .checkbox label,
+        html.dark-mode .note-modal .note-modal-body .checkbox label,
+        html.dark-mode .note-modal .note-form-group label {
+            color: #b0b3b8 !important;
+        }
+        /* Summernote dropdown dark mode */
+        html.dark-mode .note-editor .note-toolbar .note-dropdown-menu,
+        html.dark-mode .note-dropdown-menu {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .note-dropdown-item,
+        html.dark-mode .note-dropdown-menu a {
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .note-dropdown-item:hover,
+        html.dark-mode .note-dropdown-menu a:hover {
+            background-color: #373b3e !important;
+            color: var(--primary) !important;
+        }
+        /* Summernote popover/tooltip dark mode */
+        html.dark-mode .note-popover .popover-content,
+        html.dark-mode .note-popover .note-popover-content {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .note-hint-popover .popover-content {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .note-hint-popover .popover-content .note-hint-item {
+            color: #e4e6eb !important;
+        }
         /* Toggle switch (jumbotron) */
         html.dark-mode .toggle-switch {
             background-color: #2b2f33 !important;
