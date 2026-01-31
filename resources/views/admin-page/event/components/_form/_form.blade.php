@@ -260,7 +260,8 @@
                                             @if($operation === 'update' && $event->gdrive_id)
                                                 <img id="posterPreview" src="https://lh3.googleusercontent.com/d/{{ $event->gdrive_id }}" alt="Current Poster" class="img-thumbnail mb-2" style="max-height: 200px;">
                                             @else
-                                                <img id="posterPreview" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" alt="Preview" class="img-thumbnail mb-2" style="max-height: 200px;">
+                                                <img id="posterPreview" src="" alt="Preview" class="img-thumbnail mb-2" style="max-height: 200px; display:none;">
+                                                <x-svg-placeholder />
                                             @endif
                                         </div>
                                         <input type="file" class="form-control @error('poster') is-invalid @enderror" id="poster" name="poster"

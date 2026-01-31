@@ -78,6 +78,9 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         posterPreview.src = e.target.result;
+                        posterPreview.style.display = '';
+                        var svgEl = posterPreview.parentElement.querySelector('.svg-placeholder');
+                        if (svgEl) svgEl.style.display = 'none';
                         posterPreview.closest('.image-preview-container').classList.add('has-image');
                     };
                     reader.readAsDataURL(file);
@@ -95,6 +98,9 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         logoPreview.src = e.target.result;
+                        logoPreview.style.display = '';
+                        var svgEl = logoPreview.parentElement.querySelector('.svg-placeholder');
+                        if (svgEl) svgEl.style.display = 'none';
                         logoPreview.closest('.image-preview-container').classList.add('has-image');
                     };
                     reader.readAsDataURL(file);

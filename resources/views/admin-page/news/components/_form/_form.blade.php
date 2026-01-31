@@ -3,7 +3,6 @@
     $operation = $operation ?? 'create';
     $news = $news ?? null;
 
-    $defaultImage = 'https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm';
 @endphp
 
 <div class="container-fluid pt-4 px-4">
@@ -195,9 +194,12 @@
                                     </label>
 
                                     <div class="image-preview-container {{ ($news && $news->gdrive_id) ? 'has-image' : '' }} mb-3">
-                                        <img id="imagePreview"
-                                            src="{{ ($news && $news->gdrive_id) ? $news->getPictureUrl() : $defaultImage }}"
-                                            alt="News Preview">
+                                        @if($news && $news->gdrive_id)
+                                            <img id="imagePreview" src="{{ $news->getPictureUrl() }}" alt="News Preview">
+                                        @else
+                                            <img id="imagePreview" src="" alt="News Preview" style="display:none;">
+                                            <x-svg-placeholder />
+                                        @endif
                                     </div>
 
                                     @if ($operation !== 'view')
