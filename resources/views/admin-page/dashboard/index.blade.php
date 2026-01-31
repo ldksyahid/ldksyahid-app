@@ -375,7 +375,7 @@ $(document).ready(function() {
             $sub.animate({ opacity: 1 }, 400);
         });
     }
-    setInterval(rotateGreeting, 30000);
+    setInterval(rotateGreeting, 10000);
 
     // === Animated Counter (Count-Up) ===
     var counterAnimated = false;
