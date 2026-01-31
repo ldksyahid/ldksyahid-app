@@ -548,6 +548,9 @@ html.dark-mode .{{ $tableClass }} tbody tr {
     background-color: #2b2f33;
     color: #e4e6eb;
 }
+html.dark-mode .{{ $tableClass }} tbody tr:nth-child(even) {
+    background-color: #252829;
+}
 html.dark-mode .{{ $tableClass }} tbody tr:hover {
     background-color: rgba(0, 167, 157, 0.15) !important;
 }
