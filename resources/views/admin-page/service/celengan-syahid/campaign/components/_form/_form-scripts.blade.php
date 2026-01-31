@@ -1,11 +1,11 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script>
     $(document).ready(function () {
         // Init Select2 for dropdowns
-        $('#inputProvinsiCampaign, #inputKotaCampaign').each(function() {
+        $('#inputProvinsiCampaign, #inputKotaCampaign, #chooseKategoriCampaign').each(function() {
             $(this).select2({
                 placeholder: $(this).data('placeholder') || '-- Select --',
                 width: '100%',
@@ -38,13 +38,28 @@
 
         // Summernote editor
         $('.summernote').summernote({
-            height: 500,
-            dialogsInBody: true,
+            height: 400,
+            minHeight: 300,
+            maxHeight: 800,
+            focus: false,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'italic', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ],
+            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'],
+            fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '28', '36', '48', '64', '72'],
             callbacks: {
                 onInit: function() {
                     $('body > .note-popover').hide();
                 }
-            },
+            }
         });
 
         // Poster preview

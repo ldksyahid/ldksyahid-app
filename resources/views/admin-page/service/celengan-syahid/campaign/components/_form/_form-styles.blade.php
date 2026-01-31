@@ -1,3 +1,4 @@
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 <style>
     .page-title {
         font-size: 1.65rem;
@@ -187,6 +188,23 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Summernote Customization */
+    .note-editor.note-frame {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+    }
+    .note-editor.note-frame .note-toolbar {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        border-radius: 8px 8px 0 0;
+    }
+    .note-editor.note-frame .note-editing-area {
+        min-height: 400px;
+    }
+    .note-editor.note-frame .note-editing-area .note-editable {
+        padding: 15px;
+    }
+
     @media (max-width: 768px) {
         .page-title { font-size: 1.35rem; }
         .card-body { padding: 1rem; }
@@ -203,6 +221,9 @@
         .select2-container .select2-selection--single {
             height: calc(2.25rem + 2px);
             font-size: 0.9rem;
+        }
+        .note-editor.note-frame .note-editing-area {
+            min-height: 300px;
         }
     }
 </style>

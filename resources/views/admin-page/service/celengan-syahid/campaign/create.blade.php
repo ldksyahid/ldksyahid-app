@@ -8,7 +8,7 @@
     @include('admin-page.service.celengan-syahid.campaign.components._form._form', [
         'operation' => 'create',
         'data' => null,
-        'provinces' => $province ?? collect()
+        'provinces' => $provinces ?? collect()
     ])
 @endsection
 
