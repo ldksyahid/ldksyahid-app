@@ -86,6 +86,9 @@
 
     /* Select2 Styles */
     .select2-container {
+        z-index: 1;
+    }
+    .select2-container--open {
         z-index: 1050;
     }
     .select2-container .select2-selection--single {
