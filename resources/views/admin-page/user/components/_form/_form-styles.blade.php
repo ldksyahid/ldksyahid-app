@@ -195,6 +195,44 @@
     .badge.bg-role-helperletter { background-color: #6c757d !important; }
     .badge.bg-role-user { background-color: #007bff !important; }
 
+    /* Dark Mode Overrides */
+    html.dark-mode .role-option {
+        background-color: #1a1d21;
+        border-color: #373b3e;
+        color: #e4e6eb;
+    }
+    html.dark-mode .role-option:hover {
+        border-color: #00a79d;
+        background-color: #2b2f33;
+    }
+    html.dark-mode .role-option.selected {
+        border-color: #00a79d;
+        background-color: rgba(0, 167, 157, 0.15);
+    }
+    html.dark-mode .role-option input[type="radio"] {
+        border-color: #373b3e;
+        background-color: #1a1d21;
+    }
+    html.dark-mode .role-option input[type="radio"]:checked {
+        border-color: #00a79d;
+        background-color: #1a1d21;
+    }
+    html.dark-mode .info-card {
+        border-color: #373b3e;
+        border-left-color: #00a79d;
+        background-color: #2b2f33 !important;
+        color: #e4e6eb;
+    }
+    html.dark-mode .form-label.fw-bold {
+        color: #e4e6eb;
+    }
+    html.dark-mode .form-text {
+        color: #b0b3b8;
+    }
+    html.dark-mode .section-title {
+        border-bottom-color: #373b3e;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .page-title {

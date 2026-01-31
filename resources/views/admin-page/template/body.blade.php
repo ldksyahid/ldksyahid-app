@@ -506,6 +506,281 @@
             color: #e4e6eb;
         }
 
+        /* Daterangepicker dark mode (global) */
+        body.dark-mode .daterangepicker {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .daterangepicker::before,
+        body.dark-mode .daterangepicker::after {
+            border-bottom-color: #2b2f33 !important;
+        }
+        body.dark-mode .daterangepicker .calendar-table {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        body.dark-mode .daterangepicker .calendar-table thead tr:first-child th,
+        body.dark-mode .daterangepicker .calendar-table thead tr:last-child th {
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .daterangepicker td,
+        body.dark-mode .daterangepicker th {
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .daterangepicker td.off,
+        body.dark-mode .daterangepicker td.off.in-range,
+        body.dark-mode .daterangepicker td.off.start-date,
+        body.dark-mode .daterangepicker td.off.end-date {
+            color: #6c757d !important;
+            background-color: transparent !important;
+        }
+        body.dark-mode .daterangepicker td.available:hover,
+        body.dark-mode .daterangepicker th.available:hover {
+            background-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .daterangepicker td.in-range {
+            background-color: rgba(0, 167, 157, 0.2) !important;
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .daterangepicker td.active,
+        body.dark-mode .daterangepicker td.active:hover,
+        body.dark-mode .daterangepicker td.start-date,
+        body.dark-mode .daterangepicker td.end-date {
+            background-color: #00a79d !important;
+            color: #fff !important;
+        }
+        body.dark-mode .daterangepicker td.today {
+            color: #00a79d !important;
+            font-weight: bold;
+        }
+        body.dark-mode .daterangepicker td.today.active {
+            color: #fff !important;
+        }
+        body.dark-mode .daterangepicker .drp-buttons {
+            border-top-color: #373b3e !important;
+        }
+        body.dark-mode .daterangepicker .drp-buttons .btn.cancelBtn {
+            color: #b0b3b8 !important;
+            background-color: transparent !important;
+        }
+        body.dark-mode .daterangepicker .drp-buttons .btn.cancelBtn:hover {
+            background-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .daterangepicker .drp-selected {
+            color: #b0b3b8 !important;
+        }
+        body.dark-mode .daterangepicker select.monthselect,
+        body.dark-mode .daterangepicker select.yearselect {
+            background-color: #1a1d21 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .daterangepicker .ranges li {
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .daterangepicker .ranges li:hover {
+            background-color: #373b3e !important;
+        }
+        body.dark-mode .daterangepicker .ranges li.active {
+            background-color: #00a79d !important;
+            color: #fff !important;
+        }
+
+        /* Global form dark mode overrides (all admin forms) */
+        body.dark-mode .section-title {
+            color: #00a79d;
+            border-bottom-color: #373b3e;
+        }
+        body.dark-mode .form-text {
+            color: #b0b3b8 !important;
+        }
+        body.dark-mode .form-label,
+        body.dark-mode .form-label.fw-bold {
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .form-control-plaintext {
+            color: #e4e6eb;
+        }
+        body.dark-mode .info-card {
+            border-color: #373b3e !important;
+            border-left-color: #00a79d !important;
+            background-color: #2b2f33 !important;
+            color: #e4e6eb;
+        }
+        body.dark-mode .image-preview-container {
+            background-color: #1a1d21 !important;
+            border-color: #373b3e !important;
+        }
+        body.dark-mode .no-image-placeholder {
+            color: #b0b3b8 !important;
+        }
+        body.dark-mode .role-option {
+            background-color: #1a1d21;
+            border-color: #373b3e;
+            color: #e4e6eb;
+        }
+        body.dark-mode .role-option:hover {
+            border-color: #00a79d;
+            background-color: #2b2f33;
+        }
+        body.dark-mode .role-option.selected {
+            border-color: #00a79d;
+            background-color: rgba(0, 167, 157, 0.15);
+        }
+        body.dark-mode .role-option input[type="radio"] {
+            border-color: #373b3e;
+            background-color: #1a1d21;
+        }
+        body.dark-mode .role-option input[type="radio"]:checked {
+            border-color: #00a79d;
+            background-color: #1a1d21;
+        }
+        /* Card guide (index pages) */
+        body.dark-mode .card-guide {
+            background: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        body.dark-mode .card-guide .card-title {
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .card-guide .card-text {
+            color: #b0b3b8 !important;
+        }
+        /* Summernote editor dark mode */
+        body.dark-mode .note-editor {
+            border-color: #373b3e !important;
+        }
+        body.dark-mode .note-editor .note-toolbar {
+            background-color: #212529 !important;
+            border-color: #373b3e !important;
+        }
+        body.dark-mode .note-editor .note-editing-area .note-editable {
+            background-color: #1a1d21 !important;
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .note-editor .note-statusbar {
+            background-color: #212529 !important;
+            border-color: #373b3e !important;
+        }
+        body.dark-mode .note-btn {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        /* Toggle switch (jumbotron) */
+        body.dark-mode .toggle-switch {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .toggle-switch:hover {
+            border-color: #00a79d !important;
+            background-color: rgba(0, 167, 157, 0.1) !important;
+        }
+        body.dark-mode .toggle-switch input[type="checkbox"] {
+            border-color: #373b3e;
+            background-color: #1a1d21;
+        }
+        /* Button fields container (jumbotron) */
+        body.dark-mode .button-fields {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        /* Content preview (news) */
+        body.dark-mode .news-content-preview {
+            background-color: #1a1d21 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        /* Container fluid bg-light inside content */
+        body.dark-mode .content .container-fluid .bg-light {
+            background: #1a1d21 !important;
+        }
+        /* File input dark mode */
+        body.dark-mode .form-control[type="file"] {
+            background-color: #1a1d21 !important;
+            border-color: #373b3e !important;
+            color: #b0b3b8 !important;
+        }
+        body.dark-mode .form-control[type="file"]::file-selector-button {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        /* Input group (event contact, etc.) */
+        body.dark-mode .input-group .input-group-text {
+            background-color: #212529 !important;
+            border-color: #373b3e !important;
+            color: #b0b3b8 !important;
+        }
+        /* Link field (call-kestari) */
+        body.dark-mode .link-field {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        /* Reader link preview (catalog-book) */
+        body.dark-mode .reader-link-preview,
+        body.dark-mode .reader-link-content {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        /* Finance report card bg-light */
+        body.dark-mode .card.bg-light {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        /* Campaign progress info (celsyahid) */
+        body.dark-mode .progress {
+            background-color: #373b3e !important;
+        }
+        /* No media/image placeholder */
+        body.dark-mode .no-media-placeholder,
+        body.dark-mode .no-image-placeholder {
+            background-color: #1a1d21 !important;
+            border-color: #373b3e !important;
+            color: #b0b3b8 !important;
+        }
+        /* Select2 in forms (all modules) */
+        body.dark-mode .select2-container--default .select2-selection--single {
+            background-color: #1a1d21 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #6c757d !important;
+        }
+        body.dark-mode .select2-dropdown {
+            background-color: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        body.dark-mode .select2-search--dropdown .select2-search__field {
+            background-color: #1a1d21 !important;
+            border-color: #373b3e !important;
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .select2-container--default .select2-results__option {
+            color: #e4e6eb !important;
+        }
+        body.dark-mode .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #00a79d !important;
+            color: #fff !important;
+        }
+        body.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
+            background-color: #373b3e !important;
+            color: var(--primary) !important;
+        }
+        body.dark-mode .select2-container--default .select2-results__option:hover {
+            background-color: #373b3e !important;
+        }
+
         /* Light mode specific overrides */
         body:not(.dark-mode) {
             background-color: #ffffff !important;
