@@ -72,13 +72,14 @@
     /* Image Preview */
     .image-preview-container {
         position: relative;
-        width: 150px;
-        height: 200px;
+        width: 100%;
+        max-height: 300px;
         border-radius: 12px;
         overflow: hidden;
         border: 2px solid #dee2e6;
         background-color: #f8f9fa;
     }
+
     .image-preview-container img {
         width: 100%;
         height: 100%;
