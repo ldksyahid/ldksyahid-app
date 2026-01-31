@@ -309,6 +309,15 @@
             color: #6c757d;
         }
 
+        html.dark-mode .form-control:-webkit-autofill,
+        html.dark-mode .form-control:-webkit-autofill:hover,
+        html.dark-mode .form-control:-webkit-autofill:focus,
+        html.dark-mode .form-control:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px #1a1d21 inset !important;
+            -webkit-text-fill-color: #e4e6eb !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
         html.dark-mode .input-group-text {
             background-color: #212529;
             border-color: #373b3e;
@@ -778,6 +787,16 @@
         }
         html.dark-mode .select2-container--default .select2-results__option:hover {
             background-color: #373b3e !important;
+        }
+
+        /* Light mode autofill */
+        html:not(.dark-mode) .form-control:-webkit-autofill,
+        html:not(.dark-mode) .form-control:-webkit-autofill:hover,
+        html:not(.dark-mode) .form-control:-webkit-autofill:focus,
+        html:not(.dark-mode) .form-control:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+            -webkit-text-fill-color: #212529 !important;
+            transition: background-color 5000s ease-in-out 0s;
         }
 
         /* Light mode specific overrides */
