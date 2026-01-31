@@ -350,18 +350,32 @@ $(document).ready(function() {
         'Senyum dulu, baru kerja~',
         'Have a wonderful day!',
         'Jaga kesehatan, jaga ibadah!',
+        'Awali dengan Bismillah, akhiri dengan Alhamdulillah!',
+        'Sedikit-sedikit, lama-lama jadi bukit!',
+        'Jangan lupa minum air putih ya!',
+        'Setiap langkah kecil tetap berarti!',
+        'Barakallahu fiikum, tetap produktif!',
+        'Ingat niat, ingat tujuan!',
+        'Kerja cerdas, bukan cuma kerja keras!',
+        'Jadilah bermanfaat untuk sesama!',
+        'Allah bersama orang-orang yang sabar!',
+        'Fokus, konsisten, dan tawakal!',
     ];
-    var currentMsgIndex = 0;
+    function randomMsg() {
+        return greetingMessages[Math.floor(Math.random() * greetingMessages.length)];
+    }
+
+    // Random on page load
+    $('#greetingSub').html(userName + ' &mdash; ' + randomMsg());
 
     function rotateGreeting() {
-        currentMsgIndex = (currentMsgIndex + 1) % greetingMessages.length;
         var $sub = $('#greetingSub');
         $sub.animate({ opacity: 0 }, 400, function() {
-            $sub.html(userName + ' &mdash; ' + greetingMessages[currentMsgIndex]);
+            $sub.html(userName + ' &mdash; ' + randomMsg());
             $sub.animate({ opacity: 1 }, 400);
         });
     }
-    setInterval(rotateGreeting, 5000);
+    setInterval(rotateGreeting, 30000);
 
     // === Animated Counter (Count-Up) ===
     var counterAnimated = false;
