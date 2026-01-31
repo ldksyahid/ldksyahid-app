@@ -59,12 +59,13 @@
         :root {
             --dark-mode-bg: #1a1d21;
             --light-mode-bg: #ffffff;
+            --transition-duration: 0s; /* No transition initially */
         }
 
         /* Initial state - menggunakan localStorage jika ada, default light mode */
         body {
             background-color: var(--light-mode-bg);
-            transition: background-color 0.3s ease;
+            transition: background-color var(--transition-duration) ease;
         }
 
         /* Dark mode class akan ditambahkan oleh JavaScript */
@@ -72,23 +73,352 @@
         html.dark-mode body {
             background-color: var(--dark-mode-bg) !important;
         }
+
+        /* Prevent transitions during initial load */
+        .dark-mode-loading * {
+            transition: none !important;
+        }
+
+        /* Dark Mode Toggle Styles */
+        .dark-mode-toggle-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dark-mode-checkbox {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+
+        .dark-mode-toggle {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-track {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            border-radius: 34px;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .dark-mode-checkbox:checked + .dark-mode-toggle .toggle-track {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .toggle-thumb {
+            background-color: white;
+            border-radius: 50%;
+            height: 26px;
+            width: 26px;
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+
+        .dark-mode-checkbox:checked + .dark-mode-toggle .toggle-thumb {
+            transform: translateX(30px);
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .sun-icon, .moon-icon {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: #ff9800;
+            opacity: 1;
+        }
+
+        .moon-icon {
+            color: #764ba2;
+            opacity: 0;
+            transform: rotate(-90deg);
+        }
+
+        .dark-mode-checkbox:checked + .dark-mode-toggle .sun-icon {
+            opacity: 0;
+            transform: rotate(90deg);
+        }
+
+        .dark-mode-checkbox:checked + .dark-mode-toggle .moon-icon {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        /* Hover effects */
+        .dark-mode-toggle:hover .toggle-track {
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .dark-mode-checkbox:checked + .dark-mode-toggle:hover .toggle-track {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .dark-mode-toggle:hover .toggle-thumb {
+            transform: scale(1.1);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+        }
+
+        .dark-mode-checkbox:checked + .dark-mode-toggle:hover .toggle-thumb {
+            transform: translateX(30px) scale(1.1);
+        }
+
+        /* Focus states */
+        .dark-mode-checkbox:focus + .dark-mode-toggle .toggle-track {
+            outline: 2px solid #00a79d;
+            outline-offset: 2px;
+        }
+
+        /* Dark mode specific adjustments */
+        html.dark-mode .dark-mode-toggle {
+            filter: brightness(0.9);
+        }
+
+        html.dark-mode .dark-mode-toggle .toggle-track {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Ripple effect animation */
+        @keyframes ripple {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 167, 157, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 167, 157, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 167, 157, 0);
+            }
+        }
+
+        .dark-mode-checkbox:checked + .dark-mode-toggle .toggle-thumb {
+            animation: ripple 0.6s ease-out;
+        }
+
+        /* Dark mode toggle in navbar specific */
+        .navbar .dark-mode-toggle {
+            margin: 0;
+        }
+
+        .navbar .dark-mode-toggle-container {
+            margin-right: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .dark-mode-toggle {
+                width: 50px;
+                height: 25px;
+            }
+
+            .toggle-thumb {
+                height: 21px;
+                width: 21px;
+                left: 2px;
+                top: 2px;
+            }
+
+            .dark-mode-checkbox:checked + .dark-mode-toggle .toggle-thumb {
+                transform: translateX(25px);
+            }
+
+            .sun-icon svg, .moon-icon svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+        /* Tooltip for toggle */
+        .dark-mode-toggle::after {
+            content: 'Toggle Dark Mode';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .dark-mode-toggle:hover::after {
+            opacity: 1;
+        }
+
+        /* Notification styles */
+        .dark-mode-notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #00a79d;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 167, 157, 0.3);
+            z-index: 9999;
+            transform: translateX(150%);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .dark-mode-notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        /* Transition classes */
+        .dark-mode-transition-ready .container-xxl,
+        .dark-mode-transition-ready .content,
+        .dark-mode-transition-ready .sidebar,
+        .dark-mode-transition-ready .card,
+        .dark-mode-transition-ready .navbar,
+        .dark-mode-transition-ready .form-control,
+        .dark-mode-transition-ready .form-select,
+        .dark-mode-transition-ready .table,
+        .dark-mode-transition-ready .modal-content,
+        .dark-mode-transition-ready .dropdown-menu {
+            transition: background-color 0.3s ease,
+                        border-color 0.3s ease,
+                        color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        .dark-mode-transition {
+            transition: all 0.3s ease !important;
+        }
+
+        /* Animation classes */
+        .dark-mode-activated {
+            animation: darkModeRipple 0.6s ease-out;
+        }
+
+        .light-mode-activated {
+            animation: lightModeRipple 0.6s ease-out;
+        }
+
+        @keyframes darkModeRipple {
+            0% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+            }
+        }
+
+        @keyframes lightModeRipple {
+            0% {
+                box-shadow: 0 0 0 0 rgba(246, 211, 101, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(246, 211, 101, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(246, 211, 101, 0);
+            }
+        }
+
+        /* Accessibility improvements */
+        .dark-mode-toggle:focus {
+            outline: 2px solid #00a79d;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .dark-mode-checkbox:focus-visible + .dark-mode-toggle .toggle-track {
+            outline: 2px solid #00a79d;
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .dark-mode-toggle .toggle-track {
+                border: 2px solid #333;
+            }
+
+            .dark-mode-checkbox:checked + .dark-mode-toggle .toggle-track {
+                border: 2px solid #fff;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            .dark-mode-toggle .toggle-thumb,
+            .dark-mode-notification,
+            .dark-mode-transition-ready .container-xxl,
+            .dark-mode-transition-ready .content,
+            .dark-mode-transition-ready .sidebar,
+            .dark-mode-transition-ready .card,
+            .dark-mode-transition-ready .navbar,
+            .dark-mode-transition-ready .form-control,
+            .dark-mode-transition-ready .form-select,
+            .dark-mode-transition-ready .table,
+            .dark-mode-transition-ready .modal-content,
+            .dark-mode-transition-ready .dropdown-menu {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
     </style>
 
     <script>
         // Synchronous - runs immediately before any rendering
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.documentElement.classList.add('dark-mode');
-        }
+        (function() {
+            // Add loading class to prevent transitions
+            document.documentElement.classList.add('dark-mode-loading');
+
+            // Check saved preference
+            const savedMode = localStorage.getItem('darkMode');
+            const isDark = savedMode === 'enabled';
+
+            if (isDark) {
+                document.documentElement.classList.add('dark-mode');
+                document.body.classList.add('dark-mode');
+            }
+
+            // Remove loading class after a short delay
+            setTimeout(() => {
+                document.documentElement.classList.remove('dark-mode-loading');
+
+                // Update CSS variable for transitions
+                document.documentElement.style.setProperty('--transition-duration', '0.3s');
+            }, 100);
+        })();
     </script>
 </head>
 
 <body>
-    <script>
-        // Runs immediately when body is available - ensures body has the class
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-        }
-    </script>
     <!-- Custom Styles untuk dark/light mode -->
     <style>
         /* Light mode default */
@@ -102,6 +432,32 @@
         html.dark-mode body {
             background-color: #1a1d21 !important;
             color: #e4e6eb;
+        }
+
+        /* Smooth transitions for dark mode */
+        html, body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container-xxl,
+        .content,
+        .sidebar,
+        .card,
+        .navbar,
+        .form-control,
+        .form-select,
+        .table,
+        .modal-content,
+        .dropdown-menu {
+            transition: background-color 0.3s ease,
+                        border-color 0.3s ease,
+                        color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        /* Spinner transition */
+        #spinner {
+            transition: background-color 0.3s ease;
         }
 
         /* Active dropdown item styling */
@@ -691,10 +1047,6 @@
             border-color: #00a79d !important;
             background-color: rgba(0, 167, 157, 0.1) !important;
         }
-        html.dark-mode .toggle-switch input[type="checkbox"] {
-            border-color: #373b3e;
-            background-color: #1a1d21;
-        }
         /* Button fields container (jumbotron) */
         html.dark-mode .button-fields {
             background-color: #2b2f33 !important;
@@ -992,40 +1344,193 @@
     <!-- Template Javascript -->
     <script src="{{ asset('admin-page-ext-rsrc/js/main.js') }}"></script>
 
-    {{-- Dark Mode Toggle Script --}}
+    {{-- Enhanced Dark Mode Toggle Script --}}
     <script>
-        $(function() {
-            function updateToggleSwitch(isDark) {
-                var $toggle = $('#darkModeToggle');
+    $(function() {
+        const darkModeToggle = {
+            init: function() {
+                this.cacheDOM();
+                this.bindEvents();
+                this.loadSavedMode();
+            },
+
+            cacheDOM: function() {
+                this.$switch = $('#darkModeSwitch');
+                this.$toggle = $('.dark-mode-toggle');
+                this.$html = $('html');
+                this.$body = $('body');
+            },
+
+            bindEvents: function() {
+                // Switch toggle event
+                this.$switch.on('change', this.toggleMode.bind(this));
+
+                // Keyboard accessibility
+                this.$toggle.on('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        $(this).find('input').prop('checked',
+                            !$(this).find('input').prop('checked')
+                        ).trigger('change');
+                    }
+                });
+
+                // Initialize tooltips
+                this.$toggle.tooltip({
+                    trigger: 'hover',
+                    placement: 'bottom'
+                });
+            },
+
+            loadSavedMode: function() {
+                const isDark = localStorage.getItem('darkMode') === 'enabled';
+
+                // Set initial state
                 if (isDark) {
-                    $toggle.css('background', '#00a79d');
-                    $toggle.find('.dark-mode-knob').css('transform', 'translateX(20px)');
+                    this.enableDarkMode();
                 } else {
-                    $toggle.css('background', '#ccc');
-                    $toggle.find('.dark-mode-knob').css('transform', 'translateX(0)');
+                    this.disableDarkMode();
                 }
-            }
 
-            // Initialize based on current state
-            var isDark = document.documentElement.classList.contains('dark-mode');
-            if (isDark) document.body.classList.add('dark-mode');
-            updateToggleSwitch(isDark);
+                // Update checkbox state
+                this.$switch.prop('checked', isDark);
 
-            $('#darkModeToggle').on('click', function() {
-                isDark = !document.documentElement.classList.contains('dark-mode');
+                // Add transition after initial load to prevent flash
+                setTimeout(() => {
+                    this.$body.addClass('dark-mode-transition-ready');
+                }, 100);
+            },
+
+            toggleMode: function() {
+                const isDark = this.$switch.prop('checked');
 
                 if (isDark) {
-                    document.documentElement.classList.add('dark-mode');
-                    document.body.classList.add('dark-mode');
+                    this.enableDarkMode();
                 } else {
-                    document.documentElement.classList.remove('dark-mode');
-                    document.body.classList.remove('dark-mode');
+                    this.disableDarkMode();
                 }
 
+                // Save preference
                 localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-                updateToggleSwitch(isDark);
+
+                // Emit custom event for other components
+                $(document).trigger('darkModeChange', [isDark]);
+
+                // Send analytics event
+                this.sendAnalyticsEvent(isDark);
+            },
+
+            enableDarkMode: function() {
+                // Smooth transition
+                this.$html.addClass('dark-mode-transition');
+                this.$body.addClass('dark-mode-transition');
+
+                setTimeout(() => {
+                    this.$html.addClass('dark-mode');
+                    this.$body.addClass('dark-mode');
+                }, 10);
+
+                // Add animation class
+                this.$toggle.find('.toggle-thumb').addClass('dark-mode-activated');
+                setTimeout(() => {
+                    this.$toggle.find('.toggle-thumb').removeClass('dark-mode-activated');
+                }, 600);
+            },
+
+            disableDarkMode: function() {
+                // Smooth transition
+                this.$html.addClass('dark-mode-transition');
+                this.$body.addClass('dark-mode-transition');
+
+                setTimeout(() => {
+                    this.$html.removeClass('dark-mode');
+                    this.$body.removeClass('dark-mode');
+                }, 10);
+
+                // Add animation class
+                this.$toggle.find('.toggle-thumb').addClass('light-mode-activated');
+                setTimeout(() => {
+                    this.$toggle.find('.toggle-thumb').removeClass('light-mode-activated');
+                }, 600);
+
+                // Remove transition classes after animation
+                setTimeout(() => {
+                    this.$html.removeClass('dark-mode-transition');
+                    this.$body.removeClass('dark-mode-transition');
+                }, 300);
+            },
+
+            showNotification: function(message) {
+                // Create notification element
+                const $notification = $(`
+                    <div class="dark-mode-notification">
+                        <div class="notification-content">
+                            <i class="fas ${message.includes('Dark') ? 'fa-moon' : 'fa-sun'} me-2"></i>
+                            ${message}
+                        </div>
+                    </div>
+                `);
+
+                // Append to body
+                $('body').append($notification);
+
+                // Show with animation
+                setTimeout(() => {
+                    $notification.addClass('show');
+                }, 10);
+
+                // Remove after 2 seconds
+                setTimeout(() => {
+                    $notification.removeClass('show');
+                    setTimeout(() => $notification.remove(), 300);
+                }, 2000);
+            },
+
+            sendAnalyticsEvent: function(isDark) {
+                // You can integrate with Google Analytics or other analytics here
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'dark_mode_toggle', {
+                        'event_category': 'User Preference',
+                        'event_label': isDark ? 'Dark Mode' : 'Light Mode'
+                    });
+                }
+
+                // Log to console for debugging
+                console.log(`Dark mode ${isDark ? 'enabled' : 'disabled'}`);
+            }
+        };
+
+        // Initialize dark mode toggle
+        darkModeToggle.init();
+
+        // System preference detection
+        if (window.matchMedia) {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+            // Listen for system preference changes
+            prefersDarkScheme.addListener((e) => {
+                if (localStorage.getItem('darkMode') === null) {
+                    const isDark = e.matches;
+                    $('#darkModeSwitch').prop('checked', isDark).trigger('change');
+                }
             });
+
+            // Auto-detect on first visit (if no preference saved)
+            if (localStorage.getItem('darkMode') === null) {
+                const isDark = prefersDarkScheme.matches;
+                $('#darkModeSwitch').prop('checked', isDark).trigger('change');
+            }
+        }
+
+        // Listen for dark mode changes to update other components
+        $(document).on('darkModeChange', function(e, isDark) {
+            // Update any component that needs to know about dark mode
+            console.log('Dark mode changed:', isDark);
+
+            // You can add additional component updates here
+            // For example: update charts, maps, etc.
         });
+    });
     </script>
 
     {{-- Global Flatpickr Init --}}
