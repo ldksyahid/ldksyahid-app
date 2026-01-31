@@ -86,7 +86,7 @@
                                             <span class="badge bg-info">{{ $data->kategori }}</span>
                                         </div>
                                     @else
-                                        <select class="form-select @error('kategori') is-invalid @enderror" name="kategori" id="chooseKategoriCampaign" required>
+                                        <select class="form-select @error('kategori') is-invalid @enderror" name="kategori" id="chooseKategoriCampaign" data-placeholder="-- Choose Category --" required>
                                             <option value="" disabled {{ !old('kategori', $data->kategori ?? '') ? 'selected' : '' }}>-- Choose Category --</option>
                                             @foreach (['Pendidikan', 'Kemanusiaan', 'Kesehatan', 'Ekonomi', 'Sosial Dakwah', 'Lingkungan'] as $cat)
                                                 <option value="{{ $cat }}" {{ old('kategori', $data->kategori ?? '') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
