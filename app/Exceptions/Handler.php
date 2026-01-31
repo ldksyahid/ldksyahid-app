@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -36,6 +37,16 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (UnauthorizedException $e, $request) {
+            if (!auth()->check()) {
+                alert()->info('Maaf', 'Harap Masuk Terlebih Dahulu!');
+                return redirect()->route('login');
+            }
+
+            alert()->error('Akses Ditolak', 'Anda tidak memiliki izin untuk mengakses halaman ini.');
+            return redirect()->route('login');
         });
     }
 }
