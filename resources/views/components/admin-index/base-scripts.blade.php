@@ -188,6 +188,7 @@
 
     @if($includeSelect2)
     function initSelect2() {
+        if (typeof $.fn.select2 === 'undefined') return;
         // Initialize Select2 on all select elements with .select2-filter class
         $('.select2-filter').each(function() {
             // Skip if already initialized
@@ -208,6 +209,7 @@
 
     @if($dateRangeField)
     function initDateRangePicker() {
+        if (typeof $.fn.daterangepicker === 'undefined') return;
         $('input[name="{{ $dateRangeField }}"]').daterangepicker({
             autoUpdateInput: false,
             locale: {
