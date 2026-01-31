@@ -142,8 +142,8 @@
 
                                 <div class="mb-3">
                                     <label for="start" class="form-label">Start Event <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" class="form-control @error('start') is-invalid @enderror" id="start" name="start"
-                                        value="{{ old('start', ($event && $event->start) ? \Carbon\Carbon::parse($event->start)->format('Y-m-d\TH:i') : '') }}"
+                                    <input type="text" class="form-control flatpickr-datetime @error('start') is-invalid @enderror" id="start" name="start"
+                                        value="{{ old('start', ($event && $event->start) ? \Carbon\Carbon::parse($event->start)->format('Y-m-d H:i') : '') }}"
                                         {{ $operation === 'view' ? 'readonly' : 'required' }}>
                                     @error('start')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -152,8 +152,8 @@
 
                                 <div class="mb-3">
                                     <label for="finished" class="form-label">Event Finished <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" class="form-control @error('finished') is-invalid @enderror" id="finished" name="finished"
-                                        value="{{ old('finished', ($event && $event->finished) ? \Carbon\Carbon::parse($event->finished)->format('Y-m-d\TH:i') : '') }}"
+                                    <input type="text" class="form-control flatpickr-datetime @error('finished') is-invalid @enderror" id="finished" name="finished"
+                                        value="{{ old('finished', ($event && $event->finished) ? \Carbon\Carbon::parse($event->finished)->format('Y-m-d H:i') : '') }}"
                                         {{ $operation === 'view' ? 'readonly' : 'required' }}>
                                     @error('finished')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -162,8 +162,8 @@
 
                                 <div class="mb-3">
                                     <label for="closeRegist" class="form-label">Close Registration <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" class="form-control @error('closeRegist') is-invalid @enderror" id="closeRegist" name="closeRegist"
-                                        value="{{ old('closeRegist', ($event && $event->closeRegist) ? \Carbon\Carbon::parse($event->closeRegist)->format('Y-m-d\TH:i') : '') }}"
+                                    <input type="text" class="form-control flatpickr-datetime @error('closeRegist') is-invalid @enderror" id="closeRegist" name="closeRegist"
+                                        value="{{ old('closeRegist', ($event && $event->closeRegist) ? \Carbon\Carbon::parse($event->closeRegist)->format('Y-m-d H:i') : '') }}"
                                         {{ $operation === 'view' ? 'readonly' : 'required' }}>
                                     @error('closeRegist')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -260,7 +260,8 @@
                                             @if($operation === 'update' && $event->gdrive_id)
                                                 <img id="posterPreview" src="https://lh3.googleusercontent.com/d/{{ $event->gdrive_id }}" alt="Current Poster" class="img-thumbnail mb-2" style="max-height: 200px;">
                                             @else
-                                                <img id="posterPreview" src="https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm" alt="Preview" class="img-thumbnail mb-2" style="max-height: 200px;">
+                                                <img id="posterPreview" src="" alt="Preview" class="img-thumbnail mb-2" style="max-height: 200px; display:none;">
+                                                <x-svg-placeholder />
                                             @endif
                                         </div>
                                         <input type="file" class="form-control @error('poster') is-invalid @enderror" id="poster" name="poster"

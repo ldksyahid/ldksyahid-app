@@ -3,7 +3,6 @@
     $operation = $operation ?? 'create';
     $structure = $structure ?? null;
 
-    $defaultImage = 'https://lh3.googleusercontent.com/d/1STslQ7I3qeakz_Pu5ZY5V8RcsxxcrqOm';
 @endphp
 
 <div class="container-fluid pt-4 px-4">
@@ -191,9 +190,12 @@
                                     </label>
 
                                     <div class="image-preview-container {{ ($structure && $structure->gdrive_id) ? 'has-image' : '' }} mb-3">
-                                        <img id="logoPreview"
-                                            src="{{ ($structure && $structure->gdrive_id) ? $structure->getLogoUrl() : $defaultImage }}"
-                                            alt="Logo Preview" style="max-height: 300px;">
+                                        @if($structure && $structure->gdrive_id)
+                                            <img id="logoPreview" src="{{ $structure->getLogoUrl() }}" alt="Logo Preview" style="max-height: 300px;">
+                                        @else
+                                            <img id="logoPreview" src="" alt="Logo Preview" style="display:none; max-height: 300px;">
+                                            <x-svg-placeholder />
+                                        @endif
                                     </div>
 
                                     @if ($operation !== 'view')
@@ -232,9 +234,12 @@
                                     </label>
 
                                     <div class="image-preview-container {{ ($structure && $structure->gdrive_id_2) ? 'has-image' : '' }} mb-3">
-                                        <img id="imagePreview"
-                                            src="{{ ($structure && $structure->gdrive_id_2) ? $structure->getStructureImageUrl() : $defaultImage }}"
-                                            alt="Structure Image Preview" style="max-height: 300px;">
+                                        @if($structure && $structure->gdrive_id_2)
+                                            <img id="imagePreview" src="{{ $structure->getStructureImageUrl() }}" alt="Structure Image Preview" style="max-height: 300px;">
+                                        @else
+                                            <img id="imagePreview" src="" alt="Structure Image Preview" style="display:none; max-height: 300px;">
+                                            <x-svg-placeholder />
+                                        @endif
                                     </div>
 
                                     @if ($operation !== 'view')

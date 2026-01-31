@@ -184,4 +184,20 @@
         background-color: #008b84;
         border-color: #008b84;
     }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .page-title { font-size: 1.35rem; }
+        .card-body { padding: 1rem; }
+        .section-title { font-size: 1rem; }
+        .form-label { font-size: 0.9rem; }
+        .form-text { font-size: 0.75rem; }
+        .form-control, .form-select { font-size: 0.9rem; }
+        .d-flex.justify-content-end.gap-2 {
+            flex-direction: column;
+        }
+        .d-flex.justify-content-end.gap-2 .btn {
+            width: 100%;
+        }
+    }
 </style>
