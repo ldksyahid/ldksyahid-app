@@ -9,9 +9,12 @@
     <div class="row p-2 bg-light rounded justify-content-center mx-0">
         <div class="row">
             <h1 class="page-title">
-                <i class="fa fa-calendar-alt me-2"></i>
+                <i class="fa fa-{{ $operation === 'create' ? 'plus-circle' : ($operation === 'update' ? 'edit' : 'eye') }} me-2"></i>
                 <span>{{ ucfirst($titleForm) }}</span>
                 <span class="highlighted-text ms-1">{{ $entityLabel }}</span>
+                @if($operation !== 'create' && $event)
+                    <small class="text-muted d-block mt-2">{{ $event->title }}</small>
+                @endif
             </h1>
 
             @if ($operation !== 'view')
@@ -61,29 +64,41 @@
                                 <h5 class="section-title mb-3"><i class="fas fa-info-circle me-2"></i>Basic Information</h5>
 
                                 <div class="mb-3">
-                                    <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
-                                        value="{{ old('title', $event->title ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}>
-                                    @error('title')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="division" class="form-label">Event Organizer <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('division') is-invalid @enderror" id="division" name="division"
-                                        value="{{ old('division', $event->division ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}>
-                                    @error('division')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="tag" class="form-label">Tag <span class="text-danger">*</span></label>
+                                    <label for="title" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Title @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
                                     @if ($operation === 'view')
-                                        <input type="text" class="form-control" value="{{ $event->tag ?? 'N/A' }}" readonly>
+                                        <div class="form-control-plaintext">{{ $event->title }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
+                                            value="{{ old('title', $event->title ?? '') }}" required>
+                                        @error('title')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="division" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Event Organizer @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $event->division }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('division') is-invalid @enderror" id="division" name="division"
+                                            value="{{ old('division', $event->division ?? '') }}" required>
+                                        @error('division')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="tag" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Tag @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $event->tag ?? 'N/A' }}</div>
                                     @else
                                         <select class="form-select @error('tag') is-invalid @enderror" id="tag" name="tag" required>
                                             <option value="">Select Tag</option>
@@ -97,19 +112,26 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="location" class="form-label">Location <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location"
-                                        value="{{ old('location', $event->location ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}>
-                                    @error('location')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="location" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Location @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $event->location }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location"
+                                            value="{{ old('location', $event->location ?? '') }}" required>
+                                        @error('location')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="place" class="form-label">Place Type <span class="text-danger">*</span></label>
+                                    <label for="place" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Place Type @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
                                     @if ($operation === 'view')
-                                        <input type="text" class="form-control" value="{{ $event->place ?? 'N/A' }}" readonly>
+                                        <div class="form-control-plaintext">{{ $event->place ?? 'N/A' }}</div>
                                     @else
                                         <select class="form-select @error('place') is-invalid @enderror" id="place" name="place" required>
                                             <option value="">Select Place Type</option>
@@ -124,15 +146,26 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="linkLocation" class="form-label">Link Location</label>
-                                    <input type="url" class="form-control @error('linkLocation') is-invalid @enderror" id="linkLocation" name="linkLocation"
-                                        value="{{ old('linkLocation', $event->linkLocation ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : '' }}
-                                        placeholder="https://example.com">
-                                    @error('linkLocation')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <div class="form-text">Optional - Link to event location (Google Maps, Zoom, etc.)</div>
+                                    <label for="linkLocation" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Link Location
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">
+                                            @if($event->linkLocation)
+                                                <a href="{{ $event->linkLocation }}" target="_blank">{{ $event->linkLocation }}</a>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <input type="url" class="form-control @error('linkLocation') is-invalid @enderror" id="linkLocation" name="linkLocation"
+                                            value="{{ old('linkLocation', $event->linkLocation ?? '') }}"
+                                            placeholder="https://example.com">
+                                        @error('linkLocation')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">Optional - Link to event location (Google Maps, Zoom, etc.)</div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -141,68 +174,121 @@
                                 <h5 class="section-title mb-3"><i class="fas fa-clock me-2"></i>Schedule & Registration</h5>
 
                                 <div class="mb-3">
-                                    <label for="start" class="form-label">Start Event <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control flatpickr-datetime @error('start') is-invalid @enderror" id="start" name="start"
-                                        value="{{ old('start', ($event && $event->start) ? \Carbon\Carbon::parse($event->start)->format('Y-m-d H:i') : '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}>
-                                    @error('start')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="start" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Start Event @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">
+                                            {{ $event->start ? \Carbon\Carbon::parse($event->start)->isoFormat('dddd, DD MMMM YYYY HH:mm') : '-' }}
+                                        </div>
+                                    @else
+                                        <input type="text" class="form-control flatpickr-datetime @error('start') is-invalid @enderror" id="start" name="start"
+                                            value="{{ old('start', ($event && $event->start) ? \Carbon\Carbon::parse($event->start)->format('Y-m-d H:i') : '') }}"
+                                            required>
+                                        @error('start')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="finished" class="form-label">Event Finished <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control flatpickr-datetime @error('finished') is-invalid @enderror" id="finished" name="finished"
-                                        value="{{ old('finished', ($event && $event->finished) ? \Carbon\Carbon::parse($event->finished)->format('Y-m-d H:i') : '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}>
-                                    @error('finished')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="finished" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Event Finished @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">
+                                            {{ $event->finished ? \Carbon\Carbon::parse($event->finished)->isoFormat('dddd, DD MMMM YYYY HH:mm') : '-' }}
+                                        </div>
+                                    @else
+                                        <input type="text" class="form-control flatpickr-datetime @error('finished') is-invalid @enderror" id="finished" name="finished"
+                                            value="{{ old('finished', ($event && $event->finished) ? \Carbon\Carbon::parse($event->finished)->format('Y-m-d H:i') : '') }}"
+                                            required>
+                                        @error('finished')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="closeRegist" class="form-label">Close Registration <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control flatpickr-datetime @error('closeRegist') is-invalid @enderror" id="closeRegist" name="closeRegist"
-                                        value="{{ old('closeRegist', ($event && $event->closeRegist) ? \Carbon\Carbon::parse($event->closeRegist)->format('Y-m-d H:i') : '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}>
-                                    @error('closeRegist')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="closeRegist" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Close Registration @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">
+                                            {{ $event->closeRegist ? \Carbon\Carbon::parse($event->closeRegist)->isoFormat('dddd, DD MMMM YYYY HH:mm') : '-' }}
+                                        </div>
+                                    @else
+                                        <input type="text" class="form-control flatpickr-datetime @error('closeRegist') is-invalid @enderror" id="closeRegist" name="closeRegist"
+                                            value="{{ old('closeRegist', ($event && $event->closeRegist) ? \Carbon\Carbon::parse($event->closeRegist)->format('Y-m-d H:i') : '') }}"
+                                            required>
+                                        @error('closeRegist')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="linkRegist" class="form-label">Link Registration <span class="text-danger">*</span></label>
-                                    <input type="url" class="form-control @error('linkRegist') is-invalid @enderror" id="linkRegist" name="linkRegist"
-                                        value="{{ old('linkRegist', $event->linkRegist ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}
-                                        placeholder="https://example.com/register">
-                                    @error('linkRegist')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="linkRegist" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Link Registration @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">
+                                            <a href="{{ $event->linkRegist }}" target="_blank">{{ $event->linkRegist }}</a>
+                                        </div>
+                                    @else
+                                        <input type="url" class="form-control @error('linkRegist') is-invalid @enderror" id="linkRegist" name="linkRegist"
+                                            value="{{ old('linkRegist', $event->linkRegist ?? '') }}" required
+                                            placeholder="https://example.com/register">
+                                        @error('linkRegist')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="linkDoc" class="form-label">Link Documentation</label>
-                                    <input type="url" class="form-control @error('linkDoc') is-invalid @enderror" id="linkDoc" name="linkDoc"
-                                        value="{{ old('linkDoc', $event->linkDoc ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : '' }}
-                                        placeholder="https://example.com/docs">
-                                    @error('linkDoc')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <div class="form-text">Optional - Link to event documentation</div>
+                                    <label for="linkDoc" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Link Documentation
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">
+                                            @if($event->linkDoc)
+                                                <a href="{{ $event->linkDoc }}" target="_blank">{{ $event->linkDoc }}</a>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <input type="url" class="form-control @error('linkDoc') is-invalid @enderror" id="linkDoc" name="linkDoc"
+                                            value="{{ old('linkDoc', $event->linkDoc ?? '') }}"
+                                            placeholder="https://example.com/docs">
+                                        @error('linkDoc')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">Optional - Link to event documentation</div>
+                                    @endif
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="linkPresent" class="form-label">Link Presentation</label>
-                                    <input type="url" class="form-control @error('linkPresent') is-invalid @enderror" id="linkPresent" name="linkPresent"
-                                        value="{{ old('linkPresent', $event->linkPresent ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : '' }}
-                                        placeholder="https://example.com/slides">
-                                    @error('linkPresent')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <div class="form-text">Optional - Link to presentation slides</div>
+                                    <label for="linkPresent" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Link Presentation
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">
+                                            @if($event->linkPresent)
+                                                <a href="{{ $event->linkPresent }}" target="_blank">{{ $event->linkPresent }}</a>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <input type="url" class="form-control @error('linkPresent') is-invalid @enderror" id="linkPresent" name="linkPresent"
+                                            value="{{ old('linkPresent', $event->linkPresent ?? '') }}"
+                                            placeholder="https://example.com/slides">
+                                        @error('linkPresent')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">Optional - Link to presentation slides</div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -213,7 +299,9 @@
                                 <h5 class="section-title mb-3"><i class="fas fa-bullhorn me-2"></i>Broadcast Message</h5>
 
                                 <div class="mb-3">
-                                    <label for="broadcast" class="form-label">Broadcast Event <span class="text-danger">*</span></label>
+                                    <label for="broadcast" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Broadcast Event @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
                                     @if ($operation === 'view')
                                         <div class="border p-4 rounded bg-white">
                                             {!! $event->broadcast !!}
@@ -231,7 +319,10 @@
                         <!-- Poster & Contact Person -->
                         <div class="row mt-3">
                             <div class="col-md-6">
-                                <h5 class="section-title mb-3"><i class="fas fa-image me-2"></i>Event Poster</h5>
+                                <h5 class="section-title mb-3">
+                                    <i class="fas fa-image me-2"></i>
+                                    {{ $operation === 'view' ? 'Event Poster' : ($operation === 'create' ? 'Upload Poster' : 'Poster Management') }}
+                                </h5>
 
                                 @if ($operation === 'view')
                                     <div class="mb-3">
@@ -282,52 +373,92 @@
                                 <h5 class="section-title mb-3"><i class="fas fa-address-book me-2"></i>Contact Person</h5>
 
                                 <div class="mb-3">
-                                    <label for="nameCntctPrsn1" class="form-label">Name Contact Person 1 <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('nameCntctPrsn1') is-invalid @enderror" id="nameCntctPrsn1" name="nameCntctPrsn1"
-                                        value="{{ old('nameCntctPrsn1', $event->nameCntctPrsn1 ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : 'required' }}>
-                                    @error('nameCntctPrsn1')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="nameCntctPrsn1" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Name Contact Person 1 @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $event->nameCntctPrsn1 }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('nameCntctPrsn1') is-invalid @enderror" id="nameCntctPrsn1" name="nameCntctPrsn1"
+                                            value="{{ old('nameCntctPrsn1', $event->nameCntctPrsn1 ?? '') }}" required>
+                                        @error('nameCntctPrsn1')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="cntctPrsn1" class="form-label">Phone Contact Person 1 <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">+62</span>
-                                        <input type="text" class="form-control @error('cntctPrsn1') is-invalid @enderror" id="cntctPrsn1" name="cntctPrsn1"
-                                            value="{{ old('cntctPrsn1', $event->cntctPrsn1 ?? '') }}"
-                                            {{ $operation === 'view' ? 'readonly' : 'required' }}>
+                                    <label for="cntctPrsn1" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Phone Contact Person 1 @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">+62{{ $event->cntctPrsn1 }}</div>
+                                    @else
+                                        <div class="input-group">
+                                            <span class="input-group-text">+62</span>
+                                            <input type="text" class="form-control @error('cntctPrsn1') is-invalid @enderror" id="cntctPrsn1" name="cntctPrsn1"
+                                                value="{{ old('cntctPrsn1', $event->cntctPrsn1 ?? '') }}" required>
+                                        </div>
+                                        @error('cntctPrsn1')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="nameCntctPrsn2" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Name Contact Person 2
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $event->nameCntctPrsn2 ?: '-' }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('nameCntctPrsn2') is-invalid @enderror" id="nameCntctPrsn2" name="nameCntctPrsn2"
+                                            value="{{ old('nameCntctPrsn2', $event->nameCntctPrsn2 ?? '') }}">
+                                        @error('nameCntctPrsn2')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">Optional</div>
+                                    @endif
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="cntctPrsn2" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Phone Contact Person 2
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $event->cntctPrsn2 ? '+62' . $event->cntctPrsn2 : '-' }}</div>
+                                    @else
+                                        <div class="input-group">
+                                            <span class="input-group-text">+62</span>
+                                            <input type="text" class="form-control @error('cntctPrsn2') is-invalid @enderror" id="cntctPrsn2" name="cntctPrsn2"
+                                                value="{{ old('cntctPrsn2', $event->cntctPrsn2 ?? '') }}">
+                                        </div>
+                                        @error('cntctPrsn2')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">Optional</div>
+                                    @endif
+                                </div>
+
+                                @if ($operation === 'view')
+                                    <div class="row mt-3">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Created At</label>
+                                            <div class="form-control-plaintext">
+                                                {{ \Carbon\Carbon::parse($event->created_at)->isoFormat('dddd, DD MMMM YYYY') }}
+                                                <small class="text-muted">({{ \Carbon\Carbon::parse($event->created_at)->format('H:i T') }})</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Last Updated</label>
+                                            <div class="form-control-plaintext">
+                                                {{ \Carbon\Carbon::parse($event->updated_at)->isoFormat('dddd, DD MMMM YYYY') }}
+                                                <small class="text-muted">({{ \Carbon\Carbon::parse($event->updated_at)->format('H:i T') }})</small>
+                                            </div>
+                                        </div>
                                     </div>
-                                    @error('cntctPrsn1')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="nameCntctPrsn2" class="form-label">Name Contact Person 2</label>
-                                    <input type="text" class="form-control @error('nameCntctPrsn2') is-invalid @enderror" id="nameCntctPrsn2" name="nameCntctPrsn2"
-                                        value="{{ old('nameCntctPrsn2', $event->nameCntctPrsn2 ?? '') }}"
-                                        {{ $operation === 'view' ? 'readonly' : '' }}>
-                                    @error('nameCntctPrsn2')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <div class="form-text">Optional</div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="cntctPrsn2" class="form-label">Phone Contact Person 2</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">+62</span>
-                                        <input type="text" class="form-control @error('cntctPrsn2') is-invalid @enderror" id="cntctPrsn2" name="cntctPrsn2"
-                                            value="{{ old('cntctPrsn2', $event->cntctPrsn2 ?? '') }}"
-                                            {{ $operation === 'view' ? 'readonly' : '' }}>
-                                    </div>
-                                    @error('cntctPrsn2')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <div class="form-text">Optional</div>
-                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -346,6 +477,7 @@
                         </button>
                     </div>
                 </div>
+                </form>
             @else
                 <!-- View Mode Actions -->
                 <div class="row mb-5">
@@ -353,15 +485,11 @@
                         <a href="{{ route('admin.event.index') }}" class="btn btn-secondary">
                             <i class="fa fa-arrow-left me-1"></i> Back
                         </a>
-                        <a href="{{ route('admin.event.edit', $event->id) }}" class="btn btn-primary">
+                        <a href="{{ route('admin.event.edit', $event->id) }}" class="btn btn-custom-primary">
                             <i class="fa fa-edit me-1"></i> Edit
                         </a>
                     </div>
                 </div>
-            @endif
-
-            @if ($operation !== 'view')
-                </form>
             @endif
         </div>
     </div>
