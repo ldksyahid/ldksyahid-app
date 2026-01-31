@@ -65,6 +65,8 @@
         /* Initial state - menggunakan localStorage jika ada, default light mode */
         body {
             background-color: var(--light-mode-bg);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M30 12l-5 8h10l-5-8zm0 4l2.5 4h-5l2.5-4z' fill='%23888' fill-opacity='0.18'/%3E%3Ccircle cx='90' cy='20' r='6' fill='none' stroke='%23888' stroke-opacity='0.18' stroke-width='1.2'/%3E%3Ccircle cx='90' cy='20' r='2.2' fill='%23888' fill-opacity='0.18'/%3E%3Crect x='10' y='75' width='14' height='16' rx='2' fill='none' stroke='%23888' stroke-opacity='0.18' stroke-width='1.2'/%3E%3Cline x1='13' y1='80' x2='21' y2='80' stroke='%23888' stroke-opacity='0.18' stroke-width='1'/%3E%3Cline x1='13' y1='83.5' x2='21' y2='83.5' stroke='%23888' stroke-opacity='0.18' stroke-width='1'/%3E%3Cline x1='13' y1='87' x2='19' y2='87' stroke='%23888' stroke-opacity='0.18' stroke-width='1'/%3E%3Cpath d='M82 72l8 5-8 5z' fill='none' stroke='%23888' stroke-opacity='0.18' stroke-width='1.2'/%3E%3Ccircle cx='58' cy='52' r='8' fill='none' stroke='%23888' stroke-opacity='0.18' stroke-width='1.2'/%3E%3Cpath d='M55 52l2.5 2.5 5-5' fill='none' stroke='%23888' stroke-opacity='0.18' stroke-width='1.2'/%3E%3Cpath d='M85 100a6 6 0 01-6 6h-2v3l-5-3h-3a6 6 0 01-6-6v-3a6 6 0 016-6h10a6 6 0 016 6z' fill='none' stroke='%23888' stroke-opacity='0.18' stroke-width='1.2'/%3E%3C/svg%3E");
+            background-size: 120px 120px;
             transition: background-color var(--transition-duration) ease;
         }
 
@@ -72,6 +74,7 @@
         html.dark-mode,
         html.dark-mode body {
             background-color: var(--dark-mode-bg) !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M30 12l-5 8h10l-5-8zm0 4l2.5 4h-5l2.5-4z' fill='%23ffffff' fill-opacity='0.12'/%3E%3Ccircle cx='90' cy='20' r='6' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3Ccircle cx='90' cy='20' r='2.2' fill='%23ffffff' fill-opacity='0.12'/%3E%3Crect x='10' y='75' width='14' height='16' rx='2' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3Cline x1='13' y1='80' x2='21' y2='80' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1'/%3E%3Cline x1='13' y1='83.5' x2='21' y2='83.5' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1'/%3E%3Cline x1='13' y1='87' x2='19' y2='87' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1'/%3E%3Cpath d='M82 72l8 5-8 5z' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3Ccircle cx='58' cy='52' r='8' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3Cpath d='M55 52l2.5 2.5 5-5' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3Cpath d='M85 100a6 6 0 01-6 6h-2v3l-5-3h-3a6 6 0 01-6-6v-3a6 6 0 016-6h10a6 6 0 016 6z' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3C/svg%3E");
         }
 
         /* Profile Dropdown Animation */
@@ -633,7 +636,7 @@
         }
 
         .content {
-            background: #FFFFFF;
+            background-color: #FFFFFF;
             transition: background-color 0.3s ease;
         }
 
@@ -657,8 +660,8 @@
 
         html.dark-mode .content {
             background-color: #1a1d21;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M20 10l-3 5h6l-3-5zm0 2.5l1.5 2.5h-3l1.5-2.5z' fill='%23ffffff' fill-opacity='0.12'/%3E%3Ccircle cx='60' cy='15' r='4' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3Ccircle cx='60' cy='15' r='1.5' fill='%23ffffff' fill-opacity='0.12'/%3E%3Crect x='8' y='50' width='8' height='10' rx='1' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3Cline x1='10' y1='53' x2='14' y2='53' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.6'/%3E%3Cline x1='10' y1='55' x2='14' y2='55' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.6'/%3E%3Cline x1='10' y1='57' x2='13' y2='57' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.6'/%3E%3Cpath d='M55 48l5 3-5 3z' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3Ccircle cx='40' cy='35' r='5' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3Cpath d='M38 35l1.5 1.5 3-3' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3Cpath d='M55 65a4 4 0 01-4 4h-1v2l-3-2h-2a4 4 0 01-4-4v-2a4 4 0 014-4h6a4 4 0 014 4z' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='0.8'/%3E%3C/svg%3E");
-            background-size: 80px 80px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M30 12l-5 8h10l-5-8zm0 4l2.5 4h-5l2.5-4z' fill='%23ffffff' fill-opacity='0.12'/%3E%3Ccircle cx='90' cy='20' r='6' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3Ccircle cx='90' cy='20' r='2.2' fill='%23ffffff' fill-opacity='0.12'/%3E%3Crect x='10' y='75' width='14' height='16' rx='2' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3Cline x1='13' y1='80' x2='21' y2='80' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1'/%3E%3Cline x1='13' y1='83.5' x2='21' y2='83.5' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1'/%3E%3Cline x1='13' y1='87' x2='19' y2='87' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1'/%3E%3Cpath d='M82 72l8 5-8 5z' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3Ccircle cx='58' cy='52' r='8' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3Cpath d='M55 52l2.5 2.5 5-5' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3Cpath d='M85 100a6 6 0 01-6 6h-2v3l-5-3h-3a6 6 0 01-6-6v-3a6 6 0 016-6h10a6 6 0 016 6z' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1.2'/%3E%3C/svg%3E");
+            background-size: 120px 120px;
         }
 
         html.dark-mode .sidebar {
@@ -1413,7 +1416,7 @@
         }
 
         html:not(.dark-mode) .content {
-            background: #FFFFFF;
+            background-color: #FFFFFF;
         }
 
         html:not(.dark-mode) .content > .navbar {
