@@ -349,37 +349,37 @@
                         <h5 class="section-title mb-3"><i class="fas fa-chart-bar me-2"></i>Statistics Overview</h5>
                         @php
                             $widgets = [
-                                ['icon' => 'fa-users', 'title' => 'Users', 'count' => $userCount, 'route' => 'admin.user.index'],
-                                ['icon' => 'fa-image', 'title' => 'Jumbotron', 'count' => $jumbotronCount, 'route' => 'admin.jumbotron.index'],
-                                ['icon' => 'fa-star', 'title' => 'Testimony', 'count' => $testimonyCount, 'route' => 'admin.testimony.index'],
-                                ['icon' => 'fa-calendar-check', 'title' => 'Events', 'count' => $eventCount, 'route' => 'admin.event.index'],
-                                ['icon' => 'fa-book-open', 'title' => 'Articles', 'count' => $articleCount, 'route' => 'admin.article.index'],
-                                ['icon' => 'fa-clock', 'title' => 'Schedules', 'count' => $scheduleCount, 'route' => 'admin.schedule.index'],
-                                ['icon' => 'fa-newspaper', 'title' => 'News', 'count' => $newsCount, 'route' => 'admin.news.index'],
-                                ['icon' => 'fa-bullhorn', 'title' => 'Campaigns', 'count' => $campaignCount, 'route' => 'admin.service.index.campaign'],
-                                ['icon' => 'fa-donate', 'title' => 'Donations', 'count' => $donationCount, 'route' => 'admin.service.index.donation'],
-                                ['icon' => 'fa-envelope', 'title' => 'Messages', 'count' => $contactMessageCount, 'route' => 'admin.about.contact.index'],
-                                ['icon' => 'fa-sitemap', 'title' => 'Structure', 'count' => $structureCount, 'route' => 'admin.about.structure.index'],
-                                ['icon' => 'fa-images', 'title' => 'Gallery', 'count' => $galleryCount, 'route' => 'admin.about.gallery.index'],
-                                ['icon' => 'fa-headset', 'title' => 'IT Support', 'count' => $itSupportCount, 'route' => 'admin.about.itsupport.index'],
-                                ['icon' => 'fa-link', 'title' => 'Shortlinks', 'count' => $shortlinkServiceCount, 'route' => 'admin.service.shortlink.index'],
-                                ['icon' => 'fa-phone', 'title' => 'Call Kestari', 'count' => $callKestariCount, 'route' => 'admin.service.callkestari.index'],
-                                ['icon' => 'fa-external-link-alt', 'title' => 'Req Shortlink', 'count' => $reqShortlinkCount, 'route' => 'admin.reqservice.shortlink.index'],
-                                ['icon' => 'fa-id-card', 'title' => 'KTA LDK', 'count' => $idCardCount, 'route' => 'admin.ktaldksyahid.index'],
-                                ['icon' => 'fa-book', 'title' => 'Book Catalog', 'count' => $catalogBookCount, 'route' => 'admin.catalog.books.indexAdmin'],
-                                ['icon' => 'fa-file-alt', 'title' => 'Finance Report', 'count' => $financeReportCount, 'route' => 'admin.finance-report.index'],
+                                ['icon' => 'fa-users', 'title' => 'Users', 'count' => $userCount],
+                                ['icon' => 'fa-image', 'title' => 'Jumbotron', 'count' => $jumbotronCount],
+                                ['icon' => 'fa-star', 'title' => 'Testimony', 'count' => $testimonyCount],
+                                ['icon' => 'fa-calendar-check', 'title' => 'Events', 'count' => $eventCount],
+                                ['icon' => 'fa-book-open', 'title' => 'Articles', 'count' => $articleCount],
+                                ['icon' => 'fa-clock', 'title' => 'Schedules', 'count' => $scheduleCount],
+                                ['icon' => 'fa-newspaper', 'title' => 'News', 'count' => $newsCount],
+                                ['icon' => 'fa-bullhorn', 'title' => 'Campaigns', 'count' => $campaignCount],
+                                ['icon' => 'fa-donate', 'title' => 'Donations', 'count' => $donationCount],
+                                ['icon' => 'fa-envelope', 'title' => 'Messages', 'count' => $contactMessageCount],
+                                ['icon' => 'fa-sitemap', 'title' => 'Structure', 'count' => $structureCount],
+                                ['icon' => 'fa-images', 'title' => 'Gallery', 'count' => $galleryCount],
+                                ['icon' => 'fa-headset', 'title' => 'IT Support', 'count' => $itSupportCount],
+                                ['icon' => 'fa-link', 'title' => 'Shortlinks', 'count' => $shortlinkServiceCount],
+                                ['icon' => 'fa-phone', 'title' => 'Call Kestari', 'count' => $callKestariCount],
+                                ['icon' => 'fa-external-link-alt', 'title' => 'Req Shortlink', 'count' => $reqShortlinkCount],
+                                ['icon' => 'fa-id-card', 'title' => 'KTA LDK', 'count' => $idCardCount],
+                                ['icon' => 'fa-book', 'title' => 'Book Catalog', 'count' => $catalogBookCount],
+                                ['icon' => 'fa-file-alt', 'title' => 'Finance Report', 'count' => $financeReportCount],
                             ];
                         @endphp
                         <div class="row g-3" id="widgetSection">
                             @foreach ($widgets as $widget)
                             <div class="col-6 col-md-3 col-lg-2">
-                                <a href="{{ route($widget['route']) }}" class="widget-card bg-white border shadow-sm p-3 text-center">
+                                <div class="widget-card bg-white border shadow-sm p-3 text-center">
                                     <div class="widget-icon mx-auto mb-2">
                                         <i class="fa {{ $widget['icon'] }}"></i>
                                     </div>
                                     <div class="widget-count" data-target="{{ $widget['count'] }}">0</div>
                                     <div class="widget-label">{{ $widget['title'] }}</div>
-                                </a>
+                                </div>
                             </div>
                             @endforeach
                         </div>
@@ -394,32 +394,34 @@
                         <h5 class="section-title mb-3"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
                         @php
                             $quickActions = [
-                                ['icon' => 'fa-user-plus', 'label' => 'Add User', 'route' => 'admin.user.create'],
-                                ['icon' => 'fa-image', 'label' => 'Add Jumbotron', 'route' => 'admin.jumbotron.create'],
-                                ['icon' => 'fa-star', 'label' => 'Add Testimony', 'route' => 'admin.testimony.create'],
-                                ['icon' => 'fa-calendar-check', 'label' => 'Add Event', 'route' => 'admin.event.create'],
-                                ['icon' => 'fa-book-open', 'label' => 'Add Article', 'route' => 'admin.article.create'],
-                                ['icon' => 'fa-clock', 'label' => 'Add Schedule', 'route' => 'admin.schedule.create'],
-                                ['icon' => 'fa-newspaper', 'label' => 'Add News', 'route' => 'admin.news.create'],
-                                ['icon' => 'fa-bullhorn', 'label' => 'Add Campaign', 'route' => 'admin.service.create.campaign'],
-                                ['icon' => 'fa-sitemap', 'label' => 'Add Structure', 'route' => 'admin.about.structure.create'],
-                                ['icon' => 'fa-images', 'label' => 'Add Gallery', 'route' => 'admin.about.gallery.create'],
-                                ['icon' => 'fa-headset', 'label' => 'Add IT Support', 'route' => 'admin.about.itsupport.create'],
-                                ['icon' => 'fa-phone', 'label' => 'Add Call Kestari', 'route' => 'admin.service.callkestari.create'],
-                                ['icon' => 'fa-id-card', 'label' => 'Add KTA', 'route' => 'admin.ktaldksyahid.create'],
-                                ['icon' => 'fa-book', 'label' => 'Add Book Catalog', 'route' => 'admin.catalog.books.create'],
-                                ['icon' => 'fa-file-alt', 'label' => 'Add Finance Report', 'route' => 'admin.finance-report.create'],
-                                ['icon' => 'fa-link', 'label' => 'Add Shortlink', 'route' => 'admin.service.shortlink.index'],
+                                ['icon' => 'fa-user-plus', 'label' => 'Add User', 'route' => 'admin.user.create', 'roles' => ['Superadmin']],
+                                ['icon' => 'fa-image', 'label' => 'Add Jumbotron', 'route' => 'admin.jumbotron.create', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia']],
+                                ['icon' => 'fa-star', 'label' => 'Add Testimony', 'route' => 'admin.testimony.create', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperSPAM', 'HelperMedia']],
+                                ['icon' => 'fa-calendar-check', 'label' => 'Add Event', 'route' => 'admin.event.create', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperSPAM', 'HelperMedia', 'HelperCelsyahid']],
+                                ['icon' => 'fa-book-open', 'label' => 'Add Article', 'route' => 'admin.article.create', 'roles' => ['Superadmin', 'HelperCelsyahid', 'HelperMedia']],
+                                ['icon' => 'fa-clock', 'label' => 'Add Schedule', 'route' => 'admin.schedule.create', 'roles' => ['Superadmin', 'HelperSPAM', 'HelperMedia']],
+                                ['icon' => 'fa-newspaper', 'label' => 'Add News', 'route' => 'admin.news.create', 'roles' => ['Superadmin', 'HelperCelsyahid', 'HelperMedia']],
+                                ['icon' => 'fa-bullhorn', 'label' => 'Add Campaign', 'route' => 'admin.service.create.campaign', 'roles' => ['Superadmin', 'HelperCelsyahid']],
+                                ['icon' => 'fa-sitemap', 'label' => 'Add Structure', 'route' => 'admin.about.structure.create', 'roles' => ['Superadmin', 'HelperMedia']],
+                                ['icon' => 'fa-images', 'label' => 'Add Gallery', 'route' => 'admin.about.gallery.create', 'roles' => ['Superadmin', 'HelperMedia']],
+                                ['icon' => 'fa-headset', 'label' => 'Add IT Support', 'route' => 'admin.about.itsupport.create', 'roles' => ['Superadmin']],
+                                ['icon' => 'fa-phone', 'label' => 'Add Call Kestari', 'route' => 'admin.service.callkestari.create', 'roles' => ['Superadmin', 'HelperLetter', 'HelperMedia']],
+                                ['icon' => 'fa-id-card', 'label' => 'Add KTA', 'route' => 'admin.ktaldksyahid.create', 'roles' => ['Superadmin', 'HelperLetter']],
+                                ['icon' => 'fa-book', 'label' => 'Add Book Catalog', 'route' => 'admin.catalog.books.create', 'roles' => ['Superadmin', 'HelperLetter', 'HelperMedia']],
+                                ['icon' => 'fa-file-alt', 'label' => 'Add Finance Report', 'route' => 'admin.finance-report.create', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter']],
+                                ['icon' => 'fa-link', 'label' => 'Add Shortlink', 'route' => 'admin.service.shortlink.index', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter']],
                             ];
                         @endphp
                         <div class="row g-2">
                             @foreach ($quickActions as $action)
-                            <div class="col-6 col-md-4 col-lg-3">
-                                <a href="{{ route($action['route']) }}" class="quick-action-btn">
-                                    <div class="qa-icon"><i class="fa {{ $action['icon'] }}"></i></div>
-                                    {{ $action['label'] }}
-                                </a>
-                            </div>
+                                @if(auth()->user()->hasAnyRole($action['roles']))
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <a href="{{ route($action['route']) }}" class="quick-action-btn">
+                                        <div class="qa-icon"><i class="fa {{ $action['icon'] }}"></i></div>
+                                        {{ $action['label'] }}
+                                    </a>
+                                </div>
+                                @endif
                             @endforeach
                         </div>
                     </div>
