@@ -542,11 +542,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            animation: ldkGlow 2.5s ease-in-out infinite;
         }
 
         .ldk-logo-spinner {
-            animation: ldkPulse 2s ease-in-out infinite, ldkGlow 2s ease-in-out infinite;
+            animation: ldkPulse 2.5s ease-in-out infinite;
             border-radius: 12px;
+            position: relative;
+            z-index: 1;
         }
 
         .ldk-orbit-ring {
@@ -557,21 +563,24 @@
             border-top-color: var(--primary);
             border-right-color: var(--primary);
             border-radius: 50%;
-            animation: ldkOrbit 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            animation: ldkOrbit 1.2s linear infinite;
             opacity: 0.6;
         }
 
         @keyframes ldkPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+            50% { transform: scale(1.06); }
         }
 
         @keyframes ldkGlow {
             0%, 100% {
-                filter: drop-shadow(0 0 10px rgba(0, 167, 157, 0.4)) brightness(1.1);
+                box-shadow: 0 0 15px rgba(0, 167, 157, 0.3),
+                            0 0 30px rgba(0, 167, 157, 0.15);
             }
             50% {
-                filter: drop-shadow(0 0 25px rgba(0, 167, 157, 0.8)) drop-shadow(0 0 50px rgba(0, 167, 157, 0.4)) brightness(1.3);
+                box-shadow: 0 0 25px rgba(0, 167, 157, 0.6),
+                            0 0 50px rgba(0, 167, 157, 0.3),
+                            0 0 80px rgba(0, 167, 157, 0.15);
             }
         }
 
@@ -585,16 +594,19 @@
             background: #1a1d21 !important;
         }
 
-        html.dark-mode .ldk-logo-spinner {
-            animation: ldkPulse 2s ease-in-out infinite, ldkGlowDark 2s ease-in-out infinite;
+        html.dark-mode .spinner-ldk {
+            animation: ldkGlowDark 2.5s ease-in-out infinite;
         }
 
         @keyframes ldkGlowDark {
             0%, 100% {
-                filter: drop-shadow(0 0 15px rgba(0, 167, 157, 0.6)) brightness(1.2);
+                box-shadow: 0 0 20px rgba(0, 167, 157, 0.5),
+                            0 0 40px rgba(0, 167, 157, 0.25);
             }
             50% {
-                filter: drop-shadow(0 0 35px rgba(0, 167, 157, 1)) drop-shadow(0 0 70px rgba(0, 167, 157, 0.5)) brightness(1.5);
+                box-shadow: 0 0 35px rgba(0, 167, 157, 0.8),
+                            0 0 70px rgba(0, 167, 157, 0.4),
+                            0 0 110px rgba(0, 167, 157, 0.2);
             }
         }
 
