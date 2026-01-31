@@ -109,7 +109,7 @@
                                                 {{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('dddd, DD MMMM YYYY') }}
                                             </div>
                                         @else
-                                            <input type="date" class="form-control @error('datearticle') is-invalid @enderror" id="datearticle" name="datearticle"
+                                            <input type="text" class="form-control flatpickr-date @error('datearticle') is-invalid @enderror" id="datearticle" name="datearticle"
                                                 value="{{ old('datearticle', $article ? $article->dateevent->format('Y-m-d') : '') }}"
                                                 required>
                                             @error('datearticle')

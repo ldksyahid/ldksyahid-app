@@ -47,6 +47,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     @yield('head')
 
     <!-- Anti-flash script untuk mencegah flash konten putih -->
@@ -797,6 +801,169 @@
         html.dark-mode .svg-placeholder-ground { fill: #373b3e; }
         html.dark-mode .svg-placeholder-text { fill: #6c757d; }
 
+        /* Flatpickr general overrides (light + dark) */
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236c757d'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 6px center;
+            background-size: 10px 6px;
+            padding: 4px 24px 4px 8px !important;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months:hover {
+            border-color: #00a79d;
+        }
+        .flatpickr-current-month input.cur-year {
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 4px 6px !important;
+            font-size: 14px;
+        }
+        .flatpickr-current-month input.cur-year:hover {
+            border-color: #00a79d;
+        }
+        .numInputWrapper span {
+            border: none !important;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+        .numInputWrapper:hover span {
+            opacity: 1;
+        }
+
+        /* Flatpickr dark mode */
+        html.dark-mode .flatpickr-calendar {
+            background: #2b2f33 !important;
+            border-color: #373b3e !important;
+            box-shadow: 0 0 10px rgba(0,0,0,0.4) !important;
+        }
+        html.dark-mode .flatpickr-calendar::before,
+        html.dark-mode .flatpickr-calendar::after {
+            border-bottom-color: #2b2f33 !important;
+        }
+        html.dark-mode .flatpickr-months {
+            background: #212529 !important;
+            border-radius: 5px 5px 0 0;
+        }
+        html.dark-mode .flatpickr-months .flatpickr-month,
+        html.dark-mode .flatpickr-months .flatpickr-prev-month,
+        html.dark-mode .flatpickr-months .flatpickr-next-month {
+            color: #e4e6eb !important;
+            fill: #e4e6eb !important;
+        }
+        html.dark-mode .flatpickr-months .flatpickr-prev-month:hover,
+        html.dark-mode .flatpickr-months .flatpickr-next-month:hover {
+            color: #00a79d !important;
+        }
+        html.dark-mode .flatpickr-months .flatpickr-prev-month:hover svg,
+        html.dark-mode .flatpickr-months .flatpickr-next-month:hover svg {
+            fill: #00a79d !important;
+        }
+        html.dark-mode .flatpickr-current-month .flatpickr-monthDropdown-months {
+            background-color: #1a1d21 !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23b0b3b8'/%3E%3C/svg%3E") !important;
+            color: #e4e6eb !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .flatpickr-current-month .flatpickr-monthDropdown-months:hover {
+            border-color: #00a79d !important;
+        }
+        html.dark-mode .flatpickr-current-month .flatpickr-monthDropdown-months option {
+            background: #2b2f33 !important;
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .flatpickr-current-month .flatpickr-monthDropdown-months option:checked {
+            background: #00a79d !important;
+            color: #fff !important;
+        }
+        html.dark-mode .flatpickr-current-month input.cur-year {
+            color: #e4e6eb !important;
+            background: #1a1d21 !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .flatpickr-current-month input.cur-year:hover {
+            border-color: #00a79d !important;
+        }
+        html.dark-mode .numInputWrapper {
+            background: transparent !important;
+        }
+        html.dark-mode .numInputWrapper:hover {
+            background: transparent !important;
+        }
+        html.dark-mode .numInputWrapper span {
+            background: #2b2f33 !important;
+            border: none !important;
+        }
+        html.dark-mode .numInputWrapper span:hover {
+            background: #373b3e !important;
+        }
+        html.dark-mode .numInputWrapper span::after {
+            border-top-color: #e4e6eb !important;
+            border-bottom-color: #e4e6eb !important;
+        }
+        html.dark-mode .flatpickr-weekdays {
+            background: #212529 !important;
+        }
+        html.dark-mode span.flatpickr-weekday {
+            color: #b0b3b8 !important;
+            background: #212529 !important;
+        }
+        html.dark-mode .flatpickr-day {
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .flatpickr-day:hover {
+            background: #373b3e !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .flatpickr-day.today {
+            border-color: #00a79d !important;
+            color: #00a79d !important;
+        }
+        html.dark-mode .flatpickr-day.today:hover {
+            background: #00a79d !important;
+            color: #fff !important;
+        }
+        html.dark-mode .flatpickr-day.selected,
+        html.dark-mode .flatpickr-day.selected:hover {
+            background: #00a79d !important;
+            border-color: #00a79d !important;
+            color: #fff !important;
+        }
+        html.dark-mode .flatpickr-day.prevMonthDay,
+        html.dark-mode .flatpickr-day.nextMonthDay {
+            color: #6c757d !important;
+        }
+        html.dark-mode .flatpickr-day.disabled,
+        html.dark-mode .flatpickr-day.disabled:hover {
+            color: #4a4f54 !important;
+        }
+        html.dark-mode .flatpickr-time {
+            background: #2b2f33 !important;
+            border-color: #373b3e !important;
+        }
+        html.dark-mode .flatpickr-time input {
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .flatpickr-time input:hover,
+        html.dark-mode .flatpickr-time input:focus {
+            background: #373b3e !important;
+        }
+        html.dark-mode .flatpickr-time .flatpickr-am-pm {
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .flatpickr-time .flatpickr-am-pm:hover {
+            background: #373b3e !important;
+        }
+        html.dark-mode .flatpickr-time .flatpickr-time-separator {
+            color: #e4e6eb !important;
+        }
+
         /* Light mode autofill */
         html:not(.dark-mode) .form-control:-webkit-autofill,
         html:not(.dark-mode) .form-control:-webkit-autofill:hover,
@@ -917,6 +1084,26 @@
 
                 localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
                 updateToggleSwitch(isDark);
+            });
+        });
+    </script>
+
+    {{-- Global Flatpickr Init --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr('.flatpickr-date', {
+                dateFormat: 'Y-m-d',
+                altInput: true,
+                altFormat: 'd/m/Y',
+                allowInput: true
+            });
+            flatpickr('.flatpickr-datetime', {
+                dateFormat: 'Y-m-d H:i',
+                altInput: true,
+                altFormat: 'd/m/Y H:i',
+                enableTime: true,
+                time_24hr: true,
+                allowInput: true
             });
         });
     </script>
