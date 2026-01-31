@@ -38,6 +38,9 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         photoPreview.src = e.target.result;
+                        photoPreview.style.display = '';
+                        var svgEl = photoPreview.parentElement.querySelector('.svg-placeholder');
+                        if (svgEl) svgEl.style.display = 'none';
                         photoPreview.closest('.image-preview-container').classList.add('has-image');
                     };
                     reader.readAsDataURL(file);

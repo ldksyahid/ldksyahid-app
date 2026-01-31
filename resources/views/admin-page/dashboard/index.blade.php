@@ -201,6 +201,79 @@
         border: 2px solid #e0f7f5;
     }
 
+    /* Dark Mode Overrides - Dashboard */
+    html.dark-mode .quick-action-btn {
+        background: #2b2f33;
+        border-color: #373b3e;
+        color: #e4e6eb;
+    }
+    html.dark-mode .quick-action-btn:hover {
+        background: linear-gradient(135deg, #00a79d 0%, #008b84 100%);
+        color: #fff;
+        border-color: #00a79d;
+    }
+    html.dark-mode .prayer-card {
+        background: #2b2f33;
+        border-color: #373b3e;
+    }
+    html.dark-mode .prayer-card:hover {
+        border-color: #00a79d;
+        box-shadow: 0 6px 16px rgba(0, 167, 157, 0.25);
+    }
+    html.dark-mode .prayer-card .prayer-name {
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .widget-card {
+        background: #2b2f33 !important;
+        border-color: #373b3e !important;
+    }
+    html.dark-mode .widget-card .widget-label {
+        color: #b0b3b8 !important;
+    }
+    html.dark-mode .map-iframe {
+        border-color: #373b3e;
+    }
+    /* Calendar (datetimepicker) dark mode */
+    html.dark-mode .bootstrap-datetimepicker-widget {
+        background: #2b2f33 !important;
+        border-color: #373b3e !important;
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th,
+    html.dark-mode .bootstrap-datetimepicker-widget table td {
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.day:hover,
+    html.dark-mode .bootstrap-datetimepicker-widget table td span:hover {
+        background: #373b3e !important;
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.active,
+    html.dark-mode .bootstrap-datetimepicker-widget table td.active:hover {
+        background: #00a79d !important;
+        color: #fff !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.today::before {
+        border-bottom-color: #00a79d !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table td.old,
+    html.dark-mode .bootstrap-datetimepicker-widget table td.new {
+        color: #6c757d !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th.prev,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.next,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.picker-switch {
+        color: #e4e6eb !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th.prev:hover,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.next:hover,
+    html.dark-mode .bootstrap-datetimepicker-widget table th.picker-switch:hover {
+        background: #373b3e !important;
+    }
+    html.dark-mode .bootstrap-datetimepicker-widget table th.dow {
+        color: #b0b3b8 !important;
+    }
+
     @media (max-width: 768px) {
         .page-title { font-size: 1.35rem; }
         .section-title { font-size: 1rem; }
@@ -213,6 +286,8 @@
         .greeting-card .live-date { font-size: 0.8rem; }
         .greeting-card .text-end { text-align: left !important; }
         .chart-container { height: 250px; }
+        .quick-action-btn { font-size: 0.75rem; padding: 0.5rem 0.6rem; gap: 0.4rem; }
+        .quick-action-btn .qa-icon { width: 28px; height: 28px; font-size: 0.7rem; border-radius: 6px; }
     }
 </style>
 @endsection
@@ -241,6 +316,32 @@
                 </div>
             </div>
 
+            <!-- Prayer Times -->
+            <div class="col-md-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="section-title mb-3"><i class="fas fa-mosque me-2"></i>Prayer Times - Jakarta</h5>
+                        <div class="row g-3">
+                            @php
+                                $prayers = ['Imsak', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
+                                $icons = ['fa-moon', 'fa-sun', 'fa-sun', 'fa-cloud-sun', 'fa-moon', 'fa-star'];
+                            @endphp
+                            @foreach ($prayers as $index => $name)
+                            <div class="col-6 col-md-4 col-lg-2">
+                                <div class="prayer-card text-center p-3">
+                                    <div class="prayer-icon mx-auto mb-2">
+                                        <i class="fa {{ $icons[$index] }}"></i>
+                                    </div>
+                                    <div class="prayer-name mb-1">{{ $name }}</div>
+                                    <div class="prayer-time">{{ $prayerTimes[strtolower($name)] ?? '-' }}</div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Statistics Widgets -->
             <div class="col-md-12 mb-4">
                 <div class="card border-0 shadow-sm">
@@ -249,16 +350,29 @@
                         @php
                             $widgets = [
                                 ['icon' => 'fa-users', 'title' => 'Users', 'count' => $userCount, 'route' => 'admin.user.index'],
+                                ['icon' => 'fa-image', 'title' => 'Jumbotron', 'count' => $jumbotronCount, 'route' => 'admin.jumbotron.index'],
+                                ['icon' => 'fa-star', 'title' => 'Testimony', 'count' => $testimonyCount, 'route' => 'admin.testimony.index'],
                                 ['icon' => 'fa-calendar-check', 'title' => 'Events', 'count' => $eventCount, 'route' => 'admin.event.index'],
                                 ['icon' => 'fa-book-open', 'title' => 'Articles', 'count' => $articleCount, 'route' => 'admin.article.index'],
+                                ['icon' => 'fa-clock', 'title' => 'Schedules', 'count' => $scheduleCount, 'route' => 'admin.schedule.index'],
                                 ['icon' => 'fa-newspaper', 'title' => 'News', 'count' => $newsCount, 'route' => 'admin.news.index'],
-                                ['icon' => 'fa-link', 'title' => 'Shortlinks', 'count' => $shortLinkCount, 'route' => 'admin.service.shortlink.index'],
-                                ['icon' => 'fa-id-card', 'title' => 'ID Cards', 'count' => $idCardCount, 'route' => 'admin.ktaldksyahid.index'],
+                                ['icon' => 'fa-bullhorn', 'title' => 'Campaigns', 'count' => $campaignCount, 'route' => 'admin.service.index.campaign'],
+                                ['icon' => 'fa-donate', 'title' => 'Donations', 'count' => $donationCount, 'route' => 'admin.service.index.donation'],
+                                ['icon' => 'fa-envelope', 'title' => 'Messages', 'count' => $contactMessageCount, 'route' => 'admin.about.contact.index'],
+                                ['icon' => 'fa-sitemap', 'title' => 'Structure', 'count' => $structureCount, 'route' => 'admin.about.structure.index'],
+                                ['icon' => 'fa-images', 'title' => 'Gallery', 'count' => $galleryCount, 'route' => 'admin.about.gallery.index'],
+                                ['icon' => 'fa-headset', 'title' => 'IT Support', 'count' => $itSupportCount, 'route' => 'admin.about.itsupport.index'],
+                                ['icon' => 'fa-link', 'title' => 'Shortlinks', 'count' => $shortlinkServiceCount, 'route' => 'admin.service.shortlink.index'],
+                                ['icon' => 'fa-phone', 'title' => 'Call Kestari', 'count' => $callKestariCount, 'route' => 'admin.service.callkestari.index'],
+                                ['icon' => 'fa-external-link-alt', 'title' => 'Req Shortlink', 'count' => $reqShortlinkCount, 'route' => 'admin.reqservice.shortlink.index'],
+                                ['icon' => 'fa-id-card', 'title' => 'KTA LDK', 'count' => $idCardCount, 'route' => 'admin.ktaldksyahid.index'],
+                                ['icon' => 'fa-book', 'title' => 'Book Catalog', 'count' => $catalogBookCount, 'route' => 'admin.catalog.books.indexAdmin'],
+                                ['icon' => 'fa-file-alt', 'title' => 'Finance Report', 'count' => $financeReportCount, 'route' => 'admin.finance-report.index'],
                             ];
                         @endphp
                         <div class="row g-3" id="widgetSection">
                             @foreach ($widgets as $widget)
-                            <div class="col-6 col-md-4 col-lg-2">
+                            <div class="col-6 col-md-3 col-lg-2">
                                 <a href="{{ route($widget['route']) }}" class="widget-card bg-white border shadow-sm p-3 text-center">
                                     <div class="widget-icon mx-auto mb-2">
                                         <i class="fa {{ $widget['icon'] }}"></i>
@@ -280,18 +394,22 @@
                         <h5 class="section-title mb-3"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
                         @php
                             $quickActions = [
-                                ['icon' => 'fa-book-open', 'label' => 'Add Article', 'route' => 'admin.article.create'],
-                                ['icon' => 'fa-calendar-check', 'label' => 'Add Event', 'route' => 'admin.event.create'],
-                                ['icon' => 'fa-newspaper', 'label' => 'Add News', 'route' => 'admin.news.create'],
-                                ['icon' => 'fa-id-card', 'label' => 'Add KTA', 'route' => 'admin.ktaldksyahid.create'],
-                                ['icon' => 'fa-clock', 'label' => 'Add Schedule', 'route' => 'admin.schedule.create'],
-                                ['icon' => 'fa-images', 'label' => 'Add Gallery', 'route' => 'admin.about.gallery.create'],
-                                ['icon' => 'fa-star', 'label' => 'Add Testimony', 'route' => 'admin.testimony.create'],
-                                ['icon' => 'fa-image', 'label' => 'Add Jumbotron', 'route' => 'admin.jumbotron.create'],
                                 ['icon' => 'fa-user-plus', 'label' => 'Add User', 'route' => 'admin.user.create'],
+                                ['icon' => 'fa-image', 'label' => 'Add Jumbotron', 'route' => 'admin.jumbotron.create'],
+                                ['icon' => 'fa-star', 'label' => 'Add Testimony', 'route' => 'admin.testimony.create'],
+                                ['icon' => 'fa-calendar-check', 'label' => 'Add Event', 'route' => 'admin.event.create'],
+                                ['icon' => 'fa-book-open', 'label' => 'Add Article', 'route' => 'admin.article.create'],
+                                ['icon' => 'fa-clock', 'label' => 'Add Schedule', 'route' => 'admin.schedule.create'],
+                                ['icon' => 'fa-newspaper', 'label' => 'Add News', 'route' => 'admin.news.create'],
+                                ['icon' => 'fa-bullhorn', 'label' => 'Add Campaign', 'route' => 'admin.service.create.campaign'],
                                 ['icon' => 'fa-sitemap', 'label' => 'Add Structure', 'route' => 'admin.about.structure.create'],
+                                ['icon' => 'fa-images', 'label' => 'Add Gallery', 'route' => 'admin.about.gallery.create'],
                                 ['icon' => 'fa-headset', 'label' => 'Add IT Support', 'route' => 'admin.about.itsupport.create'],
                                 ['icon' => 'fa-phone', 'label' => 'Add Call Kestari', 'route' => 'admin.service.callkestari.create'],
+                                ['icon' => 'fa-id-card', 'label' => 'Add KTA', 'route' => 'admin.ktaldksyahid.create'],
+                                ['icon' => 'fa-book', 'label' => 'Add Book Catalog', 'route' => 'admin.catalog.books.create'],
+                                ['icon' => 'fa-file-alt', 'label' => 'Add Finance Report', 'route' => 'admin.finance-report.create'],
+                                ['icon' => 'fa-link', 'label' => 'Add Shortlink', 'route' => 'admin.service.shortlink.index'],
                             ];
                         @endphp
                         <div class="row g-2">
@@ -329,32 +447,6 @@
                                     <canvas id="doughnutChart"></canvas>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Prayer Times -->
-            <div class="col-md-12 mb-4">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="section-title mb-3"><i class="fas fa-mosque me-2"></i>Prayer Times - Jakarta</h5>
-                        <div class="row g-3">
-                            @php
-                                $prayers = ['Imsak', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
-                                $icons = ['fa-moon', 'fa-sun', 'fa-sun', 'fa-cloud-sun', 'fa-moon', 'fa-star'];
-                            @endphp
-                            @foreach ($prayers as $index => $name)
-                            <div class="col-6 col-md-4 col-lg-2">
-                                <div class="prayer-card text-center p-3">
-                                    <div class="prayer-icon mx-auto mb-2">
-                                        <i class="fa {{ $icons[$index] }}"></i>
-                                    </div>
-                                    <div class="prayer-name mb-1">{{ $name }}</div>
-                                    <div class="prayer-time">{{ $prayerTimes[strtolower($name)] ?? '-' }}</div>
-                                </div>
-                            </div>
-                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -483,12 +575,27 @@ $(document).ready(function() {
     }
 
     // === Chart.js ===
-    var chartLabels = ['Users', 'Events', 'Articles', 'News', 'Shortlinks', 'ID Cards'];
-    var chartData = [
-        {{ $userCount }}, {{ $eventCount }}, {{ $articleCount }},
-        {{ $newsCount }}, {{ $shortLinkCount }}, {{ $idCardCount }}
+    var chartLabels = [
+        'Users', 'Jumbotron', 'Testimony', 'Events', 'Articles', 'Schedules',
+        'News', 'Campaigns', 'Donations', 'Messages', 'Structure', 'Gallery',
+        'IT Support', 'Shortlinks', 'Call Kestari', 'Req Shortlink',
+        'KTA LDK', 'Book Catalog', 'Finance Report'
     ];
-    var chartColors = ['#00a79d', '#008b84', '#00c9bd', '#006b63', '#33b8b0', '#4dd0c8'];
+    var chartData = [
+        {{ $userCount }}, {{ $jumbotronCount }}, {{ $testimonyCount }},
+        {{ $eventCount }}, {{ $articleCount }}, {{ $scheduleCount }},
+        {{ $newsCount }}, {{ $campaignCount }}, {{ $donationCount }},
+        {{ $contactMessageCount }}, {{ $structureCount }}, {{ $galleryCount }},
+        {{ $itSupportCount }}, {{ $shortlinkServiceCount }}, {{ $callKestariCount }},
+        {{ $reqShortlinkCount }}, {{ $idCardCount }}, {{ $catalogBookCount }},
+        {{ $financeReportCount }}
+    ];
+    var chartColors = [
+        '#00a79d', '#008b84', '#00c9bd', '#006b63', '#33b8b0',
+        '#4dd0c8', '#00887f', '#26b5ab', '#1a9e95', '#0dbfb3',
+        '#009688', '#00796b', '#00897b', '#4db6ac', '#80cbc4',
+        '#b2dfdb', '#00bfa5', '#1de9b6', '#69f0ae'
+    ];
 
     // Bar Chart
     new Chart(document.getElementById('barChart').getContext('2d'), {

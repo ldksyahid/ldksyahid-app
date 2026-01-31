@@ -72,13 +72,14 @@
     /* Image Preview */
     .image-preview-container {
         position: relative;
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
+        width: 100%;
+        max-height: 300px;
+        border-radius: 12px;
         overflow: hidden;
-        border: 3px solid #dee2e6;
+        border: 2px solid #dee2e6;
         background-color: #f8f9fa;
     }
+
     .image-preview-container img {
         width: 100%;
         height: 100%;
@@ -116,26 +117,26 @@
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
-        .page-title {
-            font-size: 1.35rem;
-        }
-        .d-flex.justify-content-between,
-        .d-flex.align-items-center {
+        .page-title { font-size: 1.35rem; }
+        .card-body { padding: 1rem; }
+        .section-title { font-size: 1rem; }
+        .form-label { font-size: 0.9rem; }
+        .form-text { font-size: 0.75rem; }
+        .form-control, .form-select { font-size: 0.9rem; }
+        .d-flex.justify-content-end.gap-2 {
             flex-direction: column;
-            align-items: flex-start !important;
-            gap: 0.5rem;
         }
-        .d-flex.justify-content-between .btn,
-        .d-flex.align-items-center .btn {
+        .d-flex.justify-content-end.gap-2 .btn {
             width: 100%;
-            margin-top: 0.5rem;
-        }
-        .section-title {
-            font-size: 1rem;
         }
         .image-preview-container {
             width: 120px;
             height: 120px;
+        }
+        .d-flex.justify-content-between.align-items-center {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 0.15rem;
         }
     }
 </style>

@@ -277,7 +277,10 @@ $(document).ready(function() {
     // Remove Bootstrap data-bs-toggle to prevent conflict
     $('.sidebar .dropdown-toggle').removeAttr('data-bs-toggle');
 
-    // Custom dropdown handler for sidebar
+    // Hide all dropdown menus initially (jQuery will handle display)
+    $('.sidebar .dropdown-menu').hide();
+
+    // Custom dropdown handler for sidebar with slide animation
     $('.sidebar .dropdown-toggle').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -287,24 +290,26 @@ $(document).ready(function() {
         var $menu = $dropdown.find('.dropdown-menu');
         var isOpen = $menu.hasClass('show');
 
-        // Close all other dropdowns first
-        $('.sidebar .dropdown-menu.show').not($menu).removeClass('show');
+        // Close all other dropdowns first with slide up
+        $('.sidebar .dropdown-menu.show').not($menu).slideUp(250).removeClass('show');
         $('.sidebar .dropdown-toggle[aria-expanded="true"]').not($this).attr('aria-expanded', 'false');
 
-        // Toggle current dropdown
+        // Toggle current dropdown with slide animation
         if (isOpen) {
-            $menu.removeClass('show');
+            $menu.slideUp(250, function() {
+                $menu.removeClass('show');
+            });
             $this.attr('aria-expanded', 'false');
         } else {
-            $menu.addClass('show');
+            $menu.addClass('show').hide().slideDown(250);
             $this.attr('aria-expanded', 'true');
         }
     });
 
-    // Open dropdown that has active submenu on page load
+    // Open dropdown that has active submenu on page load (no animation)
     $('.sidebar .dropdown-item.active').each(function() {
         var $dropdown = $(this).closest('.dropdown');
-        $dropdown.find('.dropdown-menu').addClass('show');
+        $dropdown.find('.dropdown-menu').addClass('show').show();
         $dropdown.find('.dropdown-toggle').attr('aria-expanded', 'true');
     });
 });
