@@ -631,7 +631,7 @@
 
         /* Fix navbar connection with sidebar - remove the gap */
         .container-xxl {
-            background: #FFFFFF !important;
+            background-color: transparent !important;
             transition: background-color 0.3s ease;
         }
 
@@ -655,7 +655,7 @@
 
         /* Dark Mode Overrides - menggunakan selector html.dark-mode */
         html.dark-mode .container-xxl {
-            background: #212529 !important;
+            background-color: transparent !important;
         }
 
         html.dark-mode .content {
@@ -889,7 +889,7 @@
         }
 
         html.dark-mode .bg-white {
-            background-color: #1a1d21 !important;
+            background-color: transparent !important;
         }
 
         html.dark-mode .shadow,
@@ -1412,7 +1412,7 @@
         }
 
         html:not(.dark-mode) .container-xxl {
-            background: #FFFFFF !important;
+            background-color: transparent !important;
         }
 
         html:not(.dark-mode) .content {
