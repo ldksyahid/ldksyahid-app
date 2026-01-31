@@ -5,101 +5,157 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Testimony;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Services\GoogleDrive;
 
 class TestimonyController extends Controller
 {
-
-    public $pathTestimonyGDrive = '1w2pq-EYLmaeJ7irJ-KQaXZS0iJvn1pNY';
-
-    public function index()
+    /**
+     * Display a listing of testimonies (Admin Index)
+     */
+    public function indexAdmin(Request $request)
     {
-        $posttestimony= Testimony::orderBy('created_at','desc')->get();
-        return view('admin-page.home.testimony.index', compact('posttestimony'), ["title" => "Home"]);
-    }
+        $items = Testimony::searchAdminTestimonies($request);
+        $tableConfig = Testimony::getTableConfig();
 
-    public function create()
-    {
-        return view('admin-page.home.testimony.create', ["title" => "Home"]);
-    }
-
-    public function store(Request $request)
-    {
-        $gdriveService = new GoogleDrive($this->pathTestimonyGDrive);
-
-        $fileName = time() . '_testimony_' . $request->file('picture')->getClientOriginalName();
-        $filePath = $this->pathTestimonyGDrive . '/' . $fileName;
-
-        $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
-
-        Testimony::create([
-            "name" => $request["name"],
-            "profession" => $request["profession"],
-            "testimony" => $request["testimony"],
-            'picture' => $uploadResult['fileName'],
-            'gdrive_id' => $uploadResult['gdriveID'],
-        ]);
-
-        Alert::success('Success', 'Testimony has been uploaded !');
-        return redirect('/admin/testimony');
-    }
-
-    public function edit($id)
-    {
-        $posttestimony = Testimony::find($id);
-        return view('admin-page.home.testimony.update', compact('posttestimony'), ["title" => "Home"]);
-    }
-
-    public function show($id)
-    {
-        $posttestimony = Testimony::find($id);
-        return view('admin-page.home.testimony.view', compact('posttestimony'), ["title" => "Home"]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $testimonyModel = Testimony::find($id);
-
-        if ($request->file('picture')) {
-            $gdriveService = new GoogleDrive($this->pathTestimonyGDrive);
-
-            $fileName = time() . '_testimony_' . $request->file('picture')->getClientOriginalName();
-            $filePath = $this->pathTestimonyGDrive . '/' . $fileName;
-
-            $uploadResult = $gdriveService->uploadImage($request->file('picture'), $fileName, $filePath);
-
-            $oldGdriveID = $testimonyModel->gdrive_id;
-
-            if ($oldGdriveID) {
-                $gdriveService->deleteImage($oldGdriveID);
-            }
-
-            $testimonyModel->update([
-                'picture' => $uploadResult['fileName'],
-                'gdrive_id' => $uploadResult['gdriveID'],
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $items,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
+                'pagination' => $items->appends($request->query())->links()->render(),
+                'total' => $items->total(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem()
             ]);
         }
 
-        $testimonyModel->update([
-            "name" => $request["name"],
-            "profession" => $request["profession"],
-            "testimony" => $request["testimony"],
-        ]);
-
-        toast('Testimony has been edited !', 'success')->autoClose(1500)->width('400px');
-        return redirect('/admin/testimony');
+        return view('admin-page.home.testimony.index', compact('items', 'tableConfig'))
+            ->with('title', 'Home');
     }
 
+    /**
+     * Show the form for creating a new testimony
+     */
+    public function create()
+    {
+        return view('admin-page.home.testimony.create')
+            ->with('title', 'Home');
+    }
+
+    /**
+     * Store a newly created testimony
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'profession' => 'required|string|max:255',
+            'testimony' => 'required|string|max:250',
+            'picture' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+        ]);
+
+        try {
+            Testimony::saveModel($request);
+            Alert::success('Success', 'Testimony has been created!');
+            return redirect()->route('admin.testimony.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to create testimony: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+    }
+
+    /**
+     * Display the specified testimony (Admin Preview)
+     */
+    public function showAdmin($id)
+    {
+        $testimony = Testimony::findOrFail($id);
+
+        return view('admin-page.home.testimony.view', compact('testimony'))
+            ->with('title', 'Home');
+    }
+
+    /**
+     * Show the form for editing the specified testimony
+     */
+    public function edit($id)
+    {
+        $testimony = Testimony::findOrFail($id);
+
+        return view('admin-page.home.testimony.update', compact('testimony'))
+            ->with('title', 'Home');
+    }
+
+    /**
+     * Update the specified testimony
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'profession' => 'required|string|max:255',
+            'testimony' => 'required|string|max:250',
+            'picture' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+        ]);
+
+        try {
+            $testimony = Testimony::findOrFail($id);
+            $testimony->updateModel($request);
+            Alert::success('Success', 'Testimony has been updated!');
+            return redirect()->route('admin.testimony.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Failed to update testimony: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+    }
+
+    /**
+     * Remove the specified testimony
+     */
     public function destroy($id)
     {
-        $testimonyModel = Testimony::find($id);
-        $gdriveService = new GoogleDrive($this->pathTestimonyGDrive);
+        try {
+            $testimony = Testimony::findOrFail($id);
+            $testimony->deleteModel();
 
-        if ($testimonyModel->gdrive_id) {
-            $gdriveService->deleteImage($testimonyModel->gdrive_id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Testimony has been deleted!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting testimony: ' . $e->getMessage()
+            ], 500);
         }
+    }
 
-        $testimonyModel->delete();
-        return redirect()->back();
+    /**
+     * Bulk delete testimonies
+     */
+    public function bulkDelete(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No testimonies selected for deletion'
+                ], 400);
+            }
+
+            $deleted = Testimony::bulkDeleteModel($ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$deleted} testimony(ies) have been deleted!"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting testimonies: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

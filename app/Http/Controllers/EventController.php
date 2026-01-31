@@ -4,147 +4,145 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
-use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
-use App\Services\GoogleDrive;
 
 class EventController extends Controller
 {
-    public $pathEventGDrive = '1iQgMUHmSTJVXG7LbmKvXjFPNz4gmyYak';
+    /* =========================================================================
+       SECTION A — LANDING PAGE (Public)
+       ========================================================================= */
 
     public function index()
     {
-        $postevent = Event::orderBy('start','desc')->get();
+        $postevent = Event::orderBy('start', 'desc')->get();
         return view('landing-page.event.index', compact('postevent'), ["title" => "Kegiatan"]);
-    }
-
-    public function indexadmin()
-    {
-        $postevent = Event::orderBy('created_at','desc')->get();
-        return view('admin-page.event.index', compact('postevent'), ["title" => "Event"]);
-    }
-
-    public function create()
-    {
-        return view('admin-page.event.create', ["title" => "Event"]);
-    }
-
-    public function store(Request $request)
-    {
-        $gdriveService = new GoogleDrive($this->pathEventGDrive);
-
-        $fileName = time() . '_event_' . $request->file('poster')->getClientOriginalName();
-        $filePath = $this->pathEventGDrive . '/' . $fileName;
-
-        $uploadResult = $gdriveService->uploadImage($request->file('poster'), $fileName, $filePath);
-
-        Event::create([
-            "title" => $request["title"],
-            "division" => $request["division"],
-            "broadcast" => $request["broadcast"],
-            "tag" => $request["tag"],
-            "closeRegist" => $request["closeRegist"],
-            "linkRegist" => $request["linkRegist"],
-            "start" => $request["start"],
-            "finished" => $request["finished"],
-            "location" => $request["location"],
-            "linkLocation" => $request["linkLocation"],
-            "place" => $request["place"],
-            "linkDoc" => $request["linkDoc"],
-            "linkPresent" => $request["linkPresent"],
-            "cntctPrsn1" => $request["cntctPrsn1"],
-            "cntctPrsn2" => $request["cntctPrsn2"],
-            "nameCntctPrsn1" => $request["nameCntctPrsn1"],
-            "nameCntctPrsn2" => $request["nameCntctPrsn2"],
-            "linkembedgform" => null,
-            "dateevent" => '2023/01/01',
-            'poster' => $uploadResult['fileName'],
-            'gdrive_id' => $uploadResult['gdriveID'],
-        ]);
-        Alert::success('Success', 'Event has been uploaded !');
-        return redirect('/admin/event');
     }
 
     public function show($id)
     {
-        $dt = Carbon::now();
         $postevent = Event::find($id);
         return view('landing-page.event.detail', compact('postevent'), ["title" => "Kegiatan"]);
     }
 
-    public function showInAdmin($id)
+    /* =========================================================================
+       SECTION B — ADMIN AREA (with RESTful routing)
+       ========================================================================= */
+
+    public function indexAdmin(Request $request)
     {
-        $dt = Carbon::now();
-        $postevent = Event::find($id);
-        return view('admin-page.event.view', compact('postevent'), ["title" => "Kegiatan"]);
+        $events = Event::searchAdminEvents($request);
+        $divisions = Event::getDivisions();
+        $tableConfig = Event::getTableConfig();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $events,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
+                'pagination' => $events->appends($request->query())->links()->render(),
+                'total' => $events->total(),
+                'from' => $events->firstItem(),
+                'to' => $events->lastItem()
+            ]);
+        }
+
+        return view('admin-page.event.index', compact('events', 'divisions', 'tableConfig'))
+            ->with('title', 'Events');
+    }
+
+    public function create()
+    {
+        return view('admin-page.event.create')
+            ->with('title', 'Create Event');
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            Event::saveModel($request);
+
+            return redirect()->route('admin.event.index')
+                ->with('success', 'Event has been created successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('failed', true)
+                ->withErrors(['error' => 'Error creating event: ' . $e->getMessage()]);
+        }
+    }
+
+    public function showAdmin($id)
+    {
+        $event = Event::findOrFail($id);
+        return view('admin-page.event.view', compact('event'))
+            ->with('title', 'View Event');
     }
 
     public function edit($id)
     {
-        $postevent = Event::find($id);
-        return view('admin-page.event.update', compact('postevent'), ["title" => "Event"]);
+        $event = Event::findOrFail($id);
+        return view('admin-page.event.update', compact('event'))
+            ->with('title', 'Edit Event');
     }
 
     public function update(Request $request, $id)
     {
-        $eventModel = Event::find($id);
+        try {
+            $event = Event::findOrFail($id);
+            $event->updateModel($request);
 
-        if ($request->file('poster')) {
-            $gdriveService = new GoogleDrive($this->pathEventGDrive);
-
-            $fileName = time() . '_event_' . $request->file('poster')->getClientOriginalName();
-            $filePath = $this->pathEventGDrive . '/' . $fileName;
-
-            $uploadResult = $gdriveService->uploadImage($request->file('poster'), $fileName, $filePath);
-
-            $oldGdriveID = $eventModel->gdrive_id;
-
-            if ($oldGdriveID) {
-                $gdriveService->deleteImage($oldGdriveID);
-            }
-
-            $eventModel->update([
-                'poster' => $uploadResult['fileName'],
-                'gdrive_id' => $uploadResult['gdriveID'],
-            ]);
+            return redirect()->route('admin.event.index')
+                ->with('success', 'Event has been updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('failed', true)
+                ->withErrors(['error' => 'Error updating event: ' . $e->getMessage()]);
         }
-
-        $eventModel->update([
-            "title" => $request["title"],
-            "division" => $request["division"],
-            "broadcast" => $request["broadcast"],
-            "tag" => $request["tag"],
-            "closeRegist" => $request["closeRegist"],
-            "linkRegist" => $request["linkRegist"],
-            "start" => $request["start"],
-            "finished" => $request["finished"],
-            "location" => $request["location"],
-            "linkLocation" => $request["linkLocation"],
-            "place" => $request["place"],
-            "linkDoc" => $request["linkDoc"],
-            "linkPresent" => $request["linkPresent"],
-            "cntctPrsn1" => $request["cntctPrsn1"],
-            "cntctPrsn2" => $request["cntctPrsn2"],
-            "nameCntctPrsn1" => $request["nameCntctPrsn1"],
-            "nameCntctPrsn2" => $request["nameCntctPrsn2"],
-            "linkembedgform" => null,
-            "dateevent" => '2023/01/01',
-        ]);
-
-        toast('Event has been edited !', 'success')->autoClose(1500)->width('400px');
-        return redirect('/admin/event');
     }
 
     public function destroy($id)
     {
-        $eventModel = Event::find($id);
-        $gdriveService = new GoogleDrive($this->pathEventGDrive);
+        try {
+            $event = Event::findOrFail($id);
+            $event->deleteModel();
 
-        if ($eventModel->gdrive_id) {
-            $gdriveService->deleteImage($eventModel->gdrive_id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Event has been deleted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting event: ' . $e->getMessage()
+            ], 500);
         }
+    }
 
-        $eventModel->delete();
-        return redirect()->back();
+    public function bulkDelete(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No events selected for deletion'
+                ], 400);
+            }
+
+            Event::bulkDeleteModel($ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Selected events have been deleted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting events: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

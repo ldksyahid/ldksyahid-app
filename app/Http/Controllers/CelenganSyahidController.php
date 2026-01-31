@@ -25,7 +25,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 class CelenganSyahidController extends Controller
 {
     public $pathCampaignsGDrive = '1w48iZmjPCkYwVUL26zIj8fBIX37OMaGT';
-    
+
     public function indexLanding()
     {
         $postcampaign = Campaign::getCampaigns();
@@ -169,22 +169,86 @@ class CelenganSyahidController extends Controller
         return $pdf->setPaper('a4')->stream('Bukti Pembayaran Donasi'." - ".$donation->id.".pdf");
     }
 
-    public function indexAdminDonation()
+    public function indexAdminDonation(Request $request)
     {
-        $postDonation = Donation::orderBy('created_at','desc')->get();
-        return view('admin-page.service.celengan-syahid.donation.index',compact('postDonation'), ["title" => "Celengan Syahid"]);
+        $items = Donation::searchAdminDonations($request);
+        $tableConfig = Donation::getTableConfig();
+
+        // Add campaign_name to each donation item
+        $campaignNames = Campaign::pluck('judul', 'id')->toArray();
+        $items->getCollection()->transform(function ($donation) use ($campaignNames) {
+            $donation->campaign_name = $campaignNames[$donation->campaign_id] ?? '-';
+            $donation->jumlah_donasi = LFC::formatRupiah($donation->jumlah_donasi);
+            return $donation;
+        });
+
+        $paymentStatusOptions = Donation::getPaymentStatusOptions();
+        $campaignOptions = Donation::getCampaignOptions();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $items,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
+                'pagination' => $items->appends($request->query())->links()->render(),
+                'total' => $items->total(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem()
+            ]);
+        }
+
+        return view('admin-page.service.celengan-syahid.donation.index', compact('items', 'tableConfig', 'paymentStatusOptions', 'campaignOptions'))
+            ->with('title', 'Celengan Syahid');
     }
 
     public function destroyAdminDonation($id)
     {
-        Donation::deleteDonation($id);
-        return redirect()->back();
+        try {
+            Donation::deleteDonation($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Donation has been deleted!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting donation: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function bulkDeleteDonation(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No donations selected for deletion'
+                ], 400);
+            }
+
+            $deleted = Donation::bulkDeleteDonations($ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$deleted} donation(s) have been deleted!"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting donations: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function dashboardCelenganSyahid()
     {
         $pythonExecutable = '/home/ldksyah1/virtualenv/ucupspython/3.9/bin/python';
-        // $pythonExecutable = 'C:\Users\hp\AppData\Local\Programs\Python\Python311\python.exe';
+        // $pythonExecutable = 'C:\Users\ESB\AppData\Local\Programs\Python\Python313\python.exe';
 
         $scriptPath = '/home/ldksyah1/public_html/public/machine-learning/models/donation-class-machine.py';
         // $scriptPath = 'machine-learning/models/donation-class-machine.py';
@@ -209,10 +273,34 @@ class CelenganSyahidController extends Controller
 
 
 
-    public function indexAdminCampaign()
+    public function indexAdminCampaign(Request $request)
     {
-        $postcampaign = Campaign::orderBy('created_at','desc')->get();
-        return view('admin-page.service.celengan-syahid.campaign.index',compact('postcampaign'), ["title" => "Celengan Syahid"]);
+        $items = Campaign::searchAdminCampaigns($request);
+        $tableConfig = Campaign::getTableConfig();
+
+        // Format target_biaya for display
+        $items->getCollection()->transform(function ($campaign) {
+            $campaign->target_biaya = LFC::formatRupiah($campaign->target_biaya);
+            return $campaign;
+        });
+
+        $categoryOptions = Campaign::getCategoryOptions();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody' => view('components.admin-index.index-table', [
+                    'items' => $items,
+                    'tableConfig' => $tableConfig,
+                ])->render(),
+                'pagination' => $items->appends($request->query())->links()->render(),
+                'total' => $items->total(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem()
+            ]);
+        }
+
+        return view('admin-page.service.celengan-syahid.campaign.index', compact('items', 'tableConfig', 'categoryOptions'))
+            ->with('title', 'Celengan Syahid');
     }
 
     public function createAdminCampaign()
@@ -315,19 +403,56 @@ class CelenganSyahidController extends Controller
 
     public function destroyAdminCampaign($id)
     {
-        $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
-        $campaignModel = Campaign::findOrFail($id);
+        try {
+            $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
+            $campaignModel = Campaign::findOrFail($id);
 
-        if (!empty($campaignModel->gdrive_id)) {
-            $gdriveService->deleteImage($campaignModel->gdrive_id);
+            if (!empty($campaignModel->gdrive_id)) {
+                $gdriveService->deleteImage($campaignModel->gdrive_id);
+            }
+
+            if (!empty($campaignModel->gdrive_id_1)) {
+                $gdriveService->deleteImage($campaignModel->gdrive_id_1);
+            }
+
+            Campaign::deleteCampaign($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Campaign has been deleted!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting campaign: ' . $e->getMessage()
+            ], 500);
         }
+    }
 
-        if (!empty($campaignModel->gdrive_id_1)) {
-            $gdriveService->deleteImage($campaignModel->gdrive_id_1);
+    public function bulkDeleteCampaign(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No campaigns selected for deletion'
+                ], 400);
+            }
+
+            $deleted = Campaign::bulkDeleteCampaigns($ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$deleted} campaign(s) have been deleted!"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting campaigns: ' . $e->getMessage()
+            ], 500);
         }
-
-        Campaign::deleteCampaign($id);
-        return redirect()->back();
     }
 
     public function storeCity(request $request)
@@ -338,4 +463,3 @@ class CelenganSyahidController extends Controller
         return response()->json($cities);
     }
 }
-
