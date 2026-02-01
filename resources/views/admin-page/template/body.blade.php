@@ -264,7 +264,11 @@
             }
 
             .dark-mode-checkbox:checked + .dark-mode-toggle .toggle-thumb {
-                transform: translateX(25px);
+                transform: translateX(23px);
+            }
+
+            .dark-mode-checkbox:checked + .dark-mode-toggle:hover .toggle-thumb {
+                transform: translateX(23px) scale(1.1);
             }
 
             .sun-icon svg, .moon-icon svg {
@@ -421,6 +425,13 @@
             .dark-mode-transition-ready .dropdown-menu {
                 transition: none !important;
                 animation: none !important;
+            }
+        }
+
+        /* View Mode Action Buttons - full width on mobile */
+        @media (max-width: 575.98px) {
+            .flex-column.gap-2 > .btn {
+                width: 100%;
             }
         }
     </style>
