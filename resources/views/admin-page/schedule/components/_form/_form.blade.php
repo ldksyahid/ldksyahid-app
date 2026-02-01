@@ -167,7 +167,7 @@
                                             <label class="form-label fw-bold">Created At</label>
                                             <div class="form-control-plaintext">
                                                 {{ \Carbon\Carbon::parse($schedule->created_at)->isoFormat('dddd, DD MMMM YYYY') }}
-                                                <small class="text-muted">({{ \Carbon\Carbon::parse($schedule->created_at)->format('H:i T') }})</small>
+                                                <small class="text-muted ms-1">({{ \Carbon\Carbon::parse($schedule->created_at)->format('H:i T') }})</small>
                                             </div>
                                         </div>
 
@@ -175,7 +175,7 @@
                                             <label class="form-label fw-bold">Last Updated</label>
                                             <div class="form-control-plaintext">
                                                 {{ \Carbon\Carbon::parse($schedule->updated_at)->isoFormat('dddd, DD MMMM YYYY') }}
-                                                <small class="text-muted">({{ \Carbon\Carbon::parse($schedule->updated_at)->format('H:i T') }})</small>
+                                                <small class="text-muted ms-1">({{ \Carbon\Carbon::parse($schedule->updated_at)->format('H:i T') }})</small>
                                             </div>
                                         </div>
                                     </div>
