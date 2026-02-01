@@ -264,7 +264,11 @@
             }
 
             .dark-mode-checkbox:checked + .dark-mode-toggle .toggle-thumb {
-                transform: translateX(25px);
+                transform: translateX(23px);
+            }
+
+            .dark-mode-checkbox:checked + .dark-mode-toggle:hover .toggle-thumb {
+                transform: translateX(23px) scale(1.1);
             }
 
             .sun-icon svg, .moon-icon svg {
