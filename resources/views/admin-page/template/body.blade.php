@@ -427,6 +427,13 @@
                 animation: none !important;
             }
         }
+
+        /* View Mode Action Buttons - full width on mobile */
+        @media (max-width: 575.98px) {
+            .flex-column.gap-2 > .btn {
+                width: 100%;
+            }
+        }
     </style>
 
     <script>
