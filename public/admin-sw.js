@@ -18,3 +18,12 @@ self.addEventListener('fetch', function(event) {
         );
     }
 });
+
+// Force update: activate new service worker immediately
+self.addEventListener('install', function(event) {
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', function(event) {
+    event.waitUntil(clients.claim());
+});
