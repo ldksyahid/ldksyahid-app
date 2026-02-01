@@ -105,6 +105,16 @@
         .cs-section-title { font-size: 1rem; }
         .cs-chart-container { min-height: 300px; }
         .cs-info-icon { width: 40px; height: 40px; font-size: 1rem; }
+        .cs-info-card {
+            min-height: 0;
+        }
+        .cs-info-card .fw-semibold {
+            font-size: 0.75rem;
+            word-break: break-word;
+        }
+        .cs-info-card .fw-bold {
+            font-size: 0.7rem;
+        }
     }
 </style>
 @endsection

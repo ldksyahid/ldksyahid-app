@@ -119,7 +119,7 @@
                                         Embed Youtube Link
                                     </label>
                                     @if ($operation === 'view')
-                                        <div class="form-control-plaintext">
+                                        <div class="form-control-plaintext" style="word-break: break-all;">
                                             @if($gallery->linkEmbedYoutube)
                                                 <a href="{{ $gallery->linkEmbedYoutube }}" target="_blank">{{ $gallery->linkEmbedYoutube }}</a>
                                             @else
@@ -142,7 +142,7 @@
                                         Documentation Link
                                     </label>
                                     @if ($operation === 'view')
-                                        <div class="form-control-plaintext">
+                                        <div class="form-control-plaintext" style="word-break: break-all;">
                                             @if($gallery->linkDoc)
                                                 <a href="{{ $gallery->linkDoc }}" target="_blank">{{ $gallery->linkDoc }}</a>
                                             @else
@@ -229,8 +229,8 @@
                         <h5 class="section-title mb-3"><i class="fas fa-images me-2"></i>Additional Photos (Optional)</h5>
                         <div class="row">
                             @for($i = 1; $i <= 12; $i++)
-                                <div class="col-md-4 col-lg-3 mb-3">
-                                    <label for="photo{{ $i }}" class="form-label">Photo {{ $i }}</label>
+                                <div class="col-6 col-md-4 col-lg-3 mb-3">
+                                    <label for="photo{{ $i }}" class="form-label text-center d-block">Photo {{ $i }}</label>
                                     <div class="image-preview-container small-preview {{ ($gallery && $gallery->getPhotoUrl($i)) ? 'has-image' : '' }} mb-2">
                                         @if($gallery && $gallery->getPhotoUrl($i))
                                             <img id="photoPreview{{ $i }}" src="{{ $gallery->getPhotoUrl($i) }}" alt="Photo {{ $i }} Preview">

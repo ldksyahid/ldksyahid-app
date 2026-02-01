@@ -126,5 +126,10 @@
         .image-preview-container.group-photo {
             max-width: 100%;
         }
+        .col-md-4.col-lg-3.mb-3 > .form-label {
+            font-size: 0.8rem;
+            display: block;
+            text-align: center;
+        }
     }
 </style>
