@@ -1599,7 +1599,7 @@
     {{-- END Datatable FROM https://brilliansolution.com/tutorial-laravel-8-datatables-yajra-datatables/--}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@12"></script>
     <script src="{{ asset('admin-page-ext-rsrc/lib/chart/chart.min.js') }}"></script>
     <script src="{{ asset('admin-page-ext-rsrc/lib/easing/easing.min.js') }}"></script>
     <script src="{{ asset('admin-page-ext-rsrc/lib/waypoints/waypoints.min.js') }}"></script>
@@ -1822,7 +1822,7 @@
     <script>
         // Register service worker to intercept navigation and prevent cached JSON
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/admin-sw.js', { scope: '/admin/' });
+            navigator.serviceWorker.register('/admin-sw.js?v.1.000.0', { scope: '/admin/' });
         }
     </script>
 
