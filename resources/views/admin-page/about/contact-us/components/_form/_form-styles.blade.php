@@ -56,6 +56,10 @@
         min-height: 38px;
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
+    }
+    .form-control-plaintext a {
+        word-break: break-all;
     }
     .form-label.fw-bold {
         color: #495057;
