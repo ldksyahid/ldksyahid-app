@@ -1818,14 +1818,6 @@
         });
     </script>
 
-    {{-- Fix: browser back/forward button showing raw JSON from DataTables AJAX --}}
-    <script>
-        // Register service worker to intercept navigation and prevent cached JSON
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/admin-sw.js?v.1.003.0', { scope: '/admin/' });
-        }
-    </script>
-
     {{-- Script Admin Page Start --}}
     @yield('scripts')
     @stack('scripts')
