@@ -351,16 +351,20 @@
 .nav-menu {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.15rem;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
+.nav-menu .nav-item {
+    position: relative;
+}
+
 .nav-menu .nav-link {
     display: flex;
     align-items: center;
-    padding: 0.5rem 0.85rem;
+    padding: 0.5rem 0.75rem;
     color: var(--dark);
     font-weight: 500;
     font-size: 0.9rem;
@@ -368,6 +372,7 @@
     border-radius: 12px;
     transition: all 0.2s ease;
     position: relative;
+    white-space: nowrap;
 }
 
 /* Top state - nav links on light bg */
@@ -937,6 +942,10 @@
 
     .nav-actions .dropdown:hover .dropdown-fun[data-bs-popper] {
         transform: translateX(0) translateY(0) !important;
+    }
+
+    .dropdown-toggle::after {
+        display: none;
     }
 }
 </style>
