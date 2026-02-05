@@ -126,6 +126,12 @@
         border-radius: 24px;
         overflow: hidden;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        animation: zoomInOut 3s ease-in-out infinite;
+    }
+
+    @keyframes zoomInOut {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.01); }
     }
 
     @media (min-width: 992px) {
