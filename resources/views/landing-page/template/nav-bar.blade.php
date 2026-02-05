@@ -33,6 +33,7 @@
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle {{ ($title === "Tentang Kami") ? "active" : "" }}">
                     <span>Tentang Kami</span>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-fun">
                     <li><a href="/about/structure" class="dropdown-item"><i class="fas fa-sitemap"></i>Struktur Pengurus</a></li>
@@ -74,6 +75,7 @@
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle {{ ($title === "Lainnya") ? "active" : "" }}">
                     <span>Lainnya</span>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-fun">
                     <li><a href="/laporan" class="dropdown-item"><i class="fas fa-file-alt"></i>Laporan</a></li>
@@ -394,78 +396,131 @@
     background: var(--primary);
 }
 
+/* Dropdown Arrow */
+.dropdown-arrow {
+    font-size: 0.65rem;
+    margin-left: 0.35rem;
+    transition: transform 0.3s ease;
+}
+
+.nav-menu .nav-item.dropdown:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
 /* Dropdown - show on hover */
-.nav-item.dropdown {
+.nav-menu .nav-item.dropdown {
     position: relative;
 }
 
-.dropdown-fun {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    min-width: 220px;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    padding: 0.75rem;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.25s ease;
-    border: none;
-    margin-top: 0;
-    z-index: 1100;
+.nav-menu .dropdown-fun,
+.nav-actions .dropdown-fun {
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) translateY(10px) !important;
+    min-width: 240px !important;
+    background: white !important;
+    border-radius: 20px !important;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15), 0 10px 30px rgba(0, 167, 157, 0.1) !important;
+    padding: 1rem !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: 1px solid rgba(0, 167, 157, 0.08) !important;
+    z-index: 1100 !important;
+    list-style: none !important;
+    display: block !important;
+    margin: 0 !important;
 }
+
 
 /* Show dropdown on hover - Desktop */
 @media (min-width: 992px) {
-    .nav-item.dropdown:hover > .dropdown-fun,
-    .nav-item.dropdown:focus-within > .dropdown-fun {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
+    .nav-menu .nav-item.dropdown:hover > .dropdown-fun,
+    .nav-menu .nav-item.dropdown:focus-within > .dropdown-fun {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: translateX(-50%) translateY(0) !important;
     }
 
     .nav-actions .dropdown:hover > .dropdown-fun,
     .nav-actions .dropdown:focus-within > .dropdown-fun {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: translateX(-50%) translateY(0) !important;
     }
+
+    /* For right-aligned dropdowns */
+    .nav-actions .dropdown-fun,
+    .nav-actions .dropdown-menu-end.dropdown-fun {
+        left: auto !important;
+        right: 0 !important;
+        transform: translateX(0) translateY(10px) !important;
+    }
+
+    .nav-actions .dropdown:hover > .dropdown-fun,
+    .nav-actions .dropdown:focus-within > .dropdown-fun {
+        transform: translateX(0) translateY(0) !important;
+    }
+
 }
 
 /* Also show on click for fallback */
 .dropdown-fun.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateX(-50%) translateY(0) !important;
 }
 
-.dropdown-fun .dropdown-item {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    color: var(--dark);
-    border-radius: 10px;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
+.nav-menu .dropdown-fun .dropdown-item,
+.nav-actions .dropdown-fun .dropdown-item {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.875rem 1.25rem !important;
+    color: var(--dark) !important;
+    border-radius: 12px !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    background: transparent !important;
 }
 
-.dropdown-fun .dropdown-item i {
-    width: 24px;
-    color: var(--primary);
-    margin-right: 0.75rem;
-    font-size: 0.9rem;
+
+.nav-menu .dropdown-fun .dropdown-item i,
+.nav-actions .dropdown-fun .dropdown-item i {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: var(--primary-light) !important;
+    color: var(--primary) !important;
+    border-radius: 10px !important;
+    margin-right: 0.875rem !important;
+    font-size: 0.85rem !important;
+    transition: all 0.3s ease !important;
 }
 
-.dropdown-fun .dropdown-item:hover {
-    background: var(--primary-light);
-    color: var(--primary);
-    transform: translateX(5px);
+.nav-menu .dropdown-fun .dropdown-item:hover,
+.nav-actions .dropdown-fun .dropdown-item:hover {
+    background: linear-gradient(135deg, var(--primary-light), rgba(0, 167, 157, 0.08)) !important;
+    color: var(--primary) !important;
+    transform: translateX(5px) !important;
+    padding-left: 1.5rem !important;
 }
 
-.dropdown-fun li + li {
-    margin-top: 0.25rem;
+.nav-menu .dropdown-fun .dropdown-item:hover i,
+.nav-actions .dropdown-fun .dropdown-item:hover i {
+    background: var(--primary) !important;
+    color: white !important;
+    transform: scale(1.1) !important;
+}
+
+.nav-menu .dropdown-fun li + li,
+.nav-actions .dropdown-fun li + li {
+    margin-top: 0.35rem;
 }
 
 /* User Button */
@@ -858,18 +913,30 @@
     }
 }
 
+/* Override Bootstrap popper positioning */
 @media (min-width: 992px) {
-    .dropdown-fun[data-bs-popper] {
-        transform: none !important;
+    .nav-menu .dropdown-fun[data-bs-popper],
+    .nav-actions .dropdown-fun[data-bs-popper] {
+        transform: translateX(-50%) translateY(10px) !important;
         inset: auto !important;
-        top: 100% !important;
-        left: 0 !important;
-        margin-top: 0.5rem !important;
+        top: calc(100% + 8px) !important;
+        left: 50% !important;
+        margin-top: 0 !important;
     }
 
-    .dropdown-menu-end.dropdown-fun[data-bs-popper] {
+    .nav-menu .nav-item.dropdown:hover .dropdown-fun[data-bs-popper],
+    .nav-actions .dropdown:hover .dropdown-fun[data-bs-popper] {
+        transform: translateX(-50%) translateY(0) !important;
+    }
+
+    .nav-actions .dropdown-fun[data-bs-popper] {
         left: auto !important;
         right: 0 !important;
+        transform: translateX(0) translateY(10px) !important;
+    }
+
+    .nav-actions .dropdown:hover .dropdown-fun[data-bs-popper] {
+        transform: translateX(0) translateY(0) !important;
     }
 }
 </style>
