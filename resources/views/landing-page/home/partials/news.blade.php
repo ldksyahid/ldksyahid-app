@@ -1,114 +1,370 @@
-@if((new \Jenssegers\Agent\Agent())->isDesktop())
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f5f6fa" fill-opacity="1" d="M0,160L30,181.3C60,203,120,245,180,256C240,267,300,245,360,202.7C420,160,480,96,540,80C600,64,660,96,720,128C780,160,840,192,900,192C960,192,1020,160,1080,144C1140,128,1200,128,1260,144C1320,160,1380,192,1410,208L1440,224L1440,320L0,320Z"></path></svg>
-
-    <div class="py-5" style="background-color: #f5f6fa">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-5">
-            <div>
-                <h6 class="text-uppercase text-primary fw-bold mb-2">Berita</h6>
-                <h2 class="fw-bold mb-2">Berita Terbaru dari Kami</h2>
-                <p class="text-muted mb-0">Berita Terbaru yang di-publish oleh kami untuk kamu yang ketinggalan informasi.</p>
+{{-- News Section - Fun & Modern Design --}}
+<section class="news-fun py-5">
+    <div class="container">
+        {{-- Section Header --}}
+        <div class="row mb-4 mb-lg-5 align-items-center justify-content-between wow fadeInUp" data-wow-delay="0.1s">
+            <div class="col-lg-8 mb-3 mb-lg-0">
+                <div class="section-badge-news">
+                    <span class="badge-emoji">📰</span>
+                    <span>Berita</span>
+                </div>
+                <h2 class="section-title-fun">
+                    Berita Terbaru
+                    <span class="title-emoji-news">🔥</span>
+                </h2>
+                <p class="section-description-fun">
+                    Info terkini dari LDK Syahid. Jangan sampai ketinggalan ya!
+                </p>
             </div>
-            <div>
-                <a href="/news" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-medium shadow-sm">
-                    Lihat Semua Berita <i class="fas fa-arrow-right ms-2"></i>
+            <div class="col-lg-4 text-lg-end">
+                <a href="/news" class="btn-view-all-news">
+                    <span>Semua Berita</span>
+                    <i class="fas fa-newspaper"></i>
                 </a>
             </div>
         </div>
 
-        <div class="row g-4">
-            @forelse($postnews as $key => $postnews)
-            <div class="col-12">
-                <div class="card border-0 shadow rounded-4 overflow-hidden mb-4 news-card wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <a href="/news/{{ $postnews->id }}">
-                                <img src="https://lh3.googleusercontent.com/d/{{ $postnews->gdrive_id }}" alt="{{ $postnews->title }}" class="img-fluid h-100 w-100 object-fit-cover">
-                            </a>
+        {{-- News Cards --}}
+        <div class="news-list">
+            @forelse($postnews as $key => $news)
+            <div class="news-card-fun wow fadeInUp" data-wow-delay="{{ 0.1 + ($key * 0.1) }}s">
+                <div class="news-card-inner">
+                    {{-- Image --}}
+                    <a href="/news/{{ $news->id }}" class="news-image-link">
+                        <img src="https://lh3.googleusercontent.com/d/{{ $news->gdrive_id }}"
+                             alt="{{ $news->title }}"
+                             class="news-img">
+                        <div class="news-emoji-badge">📰</div>
+                    </a>
+
+                    {{-- Content --}}
+                    <div class="news-content">
+                        {{-- Date --}}
+                        <div class="news-date-tag">
+                            <i class="far fa-calendar-alt"></i>
+                            <span class="d-none d-md-inline">{{ \Carbon\Carbon::parse($news->datepublish)->isoFormat('dddd, D MMMM Y') }}</span>
+                            <span class="d-md-none">{{ \Carbon\Carbon::parse($news->datepublish)->isoFormat('D MMM Y') }}</span>
                         </div>
-                        <div class="col-md-8 d-flex flex-column justify-content-between p-4">
-                            <div>
-                                <h5 class="text-primary fw-bold mb-2">
-                                    <a href="/news/{{ $postnews->id }}" class="text-decoration-none text-primary">{{ $postnews->title }}</a>
-                                </h5>
-                                <p class="text-muted small mb-2">
-                                    {{ \Carbon\Carbon::parse($postnews->datepublish)->isoFormat('dddd, D MMMM Y') }}
-                                </p>
-                                <p class="text-muted" style="text-align: justify;">
-                                    Reporter {{ $postnews->reporter }}; Editor {{ $postnews->editor }} <br>
-                                    {!! substr(strip_tags($postnews->body), 0, 120) !!}… <a href="/news/{{ $postnews->id }}/show">Selanjutnya</a>
-                                </p>
+
+                        {{-- Title --}}
+                        <h4 class="news-title">
+                            <a href="/news/{{ $news->id }}">{{ $news->title }}</a>
+                        </h4>
+
+                        {{-- Meta (Desktop) --}}
+                        <div class="news-meta d-none d-md-flex">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span>{{ $news->reporter }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-edit"></i>
+                                <span>{{ $news->editor }}</span>
                             </div>
                         </div>
+
+                        {{-- Excerpt (Desktop) --}}
+                        <p class="news-excerpt d-none d-lg-block">
+                            {!! substr(strip_tags($news->body), 0, 120) !!}...
+                        </p>
+
+                        {{-- Read Button --}}
+                        <a href="/news/{{ $news->id }}/show" class="news-read-btn">
+                            <span class="d-none d-md-inline">Baca Selengkapnya</span>
+                            <span class="d-md-none">Baca</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
             @empty
-                <h3 class="text-center">Berita Belum Tersedia</h3>
+            <div class="empty-state-news">
+                <div class="empty-emoji">📭</div>
+                <h4>Belum Ada Berita</h4>
+                <p>Berita terbaru akan segera hadir. Stay tuned!</p>
+            </div>
             @endforelse
         </div>
     </div>
-</div>
-
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f5f6fa" fill-opacity="1" d="M0,64L17.1,101.3C34.3,139,69,213,103,208C137.1,203,171,117,206,85.3C240,53,274,75,309,80C342.9,85,377,75,411,80C445.7,85,480,107,514,112C548.6,117,583,107,617,96C651.4,85,686,75,720,80C754.3,85,789,107,823,128C857.1,149,891,171,926,149.3C960,128,994,64,1029,37.3C1062.9,11,1097,21,1131,26.7C1165.7,32,1200,32,1234,58.7C1268.6,85,1303,139,1337,160C1371.4,181,1406,171,1423,165.3L1440,160L1440,0L1422.9,0C1405.7,0,1371,0,1337,0C1302.9,0,1269,0,1234,0C1200,0,1166,0,1131,0C1097.1,0,1063,0,1029,0C994.3,0,960,0,926,0C891.4,0,857,0,823,0C788.6,0,754,0,720,0C685.7,0,651,0,617,0C582.9,0,549,0,514,0C480,0,446,0,411,0C377.1,0,343,0,309,0C274.3,0,240,0,206,0C171.4,0,137,0,103,0C68.6,0,34,0,17,0L0,0Z"></path></svg>
+</section>
 
 <style>
-    .object-fit-cover {
-        object-fit: cover;
+    .news-fun {
+        background: transparent;
     }
 
-    .news-card {
+    /* Section Badge */
+    .section-badge-news {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--primary-light);
+        border: 1px solid rgba(0, 167, 157, 0.2);
+        border-radius: 50px;
+        padding: 0.5rem 1.25rem;
+        margin-bottom: 0.75rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    .section-title-fun {
+        font-family: var(--font-primary);
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .title-emoji-news {
+        display: inline-block;
+        animation: fireAnimation 0.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes fireAnimation {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.2); }
+    }
+
+    .section-description-fun {
+        color: var(--secondary);
+        font-size: 1rem;
+    }
+
+    /* View All Button */
+    .btn-view-all-news {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: var(--primary-gradient);
+        color: white;
+        padding: 0.875rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 167, 157, 0.3);
         transition: all 0.3s ease;
     }
 
-    .news-card:hover {
+    .btn-view-all-news:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 167, 157, 0.4);
+        color: white;
+    }
+
+    /* News List */
+    .news-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* News Card */
+    .news-card-fun {
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+        transition: all 0.4s ease;
+    }
+
+    .news-card-fun:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    }
+
+    .news-card-inner {
+        display: flex;
+        align-items: stretch;
+    }
+
+    /* Image */
+    .news-image-link {
+        position: relative;
+        width: 35%;
+        min-height: 200px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .news-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .news-card-fun:hover .news-img {
+        transform: scale(1.1);
+    }
+
+    .news-emoji-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        width: 45px;
+        height: 45px;
+        background: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Content */
+    .news-content {
+        flex: 1;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .news-date-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--primary-light);
+        color: var(--primary);
+        padding: 0.375rem 0.875rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        width: fit-content;
+    }
+
+    .news-title {
+        font-family: var(--font-primary);
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
+    }
+
+    .news-title a {
+        color: var(--dark);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .news-title a:hover {
+        color: var(--primary);
+    }
+
+    /* Meta */
+    .news-meta {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        color: var(--secondary);
+        font-size: 0.85rem;
+    }
+
+    .meta-item i {
+        color: var(--primary);
+        font-size: 0.75rem;
+    }
+
+    /* Excerpt */
+    .news-excerpt {
+        color: var(--secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    /* Read Button */
+    .news-read-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--primary-gradient);
+        color: white;
+        padding: 0.625rem 1.25rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin-top: auto;
+        width: fit-content;
+    }
+
+    .news-read-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 167, 157, 0.4);
+        color: white;
+    }
+
+    .news-read-btn i {
+        transition: transform 0.3s ease;
+    }
+
+    .news-read-btn:hover i {
+        transform: translateX(5px);
+    }
+
+    /* Empty State */
+    .empty-state-news {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+    }
+
+    .empty-state-news .empty-emoji {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state-news h4 {
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state-news p {
+        color: var(--secondary);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 767.98px) {
+        .news-image-link {
+            width: 40%;
+            min-height: 150px;
+        }
+
+        .news-content {
+            padding: 1rem;
+        }
+
+        .news-title {
+            font-size: 0.95rem;
+        }
+
+        .news-emoji-badge {
+            width: 35px;
+            height: 35px;
+            font-size: 1.1rem;
+            top: 10px;
+            left: 10px;
+        }
+
+        .section-title-fun {
+            font-size: 1.5rem;
+        }
+
+        .btn-view-all-news {
+            width: 100%;
+            justify-content: center;
+        }
     }
 </style>
-@endif
-
-
-
-@if((new \Jenssegers\Agent\Agent())->isMobile())
-<div class="container-xxl py-3" style="background-color: #f5f6fa">
-    <div class="container">
-        <div class="row g-5 mb-5 wow fadeInUp" data-wow-delay="0.5s">
-            <div class="col col-12 text-end">
-                <div class="border-end border-5 border-primary px-4">
-                    <h6 class="text-body text-uppercase mb-2 mobile-font-2">&mdash; Berita</h6>
-                    <h1 class="display-6 mb-0 mobile-font-4">
-                        Berita Terbaru <br> dari Kami
-                    </h1>
-                </div>
-                <p class="mb-0 mt-1 mobile-font-2">
-                    Berita Terbaru yang di publish oleh kami untuk kamu yang ketinggalan Informasi
-                </p>
-            </div>
-            <div class="col-lg-12 mt-4">
-                @forelse($postnews as $key => $postnews)
-                <div class="row">
-                    <div class="col-5" style="padding-right:2.5px">
-                        <div>
-                            <a href="/news/{{ $postnews->id }}"><img src="https://lh3.googleusercontent.com/d/{{ $postnews->gdrive_id }}" alt="" class="card-img w-100" style="border-radius: 5px;"></a>
-                        </div>
-                    </div>
-                    <div class="col-7" style="padding-left:2.5px;">
-                        <div style="">
-                            <a href="/news/{{ $postnews->id }}"><h1 class="display-6 mb-0 mobile-font-2 text-primary">{{ $postnews->title }}</h1></a>
-                            <p class="mobile-font-1">{!!  substr(strip_tags($postnews->body), 0, 60) !!} <br> <span style="font-size: 10px;">({{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('D') }} {{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postnews->datepublish )->isoFormat('Y') }})</span></p>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                @empty
-                    <h3 class="text-center">Berita Belum Tersedia</h3>
-                @endforelse
-                <div class="text-center">
-                    <a href="/news"><i class="fas fa-angle-down fa-2x text-primary flex-shrink-0 me-3"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
