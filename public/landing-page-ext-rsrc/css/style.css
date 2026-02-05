@@ -1829,17 +1829,17 @@ textarea.form-control {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--gray-300);
+    background: #f5f5f5;
     border-radius: var(--radius-pill);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--dark-soft);
+    background: #c8c8c8;
     border-radius: var(--radius-pill);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--dark);
+    background: #b0b0b0;
 }
 
 /* ========================================

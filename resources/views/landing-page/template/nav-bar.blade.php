@@ -304,9 +304,7 @@
 .brand-logo {
     width: 42px;
     height: 42px;
-    border-radius: 12px;
     transition: transform 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand-fun:hover .brand-logo {
