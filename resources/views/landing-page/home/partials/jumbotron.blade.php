@@ -1,56 +1,39 @@
 {{-- Jumbotron / Hero Section - Fun & Modern Design --}}
 <section class="hero-fun">
-    {{-- Decorative Elements --}}
-    <div class="hero-decorations">
-        <div class="hero-deco hero-deco-1"></div>
-        <div class="hero-deco hero-deco-2"></div>
-        <div class="hero-deco hero-deco-3"></div>
-        <div class="hero-sparkle hero-sparkle-1">✨</div>
-        <div class="hero-sparkle hero-sparkle-2">⭐</div>
-        <div class="hero-sparkle hero-sparkle-3">🌟</div>
-    </div>
-
     <div class="hero-carousel-wrapper">
-        <div id="header-carousel" class="carousel slide carousel-fade hero-carousel-card" data-bs-ride="carousel">
+        <div id="header-carousel" class="carousel slide carousel-fade hero-carousel-card" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-inner">
             @forelse($postjumbotron as $key => $post)
             <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-                <div class="hero-slide">
+                <div class="hero-slide has-content">
                     <img class="hero-image"
                          src="https://lh3.googleusercontent.com/d/{{ $post->gdrive_id }}"
                          alt="{{ $post->title }}" />
 
-                    {{-- Fun Gradient Overlay --}}
+                    {{-- Dark Overlay for readability --}}
                     <div class="hero-overlay-fun"></div>
 
-                    {{-- Content --}}
-                    <div class="hero-content-wrapper">
+                    {{-- Content (Desktop) --}}
+                    <div class="hero-content-wrapper d-none d-lg-block">
                         <div class="container">
                             <div class="row justify-content-center justify-content-lg-start">
                                 <div class="col-lg-8 col-xl-7">
                                     <div class="hero-content-box">
-                                        {{-- Badge --}}
                                         <div class="hero-badge animate__animated animate__fadeInDown">
                                             <span class="badge-icon">🎉</span>
                                             <span>LDK Syahid</span>
                                         </div>
-
-                                        {{-- Title --}}
                                         <h1 class="hero-title-fun animate__animated animate__fadeInUp">
                                             {{ $post->title }}
                                         </h1>
-
                                         @if ($post->description)
                                         <p class="hero-subtitle-fun animate__animated animate__fadeIn animate__delay-1s">
                                             {{ $post->description }}
                                         </p>
                                         @endif
-
                                         @if ($post->btnname && $post->btnlink)
                                         <div class="hero-buttons animate__animated animate__fadeInUp animate__delay-2s">
-                                            <a href="{{ $post->btnlink }}"
-                                               target="_blank"
-                                               class="hero-btn-primary">
+                                            <a href="{{ $post->btnlink }}" target="_blank" class="hero-btn-primary">
                                                 <span>{{ $post->btnname }}</span>
                                                 <i class="fas fa-arrow-right"></i>
                                             </a>
@@ -66,6 +49,29 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- Mobile Content (below image) --}}
+                <div class="hero-mobile-content d-lg-none">
+                    <div class="hero-mobile-badge">
+                        <span class="badge-icon">🎉</span>
+                        <span>LDK Syahid</span>
+                    </div>
+                    <h2 class="hero-mobile-title">{{ $post->title }}</h2>
+                    @if ($post->description)
+                    <p class="hero-mobile-desc">{{ Str::limit($post->description, 100) }}</p>
+                    @endif
+                    @if ($post->btnname && $post->btnlink)
+                    <a href="{{ $post->btnlink }}" target="_blank" class="hero-mobile-btn">
+                        <span>{{ $post->btnname }}</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    @else
+                    <a href="#about-section" class="hero-mobile-btn">
+                        <span>Kenali Kami</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    @endif
+                </div>
             </div>
             @empty
             <div class="carousel-item active">
@@ -73,7 +79,20 @@
                     <img class="hero-image"
                          src="https://lh3.googleusercontent.com/d/1Cur2mISU8cwkWcyBuiwv9aGYNTxsZMPo"
                          alt="Default" />
-                    <div class="hero-overlay-fun"></div>
+                </div>
+
+                {{-- Mobile default content --}}
+                <div class="hero-mobile-content d-lg-none">
+                    <div class="hero-mobile-badge">
+                        <span class="badge-icon">🕌</span>
+                        <span>LDK Syahid UIN Jakarta</span>
+                    </div>
+                    <h2 class="hero-mobile-title">Bersama Meraih Ridho Ilahi</h2>
+                    <p class="hero-mobile-desc">Membangun generasi muda yang berilmu, berakhlak, dan bermanfaat bagi umat.</p>
+                    <a href="#about-section" class="hero-mobile-btn">
+                        <span>Kenali Kami</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
                 </div>
             </div>
             @endforelse
@@ -88,7 +107,6 @@
                     data-bs-slide-to="{{ $key }}"
                     class="indicator-dot {{ $key === 0 ? 'active' : '' }}"
                     aria-label="Slide {{ $key + 1 }}">
-                <span class="dot-fill"></span>
             </button>
             @endforeach
         </div>
@@ -112,7 +130,7 @@
         position: relative;
         overflow: visible;
         background: transparent;
-        padding-top: 80px; /* Space for navbar */
+        padding-top: 80px;
         margin-bottom: 0;
     }
 
@@ -126,12 +144,7 @@
         border-radius: 24px;
         overflow: hidden;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        animation: zoomInOut 3s ease-in-out infinite;
-    }
-
-    @keyframes zoomInOut {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.01); }
+        position: relative;
     }
 
     @media (min-width: 992px) {
@@ -142,64 +155,6 @@
         .hero-carousel-card {
             border-radius: 32px;
         }
-    }
-
-    /* Decorative Elements - Hidden as we use body decorations */
-    .hero-decorations {
-        display: none;
-    }
-
-    .hero-deco {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.1;
-    }
-
-    .hero-deco-1 {
-        width: 200px;
-        height: 200px;
-        background: var(--primary);
-        top: 10%;
-        right: -50px;
-        animation: floatBubble 8s ease-in-out infinite;
-    }
-
-    .hero-deco-2 {
-        width: 150px;
-        height: 150px;
-        background: var(--primary-dark);
-        bottom: 20%;
-        left: -30px;
-        animation: floatBubble 10s ease-in-out infinite reverse;
-    }
-
-    .hero-deco-3 {
-        width: 100px;
-        height: 100px;
-        background: var(--secondary);
-        top: 50%;
-        right: 10%;
-        animation: floatBubble 12s ease-in-out infinite;
-    }
-
-    .hero-sparkle {
-        position: absolute;
-        font-size: 1.5rem;
-        animation: sparkle 3s ease-in-out infinite;
-    }
-
-    .hero-sparkle-1 { top: 15%; left: 10%; animation-delay: 0s; }
-    .hero-sparkle-2 { top: 30%; right: 15%; animation-delay: 1s; }
-    .hero-sparkle-3 { bottom: 25%; left: 20%; animation-delay: 2s; }
-
-    @keyframes floatBubble {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        50% { transform: translate(20px, -30px) scale(1.1); }
-    }
-
-    @keyframes sparkle {
-        0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
-        50% { opacity: 0.8; transform: scale(1.2) rotate(180deg); }
     }
 
     .hero-slide {
@@ -220,9 +175,20 @@
         object-fit: cover;
     }
 
-    /* Overlay removed for better image visibility */
+    /* Overlay - only on slides with content */
     .hero-overlay-fun {
         display: none;
+    }
+
+    .hero-slide.has-content .hero-overlay-fun {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.35) 100%);
+        z-index: 2;
     }
 
     .hero-content-wrapper {
@@ -243,7 +209,7 @@
         gap: 0.5rem;
         background: rgba(255, 255, 255, 0.15);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.25);
         border-radius: 50px;
         padding: 0.5rem 1.25rem;
         margin-bottom: 1.5rem;
@@ -275,6 +241,7 @@
         margin-left: auto;
         margin-right: auto;
         line-height: 1.6;
+        text-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
     }
 
     /* Buttons */
@@ -285,56 +252,32 @@
         justify-content: center;
     }
 
-    .hero-btn-primary {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.75rem;
-        background: white;
-        color: var(--primary);
-        padding: 1rem 2rem;
-        border-radius: 50px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    }
-
-    .hero-btn-primary:hover {
-        background: var(--primary);
-        color: white;
-        transform: translateY(-3px);
-        box-shadow: 0 15px 50px rgba(0, 167, 157, 0.4);
-    }
-
-    .hero-btn-primary i {
-        transition: transform 0.3s ease;
-    }
-
-    .hero-btn-primary:hover i {
-        transform: translateX(5px);
-    }
-
+    .hero-btn-primary,
     .hero-btn-secondary {
         display: inline-flex;
         align-items: center;
         gap: 0.75rem;
-        background: transparent;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         color: white;
         padding: 1rem 2rem;
         border-radius: 50px;
         font-weight: 600;
         text-decoration: none;
-        border: 2px solid rgba(255, 255, 255, 0.3);
         transition: all 0.3s ease;
     }
 
-    .hero-btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: white;
+    .hero-btn-primary:hover,
+    .hero-btn-primary:active,
+    .hero-btn-secondary:hover,
+    .hero-btn-secondary:active {
+        background: rgba(255, 255, 255, 0.35);
         color: white;
+        transform: scale(1.1);
     }
 
-    /* Carousel Indicators */
+    /* ===== Carousel Indicators ===== */
     .carousel-indicators-fun {
         position: absolute;
         bottom: 30px;
@@ -355,19 +298,6 @@
         cursor: pointer;
         transition: all 0.3s ease;
         position: relative;
-        overflow: hidden;
-    }
-
-    .indicator-dot .dot-fill {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: white;
-        border-radius: 50%;
-        transform: scale(0);
-        transition: transform 0.3s ease;
     }
 
     .indicator-dot.active {
@@ -376,8 +306,8 @@
         background: white;
     }
 
-    .indicator-dot:hover .dot-fill {
-        transform: scale(1);
+    .indicator-dot:not(.active):hover {
+        background: rgba(255, 255, 255, 0.6);
     }
 
     /* Navigation Arrows */
@@ -404,24 +334,24 @@
     .carousel-nav-prev { left: 25px; }
     .carousel-nav-next { right: 25px; }
 
-    .carousel-nav:hover {
-        background: white;
-        color: var(--primary);
-        transform: translateY(-50%) scale(1.1);
+    .carousel-nav:hover,
+    .carousel-nav:active {
+        background: rgba(255, 255, 255, 0.35);
+        transform: translateY(-50%) scale(1.15);
     }
 
-    /* Desktop Styles */
+    /* ===== Desktop Styles ===== */
     @media (min-width: 992px) {
         .hero-content-box {
             text-align: left;
         }
 
         .hero-title-fun {
-            font-size: 4rem;
+            font-size: 3.5rem;
         }
 
         .hero-subtitle-fun {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             margin-left: 0;
         }
 
@@ -434,50 +364,169 @@
         }
     }
 
-    /* Mobile Styles */
+    /* ===== Mobile Styles ===== */
     @media (max-width: 991.98px) {
         .hero-fun {
-            padding-top: 70px;
+            padding-top: 65px;
         }
 
         .hero-carousel-wrapper {
-            padding: 1rem;
+            padding: 0.75rem;
         }
 
         .hero-carousel-card {
             border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            overflow: visible;
+        }
+
+        .hero-carousel-card .carousel-inner {
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
         }
 
         .hero-slide {
-            min-height: 350px;
-            height: 45vh;
-            max-height: 450px;
+            min-height: 0;
+            height: auto;
+            max-height: none;
         }
 
-        .hero-decorations {
+        .hero-image {
+            position: relative;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .hero-slide.has-content .hero-overlay-fun {
             display: none;
         }
 
         .carousel-nav {
-            display: none;
+            width: 36px;
+            height: 36px;
+            font-size: 0.8rem;
         }
 
-        .hero-title-fun {
-            font-size: 1.75rem;
-        }
+        .carousel-nav-prev { left: 10px; }
+        .carousel-nav-next { right: 10px; }
 
-        .hero-content-wrapper {
-            padding: 80px 0 60px;
-        }
-
-        .hero-btn-primary,
-        .hero-btn-secondary {
-            padding: 0.75rem 1.25rem;
-            font-size: 0.85rem;
+        .carousel-nav:hover,
+        .carousel-nav:active {
+            transform: translateY(-50%) scale(1.15);
         }
 
         .carousel-indicators-fun {
-            bottom: 20px;
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            left: auto;
+            transform: none;
+            gap: 6px;
+            z-index: 5;
+        }
+
+        .indicator-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(0, 167, 157, 0.2);
+        }
+
+        .indicator-dot.active {
+            width: 22px;
+            background: var(--primary);
+        }
+
+        .indicator-dot:not(.active):hover {
+            background: rgba(0, 167, 157, 0.4);
         }
     }
+
+    /* ===== Mobile Content Below Image ===== */
+    .hero-mobile-content {
+        padding: 1rem 1.25rem 1.25rem;
+        text-align: center;
+        background: white;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .hero-mobile-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--primary-light);
+        color: var(--primary);
+        border-radius: 50px;
+        padding: 0.3rem 0.85rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.6rem;
+    }
+
+    .hero-mobile-badge .badge-icon {
+        font-size: 0.85rem;
+    }
+
+    .hero-mobile-title {
+        font-family: var(--font-primary);
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--dark);
+        line-height: 1.3;
+        margin-bottom: 0.4rem;
+    }
+
+    .hero-mobile-desc {
+        font-size: 0.82rem;
+        color: var(--gray);
+        line-height: 1.5;
+        margin-bottom: 0.75rem;
+    }
+
+    .hero-mobile-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        padding: 0.55rem 1.25rem;
+        border-radius: 50px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 167, 157, 0.3);
+    }
+
+    .hero-mobile-btn:hover,
+    .hero-mobile-btn:active {
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(0, 167, 157, 0.4);
+    }
+
+    .hero-mobile-btn i {
+        font-size: 0.7rem;
+        transition: transform 0.3s ease;
+    }
+
+    .hero-mobile-btn:hover i {
+        transform: translateX(3px);
+    }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.getElementById('header-carousel');
+    if (!carousel) return;
+
+    // Update indicator dots on slide change
+    carousel.addEventListener('slid.bs.carousel', function(e) {
+        const dots = document.querySelectorAll('.indicator-dot');
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[e.to]) {
+            dots[e.to].classList.add('active');
+        }
+    });
+});
+</script>
