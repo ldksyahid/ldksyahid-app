@@ -37,7 +37,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-fun">
                     <li>
-                        <a href="/about/structure" class="dropdown-item">
+                        <a href="/about/structure" class="dropdown-item {{ request()->is('about/structure') ? 'active' : '' }}">
                             <div class="dropdown-icon"><i class="fas fa-sitemap"></i></div>
                             <div class="dropdown-text">
                                 <span class="dropdown-title">Struktur Pengurus</span>
@@ -46,7 +46,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/about/contact" class="dropdown-item">
+                        <a href="/about/contact" class="dropdown-item {{ request()->is('about/contact') ? 'active' : '' }}">
                             <div class="dropdown-icon"><i class="fas fa-phone"></i></div>
                             <div class="dropdown-text">
                                 <span class="dropdown-title">Hubungi Kami</span>
@@ -55,7 +55,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/about/gallery" class="dropdown-item">
+                        <a href="/about/gallery" class="dropdown-item {{ request()->is('about/gallery') ? 'active' : '' }}">
                             <div class="dropdown-icon"><i class="fas fa-images"></i></div>
                             <div class="dropdown-text">
                                 <span class="dropdown-title">Galeri</span>
@@ -103,7 +103,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-fun">
                     <li>
-                        <a href="/laporan" class="dropdown-item">
+                        <a href="/laporan" class="dropdown-item {{ request()->is('laporan') ? 'active' : '' }}">
                             <div class="dropdown-icon"><i class="fas fa-file-alt"></i></div>
                             <div class="dropdown-text">
                                 <span class="dropdown-title">Laporan</span>
@@ -112,7 +112,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/schedule" class="dropdown-item">
+                        <a href="/schedule" class="dropdown-item {{ request()->is('schedule') ? 'active' : '' }}">
                             <div class="dropdown-icon"><i class="fas fa-calendar-alt"></i></div>
                             <div class="dropdown-text">
                                 <span class="dropdown-title">Jadwal</span>
@@ -218,16 +218,16 @@
                 <span>Beranda</span>
             </a>
 
-            <div class="mobile-dropdown">
+            <div class="mobile-dropdown {{ ($title === 'Tentang Kami') ? 'open' : '' }}">
                 <button class="mobile-dropdown-toggle">
                     <div class="mobile-nav-icon"><i class="fas fa-info-circle"></i></div>
                     <span>Tentang Kami</span>
                     <i class="fas fa-chevron-down arrow"></i>
                 </button>
                 <div class="mobile-dropdown-menu">
-                    <a href="/about/structure"><i class="fas fa-sitemap"></i>Struktur Pengurus</a>
-                    <a href="/about/contact"><i class="fas fa-phone"></i>Hubungi Kami</a>
-                    <a href="/about/gallery"><i class="fas fa-images"></i>Galeri</a>
+                    <a href="/about/structure" class="{{ request()->is('about/structure') ? 'active' : '' }}"><i class="fas fa-sitemap"></i>Struktur Pengurus</a>
+                    <a href="/about/contact" class="{{ request()->is('about/contact') ? 'active' : '' }}"><i class="fas fa-phone"></i>Hubungi Kami</a>
+                    <a href="/about/gallery" class="{{ request()->is('about/gallery') ? 'active' : '' }}"><i class="fas fa-images"></i>Galeri</a>
                 </div>
             </div>
 
@@ -252,15 +252,15 @@
                 <span>Layanan</span>
             </a>
 
-            <div class="mobile-dropdown">
+            <div class="mobile-dropdown {{ ($title === 'Lainnya') ? 'open' : '' }}">
                 <button class="mobile-dropdown-toggle">
                     <div class="mobile-nav-icon"><i class="fas fa-ellipsis-h"></i></div>
                     <span>Lainnya</span>
                     <i class="fas fa-chevron-down arrow"></i>
                 </button>
                 <div class="mobile-dropdown-menu">
-                    <a href="/laporan"><i class="fas fa-file-alt"></i>Laporan</a>
-                    <a href="/schedule"><i class="fas fa-calendar-alt"></i>Jadwal</a>
+                    <a href="/laporan" class="{{ request()->is('laporan') ? 'active' : '' }}"><i class="fas fa-file-alt"></i>Laporan</a>
+                    <a href="/schedule" class="{{ request()->is('schedule') ? 'active' : '' }}"><i class="fas fa-calendar-alt"></i>Jadwal</a>
                 </div>
             </div>
         </nav>
@@ -670,6 +670,23 @@
     opacity: 0.7 !important;
 }
 
+/* Dropdown item active state */
+.nav-menu .dropdown-fun .dropdown-item.active,
+.nav-actions .dropdown-fun .dropdown-item.active {
+    background: linear-gradient(135deg, var(--primary-light), rgba(0, 167, 157, 0.08)) !important;
+}
+
+.nav-menu .dropdown-fun .dropdown-item.active .dropdown-icon,
+.nav-actions .dropdown-fun .dropdown-item.active .dropdown-icon {
+    background: var(--primary) !important;
+    color: white !important;
+}
+
+.nav-menu .dropdown-fun .dropdown-item.active .dropdown-title,
+.nav-actions .dropdown-fun .dropdown-item.active .dropdown-title {
+    color: var(--primary) !important;
+}
+
 .nav-menu .dropdown-fun li + li,
 .nav-actions .dropdown-fun li + li {
     margin-top: 0.25rem;
@@ -1033,6 +1050,18 @@
 }
 
 .mobile-dropdown-menu a:hover i {
+    background: var(--primary);
+    color: white;
+}
+
+/* Mobile dropdown item active */
+.mobile-dropdown-menu a.active {
+    color: var(--primary);
+    background: var(--primary-light);
+    font-weight: 600;
+}
+
+.mobile-dropdown-menu a.active i {
     background: var(--primary);
     color: white;
 }
