@@ -134,10 +134,26 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end dropdown-fun">
                         @if (Route::has('login'))
-                            <li><a class="dropdown-item" href="{{ route('login') }}"><i class="fas fa-sign-in-alt"></i>Masuk</a></li>
+                            <li>
+                                <a class="dropdown-item {{ request()->is('login') ? 'active' : '' }}" href="{{ route('login') }}">
+                                    <div class="dropdown-icon"><i class="fas fa-sign-in-alt"></i></div>
+                                    <div class="dropdown-text">
+                                        <span class="dropdown-title">Masuk</span>
+                                        <span class="dropdown-desc">Login ke akun kamu</span>
+                                    </div>
+                                </a>
+                            </li>
                         @endif
                         @if (Route::has('register'))
-                            <li><a class="dropdown-item" href="{{ route('register') }}"><i class="fas fa-user-plus"></i>Daftar</a></li>
+                            <li>
+                                <a class="dropdown-item {{ request()->is('register') ? 'active' : '' }}" href="{{ route('register') }}">
+                                    <div class="dropdown-icon"><i class="fas fa-user-plus"></i></div>
+                                    <div class="dropdown-text">
+                                        <span class="dropdown-title">Daftar</span>
+                                        <span class="dropdown-desc">Buat akun baru</span>
+                                    </div>
+                                </a>
+                            </li>
                         @endif
                     </ul>
                 </div>
@@ -157,14 +173,34 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end dropdown-fun">
                         @if (LFC::cekRoleAdmin(auth()->user()))
-                            <li><a href="/admin/dashboard" class="dropdown-item"><i class="fas fa-tachometer-alt"></i>Admin Panel</a></li>
+                            <li>
+                                <a href="/admin/dashboard" class="dropdown-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                                    <div class="dropdown-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                    <div class="dropdown-text">
+                                        <span class="dropdown-title">Admin Panel</span>
+                                        <span class="dropdown-desc">Kelola website</span>
+                                    </div>
+                                </a>
+                            </li>
                         @endif
-                        <li><a href="/profile" class="dropdown-item"><i class="fas fa-user-circle"></i>Profil Aku</a></li>
+                        <li>
+                            <a href="/profile" class="dropdown-item {{ request()->is('profile') ? 'active' : '' }}">
+                                <div class="dropdown-icon"><i class="fas fa-user-circle"></i></div>
+                                <div class="dropdown-text">
+                                    <span class="dropdown-title">Profil Aku</span>
+                                    <span class="dropdown-desc">Lihat & edit profil</span>
+                                </div>
+                            </a>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                            <a class="dropdown-item dropdown-item-danger" href="{{ route('logout') }}"
                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="fas fa-sign-out-alt"></i>Keluar
+                                <div class="dropdown-icon dropdown-icon-danger"><i class="fas fa-sign-out-alt"></i></div>
+                                <div class="dropdown-text">
+                                    <span class="dropdown-title dropdown-title-danger">Keluar</span>
+                                    <span class="dropdown-desc">Logout dari akun</span>
+                                </div>
                             </a>
                         </li>
                     </ul>
@@ -685,6 +721,35 @@
 .nav-menu .dropdown-fun .dropdown-item.active .dropdown-title,
 .nav-actions .dropdown-fun .dropdown-item.active .dropdown-title {
     color: var(--primary) !important;
+}
+
+/* Dropdown divider */
+.nav-actions .dropdown-fun .dropdown-divider {
+    margin: 0.35rem 0.75rem !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Dropdown danger item (logout) */
+.dropdown-icon-danger {
+    background: rgba(220, 53, 69, 0.1) !important;
+    color: var(--danger) !important;
+}
+
+.dropdown-title-danger {
+    color: var(--danger) !important;
+}
+
+.dropdown-item-danger:hover .dropdown-icon-danger {
+    background: var(--danger) !important;
+    color: white !important;
+}
+
+.dropdown-item-danger:hover .dropdown-title-danger {
+    color: var(--danger) !important;
+}
+
+.dropdown-item-danger:hover {
+    background: rgba(220, 53, 69, 0.08) !important;
 }
 
 .nav-menu .dropdown-fun li + li,
