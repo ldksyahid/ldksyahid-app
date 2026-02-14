@@ -232,7 +232,10 @@
 
     <div class="mobile-menu-header">
         <a href="/" class="mobile-brand">
-            <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="Logo">
+            <div class="mobile-brand-logo-wrapper">
+                <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="Logo">
+                <span class="mobile-brand-emoji">✨</span>
+            </div>
             <span>LDK Syahid</span>
         </a>
         <button class="mobile-close" id="mobileClose">
@@ -249,7 +252,7 @@
                     <img src="https://lh3.googleusercontent.com/d/{{Auth::User()->profile->gdrive_id}}" alt="">
                 @endif
                 <div>
-                    <span class="name">Halo, {{ Auth::user()->name }}! 👋</span>
+                    <span class="name">Marhaban, {{ Auth::user()->name }}! <span class="wave-emoji">👋</span></span>
                     <span class="email">{{ Auth::user()->email }}</span>
                 </div>
             </div>
@@ -333,7 +336,7 @@
             <a href="https://www.youtube.com/channel/UCJ-SyxQN5sG4CzO0waSYpBQ" target="_blank"><i class="fab fa-youtube"></i></a>
             <a href="https://www.instagram.com/ldksyahid/" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
-        <p class="copyright">© {{ date('Y') }} LDK Syahid · Kita Adalah Saudara ❤️</p>
+        <p class="copyright">© {{ date('Y') }} LDK Syahid · Kita Adalah Saudara <span class="beat-emoji">❤️</span></p>
     </div>
 </div>
 
@@ -991,10 +994,27 @@
     text-decoration: none;
 }
 
+.mobile-brand-logo-wrapper {
+    position: relative;
+}
+
 .mobile-brand img {
     width: 36px;
     height: 36px;
     border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.mobile-brand:hover img {
+    transform: rotate(-5deg) scale(1.05);
+}
+
+.mobile-brand-emoji {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: 0.75rem;
+    animation: sparkle 2s ease-in-out infinite;
 }
 
 .mobile-brand span {
@@ -1243,18 +1263,42 @@
 }
 
 .btn-mobile-primary {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
+    box-shadow: 0 4px 12px rgba(0, 167, 157, 0.3);
+}
+
+.btn-mobile-primary:hover,
+.btn-mobile-primary:active {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 167, 157, 0.4);
 }
 
 .btn-mobile-outline {
     background: var(--primary-light);
     color: var(--primary);
+    border: 1px solid rgba(0, 167, 157, 0.15);
+}
+
+.btn-mobile-outline:hover,
+.btn-mobile-outline:active {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-1px);
 }
 
 .btn-mobile-danger {
     background: rgba(220, 53, 69, 0.1);
     color: var(--danger);
+}
+
+.btn-mobile-danger:hover,
+.btn-mobile-danger:active {
+    background: var(--danger);
+    color: white;
+    transform: translateY(-1px);
 }
 
 .mobile-menu-footer {
@@ -1293,6 +1337,35 @@
     font-size: 0.8rem;
     color: var(--gray);
     margin: 0;
+}
+
+/* Animated emojis */
+.wave-emoji {
+    display: inline-block;
+    animation: wave 1.8s ease-in-out infinite;
+    transform-origin: 70% 70%;
+}
+
+@keyframes wave {
+    0%, 60%, 100% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    30% { transform: rotate(14deg); }
+    40% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+}
+
+.beat-emoji {
+    display: inline-block;
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.3); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.3); }
+    56% { transform: scale(1); }
 }
 
 /* ===== RESPONSIVE ===== */
@@ -1340,7 +1413,10 @@
     }
 
     .brand-emoji {
-        display: none;
+        display: inline;
+        font-size: 0.75rem;
+        top: -5px;
+        right: -5px;
     }
 }
 
