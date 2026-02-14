@@ -36,9 +36,33 @@
                     <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-fun">
-                    <li><a href="/about/structure" class="dropdown-item"><i class="fas fa-sitemap"></i>Struktur Pengurus</a></li>
-                    <li><a href="/about/contact" class="dropdown-item"><i class="fas fa-phone"></i>Hubungi Kami</a></li>
-                    <li><a href="/about/gallery" class="dropdown-item"><i class="fas fa-images"></i>Galeri</a></li>
+                    <li>
+                        <a href="/about/structure" class="dropdown-item">
+                            <div class="dropdown-icon"><i class="fas fa-sitemap"></i></div>
+                            <div class="dropdown-text">
+                                <span class="dropdown-title">Struktur Pengurus</span>
+                                <span class="dropdown-desc">Kenali pengurus LDK Syahid</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/about/contact" class="dropdown-item">
+                            <div class="dropdown-icon"><i class="fas fa-phone"></i></div>
+                            <div class="dropdown-text">
+                                <span class="dropdown-title">Hubungi Kami</span>
+                                <span class="dropdown-desc">Sampaikan pesan & saran</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/about/gallery" class="dropdown-item">
+                            <div class="dropdown-icon"><i class="fas fa-images"></i></div>
+                            <div class="dropdown-text">
+                                <span class="dropdown-title">Galeri</span>
+                                <span class="dropdown-desc">Dokumentasi kegiatan kami</span>
+                            </div>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
@@ -78,8 +102,24 @@
                     <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-fun">
-                    <li><a href="/laporan" class="dropdown-item"><i class="fas fa-file-alt"></i>Laporan</a></li>
-                    <li><a href="/schedule" class="dropdown-item"><i class="fas fa-calendar-alt"></i>Jadwal</a></li>
+                    <li>
+                        <a href="/laporan" class="dropdown-item">
+                            <div class="dropdown-icon"><i class="fas fa-file-alt"></i></div>
+                            <div class="dropdown-text">
+                                <span class="dropdown-title">Laporan</span>
+                                <span class="dropdown-desc">Laporan kegiatan & keuangan</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/schedule" class="dropdown-item">
+                            <div class="dropdown-icon"><i class="fas fa-calendar-alt"></i></div>
+                            <div class="dropdown-text">
+                                <span class="dropdown-title">Jadwal</span>
+                                <span class="dropdown-desc">Agenda & jadwal kegiatan</span>
+                            </div>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>
@@ -473,11 +513,11 @@
     top: calc(100% + 8px) !important;
     left: 50% !important;
     transform: translateX(-50%) translateY(10px) !important;
-    min-width: 240px !important;
+    min-width: 280px !important;
     background: white !important;
-    border-radius: 20px !important;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15), 0 10px 30px rgba(0, 167, 157, 0.1) !important;
-    padding: 1rem !important;
+    border-radius: 18px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 167, 157, 0.08) !important;
+    padding: 0.75rem !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -531,9 +571,10 @@
 .nav-actions .dropdown-fun .dropdown-item {
     display: flex !important;
     align-items: center !important;
-    padding: 0.875rem 1.25rem !important;
+    gap: 0.875rem !important;
+    padding: 0.75rem 1rem !important;
     color: var(--dark) !important;
-    border-radius: 12px !important;
+    border-radius: 14px !important;
     font-size: 0.9rem !important;
     font-weight: 500 !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -542,40 +583,70 @@
     background: transparent !important;
 }
 
-
-.nav-menu .dropdown-fun .dropdown-item i,
-.nav-actions .dropdown-fun .dropdown-item i {
-    width: 32px !important;
-    height: 32px !important;
+/* Dropdown icon wrapper */
+.dropdown-icon {
+    width: 40px !important;
+    height: 40px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     background: var(--primary-light) !important;
     color: var(--primary) !important;
-    border-radius: 10px !important;
-    margin-right: 0.875rem !important;
-    font-size: 0.85rem !important;
+    border-radius: 12px !important;
+    font-size: 0.9rem !important;
     transition: all 0.3s ease !important;
+    flex-shrink: 0 !important;
+}
+
+/* Dropdown text */
+.dropdown-text {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+}
+
+.dropdown-title {
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    color: var(--dark) !important;
+    transition: color 0.3s ease !important;
+}
+
+.dropdown-desc {
+    font-size: 0.75rem !important;
+    color: var(--gray) !important;
+    font-weight: 400 !important;
+    transition: color 0.3s ease !important;
 }
 
 .nav-menu .dropdown-fun .dropdown-item:hover,
 .nav-actions .dropdown-fun .dropdown-item:hover {
-    background: linear-gradient(135deg, var(--primary-light), rgba(0, 167, 157, 0.08)) !important;
+    background: linear-gradient(135deg, var(--primary-light), rgba(0, 167, 157, 0.06)) !important;
     color: var(--primary) !important;
-    transform: translateX(5px) !important;
-    padding-left: 1.5rem !important;
+    transform: translateX(4px) !important;
 }
 
-.nav-menu .dropdown-fun .dropdown-item:hover i,
-.nav-actions .dropdown-fun .dropdown-item:hover i {
+.nav-menu .dropdown-fun .dropdown-item:hover .dropdown-icon,
+.nav-actions .dropdown-fun .dropdown-item:hover .dropdown-icon {
     background: var(--primary) !important;
     color: white !important;
-    transform: scale(1.1) !important;
+    transform: scale(1.08) !important;
+}
+
+.nav-menu .dropdown-fun .dropdown-item:hover .dropdown-title,
+.nav-actions .dropdown-fun .dropdown-item:hover .dropdown-title {
+    color: var(--primary) !important;
+}
+
+.nav-menu .dropdown-fun .dropdown-item:hover .dropdown-desc,
+.nav-actions .dropdown-fun .dropdown-item:hover .dropdown-desc {
+    color: var(--primary) !important;
+    opacity: 0.7 !important;
 }
 
 .nav-menu .dropdown-fun li + li,
 .nav-actions .dropdown-fun li + li {
-    margin-top: 0.35rem;
+    margin-top: 0.25rem;
 }
 
 /* User Button */
