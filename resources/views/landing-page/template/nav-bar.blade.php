@@ -333,7 +333,7 @@
             <a href="https://www.youtube.com/channel/UCJ-SyxQN5sG4CzO0waSYpBQ" target="_blank"><i class="fab fa-youtube"></i></a>
             <a href="https://www.instagram.com/ldksyahid/" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
-        <p class="copyright">© {{ date('Y') }} LDK Syahid 💚</p>
+        <p class="copyright">© {{ date('Y') }} LDK Syahid · Kita Adalah Saudara ❤️</p>
     </div>
 </div>
 
@@ -378,7 +378,7 @@
     padding: 0.6rem 1.5rem;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(0, 167, 157, 0.1);
-    animation: slideDown 0.3s ease;
+    animation: slideDown 0.3s ease forwards;
 }
 
 @keyframes slideDown {
@@ -435,10 +435,23 @@
 
 @media (max-width: 991.98px) {
     .navbar-floating.returning-top {
-        top: 15px;
-        width: calc(100% - 30px);
-        padding: 0.5rem 1.25rem;
+        top: 12px;
+        left: 50%;
+        width: calc(100% - 24px);
+        padding: 0.65rem 1.25rem;
         border-radius: 16px;
+        animation: slideUpMobile 0.35s ease forwards;
+    }
+
+    @keyframes slideUpMobile {
+        from {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-15px);
+        }
     }
 }
 
@@ -949,6 +962,7 @@
     width: 85%;
     max-width: 320px;
     height: 100vh;
+    height: 100dvh;
     background: white;
     z-index: 1070;
     display: flex;
@@ -967,6 +981,7 @@
     justify-content: space-between;
     padding: 1rem 1.25rem;
     border-bottom: 1px solid var(--gray-200);
+    flex-shrink: 0;
 }
 
 .mobile-brand {
@@ -1084,7 +1099,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.65rem 0.75rem;
+    padding: 0.55rem 0.75rem;
     color: var(--dark);
     text-decoration: none;
     border-radius: 14px;
@@ -1207,9 +1222,9 @@
 .mobile-actions {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    padding-top: 1rem;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
     border-top: 1px solid var(--gray-200);
 }
 
@@ -1243,16 +1258,17 @@
 }
 
 .mobile-menu-footer {
-    padding: 1rem 1.25rem;
+    padding: 0.75rem 1.25rem;
     border-top: 1px solid var(--gray-200);
     text-align: center;
+    flex-shrink: 0;
 }
 
 .mobile-menu-footer .social-links {
     display: flex;
     justify-content: center;
     gap: 0.5rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .mobile-menu-footer .social-links a {
@@ -1290,11 +1306,28 @@
     }
 
     .navbar-floating.scrolled {
-        position: fixed;
-        top: 15px;
-        width: calc(100% - 30px);
-        padding: 0.5rem 1.25rem;
+        position: fixed !important;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 24px);
+        padding: 0.65rem 1.25rem;
         border-radius: 16px;
+        z-index: 1050;
+        opacity: 1;
+        visibility: visible;
+        animation: slideDownMobile 0.3s ease forwards;
+    }
+
+    @keyframes slideDownMobile {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
     }
 
     .brand-logo {
@@ -1395,11 +1428,14 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     // Mobile menu
+    const backToTop = document.querySelector('.back-to-top');
+
     function openMenu() {
         mobileMenu.classList.add('active');
         mobileOverlay.classList.add('active');
         mobileToggle.classList.add('active');
         document.body.style.overflow = 'hidden';
+        if (backToTop) backToTop.style.display = 'none';
     }
 
     function closeMenu() {
@@ -1407,6 +1443,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileOverlay.classList.remove('active');
         mobileToggle.classList.remove('active');
         document.body.style.overflow = '';
+        if (backToTop) backToTop.style.display = '';
     }
 
     mobileToggle?.addEventListener('click', () => mobileMenu.classList.contains('active') ? closeMenu() : openMenu());
