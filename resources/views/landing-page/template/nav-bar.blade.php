@@ -213,28 +213,54 @@
         @endauth
 
         <nav class="mobile-nav-fun">
-            <a href="/" class="{{ ($title === "Beranda") ? "active" : "" }}"><i class="fas fa-home"></i>Beranda</a>
+            <a href="/" class="{{ ($title === "Beranda") ? "active" : "" }}">
+                <div class="mobile-nav-icon"><i class="fas fa-home"></i></div>
+                <span>Beranda</span>
+            </a>
 
             <div class="mobile-dropdown">
-                <button class="mobile-dropdown-toggle"><i class="fas fa-info-circle"></i>Tentang Kami<i class="fas fa-chevron-down arrow"></i></button>
+                <button class="mobile-dropdown-toggle">
+                    <div class="mobile-nav-icon"><i class="fas fa-info-circle"></i></div>
+                    <span>Tentang Kami</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </button>
                 <div class="mobile-dropdown-menu">
-                    <a href="/about/structure">Struktur Pengurus</a>
-                    <a href="/about/contact">Hubungi Kami</a>
-                    <a href="/about/gallery">Galeri</a>
+                    <a href="/about/structure"><i class="fas fa-sitemap"></i>Struktur Pengurus</a>
+                    <a href="/about/contact"><i class="fas fa-phone"></i>Hubungi Kami</a>
+                    <a href="/about/gallery"><i class="fas fa-images"></i>Galeri</a>
                 </div>
             </div>
 
-            <a href="/articles" class="{{ ($title === "Artikel") ? "active" : "" }}"><i class="fas fa-newspaper"></i>Artikel</a>
-            <a href="/news" class="{{ ($title === "Berita") ? "active" : "" }}"><i class="fas fa-bullhorn"></i>Berita</a>
-            <a href="/events" class="{{ ($title === "Kegiatan") ? "active" : "" }}"><i class="fas fa-calendar-check"></i>Kegiatan</a>
-            <a href="/perpustakaan" class="{{ ($title === "Perpustakaan") ? "active" : "" }}"><i class="fas fa-book"></i>Perpustakaan</a>
-            <a href="/service" class="{{ ($title === "Layanan") ? "active" : "" }}"><i class="fas fa-hands-helping"></i>Layanan</a>
+            <a href="/articles" class="{{ ($title === "Artikel") ? "active" : "" }}">
+                <div class="mobile-nav-icon"><i class="fas fa-newspaper"></i></div>
+                <span>Artikel</span>
+            </a>
+            <a href="/news" class="{{ ($title === "Berita") ? "active" : "" }}">
+                <div class="mobile-nav-icon"><i class="fas fa-bullhorn"></i></div>
+                <span>Berita</span>
+            </a>
+            <a href="/events" class="{{ ($title === "Kegiatan") ? "active" : "" }}">
+                <div class="mobile-nav-icon"><i class="fas fa-calendar-check"></i></div>
+                <span>Kegiatan</span>
+            </a>
+            <a href="/perpustakaan" class="{{ ($title === "Perpustakaan") ? "active" : "" }}">
+                <div class="mobile-nav-icon"><i class="fas fa-book"></i></div>
+                <span>Perpustakaan</span>
+            </a>
+            <a href="/service" class="{{ ($title === "Layanan") ? "active" : "" }}">
+                <div class="mobile-nav-icon"><i class="fas fa-hands-helping"></i></div>
+                <span>Layanan</span>
+            </a>
 
             <div class="mobile-dropdown">
-                <button class="mobile-dropdown-toggle"><i class="fas fa-ellipsis-h"></i>Lainnya<i class="fas fa-chevron-down arrow"></i></button>
+                <button class="mobile-dropdown-toggle">
+                    <div class="mobile-nav-icon"><i class="fas fa-ellipsis-h"></i></div>
+                    <span>Lainnya</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </button>
                 <div class="mobile-dropdown-menu">
-                    <a href="/laporan">Laporan</a>
-                    <a href="/schedule">Jadwal</a>
+                    <a href="/laporan"><i class="fas fa-file-alt"></i>Laporan</a>
+                    <a href="/schedule"><i class="fas fa-calendar-alt"></i>Jadwal</a>
                 </div>
             </div>
         </nav>
@@ -864,7 +890,38 @@
 .mobile-nav-fun {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.2rem;
+}
+
+/* Section label */
+.mobile-nav-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray);
+    padding: 0.75rem 1rem 0.35rem;
+    margin-top: 0.25rem;
+}
+
+.mobile-nav-label:first-child {
+    margin-top: 0;
+    padding-top: 0.25rem;
+}
+
+/* Nav icon wrapper */
+.mobile-nav-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
 }
 
 .mobile-nav-fun > a,
@@ -872,24 +929,18 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.875rem 1rem;
+    padding: 0.65rem 0.75rem;
     color: var(--dark);
     text-decoration: none;
-    border-radius: 12px;
+    border-radius: 14px;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
     background: none;
     border: none;
     width: 100%;
     text-align: left;
     cursor: pointer;
     font-size: 0.95rem;
-}
-
-.mobile-nav-fun > a i,
-.mobile-dropdown-toggle i:first-child {
-    width: 20px;
-    color: var(--primary);
 }
 
 .mobile-nav-fun > a:hover,
@@ -899,42 +950,91 @@
     color: var(--primary);
 }
 
+.mobile-nav-fun > a.active .mobile-nav-icon {
+    background: var(--primary);
+    color: white;
+}
+
+.mobile-nav-fun > a:hover .mobile-nav-icon {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.05);
+}
+
 .mobile-dropdown-toggle .arrow {
     margin-left: auto;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
+    color: var(--gray);
     transition: transform 0.3s ease;
 }
 
 .mobile-dropdown.open .arrow {
     transform: rotate(180deg);
+    color: var(--primary);
+}
+
+.mobile-dropdown.open .mobile-dropdown-toggle {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.mobile-dropdown.open .mobile-dropdown-toggle .mobile-nav-icon {
+    background: var(--primary);
+    color: white;
 }
 
 .mobile-dropdown-menu {
     max-height: 0;
     overflow: hidden;
-    padding-left: 2.5rem;
-    transition: max-height 0.35s ease, padding-top 0.35s ease;
+    padding-left: 1rem;
+    margin-left: 1.1rem;
+    border-left: 2px solid var(--primary-light);
+    transition: max-height 0.35s ease, padding-top 0.35s ease, padding-bottom 0.35s ease;
     padding-top: 0;
+    padding-bottom: 0;
 }
 
 .mobile-dropdown.open .mobile-dropdown-menu {
     max-height: 300px;
-    padding-top: 0.25rem;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
 }
 
 .mobile-dropdown-menu a {
-    display: block;
-    padding: 0.6rem 1rem;
-    color: var(--gray);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.85rem;
+    color: var(--dark);
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
+    font-weight: 450;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.mobile-dropdown-menu a i {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-light);
+    color: var(--primary);
     border-radius: 8px;
+    font-size: 0.75rem;
+    flex-shrink: 0;
     transition: all 0.2s ease;
 }
 
 .mobile-dropdown-menu a:hover {
     color: var(--primary);
     background: var(--primary-light);
+}
+
+.mobile-dropdown-menu a:hover i {
+    background: var(--primary);
+    color: white;
 }
 
 .mobile-actions {
