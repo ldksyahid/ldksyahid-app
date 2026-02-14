@@ -223,6 +223,13 @@
 {{-- Mobile Menu --}}
 <div class="mobile-menu-overlay" id="mobileOverlay"></div>
 <div class="mobile-menu-fun" id="mobileMenu">
+    {{-- Decorative Background --}}
+    <div class="mobile-menu-deco">
+        <div class="mobile-deco-circle mobile-deco-1"></div>
+        <div class="mobile-deco-circle mobile-deco-2"></div>
+        <div class="mobile-deco-blob"></div>
+    </div>
+
     <div class="mobile-menu-header">
         <a href="/" class="mobile-brand">
             <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="Logo">
@@ -850,6 +857,72 @@
 
 .mobile-toggle.active span:nth-child(3) {
     transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ===== MOBILE MENU DECORATIVE BG ===== */
+.mobile-menu-deco {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.mobile-deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.07;
+}
+
+.mobile-deco-1 {
+    width: 200px;
+    height: 200px;
+    background: var(--primary);
+    top: -60px;
+    right: -60px;
+    animation: mobileFloat 12s ease-in-out infinite;
+}
+
+.mobile-deco-2 {
+    width: 120px;
+    height: 120px;
+    background: #ffd93d;
+    bottom: 15%;
+    left: -40px;
+    animation: mobileFloat 15s ease-in-out infinite reverse;
+}
+
+.mobile-deco-blob {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    bottom: -80px;
+    right: -80px;
+    background: linear-gradient(135deg, rgba(0, 167, 157, 0.06), rgba(109, 213, 199, 0.04));
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    animation: mobileMorph 18s ease-in-out infinite;
+}
+
+@keyframes mobileFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(15px, -20px) scale(1.05); }
+    66% { transform: translate(-10px, 10px) scale(0.95); }
+}
+
+@keyframes mobileMorph {
+    0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(0deg); }
+    50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; transform: rotate(90deg); }
+}
+
+/* Ensure mobile menu content stays above deco */
+.mobile-menu-header,
+.mobile-menu-body,
+.mobile-menu-footer {
+    position: relative;
+    z-index: 1;
 }
 
 /* ===== MOBILE MENU ===== */

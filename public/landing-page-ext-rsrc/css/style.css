@@ -323,9 +323,59 @@ a:hover {
     }
 }
 
-/* Hide decorative elements on mobile for performance */
+/* Adjust decorative elements on mobile */
 @media (max-width: 991.98px) {
-    .decorative-bg {
+    .deco-shape {
+        opacity: 0.06;
+    }
+
+    .deco-circle-1 {
+        width: 150px;
+        height: 150px;
+        top: 5%;
+        right: -50px;
+    }
+
+    .deco-circle-2 {
+        width: 100px;
+        height: 100px;
+        bottom: 25%;
+        left: -30px;
+    }
+
+    .deco-circle-3 {
+        width: 80px;
+        height: 80px;
+        top: 45%;
+        right: -20px;
+    }
+
+    .deco-blob-1 {
+        width: 200px;
+        height: 200px;
+        top: -80px;
+        left: -50px;
+    }
+
+    .deco-blob-2 {
+        width: 180px;
+        height: 180px;
+        bottom: -60px;
+        right: -40px;
+    }
+
+    .deco-icon {
+        opacity: 0.08;
+        font-size: 1.1rem;
+    }
+
+    .deco-icon-4 {
+        font-size: 1.4rem;
+    }
+
+    /* Hide some icons on mobile to reduce clutter */
+    .deco-icon-2,
+    .deco-icon-5 {
         display: none;
     }
 }
