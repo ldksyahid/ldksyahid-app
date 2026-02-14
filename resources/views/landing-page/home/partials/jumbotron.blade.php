@@ -90,10 +90,7 @@
                         <div class="floating-icon icon-6">☪️</div>
                         <div class="floating-icon icon-7">📚</div>
                         <div class="floating-icon icon-8">🤲</div>
-                        <div class="floating-shape shape-1"></div>
                         <div class="floating-shape shape-2"></div>
-                        <div class="floating-shape shape-3"></div>
-                        <div class="floating-shape shape-4"></div>
                     </div>
 
                     {{-- Countdown Timer - Bottom Right --}}
@@ -147,7 +144,6 @@
                         <div class="floating-icon icon-3">✨</div>
                         <div class="floating-icon icon-4">🌙</div>
                         <div class="floating-icon icon-5">⭐</div>
-                        <div class="floating-shape shape-1"></div>
                         <div class="floating-shape shape-2"></div>
                     </div>
 
@@ -389,7 +385,7 @@
         z-index: 30;
     }
 
-    /* Background Animation & Icons */
+    /* Background Animation & Icons - TIDAK TERPENGARUH FADE */
     .hadith-background-animation {
         position: absolute;
         top: 0;
@@ -399,31 +395,39 @@
         overflow: hidden;
         z-index: 1;
         pointer-events: none;
+        /* Tidak ada transition */
     }
 
     .floating-icon {
         position: absolute;
-        font-size: 2rem;
-        opacity: 0.15;
+        font-size: 2.5rem;
+        opacity: 0.25;
         color: var(--primary);
         animation: float 15s infinite ease-in-out;
         z-index: 1;
         pointer-events: none;
+        filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
+        display: block;
+        /* Tidak ada transition */
     }
 
     .floating-shape {
         position: absolute;
-        width: 100px;
-        height: 100px;
-        background: linear-gradient(135deg, var(--primary-light) 0%, transparent 100%);
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle at 30% 30%, var(--primary-light), transparent 70%);
         border-radius: 50%;
-        opacity: 0.1;
+        opacity: 0.2;
         animation: pulse 20s infinite ease-in-out;
         z-index: 1;
         pointer-events: none;
+        filter: blur(8px);
+        display: block;
+        mix-blend-mode: multiply;
+        /* Tidak ada transition */
     }
 
-    /* Floating Icons Positions - Desktop */
+    /* Floating Icons Positions - Desktop - DIPERBAIKI POSISINYA */
     .hadith-background-animation:not(.mobile) .icon-1 {
         top: 10%;
         left: 5%;
@@ -436,139 +440,114 @@
         font-size: 2.5rem;
     }
     .hadith-background-animation:not(.mobile) .icon-3 {
-        top: 20%;
+        top: 25%;
         right: 15%;
         animation-delay: 4s;
         font-size: 1.8rem;
     }
     .hadith-background-animation:not(.mobile) .icon-4 {
-        bottom: 25%;
+        bottom: 20%;
         left: 12%;
         animation-delay: 6s;
         font-size: 2.2rem;
     }
     .hadith-background-animation:not(.mobile) .icon-5 {
-        top: 40%;
+        top: 45%;
         left: 20%;
         animation-delay: 8s;
     }
     .hadith-background-animation:not(.mobile) .icon-6 {
-        top: 40%;
-        right: 20%;
+        top: 65%;
+        right: 15%;
         animation-delay: 10s;
         font-size: 2.3rem;
     }
     .hadith-background-animation:not(.mobile) .icon-7 {
-        bottom: 10%;
-        left: 20%;
+        bottom: 8%;
+        left: 15%;
         animation-delay: 12s;
     }
     .hadith-background-animation:not(.mobile) .icon-8 {
-        top: 15%;
+        top: 20%;
         right: 25%;
         animation-delay: 14s;
         font-size: 2.4rem;
     }
 
-    /* Floating Shapes Positions - Desktop */
-    .hadith-background-animation:not(.mobile) .shape-1 {
-        top: 5%;
-        right: 10%;
-        width: 150px;
-        height: 150px;
-        animation: pulse 18s infinite;
-    }
+    /* Floating Shapes Positions - Desktop - DIPERBAIKI POSISINYA */
     .hadith-background-animation:not(.mobile) .shape-2 {
-        bottom: 10%;
+        bottom: 15%;
         left: 5%;
-        width: 200px;
-        height: 200px;
+        width: 250px;
+        height: 250px;
         animation: pulse 22s infinite reverse;
-    }
-    .hadith-background-animation:not(.mobile) .shape-3 {
-        top: 30%;
-        left: 30%;
-        width: 120px;
-        height: 120px;
-        animation: pulse 25s infinite;
-    }
-    .hadith-background-animation:not(.mobile) .shape-4 {
-        bottom: 20%;
-        right: 15%;
-        width: 180px;
-        height: 180px;
-        animation: pulse 20s infinite reverse;
+        background: radial-gradient(circle at 80% 80%, var(--primary-light), transparent 80%);
     }
 
     /* Mobile Background Animation */
     .hadith-background-animation.mobile .icon-1 {
         top: 5%;
         left: 5%;
-        font-size: 1.5rem;
+        font-size: 2rem;
         animation: float 12s infinite;
     }
     .hadith-background-animation.mobile .icon-2 {
         bottom: 10%;
         right: 5%;
-        font-size: 1.8rem;
+        font-size: 2.3rem;
         animation: float 14s infinite 1s;
     }
     .hadith-background-animation.mobile .icon-3 {
         top: 15%;
         right: 10%;
-        font-size: 1.3rem;
+        font-size: 1.8rem;
         animation: float 16s infinite 2s;
     }
     .hadith-background-animation.mobile .icon-4 {
         bottom: 15%;
         left: 8%;
-        font-size: 1.6rem;
+        font-size: 2.1rem;
         animation: float 13s infinite 3s;
     }
     .hadith-background-animation.mobile .icon-5 {
         top: 30%;
         left: 15%;
-        font-size: 1.4rem;
+        font-size: 1.9rem;
         animation: float 15s infinite 4s;
-    }
-    .hadith-background-animation.mobile .shape-1 {
-        top: 20%;
-        right: 5%;
-        width: 80px;
-        height: 80px;
-        animation: pulse 15s infinite;
     }
     .hadith-background-animation.mobile .shape-2 {
         bottom: 5%;
         left: 10%;
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
         animation: pulse 18s infinite reverse;
+        background: radial-gradient(circle at 70% 70%, var(--primary-light), transparent 70%);
     }
 
+    /* Animasi yang lebih terlihat */
     @keyframes float {
         0%, 100% {
             transform: translateY(0) rotate(0deg);
         }
         25% {
-            transform: translateY(-15px) rotate(5deg);
+            transform: translateY(-20px) rotate(8deg);
         }
         50% {
-            transform: translateY(10px) rotate(-5deg);
+            transform: translateY(15px) rotate(-8deg);
         }
         75% {
-            transform: translateY(-5px) rotate(3deg);
+            transform: translateY(-8px) rotate(5deg);
         }
     }
 
     @keyframes pulse {
         0%, 100% {
             transform: scale(1);
-            opacity: 0.1;
+            opacity: 0.2;
         }
         50% {
-            transform: scale(1.2);
-            opacity: 0.15;
+            transform: scale(1.4);
+            opacity: 0.35;
         }
     }
 
@@ -642,7 +621,7 @@
         z-index: 36;
     }
 
-    /* Smooth text transitions */
+    /* Smooth text transitions - HANYA UNTUK TEKS */
     .hadith-fade-text {
         transition: opacity 0.5s ease-in-out;
         opacity: 1;
@@ -1140,22 +1119,30 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // Function to refresh text elements array
+    // Function to refresh text elements array - HANYA TEKS YANG MEMILIKI CLASS hadith-fade-text
     function getTextElements() {
         const elements = getFreshElements();
         const textElements = [];
 
-        // Tambahkan elemen desktop yang ada
-        if (elements.desktop.arab) textElements.push(elements.desktop.arab);
-        if (elements.desktop.text) textElements.push(elements.desktop.text);
-        if (elements.desktop.number) textElements.push(elements.desktop.number);
-        if (elements.desktop.source) textElements.push(elements.desktop.source);
+        // Tambahkan elemen desktop yang memiliki class hadith-fade-text
+        if (elements.desktop.arab && elements.desktop.arab.classList.contains('hadith-fade-text'))
+            textElements.push(elements.desktop.arab);
+        if (elements.desktop.text && elements.desktop.text.classList.contains('hadith-fade-text'))
+            textElements.push(elements.desktop.text);
+        if (elements.desktop.number && elements.desktop.number.classList.contains('hadith-fade-text'))
+            textElements.push(elements.desktop.number);
+        if (elements.desktop.source && elements.desktop.source.classList.contains('hadith-fade-text'))
+            textElements.push(elements.desktop.source);
 
-        // Tambahkan elemen mobile yang ada
-        if (elements.mobile.arab) textElements.push(elements.mobile.arab);
-        if (elements.mobile.text) textElements.push(elements.mobile.text);
-        if (elements.mobile.number) textElements.push(elements.mobile.number);
-        if (elements.mobile.source) textElements.push(elements.mobile.source);
+        // Tambahkan elemen mobile yang memiliki class hadith-fade-text
+        if (elements.mobile.arab && elements.mobile.arab.classList.contains('hadith-fade-text'))
+            textElements.push(elements.mobile.arab);
+        if (elements.mobile.text && elements.mobile.text.classList.contains('hadith-fade-text'))
+            textElements.push(elements.mobile.text);
+        if (elements.mobile.number && elements.mobile.number.classList.contains('hadith-fade-text'))
+            textElements.push(elements.mobile.number);
+        if (elements.mobile.source && elements.mobile.source.classList.contains('hadith-fade-text'))
+            textElements.push(elements.mobile.source);
 
         return textElements;
     }
@@ -1173,7 +1160,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let countdownInterval;
     let isFetching = false;
     let retryCount = 0;
-    const MAX_RETRY = 5; // Maksimal 5 kali percobaan
+    const MAX_RETRY = 5;
     let retryTimeout = null;
 
     // Toggle functionality with event delegation
@@ -1376,7 +1363,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Tambahkan timeout untuk fetch
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10000); // Timeout 10 detik
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
 
             const res = await fetch(`https://api.hadith.gading.dev/books/${book.id}/${number}`, {
                 signal: controller.signal
@@ -1385,11 +1372,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const json = await res.json();
 
             if (json.code === 200 && json.data && json.data.contents) {
-                // Reset retry count on success
                 retryCount = 0;
                 const contents = json.data.contents;
 
-                // Reset expanded state
                 const desktopWrapper = document.getElementById('hadith-desktop-wrapper');
                 const mobileWrapper = document.getElementById('hadith-mobile-wrapper');
                 const desktopToggle = document.getElementById('hadith-toggle-desktop');
@@ -1410,7 +1395,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (textSpan) textSpan.textContent = 'Selengkapnya';
                 }
 
-                // Update konten desktop
                 const desktopArab = document.getElementById('hadith-arab-desktop');
                 const desktopText = document.getElementById('hadith-text-desktop');
                 const desktopSource = document.getElementById('hadith-source-desktop');
@@ -1421,7 +1405,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (desktopSource) desktopSource.textContent = book.name;
                 if (desktopNumber) desktopNumber.textContent = `${book.name} No. ${contents.number}`;
 
-                // Update konten mobile
                 const mobileArab = document.getElementById('hadith-arab-mobile');
                 const mobileText = document.getElementById('hadith-text-mobile');
                 const mobileSource = document.getElementById('hadith-source-mobile');
@@ -1432,10 +1415,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (mobileSource) mobileSource.textContent = book.name;
                 if (mobileNumber) mobileNumber.textContent = `${book.name} No. ${contents.number}`;
 
-                // Fade in konten baru
                 fadeInElements();
 
-                // Cek overflow untuk toggle button
                 setTimeout(() => {
                     checkOverflow();
                 }, 100);
@@ -1447,7 +1428,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (e) {
             console.error('Error:', e);
 
-            // Increment retry count
             retryCount++;
 
             let errorMessage = '';
@@ -1459,14 +1439,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 errorMessage = 'Gagal memuat hadits.';
             }
 
-            // Tampilkan pesan error
             showErrorMessage(errorMessage);
-
-            // Fade in kembali
             fadeInElements();
-
-            // Schedule retry
-            scheduleRetry(3000); // Coba lagi setelah 3 detik
+            scheduleRetry(3000);
 
         } finally {
             isFetching = false;
@@ -1490,20 +1465,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (desktopNumber) desktopNumber.textContent = '';
     if (mobileNumber) mobileNumber.textContent = '';
 
-    // Setup toggle listeners dengan event delegation
     setupToggleListeners();
 
-    // Cek overflow untuk toggle button
     setTimeout(() => {
         checkOverflow();
     }, 100);
 
-    // Listen for window resize to check overflow again
     window.addEventListener('resize', function() {
         checkOverflow();
     });
 
-    // Mulai countdown dan fetch hadits pertama setelah 3 detik
     startCountdown();
     setTimeout(() => {
         fetchRandomHadith();
