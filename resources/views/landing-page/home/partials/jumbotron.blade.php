@@ -1,6 +1,6 @@
 {{-- Jumbotron / Hero Section - Fun & Modern Design --}}
 <section class="hero-fun">
-    <div class="hero-carousel-wrapper">
+    <div class="hero-carousel-wrapper wow fadeInUp" data-wow-delay="0.1s">
         <div id="header-carousel" class="carousel slide carousel-fade hero-carousel-card" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-inner">
             @forelse($postjumbotron as $key => $post)
@@ -81,14 +81,18 @@
                          alt="Default" />
                 </div>
 
-                {{-- Mobile default content --}}
-                <div class="hero-mobile-content d-lg-none">
+                {{-- Mobile default content with Hadith API --}}
+                <div class="hero-mobile-content d-lg-none" id="hadith-mobile-content">
                     <div class="hero-mobile-badge">
-                        <span class="badge-icon">🕌</span>
-                        <span>LDK Syahid UIN Jakarta</span>
+                        <span class="badge-icon">📖</span>
+                        <span id="hadith-source">Hadits Harian</span>
                     </div>
-                    <h2 class="hero-mobile-title">Bersama Meraih Ridho Ilahi</h2>
-                    <p class="hero-mobile-desc">Membangun generasi muda yang berilmu, berakhlak, dan bermanfaat bagi umat.</p>
+                    <div class="hadith-content" id="hadith-content">
+                        <p class="hero-mobile-arab" id="hadith-arab"></p>
+                        <p class="hero-mobile-desc" id="hadith-text">Memuat hadits...</p>
+                    </div>
+                    <button class="hadith-toggle" id="hadith-toggle" style="display:none;"><span class="hadith-toggle-text">Selengkapnya</span> <i class="fas fa-chevron-down"></i></button>
+                    <span class="hadith-number" id="hadith-number"></span>
                     <a href="#about-section" class="hero-mobile-btn">
                         <span>Kenali Kami</span>
                         <i class="fas fa-chevron-down"></i>
@@ -491,11 +495,89 @@
         margin-bottom: 0.4rem;
     }
 
+    .hero-mobile-arab {
+        font-size: 1.1rem;
+        color: var(--dark);
+        line-height: 2;
+        margin-bottom: 0.5rem;
+        direction: rtl;
+        font-family: 'Amiri', 'Traditional Arabic', serif;
+        transition: opacity 0.4s ease;
+    }
+
     .hero-mobile-desc {
         font-size: 0.82rem;
         color: var(--gray);
         line-height: 1.5;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.5rem;
+        transition: opacity 0.4s ease;
+    }
+
+    .hadith-number {
+        display: block;
+        font-size: 0.7rem;
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 0.6rem;
+        opacity: 0.7;
+    }
+
+    .hadith-content {
+        max-height: 120px;
+        overflow: hidden;
+        position: relative;
+        transition: max-height 0.4s ease, opacity 0.4s ease;
+    }
+
+    .hadith-content.expanded {
+        max-height: 2000px;
+    }
+
+    .hadith-content:not(.expanded)::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        background: linear-gradient(to bottom, transparent, white);
+        pointer-events: none;
+    }
+
+    .hadith-toggle {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 0.2rem 0;
+        margin-bottom: 0.4rem;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .hadith-toggle:hover,
+    .hadith-toggle:active,
+    .hadith-toggle:focus {
+        color: var(--primary);
+        background: none;
+        box-shadow: none;
+        outline: none;
+    }
+
+    .hadith-toggle i {
+        font-size: 0.6rem;
+        margin-left: 0.2rem;
+        transition: transform 0.3s ease;
+    }
+
+    .hadith-toggle.expanded i {
+        transform: rotate(180deg);
+    }
+
+    .hadith-fade-out {
+        opacity: 0;
     }
 
     .hero-mobile-btn {
@@ -530,6 +612,8 @@
     }
 </style>
 
+<link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const carousel = document.getElementById('header-carousel');
@@ -543,5 +627,91 @@ document.addEventListener('DOMContentLoaded', function() {
             dots[e.to].classList.add('active');
         }
     });
+
+    // Hadith API - auto fetch random hadith every 10 seconds
+    const hadithArab = document.getElementById('hadith-arab');
+    const hadithText = document.getElementById('hadith-text');
+    const hadithSource = document.getElementById('hadith-source');
+    const hadithNumber = document.getElementById('hadith-number');
+    const hadithContent = document.getElementById('hadith-content');
+    const hadithToggle = document.getElementById('hadith-toggle');
+
+    if (!hadithText) return;
+
+    const books = [
+        { id: 'bukhari', name: 'HR. Bukhari', max: 6638 },
+        { id: 'muslim', name: 'HR. Muslim', max: 4930 },
+        { id: 'abu-daud', name: 'HR. Abu Daud', max: 4419 },
+        { id: 'tirmidzi', name: 'HR. Tirmidzi', max: 3625 },
+        { id: 'ibnu-majah', name: 'HR. Ibnu Majah', max: 4285 },
+        { id: 'nasai', name: 'HR. Nasai', max: 5364 },
+    ];
+
+    // Toggle expand/collapse
+    const toggleText = hadithToggle ? hadithToggle.querySelector('.hadith-toggle-text') : null;
+    if (hadithToggle) {
+        hadithToggle.addEventListener('click', function() {
+            const isExpanded = hadithContent.classList.toggle('expanded');
+            hadithToggle.classList.toggle('expanded');
+            if (toggleText) toggleText.textContent = isExpanded ? 'Sembunyikan' : 'Selengkapnya';
+        });
+    }
+
+    function checkOverflow() {
+        // Show toggle only if content overflows
+        if (hadithContent.scrollHeight > 125) {
+            hadithToggle.style.display = '';
+        } else {
+            hadithToggle.style.display = 'none';
+        }
+    }
+
+    async function fetchRandomHadith() {
+        try {
+            const book = books[Math.floor(Math.random() * books.length)];
+            const number = Math.floor(Math.random() * book.max) + 1;
+            const res = await fetch(`https://api.hadith.gading.dev/books/${book.id}/${number}`);
+            const json = await res.json();
+
+            if (json.code === 200 && json.data && json.data.contents) {
+                const contents = json.data.contents;
+
+                // Fade out
+                hadithContent.style.opacity = '0';
+
+                setTimeout(() => {
+                    // Reset to collapsed
+                    hadithContent.classList.remove('expanded');
+                    if (hadithToggle) {
+                        hadithToggle.classList.remove('expanded');
+                        if (toggleText) toggleText.textContent = 'Selengkapnya';
+                    }
+
+                    hadithArab.textContent = contents.arab;
+                    hadithText.textContent = `"${contents.id}"`;
+                    hadithSource.textContent = book.name;
+                    hadithNumber.textContent = `${book.name} No. ${contents.number}`;
+
+                    // Fade in
+                    hadithContent.style.opacity = '1';
+
+                    // Check if toggle needed
+                    setTimeout(checkOverflow, 50);
+                }, 400);
+            }
+        } catch (e) {
+            hadithText.textContent = 'Membangun generasi muda yang berilmu, berakhlak, dan bermanfaat bagi umat.';
+            hadithSource.textContent = 'LDK Syahid';
+            hadithArab.textContent = '';
+            hadithNumber.textContent = '';
+            if (hadithToggle) hadithToggle.style.display = 'none';
+        }
+    }
+
+    // Fetch first hadith immediately
+    fetchRandomHadith();
+
+    // Auto-rotate every 10 seconds
+    setInterval(fetchRandomHadith, 10000);
 });
 </script>
