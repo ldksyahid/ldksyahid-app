@@ -90,6 +90,7 @@
                         <div class="floating-icon icon-6">☪️</div>
                         <div class="floating-icon icon-7">📚</div>
                         <div class="floating-icon icon-8">🤲</div>
+                        <div class="floating-shape shape-1"></div>
                         <div class="floating-shape shape-2"></div>
                     </div>
 
@@ -140,10 +141,9 @@
                     {{-- Background Animation & Icons for Mobile --}}
                     <div class="hadith-background-animation mobile">
                         <div class="floating-icon icon-1">📖</div>
-                        <div class="floating-icon icon-2">🕌</div>
                         <div class="floating-icon icon-3">✨</div>
-                        <div class="floating-icon icon-4">🌙</div>
-                        <div class="floating-icon icon-5">⭐</div>
+                        <div class="floating-icon icon-5">🕌</div>
+                        <div class="floating-shape shape-1"></div>
                         <div class="floating-shape shape-2"></div>
                     </div>
 
@@ -429,7 +429,7 @@
 
     /* Floating Icons Positions - Desktop - DIPERBAIKI POSISINYA */
     .hadith-background-animation:not(.mobile) .icon-1 {
-        top: 15%;
+        top: 10%;
         left: 5%;
         animation-delay: 0s;
     }
@@ -475,27 +475,29 @@
     }
 
     /* Floating Shapes Positions - Desktop - DIPERBAIKI POSISINYA */
+    .hadith-background-animation:not(.mobile) .shape-1 {
+        top: 20%;
+        right: 10%;
+        width: 150px;
+        height: 150px;
+        animation: pulse 18s infinite;
+        background: radial-gradient(circle at 20% 20%, var(--primary-light), transparent 80%);
+    }
     .hadith-background-animation:not(.mobile) .shape-2 {
-        bottom: 15%;
+        bottom: 10%;
         left: 5%;
-        width: 250px;
-        height: 250px;
+        width: 120px;
+        height: 120px;
         animation: pulse 22s infinite reverse;
         background: radial-gradient(circle at 80% 80%, var(--primary-light), transparent 80%);
     }
 
     /* Mobile Background Animation */
     .hadith-background-animation.mobile .icon-1 {
-        top: 5%;
+        top: 20%;
         left: 5%;
         font-size: 2rem;
         animation: float 12s infinite;
-    }
-    .hadith-background-animation.mobile .icon-2 {
-        bottom: 10%;
-        right: 5%;
-        font-size: 2.3rem;
-        animation: float 14s infinite 1s;
     }
     .hadith-background-animation.mobile .icon-3 {
         top: 15%;
@@ -503,23 +505,25 @@
         font-size: 1.8rem;
         animation: float 16s infinite 2s;
     }
-    .hadith-background-animation.mobile .icon-4 {
-        bottom: 15%;
-        left: 8%;
-        font-size: 2.1rem;
-        animation: float 13s infinite 3s;
-    }
     .hadith-background-animation.mobile .icon-5 {
-        top: 30%;
+        top: 40%;
         left: 15%;
         font-size: 1.9rem;
         animation: float 15s infinite 4s;
     }
+    .hadith-background-animation.mobile .shape-1 {
+        top: 20%;
+        right: 5%;
+        width: 90px;
+        height: 90px;
+        animation: pulse 15s infinite;
+        background: radial-gradient(circle at 30% 30%, var(--primary-light), transparent 70%);
+    }
     .hadith-background-animation.mobile .shape-2 {
         bottom: 5%;
         left: 10%;
-        width: 150px;
-        height: 150px;
+        width: 60px;
+        height: 60px;
         animation: pulse 18s infinite reverse;
         background: radial-gradient(circle at 70% 70%, var(--primary-light), transparent 70%);
     }
