@@ -80,6 +80,22 @@
 
                 {{-- Desktop Hadith Content (Below Image) --}}
                 <div class="hero-desktop-content d-none d-lg-block">
+                    {{-- Background Animation & Icons --}}
+                    <div class="hadith-background-animation">
+                        <div class="floating-icon icon-1">📖</div>
+                        <div class="floating-icon icon-2">🕌</div>
+                        <div class="floating-icon icon-3">✨</div>
+                        <div class="floating-icon icon-4">🌙</div>
+                        <div class="floating-icon icon-5">⭐</div>
+                        <div class="floating-icon icon-6">☪️</div>
+                        <div class="floating-icon icon-7">📚</div>
+                        <div class="floating-icon icon-8">🤲</div>
+                        <div class="floating-shape shape-1"></div>
+                        <div class="floating-shape shape-2"></div>
+                        <div class="floating-shape shape-3"></div>
+                        <div class="floating-shape shape-4"></div>
+                    </div>
+
                     {{-- Countdown Timer - Bottom Right --}}
                     <div class="desktop-countdown">
                         <span>Hadits berikutnya dalam</span>
@@ -87,7 +103,10 @@
                         <span>detik</span>
                     </div>
 
-                    <div class="container">
+                    {{-- PEMBATAS SETENGAH LINGKARAN DENGAN WARNA PUTIH --}}
+                    <div class="hero-divider-desktop"></div>
+
+                    <div class="container position-relative" style="z-index: 20;">
                         <div class="row justify-content-center">
                             <div class="col-lg-10 col-xl-8">
                                 <div class="hero-desktop-card">
@@ -121,6 +140,20 @@
 
                 {{-- Mobile Hadith Content (Below Image) --}}
                 <div class="hero-mobile-content d-lg-none" id="hadith-mobile-content">
+                    {{-- Background Animation & Icons for Mobile --}}
+                    <div class="hadith-background-animation mobile">
+                        <div class="floating-icon icon-1">📖</div>
+                        <div class="floating-icon icon-2">🕌</div>
+                        <div class="floating-icon icon-3">✨</div>
+                        <div class="floating-icon icon-4">🌙</div>
+                        <div class="floating-icon icon-5">⭐</div>
+                        <div class="floating-shape shape-1"></div>
+                        <div class="floating-shape shape-2"></div>
+                    </div>
+
+                    {{-- PEMBATAS SETENGAH LINGKARAN MOBILE DENGAN WARNA PUTIH --}}
+                    <div class="hero-divider-mobile"></div>
+
                     <div class="hero-mobile-badge">
                         <span class="badge-icon">📖</span>
                         <span class="hadith-fade-text" id="hadith-source-mobile">Hadits dalam 1 Menit</span>
@@ -336,22 +369,207 @@
     /* Desktop Hadith Content */
     .hero-desktop-content {
         background: white;
-        padding: 1.5rem 1.5rem 2.5rem;
+        padding: 0 1.5rem 2.5rem;
         margin-top: -20px;
         position: relative;
         z-index: 5;
         border-radius: 0 0 32px 32px;
+        overflow: visible;
     }
 
-    .hero-desktop-content::before {
-        content: '';
+    /* PEMBATAS DESKTOP - WARNA PUTIH */
+    .hero-divider-desktop {
         position: absolute;
-        top: -30px;
-        left: 0;
-        width: 100%;
-        height: 40px;
+        top: -40px;
+        left: -10px;
+        width: calc(100% + 20px);
+        height: 60px;
         background: white;
         border-radius: 50% 50% 0 0;
+        z-index: 30;
+    }
+
+    /* Background Animation & Icons */
+    .hadith-background-animation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .floating-icon {
+        position: absolute;
+        font-size: 2rem;
+        opacity: 0.15;
+        color: var(--primary);
+        animation: float 15s infinite ease-in-out;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .floating-shape {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, var(--primary-light) 0%, transparent 100%);
+        border-radius: 50%;
+        opacity: 0.1;
+        animation: pulse 20s infinite ease-in-out;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* Floating Icons Positions - Desktop */
+    .hadith-background-animation:not(.mobile) .icon-1 {
+        top: 10%;
+        left: 5%;
+        animation-delay: 0s;
+    }
+    .hadith-background-animation:not(.mobile) .icon-2 {
+        bottom: 15%;
+        right: 8%;
+        animation-delay: 2s;
+        font-size: 2.5rem;
+    }
+    .hadith-background-animation:not(.mobile) .icon-3 {
+        top: 20%;
+        right: 15%;
+        animation-delay: 4s;
+        font-size: 1.8rem;
+    }
+    .hadith-background-animation:not(.mobile) .icon-4 {
+        bottom: 25%;
+        left: 12%;
+        animation-delay: 6s;
+        font-size: 2.2rem;
+    }
+    .hadith-background-animation:not(.mobile) .icon-5 {
+        top: 40%;
+        left: 20%;
+        animation-delay: 8s;
+    }
+    .hadith-background-animation:not(.mobile) .icon-6 {
+        top: 40%;
+        right: 20%;
+        animation-delay: 10s;
+        font-size: 2.3rem;
+    }
+    .hadith-background-animation:not(.mobile) .icon-7 {
+        bottom: 10%;
+        left: 20%;
+        animation-delay: 12s;
+    }
+    .hadith-background-animation:not(.mobile) .icon-8 {
+        top: 15%;
+        right: 25%;
+        animation-delay: 14s;
+        font-size: 2.4rem;
+    }
+
+    /* Floating Shapes Positions - Desktop */
+    .hadith-background-animation:not(.mobile) .shape-1 {
+        top: 5%;
+        right: 10%;
+        width: 150px;
+        height: 150px;
+        animation: pulse 18s infinite;
+    }
+    .hadith-background-animation:not(.mobile) .shape-2 {
+        bottom: 10%;
+        left: 5%;
+        width: 200px;
+        height: 200px;
+        animation: pulse 22s infinite reverse;
+    }
+    .hadith-background-animation:not(.mobile) .shape-3 {
+        top: 30%;
+        left: 30%;
+        width: 120px;
+        height: 120px;
+        animation: pulse 25s infinite;
+    }
+    .hadith-background-animation:not(.mobile) .shape-4 {
+        bottom: 20%;
+        right: 15%;
+        width: 180px;
+        height: 180px;
+        animation: pulse 20s infinite reverse;
+    }
+
+    /* Mobile Background Animation */
+    .hadith-background-animation.mobile .icon-1 {
+        top: 5%;
+        left: 5%;
+        font-size: 1.5rem;
+        animation: float 12s infinite;
+    }
+    .hadith-background-animation.mobile .icon-2 {
+        bottom: 10%;
+        right: 5%;
+        font-size: 1.8rem;
+        animation: float 14s infinite 1s;
+    }
+    .hadith-background-animation.mobile .icon-3 {
+        top: 15%;
+        right: 10%;
+        font-size: 1.3rem;
+        animation: float 16s infinite 2s;
+    }
+    .hadith-background-animation.mobile .icon-4 {
+        bottom: 15%;
+        left: 8%;
+        font-size: 1.6rem;
+        animation: float 13s infinite 3s;
+    }
+    .hadith-background-animation.mobile .icon-5 {
+        top: 30%;
+        left: 15%;
+        font-size: 1.4rem;
+        animation: float 15s infinite 4s;
+    }
+    .hadith-background-animation.mobile .shape-1 {
+        top: 20%;
+        right: 5%;
+        width: 80px;
+        height: 80px;
+        animation: pulse 15s infinite;
+    }
+    .hadith-background-animation.mobile .shape-2 {
+        bottom: 5%;
+        left: 10%;
+        width: 100px;
+        height: 100px;
+        animation: pulse 18s infinite reverse;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        25% {
+            transform: translateY(-15px) rotate(5deg);
+        }
+        50% {
+            transform: translateY(10px) rotate(-5deg);
+        }
+        75% {
+            transform: translateY(-5px) rotate(3deg);
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 0.1;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 0.15;
+        }
     }
 
     /* Desktop Countdown - Bottom Right */
@@ -365,7 +583,7 @@
         padding: 0.4rem 1rem;
         border-radius: 50px;
         font-size: 0.75rem;
-        z-index: 10;
+        z-index: 40;
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
@@ -379,6 +597,9 @@
         max-width: 900px;
         margin: 0 auto;
         text-align: center;
+        position: relative;
+        z-index: 35;
+        padding-top: 30px;
     }
 
     .hero-desktop-badge {
@@ -392,6 +613,8 @@
         font-size: 0.8rem;
         font-weight: 600;
         margin-bottom: 1rem;
+        position: relative;
+        z-index: 35;
     }
 
     .hadith-desktop-wrapper {
@@ -400,6 +623,7 @@
         position: relative;
         transition: max-height 0.5s ease;
         margin-bottom: 0.75rem;
+        z-index: 35;
     }
 
     .hadith-desktop-wrapper.expanded {
@@ -415,6 +639,7 @@
         height: 50px;
         background: linear-gradient(to bottom, transparent, white);
         pointer-events: none;
+        z-index: 36;
     }
 
     /* Smooth text transitions */
@@ -471,6 +696,8 @@
         margin-bottom: 0.75rem;
         direction: rtl;
         padding: 0 0.5rem;
+        position: relative;
+        z-index: 35;
     }
 
     .hero-desktop-text {
@@ -479,6 +706,8 @@
         line-height: 1.6;
         margin-bottom: 0.35rem;
         font-style: italic;
+        position: relative;
+        z-index: 35;
     }
 
     .hero-desktop-number {
@@ -487,6 +716,8 @@
         color: var(--primary);
         font-weight: 600;
         margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 35;
     }
 
     .desktop-toggle-btn {
@@ -503,6 +734,8 @@
         align-items: center;
         gap: 0.4rem;
         margin-top: 0.25rem;
+        position: relative;
+        z-index: 35;
     }
 
     .desktop-toggle-btn:hover,
@@ -527,24 +760,28 @@
 
     /* Mobile Content Styles */
     .hero-mobile-content {
-        padding: 1.25rem 1.25rem 1rem;
+        padding: 0 1.25rem 1rem;
         text-align: center;
         background: white;
         border-radius: 0 0 20px 20px;
         margin-top: -20px;
         position: relative;
         z-index: 4;
+        overflow: visible;
     }
 
-    .hero-mobile-content::before {
-        content: '';
+    /* PEMBATAS MOBILE - WARNA PUTIH */
+    .hero-divider-mobile {
         position: absolute;
-        top: -20px;
-        left: 0;
-        width: 100%;
-        height: 30px;
+        top: -30px;
+        left: -5px;
+        width: calc(100% + 10px);
+        height: 45px;
         background: white;
-        border-radius: 30% 30% 0 0;
+        border-radius: 50% 50% 0 0;
+        z-index: 30;
+        box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.02);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     }
 
     .hero-mobile-badge {
@@ -558,6 +795,9 @@
         font-size: 0.75rem;
         font-weight: 600;
         margin-bottom: 1rem;
+        position: relative;
+        z-index: 35;
+        margin-top: 20px;
     }
 
     .hero-mobile-title {
@@ -566,6 +806,8 @@
         color: var(--dark);
         line-height: 1.3;
         margin-bottom: 0.4rem;
+        position: relative;
+        z-index: 35;
     }
 
     .hero-mobile-arab {
@@ -576,6 +818,8 @@
         direction: rtl;
         font-family: 'Amiri', 'Traditional Arabic', serif;
         padding: 0 0.5rem;
+        position: relative;
+        z-index: 35;
     }
 
     .hero-mobile-desc {
@@ -584,6 +828,8 @@
         line-height: 1.5;
         margin-bottom: 0.75rem;
         font-style: italic;
+        position: relative;
+        z-index: 35;
     }
 
     .hadith-mobile-wrapper {
@@ -592,6 +838,7 @@
         position: relative;
         transition: max-height 0.4s ease;
         margin-bottom: 1rem;
+        z-index: 35;
     }
 
     .hadith-mobile-wrapper.expanded {
@@ -607,6 +854,7 @@
         height: 40px;
         background: linear-gradient(to bottom, transparent, white);
         pointer-events: none;
+        z-index: 36;
     }
 
     .hadith-number {
@@ -616,6 +864,8 @@
         font-weight: 600;
         margin-top: 0.5rem;
         opacity: 0.7;
+        position: relative;
+        z-index: 35;
     }
 
     /* Mobile Action Area */
@@ -625,6 +875,8 @@
         align-items: center;
         margin-top: 0.5rem;
         padding: 0 0.25rem;
+        position: relative;
+        z-index: 35;
     }
 
     .hadith-toggle {
@@ -674,6 +926,7 @@
         border: 1px solid rgba(255, 255, 255, 0.08);
         white-space: nowrap;
         flex-shrink: 0;
+        z-index: 40;
     }
 
     .mobile-countdown-number {
@@ -919,10 +1172,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let timeLeft = 60;
     let countdownInterval;
     let isFetching = false;
+    let retryCount = 0;
+    const MAX_RETRY = 5; // Maksimal 5 kali percobaan
+    let retryTimeout = null;
 
     // Toggle functionality with event delegation
     function setupToggleListeners() {
-        // Remove existing listeners by cloning and replacing buttons (optional, but we'll use event delegation)
         document.addEventListener('click', function(e) {
             // Desktop toggle
             if (e.target.closest('#hadith-toggle-desktop')) {
@@ -1057,6 +1312,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Fungsi untuk menampilkan pesan error dengan retry count
+    function showErrorMessage(message, showRetry = true) {
+        const desktopText = document.getElementById('hadith-text-desktop');
+        const mobileText = document.getElementById('hadith-text-mobile');
+        const desktopSource = document.getElementById('hadith-source-desktop');
+        const mobileSource = document.getElementById('hadith-source-mobile');
+        const desktopArab = document.getElementById('hadith-arab-desktop');
+        const mobileArab = document.getElementById('hadith-arab-mobile');
+        const desktopNumber = document.getElementById('hadith-number-desktop');
+        const mobileNumber = document.getElementById('hadith-number-mobile');
+        const desktopToggle = document.getElementById('hadith-toggle-desktop');
+        const mobileToggle = document.getElementById('hadith-toggle-mobile');
+
+        let errorText = message;
+        if (showRetry && retryCount > 0) {
+            errorText = `${message} (Percobaan ke-${retryCount}/${MAX_RETRY})`;
+        }
+
+        if (desktopText) desktopText.innerHTML = errorText;
+        if (mobileText) mobileText.innerHTML = errorText;
+
+        if (desktopSource) desktopSource.textContent = 'Hadits dalam 1 Menit';
+        if (mobileSource) mobileSource.textContent = 'Hadits dalam 1 Menit';
+
+        if (desktopArab) desktopArab.textContent = '';
+        if (mobileArab) mobileArab.textContent = '';
+
+        if (desktopNumber) desktopNumber.textContent = '';
+        if (mobileNumber) mobileNumber.textContent = '';
+
+        if (desktopToggle) desktopToggle.style.display = 'none';
+        if (mobileToggle) mobileToggle.style.display = 'none';
+    }
+
+    // Fungsi untuk retry dengan delay
+    function scheduleRetry(delay = 3000) {
+        if (retryTimeout) clearTimeout(retryTimeout);
+
+        if (retryCount < MAX_RETRY) {
+            retryTimeout = setTimeout(() => {
+                fetchRandomHadith();
+            }, delay);
+        } else {
+            // Jika sudah mencapai maksimal percobaan, tampilkan pesan dan reset counter
+            showErrorMessage('Gagal memuat hadits setelah beberapa kali percobaan. Silakan refresh halaman.', false);
+            retryCount = 0;
+        }
+    }
+
     async function fetchRandomHadith() {
         if (isFetching) return;
         isFetching = true;
@@ -1069,10 +1373,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const book = books[Math.floor(Math.random() * books.length)];
             const number = Math.floor(Math.random() * book.max) + 1;
-            const res = await fetch(`https://api.hadith.gading.dev/books/${book.id}/${number}`);
+
+            // Tambahkan timeout untuk fetch
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // Timeout 10 detik
+
+            const res = await fetch(`https://api.hadith.gading.dev/books/${book.id}/${number}`, {
+                signal: controller.signal
+            }).finally(() => clearTimeout(timeoutId));
+
             const json = await res.json();
 
             if (json.code === 200 && json.data && json.data.contents) {
+                // Reset retry count on success
+                retryCount = 0;
                 const contents = json.data.contents;
 
                 // Reset expanded state
@@ -1133,37 +1447,27 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (e) {
             console.error('Error:', e);
 
-            // Fallback ke teks default
-            const defaultText = 'Gagal memuat hadits. Silakan Refresh Halaman ini.';
+            // Increment retry count
+            retryCount++;
 
-            const desktopText = document.getElementById('hadith-text-desktop');
-            const mobileText = document.getElementById('hadith-text-mobile');
-            const desktopSource = document.getElementById('hadith-source-desktop');
-            const mobileSource = document.getElementById('hadith-source-mobile');
-            const desktopArab = document.getElementById('hadith-arab-desktop');
-            const mobileArab = document.getElementById('hadith-arab-mobile');
-            const desktopNumber = document.getElementById('hadith-number-desktop');
-            const mobileNumber = document.getElementById('hadith-number-mobile');
-            const desktopToggle = document.getElementById('hadith-toggle-desktop');
-            const mobileToggle = document.getElementById('hadith-toggle-mobile');
+            let errorMessage = '';
+            if (e.name === 'AbortError') {
+                errorMessage = 'Timeout memuat hadits.';
+            } else if (e.message === 'Failed to fetch') {
+                errorMessage = 'Koneksi terputus.';
+            } else {
+                errorMessage = 'Gagal memuat hadits.';
+            }
 
-            if (desktopText) desktopText.innerHTML = defaultText;
-            if (mobileText) mobileText.innerHTML = defaultText;
-
-            if (desktopSource) desktopSource.textContent = 'Hadits dalam 1 Menit';
-            if (mobileSource) mobileSource.textContent = 'Hadits dalam 1 Menit';
-
-            if (desktopArab) desktopArab.textContent = '';
-            if (mobileArab) mobileArab.textContent = '';
-
-            if (desktopNumber) desktopNumber.textContent = '';
-            if (mobileNumber) mobileNumber.textContent = '';
+            // Tampilkan pesan error
+            showErrorMessage(errorMessage);
 
             // Fade in kembali
             fadeInElements();
 
-            if (desktopToggle) desktopToggle.style.display = 'none';
-            if (mobileToggle) mobileToggle.style.display = 'none';
+            // Schedule retry
+            scheduleRetry(3000); // Coba lagi setelah 3 detik
+
         } finally {
             isFetching = false;
         }
