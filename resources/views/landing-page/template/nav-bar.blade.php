@@ -283,6 +283,56 @@
     }
 }
 
+/* ===== NAVBAR - RETURNING TO TOP (smooth transition) ===== */
+.navbar-floating.returning-top {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 1400px;
+    border-radius: 20px;
+    padding: 0.6rem 1.5rem;
+    border: 1px solid rgba(0, 167, 157, 0.1);
+    animation: slideUp 0.35s ease forwards;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+}
+
+/* ===== NAVBAR - APPEAR AT TOP (fade in) ===== */
+.navbar-floating.appear-top {
+    animation: fadeInTop 0.35s ease forwards;
+}
+
+@keyframes fadeInTop {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar-floating.returning-top {
+        top: 15px;
+        width: calc(100% - 30px);
+        padding: 0.5rem 1.25rem;
+        border-radius: 16px;
+    }
+}
+
 .navbar-container {
     display: flex;
     align-items: center;
@@ -691,15 +741,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--gray-100);
+    background: var(--primary-light);
+    color: var(--primary);
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    font-size: 1.1rem;
     transition: all 0.3s ease;
 }
 
 .mobile-close:hover {
-    background: var(--danger);
+    background: var(--primary);
     color: white;
 }
 
@@ -787,13 +839,16 @@
 }
 
 .mobile-dropdown-menu {
-    display: none;
+    max-height: 0;
+    overflow: hidden;
     padding-left: 2.5rem;
-    padding-top: 0.25rem;
+    transition: max-height 0.35s ease, padding-top 0.35s ease;
+    padding-top: 0;
 }
 
 .mobile-dropdown.open .mobile-dropdown-menu {
-    display: block;
+    max-height: 300px;
+    padding-top: 0.25rem;
 }
 
 .mobile-dropdown-menu a {
@@ -893,14 +948,14 @@
     }
 
     .navbar-floating {
-        padding: 0.6rem 1rem;
+        padding: 0.6rem 1.25rem;
     }
 
     .navbar-floating.scrolled {
         position: fixed;
-        top: 10px;
-        width: calc(100% - 20px);
-        padding: 0.5rem 1rem;
+        top: 15px;
+        width: calc(100% - 30px);
+        padding: 0.5rem 1.25rem;
         border-radius: 16px;
     }
 
@@ -972,11 +1027,26 @@ document.addEventListener('DOMContentLoaded', function() {
             isScrolled = shouldBeScrolled;
 
             if (isScrolled) {
+                navbar.classList.remove('returning-top');
                 navbar.classList.add('scrolled');
                 placeholder.classList.add('active');
             } else {
+                // Smooth transition back to top
                 navbar.classList.remove('scrolled');
-                placeholder.classList.remove('active');
+                navbar.classList.add('returning-top');
+
+                navbar.addEventListener('animationend', function onEnd() {
+                    navbar.removeEventListener('animationend', onEnd);
+                    navbar.classList.remove('returning-top');
+                    placeholder.classList.remove('active');
+
+                    // Fade in at top position
+                    navbar.classList.add('appear-top');
+                    navbar.addEventListener('animationend', function onAppear() {
+                        navbar.removeEventListener('animationend', onAppear);
+                        navbar.classList.remove('appear-top');
+                    }, { once: true });
+                }, { once: true });
             }
         }
     }
