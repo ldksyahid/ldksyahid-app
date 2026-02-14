@@ -402,6 +402,7 @@
             display: none;
         }
 
+
         .carousel-nav {
             width: 36px;
             height: 36px;
@@ -448,6 +449,20 @@
         text-align: center;
         background: white;
         border-radius: 0 0 20px 20px;
+        margin-top: -30px;
+        position: relative;
+        z-index: 4;
+    }
+
+    .hero-mobile-content::before {
+        content: '';
+        position: absolute;
+        top: -25px;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        background: white;
+        border-radius: 50% 50% 0 0;
     }
 
     .hero-mobile-badge {
