@@ -707,7 +707,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fetch first hadith immediately
     fetchRandomHadith();
 
-    // Auto-rotate every 20 seconds
-    setInterval(fetchRandomHadith, 20000);
+    // Auto-rotate every 30 seconds
+    setInterval(fetchRandomHadith, 30000);
 });
 </script>
