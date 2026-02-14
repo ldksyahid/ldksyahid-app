@@ -93,10 +93,6 @@
                     </div>
                     <button class="hadith-toggle" id="hadith-toggle" style="display:none;"><span class="hadith-toggle-text">Selengkapnya</span> <i class="fas fa-chevron-down"></i></button>
                     <span class="hadith-number" id="hadith-number"></span>
-                    <a href="#about-section" class="hero-mobile-btn">
-                        <span>Kenali Kami</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
                 </div>
             </div>
             @endforelse
@@ -711,7 +707,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fetch first hadith immediately
     fetchRandomHadith();
 
-    // Auto-rotate every 10 seconds
-    setInterval(fetchRandomHadith, 10000);
+    // Auto-rotate every 20 seconds
+    setInterval(fetchRandomHadith, 20000);
 });
 </script>
