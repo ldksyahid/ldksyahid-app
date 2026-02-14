@@ -97,9 +97,9 @@
                                     </div>
 
                                     <div class="hadith-desktop-wrapper" id="hadith-desktop-wrapper">
-                                        <p class="hero-desktop-arab" id="hadith-arab-desktop"></p>
-                                        <p class="hero-desktop-text" id="hadith-text-desktop">Memuat hadits...</p>
-                                        <span class="hero-desktop-number" id="hadith-number-desktop"></span>
+                                        <p class="hero-desktop-arab hadith-fade-text" id="hadith-arab-desktop"></p>
+                                        <p class="hero-desktop-text hadith-fade-text" id="hadith-text-desktop">Memuat hadits...</p>
+                                        <span class="hero-desktop-number hadith-fade-text" id="hadith-number-desktop"></span>
                                     </div>
 
                                     <button class="desktop-toggle-btn" id="hadith-toggle-desktop">
@@ -120,9 +120,9 @@
                     </div>
 
                     <div class="hadith-mobile-wrapper" id="hadith-mobile-wrapper">
-                        <p class="hero-mobile-arab" id="hadith-arab-mobile"></p>
-                        <p class="hero-mobile-desc" id="hadith-text-mobile">Memuat hadits...</p>
-                        <span class="hadith-number" id="hadith-number-mobile"></span>
+                        <p class="hero-mobile-arab hadith-fade-text" id="hadith-arab-mobile"></p>
+                        <p class="hero-mobile-desc hadith-fade-text" id="hadith-text-mobile">Memuat hadits...</p>
+                        <span class="hadith-number hadith-fade-text" id="hadith-number-mobile"></span>
                     </div>
 
                     <div class="mobile-action-area">
@@ -352,7 +352,7 @@
         border-radius: 50px;
         font-size: 0.75rem;
         z-index: 10;
-       border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .desktop-countdown-number {
@@ -401,6 +401,16 @@
         height: 50px;
         background: linear-gradient(to bottom, transparent, white);
         pointer-events: none;
+    }
+
+    /* Smooth text transitions - menggunakan kelas spesifik */
+    .hadith-fade-text {
+        transition: opacity 0.5s ease-in-out;
+        opacity: 1;
+    }
+
+    .hadith-fade-text.fade-out {
+        opacity: 0;
     }
 
     .hero-desktop-arab {
@@ -617,7 +627,6 @@
         flex-shrink: 0;
     }
 
-
     .mobile-countdown-number {
         font-weight: 700;
         color: #ffd700;
@@ -826,8 +835,21 @@ document.addEventListener('DOMContentLoaded', function() {
         countdown: document.getElementById('countdown-number-mobile')
     };
 
+    // Kumpulkan semua elemen teks yang akan di-fade
+    const textElements = [];
+
+    // Tambahkan elemen desktop yang ada
+    if (desktopElements.arab) textElements.push(desktopElements.arab);
+    if (desktopElements.text) textElements.push(desktopElements.text);
+    if (desktopElements.number) textElements.push(desktopElements.number);
+
+    // Tambahkan elemen mobile yang ada
+    if (mobileElements.arab) textElements.push(mobileElements.arab);
+    if (mobileElements.text) textElements.push(mobileElements.text);
+    if (mobileElements.number) textElements.push(mobileElements.number);
+
     // Exit if no hadith elements
-    if (!desktopElements.arab && !mobileElements.arab) return;
+    if (textElements.length === 0) return;
 
     const books = [
         { id: 'bukhari', name: 'HR. Bukhari', max: 6638 },
@@ -840,6 +862,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let timeLeft = 60;
     let countdownInterval;
+    let isFetching = false;
 
     // Toggle functionality
     function setupToggle(wrapper, toggleBtn) {
@@ -896,11 +919,59 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1000);
     }
 
+    function fadeOutElements(callback) {
+        let completed = 0;
+        const total = textElements.length;
+
+        if (total === 0) {
+            callback();
+            return;
+        }
+
+        // Tambahkan class fade-out ke semua elemen
+        textElements.forEach(el => {
+            el.classList.add('fade-out');
+        });
+
+        // Tunggu transisi selesai
+        const checkComplete = function() {
+            completed++;
+            if (completed === total) {
+                callback();
+            }
+        };
+
+        textElements.forEach(el => {
+            const handler = function() {
+                el.removeEventListener('transitionend', handler);
+                checkComplete();
+            };
+            el.addEventListener('transitionend', handler);
+
+            // Fallback jika transisi tidak berjalan
+            setTimeout(() => {
+                if (el.classList.contains('fade-out')) {
+                    el.removeEventListener('transitionend', handler);
+                    checkComplete();
+                }
+            }, 600);
+        });
+    }
+
+    function fadeInElements() {
+        textElements.forEach(el => {
+            el.classList.remove('fade-out');
+        });
+    }
+
     async function fetchRandomHadith() {
+        if (isFetching) return;
+        isFetching = true;
+
         try {
-            // Fade out
-            [desktopElements.wrapper, mobileElements.wrapper].forEach(w => {
-                if (w) w.style.opacity = '0';
+            // Fade out semua teks
+            await new Promise(resolve => {
+                fadeOutElements(resolve);
             });
 
             const book = books[Math.floor(Math.random() * books.length)];
@@ -908,49 +979,54 @@ document.addEventListener('DOMContentLoaded', function() {
             const res = await fetch(`https://api.hadith.gading.dev/books/${book.id}/${number}`);
             const json = await res.json();
 
-            setTimeout(() => {
-                if (json.code === 200 && json.data && json.data.contents) {
-                    const contents = json.data.contents;
+            if (json.code === 200 && json.data && json.data.contents) {
+                const contents = json.data.contents;
 
-                    // Reset expanded state
-                    [desktopElements.wrapper, mobileElements.wrapper].forEach(w => {
-                        if (w) {
-                            w.classList.remove('expanded');
-                            w.style.opacity = '1';
-                        }
-                    });
+                // Reset expanded state
+                if (desktopElements.wrapper) desktopElements.wrapper.classList.remove('expanded');
+                if (mobileElements.wrapper) mobileElements.wrapper.classList.remove('expanded');
 
-                    [desktopElements.toggle, mobileElements.toggle].forEach(t => {
-                        if (t) {
-                            t.classList.remove('expanded');
-                            const textSpan = t.querySelector('.toggle-text, .hadith-toggle-text');
-                            if (textSpan) textSpan.textContent = 'Selengkapnya';
-                        }
-                    });
-
-                    // Update desktop
-                    if (desktopElements.arab) desktopElements.arab.textContent = contents.arab;
-                    if (desktopElements.text) desktopElements.text.textContent = `"${contents.id}"`;
-                    if (desktopElements.source) desktopElements.source.textContent = book.name;
-                    if (desktopElements.number) desktopElements.number.textContent = `${book.name} No. ${contents.number}`;
-
-                    // Update mobile
-                    if (mobileElements.arab) mobileElements.arab.textContent = contents.arab;
-                    if (mobileElements.text) mobileElements.text.textContent = `"${contents.id}"`;
-                    if (mobileElements.source) mobileElements.source.textContent = book.name;
-                    if (mobileElements.number) mobileElements.number.textContent = `${book.name} No. ${contents.number}`;
-
-                    // Check overflow
-                    setTimeout(() => {
-                        checkOverflow(desktopElements.wrapper, desktopElements.toggle);
-                        checkOverflow(mobileElements.wrapper, mobileElements.toggle);
-                    }, 100);
-
-                    resetCountdown();
+                if (desktopElements.toggle) {
+                    desktopElements.toggle.classList.remove('expanded');
+                    const textSpan = desktopElements.toggle.querySelector('.toggle-text');
+                    if (textSpan) textSpan.textContent = 'Selengkapnya';
                 }
-            }, 300);
+
+                if (mobileElements.toggle) {
+                    mobileElements.toggle.classList.remove('expanded');
+                    const textSpan = mobileElements.toggle.querySelector('.hadith-toggle-text');
+                    if (textSpan) textSpan.textContent = 'Selengkapnya';
+                }
+
+                // Update konten desktop
+                if (desktopElements.arab) desktopElements.arab.textContent = contents.arab;
+                if (desktopElements.text) desktopElements.text.textContent = `"${contents.id}"`;
+                if (desktopElements.source) desktopElements.source.textContent = book.name;
+                if (desktopElements.number) desktopElements.number.textContent = `${book.name} No. ${contents.number}`;
+
+                // Update konten mobile
+                if (mobileElements.arab) mobileElements.arab.textContent = contents.arab;
+                if (mobileElements.text) mobileElements.text.textContent = `"${contents.id}"`;
+                if (mobileElements.source) mobileElements.source.textContent = book.name;
+                if (mobileElements.number) mobileElements.number.textContent = `${book.name} No. ${contents.number}`;
+
+                // Fade in konten baru
+                fadeInElements();
+
+                // Cek overflow untuk toggle button
+                setTimeout(() => {
+                    checkOverflow(desktopElements.wrapper, desktopElements.toggle);
+                    checkOverflow(mobileElements.wrapper, mobileElements.toggle);
+                }, 100);
+
+                resetCountdown();
+            } else {
+                throw new Error('Invalid response');
+            }
         } catch (e) {
             console.error('Error:', e);
+
+            // Fallback ke teks default
             const defaultText = 'Membangun generasi muda yang berilmu, berakhlak, dan bermanfaat bagi umat.';
 
             if (desktopElements.text) desktopElements.text.textContent = defaultText;
@@ -965,13 +1041,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (desktopElements.number) desktopElements.number.textContent = '';
             if (mobileElements.number) mobileElements.number.textContent = '';
 
-            [desktopElements.wrapper, mobileElements.wrapper].forEach(w => {
-                if (w) w.style.opacity = '1';
-            });
+            // Fade in kembali
+            fadeInElements();
 
-            [desktopElements.toggle, mobileElements.toggle].forEach(t => {
-                if (t) t.style.display = 'none';
-            });
+            if (desktopElements.toggle) desktopElements.toggle.style.display = 'none';
+            if (mobileElements.toggle) mobileElements.toggle.style.display = 'none';
+        } finally {
+            isFetching = false;
         }
     }
 
