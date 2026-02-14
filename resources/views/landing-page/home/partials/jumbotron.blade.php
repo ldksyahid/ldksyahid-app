@@ -457,12 +457,12 @@
     .hero-mobile-content::before {
         content: '';
         position: absolute;
-        top: -25px;
+        top: -20px;
         left: 0;
         width: 100%;
         height: 30px;
         background: white;
-        border-radius: 50% 50% 0 0;
+        border-radius: 30% 30% 0 0;
     }
 
     .hero-mobile-badge {
