@@ -429,7 +429,7 @@
 
     /* Floating Icons Positions - Desktop - DIPERBAIKI POSISINYA */
     .hadith-background-animation:not(.mobile) .icon-1 {
-        top: 10%;
+        top: 15%;
         left: 5%;
         animation-delay: 0s;
     }
