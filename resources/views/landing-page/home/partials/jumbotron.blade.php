@@ -93,12 +93,19 @@
                                 <div class="hero-desktop-card">
                                     <div class="hero-desktop-badge">
                                         <span class="badge-icon">📖</span>
-                                        <span id="hadith-source-desktop">Hadits Harian</span>
+                                        <span class="hadith-fade-text" id="hadith-source-desktop">Hadits dalam 1 Menit</span>
                                     </div>
 
                                     <div class="hadith-desktop-wrapper" id="hadith-desktop-wrapper">
                                         <p class="hero-desktop-arab hadith-fade-text" id="hadith-arab-desktop"></p>
-                                        <p class="hero-desktop-text hadith-fade-text" id="hadith-text-desktop">Memuat hadits...</p>
+                                        <p class="hero-desktop-text hadith-fade-text" id="hadith-text-desktop">
+                                            <span class="loading-text">Sedang Menyiapkan Hadits</span>
+                                            <span class="loading-dots">
+                                                <span class="dot">.</span>
+                                                <span class="dot">.</span>
+                                                <span class="dot">.</span>
+                                            </span>
+                                        </p>
                                         <span class="hero-desktop-number hadith-fade-text" id="hadith-number-desktop"></span>
                                     </div>
 
@@ -116,12 +123,19 @@
                 <div class="hero-mobile-content d-lg-none" id="hadith-mobile-content">
                     <div class="hero-mobile-badge">
                         <span class="badge-icon">📖</span>
-                        <span id="hadith-source-mobile">Hadits Harian</span>
+                        <span class="hadith-fade-text" id="hadith-source-mobile">Hadits dalam 1 Menit</span>
                     </div>
 
                     <div class="hadith-mobile-wrapper" id="hadith-mobile-wrapper">
                         <p class="hero-mobile-arab hadith-fade-text" id="hadith-arab-mobile"></p>
-                        <p class="hero-mobile-desc hadith-fade-text" id="hadith-text-mobile">Memuat hadits...</p>
+                        <p class="hero-mobile-desc hadith-fade-text" id="hadith-text-mobile">
+                            <span class="loading-text">Sedang Menyiapkan Hadits</span>
+                            <span class="loading-dots">
+                                <span class="dot">.</span>
+                                <span class="dot">.</span>
+                                <span class="dot">.</span>
+                            </span>
+                        </p>
                         <span class="hadith-number hadith-fade-text" id="hadith-number-mobile"></span>
                     </div>
 
@@ -403,7 +417,7 @@
         pointer-events: none;
     }
 
-    /* Smooth text transitions - menggunakan kelas spesifik */
+    /* Smooth text transitions */
     .hadith-fade-text {
         transition: opacity 0.5s ease-in-out;
         opacity: 1;
@@ -411,6 +425,42 @@
 
     .hadith-fade-text.fade-out {
         opacity: 0;
+    }
+
+    /* Loading animation styles */
+    .loading-text {
+        display: inline-block;
+    }
+
+    .loading-dots {
+        display: inline-block;
+        margin-left: 2px;
+    }
+
+    .dot {
+        display: inline-block;
+        animation: bounce 1.4s infinite;
+        font-size: 1.2rem;
+        line-height: 1;
+    }
+
+    .dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+        0%, 60%, 100% {
+            transform: translateY(0);
+            opacity: 0.3;
+        }
+        30% {
+            transform: translateY(-5px);
+            opacity: 1;
+        }
     }
 
     .hero-desktop-arab {
@@ -568,7 +618,7 @@
         opacity: 0.7;
     }
 
-    /* Mobile Action Area - Flex container for toggle and countdown */
+    /* Mobile Action Area */
     .mobile-action-area {
         display: flex;
         justify-content: space-between;
@@ -614,7 +664,6 @@
         transform: rotate(180deg);
     }
 
-    /* Mobile Countdown - Now positioned in flex container */
     .mobile-countdown {
         background: rgba(0, 0, 0, 0.35);
         backdrop-filter: blur(6px);
@@ -814,42 +863,49 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Hadith elements
-    const desktopElements = {
-        arab: document.getElementById('hadith-arab-desktop'),
-        text: document.getElementById('hadith-text-desktop'),
-        source: document.getElementById('hadith-source-desktop'),
-        number: document.getElementById('hadith-number-desktop'),
-        wrapper: document.getElementById('hadith-desktop-wrapper'),
-        toggle: document.getElementById('hadith-toggle-desktop'),
-        countdown: document.getElementById('countdown-number-desktop')
-    };
+    // Function to get fresh elements (to handle DOM changes)
+    function getFreshElements() {
+        return {
+            desktop: {
+                arab: document.getElementById('hadith-arab-desktop'),
+                text: document.getElementById('hadith-text-desktop'),
+                source: document.getElementById('hadith-source-desktop'),
+                number: document.getElementById('hadith-number-desktop'),
+                wrapper: document.getElementById('hadith-desktop-wrapper'),
+                toggle: document.getElementById('hadith-toggle-desktop'),
+                countdown: document.getElementById('countdown-number-desktop')
+            },
+            mobile: {
+                arab: document.getElementById('hadith-arab-mobile'),
+                text: document.getElementById('hadith-text-mobile'),
+                source: document.getElementById('hadith-source-mobile'),
+                number: document.getElementById('hadith-number-mobile'),
+                wrapper: document.getElementById('hadith-mobile-wrapper'),
+                toggle: document.getElementById('hadith-toggle-mobile'),
+                countdown: document.getElementById('countdown-number-mobile')
+            }
+        };
+    }
 
-    const mobileElements = {
-        arab: document.getElementById('hadith-arab-mobile'),
-        text: document.getElementById('hadith-text-mobile'),
-        source: document.getElementById('hadith-source-mobile'),
-        number: document.getElementById('hadith-number-mobile'),
-        wrapper: document.getElementById('hadith-mobile-wrapper'),
-        toggle: document.getElementById('hadith-toggle-mobile'),
-        countdown: document.getElementById('countdown-number-mobile')
-    };
+    // Function to refresh text elements array
+    function getTextElements() {
+        const elements = getFreshElements();
+        const textElements = [];
 
-    // Kumpulkan semua elemen teks yang akan di-fade
-    const textElements = [];
+        // Tambahkan elemen desktop yang ada
+        if (elements.desktop.arab) textElements.push(elements.desktop.arab);
+        if (elements.desktop.text) textElements.push(elements.desktop.text);
+        if (elements.desktop.number) textElements.push(elements.desktop.number);
+        if (elements.desktop.source) textElements.push(elements.desktop.source);
 
-    // Tambahkan elemen desktop yang ada
-    if (desktopElements.arab) textElements.push(desktopElements.arab);
-    if (desktopElements.text) textElements.push(desktopElements.text);
-    if (desktopElements.number) textElements.push(desktopElements.number);
+        // Tambahkan elemen mobile yang ada
+        if (elements.mobile.arab) textElements.push(elements.mobile.arab);
+        if (elements.mobile.text) textElements.push(elements.mobile.text);
+        if (elements.mobile.number) textElements.push(elements.mobile.number);
+        if (elements.mobile.source) textElements.push(elements.mobile.source);
 
-    // Tambahkan elemen mobile yang ada
-    if (mobileElements.arab) textElements.push(mobileElements.arab);
-    if (mobileElements.text) textElements.push(mobileElements.text);
-    if (mobileElements.number) textElements.push(mobileElements.number);
-
-    // Exit if no hadith elements
-    if (textElements.length === 0) return;
+        return textElements;
+    }
 
     const books = [
         { id: 'bukhari', name: 'HR. Bukhari', max: 6638 },
@@ -864,39 +920,74 @@ document.addEventListener('DOMContentLoaded', function() {
     let countdownInterval;
     let isFetching = false;
 
-    // Toggle functionality
-    function setupToggle(wrapper, toggleBtn) {
-        if (!wrapper || !toggleBtn) return;
+    // Toggle functionality with event delegation
+    function setupToggleListeners() {
+        // Remove existing listeners by cloning and replacing buttons (optional, but we'll use event delegation)
+        document.addEventListener('click', function(e) {
+            // Desktop toggle
+            if (e.target.closest('#hadith-toggle-desktop')) {
+                const toggle = document.getElementById('hadith-toggle-desktop');
+                const wrapper = document.getElementById('hadith-desktop-wrapper');
+                if (toggle && wrapper) {
+                    e.preventDefault();
+                    const isExpanded = wrapper.classList.toggle('expanded');
+                    toggle.classList.toggle('expanded');
+                    const textSpan = toggle.querySelector('.toggle-text');
+                    if (textSpan) {
+                        textSpan.textContent = isExpanded ? 'Sembunyikan' : 'Selengkapnya';
+                    }
+                }
+            }
 
-        toggleBtn.addEventListener('click', function() {
-            const isExpanded = wrapper.classList.toggle('expanded');
-            toggleBtn.classList.toggle('expanded');
-            const textSpan = toggleBtn.querySelector('.toggle-text, .hadith-toggle-text');
-            if (textSpan) {
-                textSpan.textContent = isExpanded ? 'Sembunyikan' : 'Selengkapnya';
+            // Mobile toggle
+            if (e.target.closest('#hadith-toggle-mobile')) {
+                const toggle = document.getElementById('hadith-toggle-mobile');
+                const wrapper = document.getElementById('hadith-mobile-wrapper');
+                if (toggle && wrapper) {
+                    e.preventDefault();
+                    const isExpanded = wrapper.classList.toggle('expanded');
+                    toggle.classList.toggle('expanded');
+                    const textSpan = toggle.querySelector('.hadith-toggle-text');
+                    if (textSpan) {
+                        textSpan.textContent = isExpanded ? 'Sembunyikan' : 'Selengkapnya';
+                    }
+                }
             }
         });
     }
 
-    setupToggle(desktopElements.wrapper, desktopElements.toggle);
-    setupToggle(mobileElements.wrapper, mobileElements.toggle);
+    function checkOverflow() {
+        const desktopWrapper = document.getElementById('hadith-desktop-wrapper');
+        const desktopToggle = document.getElementById('hadith-toggle-desktop');
+        const mobileWrapper = document.getElementById('hadith-mobile-wrapper');
+        const mobileToggle = document.getElementById('hadith-toggle-mobile');
 
-    function checkOverflow(wrapper, toggleBtn) {
-        if (!wrapper || !toggleBtn) return;
+        if (desktopWrapper && desktopToggle) {
+            if (desktopWrapper.scrollHeight > 150) {
+                desktopToggle.style.display = 'inline-flex';
+            } else {
+                desktopToggle.style.display = 'none';
+            }
+        }
 
-        if (wrapper.scrollHeight > 150) {
-            toggleBtn.style.display = 'inline-flex';
-        } else {
-            toggleBtn.style.display = 'none';
+        if (mobileWrapper && mobileToggle) {
+            if (mobileWrapper.scrollHeight > 150) {
+                mobileToggle.style.display = 'inline-flex';
+            } else {
+                mobileToggle.style.display = 'none';
+            }
         }
     }
 
     function updateCountdown() {
-        if (desktopElements.countdown) {
-            desktopElements.countdown.textContent = timeLeft;
+        const desktopCountdown = document.getElementById('countdown-number-desktop');
+        const mobileCountdown = document.getElementById('countdown-number-mobile');
+
+        if (desktopCountdown) {
+            desktopCountdown.textContent = timeLeft;
         }
-        if (mobileElements.countdown) {
-            mobileElements.countdown.textContent = timeLeft;
+        if (mobileCountdown) {
+            mobileCountdown.textContent = timeLeft;
         }
     }
 
@@ -920,6 +1011,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fadeOutElements(callback) {
+        const textElements = getTextElements();
         let completed = 0;
         const total = textElements.length;
 
@@ -959,6 +1051,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fadeInElements() {
+        const textElements = getTextElements();
         textElements.forEach(el => {
             el.classList.remove('fade-out');
         });
@@ -983,40 +1076,54 @@ document.addEventListener('DOMContentLoaded', function() {
                 const contents = json.data.contents;
 
                 // Reset expanded state
-                if (desktopElements.wrapper) desktopElements.wrapper.classList.remove('expanded');
-                if (mobileElements.wrapper) mobileElements.wrapper.classList.remove('expanded');
+                const desktopWrapper = document.getElementById('hadith-desktop-wrapper');
+                const mobileWrapper = document.getElementById('hadith-mobile-wrapper');
+                const desktopToggle = document.getElementById('hadith-toggle-desktop');
+                const mobileToggle = document.getElementById('hadith-toggle-mobile');
 
-                if (desktopElements.toggle) {
-                    desktopElements.toggle.classList.remove('expanded');
-                    const textSpan = desktopElements.toggle.querySelector('.toggle-text');
+                if (desktopWrapper) desktopWrapper.classList.remove('expanded');
+                if (mobileWrapper) mobileWrapper.classList.remove('expanded');
+
+                if (desktopToggle) {
+                    desktopToggle.classList.remove('expanded');
+                    const textSpan = desktopToggle.querySelector('.toggle-text');
                     if (textSpan) textSpan.textContent = 'Selengkapnya';
                 }
 
-                if (mobileElements.toggle) {
-                    mobileElements.toggle.classList.remove('expanded');
-                    const textSpan = mobileElements.toggle.querySelector('.hadith-toggle-text');
+                if (mobileToggle) {
+                    mobileToggle.classList.remove('expanded');
+                    const textSpan = mobileToggle.querySelector('.hadith-toggle-text');
                     if (textSpan) textSpan.textContent = 'Selengkapnya';
                 }
 
                 // Update konten desktop
-                if (desktopElements.arab) desktopElements.arab.textContent = contents.arab;
-                if (desktopElements.text) desktopElements.text.textContent = `"${contents.id}"`;
-                if (desktopElements.source) desktopElements.source.textContent = book.name;
-                if (desktopElements.number) desktopElements.number.textContent = `${book.name} No. ${contents.number}`;
+                const desktopArab = document.getElementById('hadith-arab-desktop');
+                const desktopText = document.getElementById('hadith-text-desktop');
+                const desktopSource = document.getElementById('hadith-source-desktop');
+                const desktopNumber = document.getElementById('hadith-number-desktop');
+
+                if (desktopArab) desktopArab.textContent = contents.arab;
+                if (desktopText) desktopText.innerHTML = `"${contents.id}"`;
+                if (desktopSource) desktopSource.textContent = book.name;
+                if (desktopNumber) desktopNumber.textContent = `${book.name} No. ${contents.number}`;
 
                 // Update konten mobile
-                if (mobileElements.arab) mobileElements.arab.textContent = contents.arab;
-                if (mobileElements.text) mobileElements.text.textContent = `"${contents.id}"`;
-                if (mobileElements.source) mobileElements.source.textContent = book.name;
-                if (mobileElements.number) mobileElements.number.textContent = `${book.name} No. ${contents.number}`;
+                const mobileArab = document.getElementById('hadith-arab-mobile');
+                const mobileText = document.getElementById('hadith-text-mobile');
+                const mobileSource = document.getElementById('hadith-source-mobile');
+                const mobileNumber = document.getElementById('hadith-number-mobile');
+
+                if (mobileArab) mobileArab.textContent = contents.arab;
+                if (mobileText) mobileText.innerHTML = `"${contents.id}"`;
+                if (mobileSource) mobileSource.textContent = book.name;
+                if (mobileNumber) mobileNumber.textContent = `${book.name} No. ${contents.number}`;
 
                 // Fade in konten baru
                 fadeInElements();
 
                 // Cek overflow untuk toggle button
                 setTimeout(() => {
-                    checkOverflow(desktopElements.wrapper, desktopElements.toggle);
-                    checkOverflow(mobileElements.wrapper, mobileElements.toggle);
+                    checkOverflow();
                 }, 100);
 
                 resetCountdown();
@@ -1027,37 +1134,75 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', e);
 
             // Fallback ke teks default
-            const defaultText = 'Membangun generasi muda yang berilmu, berakhlak, dan bermanfaat bagi umat.';
+            const defaultText = 'Gagal memuat hadits. Silakan Refresh Halaman ini.';
 
-            if (desktopElements.text) desktopElements.text.textContent = defaultText;
-            if (mobileElements.text) mobileElements.text.textContent = defaultText;
+            const desktopText = document.getElementById('hadith-text-desktop');
+            const mobileText = document.getElementById('hadith-text-mobile');
+            const desktopSource = document.getElementById('hadith-source-desktop');
+            const mobileSource = document.getElementById('hadith-source-mobile');
+            const desktopArab = document.getElementById('hadith-arab-desktop');
+            const mobileArab = document.getElementById('hadith-arab-mobile');
+            const desktopNumber = document.getElementById('hadith-number-desktop');
+            const mobileNumber = document.getElementById('hadith-number-mobile');
+            const desktopToggle = document.getElementById('hadith-toggle-desktop');
+            const mobileToggle = document.getElementById('hadith-toggle-mobile');
 
-            if (desktopElements.source) desktopElements.source.textContent = 'LDK Syahid';
-            if (mobileElements.source) mobileElements.source.textContent = 'LDK Syahid';
+            if (desktopText) desktopText.innerHTML = defaultText;
+            if (mobileText) mobileText.innerHTML = defaultText;
 
-            if (desktopElements.arab) desktopElements.arab.textContent = '';
-            if (mobileElements.arab) mobileElements.arab.textContent = '';
+            if (desktopSource) desktopSource.textContent = 'Hadits dalam 1 Menit';
+            if (mobileSource) mobileSource.textContent = 'Hadits dalam 1 Menit';
 
-            if (desktopElements.number) desktopElements.number.textContent = '';
-            if (mobileElements.number) mobileElements.number.textContent = '';
+            if (desktopArab) desktopArab.textContent = '';
+            if (mobileArab) mobileArab.textContent = '';
+
+            if (desktopNumber) desktopNumber.textContent = '';
+            if (mobileNumber) mobileNumber.textContent = '';
 
             // Fade in kembali
             fadeInElements();
 
-            if (desktopElements.toggle) desktopElements.toggle.style.display = 'none';
-            if (mobileElements.toggle) mobileElements.toggle.style.display = 'none';
+            if (desktopToggle) desktopToggle.style.display = 'none';
+            if (mobileToggle) mobileToggle.style.display = 'none';
         } finally {
             isFetching = false;
         }
     }
 
-    // Initialize
-    fetchRandomHadith();
-    startCountdown();
+    // Initialize dengan teks loading
+    const desktopArab = document.getElementById('hadith-arab-desktop');
+    const mobileArab = document.getElementById('hadith-arab-mobile');
+    const desktopSource = document.getElementById('hadith-source-desktop');
+    const mobileSource = document.getElementById('hadith-source-mobile');
+    const desktopNumber = document.getElementById('hadith-number-desktop');
+    const mobileNumber = document.getElementById('hadith-number-mobile');
 
-    // Cleanup
-    window.addEventListener('beforeunload', function() {
-        if (countdownInterval) clearInterval(countdownInterval);
+    if (desktopArab) desktopArab.textContent = '';
+    if (mobileArab) mobileArab.textContent = '';
+
+    if (desktopSource) desktopSource.textContent = 'Hadits dalam 1 Menit';
+    if (mobileSource) mobileSource.textContent = 'Hadits dalam 1 Menit';
+
+    if (desktopNumber) desktopNumber.textContent = '';
+    if (mobileNumber) mobileNumber.textContent = '';
+
+    // Setup toggle listeners dengan event delegation
+    setupToggleListeners();
+
+    // Cek overflow untuk toggle button
+    setTimeout(() => {
+        checkOverflow();
+    }, 100);
+
+    // Listen for window resize to check overflow again
+    window.addEventListener('resize', function() {
+        checkOverflow();
     });
+
+    // Mulai countdown dan fetch hadits pertama setelah 3 detik
+    startCountdown();
+    setTimeout(() => {
+        fetchRandomHadith();
+    }, 3000);
 });
 </script>
