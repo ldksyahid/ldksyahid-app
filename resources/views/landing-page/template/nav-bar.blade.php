@@ -126,6 +126,14 @@
 
         {{-- User Section --}}
         <div class="nav-actions d-none d-lg-flex">
+            {{-- Prayer Reminder Button (Desktop) --}}
+            <button class="btn-prayer-navbar" id="prayerNavBtn">
+                <div class="prayer-nav-icon-wrap"><i class="fas fa-mosque"></i></div>
+                <div class="prayer-nav-text">
+                    <span class="prayer-nav-label" id="prayerNavName">Sholat</span>
+                    <span class="prayer-nav-time-display" id="prayerNavTime">--:--</span>
+                </div>
+            </button>
             @guest
                 <div class="dropdown">
                     <button class="btn-user-fun" data-bs-toggle="dropdown">
@@ -211,12 +219,23 @@
             @endguest
         </div>
 
-        {{-- Mobile Toggle --}}
-        <button class="mobile-toggle d-lg-none" id="mobileToggle">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        {{-- Mobile Right Area --}}
+        <div class="d-flex d-lg-none align-items-center gap-2">
+            {{-- Prayer Reminder Button (Mobile) --}}
+            <button class="btn-prayer-mobile" id="prayerMobileBtn">
+                <i class="fas fa-mosque"></i>
+                <div class="prayer-mobile-text">
+                    <span id="prayerMobileName">Sholat</span>
+                    <span id="prayerMobileTime">--:--</span>
+                </div>
+            </button>
+            {{-- Mobile Toggle --}}
+            <button class="mobile-toggle" id="mobileToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
     </div>
 </nav>
 
@@ -236,7 +255,10 @@
                 <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="Logo">
                 <span class="mobile-brand-emoji">✨</span>
             </div>
-            <span>LDK Syahid</span>
+            <div class="mobile-brand-info">
+                <span class="mobile-brand-name-text">LDK Syahid</span>
+                <span class="mobile-brand-tagline-text">UIN Jakarta</span>
+            </div>
         </a>
         <button class="mobile-close" id="mobileClose">
             <i class="fas fa-times"></i>
@@ -337,6 +359,52 @@
             <a href="https://www.instagram.com/ldksyahid/" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
         <p class="copyright">© {{ date('Y') }} LDK Syahid · Kita Adalah Saudara <span class="beat-emoji">❤️</span></p>
+    </div>
+</div>
+
+{{-- Prayer Reminder Modal --}}
+<div class="prayer-modal-overlay" id="prayerModalOverlay">
+    <div class="prayer-modal" id="prayerModal">
+
+        {{-- Hero Header with animated bg --}}
+        <div class="prayer-modal-hero">
+            {{-- Decorative blobs --}}
+            <div class="prayer-hero-blob prayer-hero-blob-1"></div>
+            <div class="prayer-hero-blob prayer-hero-blob-2"></div>
+            <div class="prayer-hero-blob prayer-hero-blob-3"></div>
+            {{-- Large silhouette bg icon --}}
+            <div class="prayer-hero-silhouette"><i class="fas fa-mosque"></i></div>
+            {{-- Stars / sparkle particles --}}
+            <div class="prayer-hero-star s1"></div>
+            <div class="prayer-hero-star s2"></div>
+            <div class="prayer-hero-star s3"></div>
+            {{-- Close button inside hero so it contrasts on green --}}
+            <button class="prayer-modal-close" id="prayerModalClose">&times;</button>
+            {{-- Main content --}}
+            <div class="prayer-modal-icon">
+                <i class="fas fa-mosque"></i>
+            </div>
+            {{-- Live clock --}}
+            <div class="prayer-live-clock">
+                <span id="prayerCurrentTime">--:--:--</span>
+                <span class="prayer-tz-badge">
+                    <span class="prayer-tz-live-dot"></span>
+                    WIB
+                </span>
+            </div>
+            <h3 class="prayer-modal-title">Jadwal Sholat Hari Ini</h3>
+            <p class="prayer-modal-date" id="prayerModalDate"></p>
+            <p class="prayer-modal-location" id="prayerModalLocation">Untuk Wilayah Jakarta & Sekitarnya</p>
+        </div>
+
+        {{-- Prayer list body --}}
+        <div class="prayer-list" id="prayerModalBody">
+            <div class="prayer-modal-loading">
+                <i class="fas fa-spinner"></i>
+                <p>Memuat jadwal sholat...</p>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -1017,9 +1085,22 @@
     animation: sparkle 2s ease-in-out infinite;
 }
 
-.mobile-brand span {
+.mobile-brand-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.mobile-brand-name-text {
     font-weight: 700;
+    font-size: 1rem;
     color: var(--dark);
+}
+
+.mobile-brand-tagline-text {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--primary);
 }
 
 .mobile-close {
@@ -1450,10 +1531,638 @@
         display: none;
     }
 }
+
+/* ===== NAV-ACTIONS GAP ===== */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+/* Hide brand text (name + tagline) on mobile navbar – only logo shown */
+@media (max-width: 991.98px) {
+    .navbar-brand-fun .brand-text {
+        display: none;
+    }
+}
+
+/* ===== PRAYER REMINDER ===== */
+
+/* Desktop Prayer Button */
+.btn-prayer-navbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.9rem 0.45rem 0.6rem;
+    background: var(--primary-light);
+    border: 1px solid rgba(0, 167, 157, 0.2);
+    border-radius: 50px;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.btn-prayer-navbar:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 167, 157, 0.35);
+}
+
+.prayer-nav-icon-wrap {
+    font-size: 1.05rem;
+    line-height: 1;
+}
+
+.prayer-nav-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    text-align: left;
+}
+
+.prayer-nav-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.prayer-nav-time-display {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+/* Mobile Prayer Button */
+.btn-prayer-mobile {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.65rem;
+    background: var(--primary-light);
+    border: none;
+    border-radius: 12px;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.btn-prayer-mobile i {
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.prayer-mobile-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    text-align: left;
+}
+
+.prayer-mobile-text span:first-child {
+    font-size: 0.62rem;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.prayer-mobile-text span:last-child {
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.btn-prayer-mobile:hover,
+.btn-prayer-mobile:active {
+    background: var(--primary);
+    color: white;
+}
+
+/* Hide back-to-top when prayer modal is open */
+body.prayer-modal-open .back-to-top {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Prayer Modal Overlay */
+.prayer-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.prayer-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.prayer-modal {
+    background: white;
+    border-radius: 24px;
+    padding: 0;
+    width: 100%;
+    max-width: 390px;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    transform: scale(0.88) translateY(24px);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2);
+}
+
+.prayer-modal-overlay.active .prayer-modal {
+    transform: scale(1) translateY(0);
+}
+
+/* ---- Hero Section ---- */
+.prayer-modal-hero {
+    position: relative;
+    background: linear-gradient(145deg, #00a79d 0%, #007b73 60%, #005f5a 100%);
+    border-radius: 22px 22px 0 0;
+    padding: 2rem 1.5rem 1.75rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Large silhouette mosque icon in background */
+.prayer-hero-silhouette {
+    position: absolute;
+    bottom: -25px;
+    right: -20px;
+    font-size: 9rem;
+    color: rgba(255, 255, 255, 0.09);
+    pointer-events: none;
+    line-height: 1;
+    animation: silhouetteFloat 5s ease-in-out infinite;
+}
+
+@keyframes silhouetteFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+    50%       { transform: translateY(-10px) rotate(1deg) scale(1.03); }
+}
+
+/* Animated blobs */
+.prayer-hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.prayer-hero-blob-1 {
+    width: 160px; height: 160px;
+    top: -65px; left: -50px;
+    animation: blob1Float 9s ease-in-out infinite;
+}
+
+.prayer-hero-blob-2 {
+    width: 100px; height: 100px;
+    top: 10px; right: -10px;
+    background: rgba(255, 255, 255, 0.05);
+    animation: blob2Float 7s ease-in-out infinite;
+}
+
+.prayer-hero-blob-3 {
+    width: 55px; height: 55px;
+    bottom: 15px; left: 15%;
+    background: rgba(255, 255, 255, 0.06);
+    animation: blob3Float 11s ease-in-out infinite;
+}
+
+@keyframes blob1Float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%       { transform: translate(12px, 15px) scale(1.06); }
+    66%       { transform: translate(-8px, 8px) scale(0.95); }
+}
+
+@keyframes blob2Float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%       { transform: translate(-12px, 18px) scale(1.08); }
+}
+
+@keyframes blob3Float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%       { transform: translate(10px, -14px) scale(1.1); }
+}
+
+/* Star/sparkle dots */
+.prayer-hero-star {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+    animation: starTwinkle 2.5s ease-in-out infinite;
+}
+
+.prayer-hero-star.s1 { width: 4px; height: 4px; top: 18%; left: 12%; animation-delay: 0s;    }
+.prayer-hero-star.s2 { width: 3px; height: 3px; top: 30%; right: 18%; animation-delay: 0.8s; }
+.prayer-hero-star.s3 { width: 5px; height: 5px; bottom: 22%; left: 40%; animation-delay: 1.5s;}
+
+@keyframes starTwinkle {
+    0%, 100% { transform: scale(1);   opacity: 0.7; }
+    50%       { transform: scale(1.8); opacity: 0.2; }
+}
+
+/* Close Button — white on dark hero */
+.prayer-modal-close {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 5;
+    backdrop-filter: blur(4px);
+}
+
+.prayer-modal-close:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.1);
+}
+
+/* Icon circle in hero */
+.prayer-modal-icon {
+    width: 72px;
+    height: 72px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.8rem;
+    font-size: 1.9rem;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(6px);
+    animation: iconPulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes iconPulseGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); }
+    50%       { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+}
+
+/* Live clock */
+.prayer-live-clock {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-bottom: 0.6rem;
+    position: relative;
+    z-index: 2;
+}
+
+#prayerCurrentTime {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    line-height: 1;
+}
+
+.prayer-tz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: white;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    padding: 0.22rem 0.6rem 0.22rem 0.45rem;
+    border-radius: 20px;
+    letter-spacing: 0.1em;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.2);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.prayer-tz-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #7fffd4;
+    flex-shrink: 0;
+    box-shadow: 0 0 5px rgba(127, 255, 212, 0.8);
+    animation: tzDotPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes tzDotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 5px rgba(127,255,212,0.8); }
+    50%       { opacity: 0.55; transform: scale(0.7); box-shadow: 0 0 2px rgba(127,255,212,0.4); }
+}
+
+/* Titles in hero */
+.prayer-modal-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 0.3rem;
+    position: relative;
+    z-index: 2;
+}
+
+.prayer-modal-date {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 0.2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.prayer-modal-location {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+    position: relative;
+    z-index: 2;
+}
+
+/* Prayer List */
+.prayer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 1.1rem 1.25rem 1.5rem;
+}
+
+.prayer-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem;
+    background: #f8fafb;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.prayer-item.next-prayer {
+    background: var(--primary-light);
+}
+
+.prayer-item-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(0, 167, 157, 0.25);
+    border: 2px solid var(--primary);
+    flex-shrink: 0;
+}
+
+.prayer-item.next-prayer .prayer-item-dot {
+    background: var(--primary);
+    animation: pulseDot 1.6s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 167, 157, 0.45); }
+    50%       { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(0, 167, 157, 0); }
+}
+
+.prayer-item-name {
+    flex: 1;
+    font-weight: 500;
+    font-size: 0.88rem;
+    color: #333;
+}
+
+.prayer-item.next-prayer .prayer-item-name {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.prayer-next-badge {
+    font-size: 0.62rem;
+    background: var(--primary);
+    color: white;
+    padding: 0.12rem 0.45rem;
+    border-radius: 20px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.prayer-item-time {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: #333;
+    min-width: 40px;
+    text-align: right;
+}
+
+.prayer-item.next-prayer .prayer-item-time {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+/* Loading state */
+.prayer-modal-loading {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #888;
+}
+
+.prayer-modal-loading i {
+    font-size: 1.75rem;
+    color: var(--primary);
+    display: block;
+    margin-bottom: 0.5rem;
+    animation: prayerSpin 0.9s linear infinite;
+}
+
+@keyframes prayerSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.prayer-modal-loading p {
+    font-size: 0.85rem;
+    margin: 0;
+}
 </style>
 
 <script>
+/* ===== PRAYER TIMES ===== */
+(function() {
+    const CITY_ID = 1301; // Jakarta Pusat — sesuaikan jika perlu
+    const PRAYERS = [
+        { key: 'subuh',   name: 'Subuh'   },
+        { key: 'dzuhur',  name: 'Dzuhur'  },
+        { key: 'ashar',   name: 'Ashar'   },
+        { key: 'maghrib', name: 'Maghrib' },
+        { key: 'isya',    name: 'Isya'    },
+    ];
+    let prayerData = null;
+    let prayerClockInterval = null;
+
+    /* ---- Live Clock (WIB = Asia/Jakarta) ---- */
+    function tickPrayerClock() {
+        const el = document.getElementById('prayerCurrentTime');
+        if (!el) return;
+        const now = new Date();
+        const wib = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+        el.textContent = [
+            String(wib.getHours()).padStart(2, '0'),
+            String(wib.getMinutes()).padStart(2, '0'),
+            String(wib.getSeconds()).padStart(2, '0'),
+        ].join(':');
+    }
+
+    /* ---- Helpers ---- */
+    function toMinutes(timeStr) {
+        if (!timeStr) return Infinity;
+        const [h, m] = timeStr.split(':').map(Number);
+        return h * 60 + m;
+    }
+
+    function getNextPrayer(jadwal) {
+        const now   = new Date();
+        const cur   = now.getHours() * 60 + now.getMinutes();
+        for (const p of PRAYERS) {
+            if (toMinutes(jadwal[p.key]) > cur) return { ...p, time: jadwal[p.key] };
+        }
+        // Semua sholat hari ini sudah lewat → tampilkan Subuh
+        return { ...PRAYERS[0], time: jadwal[PRAYERS[0].key] };
+    }
+
+    function formatDate(d) {
+        const days   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+        const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
+    /* ---- Fetch ---- */
+    async function fetchPrayerTimes() {
+        try {
+            const d    = new Date();
+            const date = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            const res  = await fetch(`https://api.myquran.com/v2/sholat/jadwal/${CITY_ID}/${date}`);
+            const json = await res.json();
+            if (json.status && json.data) {
+                prayerData = json.data;
+                updatePrayerButton();
+            }
+        } catch (e) {
+            console.warn('Prayer times fetch failed:', e);
+        }
+    }
+
+    /* ---- Update navbar button ---- */
+    function updatePrayerButton() {
+        if (!prayerData || !prayerData.jadwal) return;
+        const next = getNextPrayer(prayerData.jadwal);
+
+        const navName = document.getElementById('prayerNavName');
+        const navTime = document.getElementById('prayerNavTime');
+        if (navName) navName.textContent = next.name;
+        if (navTime) navTime.textContent = next.time;
+
+        const mobileName = document.getElementById('prayerMobileName');
+        const mobileTime = document.getElementById('prayerMobileTime');
+        if (mobileName) mobileName.textContent = next.name;
+        if (mobileTime) mobileTime.textContent = next.time;
+    }
+
+    /* ---- Render modal body ---- */
+    function renderModal() {
+        const body  = document.getElementById('prayerModalBody');
+        const dateEl = document.getElementById('prayerModalDate');
+        const locEl  = document.getElementById('prayerModalLocation');
+        if (!body) return;
+
+        if (!prayerData) {
+            body.innerHTML = '<div class="prayer-modal-loading"><i class="fas fa-spinner"></i><p>Memuat jadwal sholat...</p></div>';
+            return;
+        }
+
+        const jadwal = prayerData.jadwal;
+        const next   = getNextPrayer(jadwal);
+
+        if (dateEl) dateEl.textContent = formatDate(new Date());
+        if (locEl && prayerData.lokasi) {
+            locEl.textContent = 'Untuk Wilayah ' + prayerData.lokasi + ' & Sekitarnya';
+        }
+
+        body.innerHTML = PRAYERS.map(p => {
+            const time   = jadwal[p.key] || '--:--';
+            const isNext = p.key === next.key;
+            return `<div class="prayer-item ${isNext ? 'next-prayer' : ''}">
+                        <div class="prayer-item-dot"></div>
+                        <span class="prayer-item-name">${p.name}</span>
+                        ${isNext ? '<span class="prayer-next-badge">Berikutnya</span>' : ''}
+                        <span class="prayer-item-time">${time}</span>
+                    </div>`;
+        }).join('');
+    }
+
+    /* ---- Open / Close ---- */
+    window.openPrayerModal = function() {
+        const overlay = document.getElementById('prayerModalOverlay');
+        if (!overlay) return;
+        renderModal();
+        overlay.classList.add('active');
+        document.body.classList.add('prayer-modal-open');
+        document.body.style.overflow = 'hidden';
+        // Start live clock
+        tickPrayerClock();
+        prayerClockInterval = setInterval(tickPrayerClock, 1000);
+    };
+
+    window.closePrayerModal = function() {
+        const overlay = document.getElementById('prayerModalOverlay');
+        if (!overlay) return;
+        overlay.classList.remove('active');
+        document.body.classList.remove('prayer-modal-open');
+        document.body.style.overflow = '';
+        // Stop live clock
+        clearInterval(prayerClockInterval);
+        prayerClockInterval = null;
+    };
+
+    /* ---- Init ---- */
+    fetchPrayerTimes();
+    setInterval(updatePrayerButton, 60000); // refresh label every minute
+})();
+
 document.addEventListener('DOMContentLoaded', function() {
+    /* Wire up prayer buttons & modal */
+    document.getElementById('prayerNavBtn')     ?.addEventListener('click', openPrayerModal);
+    document.getElementById('prayerMobileBtn')  ?.addEventListener('click', openPrayerModal);
+    document.getElementById('prayerModalClose') ?.addEventListener('click', closePrayerModal);
+    document.getElementById('prayerModalOverlay')?.addEventListener('click', function(e) {
+        if (e.target === this) closePrayerModal();
+    });
+    document.addEventListener('keydown', e => e.key === 'Escape' && closePrayerModal());
     const navbar = document.getElementById('mainNavbar');
     const placeholder = document.getElementById('navbarPlaceholder');
     const mobileToggle = document.getElementById('mobileToggle');
