@@ -1641,9 +1641,14 @@
     color: white;
 }
 
+/* Smooth transition for back-to-top hide/show */
+.back-to-top {
+    transition: opacity 0.35s ease, visibility 0.35s ease !important;
+}
+
 /* Hide back-to-top when prayer modal is open */
-body.prayer-modal-open .back-to-top {
-    display: none !important;
+body.prayer-modal-open .back-to-top,
+.back-to-top.hide-for-overlay {
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
@@ -2231,7 +2236,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileOverlay.classList.add('active');
         mobileToggle.classList.add('active');
         document.body.style.overflow = 'hidden';
-        if (backToTop) backToTop.style.display = 'none';
+        if (backToTop) backToTop.classList.add('hide-for-overlay');
     }
 
     function closeMenu() {
@@ -2239,7 +2244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileOverlay.classList.remove('active');
         mobileToggle.classList.remove('active');
         document.body.style.overflow = '';
-        if (backToTop) backToTop.style.display = '';
+        if (backToTop) backToTop.classList.remove('hide-for-overlay');
     }
 
     mobileToggle?.addEventListener('click', () => mobileMenu.classList.contains('active') ? closeMenu() : openMenu());
