@@ -164,7 +164,9 @@
                     <div class="copyright-left">
                         <span>&copy; {{ date('Y') }}</span>
                         <a href="/" class="copyright-link">UKM LDK Syahid</a>
-                        <span class="copyright-heart">Kita Adalah Saudara 🤝</span>
+                        <span class="copyright-heart">🤝</span>
+                        <span>Kita Adalah Saudara</span>
+
                     </div>
                     <div class="copyright-right">
                         <span>Developed by</span>
