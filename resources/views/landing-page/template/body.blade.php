@@ -107,7 +107,7 @@
                 position: relative;
                 z-index: 2;
                 animation: ldkSpinPulse 2.2s ease-in-out infinite;
-                box-shadow: 0 6px 24px rgba(0, 167, 157, 0.25);
+                mix-blend-mode: multiply;
             }
 
             .ldk-ring {
