@@ -124,7 +124,7 @@ a:hover {
     visibility: hidden;
     transition: opacity 0.5s ease-out, visibility 0s linear 0.5s;
     z-index: 99999;
-    background: linear-gradient(135deg, var(--primary-light) 0%, var(--white) 50%, #fff5f5 100%);
+    background: linear-gradient(135deg, #d5f4f1 0%, #edfbfa 50%, #fde8f5 100%);
 }
 
 #spinner.show {
