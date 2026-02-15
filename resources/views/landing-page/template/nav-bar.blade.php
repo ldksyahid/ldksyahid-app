@@ -386,11 +386,13 @@
             </div>
             {{-- Live clock --}}
             <div class="prayer-live-clock">
-                <span id="prayerCurrentTime">--:--:--</span>
-                <span class="prayer-tz-badge">
-                    <span class="prayer-tz-live-dot"></span>
-                    WIB
-                </span>
+                <div class="prayer-time-wrap">
+                    <span class="prayer-tz-badge">
+                        <span class="prayer-tz-live-dot"></span>
+                        WIB
+                    </span>
+                    <span id="prayerCurrentTime">--:--:--</span>
+                </div>
             </div>
             <h3 class="prayer-modal-title">Jadwal Sholat Hari Ini</h3>
             <p class="prayer-modal-date" id="prayerModalDate"></p>
@@ -1831,12 +1833,18 @@ body.prayer-modal-open .back-to-top {
 /* Live clock */
 .prayer-live-clock {
     display: flex;
-    align-items: baseline;
     justify-content: center;
-    gap: 0.35rem;
     margin-bottom: 0.6rem;
     position: relative;
     z-index: 2;
+}
+
+.prayer-time-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1.6rem;
 }
 
 #prayerCurrentTime {
@@ -1851,20 +1859,23 @@ body.prayer-modal-open .back-to-top {
 }
 
 .prayer-tz-badge {
+    position: absolute;
+    top: 0;
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    font-size: 0.7rem;
+    gap: 0.28rem;
+    font-size: 0.62rem;
     font-weight: 800;
     color: white;
     background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
     border: 1px solid rgba(255, 255, 255, 0.45);
-    padding: 0.22rem 0.6rem 0.22rem 0.45rem;
+    padding: 0.17rem 0.5rem 0.17rem 0.38rem;
     border-radius: 20px;
     letter-spacing: 0.1em;
     backdrop-filter: blur(8px);
     box-shadow: 0 2px 10px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.2);
     text-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    white-space: nowrap;
 }
 
 .prayer-tz-live-dot {
