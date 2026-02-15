@@ -126,6 +126,22 @@
 
         {{-- User Section --}}
         <div class="nav-actions d-none d-lg-flex">
+            {{-- Dark Mode Toggle (Desktop) --}}
+            <div class="dark-mode-toggle-container">
+                <input type="checkbox" id="darkModeSwitch" class="dark-mode-checkbox">
+                <label for="darkModeSwitch" class="dark-mode-toggle" title="Toggle Dark Mode" tabindex="0" role="button" aria-label="Toggle dark mode">
+                    <div class="toggle-track">
+                        <div class="toggle-thumb">
+                            <div class="sun-icon">
+                                <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9z M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg>
+                            </div>
+                            <div class="moon-icon">
+                                <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </label>
+            </div>
             {{-- Prayer Reminder Button (Desktop) --}}
             <button class="btn-prayer-navbar" id="prayerNavBtn">
                 <div class="prayer-nav-icon-wrap"><i class="fas fa-mosque"></i></div>
@@ -221,6 +237,22 @@
 
         {{-- Mobile Right Area --}}
         <div class="d-flex d-lg-none align-items-center gap-2">
+            {{-- Dark Mode Toggle (Mobile) --}}
+            <div class="dark-mode-toggle-container">
+                <input type="checkbox" id="darkModeSwitchMobile" class="dark-mode-checkbox">
+                <label for="darkModeSwitchMobile" class="dark-mode-toggle dark-mode-toggle-sm" title="Toggle Dark Mode" tabindex="0" role="button" aria-label="Toggle dark mode">
+                    <div class="toggle-track">
+                        <div class="toggle-thumb">
+                            <div class="sun-icon">
+                                <svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9z M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1S11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg>
+                            </div>
+                            <div class="moon-icon">
+                                <svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </label>
+            </div>
             {{-- Prayer Reminder Button (Mobile) --}}
             <button class="btn-prayer-mobile" id="prayerMobileBtn">
                 <i class="fas fa-mosque"></i>
@@ -1541,10 +1573,45 @@
     gap: 0.6rem;
 }
 
-/* Hide brand text (name + tagline) on mobile navbar – only logo shown */
+/* Mobile navbar brand text proportional adjustments */
 @media (max-width: 991.98px) {
     .navbar-brand-fun .brand-text {
-        display: none;
+        display: flex; /* show on mobile */
+    }
+
+    .navbar-brand-fun .brand-name {
+        font-size: 0.88rem;
+    }
+
+    .navbar-brand-fun .brand-tagline {
+        font-size: 0.62rem;
+    }
+
+    .brand-logo {
+        width: 32px;
+        height: 32px;
+    }
+
+    .navbar-brand-fun {
+        gap: 0.5rem;
+    }
+
+    /* Compact prayer button on mobile to fit toggle */
+    .btn-prayer-mobile {
+        padding: 0.4rem 0.5rem;
+        gap: 0.3rem;
+    }
+
+    .btn-prayer-mobile i {
+        font-size: 0.85rem;
+    }
+
+    .prayer-mobile-text span:first-child {
+        font-size: 0.68rem;
+    }
+
+    .prayer-mobile-text span:last-child {
+        font-size: 0.72rem;
     }
 }
 
@@ -1639,6 +1706,136 @@
 .btn-prayer-mobile:active {
     background: var(--primary);
     color: white;
+}
+
+/* ===== DARK MODE TOGGLE ===== */
+.dark-mode-toggle-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.dark-mode-checkbox {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.dark-mode-toggle {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    width: 50px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.toggle-track {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    border-radius: 34px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dark-mode-checkbox:checked + .dark-mode-toggle .toggle-track {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
+}
+
+.toggle-thumb {
+    background-color: white;
+    border-radius: 50%;
+    height: 22px;
+    width: 22px;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 2;
+}
+
+.dark-mode-checkbox:checked + .dark-mode-toggle .toggle-thumb {
+    transform: translateX(24px);
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.sun-icon,
+.moon-icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: #ff9800;
+    opacity: 1;
+}
+
+.moon-icon {
+    color: #764ba2;
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+.dark-mode-checkbox:checked + .dark-mode-toggle .sun-icon {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+.dark-mode-checkbox:checked + .dark-mode-toggle .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+.dark-mode-toggle:hover .toggle-track {
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.dark-mode-checkbox:checked + .dark-mode-toggle:hover .toggle-track {
+    box-shadow: 0 0 18px rgba(102, 126, 234, 0.6);
+}
+
+.dark-mode-toggle:hover .toggle-thumb {
+    transform: scale(1.1);
+}
+
+.dark-mode-checkbox:checked + .dark-mode-toggle:hover .toggle-thumb {
+    transform: translateX(24px) scale(1.1);
+}
+
+.dark-mode-checkbox:focus + .dark-mode-toggle .toggle-track {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Compact toggle for mobile navbar */
+.dark-mode-toggle-sm {
+    width: 44px;
+    height: 22px;
+}
+
+.dark-mode-toggle-sm .toggle-thumb {
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    top: 2px;
+}
+
+.dark-mode-checkbox:checked + .dark-mode-toggle-sm .toggle-thumb {
+    transform: translateX(22px);
+}
+
+.dark-mode-checkbox:checked + .dark-mode-toggle-sm:hover .toggle-thumb {
+    transform: translateX(22px) scale(1.1);
 }
 
 /* Smooth transition for back-to-top hide/show */
