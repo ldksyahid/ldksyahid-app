@@ -252,7 +252,7 @@
     .footer-logo-secondary {
         background: transparent;
         border-color: rgba(255, 255, 255, 0.2);
-        padding: 5;
+        padding: 5px;
     }
 
     .footer-logo:hover {
