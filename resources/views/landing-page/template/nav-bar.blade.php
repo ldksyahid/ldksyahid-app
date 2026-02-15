@@ -126,6 +126,14 @@
 
         {{-- User Section --}}
         <div class="nav-actions d-none d-lg-flex">
+            {{-- Prayer Reminder Button (Desktop) --}}
+            <button class="btn-prayer-navbar" id="prayerNavBtn">
+                <div class="prayer-nav-icon-wrap"><i class="fas fa-mosque"></i></div>
+                <div class="prayer-nav-text">
+                    <span class="prayer-nav-label" id="prayerNavName">Sholat</span>
+                    <span class="prayer-nav-time-display" id="prayerNavTime">--:--</span>
+                </div>
+            </button>
             {{-- Dark Mode Toggle (Desktop) --}}
             <div class="dark-mode-toggle-container">
                 <input type="checkbox" id="darkModeSwitch" class="dark-mode-checkbox">
@@ -142,14 +150,6 @@
                     </div>
                 </label>
             </div>
-            {{-- Prayer Reminder Button (Desktop) --}}
-            <button class="btn-prayer-navbar" id="prayerNavBtn">
-                <div class="prayer-nav-icon-wrap"><i class="fas fa-mosque"></i></div>
-                <div class="prayer-nav-text">
-                    <span class="prayer-nav-label" id="prayerNavName">Sholat</span>
-                    <span class="prayer-nav-time-display" id="prayerNavTime">--:--</span>
-                </div>
-            </button>
             @guest
                 <div class="dropdown">
                     <button class="btn-user-fun" data-bs-toggle="dropdown">
@@ -237,6 +237,14 @@
 
         {{-- Mobile Right Area --}}
         <div class="d-flex d-lg-none align-items-center gap-2">
+            {{-- Prayer Reminder Button (Mobile) --}}
+            <button class="btn-prayer-mobile" id="prayerMobileBtn">
+                <i class="fas fa-mosque"></i>
+                <div class="prayer-mobile-text">
+                    <span id="prayerMobileName">Sholat</span>
+                    <span id="prayerMobileTime">--:--</span>
+                </div>
+            </button>
             {{-- Dark Mode Toggle (Mobile) --}}
             <div class="dark-mode-toggle-container">
                 <input type="checkbox" id="darkModeSwitchMobile" class="dark-mode-checkbox">
@@ -253,14 +261,6 @@
                     </div>
                 </label>
             </div>
-            {{-- Prayer Reminder Button (Mobile) --}}
-            <button class="btn-prayer-mobile" id="prayerMobileBtn">
-                <i class="fas fa-mosque"></i>
-                <div class="prayer-mobile-text">
-                    <span id="prayerMobileName">Sholat</span>
-                    <span id="prayerMobileTime">--:--</span>
-                </div>
-            </button>
             {{-- Mobile Toggle --}}
             <button class="mobile-toggle" id="mobileToggle">
                 <span></span>
