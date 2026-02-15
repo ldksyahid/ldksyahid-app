@@ -2,8 +2,8 @@
 <footer class="footer-fun">
     {{-- Decorative Top Wave --}}
     <div class="footer-wave">
-        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z" fill="#1a2332"></path>
+        <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+            <path d="M0,0 C240,80 480,0 720,40 C960,80 1200,0 1440,0 L1440,80 L0,80 Z" fill="#1a2332"></path>
         </svg>
     </div>
 
@@ -11,9 +11,14 @@
         <div class="container py-5">
             <div class="row g-4 g-lg-5">
                 {{-- Brand & Description --}}
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-3 col-md-6">
                     <div class="footer-brand-section">
                         <div class="footer-brand mb-3">
+                            <div class="footer-logo-wrapper me-1">
+                                <img src="https://lh3.googleusercontent.com/d/1LsDxFAt1WU66CNp-2CN3J2qWXXJHlWIY"
+                                     alt="Logo UIN Jakarta"
+                                     class="footer-logo footer-logo-secondary">
+                            </div>
                             <div class="footer-logo-wrapper">
                                 <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1"
                                      alt="Logo LDK Syahid"
@@ -70,7 +75,7 @@
                 </div>
 
                 {{-- Quick Links --}}
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-6">
                     <div class="footer-section">
                         <h5 class="footer-title">
                             <span class="title-icon">🚀</span>
@@ -99,7 +104,23 @@
                             </a>
                             <a href="/kalkulatorkestari" class="footer-link-card">
                                 <i class="fas fa-calculator"></i>
-                                <span>Kestari</span>
+                                <span>Kalkulator Kestari</span>
+                            </a>
+                            <a href="/perpustakaan" class="footer-link-card">
+                                <i class="fas fa-book"></i>
+                                <span>Perpustakaan</span>
+                            </a>
+                            <a href="/laporan" class="footer-link-card">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Laporan</span>
+                            </a>
+                            <a href="/shortlink" class="footer-link-card">
+                                <i class="fas fa-link"></i>
+                                <span>Shortlink Request</span>
+                            </a>
+                            <a href="/callkestari" class="footer-link-card">
+                                <i class="fas fa-phone"></i>
+                                <span>Call Kestari</span>
                             </a>
                         </div>
                     </div>
@@ -143,7 +164,7 @@
                     <div class="copyright-left">
                         <span>&copy; {{ date('Y') }}</span>
                         <a href="/" class="copyright-link">UKM LDK Syahid</a>
-                        <span class="copyright-heart">Made with ❤️</span>
+                        <span class="copyright-heart">Kita Adalah Saudara 🤝</span>
                     </div>
                     <div class="copyright-right">
                         <span>Developed by</span>
@@ -160,11 +181,14 @@
     .footer-fun {
         position: relative;
         background: transparent;
+        border-radius: 40px 40px 0 0;
+        overflow: hidden;
+        margin-bottom: 0;
     }
 
     .footer-wave {
         position: relative;
-        height: 60px;
+        height: 80px;
         overflow: hidden;
     }
 
@@ -198,26 +222,33 @@
     /* Brand Section */
     .footer-brand-section {
         position: relative;
+        text-align: left;
     }
 
     .footer-brand {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 0.75rem;
     }
 
     .footer-logo-wrapper {
         position: relative;
+        flex-shrink: 0;
     }
 
     .footer-logo {
-        width: 60px;
-        height: 60px;
+        width: 56px;
+        height: 56px;
         border-radius: 16px;
         border: 3px solid var(--primary);
         padding: 2px;
         background: white;
         transition: transform 0.3s ease;
+        object-fit: contain;
+    }
+
+    .footer-logo-secondary {
+        border-color: rgba(255, 255, 255, 0.3);
     }
 
     .footer-logo:hover {
@@ -244,7 +275,7 @@
 
     .brand-name {
         font-family: var(--font-primary);
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 700;
         color: white;
     }
@@ -260,6 +291,7 @@
         font-size: 0.9rem;
         line-height: 1.7;
         margin-bottom: 1.5rem;
+        text-align: left;
     }
 
     /* Social Buttons */
@@ -305,6 +337,7 @@
         transform: translateY(-4px) scale(1.05);
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         color: white;
+        filter: brightness(1.2);
     }
 
     .social-btn::after {
@@ -314,10 +347,10 @@
         left: 50%;
         width: 0;
         height: 0;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 12px;
         transform: translate(-50%, -50%);
-        transition: width 0.3s, height 0.3s;
+        transition: width 0.35s ease, height 0.35s ease;
     }
 
     .social-btn:hover::after {
@@ -328,6 +361,7 @@
     /* Footer Section */
     .footer-section {
         position: relative;
+        text-align: left;
     }
 
     .footer-title {
@@ -377,33 +411,35 @@
     .footer-links-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
+        gap: 0.6rem;
     }
 
     .footer-link-card {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 12px;
-        padding: 0.75rem;
+        padding: 0.65rem 0.5rem;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.35rem;
         text-decoration: none;
         transition: all 0.3s ease;
     }
 
     .footer-link-card i {
-        font-size: 1.1rem;
+        font-size: 1rem;
         color: var(--primary);
         transition: transform 0.3s ease;
     }
 
     .footer-link-card span {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         color: #a0a8b3;
         font-weight: 500;
         transition: color 0.3s ease;
+        text-align: center;
+        line-height: 1.3;
     }
 
     .footer-link-card:hover {
@@ -426,6 +462,7 @@
         font-size: 0.85rem;
         line-height: 1.6;
         margin-bottom: 1rem;
+        text-align: left;
     }
 
     .subscribe-input-wrapper {
@@ -469,6 +506,7 @@
         font-size: 1rem;
         cursor: pointer;
         transition: all 0.3s ease;
+        flex-shrink: 0;
     }
 
     .subscribe-btn:hover {
@@ -483,6 +521,7 @@
     .footer-fun-text {
         color: #a0a8b3;
         font-size: 0.85rem;
+        text-align: left;
     }
 
     /* Copyright */
@@ -532,25 +571,33 @@
 
     /* Mobile Responsive */
     @media (max-width: 991.98px) {
+        .footer-fun {
+            border-radius: 28px 28px 0 0;
+        }
+
         .footer-wave {
-            height: 40px;
+            height: 60px;
         }
 
         .footer-logo {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
         }
 
         .brand-name {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
         }
 
         .footer-links-grid {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
         }
     }
 
     @media (max-width: 767.98px) {
+        .footer-fun {
+            border-radius: 20px 20px 0 0;
+        }
+
         .footer-links-grid {
             grid-template-columns: repeat(2, 1fr);
         }
