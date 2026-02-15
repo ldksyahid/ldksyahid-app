@@ -1,7 +1,7 @@
 {{-- Jumbotron / Hero Section - Fun & Modern Design --}}
 <section class="hero-fun">
     <div class="hero-carousel-wrapper wow fadeInUp" data-wow-delay="0.1s">
-        <div id="header-carousel" class="carousel slide carousel-fade hero-carousel-card" data-bs-ride="carousel" data-bs-interval="60000">
+        <div id="header-carousel" class="carousel slide carousel-fade hero-carousel-card" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-inner">
             @forelse($postjumbotron as $key => $post)
             <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
@@ -17,7 +17,7 @@
                                 <div class="col-lg-8 col-xl-7">
                                     <div class="hero-content-box">
                                         <div class="hero-badge animate__animated animate__fadeInDown">
-                                            <span class="badge-icon">🎉</span>
+                                            <span class="badge-icon">👑</span>
                                             <span>LDK Syahid</span>
                                         </div>
                                         <h1 class="hero-title-fun animate__animated animate__fadeInUp">
@@ -50,7 +50,7 @@
                 {{-- Mobile Content (below image) --}}
                 <div class="hero-mobile-content d-lg-none">
                     <div class="hero-mobile-badge">
-                        <span class="badge-icon">🎉</span>
+                        <span class="badge-icon">👑</span>
                         <span>LDK Syahid</span>
                     </div>
                     <h2 class="hero-mobile-title">{{ $post->title }}</h2>
@@ -186,8 +186,16 @@
             @endforelse
         </div>
 
-        {{-- Carousel Indicators --}}
+        {{-- Navigation Arrows --}}
         @if(count($postjumbotron) > 1)
+        <button class="carousel-nav carousel-nav-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="carousel-nav carousel-nav-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        {{-- Carousel Indicators - inside carousel card, below mobile content --}}
         <div class="carousel-indicators-fun">
             @foreach($postjumbotron as $key => $post)
             <button type="button"
@@ -198,16 +206,6 @@
             </button>
             @endforeach
         </div>
-        @endif
-
-        {{-- Navigation Arrows --}}
-        @if(count($postjumbotron) > 1)
-        <button class="carousel-nav carousel-nav-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <button class="carousel-nav carousel-nav-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
-            <i class="fas fa-chevron-right"></i>
-        </button>
         @endif
         </div>
     </div>
@@ -452,7 +450,7 @@
         font-size: 2.2rem;
     }
     .hadith-background-animation:not(.mobile) .icon-5 {
-        top: 45%;
+        top: 40%;
         left: 20%;
         animation-delay: 8s;
     }
@@ -668,6 +666,17 @@
         30% {
             transform: translateY(-5px);
             opacity: 1;
+        }
+    }
+
+    @keyframes navBubble {
+        0% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.5;
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(2.8);
+            opacity: 0;
         }
     }
 
@@ -950,14 +959,21 @@
     }
 
     /* Carousel Controls */
+    .hero-carousel-wrapper {
+        position: relative;
+    }
+
     .carousel-indicators-fun {
         position: absolute;
-        bottom: 30px;
+        bottom: 42px;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
-        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
         z-index: 10;
+        max-width: 80%;
     }
 
     .indicator-dot {
@@ -1017,6 +1033,7 @@
 
         .hero-carousel-card {
             border-radius: 20px;
+            overflow: hidden;
         }
 
         .hero-slide {
@@ -1024,33 +1041,84 @@
         }
 
         .hero-image {
-            height: auto;
-            max-height: 280px;
+            height: 220px;
+            object-fit: cover;
         }
 
+        /* Dark nav buttons, scale only on click - no color change */
         .carousel-nav {
             width: 36px;
             height: 36px;
             font-size: 0.8rem;
+            background: rgba(0, 0, 0, 0.45);
+            border-color: rgba(255, 255, 255, 0.15);
+            top: 110px; /* center of 220px image */
+        }
+
+        .carousel-nav::before,
+        .carousel-nav::after {
+            display: none;
+        }
+
+        .carousel-nav:hover,
+        .carousel-nav:active {
+            background: rgba(0, 0, 0, 0.45);
+            transform: translateY(-50%) scale(1.2);
         }
 
         .carousel-nav-prev { left: 10px; }
         .carousel-nav-next { right: 10px; }
 
+        /* Indicators inside card, below button */
         .carousel-indicators-fun {
-            bottom: 20px;
-            right: 15px;
+            position: relative;
+            bottom: auto;
             left: auto;
             transform: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            padding: 0.5rem 1rem 1.25rem;
+            max-width: 100%;
+            background: white;
         }
 
         .indicator-dot {
-            background: rgba(0, 167, 157, 0.2);
+            width: 8px;
+            height: 8px;
+            background: rgba(0, 167, 157, 0.25);
         }
 
         .indicator-dot.active {
+            width: 20px;
             background: var(--primary);
         }
+    }
+
+    /* Background bubble circles - only for regular post slides, not default hadith */
+    .hero-mobile-content:not(#hadith-mobile-content) {
+        isolation: isolate;
+    }
+
+    .hero-mobile-content:not(#hadith-mobile-content)::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background:
+            radial-gradient(circle at 10% 20%, rgba(0,167,157,0.07) 0%, transparent 50%),
+            radial-gradient(circle at 90% 15%, rgba(0,167,157,0.06) 0%, transparent 45%),
+            radial-gradient(circle at 75% 80%, rgba(0,167,157,0.08) 0%, transparent 55%),
+            radial-gradient(circle at 20% 85%, rgba(0,167,157,0.05) 0%, transparent 40%),
+            radial-gradient(circle at 50% 50%, rgba(0,167,157,0.04) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .hero-mobile-content:not(#hadith-mobile-content) > * {
+        position: relative;
+        z-index: 1;
     }
 
     /* Desktop Text Alignment */
