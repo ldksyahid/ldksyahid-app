@@ -504,8 +504,8 @@
         animation: float 16s infinite 2s;
     }
     .hadith-background-animation.mobile .icon-5 {
-        top: 40%;
-        left: 15%;
+        top: 25%;
+        left: 20%;
         font-size: 1.9rem;
         animation: float 15s infinite 4s;
     }
