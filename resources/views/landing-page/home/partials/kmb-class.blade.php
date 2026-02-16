@@ -711,7 +711,7 @@ body.kmb2-popup-open .back-to-top {
 }
 .kmb2-modal-banner-emoji svg {
     width: 3rem;
-    height: 3rem;
+    height: 5rem;
     display: block;
 }
 .kmb2-modal-banner-tag {
