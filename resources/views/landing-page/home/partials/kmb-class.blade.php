@@ -256,7 +256,6 @@ body.kmb2-popup-open .back-to-top {
 /* ════ BASE ════ */
 .kmb2-section {
     background: transparent;
-    position: relative;
     overflow: hidden;
 }
 
@@ -730,10 +729,10 @@ body.kmb2-popup-open .back-to-top {
     border: 1px solid rgba(255,255,255,.3);
 }
 
-/* Modal nav arrows — inside banner, hover = scale only */
+/* Modal nav arrows — prev kiri, next kiri-geser (jauh dari X di kanan) */
 .kmb2-modal-nav {
     position: absolute;
-    top: 57px;
+    top: 14px;
     width: 46px; height: 46px;
     background: rgba(255,255,255,.28) !important;
     backdrop-filter: blur(8px);
@@ -760,8 +759,9 @@ body.kmb2-popup-open .back-to-top {
     box-shadow: none !important;
     outline: none !important;
 }
-.kmb2-modal-nav.mnav-prev { left: 14px; }
-.kmb2-modal-nav.mnav-next { right: 14px; }
+/* Grup kanan atas: [< > ×] — tag label aman sendirian di kiri */
+.kmb2-modal-nav.mnav-prev { right: 124px; }
+.kmb2-modal-nav.mnav-next { right: 70px;  }
 
 /* Modal photo (overlapping) */
 .kmb2-modal-photo-area {
@@ -866,7 +866,8 @@ body.kmb2-popup-open .back-to-top {
     z-index: 9101;
     transform: translateY(100%);
     transition: transform .38s cubic-bezier(.4,0,.2,1);
-    max-height: 92dvh;
+    /* Tinggi tetap — semua kelas sama, konten lebih pendek tetap mengisi */
+    height: 85dvh;
     overflow-y: auto;
     scrollbar-width: none;
 }
