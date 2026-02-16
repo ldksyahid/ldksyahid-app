@@ -37,59 +37,59 @@
         @php
             $kelas = [
                 [
-                    'img'     => 'https://lh3.googleusercontent.com/d/1Libi_zhvvc5nC5IU10puFt_p28fRi5vG',
-                    'icon'    => '✍️',
-                    'title'   => 'Kepenulisan Fiksi',
-                    'tag'     => 'Kreativitas',
-                    'color'   => '#6366f1',
-                    'light'   => '#eef2ff',
-                    'dark'    => '#4f46e5',
-                    'preview' => 'Tulis cerpen, puisi, novel, dan berbagai karya fiksi lainnya secara kreatif!',
-                    'desc'    => 'Merupakan kelas yang akan membantu peserta dalam mengembangkan keterampilannya di bidang fiksi seperti cerpen, puisi, novel, dan sebagainya serta menyiapkan peserta untuk menciptakan sebuah karya tulis di bidang tersebut.',
+                    'img'      => 'https://lh3.googleusercontent.com/d/1Libi_zhvvc5nC5IU10puFt_p28fRi5vG',
+                    'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+                    'title'    => 'Kepenulisan Fiksi',
+                    'tag'      => 'Kreativitas',
+                    'color'    => '#6366f1',
+                    'light'    => '#eef2ff',
+                    'dark'     => '#4f46e5',
+                    'preview'  => 'Tulis cerpen, puisi, novel, dan berbagai karya fiksi lainnya secara kreatif!',
+                    'desc'     => 'Merupakan kelas yang akan membantu peserta dalam mengembangkan keterampilannya di bidang fiksi seperti cerpen, puisi, novel, dan sebagainya serta menyiapkan peserta untuk menciptakan sebuah karya tulis di bidang tersebut.',
                 ],
                 [
-                    'img'     => 'https://lh3.googleusercontent.com/d/1tl4ZDZRMmAzi0MOGYJkXk-0WYSLWIBIy',
-                    'icon'    => '📚',
-                    'title'   => 'Kepenulisan Non Fiksi',
-                    'tag'     => 'Ilmiah',
-                    'color'   => '#10b981',
-                    'light'   => '#ecfdf5',
-                    'dark'    => '#059669',
-                    'preview' => 'Asah kemampuan menulis esai ilmiah, karya tulis, dan kepenulisan berbasis riset!',
-                    'desc'    => 'Merupakan kelas yang akan membantu peserta dalam mengembangkan keterampilannya pada kepenulisan berbasis ilmiah dan terstruktur seperti esai ilmiah, karya tulis ilmiah, dan sebagainya.',
+                    'img'      => 'https://lh3.googleusercontent.com/d/1tl4ZDZRMmAzi0MOGYJkXk-0WYSLWIBIy',
+                    'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+                    'title'    => 'Kepenulisan Non Fiksi',
+                    'tag'      => 'Ilmiah',
+                    'color'    => '#10b981',
+                    'light'    => '#ecfdf5',
+                    'dark'     => '#059669',
+                    'preview'  => 'Asah kemampuan menulis esai ilmiah, karya tulis, dan kepenulisan berbasis riset!',
+                    'desc'     => 'Merupakan kelas yang akan membantu peserta dalam mengembangkan keterampilannya pada kepenulisan berbasis ilmiah dan terstruktur seperti esai ilmiah, karya tulis ilmiah, dan sebagainya.',
                 ],
                 [
-                    'img'     => 'https://lh3.googleusercontent.com/d/16rCOS6itQtju7N6ELYwQpLTkAESQ9PEd',
-                    'icon'    => '💼',
-                    'title'   => 'Entrepreneur',
-                    'tag'     => 'Bisnis',
-                    'color'   => '#f59e0b',
-                    'light'   => '#fffbeb',
-                    'dark'    => '#d97706',
-                    'preview' => 'Wujudkan jiwa wirausaha, bangun unit usaha kompetitif, dan kuasai business plan!',
-                    'desc'    => "Merupakan kelas yang akan membahas dan mendiskusikan perihal kewirausahaan, sehingga peserta yang memiliki jiwa entrepreneur atau yang sedang belajar dapat menciptakan unit usaha baru yang kompetitif. Tidak hanya itu, KMB Entrepreneur juga akan membahas mengenai hal-hal mendasar dalam berwirausaha termasuk business plan.",
+                    'img'      => 'https://lh3.googleusercontent.com/d/16rCOS6itQtju7N6ELYwQpLTkAESQ9PEd',
+                    'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+                    'title'    => 'Entrepreneur',
+                    'tag'      => 'Bisnis',
+                    'color'    => '#f59e0b',
+                    'light'    => '#fffbeb',
+                    'dark'     => '#d97706',
+                    'preview'  => 'Wujudkan jiwa wirausaha, bangun unit usaha kompetitif, dan kuasai business plan!',
+                    'desc'     => "Merupakan kelas yang akan membahas dan mendiskusikan perihal kewirausahaan, sehingga peserta yang memiliki jiwa entrepreneur atau yang sedang belajar dapat menciptakan unit usaha baru yang kompetitif. Tidak hanya itu, KMB Entrepreneur juga akan membahas mengenai hal-hal mendasar dalam berwirausaha termasuk business plan.",
                 ],
                 [
-                    'img'     => 'https://lh3.googleusercontent.com/d/1lfwpEtfLepTOcmu6DcZlmX-7RY01g_Lv',
-                    'icon'    => '🎤',
-                    'title'   => 'Public Speaking',
-                    'tag'     => 'Komunikasi',
-                    'color'   => '#ef4444',
-                    'light'   => '#fef2f2',
-                    'dark'    => '#dc2626',
-                    'preview' => "Percaya diri berbicara di depan umum dan cetak da'i yang komunikatif!",
-                    'desc'    => "Merupakan kelas yang akan mewadahi peserta yang berminat dan/atau berbakat dalam public speaking dan mengasah kemampuan peserta untuk dapat berbicara di depan umum hingga mencetak da'i yang mampu berkomunikasi dengan baik.",
+                    'img'      => 'https://lh3.googleusercontent.com/d/1lfwpEtfLepTOcmu6DcZlmX-7RY01g_Lv',
+                    'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>',
+                    'title'    => 'Public Speaking',
+                    'tag'      => 'Komunikasi',
+                    'color'    => '#ef4444',
+                    'light'    => '#fef2f2',
+                    'dark'     => '#dc2626',
+                    'preview'  => "Percaya diri berbicara di depan umum dan cetak da'i yang komunikatif!",
+                    'desc'     => "Merupakan kelas yang akan mewadahi peserta yang berminat dan/atau berbakat dalam public speaking dan mengasah kemampuan peserta untuk dapat berbicara di depan umum hingga mencetak da'i yang mampu berkomunikasi dengan baik.",
                 ],
                 [
-                    'img'     => 'https://lh3.googleusercontent.com/d/126xPzrizaxfbhH0iQj0rjFh9n19JlI3Y',
-                    'icon'    => '🎨',
-                    'title'   => 'Desain Grafis',
-                    'tag'     => 'Visual',
-                    'color'   => '#8b5cf6',
-                    'light'   => '#f5f3ff',
-                    'dark'    => '#7c3aed',
-                    'preview' => 'Ciptakan karya visual dan audio visual yang indah, selaras nilai-nilai Islam!',
-                    'desc'    => 'Merupakan kelas yang akan mewadahi minat dan bakat peserta dalam mengembangkan potensinya di bidang desain grafis sehingga mampu dan mahir untuk menciptakan karya visual maupun audio visual yang selaras dengan nilai-nilai Islam.',
+                    'img'      => 'https://lh3.googleusercontent.com/d/126xPzrizaxfbhH0iQj0rjFh9n19JlI3Y',
+                    'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r="1" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r="1" fill="currentColor" stroke="none"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>',
+                    'title'    => 'Desain Grafis',
+                    'tag'      => 'Visual',
+                    'color'    => '#8b5cf6',
+                    'light'    => '#f5f3ff',
+                    'dark'     => '#7c3aed',
+                    'preview'  => 'Ciptakan karya visual dan audio visual yang indah, selaras nilai-nilai Islam!',
+                    'desc'     => 'Merupakan kelas yang akan mewadahi minat dan bakat peserta dalam mengembangkan potensinya di bidang desain grafis sehingga mampu dan mahir untuk menciptakan karya visual maupun audio visual yang selaras dengan nilai-nilai Islam.',
                 ],
             ];
         @endphp
@@ -105,7 +105,7 @@
                 <div class="kmb2-card-banner">
                     <div class="kmb2-banner-dots"></div>
                     <span class="kmb2-banner-tag">{{ $item['tag'] }}</span>
-                    <span class="kmb2-banner-emoji">{{ $item['icon'] }}</span>
+                    <span class="kmb2-banner-emoji">{!! $item['icon_svg'] !!}</span>
                 </div>
 
                 {{-- Overlapping circular photo --}}
@@ -113,7 +113,7 @@
                     <div class="kmb2-photo-ring">
                         <img src="{{ $item['img'] }}" alt="{{ $item['title'] }}" class="kmb2-photo">
                     </div>
-                    <span class="kmb2-photo-chip">{{ $item['icon'] }}</span>
+                    <span class="kmb2-photo-chip">{!! $item['icon_svg'] !!}</span>
                 </div>
 
                 {{-- Card Body --}}
@@ -142,11 +142,9 @@
                     </div>
                 </div>
                 <div class="kmb2-cta-chips">
-                    <span title="Kepenulisan Fiksi">✍️</span>
-                    <span title="Kepenulisan Non Fiksi">📚</span>
-                    <span title="Entrepreneur">💼</span>
-                    <span title="Public Speaking">🎤</span>
-                    <span title="Desain Grafis">🎨</span>
+                    @foreach($kelas as $item)
+                    <span title="{{ $item['title'] }}">{!! $item['icon_svg'] !!}</span>
+                    @endforeach
                 </div>
             </div>
             <span class="kmb2-cta-orb oa" aria-hidden="true"></span>
@@ -163,7 +161,7 @@
 <div class="kmb2-modal" id="kmb2Modal" role="dialog" aria-modal="true" aria-label="Detail KMB">
 
     <button class="kmb2-modal-x" id="kmb2MClose" aria-label="Tutup">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
 
     {{-- Modal Banner --}}
@@ -172,6 +170,14 @@
         <span class="kmb2-modal-banner-emoji" id="kmb2MEmoji"></span>
         <span class="kmb2-modal-banner-tag" id="kmb2MTag"></span>
     </div>
+
+    {{-- Modal Nav Arrows (inside banner) --}}
+    <button class="kmb2-modal-nav mnav-prev" id="kmb2MPrev" aria-label="Kelas sebelumnya">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="kmb2-modal-nav mnav-next" id="kmb2MNext" aria-label="Kelas berikutnya">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
 
     {{-- Modal Photo --}}
     <div class="kmb2-modal-photo-area">
@@ -187,14 +193,6 @@
         <p class="kmb2-modal-desc" id="kmb2MDesc"></p>
     </div>
 
-    {{-- Navigation --}}
-    <button class="kmb2-modal-nav mnav-prev" id="kmb2MPrev" aria-label="Kelas sebelumnya">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
-    <button class="kmb2-modal-nav mnav-next" id="kmb2MNext" aria-label="Kelas berikutnya">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-    </button>
-
     {{-- Indicator dots --}}
     <div class="kmb2-modal-dots" id="kmb2MDots"></div>
 </div>
@@ -204,9 +202,10 @@
      ══════════════════════════════════════════ --}}
 <div class="kmb2-sheet-backdrop" id="kmb2SBackdrop"></div>
 <div class="kmb2-sheet" id="kmb2Sheet">
-    <div class="kmb2-sheet-handle"></div>
 
+    {{-- Banner contains the drag handle so no white area shows --}}
     <div class="kmb2-sheet-banner" id="kmb2SBanner">
+        <div class="kmb2-sheet-handle"></div>
         <div class="kmb2-sheet-banner-dots"></div>
         <span class="kmb2-sheet-banner-emoji" id="kmb2SEmoji"></span>
         <span class="kmb2-sheet-banner-tag" id="kmb2STag"></span>
@@ -227,13 +226,13 @@
     <div class="kmb2-sheet-footer">
         <div class="kmb2-sheet-nav-row">
             <button class="kmb2-sheet-nav-btn" id="kmb2SPrev">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                 Sebelumnya
             </button>
             <div class="kmb2-sheet-dots" id="kmb2SDots"></div>
             <button class="kmb2-sheet-nav-btn" id="kmb2SNext">
                 Berikutnya
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
             </button>
         </div>
         <button class="kmb2-sheet-close" id="kmb2SClose">Tutup</button>
@@ -244,6 +243,16 @@
 {{-- STYLES                                    --}}
 {{-- ══════════════════════════════════════════ --}}
 <style>
+/* ════ BACK-TO-TOP smooth toggle ════ */
+.back-to-top {
+    transition: opacity 0.35s ease, transform 0.35s ease !important;
+}
+body.kmb2-popup-open .back-to-top {
+    opacity: 0 !important;
+    transform: scale(0.8) translateY(12px) !important;
+    pointer-events: none !important;
+}
+
 /* ════ BASE ════ */
 .kmb2-section {
     background: transparent;
@@ -414,11 +423,18 @@
 }
 .kmb2-banner-emoji {
     position: absolute;
-    bottom: 10px; right: 14px;
-    font-size: 2rem;
+    bottom: 12px; right: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
     filter: drop-shadow(0 2px 8px rgba(0,0,0,.2));
     animation: kmb2BounceIcon 3.5s ease-in-out infinite;
-    display: inline-block;
+}
+.kmb2-banner-emoji svg {
+    width: 2.2rem;
+    height: 2.2rem;
+    display: block;
 }
 @keyframes kmb2BounceIcon {
     0%,100%{ transform:translateY(0) rotate(0); }
@@ -463,10 +479,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: .9rem;
+    color: var(--kc);
     box-shadow: 0 3px 10px rgba(0,0,0,.12);
     border: 2px solid var(--kl);
     transition: transform .3s ease;
+}
+.kmb2-photo-chip svg {
+    width: 14px;
+    height: 14px;
+    display: block;
 }
 @media(hover:hover) {
     .kmb2-card:hover .kmb2-photo-chip { transform: scale(1.18) rotate(-12deg); }
@@ -580,15 +601,21 @@
 .kmb2-cta-chips { display:flex; gap:.6rem; flex-wrap:wrap; }
 .kmb2-cta-chips span {
     display:inline-flex; align-items:center; justify-content:center;
-    width:50px; height:50px; font-size:1.55rem;
+    width:50px; height:50px;
+    color: white;
     background:rgba(255,255,255,.16);
     border-radius:14px;
     border:1px solid rgba(255,255,255,.22);
     cursor:default;
-    transition:transform .3s ease, background .3s ease;
+    transition:transform .3s ease;
+}
+.kmb2-cta-chips span svg {
+    width: 1.4rem;
+    height: 1.4rem;
+    display: block;
 }
 @media(hover:hover) {
-    .kmb2-cta-chips span:hover { transform:translateY(-5px) scale(1.1); background:rgba(255,255,255,.28); }
+    .kmb2-cta-chips span:hover { transform:translateY(-5px) scale(1.1); }
 }
 
 /* ════════════════════════════════════════════
@@ -629,24 +656,24 @@
     transform: translate(-50%,-50%) scale(1);
 }
 
-/* Modal close */
+/* Modal close — improved */
 .kmb2-modal-x {
     position: absolute;
     top: 14px; right: 14px;
-    width: 36px; height: 36px;
-    background: rgba(255,255,255,.25);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,.35);
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,.3);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255,255,255,.45);
     border-radius: 50%;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 5;
-    transition: background .2s ease, transform .2s ease;
+    z-index: 10;
+    transition: transform .25s ease;
 }
-.kmb2-modal-x:hover { background:rgba(255,255,255,.4); transform:scale(1.1); }
+.kmb2-modal-x:hover { transform: scale(1.15); }
 
 /* Modal banner */
 .kmb2-modal-banner {
@@ -663,11 +690,18 @@
 }
 .kmb2-modal-banner-emoji {
     position: absolute;
-    font-size: 4rem;
-    bottom: 16px; right: 24px;
+    bottom: 18px; right: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
     filter: drop-shadow(0 4px 12px rgba(0,0,0,.2));
     animation: kmb2BounceIcon 3.5s ease-in-out infinite;
-    display: inline-block;
+}
+.kmb2-modal-banner-emoji svg {
+    width: 3rem;
+    height: 3rem;
+    display: block;
 }
 .kmb2-modal-banner-tag {
     position: absolute;
@@ -683,6 +717,27 @@
     letter-spacing: .6px;
     border: 1px solid rgba(255,255,255,.3);
 }
+
+/* Modal nav arrows — inside banner, hover = scale only */
+.kmb2-modal-nav {
+    position: absolute;
+    top: 72px;
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,.28);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255,255,255,.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 6;
+    color: white;
+    transition: transform .25s cubic-bezier(.4,0,.2,1);
+}
+.kmb2-modal-nav:hover { transform: scale(1.18); }
+.kmb2-modal-nav.mnav-prev { left: 14px; }
+.kmb2-modal-nav.mnav-next { right: 14px; }
 
 /* Modal photo (overlapping) */
 .kmb2-modal-photo-area {
@@ -715,9 +770,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
     box-shadow: 0 4px 12px rgba(0,0,0,.12);
     border: 2px solid #f3f3f3;
+}
+.kmb2-modal-photo-chip svg {
+    width: 16px;
+    height: 16px;
+    display: block;
 }
 
 /* Modal body */
@@ -740,28 +799,7 @@
     margin: 0 0 1rem;
 }
 
-/* Modal nav arrows */
-.kmb2-modal-nav {
-    position: absolute;
-    top: 72px;
-    width: 42px; height: 42px;
-    background: white;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(0,0,0,.12);
-    transition: transform .25s ease, box-shadow .25s ease;
-    z-index: 6;
-    color: var(--dark);
-}
-.kmb2-modal-nav:hover { transform: scale(1.12); box-shadow: 0 6px 20px rgba(0,0,0,.18); }
-.kmb2-modal-nav.mnav-prev { left: -20px; }
-.kmb2-modal-nav.mnav-next { right: -20px; }
-
-/* Modal dots */
+/* Modal dots — hover = scale only */
 .kmb2-modal-dots {
     display: flex;
     justify-content: center;
@@ -775,6 +813,7 @@
     cursor: pointer;
     transition: all .3s ease;
 }
+.kmb2-modal-dots .mdot:hover { transform: scale(1.35); }
 .kmb2-modal-dots .mdot.active {
     width: 24px;
     border-radius: 50px;
@@ -810,18 +849,24 @@
 .kmb2-sheet::-webkit-scrollbar { display:none; }
 .kmb2-sheet.active { transform: translateY(0); }
 
+/* Handle sits inside the colored banner — no white gap */
 .kmb2-sheet-handle {
-    width: 40px; height: 4px;
-    background: #e0e0e0;
+    width: 42px; height: 4px;
+    background: rgba(255,255,255,0.55);
     border-radius: 4px;
-    margin: 12px auto 0;
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
 }
 
 /* Sheet banner */
 .kmb2-sheet-banner {
-    height: 130px;
+    height: 136px;
     position: relative;
     overflow: hidden;
+    border-radius: 24px 24px 0 0;
     transition: background .4s ease;
 }
 .kmb2-sheet-banner-dots {
@@ -831,11 +876,18 @@
 }
 .kmb2-sheet-banner-emoji {
     position:absolute;
-    font-size:3.2rem;
-    bottom:12px; right:18px;
+    bottom:14px; right:18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
     filter:drop-shadow(0 3px 8px rgba(0,0,0,.2));
     animation:kmb2BounceIcon 3.5s ease-in-out infinite;
-    display:inline-block;
+}
+.kmb2-sheet-banner-emoji svg {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: block;
 }
 .kmb2-sheet-banner-tag {
     position:absolute;
@@ -881,9 +933,13 @@
     background:white;
     border-radius:50%;
     display:flex; align-items:center; justify-content:center;
-    font-size:.85rem;
     box-shadow:0 3px 10px rgba(0,0,0,.12);
     border:2px solid #f3f3f3;
+}
+.kmb2-sheet-photo-chip svg {
+    width: 13px;
+    height: 13px;
+    display: block;
 }
 
 /* Sheet body */
@@ -919,6 +975,7 @@
     justify-content:space-between;
     gap:.5rem;
 }
+/* Nav buttons: hover = scale only, no color change */
 .kmb2-sheet-nav-btn {
     display:inline-flex;
     align-items:center;
@@ -931,9 +988,9 @@
     font-size:.8rem;
     font-weight:600;
     cursor:pointer;
-    transition:background .2s ease;
+    transition: transform .22s ease;
 }
-.kmb2-sheet-nav-btn:hover { background:rgba(0,167,157,.15); }
+.kmb2-sheet-nav-btn:hover { transform: scale(1.07); }
 .kmb2-sheet-dots {
     display:flex;
     gap:5px;
@@ -946,6 +1003,7 @@
     transition:all .3s ease;
     cursor:pointer;
 }
+.kmb2-sheet-dots .sdot:hover { transform: scale(1.35); }
 .kmb2-sheet-dots .sdot.active {
     width:20px;
     border-radius:50px;
@@ -963,7 +1021,9 @@
     font-weight:600;
     cursor:pointer;
     box-shadow:0 4px 14px rgba(0,167,157,.3);
+    transition: transform .22s ease;
 }
+.kmb2-sheet-close:hover { transform: scale(1.02); }
 
 /* ════ RESPONSIVE ════ */
 @media(max-width:991.98px) {
@@ -978,9 +1038,6 @@
     .kmb2-grid .kmb2-card:nth-child(4){grid-column:3/5;}
     .kmb2-grid .kmb2-card:nth-child(5){grid-column:2/4;}
     .kmb2-cta { padding:1.5rem; }
-    /* Modal nav arrows inside on tablet */
-    .kmb2-modal-nav.mnav-prev { left:8px; }
-    .kmb2-modal-nav.mnav-next { right:8px; }
 }
 @media(max-width:767.98px) {
     .kmb2-title { font-size:1.65rem; }
@@ -997,7 +1054,7 @@
     .kmb2-title  { font-size:1.4rem; }
     .kmb2-badge  { font-size:.8rem; padding:.4rem 1rem; }
     .kmb2-cta    { padding:1.25rem; }
-    .kmb2-cta-chips span { width:42px; height:42px; font-size:1.3rem; border-radius:12px; }
+    .kmb2-cta-chips span { width:42px; height:42px; border-radius:12px; }
 }
 </style>
 
@@ -1012,9 +1069,18 @@
     /* ── Helpers ── */
     function isDesktop() { return window.innerWidth >= 992; }
 
-    function applyAccent(elBanner, elPhotoRing, color, light) {
-        if (elBanner)    elBanner.style.background    = color;
-        if (elPhotoRing) elPhotoRing.style.background = 'linear-gradient(135deg,' + color + ',' + light + ')';
+    /* ── Back-to-top toggle (smooth) ── */
+    function hideBackToTop() {
+        document.body.classList.add('kmb2-popup-open');
+    }
+    function showBackToTop() {
+        document.body.classList.remove('kmb2-popup-open');
+        // Re-trigger jQuery fade-in if scrolled far enough
+        setTimeout(function() {
+            if (window.jQuery && (window.scrollY || document.documentElement.scrollTop) > 300) {
+                jQuery('.back-to-top').stop(true).fadeIn(300);
+            }
+        }, 380);
     }
 
     /* ── Populate Modal ── */
@@ -1023,15 +1089,17 @@
         document.getElementById('kmb2MBanner').style.background = d.color;
         document.getElementById('kmb2MPhotoRing').style.background =
             'linear-gradient(135deg,' + d.color + ',' + d.light + ')';
-        document.getElementById('kmb2MEmoji').textContent  = d.icon;
-        document.getElementById('kmb2MTag').textContent    = d.tag;
-        document.getElementById('kmb2MImg').src            = d.img;
-        document.getElementById('kmb2MImg').alt            = d.title;
-        document.getElementById('kmb2MChip').textContent   = d.icon;
-        document.getElementById('kmb2MTitle').textContent  = d.title;
-        document.getElementById('kmb2MDesc').textContent   = d.desc;
+        document.getElementById('kmb2MEmoji').innerHTML  = d.icon_svg;
+        document.getElementById('kmb2MTag').textContent  = d.tag;
+        document.getElementById('kmb2MImg').src          = d.img;
+        document.getElementById('kmb2MImg').alt          = d.title;
+        var chip = document.getElementById('kmb2MChip');
+        chip.innerHTML    = d.icon_svg;
+        chip.style.color  = d.color;
+        document.getElementById('kmb2MTitle').textContent = d.title;
+        document.getElementById('kmb2MDesc').textContent  = d.desc;
         // Update dots
-        document.querySelectorAll('#kmb2MDots .mdot').forEach((dot, i) => {
+        document.querySelectorAll('#kmb2MDots .mdot').forEach(function(dot, i) {
             dot.classList.toggle('active', i === idx);
         });
     }
@@ -1042,15 +1110,17 @@
         document.getElementById('kmb2SBanner').style.background = d.color;
         document.getElementById('kmb2SPhotoRing').style.background =
             'linear-gradient(135deg,' + d.color + ',' + d.light + ')';
-        document.getElementById('kmb2SEmoji').textContent  = d.icon;
-        document.getElementById('kmb2STag').textContent    = d.tag;
-        document.getElementById('kmb2SImg').src            = d.img;
-        document.getElementById('kmb2SImg').alt            = d.title;
-        document.getElementById('kmb2SChip').textContent   = d.icon;
-        document.getElementById('kmb2STitle').textContent  = d.title;
-        document.getElementById('kmb2SDesc').textContent   = d.desc;
+        document.getElementById('kmb2SEmoji').innerHTML  = d.icon_svg;
+        document.getElementById('kmb2STag').textContent  = d.tag;
+        document.getElementById('kmb2SImg').src          = d.img;
+        document.getElementById('kmb2SImg').alt          = d.title;
+        var chip = document.getElementById('kmb2SChip');
+        chip.innerHTML    = d.icon_svg;
+        chip.style.color  = d.color;
+        document.getElementById('kmb2STitle').textContent = d.title;
+        document.getElementById('kmb2SDesc').textContent  = d.desc;
         // Update dots
-        document.querySelectorAll('#kmb2SDots .sdot').forEach((dot, i) => {
+        document.querySelectorAll('#kmb2SDots .sdot').forEach(function(dot, i) {
             dot.classList.toggle('active', i === idx);
         });
         // Scroll sheet to top
@@ -1066,52 +1136,56 @@
 
     function openModal(idx) {
         populateModal(idx);
-        const bd = document.getElementById('kmb2MBackdrop');
-        const md = document.getElementById('kmb2Modal');
+        var bd = document.getElementById('kmb2MBackdrop');
+        var md = document.getElementById('kmb2Modal');
         bd.style.display = 'block';
         md.style.display = 'block';
-        requestAnimationFrame(() => {
+        requestAnimationFrame(function() {
             bd.classList.add('active');
             md.classList.add('active');
         });
         document.body.style.overflow = 'hidden';
+        hideBackToTop();
         document.getElementById('kmb2MClose').focus();
     }
 
     function closeModal() {
-        const bd = document.getElementById('kmb2MBackdrop');
-        const md = document.getElementById('kmb2Modal');
+        var bd = document.getElementById('kmb2MBackdrop');
+        var md = document.getElementById('kmb2Modal');
         bd.classList.remove('active');
         md.classList.remove('active');
-        setTimeout(() => {
+        setTimeout(function() {
             bd.style.display = 'none';
             md.style.display = 'none';
             document.body.style.overflow = '';
+            showBackToTop();
         }, 350);
     }
 
     function openSheet(idx) {
         populateSheet(idx);
-        const bd = document.getElementById('kmb2SBackdrop');
-        const sh = document.getElementById('kmb2Sheet');
+        var bd = document.getElementById('kmb2SBackdrop');
+        var sh = document.getElementById('kmb2Sheet');
         bd.style.display = 'block';
         sh.style.display = 'block';
-        requestAnimationFrame(() => {
+        requestAnimationFrame(function() {
             bd.classList.add('active');
             sh.classList.add('active');
         });
         document.body.style.overflow = 'hidden';
+        hideBackToTop();
     }
 
     function closeSheet() {
-        const bd = document.getElementById('kmb2SBackdrop');
-        const sh = document.getElementById('kmb2Sheet');
+        var bd = document.getElementById('kmb2SBackdrop');
+        var sh = document.getElementById('kmb2Sheet');
         bd.classList.remove('active');
         sh.classList.remove('active');
-        setTimeout(() => {
+        setTimeout(function() {
             bd.style.display = 'none';
             sh.style.display = 'none';
             document.body.style.overflow = '';
+            showBackToTop();
         }, 380);
     }
 
@@ -1124,13 +1198,13 @@
 
     /* ── Build Dots ── */
     function buildDots(containerId, cssClass) {
-        const container = document.getElementById(containerId);
+        var container = document.getElementById(containerId);
         if (!container) return;
         container.innerHTML = '';
-        KMB_DATA.forEach((_, i) => {
-            const dot = document.createElement('span');
+        KMB_DATA.forEach(function(_, i) {
+            var dot = document.createElement('span');
             dot.className = cssClass + (i === 0 ? ' active' : '');
-            dot.addEventListener('click', () => navigateTo(i));
+            dot.addEventListener('click', function() { navigateTo(i); });
             container.appendChild(dot);
         });
     }
@@ -1142,23 +1216,23 @@
         /* Modal events */
         document.getElementById('kmb2MClose').addEventListener('click', closeModal);
         document.getElementById('kmb2MBackdrop').addEventListener('click', closeModal);
-        document.getElementById('kmb2MPrev').addEventListener('click', () => navigateTo(currentIdx - 1));
-        document.getElementById('kmb2MNext').addEventListener('click', () => navigateTo(currentIdx + 1));
+        document.getElementById('kmb2MPrev').addEventListener('click', function() { navigateTo(currentIdx - 1); });
+        document.getElementById('kmb2MNext').addEventListener('click', function() { navigateTo(currentIdx + 1); });
 
         /* Sheet events */
         document.getElementById('kmb2SClose').addEventListener('click', closeSheet);
         document.getElementById('kmb2SBackdrop').addEventListener('click', closeSheet);
-        document.getElementById('kmb2SPrev').addEventListener('click', () => navigateTo(currentIdx - 1));
-        document.getElementById('kmb2SNext').addEventListener('click', () => navigateTo(currentIdx + 1));
+        document.getElementById('kmb2SPrev').addEventListener('click', function() { navigateTo(currentIdx - 1); });
+        document.getElementById('kmb2SNext').addEventListener('click', function() { navigateTo(currentIdx + 1); });
 
         /* Keyboard: Escape to close, arrows to navigate */
         document.addEventListener('keydown', function (e) {
-            const mOpen = document.getElementById('kmb2Modal').classList.contains('active');
-            const sOpen = document.getElementById('kmb2Sheet').classList.contains('active');
+            var mOpen = document.getElementById('kmb2Modal').classList.contains('active');
+            var sOpen = document.getElementById('kmb2Sheet').classList.contains('active');
             if (!mOpen && !sOpen) return;
-            if (e.key === 'Escape')      { mOpen ? closeModal() : closeSheet(); }
-            if (e.key === 'ArrowLeft')   { navigateTo(currentIdx - 1); }
-            if (e.key === 'ArrowRight')  { navigateTo(currentIdx + 1); }
+            if (e.key === 'Escape')     { mOpen ? closeModal() : closeSheet(); }
+            if (e.key === 'ArrowLeft')  { navigateTo(currentIdx - 1); }
+            if (e.key === 'ArrowRight') { navigateTo(currentIdx + 1); }
         });
     });
 })();
