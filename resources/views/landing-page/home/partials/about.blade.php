@@ -1133,7 +1133,7 @@
         .tabs-cr-slider { display: none; }
 
         .tab-btn-cr.active {
-            background: var(--primary-gradient);
+            background-color: var(--primary);
             color: white;
             box-shadow: var(--shadow-primary);
         }
