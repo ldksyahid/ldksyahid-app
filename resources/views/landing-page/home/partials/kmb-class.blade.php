@@ -161,7 +161,7 @@
 <div class="kmb2-modal" id="kmb2Modal" role="dialog" aria-modal="true" aria-label="Detail KMB">
 
     <button class="kmb2-modal-x" id="kmb2MClose" aria-label="Tutup">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
 
     {{-- Modal Banner --}}
@@ -173,10 +173,10 @@
 
     {{-- Modal Nav Arrows (inside banner) --}}
     <button class="kmb2-modal-nav mnav-prev" id="kmb2MPrev" aria-label="Kelas sebelumnya">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <button class="kmb2-modal-nav mnav-next" id="kmb2MNext" aria-label="Kelas berikutnya">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
 
     {{-- Modal Photo --}}
@@ -656,24 +656,36 @@ body.kmb2-popup-open .back-to-top {
     transform: translate(-50%,-50%) scale(1);
 }
 
-/* Modal close — improved */
+/* Modal close */
 .kmb2-modal-x {
     position: absolute;
     top: 14px; right: 14px;
-    width: 40px; height: 40px;
-    background: rgba(255,255,255,.3);
+    width: 46px; height: 46px;
+    background: rgba(255,255,255,.3) !important;
     backdrop-filter: blur(8px);
-    border: 1.5px solid rgba(255,255,255,.45);
-    border-radius: 50%;
-    color: white;
+    border: 1.5px solid rgba(255,255,255,.5) !important;
+    border-radius: 50% !important;
+    color: white !important;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 10;
+    outline: none !important;
+    box-shadow: none !important;
     transition: transform .25s ease;
+    appearance: none;
 }
-.kmb2-modal-x:hover { transform: scale(1.15); }
+.kmb2-modal-x:hover,
+.kmb2-modal-x:focus,
+.kmb2-modal-x:active {
+    transform: scale(1.18) !important;
+    background: rgba(255,255,255,.3) !important;
+    border-color: rgba(255,255,255,.5) !important;
+    color: white !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
 
 /* Modal banner */
 .kmb2-modal-banner {
@@ -721,21 +733,33 @@ body.kmb2-popup-open .back-to-top {
 /* Modal nav arrows — inside banner, hover = scale only */
 .kmb2-modal-nav {
     position: absolute;
-    top: 72px;
-    width: 40px; height: 40px;
-    background: rgba(255,255,255,.28);
+    top: 57px;
+    width: 46px; height: 46px;
+    background: rgba(255,255,255,.28) !important;
     backdrop-filter: blur(8px);
-    border: 1.5px solid rgba(255,255,255,.4);
-    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,.45) !important;
+    border-radius: 50% !important;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 6;
-    color: white;
+    color: white !important;
+    outline: none !important;
+    box-shadow: none !important;
     transition: transform .25s cubic-bezier(.4,0,.2,1);
+    appearance: none;
 }
-.kmb2-modal-nav:hover { transform: scale(1.18); }
+.kmb2-modal-nav:hover,
+.kmb2-modal-nav:focus,
+.kmb2-modal-nav:active {
+    transform: scale(1.2) !important;
+    background: rgba(255,255,255,.28) !important;
+    border-color: rgba(255,255,255,.45) !important;
+    color: white !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
 .kmb2-modal-nav.mnav-prev { left: 14px; }
 .kmb2-modal-nav.mnav-next { right: 14px; }
 

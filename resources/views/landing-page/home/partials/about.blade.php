@@ -1683,12 +1683,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 backdrop.classList.add('active');
                 sheet.classList.add('active');
             });
+            // Sembunyikan back-to-top secara smooth
+            document.body.classList.add('kmb2-popup-open');
         }
 
         function closeSheet() {
             backdrop.classList.remove('active');
             sheet.classList.remove('active');
-            setTimeout(() => { backdrop.style.display = 'none'; }, 350);
+            setTimeout(() => {
+                backdrop.style.display = 'none';
+                // Tampilkan kembali back-to-top jika sudah scroll cukup
+                document.body.classList.remove('kmb2-popup-open');
+                if (window.jQuery && (window.scrollY || document.documentElement.scrollTop) > 300) {
+                    jQuery('.back-to-top').stop(true).fadeIn(300);
+                }
+            }, 350);
         }
 
         document.querySelectorAll('.pillar-cr').forEach(pillar => {
