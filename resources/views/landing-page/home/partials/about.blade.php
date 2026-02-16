@@ -1063,6 +1063,10 @@
         transform: rotateY(180deg);
     }
 
+    /* Tap to flip (touch) */
+    .mission-card-cr.flipped .mc-front { transform: rotateY(-180deg); }
+    .mission-card-cr.flipped .mc-back { transform: rotateY(0); }
+
     @media (hover: hover) {
         .mission-card-cr:hover .mc-front { transform: rotateY(-180deg); }
         .mission-card-cr:hover .mc-back { transform: rotateY(0); }
@@ -1212,9 +1216,6 @@
 
         .mission-card-cr { height: 210px; }
 
-        /* Touch devices - tap to flip */
-        .mission-card-cr.flipped .mc-front { transform: rotateY(-180deg); }
-        .mission-card-cr.flipped .mc-back { transform: rotateY(0); }
     }
 
     @media (max-width: 767.98px) {
@@ -1360,18 +1361,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (active) updateSlider(active);
     });
 
-    // Mobile: tap to flip mission cards
-    if ('ontouchstart' in window) {
-        document.querySelectorAll('.mission-card-cr').forEach(card => {
-            card.addEventListener('click', function() {
-                document.querySelectorAll('.mission-card-cr.flipped').forEach(c => {
-                    if (c !== this) c.classList.remove('flipped');
-                });
-                this.classList.toggle('flipped');
+    // Tap to flip mission cards (all devices - CSS @media hover:hover handles desktop hover)
+    document.querySelectorAll('.mission-card-cr').forEach(card => {
+        card.addEventListener('click', function() {
+            document.querySelectorAll('.mission-card-cr.flipped').forEach(c => {
+                if (c !== this) c.classList.remove('flipped');
             });
+            this.classList.toggle('flipped');
         });
+    });
 
-        // Mobile: bottom sheet for pillars
+    // Mobile: bottom sheet for pillars
+    if ('ontouchstart' in window) {
         const backdrop = document.getElementById('pillarBackdrop');
         const sheet    = document.getElementById('pillarSheet');
         const pbsIcon  = document.getElementById('pbsIcon');
