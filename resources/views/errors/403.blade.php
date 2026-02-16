@@ -1,5 +1,7 @@
-@extends('errors::minimal')
+@extends('errors.layout')
 
-@section('title', __('Forbidden'))
+@section('title', 'Akses Ditolak')
 @section('code', '403')
-@section('message', __($exception->getMessage() ?: 'Forbidden'))
+@section('icon', 'fas fa-ban')
+@section('heading', 'Akses Ditolak')
+@section('description', 'Maaf, Kamu tidak memiliki izin untuk mengakses halaman ini. Jika merasa ini adalah kesalahan, silakan hubungi administrator.')
