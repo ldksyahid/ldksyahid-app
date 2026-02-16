@@ -51,7 +51,7 @@
                 </div>
 
                 {{-- Contact Info --}}
-                <div class="col-lg-2 col-md-6">
+                <div class="col-lg-3 col-md-6">
                     <div class="footer-section">
                         <h5 class="footer-title">
                             <span class="title-icon">📍</span>
@@ -75,7 +75,7 @@
                 </div>
 
                 {{-- Quick Links --}}
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-3 col-md-6">
                     <div class="footer-section">
                         <h5 class="footer-title">
                             <span class="title-icon">🚀</span>
@@ -398,6 +398,7 @@
         font-size: 0.85rem;
         margin-bottom: 1rem;
         transition: color 0.3s ease;
+        word-break: break-word;
     }
 
     .footer-contact-list li:hover {
