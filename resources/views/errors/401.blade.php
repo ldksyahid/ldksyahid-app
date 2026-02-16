@@ -1,5 +1,7 @@
-@extends('errors::minimal')
+@extends('errors.layout')
 
-@section('title', __('Unauthorized'))
+@section('title', 'Tidak Terotorisasi')
 @section('code', '401')
-@section('message', __('Unauthorized'))
+@section('icon', 'fas fa-user-lock')
+@section('heading', 'Akses Tidak Terotorisasi')
+@section('description', 'Kamu perlu masuk terlebih dahulu untuk mengakses halaman ini. Silakan login dengan akun yang valid untuk melanjutkan.')
