@@ -35,6 +35,10 @@
                         <span class="tab-icon-cr">🎯</span>
                         <span class="tab-text-cr">Misi</span>
                     </button>
+                    <button class="tab-btn-cr" data-tab="keluarga">
+                        <span class="tab-icon-cr">🌿</span>
+                        <span class="tab-text-cr">Keluarga</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -268,6 +272,61 @@
                             @endforeach
                         </div>
                     </div>
+                </div>
+            </div>
+            {{-- Keluarga Tab --}}
+            <div class="tab-content-cr" id="tab-keluarga">
+                <div class="keluarga-header-cr text-center mb-4">
+                    <span class="mission-badge-cr">🌿 Keluarga</span>
+                    <h4 class="mission-title-cr">Keluarga Besar LDK Syahid</h4>
+                    <p class="text-muted" style="font-size:0.9rem;">LDK Syahid Pusat beserta LDK Syahid tingkat Fakultas</p>
+                </div>
+
+                {{-- Pusat --}}
+                <div class="kl-pusat-wrap">
+                    <div class="kl-pusat-card">
+                        <div class="kl-pusat-badge">🏛️ Pusat</div>
+                        <div class="kl-pusat-img-wrap">
+                            <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1"
+                                 alt="LDK Syahid Pusat" class="kl-pusat-img">
+                        </div>
+                        <div class="kl-pusat-name">LDK Syahid</div>
+                        <div class="kl-pusat-sub">UIN Syarif Hidayatullah Jakarta</div>
+                    </div>
+                    <div class="kl-connector">
+                        <div class="kl-connector-line"></div>
+                        <div class="kl-connector-spread"></div>
+                    </div>
+                </div>
+
+                {{-- Fakultas Grid --}}
+                <div class="kl-fakultas-label">
+                    <span>🏫 LDK Syahid Tingkat Fakultas</span>
+                </div>
+                <div class="kl-grid">
+                    @php
+                        $fakultas = [
+                            ['img' => 'https://lh3.googleusercontent.com/d/1Fj4hZRy7SNQ1Kq72JvY4M557noiULg-i', 'name' => 'LDKS FAH'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1R-3mi9Jzw5vt3-VKVPic9BTvJeFkaikK', 'name' => 'LDKS FDI'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1INzkD8YgOvf5_FVIXEnW40wUCsxJdepp', 'name' => 'LDKS FDIKOM'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1t_dDa8IDgpOnH85RvU67DV3W2CxhSetx', 'name' => 'LDKS FKIK'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1yU1Oj1qrFBanjcoj3ZhO1LPFOon7V92-', 'name' => 'LDKS FISIP'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1u6mS175Q2Fbqd2k6CRNqKq0E3q5Sde1U', 'name' => 'LDKS FITK'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1Iem3JZgYMXRitO1GOb9lTMVeMjiUQFUI', 'name' => 'LDKS FSH'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1HinEWSv90pL0MUZ1F0dAbyHNSmk2L-B5', 'name' => 'LDKS FST'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1zgyRIwgN-wnFHAquVyBvSuyhb4ZzpJ0R', 'name' => 'LDKS FEB'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1sr4GI8TE-Z2Og4PBm3hqm1Bb38NryJ6U', 'name' => 'LDKS F.Psikologi'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1m4RD-ZZOYSQmGcGBuxVDS-lOd2BI3AaJ', 'name' => 'CSI FEB'],
+                        ];
+                    @endphp
+                    @foreach($fakultas as $i => $fak)
+                    <div class="kl-card" style="--delay: {{ $i * 0.06 }}s">
+                        <div class="kl-img-wrap">
+                            <img src="{{ $fak['img'] }}" alt="{{ $fak['name'] }}" class="kl-logo">
+                        </div>
+                        <span class="kl-name">{{ $fak['name'] }}</span>
+                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -1236,6 +1295,246 @@
         .about-photo { max-width: 220px; }
 
         .history-body-cr p { font-size: 0.85rem; }
+    }
+
+    /* ===== KELUARGA ===== */
+    #tab-keluarga {
+        background: linear-gradient(160deg, #f0fffe 0%, #ffffff 60%);
+        border-radius: 24px;
+        padding: 2rem;
+    }
+
+    .kl-pusat-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 0;
+    }
+
+    .kl-pusat-card {
+        background: white;
+        border-radius: 28px;
+        padding: 2rem 3rem;
+        box-shadow: 0 8px 40px rgba(0,167,157,0.15);
+        text-align: center;
+        position: relative;
+        border: 2px solid rgba(0,167,157,0.2);
+        transition: var(--transition-bounce);
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .kl-pusat-card::before {
+        content: '';
+        position: absolute;
+        inset: -6px;
+        border-radius: 32px;
+        border: 2px dashed rgba(0,167,157,0.2);
+        animation: klRingSpin 12s linear infinite;
+    }
+
+    @keyframes klRingSpin { to { transform: rotate(360deg); } }
+
+    @media (hover: hover) {
+        .kl-pusat-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 16px 50px rgba(0,167,157,0.22);
+        }
+    }
+
+    .kl-pusat-badge {
+        position: absolute;
+        top: -16px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary-gradient);
+        color: white;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.3rem 1.1rem;
+        border-radius: 50px;
+        white-space: nowrap;
+        letter-spacing: 0.5px;
+        box-shadow: var(--shadow-primary);
+        animation: klBadgeGlow 5s ease-in-out infinite;
+    }
+
+    @keyframes klBadgeGlow {
+        0%, 100% { opacity: 1; transform: translateX(-50%); }
+        50% { opacity: 0.82; transform: translateX(-50%) scale(1.04); }
+    }
+
+    .kl-pusat-img-wrap {
+        width: 100px;
+        height: 100px;
+        background: var(--primary-light);
+        border-radius: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .kl-pusat-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    .kl-pusat-name {
+        font-family: var(--font-primary);
+        font-weight: 700;
+        color: var(--dark);
+        font-size: 1.05rem;
+        margin-top: 0.25rem;
+    }
+
+    .kl-pusat-sub {
+        font-size: 0.78rem;
+        color: var(--secondary);
+    }
+
+    /* Connector */
+    .kl-connector {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        padding: 0 2rem;
+        width: 100%;
+    }
+
+    .kl-connector-line {
+        width: 3px;
+        height: 28px;
+        background: linear-gradient(180deg, var(--primary) 0%, rgba(0,167,157,0.4) 100%);
+        border-radius: 3px;
+    }
+
+    .kl-connector-spread {
+        width: 75%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent 0%, var(--primary) 20%, var(--primary) 80%, transparent 100%);
+        border-radius: 3px;
+        position: relative;
+    }
+
+    .kl-connector-spread::before,
+    .kl-connector-spread::after {
+        content: '';
+        position: absolute;
+        top: -3px;
+        width: 8px; height: 8px;
+        background: var(--primary);
+        border-radius: 50%;
+    }
+    .kl-connector-spread::before { left: 20%; }
+    .kl-connector-spread::after { right: 20%; }
+
+    /* Fakultas label */
+    .kl-fakultas-label {
+        text-align: center;
+        margin: 0.75rem 0 1.25rem;
+    }
+
+    .kl-fakultas-label span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--primary-light);
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 0.85rem;
+        padding: 0.45rem 1.25rem;
+        border-radius: 50px;
+        border: 1px solid rgba(0,167,157,0.25);
+    }
+
+    /* Grid */
+    .kl-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.85rem;
+    }
+
+    .kl-card {
+        flex: 0 0 calc((100% - 5 * 0.85rem) / 6);
+        background: white;
+        border-radius: 18px;
+        padding: 1.1rem 0.6rem 0.9rem;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(0,167,157,0.08);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.55rem;
+        cursor: default;
+        transition: var(--transition-bounce);
+        animation: tabSlideIn 0.45s cubic-bezier(0.4,0,0.2,1) both;
+        animation-delay: var(--delay);
+        position: relative;
+        overflow: hidden;
+    }
+
+    @media (hover: hover) {
+        .kl-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 14px 32px rgba(0,167,157,0.15), 0 0 0 2px rgba(0,167,157,0.25);
+            border-color: rgba(0,167,157,0.25);
+        }
+    }
+
+    .kl-img-wrap {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary-light);
+        border-radius: 14px;
+        padding: 8px;
+        transition: var(--transition-smooth);
+    }
+
+    @media (hover: hover) {
+        .kl-card:hover .kl-img-wrap {
+            background: rgba(0,167,157,0.12);
+            transform: scale(1.08);
+        }
+    }
+
+    .kl-logo {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .kl-name {
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: var(--dark);
+        text-align: center;
+        line-height: 1.3;
+    }
+
+    @media (max-width: 1199.98px) {
+        .kl-card { flex: 0 0 calc((100% - 3 * 0.85rem) / 4); }
+    }
+
+    @media (max-width: 991.98px) {
+        .kl-card { flex: 0 0 calc((100% - 2 * 0.85rem) / 3); }
+        .kl-connector-spread { width: 85%; }
+        #tab-keluarga { padding: 1.25rem; }
+    }
+
+    @media (max-width: 575.98px) {
+        .kl-card { flex: 0 0 calc((100% - 0.85rem) / 2); }
+        .kl-pusat-img-wrap { width: 80px; height: 80px; }
+        .kl-pusat-card { padding: 1.5rem 2rem; }
     }
 
     /* ===== PILLAR BOTTOM SHEET ===== */
