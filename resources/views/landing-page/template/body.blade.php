@@ -29,8 +29,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
         {{-- Custom CSS --}}
-        <link href="{{ asset('landing-page-ext-rsrc/css/style.css') }}" rel="stylesheet" />
-        <link rel="stylesheet" href="{{ asset('proker-counter-by-yuda-ext-rsrc/css/style-new.css') }}">
+        <link href="{{ asset('landing-page-ext-rsrc/css/style-v1.0.0.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ asset('proker-counter-by-yuda-ext-rsrc/css/style-v1.0.0.css') }}">
         <link href="{{ asset('css/itsupport.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/pagination.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/cardservice.css') }}" rel="stylesheet" />
@@ -226,7 +226,7 @@
         <script src="{{ asset('landing-page-ext-rsrc/lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
         {{-- Custom JavaScript --}}
-        <script src="{{ asset('landing-page-ext-rsrc/js/main.js') }}"></script>
+        <script src="{{ asset('landing-page-ext-rsrc/js/main-v1.0.0.js') }}"></script>
 
         @yield('scripts')
 

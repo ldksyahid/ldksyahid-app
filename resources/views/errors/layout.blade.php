@@ -21,7 +21,7 @@
         {{-- CSS Libraries --}}
         <link href="{{ asset('landing-page-ext-rsrc/css/bootstrap.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('landing-page-ext-rsrc/lib/animate/animate.min.css') }}" rel="stylesheet" />
-        <link href="{{ asset('landing-page-ext-rsrc/css/style.css') }}" rel="stylesheet" />
+        <link href="{{ asset('landing-page-ext-rsrc/css/style-v1.0.0.css') }}" rel="stylesheet" />
 
         <style>
             :root {
