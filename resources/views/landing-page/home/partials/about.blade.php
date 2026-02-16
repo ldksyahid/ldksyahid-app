@@ -1,106 +1,131 @@
-{{-- About Section - Fun & Modern Design --}}
-<section class="about-fun pt-3 pb-5" id="about-section">
+{{-- About Section - Creative & Interactive Design --}}
+<section class="about-creative pt-3 pb-5" id="about-section">
+    {{-- Decorative floating elements --}}
+    <div class="about-deco">
+        <div class="deco-circle deco-1"></div>
+        <div class="deco-circle deco-2"></div>
+        <div class="deco-circle deco-3"></div>
+        <div class="deco-dot-grid"></div>
+    </div>
+
     <div class="container">
         {{-- Section Header --}}
         <div class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="section-badge">
-                <span class="badge-emoji">🏠</span>
+            <div class="section-badge-cr">
+                <span class="badge-emoji-cr">🏠</span>
                 <span>Tentang Kami</span>
+                <span class="badge-pulse"></span>
             </div>
-            <h2 class="section-title-fun">
+            <h2 class="section-title-cr">
                 UKM LDK Syahid
-                <span class="title-highlight">UIN Jakarta</span>
+                <span class="title-highlight-cr">UIN Syarif Hidayatullah Jakarta</span>
             </h2>
-            <p class="section-description-fun">
-                Tempat bertumbuh dan berkarya dalam kebaikan
-            </p>
         </div>
 
-        {{-- Fun Tabs Navigation --}}
+        {{-- Creative Tabs Navigation --}}
         <div class="row justify-content-center mb-4 wow fadeInUp" data-wow-delay="0.2s">
             <div class="col-12 col-lg-auto">
-                <div class="tabs-fun-wrapper">
-                    <button class="tab-btn-fun active" data-tab="perkenalan">
-                        <span class="tab-icon">👋</span>
-                        <span class="tab-text">Perkenalan</span>
+                <div class="tabs-cr-wrapper">
+                    <div class="tabs-cr-slider"></div>
+                    <button class="tab-btn-cr active" data-tab="perkenalan">
+                        <span class="tab-icon-cr">👋</span>
+                        <span class="tab-text-cr">Perkenalan</span>
                     </button>
-                    <button class="tab-btn-fun" data-tab="sejarah">
-                        <span class="tab-icon">📜</span>
-                        <span class="tab-text">Sejarah</span>
+                    <button class="tab-btn-cr" data-tab="sejarah">
+                        <span class="tab-icon-cr">📜</span>
+                        <span class="tab-text-cr">Sejarah</span>
                     </button>
-                    <button class="tab-btn-fun" data-tab="visi">
-                        <span class="tab-icon">🔭</span>
-                        <span class="tab-text">Visi</span>
+                    <button class="tab-btn-cr" data-tab="visi">
+                        <span class="tab-icon-cr">🔭</span>
+                        <span class="tab-text-cr">Visi</span>
                     </button>
-                    <button class="tab-btn-fun" data-tab="misi">
-                        <span class="tab-icon">🎯</span>
-                        <span class="tab-text">Misi</span>
+                    <button class="tab-btn-cr" data-tab="misi">
+                        <span class="tab-icon-cr">🎯</span>
+                        <span class="tab-text-cr">Misi</span>
                     </button>
                 </div>
             </div>
         </div>
 
         {{-- Tab Contents --}}
-        <div class="tab-contents-fun">
+        <div class="tab-contents-cr">
             {{-- Perkenalan Tab --}}
-            <div class="tab-content-fun active" id="tab-perkenalan">
+            <div class="tab-content-cr active" id="tab-perkenalan">
                 <div class="row g-4 align-items-center wow fadeInUp" data-wow-delay="0.3s">
                     <div class="col-lg-5 text-center">
-                        <div class="about-image-wrapper">
-                            <div class="about-image-bg"></div>
-                            <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1"
-                                 alt="LDK Syahid"
-                                 class="about-image">
-                            <div class="about-image-badge">
-                                <span class="badge-year">Est.</span>
-                                <span class="badge-number">1996</span>
+                        <div class="about-img-cr">
+                            <div class="img-frame">
+                                <div class="img-frame-border"></div>
+                                <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1"
+                                     alt="Gambar LDK Syahid"
+                                     class="about-photo">
+                                <div class="img-overlay">
+                                    <span>LDK Syahid</span>
+                                </div>
+                            </div>
+                            <div class="img-badge-cr">
+                                <div class="badge-inner">
+                                    <span class="badge-est">Est.</span>
+                                    <span class="badge-yr">1996</span>
+                                </div>
+                            </div>
+                            <div class="img-float-tag tag-1">
+                                <i class="fas fa-mosque"></i> Dakwah
+                            </div>
+                            <div class="img-float-tag tag-2">
+                                <i class="fas fa-users"></i> Ukhuwah
                             </div>
                         </div>
+                        <p class="mt-4 fst-italic text-muted px-3" style="font-size: 0.9rem;">LDK Syahid adalah UKM keislaman yang aktif dalam mentoring, kajian, rihlah, softskill, ukhuwah, dan pembentukan karakter kepemimpinan.</p>
                     </div>
                     <div class="col-lg-7">
-                        <div class="about-card-fun">
-                            <div class="about-card-header">
-                                <div class="about-icon-box">
+                        <div class="intro-card-cr">
+                            <div class="intro-card-accent"></div>
+                            <div class="intro-header">
+                                <div class="intro-icon-box">
                                     <i class="fas fa-mosque"></i>
+                                    <div class="icon-ring"></div>
                                 </div>
                                 <div>
-                                    <h4 class="about-card-title">Lembaga Dakwah Kampus</h4>
-                                    <span class="about-card-subtitle">UIN Syarif Hidayatullah Jakarta</span>
+                                    <h4 class="intro-title">Lembaga Dakwah Kampus</h4>
+                                    <span class="intro-subtitle">UIN Syarif Hidayatullah Jakarta</span>
                                 </div>
                             </div>
-                            <div class="about-card-body">
-                                <p>
-                                    LDK Syahid adalah salah satu Unit Kegiatan Mahasiswa (UKM) bidang keislaman di UIN Syarif Hidayatullah Jakarta. Yuk, kenali lebih dekat! 🌟
+                            <div class="intro-body">
+                                <p style="text-align: justify;">
+                                    LDK Syahid adalah Salah satu Unit Kegiatan Mahasiswa (UKM) bidang keislaman di UIN Jakarta. Kegiatan-kegiatan yang dilakukan oleh LDK Syahid ialah Mentoring Pekanan, Kajian Keislaman, Rihlah, Upgrading Softskill, Menguatkan Ukhuwah Islamiyah, Management SDM, Management Problem Solved, Pembentukan Karakter Kepemimpinan, dan masih banyak lagi. Outputnya adalah Anggota LDK Syahid menjadi generasi emas menyongsong kehidupan masyarakat madani.
                                 </p>
-                                <div class="about-features">
-                                    <div class="feature-item-fun">
-                                        <span class="feature-emoji">📖</span>
-                                        <span>Mentoring Pekanan</span>
+                                <div class="features-grid-cr">
+                                    <div class="feature-cr" data-tooltip="Belajar bersama setiap pekan">
+                                        <span class="feature-emoji-cr">📖</span>
+                                        <span class="feature-text-cr">Mentoring Pekanan</span>
+                                        <div class="feature-shine"></div>
                                     </div>
-                                    <div class="feature-item-fun">
-                                        <span class="feature-emoji">🎓</span>
-                                        <span>Kajian Keislaman</span>
+                                    <div class="feature-cr" data-tooltip="Memperdalam ilmu agama">
+                                        <span class="feature-emoji-cr">🎓</span>
+                                        <span class="feature-text-cr">Kajian Keislaman</span>
+                                        <div class="feature-shine"></div>
                                     </div>
-                                    <div class="feature-item-fun">
-                                        <span class="feature-emoji">🤝</span>
-                                        <span>Ukhuwah Islamiyah</span>
+                                    <div class="feature-cr" data-tooltip="Mempererat tali persaudaraan">
+                                        <span class="feature-emoji-cr">🤝</span>
+                                        <span class="feature-text-cr">Ukhuwah Islamiyah</span>
+                                        <div class="feature-shine"></div>
                                     </div>
-                                    <div class="feature-item-fun">
-                                        <span class="feature-emoji">⚡</span>
-                                        <span>Upgrading Softskill</span>
+                                    <div class="feature-cr" data-tooltip="Tingkatkan kemampuan diri">
+                                        <span class="feature-emoji-cr">⚡</span>
+                                        <span class="feature-text-cr">Upgrading Softskill</span>
+                                        <div class="feature-shine"></div>
                                     </div>
-                                    <div class="feature-item-fun">
-                                        <span class="feature-emoji">👑</span>
-                                        <span>Leadership Program</span>
+                                    <div class="feature-cr" data-tooltip="Program kepemimpinan">
+                                        <span class="feature-emoji-cr">👑</span>
+                                        <span class="feature-text-cr">Leadership Program</span>
+                                        <div class="feature-shine"></div>
                                     </div>
-                                    <div class="feature-item-fun">
-                                        <span class="feature-emoji">🏕️</span>
-                                        <span>Rihlah & Outbound</span>
+                                    <div class="feature-cr" data-tooltip="Jelajah alam & kebersamaan">
+                                        <span class="feature-emoji-cr">🏕️</span>
+                                        <span class="feature-text-cr">Rihlah & Outbound</span>
+                                        <div class="feature-shine"></div>
                                     </div>
-                                </div>
-                                <div class="about-cta">
-                                    <span class="cta-text">Output: Generasi Emas Siap Masyarakat Madani</span>
-                                    <span class="cta-emoji">✨</span>
                                 </div>
                             </div>
                         </div>
@@ -109,43 +134,61 @@
             </div>
 
             {{-- Sejarah Tab --}}
-            <div class="tab-content-fun" id="tab-sejarah">
-                <div class="row justify-content-center wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="col-lg-10">
-                        <div class="history-card-fun">
-                            <div class="history-header">
-                                <span class="history-badge">📜 Sejarah</span>
-                                <h4 class="history-title">Perjalanan LDK Syahid</h4>
+            <div class="tab-content-cr" id="tab-sejarah">
+                <div class="row g-4 align-items-start wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="col-lg-7">
+                        <div class="history-card-cr">
+                            <div class="history-header-cr">
+                                <span class="history-badge-cr">📜 Sejarah</span>
+                                <h4 class="history-title-cr">Perjalanan LDK Syahid</h4>
+                                <div class="history-header-line"></div>
                             </div>
-                            <div class="history-timeline">
-                                <div class="timeline-item-fun">
-                                    <div class="timeline-marker">
-                                        <span class="marker-emoji">🎂</span>
+                            <div class="history-body-cr" style="text-align: justify;">
+                                <p>Lembaga Dakwah Kampus Syahid (LDK Syahid) UIN Syarif Hidayatullah Jakarta adalah sebuah organisasi dalam lingkup Unit Kegiatan Mahasiswa (UKM) di lingkungan UIN Syarif Hidayatullah Jakarta yang didirikan pada hari Selasa 10 Muharram 1417 H atau bertepatan dengan tanggal 28 Mei 1996 M.</p>
+                                <p>Tepat tanggal 28 Mei 1996, dua puluh mahasiswa IAIN Jakarta dari lima fakultas dilantik sebagai pengurus LDK Syahid periode pertama 1996-1997. Pelantikan tersebut langsung dipimpin oleh Senat Mahasiswa Institut (SMI), Thobib El-Hasyr, sekaligus menandai kelahiran LDK Syahid di lingkungan IAIN Syarif Hidayatullah Jakarta yang sekarang telah menjadi UIN Syarif Hidayatullah Jakarta. Ketua SMI saat itu, Muhammad Ali, adalah salah seorang yang memberikan jalan bagi berdirinya LDK Syahid di kampus peradaban ini dalam forum Majelis Perwakilan Mahasiswa Institut (MPMI) saat itu.</p>
+                                <p>Usaha beliau dalam mengukuhkan LDK dimulai dengan mengajak mahasiswa IAIN seperti Misbah (Ushuludin) yang saat itu aktif di lembaga ekstra kampus Fikratussalam yang bergerak di bidang dakwah. Selanjutnya dibentuk tim kecil yang bertugas mempersiapkan berdirinya LDK Syahid, baik persiapan konstitusi maupun persiapan teknis.</p>
+                                <p>Tim yang terdiri dari Deka Kurniawan (Ushuludin-Aqidah Filsafat '93), Muhammad Mustofa (Syariah-MU '94), dan Rinaldi Syafiq (Tarbiyah-Bahasa Arab '94) itu dihasilkan dalam musyawarah yang dihadiri oleh sejumlah perwakilan fakultas. Deka Kurniawan (Ushuludin-Aqidah Filsafat '93) merupakan Ketua LDK Syahid yang pertama.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="history-sidebar">
+                            <div class="history-timeline-cr">
+                                <div class="timeline-line-cr"></div>
+                                <div class="timeline-item-cr">
+                                    <div class="timeline-node">
+                                        <span class="node-emoji">🎂</span>
+                                        <div class="node-ring"></div>
                                     </div>
-                                    <div class="timeline-content">
-                                        <div class="timeline-date">28 Mei 1996</div>
-                                        <h5>Kelahiran LDK Syahid</h5>
-                                        <p>Dua puluh mahasiswa IAIN Jakarta dari lima fakultas dilantik sebagai pengurus LDK Syahid periode pertama 1996-1997.</p>
+                                    <div class="timeline-card-cr">
+                                        <div class="tl-card-glow"></div>
+                                        <div class="tl-date-cr">10 Muharram 1417 H</div>
+                                        <h5>28 Mei 1996</h5>
+                                        <p>Hari kelahiran LDK Syahid di lingkungan IAIN Syarif Hidayatullah Jakarta.</p>
                                     </div>
                                 </div>
-                                <div class="timeline-item-fun">
-                                    <div class="timeline-marker">
-                                        <span class="marker-emoji">🤝</span>
+                                <div class="timeline-item-cr">
+                                    <div class="timeline-node">
+                                        <span class="node-emoji">👥</span>
+                                        <div class="node-ring"></div>
                                     </div>
-                                    <div class="timeline-content">
-                                        <div class="timeline-date">Awal Mula</div>
-                                        <h5>Inisiasi Pendirian</h5>
-                                        <p>Muhammad Ali (Ketua SMI) memberikan jalan bagi berdirinya LDK dengan mengajak mahasiswa IAIN seperti Misbah yang aktif di Fikratussalam.</p>
+                                    <div class="timeline-card-cr">
+                                        <div class="tl-card-glow"></div>
+                                        <div class="tl-date-cr">Periode Pertama</div>
+                                        <h5>20 Mahasiswa Dilantik</h5>
+                                        <p>Pengurus pertama dari lima fakultas, periode 1996-1997.</p>
                                     </div>
                                 </div>
-                                <div class="timeline-item-fun">
-                                    <div class="timeline-marker">
-                                        <span class="marker-emoji">⭐</span>
+                                <div class="timeline-item-cr">
+                                    <div class="timeline-node">
+                                        <span class="node-emoji">⭐</span>
+                                        <div class="node-ring"></div>
                                     </div>
-                                    <div class="timeline-content">
-                                        <div class="timeline-date">Tim Pendiri</div>
-                                        <h5>Para Pionir</h5>
-                                        <p><strong>Deka Kurniawan</strong> (Ketua pertama), <strong>Muhammad Mustofa</strong>, dan <strong>Rinaldi Syafiq</strong> menjadi tim kecil yang mempersiapkan berdirinya LDK Syahid.</p>
+                                    <div class="timeline-card-cr">
+                                        <div class="tl-card-glow"></div>
+                                        <div class="tl-date-cr">Ketua Pertama</div>
+                                        <h5>Deka Kurniawan</h5>
+                                        <p>Ushuludin-Aqidah Filsafat '93, Ketua LDK Syahid pertama.</p>
                                     </div>
                                 </div>
                             </div>
@@ -155,41 +198,46 @@
             </div>
 
             {{-- Visi Tab --}}
-            <div class="tab-content-fun" id="tab-visi">
+            <div class="tab-content-cr" id="tab-visi">
                 <div class="row justify-content-center wow fadeInUp" data-wow-delay="0.3s">
                     <div class="col-lg-8">
-                        <div class="vision-card-fun">
-                            <div class="vision-icon-wrapper">
-                                <div class="vision-icon">
+                        <div class="vision-card-cr">
+                            <div class="vision-bg-pattern"></div>
+                            <div class="vision-icon-cr">
+                                <div class="v-icon-inner">
                                     <i class="fas fa-eye"></i>
                                 </div>
-                                <div class="vision-sparkles">
-                                    <span>✨</span>
-                                    <span>⭐</span>
-                                    <span>🌟</span>
+                                <div class="v-icon-orbit">
+                                    <span class="orbit-dot" style="--delay: 0s">✨</span>
+                                    <span class="orbit-dot" style="--delay: 1s">⭐</span>
+                                    <span class="orbit-dot" style="--delay: 2s">🌟</span>
                                 </div>
                             </div>
-                            <h4 class="vision-title">Visi LDK Syahid</h4>
-                            <blockquote class="vision-quote">
-                                "Terciptanya insan-insan dakwah yang memiliki kekokohan
-                                <span class="quote-highlight">spiritualitas</span>,
-                                <span class="quote-highlight">intelektualitas</span>, dan
-                                <span class="quote-highlight">solidaritas</span>
-                                dengan etos profesionalisme menuju kampus yang islami dalam rangka mewujudkan
-                                <span class="quote-highlight">khairu ummah</span>."
+                            <h4 class="vision-title-cr">Visi LDK Syahid</h4>
+                            <blockquote class="vision-quote-cr">
+                                <span class="quote-mark">"</span>Terciptanya insan-insan dakwah yang memiliki kekokohan <span class="quote-hl">spiritualitas</span>, <span class="quote-hl">intelektualitas</span>, dan <span class="quote-hl">solidaritas</span> dengan etos profesionalisme menuju kampus yang islami dalam rangka mewujudkan <span class="quote-hl">khairu ummah</span>.<span class="quote-mark">"</span>
                             </blockquote>
-                            <div class="vision-pillars">
-                                <div class="pillar-item">
-                                    <span class="pillar-emoji">🤲</span>
-                                    <span class="pillar-text">Spiritualitas</span>
+                            <div class="vision-pillars-cr">
+                                <div class="pillar-cr">
+                                    <div class="pillar-icon-cr">🤲</div>
+                                    <span class="pillar-label-cr">Spiritualitas</span>
+                                    <div class="pillar-hover-card">
+                                        <p>Kekokohan iman, ibadah, dan akhlak sebagai fondasi utama</p>
+                                    </div>
                                 </div>
-                                <div class="pillar-item">
-                                    <span class="pillar-emoji">🧠</span>
-                                    <span class="pillar-text">Intelektualitas</span>
+                                <div class="pillar-cr">
+                                    <div class="pillar-icon-cr">🧠</div>
+                                    <span class="pillar-label-cr">Intelektualitas</span>
+                                    <div class="pillar-hover-card">
+                                        <p>Kecerdasan, wawasan luas, dan kemampuan berpikir kritis</p>
+                                    </div>
                                 </div>
-                                <div class="pillar-item">
-                                    <span class="pillar-emoji">🤝</span>
-                                    <span class="pillar-text">Solidaritas</span>
+                                <div class="pillar-cr">
+                                    <div class="pillar-icon-cr">🤝</div>
+                                    <span class="pillar-label-cr">Solidaritas</span>
+                                    <div class="pillar-hover-card">
+                                        <p>Persatuan, kebersamaan, dan kepedulian sesama</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -198,28 +246,37 @@
             </div>
 
             {{-- Misi Tab --}}
-            <div class="tab-content-fun" id="tab-misi">
+            <div class="tab-content-cr" id="tab-misi">
                 <div class="row justify-content-center wow fadeInUp" data-wow-delay="0.3s">
                     <div class="col-lg-10">
-                        <div class="mission-header-fun">
-                            <span class="mission-badge">🎯 Misi</span>
-                            <h4 class="mission-title">Lima Pilar Misi LDK Syahid</h4>
+                        <div class="mission-header-cr">
+                            <span class="mission-badge-cr">🎯 Misi</span>
+                            <h4 class="mission-title-cr">Lima Pilar Misi LDK Syahid</h4>
                         </div>
-                        <div class="mission-grid">
+                        <div class="mission-grid-cr">
                             @php
                                 $misi = [
-                                    ['emoji' => '📖', 'color' => '#00a79d', 'title' => 'Tarbiyah Madal Hayah', 'desc' => 'Pendidikan Sepanjang Hidup'],
-                                    ['emoji' => '💝', 'color' => '#008f86', 'title' => 'Amal Sholeh', 'desc' => 'Perbuatan yang Baik'],
-                                    ['emoji' => '⚖️', 'color' => '#00a79d', 'title' => 'Amar Ma\'ruf Nahi Mungkar', 'desc' => 'Memerintahkan Baik, Mencegah Mungkar'],
-                                    ['emoji' => '🤲', 'color' => '#008f86', 'title' => 'Khidmatul Ummah', 'desc' => 'Pengabdian Masyarakat'],
-                                    ['emoji' => '🤝', 'color' => '#00a79d', 'title' => 'Wihdatul Ummah', 'desc' => 'Persatuan & Ukhuwah Islamiyah'],
+                                    ['emoji' => '📖', 'num' => '1', 'color' => '#00a79d', 'title' => 'Tarbiyah Madal Hayah', 'desc' => 'Pendidikan Sepanjang Hidup', 'detail' => 'Proses pendidikan berkelanjutan yang membentuk karakter dan keilmuan sepanjang hayat'],
+                                    ['emoji' => '💝', 'num' => '2', 'color' => '#008f86', 'title' => 'Amal Sholeh', 'desc' => 'Perbuatan yang Baik', 'detail' => 'Mengamalkan kebaikan dalam setiap aspek kehidupan sehari-hari'],
+                                    ['emoji' => '⚖️', 'num' => '3', 'color' => '#00a79d', 'title' => 'Amar Ma\'ruf Nahi Mungkar', 'desc' => 'Memerintahkan yang Baik dan Mencegah yang Mungkar', 'detail' => 'Menyeru kepada kebaikan dan mencegah kemungkaran di lingkungan kampus dan masyarakat'],
+                                    ['emoji' => '🤲', 'num' => '4', 'color' => '#008f86', 'title' => 'Khidmatul Ummah', 'desc' => 'Pengabdian Masyarakat', 'detail' => 'Melayani dan mengabdi untuk kemaslahatan umat secara profesional'],
+                                    ['emoji' => '🤝', 'num' => '5', 'color' => '#00a79d', 'title' => 'Wihdatul Ummah dan Ukhuwah Islamiyah', 'desc' => 'Persatuan Umat dan Ukhuwah Islamiyah', 'detail' => 'Mempersatukan umat dalam tali persaudaraan Islam yang kokoh'],
                                 ];
                             @endphp
-                            @foreach($misi as $item)
-                            <div class="mission-card-fun" style="--accent-color: {{ $item['color'] }}">
-                                <div class="mission-emoji">{{ $item['emoji'] }}</div>
-                                <h5 class="mission-card-title">{{ $item['title'] }}</h5>
-                                <p class="mission-card-desc">{{ $item['desc'] }}</p>
+                            @foreach($misi as $index => $item)
+                            <div class="mission-card-cr" style="--accent: {{ $item['color'] }}; --delay: {{ $index * 0.1 }}s">
+                                <div class="mc-front">
+                                    <div class="mc-num">{{ $item['num'] }}</div>
+                                    <div class="mc-emoji">{{ $item['emoji'] }}</div>
+                                    <h5 class="mc-title">{{ $item['title'] }}</h5>
+                                    <p class="mc-desc">{{ $item['desc'] }}</p>
+                                    <span class="mc-hint">Hover untuk detail</span>
+                                </div>
+                                <div class="mc-back">
+                                    <div class="mc-emoji">{{ $item['emoji'] }}</div>
+                                    <h5 class="mc-title-back">{{ $item['title'] }}</h5>
+                                    <p class="mc-detail">{{ $item['detail'] }}</p>
+                                </div>
                             </div>
                             @endforeach
                         </div>
@@ -231,13 +288,70 @@
 </section>
 
 <style>
-    .about-fun {
-        background: transparent;
+    /* ===================== ABOUT CREATIVE ===================== */
+    .about-creative {
         position: relative;
+        overflow: hidden;
+    }
+
+    /* Decorative Elements */
+    .about-deco {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .deco-circle {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.07;
+    }
+
+    .deco-1 {
+        width: 400px; height: 400px;
+        background: var(--primary);
+        top: -100px; right: -100px;
+        animation: decoFloat 20s ease-in-out infinite;
+    }
+
+    .deco-2 {
+        width: 300px; height: 300px;
+        background: var(--primary-dark);
+        bottom: -50px; left: -80px;
+        animation: decoFloat 15s ease-in-out infinite reverse;
+    }
+
+    .deco-3 {
+        width: 200px; height: 200px;
+        background: var(--primary);
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        animation: decoFloat 18s ease-in-out infinite 3s;
+    }
+
+    .deco-dot-grid {
+        position: absolute;
+        top: 10%; right: 5%;
+        width: 120px; height: 120px;
+        background-image: radial-gradient(circle, var(--primary) 1px, transparent 1px);
+        background-size: 20px 20px;
+        opacity: 0.08;
+    }
+
+    @keyframes decoFloat {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -20px) scale(1.05); }
+        66% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+
+    .about-creative .container {
+        position: relative;
+        z-index: 1;
     }
 
     /* Section Badge */
-    .section-badge {
+    .section-badge-cr {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
@@ -249,247 +363,379 @@
         font-size: 0.9rem;
         font-weight: 500;
         color: var(--primary);
+        position: relative;
     }
 
-    .badge-emoji {
-        font-size: 1.1rem;
+    .badge-emoji-cr { font-size: 1.1rem; }
+
+    .badge-pulse {
+        width: 8px; height: 8px;
+        background: var(--primary);
+        border-radius: 50%;
+        animation: badgePulse 2s ease-in-out infinite;
     }
 
-    /* Section Title */
-    .section-title-fun {
+    @keyframes badgePulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.5); }
+    }
+
+    .section-title-cr {
         font-family: var(--font-primary);
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         font-weight: 700;
         color: var(--dark);
         margin-bottom: 0.5rem;
     }
 
-    .title-highlight {
+    .title-highlight-cr {
         color: var(--primary);
         position: relative;
     }
 
-    .section-description-fun {
-        color: var(--secondary);
-        font-size: 1.1rem;
+    .title-highlight-cr::after {
+        content: '';
+        position: absolute;
+        bottom: 2px; left: 0;
+        width: 100%; height: 8px;
+        background: rgba(0, 167, 157, 0.15);
+        border-radius: 4px;
+        z-index: -1;
     }
 
-    /* Tabs */
-    .tabs-fun-wrapper {
-        display: flex;
+    /* ===== TABS ===== */
+    .tabs-cr-wrapper {
+        display: inline-flex;
         flex-wrap: wrap;
-        gap: 0.75rem;
+        gap: 0.5rem;
         justify-content: center;
         background: var(--white);
-        padding: 0.5rem;
-        border-radius: 20px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 6px;
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        position: relative;
     }
 
-    .tab-btn-fun {
+    .tabs-cr-slider {
+        position: absolute;
+        height: calc(100% - 12px);
+        top: 6px;
+        border-radius: 14px;
+        background: var(--primary-gradient);
+        box-shadow: var(--shadow-primary);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1;
+    }
+
+    .tab-btn-cr {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.75rem 1.25rem;
+        padding: 0.7rem 1.2rem;
         border: none;
         background: transparent;
         border-radius: 14px;
         font-weight: 500;
         color: var(--secondary);
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: color 0.3s ease;
+        position: relative;
+        z-index: 2;
+        font-size: 0.95rem;
     }
 
-    .tab-btn-fun:hover {
-        background: var(--primary-light);
-        color: var(--primary);
-    }
-
-    .tab-btn-fun.active {
-        background: var(--primary-gradient);
-        color: white;
-        box-shadow: 0 4px 15px rgba(0, 167, 157, 0.3);
-    }
-
-    .tab-icon {
-        font-size: 1.1rem;
-    }
+    .tab-btn-cr:hover { color: var(--primary); }
+    .tab-btn-cr.active { color: white; }
+    .tab-icon-cr { font-size: 1.1rem; }
 
     /* Tab Contents */
-    .tab-contents-fun {
-        margin-top: 2rem;
-    }
+    .tab-contents-cr { margin-top: 2rem; }
 
-    .tab-content-fun {
+    .tab-content-cr {
         display: none;
-        animation: fadeInTab 0.4s ease;
+        animation: tabSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .tab-content-fun.active {
-        display: block;
+    .tab-content-cr.active { display: block; }
+
+    @keyframes tabSlideIn {
+        from { opacity: 0; transform: translateY(24px) scale(0.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    @keyframes fadeInTab {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* About Image */
-    .about-image-wrapper {
+    /* ===== PERKENALAN - Image ===== */
+    .about-img-cr {
         position: relative;
         display: inline-block;
     }
 
-    .about-image-bg {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        width: 100%;
-        height: 100%;
-        background: var(--primary-gradient);
+    .img-frame {
+        position: relative;
+        display: inline-block;
         border-radius: 24px;
-        opacity: 0.3;
+        overflow: hidden;
     }
 
-    .about-image {
-        position: relative;
+    .img-frame-border {
+        position: absolute;
+        inset: -3px;
+        border-radius: 27px;
+        background: var(--primary-gradient);
+        z-index: -1;
+        opacity: 0.5;
+    }
+
+    .about-photo {
         max-width: 280px;
         border-radius: 24px;
-        box-shadow: 0 20px 60px rgba(0, 167, 157, 0.2);
-        animation: floatImage 6s ease-in-out infinite;
+        display: block;
+        transition: transform 0.6s ease;
     }
 
-    @keyframes floatImage {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+    .img-frame:hover .about-photo {
+        transform: scale(1.05);
     }
 
-    .about-image-badge {
+    .img-overlay {
         position: absolute;
-        bottom: -15px;
-        right: -15px;
+        bottom: 0; left: 0; right: 0;
+        padding: 1.5rem 1rem 1rem;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .img-frame:hover .img-overlay { opacity: 1; }
+
+    .img-badge-cr {
+        position: absolute;
+        bottom: -12px; right: -12px;
+        z-index: 3;
+    }
+
+    .badge-inner {
         background: white;
         border-radius: 16px;
-        padding: 0.75rem 1.25rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 0.6rem 1rem;
+        box-shadow: var(--shadow-md);
         text-align: center;
+        transition: var(--transition-bounce);
     }
 
-    .badge-year {
+    .badge-inner:hover {
+        transform: scale(1.1) rotate(-5deg);
+    }
+
+    .badge-est {
         display: block;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         color: var(--secondary);
         text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
-    .badge-number {
+    .badge-yr {
         display: block;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 700;
         color: var(--primary);
+        line-height: 1;
     }
 
-    /* About Card */
-    .about-card-fun {
+    .img-float-tag {
+        position: absolute;
+        background: white;
+        padding: 0.4rem 0.85rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--primary);
+        box-shadow: var(--shadow-sm);
+        z-index: 3;
+        animation: tagFloat 4s ease-in-out infinite;
+    }
+
+    .img-float-tag i {
+        margin-right: 4px;
+        font-size: 0.7rem;
+    }
+
+    .tag-1 { top: 10px; left: -20px; animation-delay: 0s; }
+    .tag-2 { bottom: 40px; left: -30px; animation-delay: 1.5s; }
+
+    @keyframes tagFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+
+    /* ===== PERKENALAN - Card ===== */
+    .intro-card-cr {
         background: white;
         border-radius: 24px;
         padding: 2rem;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        box-shadow: var(--shadow-lg);
+        position: relative;
+        overflow: hidden;
+        transition: var(--transition);
     }
 
-    .about-card-header {
+    .intro-card-cr:hover {
+        box-shadow: var(--shadow-xl);
+    }
+
+    .intro-card-accent {
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: var(--primary-gradient);
+    }
+
+    .intro-header {
         display: flex;
         align-items: center;
         gap: 1rem;
         margin-bottom: 1.5rem;
     }
 
-    .about-icon-box {
-        width: 60px;
-        height: 60px;
+    .intro-icon-box {
+        width: 56px; height: 56px;
         background: var(--primary-gradient);
         border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         flex-shrink: 0;
+        position: relative;
     }
 
-    .about-card-title {
+    .icon-ring {
+        position: absolute;
+        inset: -4px;
+        border: 2px solid rgba(0, 167, 157, 0.2);
+        border-radius: 20px;
+        animation: iconRingPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes iconRingPulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.15); opacity: 0; }
+    }
+
+    .intro-title {
         font-family: var(--font-primary);
         font-weight: 700;
         color: var(--dark);
         margin: 0;
+        font-size: 1.15rem;
     }
 
-    .about-card-subtitle {
+    .intro-subtitle {
         color: var(--secondary);
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 
-    .about-card-body p {
+    .intro-body p {
         color: var(--secondary);
         line-height: 1.7;
         margin-bottom: 1.5rem;
     }
 
-    /* Features */
-    .about-features {
+    /* Features Grid */
+    .features-grid-cr {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
+        gap: 0.6rem;
     }
 
-    .feature-item-fun {
+    .feature-cr {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.75rem;
+        padding: 0.7rem 0.85rem;
         background: var(--primary-light);
         border-radius: 12px;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         font-weight: 500;
         color: var(--dark);
+        cursor: default;
+        position: relative;
+        overflow: hidden;
+        transition: var(--transition-smooth);
     }
 
-    .feature-emoji {
-        font-size: 1.1rem;
+    .feature-cr:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-primary);
     }
 
-    .about-cta {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 1rem;
-        background: linear-gradient(135deg, var(--primary-light) 0%, #e8f5f4 100%);
-        border-radius: 12px;
-        border: 1px dashed var(--primary);
+    .feature-shine {
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.6s ease;
     }
 
-    .cta-text {
-        color: var(--primary);
-        font-weight: 600;
-        font-size: 0.9rem;
+    .feature-cr:hover .feature-shine {
+        left: 100%;
     }
 
-    /* History Card */
-    .history-card-fun {
+    .feature-cr[data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--dark);
+        color: white;
+        padding: 0.4rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.72rem;
+        font-weight: 400;
+        white-space: nowrap;
+        z-index: 10;
+        animation: tooltipIn 0.2s ease;
+    }
+
+    .feature-cr[data-tooltip]:hover::before {
+        content: '';
+        position: absolute;
+        bottom: calc(100% + 2px);
+        left: 50%;
+        transform: translateX(-50%);
+        border: 5px solid transparent;
+        border-top-color: var(--dark);
+        z-index: 10;
+    }
+
+    @keyframes tooltipIn {
+        from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+        to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .feature-emoji-cr { font-size: 1rem; flex-shrink: 0; }
+
+    /* ===== SEJARAH ===== */
+    .history-card-cr {
         background: white;
         border-radius: 24px;
         padding: 2rem;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        box-shadow: var(--shadow-lg);
     }
 
-    .history-header {
+    .history-header-cr {
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
 
-    .history-badge {
+    .history-badge-cr {
         display: inline-block;
         padding: 0.5rem 1rem;
         background: var(--primary-light);
@@ -500,163 +746,269 @@
         margin-bottom: 0.75rem;
     }
 
-    .history-title {
+    .history-title-cr {
         font-family: var(--font-primary);
         font-weight: 700;
         color: var(--dark);
-        margin: 0;
+        margin: 0 0 1rem;
+    }
+
+    .history-header-line {
+        width: 60px; height: 4px;
+        background: var(--primary-gradient);
+        border-radius: 2px;
+        margin: 0 auto;
+    }
+
+    .history-body-cr p {
+        color: var(--secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+        font-size: 0.92rem;
+    }
+
+    .history-body-cr p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* History Sidebar */
+    .history-sidebar {
+        position: sticky;
+        top: 100px;
     }
 
     /* Timeline */
-    .history-timeline {
+    .history-timeline-cr {
         position: relative;
-        padding-left: 60px;
+        padding-left: 70px;
     }
 
-    .history-timeline::before {
-        content: '';
+    .timeline-line-cr {
         position: absolute;
-        left: 24px;
-        top: 0;
-        bottom: 0;
+        left: 28px;
+        top: 0; bottom: 0;
         width: 3px;
         background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
         border-radius: 10px;
     }
 
-    .timeline-item-fun {
+    .timeline-item-cr {
         position: relative;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
 
-    .timeline-item-fun:last-child {
-        margin-bottom: 0;
-    }
+    .timeline-item-cr:last-child { margin-bottom: 0; }
 
-    .timeline-marker {
+    .timeline-node {
         position: absolute;
-        left: -60px;
+        left: -70px;
         top: 0;
-        width: 50px;
-        height: 50px;
+        width: 56px; height: 56px;
         background: white;
         border: 3px solid var(--primary);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.25rem;
+        font-size: 1.3rem;
+        transition: var(--transition-bounce);
+        z-index: 2;
     }
 
-    .timeline-content {
+    .node-ring {
+        position: absolute;
+        inset: -6px;
+        border: 2px dashed rgba(0, 167, 157, 0.3);
+        border-radius: 50%;
+        opacity: 0;
+        transition: var(--transition);
+    }
+
+    .timeline-item-cr:hover .timeline-node {
+        transform: scale(1.15);
+        box-shadow: var(--shadow-primary);
+    }
+
+    .timeline-item-cr:hover .node-ring {
+        opacity: 1;
+        animation: nodeRingSpin 8s linear infinite;
+    }
+
+    @keyframes nodeRingSpin {
+        to { transform: rotate(360deg); }
+    }
+
+    .timeline-card-cr {
         background: var(--primary-light);
         border-radius: 16px;
-        padding: 1.5rem;
+        padding: 1.25rem;
+        position: relative;
+        overflow: hidden;
+        transition: var(--transition-smooth);
+        border: 1px solid transparent;
     }
 
-    .timeline-date {
+    .timeline-item-cr:hover .timeline-card-cr {
+        border-color: rgba(0, 167, 157, 0.2);
+        transform: translateX(6px);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .tl-card-glow {
+        position: absolute;
+        top: -50%; right: -50%;
+        width: 100px; height: 100px;
+        background: var(--primary);
+        opacity: 0;
+        border-radius: 50%;
+        filter: blur(40px);
+        transition: opacity 0.4s ease;
+    }
+
+    .timeline-item-cr:hover .tl-card-glow { opacity: 0.08; }
+
+    .tl-date-cr {
         display: inline-block;
         padding: 0.25rem 0.75rem;
         background: var(--primary);
         color: white;
         border-radius: 50px;
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 600;
         margin-bottom: 0.5rem;
     }
 
-    .timeline-content h5 {
+    .timeline-card-cr h5 {
         font-family: var(--font-primary);
         font-weight: 600;
         color: var(--dark);
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
+        font-size: 0.95rem;
     }
 
-    .timeline-content p {
+    .timeline-card-cr p {
         color: var(--secondary);
         margin: 0;
-        font-size: 0.9rem;
-        line-height: 1.6;
+        font-size: 0.82rem;
+        line-height: 1.5;
     }
 
-    /* Vision Card */
-    .vision-card-fun {
+    /* ===== VISI ===== */
+    .vision-card-cr {
         background: white;
         border-radius: 24px;
         padding: 3rem 2rem;
         text-align: center;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        box-shadow: var(--shadow-lg);
+        position: relative;
+        overflow: hidden;
     }
 
-    .vision-icon-wrapper {
+    .vision-bg-pattern {
+        position: absolute;
+        inset: 0;
+        background-image:
+            radial-gradient(circle at 20% 80%, rgba(0, 167, 157, 0.04) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(0, 167, 157, 0.04) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .vision-icon-cr {
         position: relative;
         display: inline-block;
         margin-bottom: 1.5rem;
     }
 
-    .vision-icon {
-        width: 80px;
-        height: 80px;
+    .v-icon-inner {
+        width: 80px; height: 80px;
         background: var(--primary-gradient);
-        border-radius: 20px;
+        border-radius: 22px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         font-size: 2rem;
-        box-shadow: 0 10px 30px rgba(0, 167, 157, 0.3);
+        box-shadow: var(--shadow-primary);
+        position: relative;
+        z-index: 2;
     }
 
-    .vision-sparkles {
+    .v-icon-orbit {
         position: absolute;
-        top: -10px;
-        right: -10px;
+        inset: -20px;
+        animation: orbitSpin 12s linear infinite;
     }
 
-    .vision-sparkles span {
+    .orbit-dot {
         position: absolute;
-        animation: sparkleVision 2s ease-in-out infinite;
+        font-size: 0.9rem;
+        animation: orbitDotPulse 3s ease-in-out infinite;
+        animation-delay: var(--delay);
     }
 
-    .vision-sparkles span:nth-child(1) { top: 0; left: 0; animation-delay: 0s; }
-    .vision-sparkles span:nth-child(2) { top: -10px; left: 15px; animation-delay: 0.3s; }
-    .vision-sparkles span:nth-child(3) { top: 5px; left: 25px; animation-delay: 0.6s; }
+    .orbit-dot:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); }
+    .orbit-dot:nth-child(2) { bottom: 5px; left: 0; }
+    .orbit-dot:nth-child(3) { bottom: 5px; right: 0; }
 
-    @keyframes sparkleVision {
-        0%, 100% { opacity: 0.3; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.2); }
+    @keyframes orbitSpin { to { transform: rotate(360deg); } }
+    @keyframes orbitDotPulse {
+        0%, 100% { opacity: 0.4; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.3); }
     }
 
-    .vision-title {
+    .vision-title-cr {
         font-family: var(--font-primary);
         font-weight: 700;
         color: var(--dark);
         margin-bottom: 1.5rem;
+        position: relative;
     }
 
-    .vision-quote {
+    .vision-quote-cr {
         font-size: 1.1rem;
         font-style: italic;
         color: var(--secondary);
         line-height: 1.8;
         margin-bottom: 2rem;
         padding: 0 1rem;
+        position: relative;
+        text-align: justify;
     }
 
-    .quote-highlight {
+    .quote-mark {
+        font-size: 2rem;
+        color: var(--primary);
+        font-weight: 700;
+        line-height: 0;
+        vertical-align: -0.3em;
+        opacity: 0.4;
+    }
+
+    .quote-hl {
         color: var(--primary);
         font-weight: 600;
         font-style: normal;
+        position: relative;
     }
 
-    .vision-pillars {
+    .quote-hl::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%; height: 3px;
+        background: rgba(0, 167, 157, 0.2);
+        border-radius: 2px;
+    }
+
+    /* Vision Pillars */
+    .vision-pillars-cr {
         display: flex;
         justify-content: center;
         gap: 1rem;
         flex-wrap: wrap;
     }
 
-    .pillar-item {
+    .pillar-cr {
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -665,15 +1017,68 @@
         border-radius: 50px;
         font-weight: 500;
         color: var(--primary);
+        cursor: default;
+        position: relative;
+        transition: var(--transition-bounce);
     }
 
-    /* Mission */
-    .mission-header-fun {
+    .pillar-cr:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-primary);
+    }
+
+    .pillar-icon-cr { font-size: 1.2rem; }
+
+    .pillar-hover-card {
+        position: absolute;
+        bottom: calc(100% + 12px);
+        left: 50%;
+        transform: translateX(-50%) translateY(8px);
+        background: white;
+        border-radius: 12px;
+        padding: 0.85rem 1rem;
+        box-shadow: var(--shadow-lg);
+        width: 200px;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 10;
+        border: 1px solid rgba(0, 167, 157, 0.15);
+    }
+
+    .pillar-hover-card::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: white;
+    }
+
+    .pillar-hover-card p {
+        margin: 0;
+        font-size: 0.8rem;
+        color: var(--secondary);
+        line-height: 1.5;
+        font-style: normal;
+    }
+
+    .pillar-cr:hover .pillar-hover-card {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* ===== MISI ===== */
+    .mission-header-cr {
         text-align: center;
         margin-bottom: 2rem;
     }
 
-    .mission-badge {
+    .mission-badge-cr {
         display: inline-block;
         padding: 0.5rem 1rem;
         background: var(--primary-light);
@@ -684,124 +1089,240 @@
         margin-bottom: 0.75rem;
     }
 
-    .mission-title {
+    .mission-title-cr {
         font-family: var(--font-primary);
         font-weight: 700;
         color: var(--dark);
         margin: 0;
     }
 
-    .mission-grid {
+    .mission-grid-cr {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.25rem;
     }
 
-    .mission-card-fun {
-        background: white;
+    /* Mission Card - Flip Effect */
+    .mission-card-cr {
+        position: relative;
+        height: 240px;
+        perspective: 800px;
+        cursor: default;
+    }
+
+    .mc-front, .mc-back {
+        position: absolute;
+        inset: 0;
         border-radius: 20px;
-        padding: 1.5rem;
+        padding: 1.5rem 1rem;
+        backface-visibility: hidden;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-        transition: all 0.3s ease;
-        border-bottom: 4px solid var(--accent-color);
     }
 
-    .mission-card-fun:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+    .mc-front {
+        background: white;
+        box-shadow: var(--shadow);
+        border-bottom: 4px solid var(--accent);
     }
 
-    .mission-emoji {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
+    .mc-back {
+        background: var(--primary-gradient);
+        color: white;
+        transform: rotateY(180deg);
     }
 
-    .mission-card-title {
+    .mission-card-cr:hover .mc-front { transform: rotateY(-180deg); }
+    .mission-card-cr:hover .mc-back { transform: rotateY(0); }
+
+    .mc-num {
+        position: absolute;
+        top: 10px; right: 14px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--primary);
+        background: var(--primary-light);
+        width: 24px; height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mc-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
+
+    .mc-title {
         font-family: var(--font-primary);
         font-weight: 600;
         color: var(--dark);
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
+        margin-bottom: 0.3rem;
+        font-size: 0.88rem;
+        line-height: 1.3;
     }
 
-    .mission-card-desc {
+    .mc-desc {
         color: var(--secondary);
-        font-size: 0.85rem;
+        font-size: 0.78rem;
         margin: 0;
+        line-height: 1.4;
     }
 
-    /* Mobile Responsive */
+    .mc-hint {
+        font-size: 0.68rem;
+        color: var(--secondary-light);
+        margin-top: 0.5rem;
+        opacity: 0.7;
+    }
+
+    .mc-title-back {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: white;
+    }
+
+    .mc-detail {
+        font-size: 0.82rem;
+        margin: 0;
+        opacity: 0.9;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 991.98px) {
-        .section-title-fun {
-            font-size: 1.75rem;
+        .section-title-cr { font-size: 1.6rem; }
+
+        .tabs-cr-wrapper {
+            padding: 5px;
+            border-radius: 14px;
         }
 
-        .tabs-fun-wrapper {
-            padding: 0.5rem;
-            border-radius: 16px;
-        }
-
-        .tab-btn-fun {
-            padding: 0.6rem 1rem;
+        .tab-btn-cr {
+            padding: 0.55rem 0.85rem;
             font-size: 0.85rem;
         }
 
-        .tab-text {
-            display: none;
+        .tab-text-cr { display: none; }
+
+        .tabs-cr-slider { display: none; }
+
+        .tab-btn-cr.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-primary);
         }
 
-        .about-card-fun {
-            padding: 1.5rem;
+        .intro-card-cr { padding: 1.5rem; }
+
+        .features-grid-cr { grid-template-columns: 1fr; }
+
+        .feature-cr[data-tooltip]:hover::after,
+        .feature-cr[data-tooltip]:hover::before { display: none; }
+
+        .about-img-cr { margin-bottom: 1rem; }
+
+        .img-float-tag { display: none; }
+
+        .history-card-cr { padding: 1.5rem; }
+
+        .history-timeline-cr { padding-left: 55px; }
+
+        .timeline-line-cr { left: 22px; }
+
+        .timeline-node {
+            left: -55px;
+            width: 44px; height: 44px;
+            font-size: 1.1rem;
         }
 
-        .about-features {
-            grid-template-columns: 1fr;
-        }
+        .vision-card-cr { padding: 2rem 1.5rem; }
 
-        .history-timeline {
-            padding-left: 50px;
-        }
-
-        .history-timeline::before {
-            left: 20px;
-        }
-
-        .timeline-marker {
-            left: -50px;
-            width: 40px;
-            height: 40px;
-            font-size: 1rem;
-        }
-
-        .vision-card-fun {
-            padding: 2rem 1.5rem;
-        }
-
-        .vision-pillars {
+        .vision-pillars-cr {
             flex-direction: column;
             align-items: center;
         }
+
+        .pillar-hover-card { display: none; }
+
+        .mission-grid-cr {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .mission-card-cr { height: 220px; }
+
+        .mc-hint { display: none; }
+
+        /* Touch devices - tap to flip */
+        .mission-card-cr.flipped .mc-front { transform: rotateY(-180deg); }
+        .mission-card-cr.flipped .mc-back { transform: rotateY(0); }
+    }
+
+    @media (max-width: 575.98px) {
+        .section-title-cr { font-size: 1.4rem; }
+
+        .mission-grid-cr {
+            grid-template-columns: 1fr;
+        }
+
+        .mission-card-cr { height: 200px; }
+
+        .about-photo { max-width: 220px; }
+
+        .history-body-cr p { font-size: 0.85rem; }
     }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const tabBtns = document.querySelectorAll('.tab-btn-fun');
-    const tabContents = document.querySelectorAll('.tab-content-fun');
+    // Tab switching with slider animation
+    const tabBtns = document.querySelectorAll('.tab-btn-cr');
+    const tabContents = document.querySelectorAll('.tab-content-cr');
+    const slider = document.querySelector('.tabs-cr-slider');
+
+    function updateSlider(btn) {
+        if (!slider || window.innerWidth < 992) return;
+        slider.style.width = btn.offsetWidth + 'px';
+        slider.style.left = btn.offsetLeft + 'px';
+    }
+
+    // Initialize slider position
+    const activeBtn = document.querySelector('.tab-btn-cr.active');
+    if (activeBtn) {
+        setTimeout(() => updateSlider(activeBtn), 100);
+    }
 
     tabBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             const tabId = this.getAttribute('data-tab');
 
-            // Remove active class from all buttons and contents
             tabBtns.forEach(b => b.classList.remove('active'));
             tabContents.forEach(c => c.classList.remove('active'));
 
-            // Add active class to clicked button and corresponding content
             this.classList.add('active');
             document.getElementById('tab-' + tabId).classList.add('active');
+
+            updateSlider(this);
         });
     });
+
+    // Recalculate slider on resize
+    window.addEventListener('resize', function() {
+        const active = document.querySelector('.tab-btn-cr.active');
+        if (active) updateSlider(active);
+    });
+
+    // Mobile: tap to flip mission cards
+    if ('ontouchstart' in window) {
+        document.querySelectorAll('.mission-card-cr').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('flipped');
+            });
+        });
+    }
 });
 </script>
