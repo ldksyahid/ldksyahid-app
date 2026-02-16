@@ -314,7 +314,7 @@
                             ['img' => 'https://lh3.googleusercontent.com/d/1u6mS175Q2Fbqd2k6CRNqKq0E3q5Sde1U', 'name' => 'LDKS FITK'],
                             ['img' => 'https://lh3.googleusercontent.com/d/1Iem3JZgYMXRitO1GOb9lTMVeMjiUQFUI', 'name' => 'LDKS FSH'],
                             ['img' => 'https://lh3.googleusercontent.com/d/1HinEWSv90pL0MUZ1F0dAbyHNSmk2L-B5', 'name' => 'LDKS FST'],
-                            ['img' => 'https://lh3.googleusercontent.com/d/1zgyRIwgN-wnFHAquVyBvSuyhb4ZzpJ0R', 'name' => 'LDKS FEB'],
+                            ['img' => 'https://lh3.googleusercontent.com/d/1zgyRIwgN-wnFHAquVyBvSuyhb4ZzpJ0R', 'name' => 'LDKS FU'],
                             ['img' => 'https://lh3.googleusercontent.com/d/1sr4GI8TE-Z2Og4PBm3hqm1Bb38NryJ6U', 'name' => 'LDKS F.Psikologi'],
                             ['img' => 'https://lh3.googleusercontent.com/d/1m4RD-ZZOYSQmGcGBuxVDS-lOd2BI3AaJ', 'name' => 'CSI FEB'],
                         ];
