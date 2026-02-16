@@ -1,13 +1,5 @@
 {{-- About Section - Creative & Interactive Design --}}
 <section class="about-creative pt-3 pb-5" id="about-section">
-    {{-- Decorative floating elements --}}
-    <div class="about-deco">
-        <div class="deco-circle deco-1"></div>
-        <div class="deco-circle deco-2"></div>
-        <div class="deco-circle deco-3"></div>
-        <div class="deco-dot-grid"></div>
-    </div>
-
     <div class="container">
         {{-- Section Header --}}
         <div class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
@@ -51,21 +43,17 @@
         <div class="tab-contents-cr">
             {{-- Perkenalan Tab --}}
             <div class="tab-content-cr active" id="tab-perkenalan">
-                <div class="row g-4 align-items-center wow fadeInUp" data-wow-delay="0.3s">
+                <div class="row g-4 align-items-center">
                     <div class="col-lg-5 text-center">
                         <div class="about-img-cr">
                             <div class="img-frame">
-                                <div class="img-frame-border"></div>
                                 <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1"
                                      alt="Gambar LDK Syahid"
                                      class="about-photo">
-                                <div class="img-overlay">
-                                    <span>LDK Syahid</span>
-                                </div>
                             </div>
                             <div class="img-badge-cr">
                                 <div class="badge-inner">
-                                    <span class="badge-est">Est.</span>
+                                    <span class="badge-est">Sejak</span>
                                     <span class="badge-yr">1996</span>
                                 </div>
                             </div>
@@ -80,7 +68,6 @@
                     </div>
                     <div class="col-lg-7">
                         <div class="intro-card-cr">
-                            <div class="intro-card-accent"></div>
                             <div class="intro-header">
                                 <div class="intro-icon-box">
                                     <i class="fas fa-mosque"></i>
@@ -135,7 +122,7 @@
 
             {{-- Sejarah Tab --}}
             <div class="tab-content-cr" id="tab-sejarah">
-                <div class="row g-4 align-items-start wow fadeInUp" data-wow-delay="0.3s">
+                <div class="row g-4 align-items-start">
                     <div class="col-lg-7">
                         <div class="history-card-cr">
                             <div class="history-header-cr">
@@ -199,7 +186,7 @@
 
             {{-- Visi Tab --}}
             <div class="tab-content-cr" id="tab-visi">
-                <div class="row justify-content-center wow fadeInUp" data-wow-delay="0.3s">
+                <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="vision-card-cr">
                             <div class="vision-bg-pattern"></div>
@@ -247,8 +234,8 @@
 
             {{-- Misi Tab --}}
             <div class="tab-content-cr" id="tab-misi">
-                <div class="row justify-content-center wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="col-lg-10">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
                         <div class="mission-header-cr">
                             <span class="mission-badge-cr">🎯 Misi</span>
                             <h4 class="mission-title-cr">Lima Pilar Misi LDK Syahid</h4>
@@ -270,7 +257,7 @@
                                     <div class="mc-emoji">{{ $item['emoji'] }}</div>
                                     <h5 class="mc-title">{{ $item['title'] }}</h5>
                                     <p class="mc-desc">{{ $item['desc'] }}</p>
-                                    <span class="mc-hint">Hover untuk detail</span>
+
                                 </div>
                                 <div class="mc-back">
                                     <div class="mc-emoji">{{ $item['emoji'] }}</div>
@@ -291,63 +278,6 @@
     /* ===================== ABOUT CREATIVE ===================== */
     .about-creative {
         position: relative;
-        overflow: hidden;
-    }
-
-    /* Decorative Elements */
-    .about-deco {
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        pointer-events: none;
-        z-index: 0;
-    }
-
-    .deco-circle {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.07;
-    }
-
-    .deco-1 {
-        width: 400px; height: 400px;
-        background: var(--primary);
-        top: -100px; right: -100px;
-        animation: decoFloat 20s ease-in-out infinite;
-    }
-
-    .deco-2 {
-        width: 300px; height: 300px;
-        background: var(--primary-dark);
-        bottom: -50px; left: -80px;
-        animation: decoFloat 15s ease-in-out infinite reverse;
-    }
-
-    .deco-3 {
-        width: 200px; height: 200px;
-        background: var(--primary);
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        animation: decoFloat 18s ease-in-out infinite 3s;
-    }
-
-    .deco-dot-grid {
-        position: absolute;
-        top: 10%; right: 5%;
-        width: 120px; height: 120px;
-        background-image: radial-gradient(circle, var(--primary) 1px, transparent 1px);
-        background-size: 20px 20px;
-        opacity: 0.08;
-    }
-
-    @keyframes decoFloat {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        33% { transform: translate(30px, -20px) scale(1.05); }
-        66% { transform: translate(-20px, 20px) scale(0.95); }
-    }
-
-    .about-creative .container {
-        position: relative;
-        z-index: 1;
     }
 
     /* Section Badge */
@@ -425,6 +355,7 @@
         box-shadow: var(--shadow-primary);
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1;
+        pointer-events: none;
     }
 
     .tab-btn-cr {
@@ -438,14 +369,25 @@
         font-weight: 500;
         color: var(--secondary);
         cursor: pointer;
-        transition: color 0.3s ease;
+        transition: color 0.3s ease, background 0.3s ease;
         position: relative;
         z-index: 2;
         font-size: 0.95rem;
     }
 
-    .tab-btn-cr:hover { color: var(--primary); }
+    @media (hover: hover) {
+        .tab-btn-cr:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+    }
     .tab-btn-cr.active { color: white; }
+    @media (min-width: 992px) {
+        .tab-btn-cr.active:hover {
+            color: white;
+            background: transparent;
+        }
+    }
     .tab-icon-cr { font-size: 1.1rem; }
 
     /* Tab Contents */
@@ -472,43 +414,17 @@
     .img-frame {
         position: relative;
         display: inline-block;
-        border-radius: 24px;
-        overflow: hidden;
-    }
-
-    .img-frame-border {
-        position: absolute;
-        inset: -3px;
-        border-radius: 27px;
-        background: var(--primary-gradient);
-        z-index: -1;
-        opacity: 0.5;
     }
 
     .about-photo {
         max-width: 280px;
-        border-radius: 24px;
         display: block;
-        transition: transform 0.6s ease;
+        transition: transform 0.5s ease;
     }
 
     .img-frame:hover .about-photo {
-        transform: scale(1.05);
+        transform: translateY(-5px);
     }
-
-    .img-overlay {
-        position: absolute;
-        bottom: 0; left: 0; right: 0;
-        padding: 1.5rem 1rem 1rem;
-        background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
-        color: white;
-        font-weight: 600;
-        font-size: 1.1rem;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-
-    .img-frame:hover .img-overlay { opacity: 1; }
 
     .img-badge-cr {
         position: absolute;
@@ -586,13 +502,6 @@
         box-shadow: var(--shadow-xl);
     }
 
-    .intro-card-accent {
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 4px;
-        background: var(--primary-gradient);
-    }
-
     .intro-header {
         display: flex;
         align-items: center;
@@ -668,11 +577,11 @@
         transition: var(--transition-smooth);
     }
 
-    .feature-cr:hover {
-        background: var(--primary);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-primary);
+    @media (hover: hover) {
+        .feature-cr:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
     }
 
     .feature-shine {
@@ -683,8 +592,10 @@
         transition: left 0.6s ease;
     }
 
-    .feature-cr:hover .feature-shine {
-        left: 100%;
+    @media (hover: hover) {
+        .feature-cr:hover .feature-shine {
+            left: 100%;
+        }
     }
 
     .feature-cr[data-tooltip]:hover::after {
@@ -1022,11 +933,11 @@
         transition: var(--transition-bounce);
     }
 
-    .pillar-cr:hover {
-        background: var(--primary);
-        color: white;
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-primary);
+    @media (hover: hover) {
+        .pillar-cr:hover {
+            color: var(--primary);
+            transform: translateY(-4px);
+        }
     }
 
     .pillar-icon-cr { font-size: 1.2rem; }
@@ -1098,8 +1009,8 @@
 
     .mission-grid-cr {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.25rem;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
     }
 
     /* Mission Card - Flip Effect */
@@ -1114,7 +1025,7 @@
         position: absolute;
         inset: 0;
         border-radius: 20px;
-        padding: 1.5rem 1rem;
+        padding: 1.25rem 0.75rem;
         backface-visibility: hidden;
         transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
@@ -1125,9 +1036,14 @@
     }
 
     .mc-front {
-        background: white;
+        background: linear-gradient(160deg, #ffffff 60%, var(--primary-light) 100%);
         box-shadow: var(--shadow);
-        border-bottom: 4px solid var(--accent);
+        border: 1px solid rgba(0, 167, 157, 0.08);
+    }
+
+    .mission-card-cr:hover .mc-front {
+        border-color: rgba(0, 167, 157, 0.2);
+        box-shadow: 0 8px 25px rgba(0, 167, 157, 0.12);
     }
 
     .mc-back {
@@ -1141,52 +1057,54 @@
 
     .mc-num {
         position: absolute;
-        top: 10px; right: 14px;
-        font-size: 0.7rem;
+        top: 10px; right: 12px;
+        font-size: 0.65rem;
         font-weight: 700;
         color: var(--primary);
         background: var(--primary-light);
-        width: 24px; height: 24px;
+        width: 22px; height: 22px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    .mc-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
+    .mc-emoji {
+        font-size: 2.2rem;
+        margin-bottom: 0.75rem;
+        display: inline-block;
+        padding: 0.5rem;
+        background: var(--primary-light);
+        border-radius: 16px;
+        line-height: 1;
+    }
 
     .mc-title {
         font-family: var(--font-primary);
         font-weight: 600;
         color: var(--dark);
-        margin-bottom: 0.3rem;
-        font-size: 0.88rem;
+        margin-bottom: 0.25rem;
+        font-size: 0.82rem;
         line-height: 1.3;
     }
 
     .mc-desc {
         color: var(--secondary);
-        font-size: 0.78rem;
+        font-size: 0.73rem;
         margin: 0;
         line-height: 1.4;
-    }
-
-    .mc-hint {
-        font-size: 0.68rem;
-        color: var(--secondary-light);
-        margin-top: 0.5rem;
-        opacity: 0.7;
     }
 
     .mc-title-back {
         font-weight: 600;
         margin-bottom: 0.5rem;
-        font-size: 0.9rem;
+        font-size: 0.82rem;
         color: white;
+        line-height: 1.3;
     }
 
     .mc-detail {
-        font-size: 0.82rem;
+        font-size: 0.75rem;
         margin: 0;
         opacity: 0.9;
         line-height: 1.5;
@@ -1200,11 +1118,14 @@
         .tabs-cr-wrapper {
             padding: 5px;
             border-radius: 14px;
+            display: flex;
+            justify-content: center;
         }
 
         .tab-btn-cr {
             padding: 0.55rem 0.85rem;
             font-size: 0.85rem;
+            transition: all 0.35s ease;
         }
 
         .tab-text-cr { display: none; }
@@ -1217,6 +1138,17 @@
             box-shadow: var(--shadow-primary);
         }
 
+        .img-badge-cr {
+            bottom: -8px;
+            right: 0px;
+        }
+
+        .about-img-cr {
+            margin-bottom: 1.5rem;
+            display: block;
+            text-align: center;
+        }
+
         .intro-card-cr { padding: 1.5rem; }
 
         .features-grid-cr { grid-template-columns: 1fr; }
@@ -1224,9 +1156,12 @@
         .feature-cr[data-tooltip]:hover::after,
         .feature-cr[data-tooltip]:hover::before { display: none; }
 
-        .about-img-cr { margin-bottom: 1rem; }
-
-        .img-float-tag { display: none; }
+        .img-float-tag {
+            font-size: 0.7rem;
+            padding: 0.35rem 0.7rem;
+        }
+        .tag-1 { top: 5px; left: 5px; }
+        .tag-2 { bottom: 35px; left: 0px; }
 
         .history-card-cr { padding: 1.5rem; }
 
@@ -1250,16 +1185,20 @@
         .pillar-hover-card { display: none; }
 
         .mission-grid-cr {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
         }
 
-        .mission-card-cr { height: 220px; }
-
-        .mc-hint { display: none; }
+        .mission-card-cr { height: 210px; }
 
         /* Touch devices - tap to flip */
         .mission-card-cr.flipped .mc-front { transform: rotateY(-180deg); }
         .mission-card-cr.flipped .mc-back { transform: rotateY(0); }
+    }
+
+    @media (max-width: 767.98px) {
+        .mission-grid-cr {
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
 
     @media (max-width: 575.98px) {
@@ -1279,10 +1218,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Tab switching with slider animation
     const tabBtns = document.querySelectorAll('.tab-btn-cr');
     const tabContents = document.querySelectorAll('.tab-content-cr');
     const slider = document.querySelector('.tabs-cr-slider');
+    const tabContentsWrapper = document.querySelector('.tab-contents-cr');
 
     function updateSlider(btn) {
         if (!slider || window.innerWidth < 992) return;
@@ -1290,7 +1229,7 @@ document.addEventListener('DOMContentLoaded', function() {
         slider.style.left = btn.offsetLeft + 'px';
     }
 
-    // Initialize slider position
+    // Initialize slider
     const activeBtn = document.querySelector('.tab-btn-cr.active');
     if (activeBtn) {
         setTimeout(() => updateSlider(activeBtn), 100);
@@ -1304,13 +1243,13 @@ document.addEventListener('DOMContentLoaded', function() {
             tabContents.forEach(c => c.classList.remove('active'));
 
             this.classList.add('active');
-            document.getElementById('tab-' + tabId).classList.add('active');
+            const targetTab = document.getElementById('tab-' + tabId);
+            targetTab.classList.add('active');
 
             updateSlider(this);
         });
     });
 
-    // Recalculate slider on resize
     window.addEventListener('resize', function() {
         const active = document.querySelector('.tab-btn-cr.active');
         if (active) updateSlider(active);
@@ -1320,6 +1259,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if ('ontouchstart' in window) {
         document.querySelectorAll('.mission-card-cr').forEach(card => {
             card.addEventListener('click', function() {
+                // Close other flipped cards
+                document.querySelectorAll('.mission-card-cr.flipped').forEach(c => {
+                    if (c !== this) c.classList.remove('flipped');
+                });
                 this.classList.toggle('flipped');
             });
         });
