@@ -1315,7 +1315,6 @@
         background: white;
         border-radius: 28px;
         padding: 2rem 3rem;
-        box-shadow: 0 8px 40px rgba(0,167,157,0.15);
         text-align: center;
         position: relative;
         border: 2px solid rgba(0,167,157,0.2);
@@ -1324,23 +1323,19 @@
         flex-direction: column;
         align-items: center;
         gap: 0.5rem;
+        animation: klPusatGlow 4s ease-in-out infinite;
     }
 
-    .kl-pusat-card::before {
-        content: '';
-        position: absolute;
-        inset: -6px;
-        border-radius: 32px;
-        border: 2px dashed rgba(0,167,157,0.2);
-        animation: klRingSpin 12s linear infinite;
+    @keyframes klPusatGlow {
+        0%, 100% { box-shadow: 0 8px 30px rgba(0,167,157,0.12); }
+        50%       { box-shadow: 0 8px 40px rgba(0,167,157,0.28), 0 0 0 8px rgba(0,167,157,0.06); }
     }
-
-    @keyframes klRingSpin { to { transform: rotate(360deg); } }
 
     @media (hover: hover) {
         .kl-pusat-card:hover {
             transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 16px 50px rgba(0,167,157,0.22);
+            box-shadow: 0 16px 50px rgba(0,167,157,0.28), 0 0 0 10px rgba(0,167,157,0.07);
+            animation-play-state: paused;
         }
     }
 
