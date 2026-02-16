@@ -660,9 +660,9 @@ body.kmb2-popup-open .back-to-top {
     position: absolute;
     top: 14px; right: 14px;
     width: 46px; height: 46px;
-    background: rgba(255,255,255,.3) !important;
+    background: rgba(0,0,0,.28) !important;
     backdrop-filter: blur(8px);
-    border: 1.5px solid rgba(255,255,255,.5) !important;
+    border: 1.5px solid rgba(0,0,0,.18) !important;
     border-radius: 50% !important;
     color: white !important;
     display: flex;
@@ -672,15 +672,15 @@ body.kmb2-popup-open .back-to-top {
     z-index: 10;
     outline: none !important;
     box-shadow: none !important;
-    transition: transform .25s ease;
+    transition: transform .25s ease !important;
     appearance: none;
 }
 .kmb2-modal-x:hover,
 .kmb2-modal-x:focus,
 .kmb2-modal-x:active {
     transform: scale(1.18) !important;
-    background: rgba(255,255,255,.3) !important;
-    border-color: rgba(255,255,255,.5) !important;
+    background: rgba(0,0,0,.28) !important;
+    border-color: rgba(0,0,0,.18) !important;
     color: white !important;
     box-shadow: none !important;
     outline: none !important;
@@ -729,14 +729,14 @@ body.kmb2-popup-open .back-to-top {
     border: 1px solid rgba(255,255,255,.3);
 }
 
-/* Modal nav arrows — prev kiri, next kiri-geser (jauh dari X di kanan) */
+/* Modal nav arrows — di batas banner/konten (center = 160px) */
 .kmb2-modal-nav {
     position: absolute;
-    top: 14px;
+    top: 137px; /* 160px banner - 23px (½ btn) = center di garis batas */
     width: 46px; height: 46px;
-    background: rgba(255,255,255,.28) !important;
+    background: rgba(0,0,0,.28) !important;
     backdrop-filter: blur(8px);
-    border: 1.5px solid rgba(255,255,255,.45) !important;
+    border: 1.5px solid rgba(0,0,0,.18) !important;
     border-radius: 50% !important;
     display: flex;
     align-items: center;
@@ -753,15 +753,15 @@ body.kmb2-popup-open .back-to-top {
 .kmb2-modal-nav:focus,
 .kmb2-modal-nav:active {
     transform: scale(1.2) !important;
-    background: rgba(255,255,255,.28) !important;
-    border-color: rgba(255,255,255,.45) !important;
+    background: rgba(0,0,0,.28) !important;
+    border-color: rgba(0,0,0,.18) !important;
     color: white !important;
     box-shadow: none !important;
     outline: none !important;
 }
-/* Grup kanan atas: [< > ×] — tag label aman sendirian di kiri */
-.kmb2-modal-nav.mnav-prev { right: 124px; }
-.kmb2-modal-nav.mnav-next { right: 70px;  }
+/* Prev di kiri, Next di kanan — keduanya center vertikal pada banner */
+.kmb2-modal-nav.mnav-prev { left: 14px; }
+.kmb2-modal-nav.mnav-next { right: 14px; }
 
 /* Modal photo (overlapping) */
 .kmb2-modal-photo-area {
@@ -866,8 +866,7 @@ body.kmb2-popup-open .back-to-top {
     z-index: 9101;
     transform: translateY(100%);
     transition: transform .38s cubic-bezier(.4,0,.2,1);
-    /* Tinggi tetap — semua kelas sama, konten lebih pendek tetap mengisi */
-    height: 85dvh;
+    max-height: 92dvh;
     overflow-y: auto;
     scrollbar-width: none;
 }
