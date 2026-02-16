@@ -1,5 +1,5 @@
 {{-- About Section - Creative & Interactive Design --}}
-<section class="about-creative pt-3 pb-5" id="about-section">
+<section class="about-creative pt-3 pb-5 mt-5" id="about-section">
     <div class="container">
         {{-- Section Header --}}
         <div class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
@@ -205,21 +205,21 @@
                                 <span class="quote-mark">"</span>Terciptanya insan-insan dakwah yang memiliki kekokohan <span class="quote-hl">spiritualitas</span>, <span class="quote-hl">intelektualitas</span>, dan <span class="quote-hl">solidaritas</span> dengan etos profesionalisme menuju kampus yang islami dalam rangka mewujudkan <span class="quote-hl">khairu ummah</span>.<span class="quote-mark">"</span>
                             </blockquote>
                             <div class="vision-pillars-cr">
-                                <div class="pillar-cr">
+                                <div class="pillar-cr" data-icon="🤲" data-title="Spiritualitas" data-desc="Kekokohan iman, ibadah, dan akhlak sebagai fondasi utama">
                                     <div class="pillar-icon-cr">🤲</div>
                                     <span class="pillar-label-cr">Spiritualitas</span>
                                     <div class="pillar-hover-card">
                                         <p>Kekokohan iman, ibadah, dan akhlak sebagai fondasi utama</p>
                                     </div>
                                 </div>
-                                <div class="pillar-cr">
+                                <div class="pillar-cr" data-icon="🧠" data-title="Intelektualitas" data-desc="Kecerdasan, wawasan luas, dan kemampuan berpikir kritis">
                                     <div class="pillar-icon-cr">🧠</div>
                                     <span class="pillar-label-cr">Intelektualitas</span>
                                     <div class="pillar-hover-card">
                                         <p>Kecerdasan, wawasan luas, dan kemampuan berpikir kritis</p>
                                     </div>
                                 </div>
-                                <div class="pillar-cr">
+                                <div class="pillar-cr" data-icon="🤝" data-title="Solidaritas" data-desc="Persatuan, kebersamaan, dan kepedulian sesama">
                                     <div class="pillar-icon-cr">🤝</div>
                                     <span class="pillar-label-cr">Solidaritas</span>
                                     <div class="pillar-hover-card">
@@ -273,6 +273,16 @@
         </div>
     </div>
 </section>
+
+{{-- Pillar Bottom Sheet (mobile) --}}
+<div class="pillar-sheet-backdrop" id="pillarBackdrop"></div>
+<div class="pillar-bottom-sheet" id="pillarSheet">
+    <div class="pbs-handle"></div>
+    <div class="pbs-icon" id="pbsIcon"></div>
+    <h5 class="pbs-title" id="pbsTitle"></h5>
+    <p class="pbs-desc" id="pbsDesc"></p>
+    <button class="pbs-close" id="pbsClose">Tutup</button>
+</div>
 
 <style>
     /* ===================== ABOUT CREATIVE ===================== */
@@ -1053,8 +1063,10 @@
         transform: rotateY(180deg);
     }
 
-    .mission-card-cr:hover .mc-front { transform: rotateY(-180deg); }
-    .mission-card-cr:hover .mc-back { transform: rotateY(0); }
+    @media (hover: hover) {
+        .mission-card-cr:hover .mc-front { transform: rotateY(-180deg); }
+        .mission-card-cr:hover .mc-back { transform: rotateY(0); }
+    }
 
     .mc-num {
         position: absolute;
@@ -1192,11 +1204,7 @@
             justify-content: center;
         }
 
-        .pillar-cr.show-card .pillar-hover-card {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0);
-        }
+        .pillar-hover-card { display: none !important; }
 
         .mission-grid-cr {
             grid-template-columns: repeat(3, 1fr);
@@ -1227,6 +1235,89 @@
         .about-photo { max-width: 220px; }
 
         .history-body-cr p { font-size: 0.85rem; }
+    }
+
+    /* ===== PILLAR BOTTOM SHEET ===== */
+    .pillar-sheet-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 9998;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .pillar-sheet-backdrop.active {
+        display: block;
+        opacity: 1;
+    }
+
+    .pillar-bottom-sheet {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        background: white;
+        border-radius: 24px 24px 0 0;
+        padding: 1.25rem 1.5rem 2rem;
+        z-index: 9999;
+        text-align: center;
+        transform: translateY(100%);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
+    }
+
+    .pillar-bottom-sheet.active {
+        transform: translateY(0);
+    }
+
+    .pbs-handle {
+        width: 40px; height: 4px;
+        background: #e0e0e0;
+        border-radius: 4px;
+        margin: 0 auto 1.25rem;
+    }
+
+    .pbs-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+        display: inline-block;
+        padding: 0.75rem;
+        background: var(--primary-light);
+        border-radius: 18px;
+        line-height: 1;
+    }
+
+    .pbs-title {
+        font-family: var(--font-primary);
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .pbs-desc {
+        color: var(--secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
+    }
+
+    .pbs-close {
+        display: inline-block;
+        padding: 0.6rem 2rem;
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: var(--shadow-primary);
+    }
+
+    @media (min-width: 992px) {
+        .pillar-sheet-backdrop,
+        .pillar-bottom-sheet { display: none !important; }
     }
 </style>
 
@@ -1280,19 +1371,43 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // Mobile: tap to show pillar tooltip
+        // Mobile: bottom sheet for pillars
+        const backdrop = document.getElementById('pillarBackdrop');
+        const sheet    = document.getElementById('pillarSheet');
+        const pbsIcon  = document.getElementById('pbsIcon');
+        const pbsTitle = document.getElementById('pbsTitle');
+        const pbsDesc  = document.getElementById('pbsDesc');
+        const pbsClose = document.getElementById('pbsClose');
+
+        function openSheet(icon, title, desc) {
+            pbsIcon.textContent  = icon;
+            pbsTitle.textContent = title;
+            pbsDesc.textContent  = desc;
+            backdrop.style.display = 'block';
+            requestAnimationFrame(() => {
+                backdrop.classList.add('active');
+                sheet.classList.add('active');
+            });
+        }
+
+        function closeSheet() {
+            backdrop.classList.remove('active');
+            sheet.classList.remove('active');
+            setTimeout(() => { backdrop.style.display = 'none'; }, 350);
+        }
+
         document.querySelectorAll('.pillar-cr').forEach(pillar => {
-            pillar.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const isOpen = this.classList.contains('show-card');
-                document.querySelectorAll('.pillar-cr.show-card').forEach(p => p.classList.remove('show-card'));
-                if (!isOpen) this.classList.add('show-card');
+            pillar.addEventListener('click', function() {
+                openSheet(
+                    this.dataset.icon,
+                    this.dataset.title,
+                    this.dataset.desc
+                );
             });
         });
 
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.pillar-cr.show-card').forEach(p => p.classList.remove('show-card'));
-        });
+        backdrop.addEventListener('click', closeSheet);
+        pbsClose.addEventListener('click', closeSheet);
     }
 });
 </script>
