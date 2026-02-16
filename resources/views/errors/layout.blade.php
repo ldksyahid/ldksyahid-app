@@ -39,8 +39,8 @@
             body {
                 font-family: 'Inter', sans-serif !important;
                 background: var(--err-bg) !important;
-                min-height: 100vh;
-                overflow-x: hidden;
+                height: 100vh;
+                overflow: hidden;
                 display: flex;
                 flex-direction: column;
                 margin: 0;
@@ -171,9 +171,10 @@
 
             /* ========== Navbar ========== */
             .error-navbar {
-                padding: 1.25rem 2rem;
+                padding: 0.75rem 2rem;
                 position: relative;
                 z-index: 2;
+                flex-shrink: 0;
             }
 
             .error-navbar a {
@@ -214,49 +215,44 @@
                 justify-content: center;
                 position: relative;
                 z-index: 1;
-                padding: 1rem;
+                padding: 0.5rem 1rem;
+                min-height: 0;
+            }
+
+            /* Gradient border wrapper */
+            .error-card-glow {
+                max-width: 520px;
+                width: 100%;
+                padding: 2px;
+                border-radius: 30px;
+                background: linear-gradient(135deg, var(--err-primary), var(--err-accent), var(--err-accent-pink), var(--err-primary));
+                background-size: 300% 300%;
+                animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards, glowBorder 6s ease infinite;
+                opacity: 0;
+                transform: translateY(30px);
+                box-shadow:
+                    0 25px 70px rgba(0, 167, 157, 0.1),
+                    0 8px 30px rgba(0, 0, 0, 0.04);
+            }
+
+            @keyframes glowBorder {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
             }
 
             .error-card {
-                background: rgba(255, 255, 255, 0.85);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                border: 1px solid rgba(255, 255, 255, 0.6);
+                background: #fff;
                 border-radius: 28px;
-                box-shadow:
-                    0 25px 70px rgba(0, 167, 157, 0.08),
-                    0 8px 30px rgba(0, 0, 0, 0.04),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-                padding: 3rem 2.5rem 2.5rem;
-                max-width: 520px;
+                padding: 2rem 2.5rem 1.75rem;
                 width: 100%;
                 text-align: center;
                 position: relative;
                 overflow: hidden;
-                animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                opacity: 0;
-                transform: translateY(30px);
             }
 
             @keyframes cardAppear {
                 to { opacity: 1; transform: translateY(0); }
-            }
-
-            /* Top gradient bar */
-            .error-card::before {
-                content: '';
-                position: absolute;
-                top: 0; left: 0; right: 0;
-                height: 4px;
-                background: linear-gradient(90deg, var(--err-primary), var(--err-accent), var(--err-accent-pink), var(--err-primary));
-                background-size: 300% 100%;
-                animation: gradientFlow 4s ease infinite;
-            }
-
-            @keyframes gradientFlow {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
             }
 
             /* Shimmer effect */
@@ -266,7 +262,7 @@
                 top: 0; left: -100%;
                 width: 60%;
                 height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
                 animation: shimmer 5s ease-in-out infinite;
                 pointer-events: none;
             }
@@ -278,9 +274,9 @@
 
             /* ========== Icon ========== */
             .error-icon-wrap {
-                width: 130px;
-                height: 130px;
-                margin: 0 auto 1.75rem;
+                width: 100px;
+                height: 100px;
+                margin: 0 auto 1rem;
                 position: relative;
                 display: flex;
                 align-items: center;
@@ -360,13 +356,13 @@
             }
 
             @keyframes orbitDot {
-                from { transform: rotate(0deg) translateX(78px) rotate(0deg) scale(0.8); }
-                50% { transform: rotate(180deg) translateX(78px) rotate(-180deg) scale(1.2); }
-                to { transform: rotate(360deg) translateX(78px) rotate(-360deg) scale(0.8); }
+                from { transform: rotate(0deg) translateX(60px) rotate(0deg) scale(0.8); }
+                50% { transform: rotate(180deg) translateX(60px) rotate(-180deg) scale(1.2); }
+                to { transform: rotate(360deg) translateX(60px) rotate(-360deg) scale(0.8); }
             }
 
             .error-icon-wrap i {
-                font-size: 3.2rem;
+                font-size: 2.5rem;
                 position: relative;
                 z-index: 1;
                 background: linear-gradient(135deg, var(--err-primary), var(--err-primary-dark));
@@ -378,10 +374,10 @@
 
             /* ========== Error Code ========== */
             .error-code {
-                font-size: 5.5rem;
+                font-size: 4.5rem;
                 font-weight: 900;
                 line-height: 1;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.25rem;
                 letter-spacing: -3px;
                 position: relative;
                 display: inline-block;
@@ -416,18 +412,18 @@
 
             /* ========== Text ========== */
             .error-title {
-                font-size: 1.4rem;
+                font-size: 1.25rem;
                 font-weight: 700;
                 color: var(--err-text);
-                margin-bottom: 0.75rem;
+                margin-bottom: 0.5rem;
                 animation: textSlide 0.5s ease 0.2s both;
             }
 
             .error-message {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
                 color: var(--err-muted);
-                line-height: 1.75;
-                margin-bottom: 2rem;
+                line-height: 1.6;
+                margin-bottom: 1.5rem;
                 animation: textSlide 0.5s ease 0.3s both;
             }
 
@@ -511,8 +507,8 @@
 
             /* ========== Emoji hint ========== */
             .error-emoji {
-                font-size: 1.5rem;
-                margin-bottom: 0.5rem;
+                font-size: 1.3rem;
+                margin-bottom: 0.25rem;
                 animation: emojiWave 2s ease-in-out infinite;
                 display: inline-block;
             }
@@ -526,9 +522,10 @@
             /* ========== Footer ========== */
             .error-footer {
                 text-align: center;
-                padding: 1.25rem;
+                padding: 0.75rem;
                 color: var(--err-muted);
-                font-size: 0.8rem;
+                font-size: 0.78rem;
+                flex-shrink: 0;
                 position: relative;
                 z-index: 1;
                 letter-spacing: 0.01em;
@@ -545,20 +542,26 @@
 
             /* ========== Responsive ========== */
             @media (max-width: 576px) {
-                .error-card { padding: 2rem 1.5rem 1.75rem; border-radius: 22px; }
-                .error-code { font-size: 4rem; letter-spacing: -2px; }
-                .error-title { font-size: 1.15rem; }
-                .error-message { font-size: 0.88rem; }
-                .error-icon-wrap { width: 100px; height: 100px; }
-                .error-icon-wrap i { font-size: 2.4rem; }
-                .error-navbar { padding: 1rem 1.25rem; }
+                .error-card-glow { border-radius: 22px; }
+                .error-card { padding: 1.5rem 1.25rem 1.25rem; border-radius: 20px; }
+                .error-code { font-size: 3.5rem; letter-spacing: -2px; }
+                .error-title { font-size: 1.05rem; }
+                .error-message { font-size: 0.82rem; margin-bottom: 1rem; }
+                .error-icon-wrap { width: 80px; height: 80px; margin-bottom: 0.75rem; }
+                .error-icon-wrap i { font-size: 2rem; }
+                .error-navbar { padding: 0.6rem 1rem; }
+                .error-navbar img { width: 34px; height: 34px; }
+                .error-navbar .brand-name { font-size: 0.95rem; }
+                .error-emoji { font-size: 1.1rem; }
+                .btn-err-primary, .btn-err-secondary { padding: 0.65rem 1.25rem; font-size: 0.82rem; border-radius: 12px; }
                 .orbit-dot { width: 5px; height: 5px; }
                 @keyframes orbitDot {
-                    from { transform: rotate(0deg) translateX(58px) rotate(0deg); }
-                    50% { transform: rotate(180deg) translateX(58px) rotate(-180deg); }
-                    to { transform: rotate(360deg) translateX(58px) rotate(-360deg); }
+                    from { transform: rotate(0deg) translateX(48px) rotate(0deg); }
+                    50% { transform: rotate(180deg) translateX(48px) rotate(-180deg); }
+                    to { transform: rotate(360deg) translateX(48px) rotate(-360deg); }
                 }
                 .bg-icon { display: none; }
+                .error-footer { padding: 0.5rem; font-size: 0.72rem; }
             }
         </style>
     </head>
@@ -600,6 +603,7 @@
 
         {{-- Error Content --}}
         <div class="error-wrapper">
+            <div class="error-card-glow">
             <div class="error-card">
                 {{-- Animated Icon --}}
                 <div class="error-icon-wrap">
@@ -633,6 +637,7 @@
                     </a>
                 </div>
             </div>
+            </div>
         </div>
 
         {{-- Footer --}}
@@ -649,7 +654,7 @@
                 new WOW().init();
 
                 // Parallax effect on mouse move
-                const card = document.querySelector('.error-card');
+                const card = document.querySelector('.error-card-glow');
                 document.addEventListener('mousemove', function(e) {
                     const x = (e.clientX / window.innerWidth - 0.5) * 8;
                     const y = (e.clientY / window.innerHeight - 0.5) * 8;

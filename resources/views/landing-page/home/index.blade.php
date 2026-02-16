@@ -33,10 +33,6 @@
 @include('landing-page.home.partials.event')
 {{-- Event Landing Page End --}}
 
-{{-- Contact Us Landing Page Start --}}
-@include('landing-page.home.partials.contact-us')
-{{-- Contact Us Landing Page End --}}
-
 {{-- Schedule Landing Page Start --}}
 @include('landing-page.home.partials.schedule')
 {{-- Schedule Landing Page End --}}
@@ -48,5 +44,9 @@
 {{-- Testimony Landing Page Start --}}
 @include('landing-page.home.partials.testimony')
 {{-- Testimony Landing Page End --}}
+
+{{-- Contact Us Landing Page Start --}}
+@include('landing-page.home.partials.contact-us')
+{{-- Contact Us Landing Page End --}}
 
 @endsection
