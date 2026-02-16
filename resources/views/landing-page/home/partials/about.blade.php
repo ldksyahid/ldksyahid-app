@@ -977,6 +977,7 @@
         font-style: normal;
     }
 
+
     .pillar-cr:hover .pillar-hover-card {
         opacity: 1;
         visibility: visible;
@@ -1175,14 +1176,27 @@
             font-size: 1.1rem;
         }
 
-        .vision-card-cr { padding: 2rem 1.5rem; }
+        .vision-card-cr {
+            padding: 2rem 1.5rem;
+            overflow: visible;
+        }
 
         .vision-pillars-cr {
             flex-direction: column;
             align-items: center;
         }
 
-        .pillar-hover-card { display: none; }
+        .pillar-cr {
+            width: 100%;
+            max-width: 280px;
+            justify-content: center;
+        }
+
+        .pillar-cr.show-card .pillar-hover-card {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
 
         .mission-grid-cr {
             grid-template-columns: repeat(3, 1fr);
@@ -1259,12 +1273,25 @@ document.addEventListener('DOMContentLoaded', function() {
     if ('ontouchstart' in window) {
         document.querySelectorAll('.mission-card-cr').forEach(card => {
             card.addEventListener('click', function() {
-                // Close other flipped cards
                 document.querySelectorAll('.mission-card-cr.flipped').forEach(c => {
                     if (c !== this) c.classList.remove('flipped');
                 });
                 this.classList.toggle('flipped');
             });
+        });
+
+        // Mobile: tap to show pillar tooltip
+        document.querySelectorAll('.pillar-cr').forEach(pillar => {
+            pillar.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isOpen = this.classList.contains('show-card');
+                document.querySelectorAll('.pillar-cr.show-card').forEach(p => p.classList.remove('show-card'));
+                if (!isOpen) this.classList.add('show-card');
+            });
+        });
+
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.pillar-cr.show-card').forEach(p => p.classList.remove('show-card'));
         });
     }
 });
