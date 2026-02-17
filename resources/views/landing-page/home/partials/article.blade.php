@@ -44,13 +44,16 @@
                     </div>
                 </div>
                 <div class="art-card__body">
-                    <div class="art-card__theme-row">
+                    <div class="art-card__top-row">
                         <span class="art-card__theme" style="--theme-color: {{ $accent }}">{{ $article->theme ?? 'Artikel' }}</span>
+                        <span class="art-card__reading-time" style="color: {{ $accent }}">
+                            <i class="fas fa-clock"></i> 5 min
+                        </span>
                     </div>
                     <h5 class="art-card__title">
                         <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
                     </h5>
-                    <div class="art-card__people">
+                    <div class="art-card__people-card" style="--card-accent: {{ $accent }}">
                         <div class="art-card__meta">
                             <div class="art-card__avatar" style="background: {{ $accent }}20; color: {{ $accent }}">
                                 <i class="fas fa-pen-fancy"></i>
@@ -61,6 +64,7 @@
                             </div>
                         </div>
                         @if($article->editor)
+                        <div class="art-card__people-divider"></div>
                         <div class="art-card__meta">
                             <div class="art-card__avatar" style="background: {{ $accent }}20; color: {{ $accent }}">
                                 <i class="fas fa-edit"></i>
@@ -72,11 +76,9 @@
                         </div>
                         @endif
                     </div>
-                    <div class="art-card__footer">
-                        <a href="/articles/{{ $article->id }}" class="art-card__read">
-                            <span>Baca</span> <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
+                    <a href="/articles/{{ $article->id }}" class="art-card__read">
+                        <span>Baca Selengkapnya</span> <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
             @empty
@@ -122,11 +124,14 @@
                         </div>
                     </div>
                     <div class="art-card__body">
-                        <div class="art-card__theme-row">
+                        <div class="art-card__top-row">
                             <span class="art-card__theme" style="--theme-color: {{ $accent }}">{{ $article->theme ?? 'Artikel' }}</span>
+                            <span class="art-card__reading-time" style="color: {{ $accent }}">
+                                <i class="fas fa-clock"></i> 5 min
+                            </span>
                         </div>
                         <h5 class="art-card__title">{{ $article->title }}</h5>
-                        <div class="art-card__people">
+                        <div class="art-card__people-card" style="--card-accent: {{ $accent }}">
                             <div class="art-card__meta">
                                 <div class="art-card__avatar" style="background: {{ $accent }}20; color: {{ $accent }}">
                                     <i class="fas fa-pen-fancy"></i>
@@ -137,6 +142,7 @@
                                 </div>
                             </div>
                             @if($article->editor)
+                            <div class="art-card__people-divider"></div>
                             <div class="art-card__meta">
                                 <div class="art-card__avatar" style="background: {{ $accent }}20; color: {{ $accent }}">
                                     <i class="fas fa-edit"></i>
@@ -431,32 +437,18 @@
 
 /* ── Body ── */
 .art-card__body {
-    padding: 1rem 1.25rem 1.15rem;
+    padding: 1.1rem 1.25rem 1.25rem;
     flex: 1;
     display: flex;
     flex-direction: column;
-    position: relative;
 }
 
-.art-card__body::before {
-    content: '';
-    position: absolute;
-    top: 12px;
-    left: 0;
-    width: 3px;
-    height: 28px;
-    background: var(--card-accent);
-    border-radius: 0 3px 3px 0;
-    opacity: 0;
-    transition: opacity 0.3s ease, height 0.3s ease;
-}
-
-.art-card:hover .art-card__body::before {
-    opacity: 1;
-}
-
-.art-card__theme-row {
-    margin-bottom: 0.5rem;
+/* Top row: theme + reading time */
+.art-card__top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
 }
 
 .art-card__theme {
@@ -469,6 +461,19 @@
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.2px;
+}
+
+.art-card__reading-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    opacity: 0.7;
+}
+
+.art-card__reading-time i {
+    font-size: 0.6rem;
 }
 
 .art-card__title {
@@ -501,25 +506,34 @@
     color: var(--card-accent);
 }
 
-/* Footer row */
-.art-card__footer {
-    padding-top: 0.5rem;
-    margin-top: auto;
-}
-
-/* People (writer + editor) */
-.art-card__people {
+/* People Card */
+.art-card__people-card {
+    background: color-mix(in srgb, var(--card-accent) 5%, #f8f9fa);
+    border-radius: 14px;
+    padding: 0.7rem 0.85rem;
+    margin-bottom: 0.85rem;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    margin-bottom: 0.75rem;
+    gap: 0;
+    transition: background 0.3s ease;
 }
 
-/* Meta */
+.art-card:hover .art-card__people-card {
+    background: color-mix(in srgb, var(--card-accent) 8%, #f8f9fa);
+}
+
+.art-card__people-divider {
+    height: 1px;
+    background: color-mix(in srgb, var(--card-accent) 12%, transparent);
+    margin: 0.45rem 0;
+    border-radius: 1px;
+}
+
+/* Meta row */
 .art-card__meta {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
+    gap: 0.5rem;
     color: var(--secondary);
     font-size: 0.8rem;
     font-weight: 500;
@@ -530,16 +544,16 @@
     display: flex;
     flex-direction: column;
     min-width: 0;
-    line-height: 1.2;
+    line-height: 1.25;
 }
 
 .art-card__meta-label {
-    font-size: 0.62rem;
-    font-weight: 600;
+    font-size: 0.6rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: var(--secondary);
-    opacity: 0.7;
+    opacity: 0.6;
 }
 
 .art-card__meta-name {
@@ -552,9 +566,9 @@
 }
 
 .art-card__avatar {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -564,32 +578,27 @@
 }
 
 .art-card:hover .art-card__avatar {
-    transform: scale(1.15);
+    transform: scale(1.1) rotate(-3deg);
 }
 
-.art-card__meta span {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Read Button */
+/* Read Button — Full width */
 .art-card__read {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    width: 100%;
     color: var(--card-accent);
-    background: color-mix(in srgb, var(--card-accent) 10%, transparent);
+    background: color-mix(in srgb, var(--card-accent) 8%, transparent);
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     text-decoration: none;
-    padding: 8px 18px;
-    border-radius: var(--radius-pill);
+    padding: 10px 18px;
+    border-radius: 14px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    white-space: nowrap;
-    flex-shrink: 0;
     position: relative;
     overflow: hidden;
+    margin-top: auto;
 }
 
 .art-card__read::before {
@@ -600,7 +609,7 @@
     border-radius: inherit;
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 0;
 }
 
@@ -612,16 +621,17 @@
 .art-card__read i {
     position: relative;
     z-index: 1;
+    transition: color 0.3s ease;
 }
 
 .art-card:hover .art-card__read {
     color: white;
-    box-shadow: 0 4px 15px color-mix(in srgb, var(--card-accent) 35%, transparent);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--card-accent) 30%, transparent);
 }
 
 .art-card__read i {
-    font-size: 0.7rem;
-    transition: transform 0.3s ease;
+    font-size: 0.72rem;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .art-card:hover .art-card__read i {
