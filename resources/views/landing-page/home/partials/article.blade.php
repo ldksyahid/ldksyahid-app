@@ -44,12 +44,7 @@
                     </div>
                 </div>
                 <div class="art-card__body">
-                    <div class="art-card__top-row">
-                        <span class="art-card__theme" style="--theme-color: {{ $accent }}">{{ $article->theme ?? 'Artikel' }}</span>
-                        <span class="art-card__reading-time" style="color: {{ $accent }}">
-                            <i class="fas fa-clock"></i> 5 min
-                        </span>
-                    </div>
+                    <span class="art-card__theme" style="--theme-color: {{ $accent }}">{{ $article->theme ?? 'Artikel' }}</span>
                     <h5 class="art-card__title">
                         <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
                     </h5>
@@ -124,12 +119,7 @@
                         </div>
                     </div>
                     <div class="art-card__body">
-                        <div class="art-card__top-row">
-                            <span class="art-card__theme" style="--theme-color: {{ $accent }}">{{ $article->theme ?? 'Artikel' }}</span>
-                            <span class="art-card__reading-time" style="color: {{ $accent }}">
-                                <i class="fas fa-clock"></i> 5 min
-                            </span>
-                        </div>
+                        <span class="art-card__theme" style="--theme-color: {{ $accent }}">{{ $article->theme ?? 'Artikel' }}</span>
                         <h5 class="art-card__title">{{ $article->title }}</h5>
                         <div class="art-card__people-card" style="--card-accent: {{ $accent }}">
                             <div class="art-card__meta">
@@ -443,37 +433,46 @@
     flex-direction: column;
 }
 
-/* Top row: theme + reading time */
-.art-card__top-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.6rem;
-}
-
 .art-card__theme {
+    margin-bottom: 0.6rem;
     --theme-color: var(--primary);
-    display: inline-block;
-    background: color-mix(in srgb, var(--theme-color) 12%, transparent);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: color-mix(in srgb, var(--theme-color) 10%, white);
     color: var(--theme-color);
-    padding: 4px 12px;
-    border-radius: var(--radius-pill);
+    padding: 5px 14px 5px 10px;
+    border-radius: 10px;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.2px;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--theme-color) 15%, transparent);
+    transition: all 0.3s ease;
 }
 
-.art-card__reading-time {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    opacity: 0.7;
+.art-card__theme::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--theme-color);
+    flex-shrink: 0;
+    animation: artThemeDot 2s ease-in-out infinite;
 }
 
-.art-card__reading-time i {
-    font-size: 0.6rem;
+@keyframes artThemeDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+.art-card:hover .art-card__theme {
+    background: var(--theme-color);
+    color: white;
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--theme-color) 30%, transparent);
+}
+
+.art-card:hover .art-card__theme::before {
+    background: white;
 }
 
 .art-card__title {
