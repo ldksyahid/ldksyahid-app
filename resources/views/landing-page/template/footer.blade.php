@@ -148,6 +148,18 @@
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
                             </div>
+                            @if(session('newsletter_success'))
+                            <div class="newsletter-alert newsletter-success">
+                                <i class="fas fa-check-circle"></i>
+                                <span>{{ session('newsletter_success') }}</span>
+                            </div>
+                            @endif
+                            @if(session('newsletter_error'))
+                            <div class="newsletter-alert newsletter-error">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>{{ session('newsletter_error') }}</span>
+                            </div>
+                            @endif
                         </form>
                         <div class="footer-fun-text">
                             <span>Mari berteman! 🤝</span>
@@ -521,6 +533,49 @@
 
     .subscribe-btn:active {
         transform: scale(0.95);
+    }
+
+    /* Newsletter Alerts */
+    .newsletter-alert {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        margin-top: 1rem;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .newsletter-success {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10b981;
+    }
+
+    .newsletter-success i {
+        font-size: 1rem;
+    }
+
+    .newsletter-error {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+    }
+
+    .newsletter-error i {
+        font-size: 1rem;
     }
 
     .footer-fun-text {
