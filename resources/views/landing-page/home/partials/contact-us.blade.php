@@ -1,9 +1,9 @@
 {{-- Contact Us Section - Modern & Elegant Design --}}
 <section class="contact-section py-5">
     <div class="container">
-        {{-- Header - Centered with Pulse Badge --}}
+        {{-- Header - Badge Style Like Testimony --}}
         <div class="text-center mb-5 contact-header-wrap">
-            <div class="contact-badge">
+            <div class="contact-badge mb-3">
                 <span class="contact-badge__emoji">💬</span>
                 <span>Hubungi Kami</span>
                 <span class="contact-badge__pulse"></span>
@@ -42,8 +42,8 @@
                             </div>
                             <div class="contact-method-item__content">
                                 <span class="contact-method-item__label">Email</span>
-                                <a href="mailto:ldksyahid@uinjkt.ac.id" class="contact-method-item__value">
-                                    ldksyahid@uinjkt.ac.id
+                                <a href="mailto:ldk.ormawa@apps.uinjkt.ac.id" class="contact-method-item__value">
+                                    ldk.ormawa@apps.uinjkt.ac.id
                                 </a>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                             </div>
                             <div class="contact-method-item__content">
                                 <span class="contact-method-item__label">Jam Operasional</span>
-                                <span class="contact-method-item__value">Senin - Jumat, 08:00 - 17:00 WIB</span>
+                                <span class="contact-method-item__value">24 Jam</span>
                             </div>
                         </div>
                     </div>
@@ -95,28 +95,33 @@
                             <div class="contact-form__group">
                                 <label class="contact-form__label">
                                     <span class="label-emoji">👤</span>
-                                    <span>Nama Kamu</span>
+                                    <span>Nama Kamu <span class="required-mark">*</span></span>
                                 </label>
                                 <input type="text"
                                        class="contact-form__input"
                                        id="contact-name"
                                        name="name"
                                        placeholder="Masukkan namamu"
-                                       required/>
+                                       required
+                                       minlength="3"
+                                       maxlength="100"/>
+                                <span class="contact-form__error">Nama wajib diisi (minimal 3 karakter)</span>
                             </div>
 
                             {{-- Email Input --}}
                             <div class="contact-form__group">
                                 <label class="contact-form__label">
                                     <span class="label-emoji">📧</span>
-                                    <span>Email Kamu</span>
+                                    <span>Email Kamu <span class="required-mark">*</span></span>
                                 </label>
                                 <input type="email"
                                        class="contact-form__input"
                                        id="contact-email"
                                        name="email"
                                        placeholder="Masukkan emailmu"
-                                       required/>
+                                       required
+                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
+                                <span class="contact-form__error">Email wajib diisi dengan format yang benar</span>
                             </div>
                         </div>
 
@@ -124,28 +129,34 @@
                         <div class="contact-form__group">
                             <label class="contact-form__label">
                                 <span class="label-emoji">📌</span>
-                                <span>Subjek</span>
+                                <span>Subjek <span class="required-mark">*</span></span>
                             </label>
                             <input type="text"
                                    class="contact-form__input"
                                    id="contact-subject"
                                    name="subject"
                                    placeholder="Tentang apa pesanmu?"
-                                   required/>
+                                   required
+                                   minlength="5"
+                                   maxlength="200"/>
+                            <span class="contact-form__error">Subjek wajib diisi (minimal 5 karakter)</span>
                         </div>
 
                         {{-- Message Textarea --}}
                         <div class="contact-form__group">
                             <label class="contact-form__label">
                                 <span class="label-emoji">💭</span>
-                                <span>Pesan</span>
+                                <span>Pesan <span class="required-mark">*</span></span>
                             </label>
                             <textarea class="contact-form__textarea"
                                       placeholder="Tulis pesanmu di sini..."
                                       name="message"
                                       id="contact-message"
                                       rows="4"
-                                      required></textarea>
+                                      required
+                                      minlength="10"
+                                      maxlength="1000"></textarea>
+                            <span class="contact-form__error">Pesan wajib diisi (minimal 10 karakter)</span>
                         </div>
 
                         {{-- Submit Button --}}
@@ -172,7 +183,7 @@
     }
 
     /* ========================================
-       HEADER - CENTERED WITH PULSE BADGE
+       HEADER - CENTERED WITH BADGE
     ======================================== */
     .contact-header-wrap {
         opacity: 0;
@@ -187,59 +198,40 @@
         }
     }
 
-    /* Pulse Badge - Matching About Section Style */
+    /* Badge Style */
     .contact-badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.625rem;
-        background: rgba(0, 167, 157, 0.1);
-        backdrop-filter: blur(10px);
-        border: 2px solid rgba(0, 167, 157, 0.2);
+        gap: 0.5rem;
+        background: var(--primary-light);
+        border: 1px solid rgba(0, 167, 157, 0.2);
         border-radius: 50px;
-        padding: 0.625rem 1.5rem;
-        margin-bottom: 1.25rem;
-        font-size: 0.95rem;
-        font-weight: 600;
+        padding: 0.5rem 1.25rem;
+        font-size: 0.9rem;
+        font-weight: 500;
         color: var(--primary);
-        position: relative;
-        transition: all 0.3s ease;
     }
 
     .contact-badge__emoji {
-        font-size: 1.25rem;
-        animation: contactBadgeFloat 3s ease-in-out infinite;
-    }
-
-    @keyframes contactBadgeFloat {
-        0%, 100% {
-            transform: translateY(0px);
-        }
-        50% {
-            transform: translateY(-5px);
-        }
+        font-size: 1.1rem;
     }
 
     .contact-badge__pulse {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 100%;
-        height: 100%;
-        border: 2px solid var(--primary);
-        border-radius: 50px;
-        transform: translate(-50%, -50%);
-        animation: contactBadgePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        pointer-events: none;
+        width: 8px;
+        height: 8px;
+        background: var(--primary);
+        border-radius: 50%;
+        animation: contactBadgePulse 2s ease-in-out infinite;
     }
 
     @keyframes contactBadgePulse {
-        0% {
+        0%, 100% {
             opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
+            transform: scale(1);
         }
-        100% {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(1.4);
+        50% {
+            opacity: 0.5;
+            transform: scale(1.5);
         }
     }
 
@@ -410,7 +402,7 @@
         backdrop-filter: blur(10px);
         padding: 1.5rem;
         border-radius: 20px;
-        border: 2px solid rgba(0, 167, 157, 0.1);
+        border: 2px solid transparent;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
@@ -421,22 +413,23 @@
         position: absolute;
         left: 0;
         top: 0;
-        width: 4px;
-        height: 100%;
-        background: var(--primary-gradient);
-        transform: scaleY(0);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(0, 167, 157, 0.06) 0%, rgba(0, 167, 157, 0.02) 100%);
+        opacity: 0;
+        transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 20px;
+        pointer-events: none;
     }
 
     .contact-method-item:hover {
-        transform: translateX(8px);
-        border-color: rgba(0, 167, 157, 0.3);
+        transform: translateY(-4px);
         box-shadow: 0 8px 30px rgba(0, 167, 157, 0.15);
         background: rgba(255, 255, 255, 0.9);
     }
 
     .contact-method-item:hover::before {
-        transform: scaleY(1);
+        opacity: 1;
     }
 
     .contact-method-item__icon {
@@ -578,6 +571,12 @@
         font-size: 1.1rem;
     }
 
+    .required-mark {
+        color: #ef4444;
+        font-weight: 700;
+        margin-left: 0.125rem;
+    }
+
     .contact-form__input,
     .contact-form__textarea {
         width: 100%;
@@ -589,6 +588,7 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         background: rgba(255, 255, 255, 0.9);
         color: var(--dark);
+        height: 52px;
     }
 
     .contact-form__input:focus,
@@ -608,7 +608,44 @@
     .contact-form__textarea {
         resize: vertical;
         min-height: 140px;
+        height: auto;
         line-height: 1.6;
+    }
+
+    /* Validation States */
+    .contact-form__error {
+        display: none;
+        color: #ef4444;
+        font-size: 0.8rem;
+        margin-top: 0.375rem;
+        font-weight: 500;
+    }
+
+    .contact-form__input.invalid,
+    .contact-form__textarea.invalid {
+        border-color: #ef4444;
+        background: rgba(239, 68, 68, 0.05);
+    }
+
+    .contact-form__input.invalid:focus,
+    .contact-form__textarea.invalid:focus {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+    }
+
+    .contact-form__group.has-error .contact-form__error {
+        display: block;
+    }
+
+    .contact-form__input.valid,
+    .contact-form__textarea.valid {
+        border-color: #10b981;
+    }
+
+    .contact-form__input.valid:focus,
+    .contact-form__textarea.valid:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
     }
 
     /* Submit Button */
@@ -635,24 +672,23 @@
     .contact-form__submit::before {
         content: '';
         position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        transform: translate(-50%, -50%);
-        transition: width 0.6s, height 0.6s;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, #00d4c4 0%, var(--primary) 100%);
+        opacity: 0;
+        transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 50px;
     }
 
     .contact-form__submit:hover::before {
-        width: 300px;
-        height: 300px;
+        opacity: 1;
     }
 
     .contact-form__submit:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 35px rgba(0, 167, 157, 0.4);
+        box-shadow: 0 12px 35px rgba(0, 167, 157, 0.5);
     }
 
     .contact-form__submit:active {
@@ -764,33 +800,76 @@
         const contactForm = document.getElementById('contact-form');
 
         if (contactForm) {
-            // Add focus/blur animations to form inputs
             const formInputs = contactForm.querySelectorAll('.contact-form__input, .contact-form__textarea');
 
+            // Real-time validation
             formInputs.forEach(input => {
+                // Focus/blur animations
                 input.addEventListener('focus', function() {
                     this.parentElement.classList.add('focused');
                 });
 
                 input.addEventListener('blur', function() {
+                    validateField(this);
                     if (!this.value) {
                         this.parentElement.classList.remove('focused');
                     }
                 });
+
+                // Input validation
+                input.addEventListener('input', function() {
+                    if (this.classList.contains('invalid')) {
+                        validateField(this);
+                    }
+                });
             });
 
-            // Form submission handler (optional - can be enhanced with AJAX)
+            // Validate individual field
+            function validateField(field) {
+                const parent = field.closest('.contact-form__group');
+
+                if (!field.validity.valid || field.value.trim() === '') {
+                    field.classList.add('invalid');
+                    field.classList.remove('valid');
+                    parent.classList.add('has-error');
+                } else {
+                    field.classList.remove('invalid');
+                    field.classList.add('valid');
+                    parent.classList.remove('has-error');
+                }
+            }
+
+            // Form submission handler
             contactForm.addEventListener('submit', function(e) {
+                let isValid = true;
+
+                // Validate all fields
+                formInputs.forEach(input => {
+                    validateField(input);
+                    if (!input.validity.valid || input.value.trim() === '') {
+                        isValid = false;
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+
+                    // Scroll to first error
+                    const firstError = contactForm.querySelector('.contact-form__input.invalid, .contact-form__textarea.invalid');
+                    if (firstError) {
+                        firstError.focus();
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+
+                    return false;
+                }
+
+                // Show loading state
                 const submitBtn = this.querySelector('.contact-form__submit');
                 const btnText = submitBtn.querySelector('span:not(.btn-emoji)');
-                const originalText = btnText.textContent;
 
-                // Disable button and show loading state
                 submitBtn.disabled = true;
                 btnText.textContent = 'Mengirim...';
-
-                // Note: Form will submit normally. If you want AJAX, prevent default here
-                // and handle with fetch/axios
             });
         }
     });
