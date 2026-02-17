@@ -32,25 +32,57 @@
 
                 {{-- Info Side --}}
                 <div class="schedule-info-box">
-                    <div class="info-badge">
-                        <i class="fas fa-calendar-check"></i>
-                        <span>Jadwal LDK Syahid</span>
+                    {{-- Decorative Elements --}}
+                    <div class="info-deco-top">
+                        <i class="fas fa-calendar-day"></i>
                     </div>
-                    <div class="info-divider">
-                        <span class="divider-line"></span>
-                        <i class="fas fa-star divider-icon"></i>
-                        <span class="divider-line"></span>
+                    <div class="info-deco-bottom">
+                        <i class="fas fa-book-open"></i>
                     </div>
-                    <div class="info-date">
-                        <span class="date-label">EDISI</span>
-                        <h3 class="date-month">{{ $schedule->month }}</h3>
-                        <span class="date-year">{{ $schedule->year }}</span>
+
+                    {{-- Pattern Background --}}
+                    <div class="info-pattern"></div>
+
+                    {{-- Main Content --}}
+                    <div class="info-content">
+                        <div class="info-badge">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Jadwal LDK Syahid</span>
+                        </div>
+
+                        <div class="info-divider">
+                            <span class="divider-line"></span>
+                            <i class="fas fa-star divider-icon"></i>
+                            <span class="divider-line"></span>
+                        </div>
+
+                        <div class="info-date-wrapper">
+                            <div class="info-date-circle">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="info-date">
+                                <span class="date-label">EDISI</span>
+                                <h3 class="date-month">{{ $schedule->month }}</h3>
+                                <span class="date-year">{{ $schedule->year }}</span>
+                            </div>
+                        </div>
+
+                        <div class="info-description">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Cek jadwal lengkap kegiatan dan acara LDK Syahid bulan ini!</p>
+                        </div>
+
+                        <a href="/schedule" class="info-cta">
+                            <span class="cta-icon-wrap">
+                                <i class="fas fa-calendar-alt"></i>
+                            </span>
+                            <span class="cta-text">
+                                <span class="cta-main">Lihat Semua Jadwal</span>
+                                <span class="cta-sub">Klik untuk detail</span>
+                            </span>
+                            <i class="fas fa-arrow-right cta-arrow"></i>
+                        </a>
                     </div>
-                    <a href="/schedule" class="info-cta">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Lihat Semua Jadwal</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
             </div>
         </div>
@@ -92,7 +124,6 @@
     align-items: center;
     gap: 0.5rem;
     background: var(--primary-light);
-    border: 1px solid rgba(0, 167, 157, 0.2);
     border-radius: var(--radius-pill);
     padding: 0.5rem 1.25rem;
     margin-bottom: 1rem;
@@ -100,6 +131,7 @@
     font-weight: 500;
     color: var(--primary);
     position: relative;
+    box-shadow: 0 2px 8px rgba(0, 167, 157, 0.1);
 }
 
 .badge-emoji {
@@ -179,7 +211,6 @@
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     margin-bottom: 2rem;
-    border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .schedule-card-fun:hover {
@@ -226,9 +257,9 @@
 
 /* ── Info Box Section ── */
 .schedule-info-box {
-    width: 340px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-    padding: 2.5rem;
+    width: 380px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #f8fafc 100%);
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -236,15 +267,89 @@
     text-align: center;
     position: relative;
     flex-shrink: 0;
-    border-left: 1px solid rgba(0, 0, 0, 0.05);
+    border-left: 1px solid rgba(0, 167, 157, 0.1);
+    overflow: hidden;
+}
+
+/* Decorative Icons */
+.info-deco-top {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 167, 157, 0.05);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.info-deco-top i {
+    font-size: 1.5rem;
+    color: var(--primary);
+    opacity: 0.3;
+    animation: schDecoFloat1 4s ease-in-out infinite;
+}
+
+.info-deco-bottom {
+    position: absolute;
+    bottom: 30px;
+    left: 25px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(124, 58, 237, 0.05);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.info-deco-bottom i {
+    font-size: 1.3rem;
+    color: #7c3aed;
+    opacity: 0.3;
+    animation: schDecoFloat2 5s ease-in-out infinite;
+}
+
+@keyframes schDecoFloat1 {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(5deg); }
+}
+
+@keyframes schDecoFloat2 {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(8px) rotate(-5deg); }
+}
+
+/* Pattern Background */
+.info-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image:
+        radial-gradient(circle at 25% 25%, var(--primary) 2px, transparent 2px),
+        radial-gradient(circle at 75% 75%, var(--primary) 2px, transparent 2px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    pointer-events: none;
+}
+
+/* Main Content Wrapper */
+.info-content {
+    position: relative;
+    z-index: 2;
+    padding: 2.5rem;
+    width: 100%;
 }
 
 .info-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: white;
-    border: 2px solid var(--primary);
+    background: linear-gradient(135deg, rgba(0, 167, 157, 0.1) 0%, rgba(0, 167, 157, 0.05) 100%);
     color: var(--primary);
     padding: 0.6rem 1.25rem;
     border-radius: var(--radius-pill);
@@ -252,7 +357,7 @@
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.3px;
-    box-shadow: 0 4px 15px rgba(0, 167, 157, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 167, 157, 0.12);
     transition: all 0.3s ease;
 }
 
@@ -295,23 +400,60 @@
     }
 }
 
+/* Date Wrapper with Circle */
+.info-date-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 167, 157, 0.08);
+}
+
+.info-date-circle {
+    width: 70px;
+    height: 70px;
+    background: var(--primary-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 8px 20px rgba(0, 167, 157, 0.3);
+    animation: schDatePulse 3s ease-in-out infinite;
+}
+
+.info-date-circle i {
+    font-size: 1.8rem;
+    color: white;
+}
+
+@keyframes schDatePulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 8px 20px rgba(0, 167, 157, 0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 12px 30px rgba(0, 167, 157, 0.4); }
+}
+
 .info-date {
-    margin-bottom: 2rem;
+    text-align: left;
 }
 
 .date-label {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: var(--secondary);
     text-transform: uppercase;
     font-weight: 700;
     letter-spacing: 1.5px;
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
+    opacity: 0.8;
 }
 
 .date-month {
     font-family: var(--font-primary);
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 800;
     color: var(--primary);
     margin: 0;
@@ -320,46 +462,123 @@
 }
 
 .date-year {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--secondary);
     font-weight: 600;
     display: block;
-    margin-top: 0.25rem;
+    margin-top: 0.15rem;
 }
 
+/* Description Section */
+.info-description {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, rgba(0, 167, 157, 0.08) 0%, rgba(0, 167, 157, 0.04) 100%);
+    padding: 1rem 1.25rem;
+    border-radius: 16px;
+    margin-bottom: 1.75rem;
+    box-shadow: inset 0 0 0 0 rgba(0, 167, 157, 0.3);
+}
+
+.info-description i {
+    color: var(--primary);
+    font-size: 0.9rem;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+}
+
+.info-description p {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--dark);
+    text-align: left;
+    font-weight: 500;
+}
+
+/* Enhanced CTA Button */
 .info-cta {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
     background: var(--primary-gradient);
     color: white;
-    padding: 0.9rem 1.75rem;
-    border-radius: var(--radius-pill);
-    font-weight: 700;
-    font-size: 0.85rem;
+    padding: 1.1rem 1.5rem;
+    border-radius: 16px;
     text-decoration: none;
-    box-shadow: 0 6px 20px rgba(0, 167, 157, 0.35);
+    box-shadow: 0 8px 25px rgba(0, 167, 157, 0.35);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.info-cta:hover::before {
+    left: 100%;
 }
 
 .info-cta:hover {
     color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(0, 167, 157, 0.45);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0, 167, 157, 0.45);
 }
 
-.info-cta i:first-child {
-    font-size: 0.85rem;
+.cta-icon-wrap {
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    backdrop-filter: blur(10px);
 }
 
-.info-cta i:last-child {
-    font-size: 0.75rem;
+.cta-icon-wrap i {
+    font-size: 1.1rem;
+}
+
+.cta-text {
+    flex: 1;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.cta-main {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.cta-sub {
+    font-size: 0.7rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.cta-arrow {
+    font-size: 1rem;
     transition: transform 0.3s ease;
-    margin-left: 0.25rem;
+    flex-shrink: 0;
 }
 
-.info-cta:hover i:last-child {
-    transform: translateX(4px);
+.info-cta:hover .cta-arrow {
+    transform: translateX(5px);
 }
 
 /* ── Empty State ── */
@@ -376,7 +595,6 @@
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
     max-width: 500px;
     width: 100%;
-    border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .empty-icon {
@@ -423,9 +641,12 @@
 
     .schedule-info-box {
         width: 100%;
-        padding: 2rem 1.5rem;
         border-left: none;
-        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        border-top: 1px solid rgba(0, 167, 157, 0.1);
+    }
+
+    .info-content {
+        padding: 2rem 1.5rem;
     }
 
     .section-title-fun {
@@ -433,7 +654,21 @@
     }
 
     .date-month {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
+    }
+
+    .info-date-wrapper {
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+
+    .info-date-circle {
+        width: 60px;
+        height: 60px;
+    }
+
+    .info-date-circle i {
+        font-size: 1.5rem;
     }
 }
 
@@ -442,17 +677,43 @@
         font-size: 1.4rem;
     }
 
-    .schedule-info-box {
+    .info-content {
         padding: 1.75rem 1.25rem;
     }
 
     .date-month {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
     }
 
     .info-badge {
         font-size: 0.75rem;
         padding: 0.5rem 1rem;
+    }
+
+    .info-date-circle {
+        width: 55px;
+        height: 55px;
+    }
+
+    .info-date-circle i {
+        font-size: 1.3rem;
+    }
+
+    .info-description {
+        padding: 0.85rem 1rem;
+    }
+
+    .cta-icon-wrap {
+        width: 38px;
+        height: 38px;
+    }
+
+    .cta-main {
+        font-size: 0.85rem;
+    }
+
+    .cta-sub {
+        font-size: 0.65rem;
     }
 }
 </style>
