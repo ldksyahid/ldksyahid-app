@@ -52,7 +52,7 @@
                         </div>
                         @if($key === 0)
                         <p class="news-card__excerpt">
-                            {!! substr(strip_tags($news->body), 0, 150) !!}...
+                            {!! substr(strip_tags($news->body), 0, 365) !!}...
                         </p>
                         @endif
                         <a href="/news/{{ $news->id }}/show" class="news-card__read">
