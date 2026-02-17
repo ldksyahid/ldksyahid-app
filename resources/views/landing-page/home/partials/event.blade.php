@@ -1,19 +1,27 @@
 {{-- Event Section - Modern & Balanced Design --}}
 <section class="event-section py-5" id="eventSection">
     <div class="container">
-        {{-- Section Header --}}
-        <div class="text-center mb-5 event-header-animate">
-            <div class="event-badge">
-                <span class="event-badge__emoji">🎉</span>
-                <span>Yuk Ikuti!</span>
-                <span class="event-badge__pulse"></span>
+        {{-- Section Header (Matching Gallery Style - Left + Right Button) --}}
+        <div class="row mb-4 mb-lg-5 align-items-center justify-content-between event-header-wrap">
+            <div class="col-lg-8 mb-3 mb-lg-0">
+                <div class="event-badge">
+                    <span class="event-badge__emoji">🎉</span>
+                    <span>Yuk Ikuti!</span>
+                    <span class="event-badge__pulse"></span>
+                </div>
+                <h2 class="event-heading">
+                    Kegiatan <span class="event-heading__highlight">Seru</span>
+                </h2>
+                <p class="event-subtitle">
+                    Berbagai kegiatan menarik yang bikin kamu makin berkembang!
+                </p>
             </div>
-            <h2 class="event-heading">
-                Kegiatan <span class="event-heading__highlight">Seru</span>
-            </h2>
-            <p class="event-subtitle">
-                Berbagai kegiatan menarik yang bikin kamu makin berkembang!
-            </p>
+            <div class="col-lg-4 text-lg-end d-none d-md-block">
+                <a href="/events" class="event-btn-view-all">
+                    <span>Lihat Semua</span>
+                    <i class="fas fa-calendar-alt"></i>
+                </a>
+            </div>
         </div>
 
         {{-- Desktop Grid Layout --}}
@@ -76,15 +84,6 @@
                 </div>
                 @endforelse
             </div>
-
-            @if(count($postevent) > 0)
-            <div class="text-center mt-4 event-card-animate" style="--anim-delay: 0.5s">
-                <a href="/events" class="event-btn-all">
-                    <span>Lihat Semua Kegiatan</span>
-                    <i class="fas fa-calendar-alt"></i>
-                </a>
-            </div>
-            @endif
         </div>
 
         {{-- Mobile Carousel --}}
@@ -211,6 +210,10 @@
 }
 
 /* ── Header ── */
+.event-header-wrap {
+    margin-bottom: 0;
+}
+
 .event-badge {
     display: inline-flex;
     align-items: center;
@@ -271,14 +274,48 @@
     margin-bottom: 0;
 }
 
+/* ── Header Button ── */
+.event-btn-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: white;
+    color: var(--primary);
+    padding: 0.9rem 2rem;
+    border-radius: var(--radius-pill);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: var(--transition);
+    border: 2px solid rgba(0, 167, 157, 0.2);
+    white-space: nowrap;
+}
+
+.event-btn-view-all:hover {
+    background: var(--primary-gradient);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-primary);
+    border-color: transparent;
+}
+
+.event-btn-view-all i {
+    transition: transform 0.3s ease;
+}
+
+.event-btn-view-all:hover i {
+    transform: translateX(5px);
+}
+
 /* ── Animations ── */
-.event-header-animate {
+.event-header-wrap {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-.event-header-animate.is-visible {
+.event-header-wrap.is-visible {
     opacity: 1;
     transform: translateY(0);
 }
@@ -1041,7 +1078,7 @@ body.event-sheet-open .back-to-top {
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Viewport animations
-    var animEls = document.querySelectorAll('.event-header-animate, .event-card-animate');
+    var animEls = document.querySelectorAll('.event-header-wrap, .event-card-animate');
     if ('IntersectionObserver' in window) {
         var obs = new IntersectionObserver(function(entries) {
             entries.forEach(function(e) {
