@@ -1,9 +1,15 @@
 {{-- Library Section - Modern & Elegant --}}
 <section class="library-section py-5" id="librarySection">
     <div class="container">
-        {{-- Section Header (Matching Gallery Style - Left + Right Button) --}}
+        {{-- Section Header (Right Aligned with Button on Left) --}}
         <div class="row mb-4 mb-lg-5 align-items-center justify-content-between library-header-wrap">
-            <div class="col-lg-8 mb-3 mb-lg-0">
+            <div class="col-lg-4 text-lg-start d-none d-md-block order-lg-1">
+                <a href="/perpustakaan" class="library-btn-view-all">
+                    <span>Lihat Semua</span>
+                    <i class="fas fa-book-open"></i>
+                </a>
+            </div>
+            <div class="col-lg-8 mb-3 mb-lg-0 text-lg-end order-lg-2">
                 <div class="library-badge">
                     <span class="library-badge__emoji">📚</span>
                     <span>Perpustakaan</span>
@@ -16,12 +22,6 @@
                     Temukan berbagai buku menarik untuk menambah wawasan!
                 </p>
             </div>
-            <div class="col-lg-4 text-lg-end d-none d-md-block">
-                <a href="/catalog/books" class="library-btn-view-all">
-                    <span>Lihat Semua</span>
-                    <i class="fas fa-book-open"></i>
-                </a>
-            </div>
         </div>
 
         {{-- Desktop Grid Layout --}}
@@ -30,7 +30,7 @@
                 @forelse($postlibrary as $key => $book)
                 <div class="library-card library-card-animate" style="--anim-delay: {{ $key * 0.1 }}s">
                     <div class="library-card__img-wrap">
-                        <a href="/catalog/books/{{ $book->slug }}">
+                        <a href="/perpustakaan/buku/{{ $book->slug }}">
                             @if($book->coverImageGdriveID)
                             <img src="https://lh3.googleusercontent.com/d/{{ $book->coverImageGdriveID }}"
                                  alt="{{ $book->titleBook }}"
@@ -52,7 +52,7 @@
 
                     <div class="library-card__content">
                         <h4 class="library-card__title">
-                            <a href="/catalog/books/{{ $book->slug }}">{{ $book->titleBook }}</a>
+                            <a href="/perpustakaan/buku/{{ $book->slug }}">{{ $book->titleBook }}</a>
                         </h4>
                         <div class="library-card__author">
                             <i class="fas fa-user-edit"></i>
@@ -70,7 +70,7 @@
                             <span>{{ $book->pages }} halaman</span>
                         </div>
                         @endif
-                        <a href="/catalog/books/{{ $book->slug }}" class="library-card__btn">
+                        <a href="/perpustakaan/buku/{{ $book->slug }}" class="library-card__btn">
                             <span>Lihat Detail</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -98,7 +98,7 @@
                      data-book-year="{{ $book->year ?? '' }}"
                      data-book-pages="{{ $book->pages ?? '' }}"
                      data-book-img="{{ $book->coverImageGdriveID ? 'https://lh3.googleusercontent.com/d/' . $book->coverImageGdriveID : '' }}"
-                     data-book-url="/catalog/books/{{ $book->slug }}">
+                     data-book-url="/perpustakaan/buku/{{ $book->slug }}">
 
                     <div class="library-card-mobile__img-wrap">
                         @if($book->coverImageGdriveID)
@@ -143,7 +143,7 @@
 
             @if(count($postlibrary) > 0)
             <div class="text-center mt-3">
-                <a href="/catalog/books" class="library-btn-all library-btn-all--mobile">
+                <a href="/perpustakaan" class="library-btn-all library-btn-all--mobile">
                     <span>Semua Koleksi</span>
                     <i class="fas fa-book-open"></i>
                 </a>
@@ -493,17 +493,12 @@
 }
 
 .library-card:hover .library-card__btn {
-    transform: translateX(5px);
-    box-shadow: 0 6px 20px rgba(0, 167, 157, 0.4);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 167, 157, 0.5);
 }
 
 .library-card__btn i {
     font-size: 0.7rem;
-    transition: transform 0.3s ease;
-}
-
-.library-card:hover .library-card__btn i {
-    transform: translateX(3px);
 }
 
 /* ═══════════════════════════════════════════════

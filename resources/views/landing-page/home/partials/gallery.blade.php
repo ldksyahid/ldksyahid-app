@@ -1,27 +1,19 @@
 {{-- Gallery Section - Modern & Elegant --}}
 <section class="gallery-elegant py-5" id="gallery-section">
     <div class="container">
-        {{-- Section Header (Matching About Style - Left + Right Button) --}}
-        <div class="row mb-4 mb-lg-5 align-items-center justify-content-between gallery-header-wrap">
-            <div class="col-lg-8 mb-3 mb-lg-0">
-                <div class="section-badge-gal">
-                    <span class="badge-emoji-gal">📸</span>
-                    <span>Galeri</span>
-                    <span class="badge-pulse-gal"></span>
-                </div>
-                <h2 class="section-title-gal">
-                    Dokumentasi <span class="title-highlight-gal">Kegiatan</span>
-                </h2>
-                <p class="section-description-gal">
-                    Momen-momen seru dari kegiatan LDK Syahid yang penuh manfaat!
-                </p>
+        {{-- Section Header (Centered) --}}
+        <div class="text-center mb-5 gallery-header-wrap">
+            <div class="section-badge-gal">
+                <span class="badge-emoji-gal">📸</span>
+                <span>Galeri</span>
+                <span class="badge-pulse-gal"></span>
             </div>
-            <div class="col-lg-4 text-lg-end">
-                <a href="/about/gallery" class="btn-view-all-gal">
-                    <span>Lihat Semua</span>
-                    <i class="fas fa-images"></i>
-                </a>
-            </div>
+            <h2 class="section-title-gal">
+                Dokumentasi <span class="title-highlight-gal">Kegiatan</span>
+            </h2>
+            <p class="section-description-gal">
+                Momen-momen seru dari kegiatan LDK Syahid yang penuh manfaat!
+            </p>
         </div>
 
         {{-- Gallery Items --}}
@@ -187,6 +179,16 @@
             <p class="empty-text-gal">Dokumentasi kegiatan akan segera hadir. Tunggu ya!</p>
         </div>
         @endforelse
+
+        {{-- View All Button --}}
+        @if(count($postgallery) > 0)
+        <div class="text-center mt-5">
+            <a href="/about/gallery" class="btn-view-all-gal">
+                <span>Lihat Semua Galeri</span>
+                <i class="fas fa-images"></i>
+            </a>
+        </div>
+        @endif
     </div>
 </section>
 
