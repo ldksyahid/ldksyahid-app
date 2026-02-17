@@ -50,19 +50,34 @@
                     <h5 class="art-card__title">
                         <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
                     </h5>
-                    <div class="art-card__footer">
+                    <div class="art-card__people">
                         <div class="art-card__meta">
                             <div class="art-card__avatar" style="background: {{ $accent }}20; color: {{ $accent }}">
-                                <i class="fas fa-user"></i>
+                                <i class="fas fa-pen-fancy"></i>
                             </div>
-                            <span>{{ $article->writer }}</span>
+                            <div class="art-card__meta-info">
+                                <span class="art-card__meta-label">Penulis</span>
+                                <span class="art-card__meta-name">{{ $article->writer }}</span>
+                            </div>
                         </div>
+                        @if($article->editor)
+                        <div class="art-card__meta">
+                            <div class="art-card__avatar" style="background: {{ $accent }}20; color: {{ $accent }}">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="art-card__meta-info">
+                                <span class="art-card__meta-label">Editor</span>
+                                <span class="art-card__meta-name">{{ $article->editor }}</span>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="art-card__footer">
                         <a href="/articles/{{ $article->id }}" class="art-card__read">
-                            Baca <i class="fas fa-arrow-right"></i>
+                            <span>Baca</span> <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
-                <div class="art-card__accent-line" style="background: {{ $accent }}"></div>
             </div>
             @empty
             <div class="art-empty">
@@ -89,6 +104,7 @@
                      data-article-writer="{{ $article->writer }}"
                      data-article-date="{{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('D MMMM YYYY') }}"
                      data-article-img="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
+                     data-article-editor="{{ $article->editor }}"
                      data-article-url="/articles/{{ $article->id }}"
                      data-article-accent="{{ $accent }}">
                     <div class="art-card__img-wrap">
@@ -102,7 +118,7 @@
                         </div>
                         {{-- Tap hint --}}
                         <div class="art-card__tap-hint">
-                            <i class="fas fa-hand-pointer"></i> Ketuk untuk detail
+                            Baca selengkapnya 👆
                         </div>
                     </div>
                     <div class="art-card__body">
@@ -110,14 +126,29 @@
                             <span class="art-card__theme" style="--theme-color: {{ $accent }}">{{ $article->theme ?? 'Artikel' }}</span>
                         </div>
                         <h5 class="art-card__title">{{ $article->title }}</h5>
-                        <div class="art-card__meta">
-                            <div class="art-card__avatar" style="background: {{ $accent }}20; color: {{ $accent }}">
-                                <i class="fas fa-user"></i>
+                        <div class="art-card__people">
+                            <div class="art-card__meta">
+                                <div class="art-card__avatar" style="background: {{ $accent }}20; color: {{ $accent }}">
+                                    <i class="fas fa-pen-fancy"></i>
+                                </div>
+                                <div class="art-card__meta-info">
+                                    <span class="art-card__meta-label">Penulis</span>
+                                    <span class="art-card__meta-name">{{ $article->writer }}</span>
+                                </div>
                             </div>
-                            <span>{{ $article->writer }}</span>
+                            @if($article->editor)
+                            <div class="art-card__meta">
+                                <div class="art-card__avatar" style="background: {{ $accent }}20; color: {{ $accent }}">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="art-card__meta-info">
+                                    <span class="art-card__meta-label">Editor</span>
+                                    <span class="art-card__meta-name">{{ $article->editor }}</span>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
-                    <div class="art-card__accent-line" style="background: {{ $accent }}"></div>
                 </div>
                 @empty
                 <div class="art-empty">
@@ -154,12 +185,25 @@
             <h3 class="art-sheet__title" id="artSheetTitle"></h3>
             <div class="art-sheet__meta">
                 <div class="art-sheet__meta-item">
-                    <div class="art-sheet__meta-icon"><i class="fas fa-user"></i></div>
-                    <span id="artSheetWriter"></span>
+                    <div class="art-sheet__meta-icon"><i class="fas fa-pen-fancy"></i></div>
+                    <div class="art-sheet__meta-text">
+                        <span class="art-sheet__meta-label">Penulis</span>
+                        <span id="artSheetWriter"></span>
+                    </div>
+                </div>
+                <div class="art-sheet__meta-item" id="artSheetEditorRow" style="display: none;">
+                    <div class="art-sheet__meta-icon"><i class="fas fa-edit"></i></div>
+                    <div class="art-sheet__meta-text">
+                        <span class="art-sheet__meta-label">Editor</span>
+                        <span id="artSheetEditor"></span>
+                    </div>
                 </div>
                 <div class="art-sheet__meta-item">
                     <div class="art-sheet__meta-icon"><i class="fas fa-calendar-alt"></i></div>
-                    <span id="artSheetDate"></span>
+                    <div class="art-sheet__meta-text">
+                        <span class="art-sheet__meta-label">Tanggal</span>
+                        <span id="artSheetDate"></span>
+                    </div>
                 </div>
             </div>
             <a href="#" class="art-sheet__btn" id="artSheetBtn">
@@ -300,39 +344,23 @@
 }
 
 .art-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
-}
-
-/* Accent bottom glow */
-.art-card__accent-line {
-    height: 3px;
-    width: 100%;
-    background: linear-gradient(90deg, transparent, var(--card-accent), transparent);
-    opacity: 0.6;
-    transition: opacity 0.3s ease;
-}
-
-.art-card:hover .art-card__accent-line {
-    opacity: 1;
+    transform: translateY(-6px) scale(1.01);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.08),
+        0 4px 20px color-mix(in srgb, var(--card-accent) 25%, transparent);
 }
 
 /* ── Image ── */
 .art-card__img-wrap {
     position: relative;
     width: 100%;
-    padding-top: 100%; /* 550x400 image ratio */
     overflow: hidden;
 }
 
 .art-card__img {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top;
+    height: auto;
+    display: block;
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -354,6 +382,11 @@
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     line-height: 1;
     z-index: 2;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.art-card:hover .art-card__date {
+    transform: rotate(-3deg) scale(1.05);
 }
 
 .art-card__date-num {
@@ -391,11 +424,6 @@
     animation: artPulse 2s ease-in-out infinite;
 }
 
-.art-card__tap-hint i {
-    color: var(--card-accent);
-    margin-right: 2px;
-}
-
 @keyframes artPulse {
     0%, 100% { opacity: 0.9; transform: scale(1); }
     50% { opacity: 0.6; transform: scale(0.97); }
@@ -407,6 +435,24 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+.art-card__body::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 0;
+    width: 3px;
+    height: 28px;
+    background: var(--card-accent);
+    border-radius: 0 3px 3px 0;
+    opacity: 0;
+    transition: opacity 0.3s ease, height 0.3s ease;
+}
+
+.art-card:hover .art-card__body::before {
+    opacity: 1;
 }
 
 .art-card__theme-row {
@@ -457,12 +503,16 @@
 
 /* Footer row */
 .art-card__footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding-top: 0.75rem;
+    padding-top: 0.5rem;
     margin-top: auto;
+}
+
+/* People (writer + editor) */
+.art-card__people {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
 }
 
 /* Meta */
@@ -476,9 +526,29 @@
     min-width: 0;
 }
 
-/* In mobile card without footer, add margin */
-.art-card--mobile .art-card__meta {
-    margin-bottom: 0;
+.art-card__meta-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.2;
+}
+
+.art-card__meta-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--secondary);
+    opacity: 0.7;
+}
+
+.art-card__meta-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .art-card__avatar {
@@ -490,6 +560,11 @@
     justify-content: center;
     font-size: 0.65rem;
     flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.art-card:hover .art-card__avatar {
+    transform: scale(1.15);
 }
 
 .art-card__meta span {
@@ -502,24 +577,46 @@
 .art-card__read {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    color: white;
-    background: var(--card-accent);
-    font-weight: 600;
-    font-size: 0.78rem;
+    gap: 8px;
+    color: var(--card-accent);
+    background: color-mix(in srgb, var(--card-accent) 10%, transparent);
+    font-weight: 700;
+    font-size: 0.8rem;
     text-decoration: none;
-    padding: 6px 14px;
+    padding: 8px 18px;
     border-radius: var(--radius-pill);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
     flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
 }
 
-.art-card__read:hover {
+.art-card__read::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--card-accent);
+    border-radius: inherit;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+}
+
+.art-card:hover .art-card__read::before {
+    transform: scaleX(1);
+}
+
+.art-card__read span,
+.art-card__read i {
+    position: relative;
+    z-index: 1;
+}
+
+.art-card:hover .art-card__read {
     color: white;
-    filter: brightness(1.1);
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px color-mix(in srgb, var(--card-accent) 40%, transparent);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--card-accent) 35%, transparent);
 }
 
 .art-card__read i {
@@ -528,7 +625,13 @@
 }
 
 .art-card:hover .art-card__read i {
-    transform: translateX(3px);
+    transform: translateX(4px);
+    animation: artArrowBounce 0.6s ease-in-out 0.15s;
+}
+
+@keyframes artArrowBounce {
+    0%, 100% { transform: translateX(4px); }
+    50% { transform: translateX(8px); }
 }
 
 /* ── Empty State ── */
@@ -566,10 +669,6 @@
 .art-carousel .art-card {
     width: 100%;
     margin: 0;
-}
-
-.art-carousel .art-card__img-wrap {
-    padding-top: 100%; /* match desktop square ratio */
 }
 
 /* Custom dots */
@@ -758,6 +857,26 @@
     font-size: 0.8rem;
 }
 
+.art-sheet__meta-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.art-sheet__meta-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--secondary);
+    opacity: 0.7;
+}
+
+.art-sheet__meta-text span:not(.art-sheet__meta-label) {
+    font-weight: 600;
+    color: var(--dark);
+}
+
 .art-sheet__btn {
     display: flex;
     align-items: center;
@@ -898,6 +1017,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         jQuery('#artSheetTitle').text(data.title);
         jQuery('#artSheetWriter').text(data.writer);
+        if (data.editor) {
+            jQuery('#artSheetEditor').text(data.editor);
+            jQuery('#artSheetEditorRow').show();
+        } else {
+            jQuery('#artSheetEditorRow').hide();
+        }
         jQuery('#artSheetDate').text(data.date);
         jQuery('#artSheetBtn').attr('href', data.url);
 
@@ -932,6 +1057,7 @@ document.addEventListener('DOMContentLoaded', function() {
             title:  $el.data('article-title'),
             theme:  $el.data('article-theme'),
             writer: $el.data('article-writer'),
+            editor: $el.data('article-editor'),
             date:   $el.data('article-date'),
             img:    $el.data('article-img'),
             url:    $el.data('article-url'),
