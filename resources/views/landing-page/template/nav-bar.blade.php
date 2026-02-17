@@ -472,10 +472,11 @@
 .navbar-floating.scrolled {
     position: fixed;
     top: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+    width: auto;
     max-width: 1400px;
+    margin: 0 auto;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -489,11 +490,11 @@
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateX(-50%) translateY(-20px);
+        transform: translateY(-20px);
     }
     to {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateY(0);
     }
 }
 
@@ -501,10 +502,11 @@
 .navbar-floating.returning-top {
     position: fixed;
     top: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+    width: auto;
     max-width: 1400px;
+    margin: 0 auto;
     border-radius: 20px;
     padding: 0.6rem 1.5rem;
     border: 1px solid rgba(0, 167, 157, 0.1);
@@ -514,11 +516,11 @@
 @keyframes slideUp {
     from {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateY(0);
     }
     to {
         opacity: 0;
-        transform: translateX(-50%) translateY(-20px);
+        transform: translateY(-20px);
     }
 }
 
@@ -541,8 +543,9 @@
 @media (max-width: 991.98px) {
     .navbar-floating.returning-top {
         top: 12px;
-        left: 50%;
-        width: calc(100% - 24px);
+        left: 12px;
+        right: 12px;
+        width: auto;
         padding: 0.65rem 1.25rem;
         border-radius: 16px;
         animation: slideUpMobile 0.35s ease forwards;
@@ -551,11 +554,11 @@
     @keyframes slideUpMobile {
         from {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+            transform: translateY(0);
         }
         to {
             opacity: 0;
-            transform: translateX(-50%) translateY(-15px);
+            transform: translateY(-15px);
         }
     }
 }
@@ -1496,9 +1499,9 @@
     .navbar-floating.scrolled {
         position: fixed !important;
         top: 12px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: calc(100% - 24px);
+        left: 12px;
+        right: 12px;
+        width: auto;
         padding: 0.65rem 1.25rem;
         border-radius: 16px;
         z-index: 1050;
@@ -1510,11 +1513,11 @@
     @keyframes slideDownMobile {
         from {
             opacity: 0;
-            transform: translateX(-50%) translateY(-15px);
+            transform: translateY(-15px);
         }
         to {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+            transform: translateY(0);
         }
     }
 
