@@ -34,13 +34,13 @@ class HomeController extends Controller
             $postarticle= Article::orderBy('dateevent','desc')->limit(4)->get();
             $postevent= Event::orderBy('start','desc')->limit(4)->get();
         } else {
-            $postnews= News::orderBy('datepublish','desc')->limit(3)->get();
+            $postnews= News::orderBy('datepublish','desc')->limit(4)->get();
             $postarticle= Article::orderBy('dateevent','desc')->limit(3)->get();
             $postevent= Event::orderBy('start','desc')->limit(3)->get();
         }
 
         $postgallery= Gallery::orderBy('created_at','desc')->limit(1)->get();
-        $postnews= News::orderBy('datepublish','desc')->limit(3)->get();
+        $postnews= News::orderBy('datepublish','desc')->limit(4)->get();
         $postschedule= Schedule::orderBy('created_at','desc')->limit(1)->get();
         $postjumbotron= Jumbotron::orderBy('created_at','desc')->get();
         $posttestimony = Testimony::getAPITestimony()->orderBy('created_at','desc')->get();
