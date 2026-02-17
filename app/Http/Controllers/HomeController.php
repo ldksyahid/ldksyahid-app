@@ -11,6 +11,7 @@ use App\Models\News;
 use App\Models\Event;
 use App\Models\MsKTALDKSyahid;
 use App\Models\Schedule;
+use App\Models\MsCatalogBook;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Jenssegers\Agent\Agent;
@@ -44,7 +45,8 @@ class HomeController extends Controller
         $postschedule= Schedule::orderBy('created_at','desc')->limit(1)->get();
         $postjumbotron= Jumbotron::orderBy('created_at','desc')->get();
         $posttestimony = Testimony::getAPITestimony()->orderBy('created_at','desc')->get();
-        return view('landing-page.home.index', compact('postjumbotron', 'postarticle', 'posttestimony', 'postgallery', 'postnews', 'postevent', 'postschedule'), ['title' => "Beranda"]);
+        $postlibrary= MsCatalogBook::where('flagActive', true)->orderBy('createdDate','desc')->limit(4)->get();
+        return view('landing-page.home.index', compact('postjumbotron', 'postarticle', 'posttestimony', 'postgallery', 'postnews', 'postevent', 'postschedule', 'postlibrary'), ['title' => "Beranda"]);
     }
 
     public function adminHome()
