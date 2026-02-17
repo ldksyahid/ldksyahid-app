@@ -745,21 +745,24 @@
 }
 
 .event-sheet__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 16px 4px;
-    position: sticky;
-    top: 0;
-    background: white;
-    z-index: 2;
+    padding: 12px 16px;
+    z-index: 10;
+    background: transparent;
 }
 
 .event-sheet__handle {
     width: 40px;
     height: 4px;
-    background: #ddd;
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .event-sheet__close {
@@ -770,13 +773,14 @@
     height: 36px;
     border-radius: 50%;
     border: none;
-    background: var(--primary-light);
+    background: rgba(255, 255, 255, 0.95);
     color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: var(--transition);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
 .event-sheet__close:hover {
@@ -786,27 +790,31 @@
 
 .event-sheet__content {
     padding: 0 0 2rem;
+    position: relative;
 }
 
 .event-sheet__img-wrap {
     position: relative;
     width: 100%;
+    height: 280px;
+    overflow: hidden;
 }
 
 .event-sheet__img {
     width: 100%;
-    height: 250px;
+    height: 500px;
     object-fit: cover;
+    object-position: center top;
 }
 
 .event-sheet__date {
     position: absolute;
-    top: 16px;
+    bottom: 24px;
     left: 16px;
     padding: 10px 18px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    z-index: 2;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 3;
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
@@ -832,8 +840,9 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 80px;
+    height: 100px;
     background: linear-gradient(to top, white, transparent);
+    z-index: 1;
 }
 
 .event-sheet__info {
