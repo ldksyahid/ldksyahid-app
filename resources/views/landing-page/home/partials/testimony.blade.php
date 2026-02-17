@@ -86,35 +86,35 @@
 
         {{-- Mobile View - WITH DOTS --}}
         <div class="d-md-none">
-            {{-- Header --}}
-            <div class="text-center mb-4">
-                <div class="testimony-badge mb-3">
+            {{-- Header - Compact --}}
+            <div class="text-center mb-3">
+                <div class="testimony-badge-mobile mb-2">
                     <span class="testimony-badge__emoji">💬</span>
                     <span>Testimoni</span>
-                    <span class="testimony-badge__pulse"></span>
                 </div>
-                <h2 class="testimony-heading mb-3">
+                <h2 class="testimony-heading-mobile mb-2">
                     Kata Mereka <span class="testimony-heading__heart">❤️</span>
                 </h2>
-                <p class="testimony-subtitle mb-4">
+                <p class="testimony-subtitle-mobile mb-3">
                     Banyak mahasiswa UIN Jakarta yang sudah merasakan manfaat bergabung dengan LDK Syahid
                 </p>
             </div>
 
-            {{-- Mobile Stats --}}
-            <div class="testimony-stats-mobile mb-4">
-                <div class="stat-mobile">
-                    <div class="stat-mobile__icon">👥</div>
-                    <div class="stat-mobile__content">
-                        <span class="stat-mobile__number">1000+</span>
-                        <span class="stat-mobile__label">ANGGOTA</span>
+            {{-- Mobile Stats - Compact Horizontal --}}
+            <div class="testimony-stats-compact mb-3">
+                <div class="stat-compact">
+                    <span class="stat-compact__icon">👥</span>
+                    <div class="stat-compact__text">
+                        <span class="stat-compact__number">1000+</span>
+                        <span class="stat-compact__label">Anggota</span>
                     </div>
                 </div>
-                <div class="stat-mobile">
-                    <div class="stat-mobile__icon">💝</div>
-                    <div class="stat-mobile__content">
-                        <span class="stat-mobile__number">1001</span>
-                        <span class="stat-mobile__label">MANFAAT</span>
+                <div class="stat-compact-divider"></div>
+                <div class="stat-compact">
+                    <span class="stat-compact__icon">💝</span>
+                    <div class="stat-compact__text">
+                        <span class="stat-compact__number">1001</span>
+                        <span class="stat-compact__label">Manfaat</span>
                     </div>
                 </div>
             </div>
@@ -529,29 +529,142 @@
 }
 
 /* ═══════════════════════════════════════════════
-   MOBILE STYLES - WITH DOTS
+   MOBILE STYLES - COMPACT & MINIMAL
    ═══════════════════════════════════════════════ */
 
-/* Mobile Stats */
-.testimony-stats-mobile {
+/* Mobile Header - Compact */
+.testimony-badge-mobile {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(0, 167, 157, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 167, 157, 0.15);
+    border-radius: 50px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.testimony-heading-mobile {
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 0;
+}
+
+.testimony-subtitle-mobile {
+    color: var(--secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+/* Mobile Stats - Compact Horizontal */
+.testimony-stats-compact {
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 1rem;
-    padding: 0 0.5rem;
-    margin-bottom: 1.5rem;
+    gap: 0;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(0, 167, 157, 0.15);
+    border-radius: 50px;
+    padding: 0.75rem 1.5rem;
+    max-width: 280px;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 15px rgba(0, 167, 157, 0.08),
+                0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.stat-compact {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.stat-compact__icon {
+    font-size: 1.6rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 167, 157, 0.2));
+}
+
+.stat-compact__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.stat-compact__number {
+    font-family: var(--font-primary);
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.stat-compact__label {
+    font-size: 0.65rem;
+    color: var(--secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stat-compact-divider {
+    width: 1px;
+    height: 30px;
+    background: linear-gradient(to bottom, transparent, rgba(0, 167, 157, 0.3), transparent);
+    margin: 0 0.75rem;
+}
+
+/* Hide old mobile stats */
+.testimony-stats-mobile {
+    display: none;
 }
 
 .stat-mobile {
-    background: white;
+    background: linear-gradient(135deg, #ffffff 0%, rgba(0, 167, 157, 0.03) 100%);
     border-radius: 20px;
-    padding: 1rem 1.5rem;
+    padding: 1.25rem 1.75rem;
     display: flex;
     align-items: center;
     gap: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 6px 25px rgba(0, 167, 157, 0.12),
+                0 3px 10px rgba(0, 0, 0, 0.06);
+    border: 2px solid rgba(0, 167, 157, 0.1);
     flex: 0 1 auto;
-    min-width: 140px;
+    min-width: 150px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-mobile::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(0, 167, 157, 0.06) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stat-mobile:hover::before {
+    opacity: 1;
+}
+
+.stat-mobile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 35px rgba(0, 167, 157, 0.18),
+                0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 167, 157, 0.2);
 }
 
 .stat-mobile__icon {
@@ -581,7 +694,7 @@
     text-transform: uppercase;
 }
 
-/* Carousel Container */
+/* Carousel Container - Compact */
 .testimony-carousel-container {
     position: relative;
     width: 100%;
@@ -589,12 +702,12 @@
 
 /* Mobile Carousel */
 .testimony-carousel.owl-carousel {
-    margin: 0 -12px;
-    width: calc(100% + 24px);
+    margin: 0 -8px;
+    width: calc(100% + 16px);
 }
 
 .testimony-carousel .owl-stage-outer {
-    padding: 10px 0 20px;
+    padding: 8px 0 16px;
     overflow: hidden;
 }
 
@@ -604,33 +717,86 @@
 }
 
 .testimony-card-mobile {
-    background: white;
-    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
     padding: 1.5rem;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    border: 2px solid rgba(0, 167, 157, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 167, 157, 0.12),
+                0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
     width: 100%;
-    max-width: 320px;
+    max-width: 300px;
     margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.testimony-card-mobile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 167, 157, 0.03) 0%, rgba(0, 212, 196, 0.08) 100%);
+    opacity: 1;
+    z-index: 0;
+}
+
+.testimony-card-mobile::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(0, 167, 157, 0.1) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+}
+
+.testimony-card-mobile:active::after {
+    opacity: 1;
+}
+
+.testimony-card-mobile:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 16px rgba(0, 167, 157, 0.15),
+                0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .testimony-card-mobile__header {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.875rem;
+    position: relative;
+    z-index: 1;
 }
 
 .testimony-card-mobile__avatar-wrapper {
-    width: 60px;
-    height: 60px;
+    width: 58px;
+    height: 58px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid var(--primary-light);
-    box-shadow: 0 4px 15px rgba(0, 167, 157, 0.2);
+    border: 2.5px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 16px rgba(0, 167, 157, 0.2),
+                0 2px 6px rgba(0, 0, 0, 0.08);
     flex-shrink: 0;
+    position: relative;
+    background: linear-gradient(135deg, rgba(0, 167, 157, 0.1), rgba(255, 255, 255, 0.3));
+}
+
+.testimony-card-mobile__avatar-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: -2.5px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0, 167, 157, 0.3), rgba(0, 212, 196, 0.2));
+    z-index: -1;
+    opacity: 0.6;
 }
 
 .testimony-card-mobile__avatar {
@@ -648,9 +814,9 @@
 .testimony-card-mobile__name {
     font-family: var(--font-primary);
     font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--primary);
-    margin: 0 0 0.25rem;
+    font-size: 1.05rem;
+    color: var(--dark);
+    margin: 0 0 0.2rem;
     line-height: 1.3;
     white-space: nowrap;
     overflow: hidden;
@@ -658,12 +824,14 @@
 }
 
 .testimony-card-mobile__role {
-    font-size: 0.8rem;
-    color: var(--secondary);
+    font-size: 0.75rem;
+    color: var(--primary);
     display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 600;
+    opacity: 0.9;
 }
 
 .testimony-card-mobile__btn {
@@ -672,49 +840,76 @@
     background: linear-gradient(135deg, var(--primary) 0%, #00d4c4 100%);
     color: white;
     border: none;
-    border-radius: 16px;
-    font-size: 0.95rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 167, 157, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 167, 157, 0.3),
+                0 2px 6px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    letter-spacing: 0.2px;
+}
+
+.testimony-card-mobile__btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #00d4c4 0%, var(--primary) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.testimony-card-mobile__btn:active::before {
+    opacity: 1;
 }
 
 .testimony-card-mobile__btn:active {
-    transform: scale(0.97);
-    box-shadow: 0 2px 8px rgba(0, 167, 157, 0.2);
+    transform: scale(0.96);
+    box-shadow: 0 2px 8px rgba(0, 167, 157, 0.25),
+                0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Custom Dots Navigation */
+/* Custom Dots Navigation - Minimal */
 .testimony-carousel-dots {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     margin-top: 1rem;
-    padding: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 2px 8px rgba(0, 167, 157, 0.08);
 }
 
 .testimony-carousel-dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background: rgba(0, 167, 157, 0.2);
+    background: rgba(0, 167, 157, 0.25);
     border: none;
     padding: 0;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.testimony-carousel-dot:hover {
-    background: rgba(0, 167, 157, 0.4);
+.testimony-carousel-dot:active {
+    transform: scale(0.9);
 }
 
 .testimony-carousel-dot.active {
     width: 24px;
     border-radius: 12px;
     background: var(--primary);
-    transform: scale(1);
+    box-shadow: 0 2px 8px rgba(0, 167, 157, 0.3);
 }
 
 /* Hide default Owl Dots */
@@ -773,7 +968,7 @@
     overflow-y: auto;
     transform: translateY(100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 -4px 20px rgba(0, 167, 157, 0.12);
 }
 
 .testimony-sheet.active {
@@ -822,7 +1017,8 @@
 }
 
 .testimony-sheet__content {
-    padding: 1rem 1.5rem 2rem;
+    padding: 1.5rem 1.75rem 2.5rem;
+    background: linear-gradient(to bottom, #ffffff 0%, rgba(0, 167, 157, 0.02) 100%);
 }
 
 .testimony-sheet__profile {
@@ -833,13 +1029,25 @@
 }
 
 .testimony-sheet__avatar {
-    width: 70px;
-    height: 70px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid var(--primary-light);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 4px solid rgba(0, 167, 157, 0.2);
+    box-shadow: 0 6px 20px rgba(0, 167, 157, 0.25),
+                0 3px 10px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
+    background: linear-gradient(135deg, var(--primary-light), rgba(255, 255, 255, 0.5));
+    position: relative;
+}
+
+.testimony-sheet__avatar::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    pointer-events: none;
 }
 
 .testimony-sheet__info {
@@ -927,43 +1135,73 @@ body.testimony-sheet-open {
 }
 
 @media (max-width: 480px) {
-    .testimony-stats-mobile {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.75rem;
+    .testimony-heading-mobile {
+        font-size: 1.4rem;
     }
 
-    .stat-mobile {
-        width: 100%;
-        max-width: 250px;
-        justify-content: center;
+    .testimony-subtitle-mobile {
+        font-size: 0.8rem;
+        max-width: 95%;
+    }
+
+    .testimony-stats-compact {
+        max-width: 260px;
+        padding: 0.65rem 1.25rem;
+    }
+
+    .stat-compact__icon {
+        font-size: 1.4rem;
+    }
+
+    .stat-compact__number {
+        font-size: 1.15rem;
+    }
+
+    .stat-compact__label {
+        font-size: 0.6rem;
+    }
+
+    .stat-compact-divider {
+        height: 25px;
+        margin: 0 0.5rem;
     }
 
     .testimony-card-mobile {
         max-width: 280px;
         padding: 1.25rem;
+        border-radius: 24px;
     }
 
     .testimony-card-mobile__avatar-wrapper {
-        width: 50px;
-        height: 50px;
+        width: 52px;
+        height: 52px;
     }
 
     .testimony-card-mobile__name {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .testimony-card-mobile__role {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
+    }
+
+    .testimony-card-mobile__btn {
+        padding: 0.8rem 1.1rem;
+        font-size: 0.85rem;
     }
 
     .testimony-carousel-dot {
-        width: 8px;
-        height: 8px;
+        width: 6px;
+        height: 6px;
     }
 
     .testimony-carousel-dot.active {
         width: 20px;
+    }
+
+    .testimony-carousel-dots {
+        gap: 0.4rem;
+        padding: 0.4rem 0.8rem;
     }
 }
 </style>
@@ -1046,6 +1284,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var $overlay = jQuery('#testimonySheetOverlay');
     var $sheet = jQuery('#testimonySheet');
     var $body = jQuery('body');
+    var $backToTop = jQuery('.back-to-top');
 
     function openSheet(data) {
         jQuery('#testimonySheetAvatar').attr('src', data.img).attr('alt', data.name);
@@ -1055,6 +1294,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         $body.addClass('testimony-sheet-open');
         $overlay.addClass('active');
+
+        // Hide back-to-top button smoothly
+        if ($backToTop.length) {
+            $backToTop.addClass('hide-for-overlay');
+        }
+
         setTimeout(function() {
             $sheet.addClass('active');
         }, 50);
@@ -1069,6 +1314,11 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
             $overlay.removeClass('active');
             $body.removeClass('testimony-sheet-open');
+
+            // Show back-to-top button smoothly
+            if ($backToTop.length) {
+                $backToTop.removeClass('hide-for-overlay');
+            }
         }, 400);
     }
 
