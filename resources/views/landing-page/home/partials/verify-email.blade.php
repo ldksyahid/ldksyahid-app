@@ -36,7 +36,6 @@
 
         {{-- Email chip --}}
         <div class="vepm-email-chip">
-            <i class="fas fa-at"></i>
             <span>{{ Auth::user()->email }}</span>
         </div>
 
