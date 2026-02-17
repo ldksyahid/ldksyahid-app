@@ -29,6 +29,10 @@
 @include('landing-page.home.partials.news')
 {{-- News Landing Page End --}}
 
+{{-- Library Landing Page Start --}}
+@include('landing-page.home.partials.library')
+{{-- Library Landing Page End --}}
+
 {{-- Event Landing Page Start --}}
 @include('landing-page.home.partials.event')
 {{-- Event Landing Page End --}}
