@@ -7,9 +7,10 @@
                 <div class="art-badge">
                     <span class="art-badge__emoji">📝</span>
                     <span>Artikel</span>
+                    <span class="art-badge__pulse"></span>
                 </div>
                 <h2 class="art-heading">
-                    Karya Tulis Kita
+                    Karya Tulis <span class="art-heading__highlight">Kita</span>
                     <span class="art-heading__sparkle">✨</span>
                 </h2>
                 <p class="art-subtitle">
@@ -186,21 +187,51 @@
     align-items: center;
     gap: 0.5rem;
     background: var(--primary-light);
-    border: 1px solid rgba(0, 167, 157, 0.15);
     border-radius: var(--radius-pill);
     padding: 0.5rem 1.25rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--primary);
+    position: relative;
+}
+
+.art-badge__pulse {
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: artBadgePulse 2s ease-in-out infinite;
+}
+
+@keyframes artBadgePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.5); }
 }
 
 .art-heading {
     font-family: var(--font-primary);
-    font-size: 2rem;
-    font-weight: 800;
+    font-size: 2.2rem;
+    font-weight: 700;
     color: var(--dark);
     margin-bottom: 0.5rem;
+}
+
+.art-heading__highlight {
+    color: var(--primary);
+    position: relative;
+}
+
+.art-heading__highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: rgba(0, 167, 157, 0.15);
+    border-radius: 4px;
+    z-index: -1;
 }
 
 .art-heading__sparkle {
@@ -230,15 +261,14 @@
     border-radius: var(--radius-pill);
     font-weight: 600;
     text-decoration: none;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
     transition: var(--transition);
-    border: 2px solid var(--primary-light);
+    border: none;
 }
 
 .art-btn-all:hover {
     background: var(--primary);
     color: white;
-    border-color: var(--primary);
     transform: translateY(-2px);
     box-shadow: var(--shadow-primary);
 }
@@ -274,23 +304,24 @@
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
 }
 
-/* Accent bottom line */
+/* Accent bottom glow */
 .art-card__accent-line {
-    height: 4px;
+    height: 3px;
     width: 100%;
-    background: var(--card-accent);
-    transition: height 0.3s ease;
+    background: linear-gradient(90deg, transparent, var(--card-accent), transparent);
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
 }
 
 .art-card:hover .art-card__accent-line {
-    height: 5px;
+    opacity: 1;
 }
 
 /* ── Image ── */
 .art-card__img-wrap {
     position: relative;
     width: 100%;
-    padding-top: 56.25%; /* 16:9 aspect ratio */
+    padding-top: 100%; /* 550x400 image ratio */
     overflow: hidden;
 }
 
@@ -301,6 +332,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: top;
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -313,11 +345,13 @@
     position: absolute;
     top: 12px;
     left: 12px;
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: 14px;
     padding: 6px 10px;
     text-align: center;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     line-height: 1;
     z-index: 2;
 }
@@ -384,12 +418,11 @@
     display: inline-block;
     background: color-mix(in srgb, var(--theme-color) 12%, transparent);
     color: var(--theme-color);
-    padding: 3px 12px;
+    padding: 4px 12px;
     border-radius: var(--radius-pill);
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.2px;
-    border: 1px solid color-mix(in srgb, var(--theme-color) 20%, transparent);
 }
 
 .art-card__title {
@@ -429,7 +462,6 @@
     justify-content: space-between;
     gap: 0.5rem;
     padding-top: 0.75rem;
-    border-top: 1px solid #f0f0f0;
     margin-top: auto;
 }
 
@@ -537,7 +569,7 @@
 }
 
 .art-carousel .art-card__img-wrap {
-    padding-top: 60%; /* taller image on mobile */
+    padding-top: 100%; /* match desktop square ratio */
 }
 
 /* Custom dots */
@@ -773,7 +805,7 @@ body.art-sheet-open .back-to-top {
         gap: 1.25rem;
     }
 
-    .art-heading { font-size: 1.5rem; }
+    .art-heading { font-size: 1.6rem; }
 }
 
 @media (max-width: 767.98px) {
@@ -862,8 +894,7 @@ document.addEventListener('DOMContentLoaded', function() {
         jQuery('#artSheetTheme').text(data.theme).css({
             '--theme-color': data.accent || 'var(--primary)',
             'background': 'color-mix(in srgb, ' + (data.accent || '#00a79d') + ' 12%, transparent)',
-            'color': data.accent || 'var(--primary)',
-            'border-color': 'color-mix(in srgb, ' + (data.accent || '#00a79d') + ' 20%, transparent)'
+            'color': data.accent || 'var(--primary)'
         });
         jQuery('#artSheetTitle').text(data.title);
         jQuery('#artSheetWriter').text(data.writer);
