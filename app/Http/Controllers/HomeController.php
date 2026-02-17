@@ -36,7 +36,7 @@ class HomeController extends Controller
         } else {
             $postnews= News::orderBy('datepublish','desc')->limit(4)->get();
             $postarticle= Article::orderBy('dateevent','desc')->limit(3)->get();
-            $postevent= Event::orderBy('start','desc')->limit(3)->get();
+            $postevent= Event::orderBy('start','desc')->limit(4)->get();
         }
 
         $postgallery= Gallery::orderBy('created_at','desc')->limit(1)->get();
