@@ -37,7 +37,6 @@
         @php
             $kelas = [
                 [
-                    'img'      => 'https://lh3.googleusercontent.com/d/1Libi_zhvvc5nC5IU10puFt_p28fRi5vG',
                     'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
                     'title'    => 'Kepenulisan Fiksi',
                     'tag'      => 'Kreativitas',
@@ -48,7 +47,6 @@
                     'desc'     => 'Merupakan kelas yang akan membantu peserta dalam mengembangkan keterampilannya di bidang fiksi seperti cerpen, puisi, novel, dan sebagainya serta menyiapkan peserta untuk menciptakan sebuah karya tulis di bidang tersebut.',
                 ],
                 [
-                    'img'      => 'https://lh3.googleusercontent.com/d/1tl4ZDZRMmAzi0MOGYJkXk-0WYSLWIBIy',
                     'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
                     'title'    => 'Kepenulisan Non Fiksi',
                     'tag'      => 'Ilmiah',
@@ -59,7 +57,6 @@
                     'desc'     => 'Merupakan kelas yang akan membantu peserta dalam mengembangkan keterampilannya pada kepenulisan berbasis ilmiah dan terstruktur seperti esai ilmiah, karya tulis ilmiah, dan sebagainya.',
                 ],
                 [
-                    'img'      => 'https://lh3.googleusercontent.com/d/16rCOS6itQtju7N6ELYwQpLTkAESQ9PEd',
                     'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
                     'title'    => 'Entrepreneur',
                     'tag'      => 'Bisnis',
@@ -70,7 +67,6 @@
                     'desc'     => "Merupakan kelas yang akan membahas dan mendiskusikan perihal kewirausahaan, sehingga peserta yang memiliki jiwa entrepreneur atau yang sedang belajar dapat menciptakan unit usaha baru yang kompetitif. Tidak hanya itu, KMB Entrepreneur juga akan membahas mengenai hal-hal mendasar dalam berwirausaha termasuk business plan.",
                 ],
                 [
-                    'img'      => 'https://lh3.googleusercontent.com/d/1lfwpEtfLepTOcmu6DcZlmX-7RY01g_Lv',
                     'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>',
                     'title'    => 'Public Speaking',
                     'tag'      => 'Komunikasi',
@@ -81,7 +77,6 @@
                     'desc'     => "Merupakan kelas yang akan mewadahi peserta yang berminat dan/atau berbakat dalam public speaking dan mengasah kemampuan peserta untuk dapat berbicara di depan umum hingga mencetak da'i yang mampu berkomunikasi dengan baik.",
                 ],
                 [
-                    'img'      => 'https://lh3.googleusercontent.com/d/126xPzrizaxfbhH0iQj0rjFh9n19JlI3Y',
                     'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r="1" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r="1" fill="currentColor" stroke="none"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>',
                     'title'    => 'Desain Grafis',
                     'tag'      => 'Visual',
@@ -90,6 +85,16 @@
                     'dark'     => '#7c3aed',
                     'preview'  => 'Ciptakan karya visual dan audio visual yang indah, selaras nilai-nilai Islam!',
                     'desc'     => 'Merupakan kelas yang akan mewadahi minat dan bakat peserta dalam mengembangkan potensinya di bidang desain grafis sehingga mampu dan mahir untuk menciptakan karya visual maupun audio visual yang selaras dengan nilai-nilai Islam.',
+                ],
+                [
+                    'icon_svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+                    'title'    => 'Microsoft Office',
+                    'tag'      => 'Produktivitas',
+                    'color'    => '#0078d4',
+                    'light'    => '#eff6ff',
+                    'dark'     => '#005fa3',
+                    'preview'  => 'Kuasai Word, Excel, dan PowerPoint untuk produktivitas dan karier yang lebih baik!',
+                    'desc'     => 'Merupakan kelas yang akan membekali peserta dengan kemampuan menggunakan aplikasi Microsoft Office secara profesional, meliputi Microsoft Word untuk penulisan dokumen, Microsoft Excel untuk pengolahan data, serta Microsoft PowerPoint untuk pembuatan presentasi yang menarik dan efektif.',
                 ],
             ];
         @endphp
@@ -108,10 +113,10 @@
                     <span class="kmb2-banner-emoji">{!! $item['icon_svg'] !!}</span>
                 </div>
 
-                {{-- Overlapping circular photo --}}
+                {{-- Overlapping circular icon --}}
                 <div class="kmb2-card-photo-area">
                     <div class="kmb2-photo-ring">
-                        <img src="{{ $item['img'] }}" alt="{{ $item['title'] }}" class="kmb2-photo">
+                        <div class="kmb2-photo-icon">{!! $item['icon_svg'] !!}</div>
                     </div>
                     <span class="kmb2-photo-chip">{!! $item['icon_svg'] !!}</span>
                 </div>
@@ -182,7 +187,7 @@
     {{-- Modal Photo --}}
     <div class="kmb2-modal-photo-area">
         <div class="kmb2-modal-photo-ring" id="kmb2MPhotoRing">
-            <img id="kmb2MImg" class="kmb2-modal-photo" src="" alt="">
+            <div class="kmb2-modal-photo-icon" id="kmb2MIcon"></div>
         </div>
         <span class="kmb2-modal-photo-chip" id="kmb2MChip"></span>
     </div>
@@ -213,7 +218,7 @@
 
     <div class="kmb2-sheet-photo-area">
         <div class="kmb2-sheet-photo-ring" id="kmb2SPhotoRing">
-            <img id="kmb2SImg" class="kmb2-sheet-photo" src="" alt="">
+            <div class="kmb2-sheet-photo-icon" id="kmb2SIcon"></div>
         </div>
         <span class="kmb2-sheet-photo-chip" id="kmb2SChip"></span>
     </div>
@@ -362,8 +367,9 @@ body.kmb2-popup-open .back-to-top {
 .kmb2-grid .kmb2-card:nth-child(1) { grid-column: 1/3; }
 .kmb2-grid .kmb2-card:nth-child(2) { grid-column: 3/5; }
 .kmb2-grid .kmb2-card:nth-child(3) { grid-column: 5/7; }
-.kmb2-grid .kmb2-card:nth-child(4) { grid-column: 2/4; }
-.kmb2-grid .kmb2-card:nth-child(5) { grid-column: 4/6; }
+.kmb2-grid .kmb2-card:nth-child(4) { grid-column: 1/3; }
+.kmb2-grid .kmb2-card:nth-child(5) { grid-column: 3/5; }
+.kmb2-grid .kmb2-card:nth-child(6) { grid-column: 5/7; }
 
 /* ════ CARD ════ */
 .kmb2-card {
@@ -461,11 +467,19 @@ body.kmb2-popup-open .back-to-top {
 @media(hover:hover) {
     .kmb2-card:hover .kmb2-photo-ring { transform: scale(1.08) rotate(4deg); }
 }
-.kmb2-photo {
+.kmb2-photo-icon {
     width: 100%; height: 100%;
-    object-fit: cover;
     border-radius: 50%;
     border: 3px solid white;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.kmb2-photo-icon svg {
+    width: 2.4rem;
+    height: 2.4rem;
     display: block;
 }
 .kmb2-photo-chip {
@@ -675,10 +689,18 @@ body.kmb2-popup-open .back-to-top {
     transition: transform .25s ease !important;
     appearance: none;
 }
-.kmb2-modal-x:hover,
+/* hover saja yang membesar, focus tidak (supaya tidak membesar saat popup pertama dibuka) */
+.kmb2-modal-x:hover {
+    transform: scale(1.2) !important;
+    background: rgba(0,0,0,.28) !important;
+    border-color: rgba(0,0,0,.18) !important;
+    color: white !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
 .kmb2-modal-x:focus,
 .kmb2-modal-x:active {
-    transform: scale(1.18) !important;
+    transform: none !important;
     background: rgba(0,0,0,.28) !important;
     border-color: rgba(0,0,0,.18) !important;
     color: white !important;
@@ -778,12 +800,21 @@ body.kmb2-popup-open .back-to-top {
     box-shadow: 0 10px 32px rgba(0,0,0,.14);
     transition: background .4s ease;
 }
-.kmb2-modal-photo {
-    width:100%; height:100%;
-    object-fit:cover;
-    border-radius:50%;
-    border:4px solid white;
-    display:block;
+.kmb2-modal-photo-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.kmb2-modal-photo-icon svg {
+    width: 3.2rem;
+    height: 3.2rem;
+    display: block;
 }
 .kmb2-modal-photo-chip {
     position: absolute;
@@ -943,12 +974,21 @@ body.kmb2-popup-open .back-to-top {
     box-shadow:0 8px 24px rgba(0,0,0,.13);
     transition:background .4s ease;
 }
-.kmb2-sheet-photo {
-    width:100%; height:100%;
-    object-fit:cover;
-    border-radius:50%;
-    border:3px solid white;
-    display:block;
+.kmb2-sheet-photo-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.kmb2-sheet-photo-icon svg {
+    width: 2.6rem;
+    height: 2.6rem;
+    display: block;
 }
 .kmb2-sheet-photo-chip {
     position:absolute;
@@ -1015,6 +1055,15 @@ body.kmb2-popup-open .back-to-top {
     transition: transform .22s ease;
 }
 .kmb2-sheet-nav-btn:hover { transform: scale(1.07); }
+.kmb2-sheet-nav-btn:active,
+.kmb2-sheet-nav-btn:focus {
+    transform: scale(1.07) !important;
+    background: var(--primary-light) !important;
+    color: var(--primary) !important;
+    border-color: rgba(0,167,157,.2) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
 .kmb2-sheet-dots {
     display:flex;
     gap:5px;
@@ -1060,7 +1109,8 @@ body.kmb2-popup-open .back-to-top {
     .kmb2-grid .kmb2-card:nth-child(2){grid-column:3/5;}
     .kmb2-grid .kmb2-card:nth-child(3){grid-column:1/3;}
     .kmb2-grid .kmb2-card:nth-child(4){grid-column:3/5;}
-    .kmb2-grid .kmb2-card:nth-child(5){grid-column:2/4;}
+    .kmb2-grid .kmb2-card:nth-child(5){grid-column:1/3;}
+    .kmb2-grid .kmb2-card:nth-child(6){grid-column:3/5;}
     .kmb2-cta { padding:1.5rem; }
 }
 @media(max-width:767.98px) {
@@ -1115,8 +1165,7 @@ body.kmb2-popup-open .back-to-top {
             'linear-gradient(135deg,' + d.color + ',' + d.light + ')';
         document.getElementById('kmb2MEmoji').innerHTML  = d.icon_svg;
         document.getElementById('kmb2MTag').textContent  = d.tag;
-        document.getElementById('kmb2MImg').src          = d.img;
-        document.getElementById('kmb2MImg').alt          = d.title;
+        document.getElementById('kmb2MIcon').innerHTML   = d.icon_svg;
         var chip = document.getElementById('kmb2MChip');
         chip.innerHTML    = d.icon_svg;
         chip.style.color  = d.color;
@@ -1136,8 +1185,7 @@ body.kmb2-popup-open .back-to-top {
             'linear-gradient(135deg,' + d.color + ',' + d.light + ')';
         document.getElementById('kmb2SEmoji').innerHTML  = d.icon_svg;
         document.getElementById('kmb2STag').textContent  = d.tag;
-        document.getElementById('kmb2SImg').src          = d.img;
-        document.getElementById('kmb2SImg').alt          = d.title;
+        document.getElementById('kmb2SIcon').innerHTML   = d.icon_svg;
         var chip = document.getElementById('kmb2SChip');
         chip.innerHTML    = d.icon_svg;
         chip.style.color  = d.color;
