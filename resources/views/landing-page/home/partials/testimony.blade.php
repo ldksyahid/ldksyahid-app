@@ -84,7 +84,7 @@
             </div>
         </div>
 
-        {{-- Mobile View --}}
+        {{-- Mobile View - WITH DOTS --}}
         <div class="d-md-none">
             {{-- Header --}}
             <div class="text-center mb-4">
@@ -104,44 +104,63 @@
             {{-- Mobile Stats --}}
             <div class="testimony-stats-mobile mb-4">
                 <div class="stat-mobile">
-                    <span class="stat-mobile__icon">👥</span>
-                    <span class="stat-mobile__number">1000+</span>
-                    <span class="stat-mobile__label">Anggota</span>
+                    <div class="stat-mobile__icon">👥</div>
+                    <div class="stat-mobile__content">
+                        <span class="stat-mobile__number">1000+</span>
+                        <span class="stat-mobile__label">ANGGOTA</span>
+                    </div>
                 </div>
                 <div class="stat-mobile">
-                    <span class="stat-mobile__icon">💝</span>
-                    <span class="stat-mobile__number">1001</span>
-                    <span class="stat-mobile__label">Manfaat</span>
+                    <div class="stat-mobile__icon">💝</div>
+                    <div class="stat-mobile__content">
+                        <span class="stat-mobile__number">1001</span>
+                        <span class="stat-mobile__label">MANFAAT</span>
+                    </div>
                 </div>
             </div>
 
-            {{-- Carousel --}}
-            <div class="testimony-carousel owl-carousel">
-                @forelse($posttestimony as $key => $testimony)
-                <div class="testimony-card-mobile" data-index="{{ $key }}">
-                    <div class="testimony-card-mobile__header">
-                        <img src="https://lh3.googleusercontent.com/d/{{ $testimony->gdrive_id }}"
-                             alt="{{ $testimony->name }}"
-                             class="testimony-card-mobile__avatar">
-                        <div class="testimony-card-mobile__info">
-                            <h5 class="testimony-card-mobile__name">{{ $testimony->name }}</h5>
-                            <span class="testimony-card-mobile__role">{{ $testimony->profession }}</span>
+            {{-- Carousel with DOTS --}}
+            <div class="testimony-carousel-container">
+                <div class="testimony-carousel owl-carousel">
+                    @forelse($posttestimony as $key => $testimony)
+                    <div class="testimony-card-mobile" data-index="{{ $key }}">
+                        <div class="testimony-card-mobile__header">
+                            <div class="testimony-card-mobile__avatar-wrapper">
+                                <img src="https://lh3.googleusercontent.com/d/{{ $testimony->gdrive_id }}"
+                                     alt="{{ $testimony->name }}"
+                                     class="testimony-card-mobile__avatar">
+                            </div>
+                            <div class="testimony-card-mobile__info">
+                                <h5 class="testimony-card-mobile__name">{{ $testimony->name }}</h5>
+                                <span class="testimony-card-mobile__role">{{ $testimony->profession }}</span>
+                            </div>
                         </div>
+                        <button class="testimony-card-mobile__btn"
+                                data-name="{{ $testimony->name }}"
+                                data-role="{{ $testimony->profession }}"
+                                data-img="https://lh3.googleusercontent.com/d/{{ $testimony->gdrive_id }}"
+                                data-text="{{ $testimony->testimony }}">
+                            Baca Testimoni 💬
+                        </button>
                     </div>
-                    <button class="testimony-card-mobile__btn"
-                            data-name="{{ $testimony->name }}"
-                            data-role="{{ $testimony->profession }}"
-                            data-img="https://lh3.googleusercontent.com/d/{{ $testimony->gdrive_id }}"
-                            data-text="{{ $testimony->testimony }}">
-                        Baca Testimoni 💬
-                    </button>
+                    @empty
+                    <div class="testimony-empty-mobile">
+                        <div class="testimony-empty__icon">💭</div>
+                        <h4>Testimoni Segera Hadir</h4>
+                    </div>
+                    @endforelse
                 </div>
-                @empty
-                <div class="testimony-empty-mobile">
-                    <div class="testimony-empty__icon">💭</div>
-                    <h4>Testimoni Segera Hadir</h4>
+
+                {{-- Custom Dots Navigation --}}
+                @if(count($posttestimony) > 1)
+                <div class="testimony-carousel-dots">
+                    @foreach($posttestimony as $key => $testimony)
+                    <button class="testimony-carousel-dot {{ $key == 0 ? 'active' : '' }}"
+                            data-slide="{{ $key }}"
+                            aria-label="Go to slide {{ $key + 1 }}"></button>
+                    @endforeach
                 </div>
-                @endforelse
+                @endif
             </div>
         </div>
     </div>
@@ -174,6 +193,16 @@
 /* ═══════════════════════════════════════════════
    TESTIMONY SECTION — Modern & Elegant
    ═══════════════════════════════════════════════ */
+:root {
+    --primary: #00a79d;
+    --primary-light: rgba(0, 167, 157, 0.1);
+    --primary-gradient: linear-gradient(135deg, #00a79d 0%, #00d4c4 100%);
+    --secondary: #6c757d;
+    --dark: #2d3e50;
+    --font-primary: 'Poppins', sans-serif;
+    --radius-pill: 50px;
+}
+
 .testimony-modern {
     background: transparent;
     position: relative;
@@ -337,7 +366,6 @@
     font-weight: 500;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    text-align: center;
 }
 
 .stat-card__shine {
@@ -500,180 +528,93 @@
     z-index: 2;
 }
 
-/* ── CTA Button ── */
-.testimony-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: var(--primary-gradient);
-    color: white;
-    padding: 1rem 2.5rem;
-    border-radius: var(--radius-pill);
-    font-weight: 700;
-    text-decoration: none;
-    box-shadow: 0 8px 25px rgba(0, 167, 157, 0.35);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.testimony-cta::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s ease, height 0.6s ease;
-}
-
-.testimony-cta:hover::before {
-    width: 300px;
-    height: 300px;
-}
-
-.testimony-cta:hover {
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(0, 167, 157, 0.45);
-}
-
-.testimony-cta__icon {
-    font-size: 1.3rem;
-    z-index: 1;
-}
-
-.testimony-cta i {
-    transition: transform 0.3s ease;
-    z-index: 1;
-}
-
-.testimony-cta:hover i {
-    transform: translateX(5px);
-}
-
-/* ── Animations ── */
-.stat-card-animate,
-.testimony-card-animate {
-    opacity: 0;
-    transform: translateY(40px) scale(0.97);
-    transition: opacity 0.6s ease var(--anim-delay, 0s),
-                transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) var(--anim-delay, 0s);
-}
-
-.stat-card-animate.is-visible,
-.testimony-card-animate.is-visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-}
-
-/* ── Empty State ── */
-.testimony-empty {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 4rem 2rem;
-    background: white;
-    border-radius: 24px;
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.06);
-}
-
-.testimony-empty__icon {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-.testimony-empty h4 {
-    color: var(--dark);
-    margin-bottom: 0.5rem;
-}
-
-.testimony-empty p {
-    color: var(--secondary);
-    margin: 0;
-}
-
 /* ═══════════════════════════════════════════════
-   MOBILE STYLES
+   MOBILE STYLES - WITH DOTS
    ═══════════════════════════════════════════════ */
 
 /* Mobile Stats */
 .testimony-stats-mobile {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    justify-content: center;
     gap: 1rem;
+    padding: 0 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .stat-mobile {
     background: white;
     border-radius: 20px;
-    padding: 1.5rem 1rem;
+    padding: 1rem 1.5rem;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(0, 0, 0, 0.04);
-    transition: all 0.3s ease;
-}
-
-.stat-mobile:active {
-    transform: scale(0.97);
+    flex: 0 1 auto;
+    min-width: 140px;
 }
 
 .stat-mobile__icon {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     filter: drop-shadow(0 2px 8px rgba(0, 167, 157, 0.2));
+    flex-shrink: 0;
+}
+
+.stat-mobile__content {
+    display: flex;
+    flex-direction: column;
 }
 
 .stat-mobile__number {
     font-family: var(--font-primary);
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: var(--primary);
-    line-height: 1;
+    line-height: 1.2;
 }
 
 .stat-mobile__label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--secondary);
-    font-weight: 600;
-    text-transform: uppercase;
+    font-weight: 700;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Carousel Container */
+.testimony-carousel-container {
+    position: relative;
+    width: 100%;
 }
 
 /* Mobile Carousel */
 .testimony-carousel.owl-carousel {
-    margin: 0 -15px;
+    margin: 0 -12px;
+    width: calc(100% + 24px);
 }
 
 .testimony-carousel .owl-stage-outer {
     padding: 10px 0 20px;
+    overflow: hidden;
+}
+
+.testimony-carousel .owl-item {
+    display: flex;
+    justify-content: center;
 }
 
 .testimony-card-mobile {
     background: white;
     border-radius: 24px;
-    padding: 2rem 1.5rem;
+    padding: 1.5rem;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     border: 2px solid rgba(0, 167, 157, 0.08);
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    min-height: 200px;
-    transition: all 0.3s ease;
-}
-
-.testimony-card-mobile:active {
-    transform: scale(0.98);
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
 }
 
 .testimony-card-mobile__header {
@@ -682,14 +623,21 @@
     gap: 1rem;
 }
 
-.testimony-card-mobile__avatar {
-    width: 70px;
-    height: 70px;
+.testimony-card-mobile__avatar-wrapper {
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    object-fit: cover;
+    overflow: hidden;
     border: 3px solid var(--primary-light);
     box-shadow: 0 4px 15px rgba(0, 167, 157, 0.2);
     flex-shrink: 0;
+}
+
+.testimony-card-mobile__avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .testimony-card-mobile__info {
@@ -704,18 +652,23 @@
     color: var(--primary);
     margin: 0 0 0.25rem;
     line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .testimony-card-mobile__role {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--secondary);
     display: block;
-    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .testimony-card-mobile__btn {
     width: 100%;
-    padding: 0.875rem 1.5rem;
+    padding: 0.875rem 1.25rem;
     background: linear-gradient(135deg, var(--primary) 0%, #00d4c4 100%);
     color: white;
     border: none;
@@ -732,12 +685,63 @@
     box-shadow: 0 2px 8px rgba(0, 167, 157, 0.2);
 }
 
+/* Custom Dots Navigation */
+.testimony-carousel-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding: 0.5rem 0;
+}
+
+.testimony-carousel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(0, 167, 157, 0.2);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.testimony-carousel-dot:hover {
+    background: rgba(0, 167, 157, 0.4);
+}
+
+.testimony-carousel-dot.active {
+    width: 24px;
+    border-radius: 12px;
+    background: var(--primary);
+    transform: scale(1);
+}
+
+/* Hide default Owl Dots */
+.owl-carousel .owl-dots {
+    display: none !important;
+}
+
+/* Empty State */
 .testimony-empty-mobile {
     text-align: center;
-    padding: 3rem 1.5rem;
+    padding: 2.5rem 1.5rem;
     background: white;
     border-radius: 24px;
     box-shadow: 0 6px 30px rgba(0, 0, 0, 0.06);
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.testimony-empty__icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 /* Bottom Sheet */
@@ -765,7 +769,7 @@
     background: white;
     border-radius: 24px 24px 0 0;
     z-index: 10001;
-    max-height: 85vh;
+    max-height: 80vh;
     overflow-y: auto;
     transform: translateY(100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -829,25 +833,34 @@
 }
 
 .testimony-sheet__avatar {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid var(--primary-light);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.testimony-sheet__info {
+    flex: 1;
+    min-width: 0;
 }
 
 .testimony-sheet__name {
     font-family: var(--font-primary);
     font-weight: 800;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     color: var(--primary);
     margin: 0 0 0.25rem;
+    word-break: break-word;
 }
 
 .testimony-sheet__role {
     font-size: 0.9rem;
     color: var(--secondary);
+    display: block;
+    word-break: break-word;
 }
 
 .testimony-sheet__divider {
@@ -859,20 +872,23 @@
 }
 
 .testimony-sheet__quote {
-    font-size: 4rem;
+    font-size: 3.5rem;
     font-family: Georgia, serif;
     color: var(--primary);
     opacity: 0.15;
     line-height: 1;
-    margin-bottom: -2rem;
+    margin-bottom: -1.5rem;
 }
 
 .testimony-sheet__text {
     color: var(--dark);
-    font-size: 1.05rem;
-    line-height: 1.8;
+    font-size: 1rem;
+    line-height: 1.7;
     font-style: italic;
     margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 body.testimony-sheet-open {
@@ -891,14 +907,6 @@ body.testimony-sheet-open {
     .testimony-heading {
         font-size: 1.6rem;
     }
-
-    .stat-card__number {
-        font-size: 1.5rem;
-    }
-
-    .stat-card__label {
-        font-size: 0.8rem;
-    }
 }
 
 @media (max-width: 767.98px) {
@@ -909,19 +917,53 @@ body.testimony-sheet-open {
     .testimony-subtitle {
         font-size: 0.95rem;
         line-height: 1.6;
-    }
-
-    .stat-card__number {
-        font-size: 1.3rem;
+        padding: 0 0.5rem;
     }
 
     .testimony-badge {
         font-size: 0.85rem;
         padding: 0.5rem 1rem;
     }
+}
 
-    .testimony-badge__emoji {
+@media (max-width: 480px) {
+    .testimony-stats-mobile {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .stat-mobile {
+        width: 100%;
+        max-width: 250px;
+        justify-content: center;
+    }
+
+    .testimony-card-mobile {
+        max-width: 280px;
+        padding: 1.25rem;
+    }
+
+    .testimony-card-mobile__avatar-wrapper {
+        width: 50px;
+        height: 50px;
+    }
+
+    .testimony-card-mobile__name {
         font-size: 1rem;
+    }
+
+    .testimony-card-mobile__role {
+        font-size: 0.75rem;
+    }
+
+    .testimony-carousel-dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    .testimony-carousel-dot.active {
+        width: 20px;
     }
 }
 </style>
@@ -944,20 +986,41 @@ document.addEventListener('DOMContentLoaded', function() {
         animEls.forEach(function(el) { el.classList.add('is-visible'); });
     }
 
-    // Mobile Carousel
-    var $carousel = jQuery('.testimony-carousel');
-    if ($carousel.length) {
+    // Mobile Carousel with Dots
+    if (typeof jQuery !== 'undefined' && jQuery('.testimony-carousel').length) {
+        var $carousel = jQuery('.testimony-carousel');
+        var $dots = jQuery('.testimony-carousel-dot');
+
+        if ($carousel.data('owl.carousel')) {
+            $carousel.owlCarousel('destroy');
+        }
+
         $carousel.owlCarousel({
             items: 1,
             margin: 16,
             stagePadding: 40,
             loop: false,
-            dots: false,
+            dots: false, // Disable default dots
             nav: false,
             autoplay: false,
             smartSpeed: 400,
             touchDrag: true,
             mouseDrag: true,
+            onChanged: function(event) {
+                // Update custom dots on slide change
+                var currentIndex = event.item.index - event.relatedTarget._clones.length / 2;
+                var totalItems = event.item.count;
+
+                // Adjust index for proper display
+                if (currentIndex < 0) {
+                    currentIndex = totalItems + currentIndex;
+                } else if (currentIndex >= totalItems) {
+                    currentIndex = currentIndex - totalItems;
+                }
+
+                $dots.removeClass('active');
+                $dots.eq(currentIndex).addClass('active');
+            },
             responsive: {
                 0: {
                     items: 1,
@@ -970,6 +1033,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     margin: 16
                 }
             }
+        });
+
+        // Custom dots click handler
+        $dots.on('click', function() {
+            var index = jQuery(this).data('slide');
+            $carousel.trigger('to.owl.carousel', [index, 400]);
         });
     }
 
@@ -1028,7 +1097,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Swipe down to close
-    var startY = 0, currentY = 0, el = $sheet[0];
+    var startY = 0, currentY = 0;
+    var el = $sheet[0];
     if (el) {
         el.addEventListener('touchstart', function(e) {
             if (this.scrollTop <= 0) {
@@ -1042,10 +1112,11 @@ document.addEventListener('DOMContentLoaded', function() {
             var diff = currentY - startY;
 
             if (diff > 0 && this.scrollTop <= 0) {
+                e.preventDefault();
                 var val = Math.min(diff * 0.6, 200);
                 this.style.transform = 'translateY(' + val + 'px)';
             }
-        }, { passive: true });
+        }, { passive: false });
 
         el.addEventListener('touchend', function() {
             if (currentY - startY > 80) {
