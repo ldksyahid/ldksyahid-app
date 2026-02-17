@@ -589,6 +589,12 @@
         background: rgba(255, 255, 255, 0.9);
         color: var(--dark);
         height: 52px;
+        box-sizing: border-box;
+        display: block;
+        line-height: 1.5;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
     }
 
     .contact-form__input:focus,
