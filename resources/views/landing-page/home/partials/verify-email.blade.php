@@ -441,11 +441,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const backToTop = document.querySelector('.back-to-top');
     if (!overlay) return;
 
-    // Hide back-to-top while modal is open
+    // Hide back-to-top & disable scroll while modal is open
     if (backToTop) backToTop.classList.add('vepm-suppressed');
+    document.body.style.overflow = 'hidden';
 
     function closeModal() {
         overlay.style.animation = 'vepmFadeOut 0.3s ease forwards';
+        document.body.style.overflow = '';
         // Restore back-to-top smoothly after modal fades out
         if (backToTop) {
             setTimeout(() => backToTop.classList.remove('vepm-suppressed'), 250);
