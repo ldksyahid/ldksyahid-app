@@ -1,19 +1,27 @@
 {{-- Schedule Section - Fun & Modern Design --}}
 <section class="schedule-fun py-5">
     <div class="container">
-        {{-- Section Header --}}
-        <div class="text-center mb-5 schedule-header-animate">
-            <div class="section-badge-schedule">
-                <span class="badge-emoji">📅</span>
-                <span>Yuk Catat!</span>
-                <span class="badge-pulse"></span>
+        {{-- Section Header (Matching Gallery Style - Left + Right Button) --}}
+        <div class="row mb-4 mb-lg-5 align-items-center justify-content-between schedule-header-wrap">
+            <div class="col-lg-8 mb-3 mb-lg-0">
+                <div class="section-badge-schedule">
+                    <span class="badge-emoji">📅</span>
+                    <span>Yuk Catat!</span>
+                    <span class="badge-pulse"></span>
+                </div>
+                <h2 class="section-title-fun">
+                    Jadwal <span class="section-title-highlight">Terbaru</span>
+                </h2>
+                <p class="section-description-fun">
+                    Jadwal kegiatan LDK Syahid agar kamu tidak ketinggalan info penting!
+                </p>
             </div>
-            <h2 class="section-title-fun">
-                Jadwal <span class="section-title-highlight">Terbaru</span>
-            </h2>
-            <p class="section-description-fun">
-                Jadwal kegiatan LDK Syahid agar kamu tidak ketinggalan info penting!
-            </p>
+            <div class="col-lg-4 text-lg-end d-none d-md-block">
+                <a href="/schedules" class="schedule-btn-view-all">
+                    <span>Lihat Semua</span>
+                    <i class="fas fa-calendar-check"></i>
+                </a>
+            </div>
         </div>
 
         {{-- Schedule Cards --}}
@@ -107,14 +115,15 @@
     position: relative;
 }
 
-/* ── Header (Matching About Style) ── */
-.schedule-header-animate {
+/* ── Header (Matching Gallery Style) ── */
+.schedule-header-wrap {
+    margin-bottom: 0;
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-.schedule-header-animate.is-visible {
+.schedule-header-wrap.is-visible {
     opacity: 1;
     transform: translateY(0);
 }
@@ -132,6 +141,40 @@
     color: var(--primary);
     position: relative;
     box-shadow: 0 2px 8px rgba(0, 167, 157, 0.1);
+}
+
+/* ── Header Button ── */
+.schedule-btn-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: white;
+    color: var(--primary);
+    padding: 0.9rem 2rem;
+    border-radius: var(--radius-pill);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: var(--transition);
+    border: 2px solid rgba(0, 167, 157, 0.2);
+    white-space: nowrap;
+}
+
+.schedule-btn-view-all:hover {
+    background: var(--primary-gradient);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-primary);
+    border-color: transparent;
+}
+
+.schedule-btn-view-all i {
+    transition: transform 0.3s ease;
+}
+
+.schedule-btn-view-all:hover i {
+    transform: translateX(5px);
 }
 
 .badge-emoji {
@@ -721,7 +764,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Viewport animations with IntersectionObserver
-    var animEls = document.querySelectorAll('.schedule-header-animate, .schedule-card-animate');
+    var animEls = document.querySelectorAll('.schedule-header-wrap, .schedule-card-animate');
 
     if ('IntersectionObserver' in window) {
         var observer = new IntersectionObserver(function(entries) {
