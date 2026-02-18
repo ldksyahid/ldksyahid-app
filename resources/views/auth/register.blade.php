@@ -24,7 +24,6 @@
 
                         {{-- Name --}}
                         <div class="auth-input-wrap">
-                            <i class="fas fa-user auth-input-icon" style="top:29px;transform:none;"></i>
                             <div class="form-floating">
                                 <input
                                     type="text"
@@ -36,15 +35,15 @@
                                     required
                                 />
                                 <label for="name" class="has-icon">Nama Lengkap</label>
-                                @error('name')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
+                                <i class="fas fa-user auth-input-icon"></i>
                             </div>
+                            @error('name')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- Email --}}
                         <div class="auth-input-wrap">
-                            <i class="fas fa-envelope auth-input-icon" style="top:29px;transform:none;"></i>
                             <div class="form-floating">
                                 <input
                                     type="email"
@@ -56,15 +55,15 @@
                                     required
                                 />
                                 <label for="email" class="has-icon">Email</label>
-                                @error('email')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
+                                <i class="fas fa-envelope auth-input-icon"></i>
                             </div>
+                            @error('email')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- Password --}}
                         <div class="auth-input-wrap">
-                            <i class="fas fa-lock auth-input-icon" style="top:29px;transform:none;"></i>
                             <div class="form-floating">
                                 <input
                                     type="password"
@@ -76,18 +75,18 @@
                                     style="padding-right:3rem;"
                                 />
                                 <label for="reg_password" class="has-icon">Password</label>
-                                @error('password')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
+                                <i class="fas fa-lock auth-input-icon"></i>
+                                <span class="auth-pwd-toggle" onclick="authTogglePass('reg_password','regPwdIcon')">
+                                    <i id="regPwdIcon" class="fas fa-eye"></i>
+                                </span>
                             </div>
-                            <span class="auth-pwd-toggle" onclick="authTogglePass('reg_password','regPwdIcon')">
-                                <i id="regPwdIcon" class="fas fa-eye"></i>
-                            </span>
+                            @error('password')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- Confirm Password --}}
                         <div class="auth-input-wrap">
-                            <i class="fas fa-shield-alt auth-input-icon" style="top:29px;transform:none;"></i>
                             <div class="form-floating">
                                 <input
                                     type="password"
@@ -99,13 +98,14 @@
                                     style="padding-right:3rem;"
                                 />
                                 <label for="reg_password_confirm" class="has-icon">Konfirmasi Password</label>
-                                @error('password_confirmation')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
+                                <i class="fas fa-shield-alt auth-input-icon"></i>
+                                <span class="auth-pwd-toggle" onclick="authTogglePass('reg_password_confirm','regConfirmIcon')">
+                                    <i id="regConfirmIcon" class="fas fa-eye"></i>
+                                </span>
                             </div>
-                            <span class="auth-pwd-toggle" onclick="authTogglePass('reg_password_confirm','regConfirmIcon')">
-                                <i id="regConfirmIcon" class="fas fa-eye"></i>
-                            </span>
+                            @error('password_confirmation')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- Remember me --}}
@@ -136,7 +136,7 @@
             </div>
 
             {{-- Right: Content --}}
-            <div class="col-lg-5 col-md-10 auth-left-enter" style="animation-name:authRightIn;">
+            <div class="col-lg-5 col-md-10" style="opacity:0;transform:translateX(28px);animation:authRightIn 0.7s ease 0.1s forwards;">
                 <div class="ps-lg-3">
 
                     <div class="auth-badge">

@@ -2545,10 +2545,13 @@ textarea.form-control {
 
 /* ===== INPUT WITH ICON ===== */
 .auth-input-wrap {
-    position: relative;
     margin-bottom: 1.25rem;
 }
 
+/*
+ * Icon ditempatkan di dalam .form-floating yang sudah position:relative (Bootstrap).
+ * Sehingga top:50% selalu relatif terhadap tinggi input (58px) — perfectly centered.
+ */
 .auth-input-icon {
     position: absolute;
     left: 1rem;
@@ -2561,7 +2564,7 @@ textarea.form-control {
     transition: var(--transition);
 }
 
-.auth-input-wrap:focus-within .auth-input-icon {
+.form-floating:focus-within .auth-input-icon {
     color: var(--primary);
 }
 

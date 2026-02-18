@@ -48,7 +48,6 @@
 
                         {{-- Email --}}
                         <div class="auth-input-wrap">
-                            <i class="fas fa-envelope auth-input-icon" style="top:29px;transform:none;"></i>
                             <div class="form-floating">
                                 <input
                                     type="email"
@@ -60,10 +59,11 @@
                                     required autocomplete="email" autofocus
                                 />
                                 <label for="email" class="has-icon">Email</label>
-                                @error('email')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
+                                <i class="fas fa-envelope auth-input-icon"></i>
                             </div>
+                            @error('email')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- Submit --}}
