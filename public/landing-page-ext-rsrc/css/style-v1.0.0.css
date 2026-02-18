@@ -2323,7 +2323,7 @@ textarea.form-control {
 /* Section wrapper */
 .auth-section {
     position: relative;
-    padding: 5rem 0 4rem;
+    padding: 8rem 0 4rem;
     min-height: 82vh;
     display: flex;
     align-items: center;
@@ -2753,7 +2753,7 @@ textarea.form-control {
 /* ===== CENTERED AUTH CARD (password pages) ===== */
 .auth-center-section {
     position: relative;
-    padding: 5rem 0 4rem;
+    padding: 8rem 0 4rem;
     min-height: 82vh;
     display: flex;
     align-items: center;
@@ -2844,7 +2844,7 @@ textarea.form-control {
 @media (max-width: 991.98px) {
     .auth-section,
     .auth-center-section {
-        padding: 4rem 0 3rem;
+        padding: 8rem 0 3rem;
         min-height: auto;
     }
 
