@@ -1,168 +1,198 @@
 @extends('landing-page.template.body')
 
 @section('content')
-<style>
-    .form-floating .form-control {
-        border-radius: 12px !important;
-    }
-    textarea.form-control {
-        border-radius: 12px !important;
-    }
-    .password-toggle {
-        position: absolute;
-        top: 50%;
-        right: 1rem;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #6c757d;
-        font-size: 1.2rem;
-    }
-</style>
 
-<!-- Register Section Start -->
-<div class="container-xxl py-5">
-    <div class="container">
+{{-- Register Section --}}
+<div class="auth-section">
+    <div class="container" style="position:relative;z-index:1;">
         <div class="row justify-content-center align-items-center g-5">
-            <!-- Form on the left -->
-            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="card border-0 shadow p-4 rounded-4 bg-light">
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}" autocomplete="off">
-                            @csrf
-                            <div class="mb-4">
-                                <div class="form-floating">
-                                    <input
-                                        type="text"
-                                        class="form-control @error('name') is-invalid @enderror"
-                                        id="name"
-                                        placeholder="Nama Lengkap"
-                                        name="name"
-                                        value="{{ old('name') }}"
-                                        required
-                                    />
-                                    <label for="name">Nama Lengkap</label>
-                                    @error('name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
 
-                            <div class="mb-4">
-                                <div class="form-floating">
-                                    <input
-                                        type="email"
-                                        class="form-control @error('email') is-invalid @enderror"
-                                        id="email"
-                                        placeholder="name@example.com"
-                                        name="email"
-                                        value="{{ old('email') }}"
-                                        required
-                                    />
-                                    <label for="email">Email</label>
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
+            {{-- Left: Form Card --}}
+            <div class="col-lg-6 col-md-10">
+                <div class="auth-card">
 
-                            <div class="mb-4 position-relative">
-                                <div class="form-floating">
-                                    <input
-                                        type="password"
-                                        class="form-control @error('password') is-invalid @enderror"
-                                        id="password"
-                                        placeholder="Password"
-                                        name="password"
-                                        required
-                                    />
-                                    <label for="password">Password</label>
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <span class="password-toggle" onclick="togglePassword()">
-                                    <i id="toggleIcon" class="fa fa-eye"></i>
-                                </span>
-                            </div>
-
-                            <div class="mb-4 position-relative">
-                                <div class="form-floating">
-                                    <input
-                                        type="password"
-                                        class="form-control @error('password_confirmation') is-invalid @enderror"
-                                        id="password-confirm"
-                                        placeholder="Konfirmasi Password"
-                                        name="password_confirmation"
-                                        required
-                                    />
-                                    <label for="password-confirm">Konfirmasi Password</label>
-                                    @error('password_confirmation')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <div class="form-check">
-                                    <input
-                                        type="checkbox"
-                                        name="remember"
-                                        class="form-check-input"
-                                        id="remember" {{ old('remember') ? 'checked' : '' }}
-                                    />
-                                    <label class="form-check-label" for="remember">
-                                        Ingat Saya
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="d-grid mb-3">
-                                <button class="btn btn-primary py-3 rounded-pill" type="submit">
-                                    Daftar
-                                </button>
-                            </div>
-
-                            <div class="text-center">
-                                <p class="mb-0">
-                                    Sudah Memiliki Akun? <a href="/login" class="text-primary"><u>Masuk</u></a>
-                                </p>
-                            </div>
-                        </form>
+                    <div class="auth-card-header">
+                        <div class="auth-card-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="auth-card-title">Buat Akun Baru ✨</div>
+                        <div class="auth-card-subtitle">Isi data di bawah untuk bergabung bersama kami</div>
                     </div>
-                </div> <!-- End Card -->
-            </div>
 
-            <!-- Content on the right -->
-            <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="mb-5">
-                    <h6 class="text-primary text-uppercase mb-2">Daftar</h6>
-                    <h1 class="display-6 mb-3">
-                        Melangkah Keluar dari Zona Nyaman
-                    </h1>
-                    <p class="text-muted">
-                        "Dan janganlah kamu (merasa) lemah, dan jangan (pula) bersedih hati, sebab kamu paling tinggi (derajatnya), jika kamu orang yang beriman."
-                        <br> &#9679; (QS. Ali 'Imran 3: Ayat 139)
-                    </p>
+                    <form method="POST" action="{{ route('register') }}" autocomplete="off">
+                        @csrf
+
+                        {{-- Name --}}
+                        <div class="auth-input-wrap">
+                            <i class="fas fa-user auth-input-icon" style="top:29px;transform:none;"></i>
+                            <div class="form-floating">
+                                <input
+                                    type="text"
+                                    class="form-control has-icon @error('name') is-invalid @enderror"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Nama Lengkap"
+                                    value="{{ old('name') }}"
+                                    required
+                                />
+                                <label for="name" class="has-icon">Nama Lengkap</label>
+                                @error('name')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Email --}}
+                        <div class="auth-input-wrap">
+                            <i class="fas fa-envelope auth-input-icon" style="top:29px;transform:none;"></i>
+                            <div class="form-floating">
+                                <input
+                                    type="email"
+                                    class="form-control has-icon @error('email') is-invalid @enderror"
+                                    id="email"
+                                    name="email"
+                                    placeholder="name@example.com"
+                                    value="{{ old('email') }}"
+                                    required
+                                />
+                                <label for="email" class="has-icon">Email</label>
+                                @error('email')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Password --}}
+                        <div class="auth-input-wrap">
+                            <i class="fas fa-lock auth-input-icon" style="top:29px;transform:none;"></i>
+                            <div class="form-floating">
+                                <input
+                                    type="password"
+                                    class="form-control has-icon @error('password') is-invalid @enderror"
+                                    id="reg_password"
+                                    name="password"
+                                    placeholder="Password"
+                                    required
+                                    style="padding-right:3rem;"
+                                />
+                                <label for="reg_password" class="has-icon">Password</label>
+                                @error('password')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <span class="auth-pwd-toggle" onclick="authTogglePass('reg_password','regPwdIcon')">
+                                <i id="regPwdIcon" class="fas fa-eye"></i>
+                            </span>
+                        </div>
+
+                        {{-- Confirm Password --}}
+                        <div class="auth-input-wrap">
+                            <i class="fas fa-shield-alt auth-input-icon" style="top:29px;transform:none;"></i>
+                            <div class="form-floating">
+                                <input
+                                    type="password"
+                                    class="form-control has-icon @error('password_confirmation') is-invalid @enderror"
+                                    id="reg_password_confirm"
+                                    name="password_confirmation"
+                                    placeholder="Konfirmasi Password"
+                                    required
+                                    style="padding-right:3rem;"
+                                />
+                                <label for="reg_password_confirm" class="has-icon">Konfirmasi Password</label>
+                                @error('password_confirmation')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <span class="auth-pwd-toggle" onclick="authTogglePass('reg_password_confirm','regConfirmIcon')">
+                                <i id="regConfirmIcon" class="fas fa-eye"></i>
+                            </span>
+                        </div>
+
+                        {{-- Remember me --}}
+                        <div class="mb-3 auth-check">
+                            <div class="form-check">
+                                <input type="checkbox" name="remember" class="form-check-input" id="remember" {{ old('remember') ? 'checked' : '' }} />
+                                <label class="form-check-label small" for="remember">Ingat Saya</label>
+                            </div>
+                        </div>
+
+                        {{-- Submit --}}
+                        <button type="submit" class="auth-btn">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Daftar Sekarang</span>
+                            <div class="auth-btn-shine"></div>
+                        </button>
+
+                        <div class="auth-divider">
+                            <span>Sudah punya akun?</span>
+                        </div>
+
+                        <p class="auth-bottom">
+                            Langsung saja <a href="/login">Masuk di sini &rarr;</a>
+                        </p>
+
+                    </form>
                 </div>
             </div>
+
+            {{-- Right: Content --}}
+            <div class="col-lg-5 col-md-10 auth-left-enter" style="animation-name:authRightIn;">
+                <div class="ps-lg-3">
+
+                    <div class="auth-badge">
+                        <span>🚀</span>
+                        <span>Daftar Sekarang</span>
+                        <span class="auth-badge-pulse"></span>
+                    </div>
+
+                    <h2 class="auth-heading">
+                        Melangkah Keluar dari<br>Zona <span class="auth-heading-highlight">Nyaman</span>
+                    </h2>
+
+                    <div class="auth-quote">
+                        <p>"Dan janganlah kamu (merasa) lemah, dan jangan (pula) bersedih hati, sebab kamu paling tinggi (derajatnya), jika kamu orang yang beriman."</p>
+                        <cite>&#9679; QS. Ali 'Imran 3: Ayat 139</cite>
+                    </div>
+
+                    <ul class="auth-features">
+                        <li>
+                            <span class="auth-bullet"></span>
+                            Bergabung dengan ribuan anggota LDK Syahid
+                        </li>
+                        <li>
+                            <span class="auth-bullet"></span>
+                            Akses eksklusif ke program kerja dan kegiatan
+                        </li>
+                        <li>
+                            <span class="auth-bullet"></span>
+                            Kembangkan potensi diri bersama komunitas
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
-<!-- Register Section End -->
 
+<style>
+@keyframes authRightIn {
+    from { opacity: 0; transform: translateX(28px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+</style>
+
+@endsection
+
+@section('scripts')
 <script>
-function togglePassword() {
-    const password = document.getElementById('password');
-    const toggleIcon = document.getElementById('toggleIcon');
-    if (password.type === "password") {
-        password.type = "text";
-        toggleIcon.classList.remove('fa-eye');
-        toggleIcon.classList.add('fa-eye-slash');
-    } else {
-        password.type = "password";
-        toggleIcon.classList.remove('fa-eye-slash');
-        toggleIcon.classList.add('fa-eye');
-    }
+function authTogglePass(inputId, iconId) {
+    var input = document.getElementById(inputId);
+    var icon  = document.getElementById(iconId);
+    var isPass = input.type === 'password';
+    input.type = isPass ? 'text' : 'password';
+    icon.className = isPass ? 'fas fa-eye-slash' : 'fas fa-eye';
 }
 </script>
 @endsection

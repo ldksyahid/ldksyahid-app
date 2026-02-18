@@ -1,91 +1,97 @@
 @extends('landing-page.template.body')
 
 @section('content')
-@php
-    $title = "Lupa Password"
-@endphp
-<style>
-    .form-floating .form-control {
-        border-radius: 12px !important;
-    }
-    .password-toggle {
-        position: absolute;
-        top: 50%;
-        right: 1rem;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #6c757d;
-        font-size: 1.2rem;
-    }
-</style>
+@php $title = "Lupa Password" @endphp
 
-<!-- Forgot Password Section Start -->
-<div class="container-xxl py-5">
-    <div class="container">
-        <div class="row justify-content-center align-items-center g-5">
-            <!-- Left side text content -->
-            <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="mb-5">
-                    <h6 class="text-primary text-uppercase mb-2">Lupa Password</h6>
-                    <h1 class="display-6 mb-3">
-                        Manfaatkan Hidup Kita dengan Baik
-                    </h1>
-                    <p class="text-muted">
-                        "Maka sesungguhnya bersama kesulitan itu ada kemudahan, sesungguhnya bersama kesulitan itu ada kemudahan."
-                        <br> &#9679; (QS. Al-Insyirah 94: Ayat 5-6)
-                    </p>
-                </div>
-            </div>
+{{-- Forgot Password Section --}}
+<div class="auth-center-section">
+    <div class="container" style="position:relative;z-index:1;">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-8 col-sm-10">
+                <div class="auth-center-card">
 
-            <!-- Right side form -->
-            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="card border-0 shadow p-4 rounded-4 bg-light">
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('password.email') }}" autocomplete="off">
-                            @csrf
-                            <div class="mb-4">
-                                <div class="form-floating">
-                                    <input
-                                        type="email"
-                                        class="form-control @error('email') is-invalid @enderror"
-                                        id="email"
-                                        placeholder="name@example.com"
-                                        name="email"
-                                        value="{{ old('email') }}"
-                                        required autocomplete="email" autofocus
-                                    />
-                                    <label for="email">Email</label>
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="d-grid mb-3">
-                                <button class="btn btn-primary py-3 rounded-pill" type="submit">
-                                    Kirim Link Reset Password
-                                </button>
-                            </div>
-
-                            @if (session('status'))
-                                <div class="alert alert-success" role="alert" style="border-radius: 12px;">
-                                    Kami Telah Mengirikan Email untuk Mereset Password Kamu, Silahkan Cek Email Kamu Sekarang!
-                                </div>
-                            @endif
-
-
-                            <div class="text-center">
-                                <p class="mb-0">
-                                    <a href="/login" class="text-primary"><u>Kembali</u></a>
-                                </p>
-                            </div>
-                        </form>
+                    {{-- Badge --}}
+                    <div class="auth-badge" style="margin-bottom:1.5rem;">
+                        <span>🔑</span>
+                        <span>Lupa Password</span>
+                        <span class="auth-badge-pulse"></span>
                     </div>
-                </div> <!-- End Card -->
+
+                    {{-- Icon --}}
+                    <div class="auth-card-icon" style="margin-bottom:1rem;">
+                        <i class="fas fa-key"></i>
+                    </div>
+
+                    <h3 class="auth-card-title mb-2">Reset Password Kamu</h3>
+                    <p class="auth-card-subtitle mb-1">
+                        Tenang, ini mudah! Masukkan email kamu dan kami<br class="d-none d-sm-inline">akan kirimkan link reset password.
+                    </p>
+
+                    {{-- Quote --}}
+                    <div class="auth-quote mt-3 mb-4" style="text-align:left;">
+                        <p>"Maka sesungguhnya bersama kesulitan itu ada kemudahan."</p>
+                        <cite>&#9679; QS. Al-Insyirah 94: Ayat 5-6</cite>
+                    </div>
+
+                    {{-- Status Message --}}
+                    @if (session('status'))
+                        <div class="auth-status-alert">
+                            <span class="auth-status-icon">✅</span>
+                            <div>
+                                <strong>Terkirim!</strong> Kami telah mengirimkan link reset password ke email kamu. Silakan cek inbox sekarang!
+                            </div>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('password.email') }}" autocomplete="off">
+                        @csrf
+
+                        {{-- Email --}}
+                        <div class="auth-input-wrap">
+                            <i class="fas fa-envelope auth-input-icon" style="top:29px;transform:none;"></i>
+                            <div class="form-floating">
+                                <input
+                                    type="email"
+                                    class="form-control has-icon @error('email') is-invalid @enderror"
+                                    id="email"
+                                    name="email"
+                                    placeholder="name@example.com"
+                                    value="{{ old('email') }}"
+                                    required autocomplete="email" autofocus
+                                />
+                                <label for="email" class="has-icon">Email</label>
+                                @error('email')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Submit --}}
+                        <button type="submit" class="auth-btn mt-2">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Kirim Link Reset Password</span>
+                            <div class="auth-btn-shine"></div>
+                        </button>
+
+                    </form>
+
+                    <div class="auth-divider">
+                        <span>Sudah ingat password?</span>
+                    </div>
+
+                    <p class="auth-bottom">
+                        <a href="/login" class="auth-link">&larr; Kembali ke Halaman Masuk</a>
+                    </p>
+
+                    <div class="auth-note">
+                        <i class="fas fa-circle-info"></i>
+                        Link reset password hanya berlaku selama 60 menit. Jika tidak menerima email, periksa folder spam atau coba lagi.
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Forgot Password Section End -->
 
 @endsection
