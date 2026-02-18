@@ -776,6 +776,11 @@
             padding: 1.5rem;
         }
     }
+
+    /* Toast positioned below navbar */
+    .toast-below-navbar {
+        margin-top: 80px !important;
+    }
 </style>
 
 <script>
@@ -857,13 +862,16 @@
     // ========================================
     // AJAX FORM SUBMISSION WITH TOAST
     // ========================================
-    // Initialize Toast (Swal is now loaded)
+    // Initialize Toast (Swal is now loaded) - positioned below navbar
     window.ContactToast = Swal.mixin({
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
         timer: 3000,
-        timerProgressBar: true
+        timerProgressBar: true,
+        customClass: {
+            container: 'toast-below-navbar'
+        }
     });
 
     // Handle contact form submission
