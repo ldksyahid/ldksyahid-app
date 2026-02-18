@@ -29,15 +29,15 @@
                     <ul class="auth-features">
                         <li>
                             <span class="auth-bullet"></span>
-                            Akses penuh ke seluruh fitur LDK Syahid
+                            Menguatkan iman melalui kajian dan pembinaan rutin
                         </li>
                         <li>
                             <span class="auth-bullet"></span>
-                            Pantau program kerja dan kegiatan terkini
+                            Berkontribusi dalam syiar dan dakwah di lingkungan kampus
                         </li>
                         <li>
                             <span class="auth-bullet"></span>
-                            Bergabung dengan komunitas mahasiswa aktif
+                            Menjalin ukhuwah Islamiyah dalam komunitas yang penuh keberkahan
                         </li>
                     </ul>
 
