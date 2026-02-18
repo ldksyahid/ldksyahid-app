@@ -33,7 +33,6 @@
 
                         {{-- Email --}}
                         <div class="auth-input-wrap">
-                            <i class="fas fa-envelope auth-input-icon" style="top:29px;transform:none;"></i>
                             <div class="form-floating">
                                 <input
                                     type="email"
@@ -45,15 +44,15 @@
                                     required autocomplete="email" autofocus
                                 />
                                 <label for="email" class="has-icon">Email</label>
-                                @error('email')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
+                                <i class="fas fa-envelope auth-input-icon"></i>
                             </div>
+                            @error('email')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- New Password --}}
                         <div class="auth-input-wrap">
-                            <i class="fas fa-lock auth-input-icon" style="top:29px;transform:none;"></i>
                             <div class="form-floating">
                                 <input
                                     type="password"
@@ -65,18 +64,18 @@
                                     style="padding-right:3rem;"
                                 />
                                 <label for="rst_password" class="has-icon">Password Baru</label>
-                                @error('password')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
+                                <i class="fas fa-lock auth-input-icon"></i>
+                                <span class="auth-pwd-toggle" onclick="authTogglePass('rst_password','rstPwdIcon')">
+                                    <i id="rstPwdIcon" class="fas fa-eye"></i>
+                                </span>
                             </div>
-                            <span class="auth-pwd-toggle" onclick="authTogglePass('rst_password','rstPwdIcon')">
-                                <i id="rstPwdIcon" class="fas fa-eye"></i>
-                            </span>
+                            @error('password')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- Confirm Password --}}
                         <div class="auth-input-wrap">
-                            <i class="fas fa-shield-alt auth-input-icon" style="top:29px;transform:none;"></i>
                             <div class="form-floating">
                                 <input
                                     type="password"
@@ -88,10 +87,11 @@
                                     style="padding-right:3rem;"
                                 />
                                 <label for="rst_password_confirm" class="has-icon">Konfirmasi Password Baru</label>
+                                <i class="fas fa-shield-alt auth-input-icon"></i>
+                                <span class="auth-pwd-toggle" onclick="authTogglePass('rst_password_confirm','rstConfirmIcon')">
+                                    <i id="rstConfirmIcon" class="fas fa-eye"></i>
+                                </span>
                             </div>
-                            <span class="auth-pwd-toggle" onclick="authTogglePass('rst_password_confirm','rstConfirmIcon')">
-                                <i id="rstConfirmIcon" class="fas fa-eye"></i>
-                            </span>
                         </div>
 
                         {{-- Submit --}}

@@ -37,7 +37,6 @@
 
                         {{-- Password --}}
                         <div class="auth-input-wrap">
-                            <i class="fas fa-lock auth-input-icon" style="top:29px;transform:none;"></i>
                             <div class="form-floating">
                                 <input
                                     type="password"
@@ -49,13 +48,14 @@
                                     style="padding-right:3rem;"
                                 />
                                 <label for="conf_password" class="has-icon">Password</label>
-                                @error('password')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
+                                <i class="fas fa-lock auth-input-icon"></i>
+                                <span class="auth-pwd-toggle" onclick="authTogglePass('conf_password','confPwdIcon')">
+                                    <i id="confPwdIcon" class="fas fa-eye"></i>
+                                </span>
                             </div>
-                            <span class="auth-pwd-toggle" onclick="authTogglePass('conf_password','confPwdIcon')">
-                                <i id="confPwdIcon" class="fas fa-eye"></i>
-                            </span>
+                            @error('password')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- Submit --}}
