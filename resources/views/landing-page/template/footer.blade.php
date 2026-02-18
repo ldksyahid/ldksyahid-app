@@ -156,13 +156,16 @@
                         {{-- Inline Script untuk Newsletter --}}
                         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                         <script>
-                        // Toast configuration
+                        // Toast configuration - positioned below navbar
                         window.NewsletterToast = window.NewsletterToast || Swal.mixin({
                             toast: true,
                             position: 'top-end',
                             showConfirmButton: false,
                             timer: 3000,
-                            timerProgressBar: true
+                            timerProgressBar: true,
+                            customClass: {
+                                container: 'toast-below-navbar'
+                            }
                         });
 
                         // Newsletter submit handler
@@ -723,6 +726,11 @@
         .footer-social {
             justify-content: center;
         }
+    }
+
+    /* Toast positioned below navbar */
+    .toast-below-navbar {
+        margin-top: 80px !important;
     }
 </style>
 
