@@ -485,6 +485,7 @@
 
 .event-card:hover .event-card__btn {
     transform: translateX(5px);
+    color: white;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
