@@ -727,7 +727,6 @@
     overscroll-behavior: contain;
     transform: translateY(100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
 }
 
 .news-sheet.active {
