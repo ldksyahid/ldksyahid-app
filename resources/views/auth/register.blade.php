@@ -157,15 +157,15 @@
                     <ul class="auth-features">
                         <li>
                             <span class="auth-bullet"></span>
-                            Bergabung dengan ribuan anggota LDK Syahid
+                            Bergabung dalam barisan dakwah kampus yang penuh semangat
                         </li>
                         <li>
                             <span class="auth-bullet"></span>
-                            Akses eksklusif ke program kerja dan kegiatan
+                            Mengikuti kajian, pembinaan, dan kegiatan keislaman rutin
                         </li>
                         <li>
                             <span class="auth-bullet"></span>
-                            Kembangkan potensi diri bersama komunitas
+                            Bertumbuh dalam iman, ilmu, dan ukhuwah Islamiyah
                         </li>
                     </ul>
 
