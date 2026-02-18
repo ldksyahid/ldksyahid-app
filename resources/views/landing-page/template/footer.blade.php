@@ -182,8 +182,9 @@
                                 return false;
                             }
 
-                            // Disable button
+                            // Disable button & show loading animation
                             submitBtn.disabled = true;
+                            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
                             // Send AJAX request
                             const formData = new FormData(form);
@@ -211,6 +212,7 @@
                             })
                             .finally(() => {
                                 submitBtn.disabled = false;
+                                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
                             });
 
                             return false;

@@ -64,22 +64,17 @@
 
         {{-- Resend --}}
         <p class="vepm-resend-label">Tidak menerima email?</p>
-        <form method="POST" action="{{ route('verification.resend') }}">
+        <form method="POST" action="{{ route('verification.resend') }}" id="resendVerificationForm" onsubmit="return handleResendVerification(event);">
             @csrf
-            <button type="submit" class="vepm-resend-btn">
+            <button type="submit" class="vepm-resend-btn" id="resendBtn">
                 <span class="vepm-btn-icon"><i class="fas fa-paper-plane"></i></span>
-                <span>Kirim Ulang Email</span>
+                <span id="resendBtnText">Kirim Ulang Email</span>
                 <div class="vepm-btn-shine"></div>
             </button>
         </form>
 
-        {{-- Success --}}
-        @if (session('resent'))
-        <div class="vepm-success">
-            <span>🎊</span>
-            <div><strong>Terkirim!</strong> Segera periksa inbox kamu ya!</div>
-        </div>
-        @endif
+        {{-- Message Alert --}}
+        <div id="resendMessage" class="vepm-message" style="display: none;"></div>
 
         {{-- Note --}}
         <div class="vepm-note">
@@ -411,6 +406,33 @@
     }
     .vepm-note i { color: var(--primary); margin-top: 2px; flex-shrink: 0; }
 
+    /* Message Alert */
+    .vepm-message {
+        margin-top: 1rem;
+        padding: 0.85rem 1rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        animation: veSuccessIn 0.4s cubic-bezier(0.4,0,0.2,1);
+        text-align: left;
+    }
+    .vepm-message.success {
+        background: linear-gradient(135deg, #e8fdf5, #d0faf0);
+        border: 1px solid rgba(0,167,157,0.2);
+        color: var(--dark);
+    }
+    .vepm-message.error {
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        border: 1px solid rgba(239,68,68,0.2);
+        color: #991b1b;
+    }
+    .vepm-message-icon {
+        font-size: 1.4rem;
+        flex-shrink: 0;
+    }
+
     /* Responsive */
     @media (max-width: 575.98px) {
         .vepm-box { padding: 2rem 1.25rem 1.75rem; border-radius: 22px; }
@@ -462,6 +484,71 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Escape') closeModal();
     });
 });
+</script>
+
+<script>
+// Handle resend verification email
+function handleResendVerification(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const form = event.target;
+    const submitBtn = document.getElementById('resendBtn');
+    const btnIcon = submitBtn.querySelector('.vepm-btn-icon');
+    const btnText = document.getElementById('resendBtnText');
+    const messageDiv = document.getElementById('resendMessage');
+    const originalText = btnText.textContent;
+
+    // Hide previous message
+    messageDiv.style.display = 'none';
+    messageDiv.className = 'vepm-message';
+
+    // Disable button & show loading animation
+    submitBtn.disabled = true;
+    btnIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btnText.textContent = 'Mengirim...';
+
+    // Send AJAX request
+    const formData = new FormData(form);
+
+    fetch('{{ route("verification.resend") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success message
+            messageDiv.className = 'vepm-message success';
+            messageDiv.innerHTML = '<span class="vepm-message-icon">🎊</span><div><strong>Terkirim!</strong> ' + (data.message || 'Email verifikasi berhasil dikirim ulang. Segera periksa inbox kamu ya!') + '</div>';
+            messageDiv.style.display = 'flex';
+        } else {
+            // Show error message
+            const errorMsg = data.message || 'Terjadi kesalahan saat mengirim email!';
+            messageDiv.className = 'vepm-message error';
+            messageDiv.innerHTML = '<span class="vepm-message-icon">⚠️</span><div><strong>Gagal!</strong> ' + errorMsg + '</div>';
+            messageDiv.style.display = 'flex';
+        }
+    })
+    .catch(error => {
+        console.error('Resend verification error:', error);
+        // Show network error
+        messageDiv.className = 'vepm-message error';
+        messageDiv.innerHTML = '<span class="vepm-message-icon">⚠️</span><div><strong>Error!</strong> Terjadi kesalahan jaringan. Silakan coba lagi!</div>';
+        messageDiv.style.display = 'flex';
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        btnIcon.innerHTML = '<i class="fas fa-paper-plane"></i>';
+        btnText.textContent = originalText;
+    });
+
+    return false;
+}
 </script>
 
 @endif

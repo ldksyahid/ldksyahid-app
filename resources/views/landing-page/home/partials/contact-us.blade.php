@@ -905,11 +905,15 @@
 
         // Show loading state
         const submitBtn = form.querySelector('.contact-form__submit');
+        const btnEmoji = submitBtn.querySelector('.btn-emoji');
         const btnText = submitBtn.querySelector('span:not(.btn-emoji)');
+        const btnIcon = submitBtn.querySelector('i');
         const originalText = btnText.textContent;
 
         submitBtn.disabled = true;
+        btnEmoji.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         btnText.textContent = 'Mengirim...';
+        if (btnIcon) btnIcon.style.display = 'none';
 
         // Send AJAX request
         const formData = new FormData(form);
@@ -947,7 +951,9 @@
         })
         .finally(() => {
             submitBtn.disabled = false;
+            btnEmoji.innerHTML = '🚀';
             btnText.textContent = originalText;
+            if (btnIcon) btnIcon.style.display = '';
         });
 
         return false;
