@@ -968,7 +968,6 @@
     overflow-y: auto;
     transform: translateY(100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 -4px 20px rgba(0, 167, 157, 0.12);
 }
 
 .testimony-sheet.active {
