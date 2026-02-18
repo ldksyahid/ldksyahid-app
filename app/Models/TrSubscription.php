@@ -95,7 +95,7 @@ class TrSubscription extends Model
         return $request->validate($rules, [
             'email.required' => 'Email wajib diisi!',
             'email.email'    => 'Format email tidak valid!',
-            'email.unique'   => 'Email ini sudah terdaftar di newsletter kami!',
+            'email.unique'   => 'Email ini sudah terdaftar sebagai langganan kami!',
         ]);
     }
 
@@ -121,7 +121,7 @@ class TrSubscription extends Model
 
             return [
                 'success' => true,
-                'message' => 'Terima kasih! Email Anda berhasil didaftarkan untuk berlangganan kami. 🎉',
+                'message' => 'Terima kasih! Email Anda berhasil didaftarkan untuk berlangganan kepada kami. 🎉',
             ];
         } catch (\Illuminate\Validation\ValidationException $e) {
             return [
