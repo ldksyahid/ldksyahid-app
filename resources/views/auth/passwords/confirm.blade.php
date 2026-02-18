@@ -1,79 +1,102 @@
 @extends('landing-page.template.body')
 
 @section('content')
-<style>
-    .form-floating .form-control {
-        border-radius: 12px !important;
-    }
-    .password-toggle {
-        position: absolute;
-        top: 50%;
-        right: 1rem;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #6c757d;
-        font-size: 1.2rem;
-    }
-</style>
 
-<!-- Confirm Password Section Start -->
-<div class="container-xxl py-5">
-    <div class="container">
-        <div class="row justify-content-center align-items-center g-5">
-            <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="mb-5">
-                    <h6 class="text-primary text-uppercase mb-2">Konfirmasi Password</h6>
-                    <h1 class="display-6 mb-3">
-                        Pastikan Keamanan Akun Kamu
-                    </h1>
-                    <p class="text-muted">
-                        "Dan janganlah kamu (merasa) lemah, dan jangan (pula) bersedih hati, sebab kamu paling tinggi (derajatnya), jika kamu orang yang beriman."
-                        <br> &#9679; (QS. Ali 'Imran 3: Ayat 139)
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="card border-0 shadow p-4 rounded-4 bg-light">
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('password.confirm') }}">
-                            @csrf
+{{-- Confirm Password Section --}}
+<div class="auth-center-section">
+    <div class="container" style="position:relative;z-index:1;">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7 col-sm-10">
+                <div class="auth-center-card">
 
-                            <div class="mb-4">
-                                <div class="form-floating">
-                                    <input
-                                        id="password"
-                                        type="password"
-                                        class="form-control @error('password') is-invalid @enderror"
-                                        name="password"
-                                        required autocomplete="current-password"
-                                    />
-                                    <label for="password">Password</label>
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="d-grid mb-3">
-                                <button class="btn btn-primary py-3 rounded-pill" type="submit">
-                                    Konfirmasi Password
-                                </button>
-                            </div>
-
-                            @if (Route::has('password.request'))
-                                <div class="text-center">
-                                    <a class="btn btn-link small text-primary" href="{{ route('password.request') }}">
-                                        Lupa Password?
-                                    </a>
-                                </div>
-                            @endif
-                        </form>
+                    {{-- Badge --}}
+                    <div class="auth-badge" style="margin-bottom:1.5rem;">
+                        <span>🔒</span>
+                        <span>Konfirmasi Identitas</span>
+                        <span class="auth-badge-pulse"></span>
                     </div>
-                </div> <!-- End Card -->
+
+                    {{-- Icon --}}
+                    <div class="auth-card-icon" style="margin-bottom:1rem;">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+
+                    <h3 class="auth-card-title mb-2">Pastikan Ini Kamu</h3>
+                    <p class="auth-card-subtitle mb-1">
+                        Area ini memerlukan konfirmasi identitas. Masukkan<br class="d-none d-sm-inline">password kamu untuk melanjutkan.
+                    </p>
+
+                    {{-- Quote --}}
+                    <div class="auth-quote mt-3 mb-4" style="text-align:left;">
+                        <p>"Dan janganlah kamu (merasa) lemah, dan jangan (pula) bersedih hati, sebab kamu paling tinggi (derajatnya), jika kamu orang yang beriman."</p>
+                        <cite>&#9679; QS. Ali 'Imran 3: Ayat 139</cite>
+                    </div>
+
+                    <form method="POST" action="{{ route('password.confirm') }}">
+                        @csrf
+
+                        {{-- Password --}}
+                        <div class="auth-input-wrap">
+                            <i class="fas fa-lock auth-input-icon" style="top:29px;transform:none;"></i>
+                            <div class="form-floating">
+                                <input
+                                    type="password"
+                                    class="form-control has-icon @error('password') is-invalid @enderror"
+                                    id="conf_password"
+                                    name="password"
+                                    placeholder="Password"
+                                    required autocomplete="current-password"
+                                    style="padding-right:3rem;"
+                                />
+                                <label for="conf_password" class="has-icon">Password</label>
+                                @error('password')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <span class="auth-pwd-toggle" onclick="authTogglePass('conf_password','confPwdIcon')">
+                                <i id="confPwdIcon" class="fas fa-eye"></i>
+                            </span>
+                        </div>
+
+                        {{-- Submit --}}
+                        <button type="submit" class="auth-btn mt-2">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Konfirmasi Password</span>
+                            <div class="auth-btn-shine"></div>
+                        </button>
+
+                    </form>
+
+                    @if (Route::has('password.request'))
+                        <div class="auth-divider">
+                            <span>Lupa password?</span>
+                        </div>
+                        <p class="auth-bottom">
+                            <a href="{{ route('password.request') }}" class="auth-link">Reset Password di sini &rarr;</a>
+                        </p>
+                    @endif
+
+                    <div class="auth-note">
+                        <i class="fas fa-circle-info"></i>
+                        Halaman ini dilindungi untuk keamanan akun kamu. Konfirmasi diperlukan sebelum mengakses area sensitif.
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Confirm Password Section End -->
 
+@endsection
+
+@section('scripts')
+<script>
+function authTogglePass(inputId, iconId) {
+    var input = document.getElementById(inputId);
+    var icon  = document.getElementById(iconId);
+    var isPass = input.type === 'password';
+    input.type = isPass ? 'text' : 'password';
+    icon.className = isPass ? 'fas fa-eye-slash' : 'fas fa-eye';
+}
+</script>
 @endsection
