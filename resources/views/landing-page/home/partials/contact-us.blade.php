@@ -86,6 +86,7 @@
                           enctype="multipart/form-data"
                           class="contact-form"
                           id="contact-form"
+                          onsubmit="return handleContactSubmit(event);"
                           novalidate>
                         @csrf
                         @method('POST')
@@ -845,38 +846,110 @@
                 }
             }
 
-            // Form submission handler
-            contactForm.addEventListener('submit', function(e) {
-                let isValid = true;
-
-                // Validate all fields
-                formInputs.forEach(input => {
-                    validateField(input);
-                    if (!input.validity.valid || input.value.trim() === '') {
-                        isValid = false;
-                    }
-                });
-
-                if (!isValid) {
-                    e.preventDefault();
-
-                    // Scroll to first error
-                    const firstError = contactForm.querySelector('.contact-form__input.invalid, .contact-form__textarea.invalid');
-                    if (firstError) {
-                        firstError.focus();
-                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-
-                    return false;
-                }
-
-                // Show loading state
-                const submitBtn = this.querySelector('.contact-form__submit');
-                const btnText = submitBtn.querySelector('span:not(.btn-emoji)');
-
-                submitBtn.disabled = true;
-                btnText.textContent = 'Mengirim...';
-            });
         }
     });
+</script>
+
+{{-- Load SweetAlert2 FIRST before using it --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // ========================================
+    // AJAX FORM SUBMISSION WITH TOAST
+    // ========================================
+    // Initialize Toast (Swal is now loaded)
+    window.ContactToast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    });
+
+    // Handle contact form submission
+    window.handleContactSubmit = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const form = event.target;
+        const formInputs = form.querySelectorAll('.contact-form__input, .contact-form__textarea');
+        let isValid = true;
+
+        // Validate all fields
+        formInputs.forEach(input => {
+            const parent = input.closest('.contact-form__group');
+
+            if (!input.validity.valid || input.value.trim() === '') {
+                input.classList.add('invalid');
+                input.classList.remove('valid');
+                parent.classList.add('has-error');
+                isValid = false;
+            } else {
+                input.classList.remove('invalid');
+                input.classList.add('valid');
+                parent.classList.remove('has-error');
+            }
+        });
+
+        if (!isValid) {
+            // Scroll to first error
+            const firstError = form.querySelector('.contact-form__input.invalid, .contact-form__textarea.invalid');
+            if (firstError) {
+                firstError.focus();
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            ContactToast.fire({ icon: 'error', title: 'Harap lengkapi semua field yang wajib diisi!' });
+            return false;
+        }
+
+        // Show loading state
+        const submitBtn = form.querySelector('.contact-form__submit');
+        const btnText = submitBtn.querySelector('span:not(.btn-emoji)');
+        const originalText = btnText.textContent;
+
+        submitBtn.disabled = true;
+        btnText.textContent = 'Mengirim...';
+
+        // Send AJAX request
+        const formData = new FormData(form);
+
+        fetch('/about/contact/message/store', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                ContactToast.fire({
+                    icon: 'success',
+                    title: data.message || 'Pesan berhasil dikirim! Terima kasih telah menghubungi kami. 🎉'
+                });
+
+                // Reset form
+                form.reset();
+                formInputs.forEach(input => {
+                    input.classList.remove('valid', 'invalid');
+                    input.closest('.contact-form__group').classList.remove('has-error');
+                });
+            } else {
+                const errorMsg = data.message || 'Terjadi kesalahan saat mengirim pesan!';
+                ContactToast.fire({ icon: 'error', title: errorMsg });
+            }
+        })
+        .catch(error => {
+            console.error('Contact form error:', error);
+            ContactToast.fire({ icon: 'error', title: 'Terjadi kesalahan jaringan. Silakan coba lagi!' });
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            btnText.textContent = originalText;
+        });
+
+        return false;
+    };
 </script>
