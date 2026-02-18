@@ -131,36 +131,92 @@
                     <div class="footer-section">
                         <h5 class="footer-title">
                             <span class="title-icon">💌</span>
-                            Newsletter
+                            Berlangganan
                         </h5>
                         <p class="footer-newsletter-text">
                             Yuk berlangganan! Dapatkan info seru dan inspirasi langsung ke email kamu.
                         </p>
-                        <form action="{{ route('subscribers.store') }}" method="post" class="footer-subscribe-form">
+
+                        {{-- Subscribe Form --}}
+                        <form id="newsletterForm" class="footer-subscribe-form" method="POST" action="{{ route('subscribers.store') }}" onsubmit="return handleNewsletterSubmit(event);">
                             @csrf
                             <div class="subscribe-input-wrapper">
                                 <input class="subscribe-input"
                                        type="email"
+                                       id="newsletterEmail"
                                        name="email"
                                        placeholder="Email kamu..."
                                        required />
-                                <button type="submit" class="subscribe-btn">
+                                <button type="submit" class="subscribe-btn" id="subscribeBtn">
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
                             </div>
-                            @if(session('newsletter_success'))
-                            <div class="newsletter-alert newsletter-success">
-                                <i class="fas fa-check-circle"></i>
-                                <span>{{ session('newsletter_success') }}</span>
-                            </div>
-                            @endif
-                            @if(session('newsletter_error'))
-                            <div class="newsletter-alert newsletter-error">
-                                <i class="fas fa-exclamation-circle"></i>
-                                <span>{{ session('newsletter_error') }}</span>
-                            </div>
-                            @endif
                         </form>
+
+                        {{-- Inline Script untuk Newsletter --}}
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        <script>
+                        // Toast configuration
+                        window.NewsletterToast = window.NewsletterToast || Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+
+                        // Newsletter submit handler
+                        function handleNewsletterSubmit(event) {
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                            const form = event.target;
+                            const emailInput = document.getElementById('newsletterEmail');
+                            const submitBtn = document.getElementById('subscribeBtn');
+                            const email = emailInput.value.trim();
+
+                            // Validate email
+                            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                            if (!email || !emailRegex.test(email)) {
+                                NewsletterToast.fire({ icon: 'error', title: 'Masukkan alamat email yang valid!' });
+                                return false;
+                            }
+
+                            // Disable button
+                            submitBtn.disabled = true;
+
+                            // Send AJAX request
+                            const formData = new FormData(form);
+                            fetch('{{ route("subscribers.store") }}', {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    NewsletterToast.fire({ icon: 'success', title: data.message });
+                                    form.reset();
+                                } else {
+                                    const errorMsg = data.errors?.email?.[0] || data.message || 'Terjadi kesalahan!';
+                                    NewsletterToast.fire({ icon: 'error', title: errorMsg });
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Newsletter error:', error);
+                                NewsletterToast.fire({ icon: 'error', title: 'Terjadi kesalahan jaringan!' });
+                            })
+                            .finally(() => {
+                                submitBtn.disabled = false;
+                            });
+
+                            return false;
+                        }
+                        </script>
+
                         <div class="footer-fun-text">
                             <span>Mari berteman! 🤝</span>
                         </div>
@@ -178,7 +234,6 @@
                         <a href="/" class="copyright-link">UKM LDK Syahid</a>
                         <span class="copyright-heart">🤝</span>
                         <span>Kita Adalah Saudara</span>
-
                     </div>
                     <div class="copyright-right">
                         <span>Developed by</span>
@@ -192,12 +247,19 @@
 </footer>
 
 <style>
+    :root {
+        --primary: #00a79d;
+        --primary-gradient: linear-gradient(135deg, #00a79d 0%, #00c9b7 100%);
+        --font-primary: 'Inter', sans-serif;
+    }
+
     .footer-fun {
         position: relative;
         background: transparent;
         border-radius: 40px 40px 0 0;
         overflow: hidden;
         margin-bottom: 0;
+        font-family: var(--font-primary);
     }
 
     .footer-wave {
@@ -219,7 +281,6 @@
         overflow: hidden;
     }
 
-    /* Decorative background pattern */
     .footer-main::before {
         content: '';
         position: absolute;
@@ -233,7 +294,6 @@
         pointer-events: none;
     }
 
-    /* Brand Section */
     .footer-brand-section {
         position: relative;
         text-align: left;
@@ -243,6 +303,7 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
+        flex-wrap: wrap;
     }
 
     .footer-logo-wrapper {
@@ -294,6 +355,7 @@
         font-size: 1.4rem;
         font-weight: 700;
         color: white;
+        line-height: 1.2;
     }
 
     .brand-tagline {
@@ -310,10 +372,10 @@
         text-align: left;
     }
 
-    /* Social Buttons */
     .footer-social {
         display: flex;
         gap: 0.75rem;
+        flex-wrap: wrap;
     }
 
     .social-btn {
@@ -327,6 +389,7 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
+        text-decoration: none;
     }
 
     .social-facebook {
@@ -374,7 +437,6 @@
         height: 100%;
     }
 
-    /* Footer Section */
     .footer-section {
         position: relative;
         text-align: left;
@@ -395,7 +457,6 @@
         font-size: 1.2rem;
     }
 
-    /* Contact List */
     .footer-contact-list {
         list-style: none;
         padding: 0;
@@ -424,7 +485,6 @@
         flex-shrink: 0;
     }
 
-    /* Links Grid */
     .footer-links-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -473,7 +533,6 @@
         color: white;
     }
 
-    /* Newsletter */
     .footer-newsletter-text {
         color: #a0a8b3;
         font-size: 0.85rem;
@@ -535,56 +594,24 @@
         transform: scale(0.95);
     }
 
-    /* Newsletter Alerts */
-    .newsletter-alert {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
-        border-radius: 12px;
-        font-size: 0.875rem;
-        margin-top: 1rem;
-        animation: slideDown 0.3s ease-out;
+    .subscribe-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
     }
 
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .newsletter-success {
-        background: rgba(16, 185, 129, 0.15);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        color: #10b981;
-    }
-
-    .newsletter-success i {
-        font-size: 1rem;
-    }
-
-    .newsletter-error {
-        background: rgba(239, 68, 68, 0.15);
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        color: #ef4444;
-    }
-
-    .newsletter-error i {
-        font-size: 1rem;
+    .subscribe-btn:disabled:hover {
+        transform: none;
+        box-shadow: none;
     }
 
     .footer-fun-text {
         color: #a0a8b3;
         font-size: 0.85rem;
         text-align: left;
+        margin-top: 1rem;
     }
 
-    /* Copyright */
     .footer-copyright {
         border-top: 1px solid rgba(255, 255, 255, 0.08);
         padding: 1.25rem 0;
@@ -606,6 +633,7 @@
         gap: 0.5rem;
         color: #6b7280;
         font-size: 0.85rem;
+        flex-wrap: wrap;
     }
 
     .copyright-link {
@@ -629,7 +657,6 @@
         50% { transform: scale(1.1); }
     }
 
-    /* Mobile Responsive */
     @media (max-width: 991.98px) {
         .footer-fun {
             border-radius: 28px 28px 0 0;
@@ -658,6 +685,10 @@
             border-radius: 20px 20px 0 0;
         }
 
+        .footer-wave {
+            height: 40px;
+        }
+
         .footer-links-grid {
             grid-template-columns: repeat(2, 1fr);
         }
@@ -675,5 +706,21 @@
             width: 100%;
             height: 44px;
         }
+
+        .footer-brand {
+            justify-content: center;
+        }
+
+        .footer-brand-section,
+        .footer-section,
+        .footer-newsletter-text,
+        .footer-fun-text {
+            text-align: center;
+        }
+
+        .footer-social {
+            justify-content: center;
+        }
     }
 </style>
+
