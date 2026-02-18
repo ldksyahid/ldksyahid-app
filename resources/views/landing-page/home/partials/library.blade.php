@@ -494,6 +494,7 @@
 
 .library-card:hover .library-card__btn {
     transform: scale(1.05);
+    color: white;
     box-shadow: 0 6px 20px rgba(0, 167, 157, 0.5);
 }
 
