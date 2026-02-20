@@ -197,7 +197,7 @@
     text-align: justify;
 }
 
-/* ── BAWAH: bagan full width ── */
+/* ── BAWAH: bagan full width (collapsible) ── */
 .ms-di-right {
     display: flex;
     flex-direction: column;
@@ -210,10 +210,73 @@
 .ms-di-desc-wrap { display: none; }
 
 .ms-di-chart-section {
-    padding: 1.5rem 2rem 2rem;
+    padding: 0;
 }
 
-.ms-di-chart-section > img {
+/* Toggle button */
+.ms-di-chart-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.ms-di-chart-toggle:hover,
+.ms-di-chart-toggle:focus,
+.ms-di-chart-toggle:active,
+.ms-di-chart-toggle:focus-visible {
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+}
+
+.ms-di-chart-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.ms-di-chart-toggle-icon {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 0.72rem;
+    flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+.ms-di-chart-section.ms-cs-open .ms-di-chart-toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* Collapsible body */
+.ms-di-chart-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1),
+                padding 0.35s ease;
+    padding: 0 2rem;
+}
+
+.ms-di-chart-section.ms-cs-open .ms-di-chart-body {
+    max-height: 3000px;
+    padding: 0 2rem 1.75rem;
+}
+
+.ms-di-chart-body > img {
     width: 100%;
     height: auto;
     border-radius: var(--radius-lg);
@@ -926,15 +989,31 @@ body.ms-modal-open .back-to-top {
                     </div>
                     {{-- /ATAS --}}
 
-                    {{-- ── BAWAH: bagan struktur full width ── --}}
+                    {{-- ── BAWAH: bagan struktur (collapsible) ── --}}
                     <div class="ms-di-right">
                         <div class="ms-di-chart-section">
-                            <img
-                                src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}=s3000"
-                                alt="Bagan Struktur LDK Syahid {{ $data->batch }}"
-                                loading="lazy"
-                                onerror="if(!this.dataset.err){this.dataset.err=1;this.style.display='none';}"
-                            >
+
+                            {{-- Toggle button --}}
+                            <button class="ms-di-chart-toggle" type="button" aria-expanded="false">
+                                <span class="ms-di-chart-toggle-label">
+                                    <i class="fas fa-sitemap" style="color:var(--primary);"></i>
+                                    Bagan Struktur Kepengurusan
+                                </span>
+                                <span class="ms-di-chart-toggle-icon">
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+                            </button>
+
+                            {{-- Collapsible chart --}}
+                            <div class="ms-di-chart-body">
+                                <img
+                                    src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}=s3000"
+                                    alt="Bagan Struktur LDK Syahid {{ $data->batch }}"
+                                    loading="lazy"
+                                    onerror="if(!this.dataset.err){this.dataset.err=1;this.style.display='none';}"
+                                >
+                            </div>
+
                         </div>
                     </div>
                     {{-- /BAWAH --}}
@@ -1292,7 +1371,17 @@ body.ms-modal-open .back-to-top {
         });
     }
 
-    /* ─── 5. MOBILE OWL CAROUSEL + DOTS-ONLY NAV ─── */
+    /* ─── 5. DESKTOP CHART COLLAPSE ─── */
+    document.querySelectorAll('.ms-di-chart-section').forEach(function (section) {
+        var btn = section.querySelector('.ms-di-chart-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+            var isOpen = section.classList.toggle('ms-cs-open');
+            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+    });
+
+    /* ─── 6. MOBILE OWL CAROUSEL + DOTS-ONLY NAV ─── */
     $(document).ready(function () {
         var $c = $('#msCarousel');
         if (!$c.length || window.innerWidth > 991) return;
