@@ -68,7 +68,7 @@
 }
 
 .ms-di-card:hover {
-    transform: scale(1.007);
+    transform: scale(1.003);
     box-shadow: 0 16px 48px rgba(0,0,0,0.1), 0 4px 16px rgba(0,167,157,0.1);
 }
 
