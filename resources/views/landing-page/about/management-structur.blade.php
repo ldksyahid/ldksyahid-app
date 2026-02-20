@@ -47,280 +47,126 @@
 .ms-d3 { transition-delay: 0.3s; }
 
 /* ============================================================
-   DESKTOP CARD
+   DESKTOP INLINE — konten sheet ditampilkan langsung di halaman
    ============================================================ */
-.ms-card {
+.ms-desktop-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.ms-di-card {
+    display: grid;
+    grid-template-columns: 300px 1fr;
     background: var(--white);
-    border-radius: var(--radius-2xl);
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
     border: 1px solid rgba(0,167,157,0.08);
     overflow: hidden;
-    margin-bottom: 2.5rem;
-    transition: box-shadow 0.35s ease, transform 0.35s ease;
 }
 
-.ms-card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-4px);
+/* ── Kolom kiri: hero + foto ── */
+.ms-di-left {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(0,0,0,0.06);
 }
 
-/* === Gradient Hero Header === */
-.ms-hero {
+.ms-di-hero {
     background: linear-gradient(130deg, var(--primary) 0%, #007f78 55%, #005e58 100%);
-    padding: 2rem 2.5rem;
+    padding: 1.25rem 1.5rem 1.1rem;
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
-/* Decorative circles inside hero */
-.ms-hero::before {
+.ms-di-hero::before {
     content: '';
     position: absolute;
-    top: -50px; right: -50px;
-    width: 200px; height: 200px;
-    background: rgba(255,255,255,0.06);
+    top: -25px; right: -25px;
+    width: 90px; height: 90px;
+    background: rgba(255,255,255,0.07);
     border-radius: 50%;
     pointer-events: none;
 }
 
-.ms-hero::after {
-    content: '';
-    position: absolute;
-    bottom: -40px; left: 15%;
-    width: 130px; height: 130px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-.ms-hero-inner {
+.ms-di-hero-row {
     position: relative;
     z-index: 1;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
-.ms-hero-eyebrow {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: rgba(255,255,255,0.7);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 0.4rem;
-}
-
-.ms-hero-title {
-    font-size: 1.45rem;
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.25;
-    margin: 0 0 0.6rem;
-}
-
-.ms-hero-period {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    background: rgba(255,255,255,0.14);
-    border: 1px solid rgba(255,255,255,0.22);
-    color: rgba(255,255,255,0.92);
-    font-size: 0.78rem;
-    font-weight: 600;
-    padding: 0.28rem 0.85rem;
-    border-radius: var(--radius-pill);
-    backdrop-filter: blur(4px);
-}
-
-/* "Terkini" amber pill — stays inside hero box */
-.ms-hero-current {
+.ms-di-period-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    background: linear-gradient(135deg, #fbbf24, #f59e0b);
-    color: #fff;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: rgba(255,255,255,0.92);
     font-size: 0.7rem;
-    font-weight: 700;
-    padding: 0.28rem 0.85rem;
+    font-weight: 600;
+    padding: 0.22rem 0.7rem;
     border-radius: var(--radius-pill);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 14px rgba(245,158,11,0.45);
-    white-space: nowrap;
-    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    margin-top: 0.55rem;
 }
 
-/* === Card Body — Description + Photo === */
-.ms-body {
-    padding: 2.5rem;
-}
-
-.ms-description {
-    color: var(--secondary-dark);
-    font-size: 0.92rem;
-    line-height: 1.8;
-    text-align: justify;
-    margin-bottom: 1.5rem;
-}
-
-/* Animated feature list */
-.ms-feat-list {
-    list-style: none;
-    padding: 0; margin: 0;
-}
-
-.ms-feat-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.45rem 0;
-    font-size: 0.875rem;
-    color: var(--secondary-dark);
-    opacity: 0;
-    transform: translateX(-14px);
-}
-
-.ms-feat-list li.ms-li-visible {
-    animation: msFeatureIn 0.5s ease forwards;
-}
-
-@keyframes msFeatureIn {
-    to { opacity: 1; transform: translateX(0); }
-}
-
-/* Animated growing bullet */
-.ms-bullet {
-    width: 10px; height: 10px; min-width: 10px;
-    background: var(--primary-gradient);
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 0.35rem;
-    box-shadow: 0 0 0 0 rgba(0,167,157,0.4);
-    animation: msBulletGrow 2.2s ease-in-out infinite;
-}
-
-.ms-feat-list li:nth-child(2) .ms-bullet { animation-delay: 0.4s; }
-.ms-feat-list li:nth-child(3) .ms-bullet { animation-delay: 0.8s; }
-
-@keyframes msBulletGrow {
-    0%,100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(0,167,157,0.4); }
-    50%     { transform: scale(1.45); box-shadow: 0 0 0 7px rgba(0,167,157,0); }
-}
-
-/* === Profile Photo — full image, NO cropping === */
-.ms-photo-frame {
-    background: linear-gradient(135deg, #e4faf6 0%, #edf6ff 50%, #fce8ff 100%);
-    border-radius: var(--radius-xl);
-    border: 2px solid rgba(0,167,157,0.1);
-    padding: 1.75rem 1.25rem;
+.ms-di-photo-area {
+    background: linear-gradient(135deg, #e4faf6 0%, #edf6ff 55%, #fce8ff 100%);
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 280px;
-    transition: var(--transition-smooth);
-    overflow: hidden;
+    padding: 2rem 1.5rem;
+    min-height: 260px;
 }
 
-.ms-card:hover .ms-photo-frame {
-    border-color: rgba(0,167,157,0.28);
-}
-
-.ms-photo-frame img {
+.ms-di-photo-area img {
     max-width: 100%;
-    max-height: 270px;
+    max-height: 320px;
     width: auto;
     height: auto;
-    object-fit: contain;      /* ← FULL IMAGE, no cropping */
+    object-fit: contain;
     border-radius: var(--radius-lg);
-    filter: drop-shadow(0 6px 20px rgba(0,0,0,0.13));
-    transition: transform 0.4s ease, filter 0.4s ease;
+    filter: drop-shadow(0 4px 14px rgba(0,0,0,0.13));
     display: block;
 }
 
-.ms-card:hover .ms-photo-frame img {
-    transform: scale(1.03) translateY(-3px);
-    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.18));
-}
-
-/* === Structure Chart — full width, full height === */
-.ms-chart {
-    border-top: 1px solid rgba(0,0,0,0.05);
-    background: var(--gray-100);
-    padding: 2rem 2.5rem 2.5rem;
-}
-
-.ms-chart-label {
-    font-size: 0.74rem;
-    font-weight: 700;
-    color: var(--secondary);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 1rem;
+/* ── Kolom kanan: deskripsi + bagan ── */
+.ms-di-right {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    flex-direction: column;
 }
 
-.ms-chart-wrap {
-    position: relative;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    cursor: pointer;
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow 0.3s ease;
-    background: var(--white);
-    display: block;
+.ms-di-desc-wrap {
+    padding: 1.5rem 1.75rem 1.1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
-.ms-chart-wrap:hover     { box-shadow: var(--shadow-md); }
-.ms-chart-wrap:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+.ms-di-chart-section {
+    padding: 1.25rem 1.75rem 1.75rem;
+    flex: 1;
+}
 
-.ms-chart-wrap > img {
+.ms-di-chart-section > img {
     width: 100%;
-    height: auto;        /* ← FULL IMAGE HEIGHT — no cropping */
+    height: auto;
+    border-radius: var(--radius-lg);
     display: block;
-    transition: transform 0.55s ease;
+    box-shadow: var(--shadow-sm);
+    cursor: zoom-in;
+    transition: opacity 0.2s ease;
 }
 
-.ms-chart-wrap:hover > img { transform: scale(1.008); }
+.ms-di-chart-section > img:hover { opacity: 0.92; }
 
-.ms-chart-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,167,157,0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s ease;
-}
-
-.ms-chart-wrap:hover .ms-chart-overlay { background: rgba(0,167,157,0.06); }
-
-.ms-expand-btn {
-    background: rgba(255,255,255,0.97);
-    color: var(--primary);
-    border: 1px solid rgba(0,167,157,0.2);
-    border-radius: var(--radius-pill);
-    padding: 0.6rem 1.5rem;
-    font-size: 0.82rem;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    box-shadow: var(--shadow);
-    opacity: 0;
-    transform: scale(0.8) translateY(8px);
-    transition: var(--transition-smooth);
-    cursor: pointer;
-    pointer-events: none;
-}
-
-.ms-chart-wrap:hover .ms-expand-btn {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    pointer-events: all;
+/* Medium screen — kurangi kolom kiri */
+@media (max-width: 1199.98px) {
+    .ms-di-card { grid-template-columns: 240px 1fr; }
 }
 
 /* ============================================================
@@ -932,9 +778,9 @@ body.ms-modal-open .back-to-top {
 
 @media (max-width: 575.98px) {
     .ms-section  { padding: 4.5rem 0 2rem; }
-    .ms-chart    { padding: 1.25rem 1rem 1.5rem; }
     .ms-lb-body  { padding: 1rem; }
 }
+
 </style>
 @endsection
 
@@ -961,110 +807,93 @@ body.ms-modal-open .back-to-top {
             </h2>
             <div class="section-divider mx-auto"></div>
             <p class="section-description mt-3">
-                Mengenal pengurus dan struktur organisasi LDK Syahid UIN Jakarta secara lebih dekat
+                Mengenal pengurus dan struktur UKM LDK Syahid UIN Jakarta secara lebih dekat
             </p>
         </div>
 
         @if(count($poststructure) > 0)
 
         {{-- =====================================================
-             DESKTOP: Stacked Cards
+             DESKTOP: Konten sheet ditampilkan langsung (inline)
              ===================================================== --}}
         <div class="desktop-only">
-            @foreach($poststructure as $key => $data)
-            <div class="ms-card ms-reveal ms-d{{ ($key % 3) + 1 }}">
+            <div class="ms-desktop-inline">
+                @foreach($poststructure as $key => $data)
+                <div class="ms-di-card ms-reveal ms-d{{ ($key % 3) + 1 }}">
 
-                {{-- Gradient Hero Header --}}
-                <div class="ms-hero">
-                    <div class="ms-hero-inner">
-                        <div>
-                            <div class="ms-hero-eyebrow">{{ $data->batch }}</div>
-                            <h3 class="ms-hero-title">{{ $data->structureName }}</h3>
-                            <span class="ms-hero-period">
-                                <i class="fas fa-calendar-alt" style="font-size:0.68rem;"></i>
-                                Masa Bakti {{ $data->period }}
-                            </span>
-                        </div>
-                        @if($loop->first)
-                        <span class="ms-hero-current">
-                            <i class="fas fa-star" style="font-size:0.58rem;"></i>
-                            Pengurus Terkini
-                        </span>
-                        @endif
-                    </div>
-                </div>
+                    {{-- ── Kolom kiri: hero gradient + foto ── --}}
+                    <div class="ms-di-left">
 
-                {{-- Body: Description + Photo --}}
-                <div class="ms-body">
-                    <div class="row g-4 align-items-center">
-
-                        {{-- Left — Info + Animated list --}}
-                        <div class="col-lg-7">
-                            <p class="ms-description">{{ $data->structureDescription }}</p>
-
-                            <ul class="ms-feat-list" data-ms-list>
-                                <li>
-                                    <span class="ms-bullet"></span>
-                                    <span>Organisasi mahasiswa islami yang bergerak dalam bidang dakwah dan pengembangan diri di UIN Syarif Hidayatullah Jakarta.</span>
-                                </li>
-                                <li>
-                                    <span class="ms-bullet"></span>
-                                    <span>Berkomitmen melahirkan generasi muslim yang unggul, berakhlak mulia, dan berdampak nyata bagi masyarakat luas.</span>
-                                </li>
-                                <li>
-                                    <span class="ms-bullet"></span>
-                                    <span>Struktur kepengurusan yang solid dan sinergis untuk mendukung seluruh program kerja masa bakti {{ $data->period }}.</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        {{-- Right — Profile Photo (full, no crop) --}}
-                        <div class="col-lg-5">
-                            <div class="ms-photo-frame">
-                                <img
-                                    src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}"
-                                    alt="Foto Pengurus LDK Syahid {{ $data->batch }}"
-                                    loading="lazy"
-                                    onerror="if(!this.dataset.err){this.src='https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd';this.dataset.err=1;}"
-                                >
+                        {{-- Gradient Hero Header --}}
+                        <div class="ms-di-hero">
+                            <div class="ms-di-hero-row">
+                                <div style="position:relative;z-index:1;">
+                                    <div class="ms-mob-eyebrow">LDK Syahid {{ $data->batch }}</div>
+                                    <h5 class="ms-mob-hname" style="font-size:1.05rem;">{{ $data->structureName }}</h5>
+                                    <span class="ms-di-period-badge">
+                                        <i class="fas fa-calendar-alt" style="font-size:0.6rem;"></i>
+                                        Masa Bakti {{ $data->period }}
+                                    </span>
+                                </div>
+                                @if($loop->first)
+                                <span class="ms-mob-current" style="flex-shrink:0;">
+                                    <i class="fas fa-star" style="font-size:0.52rem;"></i>
+                                    Pengurus Saat Ini
+                                </span>
+                                @endif
                             </div>
                         </div>
 
-                    </div>
-                </div>
-
-                {{-- Structure Chart — full width, natural height --}}
-                <div class="ms-chart">
-                    <div class="ms-chart-label">
-                        <i class="fas fa-sitemap" style="color:var(--primary);"></i>
-                        Bagan Struktur Organisasi
-                    </div>
-                    <div
-                        class="ms-chart-wrap"
-                        data-ms-lb
-                        data-src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}=s5000"
-                        data-title="Bagan Struktur Pengurus — {{ $data->batch }}"
-                        role="button"
-                        tabindex="0"
-                        aria-label="Buka bagan struktur {{ $data->batch }} dalam tampilan penuh"
-                    >
-                        <img
-                            src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}=s1600"
-                            alt="Bagan Struktur Pengurus LDK Syahid {{ $data->batch }}"
-                            loading="lazy"
-                            onerror="if(!this.dataset.err){this.src='https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd';this.dataset.err=1;}"
-                        >
-                        <div class="ms-chart-overlay">
-                            <button class="ms-expand-btn" type="button" tabindex="-1">
-                                <i class="fas fa-expand-alt"></i>
-                                Lihat Selengkapnya
-                            </button>
+                        {{-- Foto Pengurus --}}
+                        <div class="ms-di-photo-area">
+                            <img
+                                src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}"
+                                alt="Foto Pengurus LDK Syahid {{ $data->batch }}"
+                                loading="lazy"
+                                onerror="if(!this.dataset.err){this.src='https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd';this.dataset.err=1;}"
+                            >
                         </div>
-                    </div>
-                </div>
 
+                    </div>
+                    {{-- /Kolom kiri --}}
+
+                    {{-- ── Kolom kanan: deskripsi + bagan ── --}}
+                    <div class="ms-di-right">
+
+                        {{-- Tentang Kepengurusan --}}
+                        <div class="ms-di-desc-wrap">
+                            <div class="ms-dm-desc-label">
+                                <i class="fas fa-info-circle" style="color:var(--primary);"></i>
+                                Tentang Kepengurusan
+                            </div>
+                            <p style="font-size:0.85rem;color:var(--secondary-dark);line-height:1.8;margin:0;text-align:justify;">
+                                {{ $data->structureDescription }}
+                            </p>
+                        </div>
+
+                        {{-- Bagan Struktur Organisasi --}}
+                        <div class="ms-di-chart-section">
+                            <div class="ms-dm-chart-label">
+                                <i class="fas fa-sitemap" style="color:var(--primary);"></i>
+                                Bagan Struktur Organisasi
+                            </div>
+                            <img
+                                src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}=s3000"
+                                alt="Bagan Struktur LDK Syahid {{ $data->batch }}"
+                                loading="lazy"
+                                data-ms-lb
+                                data-src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}=s3000"
+                                data-title="Bagan Struktur — LDK Syahid {{ $data->batch }}"
+                                onerror="if(!this.dataset.err){this.dataset.err=1;this.style.display='none';}"
+                            >
+                        </div>
+
+                    </div>
+                    {{-- /Kolom kanan --}}
+
+                </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
         {{-- /DESKTOP --}}
 
@@ -1176,7 +1005,7 @@ body.ms-modal-open .back-to-top {
             </button>
         </div>
         <div class="ms-lb-body">
-            <img id="msLbImg" src="" alt="Bagan Struktur Organisasi LDK Syahid">
+            <img id="msLbImg" src="" alt="Bagan Struktur UKM LDK Syahid">
         </div>
     </div>
 </div>
