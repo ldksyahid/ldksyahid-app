@@ -10,7 +10,7 @@
    ============================================================ */
 
 /* Section */
-.ms-section { padding: 5rem 0 4rem; }
+.ms-section { padding: 8rem 0 4rem; }
 
 /* Animated badge */
 .ms-badge {
@@ -63,6 +63,13 @@
     box-shadow: var(--shadow);
     border: 1px solid rgba(0,167,157,0.08);
     overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+                box-shadow 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+.ms-di-card:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-lg);
 }
 
 /* ── Kolom kiri: hero + foto ── */
@@ -121,13 +128,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem 1.5rem;
-    min-height: 260px;
+    padding: 1.75rem 1.25rem;
+    min-height: 300px;
 }
 
 .ms-di-photo-area img {
     max-width: 100%;
-    max-height: 320px;
+    max-height: 280px;
     width: auto;
     height: auto;
     object-fit: contain;
@@ -158,11 +165,7 @@
     border-radius: var(--radius-lg);
     display: block;
     box-shadow: var(--shadow-sm);
-    cursor: zoom-in;
-    transition: opacity 0.2s ease;
 }
-
-.ms-di-chart-section > img:hover { opacity: 0.92; }
 
 /* Medium screen — kurangi kolom kiri */
 @media (max-width: 1199.98px) {
@@ -821,22 +824,20 @@ body.ms-modal-open .back-to-top {
                 @foreach($poststructure as $key => $data)
                 <div class="ms-di-card ms-reveal ms-d{{ ($key % 3) + 1 }}">
 
-                    {{-- ── Kolom kiri: hero gradient + foto ── --}}
+                    {{-- ── Kolom kiri: hero gradient atas + foto bawah ── --}}
                     <div class="ms-di-left">
 
                         {{-- Gradient Hero Header --}}
                         <div class="ms-di-hero">
-                            <div class="ms-di-hero-row">
-                                <div style="position:relative;z-index:1;">
-                                    <div class="ms-mob-eyebrow">LDK Syahid {{ $data->batch }}</div>
-                                    <h5 class="ms-mob-hname" style="font-size:1.05rem;">{{ $data->structureName }}</h5>
-                                    <span class="ms-di-period-badge">
-                                        <i class="fas fa-calendar-alt" style="font-size:0.6rem;"></i>
-                                        Masa Bakti {{ $data->period }}
-                                    </span>
-                                </div>
+                            <div style="position:relative;z-index:1;">
+                                <div class="ms-mob-eyebrow">LDK Syahid {{ $data->batch }}</div>
+                                <h5 class="ms-mob-hname" style="font-size:1.05rem;">{{ $data->structureName }}</h5>
+                                <span class="ms-di-period-badge">
+                                    <i class="fas fa-calendar-alt" style="font-size:0.6rem;"></i>
+                                    Masa Bakti {{ $data->period }}
+                                </span>
                                 @if($loop->first)
-                                <span class="ms-mob-current" style="flex-shrink:0;">
+                                <span class="ms-mob-current" style="display:inline-flex;margin-top:0.55rem;">
                                     <i class="fas fa-star" style="font-size:0.52rem;"></i>
                                     Pengurus Saat Ini
                                 </span>
@@ -881,9 +882,6 @@ body.ms-modal-open .back-to-top {
                                 src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}=s3000"
                                 alt="Bagan Struktur LDK Syahid {{ $data->batch }}"
                                 loading="lazy"
-                                data-ms-lb
-                                data-src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}=s3000"
-                                data-title="Bagan Struktur — LDK Syahid {{ $data->batch }}"
                                 onerror="if(!this.dataset.err){this.dataset.err=1;this.style.display='none';}"
                             >
                         </div>
