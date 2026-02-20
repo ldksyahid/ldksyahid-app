@@ -57,53 +57,111 @@
 
 .ms-di-card {
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 320px 1fr;
     background: var(--white);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
     border: 1px solid rgba(0,167,157,0.08);
     overflow: hidden;
-    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
-                box-shadow 0.35s cubic-bezier(0.4,0,0.2,1);
+    transition: transform 0.38s cubic-bezier(0.4,0,0.2,1),
+                box-shadow 0.38s cubic-bezier(0.4,0,0.2,1);
 }
 
 .ms-di-card:hover {
-    transform: scale(1.02);
-    box-shadow: var(--shadow-lg);
+    transform: scale(1.018);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12), 0 6px 20px rgba(0,167,157,0.12);
 }
 
-/* ── Kolom kiri: hero + foto ── */
+/* ── Kolom kiri: full gradient panel ── */
 .ms-di-left {
+    position: relative;
+    background: linear-gradient(160deg, var(--primary) 0%, #006b65 55%, #004d49 100%);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(0,0,0,0.06);
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem 1.75rem;
+    gap: 1.25rem;
 }
 
-.ms-di-hero {
-    background: linear-gradient(130deg, var(--primary) 0%, #007f78 55%, #005e58 100%);
-    padding: 1.25rem 1.5rem 1.1rem;
-    position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.ms-di-hero::before {
+/* Decorative circles */
+.ms-di-left::before {
     content: '';
     position: absolute;
-    top: -25px; right: -25px;
-    width: 90px; height: 90px;
-    background: rgba(255,255,255,0.07);
+    top: -55px; right: -55px;
+    width: 190px; height: 190px;
     border-radius: 50%;
+    background: rgba(255,255,255,0.07);
     pointer-events: none;
 }
 
-.ms-di-hero-row {
+.ms-di-left::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    pointer-events: none;
+}
+
+/* Watermark angka batch */
+.ms-di-batch-wm {
+    position: absolute;
+    bottom: -16px; right: 6px;
+    font-size: 9rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -4px;
+}
+
+/* Foto dalam frame melayang */
+.ms-di-photo-wrap {
     position: relative;
     z-index: 1;
+    width: 86%;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: 0 14px 44px rgba(0,0,0,0.28),
+                0 0 0 3px rgba(255,255,255,0.2);
+    background: linear-gradient(135deg, #e4faf6, #edf6ff, #fce8ff);
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    min-height: 210px;
+    flex-shrink: 0;
+    transition: transform 0.38s ease, box-shadow 0.38s ease;
+}
+
+.ms-di-card:hover .ms-di-photo-wrap {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 56px rgba(0,0,0,0.32),
+                0 0 0 3px rgba(255,255,255,0.25);
+}
+
+.ms-di-photo-wrap img {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: contain;
+    display: block;
+    padding: 1rem 0.75rem;
+}
+
+/* Info teks di bawah foto */
+.ms-di-info {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
 }
 
 .ms-di-period-badge {
@@ -117,46 +175,32 @@
     font-weight: 600;
     padding: 0.22rem 0.7rem;
     border-radius: var(--radius-pill);
-    position: relative;
-    z-index: 1;
-    margin-top: 0.55rem;
-}
-
-.ms-di-photo-area {
-    background: linear-gradient(135deg, #e4faf6 0%, #edf6ff 55%, #fce8ff 100%);
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.75rem 1.25rem;
-    min-height: 300px;
-}
-
-.ms-di-photo-area img {
-    max-width: 100%;
-    max-height: 280px;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: var(--radius-lg);
-    filter: drop-shadow(0 4px 14px rgba(0,0,0,0.13));
-    display: block;
 }
 
 /* ── Kolom kanan: deskripsi + bagan ── */
 .ms-di-right {
     display: flex;
     flex-direction: column;
+    border-left: 1px solid rgba(0,167,157,0.07);
+}
+
+/* Accent bar teal di paling atas kolom kanan */
+.ms-di-right-accent {
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary) 0%, #00c4b8 60%, transparent 100%);
+    flex-shrink: 0;
 }
 
 .ms-di-desc-wrap {
-    padding: 1.5rem 1.75rem 1.1rem;
+    padding: 1.5rem 1.75rem 1.25rem;
     border-bottom: 1px solid rgba(0,0,0,0.05);
+    flex: 1;
 }
 
 .ms-di-chart-section {
     padding: 1.25rem 1.75rem 1.75rem;
-    flex: 1;
+    background: rgba(0,167,157,0.025);
+    border-top: 1px solid rgba(0,167,157,0.07);
 }
 
 .ms-di-chart-section > img {
@@ -167,9 +211,9 @@
     box-shadow: var(--shadow-sm);
 }
 
-/* Medium screen — kurangi kolom kiri */
+/* Medium screen */
 @media (max-width: 1199.98px) {
-    .ms-di-card { grid-template-columns: 240px 1fr; }
+    .ms-di-card { grid-template-columns: 270px 1fr; }
 }
 
 /* ============================================================
@@ -769,7 +813,7 @@ body.ms-modal-open .back-to-top {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 991.98px) {
-    .ms-section   { padding: 5rem 0 2.5rem; }
+    .ms-section   { padding: 8rem 0 2.5rem; }
     .ms-body      { padding: 1.75rem 1.25rem; }
     .ms-chart     { padding: 1.5rem 1.25rem 1.75rem; }
     .ms-hero      { padding: 1.5rem 1.25rem; }
@@ -780,7 +824,7 @@ body.ms-modal-open .back-to-top {
 }
 
 @media (max-width: 575.98px) {
-    .ms-section  { padding: 4.5rem 0 2rem; }
+    .ms-section  { padding: 8rem 0 2rem; }
     .ms-lb-body  { padding: 1rem; }
 }
 
@@ -824,29 +868,14 @@ body.ms-modal-open .back-to-top {
                 @foreach($poststructure as $key => $data)
                 <div class="ms-di-card ms-reveal ms-d{{ ($key % 3) + 1 }}">
 
-                    {{-- ── Kolom kiri: hero gradient atas + foto bawah ── --}}
+                    {{-- ── Kolom kiri: full gradient panel ── --}}
                     <div class="ms-di-left">
 
-                        {{-- Gradient Hero Header --}}
-                        <div class="ms-di-hero">
-                            <div style="position:relative;z-index:1;">
-                                <div class="ms-mob-eyebrow">LDK Syahid {{ $data->batch }}</div>
-                                <h5 class="ms-mob-hname" style="font-size:1.05rem;">{{ $data->structureName }}</h5>
-                                <span class="ms-di-period-badge">
-                                    <i class="fas fa-calendar-alt" style="font-size:0.6rem;"></i>
-                                    Masa Bakti {{ $data->period }}
-                                </span>
-                                @if($loop->first)
-                                <span class="ms-mob-current" style="display:inline-flex;margin-top:0.55rem;">
-                                    <i class="fas fa-star" style="font-size:0.52rem;"></i>
-                                    Pengurus Saat Ini
-                                </span>
-                                @endif
-                            </div>
-                        </div>
+                        {{-- Watermark angka batch --}}
+                        <div class="ms-di-batch-wm">{{ $data->batch }}</div>
 
-                        {{-- Foto Pengurus --}}
-                        <div class="ms-di-photo-area">
+                        {{-- Foto dalam frame melayang --}}
+                        <div class="ms-di-photo-wrap">
                             <img
                                 src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}"
                                 alt="Foto Pengurus LDK Syahid {{ $data->batch }}"
@@ -855,11 +884,30 @@ body.ms-modal-open .back-to-top {
                             >
                         </div>
 
+                        {{-- Info teks --}}
+                        <div class="ms-di-info">
+                            <div class="ms-mob-eyebrow">LDK Syahid {{ $data->batch }}</div>
+                            <h5 class="ms-mob-hname" style="font-size:1.05rem;text-align:center;">{{ $data->structureName }}</h5>
+                            <span class="ms-di-period-badge">
+                                <i class="fas fa-calendar-alt" style="font-size:0.6rem;"></i>
+                                Masa Bakti {{ $data->period }}
+                            </span>
+                            @if($loop->first)
+                            <span class="ms-mob-current" style="margin-top:0.2rem;">
+                                <i class="fas fa-star" style="font-size:0.52rem;"></i>
+                                Pengurus Saat Ini
+                            </span>
+                            @endif
+                        </div>
+
                     </div>
                     {{-- /Kolom kiri --}}
 
-                    {{-- ── Kolom kanan: deskripsi + bagan ── --}}
+                    {{-- ── Kolom kanan: accent + deskripsi + bagan ── --}}
                     <div class="ms-di-right">
+
+                        {{-- Accent bar teal --}}
+                        <div class="ms-di-right-accent"></div>
 
                         {{-- Tentang Kepengurusan --}}
                         <div class="ms-di-desc-wrap">
