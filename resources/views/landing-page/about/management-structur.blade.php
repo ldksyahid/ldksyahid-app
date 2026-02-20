@@ -590,9 +590,10 @@
     color: var(--white);
 }
 
-/* --- Stage-outer vertical breathing room (like article carousel) --- */
+/* --- Stage-outer — sama persis dengan artikel carousel --- */
 .ms-carousel.owl-carousel .owl-stage-outer {
-    padding: 8px 0 14px;
+    overflow: hidden;
+    padding: 8px 0 16px;
 }
 
 /* --- Sembunyikan Owl default nav & dots (diganti custom) --- */
@@ -1419,18 +1420,18 @@ body.ms-modal-open .back-to-top {
         var $c = $('#msCarousel');
         if (!$c.length || window.innerWidth > 991) return;
 
-        /* Init carousel — stagePadding for breathing room like article carousel */
+        /* Init carousel — sama persis dengan artikel carousel */
         $c.owlCarousel({
             items       : 1,
             loop        : false,
-            margin      : 0,
-            stagePadding: 20,
+            margin      : 14,
+            stagePadding: 24,
             dots        : false,
             nav         : false,
-            smartSpeed  : 480,
+            smartSpeed  : 350,
             autoplay    : false,
             touchDrag   : true,
-            mouseDrag   : false
+            mouseDrag   : true
         });
 
         /* ── Build custom dots ── */
