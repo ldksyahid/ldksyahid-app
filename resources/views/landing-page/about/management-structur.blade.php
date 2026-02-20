@@ -56,8 +56,8 @@
 }
 
 .ms-di-card {
-    display: grid;
-    grid-template-columns: 320px 1fr;
+    display: flex;
+    flex-direction: column;
     background: var(--white);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
@@ -68,29 +68,28 @@
 }
 
 .ms-di-card:hover {
-    transform: scale(1.018);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.12), 0 6px 20px rgba(0,167,157,0.12);
+    transform: scale(1.007);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.1), 0 4px 16px rgba(0,167,157,0.1);
 }
 
-/* ── Kolom kiri: full gradient panel ── */
+/* ── ATAS: gradient hero — foto kiri, info+deskripsi kanan ── */
 .ms-di-left {
     position: relative;
-    background: linear-gradient(160deg, var(--primary) 0%, #006b65 55%, #004d49 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, #006b65 60%, #004d49 100%);
     overflow: hidden;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1.5rem 1.75rem;
-    gap: 1.25rem;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 1.75rem 2rem;
+    gap: 1.75rem;
+    flex-shrink: 0;
 }
 
-/* Decorative circles */
 .ms-di-left::before {
     content: '';
     position: absolute;
-    top: -55px; right: -55px;
-    width: 190px; height: 190px;
+    top: -50px; right: -50px;
+    width: 160px; height: 160px;
     border-radius: 50%;
     background: rgba(255,255,255,0.07);
     pointer-events: none;
@@ -99,69 +98,72 @@
 .ms-di-left::after {
     content: '';
     position: absolute;
-    bottom: -40px; left: -40px;
-    width: 140px; height: 140px;
+    bottom: -25px; left: 40%;
+    width: 90px; height: 90px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.04);
     pointer-events: none;
 }
 
 /* Watermark angka batch */
 .ms-di-batch-wm {
     position: absolute;
-    bottom: -16px; right: 6px;
-    font-size: 9rem;
+    right: 1rem; bottom: -22px;
+    font-size: 7.5rem;
     font-weight: 900;
-    color: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.07);
     line-height: 1;
     pointer-events: none;
     user-select: none;
     letter-spacing: -4px;
 }
 
-/* Foto dalam frame melayang */
+/* Foto: frame di kiri, center vertikal */
 .ms-di-photo-wrap {
     position: relative;
     z-index: 1;
-    width: 86%;
+    width: 160px;
+    min-width: 160px;
+    align-self: center;
     border-radius: var(--radius-xl);
     overflow: hidden;
-    box-shadow: 0 14px 44px rgba(0,0,0,0.28),
+    box-shadow: 0 8px 28px rgba(0,0,0,0.3),
                 0 0 0 3px rgba(255,255,255,0.2);
     background: linear-gradient(135deg, #e4faf6, #edf6ff, #fce8ff);
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 210px;
+    min-height: 140px;
     flex-shrink: 0;
     transition: transform 0.38s ease, box-shadow 0.38s ease;
 }
 
 .ms-di-card:hover .ms-di-photo-wrap {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 56px rgba(0,0,0,0.32),
-                0 0 0 3px rgba(255,255,255,0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.34),
+                0 0 0 3px rgba(255,255,255,0.28);
 }
 
 .ms-di-photo-wrap img {
     width: 100%;
     height: auto;
-    max-height: 250px;
+    max-height: 170px;
     object-fit: contain;
     display: block;
-    padding: 1rem 0.75rem;
+    padding: 0.75rem;
 }
 
-/* Info teks di bawah foto */
+/* Info + deskripsi: kanan foto */
 .ms-di-info {
     position: relative;
     z-index: 1;
-    text-align: center;
-    width: 100%;
+    text-align: left;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.35rem;
+    min-width: 0;
 }
 
 .ms-di-period-badge {
@@ -177,30 +179,38 @@
     border-radius: var(--radius-pill);
 }
 
-/* ── Kolom kanan: deskripsi + bagan ── */
-.ms-di-right {
-    display: flex;
-    flex-direction: column;
-    border-left: 1px solid rgba(0,167,157,0.07);
-}
-
-/* Accent bar teal di paling atas kolom kanan */
-.ms-di-right-accent {
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary) 0%, #00c4b8 60%, transparent 100%);
+/* Separator tipis antara badges dan deskripsi */
+.ms-di-separator {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+    margin: 0.5rem 0 0.3rem;
     flex-shrink: 0;
 }
 
-.ms-di-desc-wrap {
-    padding: 1.5rem 1.75rem 1.25rem;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    flex: 1;
+/* Deskripsi di dalam gradient */
+.ms-di-desc {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.75;
+    margin: 0;
+    text-align: justify;
 }
 
+/* ── BAWAH: bagan full width ── */
+.ms-di-right {
+    display: flex;
+    flex-direction: column;
+    border-top: 3px solid rgba(0,167,157,0.18);
+    background: var(--white);
+}
+
+.ms-di-right-accent,
+.ms-di-right-body,
+.ms-di-desc-wrap { display: none; }
+
 .ms-di-chart-section {
-    padding: 1.25rem 1.75rem 1.75rem;
-    background: rgba(0,167,157,0.025);
-    border-top: 1px solid rgba(0,167,157,0.07);
+    padding: 1.5rem 2rem 2rem;
 }
 
 .ms-di-chart-section > img {
@@ -213,7 +223,8 @@
 
 /* Medium screen */
 @media (max-width: 1199.98px) {
-    .ms-di-card { grid-template-columns: 270px 1fr; }
+    .ms-di-photo-wrap { width: 135px; min-width: 135px; }
+    .ms-di-left { padding: 1.5rem 1.5rem; gap: 1.25rem; }
 }
 
 /* ============================================================
@@ -813,7 +824,7 @@ body.ms-modal-open .back-to-top {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 991.98px) {
-    .ms-section   { padding: 8rem 0 2.5rem; }
+    .ms-section   { padding: 6rem 0 2.5rem; }
     .ms-body      { padding: 1.75rem 1.25rem; }
     .ms-chart     { padding: 1.5rem 1.25rem 1.75rem; }
     .ms-hero      { padding: 1.5rem 1.25rem; }
@@ -824,7 +835,7 @@ body.ms-modal-open .back-to-top {
 }
 
 @media (max-width: 575.98px) {
-    .ms-section  { padding: 8rem 0 2rem; }
+    .ms-section  { padding: 6rem 0 2rem; }
     .ms-lb-body  { padding: 1rem; }
 }
 
@@ -868,13 +879,13 @@ body.ms-modal-open .back-to-top {
                 @foreach($poststructure as $key => $data)
                 <div class="ms-di-card ms-reveal ms-d{{ ($key % 3) + 1 }}">
 
-                    {{-- ── Kolom kiri: full gradient panel ── --}}
+                    {{-- ── ATAS: gradient — foto kiri + info+deskripsi kanan ── --}}
                     <div class="ms-di-left">
 
                         {{-- Watermark angka batch --}}
                         <div class="ms-di-batch-wm">{{ $data->batch }}</div>
 
-                        {{-- Foto dalam frame melayang --}}
+                        {{-- Foto frame --}}
                         <div class="ms-di-photo-wrap">
                             <img
                                 src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}"
@@ -884,48 +895,40 @@ body.ms-modal-open .back-to-top {
                             >
                         </div>
 
-                        {{-- Info teks --}}
+                        {{-- Info + Deskripsi --}}
                         <div class="ms-di-info">
                             <div class="ms-mob-eyebrow">LDK Syahid {{ $data->batch }}</div>
-                            <h5 class="ms-mob-hname" style="font-size:1.05rem;text-align:center;">{{ $data->structureName }}</h5>
-                            <span class="ms-di-period-badge">
-                                <i class="fas fa-calendar-alt" style="font-size:0.6rem;"></i>
-                                Masa Bakti {{ $data->period }}
-                            </span>
-                            @if($loop->first)
-                            <span class="ms-mob-current" style="margin-top:0.2rem;">
-                                <i class="fas fa-star" style="font-size:0.52rem;"></i>
-                                Pengurus Saat Ini
-                            </span>
-                            @endif
+                            <h5 class="ms-mob-hname" style="font-size:1.1rem;">{{ $data->structureName }}</h5>
+                            <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;">
+                                <span class="ms-di-period-badge">
+                                    <i class="fas fa-calendar-alt" style="font-size:0.6rem;"></i>
+                                    Masa Bakti {{ $data->period }}
+                                </span>
+                                @if($loop->first)
+                                <span class="ms-mob-current">
+                                    <i class="fas fa-star" style="font-size:0.52rem;"></i>
+                                    Pengurus Saat Ini
+                                </span>
+                                @endif
+                            </div>
+
+                            {{-- Separator --}}
+                            <div class="ms-di-separator"></div>
+
+                            {{-- Deskripsi langsung di sini --}}
+                            <div class="ms-dm-desc-label" style="color:rgba(255,255,255,0.6);margin-bottom:0.3rem;">
+                                <i class="fas fa-info-circle"></i>
+                                Tentang Kepengurusan
+                            </div>
+                            <p class="ms-di-desc">{{ $data->structureDescription }}</p>
                         </div>
 
                     </div>
-                    {{-- /Kolom kiri --}}
+                    {{-- /ATAS --}}
 
-                    {{-- ── Kolom kanan: accent + deskripsi + bagan ── --}}
+                    {{-- ── BAWAH: bagan struktur full width ── --}}
                     <div class="ms-di-right">
-
-                        {{-- Accent bar teal --}}
-                        <div class="ms-di-right-accent"></div>
-
-                        {{-- Tentang Kepengurusan --}}
-                        <div class="ms-di-desc-wrap">
-                            <div class="ms-dm-desc-label">
-                                <i class="fas fa-info-circle" style="color:var(--primary);"></i>
-                                Tentang Kepengurusan
-                            </div>
-                            <p style="font-size:0.85rem;color:var(--secondary-dark);line-height:1.8;margin:0;text-align:justify;">
-                                {{ $data->structureDescription }}
-                            </p>
-                        </div>
-
-                        {{-- Bagan Struktur Organisasi --}}
                         <div class="ms-di-chart-section">
-                            <div class="ms-dm-chart-label">
-                                <i class="fas fa-sitemap" style="color:var(--primary);"></i>
-                                Bagan Struktur Organisasi
-                            </div>
                             <img
                                 src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id_2 }}=s3000"
                                 alt="Bagan Struktur LDK Syahid {{ $data->batch }}"
@@ -933,9 +936,8 @@ body.ms-modal-open .back-to-top {
                                 onerror="if(!this.dataset.err){this.dataset.err=1;this.style.display='none';}"
                             >
                         </div>
-
                     </div>
-                    {{-- /Kolom kanan --}}
+                    {{-- /BAWAH --}}
 
                 </div>
                 @endforeach
@@ -1105,7 +1107,7 @@ body.ms-modal-open .back-to-top {
             <div class="ms-dm-chart-section">
                 <div class="ms-dm-chart-label">
                     <i class="fas fa-sitemap" style="color:var(--primary);"></i>
-                    Bagan Struktur Organisasi
+                    Bagan Struktur Kepengurusan
                 </div>
                 <img id="msDmChart" src="" alt="">
             </div>
