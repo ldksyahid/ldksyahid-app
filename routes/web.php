@@ -80,7 +80,7 @@ Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule.in
 
 // Route LandingPage Tentang Kami
 Route::get('/about/contact', function () {
-    return view('landing-page.about.contact-us', ["title" => "Tentang Kami"]);
+    return view('landing-page.about.contact-us.index', ["title" => "Tentang Kami"]);
 })->name('aboutus');
 
 //Route LandingPage Structure

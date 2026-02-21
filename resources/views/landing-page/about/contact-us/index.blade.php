@@ -155,50 +155,9 @@
 @endsection
 
 @section('styles')
-<style>
-    .hover-card {
-        cursor: pointer;
-        transition: all 0.3s ease-in-out;
-    }
-    .hover-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.1);
-        z-index: 1;
-    }
-    .rounded-map {
-        border-radius: 1rem;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        overflow: hidden;
-        height: 100%;
-    }
-    form.needs-validation .form-control,
-    form.needs-validation textarea.form-control,
-    form.needs-validation button.btn-primary {
-        border-radius: 1rem !important;
-    }
-</style>
+@include('landing-page.about.contact-us.components._index-styles')
 @endsection
 
 @section('scripts')
-<script>
-    // Pemanggilan Validation
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
-</script>
+@include('landing-page.about.contact-us.components._index-scripts')
 @endsection
-
