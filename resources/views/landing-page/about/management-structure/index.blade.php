@@ -8,7 +8,7 @@
     <audio src="{{ asset('audio/mars-ldksyahid.mp3') }}" type="audio/mpeg" autoplay loop></audio>
 </div>
 
-<section class="ms-section">
+<section class="ms-section wow fadeInUp" data-wow-delay="0.1s">
     <div class="container">
 
         {{-- Section Header --}}
