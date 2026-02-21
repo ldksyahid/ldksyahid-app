@@ -214,7 +214,7 @@
                     transition: all 0.3s ease;
                 }
             `)
-            .appendTo('head');
+            .appendTo('styles');
 
         // Accordion hover effects
         $('.accordion-item').hover(
