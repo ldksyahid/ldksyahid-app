@@ -95,3 +95,7 @@
 </div>
 
 @endsection
+
+@section('styles')
+@include('auth.passwords.email.components._index-styles')
+@endsection

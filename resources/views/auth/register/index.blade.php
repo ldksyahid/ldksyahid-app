@@ -135,8 +135,8 @@
                 </div>
             </div>
 
-            {{-- Right: Content --}}
-            <div class="col-lg-5 col-md-10" style="opacity:0;transform:translateX(28px);animation:authRightIn 0.7s ease 0.1s forwards;">
+            {{-- Right: Decorative Content (disembunyikan di mobile) --}}
+            <div class="col-lg-5 col-md-10 auth-deco-col" style="opacity:0;transform:translateX(28px);animation:authRightIn 0.7s ease 0.1s forwards;">
                 <div class="ps-lg-3">
 
                     <div class="auth-badge">
@@ -176,23 +176,12 @@
     </div>
 </div>
 
-<style>
-@keyframes authRightIn {
-    from { opacity: 0; transform: translateX(28px); }
-    to   { opacity: 1; transform: translateX(0); }
-}
-</style>
+@endsection
 
+@section('styles')
+@include('auth.register.components._index-styles')
 @endsection
 
 @section('scripts')
-<script>
-function authTogglePass(inputId, iconId) {
-    var input = document.getElementById(inputId);
-    var icon  = document.getElementById(iconId);
-    var isPass = input.type === 'password';
-    input.type = isPass ? 'text' : 'password';
-    icon.className = isPass ? 'fas fa-eye-slash' : 'fas fa-eye';
-}
-</script>
+@include('auth.register.components._index-scripts')
 @endsection

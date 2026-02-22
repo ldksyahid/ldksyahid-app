@@ -7,8 +7,8 @@
     <div class="container" style="position:relative;z-index:1;">
         <div class="row justify-content-center align-items-center g-5">
 
-            {{-- Left: Content --}}
-            <div class="col-lg-5 col-md-10 auth-left-enter">
+            {{-- Left: Decorative Content (disembunyikan di mobile) --}}
+            <div class="col-lg-5 col-md-10 auth-left-enter auth-deco-col">
                 <div class="pe-lg-3">
 
                     <div class="auth-badge">
@@ -136,14 +136,10 @@
 
 @endsection
 
+@section('styles')
+@include('auth.login.components._index-styles')
+@endsection
+
 @section('scripts')
-<script>
-function authTogglePass(inputId, iconId) {
-    var input = document.getElementById(inputId);
-    var icon  = document.getElementById(iconId);
-    var isPass = input.type === 'password';
-    input.type = isPass ? 'text' : 'password';
-    icon.className = isPass ? 'fas fa-eye-slash' : 'fas fa-eye';
-}
-</script>
+@include('auth.login.components._index-scripts')
 @endsection
