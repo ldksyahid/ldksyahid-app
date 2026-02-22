@@ -572,15 +572,16 @@
         }
 
         .hero-carousel-wrapper {
-            padding: 0.75rem 0.75rem 0; /* no bottom padding — card touches viewport edge */
+            padding: 0.75rem 0.75rem 1rem; /* bottom padding → card gets bottom radius room */
             flex: 1;
             display: flex;
             flex-direction: column;
-            min-height: 0; /* allow flex child to shrink below content height */
+            min-height: 0;
         }
 
+        /* All 4 corners rounded — card floats above page bg */
         .hero-carousel-card {
-            border-radius: 20px 20px 0 0;
+            border-radius: 20px;
             overflow: hidden;
             flex: 1;
             display: flex;
@@ -588,33 +589,31 @@
             min-height: 0;
         }
 
-        /* Slide has explicit height so object-fit works reliably */
-        /* Use .hero-fun prefix for higher specificity over any global CSS */
+        /* Show full image at natural height — no crop */
         .hero-fun .hero-slide {
-            height: 220px;
+            height: auto;
             flex-shrink: 0;
             overflow: hidden;
-            min-height: 0;
         }
 
-        /* Image fills slide — left-aligned crop shows banner text */
         .hero-fun .hero-image {
             width: 100%;
-            height: 100%;
+            height: auto;
             display: block;
-            object-fit: cover;
-            object-position: left center;
+            object-fit: unset;
         }
 
-        /* Hadith section fills remaining space */
+        /* Hadith section fills remaining space, content starts from top
+           so it doesn't spread too far above/below */
         .hero-mobile-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding-bottom: 1.5rem;
-            overflow: hidden;
+            justify-content: flex-start;
+            padding: 0 1.25rem 1rem;
             min-height: 0;
+            /* overflow: visible — lets hero-divider-mobile at top:-30px show through;
+               hero-carousel-card clips the rest */
         }
     }
 
@@ -647,9 +646,9 @@
        CONTACT-US SPECIFIC ADDITIONS
        ================================================================ */
 
-    /* Hadith badge in mobile — spacing after divider */
+    /* Hadith badge in mobile — spacing after divider curve */
     .cu-hadith-badge-m {
-        margin-top: 20px;
+        margin-top: 25px; /* clears the hero-divider-mobile curve (height 45px, top -30px → visual bottom at +15px) */
     }
 
     /* SweetAlert toast position below navbar */
