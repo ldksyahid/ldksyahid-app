@@ -603,17 +603,25 @@
             object-fit: unset;
         }
 
-        /* Hadith section fills remaining space, content starts from top
-           so it doesn't spread too far above/below */
+        /* Hadith section fills remaining space */
         .hero-mobile-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;  /* center content vertically — no excess space top/bottom */
+            align-items: center;      /* center children horizontally — fixes badge stretching */
             padding: 0 1.25rem 1rem;
+            margin-top: 0;            /* remove base -20px: image shows fully, nothing covers it */
             min-height: 0;
-            /* overflow: visible — lets hero-divider-mobile at top:-30px show through;
-               hero-carousel-card clips the rest */
+            /* overflow: visible — lets hero-divider-mobile (top:-30px) show above;
+               hero-carousel-card clips externally */
+        }
+
+        /* When content is flex-column with align-items:center, block children
+           (paragraphs, wrappers) need their own width to stay full-width */
+        .hero-mobile-content .hadith-mobile-wrapper,
+        .hero-mobile-content .mobile-action-area {
+            width: 100%;
         }
     }
 
