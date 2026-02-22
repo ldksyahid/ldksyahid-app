@@ -100,8 +100,8 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        right: 0;
+        bottom: 0;
         overflow: hidden;
         z-index: 1;
         pointer-events: none;
@@ -554,48 +554,67 @@
 
     /* Mobile Adjustments */
     @media (max-width: 991.98px) {
-        /* Hero fills full viewport — no vertical scroll gap */
+        /* Prevent Bootstrap row negative-margins & Owl Carousel from
+           creating horizontal overflow that breaks the fullscreen hero */
+        html, body {
+            overflow-x: hidden;
+        }
+
+        /* Hero is EXACTLY viewport height — strict, no overflow scroll */
         .hero-fun {
             padding-top: 65px;
-            min-height: 100vh;
-            min-height: 100dvh;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
+            max-width: 100%;
         }
 
         .hero-carousel-wrapper {
-            padding: 0.75rem;
+            padding: 0.75rem 0.75rem 0; /* no bottom padding — card touches viewport edge */
             flex: 1;
             display: flex;
             flex-direction: column;
+            min-height: 0; /* allow flex child to shrink below content height */
         }
 
         .hero-carousel-card {
-            border-radius: 20px;
+            border-radius: 20px 20px 0 0;
             overflow: hidden;
             flex: 1;
             display: flex;
             flex-direction: column;
+            min-height: 0;
         }
 
-        .hero-slide {
-            height: auto;
+        /* Slide has explicit height so object-fit works reliably */
+        /* Use .hero-fun prefix for higher specificity over any global CSS */
+        .hero-fun .hero-slide {
+            height: 220px;
             flex-shrink: 0;
+            overflow: hidden;
+            min-height: 0;
         }
 
-        /* Show full image, no crop */
-        .hero-image {
-            height: auto;
-            object-fit: unset;
+        /* Image fills slide — left-aligned crop shows banner text */
+        .hero-fun .hero-image {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            object-position: left center;
         }
 
-        /* Hadith section grows to fill remaining space */
+        /* Hadith section fills remaining space */
         .hero-mobile-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding-bottom: 1.5rem;
+            overflow: hidden;
+            min-height: 0;
         }
     }
 
