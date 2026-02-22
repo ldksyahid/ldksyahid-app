@@ -353,6 +353,8 @@
         .vepm-icon { width: 68px; height: 68px; font-size: 1.7rem; }
         .vepm-steps { gap: 0.4rem; }
         .vepm-step-icon { width: 40px; height: 40px; font-size: 1.15rem; }
+        .vepm-ring-1 { width: 65px; height: 65px; animation-delay: 0s; }
+        .vepm-ring-2 { width: 100px; height: 100px; animation-delay: 0.9s; }
     }
 </style>
 
