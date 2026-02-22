@@ -39,12 +39,13 @@ $cuInfoCards = [
         'title'   => 'Sosial Media',
         'color'   => 'info',
         'link'    => null,
-        'value'   => 'Instagram, YouTube, Twitter, Facebook',
+        'value'   => 'Instagram, YouTube, Twitter, Facebook, LinkedIn',
         'socials' => [
             ['icon' => 'fab fa-instagram',  'label' => '@ldksyahid',         'link' => 'https://www.instagram.com/ldksyahid/'],
             ['icon' => 'fab fa-youtube',    'label' => 'youtube/syahidtv',   'link' => 'https://www.youtube.com/channel/UCJ-SyxQN5sG4CzO0waSYpBQ'],
             ['icon' => 'fab fa-twitter',    'label' => '@ldksyahid',         'link' => 'https://twitter.com/ldksyahid/'],
             ['icon' => 'fab fa-facebook-f', 'label' => 'facebook/ldksyahid', 'link' => 'https://www.facebook.com/ldksyahid/'],
+            ['icon' => 'fab fa-linkedin',   'label' => 'linkedin/ldksyahid', 'link' => 'https://www.linkedin.com/company/ukm-ldk-syahid-uin-syarif-hidayatullah-jakarta/'],
         ],
     ],
 ];
@@ -52,130 +53,144 @@ $cuInfoCards = [
 
 {{-- =============================================
      HERO / JUMBOTRON SECTION
+     Identical structure to home jumbotron (empty/hadith state)
+     No content overlay on image
      ============================================= --}}
-<section class="cu-hero wow fadeIn" data-wow-delay="0.1s">
+<section class="hero-fun wow fadeIn" data-wow-delay="0.1s">
+    <div class="hero-carousel-wrapper">
+        <div class="hero-carousel-card">
 
-    {{-- Hero Card Wrapper --}}
-    <div class="cu-hero-wrap">
-        <div class="cu-hero-img-box">
-            <img class="cu-hero-img"
-                 src="https://lh3.googleusercontent.com/d/1Xt3HVJLvYBrcxcg-HyNK2pKOQ7WUIQBj"
-                 alt="Hubungi Kami" />
-            <div class="cu-hero-overlay"></div>
-        </div>
-
-        {{-- Desktop Content Overlay --}}
-        <div class="cu-hero-content d-none d-lg-flex">
-            <div class="container h-100">
-                <div class="row h-100 align-items-center">
-                    <div class="col-lg-7">
-                        <div class="cu-hero-box">
-                            <div class="cu-hero-badge animate__animated animate__fadeInDown">
-                                <span>💬</span>
-                                <span>Hubungi Kami</span>
-                            </div>
-                            <h1 class="cu-hero-title animate__animated animate__fadeInUp">
-                                Ada Pertanyaan?<br>Yuk Hubungi Kami!
-                            </h1>
-                            <a href="#cu-form-section"
-                               class="cu-hero-btn animate__animated animate__fadeInUp animate__delay-1s">
-                                <span>Kirim Pesan</span>
-                                <i class="fas fa-paper-plane"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            {{-- Image Only — No Overlay --}}
+            <div class="hero-slide">
+                <img class="hero-image"
+                     src="https://lh3.googleusercontent.com/d/1Xt3HVJLvYBrcxcg-HyNK2pKOQ7WUIQBj"
+                     alt="Hubungi Kami" />
             </div>
-        </div>
-    </div>
 
-    {{-- Desktop Hadith Section --}}
-    <div class="cu-hadith-wrap d-none d-lg-block">
-        <div class="cu-hadith-divider"></div>
-        <div class="container position-relative" style="z-index: 10;">
-            <div class="row justify-content-center">
-                <div class="col-lg-10 col-xl-8">
-                    <div class="cu-hadith-card">
-                        <div class="cu-hadith-badge">
-                            <span>📖</span>
-                            <span class="cu-fade-text" id="cu-src-desktop">Hadits dalam 1 Menit</span>
-                        </div>
-                        <div class="cu-hadith-body" id="cu-body-desktop">
-                            <p class="cu-hadith-arab cu-fade-text" id="cu-arab-desktop"></p>
-                            <p class="cu-hadith-text cu-fade-text" id="cu-text-desktop">
-                                <span class="cu-load-txt">Sedang Menyiapkan Hadits</span>
-                                <span class="cu-load-dots">
-                                    <span class="cu-dot">.</span>
-                                    <span class="cu-dot">.</span>
-                                    <span class="cu-dot">.</span>
-                                </span>
-                            </p>
-                            <span class="cu-hadith-num cu-fade-text" id="cu-num-desktop"></span>
-                        </div>
-                        <div class="cu-hadith-footer">
-                            <button class="cu-toggle" id="cu-toggle-desktop">
-                                <span class="cu-toggle-txt">Selengkapnya</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                            <div class="cu-countdown">
-                                <span>Hadits berikutnya dalam</span>
-                                <span class="cu-countdown-num" id="cu-cdown-desktop">60</span>
-                                <span>detik</span>
+            {{-- Desktop Hadith Content (Below Image) — identical to jumbotron empty state --}}
+            <div class="hero-desktop-content d-none d-lg-block">
+
+                {{-- Background Animation & Icons --}}
+                <div class="hadith-background-animation">
+                    <div class="floating-icon icon-1">📖</div>
+                    <div class="floating-icon icon-2">🕌</div>
+                    <div class="floating-icon icon-3">✨</div>
+                    <div class="floating-icon icon-4">🌙</div>
+                    <div class="floating-icon icon-5">⭐</div>
+                    <div class="floating-icon icon-6">☪️</div>
+                    <div class="floating-icon icon-7">📚</div>
+                    <div class="floating-icon icon-8">🤲</div>
+                    <div class="floating-shape shape-1"></div>
+                    <div class="floating-shape shape-2"></div>
+                </div>
+
+                {{-- Countdown Timer - Bottom Right --}}
+                <div class="desktop-countdown">
+                    <span>Hadits berikutnya dalam</span>
+                    <span class="desktop-countdown-number" id="cu-countdown-desktop">60</span>
+                    <span>detik</span>
+                </div>
+
+                {{-- White Curved Divider --}}
+                <div class="hero-divider-desktop"></div>
+
+                <div class="container position-relative" style="z-index: 20;">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10 col-xl-8">
+                            <div class="hero-desktop-card">
+                                <div class="hero-desktop-badge">
+                                    <span class="badge-icon">📖</span>
+                                    <span class="hadith-fade-text" id="cu-source-desktop">Hadits dalam 1 Menit</span>
+                                </div>
+
+                                <div class="hadith-desktop-wrapper" id="cu-wrapper-desktop">
+                                    <p class="hero-desktop-arab hadith-fade-text" id="cu-arab-desktop"></p>
+                                    <p class="hero-desktop-text hadith-fade-text" id="cu-text-desktop">
+                                        <span class="loading-text">Sedang Menyiapkan Hadits</span>
+                                        <span class="loading-dots">
+                                            <span class="dot">.</span>
+                                            <span class="dot">.</span>
+                                            <span class="dot">.</span>
+                                        </span>
+                                    </p>
+                                    <span class="hero-desktop-number hadith-fade-text" id="cu-num-desktop"></span>
+                                </div>
+
+                                <button class="desktop-toggle-btn" id="cu-toggle-desktop">
+                                    <span class="toggle-text">Selengkapnya</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    {{-- Mobile Hero Content --}}
-    <div class="cu-mobile-hero d-lg-none">
-        <div class="cu-mobile-badge">
-            <span>💬</span>
-            <span>Hubungi Kami</span>
-        </div>
-        <h2 class="cu-mobile-title">Ada Pertanyaan?<br>Yuk Hubungi Kami!</h2>
-        <a href="#cu-form-section" class="cu-mobile-btn">
-            <span>Kirim Pesan</span>
-            <i class="fas fa-paper-plane"></i>
-        </a>
-    </div>
+            </div>{{-- /hero-desktop-content --}}
 
-    {{-- Mobile Hadith Section --}}
-    <div class="cu-hadith-wrap-mobile d-lg-none">
-        <div class="cu-hadith-divider-mobile"></div>
-        <div class="cu-hadith-card-mobile">
-            <div class="cu-hadith-badge-mobile">
-                <span>📖</span>
-                <span class="cu-fade-text" id="cu-src-mobile">Hadits dalam 1 Menit</span>
-            </div>
-            <div class="cu-hadith-body-mobile" id="cu-body-mobile">
-                <p class="cu-hadith-arab cu-fade-text" id="cu-arab-mobile"></p>
-                <p class="cu-hadith-text-mobile cu-fade-text" id="cu-text-mobile">
-                    <span class="cu-load-txt">Sedang Menyiapkan Hadits</span>
-                    <span class="cu-load-dots">
-                        <span class="cu-dot">.</span>
-                        <span class="cu-dot">.</span>
-                        <span class="cu-dot">.</span>
-                    </span>
-                </p>
-                <span class="cu-hadith-num cu-fade-text" id="cu-num-mobile"></span>
-            </div>
-            <div class="cu-hadith-footer-mobile">
-                <button class="cu-toggle-mobile" id="cu-toggle-mobile">
-                    <span class="cu-toggle-txt-m">Selengkapnya</span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="cu-countdown-mobile">
-                    <span>Berikutnya</span>
-                    <span class="cu-countdown-num" id="cu-cdown-mobile">60</span>
-                    <span>dtk</span>
+            {{-- Mobile Content (Below Image) --}}
+            <div class="hero-mobile-content d-lg-none" id="cu-hadith-mobile-content">
+
+                {{-- Background Animation for Mobile --}}
+                <div class="hadith-background-animation mobile">
+                    <div class="floating-icon icon-1">📖</div>
+                    <div class="floating-icon icon-3">✨</div>
+                    <div class="floating-icon icon-5">🕌</div>
+                    <div class="floating-shape shape-1"></div>
+                    <div class="floating-shape shape-2"></div>
                 </div>
-            </div>
-        </div>
-    </div>
 
+                {{-- White Curved Divider Mobile --}}
+                <div class="hero-divider-mobile"></div>
+
+                {{-- Page Intro (mobile only) --}}
+                <div class="cu-mobile-intro">
+                    <div class="hero-mobile-badge">
+                        <span class="badge-icon">💬</span>
+                        <span>Hubungi Kami</span>
+                    </div>
+                    <h2 class="hero-mobile-title">Ada Pertanyaan?<br>Yuk Hubungi Kami!</h2>
+                    <a href="#cu-form-section" class="hero-mobile-btn cu-intro-btn">
+                        <span>Kirim Pesan</span>
+                        <i class="fas fa-paper-plane"></i>
+                    </a>
+                </div>
+
+                {{-- Hadith Badge --}}
+                <div class="hero-mobile-badge cu-hadith-badge-m">
+                    <span class="badge-icon">📖</span>
+                    <span class="hadith-fade-text" id="cu-source-mobile">Hadits dalam 1 Menit</span>
+                </div>
+
+                {{-- Hadith Content --}}
+                <div class="hadith-mobile-wrapper" id="cu-wrapper-mobile">
+                    <p class="hero-mobile-arab hadith-fade-text" id="cu-arab-mobile"></p>
+                    <p class="hero-mobile-desc hadith-fade-text" id="cu-text-mobile">
+                        <span class="loading-text">Sedang Menyiapkan Hadits</span>
+                        <span class="loading-dots">
+                            <span class="dot">.</span>
+                            <span class="dot">.</span>
+                            <span class="dot">.</span>
+                        </span>
+                    </p>
+                    <span class="hadith-number hadith-fade-text" id="cu-num-mobile"></span>
+                </div>
+
+                <div class="mobile-action-area">
+                    <button class="hadith-toggle" id="cu-toggle-mobile">
+                        <span class="hadith-toggle-text">Selengkapnya</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="mobile-countdown">
+                        <span>Hadits berikutnya dalam</span>
+                        <span class="mobile-countdown-number" id="cu-countdown-mobile">60</span>
+                        <span>detik</span>
+                    </div>
+                </div>
+
+            </div>{{-- /hero-mobile-content --}}
+
+        </div>{{-- /hero-carousel-card --}}
+    </div>{{-- /hero-carousel-wrapper --}}
 </section>
 
 
@@ -185,7 +200,6 @@ $cuInfoCards = [
 <section class="cu-info-section py-5">
     <div class="container">
 
-        {{-- Section Header --}}
         <div class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
             <div class="cu-section-badge">
                 <span>📍</span>
@@ -274,7 +288,7 @@ $cuInfoCards = [
     <div class="container">
         <div class="row g-5 align-items-start">
 
-            {{-- Map Column --}}
+            {{-- Map --}}
             <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
                 <div class="cu-section-header mb-4">
                     <div class="cu-section-badge">
@@ -288,13 +302,12 @@ $cuInfoCards = [
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.6773009952885!2d106.75319361449397!3d-6.306059963469107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69efd9636c9d6b%3A0x71fbe6e9045945ff!2sLDK%20Syahid%20UIN%20Syarif%20Hidayatullah%20Jakarta!5e0!3m2!1sen!2sid!4v1664598000447!5m2!1sen!2sid"
                         frameborder="0" style="border:0;" allowfullscreen=""
-                        aria-hidden="false" tabindex="0"
-                        title="Lokasi LDK Syahid">
+                        aria-hidden="false" tabindex="0" title="Lokasi LDK Syahid">
                     </iframe>
                 </div>
             </div>
 
-            {{-- Form Column --}}
+            {{-- Form --}}
             <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
                 <div class="cu-section-header mb-4">
                     <div class="cu-section-badge">
@@ -380,17 +393,12 @@ $cuInfoCards = [
      ============================================= --}}
 <div class="cu-bs-backdrop" id="cu-bs-backdrop"></div>
 <div class="cu-bottom-sheet" id="cu-bottom-sheet" role="dialog" aria-modal="true" aria-label="Detail kontak">
-    <div class="cu-bs-handle" id="cu-bs-handle"></div>
+    <div class="cu-bs-handle"></div>
     <button class="cu-bs-close" id="cu-bs-close" aria-label="Tutup">
         <i class="fas fa-times"></i>
     </button>
-    <div class="cu-bs-content" id="cu-bs-content">
-        {{-- Filled dynamically by JS --}}
-    </div>
+    <div class="cu-bs-content" id="cu-bs-content"></div>
 </div>
-
-{{-- Toast Container --}}
-<div class="cu-toast-container" id="cu-toast-container" aria-live="polite" aria-atomic="true"></div>
 
 @endsection
 
