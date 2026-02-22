@@ -37,9 +37,7 @@ class Handler extends ExceptionHandler
      */
     protected function renderHttpException(HttpExceptionInterface $e)
     {
-        $this->registerErrorViewPaths();
-
-        $view = "errors::{$e->getStatusCode()}";
+        $view = "errors.{$e->getStatusCode()}";
 
         if (!view()->exists($view)) {
             $view = 'errors.default';

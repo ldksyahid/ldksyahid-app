@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\Request;
 
 class VerificationController extends Controller
 {
@@ -41,13 +42,26 @@ class VerificationController extends Controller
     }
 
     /**
+     * Show the email verification notice.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function showNotice(Request $request)
+    {
+        return $request->user()->hasVerifiedEmail()
+            ? redirect($this->redirectPath())
+            : view('auth.verify.index');
+    }
+
+    /**
      * Resend the email verification notification.
      * Override default to support AJAX requests
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function resend(\Illuminate\Http\Request $request)
+    public function resend(Request $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
             // Check if AJAX request
