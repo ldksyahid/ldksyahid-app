@@ -60,15 +60,15 @@
         object-fit: cover;
     }
 
-    /* Desktop Image Height */
+    /* Desktop: show full image, no crop */
     @media (min-width: 992px) {
         .hero-slide {
-            height: 550px;
+            height: auto;
         }
 
         .hero-image {
-            height: 550px;
-            object-fit: cover;
+            height: auto;
+            object-fit: unset;
         }
     }
 
@@ -554,26 +554,48 @@
 
     /* Mobile Adjustments */
     @media (max-width: 991.98px) {
+        /* Hero fills full viewport — no vertical scroll gap */
         .hero-fun {
             padding-top: 65px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
         }
 
         .hero-carousel-wrapper {
             padding: 0.75rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .hero-carousel-card {
             border-radius: 20px;
             overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .hero-slide {
             height: auto;
+            flex-shrink: 0;
         }
 
+        /* Show full image, no crop */
         .hero-image {
-            height: 220px;
-            object-fit: cover;
+            height: auto;
+            object-fit: unset;
+        }
+
+        /* Hadith section grows to fill remaining space */
+        .hero-mobile-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-bottom: 1.5rem;
         }
     }
 
@@ -606,16 +628,9 @@
        CONTACT-US SPECIFIC ADDITIONS
        ================================================================ */
 
-    /* Mobile intro block (page badge + title + button) */
-    .cu-mobile-intro {
-        padding-bottom: 1rem;
-        margin-bottom: 0.25rem;
-        border-bottom: 1px solid rgba(0, 167, 157, 0.12);
-    }
-
-    /* Second badge in mobile (hadith source) — reduce top gap */
+    /* Hadith badge in mobile — spacing after divider */
     .cu-hadith-badge-m {
-        margin-top: 0.75rem !important;
+        margin-top: 20px;
     }
 
     /* SweetAlert toast position below navbar */
@@ -856,12 +871,72 @@
        ------------------------------------------------ */
     .cu-map-form { background: transparent; }
 
+    /* Location chips row */
+    .cu-loc-row {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .cu-loc-chip {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: white;
+        border: 1.5px solid rgba(0, 167, 157, 0.15);
+        border-radius: 14px;
+        padding: 0.75rem 1rem;
+        flex: 1;
+        min-width: 0;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        transition: all 0.3s ease;
+    }
+
+    .cu-loc-chip:hover {
+        border-color: rgba(0, 167, 157, 0.3);
+        box-shadow: 0 6px 20px rgba(0, 167, 157, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .cu-loc-ico {
+        font-size: 1.6rem;
+        flex-shrink: 0;
+        line-height: 1;
+    }
+
+    .cu-loc-chip > div {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .cu-loc-label {
+        font-size: 0.68rem;
+        color: var(--gray);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 1px;
+    }
+
+    .cu-loc-val {
+        font-size: 0.83rem;
+        font-weight: 600;
+        color: var(--dark);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Map wrapper */
     .cu-map-wrap {
         border-radius: 20px;
         overflow: hidden;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        height: 420px;
+        height: 340px;
         transition: box-shadow 0.3s ease;
+        position: relative;
     }
 
     .cu-map-wrap:hover { box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15); }
@@ -870,6 +945,37 @@
         width: 100%;
         height: 100%;
         display: block;
+    }
+
+    /* Floating "Buka di Google Maps" button */
+    .cu-map-open-btn {
+        position: absolute;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        color: var(--primary);
+        border: 1.5px solid rgba(0, 167, 157, 0.25);
+        border-radius: 50px;
+        padding: 0.45rem 1.2rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        z-index: 5;
+    }
+
+    .cu-map-open-btn:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        transform: translateX(-50%) translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 167, 157, 0.3);
     }
 
     .cu-form-card {
@@ -1192,13 +1298,16 @@
         .cu-section-title { font-size: 1.65rem; }
         .cu-form-row      { grid-template-columns: 1fr; }
         .cu-form-card     { padding: 1.75rem; }
-        .cu-map-wrap      { height: 300px; }
+        .cu-map-wrap      { height: 280px; }
     }
 
     @media (max-width: 767.98px) {
         .cu-section-title { font-size: 1.4rem; }
         .cu-section-sub   { font-size: 0.95rem; }
         .cu-form-card     { padding: 1.25rem; }
-        .cu-map-wrap      { height: 250px; }
+        .cu-map-wrap      { height: 240px; }
+        .cu-loc-row       { gap: 0.5rem; }
+        .cu-loc-chip      { padding: 0.6rem 0.75rem; border-radius: 12px; }
+        .cu-loc-ico       { font-size: 1.3rem; }
     }
 </style>

@@ -142,19 +142,6 @@ $cuInfoCards = [
                 {{-- White Curved Divider Mobile --}}
                 <div class="hero-divider-mobile"></div>
 
-                {{-- Page Intro (mobile only) --}}
-                <div class="cu-mobile-intro">
-                    <div class="hero-mobile-badge">
-                        <span class="badge-icon">💬</span>
-                        <span>Hubungi Kami</span>
-                    </div>
-                    <h2 class="hero-mobile-title">Ada Pertanyaan?<br>Yuk Hubungi Kami!</h2>
-                    <a href="#cu-form-section" class="hero-mobile-btn cu-intro-btn">
-                        <span>Kirim Pesan</span>
-                        <i class="fas fa-paper-plane"></i>
-                    </a>
-                </div>
-
                 {{-- Hadith Badge --}}
                 <div class="hero-mobile-badge cu-hadith-badge-m">
                     <span class="badge-icon">📖</span>
@@ -290,20 +277,46 @@ $cuInfoCards = [
 
             {{-- Map --}}
             <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
-                <div class="cu-section-header mb-4">
+                {{-- Section header --}}
+                <div class="mb-3">
                     <div class="cu-section-badge">
                         <span>🗺️</span>
                         <span>Lokasi Kami</span>
                     </div>
-                    <h3 class="cu-section-title mt-3">Temukan Kami di Sini</h3>
-                    <p class="cu-section-sub">Gedung Student Center Lt. 3, UIN Syarif Hidayatullah Jakarta</p>
+                    <h3 class="cu-section-title mt-3 mb-1">Temukan Kami di Sini</h3>
+                    <p class="cu-section-sub">LDK Syahid, Gedung Student Center Lt. 3</p>
                 </div>
+
+                {{-- Location info chips --}}
+                <div class="cu-loc-row">
+                    <div class="cu-loc-chip">
+                        <span class="cu-loc-ico">🏛️</span>
+                        <div>
+                            <span class="cu-loc-label">Gedung</span>
+                            <span class="cu-loc-val">Student Center Lt. 3</span>
+                        </div>
+                    </div>
+                    <div class="cu-loc-chip">
+                        <span class="cu-loc-ico">📍</span>
+                        <div>
+                            <span class="cu-loc-label">Kota</span>
+                            <span class="cu-loc-val">Ciputat, Tangerang Selatan</span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Map iframe --}}
                 <div class="cu-map-wrap">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.6773009952885!2d106.75319361449397!3d-6.306059963469107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69efd9636c9d6b%3A0x71fbe6e9045945ff!2sLDK%20Syahid%20UIN%20Syarif%20Hidayatullah%20Jakarta!5e0!3m2!1sen!2sid!4v1664598000447!5m2!1sen!2sid"
                         frameborder="0" style="border:0;" allowfullscreen=""
                         aria-hidden="false" tabindex="0" title="Lokasi LDK Syahid">
                     </iframe>
+                    <a href="https://www.google.com/maps/place/LDK+Syahid+UIN+Syarif+Hidayatullah+Jakarta/@-6.306059963469107,106.75319361449397,17z"
+                       target="_blank" rel="noopener" class="cu-map-open-btn">
+                        <i class="fas fa-location-arrow"></i>
+                        <span>Buka di Google Maps</span>
+                    </a>
                 </div>
             </div>
 
