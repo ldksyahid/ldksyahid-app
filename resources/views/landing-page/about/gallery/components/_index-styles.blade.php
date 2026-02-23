@@ -754,12 +754,9 @@ button.gl-pag-edge:last-child  { border-radius: 14px 50px 50px 14px; }
 }
 .gl-bottom-sheet.active { transform: translateY(0); }
 
-.gl-bs-handle {
-    width: 40px; height: 4px;
-    background: rgba(0,167,157,.4);
-    border-radius: 2px; margin: .75rem auto .25rem;
-    flex-shrink: 0;
-}
+/* Handle asli disembunyikan — digantikan oleh ::before pada gl-bs-content */
+.gl-bs-handle { display: none; }
+
 .gl-bs-close {
     position: absolute; top: .75rem; right: 1rem;
     background: rgba(255,255,255,.7); border: none;
@@ -770,12 +767,25 @@ button.gl-pag-edge:last-child  { border-radius: 14px 50px 50px 14px; }
     backdrop-filter: blur(4px); z-index: 2;
 }
 .gl-bs-close:hover { background: #fecaca; color: #ef4444; }
+
 .gl-bs-content {
     overflow-y: auto; flex: 1;
-    padding: .25rem 1.1rem 2rem;
+    padding: 0 1.1rem 2rem;
     scrollbar-width: thin;
-    /* Mulai dari warna yang sama dengan sheet (#dff4f2), memudar ke putih */
     background: linear-gradient(to bottom, #dff4f2 0%, white 200px);
+}
+/* Handle di dalam konten — sticky supaya tetap di atas saat scroll */
+.gl-bs-content::before {
+    content: '';
+    display: block;
+    width: 40px; height: 4px;
+    background: rgba(0,167,157,.45);
+    border-radius: 2px;
+    margin: .85rem auto .4rem;
+    position: sticky;
+    top: .85rem;
+    z-index: 5;
+    flex-shrink: 0;
 }
 
 /* Bottom sheet inner elements */
