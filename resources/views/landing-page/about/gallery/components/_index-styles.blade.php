@@ -477,9 +477,15 @@
 }
 .gl-m-tap-hint i { opacity: .6; }
 
-/* ─── AJAX Loading State ─────────────────────────────────────── */
-#gl-cards-wrap { transition: opacity .25s ease; }
-#gl-cards-wrap.gl-cards-loading { opacity: .4; pointer-events: none; }
+/* ─── AJAX Page Transition ───────────────────────────────────── */
+#gl-cards-wrap {
+    transition: opacity .35s ease, transform .35s ease;
+}
+#gl-cards-wrap.gl-cards-out {
+    opacity: 0;
+    transform: translateY(16px);
+    pointer-events: none;
+}
 
 /* ─── Pagination ─────────────────────────────────────────────── */
 .gl-pagination {
