@@ -291,6 +291,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target === this) glCloseZoom();
     });
 
+    /* Open zoom from inline desktop grid */
+    window.glOpenZoomInline = function (dataIdx, photoIdx) {
+        var data = GL_DATA[dataIdx];
+        if (data && data.photos && data.photos.length > 0) {
+            glOpenZoom(data.photos, photoIdx);
+        }
+    };
+
     /* Keyboard nav for zoom */
     document.addEventListener('keydown', function (e) {
         var overlay = document.getElementById('gl-zoom-overlay');
@@ -302,91 +310,38 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* ============================================================
-       6. DESKTOP GALLERY MODAL
+       6. VIDEO LIGHTBOX (YouTube embed)
        ============================================================ */
-    window.glOpenModal = function (idx) {
-        var data = GL_DATA[idx];
-        if (!data) return;
-
-        /* Header */
-        document.getElementById('gl-modal-num').textContent   = data.num;
-        document.getElementById('gl-modal-event').textContent = data.name;
-        document.getElementById('gl-modal-title').textContent = data.theme;
-
-        /* Build body */
-        var body = document.getElementById('gl-modal-body');
-        body.innerHTML = buildModalBody(data);
-
-        /* Attach photo zoom clicks */
-        body.querySelectorAll('.gl-modal-photo').forEach(function (el) {
-            el.addEventListener('click', function () {
-                glOpenZoom(data.photos, parseInt(this.dataset.photoIdx));
-            });
-        });
-
-        /* Open */
-        document.getElementById('gl-modal-backdrop').classList.add('active');
-        document.getElementById('gl-modal').classList.add('active');
+    window.glOpenVideo = function (videoId) {
+        var iframe = document.getElementById('gl-video-iframe');
+        if (iframe) iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+        document.getElementById('gl-video-overlay').classList.add('active');
         lockScroll();
         hideBtt();
     };
 
-    function buildModalBody(data) {
-        var html = '';
-
-        /* Description */
-        if (data.desc) {
-            html += '<p class="gl-modal-desc">' + escHtml(data.desc) + '</p>';
-        }
-
-        /* Photo grid */
-        if (data.photos.length > 0) {
-            html += '<div class="gl-modal-grid">';
-            data.photos.forEach(function (pid, i) {
-                html += '<div class="gl-modal-photo" data-photo-idx="' + i + '">'
-                     +  '<img src="https://lh3.googleusercontent.com/d/' + escHtml(pid) + '" alt="Foto ' + (i+1) + '" loading="lazy">'
-                     +  '</div>';
-            });
-            html += '</div>';
-        }
-
-        /* YouTube */
-        if (data.videoId) {
-            var thumb = 'https://img.youtube.com/vi/' + data.videoId + '/maxresdefault.jpg';
-            var ytUrl = 'https://www.youtube.com/watch?v=' + data.videoId;
-            html += '<div class="gl-modal-video-section">'
-                 +  '<div class="gl-modal-video-label"><i class="fab fa-youtube"></i> Video Dokumentasi</div>'
-                 +  '<a href="' + escHtml(ytUrl) + '" target="_blank" rel="noopener" class="gl-modal-video-thumb">'
-                 +  '<img src="' + escHtml(thumb) + '" alt="YouTube" '
-                 +  'onerror="this.src=\'https://img.youtube.com/vi/' + escHtml(data.videoId) + '/hqdefault.jpg\'">'
-                 +  '<div class="gl-modal-play-btn"><i class="fas fa-play"></i></div>'
-                 +  '</a></div>';
-        }
-
-        /* Doc link */
-        if (data.linkDoc) {
-            html += '<a href="' + escHtml(data.linkDoc) + '" target="_blank" rel="noopener" class="gl-modal-doc">'
-                 +  '<i class="fas fa-folder-open"></i> Dokumentasi Lengkap</a>';
-        }
-
-        return html;
-    }
-
-    function glCloseModal() {
-        document.getElementById('gl-modal-backdrop').classList.remove('active');
-        document.getElementById('gl-modal').classList.remove('active');
+    function glCloseVideo() {
+        var iframe = document.getElementById('gl-video-iframe');
+        if (iframe) iframe.src = '';
+        document.getElementById('gl-video-overlay').classList.remove('active');
         unlockScroll();
         showBtt();
     }
 
-    document.getElementById('gl-modal-close').addEventListener('click', glCloseModal);
-    document.getElementById('gl-modal-backdrop').addEventListener('click', glCloseModal);
+    document.getElementById('gl-video-close').addEventListener('click', glCloseVideo);
+    document.getElementById('gl-video-overlay').addEventListener('click', function (e) {
+        if (e.target === this) glCloseVideo();
+    });
+
+    /* Escape key — close in priority: zoom > video > bottom sheet */
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
-            var overlay = document.getElementById('gl-zoom-overlay');
-            if (overlay && overlay.classList.contains('active')) { glCloseZoom(); return; }
-            if (document.getElementById('gl-modal').classList.contains('active')) glCloseModal();
-            if (document.getElementById('gl-bottom-sheet').classList.contains('active')) glCloseBs();
+            var zoomOverlay  = document.getElementById('gl-zoom-overlay');
+            var videoOverlay = document.getElementById('gl-video-overlay');
+            var bs           = document.getElementById('gl-bottom-sheet');
+            if (zoomOverlay  && zoomOverlay.classList.contains('active'))  { glCloseZoom();  return; }
+            if (videoOverlay && videoOverlay.classList.contains('active')) { glCloseVideo(); return; }
+            if (bs           && bs.classList.contains('active'))           { glCloseBs();    return; }
         }
     });
 
@@ -437,14 +392,13 @@ document.addEventListener('DOMContentLoaded', function () {
         /* Video */
         if (data.videoId) {
             var thumb = 'https://img.youtube.com/vi/' + data.videoId + '/maxresdefault.jpg';
-            var ytUrl = 'https://www.youtube.com/watch?v=' + data.videoId;
             html += '<div class="gl-bs-video">'
                  +  '<div class="gl-bs-video-label"><i class="fab fa-youtube"></i> Video Dokumentasi</div>'
-                 +  '<a href="' + escHtml(ytUrl) + '" target="_blank" rel="noopener" class="gl-bs-video-thumb">'
+                 +  '<div class="gl-bs-video-thumb" onclick="glOpenVideo(\'' + escHtml(data.videoId) + '\')">'
                  +  '<img src="' + escHtml(thumb) + '" alt="YouTube" '
                  +  'onerror="this.src=\'https://img.youtube.com/vi/' + escHtml(data.videoId) + '/hqdefault.jpg\'">'
                  +  '<div class="gl-bs-play-btn"><i class="fas fa-play"></i></div>'
-                 +  '</a></div>';
+                 +  '</div></div>';
         }
 
         /* Doc link */
