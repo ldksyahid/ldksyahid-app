@@ -166,23 +166,23 @@ $glData = $postgallery->map(function ($post, $idx) {
 
         @else
 
-        {{-- ── Desktop Card List (d-none d-lg-block) ─────────────── --}}
+        {{-- ── Desktop Card List (d-none d-lg-block) — semua foto inline ── --}}
         <div class="d-none d-lg-block">
             @foreach($postgallery as $idx => $post)
             @php
                 $pcount   = count($glData[$idx]['photos']);
-                $preview  = array_slice($glData[$idx]['photos'], 0, 4);
-                $moreNum  = max(0, $pcount - 4);
                 $hasVideo = !empty($glData[$idx]['videoId']);
+                $ytThumb  = $hasVideo ? 'https://img.youtube.com/vi/' . $glData[$idx]['videoId'] . '/maxresdefault.jpg' : '';
             @endphp
             <div class="gl-event-card wow fadeInUp" data-wow-delay="{{ 0.1 + ($idx * 0.08) }}s">
-                <div class="gl-card-accent"></div>
-                <div class="gl-card-body">
 
-                    {{-- Meta row --}}
-                    <div class="gl-card-meta">
-                        <span class="gl-card-num">{{ $glData[$idx]['num'] }}</span>
-                        <span class="gl-event-tag">{{ $post->eventName }}</span>
+                {{-- Gradient Header (replaces thin accent line) --}}
+                <div class="gl-card-header">
+                    <div class="gl-card-header-left">
+                        <span class="gl-card-header-num">{{ $glData[$idx]['num'] }}</span>
+                        <span class="gl-card-header-name">{{ $post->eventName }}</span>
+                    </div>
+                    <div class="gl-card-header-badges">
                         @if($hasVideo)
                         <span class="gl-video-badge"><i class="fab fa-youtube"></i> Video</span>
                         @endif
@@ -190,41 +190,51 @@ $glData = $postgallery->map(function ($post, $idx) {
                         <span class="gl-photo-count"><i class="fas fa-images"></i> {{ $pcount }} foto</span>
                         @endif
                     </div>
+                </div>
 
-                    {{-- Title --}}
+                {{-- Card Body —  all content inline --}}
+                <div class="gl-card-body">
+
                     <h3 class="gl-card-title">{{ $post->eventTheme }}</h3>
+                    <p class="gl-card-desc">{{ $post->eventDescription }}</p>
 
-                    {{-- Description --}}
-                    <p class="gl-card-desc">{{ Str::limit($post->eventDescription, 200) }}</p>
-
-                    {{-- Photo Strip --}}
+                    {{-- All photos grid --}}
                     @if($pcount > 0)
-                    <div class="gl-photo-strip">
-                        @foreach($preview as $pid)
-                        <div class="gl-strip-item">
+                    <div class="gl-photo-grid">
+                        @foreach($glData[$idx]['photos'] as $pidx => $pid)
+                        <div class="gl-grid-item"
+                             onclick="glOpenZoomInline({{ $idx }}, {{ $pidx }})">
                             <img src="https://lh3.googleusercontent.com/d/{{ $pid }}"
-                                 alt="Foto kegiatan" loading="lazy">
+                                 alt="Foto {{ $pidx + 1 }}" loading="lazy">
                         </div>
                         @endforeach
-                        @if($moreNum > 0)
-                        <div class="gl-strip-more">+{{ $moreNum }}</div>
-                        @endif
                     </div>
                     @endif
 
-                    {{-- Footer --}}
+                    {{-- YouTube — click buka lightbox embed --}}
+                    @if($hasVideo)
+                    <div class="gl-video-section">
+                        <div class="gl-video-label">
+                            <i class="fab fa-youtube"></i> Video Dokumentasi
+                        </div>
+                        <div class="gl-video-thumb"
+                             onclick="glOpenVideo('{{ $glData[$idx]['videoId'] }}')">
+                            <img src="{{ $ytThumb }}" alt="YouTube"
+                                 onerror="this.src='https://img.youtube.com/vi/{{ $glData[$idx]['videoId'] }}/hqdefault.jpg'">
+                            <div class="gl-play-btn"><i class="fas fa-play"></i></div>
+                        </div>
+                    </div>
+                    @endif
+
+                    {{-- Doc link --}}
+                    @if(!empty($post->linkDoc))
                     <div class="gl-card-footer">
-                        @if(!empty($post->linkDoc))
                         <a href="{{ $post->linkDoc }}" target="_blank" rel="noopener" class="gl-doc-link">
                             <i class="fas fa-folder-open"></i>
                             <span>Dokumentasi Lengkap</span>
                         </a>
-                        @endif
-                        <button class="gl-view-btn" onclick="glOpenModal({{ $idx }})">
-                            <span>Lihat Galeri</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
                     </div>
+                    @endif
 
                 </div>
             </div>
@@ -278,24 +288,16 @@ $glData = $postgallery->map(function ($post, $idx) {
 </section>
 
 {{-- =============================================
-     DESKTOP GALLERY MODAL
+     VIDEO LIGHTBOX OVERLAY (YouTube embed)
      ============================================= --}}
-<div class="gl-modal-backdrop" id="gl-modal-backdrop"></div>
-<div class="gl-modal" id="gl-modal" role="dialog" aria-modal="true" aria-label="Galeri Kegiatan">
-    <div class="gl-modal-header">
-        <div class="gl-modal-title-wrap">
-            <span class="gl-modal-num" id="gl-modal-num">01</span>
-            <div>
-                <p class="gl-modal-event-name" id="gl-modal-event"></p>
-                <h4 class="gl-modal-theme" id="gl-modal-title"></h4>
-            </div>
-        </div>
-        <button class="gl-modal-close" id="gl-modal-close" aria-label="Tutup">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-    <div class="gl-modal-body" id="gl-modal-body">
-        {{-- Populated by JS --}}
+<div class="gl-video-overlay" id="gl-video-overlay">
+    <button class="gl-video-close" id="gl-video-close" aria-label="Tutup">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="gl-video-wrap">
+        <iframe id="gl-video-iframe" src="" frameborder="0"
+                allow="autoplay; encrypted-media; fullscreen"
+                allowfullscreen></iframe>
     </div>
 </div>
 
