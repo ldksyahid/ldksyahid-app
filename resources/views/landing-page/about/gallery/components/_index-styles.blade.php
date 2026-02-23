@@ -570,11 +570,23 @@ button.gl-pag-edge:last-child  { border-radius: 14px 50px 50px 14px; }
 
 /* ── Mobile ── */
 @media (max-width: 575.98px) {
-    .gl-pag-nav, .gl-pag-num { height: 36px; }
-    .gl-pag-nav { width: 36px; }
-    .gl-pag-num { min-width: 36px; font-size: .78rem; }
-    .gl-pag-ellipsis { height: 36px; font-size: .72rem; }
-    .gl-pag-inner { gap: .3rem; }
+    .gl-pagination { width: 100%; }
+    .gl-pag-inner {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        width: 100%;
+        padding: .25rem .5rem;
+        gap: .25rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .gl-pag-inner::-webkit-scrollbar { display: none; }
+    .gl-pag-nav, .gl-pag-num { height: 34px; flex-shrink: 0; }
+    .gl-pag-nav { width: 34px; }
+    .gl-pag-num { min-width: 34px; font-size: .75rem; }
+    .gl-pag-ellipsis { height: 34px; font-size: .7rem; flex-shrink: 0; }
+    .gl-pag-info { font-size: .78rem; text-align: center; }
 }
 
 
