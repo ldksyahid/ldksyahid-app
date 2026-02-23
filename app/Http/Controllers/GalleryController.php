@@ -13,7 +13,7 @@ class GalleryController extends Controller
      */
     public function index(Request $request)
     {
-        $postgallery = Gallery::orderBy('created_at', 'desc')->paginate(5);
+        $postgallery = Gallery::orderBy('created_at', 'desc')->paginate(3);
         $glData = $this->processGalleryData($postgallery);
 
         if ($request->ajax()) {

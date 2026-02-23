@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
        2. AJAX PAGINATION
        ============================================================ */
     document.addEventListener('click', function (e) {
-        var link = e.target.closest('#gl-cards-wrap .gl-pag-btn[href], #gl-cards-wrap .gl-pag-num[href]');
+        var link = e.target.closest('#gl-cards-wrap .gl-pag-nav[href], #gl-cards-wrap .gl-pag-num[href]');
         if (!link) return;
         e.preventDefault();
         glLoadPage(link.href);

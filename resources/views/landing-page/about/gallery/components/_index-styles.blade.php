@@ -482,26 +482,64 @@
 #gl-cards-wrap.gl-cards-loading { opacity: .4; pointer-events: none; }
 
 /* ─── Pagination ─────────────────────────────────────────────── */
-.gl-pagination { display: flex; justify-content: center; margin-top: 2rem; padding-bottom: .5rem; }
-.gl-pag-inner { display: flex; align-items: center; gap: .5rem; }
-.gl-pag-btn {
-    width: 40px; height: 40px; border-radius: 50%;
-    border: 2px solid var(--primary); background: white; color: var(--primary);
+.gl-pagination {
+    display: flex; justify-content: center;
+    margin-top: 2.5rem; padding-bottom: .75rem;
+}
+.gl-pag-inner {
+    display: flex; align-items: center; gap: .35rem;
+    flex-wrap: wrap; justify-content: center;
+    background: white; border-radius: 20px;
+    padding: .5rem .75rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.05);
+}
+
+/* ── Nav: <<, <, >, >> ── */
+.gl-pag-nav {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1.5px solid var(--gray-200); background: white; color: var(--gray);
     cursor: pointer; display: flex; align-items: center; justify-content: center;
-    font-size: .85rem; transition: background .2s, color .2s, transform .15s;
+    font-size: .75rem; text-decoration: none; flex-shrink: 0;
+    transition: border-color .2s, color .2s, background .2s, transform .2s, box-shadow .2s;
 }
-.gl-pag-btn:hover:not([disabled]) { background: var(--primary); color: white; transform: scale(1.08); }
-.gl-pag-btn[disabled] { opacity: .3; cursor: default; pointer-events: none; }
-.gl-pag-pages { display: flex; gap: .35rem; flex-wrap: wrap; justify-content: center; }
+.gl-pag-nav:hover:not([disabled]) {
+    border-color: var(--primary); color: var(--primary); background: var(--primary-light, #f0faf5);
+    transform: scale(1.12); box-shadow: 0 3px 10px rgba(0,0,0,.1);
+}
+.gl-pag-nav[disabled] { opacity: .25; cursor: default; pointer-events: none; }
+
+/* Edge buttons (<<, >>) — slightly muted */
+.gl-pag-edge { border-style: dashed; }
+.gl-pag-edge:hover:not([disabled]) { border-style: solid; }
+
+/* ── Page numbers ── */
+.gl-pag-pages { display: flex; align-items: center; gap: .3rem; flex-wrap: wrap; justify-content: center; }
 .gl-pag-num {
-    min-width: 38px; height: 38px; border-radius: 10px;
-    border: 2px solid var(--gray-200); background: white; color: var(--gray);
-    cursor: pointer; font-size: .85rem; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color .2s, background .2s, color .2s;
+    min-width: 36px; height: 36px; padding: 0 .45rem; border-radius: 10px;
+    border: 1.5px solid var(--gray-200); background: white; color: var(--gray);
+    cursor: pointer; font-size: .82rem; font-weight: 700; line-height: 1;
+    display: flex; align-items: center; justify-content: center; text-decoration: none;
+    transition: border-color .2s, background .2s, color .2s, transform .2s, box-shadow .2s;
 }
-.gl-pag-num.active { border-color: var(--primary); background: var(--primary); color: white; }
-.gl-pag-num:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+.gl-pag-num:hover:not(.active) {
+    border-color: var(--primary); color: var(--primary);
+    transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,.1);
+}
+.gl-pag-num.active {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white; font-size: .88rem;
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 6px 18px rgba(0,0,0,.18);
+}
+
+/* ── Ellipsis ── */
+.gl-pag-ellipsis {
+    width: 26px; height: 36px;
+    display: flex; align-items: flex-end; justify-content: center;
+    color: var(--gray); font-weight: 800; font-size: .8rem;
+    padding-bottom: 3px; letter-spacing: 1.5px; user-select: none;
+}
 
 
 /* ─── YouTube Video Lightbox ───────────────────────────────────── */
