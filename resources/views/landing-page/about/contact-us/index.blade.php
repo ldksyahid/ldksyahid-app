@@ -52,11 +52,12 @@ $cuInfoCards = [
 @endphp
 
 {{-- =============================================
-     HERO / JUMBOTRON SECTION
-     Identical structure to home jumbotron (empty/hadith state)
-     No content overlay on image
+     INFO CARDS SECTION
+     (Hero carousel merged at top of this section)
      ============================================= --}}
-<section class="hero-fun wow fadeIn" data-wow-delay="0.1s">
+<section class="cu-info-section hero-fun py-5 wow fadeIn" data-wow-delay="0.1s">
+
+    {{-- Hero / Jumbotron Carousel --}}
     <div class="hero-carousel-wrapper">
         <div class="hero-carousel-card">
 
@@ -67,7 +68,7 @@ $cuInfoCards = [
                      alt="Hubungi Kami" />
             </div>
 
-            {{-- Desktop Hadith Content (Below Image) — identical to jumbotron empty state --}}
+            {{-- Desktop Hadith Content (Below Image) --}}
             <div class="hero-desktop-content d-none d-lg-block">
 
                 {{-- Background Animation & Icons --}}
@@ -178,14 +179,9 @@ $cuInfoCards = [
 
         </div>{{-- /hero-carousel-card --}}
     </div>{{-- /hero-carousel-wrapper --}}
-</section>
 
-
-{{-- =============================================
-     INFO CARDS SECTION
-     ============================================= --}}
-<section class="cu-info-section py-5">
-    <div class="container">
+    {{-- Info Cards --}}
+    <div class="container mt-5">
 
         <div class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
             <div class="cu-section-badge">
