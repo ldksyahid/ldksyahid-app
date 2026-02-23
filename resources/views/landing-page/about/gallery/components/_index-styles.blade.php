@@ -343,10 +343,6 @@
     display: flex; align-items: center; gap: .65rem;
     position: relative; z-index: 1;
 }
-.gl-card-header-num {
-    font-size: 1.6rem; font-weight: 900; color: rgba(255,255,255,.95);
-    line-height: 1; letter-spacing: -1px; flex-shrink: 0;
-}
 .gl-card-header-name {
     color: rgba(255,255,255,.82); font-size: .82rem; font-weight: 600;
 }

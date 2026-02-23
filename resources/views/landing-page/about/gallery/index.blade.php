@@ -179,7 +179,6 @@ $glData = $postgallery->map(function ($post, $idx) {
                 {{-- Gradient Header (replaces thin accent line) --}}
                 <div class="gl-card-header">
                     <div class="gl-card-header-left">
-                        <span class="gl-card-header-num">{{ $glData[$idx]['num'] }}</span>
                         <span class="gl-card-header-name">{{ $post->eventName }}</span>
                     </div>
                     <div class="gl-card-header-badges">
