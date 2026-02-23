@@ -23,7 +23,7 @@ class GalleryController extends Controller
             ]);
         }
 
-        return view('landing-page.about.gallery.index', compact('postgallery', 'glData'), ["title" => "Galeri Kegiatan"]);
+        return view('landing-page.about.gallery.index', compact('postgallery', 'glData'), ["title" => "Tentang Kami"]);
     }
 
     /**
