@@ -741,7 +741,7 @@ button.gl-pag-edge:last-child  { border-radius: 14px 50px 50px 14px; }
 
 .gl-bottom-sheet {
     position: fixed; bottom: 0; left: 0; right: 0;
-    background: linear-gradient(to bottom, #dff4f2 0%, white 170px);
+    background: white;
     border-radius: 24px 24px 0 0;
     z-index: 1075;
     max-height: 88dvh;
@@ -752,26 +752,37 @@ button.gl-pag-edge:last-child  { border-radius: 14px 50px 50px 14px; }
 }
 .gl-bottom-sheet.active { transform: translateY(0); }
 
+/* Top teal strip — covers handle + close btn area */
+.gl-bottom-sheet::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 52px;           /* tinggi area handle */
+    background: linear-gradient(135deg, #c8eeeb 0%, #dff4f2 100%);
+    pointer-events: none; z-index: 0;
+}
+
 .gl-bs-handle {
     width: 40px; height: 4px;
-    background: rgba(0,167,157,.35);
+    background: rgba(0,167,157,.45);
     border-radius: 2px; margin: .75rem auto .25rem;
-    flex-shrink: 0;
+    flex-shrink: 0; position: relative; z-index: 1;
 }
 .gl-bs-close {
     position: absolute; top: .75rem; right: 1rem;
-    background: rgba(255,255,255,.6); border: none;
+    background: rgba(255,255,255,.65); border: none;
     width: 34px; height: 34px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; color: var(--primary-dark); font-size: .85rem;
     transition: background .2s, color .2s;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px); z-index: 2;
 }
 .gl-bs-close:hover { background: #fecaca; color: #ef4444; }
 .gl-bs-content {
     overflow-y: auto; flex: 1;
     padding: .25rem 1.1rem 2rem;
     scrollbar-width: thin;
+    /* Gradient nyambung dari handle di atas */
+    background: linear-gradient(to bottom, #dff4f2 0%, white 160px);
 }
 
 /* Bottom sheet inner elements */
