@@ -266,7 +266,6 @@ $glData = $postgallery->map(function ($post, $idx) {
                     @endif
                     <div class="gl-mobile-card-body">
                         <div class="gl-mobile-meta">
-                            <span class="gl-m-num">{{ $glData[$idx]['num'] }}</span>
                             <span class="gl-m-tag">{{ Str::limit($post->eventName, 28) }}</span>
                         </div>
                         <h5 class="gl-m-title">{{ $post->eventTheme }}</h5>
