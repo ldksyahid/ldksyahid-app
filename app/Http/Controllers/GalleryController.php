@@ -14,7 +14,7 @@ class GalleryController extends Controller
     public function index()
     {
         $postgallery = Gallery::orderBy('created_at', 'desc')->get();
-        return view('landing-page.about.gallery', compact('postgallery'), ["title" => "Tentang Kami"]);
+        return view('landing-page.about.gallery.index', compact('postgallery'), ["title" => "Galeri Kegiatan"]);
     }
 
     /**
