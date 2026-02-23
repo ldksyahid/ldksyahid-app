@@ -554,13 +554,12 @@
 
     /* Mobile Adjustments */
     @media (max-width: 991.98px) {
-        /* Prevent Bootstrap row negative-margins & Owl Carousel from
-           creating horizontal overflow that breaks the fullscreen hero */
+        /* Prevent Bootstrap row / Owl Carousel horizontal overflow */
         html, body {
             overflow-x: hidden;
         }
 
-        /* Hero is EXACTLY viewport height — strict, no overflow scroll */
+        /* Hero fills exactly the viewport — no scroll possible */
         .hero-fun {
             padding-top: 65px;
             height: 100vh;
@@ -571,54 +570,53 @@
             max-width: 100%;
         }
 
+        /* Wrapper is a flex ITEM (takes remaining height from hero-fun)
+           but NOT a flex CONTAINER — card sizes to natural content height
+           instead of being forced to fill the full wrapper. */
         .hero-carousel-wrapper {
-            padding: 0.75rem 0.75rem 1rem; /* bottom padding → card gets bottom radius room */
+            padding: 0.75rem 0.75rem 1rem;
             flex: 1;
-            display: flex;
-            flex-direction: column;
             min-height: 0;
         }
 
-        /* All 4 corners rounded — card floats above page bg */
+        /* All 4 corners rounded; no forced height */
         .hero-carousel-card {
             border-radius: 20px;
             overflow: hidden;
-            flex: 1;
             display: flex;
             flex-direction: column;
-            min-height: 0;
         }
 
-        /* Show full image at natural height — no crop */
+        /* Full image at natural proportional height — !important beats any global rule */
         .hero-fun .hero-slide {
-            height: auto;
+            height: auto !important;
             flex-shrink: 0;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .hero-fun .hero-image {
-            width: 100%;
-            height: auto;
+            width: 100% !important;
+            height: auto !important;
+            max-height: none !important;
             display: block;
-            object-fit: unset;
+            object-fit: unset !important;
         }
 
-        /* Hadith section fills remaining space */
+        /* Hadith section: natural content height (no forced flex expansion).
+           padding-top: 1.5rem clears hero-divider-mobile which extends
+           ~15px INTO this container (top:-30px + height:45px = bottom at +15px).
+           align-items: center → badge/buttons shrink to content width & centered.
+           margin-top: 0       → image not covered at the bottom. */
         .hero-mobile-content {
-            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;  /* center content vertically — no excess space top/bottom */
-            align-items: center;      /* center children horizontally — fixes badge stretching */
-            padding: 0 1.25rem 1rem;
-            margin-top: 0;            /* remove base -20px: image shows fully, nothing covers it */
-            min-height: 0;
-            /* overflow: visible — lets hero-divider-mobile (top:-30px) show above;
-               hero-carousel-card clips externally */
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem 1.25rem 1.5rem;
+            margin-top: 0 !important;
         }
 
-        /* When content is flex-column with align-items:center, block children
-           (paragraphs, wrappers) need their own width to stay full-width */
+        /* Block children keep full width (align-items:center would shrink them) */
         .hero-mobile-content .hadith-mobile-wrapper,
         .hero-mobile-content .mobile-action-area {
             width: 100%;
@@ -654,9 +652,9 @@
        CONTACT-US SPECIFIC ADDITIONS
        ================================================================ */
 
-    /* Hadith badge in mobile — spacing after divider curve */
+    /* Hadith badge in mobile — no extra top margin; justify-content:center handles vertical centering */
     .cu-hadith-badge-m {
-        margin-top: 25px; /* clears the hero-divider-mobile curve (height 45px, top -30px → visual bottom at +15px) */
+        margin-top: 0;
     }
 
     /* SweetAlert toast position below navbar */
