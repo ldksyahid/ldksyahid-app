@@ -9,12 +9,53 @@ use RealRashid\SweetAlert\Facades\Alert;
 class GalleryController extends Controller
 {
     /**
-     * Landing page - Display all galleries
+     * Landing page - Display all galleries (with AJAX pagination support)
      */
-    public function index()
+    public function index(Request $request)
     {
         $postgallery = Gallery::orderBy('created_at', 'desc')->paginate(5);
-        return view('landing-page.about.gallery.index', compact('postgallery'), ["title" => "Galeri Kegiatan"]);
+        $glData = $this->processGalleryData($postgallery);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html'   => view('landing-page.about.gallery.components._gallery-cards', compact('postgallery', 'glData'))->render(),
+                'glData' => $glData,
+            ]);
+        }
+
+        return view('landing-page.about.gallery.index', compact('postgallery', 'glData'), ["title" => "Galeri Kegiatan"]);
+    }
+
+    /**
+     * Process gallery paginator into GL_DATA array for Blade & JS
+     */
+    private function processGalleryData($postgallery)
+    {
+        return collect($postgallery->items())->values()->map(function ($post, $idx) {
+            $photos = [];
+            if ($post->gdrive_id) $photos[] = $post->gdrive_id;
+            for ($i = 1; $i <= 12; $i++) {
+                $k = 'gdrive_id_' . $i;
+                if ($post->$k) $photos[] = $post->$k;
+            }
+            $vid = '';
+            if ($post->linkEmbedYoutube) {
+                $u = $post->linkEmbedYoutube;
+                if      (preg_match('/youtube\.com\/embed\/([^\&\?\/]+)/', $u, $m)) $vid = $m[1];
+                elseif  (preg_match('/youtube\.com\/watch\?v=([^\&\?\/]+)/', $u, $m)) $vid = $m[1];
+                elseif  (preg_match('/youtu\.be\/([^\&\?\/]+)/', $u, $m)) $vid = $m[1];
+                elseif  (preg_match('/youtube\.com\/v\/([^\&\?\/]+)/', $u, $m)) $vid = $m[1];
+            }
+            return [
+                'idx'     => $idx,
+                'name'    => $post->eventName,
+                'theme'   => $post->eventTheme,
+                'desc'    => $post->eventDescription,
+                'linkDoc' => isset($post->linkDoc) ? $post->linkDoc : null,
+                'photos'  => $photos,
+                'videoId' => $vid,
+            ];
+        })->all();
     }
 
     /**

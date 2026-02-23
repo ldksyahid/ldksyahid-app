@@ -477,6 +477,10 @@
 }
 .gl-m-tap-hint i { opacity: .6; }
 
+/* ─── AJAX Loading State ─────────────────────────────────────── */
+#gl-cards-wrap { transition: opacity .25s ease; }
+#gl-cards-wrap.gl-cards-loading { opacity: .4; pointer-events: none; }
+
 /* ─── Pagination ─────────────────────────────────────────────── */
 .gl-pagination { display: flex; justify-content: center; margin-top: 2rem; padding-bottom: .5rem; }
 .gl-pag-inner { display: flex; align-items: center; gap: .5rem; }
