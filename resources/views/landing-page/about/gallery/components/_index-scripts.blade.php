@@ -204,27 +204,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function glLoadPage(url) {
         var wrap = document.getElementById('gl-cards-wrap');
-        if (wrap) wrap.classList.add('gl-cards-loading');
 
-        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-            .then(function (r) { return r.json(); })
-            .then(function (data) {
+        /* 1. Fade-out + slide down */
+        if (wrap) wrap.classList.add('gl-cards-out');
+
+        /* 2. Smooth scroll ke section header */
+        var section = document.getElementById('gl-gallery-section');
+        if (section) {
+            var top = section.getBoundingClientRect().top + window.scrollY - 90;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+
+        /* 3. Fetch data — parallel dengan fade & scroll.
+              Tunggu keduanya (fetch + min 350ms fade) selesai dulu. */
+        var minDelay   = new Promise(function (res) { setTimeout(res, 350); });
+        var fetchData  = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                            .then(function (r) { return r.json(); });
+
+        Promise.all([fetchData, minDelay])
+            .then(function (results) {
+                var data = results[0];
                 if (wrap) {
                     wrap.innerHTML = data.html;
-                    wrap.classList.remove('gl-cards-loading');
+                    /* Dua frame sebelum hapus class agar browser sempat paint dulu */
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
+                            wrap.classList.remove('gl-cards-out');
+                        });
+                    });
                 }
                 GL_DATA = data.glData;
-
-                /* Scroll ke "Galeri Kegiatan" section header */
-                var section = document.getElementById('gl-gallery-section');
-                if (section) {
-                    var top = section.getBoundingClientRect().top + window.scrollY - 90;
-                    window.scrollTo({ top: top, behavior: 'smooth' });
-                }
             })
             .catch(function () {
-                if (wrap) wrap.classList.remove('gl-cards-loading');
-                /* Fallback: full page navigation */
+                if (wrap) wrap.classList.remove('gl-cards-out');
                 window.location.href = url;
             });
     }
