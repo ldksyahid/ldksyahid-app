@@ -86,25 +86,29 @@
         <div class="gl-mobile-thumb">
             <img src="https://lh3.googleusercontent.com/d/{{ $mthumb }}"
                  alt="{{ $post->eventTheme }}" loading="lazy">
-            <div class="gl-mobile-thumb-overlay">
-                @if($mpcount > 0)
-                <span class="gl-m-count"><i class="fas fa-images"></i> {{ $mpcount }}</span>
-                @endif
-                @if($mhasVid)
-                <span class="gl-m-video"><i class="fab fa-youtube"></i></span>
-                @endif
+            <div class="gl-mobile-thumb-bottom">
+                <span class="gl-m-tag-img">{{ Str::limit($post->eventName, 22) }}</span>
+                <div class="gl-m-badges">
+                    @if($mpcount > 0)
+                    <span class="gl-m-count"><i class="fas fa-images"></i> {{ $mpcount }}</span>
+                    @endif
+                    @if($mhasVid)
+                    <span class="gl-m-video"><i class="fab fa-youtube"></i></span>
+                    @endif
+                </div>
             </div>
+        </div>
+        @else
+        <div class="gl-mobile-card-no-thumb">
+            <span class="gl-m-tag">{{ Str::limit($post->eventName, 28) }}</span>
         </div>
         @endif
         <div class="gl-mobile-card-body">
-            <div class="gl-mobile-meta">
-                <span class="gl-m-tag">{{ Str::limit($post->eventName, 28) }}</span>
-            </div>
             <h5 class="gl-m-title">{{ $post->eventTheme }}</h5>
-            <p class="gl-m-desc">{{ Str::limit($post->eventDescription, 100) }}</p>
+            <p class="gl-m-desc">{{ Str::limit($post->eventDescription, 90) }}</p>
             <div class="gl-m-tap-hint">
-                <span>Ketuk untuk lihat galeri</span>
-                <i class="fas fa-hand-pointer"></i>
+                <span>Lihat galeri</span>
+                <i class="fas fa-arrow-right"></i>
             </div>
         </div>
     </div>
