@@ -193,7 +193,44 @@ document.addEventListener('DOMContentLoaded', function () {
     startCountdown();
 
     /* ============================================================
-       2. BACK-TO-TOP: hide when modal/sheet open
+       2. AJAX PAGINATION
+       ============================================================ */
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest('#gl-cards-wrap .gl-pag-btn[href], #gl-cards-wrap .gl-pag-num[href]');
+        if (!link) return;
+        e.preventDefault();
+        glLoadPage(link.href);
+    });
+
+    function glLoadPage(url) {
+        var wrap = document.getElementById('gl-cards-wrap');
+        if (wrap) wrap.classList.add('gl-cards-loading');
+
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (wrap) {
+                    wrap.innerHTML = data.html;
+                    wrap.classList.remove('gl-cards-loading');
+                }
+                GL_DATA = data.glData;
+
+                /* Scroll ke "Galeri Kegiatan" section header */
+                var section = document.getElementById('gl-gallery-section');
+                if (section) {
+                    var top = section.getBoundingClientRect().top + window.scrollY - 90;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
+                }
+            })
+            .catch(function () {
+                if (wrap) wrap.classList.remove('gl-cards-loading');
+                /* Fallback: full page navigation */
+                window.location.href = url;
+            });
+    }
+
+    /* ============================================================
+       3. BACK-TO-TOP: hide when modal/sheet open
        ============================================================ */
     var btt = document.querySelector('.back-to-top');
 
@@ -201,14 +238,14 @@ document.addEventListener('DOMContentLoaded', function () {
     function showBtt() { if (btt) { btt.style.opacity = ''; btt.style.visibility = ''; } }
 
     /* ============================================================
-       3. BODY SCROLL LOCK helpers
+       4. BODY SCROLL LOCK helpers
        ============================================================ */
     var scrollY = 0;
     function lockScroll()   { scrollY = window.scrollY; document.body.style.overflow = 'hidden'; document.body.style.position = 'fixed'; document.body.style.top = -scrollY + 'px'; document.body.style.width = '100%'; }
     function unlockScroll() { document.body.style.overflow = ''; document.body.style.position = ''; document.body.style.top = ''; document.body.style.width = ''; window.scrollTo(0, scrollY); }
 
     /* ============================================================
-       4. PHOTO ZOOM OVERLAY
+       5. PHOTO ZOOM OVERLAY
        ============================================================ */
     var zoomPhotos = [], zoomIdx = 0;
 
@@ -264,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* ============================================================
-       5. VIDEO LIGHTBOX (YouTube embed)
+       6. VIDEO LIGHTBOX (YouTube embed)
        ============================================================ */
     window.glOpenVideo = function (videoId) {
         var iframe = document.getElementById('gl-video-iframe');
@@ -300,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* ============================================================
-       6. MOBILE BOTTOM SHEET
+       7. MOBILE BOTTOM SHEET
        ============================================================ */
     window.glOpenBottomSheet = function (idx) {
         var data = GL_DATA[idx];
@@ -377,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('gl-bs-backdrop').addEventListener('click', glCloseBs);
 
     /* ============================================================
-       7. UTILITY
+       8. UTILITY
        ============================================================ */
     function escHtml(str) {
         if (str == null) return '';
