@@ -58,7 +58,7 @@ $cuInfoCards = [
 <section class="cu-info-section hero-fun py-5 wow fadeIn" data-wow-delay="0.1s">
 
     {{-- Hero / Jumbotron Carousel (reusable component) --}}
-    <x-hero-jumbotron>
+    <x-hero-jumbotron type="quran">
         <div class="hero-slide">
             <img class="hero-image"
                  src="https://lh3.googleusercontent.com/d/1Xt3HVJLvYBrcxcg-HyNK2pKOQ7WUIQBj"

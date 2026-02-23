@@ -1,7 +1,9 @@
+@props(['type' => 'hadith'])
+
 {{-- ================================================================
      Hero / Jumbotron Carousel Component
      Usage:
-       <x-hero-jumbotron>
+       <x-hero-jumbotron type="quran|hadith">
            <div class="hero-slide">
                <img class="hero-image" src="..." alt="..." />
            </div>
@@ -14,7 +16,7 @@
        @include('components.hero-jumbotron.scripts')
      ================================================================ --}}
 
-<div class="hero-carousel-wrapper">
+<div class="hero-carousel-wrapper" data-type="{{ $type }}">
     <div class="hero-carousel-card">
 
         {{-- Hero slide — provided by parent via $slot --}}
@@ -35,7 +37,7 @@
                 <div class="floating-shape shape-2"></div>
             </div>
             <div class="desktop-countdown">
-                <span>Hadits berikutnya dalam</span>
+                <span>{{ $type === 'quran' ? 'Ayat berikutnya dalam' : 'Hadits berikutnya dalam' }}</span>
                 <span class="desktop-countdown-number" id="hj-countdown-desktop">60</span>
                 <span>detik</span>
             </div>
@@ -46,12 +48,12 @@
                         <div class="hero-desktop-card">
                             <div class="hero-desktop-badge">
                                 <span class="badge-icon">📖</span>
-                                <span class="hadith-fade-text" id="hj-source-desktop">Hadits dalam 1 Menit</span>
+                                <span class="hadith-fade-text" id="hj-source-desktop">{{ $type === 'quran' ? 'Al-Qur\'an dalam 1 Menit' : 'Hadits dalam 1 Menit' }}</span>
                             </div>
                             <div class="hadith-desktop-wrapper" id="hj-wrapper-desktop">
                                 <p class="hero-desktop-arab hadith-fade-text" id="hj-arab-desktop"></p>
                                 <p class="hero-desktop-text hadith-fade-text" id="hj-text-desktop">
-                                    <span class="loading-text">Sedang Menyiapkan Hadits</span>
+                                    <span class="loading-text">{{ $type === 'quran' ? 'Sedang Menyiapkan Ayat' : 'Sedang Menyiapkan Hadits' }}</span>
                                     <span class="loading-dots">
                                         <span class="dot">.</span>
                                         <span class="dot">.</span>
@@ -82,12 +84,12 @@
             <div class="hero-divider-mobile"></div>
             <div class="hero-mobile-badge">
                 <span class="badge-icon">📖</span>
-                <span class="hadith-fade-text" id="hj-source-mobile">Hadits dalam 1 Menit</span>
+                <span class="hadith-fade-text" id="hj-source-mobile">{{ $type === 'quran' ? 'Al-Qur\'an dalam 1 Menit' : 'Hadits dalam 1 Menit' }}</span>
             </div>
             <div class="hadith-mobile-wrapper" id="hj-wrapper-mobile">
                 <p class="hero-mobile-arab hadith-fade-text" id="hj-arab-mobile"></p>
                 <p class="hero-mobile-desc hadith-fade-text" id="hj-text-mobile">
-                    <span class="loading-text">Sedang Menyiapkan Hadits</span>
+                    <span class="loading-text">{{ $type === 'quran' ? 'Sedang Menyiapkan Ayat' : 'Sedang Menyiapkan Hadits' }}</span>
                     <span class="loading-dots">
                         <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
                     </span>
@@ -100,7 +102,7 @@
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <div class="mobile-countdown">
-                    <span>Hadits berikutnya dalam</span>
+                    <span>{{ $type === 'quran' ? 'Ayat berikutnya dalam' : 'Hadits berikutnya dalam' }}</span>
                     <span class="mobile-countdown-number" id="hj-countdown-mobile">60</span>
                     <span>detik</span>
                 </div>
