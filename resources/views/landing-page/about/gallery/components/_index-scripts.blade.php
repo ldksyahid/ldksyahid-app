@@ -371,7 +371,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildBsBody(data) {
         var html = '<div class="gl-bs-header">'
                  + '<div class="gl-bs-meta">'
-                 + '<span class="gl-bs-num">' + escHtml(data.num) + '</span>'
                  + '<span class="gl-bs-tag">' + escHtml(data.name) + '</span>'
                  + '</div>'
                  + '<h5 class="gl-bs-title">' + escHtml(data.theme) + '</h5>'

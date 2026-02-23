@@ -330,15 +330,7 @@
     display: flex; align-items: center; justify-content: space-between; gap: 1rem;
     position: relative; overflow: hidden;
 }
-/* Ghost number decoration */
-.gl-card-header::after {
-    content: attr(data-num);
-    position: absolute; right: 1.25rem; top: 50%;
-    transform: translateY(-50%);
-    font-size: 5.5rem; font-weight: 900; letter-spacing: -4px; line-height: 1;
-    color: rgba(255,255,255,.1);
-    pointer-events: none; z-index: 0;
-}
+
 .gl-card-header-left {
     display: flex; align-items: center; gap: .65rem;
     position: relative; z-index: 1;
@@ -607,7 +599,6 @@
 /* Bottom sheet inner elements */
 .gl-bs-header { padding: .5rem 0 1rem; border-bottom: 1px solid var(--gray-200); margin-bottom: 1rem; }
 .gl-bs-meta { display: flex; align-items: center; gap: .5rem; margin-bottom: .4rem; }
-.gl-bs-num { font-size: 1.4rem; font-weight: 800; -webkit-text-stroke: 1.5px var(--primary); color: var(--primary-light); line-height: 1; }
 .gl-bs-tag { background: var(--gray-100); color: var(--dark); border-radius: 50px; padding: .2rem .7rem; font-size: .73rem; font-weight: 600; }
 .gl-bs-title { font-size: 1.05rem; font-weight: 700; color: var(--dark); margin: 0 0 .5rem; line-height: 1.3; }
 .gl-bs-desc  { font-size: .83rem; color: var(--gray); line-height: 1.6; margin: 0; }
