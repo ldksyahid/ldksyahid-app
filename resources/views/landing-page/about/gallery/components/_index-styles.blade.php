@@ -476,7 +476,6 @@
 
 .gl-mobile-card-body { padding: 1rem 1.1rem 1.25rem; }
 .gl-mobile-meta { display: flex; align-items: center; gap: .5rem; margin-bottom: .4rem; }
-.gl-m-num { font-size: 1.2rem; font-weight: 800; -webkit-text-stroke: 1.5px var(--primary); color: var(--primary-light); line-height: 1; }
 .gl-m-tag { background: var(--gray-100); color: var(--dark); border-radius: 50px; padding: .2rem .7rem; font-size: .72rem; font-weight: 600; }
 .gl-m-title { font-size: 1rem; font-weight: 700; color: var(--dark); margin: 0 0 .4rem; line-height: 1.3; }
 .gl-m-desc  { font-size: .82rem; color: var(--gray); line-height: 1.5; margin: 0 0 .75rem; }
