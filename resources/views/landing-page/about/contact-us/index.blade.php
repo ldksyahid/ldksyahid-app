@@ -57,128 +57,14 @@ $cuInfoCards = [
      ============================================= --}}
 <section class="cu-info-section hero-fun py-5 wow fadeIn" data-wow-delay="0.1s">
 
-    {{-- Hero / Jumbotron Carousel --}}
-    <div class="hero-carousel-wrapper">
-        <div class="hero-carousel-card">
-
-            {{-- Image Only — No Overlay --}}
-            <div class="hero-slide">
-                <img class="hero-image"
-                     src="https://lh3.googleusercontent.com/d/1Xt3HVJLvYBrcxcg-HyNK2pKOQ7WUIQBj"
-                     alt="Hubungi Kami" />
-            </div>
-
-            {{-- Desktop Hadith Content (Below Image) --}}
-            <div class="hero-desktop-content d-none d-lg-block">
-
-                {{-- Background Animation & Icons --}}
-                <div class="hadith-background-animation">
-                    <div class="floating-icon icon-1">📖</div>
-                    <div class="floating-icon icon-2">🕌</div>
-                    <div class="floating-icon icon-3">✨</div>
-                    <div class="floating-icon icon-4">🌙</div>
-                    <div class="floating-icon icon-5">⭐</div>
-                    <div class="floating-icon icon-6">☪️</div>
-                    <div class="floating-icon icon-7">📚</div>
-                    <div class="floating-icon icon-8">🤲</div>
-                    <div class="floating-shape shape-1"></div>
-                    <div class="floating-shape shape-2"></div>
-                </div>
-
-                {{-- Countdown Timer - Bottom Right --}}
-                <div class="desktop-countdown">
-                    <span>Hadits berikutnya dalam</span>
-                    <span class="desktop-countdown-number" id="cu-countdown-desktop">60</span>
-                    <span>detik</span>
-                </div>
-
-                {{-- White Curved Divider --}}
-                <div class="hero-divider-desktop"></div>
-
-                <div class="container position-relative" style="z-index: 20;">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-10 col-xl-8">
-                            <div class="hero-desktop-card">
-                                <div class="hero-desktop-badge">
-                                    <span class="badge-icon">📖</span>
-                                    <span class="hadith-fade-text" id="cu-source-desktop">Hadits dalam 1 Menit</span>
-                                </div>
-
-                                <div class="hadith-desktop-wrapper" id="cu-wrapper-desktop">
-                                    <p class="hero-desktop-arab hadith-fade-text" id="cu-arab-desktop"></p>
-                                    <p class="hero-desktop-text hadith-fade-text" id="cu-text-desktop">
-                                        <span class="loading-text">Sedang Menyiapkan Hadits</span>
-                                        <span class="loading-dots">
-                                            <span class="dot">.</span>
-                                            <span class="dot">.</span>
-                                            <span class="dot">.</span>
-                                        </span>
-                                    </p>
-                                    <span class="hero-desktop-number hadith-fade-text" id="cu-num-desktop"></span>
-                                </div>
-
-                                <button class="desktop-toggle-btn" id="cu-toggle-desktop">
-                                    <span class="toggle-text">Selengkapnya</span>
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>{{-- /hero-desktop-content --}}
-
-            {{-- Mobile Content (Below Image) --}}
-            <div class="hero-mobile-content d-lg-none" id="cu-hadith-mobile-content">
-
-                {{-- Background Animation for Mobile --}}
-                <div class="hadith-background-animation mobile">
-                    <div class="floating-icon icon-1">📖</div>
-                    <div class="floating-icon icon-3">✨</div>
-                    <div class="floating-icon icon-5">🕌</div>
-                    <div class="floating-shape shape-1"></div>
-                    <div class="floating-shape shape-2"></div>
-                </div>
-
-                {{-- White Curved Divider Mobile --}}
-                <div class="hero-divider-mobile"></div>
-
-                {{-- Hadith Badge --}}
-                <div class="hero-mobile-badge cu-hadith-badge-m">
-                    <span class="badge-icon">📖</span>
-                    <span class="hadith-fade-text" id="cu-source-mobile">Hadits dalam 1 Menit</span>
-                </div>
-
-                {{-- Hadith Content --}}
-                <div class="hadith-mobile-wrapper" id="cu-wrapper-mobile">
-                    <p class="hero-mobile-arab hadith-fade-text" id="cu-arab-mobile"></p>
-                    <p class="hero-mobile-desc hadith-fade-text" id="cu-text-mobile">
-                        <span class="loading-text">Sedang Menyiapkan Hadits</span>
-                        <span class="loading-dots">
-                            <span class="dot">.</span>
-                            <span class="dot">.</span>
-                            <span class="dot">.</span>
-                        </span>
-                    </p>
-                    <span class="hadith-number hadith-fade-text" id="cu-num-mobile"></span>
-                </div>
-
-                <div class="mobile-action-area">
-                    <button class="hadith-toggle" id="cu-toggle-mobile">
-                        <span class="hadith-toggle-text">Selengkapnya</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="mobile-countdown">
-                        <span>Hadits berikutnya dalam</span>
-                        <span class="mobile-countdown-number" id="cu-countdown-mobile">60</span>
-                        <span>detik</span>
-                    </div>
-                </div>
-
-            </div>{{-- /hero-mobile-content --}}
-
-        </div>{{-- /hero-carousel-card --}}
-    </div>{{-- /hero-carousel-wrapper --}}
+    {{-- Hero / Jumbotron Carousel (reusable component) --}}
+    <x-hero-jumbotron>
+        <div class="hero-slide">
+            <img class="hero-image"
+                 src="https://lh3.googleusercontent.com/d/1Xt3HVJLvYBrcxcg-HyNK2pKOQ7WUIQBj"
+                 alt="Hubungi Kami" />
+        </div>
+    </x-hero-jumbotron>
 
     {{-- Info Cards --}}
     <div class="container mt-5">

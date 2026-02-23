@@ -115,76 +115,7 @@
     @endforeach
 </div>{{-- /mobile list --}}
 
-{{-- ── Pagination ── --}}
-@if($postgallery->hasPages())
-@php
-    $cp     = $postgallery->currentPage();
-    $lp     = $postgallery->lastPage();
-    $window = 2;
-    /* Collect pages to show */
-    $show = [];
-    for ($p = 1; $p <= $lp; $p++) {
-        if ($p === 1 || $p === $lp || abs($p - $cp) <= $window) $show[] = $p;
-    }
-    /* Insert null as ellipsis marker */
-    $pItems = [];
-    $pv = null;
-    foreach ($show as $p) {
-        if ($pv !== null && $p - $pv > 1) $pItems[] = null;
-        $pItems[] = $p;
-        $pv = $p;
-    }
-@endphp
-<div class="gl-pagination">
-    <div class="gl-pag-info">
-        Menampilkan <strong>{{ $postgallery->firstItem() }}–{{ $postgallery->lastItem() }}</strong>
-        dari <strong>{{ $postgallery->total() }}</strong> kegiatan
-    </div>
-    <div class="gl-pag-inner">
-
-        {{-- First --}}
-        @if($postgallery->onFirstPage())
-        <button class="gl-pag-nav gl-pag-edge" disabled title="Halaman pertama"><i class="fas fa-angle-double-left"></i></button>
-        @else
-        <a class="gl-pag-nav gl-pag-edge" href="{{ $postgallery->url(1) }}" title="Halaman pertama"><i class="fas fa-angle-double-left"></i></a>
-        @endif
-
-        {{-- Prev --}}
-        @if($postgallery->onFirstPage())
-        <button class="gl-pag-nav" disabled title="Sebelumnya"><i class="fas fa-angle-left"></i></button>
-        @else
-        <a class="gl-pag-nav" href="{{ $postgallery->previousPageUrl() }}" title="Sebelumnya"><i class="fas fa-angle-left"></i></a>
-        @endif
-
-        {{-- Page numbers with ellipsis --}}
-        <div class="gl-pag-pages">
-            @foreach($pItems as $item)
-            @if($item === null)
-            <span class="gl-pag-ellipsis">···</span>
-            @elseif($item == $cp)
-            <button class="gl-pag-num active">{{ $item }}</button>
-            @else
-            <a class="gl-pag-num" href="{{ $postgallery->url($item) }}">{{ $item }}</a>
-            @endif
-            @endforeach
-        </div>
-
-        {{-- Next --}}
-        @if($postgallery->hasMorePages())
-        <a class="gl-pag-nav" href="{{ $postgallery->nextPageUrl() }}" title="Berikutnya"><i class="fas fa-angle-right"></i></a>
-        @else
-        <button class="gl-pag-nav" disabled title="Berikutnya"><i class="fas fa-angle-right"></i></button>
-        @endif
-
-        {{-- Last --}}
-        @if($cp === $lp)
-        <button class="gl-pag-nav gl-pag-edge" disabled title="Halaman terakhir"><i class="fas fa-angle-double-right"></i></button>
-        @else
-        <a class="gl-pag-nav gl-pag-edge" href="{{ $postgallery->url($lp) }}" title="Halaman terakhir"><i class="fas fa-angle-double-right"></i></a>
-        @endif
-
-    </div>
-</div>
-@endif
+{{-- ── Pagination (reusable component) ── --}}
+@include('components.pagination-custom', ['paginator' => $postgallery, 'itemLabel' => 'kegiatan'])
 
 @endif

@@ -12,106 +12,14 @@
      ============================================= --}}
 <section class="gl-info-section hero-fun py-5 wow fadeIn" data-wow-delay="0.1s">
 
-    {{-- ── Hero / Jumbotron Carousel ────────────────────────── --}}
-    <div class="hero-carousel-wrapper">
-        <div class="hero-carousel-card">
-
-            {{-- Banner Image --}}
-            <div class="hero-slide">
-                <img class="hero-image"
-                     src="https://lh3.googleusercontent.com/d/1Y4z7FlfDyACvm6jyaWvCQHNB_-1NgnVz"
-                     alt="Galeri LDK Syahid" />
-            </div>
-
-            {{-- Desktop Hadith --}}
-            <div class="hero-desktop-content d-none d-lg-block">
-                <div class="hadith-background-animation">
-                    <div class="floating-icon icon-1">📖</div>
-                    <div class="floating-icon icon-2">🕌</div>
-                    <div class="floating-icon icon-3">✨</div>
-                    <div class="floating-icon icon-4">🌙</div>
-                    <div class="floating-icon icon-5">⭐</div>
-                    <div class="floating-icon icon-6">☪️</div>
-                    <div class="floating-icon icon-7">📚</div>
-                    <div class="floating-icon icon-8">🤲</div>
-                    <div class="floating-shape shape-1"></div>
-                    <div class="floating-shape shape-2"></div>
-                </div>
-                <div class="desktop-countdown">
-                    <span>Hadits berikutnya dalam</span>
-                    <span class="desktop-countdown-number" id="gl-countdown-desktop">60</span>
-                    <span>detik</span>
-                </div>
-                <div class="hero-divider-desktop"></div>
-                <div class="container position-relative" style="z-index:20;">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-10 col-xl-8">
-                            <div class="hero-desktop-card">
-                                <div class="hero-desktop-badge">
-                                    <span class="badge-icon">📖</span>
-                                    <span class="hadith-fade-text" id="gl-source-desktop">Hadits dalam 1 Menit</span>
-                                </div>
-                                <div class="hadith-desktop-wrapper" id="gl-wrapper-desktop">
-                                    <p class="hero-desktop-arab hadith-fade-text" id="gl-arab-desktop"></p>
-                                    <p class="hero-desktop-text hadith-fade-text" id="gl-text-desktop">
-                                        <span class="loading-text">Sedang Menyiapkan Hadits</span>
-                                        <span class="loading-dots">
-                                            <span class="dot">.</span>
-                                            <span class="dot">.</span>
-                                            <span class="dot">.</span>
-                                        </span>
-                                    </p>
-                                    <span class="hero-desktop-number hadith-fade-text" id="gl-num-desktop"></span>
-                                </div>
-                                <button class="desktop-toggle-btn" id="gl-toggle-desktop">
-                                    <span class="toggle-text">Selengkapnya</span>
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>{{-- /hero-desktop-content --}}
-
-            {{-- Mobile Hadith --}}
-            <div class="hero-mobile-content d-lg-none" id="gl-hadith-mobile-content">
-                <div class="hadith-background-animation mobile">
-                    <div class="floating-icon icon-1">📖</div>
-                    <div class="floating-icon icon-3">✨</div>
-                    <div class="floating-icon icon-5">🕌</div>
-                    <div class="floating-shape shape-1"></div>
-                    <div class="floating-shape shape-2"></div>
-                </div>
-                <div class="hero-divider-mobile"></div>
-                <div class="hero-mobile-badge gl-hadith-badge-m">
-                    <span class="badge-icon">📖</span>
-                    <span class="hadith-fade-text" id="gl-source-mobile">Hadits dalam 1 Menit</span>
-                </div>
-                <div class="hadith-mobile-wrapper" id="gl-wrapper-mobile">
-                    <p class="hero-mobile-arab hadith-fade-text" id="gl-arab-mobile"></p>
-                    <p class="hero-mobile-desc hadith-fade-text" id="gl-text-mobile">
-                        <span class="loading-text">Sedang Menyiapkan Hadits</span>
-                        <span class="loading-dots">
-                            <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
-                        </span>
-                    </p>
-                    <span class="hadith-number hadith-fade-text" id="gl-num-mobile"></span>
-                </div>
-                <div class="mobile-action-area">
-                    <button class="hadith-toggle" id="gl-toggle-mobile">
-                        <span class="hadith-toggle-text">Selengkapnya</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="mobile-countdown">
-                        <span>Hadits berikutnya dalam</span>
-                        <span class="mobile-countdown-number" id="gl-countdown-mobile">60</span>
-                        <span>detik</span>
-                    </div>
-                </div>
-            </div>{{-- /hero-mobile-content --}}
-
-        </div>{{-- /hero-carousel-card --}}
-    </div>{{-- /hero-carousel-wrapper --}}
+    {{-- ── Hero / Jumbotron Carousel (reusable component) ────────── --}}
+    <x-hero-jumbotron>
+        <div class="hero-slide">
+            <img class="hero-image"
+                 src="https://lh3.googleusercontent.com/d/1Y4z7FlfDyACvm6jyaWvCQHNB_-1NgnVz"
+                 alt="Galeri LDK Syahid" />
+        </div>
+    </x-hero-jumbotron>
 
     {{-- ── Gallery Section ─────────────────────────────────── --}}
     <div class="container mt-5" id="gl-gallery-section">
