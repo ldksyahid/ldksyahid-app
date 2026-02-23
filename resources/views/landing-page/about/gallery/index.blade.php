@@ -19,7 +19,6 @@ $glData = $postgallery->map(function ($post, $idx) {
     }
     return [
         'idx'     => $idx,
-        'num'     => sprintf('%02d', $idx + 1),
         'name'    => $post->eventName,
         'theme'   => $post->eventTheme,
         'desc'    => $post->eventDescription,
