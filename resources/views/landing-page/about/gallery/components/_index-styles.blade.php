@@ -741,7 +741,9 @@ button.gl-pag-edge:last-child  { border-radius: 14px 50px 50px 14px; }
 
 .gl-bottom-sheet {
     position: fixed; bottom: 0; left: 0; right: 0;
-    background: white;
+    /* Warna solid = sama dengan awal gradient di gl-bs-content,
+       supaya area handle nyambung mulus tanpa garis */
+    background: #dff4f2;
     border-radius: 24px 24px 0 0;
     z-index: 1075;
     max-height: 88dvh;
@@ -752,24 +754,15 @@ button.gl-pag-edge:last-child  { border-radius: 14px 50px 50px 14px; }
 }
 .gl-bottom-sheet.active { transform: translateY(0); }
 
-/* Top teal strip — covers handle + close btn area */
-.gl-bottom-sheet::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 52px;           /* tinggi area handle */
-    background: linear-gradient(135deg, #c8eeeb 0%, #dff4f2 100%);
-    pointer-events: none; z-index: 0;
-}
-
 .gl-bs-handle {
     width: 40px; height: 4px;
-    background: rgba(0,167,157,.45);
+    background: rgba(0,167,157,.4);
     border-radius: 2px; margin: .75rem auto .25rem;
-    flex-shrink: 0; position: relative; z-index: 1;
+    flex-shrink: 0;
 }
 .gl-bs-close {
     position: absolute; top: .75rem; right: 1rem;
-    background: rgba(255,255,255,.65); border: none;
+    background: rgba(255,255,255,.7); border: none;
     width: 34px; height: 34px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; color: var(--primary-dark); font-size: .85rem;
@@ -781,8 +774,8 @@ button.gl-pag-edge:last-child  { border-radius: 14px 50px 50px 14px; }
     overflow-y: auto; flex: 1;
     padding: .25rem 1.1rem 2rem;
     scrollbar-width: thin;
-    /* Gradient nyambung dari handle di atas */
-    background: linear-gradient(to bottom, #dff4f2 0%, white 160px);
+    /* Mulai dari warna yang sama dengan sheet (#dff4f2), memudar ke putih */
+    background: linear-gradient(to bottom, #dff4f2 0%, white 200px);
 }
 
 /* Bottom sheet inner elements */
@@ -791,13 +784,13 @@ button.gl-pag-edge:last-child  { border-radius: 14px 50px 50px 14px; }
     border-bottom: 2px solid var(--primary-light);
     margin-bottom: 1.1rem;
     background: transparent;
-    position: relative; overflow: hidden;
+    position: relative; overflow: visible; /* visible agar lingkaran dekoratif tidak terpotong */
 }
 .gl-bs-header::after {
     content: '';
-    position: absolute; top: -20px; right: -20px;
-    width: 90px; height: 90px; border-radius: 50%;
-    background: rgba(0,167,157,.08); pointer-events: none;
+    position: absolute; top: -10px; right: -1.1rem;
+    width: 100px; height: 100px; border-radius: 50%;
+    background: rgba(0,167,157,.07); pointer-events: none;
 }
 .gl-bs-meta { display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; position: relative; z-index: 1; }
 .gl-bs-tag {
