@@ -18,7 +18,7 @@
         position: relative;
         overflow: visible;
         background: transparent;
-        padding-top: 80px;
+        padding-top: 80px !important;
         margin-bottom: 0;
     }
 
@@ -371,7 +371,7 @@
     /* PEMBATAS MOBILE - WARNA PUTIH */
     .hero-divider-mobile {
         position: absolute;
-        top: -30px;
+        top: -20px;
         left: -5px;
         width: calc(100% + 10px);
         height: 45px;
@@ -559,39 +559,28 @@
             overflow-x: hidden;
         }
 
-        /* Hero fills exactly the viewport — no scroll possible */
+        /* Hero is now inside cu-info-section — normal scroll, no fullscreen constraint.
+           !important beats Bootstrap py-5's padding-top: 3rem !important.
+           75px = navbar height (~65px) + ~10px breathing room. */
         .hero-fun {
-            padding-top: 65px;
-            height: 100vh;
-            height: 100dvh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            max-width: 100%;
+            padding-top: 75px !important;
         }
 
-        /* Wrapper is a flex ITEM (takes remaining height from hero-fun)
-           but NOT a flex CONTAINER — card sizes to natural content height
-           instead of being forced to fill the full wrapper. */
+        /* Wrapper padding — top gives breathing room below navbar */
         .hero-carousel-wrapper {
-            padding: 0.75rem 0.75rem 1rem;
-            flex: 1;
-            min-height: 0;
+            padding: 1.25rem 0.75rem 1rem;
         }
 
-        /* All 4 corners rounded; no forced height */
+        /* Card: rounded corners, natural height */
         .hero-carousel-card {
             border-radius: 20px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
         }
 
-        /* Full image at natural proportional height — !important beats any global rule */
+        /* Image at natural proportional height — no crop, no fullscreen tricks */
         .hero-fun .hero-slide {
             height: auto !important;
-            flex-shrink: 0;
-            overflow: visible;
+            overflow: hidden;
         }
 
         .hero-fun .hero-image {
@@ -599,28 +588,30 @@
             height: auto !important;
             max-height: none !important;
             display: block;
-            object-fit: unset !important;
+            object-fit: cover !important;
+            object-position: center !important;
         }
 
-        /* Hadith section: natural content height (no forced flex expansion).
-           padding-top: 1.5rem clears hero-divider-mobile which extends
-           ~15px INTO this container (top:-30px + height:45px = bottom at +15px).
-           align-items: center → badge/buttons shrink to content width & centered.
-           margin-top: 0       → image not covered at the bottom. */
+        /* Hadith section: natural height, centered content.
+           padding-top: 1.5rem clears hero-divider-mobile (+15px overlap).
+           margin-top: 0 removes base -20px that covers image bottom. */
         .hero-mobile-content {
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 0.75rem;
             text-align: center;
             padding: 1.5rem 1.25rem 1.5rem;
             margin-top: 0 !important;
         }
 
-        /* Block children keep full width (align-items:center would shrink them) */
+        /* Remove child margins that conflict with gap */
+        .hero-mobile-content .hero-mobile-badge { margin-bottom: 0; }
+        .hero-mobile-content .hadith-mobile-wrapper { margin-bottom: 0; }
+
+        /* Block children stay full-width */
         .hero-mobile-content .hadith-mobile-wrapper,
-        .hero-mobile-content .mobile-action-area {
-            width: 100%;
-        }
+        .hero-mobile-content .mobile-action-area { width: 100%; }
     }
 
     /* Desktop Text Alignment */
@@ -1175,7 +1166,6 @@
         max-height: 80vh;
         overflow-y: auto;
         overscroll-behavior: contain;
-        box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.15);
         will-change: transform;
     }
 
