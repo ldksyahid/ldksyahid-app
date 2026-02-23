@@ -132,6 +132,10 @@
     }
 @endphp
 <div class="gl-pagination">
+    <div class="gl-pag-info">
+        Menampilkan <strong>{{ $postgallery->firstItem() }}–{{ $postgallery->lastItem() }}</strong>
+        dari <strong>{{ $postgallery->total() }}</strong> kegiatan
+    </div>
     <div class="gl-pag-inner">
 
         {{-- First --}}

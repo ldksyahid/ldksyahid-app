@@ -483,9 +483,13 @@
 
 /* ─── Pagination ─────────────────────────────────────────────── */
 .gl-pagination {
-    display: flex; justify-content: center;
+    display: flex; flex-direction: column; align-items: center; gap: .9rem;
     margin-top: 3rem; padding-bottom: 1rem;
 }
+.gl-pag-info {
+    font-size: .82rem; color: var(--gray);
+}
+.gl-pag-info strong { color: var(--primary); font-weight: 700; }
 .gl-pag-inner {
     display: flex; align-items: center; gap: .4rem;
     flex-wrap: wrap; justify-content: center;
