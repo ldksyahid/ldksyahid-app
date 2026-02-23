@@ -148,18 +148,21 @@
     function fetchRandomHadith() {
         if (isFetching) return;
         isFetching = true;
-        fadeOutElements(function () {
-            var book   = books[Math.floor(Math.random() * books.length)];
-            var number = Math.floor(Math.random() * book.max) + 1;
-            var ctrl   = new AbortController();
-            var tId    = setTimeout(function () { ctrl.abort(); }, 10000);
 
-            fetch('https://api.hadith.gading.dev/books/' + book.id + '/' + number, { signal: ctrl.signal })
-            .then(function (r) { clearTimeout(tId); return r.json(); })
-            .then(function (json) {
-                if (json.code === 200 && json.data && json.data.contents) {
-                    retryCount = 0;
-                    var c  = json.data.contents;
+        var book   = books[Math.floor(Math.random() * books.length)];
+        var number = Math.floor(Math.random() * book.max) + 1;
+        var ctrl   = new AbortController();
+        var tId    = setTimeout(function () { ctrl.abort(); }, 10000);
+
+        /* Fetch starts immediately — loading text stays visible while waiting */
+        fetch('https://api.hadith.gading.dev/books/' + book.id + '/' + number, { signal: ctrl.signal })
+        .then(function (r) { clearTimeout(tId); return r.json(); })
+        .then(function (json) {
+            if (json.code === 200 && json.data && json.data.contents) {
+                retryCount = 0;
+                var c = json.data.contents;
+                /* Response arrived → now fade out, update, fade in */
+                fadeOutElements(function () {
                     var el = getFreshElements();
                     if (el.desktop.wrapper) el.desktop.wrapper.classList.remove('expanded');
                     if (el.mobile.wrapper)  el.mobile.wrapper.classList.remove('expanded');
@@ -176,17 +179,19 @@
                     fadeInElements();
                     setTimeout(checkOverflow, 100);
                     resetCountdown();
-                } else { throw new Error('Invalid response'); }
-            })
-            .catch(function (e) {
-                retryCount++;
-                var msg = e.name === 'AbortError' ? 'Timeout memuat hadits.' : (e.message === 'Failed to fetch' ? 'Koneksi terputus.' : 'Gagal memuat hadits.');
+                });
+            } else { throw new Error('Invalid response'); }
+        })
+        .catch(function (e) {
+            retryCount++;
+            var msg = e.name === 'AbortError' ? 'Timeout memuat hadits.' : (e.message === 'Failed to fetch' ? 'Koneksi terputus.' : 'Gagal memuat hadits.');
+            fadeOutElements(function () {
                 showErrorMessage(msg);
                 fadeInElements();
                 scheduleRetry(3000);
-            })
-            .finally(function () { isFetching = false; });
-        });
+            });
+        })
+        .finally(function () { isFetching = false; });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
