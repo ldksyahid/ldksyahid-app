@@ -484,61 +484,93 @@
 /* ─── Pagination ─────────────────────────────────────────────── */
 .gl-pagination {
     display: flex; justify-content: center;
-    margin-top: 2.5rem; padding-bottom: .75rem;
+    margin-top: 3rem; padding-bottom: 1rem;
 }
 .gl-pag-inner {
-    display: flex; align-items: center; gap: .35rem;
+    display: flex; align-items: center; gap: .4rem;
     flex-wrap: wrap; justify-content: center;
-    background: white; border-radius: 20px;
-    padding: .5rem .75rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.05);
+}
+
+/* ── Shared base for nav & page numbers ── */
+.gl-pag-nav,
+.gl-pag-num {
+    height: 40px;
+    border: 1.5px solid var(--primary);
+    background: #fff;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: .82rem; font-weight: 600; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    text-decoration: none; flex-shrink: 0;
+    transition: background .22s cubic-bezier(.4,0,.2,1),
+                color .22s cubic-bezier(.4,0,.2,1),
+                border-color .22s,
+                transform .22s cubic-bezier(.4,0,.2,1),
+                box-shadow .22s cubic-bezier(.4,0,.2,1);
 }
 
 /* ── Nav: <<, <, >, >> ── */
 .gl-pag-nav {
-    width: 36px; height: 36px; border-radius: 50%;
-    border: 1.5px solid var(--gray-200); background: white; color: var(--gray);
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    font-size: .75rem; text-decoration: none; flex-shrink: 0;
-    transition: border-color .2s, color .2s, background .2s, transform .2s, box-shadow .2s;
+    width: 40px;
+    border-radius: 50px;
 }
-.gl-pag-nav:hover:not([disabled]) {
-    border-color: var(--primary); color: var(--primary); background: var(--primary-light, #f0faf5);
-    transform: scale(1.12); box-shadow: 0 3px 10px rgba(0,0,0,.1);
-}
-.gl-pag-nav[disabled] { opacity: .25; cursor: default; pointer-events: none; }
+/* Asymmetric pill for edge buttons */
+.gl-pag-edge:first-child,
+a.gl-pag-edge:first-child,
+button.gl-pag-edge:first-child { border-radius: 50px 14px 14px 50px; }
+.gl-pag-edge:last-child,
+a.gl-pag-edge:last-child,
+button.gl-pag-edge:last-child  { border-radius: 14px 50px 50px 14px; }
 
-/* Edge buttons (<<, >>) — slightly muted */
-.gl-pag-edge { border-style: dashed; }
-.gl-pag-edge:hover:not([disabled]) { border-style: solid; }
+.gl-pag-nav:hover:not([disabled]) {
+    background: var(--primary); color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,167,157,.28);
+}
+.gl-pag-nav[disabled] {
+    color: #c8d6d5; border-color: #e2ecec;
+    background: #f7fafa; cursor: default; pointer-events: none;
+}
 
 /* ── Page numbers ── */
-.gl-pag-pages { display: flex; align-items: center; gap: .3rem; flex-wrap: wrap; justify-content: center; }
 .gl-pag-num {
-    min-width: 36px; height: 36px; padding: 0 .45rem; border-radius: 10px;
-    border: 1.5px solid var(--gray-200); background: white; color: var(--gray);
-    cursor: pointer; font-size: .82rem; font-weight: 700; line-height: 1;
-    display: flex; align-items: center; justify-content: center; text-decoration: none;
-    transition: border-color .2s, background .2s, color .2s, transform .2s, box-shadow .2s;
+    min-width: 40px; padding: 0 .55rem;
+    border-radius: 50px;
 }
 .gl-pag-num:hover:not(.active) {
-    border-color: var(--primary); color: var(--primary);
-    transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,.1);
+    background: var(--primary); color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,167,157,.28);
 }
 .gl-pag-num.active {
-    border-color: transparent;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: white; font-size: .88rem;
-    transform: translateY(-2px) scale(1.1);
-    box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark, #007a72) 100%);
+    border-color: transparent; color: #fff; font-weight: 700; font-size: .9rem;
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 8px 22px rgba(0,167,157,.38);
+    pointer-events: none;
+}
+
+/* ── Pages container ── */
+.gl-pag-pages {
+    display: flex; align-items: center; gap: .4rem;
+    flex-wrap: wrap; justify-content: center;
 }
 
 /* ── Ellipsis ── */
 .gl-pag-ellipsis {
-    width: 26px; height: 36px;
+    width: 28px; height: 40px;
     display: flex; align-items: flex-end; justify-content: center;
-    color: var(--gray); font-weight: 800; font-size: .8rem;
-    padding-bottom: 3px; letter-spacing: 1.5px; user-select: none;
+    color: var(--primary); font-weight: 800; font-size: .78rem;
+    padding-bottom: 4px; letter-spacing: 2px; user-select: none; opacity: .7;
+}
+
+/* ── Mobile ── */
+@media (max-width: 575.98px) {
+    .gl-pag-nav, .gl-pag-num { height: 36px; }
+    .gl-pag-nav { width: 36px; }
+    .gl-pag-num { min-width: 36px; font-size: .78rem; }
+    .gl-pag-ellipsis { height: 36px; font-size: .72rem; }
+    .gl-pag-inner { gap: .3rem; }
 }
 
 
