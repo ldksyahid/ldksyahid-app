@@ -193,53 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
     startCountdown();
 
     /* ============================================================
-       2. OWL CAROUSEL — mobile gallery cards
-       ============================================================ */
-    if (typeof jQuery !== 'undefined' && typeof jQuery.fn.owlCarousel !== 'undefined') {
-        var $owl = jQuery('#gl-mobile-owl');
-        if ($owl.length) {
-            $owl.owlCarousel({
-                items: 1,
-                loop: false,
-                margin: 12,
-                nav: false,
-                dots: false,
-                pullDrag: true,
-                touchDrag: true,
-                mouseDrag: false,
-                animateOut: false,
-                autoplay: false,
-                smartSpeed: 350,
-                responsive: { 0: { items: 1 }, 480: { items: 1, margin: 16 } },
-                onInitialized: function (e) { buildGlDots(e); },
-                onTranslated:  function (e) { updateGlDots(e); }
-            });
-        }
-
-        function buildGlDots(e) {
-            var dotsEl = document.getElementById('gl-owl-dots');
-            if (!dotsEl) return;
-            dotsEl.innerHTML = '';
-            var count = e.item.count;
-            for (var i = 0; i < count; i++) {
-                var d = document.createElement('div');
-                d.className = 'gl-owl-dot' + (i === 0 ? ' active' : '');
-                d.dataset.idx = i;
-                d.addEventListener('click', function () {
-                    $owl.trigger('to.owl.carousel', [parseInt(this.dataset.idx), 300]);
-                });
-                dotsEl.appendChild(d);
-            }
-        }
-
-        function updateGlDots(e) {
-            var dots = document.querySelectorAll('.gl-owl-dot');
-            dots.forEach(function (d, i) { d.classList.toggle('active', i === e.item.index % e.item.count); });
-        }
-    }
-
-    /* ============================================================
-       3. BACK-TO-TOP: hide when modal/sheet open
+       2. BACK-TO-TOP: hide when modal/sheet open
        ============================================================ */
     var btt = document.querySelector('.back-to-top');
 
@@ -247,14 +201,14 @@ document.addEventListener('DOMContentLoaded', function () {
     function showBtt() { if (btt) { btt.style.opacity = ''; btt.style.visibility = ''; } }
 
     /* ============================================================
-       4. BODY SCROLL LOCK helpers
+       3. BODY SCROLL LOCK helpers
        ============================================================ */
     var scrollY = 0;
     function lockScroll()   { scrollY = window.scrollY; document.body.style.overflow = 'hidden'; document.body.style.position = 'fixed'; document.body.style.top = -scrollY + 'px'; document.body.style.width = '100%'; }
     function unlockScroll() { document.body.style.overflow = ''; document.body.style.position = ''; document.body.style.top = ''; document.body.style.width = ''; window.scrollTo(0, scrollY); }
 
     /* ============================================================
-       5. PHOTO ZOOM OVERLAY
+       4. PHOTO ZOOM OVERLAY
        ============================================================ */
     var zoomPhotos = [], zoomIdx = 0;
 
@@ -310,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* ============================================================
-       6. VIDEO LIGHTBOX (YouTube embed)
+       5. VIDEO LIGHTBOX (YouTube embed)
        ============================================================ */
     window.glOpenVideo = function (videoId) {
         var iframe = document.getElementById('gl-video-iframe');
@@ -346,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* ============================================================
-       7. MOBILE BOTTOM SHEET
+       6. MOBILE BOTTOM SHEET
        ============================================================ */
     window.glOpenBottomSheet = function (idx) {
         var data = GL_DATA[idx];
@@ -423,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('gl-bs-backdrop').addEventListener('click', glCloseBs);
 
     /* ============================================================
-       8. UTILITY
+       7. UTILITY
        ============================================================ */
     function escHtml(str) {
         if (str == null) return '';

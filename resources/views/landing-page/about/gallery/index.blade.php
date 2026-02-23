@@ -2,7 +2,7 @@
 
 @php
 /* Pre-process gallery data for both Blade rendering and JS */
-$glData = $postgallery->map(function ($post, $idx) {
+$glData = collect($postgallery->items())->values()->map(function ($post, $idx) {
     $photos = [];
     if ($post->gdrive_id) $photos[] = $post->gdrive_id;
     for ($i = 1; $i <= 12; $i++) {
@@ -166,14 +166,14 @@ $glData = $postgallery->map(function ($post, $idx) {
         @else
 
         {{-- ── Desktop Card List (d-none d-lg-block) — semua foto inline ── --}}
-        <div class="d-none d-lg-block">
+        <div class="d-none d-lg-block" id="gl-desktop-list">
             @foreach($postgallery as $idx => $post)
             @php
                 $pcount   = count($glData[$idx]['photos']);
                 $hasVideo = !empty($glData[$idx]['videoId']);
                 $ytThumb  = $hasVideo ? 'https://img.youtube.com/vi/' . $glData[$idx]['videoId'] . '/maxresdefault.jpg' : '';
             @endphp
-            <div class="gl-event-card wow fadeInUp" data-wow-delay="{{ 0.1 + ($idx * 0.08) }}s">
+            <div class="gl-event-card" data-gl-idx="{{ $idx }}">
 
                 {{-- Gradient Header (replaces thin accent line) --}}
                 <div class="gl-card-header">
@@ -239,46 +239,77 @@ $glData = $postgallery->map(function ($post, $idx) {
             @endforeach
         </div>{{-- /desktop list --}}
 
-        {{-- ── Mobile Carousel (d-lg-none) ────────────────────────── --}}
-        <div class="d-lg-none wow fadeInUp" data-wow-delay="0.2s">
-            <div class="owl-carousel" id="gl-mobile-owl">
-                @foreach($postgallery as $idx => $post)
-                @php
-                    $mpcount  = count($glData[$idx]['photos']);
-                    $mthumb   = $glData[$idx]['photos'][0] ?? null;
-                    $mhasVid  = !empty($glData[$idx]['videoId']);
-                @endphp
-                <div class="gl-mobile-card" onclick="glOpenBottomSheet({{ $idx }})">
-                    @if($mthumb)
-                    <div class="gl-mobile-thumb">
-                        <img src="https://lh3.googleusercontent.com/d/{{ $mthumb }}"
-                             alt="{{ $post->eventTheme }}" loading="lazy">
-                        <div class="gl-mobile-thumb-overlay">
-                            @if($mpcount > 0)
-                            <span class="gl-m-count"><i class="fas fa-images"></i> {{ $mpcount }}</span>
-                            @endif
-                            @if($mhasVid)
-                            <span class="gl-m-video"><i class="fab fa-youtube"></i></span>
-                            @endif
-                        </div>
-                    </div>
-                    @endif
-                    <div class="gl-mobile-card-body">
-                        <div class="gl-mobile-meta">
-                            <span class="gl-m-tag">{{ Str::limit($post->eventName, 28) }}</span>
-                        </div>
-                        <h5 class="gl-m-title">{{ $post->eventTheme }}</h5>
-                        <p class="gl-m-desc">{{ Str::limit($post->eventDescription, 100) }}</p>
-                        <div class="gl-m-tap-hint">
-                            <span>Ketuk untuk lihat galeri</span>
-                            <i class="fas fa-hand-pointer"></i>
-                        </div>
+        {{-- ── Mobile List (d-lg-none) ────────────────────────── --}}
+        <div class="d-lg-none" id="gl-mobile-list">
+            @foreach($postgallery as $idx => $post)
+            @php
+                $mpcount  = count($glData[$idx]['photos']);
+                $mthumb   = $glData[$idx]['photos'][0] ?? null;
+                $mhasVid  = !empty($glData[$idx]['videoId']);
+            @endphp
+            <div class="gl-mobile-card" data-gl-idx="{{ $idx }}" onclick="glOpenBottomSheet({{ $idx }})">
+                @if($mthumb)
+                <div class="gl-mobile-thumb">
+                    <img src="https://lh3.googleusercontent.com/d/{{ $mthumb }}"
+                         alt="{{ $post->eventTheme }}" loading="lazy">
+                    <div class="gl-mobile-thumb-overlay">
+                        @if($mpcount > 0)
+                        <span class="gl-m-count"><i class="fas fa-images"></i> {{ $mpcount }}</span>
+                        @endif
+                        @if($mhasVid)
+                        <span class="gl-m-video"><i class="fab fa-youtube"></i></span>
+                        @endif
                     </div>
                 </div>
-                @endforeach
+                @endif
+                <div class="gl-mobile-card-body">
+                    <div class="gl-mobile-meta">
+                        <span class="gl-m-tag">{{ Str::limit($post->eventName, 28) }}</span>
+                    </div>
+                    <h5 class="gl-m-title">{{ $post->eventTheme }}</h5>
+                    <p class="gl-m-desc">{{ Str::limit($post->eventDescription, 100) }}</p>
+                    <div class="gl-m-tap-hint">
+                        <span>Ketuk untuk lihat galeri</span>
+                        <i class="fas fa-hand-pointer"></i>
+                    </div>
+                </div>
             </div>
-            <div class="gl-owl-dots" id="gl-owl-dots"></div>
-        </div>{{-- /mobile carousel --}}
+            @endforeach
+        </div>{{-- /mobile list --}}
+
+        {{-- ── Pagination ─────────────────────────────────────── --}}
+        @if($postgallery->hasPages())
+        <div class="gl-pagination wow fadeInUp" data-wow-delay="0.1s">
+            <div class="gl-pag-inner">
+
+                {{-- Prev --}}
+                @if($postgallery->onFirstPage())
+                <button class="gl-pag-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                @else
+                <a class="gl-pag-btn" href="{{ $postgallery->previousPageUrl() }}"><i class="fas fa-chevron-left"></i></a>
+                @endif
+
+                {{-- Page numbers --}}
+                <div class="gl-pag-pages">
+                    @foreach($postgallery->getUrlRange(1, $postgallery->lastPage()) as $page => $url)
+                    @if($page == $postgallery->currentPage())
+                    <button class="gl-pag-num active">{{ $page }}</button>
+                    @else
+                    <a class="gl-pag-num" href="{{ $url }}">{{ $page }}</a>
+                    @endif
+                    @endforeach
+                </div>
+
+                {{-- Next --}}
+                @if($postgallery->hasMorePages())
+                <a class="gl-pag-btn" href="{{ $postgallery->nextPageUrl() }}"><i class="fas fa-chevron-right"></i></a>
+                @else
+                <button class="gl-pag-btn" disabled><i class="fas fa-chevron-right"></i></button>
+                @endif
+
+            </div>
+        </div>
+        @endif
 
         @endif
     </div>{{-- /container --}}

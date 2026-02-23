@@ -442,12 +442,12 @@
 .gl-empty-state h4 { font-weight: 700; color: var(--dark); margin-bottom: .5rem; }
 
 
-/* ─── Mobile Card & Carousel ───────────────────────────────────── */
+/* ─── Mobile Card List ──────────────────────────────────────────── */
 .gl-mobile-card {
     background: white; border-radius: 18px; overflow: hidden;
     box-shadow: 0 4px 16px rgba(0,0,0,.08); cursor: pointer;
     transition: transform .25s ease, box-shadow .25s ease;
-    margin: .25rem .1rem 1rem;
+    margin-bottom: 1.1rem;
 }
 .gl-mobile-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.13); }
 
@@ -477,14 +477,27 @@
 }
 .gl-m-tap-hint i { opacity: .6; }
 
-/* Owl dots */
-.gl-owl-dots { display: flex; justify-content: center; gap: .5rem; margin-top: .5rem; }
-.gl-owl-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--gray-300); cursor: pointer;
-    transition: all .25s ease;
+/* ─── Pagination ─────────────────────────────────────────────── */
+.gl-pagination { display: flex; justify-content: center; margin-top: 2rem; padding-bottom: .5rem; }
+.gl-pag-inner { display: flex; align-items: center; gap: .5rem; }
+.gl-pag-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 2px solid var(--primary); background: white; color: var(--primary);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: .85rem; transition: background .2s, color .2s, transform .15s;
 }
-.gl-owl-dot.active { background: var(--primary); width: 22px; border-radius: 4px; }
+.gl-pag-btn:hover:not([disabled]) { background: var(--primary); color: white; transform: scale(1.08); }
+.gl-pag-btn[disabled] { opacity: .3; cursor: default; pointer-events: none; }
+.gl-pag-pages { display: flex; gap: .35rem; flex-wrap: wrap; justify-content: center; }
+.gl-pag-num {
+    min-width: 38px; height: 38px; border-radius: 10px;
+    border: 2px solid var(--gray-200); background: white; color: var(--gray);
+    cursor: pointer; font-size: .85rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .2s, background .2s, color .2s;
+}
+.gl-pag-num.active { border-color: var(--primary); background: var(--primary); color: white; }
+.gl-pag-num:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
 
 
 /* ─── YouTube Video Lightbox ───────────────────────────────────── */
