@@ -95,8 +95,16 @@
     function checkOverflow() {
         var dw = document.getElementById('hj-wrapper-desktop'), dt = document.getElementById('hj-toggle-desktop');
         var mw = document.getElementById('hj-wrapper-mobile'),  mt = document.getElementById('hj-toggle-mobile');
-        if (dw && dt) dt.style.display = dw.scrollHeight > 150 ? 'inline-flex' : 'none';
-        if (mw && mt) mt.style.display = mw.scrollHeight > 150 ? 'inline-flex' : 'none';
+        if (dw && dt) {
+            var ovD = dw.scrollHeight > 150;
+            dt.style.display = ovD ? 'inline-flex' : 'none';
+            dw.classList.toggle('hj-no-overflow', !ovD);
+        }
+        if (mw && mt) {
+            var ovM = mw.scrollHeight > 150;
+            mt.style.display = ovM ? 'inline-flex' : 'none';
+            mw.classList.toggle('hj-no-overflow', !ovM);
+        }
     }
 
     function updateCountdown() {
