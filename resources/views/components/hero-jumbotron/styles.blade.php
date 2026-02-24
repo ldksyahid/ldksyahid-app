@@ -177,6 +177,7 @@
     background: linear-gradient(to bottom, transparent, white);
     pointer-events: none; z-index: 36;
 }
+.hadith-desktop-wrapper.hj-no-overflow:not(.expanded)::after { display: none; }
 
 .hadith-fade-text { transition: opacity .5s ease-in-out; opacity: 1; }
 .hadith-fade-text.fade-out { opacity: 0; }
@@ -259,6 +260,7 @@
     background: linear-gradient(to bottom, transparent, white);
     pointer-events: none; z-index: 36;
 }
+.hadith-mobile-wrapper.hj-no-overflow:not(.expanded)::after  { display: none; }
 .hadith-number { display: block; font-size: .7rem; color: var(--primary); font-weight: 600; margin-top: .5rem; opacity: .7; position: relative; z-index: 35; }
 .mobile-action-area { display: flex; justify-content: space-between; align-items: center; margin-top: .5rem; padding: 0 .25rem; position: relative; z-index: 35; }
 .hadith-toggle {
