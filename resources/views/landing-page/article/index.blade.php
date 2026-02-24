@@ -41,79 +41,41 @@
             <p class="ar-section-sub">Karya tulis terbaik dari para penulis dan editor LDK Syahid</p>
         </div>
 
-        {{-- ── Search + Filter Bar ─────────────────────────────── --}}
+        {{-- ── Search + Filter Bar (reusable component) ───────── --}}
         <div class="mb-3 wow fadeInUp" data-wow-delay="0.15s">
-            <div class="ar-search-wrap">
-
-                {{-- Search field --}}
-                <div class="ar-search-field">
-                    <input  type="text"
-                            id="ar-search-input"
-                            class="ar-search-input"
-                            placeholder="Cari artikel berdasarkan judul, tema, penulis…"
-                            value="{{ request('search') }}"
-                            autocomplete="off">
-                    <button id="ar-search-clear" class="ar-search-clear" aria-label="Hapus pencarian">
-                        &times;
-                    </button>
-                </div>
-
-                {{-- Filter button --}}
-                <button type="button" class="ar-filter-btn"
-                        data-bs-toggle="modal" data-bs-target="#ar-filter-modal"
-                        aria-label="Buka filter">
-                    <i class="fas fa-sliders-h"></i>
-                    <span>Filter</span>
-                    <span id="ar-filter-count" class="ar-filter-badge" style="display:none;">0</span>
-                </button>
-
-                {{-- Sort dropdown --}}
-                <div class="dropdown">
-                    <button class="ar-sort-btn dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-sort me-1"></i>Urutkan
-                    </button>
-                    <ul class="dropdown-menu" style="z-index:1060; min-width:180px;">
-                        <li>
-                            <a class="dropdown-item {{ !request('sort') || request('sort') == 'newest' ? 'active' : '' }}"
-                               href="#" data-ar-sort="newest">
-                                <i class="far fa-clock me-2"></i>Terbaru
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item {{ request('sort') == 'title' ? 'active' : '' }}"
-                               href="#" data-ar-sort="title">
-                                <i class="fas fa-sort-alpha-down me-2"></i>Judul A–Z
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-            </div>{{-- /ar-search-wrap --}}
-
-            {{-- Active Filter Pills (server-rendered initial state) --}}
-            <div id="ar-active-pills" class="ar-active-pills mt-2">
+            <x-search-filter-bar
+                prefix="ar"
+                placeholder="Cari artikel berdasarkan judul, tema, penulis…"
+                :search-value="request('search')"
+                filter-modal-id="ar-filter-modal"
+                :sort-options="[
+                    ['value' => 'newest', 'label' => 'Terbaru',   'icon' => 'far fa-clock'],
+                    ['value' => 'title',  'label' => 'Judul A–Z', 'icon' => 'fas fa-sort-alpha-down'],
+                ]"
+                :current-sort="request('sort', 'newest')"
+            >
+                {{-- Server-rendered active filter pills --}}
                 @foreach((array)request('theme', []) as $val)
-                    <span class="ar-active-pill" data-select-id="ar-theme-select" data-value="{{ $val }}">
+                    <span class="sfb-pill" data-select-id="ar-theme-select" data-value="{{ $val }}">
                         <span>Tema: {{ $val }}</span> <i class="fas fa-times"></i>
                     </span>
                 @endforeach
                 @foreach((array)request('writer', []) as $val)
-                    <span class="ar-active-pill" data-select-id="ar-writer-select" data-value="{{ $val }}">
+                    <span class="sfb-pill" data-select-id="ar-writer-select" data-value="{{ $val }}">
                         <span>Penulis: {{ $val }}</span> <i class="fas fa-times"></i>
                     </span>
                 @endforeach
                 @foreach((array)request('editor', []) as $val)
-                    <span class="ar-active-pill" data-select-id="ar-editor-select" data-value="{{ $val }}">
+                    <span class="sfb-pill" data-select-id="ar-editor-select" data-value="{{ $val }}">
                         <span>Editor: {{ $val }}</span> <i class="fas fa-times"></i>
                     </span>
                 @endforeach
                 @foreach((array)request('created_year', []) as $val)
-                    <span class="ar-active-pill" data-select-id="ar-year-select" data-value="{{ $val }}">
+                    <span class="sfb-pill" data-select-id="ar-year-select" data-value="{{ $val }}">
                         <span>Tahun: {{ $val }}</span> <i class="fas fa-times"></i>
                     </span>
                 @endforeach
-            </div>
+            </x-search-filter-bar>
         </div>
 
         {{-- Results info --}}

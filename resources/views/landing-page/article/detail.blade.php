@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-<div class="container-xxl" style="padding-top: 80px; padding-bottom: 3rem;">
+<div class="container-xxl" style="padding-top: 100px; padding-bottom: 3rem;">
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-3 col-md-5 wow fadeInDown" data-wow-delay="0.2s">

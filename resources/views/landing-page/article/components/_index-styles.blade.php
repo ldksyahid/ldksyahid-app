@@ -4,6 +4,9 @@
 {{-- ── Pagination shared styles ── --}}
 @include('components.pagination-custom.styles')
 
+{{-- ── Search-Filter-Bar component styles ── --}}
+@include('components.search-filter-bar.styles')
+
 {{-- ── Select2 CSS ── --}}
 <link href="{{ asset('assets/external/css/select2.min.css') }}" rel="stylesheet" />
 
@@ -46,88 +49,7 @@
 .ar-section-sub   { color: var(--ar-gray); font-size: 1rem; margin: .5rem 0 0; }
 
 
-/* ─── Search & Filter Bar ─────────────────────────────────────── */
-.ar-search-wrap {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    flex-wrap: wrap;
-}
-.ar-search-field {
-    flex: 1 1 280px;
-    position: relative;
-}
-.ar-search-input {
-    border: 1.5px solid var(--ar-gray-200);
-    border-radius: 50px;
-    padding: .58rem 2.8rem .58rem 1.3rem;
-    font-size: .9rem;
-    background: white;
-    width: 100%;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
-    transition: border-color .2s, box-shadow .2s;
-    color: var(--ar-dark);
-}
-.ar-search-input:focus {
-    outline: none;
-    border-color: var(--ar-primary);
-    box-shadow: 0 0 0 3.5px rgba(0,167,157,.12);
-}
-.ar-search-input::placeholder { color: #b0bec5; }
-.ar-search-clear {
-    position: absolute; right: .85rem; top: 50%; transform: translateY(-50%);
-    background: none; border: none; cursor: pointer;
-    color: #b0bec5; font-size: 1.3rem; line-height: 1; padding: 0;
-    display: none; transition: color .2s;
-}
-.ar-search-clear:hover { color: #7f8c8d; }
-
-.ar-filter-btn {
-    display: inline-flex; align-items: center; gap: .4rem;
-    border: 1.5px solid var(--ar-primary); color: var(--ar-primary);
-    background: white; border-radius: 50px;
-    padding: .55rem 1.15rem; font-size: .88rem; font-weight: 600;
-    white-space: nowrap; cursor: pointer; position: relative;
-    transition: all .22s ease;
-}
-.ar-filter-btn:hover { background: var(--ar-primary); color: white; }
-.ar-filter-badge {
-    position: absolute; top: -7px; right: -7px;
-    background: #ef4444; color: white;
-    min-width: 18px; height: 18px; border-radius: 50px;
-    font-size: .62rem; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    padding: 0 4px;
-    border: 2px solid white;
-    box-shadow: 0 1px 4px rgba(0,0,0,.2);
-}
-.ar-sort-btn {
-    display: inline-flex; align-items: center; gap: .4rem;
-    border: 1.5px solid var(--ar-gray-200); color: var(--ar-gray);
-    background: white; border-radius: 50px;
-    padding: .55rem 1rem; font-size: .88rem; font-weight: 500;
-    white-space: nowrap; cursor: pointer;
-    transition: all .22s ease;
-}
-.ar-sort-btn:hover { border-color: var(--ar-primary); color: var(--ar-primary); }
-
-
-/* ─── Active Filter Pills ─────────────────────────────────────── */
-.ar-active-pills {
-    display: flex; flex-wrap: wrap; gap: .4rem;
-}
-.ar-active-pill {
-    display: inline-flex; align-items: center; gap: .35rem;
-    background: var(--ar-primary-light); color: var(--ar-primary);
-    border-radius: 50px; padding: .22rem .75rem;
-    font-size: .78rem; font-weight: 600;
-    border: 1px solid rgba(0,167,157,.25);
-    cursor: pointer; user-select: none;
-    transition: background .2s, color .2s;
-}
-.ar-active-pill:hover { background: var(--ar-primary); color: white; }
-.ar-active-pill i { font-size: .62rem; }
-
+{{-- Search/Filter/Sort/Pills styles are in components.search-filter-bar.styles --}}
 
 /* ─── Results Info ────────────────────────────────────────────── */
 .ar-results-info {
@@ -547,12 +469,9 @@
 @media (max-width: 991.98px) {
     .ar-section-title { font-size: 1.5rem; }
     .ar-mobile-card { flex: 0 0 78vw; }
-    .ar-search-wrap { flex-wrap: wrap; }
 }
 @media (max-width: 576px) {
     .ar-mobile-card { flex: 0 0 86vw; }
-    .ar-search-wrap { gap: .5rem; }
-    .ar-filter-btn, .ar-sort-btn { padding: .5rem .9rem; font-size: .83rem; }
 }
 </style>
 @endverbatim
