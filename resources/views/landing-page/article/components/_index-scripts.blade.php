@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!el) return;
             Array.from(el.selectedOptions).forEach(function (opt) {
                 var pill = document.createElement('span');
-                pill.className = 'ar-active-pill';
+                pill.className = 'sfb-pill';
                 pill.innerHTML =
                     '<span>' + escHtml(fieldMap[id]) + ': ' + escHtml(opt.text) + '</span>' +
                     ' <i class="fas fa-times"></i>';
@@ -303,16 +303,16 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ============================================================
        9. SORT DROPDOWN
        ============================================================ */
-    document.querySelectorAll('[data-ar-sort]').forEach(function (el) {
+    document.querySelectorAll('[data-sort][data-sort-prefix="ar"]').forEach(function (el) {
         el.addEventListener('click', function (e) {
             e.preventDefault();
-            var val     = this.dataset.arSort;
-            var sortEl  = document.getElementById('ar-sort-val');
+            var val    = this.dataset.sort;
+            var sortEl = document.getElementById('ar-sort-val');
             if (sortEl) sortEl.value = val;
 
             /* Update active class */
-            document.querySelectorAll('[data-ar-sort]').forEach(function (s) {
-                s.classList.toggle('active', s.dataset.arSort === val);
+            document.querySelectorAll('[data-sort][data-sort-prefix="ar"]').forEach(function (s) {
+                s.classList.toggle('active', s.dataset.sort === val);
             });
             arLoadPage(arBuildUrl());
         });
@@ -427,7 +427,7 @@ document.addEventListener('DOMContentLoaded', function () {
        ============================================================ */
     /* The server renders initial pills in the Blade template.
        Wire up their click handlers to deselect + re-fetch. */
-    document.querySelectorAll('#ar-active-pills .ar-active-pill[data-select-id]').forEach(function (pill) {
+    document.querySelectorAll('#ar-active-pills .sfb-pill[data-select-id]').forEach(function (pill) {
         pill.addEventListener('click', function () {
             var sel = document.getElementById(this.dataset.selectId);
             if (!sel) return;
