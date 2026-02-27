@@ -750,17 +750,17 @@
     list-style: none !important;
     overflow: visible !important;
 }
-/* Tags/choices — specificity matching Select2 (0,3,0) agar tidak tertimpa */
+/* Tags/choices — text LEFT, × RIGHT (flex-direction: row, DOM order: display → remove) */
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
     display: inline-flex !important;
     align-items: center !important;
-    flex-direction: row-reverse !important;
+    flex-direction: row !important;
     gap: 5px !important;
     background: linear-gradient(135deg, var(--ar-primary), #00bfb3) !important;
     color: white !important;
     border: none !important;
     border-radius: 50px !important;
-    padding: 3px 5px 3px 10px !important;
+    padding: 3px 8px 3px 12px !important; /* left: text-side, right: ×-side */
     font-size: .78rem !important;
     font-weight: 600 !important;
     margin: 0 !important;
@@ -778,14 +778,15 @@
     min-width: 0 !important;
     flex: 1 !important;
 }
-/* Pill × button — solid white circle, margin-top agar sejajar dengan baris teks */
+/* Pill × button — override Select2 v4.1-rc yang pakai position:absolute */
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    position: static !important;   /* batalkan position:absolute dari Select2 */
     display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 16px;
-    height: 16px;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    width: 16px !important;
+    height: 16px !important;
     border-radius: 50% !important;
     border: none !important;
     background: rgba(255,255,255,.92) !important;
@@ -795,7 +796,7 @@
     font-size: .65rem !important;
     font-weight: 700 !important;
     line-height: 1 !important;
-    cursor: pointer;
+    cursor: pointer !important;
     transition: background .15s, color .15s;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
