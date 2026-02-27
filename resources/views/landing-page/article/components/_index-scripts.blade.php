@@ -87,12 +87,16 @@ document.addEventListener('DOMContentLoaded', function () {
     var fmBackdrop  = document.getElementById('ar-fm-backdrop');
 
     if (filterModal) {
-        filterModal.addEventListener('show.bs.modal',   function () {
+        filterModal.addEventListener('show.bs.modal', function () {
             updateFilterBadge();
             if (fmBackdrop) fmBackdrop.classList.add('active');
+            lockScroll();
+            hideBtt();
         });
         filterModal.addEventListener('hidden.bs.modal', function () {
             if (fmBackdrop) fmBackdrop.classList.remove('active');
+            unlockScroll();
+            showBtt();
         });
     }
 
