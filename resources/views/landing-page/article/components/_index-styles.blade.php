@@ -738,14 +738,16 @@
 .select2-container--default .select2-selection--multiple .select2-selection__clear:hover {
     color: #ef4444 !important;
 }
-/* ul is the single flex child — fills full width, pills flow inside */
+/* ul is the single flex child — outer container's align-items:center centers the ul */
 .select2-container--default .select2-selection--multiple .select2-selection__rendered {
     display: flex !important;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px;
-    flex: 1;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex: 1 !important;
     padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
     overflow: visible !important;
 }
 /* Tags/choices — × on RIGHT via flex-direction:row-reverse */
@@ -800,9 +802,9 @@
 /* Inline search (inside ul via JS) — fills remaining space after pills */
 .select2-container--default .select2-selection--multiple .select2-search--inline {
     display: flex !important;
-    align-items: center;
-    flex: 1;
-    min-width: 60px;
+    align-items: center !important;
+    flex: 1 !important;
+    min-width: 60px !important;
 }
 .select2-container--default .select2-selection--multiple .select2-search__field {
     width: 100% !important;
@@ -814,10 +816,9 @@
     resize: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    line-height: 1.5 !important;
-    height: 1.5em !important;
+    line-height: 1 !important;
+    height: 1em !important;
     min-height: unset !important;
-    vertical-align: middle;
 }
 .select2-container--default .select2-selection--multiple .select2-search__field::placeholder {
     color: #a8c5c3 !important;
