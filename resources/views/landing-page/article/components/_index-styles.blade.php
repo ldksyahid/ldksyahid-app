@@ -721,11 +721,11 @@
     box-shadow: 0 0 0 3px rgba(0,167,157,.1) !important;
     outline: none !important;
 }
-/* "Clear all" × — absolute, removed from flex flow */
+/* "Clear all" × — absolute, pojok kanan atas */
 .select2-container--default .select2-selection--multiple .select2-selection__clear {
     position: absolute !important;
-    right: 8px; top: 50%;
-    transform: translateY(-50%);
+    right: 8px; top: 8px;
+    transform: none !important;
     float: none !important;
     margin: 0 !important;
     padding: 0 3px !important;
@@ -750,29 +750,35 @@
     list-style: none !important;
     overflow: visible !important;
 }
-/* Tags/choices — × on RIGHT via flex-direction:row-reverse */
-.select2-selection__choice {
+/* Tags/choices — specificity matching Select2 (0,3,0) agar tidak tertimpa */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
     display: inline-flex !important;
-    align-items: center;
-    flex-direction: row-reverse;   /* × appears after text visually */
-    gap: 5px;
+    align-items: center !important;
+    flex-direction: row-reverse !important;
+    gap: 5px !important;
     background: linear-gradient(135deg, var(--ar-primary), #00bfb3) !important;
     color: white !important;
     border: none !important;
     border-radius: 50px !important;
-    padding: 3px 5px 3px 10px !important;  /* left: text-side, right: ×-side */
+    padding: 3px 5px 3px 10px !important;
     font-size: .78rem !important;
     font-weight: 600 !important;
     margin: 0 !important;
-    max-width: calc(100% - 8px);
-    flex-shrink: 0;
+    max-width: 180px !important;
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    overflow: hidden !important;
+    float: none !important;
 }
-.select2-selection__choice__display {
-    white-space: normal;
-    word-break: break-word;
-    line-height: 1.4;
+.select2-container--default .select2-selection--multiple .select2-selection__choice__display {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.4 !important;
+    min-width: 0 !important;
+    flex: 1 !important;
 }
-/* Pill × button — solid white circle with teal × for clear visibility */
+/* Pill × button — solid white circle, margin-top agar sejajar dengan baris teks */
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
     display: inline-flex !important;
     align-items: center;
