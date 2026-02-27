@@ -31,9 +31,6 @@
                         <span class="ar-card-date-num">{{ \Carbon\Carbon::parse($article->dateevent)->format('d') }}</span>
                         <span class="ar-card-date-month">{{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('MMM') }}</span>
                     </div>
-                    @if($loop->first && $postarticle->currentPage() == 1)
-                        <span class="ar-card-badge-new">✦ Terbaru</span>
-                    @endif
                 </a>
 
                 {{-- Card Body --}}
@@ -111,9 +108,6 @@
                         <span class="ar-card-date-num">{{ \Carbon\Carbon::parse($article->dateevent)->format('d') }}</span>
                         <span class="ar-card-date-month">{{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('MMM') }}</span>
                     </div>
-                    @if($loop->first && $postarticle->currentPage() == 1)
-                        <span class="ar-m-badge-new">✦ Terbaru</span>
-                    @endif
                     <div class="ar-m-tap-hint">Baca selengkapnya 👆</div>
                 </div>
 
