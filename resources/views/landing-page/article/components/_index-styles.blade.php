@@ -501,28 +501,220 @@
 }
 
 
-/* ─── Filter Modal ────────────────────────────────────────────── */
-.ar-modal .modal-content {
-    border-radius: 20px; border: none;
-    box-shadow: 0 20px 60px rgba(0,0,0,.15);
+/* ─── Custom blur backdrop (replaces Bootstrap's) ────────────── */
+/* Bootstrap backdrop disabled via data-bs-backdrop="false".
+   Custom div allows full-opacity backdrop-filter: blur to work.
+   Using visibility (not display:none) so transitions still fire. */
+.ar-fm-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .3s ease, visibility .3s ease;
 }
-.ar-modal .modal-header {
-    border-bottom: 1px solid var(--ar-gray-200);
-    border-radius: 20px 20px 0 0; padding: 1.4rem 1.5rem;
+.ar-fm-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
-.ar-modal .modal-footer {
-    border-top: 1px solid var(--ar-gray-200);
-    border-radius: 0 0 20px 20px; padding: 1.15rem 1.5rem;
+
+/* ─── Filter Modal (redesigned, vepm-inspired) ───────────────── */
+.ar-fm-dialog { max-width: 580px; }
+
+.ar-fm-content {
+    border-radius: 28px !important;
+    border: 1px solid rgba(0,167,157,.1) !important;
+    box-shadow: 0 24px 80px rgba(0,0,0,.18), 0 8px 30px rgba(0,167,157,.12) !important;
+    overflow: hidden;
+    position: relative;
+}
+.ar-fm-content::before {
+    content: '';
+    position: absolute; top: 0; left: 10%; right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0,167,157,.45) 30%, rgba(0,167,157,.45) 70%, transparent);
+    filter: blur(1px); z-index: 1; pointer-events: none;
+}
+
+/* Custom close */
+.ar-fm-close {
+    position: absolute; top: 1rem; right: 1rem;
+    width: 34px; height: 34px;
+    background: #f5f5f5; border: none; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--ar-gray); font-size: .85rem;
+    transition: background .25s, color .25s, transform .25s;
+    z-index: 10;
+}
+.ar-fm-close:hover {
+    background: var(--ar-primary-light); color: var(--ar-primary);
+    transform: scale(1.1) rotate(90deg);
+}
+
+/* Header */
+.ar-fm-header {
+    padding: 2rem 2rem 1.35rem;
+    text-align: center;
+    background: linear-gradient(to bottom, #f0fefa, white);
+    border-bottom: 1px solid rgba(0,167,157,.08);
+}
+.ar-fm-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: var(--ar-primary-light);
+    border: 1px solid rgba(0,167,157,.2);
+    border-radius: 50px; padding: .35rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: .82rem; font-weight: 500; color: var(--ar-primary);
+}
+.ar-fm-pulse {
+    width: 7px; height: 7px; background: var(--ar-primary);
+    border-radius: 50%; animation: arPulse 2s ease infinite;
+}
+.ar-fm-icon-wrap {
+    position: relative; display: inline-block;
+    margin-bottom: 1rem;
+}
+.ar-fm-icon {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, #00c4b8, #00a79d);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1.6rem;
+    box-shadow: 0 8px 24px rgba(0,167,157,.35);
+    position: relative; z-index: 2;
+    animation: arFmIconBounce 3s ease-in-out infinite;
+}
+@keyframes arFmIconBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+.ar-fm-ring {
+    position: absolute; border-radius: 50%;
+    border: 2px solid rgba(0,167,157,.12);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: arFmRingExpand 3s ease-out infinite;
+}
+.ar-fm-ring-1 { width: 90px; height: 90px; animation-delay: 0s; }
+.ar-fm-ring-2 { width: 120px; height: 120px; animation-delay: .9s; }
+@keyframes arFmRingExpand {
+    0%   { opacity: .6; transform: translate(-50%, -50%) scale(.8); }
+    100% { opacity: 0;  transform: translate(-50%, -50%) scale(1.4); }
+}
+.ar-fm-title {
+    font-size: 1.3rem; font-weight: 700; color: var(--ar-dark);
+    margin: 0 0 .3rem;
+}
+.ar-fm-subtitle {
+    font-size: .85rem; color: var(--ar-gray); margin: 0;
+}
+
+/* Body */
+.ar-fm-body { padding: 1.5rem 1.75rem; }
+.ar-fm-field-label {
+    display: flex; align-items: center; gap: .55rem;
+    margin-bottom: .55rem;
+}
+.ar-fm-field-icon {
+    width: 28px; height: 28px;
+    background: var(--ar-primary-light);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.ar-fm-field-icon i { color: var(--ar-primary); font-size: .72rem; }
+.ar-fm-label {
+    font-size: .85rem; font-weight: 600; color: var(--ar-dark); margin: 0;
+}
+
+/* Footer */
+.ar-fm-footer {
+    padding: 1.1rem 1.75rem 1.5rem;
+    display: flex; align-items: center; gap: .65rem;
+    border-top: 1px solid rgba(0,167,157,.08);
+    background: linear-gradient(to top, #f0fefa, white);
+}
+.ar-fm-btn-close {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .6rem 1.15rem; border-radius: 50px;
+    border: 1.5px solid var(--ar-gray-200); background: white;
+    color: var(--ar-gray); font-size: .83rem; font-weight: 600;
+    cursor: pointer; transition: border-color .2s, color .2s;
+}
+.ar-fm-btn-close:hover { border-color: rgba(0,167,157,.3); color: var(--ar-primary); background: var(--ar-primary-light); }
+.ar-fm-btn-reset {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .6rem 1.15rem; border-radius: 50px;
+    border: 1.5px solid rgba(245,158,11,.4); background: white;
+    color: #d97706; font-size: .83rem; font-weight: 600;
+    cursor: pointer; transition: background .2s, border-color .2s;
+}
+.ar-fm-btn-reset:hover { background: #fffbeb; border-color: #d97706; }
+.ar-fm-btn-apply {
+    flex: 1;
+    display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+    padding: .7rem 1.5rem; border-radius: 50px;
+    background: linear-gradient(135deg, #00c4b8, #00a79d);
+    color: white; font-size: .88rem; font-weight: 700;
+    border: none; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,167,157,.35);
+    transition: filter .22s, box-shadow .22s, transform .18s;
+    position: relative; overflow: hidden;
+}
+.ar-fm-btn-apply:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 6px 22px rgba(0,167,157,.52);
+    transform: translateY(-1px);
+}
+.ar-fm-btn-apply:active { transform: translateY(0); }
+.ar-fm-btn-icon {
+    width: 24px; height: 24px;
+    background: rgba(255,255,255,.2); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .72rem;
+}
+.ar-fm-btn-shine {
+    position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+    transition: left .6s ease;
+}
+.ar-fm-btn-apply:hover .ar-fm-btn-shine { left: 100%; }
+
+@media (max-width: 575.98px) {
+    .ar-fm-header { padding: 1.75rem 1.5rem 1.1rem; }
+    .ar-fm-body { padding: 1rem 1.25rem; }
+    .ar-fm-footer { padding: .85rem 1.25rem 1.25rem; flex-wrap: wrap; }
+    .ar-fm-btn-apply { order: -1; width: 100%; }
+    .ar-fm-title { font-size: 1.15rem; }
+    .ar-fm-icon { width: 54px; height: 54px; font-size: 1.35rem; }
+    .ar-fm-ring-1 { width: 76px; height: 76px; }
+    .ar-fm-ring-2 { width: 104px; height: 104px; }
 }
 
 /* Select2 inside modal — selection box */
+/* .select2-selection--multiple is the flex row: [clear-btn] [pills...] [search-textarea] */
 .select2-container--default .select2-selection--multiple {
     border: 1.5px solid #d1ece9 !important;
     border-radius: 12px !important;
-    padding: 5px 8px !important;
+    padding: 6px 10px !important;
     min-height: 48px !important;
     background: #fafffe !important;
     transition: border-color .2s, box-shadow .2s;
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    position: relative;
+    overflow: visible !important;
+}
+/* Pad right when "clear all" button is visible */
+.select2-container--default .select2-selection--multiple.select2-selection--clearable {
+    padding-right: 28px !important;
 }
 .select2-container--default.select2-container--focus .select2-selection--multiple,
 .select2-container--default.select2-container--open .select2-selection--multiple {
@@ -530,39 +722,95 @@
     box-shadow: 0 0 0 3px rgba(0,167,157,.1) !important;
     outline: none !important;
 }
-.select2-container--default .select2-selection--multiple .select2-selection__placeholder {
-    color: #a8c5c3 !important; font-size: .875rem; margin-top: 4px;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__rendered {
-    padding: 0 !important; display: flex !important; flex-wrap: wrap; gap: 4px;
-}
-/* Tags/choices */
-.select2-selection__choice {
-    display: inline-flex !important; align-items: center; gap: 4px;
-    background: linear-gradient(135deg, var(--ar-primary), #00bfb3) !important;
-    color: white !important; border: none !important;
-    border-radius: 50px !important;
-    padding: 3px 10px 3px 8px !important;
-    font-size: .78rem !important; font-weight: 600 !important;
+/* "Clear all" × button — absolute so it doesn't push pills */
+.select2-container--default .select2-selection--multiple .select2-selection__clear {
+    position: absolute !important;
+    right: 8px; top: 50%;
+    transform: translateY(-50%);
+    float: none !important;
     margin: 0 !important;
+    padding: 0 3px !important;
+    font-size: 1rem; line-height: 1;
+    color: var(--ar-gray) !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__clear:hover {
+    color: #ef4444 !important;
+}
+/* Dissolve the <ul> — pills become direct flex items of .select2-selection--multiple */
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    display: contents !important;
+    padding: 0 !important;
+}
+/* Tags/choices — now direct flex items, flow inline with the search textarea */
+.select2-selection__choice {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 5px;
+    background: linear-gradient(135deg, var(--ar-primary), #00bfb3) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 3px 10px 3px 6px !important;
+    font-size: .78rem !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+    max-width: calc(100% - 8px);
+    flex-shrink: 0;
+}
+.select2-selection__choice__display {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-    color: rgba(255,255,255,.8) !important;
-    border: none !important; border-right: none !important;
+    color: rgba(255,255,255,.85) !important;
+    border: none !important;
     background: transparent !important;
-    padding: 0 !important; margin: 0 !important;
-    font-size: .9rem !important; line-height: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: .95rem !important;
+    line-height: 1 !important;
+    flex-shrink: 0;
     order: -1;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
     color: white !important; background: transparent !important;
 }
+/* Inline search — fills remaining row space on same line as pills */
+.select2-container--default .select2-selection--multiple .select2-search--inline {
+    display: flex !important;
+    align-items: center;
+    flex: 1;
+    min-width: 60px;
+}
+.select2-container--default .select2-selection--multiple .select2-search__field {
+    width: 100% !important;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    font-size: .875rem !important;
+    resize: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 1.4em !important;
+    line-height: 1.4 !important;
+    min-height: unset !important;
+}
+.select2-container--default .select2-selection--multiple .select2-search__field::placeholder {
+    color: #a8c5c3 !important;
+}
 /* Dropdown */
 .select2-dropdown {
     border: 1.5px solid rgba(0,167,157,.25) !important;
-    border-radius: 14px !important; overflow: hidden; font-size: .875rem;
+    border-radius: 14px !important;
+    overflow: hidden;
+    font-size: .875rem;
     box-shadow: 0 8px 28px rgba(0,0,0,.1) !important;
     animation: arDropIn .18s ease forwards;
+    margin-top: 6px !important;  /* Fix 3: breathing room from input */
 }
 @keyframes arDropIn {
     from { opacity: 0; transform: translateY(-4px); }
@@ -572,28 +820,39 @@
 .select2-search--dropdown .select2-search__field {
     border: 1.5px solid #e0f2ef !important;
     border-radius: 8px !important;
-    padding: 6px 10px !important;
+    padding: 7px 10px !important;
     font-size: .85rem !important;
     outline: none !important;
     transition: border-color .2s;
 }
 .select2-search--dropdown .select2-search__field:focus {
     border-color: var(--ar-primary) !important;
+    box-shadow: 0 0 0 3px rgba(0,167,157,.1);
 }
 .select2-results__option {
-    padding: 9px 14px; cursor: pointer;
+    padding: 11px 16px;  /* Fix 3: more breathing room per option */
+    cursor: pointer;
     border-bottom: 1px solid #f0f9f8;
-    transition: background .15s;
+    transition: background .15s, color .15s;
     font-size: .875rem;
+    line-height: 1.4;
 }
 .select2-results__option:last-child { border-bottom: none; }
+/* Fix 5: Soft teal hover (no harsh gradient) */
 .select2-results__option--highlighted {
-    background: linear-gradient(135deg, var(--ar-primary), #00bfb3) !important;
-    color: white !important;
+    background: var(--ar-primary-light) !important;
+    color: #006b63 !important;
 }
+/* Fix 5: Selected state */
 .select2-results__option[aria-selected="true"] {
-    background: var(--ar-primary-light) !important; color: #007f73 !important;
+    background: #e8f8f7 !important;
+    color: #007f73 !important;
     font-weight: 600;
+}
+/* Fix 5: Hover on already-selected option */
+.select2-results__option--highlighted[aria-selected="true"] {
+    background: #c8edea !important;
+    color: #006b63 !important;
 }
 .select2-results__option[aria-selected="true"]::before {
     content: '✓ '; font-weight: 700; color: var(--ar-primary);
