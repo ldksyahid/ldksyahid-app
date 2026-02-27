@@ -12,9 +12,26 @@
 <div class="d-none d-lg-block">
     @if($postarticle->isEmpty())
         <div class="ar-empty-state">
-            <div class="ar-empty-icon">📄</div>
-            <h4>Belum Ada Artikel</h4>
-            <p>Tidak ada artikel yang sesuai dengan pencarian atau filter Anda.</p>
+            <div class="ar-empty-visual">
+                <div class="ar-empty-deco ar-empty-deco-1"></div>
+                <div class="ar-empty-deco ar-empty-deco-2"></div>
+                <div class="ar-empty-deco ar-empty-deco-3"></div>
+                <div class="ar-empty-ring ar-empty-ring-1"></div>
+                <div class="ar-empty-ring ar-empty-ring-2"></div>
+                <div class="ar-empty-icon-wrap">
+                    <i class="fas fa-search"></i>
+                    <span class="ar-empty-sparkle ar-empty-sparkle-1">✨</span>
+                    <span class="ar-empty-sparkle ar-empty-sparkle-2">📝</span>
+                    <span class="ar-empty-sparkle ar-empty-sparkle-3">🔍</span>
+                </div>
+            </div>
+            <h4 class="ar-empty-title">Artikel Tidak Ditemukan</h4>
+            <p class="ar-empty-sub">Coba ubah kata kunci atau hapus beberapa filter yang aktif</p>
+            <div class="ar-empty-tips">
+                <span class="ar-empty-tip">💡 Coba kata kunci lebih umum</span>
+                <span class="ar-empty-tip">🗑️ Hapus beberapa filter</span>
+                <span class="ar-empty-tip">📅 Coba tahun berbeda</span>
+            </div>
         </div>
     @else
         <div class="ar-grid">
@@ -81,9 +98,25 @@
 <div class="d-lg-none">
     @if($postarticle->isEmpty())
         <div class="ar-empty-state">
-            <div class="ar-empty-icon">📄</div>
-            <h4>Belum Ada Artikel</h4>
-            <p>Tidak ada artikel yang sesuai.</p>
+            <div class="ar-empty-visual">
+                <div class="ar-empty-deco ar-empty-deco-1"></div>
+                <div class="ar-empty-deco ar-empty-deco-2"></div>
+                <div class="ar-empty-deco ar-empty-deco-3"></div>
+                <div class="ar-empty-ring ar-empty-ring-1"></div>
+                <div class="ar-empty-ring ar-empty-ring-2"></div>
+                <div class="ar-empty-icon-wrap">
+                    <i class="fas fa-search"></i>
+                    <span class="ar-empty-sparkle ar-empty-sparkle-1">✨</span>
+                    <span class="ar-empty-sparkle ar-empty-sparkle-2">📝</span>
+                    <span class="ar-empty-sparkle ar-empty-sparkle-3">🔍</span>
+                </div>
+            </div>
+            <h4 class="ar-empty-title">Artikel Tidak Ditemukan</h4>
+            <p class="ar-empty-sub">Coba ubah kata kunci atau hapus filter yang aktif</p>
+            <div class="ar-empty-tips">
+                <span class="ar-empty-tip">💡 Kata kunci lebih umum</span>
+                <span class="ar-empty-tip">🗑️ Hapus filter</span>
+            </div>
         </div>
     @else
         <div class="ar-mobile-carousel" id="ar-mobile-carousel">
