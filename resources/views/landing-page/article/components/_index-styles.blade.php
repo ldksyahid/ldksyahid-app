@@ -826,64 +826,100 @@
 .select2-container--default .select2-selection--multiple .select2-search__field::placeholder {
     color: #a8c5c3 !important;
 }
-/* Dropdown */
-.select2-dropdown {
-    border: 1.5px solid rgba(0,167,157,.25) !important;
+/* ── Dropdown container ─────────────────────────────────────────── */
+.select2-container--default .select2-dropdown {
+    border: 1.5px solid rgba(0,167,157,.2) !important;
     border-radius: 14px !important;
-    overflow: hidden;
-    font-size: .875rem;
-    box-shadow: 0 8px 28px rgba(0,0,0,.1) !important;
-    animation: arDropIn .18s ease forwards;
-    margin-top: 6px !important;  /* Fix 3: breathing room from input */
+    overflow: hidden !important;
+    font-size: .875rem !important;
+    box-shadow: 0 12px 36px rgba(0,167,157,.14), 0 2px 10px rgba(0,0,0,.07) !important;
+    background: #fff !important;
+    margin-top: 6px !important;
+    animation: arDropIn .16s ease forwards;
 }
 @keyframes arDropIn {
-    from { opacity: 0; transform: translateY(-4px); }
+    from { opacity: 0; transform: translateY(-6px); }
     to   { opacity: 1; transform: translateY(0); }
 }
-.select2-search--dropdown { padding: 8px 10px !important; }
-.select2-search--dropdown .select2-search__field {
+
+/* ── Search box ─────────────────────────────────────────────────── */
+.select2-container--default .select2-search--dropdown {
+    padding: 10px 10px 8px !important;
+    border-bottom: 1px solid #edf7f6 !important;
+}
+.select2-container--default .select2-search--dropdown .select2-search__field {
     border: 1.5px solid #e0f2ef !important;
     border-radius: 8px !important;
     padding: 7px 10px !important;
     font-size: .85rem !important;
     outline: none !important;
-    transition: border-color .2s;
+    transition: border-color .2s, box-shadow .2s;
+    width: 100% !important;
 }
-.select2-search--dropdown .select2-search__field:focus {
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
     border-color: var(--ar-primary) !important;
-    box-shadow: 0 0 0 3px rgba(0,167,157,.1);
+    box-shadow: 0 0 0 3px rgba(0,167,157,.1) !important;
 }
-.select2-results__option {
-    padding: 11px 16px;  /* Fix 3: more breathing room per option */
-    cursor: pointer;
-    border-bottom: 1px solid #f0f9f8;
-    transition: background .15s, color .15s;
-    font-size: .875rem;
-    line-height: 1.4;
+
+/* ── Results scroll container ───────────────────────────────────── */
+.select2-container--default .select2-results > .select2-results__options {
+    max-height: 230px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 6px !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,167,157,.3) transparent;
 }
-.select2-results__option:last-child { border-bottom: none; }
-/* Fix 5: Soft teal hover (no harsh gradient) */
-.select2-results__option--highlighted {
-    background: var(--ar-primary-light) !important;
-    color: #006b63 !important;
+.select2-container--default .select2-results > .select2-results__options::-webkit-scrollbar {
+    width: 4px;
 }
-/* Fix 5: Selected state */
-.select2-results__option[aria-selected="true"] {
-    background: #e8f8f7 !important;
-    color: #007f73 !important;
-    font-weight: 600;
+.select2-container--default .select2-results > .select2-results__options::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 6px 0;
 }
-/* Fix 5: Hover on already-selected option */
-.select2-results__option--highlighted[aria-selected="true"] {
-    background: #c8edea !important;
-    color: #006b63 !important;
+.select2-container--default .select2-results > .select2-results__options::-webkit-scrollbar-thumb {
+    background: rgba(0,167,157,.35);
+    border-radius: 4px;
 }
-.select2-results__option[aria-selected="true"]::before {
-    content: '✓ '; font-weight: 700; color: var(--ar-primary);
+.select2-container--default .select2-results > .select2-results__options::-webkit-scrollbar-thumb:hover {
+    background: var(--ar-primary);
 }
-.select2-results__options::-webkit-scrollbar { width: 5px; }
-.select2-results__options::-webkit-scrollbar-thumb {
-    background: var(--ar-primary); border-radius: 10px;
+
+/* ── Option item ────────────────────────────────────────────────── */
+.select2-container--default .select2-results__option {
+    padding: 9px 32px 9px 12px !important;  /* right: ruang untuk ✓ */
+    cursor: pointer !important;
+    border-radius: 8px !important;
+    border-bottom: none !important;
+    transition: background .15s, color .15s !important;
+    font-size: .875rem !important;
+    line-height: 1.4 !important;
+    color: #333 !important;
+    position: relative;
+}
+
+/* ── Hover ──────────────────────────────────────────────────────── */
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background: rgba(0,167,157,.09) !important;
+    color: #005f58 !important;
+}
+
+/* ── Selected (belum di-hover) ──────────────────────────────────── */
+.select2-container--default .select2-results__option[aria-selected="true"] {
+    background: rgba(0,167,157,.08) !important;
+    color: var(--ar-primary) !important;
+    font-weight: 600 !important;
+}
+.select2-container--default .select2-results__option[aria-selected="true"]::before,
+.select2-container--default .select2-results__option[aria-selected="true"]::after {
+    content: '' !important;
+    display: none !important;
+}
+
+/* ── Hover pada item yang sudah dipilih ─────────────────────────── */
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable[aria-selected="true"] {
+    background: rgba(0,167,157,.16) !important;
+    color: #005f58 !important;
 }
 
 
