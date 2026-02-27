@@ -4,6 +4,10 @@
      Variables required: $postarticle (LengthAwarePaginator)
      =========================================================== --}}
 
+@php
+    $cardColors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#0ea5e9'];
+@endphp
+
 {{-- ── Desktop Grid (d-none d-lg-block) ───────────────────────── --}}
 <div class="d-none d-lg-block">
     @if($postarticle->isEmpty())
@@ -15,53 +19,59 @@
     @else
         <div class="ar-grid">
             @foreach($postarticle as $article)
-            <div class="ar-card wow fadeInUp" data-wow-delay="0.{{ ($loop->index % 3 + 1) }}s">
+            @php $accent = $cardColors[$loop->index % count($cardColors)]; @endphp
+            <div class="ar-card wow fadeInUp" style="--ar-accent: {{ $accent }}" data-wow-delay="0.{{ ($loop->index % 3 + 1) }}s">
 
-                {{-- Card Image --}}
-                <a href="/articles/{{ $article->id }}" class="ar-card-img-link">
-                    <div class="ar-card-img-wrap">
-                        <img src="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
-                             alt="{{ $article->title }}"
-                             class="ar-card-img" loading="lazy">
-                        @if($loop->first && $postarticle->currentPage() == 1)
-                            <span class="ar-card-badge-new">✦ Terbaru</span>
-                        @endif
-                        <div class="ar-card-img-overlay"></div>
+                {{-- Full-width Image --}}
+                <a href="/articles/{{ $article->id }}" class="ar-card-img-wrap">
+                    <img src="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
+                         alt="{{ $article->title }}"
+                         class="ar-card-img" loading="lazy">
+                    <div class="ar-card-date">
+                        <span class="ar-card-date-num">{{ \Carbon\Carbon::parse($article->dateevent)->format('d') }}</span>
+                        <span class="ar-card-date-month">{{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('MMM') }}</span>
                     </div>
+                    @if($loop->first && $postarticle->currentPage() == 1)
+                        <span class="ar-card-badge-new">✦ Terbaru</span>
+                    @endif
                 </a>
 
                 {{-- Card Body --}}
                 <div class="ar-card-body">
-                    <div class="ar-card-meta">
-                        <span class="ar-card-date">
-                            <i class="far fa-calendar-alt"></i>
-                            {{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('D MMM Y') }}
-                        </span>
-                    </div>
-
                     <span class="ar-card-theme">{{ $article->theme }}</span>
-
                     <h3 class="ar-card-title">
                         <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
                     </h3>
 
-                    <div class="ar-card-info">
-                        <div class="ar-card-info-item">
-                            <span class="ar-bullet"></span>
-                            <span><strong>Penulis:</strong> {{ $article->writer }}</span>
+                    {{-- People Card --}}
+                    <div class="ar-card-people">
+                        <div class="ar-card-meta-row">
+                            <div class="ar-card-avatar">
+                                <i class="fas fa-pen-fancy"></i>
+                            </div>
+                            <div class="ar-card-meta-info">
+                                <span class="ar-card-meta-label">Penulis</span>
+                                <span class="ar-card-meta-name">{{ $article->writer }}</span>
+                            </div>
                         </div>
-                        <div class="ar-card-info-item">
-                            <span class="ar-bullet"></span>
-                            <span><strong>Editor:</strong> {{ $article->editor }}</span>
+                        @if($article->editor)
+                        <div class="ar-card-people-divider"></div>
+                        <div class="ar-card-meta-row">
+                            <div class="ar-card-avatar">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="ar-card-meta-info">
+                                <span class="ar-card-meta-label">Editor</span>
+                                <span class="ar-card-meta-name">{{ $article->editor }}</span>
+                            </div>
                         </div>
+                        @endif
                     </div>
 
-                    <div class="ar-card-cta">
-                        <a href="/articles/{{ $article->id }}" class="ar-read-btn">
-                            <span>Baca Artikel</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
+                    <a href="/articles/{{ $article->id }}" class="ar-read-btn">
+                        <span>Baca Artikel</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
 
             </div>
@@ -81,7 +91,9 @@
     @else
         <div class="ar-mobile-carousel" id="ar-mobile-carousel">
             @foreach($postarticle as $article)
+            @php $accent = $cardColors[$loop->index % count($cardColors)]; @endphp
             <div class="ar-mobile-card"
+                 style="--ar-accent: {{ $accent }}"
                  data-id="{{ $article->id }}"
                  data-title="{{ e($article->title) }}"
                  data-theme="{{ e($article->theme) }}"
@@ -95,22 +107,29 @@
                 <div class="ar-m-thumb">
                     <img src="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
                          alt="{{ $article->title }}" loading="lazy">
+                    <div class="ar-card-date">
+                        <span class="ar-card-date-num">{{ \Carbon\Carbon::parse($article->dateevent)->format('d') }}</span>
+                        <span class="ar-card-date-month">{{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('MMM') }}</span>
+                    </div>
                     @if($loop->first && $postarticle->currentPage() == 1)
                         <span class="ar-m-badge-new">✦ Terbaru</span>
                     @endif
-                    <div class="ar-m-thumb-overlay"></div>
+                    <div class="ar-m-tap-hint">Baca selengkapnya 👆</div>
                 </div>
 
                 <div class="ar-m-body">
                     <span class="ar-m-theme">{{ $article->theme }}</span>
                     <h4 class="ar-m-title">{{ $article->title }}</h4>
-                    <p class="ar-m-meta">
-                        <i class="far fa-calendar-alt"></i>
-                        {{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('D MMM Y') }}
-                    </p>
-                    <div class="ar-m-tap-hint">
-                        <i class="fas fa-book-open"></i>
-                        <span>Lihat Detail</span>
+                    <div class="ar-card-people ar-card-people--sm">
+                        <div class="ar-card-meta-row">
+                            <div class="ar-card-avatar">
+                                <i class="fas fa-pen-fancy"></i>
+                            </div>
+                            <div class="ar-card-meta-info">
+                                <span class="ar-card-meta-label">Penulis</span>
+                                <span class="ar-card-meta-name">{{ $article->writer }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

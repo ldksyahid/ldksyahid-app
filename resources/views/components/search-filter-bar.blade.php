@@ -12,7 +12,7 @@
      ================================================================
      Usage:
 
-       @include('components.search-filter-bar.styles')  <- in styles section
+       @include('components.search-filter-bar.styles')  in styles section
 
        <x-search-filter-bar
            prefix="ar"
@@ -37,6 +37,8 @@
 
      Sort items emit: data-sort="{value}"  data-sort-prefix="{prefix}"
 
+     Clear button visibility: JS should set display:'flex' (not 'block') when showing
+
      Include styles in @section('styles'):
        @include('components.search-filter-bar.styles')
      ================================================================ --}}
@@ -56,46 +58,54 @@
         <button id="{{ $prefix }}-search-clear"
                 class="sfb-clear"
                 aria-label="Hapus pencarian"
-                style="display: {{ $searchValue ? 'block' : 'none' }};">
-            &times;
+                style="display: {{ $searchValue ? 'flex' : 'none' }};">
+            <i class="fas fa-times"></i>
         </button>
     </div>
 
-    {{-- Filter button (only when filterModalId is provided) --}}
-    @if($filterModalId)
-    <button type="button"
-            class="sfb-filter-btn"
-            data-bs-toggle="modal"
-            data-bs-target="#{{ $filterModalId }}"
-            aria-label="Buka filter">
-        <i class="fas fa-sliders-h"></i>
-        <span>Filter</span>
-        <span id="{{ $prefix }}-filter-count" class="sfb-badge" style="display:none;">0</span>
-    </button>
-    @endif
+    {{-- Filter + Sort action group --}}
+    @if($filterModalId || !empty($sortOptions))
+    <div class="sfb-actions">
 
-    {{-- Sort dropdown (only when sortOptions is not empty) --}}
-    @if(!empty($sortOptions))
-    <div class="dropdown">
-        <button class="sfb-sort-btn dropdown-toggle"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-            <i class="fas fa-sort me-1"></i>Urutkan
+        {{-- Filter button (only when filterModalId is provided) --}}
+        @if($filterModalId)
+        <button type="button"
+                class="sfb-filter-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#{{ $filterModalId }}"
+                aria-label="Buka filter">
+            <i class="fas fa-sliders-h"></i>
+            <span>Filter</span>
+            <span id="{{ $prefix }}-filter-count" class="sfb-badge" style="display:none;">0</span>
         </button>
-        <ul class="dropdown-menu" style="z-index:1060; min-width:180px;">
-            @foreach($sortOptions as $option)
-            <li>
-                <a  class="dropdown-item {{ $currentSort == $option['value'] ? 'active' : '' }}"
-                    href="#"
-                    data-sort="{{ $option['value'] }}"
-                    data-sort-prefix="{{ $prefix }}">
-                    <i class="{{ $option['icon'] ?? 'fas fa-sort' }} me-2"></i>
-                    {{ $option['label'] }}
-                </a>
-            </li>
-            @endforeach
-        </ul>
+        @endif
+
+        {{-- Sort dropdown (only when sortOptions is not empty) --}}
+        @if(!empty($sortOptions))
+        <div class="dropdown">
+            <button class="sfb-sort-btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                <i class="fas fa-sort"></i>
+                <span>Urutkan</span>
+            </button>
+            <ul class="dropdown-menu sfb-sort-menu">
+                @foreach($sortOptions as $option)
+                <li>
+                    <a  class="dropdown-item sfb-sort-item {{ $currentSort == $option['value'] ? 'active' : '' }}"
+                        href="#"
+                        data-sort="{{ $option['value'] }}"
+                        data-sort-prefix="{{ $prefix }}">
+                        <i class="{{ $option['icon'] ?? 'fas fa-sort' }}"></i>
+                        <span>{{ $option['label'] }}</span>
+                    </a>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
     </div>
     @endif
 

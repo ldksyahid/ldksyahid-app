@@ -102,8 +102,42 @@
 
 
 {{-- ══════════════════════════════════════════════════
-     FILTER MODAL
+     MOBILE BOTTOM SHEET
      ══════════════════════════════════════════════════ --}}
+<div class="ar-bs-backdrop" id="ar-bs-backdrop"></div>
+<div class="ar-bottom-sheet" id="ar-bottom-sheet"
+     role="dialog" aria-modal="true" aria-label="Detail Artikel">
+    <div class="ar-bs-handle"></div>
+    <button class="ar-bs-close" id="ar-bs-close" aria-label="Tutup">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="ar-bs-content" id="ar-bs-content">
+        {{-- Populated by JS via arOpenBottomSheet() --}}
+    </div>
+</div>
+
+
+{{-- Hidden config inputs (accessed by JS) --}}
+<input type="hidden" id="ar-base-url"  value="{{ url('/articles') }}">
+<input type="hidden" id="ar-sort-val"  value="{{ request('sort', 'newest') }}">
+
+@endsection
+
+
+{{-- ══════════════════════════════════════════════════
+     SCRIPTS
+     ══════════════════════════════════════════════════ --}}
+@section('scripts')
+@include('landing-page.article.components._index-scripts')
+@endsection
+
+
+{{-- ══════════════════════════════════════════════════
+     FILTER MODAL — pushed outside #photo to avoid stacking context.
+     (#photo has z-index:1 → Bootstrap backdrop at z-index:1040 would cover
+     any modal inside it. @push('modals') renders at body level, after #photo.)
+     ══════════════════════════════════════════════════ --}}
+@push('modals')
 <div class="modal fade ar-modal" id="ar-filter-modal" tabindex="-1"
      aria-labelledby="ar-filter-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -202,34 +236,4 @@
         </div>
     </div>
 </div>
-
-
-{{-- ══════════════════════════════════════════════════
-     MOBILE BOTTOM SHEET
-     ══════════════════════════════════════════════════ --}}
-<div class="ar-bs-backdrop" id="ar-bs-backdrop"></div>
-<div class="ar-bottom-sheet" id="ar-bottom-sheet"
-     role="dialog" aria-modal="true" aria-label="Detail Artikel">
-    <div class="ar-bs-handle"></div>
-    <button class="ar-bs-close" id="ar-bs-close" aria-label="Tutup">
-        <i class="fas fa-times"></i>
-    </button>
-    <div class="ar-bs-content" id="ar-bs-content">
-        {{-- Populated by JS via arOpenBottomSheet() --}}
-    </div>
-</div>
-
-
-{{-- Hidden config inputs (accessed by JS) --}}
-<input type="hidden" id="ar-base-url"  value="{{ url('/articles') }}">
-<input type="hidden" id="ar-sort-val"  value="{{ request('sort', 'newest') }}">
-
-@endsection
-
-
-{{-- ══════════════════════════════════════════════════
-     SCRIPTS
-     ══════════════════════════════════════════════════ --}}
-@section('scripts')
-@include('landing-page.article.components._index-scripts')
-@endsection
+@endpush

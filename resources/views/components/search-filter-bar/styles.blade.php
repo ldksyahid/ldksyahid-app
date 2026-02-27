@@ -5,87 +5,121 @@
    Include with: @include('components.search-filter-bar.styles')
    ================================================================ */
 
-/* ── Wrapper ─────────────────────────────────────────────────── */
+/* ── Wrapper — plain flex, no background ─────────────────────── */
 .sfb-wrap {
     display: flex;
     align-items: center;
-    gap: .75rem;
+    gap: .6rem;
     flex-wrap: wrap;
 }
 
-/* ── Search Field ────────────────────────────────────────────── */
+/* ── Search Field — pill card ────────────────────────────────── */
 .sfb-field {
     flex: 1 1 280px;
-    position: relative;
+    position: relative;            /* for clear button only */
     display: flex;
     align-items: center;
-}
-.sfb-search-icon {
-    position: absolute;
-    left: 1.1rem;
-    color: #b0bec5;
-    font-size: .85rem;
-    pointer-events: none;
-    z-index: 1;
-    transition: color .2s;
-}
-.sfb-field:focus-within .sfb-search-icon { color: #00a79d; }
-
-.sfb-input {
-    width: 100%;
-    border: 1.5px solid #e5e7eb;
+    gap: .5rem;                    /* space between icon and input */
+    background: #ffffff;
     border-radius: 50px;
-    padding: .58rem 2.8rem .58rem 2.6rem;  /* left room for icon, right for clear btn */
-    font-size: .9rem;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
-    transition: border-color .2s, box-shadow .2s;
-    color: #2c3e50;
+    border: 2px solid rgba(0,167,157,.2);
+    box-shadow: 0 4px 20px rgba(0,167,157,.12), 0 1px 6px rgba(0,0,0,.05);
+    transition: border-color .22s, box-shadow .22s;
+    padding: 0 .5rem 0 1.1rem;    /* left pad starts the icon; right pad clears the × btn */
 }
-.sfb-input:focus {
-    outline: none;
+.sfb-field:focus-within {
     border-color: #00a79d;
-    box-shadow: 0 0 0 3.5px rgba(0,167,157,.12);
+    box-shadow: 0 4px 22px rgba(0,167,157,.22), 0 0 0 4px rgba(0,167,157,.09);
 }
-.sfb-input::placeholder { color: #b0bec5; }
 
+/* Icon — regular flex child (NOT absolute), auto-centered by align-items */
+.sfb-search-icon {
+    flex-shrink: 0;
+    color: #00a79d;
+    font-size: .95rem;
+    pointer-events: none;
+    user-select: none;
+    opacity: .55;
+    transition: opacity .2s;
+}
+.sfb-field:focus-within .sfb-search-icon { opacity: 1; }
+
+/* Input — use .sfb-field .sfb-input for specificity (0,2,0) to beat
+   global rule: input[type="text"] { border:1px solid #ddd; padding:10px; margin:5px 0 }
+   which has specificity (0,1,1). Without this, gray border + wrong padding appear. */
+.sfb-field .sfb-input {
+    flex: 1;
+    width: auto;          /* beat global width:100% which breaks flex layout */
+    border: none;         /* beat global border:1px solid #ddd (gray box) */
+    border-radius: 0;     /* beat global border-radius:5px; container does pill */
+    margin: 0;            /* beat global margin:5px 0 */
+    padding: .78rem 2.4rem .78rem 0;  /* right pad = space for × button */
+    font-size: .9rem;
+    background: transparent;
+    color: #2c3e50;
+    outline: none;
+    box-shadow: none;
+    min-width: 0;
+    box-sizing: border-box;
+}
+.sfb-field .sfb-input::placeholder { color: #b0ccca; }
+
+/* Clear (×) button — still absolute on the right */
 .sfb-clear {
     position: absolute;
-    right: .85rem;
-    background: none;
+    right: .9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #e0f4f2;
     border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
-    color: #b0bec5;
-    font-size: 1.3rem;
-    line-height: 1;
+    color: #00a79d;
+    font-size: .62rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 0;
-    transition: color .2s;
-    z-index: 1;
+    line-height: 1;
+    transition: background .2s, color .2s, transform .15s;
+    flex-shrink: 0;
 }
-.sfb-clear:hover { color: #7f8c8d; }
+.sfb-clear:hover { background: #00a79d; color: white; transform: translateY(-50%) scale(1.1); }
+
+/* ── Actions group ───────────────────────────────────────────── */
+.sfb-actions {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-shrink: 0;
+}
 
 /* ── Filter Button ───────────────────────────────────────────── */
 .sfb-filter-btn {
     display: inline-flex;
     align-items: center;
-    gap: .4rem;
-    border: 1.5px solid #00a79d;
-    color: #00a79d;
-    background: white;
+    gap: .5rem;
+    background: linear-gradient(135deg, #00c4b8 0%, #00a79d 100%);
+    color: white;
+    border: none;
     border-radius: 50px;
-    padding: .56rem 1.15rem;
-    font-size: .88rem;
+    padding: .75rem 1.35rem;
+    font-size: .875rem;
     font-weight: 600;
     white-space: nowrap;
     cursor: pointer;
     position: relative;
-    transition: background .22s, color .22s, box-shadow .22s;
+    box-shadow: 0 4px 16px rgba(0,167,157,.4);
+    transition: filter .22s, box-shadow .22s, transform .18s;
 }
 .sfb-filter-btn:hover {
-    background: #00a79d;
-    color: white;
-    box-shadow: 0 4px 12px rgba(0,167,157,.3);
+    filter: brightness(1.08);
+    box-shadow: 0 6px 22px rgba(0,167,157,.52);
+    transform: translateY(-1px);
 }
+.sfb-filter-btn:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(0,167,157,.3); }
 
 /* Filter count badge */
 .sfb-badge {
@@ -93,78 +127,154 @@
     top: -7px; right: -7px;
     background: #ef4444;
     color: white;
-    min-width: 18px; height: 18px;
-    border-radius: 50px;
-    font-size: .62rem;
+    min-width: 20px; height: 20px;
+    border-radius: 50%;
+    font-size: .63rem;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 4px;
     border: 2px solid white;
-    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    box-shadow: 0 2px 6px rgba(239,68,68,.45);
 }
 
 /* ── Sort Button ─────────────────────────────────────────────── */
 .sfb-sort-btn {
     display: inline-flex;
     align-items: center;
-    gap: .4rem;
-    border: 1.5px solid #e5e7eb;
-    color: #7f8c8d;
+    gap: .5rem;
+    border: 2px solid rgba(0,167,157,.28);
+    color: #00a79d;
     background: white;
     border-radius: 50px;
-    padding: .56rem 1rem;
-    font-size: .88rem;
-    font-weight: 500;
+    padding: .73rem 1.25rem;
+    font-size: .875rem;
+    font-weight: 600;
     white-space: nowrap;
     cursor: pointer;
-    transition: border-color .22s, color .22s;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    transition: border-color .22s, background .22s, color .22s, box-shadow .22s, transform .18s;
 }
 .sfb-sort-btn:hover,
 .sfb-sort-btn:focus {
     border-color: #00a79d;
-    color: #00a79d;
+    background: #f0fefd;
+    box-shadow: 0 4px 16px rgba(0,167,157,.18);
+    transform: translateY(-1px);
     outline: none;
 }
-/* Bootstrap dropdown arrow keeps its styling */
-.sfb-sort-btn.dropdown-toggle::after { margin-left: .35em; }
+.sfb-sort-btn:active { transform: translateY(0); }
+.sfb-sort-btn.dropdown-toggle::after { margin-left: .3em; vertical-align: .15em; }
+
+/* Sort dropdown menu — smooth open/close */
+.sfb-sort-menu {
+    border: 1.5px solid rgba(0,167,157,.22) !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 12px 40px rgba(0,0,0,.12), 0 2px 8px rgba(0,167,157,.08) !important;
+    overflow: hidden;
+    padding: .45rem 0 !important;
+    min-width: 195px !important;
+    z-index: 1060 !important;
+
+    /* Override Bootstrap display:none — use visibility+opacity only (no transform to avoid glitch) */
+    display: block !important;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    /* close: delay visibility until fade-out finishes */
+    transition: opacity .18s ease, visibility 0s .18s;
+}
+.sfb-sort-menu.show {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    /* open: visibility instant, then fade in */
+    transition: opacity .18s ease, visibility 0s 0s;
+}
+.sfb-sort-item {
+    display: flex !important;
+    align-items: center;
+    gap: .6rem;
+    padding: .65rem 1.15rem !important;
+    font-size: .875rem;
+    color: #4a5568 !important;
+    transition: background .15s, color .15s;
+}
+.sfb-sort-item i:first-child {
+    color: #c4d6d5;
+    font-size: .85rem;
+    width: 1rem;
+    text-align: center;
+    transition: color .15s;
+    flex-shrink: 0;
+}
+.sfb-sort-item > span { flex: 1; }
+.sfb-sort-item:hover { background: #f0fefd !important; color: #00a79d !important; }
+.sfb-sort-item:hover i:first-child { color: #00a79d; }
+.sfb-sort-item.active {
+    background: linear-gradient(135deg, #eafaf8, #d4f5f2) !important;
+    color: #007d76 !important;
+    font-weight: 600;
+}
+.sfb-sort-item.active i:first-child { color: #00897b; }
+.sfb-sort-item.active::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: .7rem;
+    color: #00a79d;
+}
 
 /* ── Active Filter Pills ─────────────────────────────────────── */
 .sfb-pills {
     display: flex;
     flex-wrap: wrap;
     gap: .4rem;
-    min-height: 0;    /* collapse when empty */
+    min-height: 0;
 }
 .sfb-pill {
     display: inline-flex;
     align-items: center;
-    gap: .35rem;
-    background: #e0f7f5;
-    color: #00a79d;
+    gap: .38rem;
+    background: #e8faf8;
+    color: #007d76;
     border-radius: 50px;
-    padding: .22rem .8rem;
+    padding: .32rem 1rem;
     font-size: .78rem;
     font-weight: 600;
-    border: 1px solid rgba(0,167,157,.25);
+    border: 1.5px solid rgba(0,167,157,.22);
     cursor: pointer;
     user-select: none;
-    transition: background .2s, color .2s;
+    transition: background .2s, color .2s, border-color .2s, transform .15s, box-shadow .15s;
+    box-shadow: 0 1px 4px rgba(0,167,157,.08);
 }
-.sfb-pill:hover { background: #00a79d; color: white; }
-.sfb-pill i { font-size: .62rem; }
+.sfb-pill:hover {
+    background: linear-gradient(135deg, #00c4b8, #00a79d);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 3px 12px rgba(0,167,157,.38);
+    transform: translateY(-1px);
+}
+.sfb-pill i { font-size: .6rem; opacity: .7; transition: opacity .15s; }
+.sfb-pill:hover i { opacity: 1; }
 
 /* ── Responsive ──────────────────────────────────────────────── */
-@media (max-width: 991.98px) {
-    .sfb-wrap { gap: .5rem; }
-    .sfb-filter-btn,
-    .sfb-sort-btn { padding: .5rem .9rem; font-size: .83rem; }
-}
 @media (max-width: 576px) {
-    .sfb-field  { flex: 1 1 100%; }
-    .sfb-filter-btn,
-    .sfb-sort-btn { padding: .48rem .85rem; font-size: .8rem; }
+    .sfb-wrap { gap: .55rem; }
+    .sfb-field { flex: 1 1 100%; }
+    .sfb-actions { flex: 1 1 100%; gap: .5rem; }
+    .sfb-actions .dropdown { flex: 1; }
+    .sfb-filter-btn {
+        flex: 1;
+        justify-content: center;
+        padding: .72rem 1rem;
+    }
+    .sfb-sort-btn {
+        width: 100%;
+        justify-content: center;
+        padding: .7rem 1rem;
+    }
 }
 </style>
 @endverbatim

@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (searchInput) {
         /* Show/hide clear button on input */
         searchInput.addEventListener('input', function () {
-            if (searchClear) searchClear.style.display = this.value ? 'block' : 'none';
+            if (searchClear) searchClear.style.display = this.value ? 'flex' : 'none';
             clearTimeout(searchTimer);
             searchTimer = setTimeout(function () {
                 arLoadPage(arBuildUrl());
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /* Initial clear button state */
         if (searchClear) {
-            searchClear.style.display = searchInput.value ? 'block' : 'none';
+            searchClear.style.display = searchInput.value ? 'flex' : 'none';
         }
     }
 
