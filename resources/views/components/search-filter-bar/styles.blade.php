@@ -96,6 +96,36 @@
     flex-shrink: 0;
 }
 
+/* ── Filter Button Group ─────────────────────────────────────── */
+.sfb-filter-group {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+/* Clear-all X button (shown when filters are active) */
+.sfb-filter-clear {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #fee2e2;
+    border: 1.5px solid rgba(239,68,68,.28);
+    color: #ef4444;
+    font-size: .6rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background .2s, color .2s, border-color .2s, transform .15s, box-shadow .15s;
+    box-shadow: 0 2px 8px rgba(239,68,68,.18);
+}
+.sfb-filter-clear:hover {
+    background: #ef4444; color: white;
+    border-color: transparent;
+    transform: scale(1.12);
+    box-shadow: 0 4px 14px rgba(239,68,68,.4);
+}
+.sfb-filter-clear:active { transform: scale(1); }
+
 /* ── Filter Button ───────────────────────────────────────────── */
 .sfb-filter-btn {
     display: inline-flex;
@@ -240,24 +270,32 @@
     background: #e8faf8;
     color: #007d76;
     border-radius: 50px;
-    padding: .32rem 1rem;
+    padding: .32rem .65rem .32rem 1rem;
     font-size: .78rem;
     font-weight: 600;
     border: 1.5px solid rgba(0,167,157,.22);
-    cursor: pointer;
+    cursor: default;
     user-select: none;
-    transition: background .2s, color .2s, border-color .2s, transform .15s, box-shadow .15s;
     box-shadow: 0 1px 4px rgba(0,167,157,.08);
 }
-.sfb-pill:hover {
-    background: linear-gradient(135deg, #00c4b8, #00a79d);
-    color: white;
-    border-color: transparent;
-    box-shadow: 0 3px 12px rgba(0,167,157,.38);
-    transform: translateY(-1px);
+
+/* × circle — the only interactive part */
+.sfb-pill i {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: rgba(0,125,118,.13);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: .5rem;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background .18s, color .18s, transform .15s, box-shadow .15s;
 }
-.sfb-pill i { font-size: .6rem; opacity: .7; transition: opacity .15s; }
-.sfb-pill:hover i { opacity: 1; }
+.sfb-pill i:hover {
+    background: #ef4444;
+    color: white;
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(239,68,68,.38);
+}
 
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 576px) {

@@ -280,10 +280,124 @@
 
 /* ─── Empty State ─────────────────────────────────────────────── */
 .ar-empty-state {
-    text-align: center; padding: 4rem 1rem; color: var(--ar-gray);
+    text-align: center;
+    padding: 3.5rem 1.5rem 4rem;
+    color: var(--ar-gray);
 }
-.ar-empty-icon { font-size: 4rem; margin-bottom: 1rem; opacity: .45; }
-.ar-empty-state h4 { font-weight: 700; color: var(--ar-dark); margin-bottom: .5rem; }
+
+/* Visual / illustration area */
+.ar-empty-visual {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px; height: 160px;
+    margin: 0 auto 2rem;
+}
+
+/* Central icon bubble */
+.ar-empty-icon-wrap {
+    position: relative; z-index: 3;
+    width: 88px; height: 88px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #00c4b8, #00a79d);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 2rem;
+    box-shadow: 0 12px 36px rgba(0,167,157,.38), 0 4px 12px rgba(0,0,0,.06);
+    animation: arEmptyFloat 3.2s ease-in-out infinite;
+}
+@keyframes arEmptyFloat {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50%       { transform: translateY(-10px) rotate(2deg); }
+}
+
+/* Expanding rings */
+.ar-empty-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid rgba(0,167,157,.14);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: arEmptyRing 3s ease-out infinite;
+}
+.ar-empty-ring-1 { width: 116px; height: 116px; animation-delay: 0s; }
+.ar-empty-ring-2 { width: 150px; height: 150px; animation-delay: .85s; }
+@keyframes arEmptyRing {
+    0%   { opacity: .55; transform: translate(-50%, -50%) scale(.85); }
+    100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.35); }
+}
+
+/* Floating deco dots */
+.ar-empty-deco {
+    position: absolute;
+    border-radius: 50%;
+    opacity: .72;
+    animation: arEmptyDeco 4s ease-in-out infinite;
+}
+.ar-empty-deco-1 {
+    width: 14px; height: 14px;
+    background: #6366f1;
+    top: 10px; right: 16px;
+    animation-delay: 0s;
+}
+.ar-empty-deco-2 {
+    width: 10px; height: 10px;
+    background: #f59e0b;
+    bottom: 18px; left: 10px;
+    animation-delay: 1.1s;
+}
+.ar-empty-deco-3 {
+    width: 8px; height: 8px;
+    background: #ef4444;
+    top: 32px; left: 20px;
+    animation-delay: .55s;
+}
+@keyframes arEmptyDeco {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%       { transform: translateY(-7px) scale(1.15); }
+}
+
+/* Sparkle emoji floating around icon */
+.ar-empty-sparkle {
+    position: absolute; font-size: .85rem;
+    animation: arEmptySparkle 3.5s ease-in-out infinite;
+    pointer-events: none; user-select: none;
+}
+.ar-empty-sparkle-1 { top: -8px;  right: -10px; animation-delay: 0s; }
+.ar-empty-sparkle-2 { bottom: -6px; left: -12px; animation-delay: 1.2s; }
+.ar-empty-sparkle-3 { top: 6px;  left: -14px;  animation-delay: 2.1s; font-size: .7rem; }
+@keyframes arEmptySparkle {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: .7; }
+    50%       { transform: scale(1.3) rotate(15deg); opacity: 1; }
+}
+
+/* Text */
+.ar-empty-title {
+    font-size: 1.35rem; font-weight: 800;
+    color: var(--ar-dark); margin: 0 0 .5rem;
+    letter-spacing: -.2px;
+}
+.ar-empty-sub {
+    font-size: .88rem; color: var(--ar-gray);
+    margin: 0 auto .85rem; max-width: 320px; line-height: 1.55;
+}
+
+/* Tip pills */
+.ar-empty-tips {
+    display: flex; flex-wrap: wrap;
+    justify-content: center; gap: .45rem;
+    margin-top: .5rem;
+}
+.ar-empty-tip {
+    display: inline-flex; align-items: center; gap: .3rem;
+    background: #f0fefa;
+    border: 1.5px solid rgba(0,167,157,.18);
+    border-radius: 50px;
+    padding: .32rem 1rem;
+    font-size: .78rem; font-weight: 600;
+    color: #007d76;
+    box-shadow: 0 2px 8px rgba(0,167,157,.07);
+}
 
 
 /* ─── Mobile Carousel ─────────────────────────────────────────── */
@@ -688,8 +802,11 @@
 @media (max-width: 575.98px) {
     .ar-fm-header { padding: 1.75rem 1.5rem 1.1rem; }
     .ar-fm-body { padding: 1rem 1.25rem; }
-    .ar-fm-footer { padding: .85rem 1.25rem 1.25rem; flex-wrap: wrap; }
-    .ar-fm-btn-apply { order: -1; width: 100%; }
+    .ar-fm-footer { padding: .75rem 1.25rem 1.1rem; gap: .45rem; }
+    .ar-fm-btn-close { padding: .5rem .85rem; font-size: .78rem; }
+    .ar-fm-btn-reset { padding: .5rem .85rem; font-size: .78rem; }
+    .ar-fm-btn-apply { padding: .5rem 1rem; font-size: .82rem; }
+    .ar-fm-btn-icon { width: 20px; height: 20px; font-size: .65rem; }
     .ar-fm-title { font-size: 1.15rem; }
     .ar-fm-icon { width: 54px; height: 54px; font-size: 1.35rem; }
     .ar-fm-ring-1 { width: 76px; height: 76px; }

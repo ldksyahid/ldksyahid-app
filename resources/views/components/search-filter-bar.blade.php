@@ -67,17 +67,27 @@
     @if($filterModalId || !empty($sortOptions))
     <div class="sfb-actions">
 
-        {{-- Filter button (only when filterModalId is provided) --}}
+        {{-- Filter button group (only when filterModalId is provided) --}}
         @if($filterModalId)
-        <button type="button"
-                class="sfb-filter-btn"
-                data-bs-toggle="modal"
-                data-bs-target="#{{ $filterModalId }}"
-                aria-label="Buka filter">
-            <i class="fas fa-sliders-h"></i>
-            <span>Filter</span>
-            <span id="{{ $prefix }}-filter-count" class="sfb-badge" style="display:none;">0</span>
-        </button>
+        <div class="sfb-filter-group">
+            <button type="button"
+                    class="sfb-filter-btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#{{ $filterModalId }}"
+                    aria-label="Buka filter">
+                <i class="fas fa-sliders-h"></i>
+                <span>Filter</span>
+                <span id="{{ $prefix }}-filter-count" class="sfb-badge" style="display:none;">0</span>
+            </button>
+            <button type="button"
+                    id="{{ $prefix }}-filter-clear"
+                    class="sfb-filter-clear"
+                    aria-label="Hapus semua filter"
+                    style="display: none;"
+                    title="Hapus semua filter">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
         @endif
 
         {{-- Sort dropdown (only when sortOptions is not empty) --}}

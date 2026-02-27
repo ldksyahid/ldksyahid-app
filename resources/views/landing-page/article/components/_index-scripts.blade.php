@@ -76,6 +76,10 @@ document.addEventListener('DOMContentLoaded', function () {
             badge.textContent = count;
             badge.style.display = count > 0 ? 'flex' : 'none';
         }
+        var clearBtn = document.getElementById('ar-filter-clear');
+        if (clearBtn) {
+            clearBtn.style.display = count > 0 ? 'flex' : 'none';
+        }
     }
 
     /* Custom blur backdrop — show/hide with filter modal */
@@ -164,17 +168,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 pill.dataset.selectId = id;
                 pill.dataset.value    = opt.value;
 
-                pill.addEventListener('click', function () {
-                    var sel = document.getElementById(this.dataset.selectId);
-                    if (!sel) return;
-                    for (var i = 0; i < sel.options.length; i++) {
-                        if (sel.options[i].value === this.dataset.value) sel.options[i].selected = false;
-                    }
-                    if (typeof $ !== 'undefined') $(sel).trigger('change');
-                    updateFilterBadge();
-                    buildActivePills();
-                    arLoadPage(arBuildUrl());
-                });
+                var icon = pill.querySelector('i');
+                if (icon) {
+                    icon.addEventListener('click', function () {
+                        var p   = this.closest('.sfb-pill');
+                        var sel = document.getElementById(p.dataset.selectId);
+                        if (!sel) return;
+                        for (var i = 0; i < sel.options.length; i++) {
+                            if (sel.options[i].value === p.dataset.value) sel.options[i].selected = false;
+                        }
+                        if (typeof $ !== 'undefined') $(sel).trigger('change');
+                        updateFilterBadge();
+                        buildActivePills();
+                        arLoadPage(arBuildUrl());
+                    });
+                }
 
                 container.appendChild(pill);
             });
@@ -303,16 +311,28 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function arClearAllFilters() {
+        ['ar-theme-select', 'ar-writer-select', 'ar-editor-select', 'ar-year-select'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            for (var i = 0; i < el.options.length; i++) el.options[i].selected = false;
+            if (typeof $ !== 'undefined') $(el).trigger('change');
+        });
+        updateFilterBadge();
+    }
+
     var resetBtn = document.getElementById('ar-reset-filter');
     if (resetBtn) {
-        resetBtn.addEventListener('click', function () {
-            ['ar-theme-select', 'ar-writer-select', 'ar-editor-select', 'ar-year-select'].forEach(function (id) {
-                var el = document.getElementById(id);
-                if (!el) return;
-                for (var i = 0; i < el.options.length; i++) el.options[i].selected = false;
-                if (typeof $ !== 'undefined') $(el).trigger('change');
-            });
-            updateFilterBadge();
+        resetBtn.addEventListener('click', arClearAllFilters);
+    }
+
+    /* Clear-all button next to Filter button */
+    var filterClearBtn = document.getElementById('ar-filter-clear');
+    if (filterClearBtn) {
+        filterClearBtn.addEventListener('click', function () {
+            arClearAllFilters();
+            buildActivePills();
+            arLoadPage(arBuildUrl());
         });
     }
 
@@ -445,11 +465,14 @@ document.addEventListener('DOMContentLoaded', function () {
     /* The server renders initial pills in the Blade template.
        Wire up their click handlers to deselect + re-fetch. */
     document.querySelectorAll('#ar-active-pills .sfb-pill[data-select-id]').forEach(function (pill) {
-        pill.addEventListener('click', function () {
-            var sel = document.getElementById(this.dataset.selectId);
+        var icon = pill.querySelector('i.fa-times');
+        if (!icon) return;
+        icon.addEventListener('click', function () {
+            var p   = this.closest('.sfb-pill');
+            var sel = document.getElementById(p.dataset.selectId);
             if (!sel) return;
             for (var i = 0; i < sel.options.length; i++) {
-                if (sel.options[i].value === this.dataset.value) sel.options[i].selected = false;
+                if (sel.options[i].value === p.dataset.value) sel.options[i].selected = false;
             }
             if (typeof $ !== 'undefined') $(sel).trigger('change');
             updateFilterBadge();
