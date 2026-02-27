@@ -77,10 +77,26 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    /* Sync badge on modal open */
+    /* Custom blur backdrop — show/hide with filter modal */
     var filterModal = document.getElementById('ar-filter-modal');
+    var fmBackdrop  = document.getElementById('ar-fm-backdrop');
+
     if (filterModal) {
-        filterModal.addEventListener('show.bs.modal', updateFilterBadge);
+        filterModal.addEventListener('show.bs.modal',   function () {
+            updateFilterBadge();
+            if (fmBackdrop) fmBackdrop.classList.add('active');
+        });
+        filterModal.addEventListener('hidden.bs.modal', function () {
+            if (fmBackdrop) fmBackdrop.classList.remove('active');
+        });
+    }
+
+    /* Click on custom backdrop → close modal */
+    if (fmBackdrop) {
+        fmBackdrop.addEventListener('click', function () {
+            var modal = bootstrap.Modal.getInstance(filterModal);
+            if (modal) modal.hide();
+        });
     }
 
 

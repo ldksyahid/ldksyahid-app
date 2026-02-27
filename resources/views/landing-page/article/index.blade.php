@@ -138,98 +138,127 @@
      any modal inside it. @push('modals') renders at body level, after #photo.)
      ══════════════════════════════════════════════════ --}}
 @push('modals')
-<div class="modal fade ar-modal" id="ar-filter-modal" tabindex="-1"
-     aria-labelledby="ar-filter-modal-label" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
+{{-- Custom blur backdrop (Bootstrap backdrop disabled via data-bs-backdrop="false") --}}
+<div id="ar-fm-backdrop" class="ar-fm-backdrop"></div>
 
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold" id="ar-filter-modal-label"
-                    style="color: #00a79d;">
-                    <i class="fas fa-sliders-h me-2"></i>Filter Artikel
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+<div class="modal fade ar-modal" id="ar-filter-modal" tabindex="-1"
+     data-bs-backdrop="false"
+     aria-labelledby="ar-filter-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ar-fm-dialog">
+        <div class="modal-content ar-fm-content">
+
+            {{-- Custom close button --}}
+            <button type="button" class="ar-fm-close" data-bs-dismiss="modal" aria-label="Tutup">
+                <i class="fas fa-times"></i>
+            </button>
+
+            {{-- Header --}}
+            <div class="ar-fm-header">
+                <div class="ar-fm-badge">
+                    <span>🔍</span>
+                    <span>Cari & Saring</span>
+                    <span class="ar-fm-pulse"></span>
+                </div>
+                <div class="ar-fm-icon-wrap">
+                    <div class="ar-fm-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <div class="ar-fm-ring ar-fm-ring-1"></div>
+                    <div class="ar-fm-ring ar-fm-ring-2"></div>
+                </div>
+                <h5 class="ar-fm-title" id="ar-filter-modal-label">Filter Artikel</h5>
+                <p class="ar-fm-subtitle">Pilih satu atau lebih filter untuk menyaring artikel</p>
             </div>
 
-            <div class="modal-body p-4">
-                <div class="row g-4">
+            {{-- Body --}}
+            <div class="ar-fm-body">
+                <div class="row g-3">
 
                     <div class="col-md-6">
-                        <label for="ar-theme-select" class="form-label fw-semibold mb-2"
-                               style="color:#00a79d; font-size:.88rem;">
-                            <i class="fas fa-hashtag me-1"></i>Tema
-                        </label>
-                        <select id="ar-theme-select" class="form-select" multiple>
-                            @foreach($themes as $theme)
-                                <option value="{{ $theme }}"
-                                    {{ in_array($theme, (array)request('theme')) ? 'selected' : '' }}>
-                                    {{ $theme }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div class="ar-fm-field-wrap">
+                            <div class="ar-fm-field-label">
+                                <div class="ar-fm-field-icon"><i class="fas fa-hashtag"></i></div>
+                                <label for="ar-theme-select" class="ar-fm-label">Tema</label>
+                            </div>
+                            <select id="ar-theme-select" class="form-select" multiple>
+                                @foreach($themes as $theme)
+                                    <option value="{{ $theme }}"
+                                        {{ in_array($theme, (array)request('theme')) ? 'selected' : '' }}>
+                                        {{ $theme }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label for="ar-writer-select" class="form-label fw-semibold mb-2"
-                               style="color:#00a79d; font-size:.88rem;">
-                            <i class="fas fa-user-edit me-1"></i>Penulis
-                        </label>
-                        <select id="ar-writer-select" class="form-select" multiple>
-                            @foreach($writers as $writer)
-                                <option value="{{ $writer }}"
-                                    {{ in_array($writer, (array)request('writer')) ? 'selected' : '' }}>
-                                    {{ $writer }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div class="ar-fm-field-wrap">
+                            <div class="ar-fm-field-label">
+                                <div class="ar-fm-field-icon"><i class="fas fa-user-edit"></i></div>
+                                <label for="ar-writer-select" class="ar-fm-label">Penulis</label>
+                            </div>
+                            <select id="ar-writer-select" class="form-select" multiple>
+                                @foreach($writers as $writer)
+                                    <option value="{{ $writer }}"
+                                        {{ in_array($writer, (array)request('writer')) ? 'selected' : '' }}>
+                                        {{ $writer }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label for="ar-editor-select" class="form-label fw-semibold mb-2"
-                               style="color:#00a79d; font-size:.88rem;">
-                            <i class="fas fa-pen me-1"></i>Editor
-                        </label>
-                        <select id="ar-editor-select" class="form-select" multiple>
-                            @foreach($editors as $editor)
-                                <option value="{{ $editor }}"
-                                    {{ in_array($editor, (array)request('editor')) ? 'selected' : '' }}>
-                                    {{ $editor }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div class="ar-fm-field-wrap">
+                            <div class="ar-fm-field-label">
+                                <div class="ar-fm-field-icon"><i class="fas fa-pen"></i></div>
+                                <label for="ar-editor-select" class="ar-fm-label">Editor</label>
+                            </div>
+                            <select id="ar-editor-select" class="form-select" multiple>
+                                @foreach($editors as $editor)
+                                    <option value="{{ $editor }}"
+                                        {{ in_array($editor, (array)request('editor')) ? 'selected' : '' }}>
+                                        {{ $editor }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label for="ar-year-select" class="form-label fw-semibold mb-2"
-                               style="color:#00a79d; font-size:.88rem;">
-                            <i class="fas fa-calendar-alt me-1"></i>Tahun
-                        </label>
-                        <select id="ar-year-select" class="form-select" multiple>
-                            @foreach($years as $year)
-                                <option value="{{ $year }}"
-                                    {{ in_array($year, (array)request('created_year')) ? 'selected' : '' }}>
-                                    {{ $year }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div class="ar-fm-field-wrap">
+                            <div class="ar-fm-field-label">
+                                <div class="ar-fm-field-icon"><i class="fas fa-calendar-alt"></i></div>
+                                <label for="ar-year-select" class="ar-fm-label">Tahun</label>
+                            </div>
+                            <select id="ar-year-select" class="form-select" multiple>
+                                @foreach($years as $year)
+                                    <option value="{{ $year }}"
+                                        {{ in_array($year, (array)request('created_year')) ? 'selected' : '' }}>
+                                        {{ $year }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                 </div>
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary rounded-pill px-4"
-                        data-bs-dismiss="modal">
-                    <i class="fas fa-times me-1"></i>Tutup
+            {{-- Footer --}}
+            <div class="ar-fm-footer">
+                <button type="button" class="ar-fm-btn-close" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i>
+                    <span>Tutup</span>
                 </button>
-                <button type="button" id="ar-reset-filter"
-                        class="btn btn-outline-warning rounded-pill px-4">
-                    <i class="fas fa-undo me-1"></i>Reset
+                <button type="button" id="ar-reset-filter" class="ar-fm-btn-reset">
+                    <i class="fas fa-undo"></i>
+                    <span>Reset</span>
                 </button>
-                <button type="button" id="ar-apply-filter"
-                        class="btn btn-primary rounded-pill px-4"
-                        style="background:#00a79d; border-color:#00a79d;">
-                    <i class="fas fa-check me-1"></i>Terapkan
+                <button type="button" id="ar-apply-filter" class="ar-fm-btn-apply">
+                    <span class="ar-fm-btn-icon"><i class="fas fa-check"></i></span>
+                    <span>Terapkan Filter</span>
+                    <div class="ar-fm-btn-shine"></div>
                 </button>
             </div>
 
