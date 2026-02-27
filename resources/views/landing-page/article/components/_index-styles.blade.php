@@ -697,7 +697,8 @@
 }
 
 /* Select2 inside modal — selection box */
-/* .select2-selection--multiple is the flex row: [clear-btn] [pills...] [search-textarea] */
+/* After JS moves .select2-search--inline into ul, the ul contains:
+   [pill...] [search textarea]  — all flowing as one horizontal flex row */
 .select2-container--default .select2-selection--multiple {
     border: 1.5px solid #d1ece9 !important;
     border-radius: 12px !important;
@@ -707,12 +708,10 @@
     transition: border-color .2s, box-shadow .2s;
     display: flex !important;
     align-items: center !important;
-    flex-wrap: wrap !important;
-    gap: 4px !important;
     position: relative;
     overflow: visible !important;
 }
-/* Pad right when "clear all" button is visible */
+/* Extra right padding when "clear all" button is visible */
 .select2-container--default .select2-selection--multiple.select2-selection--clearable {
     padding-right: 28px !important;
 }
@@ -722,7 +721,7 @@
     box-shadow: 0 0 0 3px rgba(0,167,157,.1) !important;
     outline: none !important;
 }
-/* "Clear all" × button — absolute so it doesn't push pills */
+/* "Clear all" × — absolute, removed from flex flow */
 .select2-container--default .select2-selection--multiple .select2-selection__clear {
     position: absolute !important;
     right: 8px; top: 50%;
@@ -739,21 +738,27 @@
 .select2-container--default .select2-selection--multiple .select2-selection__clear:hover {
     color: #ef4444 !important;
 }
-/* Dissolve the <ul> — pills become direct flex items of .select2-selection--multiple */
+/* ul is the single flex child — fills full width, pills flow inside */
 .select2-container--default .select2-selection--multiple .select2-selection__rendered {
-    display: contents !important;
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
     padding: 0 !important;
+    overflow: visible !important;
 }
-/* Tags/choices — now direct flex items, flow inline with the search textarea */
+/* Tags/choices — × on RIGHT via flex-direction:row-reverse */
 .select2-selection__choice {
     display: inline-flex !important;
     align-items: center;
+    flex-direction: row-reverse;   /* × appears after text visually */
     gap: 5px;
     background: linear-gradient(135deg, var(--ar-primary), #00bfb3) !important;
     color: white !important;
     border: none !important;
     border-radius: 50px !important;
-    padding: 3px 10px 3px 6px !important;
+    padding: 3px 5px 3px 10px !important;  /* left: text-side, right: ×-side */
     font-size: .78rem !important;
     font-weight: 600 !important;
     margin: 0 !important;
@@ -761,25 +766,38 @@
     flex-shrink: 0;
 }
 .select2-selection__choice__display {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.4;
 }
+/* Pill × button — solid white circle with teal × for clear visibility */
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-    color: rgba(255,255,255,.85) !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50% !important;
     border: none !important;
-    background: transparent !important;
+    background: rgba(255,255,255,.92) !important;
+    color: var(--ar-primary) !important;
     padding: 0 !important;
     margin: 0 !important;
-    font-size: .95rem !important;
+    font-size: .65rem !important;
+    font-weight: 700 !important;
     line-height: 1 !important;
-    flex-shrink: 0;
-    order: -1;
+    cursor: pointer;
+    transition: background .15s, color .15s;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-    color: white !important; background: transparent !important;
+    background: white !important;
+    color: #ef4444 !important;
 }
-/* Inline search — fills remaining row space on same line as pills */
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove span {
+    display: block; line-height: 1;
+}
+/* Inline search (inside ul via JS) — fills remaining space after pills */
 .select2-container--default .select2-selection--multiple .select2-search--inline {
     display: flex !important;
     align-items: center;
@@ -792,12 +810,14 @@
     outline: none !important;
     background: transparent !important;
     font-size: .875rem !important;
+    color: var(--ar-dark) !important;
     resize: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    height: 1.4em !important;
-    line-height: 1.4 !important;
+    line-height: 1.5 !important;
+    height: 1.5em !important;
     min-height: unset !important;
+    vertical-align: middle;
 }
 .select2-container--default .select2-selection--multiple .select2-search__field::placeholder {
     color: #a8c5c3 !important;

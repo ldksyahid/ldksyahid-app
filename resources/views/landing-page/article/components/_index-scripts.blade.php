@@ -49,12 +49,31 @@ document.addEventListener('DOMContentLoaded', function () {
        ============================================================ */
     if (typeof $.fn !== 'undefined' && typeof $.fn.select2 !== 'undefined') {
         var $filterSelects = $('#ar-theme-select, #ar-writer-select, #ar-editor-select, #ar-year-select');
+
+        /* Move Select2's inline search INSIDE the rendered <ul> so pills
+           and search share one flex row. Select2 v4.1-rc puts the search
+           outside the ul (as a sibling); this restores v4.0 behaviour. */
+        function fixSelect2Search($select) {
+            var $cnt  = $select.next('.select2-container');
+            var $ul   = $cnt.find('.select2-selection__rendered');
+            var $srch = $cnt.find('.select2-search--inline');
+            if ($ul.length && $srch.length && !$.contains($ul[0], $srch[0])) {
+                $ul.append($srch);
+            }
+        }
+
         $filterSelects.each(function () {
-            $(this).select2({
+            var $s = $(this);
+            $s.select2({
                 placeholder: 'Semua',
                 allowClear: true,
                 width: '100%',
                 dropdownParent: $('#ar-filter-modal'),
+            });
+            fixSelect2Search($s);
+            /* Re-fix after any change (allowClear button re-render, etc.) */
+            $s.on('select2:select select2:unselect select2:clear', function () {
+                setTimeout(function () { fixSelect2Search($s); }, 0);
             });
         });
         $(window).on('scroll', function () { $filterSelects.select2('close'); });
