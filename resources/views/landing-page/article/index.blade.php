@@ -182,10 +182,7 @@
                             </div>
                             <select id="ar-theme-select" class="form-select" multiple>
                                 @foreach($themes as $theme)
-                                    <option value="{{ $theme }}"
-                                        {{ in_array($theme, (array)request('theme')) ? 'selected' : '' }}>
-                                        {{ $theme }}
-                                    </option>
+                                    <option value="{{ $theme }}" {{ in_array($theme, (array)request('theme')) ? 'selected' : '' }}>{{ $theme }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -199,10 +196,7 @@
                             </div>
                             <select id="ar-writer-select" class="form-select" multiple>
                                 @foreach($writers as $writer)
-                                    <option value="{{ $writer }}"
-                                        {{ in_array($writer, (array)request('writer')) ? 'selected' : '' }}>
-                                        {{ $writer }}
-                                    </option>
+                                    <option value="{{ $writer }}" {{ in_array($writer, (array)request('writer')) ? 'selected' : '' }}>{{ $writer }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -216,10 +210,7 @@
                             </div>
                             <select id="ar-editor-select" class="form-select" multiple>
                                 @foreach($editors as $editor)
-                                    <option value="{{ $editor }}"
-                                        {{ in_array($editor, (array)request('editor')) ? 'selected' : '' }}>
-                                        {{ $editor }}
-                                    </option>
+                                    <option value="{{ $editor }}" {{ in_array($editor, (array)request('editor')) ? 'selected' : '' }}>{{ $editor }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -233,10 +224,7 @@
                             </div>
                             <select id="ar-year-select" class="form-select" multiple>
                                 @foreach($years as $year)
-                                    <option value="{{ $year }}"
-                                        {{ in_array($year, (array)request('created_year')) ? 'selected' : '' }}>
-                                        {{ $year }}
-                                    </option>
+                                    <option value="{{ $year }}" {{ in_array($year, (array)request('created_year')) ? 'selected' : '' }}>{{ $year }}</option>
                                 @endforeach
                             </select>
                         </div>
