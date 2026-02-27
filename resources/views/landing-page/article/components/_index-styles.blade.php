@@ -760,7 +760,8 @@
     color: white !important;
     border: none !important;
     border-radius: 50px !important;
-    padding: 3px 8px 3px 12px !important; /* left: text-side, right: ×-side */
+    padding: 3px 5px 3px 5px !important; /* left: text-side, right: ×-side */
+    gap: 4px !important;
     font-size: .78rem !important;
     font-weight: 600 !important;
     margin: 0 !important;
@@ -785,8 +786,8 @@
     align-items: center !important;
     justify-content: center !important;
     flex-shrink: 0 !important;
-    width: 16px !important;
-    height: 16px !important;
+    width: 14px !important;
+    height: 14px !important;
     border-radius: 50% !important;
     border: none !important;
     background: rgba(255,255,255,.92) !important;
