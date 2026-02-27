@@ -697,8 +697,8 @@
 }
 
 /* Select2 inside modal — selection box */
-/* After JS moves .select2-search--inline into ul, the ul contains:
-   [pill...] [search textarea]  — all flowing as one horizontal flex row */
+/* Pakai display:contents pada ul → pills + search jadi direct flex items container,
+   tanpa perlu JS DOM manipulation yang bisa break Select2 re-render */
 .select2-container--default .select2-selection--multiple {
     border: 1.5px solid #d1ece9 !important;
     border-radius: 12px !important;
@@ -707,7 +707,9 @@
     background: #fafffe !important;
     transition: border-color .2s, box-shadow .2s;
     display: flex !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
+    gap: 4px !important;
     position: relative;
     overflow: visible !important;
 }
@@ -738,17 +740,10 @@
 .select2-container--default .select2-selection--multiple .select2-selection__clear:hover {
     color: #ef4444 !important;
 }
-/* ul is the single flex child — outer container's align-items:center centers the ul */
+/* ul: display:contents → pills jadi direct flex items di parent container.
+   Select2 bebas re-render ul tanpa search field ikut hilang. */
 .select2-container--default .select2-selection--multiple .select2-selection__rendered {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    align-items: center !important;
-    gap: 4px !important;
-    flex: 1 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    list-style: none !important;
-    overflow: visible !important;
+    display: contents !important;
 }
 /* Tags/choices — text LEFT, × RIGHT (flex-direction: row, DOM order: display → remove) */
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
@@ -807,7 +802,7 @@
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove span {
     display: block; line-height: 1;
 }
-/* Inline search (inside ul via JS) — fills remaining space after pills */
+/* Search — sibling dari ul (native v4.1-rc), flex: 1 agar isi sisa ruang */
 .select2-container--default .select2-selection--multiple .select2-search--inline {
     display: flex !important;
     align-items: center !important;
@@ -824,8 +819,8 @@
     resize: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    line-height: 1 !important;
-    height: 1em !important;
+    line-height: 1.5 !important;
+    height: 1.5em !important;
     min-height: unset !important;
 }
 .select2-container--default .select2-selection--multiple .select2-search__field::placeholder {
