@@ -211,6 +211,11 @@
             @include('landing-page.template.footer')
         </div>
 
+        {{-- Page-level modals — rendered OUTSIDE #photo to avoid z-index stacking context trap.
+             (#photo has position:relative; z-index:1 → its stacking context is below Bootstrap's
+             modal-backdrop at z-index:1040. Modals pushed here live at body level and work correctly.) --}}
+        @stack('modals')
+
         {{-- Back to Top Button --}}
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top">
             <i class="bi bi-arrow-up"></i>
