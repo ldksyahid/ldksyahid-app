@@ -90,6 +90,9 @@
             </div>
         </div>
     </div>
+
+    {{-- Smooth fade into main section --}}
+    <div class="ad-hero-fade"></div>
 </div>
 
 
@@ -120,25 +123,33 @@
             </div>
         </div>
 
-        {{-- Sidebar --}}
-        <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+        {{-- Sidebar: desktop only --}}
+        <div class="col-lg-4 wow fadeInUp d-none d-lg-block" data-wow-delay="0.3s">
             <div class="ad-sidebar">
                 <div class="ad-sidebar-header">
-                    <div class="ad-sidebar-icon"><i class="fas fa-newspaper"></i></div>
-                    <h5 class="ad-sidebar-title">Baca Juga</h5>
+                    <div class="ad-sidebar-icon-wrap">
+                        <i class="fas fa-fire-flame-curved"></i>
+                    </div>
+                    <div>
+                        <h5 class="ad-sidebar-title">Baca Juga</h5>
+                        <p class="ad-sidebar-sub">Artikel pilihan untukmu</p>
+                    </div>
                 </div>
                 <div class="ad-related-list">
                     @foreach($relatedArticles as $i => $article)
                     <a href="{{ url('/articles/' . $article->id) }}" class="ad-related-card">
-                        <span class="ad-related-num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
-                        <div class="ad-related-info">
+                        <div class="ad-related-img-wrap">
+                            <img src="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
+                                 alt="{{ $article->title }}" loading="lazy">
+                            <div class="ad-related-overlay"></div>
+                        </div>
+                        <div class="ad-related-body">
                             <span class="ad-related-title">{{ $article->title }}</span>
                             <span class="ad-related-date">
                                 <i class="far fa-calendar-alt"></i>
                                 {{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('D MMM Y') }}
                             </span>
                         </div>
-                        <i class="fas fa-chevron-right ad-related-arrow"></i>
                     </a>
                     @endforeach
                 </div>
@@ -147,22 +158,12 @@
 
     </div>
 
-    {{-- Bottom bar --}}
+    {{-- Bottom: Artikel Lainnya only --}}
     <div class="ad-actions wow fadeInUp" data-wow-delay="0.2s">
         <a href="/articles" class="ad-back-btn">
             <i class="fas fa-arrow-left"></i>
             <span>Artikel Lainnya</span>
         </a>
-        <div class="ad-share-row">
-            <button class="ad-share-btn ad-share-copy" onclick="adCopyUrl(event)">
-                <i class="fas fa-link"></i><span>Salin URL</span>
-            </button>
-            <button class="ad-share-btn ad-share-wa"
-                    data-title="{{ e($postarticle->title) }}"
-                    onclick="adShareWa(this, event)">
-                <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
-            </button>
-        </div>
     </div>
 
     {{-- Section divider --}}
@@ -176,6 +177,51 @@
     </div>
 
 </div>
+
+
+{{-- ── MOBILE: Floating Baca Juga button ───────────────────────── --}}
+<div class="ad-rj-float d-lg-none">
+    <button class="ad-rj-float-btn" onclick="adOpenRjSheet()">
+        <span class="ad-rj-float-icon"><i class="fas fa-fire-flame-curved"></i></span>
+        <span>Baca Juga</span>
+        <span class="ad-rj-badge">{{ count($relatedArticles) }}</span>
+    </button>
+</div>
+
+{{-- ── MOBILE: Baca Juga Bottom Sheet ─────────────────────────── --}}
+<div class="ad-rj-backdrop" id="ad-rj-backdrop"></div>
+<div class="ad-rj-sheet" id="ad-rj-sheet">
+    <div class="ad-rj-handle"></div>
+    <div class="ad-rj-header">
+        <div class="ad-rj-header-icon"><i class="fas fa-fire-flame-curved"></i></div>
+        <div>
+            <h5 class="ad-rj-header-title">Baca Juga</h5>
+            <p class="ad-rj-header-sub">{{ count($relatedArticles) }} artikel pilihan</p>
+        </div>
+        <button class="ad-rj-close" onclick="adCloseRjSheet()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="ad-rj-grid">
+        @foreach($relatedArticles as $i => $article)
+        <a href="{{ url('/articles/' . $article->id) }}" class="ad-rj-item">
+            <div class="ad-rj-item-img">
+                <img src="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
+                     alt="{{ $article->title }}" loading="lazy">
+                <div class="ad-rj-item-overlay"></div>
+            </div>
+            <div class="ad-rj-item-body">
+                <span class="ad-rj-item-title">{{ $article->title }}</span>
+                <span class="ad-rj-item-date">
+                    <i class="far fa-calendar-alt"></i>
+                    {{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('D MMM Y') }}
+                </span>
+            </div>
+        </a>
+        @endforeach
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
