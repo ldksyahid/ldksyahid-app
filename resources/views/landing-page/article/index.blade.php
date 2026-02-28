@@ -45,7 +45,7 @@
         <div class="mb-3 wow fadeInUp" data-wow-delay="0.15s">
             <x-search-filter-bar
                 prefix="ar"
-                placeholder="Cari artikel berdasarkan judul, tema, penulis…"
+                placeholder="Cari artikel berdasarkan judul, tema, penulis, editor, tahun…"
                 :search-value="request('search')"
                 filter-modal-id="ar-filter-modal"
                 :sort-options="[

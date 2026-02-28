@@ -523,13 +523,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<a href="' + escHtml(url) + '" class="ar-bs-btn">' +
                     '<i class="fas fa-book-open"></i><span>Baca Artikel</span>' +
                 '</a>' +
-                '<div class="ar-share-row ar-bs-share-row">' +
-                    '<button class="ar-share-btn ar-share-copy ar-bs-copy-btn">' +
-                        '<i class="fas fa-link"></i><span>Salin URL</span>' +
-                    '</button>' +
-                    '<button class="ar-share-btn ar-share-wa ar-bs-wa-btn">' +
-                        '<i class="fab fa-whatsapp"></i><span>WhatsApp</span>' +
-                    '</button>' +
+                '<div class="ar-share-wrap ar-bs-share-row">' +
+                    '<span class="ar-share-label">Bagikan</span>' +
+                    '<div class="ar-share-row">' +
+                        '<button class="ar-share-btn ar-share-copy ar-bs-copy-btn">' +
+                            '<i class="fas fa-link"></i><span>Salin URL</span>' +
+                        '</button>' +
+                        '<button class="ar-share-btn ar-share-wa ar-bs-wa-btn">' +
+                            '<i class="fab fa-whatsapp"></i><span>WhatsApp</span>' +
+                        '</button>' +
+                    '</div>' +
                 '</div>' +
             '</div>';
 
