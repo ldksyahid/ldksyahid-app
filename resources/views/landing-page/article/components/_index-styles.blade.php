@@ -651,26 +651,71 @@
 .ar-bs-btn:hover { color: white; transform: scale(1.02); box-shadow: 0 8px 30px rgba(0,167,157,.45); }
 
 
-/* ─── Share Row ───────────────────────────────────────────────── */
+/* ─── Share Section ───────────────────────────────────────────── */
+.ar-share-wrap {
+    margin-top: .75rem;
+}
+.ar-bs-share-row { margin-top: .85rem; }
+
+/* Divider with centered "Bagikan" text */
+.ar-share-label {
+    display: flex; align-items: center; gap: .55rem;
+    font-size: .67rem; font-weight: 600;
+    color: var(--ar-gray); letter-spacing: .3px;
+    margin-bottom: .5rem; white-space: nowrap;
+    opacity: .55;
+}
+.ar-share-label::before,
+.ar-share-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--ar-gray-200);
+}
+
+/* Buttons row */
 .ar-share-row {
-    display: flex; gap: .6rem; margin-top: .65rem;
+    display: flex; gap: .5rem;
 }
-.ar-bs-share-row { margin-top: .75rem; }
 .ar-share-btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+    display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
     flex: 1;
-    border: 1.5px solid var(--ar-gray-200);
-    background: white; color: var(--ar-gray);
-    border-radius: 12px; padding: 8px 14px;
-    font-size: .78rem; font-weight: 600;
-    cursor: pointer; transition: all .25s ease;
-    white-space: nowrap;
+    border: 1.5px solid transparent;
+    border-radius: 50px;
+    padding: 7px 14px;
+    font-size: .76rem; font-weight: 600;
+    cursor: pointer; transition: all .22s ease;
+    white-space: nowrap; line-height: 1;
 }
-.ar-share-copy:hover { border-color: var(--ar-primary); color: var(--ar-primary); background: var(--ar-primary-light); }
-.ar-share-wa:hover   { border-color: #25d366; color: #25d366; background: #f0fff5; }
+.ar-share-btn i { font-size: .8rem; }
+
+/* Copy — primary tint */
+.ar-share-copy {
+    background: color-mix(in srgb, var(--ar-primary) 8%, white);
+    border-color: color-mix(in srgb, var(--ar-primary) 22%, transparent);
+    color: var(--ar-primary);
+}
+.ar-share-copy:hover {
+    background: var(--ar-primary); color: white;
+    border-color: var(--ar-primary);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--ar-primary) 30%, transparent);
+    transform: translateY(-1px);
+}
+
+/* WhatsApp — green tint */
+.ar-share-wa {
+    background: rgba(37,211,102,.08);
+    border-color: rgba(37,211,102,.28);
+    color: #1da851;
+}
+.ar-share-wa:hover {
+    background: #25d366; color: white;
+    border-color: #25d366;
+    box-shadow: 0 4px 14px rgba(37,211,102,.30);
+    transform: translateY(-1px);
+}
 
 /* Mobile card: compact */
-.ar-share-row--sm .ar-share-btn { padding: 6px 12px; border-radius: 10px; font-size: .75rem; }
+.ar-share-wrap--sm .ar-share-label { font-size: .62rem; margin-bottom: .38rem; }
+.ar-share-row--sm .ar-share-btn    { padding: 6px 11px; font-size: .72rem; }
 
 /* SweetAlert toast below navbar — top-end position, clear of sticky nav */
 .ar-swal-below-nav {
