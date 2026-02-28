@@ -41,6 +41,28 @@
         var text  = (title ? title + '\n' : '') + window.location.href;
         window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
     };
+
+    /* ── Mobile Baca Juga Sheet ──────────────────────────────────── */
+    window.adOpenRjSheet = function () {
+        document.getElementById('ad-rj-backdrop').classList.add('active');
+        document.getElementById('ad-rj-sheet').classList.add('active');
+        document.body.classList.add('ad-rj-open');
+    };
+
+    window.adCloseRjSheet = function () {
+        document.getElementById('ad-rj-backdrop').classList.remove('active');
+        document.getElementById('ad-rj-sheet').classList.remove('active');
+        document.body.classList.remove('ad-rj-open');
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var backdrop = document.getElementById('ad-rj-backdrop');
+        if (backdrop) backdrop.addEventListener('click', adCloseRjSheet);
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') adCloseRjSheet();
+        });
+    });
 })();
 
 /* ── Disqus ──────────────────────────────────────────────────────── */
