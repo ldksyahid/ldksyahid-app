@@ -518,100 +518,151 @@
 /* ─── Mobile Bottom Sheet ─────────────────────────────────────── */
 .ar-bs-backdrop {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,.52);
+    background: rgba(0,0,0,.45);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     z-index: 1070;
-    display: none; /* hidden entirely so backdrop-filter does NOT bleed onto Bootstrap modal */
+    opacity: 0; visibility: hidden;
+    transition: opacity .3s ease, visibility .3s ease;
 }
-.ar-bs-backdrop.active { display: block; animation: arBsIn .28s ease forwards; }
-@keyframes arBsIn { from { opacity: 0; } to { opacity: 1; } }
+.ar-bs-backdrop.active { opacity: 1; visibility: visible; }
 
 .ar-bottom-sheet {
     position: fixed; bottom: 0; left: 0; right: 0;
-    background: #dff4f2;
+    background: white;
     border-radius: 24px 24px 0 0;
     z-index: 1075; max-height: 88dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     transform: translateY(100%);
-    transition: transform .35s cubic-bezier(.4,0,.2,1);
-    display: flex; flex-direction: column; overflow: hidden;
+    transition: transform .4s cubic-bezier(.4,0,.2,1);
 }
 .ar-bottom-sheet.active { transform: translateY(0); }
-.ar-bs-handle { display: none; }
 
+/* Close button — floats over the image */
 .ar-bs-close {
     position: absolute; top: .75rem; right: 1rem;
-    background: rgba(255,255,255,.72); border: none;
-    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,.95); border: none;
+    width: 36px; height: 36px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer; color: var(--ar-primary-dark); font-size: .85rem;
-    transition: background .2s, color .2s;
-    backdrop-filter: blur(4px); z-index: 2;
+    cursor: pointer; color: var(--ar-primary); font-size: .9rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,.15);
+    transition: background .2s, color .2s; z-index: 5;
 }
-.ar-bs-close:hover { background: #fecaca; color: #ef4444; }
+.ar-bs-close:hover { background: var(--ar-primary); color: white; }
 
-.ar-bs-content {
-    overflow-y: auto; flex: 1;
-    padding: 0 1.15rem 2rem;
-    scrollbar-width: thin;
-    background: linear-gradient(to bottom, #dff4f2 0%, white 220px);
+/* Content — no padding-top; image touches the top */
+.ar-bs-content { position: relative; }
+
+/* ── Image area ── */
+.ar-bs-img-wrap {
+    position: relative;
+    width: 100%; height: 280px;
+    overflow: hidden;
 }
-.ar-bs-content::before {
-    content: ''; display: block;
+.ar-bs-img-photo {
+    width: 100%; height: 500px;
+    object-fit: cover; object-position: center top;
+    display: block;
+}
+/* Drag handle bar overlaid on image */
+.ar-bs-drag-handle {
+    position: absolute; top: 12px; left: 50%;
+    transform: translateX(-50%);
     width: 40px; height: 4px;
-    background: rgba(0,167,157,.4); border-radius: 2px;
-    margin: .88rem auto .5rem;
-    position: sticky; top: .88rem; z-index: 5;
+    background: rgba(255,255,255,.82); border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    z-index: 2;
+}
+/* White gradient fade: image → info */
+.ar-bs-img-gradient {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 110px;
+    background: linear-gradient(to top, white 0%, transparent 100%);
+    pointer-events: none; z-index: 1;
 }
 
-/* Bottom sheet inner elements */
-.ar-bs-img {
-    border-radius: 16px; overflow: hidden;
-    margin-bottom: 1rem; aspect-ratio: 16/8;
+/* ── Info section ── */
+.ar-bs-info { padding: .6rem 1.4rem 2rem; }
+
+/* Theme badge */
+.ar-bs-theme {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 14px 5px 10px; border-radius: 10px;
+    font-size: .72rem; font-weight: 700;
+    margin-bottom: .65rem;
+    background: color-mix(in srgb, var(--ar-primary) 10%, white);
+    color: var(--ar-primary);
+    box-shadow: 0 2px 8px rgba(0,167,157,.12);
+    transition: background .3s, color .3s;
 }
-.ar-bs-img img {
-    width: 100%; height: 100%; object-fit: cover;
-    object-position: top; display: block;
+.ar-bs-theme-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0;
+    animation: arBsThemeDot 2s ease-in-out infinite;
 }
-.ar-bs-header {
-    padding: .6rem 0 1rem;
-    border-bottom: 2px solid var(--ar-primary-light);
-    margin-bottom: 1rem;
+@keyframes arBsThemeDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: .5; transform: scale(1.5); }
 }
-.ar-bs-meta {
-    display: flex; align-items: center; flex-wrap: wrap;
-    gap: .5rem; margin-bottom: .45rem;
-}
-.ar-bs-tag {
-    background: var(--ar-primary); color: white;
-    border-radius: 50px; padding: .2rem .82rem;
-    font-size: .7rem; font-weight: 700; letter-spacing: .2px;
-}
-.ar-bs-date {
-    font-size: .75rem; color: var(--ar-gray);
-    display: flex; align-items: center; gap: .28rem;
-}
-.ar-bs-date i { color: var(--ar-primary); font-size: .68rem; }
+
+/* Title */
 .ar-bs-title {
-    font-size: 1.1rem; font-weight: 700; color: var(--ar-dark);
-    margin: 0 0 .55rem; line-height: 1.38;
+    font-size: 1.25rem; font-weight: 800;
+    color: var(--ar-dark); line-height: 1.4;
+    margin: 0 0 1rem;
 }
-.ar-bs-info {
-    font-size: .8rem; color: var(--ar-gray);
-    display: flex; flex-direction: column; gap: .22rem;
-    margin-bottom: .85rem;
+
+/* Meta items */
+.ar-bs-metas {
+    display: flex; flex-direction: column; gap: .6rem;
+    margin-bottom: 1.5rem;
 }
-.ar-bs-info i { color: var(--ar-primary); width: 14px; }
-.ar-bs-actions { display: flex; gap: .6rem; flex-wrap: wrap; }
-.ar-bs-read-btn {
-    display: inline-flex; align-items: center; gap: .45rem;
-    background: var(--ar-primary); color: white;
-    font-size: .85rem; font-weight: 700; text-decoration: none;
-    padding: .62rem 1.4rem; border-radius: 50px;
-    transition: background .22s, transform .22s;
+.ar-bs-meta-item {
+    display: flex; align-items: center; gap: .65rem;
+    color: var(--ar-gray); font-size: .88rem; font-weight: 500;
 }
-.ar-bs-read-btn:hover, .ar-bs-read-btn:active {
-    background: var(--ar-primary-dark); transform: translateY(-1px); color: white;
+.ar-bs-meta-icon {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: var(--ar-primary-light);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.ar-bs-meta-icon i { color: var(--ar-primary); font-size: .8rem; }
+.ar-bs-meta-text { display: flex; flex-direction: column; line-height: 1.3; }
+.ar-bs-meta-label {
+    font-size: .62rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .5px;
+    color: var(--ar-gray); opacity: .7;
+}
+.ar-bs-meta-name { font-weight: 600; color: var(--ar-dark); }
+
+/* Read button — full width */
+.ar-bs-btn {
+    display: flex; align-items: center; justify-content: center; gap: .75rem;
+    width: 100%;
+    background: linear-gradient(135deg, #00c4b8, #00a79d);
+    color: white; text-decoration: none;
+    padding: 1rem; border-radius: 50px;
+    font-weight: 700; font-size: 1rem;
+    box-shadow: 0 6px 24px rgba(0,167,157,.35);
+    transition: all .3s ease;
+}
+.ar-bs-btn:hover { color: white; transform: scale(1.02); box-shadow: 0 8px 30px rgba(0,167,157,.45); }
+
+/* Scroll lock via class (no position:fixed → navbar aman) */
+body.ar-sheet-open { overflow: hidden !important; touch-action: none; }
+body.ar-sheet-open .back-to-top {
+    opacity: 0 !important; visibility: hidden !important; pointer-events: none !important;
+}
+
+/* Tablet: center sheet */
+@media (min-width: 768px) {
+    .ar-bottom-sheet {
+        max-width: 480px; left: 50%;
+        transform: translate(-50%, 100%);
+    }
+    .ar-bottom-sheet.active { transform: translate(-50%, 0); }
 }
 
 

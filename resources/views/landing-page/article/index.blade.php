@@ -107,7 +107,6 @@
 <div class="ar-bs-backdrop" id="ar-bs-backdrop"></div>
 <div class="ar-bottom-sheet" id="ar-bottom-sheet"
      role="dialog" aria-modal="true" aria-label="Detail Artikel">
-    <div class="ar-bs-handle"></div>
     <button class="ar-bs-close" id="ar-bs-close" aria-label="Tutup">
         <i class="fas fa-times"></i>
     </button>

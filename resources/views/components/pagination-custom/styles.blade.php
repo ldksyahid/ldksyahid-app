@@ -95,14 +95,11 @@ button.pgn-edge:last-child  { border-radius: 14px 50px 50px 14px; }
 @media (max-width: 575.98px) {
     .pgn-wrap { width: 100%; }
     .pgn-inner {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        justify-content: flex-start;
+        flex-wrap: wrap;
+        justify-content: center;
         width: 100%;
         padding: .25rem .5rem;
         gap: .25rem;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
     }
     .pgn-inner::-webkit-scrollbar { display: none; }
     .pgn-nav, .pgn-num { height: 34px; flex-shrink: 0; }
