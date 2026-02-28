@@ -191,16 +191,17 @@
 {{-- ── MOBILE: Baca Juga Bottom Sheet ─────────────────────────── --}}
 <div class="ad-rj-backdrop" id="ad-rj-backdrop"></div>
 <div class="ad-rj-sheet" id="ad-rj-sheet">
-    <div class="ad-rj-handle"></div>
     <div class="ad-rj-header">
-        <div class="ad-rj-header-icon"><i class="fas fa-fire-flame-curved"></i></div>
-        <div>
-            <h5 class="ad-rj-header-title">Baca Juga</h5>
-            <p class="ad-rj-header-sub">{{ count($relatedArticles) }} artikel pilihan</p>
+        <div class="ad-rj-header-row">
+            <div class="ad-rj-header-icon"><i class="fas fa-fire-flame-curved"></i></div>
+            <div>
+                <h5 class="ad-rj-header-title">Baca Juga</h5>
+                <p class="ad-rj-header-sub">{{ count($relatedArticles) }} artikel pilihan</p>
+            </div>
+            <button class="ad-rj-close" onclick="adCloseRjSheet()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <button class="ad-rj-close" onclick="adCloseRjSheet()">
-            <i class="fas fa-times"></i>
-        </button>
     </div>
     <div class="ad-rj-grid">
         @foreach($relatedArticles as $i => $article)
