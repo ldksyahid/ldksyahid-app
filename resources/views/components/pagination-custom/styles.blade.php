@@ -95,13 +95,22 @@ button.pgn-edge:last-child  { border-radius: 14px 50px 50px 14px; }
 @media (max-width: 575.98px) {
     .pgn-wrap { width: 100%; }
     .pgn-inner {
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-wrap: wrap;           /* boleh banyak baris */
+        justify-content: center;   /* semua baris centered */
         width: 100%;
         padding: .25rem .5rem;
-        gap: .25rem;
+        gap: .3rem;
     }
-    .pgn-inner::-webkit-scrollbar { display: none; }
+    /* Nomor halaman: baris sendiri di atas */
+    .pgn-pages {
+        order: -1;                 /* tampil sebelum nav buttons */
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .3rem;
+    }
+    /* 4 nav buttons (<<, <, >, >>) otomatis berkumpul di baris bawah, centered */
     .pgn-nav, .pgn-num { height: 34px; flex-shrink: 0; }
     .pgn-nav { width: 34px; }
     .pgn-num { min-width: 34px; font-size: .75rem; }
