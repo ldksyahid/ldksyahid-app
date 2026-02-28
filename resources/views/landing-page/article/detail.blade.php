@@ -2,6 +2,7 @@
 
 @php
     use App\Http\Controllers\LibraryFunctionController as LFC;
+    $date = \Carbon\Carbon::parse($postarticle->dateevent);
 @endphp
 
 @section('openGraph')
@@ -12,174 +13,171 @@
 <meta property="og:description" content="{{ $postarticle->theme }}" />
 @endsection
 
+@section('styles')
+@include('landing-page.article.components._detail-styles')
+@endsection
+
 @section('content')
-<div class="container-xxl" style="padding-top: 100px; padding-bottom: 3rem;">
+
+{{-- ── HERO ─────────────────────────────────────────────────────── --}}
+<div class="ad-hero">
+    <div class="ad-hero-blob ad-hero-blob-1"></div>
+    <div class="ad-hero-blob ad-hero-blob-2"></div>
+    <div class="ad-hero-blob ad-hero-blob-3"></div>
+
     <div class="container">
-        <div class="row g-4">
-            <div class="col-lg-3 col-md-5 wow fadeInDown" data-wow-delay="0.2s">
-                <div class="dateevent-box text-center bg-white border shadow-sm rounded-4 px-3 py-4">
-                    <div class="text-primary fw-bold" style="font-size: 1.25rem;">
-                        {{ \Carbon\Carbon::parse($postarticle->dateevent)->isoFormat('dddd') }}
-                    </div>
-                    <div class="display-4 fw-bold text-dark my-2" style="line-height: 1;">
-                        {{ \Carbon\Carbon::parse($postarticle->dateevent)->isoFormat('DD') }}
-                    </div>
-                    <div class="text-uppercase text-secondary small mb-1">
-                        {{ \Carbon\Carbon::parse($postarticle->dateevent)->isoFormat('MMMM') }}
-                    </div>
-                    <div class="text-muted fw-medium">
-                        {{ \Carbon\Carbon::parse($postarticle->dateevent)->format('Y') }}
-                    </div>
-                </div>
+        <div class="ad-hero-inner">
+
+            {{-- Date Card (desktop) --}}
+            <div class="ad-date-card wow fadeInLeft d-none d-md-flex" data-wow-delay="0.1s">
+                <div class="ad-date-day">{{ $date->isoFormat('dddd') }}</div>
+                <div class="ad-date-num">{{ $date->format('d') }}</div>
+                <div class="ad-date-month">{{ $date->isoFormat('MMMM') }}</div>
+                <div class="ad-date-year">{{ $date->format('Y') }}</div>
+                <div class="ad-date-deco"></div>
             </div>
 
-            <div class="col-lg-9 col-md-7 wow fadeInUp" data-wow-delay="0.2s">
-                <div class="border-start border-4 border-primary ps-4 mb-4">
-                    <span class="badge bg-primary rounded-pill px-3 py-1 text-uppercase">{{ $postarticle->theme }}</span>
-                    <h1 class="display-6 fw-bold mt-3">{{ $postarticle->title }}</h1>
-                    <div class="row g-2 text-secondary small">
-                        <div class="col-12 col-sm-6">
-                            <strong class="text-muted">Penulis:</strong>
-                            <span class="d-block" style="color: #8d9297;">{{ $postarticle->writer }}</span>
+            {{-- Info --}}
+            <div class="ad-hero-info wow fadeInUp" data-wow-delay="0.15s">
+
+                {{-- Mobile date chip --}}
+                <div class="ad-date-chip d-md-none">
+                    <i class="far fa-calendar-alt"></i>
+                    {{ $date->isoFormat('dddd, D MMMM Y') }}
+                </div>
+
+                <span class="ad-theme-badge">
+                    <span class="ad-theme-dot"></span>
+                    {{ $postarticle->theme }}
+                </span>
+
+                <h1 class="ad-title">{{ $postarticle->title }}</h1>
+
+                <div class="ad-authors">
+                    <div class="ad-author-chip">
+                        <div class="ad-author-icon"><i class="fas fa-pen-fancy"></i></div>
+                        <div class="ad-author-text">
+                            <span class="ad-author-label">Penulis</span>
+                            <span class="ad-author-name">{{ $postarticle->writer }}</span>
                         </div>
-                        <div class="col-12 col-sm-6">
-                            <strong class="text-muted">Editor:</strong>
-                            <span class="d-block" style="color: #8d9297;">{{ $postarticle->editor }}</span>
+                    </div>
+                    @if($postarticle->editor)
+                    <div class="ad-author-divider"></div>
+                    <div class="ad-author-chip">
+                        <div class="ad-author-icon"><i class="fas fa-edit"></i></div>
+                        <div class="ad-author-text">
+                            <span class="ad-author-label">Editor</span>
+                            <span class="ad-author-name">{{ $postarticle->editor }}</span>
                         </div>
                     </div>
+                    @endif
                 </div>
-            </div>
 
-            <div class="col-lg-9 wow fadeInUp" data-wow-delay="0.2s">
-                <div class="rounded-4 overflow-hidden shadow-sm border">
-                    <iframe src="{{ $postarticle->embedpdf }}" class="w-100" style="min-height: 600px; border: none;" allowfullscreen></iframe>
+                <div class="ad-share-wrap">
+                    <span class="ad-share-label">Bagikan</span>
+                    <div class="ad-share-row">
+                        <button class="ad-share-btn ad-share-copy" onclick="adCopyUrl(event)">
+                            <i class="fas fa-link"></i><span>Salin URL</span>
+                        </button>
+                        <button class="ad-share-btn ad-share-wa"
+                                data-title="{{ e($postarticle->title) }}"
+                                onclick="adShareWa(this, event)">
+                            <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-lg-3 wow fadeInUp" data-wow-delay="0.2s">
-                <div class="bg-light p-4 shadow-sm rounded-4">
-                    <h5 class="fw-bold mb-4">Baca Juga</h5>
-                    @foreach($relatedArticles as $article)
-                        <a href="{{ url('/articles/' . $article->id) }}" class="text-decoration-none">
-                            <div class="related-article-box text-dark mb-3 px-3 py-3">
-                                <div class="fw-semibold mb-1">{{ $article->title }}</div>
-                                <small class="text-muted">{{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('D MMM Y') }}</small>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="col-12">
-                <a class="btn btn-outline-primary rounded-pill px-4" href="/articles">
-                    <i class="fa fa-arrow-left me-2"></i> Artikel Lainnya
-                </a>
-            </div>
-
-            <div class="col-12">
-                <hr class="rounded-pill border-primary opacity-50">
-            </div>
-
-            <div class="col-12">
-                <div class="bg-light p-4 rounded-4 shadow-sm">
-                    <div id="disqus_thread"></div>
-                </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
 
-@section('styles')
-<style>
-    .rounded-4 {
-        border-radius: 1.5rem !important;
-    }
 
-    hr.rounded-pill {
-        height: 4px;
-        border: none;
-        background-color: #00a79d;
-        border-radius: 2rem;
-        margin: 2rem 0;
-    }
+{{-- ── MAIN ─────────────────────────────────────────────────────── --}}
+<div class="container ad-main">
+    <div class="row g-4">
 
-    iframe {
-        border-radius: 1.25rem;
-    }
+        {{-- Reader --}}
+        <div class="col-lg-8 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="ad-reader-card">
+                <div class="ad-reader-bar">
+                    <div class="ad-reader-dots">
+                        <span class="ad-rd ad-rd-r"></span>
+                        <span class="ad-rd ad-rd-y"></span>
+                        <span class="ad-rd ad-rd-g"></span>
+                    </div>
+                    <div class="ad-reader-url-pill">
+                        <i class="fas fa-lock"></i>
+                        <span>anyflip.com</span>
+                    </div>
+                    <a href="{{ $postarticle->embedpdf }}" target="_blank" class="ad-reader-open" title="Buka di tab baru">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+                <div class="ad-reader-body">
+                    <iframe src="{{ $postarticle->embedpdf }}" allowfullscreen loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
 
-    .dateevent-box {
-        background-color: #f9f9f9;
-        border-left: 6px solid #00a79d;
-        transition: all 0.3s ease;
-    }
+        {{-- Sidebar --}}
+        <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="ad-sidebar">
+                <div class="ad-sidebar-header">
+                    <div class="ad-sidebar-icon"><i class="fas fa-newspaper"></i></div>
+                    <h5 class="ad-sidebar-title">Baca Juga</h5>
+                </div>
+                <div class="ad-related-list">
+                    @foreach($relatedArticles as $i => $article)
+                    <a href="{{ url('/articles/' . $article->id) }}" class="ad-related-card">
+                        <span class="ad-related-num">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                        <div class="ad-related-info">
+                            <span class="ad-related-title">{{ $article->title }}</span>
+                            <span class="ad-related-date">
+                                <i class="far fa-calendar-alt"></i>
+                                {{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('D MMM Y') }}
+                            </span>
+                        </div>
+                        <i class="fas fa-chevron-right ad-related-arrow"></i>
+                    </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
 
-    .dateevent-box:hover {
-        background-color: #e4f9f7;
-        box-shadow: 0 4px 12px rgba(0, 167, 157, 0.15);
-    }
+    </div>
 
-    .related-article-box {
-        background-color: white;
-        border: 1px solid #e5e5e5;
-        border-radius: 1rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-    }
+    {{-- Bottom bar --}}
+    <div class="ad-actions wow fadeInUp" data-wow-delay="0.2s">
+        <a href="/articles" class="ad-back-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Artikel Lainnya</span>
+        </a>
+        <div class="ad-share-row">
+            <button class="ad-share-btn ad-share-copy" onclick="adCopyUrl(event)">
+                <i class="fas fa-link"></i><span>Salin URL</span>
+            </button>
+            <button class="ad-share-btn ad-share-wa"
+                    data-title="{{ e($postarticle->title) }}"
+                    onclick="adShareWa(this, event)">
+                <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+            </button>
+        </div>
+    </div>
 
-    .related-article-box:hover {
-        background-color: #f0fdfd;
-        border-color: #00a79d;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 167, 157, 0.2);
-    }
+    {{-- Section divider --}}
+    <div class="ad-section-divider wow fadeInUp" data-wow-delay="0.1s">
+        <span class="ad-section-divider-icon"><i class="fas fa-comments"></i></span>
+    </div>
 
-    .related-article-box .fw-semibold {
-        font-size: 0.95rem;
-        color: #333;
-    }
+    {{-- Disqus --}}
+    <div class="ad-disqus-wrap wow fadeInUp" data-wow-delay="0.15s">
+        <div id="disqus_thread"></div>
+    </div>
 
-    .related-article-box small {
-        color: #8d9297;
-        font-size: 0.8rem;
-    }
-
-    .badge.bg-primary,
-    .btn-outline-primary,
-    .border-primary {
-        border-color: #00a79d !important;
-        color: #00a79d !important;
-    }
-
-    .btn-outline-primary:hover {
-        background-color: #00a79d !important;
-        color: white !important;
-        border-color: #00a79d !important;
-    }
-
-    .badge.bg-primary {
-        background-color: #00a79d !important;
-        color: white !important;
-    }
-
-    .wow {
-        animation-duration: 0.8s;
-        animation-fill-mode: both;
-    }
-</style>
+</div>
 @endsection
 
 @section('scripts')
-<script>
-    (function() {
-        var d = document, s = d.createElement('script');
-        s.src = 'https://https-ldksyah-id-1.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>
-    Please enable JavaScript to view the
-    <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-</noscript>
+@include('landing-page.article.components._detail-scripts')
 @endsection
