@@ -86,17 +86,40 @@ document.addEventListener('DOMContentLoaded', function () {
     var filterModal = document.getElementById('ar-filter-modal');
     var fmBackdrop  = document.getElementById('ar-fm-backdrop');
 
+    /* Prevent background scroll when filter modal is open.
+       — Capture phase → intercept sebelum Bootstrap/element lain
+       — overflow:hidden di <html> → iOS Safari ikut terkunci
+       — TIDAK pakai position:fixed agar navbar tidak terganggu */
+    var _arFmScrollY    = 0;
+    var _arFmTouchBlock = null;
+
+    function arFmLockScroll() {
+        _arFmScrollY = window.scrollY;
+        document.documentElement.style.overflow = 'hidden';
+    }
+    function arFmUnlockScroll() {
+        document.documentElement.style.overflow = '';
+        window.scrollTo({ top: _arFmScrollY, left: 0, behavior: 'instant' });
+    }
+
     if (filterModal) {
         filterModal.addEventListener('show.bs.modal', function () {
             updateFilterBadge();
             if (fmBackdrop) fmBackdrop.classList.add('active');
-            lockScroll();
-            hideBtt();
+            arFmLockScroll();
+            _arFmTouchBlock = function (e) {
+                if (!e.target.closest('.ar-fm-body')) e.preventDefault();
+            };
+            /* capture:true → intercept sebelum elemen lain; passive:false → boleh preventDefault */
+            window.addEventListener('touchmove', _arFmTouchBlock, { passive: false, capture: true });
         });
         filterModal.addEventListener('hidden.bs.modal', function () {
             if (fmBackdrop) fmBackdrop.classList.remove('active');
-            unlockScroll();
-            showBtt();
+            arFmUnlockScroll();
+            if (_arFmTouchBlock) {
+                window.removeEventListener('touchmove', _arFmTouchBlock, { capture: true });
+                _arFmTouchBlock = null;
+            }
         });
     }
 
