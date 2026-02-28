@@ -64,9 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ============================================================
        4. BODY SCROLL LOCK helpers
        ============================================================ */
-    var scrollY = 0;
-    function lockScroll()   { scrollY = window.scrollY; document.body.style.overflow = 'hidden'; document.body.style.position = 'fixed'; document.body.style.top = -scrollY + 'px'; document.body.style.width = '100%'; }
-    function unlockScroll() { document.body.style.overflow = ''; document.body.style.position = ''; document.body.style.top = ''; document.body.style.width = ''; window.scrollTo({ top: scrollY, left: 0, behavior: 'instant' }); }
+    /* Scroll lock: hanya pakai overflow:hidden — TIDAK position:fixed agar navbar tetap terlihat */
+    function lockScroll()   { document.body.classList.add('gl-sheet-open'); }
+    function unlockScroll() { document.body.classList.remove('gl-sheet-open'); }
 
     /* ============================================================
        5. PHOTO ZOOM OVERLAY
