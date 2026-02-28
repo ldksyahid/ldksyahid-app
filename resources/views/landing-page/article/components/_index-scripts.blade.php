@@ -424,6 +424,51 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     /* ============================================================
+       11a. SHARE FUNCTIONS
+       ============================================================ */
+    window.arCopyUrl = function (url, ev) {
+        if (ev) ev.stopPropagation();
+        var full = window.location.origin + url;
+        function showCopyToast(ok) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: ok ? 'success' : 'error',
+                title: ok ? 'URL berhasil disalin!' : 'Gagal menyalin URL',
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true,
+                customClass: { container: 'ar-swal-below-nav' }
+            });
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(full).then(
+                function () { showCopyToast(true); },
+                function () { showCopyToast(false); }
+            );
+        } else {
+            try {
+                var ta = document.createElement('textarea');
+                ta.value = full;
+                ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none;';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showCopyToast(true);
+            } catch (e) { showCopyToast(false); }
+        }
+    };
+
+    window.arShareWa = function (url, title, ev) {
+        if (ev) ev.stopPropagation();
+        var full = window.location.origin + url;
+        var text = (title ? title + '\n' : '') + full;
+        window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+    };
+
+
+    /* ============================================================
        11. MOBILE BOTTOM SHEET
        ============================================================ */
     window.arOpenBottomSheet = function (el) {
@@ -478,7 +523,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<a href="' + escHtml(url) + '" class="ar-bs-btn">' +
                     '<i class="fas fa-book-open"></i><span>Baca Artikel</span>' +
                 '</a>' +
+                '<div class="ar-share-row ar-bs-share-row">' +
+                    '<button class="ar-share-btn ar-share-copy ar-bs-copy-btn">' +
+                        '<i class="fas fa-link"></i><span>Salin URL</span>' +
+                    '</button>' +
+                    '<button class="ar-share-btn ar-share-wa ar-bs-wa-btn">' +
+                        '<i class="fab fa-whatsapp"></i><span>WhatsApp</span>' +
+                    '</button>' +
+                '</div>' +
             '</div>';
+
+        /* Wire share buttons */
+        var bsCopyBtn = content.querySelector('.ar-bs-copy-btn');
+        var bsWaBtn   = content.querySelector('.ar-bs-wa-btn');
+        if (bsCopyBtn) bsCopyBtn.addEventListener('click', function () { arCopyUrl(url); });
+        if (bsWaBtn)   bsWaBtn.addEventListener('click',   function () { arShareWa(url, title); });
 
         document.getElementById('ar-bottom-sheet').scrollTop = 0;
         document.getElementById('ar-bs-backdrop').classList.add('active');
