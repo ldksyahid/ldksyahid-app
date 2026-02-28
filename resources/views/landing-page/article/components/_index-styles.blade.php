@@ -650,6 +650,35 @@
 }
 .ar-bs-btn:hover { color: white; transform: scale(1.02); box-shadow: 0 8px 30px rgba(0,167,157,.45); }
 
+
+/* ─── Share Row ───────────────────────────────────────────────── */
+.ar-share-row {
+    display: flex; gap: .6rem; margin-top: .65rem;
+}
+.ar-bs-share-row { margin-top: .75rem; }
+.ar-share-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+    flex: 1;
+    border: 1.5px solid var(--ar-gray-200);
+    background: white; color: var(--ar-gray);
+    border-radius: 12px; padding: 8px 14px;
+    font-size: .78rem; font-weight: 600;
+    cursor: pointer; transition: all .25s ease;
+    white-space: nowrap;
+}
+.ar-share-copy:hover { border-color: var(--ar-primary); color: var(--ar-primary); background: var(--ar-primary-light); }
+.ar-share-wa:hover   { border-color: #25d366; color: #25d366; background: #f0fff5; }
+
+/* Mobile card: compact */
+.ar-share-row--sm .ar-share-btn { padding: 6px 12px; border-radius: 10px; font-size: .75rem; }
+
+/* SweetAlert toast below navbar — top-end position, clear of sticky nav */
+.ar-swal-below-nav {
+    top: 76px !important;   /* push below sticky navbar (~70px) */
+    right: 1rem !important;
+}
+
+
 /* Scroll lock via class (no position:fixed → navbar aman) */
 body.ar-sheet-open { overflow: hidden !important; touch-action: none; }
 body.ar-sheet-open .back-to-top {

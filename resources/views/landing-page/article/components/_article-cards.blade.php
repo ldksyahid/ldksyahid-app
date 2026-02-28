@@ -86,6 +86,19 @@
                         <span>Baca Artikel</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
+                    <div class="ar-share-row">
+                        <button class="ar-share-btn ar-share-copy"
+                                data-url="/articles/{{ $article->id }}"
+                                onclick="arCopyUrl(this.dataset.url, event)">
+                            <i class="fas fa-link"></i><span>Salin URL</span>
+                        </button>
+                        <button class="ar-share-btn ar-share-wa"
+                                data-url="/articles/{{ $article->id }}"
+                                data-title="{{ e($article->title) }}"
+                                onclick="arShareWa(this.dataset.url, this.dataset.title, event)">
+                            <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+                        </button>
+                    </div>
                 </div>
 
             </div>
@@ -157,6 +170,19 @@
                                 <span class="ar-card-meta-name">{{ $article->writer }}</span>
                             </div>
                         </div>
+                    </div>
+                    <div class="ar-share-row ar-share-row--sm">
+                        <button class="ar-share-btn ar-share-copy"
+                                data-url="/articles/{{ $article->id }}"
+                                onclick="arCopyUrl(this.dataset.url, event)">
+                            <i class="fas fa-link"></i><span>Salin URL</span>
+                        </button>
+                        <button class="ar-share-btn ar-share-wa"
+                                data-url="/articles/{{ $article->id }}"
+                                data-title="{{ e($article->title) }}"
+                                onclick="arShareWa(this.dataset.url, this.dataset.title, event)">
+                            <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+                        </button>
                     </div>
                 </div>
 
