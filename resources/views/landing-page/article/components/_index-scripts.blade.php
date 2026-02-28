@@ -439,37 +439,58 @@ document.addEventListener('DOMContentLoaded', function () {
         var url    = el.dataset.url;
 
         content.innerHTML =
-            '<div class="ar-bs-img">' +
+            /* Image + gradient + handle */
+            '<div class="ar-bs-img-wrap">' +
+                '<div class="ar-bs-drag-handle"></div>' +
                 '<img src="https://lh3.googleusercontent.com/d/' + escHtml(image) +
-                     '" alt="' + escHtml(title) + '" loading="lazy">' +
+                     '" alt="' + escHtml(title) + '" class="ar-bs-img-photo" loading="lazy">' +
+                '<div class="ar-bs-img-gradient"></div>' +
             '</div>' +
-            '<div class="ar-bs-header">' +
-                '<div class="ar-bs-meta">' +
-                    '<span class="ar-bs-tag">' + escHtml(theme) + '</span>' +
-                    '<span class="ar-bs-date"><i class="far fa-calendar-alt"></i> ' + escHtml(date) + '</span>' +
-                '</div>' +
+            /* Info */
+            '<div class="ar-bs-info">' +
+                '<div class="ar-bs-theme"><span class="ar-bs-theme-dot"></span>' + escHtml(theme) + '</div>' +
                 '<h5 class="ar-bs-title">' + escHtml(title) + '</h5>' +
-                '<div class="ar-bs-info">' +
-                    '<div><i class="fas fa-pen"></i> Penulis: ' + escHtml(writer) + '</div>' +
-                    '<div><i class="fas fa-edit"></i> Editor: ' + escHtml(editor) + '</div>' +
+                '<div class="ar-bs-metas">' +
+                    '<div class="ar-bs-meta-item">' +
+                        '<div class="ar-bs-meta-icon"><i class="far fa-calendar-alt"></i></div>' +
+                        '<div class="ar-bs-meta-text">' +
+                            '<span class="ar-bs-meta-label">Tanggal</span>' +
+                            '<span class="ar-bs-meta-name">' + escHtml(date) + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="ar-bs-meta-item">' +
+                        '<div class="ar-bs-meta-icon"><i class="fas fa-pen"></i></div>' +
+                        '<div class="ar-bs-meta-text">' +
+                            '<span class="ar-bs-meta-label">Penulis</span>' +
+                            '<span class="ar-bs-meta-name">' + escHtml(writer) + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    (editor ?
+                        '<div class="ar-bs-meta-item">' +
+                            '<div class="ar-bs-meta-icon"><i class="fas fa-edit"></i></div>' +
+                            '<div class="ar-bs-meta-text">' +
+                                '<span class="ar-bs-meta-label">Editor</span>' +
+                                '<span class="ar-bs-meta-name">' + escHtml(editor) + '</span>' +
+                            '</div>' +
+                        '</div>'
+                    : '') +
                 '</div>' +
-                '<div class="ar-bs-actions">' +
-                    '<a href="' + escHtml(url) + '" class="ar-bs-read-btn">' +
-                        '<i class="fas fa-book-open"></i><span>Baca Artikel</span>' +
-                    '</a>' +
-                '</div>' +
+                '<a href="' + escHtml(url) + '" class="ar-bs-btn">' +
+                    '<i class="fas fa-book-open"></i><span>Baca Artikel</span>' +
+                '</a>' +
             '</div>';
 
+        document.getElementById('ar-bottom-sheet').scrollTop = 0;
         document.getElementById('ar-bs-backdrop').classList.add('active');
         document.getElementById('ar-bottom-sheet').classList.add('active');
-        lockScroll();
+        document.body.classList.add('ar-sheet-open');
         hideBtt();
     };
 
     function arCloseBs() {
         document.getElementById('ar-bs-backdrop').classList.remove('active');
         document.getElementById('ar-bottom-sheet').classList.remove('active');
-        unlockScroll();
+        document.body.classList.remove('ar-sheet-open');
         showBtt();
     }
 
