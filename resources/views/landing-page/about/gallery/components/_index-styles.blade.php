@@ -361,6 +361,9 @@
 }
 .gl-bs-backdrop.active { opacity: 1; pointer-events: all; }
 
+/* Scroll lock tanpa position:fixed (agar navbar tidak hilang) */
+body.gl-sheet-open { overflow: hidden !important; touch-action: none; }
+
 .gl-bottom-sheet {
     position: fixed; bottom: 0; left: 0; right: 0;
     /* Warna solid = sama dengan awal gradient di gl-bs-content,
