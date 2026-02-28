@@ -425,16 +425,21 @@ body.ad-rj-open .back-to-top { opacity: 0 !important; visibility: hidden !import
 .ad-rj-sheet.active { transform: translateY(0); }
 body.ad-rj-open { overflow: hidden !important; touch-action: none; }
 
-.ad-rj-handle {
-    width: 44px; height: 4px; border-radius: 2px;
-    background: #ccc; margin: .9rem auto .4rem;
-}
 .ad-rj-header {
-    display: flex; align-items: center; gap: .7rem;
-    padding: .6rem 1.2rem 1rem;
+    padding: 0 0 1rem;
     border-bottom: 1px solid var(--ad-gray-200);
-    background: white;
     margin-bottom: .1rem;
+}
+.ad-rj-header::before {
+    content: '';
+    display: block;
+    width: 44px; height: 4px; border-radius: 2px;
+    background: #ccc;
+    margin: .85rem auto .5rem;
+}
+.ad-rj-header-row {
+    display: flex; align-items: center; gap: .7rem;
+    padding: 0 1.2rem;
 }
 .ad-rj-header-icon {
     flex-shrink: 0;
