@@ -228,7 +228,7 @@
 
 {{-- ── Pagination ─────────────────────────────────────────────── --}}
 <div class="nw-pagination-wrap mt-4">
-    @include('components.pagination-custom', [
+    @include('components.pagination-custom.index', [
         'paginator'  => $postnews,
         'itemLabel'  => 'berita',
     ])

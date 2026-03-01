@@ -1,7 +1,7 @@
 {{-- ================================================================
      Pagination Custom Component
      Usage:
-       @include('components.pagination-custom', ['paginator' => $yourPaginator])
+       @include('components.pagination-custom.index', ['paginator' => $yourPaginator])
 
      Include styles in @section('styles'):
        @include('components.pagination-custom.styles')
