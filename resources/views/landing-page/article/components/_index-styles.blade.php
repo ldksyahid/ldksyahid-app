@@ -524,7 +524,7 @@
     background: rgba(0,0,0,.45);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    z-index: 1040;
+    z-index: 1070;
     opacity: 0; visibility: hidden;
     transition: opacity .3s ease, visibility .3s ease;
 }
