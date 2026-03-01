@@ -497,14 +497,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('nw-bottom-sheet').scrollTop = 0;
         document.getElementById('nw-bs-backdrop').classList.add('active');
         document.getElementById('nw-bottom-sheet').classList.add('active');
-        document.body.classList.add('nw-sheet-open');
+        lockScroll();
         hideBtt();
     };
 
     function nwCloseBs() {
         document.getElementById('nw-bs-backdrop').classList.remove('active');
         document.getElementById('nw-bottom-sheet').classList.remove('active');
-        document.body.classList.remove('nw-sheet-open');
+        unlockScroll();
         showBtt();
     }
 
