@@ -268,32 +268,35 @@
 .nw-read-btn i { font-size: .72rem; transition: transform .3s ease, color .3s ease; }
 .nw-read-btn:hover i { transform: translateX(3px); }
 
-/* Share */
-.nw-share-wrap {
-    display: flex; align-items: center; gap: .65rem;
-    flex-wrap: wrap; padding-top: .25rem;
+/* ─── Card Share Section ─────────────────────────────────────────── */
+.nw-card-share {
+    display: flex; align-items: center; gap: .5rem;
+    padding-top: .75rem;
+    border-top: 1.5px solid #f1f3f5;
+    margin-top: auto;
 }
-.nw-share-wrap--sm { padding-top: 0; }
-.nw-share-label {
-    font-size: .65rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .4px; color: var(--nw-gray); flex-shrink: 0;
+.nw-card-share-label {
+    font-size: .6rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .5px;
+    color: #adb5bd; flex-shrink: 0;
 }
-.nw-share-row { display: flex; gap: .4rem; }
-.nw-share-row--sm .nw-share-btn span { display: none; }
-
-.nw-share-btn {
-    display: inline-flex; align-items: center; gap: .35rem;
-    font-size: .72rem; font-weight: 600;
-    padding: .28rem .7rem; border-radius: 8px;
-    border: 1.5px solid var(--nw-gray-200);
-    background: var(--nw-gray-100);
-    color: var(--nw-gray); cursor: pointer;
-    transition: var(--nw-transition);
-    white-space: nowrap;
+.nw-card-share-btns { display: flex; gap: .35rem; margin-left: auto; }
+.nw-card-share-btn {
+    width: 34px; height: 34px; border-radius: 10px;
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .82rem;
+    transition: transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+    -webkit-tap-highlight-color: transparent;
 }
-.nw-share-copy:hover { background: var(--nw-primary-light); color: var(--nw-primary); border-color: rgba(0,167,157,.3); }
-.nw-share-wa:hover   { background: rgba(37,211,102,.1); color: #1da851; border-color: rgba(37,211,102,.3); }
-.nw-share-btn i { font-size: .7rem; }
+.nw-card-share-btn:hover  { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+.nw-card-share-btn:active { transform: scale(.88); }
+.nw-card-share-btn--copy { background: linear-gradient(135deg, #e0f7f5, #b2ede9); color: #00a79d; }
+.nw-card-share-btn--wa   { background: linear-gradient(135deg, #dcfce7, #bbf7d0); color: #16a34a; }
+.nw-card-share-btn--tw   { background: linear-gradient(135deg, #f0f0f0, #e4e4e4); color: #1a1a2e; }
+.nw-card-share-btn--copy:hover { background: linear-gradient(135deg, #00a79d, #008b82); color: white; }
+.nw-card-share-btn--wa:hover   { background: linear-gradient(135deg, #25d366, #128c7e); color: white; }
+.nw-card-share-btn--tw:hover   { background: linear-gradient(135deg, #1a1a2e, #333);   color: white; }
 
 
 /* ─── Empty State ──────────────────────────────────────────────── */
@@ -530,7 +533,76 @@
 }
 .nw-bs-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,167,157,.4); color: white; }
 
-.nw-bs-share-row { margin-top: .25rem; }
+/* ─── Bottom Sheet: Share Section ───────────────────────────────── */
+.nw-bs-share {
+    padding-top: 1.25rem;
+    margin-top: 1rem;
+    border-top: 2px solid #f1f3f5;
+}
+.nw-bs-share-title {
+    font-size: .68rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .7px;
+    color: #adb5bd; margin: 0 0 1rem;
+}
+.nw-bs-share-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .25rem;
+}
+.nw-bs-share-btn {
+    display: flex; flex-direction: column;
+    align-items: center; gap: .45rem;
+    padding: .7rem .4rem;
+    background: none; border: none;
+    cursor: pointer; border-radius: 14px;
+    transition: background .18s ease, transform .15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.nw-bs-share-btn:hover  { background: #f8f9fa; }
+.nw-bs-share-btn:active { transform: scale(.91); }
+.nw-bs-share-icon {
+    width: 56px; height: 56px; border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.35rem;
+    transition: transform .2s ease, box-shadow .2s ease, background .25s ease, color .25s ease;
+}
+.nw-bs-share-btn:hover .nw-bs-share-icon {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.1);
+}
+/* Copy link */
+.nw-bs-share-btn--copy .nw-bs-share-icon {
+    background: linear-gradient(135deg, #e0f7f5, #b2ede9);
+    color: #00a79d;
+}
+.nw-bs-share-btn--copy.nw-bs-copied .nw-bs-share-icon {
+    background: linear-gradient(135deg, #00a79d, #008b82);
+    color: white;
+}
+/* WhatsApp */
+.nw-bs-share-btn--wa .nw-bs-share-icon {
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    color: #16a34a;
+}
+.nw-bs-share-btn--wa:hover .nw-bs-share-icon {
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    color: white;
+}
+/* Twitter / X */
+.nw-bs-share-btn--tw .nw-bs-share-icon {
+    background: linear-gradient(135deg, #f0f0f0, #e4e4e4);
+    color: #1a1a2e;
+}
+.nw-bs-share-btn--tw:hover .nw-bs-share-icon {
+    background: linear-gradient(135deg, #1a1a2e, #333);
+    color: white;
+}
+.nw-bs-share-lbl {
+    font-size: .7rem; font-weight: 700;
+    color: var(--nw-gray); line-height: 1;
+    transition: color .2s ease;
+}
+.nw-bs-share-btn--copy.nw-bs-copied .nw-bs-share-lbl { color: #00a79d; }
 
 /* SweetAlert z-index fix — must be above backdrop (1040) and sheet (1090) */
 .nw-swal-below-nav { top: 76px !important; right: 1rem !important; z-index: 1100 !important; }
