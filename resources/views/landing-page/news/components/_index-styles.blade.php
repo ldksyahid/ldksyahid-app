@@ -434,7 +434,7 @@
 
 /* ─── Mobile Bottom Sheet ──────────────────────────────────────── */
 .nw-bs-backdrop {
-    position: fixed; inset: 0; z-index: 1040;
+    position: fixed; inset: 0; z-index: 1070;
     background: rgba(26,26,46,.5);
     backdrop-filter: blur(6px);
     opacity: 0; pointer-events: none;

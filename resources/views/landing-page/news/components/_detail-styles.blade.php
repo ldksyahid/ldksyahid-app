@@ -426,7 +426,7 @@
     .nd-related-list::-webkit-scrollbar { display: none; }
     .nd-related-item { flex: 0 0 200px; flex-direction: column; border-radius: 16px; overflow: hidden; }
     .nd-related-item:hover { transform: translateY(-3px); }
-    .nd-related-thumb { width: 100%; height: 110px; border-radius: 0; }
+    .nd-related-thumb { width: 100%; height: 110px; border-radius: 10%; }
     .nd-related-info  { padding: .5rem .6rem .65rem; }
 
     .nd-hero { min-height: 52vh; }
