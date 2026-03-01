@@ -203,7 +203,7 @@
 
 {{-- ── Pagination ─────────────────────────────────────────────── --}}
 <div class="ar-pagination-wrap mt-4">
-    @include('components.pagination-custom', [
+    @include('components.pagination-custom.index', [
         'paginator'  => $postarticle,
         'itemLabel'  => 'artikel',
     ])

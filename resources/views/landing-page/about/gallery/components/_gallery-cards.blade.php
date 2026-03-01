@@ -116,6 +116,6 @@
 </div>{{-- /mobile list --}}
 
 {{-- ── Pagination (reusable component) ── --}}
-@include('components.pagination-custom', ['paginator' => $postgallery, 'itemLabel' => 'kegiatan'])
+@include('components.pagination-custom.index', ['paginator' => $postgallery, 'itemLabel' => 'kegiatan'])
 
 @endif
