@@ -101,19 +101,28 @@
                     </a>
 
                     {{-- Share --}}
-                    <div class="nw-share-wrap">
-                        <span class="nw-share-label">Bagikan</span>
-                        <div class="nw-share-row">
-                            <button class="nw-share-btn nw-share-copy"
+                    <div class="nw-card-share">
+                        <span class="nw-card-share-label">Bagikan</span>
+                        <div class="nw-card-share-btns">
+                            <button class="nw-card-share-btn nw-card-share-btn--copy"
+                                    title="Salin URL"
                                     data-url="/news/{{ $news->id }}"
                                     onclick="nwCopyUrl(this.dataset.url, event)">
-                                <i class="fas fa-link"></i><span>Salin URL</span>
+                                <i class="fas fa-link"></i>
                             </button>
-                            <button class="nw-share-btn nw-share-wa"
+                            <button class="nw-card-share-btn nw-card-share-btn--wa"
+                                    title="WhatsApp"
                                     data-url="/news/{{ $news->id }}"
                                     data-title="{{ e($news->title) }}"
                                     onclick="nwShareWa(this.dataset.url, this.dataset.title, event)">
-                                <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+                                <i class="fab fa-whatsapp"></i>
+                            </button>
+                            <button class="nw-card-share-btn nw-card-share-btn--tw"
+                                    title="Twitter / X"
+                                    data-url="/news/{{ $news->id }}"
+                                    data-title="{{ e($news->title) }}"
+                                    onclick="nwShareTw(this.dataset.url, this.dataset.title, event)">
+                                <i class="fab fa-twitter"></i>
                             </button>
                         </div>
                     </div>
@@ -192,19 +201,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="nw-share-wrap nw-share-wrap--sm">
-                        <span class="nw-share-label">Bagikan</span>
-                        <div class="nw-share-row nw-share-row--sm">
-                            <button class="nw-share-btn nw-share-copy"
+                    <div class="nw-card-share" style="margin-top:.5rem; padding-top:.6rem;">
+                        <span class="nw-card-share-label">Bagikan</span>
+                        <div class="nw-card-share-btns">
+                            <button class="nw-card-share-btn nw-card-share-btn--copy"
+                                    title="Salin URL"
                                     data-url="/news/{{ $news->id }}"
                                     onclick="nwCopyUrl(this.dataset.url, event)">
-                                <i class="fas fa-link"></i><span>Salin</span>
+                                <i class="fas fa-link"></i>
                             </button>
-                            <button class="nw-share-btn nw-share-wa"
+                            <button class="nw-card-share-btn nw-card-share-btn--wa"
+                                    title="WhatsApp"
                                     data-url="/news/{{ $news->id }}"
                                     data-title="{{ e($news->title) }}"
                                     onclick="nwShareWa(this.dataset.url, this.dataset.title, event)">
-                                <i class="fab fa-whatsapp"></i><span>WA</span>
+                                <i class="fab fa-whatsapp"></i>
+                            </button>
+                            <button class="nw-card-share-btn nw-card-share-btn--tw"
+                                    title="Twitter / X"
+                                    data-url="/news/{{ $news->id }}"
+                                    data-title="{{ e($news->title) }}"
+                                    onclick="nwShareTw(this.dataset.url, this.dataset.title, event)">
+                                <i class="fab fa-twitter"></i>
                             </button>
                         </div>
                     </div>

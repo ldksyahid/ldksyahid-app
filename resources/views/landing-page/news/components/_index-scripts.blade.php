@@ -415,6 +415,13 @@ document.addEventListener('DOMContentLoaded', function () {
         window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
     };
 
+    window.nwShareTw = function (url, title, ev) {
+        if (ev) ev.stopPropagation();
+        var full = window.location.origin + url;
+        var text = (title ? title + ' — LDK Syahid\n' : '') + full;
+        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
+    };
+
 
     /* ============================================================
        12. MOBILE BOTTOM SHEET
@@ -474,19 +481,47 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<a href="' + escHtml(url) + '" class="nw-bs-btn">' +
                     '<i class="fas fa-newspaper"></i><span>Baca Selengkapnya</span>' +
                 '</a>' +
-                '<div class="nw-share-wrap nw-bs-share-row">' +
-                    '<span class="nw-share-label">Bagikan</span>' +
-                    '<div class="nw-share-row">' +
-                        '<button class="nw-share-btn nw-share-copy nw-bs-copy-btn"><i class="fas fa-link"></i><span>Salin URL</span></button>' +
-                        '<button class="nw-share-btn nw-share-wa nw-bs-wa-btn"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></button>' +
+                '<div class="nw-bs-share">' +
+                    '<p class="nw-bs-share-title">Bagikan Artikel</p>' +
+                    '<div class="nw-bs-share-grid">' +
+                        '<button class="nw-bs-share-btn nw-bs-share-btn--copy nw-bs-copy-btn" title="Salin tautan artikel">' +
+                            '<span class="nw-bs-share-icon"><i class="fas fa-link"></i></span>' +
+                            '<span class="nw-bs-share-lbl">Salin URL</span>' +
+                        '</button>' +
+                        '<button class="nw-bs-share-btn nw-bs-share-btn--wa nw-bs-wa-btn" title="Bagikan ke WhatsApp">' +
+                            '<span class="nw-bs-share-icon"><i class="fab fa-whatsapp"></i></span>' +
+                            '<span class="nw-bs-share-lbl">WhatsApp</span>' +
+                        '</button>' +
+                        '<button class="nw-bs-share-btn nw-bs-share-btn--tw nw-bs-tw-btn" title="Bagikan ke Twitter / X">' +
+                            '<span class="nw-bs-share-icon"><i class="fab fa-twitter"></i></span>' +
+                            '<span class="nw-bs-share-lbl">Twitter / X</span>' +
+                        '</button>' +
                     '</div>' +
                 '</div>' +
             '</div>';
 
         var bsCopyBtn = content.querySelector('.nw-bs-copy-btn');
         var bsWaBtn   = content.querySelector('.nw-bs-wa-btn');
-        if (bsCopyBtn) bsCopyBtn.addEventListener('click', function () { nwCopyUrl(url); });
-        if (bsWaBtn)   bsWaBtn.addEventListener('click',   function () { nwShareWa(url, title); });
+        var bsTwBtn   = content.querySelector('.nw-bs-tw-btn');
+
+        if (bsCopyBtn) bsCopyBtn.addEventListener('click', function () {
+            var btn = this;
+            nwCopyUrl(url);
+            btn.classList.add('nw-bs-copied');
+            btn.querySelector('.nw-bs-share-icon').innerHTML = '<i class="fas fa-check"></i>';
+            btn.querySelector('.nw-bs-share-lbl').textContent = 'Tersalin!';
+            setTimeout(function () {
+                btn.classList.remove('nw-bs-copied');
+                btn.querySelector('.nw-bs-share-icon').innerHTML = '<i class="fas fa-link"></i>';
+                btn.querySelector('.nw-bs-share-lbl').textContent = 'Salin URL';
+            }, 2500);
+        });
+        if (bsWaBtn) bsWaBtn.addEventListener('click', function () { nwShareWa(url, title); });
+        if (bsTwBtn) bsTwBtn.addEventListener('click', function () {
+            var full = window.location.origin + url;
+            var text = (title ? title + ' — LDK Syahid\n' : '') + full;
+            window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
+        });
 
         document.getElementById('nw-bottom-sheet').scrollTop = 0;
         document.getElementById('nw-bs-backdrop').classList.add('active');
