@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (fmBackdrop) fmBackdrop.classList.add('active');
             arFmLockScroll();
             _arFmTouchBlock = function (e) {
-                if (!e.target.closest('.ar-fm-body')) e.preventDefault();
+                if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
             };
             /* capture:true → intercept sebelum elemen lain; passive:false → boleh preventDefault */
             window.addEventListener('touchmove', _arFmTouchBlock, { passive: false, capture: true });

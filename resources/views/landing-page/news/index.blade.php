@@ -131,122 +131,69 @@
 
 
 {{-- ══════════════════════════════════════════════════
-     FILTER MODAL — pushed outside section to avoid stacking context
+     FILTER MODAL — rendered at body level via @push('modals')
      ══════════════════════════════════════════════════ --}}
 @push('modals')
-{{-- Custom blur backdrop (Bootstrap backdrop disabled via data-bs-backdrop="false") --}}
-<div id="nw-fm-backdrop" class="nw-fm-backdrop"></div>
-
-<div class="modal fade nw-modal" id="nw-filter-modal" tabindex="-1"
-     data-bs-backdrop="false"
-     aria-labelledby="nw-filter-modal-label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered nw-fm-dialog">
-        <div class="modal-content nw-fm-content">
-
-            {{-- Custom close button --}}
-            <button type="button" class="nw-fm-close" data-bs-dismiss="modal" aria-label="Tutup">
-                <i class="fas fa-times"></i>
-            </button>
-
-            {{-- Header --}}
-            <div class="nw-fm-header">
-                <div class="nw-fm-badge">
-                    <span>📰</span>
-                    <span>Cari & Saring</span>
-                    <span class="nw-fm-pulse"></span>
-                </div>
-                <div class="nw-fm-icon-wrap">
-                    <div class="nw-fm-icon">
-                        <i class="fas fa-sliders-h"></i>
-                    </div>
-                    <div class="nw-fm-ring nw-fm-ring-1"></div>
-                    <div class="nw-fm-ring nw-fm-ring-2"></div>
-                </div>
-                <h5 class="nw-fm-title" id="nw-filter-modal-label">Filter Berita</h5>
-                <p class="nw-fm-subtitle">Pilih satu atau lebih filter untuk menyaring berita</p>
+<x-search-filter-bar.modal
+    prefix="nw"
+    title="Filter Berita"
+    subtitle="Pilih satu atau lebih filter untuk menyaring berita"
+    emoji="📰"
+>
+    <div class="col-md-6">
+        <div class="sfb-fm-field-wrap">
+            <div class="sfb-fm-field-label">
+                <div class="sfb-fm-field-icon"><i class="fas fa-building"></i></div>
+                <label for="nw-publisher-select" class="sfb-fm-label">Penerbit</label>
             </div>
-
-            {{-- Body --}}
-            <div class="nw-fm-body">
-                <div class="row g-3">
-
-                    <div class="col-md-6">
-                        <div class="nw-fm-field-wrap">
-                            <div class="nw-fm-field-label">
-                                <div class="nw-fm-field-icon"><i class="fas fa-building"></i></div>
-                                <label for="nw-publisher-select" class="nw-fm-label">Penerbit</label>
-                            </div>
-                            <select id="nw-publisher-select" class="form-select" multiple>
-                                @foreach($publishers as $pub)
-                                    <option value="{{ $pub }}" {{ in_array($pub, (array)request('publisher')) ? 'selected' : '' }}>{{ $pub }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="nw-fm-field-wrap">
-                            <div class="nw-fm-field-label">
-                                <div class="nw-fm-field-icon"><i class="fas fa-user-edit"></i></div>
-                                <label for="nw-reporter-select" class="nw-fm-label">Reporter</label>
-                            </div>
-                            <select id="nw-reporter-select" class="form-select" multiple>
-                                @foreach($reporters as $rep)
-                                    <option value="{{ $rep }}" {{ in_array($rep, (array)request('reporter')) ? 'selected' : '' }}>{{ $rep }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="nw-fm-field-wrap">
-                            <div class="nw-fm-field-label">
-                                <div class="nw-fm-field-icon"><i class="fas fa-pen"></i></div>
-                                <label for="nw-editor-select" class="nw-fm-label">Editor</label>
-                            </div>
-                            <select id="nw-editor-select" class="form-select" multiple>
-                                @foreach($editors as $ed)
-                                    <option value="{{ $ed }}" {{ in_array($ed, (array)request('editor')) ? 'selected' : '' }}>{{ $ed }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="nw-fm-field-wrap">
-                            <div class="nw-fm-field-label">
-                                <div class="nw-fm-field-icon"><i class="fas fa-calendar-alt"></i></div>
-                                <label for="nw-year-select" class="nw-fm-label">Tahun Terbit</label>
-                            </div>
-                            <select id="nw-year-select" class="form-select" multiple>
-                                @foreach($years as $yr)
-                                    <option value="{{ $yr }}" {{ in_array($yr, (array)request('year')) ? 'selected' : '' }}>{{ $yr }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            {{-- Footer --}}
-            <div class="nw-fm-footer">
-                <button type="button" class="nw-fm-btn-close" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i>
-                    <span>Tutup</span>
-                </button>
-                <button type="button" id="nw-reset-filter" class="nw-fm-btn-reset">
-                    <i class="fas fa-undo"></i>
-                    <span>Reset</span>
-                </button>
-                <button type="button" id="nw-apply-filter" class="nw-fm-btn-apply">
-                    <span class="nw-fm-btn-icon"><i class="fas fa-check"></i></span>
-                    <span>Terapkan Filter</span>
-                    <div class="nw-fm-btn-shine"></div>
-                </button>
-            </div>
-
+            <select id="nw-publisher-select" class="form-select" multiple>
+                @foreach($publishers as $pub)
+                    <option value="{{ $pub }}" {{ in_array($pub, (array)request('publisher')) ? 'selected' : '' }}>{{ $pub }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
-</div>
+
+    <div class="col-md-6">
+        <div class="sfb-fm-field-wrap">
+            <div class="sfb-fm-field-label">
+                <div class="sfb-fm-field-icon"><i class="fas fa-user-edit"></i></div>
+                <label for="nw-reporter-select" class="sfb-fm-label">Reporter</label>
+            </div>
+            <select id="nw-reporter-select" class="form-select" multiple>
+                @foreach($reporters as $rep)
+                    <option value="{{ $rep }}" {{ in_array($rep, (array)request('reporter')) ? 'selected' : '' }}>{{ $rep }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="sfb-fm-field-wrap">
+            <div class="sfb-fm-field-label">
+                <div class="sfb-fm-field-icon"><i class="fas fa-pen"></i></div>
+                <label for="nw-editor-select" class="sfb-fm-label">Editor</label>
+            </div>
+            <select id="nw-editor-select" class="form-select" multiple>
+                @foreach($editors as $ed)
+                    <option value="{{ $ed }}" {{ in_array($ed, (array)request('editor')) ? 'selected' : '' }}>{{ $ed }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="sfb-fm-field-wrap">
+            <div class="sfb-fm-field-label">
+                <div class="sfb-fm-field-icon"><i class="fas fa-calendar-alt"></i></div>
+                <label for="nw-year-select" class="sfb-fm-label">Tahun Terbit</label>
+            </div>
+            <select id="nw-year-select" class="form-select" multiple>
+                @foreach($years as $yr)
+                    <option value="{{ $yr }}" {{ in_array($yr, (array)request('year')) ? 'selected' : '' }}>{{ $yr }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+</x-search-filter-bar.modal>
 @endpush

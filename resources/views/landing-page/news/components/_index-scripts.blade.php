@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (fmBackdrop) fmBackdrop.classList.add('active');
             nwFmLockScroll();
             _fmTouchBlock = function (e) {
-                if (!e.target.closest('.nw-fm-body')) e.preventDefault();
+                if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
             };
             window.addEventListener('touchmove', _fmTouchBlock, { passive: false, capture: true });
         });
