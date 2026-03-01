@@ -454,21 +454,19 @@
 .nw-bottom-sheet::-webkit-scrollbar { display: none; }
 .nw-bottom-sheet.active { transform: translateY(0); }
 
-body.nw-sheet-open {
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
-}
+/* body scroll lock handled by lockScroll() / unlockScroll() in JS */
 
 .nw-bs-close {
     position: absolute; top: 1rem; right: 1rem; z-index: 10;
     width: 36px; height: 36px; border-radius: 50%; border: none;
-    background: rgba(0,0,0,.07);
+    background: rgba(255,255,255,.9);
+    backdrop-filter: blur(6px);
     display: flex; align-items: center; justify-content: center;
     font-size: .85rem; color: var(--nw-dark); cursor: pointer;
     transition: var(--nw-transition);
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
 }
-.nw-bs-close:hover { background: rgba(0,0,0,.14); transform: rotate(90deg); }
+.nw-bs-close:hover { background: #fff; transform: rotate(90deg); }
 
 /* Sheet image header */
 .nw-bs-img-wrap {
