@@ -492,9 +492,9 @@ document.addEventListener('DOMContentLoaded', function () {
                             '<span class="nw-bs-share-icon"><i class="fab fa-whatsapp"></i></span>' +
                             '<span class="nw-bs-share-lbl">WhatsApp</span>' +
                         '</button>' +
-                        '<button class="nw-bs-share-btn nw-bs-share-btn--tw nw-bs-tw-btn" title="Bagikan ke Twitter / X">' +
-                            '<span class="nw-bs-share-icon"><i class="fab fa-twitter"></i></span>' +
-                            '<span class="nw-bs-share-lbl">Twitter / X</span>' +
+                        '<button class="nw-bs-share-btn nw-bs-share-btn--tw nw-bs-tw-btn" title="Bagikan ke X">' +
+                            '<span class="nw-bs-share-icon"><span class="xi" style="font-size:1.4rem">X</span></span>' +
+                            '<span class="nw-bs-share-lbl">X</span>' +
                         '</button>' +
                     '</div>' +
                 '</div>' +
