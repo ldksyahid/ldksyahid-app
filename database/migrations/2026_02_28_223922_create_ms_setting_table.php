@@ -16,8 +16,8 @@ class CreateMsSettingTable extends Migration
             Schema::create(MsSetting::getTableName(), function (Blueprint $table) {
                 $table->bigIncrements('settingID');
 
-                $table->string('key1', 1000)->index();
-                $table->string('key2', 1000)->index();
+                $table->string('key1', 191)->index();
+                $table->string('key2', 191)->index();
                 $table->string('value1', 1000)->nullable();
                 $table->string('value2', 1000)->nullable();
 
