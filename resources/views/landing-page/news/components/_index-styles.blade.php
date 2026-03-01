@@ -91,21 +91,9 @@
 }
 .nw-card:hover {
     transform: translateY(-8px) scale(1.01);
-    box-shadow: var(--nw-shadow-hover);
-    border-color: rgba(0,167,157,.12);
+    box-shadow: var(--nw-shadow-hover), inset 0 0 0 2.5px var(--nw-accent, var(--nw-primary));
+    border-color: transparent;
 }
-.nw-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--nw-accent, var(--nw-primary));
-    border-radius: 3px 0 0 3px;
-    transform: scaleY(0);
-    transform-origin: bottom;
-    transition: transform .35s cubic-bezier(.4,0,.2,1);
-}
-.nw-card:hover::before { transform: scaleY(1); }
 
 /* ── Card Image ── */
 .nw-card-img-wrap {
@@ -293,10 +281,11 @@
 .nw-card-share-btn:active { transform: scale(.88); }
 .nw-card-share-btn--copy { background: linear-gradient(135deg, #e0f7f5, #b2ede9); color: #00a79d; }
 .nw-card-share-btn--wa   { background: linear-gradient(135deg, #dcfce7, #bbf7d0); color: #16a34a; }
-.nw-card-share-btn--tw   { background: linear-gradient(135deg, #f0f0f0, #e4e4e4); color: #1a1a2e; }
+.nw-card-share-btn--tw   { background: #1a1a2e; color: white; }
 .nw-card-share-btn--copy:hover { background: linear-gradient(135deg, #00a79d, #008b82); color: white; }
 .nw-card-share-btn--wa:hover   { background: linear-gradient(135deg, #25d366, #128c7e); color: white; }
-.nw-card-share-btn--tw:hover   { background: linear-gradient(135deg, #1a1a2e, #333);   color: white; }
+.nw-card-share-btn--tw:hover   { background: #000; color: white; }
+.xi { font-weight: 900; font-size: .95em; font-family: 'Arial Black', Arial, sans-serif; line-height: 1; }
 
 
 /* ─── Empty State ──────────────────────────────────────────────── */
@@ -588,13 +577,13 @@
     background: linear-gradient(135deg, #25d366, #128c7e);
     color: white;
 }
-/* Twitter / X */
+/* X */
 .nw-bs-share-btn--tw .nw-bs-share-icon {
-    background: linear-gradient(135deg, #f0f0f0, #e4e4e4);
-    color: #1a1a2e;
+    background: #1a1a2e;
+    color: white;
 }
 .nw-bs-share-btn--tw:hover .nw-bs-share-icon {
-    background: linear-gradient(135deg, #1a1a2e, #333);
+    background: #000;
     color: white;
 }
 .nw-bs-share-lbl {

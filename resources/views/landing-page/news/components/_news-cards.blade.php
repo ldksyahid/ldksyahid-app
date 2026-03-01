@@ -118,11 +118,11 @@
                                 <i class="fab fa-whatsapp"></i>
                             </button>
                             <button class="nw-card-share-btn nw-card-share-btn--tw"
-                                    title="Twitter / X"
+                                    title="X"
                                     data-url="/news/{{ $news->id }}"
                                     data-title="{{ e($news->title) }}"
                                     onclick="nwShareTw(this.dataset.url, this.dataset.title, event)">
-                                <i class="fab fa-twitter"></i>
+                                <span class="xi">X</span>
                             </button>
                         </div>
                     </div>
@@ -218,11 +218,11 @@
                                 <i class="fab fa-whatsapp"></i>
                             </button>
                             <button class="nw-card-share-btn nw-card-share-btn--tw"
-                                    title="Twitter / X"
+                                    title="X"
                                     data-url="/news/{{ $news->id }}"
                                     data-title="{{ e($news->title) }}"
                                     onclick="nwShareTw(this.dataset.url, this.dataset.title, event)">
-                                <i class="fab fa-twitter"></i>
+                                <span class="xi">X</span>
                             </button>
                         </div>
                     </div>
