@@ -88,12 +88,6 @@
 <div class="nd-content-wrap">
     <div class="container">
 
-        {{-- Back button --}}
-        <a href="{{ route('news.index') }}" class="nd-back-btn nd-enter">
-            <i class="fas fa-arrow-left"></i>
-            <span>Berita Lainnya</span>
-        </a>
-
         {{-- Flexbox layout: main + sidebar (no Bootstrap row on mobile) --}}
         <div class="nd-layout">
 
@@ -117,6 +111,12 @@
                         {!! $postnews->body !!}
                     </div>
                 </div>
+
+                {{-- Back button --}}
+                <a href="{{ route('news.index') }}" class="nd-back-btn nd-enter">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Berita Lainnya</span>
+                </a>
 
                 {{-- Divider --}}
                 <div class="nd-divider nd-enter" style="transition-delay:.15s"></div>
