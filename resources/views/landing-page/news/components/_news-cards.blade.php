@@ -56,10 +56,6 @@
                         <span class="nw-card-date-num">{{ \Carbon\Carbon::parse($news->datepublish)->format('d') }}</span>
                         <span class="nw-card-date-month">{{ \Carbon\Carbon::parse($news->datepublish)->isoFormat('MMM') }}</span>
                     </div>
-
-                    @if($loop->index === 0)
-                    <div class="nw-card-badge-new">Terbaru</div>
-                    @endif
                 </a>
 
                 {{-- Card Body --}}
@@ -176,9 +172,6 @@
                 <div class="nw-m-thumb">
                     <img src="{{ $news->getPictureUrl() }}"
                          alt="{{ $news->title }}" loading="lazy">
-                    @if($loop->index === 0)
-                    <div class="nw-m-badge-new">Terbaru</div>
-                    @endif
                     <div class="nw-card-date">
                         <span class="nw-card-date-num">{{ \Carbon\Carbon::parse($news->datepublish)->format('d') }}</span>
                         <span class="nw-card-date-month">{{ \Carbon\Carbon::parse($news->datepublish)->isoFormat('MMM') }}</span>
