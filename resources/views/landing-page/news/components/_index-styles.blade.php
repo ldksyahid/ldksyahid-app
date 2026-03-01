@@ -148,16 +148,6 @@
     text-transform: uppercase; letter-spacing: .5px;
 }
 
-/* "Terbaru" badge on image */
-.nw-card-badge-new {
-    position: absolute; top: 12px; left: 12px;
-    background: linear-gradient(135deg, var(--nw-primary), var(--nw-primary-dark));
-    color: white; font-size: .68rem; font-weight: 800;
-    text-transform: uppercase; letter-spacing: .4px;
-    padding: .28rem .75rem; border-radius: 50px;
-    z-index: 2; box-shadow: 0 3px 10px rgba(0,167,157,.4);
-    animation: nwBadgePop .5s cubic-bezier(.34,1.56,.64,1) forwards;
-}
 @keyframes nwBadgePop {
     0% { transform: scale(0); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
@@ -394,13 +384,6 @@
     content: '';
     position: absolute; inset: 0;
     background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.5) 100%);
-}
-.nw-m-badge-new {
-    position: absolute; top: 10px; left: 10px; z-index: 3;
-    background: linear-gradient(135deg, var(--nw-primary), var(--nw-primary-dark));
-    color: white; font-size: .62rem; font-weight: 800; text-transform: uppercase;
-    letter-spacing: .4px; padding: .22rem .65rem; border-radius: 50px;
-    box-shadow: 0 2px 8px rgba(0,167,157,.35);
 }
 .nw-m-tap-hint {
     position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
