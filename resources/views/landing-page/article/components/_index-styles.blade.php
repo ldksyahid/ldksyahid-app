@@ -524,7 +524,7 @@
     background: rgba(0,0,0,.45);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    z-index: 1070;
+    z-index: 1040;
     opacity: 0; visibility: hidden;
     transition: opacity .3s ease, visibility .3s ease;
 }
@@ -534,7 +534,7 @@
     position: fixed; bottom: 0; left: 0; right: 0;
     background: white;
     border-radius: 24px 24px 0 0;
-    z-index: 1075; max-height: 88dvh;
+    z-index: 1090; max-height: 88dvh;
     overflow-y: auto;
     overscroll-behavior: contain;
     transform: translateY(100%);
@@ -720,10 +720,11 @@
 .ar-share-wrap--sm .ar-share-label { font-size: .62rem; margin-bottom: .38rem; }
 .ar-share-row--sm .ar-share-btn    { padding: 6px 11px; font-size: .72rem; }
 
-/* SweetAlert toast below navbar — top-end position, clear of sticky nav */
+/* SweetAlert toast below navbar — must be above backdrop (1040) and sheet (1090) */
 .ar-swal-below-nav {
-    top: 76px !important;   /* push below sticky navbar (~70px) */
+    top: 76px !important;
     right: 1rem !important;
+    z-index: 1100 !important;
 }
 
 

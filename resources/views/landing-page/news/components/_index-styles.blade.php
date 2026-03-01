@@ -434,7 +434,7 @@
 
 /* ─── Mobile Bottom Sheet ──────────────────────────────────────── */
 .nw-bs-backdrop {
-    position: fixed; inset: 0; z-index: 1070;
+    position: fixed; inset: 0; z-index: 1040;
     background: rgba(26,26,46,.5);
     backdrop-filter: blur(6px);
     opacity: 0; pointer-events: none;
@@ -443,7 +443,7 @@
 .nw-bs-backdrop.active { opacity: 1; pointer-events: all; }
 
 .nw-bottom-sheet {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 1080;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 1090;
     background: white;
     border-radius: 28px 28px 0 0;
     max-height: 90dvh; overflow-y: auto;
@@ -532,8 +532,8 @@
 
 .nw-bs-share-row { margin-top: .25rem; }
 
-/* SweetAlert z-index fix */
-.nw-swal-below-nav { top: 76px !important; right: 1rem !important; }
+/* SweetAlert z-index fix — must be above backdrop (1040) and sheet (1090) */
+.nw-swal-below-nav { top: 76px !important; right: 1rem !important; z-index: 1100 !important; }
 
 /* ─── Responsive adjustments ──────────────────────────────────── */
 @media (max-width: 1199.98px) {
