@@ -73,7 +73,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="/news" class="nav-link {{ ($title === "Berita" || (isset($linkTitle) && $title === "Berita : $linkTitle")) ? "active" : "" }}">
+                <a href="/news" class="nav-link {{ ($title === "Berita" || (isset($linkTitle) && $title === "Berita : $linkTitle") || request()->routeIs('news.*')) ? "active" : "" }}">
                     <span>Berita</span>
                 </a>
             </li>
@@ -335,7 +335,7 @@
                 <div class="mobile-nav-icon"><i class="fas fa-newspaper"></i></div>
                 <span>Artikel</span>
             </a>
-            <a href="/news" class="{{ ($title === "Berita") ? "active" : "" }}">
+            <a href="/news" class="{{ ($title === "Berita" || request()->routeIs('news.*')) ? "active" : "" }}">
                 <div class="mobile-nav-icon"><i class="fas fa-bullhorn"></i></div>
                 <span>Berita</span>
             </a>
