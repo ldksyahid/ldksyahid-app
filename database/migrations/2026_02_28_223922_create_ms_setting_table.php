@@ -14,8 +14,6 @@ class CreateMsSettingTable extends Migration
     {
         if (!Schema::hasTable(MsSetting::getTableName())) {
             Schema::create(MsSetting::getTableName(), function (Blueprint $table) {
-                $table->bigIncrements('settingID');
-
                 $table->string('key1', 191)->index();
                 $table->string('key2', 191)->index();
                 $table->string('value1', 1000)->nullable();
@@ -25,12 +23,16 @@ class CreateMsSettingTable extends Migration
             });
 
             // Insert default row
-            DB::table(MsSetting::getTableName())->insert([
-                'key1'   => Key1::LAYANAN,
-                'key2'   => Key2::CpShortlink,
-                'value1' => '+62895394755672',
-                'value2' => null,
-            ]);
+            DB::table(MsSetting::getTableName())->updateOrInsert(
+                [
+                    'key1' => Key1::LAYANAN,
+                    'key2' => Key2::CpShortlink,
+                ],
+                [
+                    'value1' => '+62895394755672',
+                    'value2' => null,
+                ]
+            );
         }
     }
 
