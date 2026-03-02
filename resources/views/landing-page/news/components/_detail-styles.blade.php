@@ -128,6 +128,12 @@
 .nd-main  { flex: 1; min-width: 0; }
 .nd-aside { flex: 0 0 310px; width: 310px; }
 
+/* Pre-layout: featured image — inside nd-main, full column width */
+.nd-pre-layout { margin-bottom: 1.5rem; }
+
+/* Post-layout: back btn / share / comments — same width as nd-main */
+.nd-post-layout { width: calc(100% - 310px - 2.5rem); }
+
 /* ─── Back button ──────────────────────────────────────────────── */
 .nd-back-btn {
     display: inline-flex; align-items: center; gap: .55rem;
@@ -254,7 +260,7 @@
 }
 
 /* ─── Sidebar Cards ────────────────────────────────────────────── */
-.nd-sidebar { position: sticky; top: 88px; }
+.nd-sidebar { }
 
 .nd-card-box {
     background: white; border-radius: var(--nd-radius);
@@ -417,6 +423,7 @@
     .nd-layout { flex-direction: column; }
     .nd-aside  { flex: unset; width: 100%; }
     .nd-sidebar { position: static; }
+    .nd-pre-layout, .nd-post-layout { max-width: 100%; width: 100%; }
 
     /* Horizontal scroll for related on tablet/mobile */
     .nd-related-list {
