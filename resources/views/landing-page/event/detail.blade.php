@@ -1,396 +1,375 @@
+{{-- resources/views/landing-page/event/detail.blade.php --}}
 @extends('landing-page.template.body')
 
+
+{{-- ══════════════════════════════════════════════════
+     OPEN GRAPH
+     ══════════════════════════════════════════════════ --}}
 @section('openGraph')
-<meta property="og:title" content="{{ $postevent->title }}" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="{{url()->current()}}" />
-<meta property="og:image" content="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" />
-<meta property="og:description" content="{!!  substr(strip_tags($postevent->broadcast), 0, 100) !!}" />
+<meta property="og:title"       content="{{ $postevent->title }}" />
+<meta property="og:type"        content="website" />
+<meta property="og:url"         content="{{ url()->current() }}" />
+<meta property="og:image"       content="{{ $postevent->getPosterUrl() ?? '' }}" />
+<meta property="og:description" content="{{ substr(strip_tags($postevent->broadcast), 0, 160) }}" />
 @endsection
 
+
+{{-- ══════════════════════════════════════════════════
+     STYLES
+     ══════════════════════════════════════════════════ --}}
+@section('styles')
+@include('landing-page.event.components._detail-styles')
+@endsection
+
+
+{{-- ══════════════════════════════════════════════════
+     CONTENT
+     ══════════════════════════════════════════════════ --}}
 @section('content')
 @php
-    use App\Http\Controllers\LibraryFunctionController as LFC;
+    use Carbon\Carbon;
+    $now        = Carbon::now();
+    $isUpcoming = $postevent->start    && $now->lt($postevent->start);
+    $isPast     = $postevent->finished && $now->gt($postevent->finished);
+    $isOngoing  = !$isUpcoming && !$isPast;
+    $statusKey  = $isUpcoming ? 'upcoming' : ($isPast ? 'past' : 'ongoing');
+    $statusLabel= $isUpcoming ? 'Akan Datang' : ($isPast ? 'Telah Selesai' : 'Berlangsung');
+    $closeRegistCarbon = $postevent->closeRegist ? Carbon::parse($postevent->closeRegist) : null;
+    $registOpen = !$isPast && (!$closeRegistCarbon || $now->lt($closeRegistCarbon));
+    $canRegist  = $registOpen && $postevent->linkRegist;
 @endphp
-@if((new \Jenssegers\Agent\Agent())->isDesktop())
-<div class="container-xxl py-5">
+
+{{-- Reading progress bar --}}
+<div class="ed-progress" id="ed-progress"></div>
+
+
+{{-- ── Hero Section ─────────────────────────────────────────────── --}}
+<section class="ed-hero">
+    <div class="ed-hero-bg"
+         style="background-image: url('{{ $postevent->getPosterUrl() ?? 'https://placehold.co/1200x600/1a1a2e/00a79d?text=Event' }}')">
+    </div>
+    <div class="ed-hero-overlay"></div>
+
+    <div class="ed-hero-content">
+        <div class="container">
+
+            {{-- Division badge --}}
+            <div class="ed-hero-division">
+                <span class="ed-hero-division-dot"></span>
+                {{ $postevent->division }}
+            </div>
+
+            {{-- Title --}}
+            <h1 class="ed-hero-title" id="ed-event-title">{{ $postevent->title }}</h1>
+
+            {{-- Meta chips --}}
+            <div class="ed-hero-metas">
+                @if($postevent->start)
+                <div class="ed-hero-meta">
+                    <i class="far fa-calendar-alt"></i>
+                    {{ $postevent->start->isoFormat('D MMMM Y') }}
+                </div>
+                @endif
+
+                @if($postevent->place || $postevent->location)
+                <div class="ed-hero-meta">
+                    <i class="fas fa-map-marker-alt"></i>
+                    {{ $postevent->place ?? $postevent->location }}
+                </div>
+                @endif
+
+                <div class="ed-hero-status {{ $statusKey }}">
+                    @if($statusKey !== 'past')<span class="ed-status-pulse"></span>@endif
+                    {{ $statusLabel }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+{{-- ── Content Wrap ────────────────────────────────────────────────── --}}
+<div class="ed-content-wrap">
     <div class="container">
-        <div class="row g-5">
-            <div class="col-3">
-                <img src="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" style="border-radius: 5px;" class="img-fluid shadow">
-            </div>
-            <div class="col-6">
-                @if ($postevent->tag != null)
-                <button type="button" class="btn btn-outline-secondary" style="border-radius: 5px; padding:2px 10px; font-size:13px;" disabled>{{ $postevent->tag }}</button>
-                @else
-                <button type="button" class="btn btn-outline-secondary" style="border-radius: 5px; padding:2px 10px; font-size:13px;" disabled>Seminar</button>
-                @endif
-                <h2 class="my-2" style="text-align: left; font-size :28px;">{{ $postevent->title }}</h2>
-                <p>Diselenggarakan oleh: {{ $postevent->division }}</p>
-            </div>
-            <div class="col-3 text-center">
-                @if (time() <= strtotime($postevent->start))
-                <div>
-                    <p class="mt-4 mb-0">Terbuka Hingga:</p>
-                    <h1 class="display-6" style="font-size :16px; margin-top:2px;">{{ \Carbon\Carbon::parse( $postevent->closeRegist )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $postevent->closeRegist )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->closeRegist )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->closeRegist )->format('Y') }}</h1>
+
+        {{-- Back button --}}
+        <a href="{{ route('event.index') }}" class="ed-back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Kembali ke Daftar Kegiatan
+        </a>
+
+        {{-- Layout --}}
+        <div class="ed-layout">
+
+            {{-- ════════════════════════════════════════
+                 MAIN COLUMN
+                 ════════════════════════════════════════ --}}
+            <div class="ed-main">
+
+                {{-- ── Tab Navigation ───────────────────────── --}}
+                <div class="ed-tabs-nav" role="tablist">
+                    <button class="ed-tab-btn active" role="tab"
+                            aria-controls="ed-tab-desc" aria-selected="true"
+                            onclick="edSwitchTab(this, 'ed-tab-desc')">
+                        <i class="fas fa-align-left"></i> Deskripsi
+                    </button>
+                    <button class="ed-tab-btn" role="tab"
+                            aria-controls="ed-tab-doc" aria-selected="false"
+                            onclick="edSwitchTab(this, 'ed-tab-doc')">
+                        <i class="fas fa-folder-open"></i> Dokumentasi
+                    </button>
+                    <button class="ed-tab-btn" role="tab"
+                            aria-controls="ed-tab-disc" aria-selected="false"
+                            onclick="edSwitchTab(this, 'ed-tab-disc')">
+                        <i class="fas fa-comments"></i> Pembahasan
+                    </button>
                 </div>
-                <div>
-                    <p class="mt-4 mb-0">Countdown:</p>
-                    <h1 class="display-6" style="font-size :16px; margin-top:2px;">{{ LFC::countdownHari($postevent->start) }} Hari Lagi</h1>
-                </div>
-                @elseif (time() > strtotime($postevent->start) && time() <= strtotime($postevent->finished))
-                <div>
-                    <h1 class="display-6 mt-5 mb-0" style="font-size :16px; margin-top:2px;">Event Sedang Berlangsung</h1>
-                </div>
-                @else
-                <div>
-                    <h1 class="display-6 mt-5 mb-0" style="font-size :16px; margin-top:2px;">Event Telah Selesai</h1>
-                </div>
-                @endif
-            </div>
-            <div class="col-lg-12">
-                <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-link active" id="nav-desc-tab" data-bs-toggle="tab" data-bs-target="#nav-desc" type="button" role="tab" aria-controls="nav-desc" aria-selected="true" style="color: #8d9297; border-radius: 5px 5px 0px 0px;">Deskripsi</button>
-                        <button class="nav-link" id="nav-doc-tab" data-bs-toggle="tab" data-bs-target="#nav-doc" type="button" role="tab" aria-controls="nav-doc" aria-selected="false" style="color: #8d9297; border-radius: 5px 5px 0px 0px;">Dokumentasi</button>
-                        <button class="nav-link" id="nav-disc-tab" data-bs-toggle="tab" data-bs-target="#nav-disc" type="button" role="tab" aria-controls="nav-disc" aria-selected="false" style="color: #8d9297; border-radius: 5px 5px 0px 0px;">Pembahasan</button>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active py-5" id="nav-desc" role="tabpanel" aria-labelledby="nav-desc-tab">
-                        <div class="row">
-                            <div class="col-9">
-                                {!! $postevent->broadcast !!}
-                            </div>
-                            <div class="col-3">
-                                <div class="mb-5">
-                                    <p style="font-size: 24px; margin-bottom:3px;">Keikutsertaan</p>
-                                    @if (time() <= strtotime($postevent->start))
-                                    <div class="alert alert-warning" role="alert" style="border-radius: 5px;">
-                                        <p class="mb-0">Silahkan daftar terlebih dahulu untuk mengikuti event ini.</p>
-                                    </div>
-                                    <a class="btn btn-primary shadow w-100" href="{{ $postevent->linkRegist }}" target="_blank" style="border-radius: 5px;">Daftar</a>
-                                    @elseif (time() > strtotime($postevent->start) && time() <= strtotime($postevent->finished))
-                                    <div class="alert alert-info" role="alert" style="border-radius: 5px;">
-                                        <p class="mb-0">Event sedang berlangsung, Silahkan daftar terlebih dahulu untuk mengikuti event ini.</p>
-                                    </div>
-                                    <a class="btn btn-primary shadow w-100" href="{{ $postevent->linkRegist }}" target="_blank" style="border-radius: 5px;">Daftar</a>
-                                    @else
-                                    <div class="alert alert-danger" role="alert" style="border-radius: 5px;">
-                                        <p class="mb-0">Maaf, event ini telah selesai</p>
-                                    </div>
-                                    @endif
-                                </div>
-                                <div class="mb-5">
-                                    <p style="font-size: 24px; margin-bottom:3px;">Jadwal <br> Pelaksanaan</p>
-                                    <div class="row">
-                                        @if ($postevent->start != null)
-                                        <div class="col-3">
-                                            <p>Mulai</p>
-                                        </div>
-                                        <div class="col-9">
-                                            <p>: {{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->start )->format('Y') }} <br> &nbsp; ({{ \Carbon\Carbon::parse( $postevent->start )->format('H:i A') }})</p>
-                                        </div>
-                                        <div class="col-3">
-                                            <p>Selesai</p>
-                                        </div>
-                                        <div class="col-9">
-                                            <p>: {{ \Carbon\Carbon::parse( $postevent->finished )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->finished )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->finished )->format('Y') }} <br> &nbsp; ({{ \Carbon\Carbon::parse( $postevent->finished )->format('H:i A') }})</p>
-                                        </div>
-                                        @else
-                                        <div class="col-12">
-                                            <div class="alert alert-danger" role="alert" style="border-radius: 5px;">
-                                                <p class="mb-0">Tidak ada jadwal pelaksanaan</p>
-                                            </div>
-                                        </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="mb-5">
-                                    <p style="font-size: 24px; margin-bottom:3px;">Lokasi</p>
-                                    <div class="row">
-                                        @if ($postevent->location != null)
-                                        <div class="col-2">
-                                            <i class="fa fa-map-marker fa-2x text-secondary"></i>
-                                        </div>
-                                        <div class="col-10">
-                                            <p>{{ $postevent->location }} <br><a href="{{ $postevent->linkLocation }}" target="_blank">Link Lokasi</a></p>
-                                            <h1 class="display-6" style="font-size: 14px">{{ $postevent->place }}</h1>
-                                        </div>
-                                        @else
-                                        <div class="col-12">
-                                            <div class="alert alert-danger" role="alert" style="border-radius: 5px;">
-                                                <p class="mb-0">Tidak ada lokasi</p>
-                                            </div>
-                                        </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="mb-5">
-                                    <p style="font-size: 24px; margin-bottom:3px;">Contact Person</p>
-                                    <div class="row">
-                                        @if ($postevent->cntctPrsn1 == null && $postevent->cntctPrsn2 == null)
-                                        <div class="col-12">
-                                        <div class="col-12">
-                                            <div class="alert alert-danger" role="alert" style="border-radius: 5px;">
-                                                <p class="mb-0">Tidak ada Contact Person</p>
-                                            </div>
-                                        </div>
-                                        </div>
-                                        @else
-                                        <div class="col-2">
-                                            <i class="fa fa-whatsapp fa-2x text-secondary"></i>
-                                        </div>
-                                        <div class="col-10">
-                                            @if ($postevent->cntctPrsn1 != null && $postevent->cntctPrsn2 != null)
-                                            <a href="https://wa.me/+62{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
-                                            <br>
-                                            <a href="https://wa.me/+62{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
-                                            @elseif ($postevent->cntctPrsn1 == null)
-                                            <a href="https://wa.me/+62{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
-                                            @elseif ($postevent->cntctPrsn2 == null)
-                                            <a href="https://wa.me/+62{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
-                                            @endif
-                                        </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
+
+                {{-- ── Tab: Deskripsi ────────────────────────── --}}
+                <div class="ed-tab-pane active" id="ed-tab-desc" role="tabpanel">
+                    <div class="ed-card">
+                        <div class="ed-body">
+                            {!! $postevent->broadcast !!}
                         </div>
                     </div>
-                    <div class="tab-pane fade py-5" id="nav-doc" role="tabpanel" aria-labelledby="nav-doc-tab">
-                        <div>
-                            <p style="font-size: 24px;" class="mb-0">Foto dan Video</p>
-                            @if ($postevent->linkDoc != null)
-                            <a href="{{ $postevent->linkDoc }}" target="_blank" rel="noopener noreferrer">{{ $postevent->linkDoc }}</a>
-                            @else
-                            <div class="alert alert-info" role="alert" style="border-radius: 5px;">
-                                Belum ada foto dan video yang diunggah oleh pengelola Event.
-                            </div>
+                </div>
+
+                {{-- ── Tab: Dokumentasi ─────────────────────── --}}
+                <div class="ed-tab-pane" id="ed-tab-doc" role="tabpanel">
+                    <div class="ed-card">
+                        <div class="ed-card-title">Dokumentasi Kegiatan</div>
+                        @if($postevent->linkDoc || $postevent->linkPresent)
+                        <div class="ed-doc-grid">
+                            @if($postevent->linkDoc)
+                            <a href="{{ $postevent->linkDoc }}" class="ed-doc-link"
+                               target="_blank" rel="noopener noreferrer">
+                                <div class="ed-doc-icon"><i class="fas fa-photo-video"></i></div>
+                                <span>Foto &amp; Video</span>
+                                <i class="fas fa-external-link-alt ms-auto" style="opacity:.4; font-size:.72rem;"></i>
+                            </a>
+                            @endif
+                            @if($postevent->linkPresent)
+                            <a href="{{ $postevent->linkPresent }}" class="ed-doc-link"
+                               target="_blank" rel="noopener noreferrer">
+                                <div class="ed-doc-icon"><i class="fas fa-file-powerpoint"></i></div>
+                                <span>Presentasi</span>
+                                <i class="fas fa-external-link-alt ms-auto" style="opacity:.4; font-size:.72rem;"></i>
+                            </a>
                             @endif
                         </div>
-                        <br>
-                        <div>
-                            <p style="font-size: 24px;" class="mb-0">Presentasi</p>
-                            @if ($postevent->linkPresent)
-                            <a href="{{ $postevent->linkPresent }}" target="_blank" rel="noopener noreferrer">{{ $postevent->linkPresent }}</a>
-                            @else
-                            <div class="alert alert-info" role="alert" style="border-radius: 5px;">
-                                Belum ada presentasi yang diunggah oleh pengelola Event.
-                            </div>
-                            @endif
+                        @else
+                        <div class="ed-doc-empty">
+                            <i class="fas fa-folder-open"></i>
+                            <p>Belum ada dokumentasi yang diunggah untuk kegiatan ini.</p>
                         </div>
+                        @endif
                     </div>
-                    <div class="tab-pane fade py-5" id="nav-disc" role="tabpanel" aria-labelledby="nav-disc-tab">
-                        <p style="text-align: justify;">Kamu dapat berdiskusi dan bertanya mengenai Event {{ $postevent->title }} pada halaman ini.</p>
+                </div>
+
+                {{-- ── Tab: Pembahasan (Disqus) ─────────────── --}}
+                <div class="ed-tab-pane" id="ed-tab-disc" role="tabpanel">
+                    <div class="ed-comments-section">
+                        <h3 class="ed-comments-title">Pembahasan</h3>
+                        <p style="font-size:.88rem; color: var(--ed-gray); margin-bottom: 1.5rem;">
+                            Diskusikan dan tanyakan seputar kegiatan <em>{{ $postevent->title }}</em> di sini.
+                        </p>
                         <div id="disqus_thread"></div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
 
-@if((new \Jenssegers\Agent\Agent())->isMobile())
-<div class="container-xxl py-5">
-    <div class="container">
-        <div class="text-center mb-4">
-            <img src="https://lh3.googleusercontent.com/d/{{ $postevent->gdrive_id }}" alt="{{ $postevent->title }}" style="border-radius: 5px;" class="img-fluid shadow" width="65%">
-        </div>
-        <div class="mb-4">
-            @if ($postevent->tag != null)
-            <button type="button" class="btn btn-outline-secondary" style="border-radius: 5px; padding:2px 10px; font-size:12px;" disabled>{{ $postevent->tag }}</button>
-            @else
-            <button type="button" class="btn btn-outline-secondary" style="border-radius: 5px; padding:2px 10px; font-size:12px;" disabled>Seminar</button>
-            @endif
-            <h2 class="my-2" style="text-align: left; font-size :20px;">{{ $postevent->title }}</h2>
-            <p style="font-size: 14px;">Diselenggarakan oleh: {{ $postevent->division }}</p>
-        </div>
-        <div class="my-5 text-center" style="font-size: 16px;">
-            @if (time() <= strtotime($postevent->start))
-                <div>
-                    <p class="mt-4 mb-0">Terbuka Hingga:</p>
-                    <h1 class="display-6" style="font-size :16px; margin-top:2px;">{{ \Carbon\Carbon::parse( $postevent->closeRegist )->isoFormat('dddd') }}, {{ \Carbon\Carbon::parse( $postevent->closeRegist )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->closeRegist )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->closeRegist )->format('Y') }}</h1>
-                </div>
-                <div>
-                    <p class="mt-4 mb-0">Countdown:</p>
-                    <h1 class="display-6" style="font-size :16px; margin-top:2px;">{{ LFC::countdownHari($postevent->start) }} Hari Lagi</h1>
-                </div>
-                @elseif (time() > strtotime($postevent->start) && time() <= strtotime($postevent->finished))
-                <div>
-                    <h1 class="display-6 mt-5 mb-0" style="font-size :16px; margin-top:2px;">Event Sedang Berlangsung</h1>
-                </div>
-                @else
-                <div>
-                    <h1 class="display-6 mt-5 mb-0" style="font-size :16px; margin-top:2px;">Event Telah Selesai</h1>
-                </div>
-            @endif
-        </div>
-        <div>
-            <hr>
-            <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist" style="font-size: 14px; border-radius: 20px;">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="pills-desc-tab" data-bs-toggle="pill" data-bs-target="#pills-desc" type="button" role="tab" aria-controls="pills-desc" aria-selected="true" style="border-radius :5px;">Deskripsi</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-doc-tab" data-bs-toggle="pill" data-bs-target="#pills-doc" type="button" role="tab" aria-controls="pills-doc" aria-selected="false" style="border-radius :5px;">Dokumentasi</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-disc-tab" data-bs-toggle="pill" data-bs-target="#pills-disc" type="button" role="tab" aria-controls="pills-disc" aria-selected="false" style="border-radius :5px;">Pembahasan</button>
-                </li>
-            </ul>
-            <hr>
-            <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-desc" role="tabpanel" aria-labelledby="pills-desc-tab">
-                    <div class="mb-5">
-                        <p style="font-size: 20px; margin-bottom:3px;" class="mb-2">Keikutsertaan</p>
-                        @if (time() <= strtotime($postevent->start))
-                        <div class="alert alert-warning" role="alert" style="border-radius: 5px; font-size: 12px;">
-                            <p class="mb-0">Silahkan daftar terlebih dahulu untuk mengikuti event ini.</p>
-                        </div>
-                        <a class="btn btn-primary shadow w-100 mt-0" href="{{ $postevent->linkRegist }}" style="border-radius: 5px; font-size: 14px;" target="_blank">Daftar</a>
-                        @elseif (time() > strtotime($postevent->start) && time() <= strtotime($postevent->finished))
-                        <div class="alert alert-info" role="alert" style="border-radius: 5px; font-size: 12px;">
-                            <p class="mb-0">Event sedang berlangsung, Silahkan daftar terlebih dahulu untuk mengikuti event ini.</p>
-                        </div>
-                        <a class="btn btn-primary shadow w-100 mt-0" href="{{ $postevent->linkRegist }}" style="border-radius: 5px; font-size: 14px;" target="_blank">Daftar</a>
-                        @else
-                        <div class="alert alert-danger" role="alert" style="border-radius: 5px; font-size: 12px;">
-                            <p class="mb-0">Maaf, event ini telah selesai</p>
-                        </div>
-                        @endif
+                {{-- ── Share (persistent, di luar tab) ─────── --}}
+                <div class="ed-share-section">
+                    <span class="ed-share-label">Bagikan</span>
+                    <div class="ed-share-btns">
+                        <button class="ed-share-btn ed-share-btn--copy" onclick="edCopyUrl(event)">
+                            <i class="fas fa-link"></i> Salin URL
+                        </button>
+                        <button class="ed-share-btn ed-share-btn--wa" onclick="edShareWa(event)">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </button>
+                        <button class="ed-share-btn ed-share-btn--tw" onclick="edShareTw(event)">
+                            <span style="font-weight:900; font-size:1rem; line-height:1; letter-spacing:-1px;">X</span>
+                        </button>
                     </div>
-                    <div class="mb-5">
-                        <p style="font-size: 20px; margin-bottom:3px;" class="mb-2">Jadwal <br> Pelaksanaan</p>
-                        <div class="row" style="font-size: 16px;">
-                            @if ($postevent->start != null)
-                            <div class="col-3">
-                                <p>Mulai</p>
-                            </div>
-                            <div class="col-9">
-                                <p>: {{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->start )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->start )->format('Y') }} <br> &nbsp; ({{ \Carbon\Carbon::parse( $postevent->start )->format('H:i A') }})</p>
-                            </div>
-                            <div class="col-3">
-                                <p>Selesai</p>
-                            </div>
-                            <div class="col-9">
-                                <p>: {{ \Carbon\Carbon::parse( $postevent->finished )->isoFormat('DD') }} {{ \Carbon\Carbon::parse( $postevent->finished )->isoFormat('MMMM') }} {{ \Carbon\Carbon::parse( $postevent->finished )->format('Y') }} <br> &nbsp; ({{ \Carbon\Carbon::parse( $postevent->finished )->format('H:i A') }})</p>
-                            </div>
-                            @else
-                            <div class="col-12">
-                                <div class="alert alert-danger" role="alert" style="border-radius: 5px; font-size: 12px;">
-                                    <p class="mb-0">Tidak ada jadwal pelaksanaan</p>
-                                </div>
-                            </div>
-                            @endif
-                        </div>
+                </div>
+
+            </div>{{-- /ed-main --}}
+
+
+            {{-- ════════════════════════════════════════
+                 ASIDE COLUMN
+                 ════════════════════════════════════════ --}}
+            <div class="ed-aside">
+
+                {{-- ── Event Info Card ──────────────────────── --}}
+                <div class="ed-info-card">
+                    <div class="ed-info-header">
+                        <div class="ed-info-header-label">Detail Kegiatan</div>
+                        <div class="ed-info-header-title">{{ Str::limit($postevent->title, 55) }}</div>
                     </div>
-                    <div class="mb-5">
-                        <p style="font-size: 20px" class="mb-2">Lokasi</p>
-                        <div class="row">
-                            @if ($postevent->location != null)
-                            <div class="col-1">
-                                <i class="fa fa-map-marker fa-2x text-secondary"></i>
+                    <div class="ed-info-body">
+
+                        {{-- Organizer --}}
+                        <div class="ed-info-item">
+                            <div class="ed-info-icon"><i class="fas fa-layer-group"></i></div>
+                            <div class="ed-info-text">
+                                <span class="ed-info-label">Penyelenggara</span>
+                                <span class="ed-info-value">{{ $postevent->division }}</span>
                             </div>
-                            <div class="col-10">
-                                <p style="font-size: 16px;">{{ $postevent->location }} <br><a href="{{ $postevent->linkLocation }}" target="_blank">Link Lokasi</a></p>
-                                <h1 class="display-6" style="font-size: 14px">{{ $postevent->place }}</h1>
-                            </div>
-                            @else
-                            <div class="col-12">
-                                <div class="alert alert-danger" role="alert" style="border-radius: 5px; font-size: 12px;">
-                                    <p class="mb-0">Tidak ada lokasi</p>
-                                </div>
-                            </div>
-                            @endif
                         </div>
-                    </div>
-                    <div>
-                        <p style="font-size: 20px" class="mb-2">Contact Person</p>
-                        <div class="row">
-                            @if ($postevent->cntctPrsn1 == null && $postevent->cntctPrsn2 == null)
-                            <div class="col-12">
-                                <div class="alert alert-danger" role="alert" style="border-radius: 5px; font-size: 12px;">
-                                    <p class="mb-0">Tidak ada Contact Person</p>
-                                </div>
-                            </div>
-                            @else
-                            <div class="col-1 m-1">
-                                <i class="fa fa-whatsapp fa-2x text-secondary"></i>
-                            </div>
-                            <div class="col-10">
-                                <div class="col-10">
-                                    @if ($postevent->cntctPrsn1 != null && $postevent->cntctPrsn2 != null)
-                                    <a href="https://wa.me/+62{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
-                                    <br>
-                                    <a href="https://wa.me/+62{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
-                                    @elseif ($postevent->cntctPrsn1 == null)
-                                    <a href="https://wa.me/+62{{ $postevent->cntctPrsn2 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn2 }} ({{ $postevent->nameCntctPrsn2 }})</a>
-                                    @elseif ($postevent->cntctPrsn2 == null)
-                                    <a href="https://wa.me/+62{{ $postevent->cntctPrsn1 }}" target="_blank" rel="noopener noreferrer">0{{ $postevent->cntctPrsn1 }} ({{ $postevent->nameCntctPrsn1 }})</a>
+
+                        {{-- Date --}}
+                        @if($postevent->start)
+                        <div class="ed-info-item">
+                            <div class="ed-info-icon"><i class="far fa-calendar-alt"></i></div>
+                            <div class="ed-info-text">
+                                <span class="ed-info-label">Tanggal Pelaksanaan</span>
+                                <span class="ed-info-value">
+                                    {{ $postevent->start->isoFormat('dddd, D MMMM Y') }}
+                                    @if($postevent->start->format('H:i') !== '00:00')
+                                        <br><small style="font-weight:500; color: var(--ed-gray);">Pukul {{ $postevent->start->format('H:i') }} WIB</small>
                                     @endif
-                                </div>
+                                    @if($postevent->finished)
+                                        <br><small style="font-weight:500; color: var(--ed-gray);">s/d {{ $postevent->finished->isoFormat('D MMMM Y') }}</small>
+                                    @endif
+                                </span>
                             </div>
+                        </div>
+                        @endif
+
+                        {{-- Location --}}
+                        @if($postevent->place || $postevent->location)
+                        <div class="ed-info-item">
+                            <div class="ed-info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="ed-info-text">
+                                <span class="ed-info-label">Lokasi</span>
+                                <span class="ed-info-value">
+                                    {{ $postevent->place ?? $postevent->location }}
+                                    @if($postevent->place && $postevent->location && $postevent->place !== $postevent->location)
+                                        <br><small style="font-weight:500; color: var(--ed-gray);">{{ $postevent->location }}</small>
+                                    @endif
+                                    @if($postevent->linkLocation)
+                                        <br><a href="{{ $postevent->linkLocation }}" target="_blank" rel="noopener noreferrer">
+                                            <i class="fas fa-directions" style="font-size:.7rem;"></i> Lihat peta
+                                        </a>
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+                        @endif
+
+                    </div>
+                </div>{{-- /ed-info-card --}}
+
+
+                {{-- ── Registration Card ────────────────────── --}}
+                <div class="ed-regist-card">
+                    <span class="ed-regist-open-label">
+                        @if($isPast)
+                            Kegiatan Telah Selesai
+                        @elseif($isOngoing)
+                            Kegiatan Sedang Berlangsung
+                        @else
+                            Pendaftaran {{ $registOpen ? 'Terbuka' : 'Ditutup' }}
+                        @endif
+                    </span>
+
+                    {{-- Countdown (upcoming only) --}}
+                    @if($isUpcoming && $postevent->start)
+                    <div class="ed-countdown" id="ed-countdown-wrap"
+                         data-target="{{ $postevent->start->toIso8601String() }}">
+                        <div class="ed-countdown-unit">
+                            <span class="ed-countdown-num" id="ed-cd-days">--</span>
+                            <span class="ed-countdown-label">Hari</span>
+                        </div>
+                        <div class="ed-countdown-unit">
+                            <span class="ed-countdown-num" id="ed-cd-hours">--</span>
+                            <span class="ed-countdown-label">Jam</span>
+                        </div>
+                        <div class="ed-countdown-unit">
+                            <span class="ed-countdown-num" id="ed-cd-mins">--</span>
+                            <span class="ed-countdown-label">Menit</span>
+                        </div>
+                        <div class="ed-countdown-unit">
+                            <span class="ed-countdown-num" id="ed-cd-secs">--</span>
+                            <span class="ed-countdown-label">Detik</span>
+                        </div>
+                    </div>
+                    @endif
+
+                    {{-- Register button --}}
+                    @if($canRegist)
+                    <a href="{{ $postevent->linkRegist }}" class="ed-regist-btn"
+                       target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-user-plus"></i> Daftar Sekarang
+                    </a>
+                    @else
+                    <div class="ed-regist-btn closed">
+                        <i class="fas fa-lock"></i>
+                        {{ $isPast ? 'Kegiatan Selesai' : 'Pendaftaran Ditutup' }}
+                    </div>
+                    @endif
+
+                    {{-- Registration deadline --}}
+                    @if($closeRegistCarbon && !$isPast)
+                    @php $isUrgent = $registOpen && $now->diffInDays($closeRegistCarbon) <= 3; @endphp
+                    <div class="ed-regist-deadline {{ $isUrgent ? 'urgent' : '' }}">
+                        <i class="far fa-clock"></i>
+                        {{ $registOpen ? 'Tutup' : 'Ditutup' }}: {{ $closeRegistCarbon->isoFormat('D MMM Y') }}
+                    </div>
+                    @endif
+
+                </div>{{-- /ed-regist-card --}}
+
+
+                {{-- ── Contact Persons ───────────────────────── --}}
+                @if($postevent->cntctPrsn1 || $postevent->cntctPrsn2)
+                <div class="ed-info-card">
+                    <div class="ed-info-header">
+                        <div class="ed-info-header-label">Butuh Bantuan?</div>
+                        <div class="ed-info-header-title">Contact Person</div>
+                    </div>
+                    <div class="ed-info-body">
+                        <div class="ed-contact-list">
+                            @if($postevent->cntctPrsn1)
+                            <a href="https://wa.me/+62{{ $postevent->cntctPrsn1 }}"
+                               class="ed-contact-item" target="_blank" rel="noopener noreferrer">
+                                <div class="ed-contact-avatar"><i class="fab fa-whatsapp"></i></div>
+                                <div>
+                                    <div class="ed-contact-name">{{ $postevent->nameCntctPrsn1 ?? 'Contact 1' }}</div>
+                                    <div class="ed-contact-num">0{{ $postevent->cntctPrsn1 }}</div>
+                                </div>
+                            </a>
+                            @endif
+                            @if($postevent->cntctPrsn2)
+                            <a href="https://wa.me/+62{{ $postevent->cntctPrsn2 }}"
+                               class="ed-contact-item" target="_blank" rel="noopener noreferrer">
+                                <div class="ed-contact-avatar"><i class="fab fa-whatsapp"></i></div>
+                                <div>
+                                    <div class="ed-contact-name">{{ $postevent->nameCntctPrsn2 ?? 'Contact 2' }}</div>
+                                    <div class="ed-contact-num">0{{ $postevent->cntctPrsn2 }}</div>
+                                </div>
+                            </a>
                             @endif
                         </div>
                     </div>
-                    <hr class="my-5">
-                    <div>
-                        {!! $postevent->broadcast !!}
-                    </div>
                 </div>
-                <div class="tab-pane fade" id="pills-doc" role="tabpanel" aria-labelledby="pills-doc-tab">
-                    <div>
-                        <p style="font-size: 18px;" class="mb-0">Foto dan Video</p>
-                        @if ($postevent->linkDoc != null)
-                        <a href="{{ $postevent->linkDoc }}" target="_blank" rel="noopener noreferrer" style="font-size: 16px;">klik disini</a>
-                        @else
-                        <div class="alert alert-info" role="alert" style="border-radius: 5px; font-size: 12px;">
-                            Belum ada foto dan video yang diunggah oleh pengelola Event.
-                        </div>
-                        @endif
-                    </div>
-                    <br>
-                    <div>
-                        <p style="font-size: 18px;" class="mb-0">Presentasi</p>
-                        @if ($postevent->linkPresent)
-                        <a href="{{ $postevent->linkPresent }}" target="_blank" rel="noopener noreferrer" style="font-size: 16px;">klik disini</a>
-                        @else
-                        <div class="alert alert-info" role="alert" style="border-radius: 5px; font-size: 12px;">
-                            Belum ada presentasi yang diunggah oleh pengelola Event.
-                        </div>
-                        @endif
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="pills-disc" role="tabpanel" aria-labelledby="pills-disc-tab">
-                    <p style="text-align: justify; font-size: 16px;">Kamu dapat berdiskusi dan bertanya mengenai Event {{ $postevent->title }} pada halaman ini.</p>
-                    <div id="disqus_thread"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
+                @endif
+
+            </div>{{-- /ed-aside --}}
+
+        </div>{{-- /ed-layout --}}
+
+    </div>{{-- /container --}}
+</div>{{-- /ed-content-wrap --}}
+
 @endsection
 
+
+{{-- ══════════════════════════════════════════════════
+     SCRIPTS
+     ══════════════════════════════════════════════════ --}}
 @section('scripts')
-<script>
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-    /*
-    var disqus_config = function () {
-    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://https-ldksyah-id-1.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+@include('landing-page.event.components._detail-scripts')
 @endsection

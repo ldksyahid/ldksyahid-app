@@ -42,6 +42,13 @@
         window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
     };
 
+    window.adShareTw = function (btn, ev) {
+        if (ev) ev.stopPropagation();
+        var title = btn ? btn.dataset.title : '';
+        var text  = (title ? title + ' — LDK Syahid\n' : '') + window.location.href;
+        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
+    };
+
     /* ── Mobile Baca Juga Sheet ──────────────────────────────────── */
     window.adOpenRjSheet = function () {
         document.getElementById('ad-rj-backdrop').classList.add('active');

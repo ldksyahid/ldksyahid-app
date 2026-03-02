@@ -133,6 +133,18 @@ class Event extends Model
     }
 
     /**
+     * Get all distinct years from start date for filter dropdown
+     */
+    public static function getYears()
+    {
+        return self::whereNotNull('start')
+            ->selectRaw('YEAR(start) as yr')
+            ->distinct()
+            ->orderByRaw('yr DESC')
+            ->pluck('yr');
+    }
+
+    /**
      * Get all divisions for filter dropdown
      */
     public static function getDivisions()

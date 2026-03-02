@@ -84,6 +84,11 @@
                                 onclick="adShareWa(this, event)">
                             <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
                         </button>
+                        <button class="ad-share-btn ad-share-tw"
+                                data-title="{{ e($postarticle->title) }}"
+                                onclick="adShareTw(this, event)">
+                            <span style="font-weight:900; font-size:.9rem; line-height:1; letter-spacing:-1px;">X</span>
+                        </button>
                     </div>
                 </div>
 
