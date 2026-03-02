@@ -19,24 +19,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     /* ============================================================
-       2. SECTION ENTRANCE ANIMATION (IntersectionObserver)
+       2. SECTION ENTRANCE ANIMATION — appear together on load
        ============================================================ */
-    var enterEls = document.querySelectorAll('.nd-enter');
-    if ('IntersectionObserver' in window && enterEls.length) {
-        var obs = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('nd-visible');
-                    obs.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-        enterEls.forEach(function (el) { obs.observe(el); });
-    } else {
-        /* Fallback: show all immediately */
-        enterEls.forEach(function (el) { el.classList.add('nd-visible'); });
-    }
+    document.querySelectorAll('.nd-enter').forEach(function (el) {
+        el.classList.add('nd-visible');
+    });
 
 
     /* ============================================================

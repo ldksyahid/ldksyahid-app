@@ -88,14 +88,14 @@
 <div class="nd-content-wrap">
     <div class="container">
 
-        {{-- Flexbox layout: main + sidebar (no Bootstrap row on mobile) --}}
+        {{-- ── LAYOUT: Article body + Sidebar (side-by-side) ──────── --}}
         <div class="nd-layout">
 
-            {{-- ── MAIN COLUMN ─────────────────────────────────────── --}}
+            {{-- Main column — image + body-card so nd-aside matches full height --}}
             <div class="nd-main">
 
-                {{-- Featured image + caption --}}
-                <div class="nd-enter" style="transition-delay:.05s">
+                {{-- Featured image --}}
+                <div class="nd-pre-layout nd-enter">
                     <img src="{{ $postnews->getPictureUrl() }}"
                          alt="{{ $postnews->title }}"
                          style="width:100%;border-radius:20px;object-fit:cover;max-height:420px;box-shadow:0 8px 32px rgba(0,0,0,.1);display:block;margin-bottom:.5rem;"
@@ -105,52 +105,16 @@
                     @endif
                 </div>
 
-                {{-- Article body --}}
-                <div class="nd-body-card nd-enter" style="transition-delay:.1s">
+                <div class="nd-body-card nd-enter">
                     <div class="nd-body">
                         {!! $postnews->body !!}
                     </div>
                 </div>
-
-                {{-- Back button --}}
-                <a href="{{ route('news.index') }}" class="nd-back-btn nd-enter">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Berita Lainnya</span>
-                </a>
-
-                {{-- Divider --}}
-                <div class="nd-divider nd-enter" style="transition-delay:.15s"></div>
-
-                {{-- Share section --}}
-                <div class="nd-share-section nd-enter" style="transition-delay:.2s">
-                    <span class="nd-share-section-label">Bagikan Berita</span>
-                    <div class="nd-share-btns">
-                        <button class="nd-share-full-btn nd-share-copy">
-                            <i class="fas fa-link"></i>
-                            <span>Salin URL</span>
-                        </button>
-                        <button class="nd-share-full-btn nd-share-wa"
-                                data-title="{{ e($postnews->title) }}">
-                            <i class="fab fa-whatsapp"></i>
-                            <span>Bagikan ke WhatsApp</span>
-                        </button>
-                    </div>
-                </div>
-
-                {{-- Comments --}}
-                <div class="nd-comments-section nd-enter" style="transition-delay:.25s">
-                    <h3 class="nd-comments-title">
-                        <i class="far fa-comments" style="color:var(--nd-primary)"></i>
-                        Komentar
-                    </h3>
-                    <div id="disqus_thread"></div>
-                </div>
-
             </div>{{-- /nd-main --}}
 
 
-            {{-- ── SIDEBAR ──────────────────────────────────────────── --}}
-            <aside class="nd-aside nd-enter" style="transition-delay:.08s">
+            {{-- ── SIDEBAR ────────────────────────────────────────── --}}
+            <aside class="nd-aside nd-enter">
                 <div class="nd-sidebar">
 
                     {{-- Meta info card --}}
@@ -253,6 +217,46 @@
             </aside>{{-- /nd-aside --}}
 
         </div>{{-- /nd-layout --}}
+
+        {{-- ── POST-LAYOUT: back button, share, comments ──────────── --}}
+        {{-- Width constrained to nd-main area (same as body-card above) --}}
+        <div class="nd-post-layout">
+
+            {{-- Back button --}}
+            <a href="{{ route('news.index') }}" class="nd-back-btn nd-enter">
+                <i class="fas fa-arrow-left"></i>
+                <span>Berita Lainnya</span>
+            </a>
+
+            {{-- Divider --}}
+            <div class="nd-divider nd-enter"></div>
+
+            {{-- Share section --}}
+            <div class="nd-share-section nd-enter">
+                <span class="nd-share-section-label">Bagikan Berita</span>
+                <div class="nd-share-btns">
+                    <button class="nd-share-full-btn nd-share-copy">
+                        <i class="fas fa-link"></i>
+                        <span>Salin URL</span>
+                    </button>
+                    <button class="nd-share-full-btn nd-share-wa"
+                            data-title="{{ e($postnews->title) }}">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>Bagikan ke WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+
+            {{-- Comments --}}
+            <div class="nd-comments-section nd-enter">
+                <h3 class="nd-comments-title">
+                    <i class="far fa-comments" style="color:var(--nd-primary)"></i>
+                    Komentar
+                </h3>
+                <div id="disqus_thread"></div>
+            </div>
+
+        </div>{{-- /nd-post-layout --}}
 
     </div>{{-- /container --}}
 </div>{{-- /nd-content-wrap --}}
