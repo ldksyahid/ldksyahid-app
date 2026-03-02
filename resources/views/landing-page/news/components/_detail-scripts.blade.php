@@ -71,6 +71,15 @@ document.addEventListener('DOMContentLoaded', function () {
         window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
     };
 
+    /* ============================================================
+       4b. X (TWITTER) SHARE
+       ============================================================ */
+    window.ndShareTw = function (title) {
+        var full = window.location.href;
+        var text = (title ? title + ' — LDK Syahid\n' : '') + full;
+        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
+    };
+
 
     /* ============================================================
        5. WIRE SHARE BUTTONS
@@ -81,6 +90,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.nd-share-wa').forEach(function (btn) {
         btn.addEventListener('click', function () {
             ndShareWa(this.dataset.title || '');
+        });
+    });
+    document.querySelectorAll('.nd-share-tw').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            ndShareTw(this.dataset.title || '');
         });
     });
 

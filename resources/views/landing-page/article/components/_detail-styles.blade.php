@@ -192,6 +192,13 @@
     box-shadow: 0 4px 14px rgba(37,211,102,.30);
     transform: translateY(-1px);
 }
+.ad-share-tw {
+    background: #1a1a2e; border-color: #1a1a2e; color: white;
+}
+.ad-share-tw:hover {
+    background: #000; border-color: #000;
+    box-shadow: 0 4px 14px rgba(0,0,0,.3); transform: translateY(-1px);
+}
 .ad-swal-below-nav { top: 76px !important; right: 1rem !important; }
 
 

@@ -327,6 +327,13 @@
     background: #25d366; color: white; border-color: #25d366;
     box-shadow: 0 4px 14px rgba(37,211,102,.3); transform: translateY(-1px);
 }
+.nd-share-tw {
+    background: #1a1a2e; border-color: #1a1a2e; color: white;
+}
+.nd-share-tw:hover {
+    background: #000; border-color: #000;
+    box-shadow: 0 4px 14px rgba(0,0,0,.3); transform: translateY(-1px);
+}
 
 /* Related news list — desktop */
 .nd-related-list { display: flex; flex-direction: column; gap: .35rem; }
@@ -407,6 +414,13 @@
 .nd-share-full-btn.nd-share-wa:hover {
     background: #25d366; color: white;
     box-shadow: 0 4px 18px rgba(37,211,102,.35); transform: translateY(-1px);
+}
+.nd-share-full-btn.nd-share-tw {
+    background: #1a1a2e; border-color: #1a1a2e;
+    color: white; box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+.nd-share-full-btn.nd-share-tw:hover {
+    background: #000; box-shadow: 0 4px 18px rgba(0,0,0,.35); transform: translateY(-1px);
 }
 
 /* ─── Comments Section ────────────────────────────────────────── */

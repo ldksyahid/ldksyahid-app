@@ -177,7 +177,11 @@
                             <button class="nd-share-btn nd-share-wa"
                                     data-title="{{ e($postnews->title) }}">
                                 <i class="fab fa-whatsapp"></i>
-                                <span>WhatsApp</span>
+                                <span>WA</span>
+                            </button>
+                            <button class="nd-share-btn nd-share-tw"
+                                    data-title="{{ e($postnews->title) }}">
+                                <span style="font-weight:900; font-size:.85rem; line-height:1; letter-spacing:-1px;">X</span>
                             </button>
                         </div>
                     </div>
@@ -243,6 +247,11 @@
                             data-title="{{ e($postnews->title) }}">
                         <i class="fab fa-whatsapp"></i>
                         <span>Bagikan ke WhatsApp</span>
+                    </button>
+                    <button class="nd-share-full-btn nd-share-tw"
+                            data-title="{{ e($postnews->title) }}">
+                        <span style="font-weight:900; font-size:.95rem; line-height:1; letter-spacing:-1px;">X</span>
+                        <span>Bagikan ke X</span>
                     </button>
                 </div>
             </div>
