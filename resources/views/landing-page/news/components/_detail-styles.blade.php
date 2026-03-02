@@ -328,31 +328,43 @@
     box-shadow: 0 4px 14px rgba(37,211,102,.3); transform: translateY(-1px);
 }
 
-/* Related news list */
-.nd-related-list { display: flex; flex-direction: column; gap: .55rem; }
+/* Related news list — desktop */
+.nd-related-list { display: flex; flex-direction: column; gap: .35rem; }
 .nd-related-item {
-    display: flex; gap: .75rem; text-decoration: none;
-    padding: .6rem; border-radius: 14px;
-    transition: background .2s ease, transform .2s ease;
+    display: flex; gap: .9rem; text-decoration: none;
+    padding: .65rem .55rem;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    position: relative; overflow: hidden;
+    transition: all .22s ease;
 }
-.nd-related-item:hover { background: var(--nd-gray-100); transform: translateX(3px); }
+.nd-related-item:hover {
+    background: linear-gradient(135deg, var(--nd-primary-light), #f8fffe 70%);
+    border-color: rgba(0,167,157,.15);
+    box-shadow: 0 2px 12px rgba(0,167,157,.1);
+    transform: translateX(5px);
+}
 .nd-related-thumb {
-    width: 68px; height: 52px; border-radius: 10px;
+    width: 78px; height: 64px; border-radius: 12px;
     object-fit: cover; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
     transition: transform .3s ease;
 }
-.nd-related-item:hover .nd-related-thumb { transform: scale(1.04); }
-.nd-related-info { min-width: 0; flex: 1; }
+.nd-related-item:hover .nd-related-thumb { transform: scale(1.06); }
+.nd-related-info {
+    min-width: 0; flex: 1;
+    display: flex; flex-direction: column; justify-content: center; gap: .22rem;
+}
 .nd-related-title {
-    font-size: .82rem; font-weight: 700; color: var(--nd-dark);
-    line-height: 1.4; margin: 0 0 .2rem;
+    font-size: .83rem; font-weight: 700; color: var(--nd-dark);
+    line-height: 1.4; margin: 0;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden;
     transition: color .2s ease;
 }
-.nd-related-item:hover .nd-related-title { color: var(--nd-primary); }
+.nd-related-item:hover .nd-related-title { color: var(--nd-primary-dark); }
 .nd-related-date {
-    font-size: .68rem; color: var(--nd-gray);
+    font-size: .67rem; color: var(--nd-gray);
     display: flex; align-items: center; gap: .28rem;
 }
 .nd-related-empty {
@@ -425,16 +437,37 @@
     .nd-sidebar { position: static; }
     .nd-pre-layout, .nd-post-layout { max-width: 100%; width: 100%; }
 
-    /* Horizontal scroll for related on tablet/mobile */
+    /* Horizontal scroll cards for related on tablet/mobile */
     .nd-related-list {
-        flex-direction: row; overflow-x: auto; gap: .85rem;
-        padding-bottom: .5rem; scrollbar-width: none;
+        flex-direction: row; overflow-x: auto; gap: .9rem;
+        padding: .25rem .05rem 1.1rem;
+        scrollbar-width: none; scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
     }
     .nd-related-list::-webkit-scrollbar { display: none; }
-    .nd-related-item { flex: 0 0 200px; flex-direction: column; border-radius: 16px; overflow: hidden; }
-    .nd-related-item:hover { transform: translateY(-3px); }
-    .nd-related-thumb { width: 100%; height: 110px; border-radius: 10%; }
-    .nd-related-info  { padding: .5rem .6rem .65rem; }
+    .nd-related-item {
+        flex: 0 0 152px; flex-direction: column;
+        border-radius: 16px; overflow: hidden; padding: 0;
+        background: white;
+        box-shadow: 0 3px 14px rgba(0,0,0,.09);
+        border: 1px solid var(--nd-gray-200);
+        scroll-snap-align: start;
+        transition: transform .22s ease, box-shadow .22s ease;
+    }
+    .nd-related-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 22px rgba(0,167,157,.16);
+        background: white;
+    }
+    .nd-related-thumb { width: 100%; height: 100px; border-radius: 0; }
+    .nd-related-item:hover .nd-related-thumb { transform: none; }
+    .nd-related-info {
+        padding: .65rem .7rem .75rem;
+        flex: 1; display: flex; flex-direction: column; gap: .3rem;
+        border-top: 2.5px solid var(--nd-primary-light);
+    }
+    .nd-related-title { font-size: .78rem; -webkit-line-clamp: 3; margin: 0; }
+    .nd-related-date  { font-size: .66rem; margin-top: auto; }
 
     .nd-hero { min-height: 52vh; }
     .nd-body-card { padding: 1.5rem 1.25rem; }
