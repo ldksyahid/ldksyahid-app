@@ -11,7 +11,7 @@
     function evStatus($event, $now) {
         if ($event->start && $now->lt($event->start))
             return ['key' => 'upcoming', 'label' => 'Akan Datang',    'cls' => 'ev-status-upcoming'];
-        if ($event->finished && $now->gt($event->finished))
+        if ($event->finished && $now->gt($event->finished) || (empty($event->start) || empty($event->finished)))
             return ['key' => 'past',     'label' => 'Telah Selesai',   'cls' => 'ev-status-past'];
         return     ['key' => 'ongoing',  'label' => 'Berlangsung',     'cls' => 'ev-status-ongoing'];
     }
