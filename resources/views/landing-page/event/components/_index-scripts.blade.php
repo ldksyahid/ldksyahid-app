@@ -391,16 +391,20 @@ document.addEventListener('DOMContentLoaded', function () {
     var closeBtn = document.getElementById('ev-bs-close');
     var content  = document.getElementById('ev-bs-content');
 
+    var _mainNav = document.getElementById('mainNavbar');
+
     function evOpenBs() {
         if (!sheet) return;
         if (backdrop) backdrop.classList.add('active');
         sheet.classList.add('open');
+        if (_mainNav) _mainNav.classList.add('ev-navbar-sheet-active');
         lockScroll();
     }
     function evCloseBs() {
         if (!sheet) return;
         sheet.classList.remove('open');
         if (backdrop) backdrop.classList.remove('active');
+        if (_mainNav) _mainNav.classList.remove('ev-navbar-sheet-active');
         unlockScroll();
     }
 
@@ -408,6 +412,32 @@ document.addEventListener('DOMContentLoaded', function () {
     if (backdrop) backdrop.addEventListener('click', evCloseBs);
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && sheet && sheet.classList.contains('open')) evCloseBs();
+    });
+
+    /* ─── Lightbox (fullscreen image) ───────────────────────── */
+    var _lbEl = null;
+    function evOpenLightbox(src, alt) {
+        if (!_lbEl) {
+            _lbEl = document.createElement('div');
+            _lbEl.className = 'ev-bs-lightbox';
+            _lbEl.innerHTML =
+                '<button class="ev-bs-lightbox-close" aria-label="Tutup"><i class="fas fa-times"></i></button>' +
+                '<img class="ev-bs-lightbox-img" alt="">';
+            document.body.appendChild(_lbEl);
+            _lbEl.querySelector('.ev-bs-lightbox-close').addEventListener('click', evCloseLightbox);
+            _lbEl.addEventListener('click', function (e) {
+                if (e.target === _lbEl) evCloseLightbox();
+            });
+        }
+        _lbEl.querySelector('.ev-bs-lightbox-img').src = src;
+        _lbEl.querySelector('.ev-bs-lightbox-img').alt = alt || '';
+        requestAnimationFrame(function () { _lbEl.classList.add('active'); });
+    }
+    function evCloseLightbox() {
+        if (_lbEl) _lbEl.classList.remove('active');
+    }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && _lbEl && _lbEl.classList.contains('active')) evCloseLightbox();
     });
 
     window.evOpenBottomSheet = function (card) {
@@ -422,9 +452,15 @@ document.addEventListener('DOMContentLoaded', function () {
         var url      = card.dataset.url;
         var excerpt  = card.dataset.excerpt;
 
-        var posterHtml = poster
-            ? '<img src="' + escHtml(poster) + '" class="ev-bs-poster" alt="' + escHtml(title) + '">'
-            : '';
+        /* ── Image section (edge-to-edge, like article sheet) ── */
+        var imgHtml = poster
+            ? '<div class="ev-bs-img-wrap">' +
+                  '<div class="ev-bs-drag-handle"></div>' +
+                  '<img src="' + escHtml(poster) + '" class="ev-bs-img-photo" alt="' + escHtml(title) + '" loading="lazy">' +
+                  '<div class="ev-bs-img-gradient"></div>' +
+                  '<button class="ev-bs-img-expand-btn" aria-label="Lihat foto penuh"><i class="fas fa-expand"></i></button>' +
+              '</div>'
+            : '<div class="ev-bs-no-img-handle"></div>';
 
         var metaRows = '';
         if (date && date !== '-')
@@ -433,34 +469,44 @@ document.addEventListener('DOMContentLoaded', function () {
             metaRows += '<div class="ev-bs-meta-row"><i class="fas fa-map-marker-alt"></i><span>' + escHtml(location) + '</span></div>';
 
         content.innerHTML =
-            posterHtml +
-            '<div class="ev-bs-status-row">' +
-                '<span class="ev-card-status ' + escHtml(statusCls) + '" style="position:static">' + escHtml(status) + '</span>' +
-                '<span class="ev-bs-division">' + escHtml(division) + '</span>' +
-            '</div>' +
-            '<div class="ev-bs-title">' + escHtml(title) + '</div>' +
-            (metaRows ? '<div class="ev-bs-meta">' + metaRows + '</div>' : '') +
-            (excerpt ? '<p class="ev-bs-excerpt">' + escHtml(excerpt) + '</p>' : '') +
-            '<a href="' + escHtml(url) + '" class="ev-bs-detail-btn">' +
-                '<i class="fas fa-calendar-check"></i> Lihat Detail Kegiatan' +
-            '</a>' +
-            '<div class="ev-bs-share">' +
-                '<p class="ev-bs-share-title">Bagikan Kegiatan</p>' +
-                '<div class="ev-bs-share-grid">' +
-                    '<button class="ev-bs-share-btn ev-bs-share-btn--copy ev-bs-copy-btn">' +
-                        '<span class="ev-bs-share-icon"><i class="fas fa-link"></i></span>' +
-                        '<span class="ev-bs-share-lbl">Salin URL</span>' +
-                    '</button>' +
-                    '<button class="ev-bs-share-btn ev-bs-share-btn--wa ev-bs-wa-btn">' +
-                        '<span class="ev-bs-share-icon"><i class="fab fa-whatsapp"></i></span>' +
-                        '<span class="ev-bs-share-lbl">WhatsApp</span>' +
-                    '</button>' +
-                    '<button class="ev-bs-share-btn ev-bs-share-btn--tw ev-bs-tw-btn">' +
-                        '<span class="ev-bs-share-icon"><span class="xi" style="font-size:1.3rem">X</span></span>' +
-                        '<span class="ev-bs-share-lbl">X</span>' +
-                    '</button>' +
+            imgHtml +
+            '<div class="ev-bs-body">' +
+                '<div class="ev-bs-status-row">' +
+                    '<span class="ev-card-status ' + escHtml(statusCls) + '" style="position:static">' + escHtml(status) + '</span>' +
+                    '<span class="ev-bs-division">' + escHtml(division) + '</span>' +
+                '</div>' +
+                '<div class="ev-bs-title">' + escHtml(title) + '</div>' +
+                (metaRows ? '<div class="ev-bs-meta">' + metaRows + '</div>' : '') +
+                (excerpt ? '<p class="ev-bs-excerpt">' + escHtml(excerpt) + '</p>' : '') +
+                '<a href="' + escHtml(url) + '" class="ev-bs-detail-btn">' +
+                    '<i class="fas fa-calendar-check"></i> Lihat Detail Kegiatan' +
+                '</a>' +
+                '<div class="ev-bs-share">' +
+                    '<p class="ev-bs-share-title">Bagikan Kegiatan</p>' +
+                    '<div class="ev-bs-share-grid">' +
+                        '<button class="ev-bs-share-btn ev-bs-share-btn--copy ev-bs-copy-btn">' +
+                            '<span class="ev-bs-share-icon"><i class="fas fa-link"></i></span>' +
+                            '<span class="ev-bs-share-lbl">Salin URL</span>' +
+                        '</button>' +
+                        '<button class="ev-bs-share-btn ev-bs-share-btn--wa ev-bs-wa-btn">' +
+                            '<span class="ev-bs-share-icon"><i class="fab fa-whatsapp"></i></span>' +
+                            '<span class="ev-bs-share-lbl">WhatsApp</span>' +
+                        '</button>' +
+                        '<button class="ev-bs-share-btn ev-bs-share-btn--tw ev-bs-tw-btn">' +
+                            '<span class="ev-bs-share-icon"><span class="xi" style="font-size:1.3rem">X</span></span>' +
+                            '<span class="ev-bs-share-lbl">X</span>' +
+                        '</button>' +
+                    '</div>' +
                 '</div>' +
             '</div>';
+
+        /* Wire expand button + image click → lightbox */
+        if (poster) {
+            var expandBtn = content.querySelector('.ev-bs-img-expand-btn');
+            var imgPhoto  = content.querySelector('.ev-bs-img-photo');
+            if (expandBtn) expandBtn.addEventListener('click', function () { evOpenLightbox(poster, title); });
+            if (imgPhoto)  imgPhoto.addEventListener('click',  function () { evOpenLightbox(poster, title); });
+        }
 
         /* Wire share buttons */
         var copyBtn = content.querySelector('.ev-bs-copy-btn');
@@ -484,6 +530,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (waBtn) waBtn.addEventListener('click', function () { evShareWa(url, title); });
         if (twBtn) twBtn.addEventListener('click', function () { evShareTw(url, title); });
 
+        sheet.scrollTop = 0;
         evOpenBs();
     };
 

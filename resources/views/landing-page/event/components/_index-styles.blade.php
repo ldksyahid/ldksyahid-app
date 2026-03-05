@@ -102,14 +102,14 @@
     isolation: isolate;
 }
 .ev-card:hover {
-    transform: translateY(-8px) rotate(0.5deg);
+    transform: translateY(-8px);
     box-shadow: var(--ev-shadow-hover);
 }
 
-/* Image area — full-width, top of card (image runs atas→bawah) */
+/* Image area — portrait 3/4 (atas→bawah, poster style) */
 .ev-card-img-wrap {
     display: block; position: relative;
-    overflow: hidden; aspect-ratio: 16/10;
+    overflow: hidden; aspect-ratio: 3/4;
     background: var(--ev-gray-100);
     flex-shrink: 0;
 }
@@ -117,7 +117,7 @@
 .ev-card-img-wrap::after {
     content: '';
     position: absolute; bottom: 0; left: 0; right: 0;
-    height: 50%;
+    height: 40%;
     background: linear-gradient(to bottom, transparent, rgba(0,20,18,.65));
     z-index: 2; pointer-events: none;
 }
@@ -277,10 +277,13 @@
     font-size: .8rem;
     transition: transform .2s ease, box-shadow .2s ease;
 }
-.ev-card-share-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,.12); }
+.ev-card-share-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,.15); }
 .ev-card-share-btn--copy { background: var(--ev-primary-light); color: var(--ev-primary); }
+.ev-card-share-btn--copy:hover { background: var(--ev-primary); color: white; }
 .ev-card-share-btn--wa   { background: #dcfce7; color: #16a34a; }
+.ev-card-share-btn--wa:hover { background: #25d366; color: white; }
 .ev-card-share-btn--tw   { background: #1a1a2e; color: white; }
+.ev-card-share-btn--tw:hover { background: #000; }
 .xi { font-weight: 900; font-size: .95em; font-family: 'Arial Black', Arial, sans-serif; line-height: 1; }
 
 /* ─── Empty State ─────────────────────────────────────────────── */
@@ -358,7 +361,7 @@
 .ev-mobile-card:active { transform: scale(.98); }
 
 .ev-m-thumb {
-    position: relative; overflow: hidden; aspect-ratio: 16/10;
+    position: relative; overflow: hidden; aspect-ratio: 3/4;
     background: var(--ev-gray-100);
 }
 .ev-m-thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -440,35 +443,83 @@
     will-change: transform;
 }
 .ev-bottom-sheet.open { transform: translateY(0); }
-.ev-bottom-sheet::before {
-    content: '';
-    display: block; width: 44px; height: 4px;
-    background: var(--ev-gray-200);
-    border-radius: 2px;
-    margin: .85rem auto 0;
-}
 
 .ev-bs-close {
     position: absolute; top: .75rem; right: .85rem;
     width: 36px; height: 36px; border-radius: 50%;
     background: rgba(255,255,255,.9);
     backdrop-filter: blur(6px);
-    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
     border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     color: var(--ev-dark); font-size: .85rem;
-    transition: var(--ev-transition); z-index: 2;
+    transition: var(--ev-transition); z-index: 10;
 }
-.ev-bs-close:hover { background: var(--ev-gray-100); transform: scale(1.1); }
+.ev-bs-close:hover { background: white; transform: scale(1.1); }
 
-.ev-bs-content { padding: 1.25rem 1.25rem 2rem; }
+/* Content wrapper — no padding; image is edge-to-edge at top */
+.ev-bs-content { position: relative; }
 
-.ev-bs-poster {
-    width: 100%; border-radius: 16px;
-    object-fit: cover; max-height: 220px;
-    box-shadow: 0 4px 18px rgba(0,0,0,.1);
-    margin-bottom: .85rem;
+/* ── Image area (like article sheet) ── */
+.ev-bs-img-wrap {
+    position: relative;
+    width: 100%; height: 46vh;
+    overflow: hidden;
+    border-radius: 24px 24px 0 0; /* match sheet top corners */
 }
+.ev-bs-img-photo {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+    display: block;
+    cursor: zoom-in;
+    transition: transform .4s ease;
+}
+.ev-bs-img-photo:active { transform: scale(1.03); }
+
+/* Drag handle overlaid on image */
+.ev-bs-drag-handle {
+    position: absolute; top: 12px; left: 50%;
+    transform: translateX(-50%);
+    width: 40px; height: 4px;
+    background: rgba(255,255,255,.82); border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* White gradient: image → body */
+.ev-bs-img-gradient {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 100px;
+    background: linear-gradient(to top, white 0%, transparent 100%);
+    pointer-events: none; z-index: 2;
+}
+
+/* Expand to fullscreen button */
+.ev-bs-img-expand-btn {
+    position: absolute; bottom: 1rem; right: 1rem;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--ev-primary);
+    backdrop-filter: blur(6px);
+    border: 2px solid rgba(255,255,255,.6);
+    cursor: pointer; z-index: 4;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: .85rem;
+    box-shadow: 0 3px 12px rgba(0,167,157,.45);
+    transition: var(--ev-transition);
+}
+.ev-bs-img-expand-btn:hover { background: var(--ev-primary-dark); transform: scale(1.12); }
+
+/* Fallback handle when no image */
+.ev-bs-no-img-handle {
+    width: 44px; height: 4px;
+    background: var(--ev-gray-200); border-radius: 2px;
+    margin: .85rem auto 0;
+}
+
+/* ── Body — content with padding ── */
+.ev-bs-body { padding: .75rem 1.25rem 2rem; }
+
 .ev-bs-status-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .6rem; }
 .ev-bs-division {
     font-size: .7rem; font-weight: 800; color: var(--ev-primary);
@@ -527,6 +578,40 @@
     font-size: 1.15rem;
 }
 .ev-bs-share-lbl { font-size: .68rem; font-weight: 700; color: var(--ev-dark); }
+
+/* ── Lightbox — fullscreen image ── */
+.ev-bs-lightbox {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.95);
+    z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity .3s ease, visibility .3s ease;
+}
+.ev-bs-lightbox.active { opacity: 1; visibility: visible; }
+.ev-bs-lightbox-img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    transform: scale(.9);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+}
+.ev-bs-lightbox.active .ev-bs-lightbox-img { transform: scale(1); }
+.ev-bs-lightbox-close {
+    position: absolute; top: 1rem; right: 1rem;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,.15); backdrop-filter: blur(6px);
+    border: none; cursor: pointer; color: white; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s ease;
+}
+.ev-bs-lightbox-close:hover { background: rgba(255,255,255,.3); }
+
+/* ─── Navbar blur when bottom sheet is open ───────────────── */
+.ev-navbar-sheet-active {
+    filter: blur(3px) brightness(.9);
+    pointer-events: none;
+    transition: filter .3s ease;
+}
 
 /* SweetAlert fix */
 .ev-swal-below-nav { top: 76px !important; right: 1rem !important; z-index: 1100 !important; }
