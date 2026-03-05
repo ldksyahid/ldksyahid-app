@@ -571,7 +571,12 @@
 .ev-bs-share-btn--copy .ev-bs-share-icon { background: linear-gradient(135deg,#e0f7f5,#b2ede9); color: #00a79d; }
 .ev-bs-share-btn--wa   .ev-bs-share-icon { background: linear-gradient(135deg,#dcfce7,#bbf7d0); color: #16a34a; }
 .ev-bs-share-btn--tw   .ev-bs-share-icon { background: #1a1a2e; color: white; }
-.ev-bs-share-btn.ev-bs-copied .ev-bs-share-icon { background: linear-gradient(135deg,#dcfce7,#bbf7d0); color: #16a34a; }
+.ev-bs-share-btn.ev-bs-copied {
+    background: linear-gradient(135deg, #00a79d, #00c4b8);
+    box-shadow: 0 4px 14px rgba(0,167,157,.4);
+}
+.ev-bs-share-btn.ev-bs-copied .ev-bs-share-icon { background: rgba(255,255,255,.22); color: white; }
+.ev-bs-share-btn.ev-bs-copied .ev-bs-share-lbl { color: white; }
 .ev-bs-share-icon {
     width: 48px; height: 48px; border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
