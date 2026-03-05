@@ -465,7 +465,7 @@
     position: relative;
     width: 100%; height: 46vh;
     overflow: hidden;
-    border-radius: 24px 24px 0 0; /* match sheet top corners */
+    /* no border-radius — sheet's overflow-y:auto + border-radius clips corners */
 }
 .ev-bs-img-photo {
     width: 100%; height: 100%;
