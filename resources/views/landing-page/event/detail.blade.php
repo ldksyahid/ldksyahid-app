@@ -93,12 +93,6 @@
 <div class="ed-content-wrap">
     <div class="container">
 
-        {{-- Back button --}}
-        <a href="{{ route('event.index') }}" class="ed-back-btn">
-            <i class="fas fa-arrow-left"></i>
-            Kembali ke Daftar Kegiatan
-        </a>
-
         {{-- Layout --}}
         <div class="ed-layout">
 
@@ -208,6 +202,7 @@
                         <div class="ed-info-header-label">Detail Kegiatan</div>
                         <div class="ed-info-header-title">{{ Str::limit($postevent->title, 55) }}</div>
                     </div>
+                    <div class="ed-ticket-sep"><div class="ed-ticket-sep-icon"><i class="fas fa-tag"></i></div></div>
                     <div class="ed-info-body">
 
                         {{-- Organizer --}}
@@ -264,7 +259,7 @@
 
 
                 {{-- ── Registration Card ────────────────────── --}}
-                <div class="ed-regist-card">
+                <div class="ed-regist-card{{ $registOpen && !$isPast ? ' regist-open' : '' }}">
                     <span class="ed-regist-open-label">
                         @if($isPast)
                             Kegiatan Telah Selesai
@@ -330,6 +325,7 @@
                         <div class="ed-info-header-label">Butuh Bantuan?</div>
                         <div class="ed-info-header-title">Contact Person</div>
                     </div>
+                    <div class="ed-ticket-sep"><div class="ed-ticket-sep-icon"><i class="fas fa-phone"></i></div></div>
                     <div class="ed-info-body">
                         <div class="ed-contact-list">
                             @if($postevent->cntctPrsn1)
@@ -363,6 +359,24 @@
 
     </div>{{-- /container --}}
 </div>{{-- /ed-content-wrap --}}
+
+
+{{-- ── Bottom Actions: Kembali + Kegiatan Lainnya ──────────────── --}}
+<div class="ed-bottom-actions">
+    <div class="container">
+        <div class="ed-bottom-inner">
+            <div class="ed-bottom-text">
+                <h4 class="ed-bottom-title">Ada Kegiatan Lainnya!</h4>
+                <p class="ed-bottom-sub">Jelajahi berbagai program dan kegiatan menarik lainnya dari LDK Syahid</p>
+            </div>
+            <div class="ed-bottom-btns">
+                <a href="{{ route('event.index') }}" class="ed-bottom-more-btn">
+                    <i class="fas fa-th-list"></i> Lihat Semua Kegiatan
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 

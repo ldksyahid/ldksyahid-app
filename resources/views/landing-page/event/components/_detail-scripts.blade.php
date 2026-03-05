@@ -60,19 +60,29 @@
 
     /* ── Tab switcher ────────────────────────────────────────────── */
     window.edSwitchTab = function (btn, targetId) {
-        /* deactivate all tabs and panes */
+        var newPane = document.getElementById(targetId);
+        var currentPane = document.querySelector('.ed-tab-pane.active');
+        if (!newPane || (currentPane && currentPane.id === targetId)) return;
+
+        /* update button states immediately */
         document.querySelectorAll('.ed-tab-btn').forEach(function (b) {
             b.classList.remove('active');
             b.setAttribute('aria-selected', 'false');
         });
-        document.querySelectorAll('.ed-tab-pane').forEach(function (p) {
-            p.classList.remove('active');
-        });
-        /* activate selected */
         btn.classList.add('active');
         btn.setAttribute('aria-selected', 'true');
-        var pane = document.getElementById(targetId);
-        if (pane) pane.classList.add('active');
+
+        if (currentPane) {
+            /* fade out current pane, then show new */
+            currentPane.classList.remove('active');
+            currentPane.classList.add('ed-tab-leaving');
+            setTimeout(function () {
+                currentPane.classList.remove('ed-tab-leaving');
+                newPane.classList.add('active');
+            }, 200);
+        } else {
+            newPane.classList.add('active');
+        }
     };
 
     /* ── Countdown timer ─────────────────────────────────────────── */
