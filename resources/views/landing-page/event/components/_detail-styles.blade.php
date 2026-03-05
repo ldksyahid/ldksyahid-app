@@ -682,8 +682,8 @@
     .ed-hero-meta { font-size: .66rem; padding: .2rem .65rem; }
     .ed-hero-status { font-size: .66rem; padding: .22rem .75rem; }
 
-    /* Content wrap — less negative overlap */
-    .ed-content-wrap { margin-top: -1.5rem; padding: 1.25rem 0 3rem; border-radius: 18px 18px 0 0; }
+    /* Content wrap — less negative overlap, more top padding for breathing room */
+    .ed-content-wrap { margin-top: -1.5rem; padding: 2.5rem 0 3rem; border-radius: 18px 18px 0 0; }
 
     /* Tabs */
     .ed-tabs-nav { padding: .25rem; gap: .18rem; border-radius: 13px; margin-bottom: 1.1rem; }
