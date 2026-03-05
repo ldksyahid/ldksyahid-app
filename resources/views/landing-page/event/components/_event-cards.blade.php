@@ -48,8 +48,8 @@
             @foreach($postevent as $event)
             @php
                 $accent  = $cardColors[$loop->index % count($cardColors)];
-                $excerpt = substr(strip_tags($event->broadcast), 0, 110);
-                if (strlen(strip_tags($event->broadcast)) > 110) $excerpt .= '…';
+                $excerpt = substr(strip_tags(html_entity_decode($event->broadcast)), 0, 110);
+                if (strlen(strip_tags(html_entity_decode($event->broadcast))) > 110) $excerpt .= '…';
                 $st = evStatus($event, $now);
                 $isNew = $event->created_at && $event->created_at->gte($now->copy()->subDays(7));
             @endphp
@@ -179,8 +179,8 @@
             @foreach($postevent as $event)
             @php
                 $accent  = $cardColors[$loop->index % count($cardColors)];
-                $excerpt = substr(strip_tags($event->broadcast), 0, 120);
-                if (strlen(strip_tags($event->broadcast)) > 120) $excerpt .= '…';
+                $excerpt = substr(strip_tags(html_entity_decode($event->broadcast)), 0, 120);
+                if (strlen(strip_tags(html_entity_decode($event->broadcast))) > 120) $excerpt .= '…';
                 $st = evStatus($event, $now);
             @endphp
             <div class="ev-mobile-card"
