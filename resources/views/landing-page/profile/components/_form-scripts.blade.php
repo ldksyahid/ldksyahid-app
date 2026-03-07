@@ -13,14 +13,16 @@
         }, false);
     });
 
-    // Show selected filename for file input
+    // Update filename display when user picks a file
     var fileInput = document.getElementById('inputprofilepicture');
-    var fileHint  = document.getElementById('prf-file-hint');
-    if (fileInput && fileHint) {
+    var fileName  = document.getElementById('prf-file-name');
+    if (fileInput && fileName) {
         fileInput.addEventListener('change', function () {
-            fileHint.textContent = this.files.length
-                ? this.files[0].name
-                : 'Tidak ada file dipilih';
+            if (this.files.length) {
+                fileName.textContent = this.files[0].name;
+                fileName.classList.remove('prf-file-name-display--set');
+                fileName.style.color = '#1f2937';
+            }
         });
     }
 })();

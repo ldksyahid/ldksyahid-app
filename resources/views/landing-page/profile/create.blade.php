@@ -158,7 +158,13 @@
                 <div class="prf-file-wrap">
                     <input type="file" class="prf-file-input" id="inputprofilepicture" name="profilepicture"
                            accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG"/>
-                    <p class="prf-file-hint" id="prf-file-hint">Tidak ada file dipilih &middot; JPG / PNG maks. 2MB</p>
+                    <label class="prf-file-label" for="inputprofilepicture">
+                        <span class="prf-file-icon"><i class="fas fa-camera"></i></span>
+                        <span class="prf-file-btn-text">Pilih Foto</span>
+                        <span class="prf-file-sep">|</span>
+                        <span class="prf-file-name-display" id="prf-file-name">Belum ada foto dipilih</span>
+                    </label>
+                    <p class="prf-file-hint">JPG / PNG &middot; maks. 2 MB</p>
                 </div>
 
                 {{-- ---- Tombol ---- --}}
