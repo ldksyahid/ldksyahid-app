@@ -20,7 +20,7 @@
                     <img src="https://lh3.googleusercontent.com/d/{{ Auth::User()->profile->gdrive_id }}"
                          alt="{{ Auth::user()->name }}">
                 @endif
-                {{-- Member Number Pill — di dalam frame agar overflow:hidden menahan posisinya --}}
+                {{-- Member Pill inside frame --}}
                 <span class="prf-member-pill">{{ Auth::User()->profile->nomoranggota }}</span>
             </div>
 
@@ -154,7 +154,7 @@
 
     {{-- ===== ACTION BUTTONS ===== --}}
     <div class="prf-actions-wrap wow fadeInUp" data-wow-delay="0.5s">
-        <div class="prf-actions prf-actions--two">
+        <div class="prf-actions">
             <a href="/" class="prf-btn prf-btn-back">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>
