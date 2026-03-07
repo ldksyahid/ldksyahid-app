@@ -154,12 +154,9 @@
 
     {{-- ===== ACTION BUTTONS ===== --}}
     <div class="prf-actions-wrap wow fadeInUp" data-wow-delay="0.5s">
-        <div class="prf-actions">
+        <div class="prf-actions prf-actions--two">
             <a href="/" class="prf-btn prf-btn-back">
                 <i class="fas fa-arrow-left"></i> Kembali
-            </a>
-            <a class="prf-btn prf-btn-export" id="prf-download" role="button">
-                <i class="fas fa-download"></i> Export PNG
             </a>
             <a href="/profile/{{ Auth::user()->id }}/edit" class="prf-btn prf-btn-edit">
                 <i class="fas fa-edit"></i> Ubah Profil

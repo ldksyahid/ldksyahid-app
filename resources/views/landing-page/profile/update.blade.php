@@ -158,14 +158,19 @@
                 <div class="prf-file-wrap">
                     <input type="file" class="prf-file-input" id="inputprofilepicture" name="profilepicture"
                            accept="image/png, image/jpeg, image/jpg, image/JPG, image/PNG"/>
-                    @if (Auth::User()->profile->profilepicture != null)
-                    <p class="prf-file-hint" id="prf-file-hint">
-                        <i class="fas fa-check-circle text-success me-1"></i>
-                        Foto terpasang: <em>{{ Auth::User()->profile->profilepicture }}</em>
-                    </p>
-                    @else
-                    <p class="prf-file-hint" id="prf-file-hint">Tidak ada file dipilih &middot; JPG / PNG maks. 2MB</p>
-                    @endif
+                    <label class="prf-file-label" for="inputprofilepicture">
+                        <span class="prf-file-icon"><i class="fas fa-camera"></i></span>
+                        <span class="prf-file-btn-text">Ganti Foto</span>
+                        <span class="prf-file-sep">|</span>
+                        @if (Auth::User()->profile->profilepicture != null)
+                            <span class="prf-file-name-display prf-file-name-display--set" id="prf-file-name">
+                                <i class="fas fa-check-circle me-1"></i>{{ Auth::User()->profile->profilepicture }}
+                            </span>
+                        @else
+                            <span class="prf-file-name-display" id="prf-file-name">Belum ada foto terpasang</span>
+                        @endif
+                    </label>
+                    <p class="prf-file-hint">JPG / PNG &middot; maks. 2 MB &middot; kosongkan jika tidak ingin mengubah foto</p>
                 </div>
 
                 {{-- ---- Tombol ---- --}}

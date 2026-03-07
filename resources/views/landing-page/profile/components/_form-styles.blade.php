@@ -199,36 +199,88 @@
     padding-top: 1.25rem;
 }
 
-/* File Input */
+/* File Input — custom label style, native input hidden */
 .prf-file-wrap {
     margin-bottom: 0.25rem;
 }
 
+/* Hide native input, label handles click */
 .prf-file-input {
-    display: block;
-    width: 100%;
-    padding: 0.85rem 1rem;
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Styled clickable label */
+.prf-file-label {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem 0.75rem 0.75rem;
     background: #f6f8fa;
     border-radius: 14px;
     border: 2px dashed #d1d5db;
     cursor: pointer;
-    font-size: 0.83rem;
-    color: #6b7280;
     transition: border-color 0.22s ease, background 0.22s ease;
+    overflow: hidden;
+    width: 100%;
 }
 
-.prf-file-input:hover {
+.prf-file-label:hover {
     border-color: #00b8ad;
     background: #f2fbfa;
 }
 
-.prf-file-input:focus {
-    border-color: #00b8ad;
-    outline: none;
+/* Teal icon box */
+.prf-file-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    background: linear-gradient(135deg, #00b8ad 0%, #006D6D 100%);
+    color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+/* "Pilih Foto" text */
+.prf-file-btn-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #00b8ad;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Separator */
+.prf-file-sep {
+    color: #d1d5db;
+    font-size: 1.1rem;
+    font-weight: 300;
+    flex-shrink: 0;
+}
+
+/* Filename display */
+.prf-file-name-display {
+    font-size: 0.78rem;
+    color: #9ca3af;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.prf-file-name-display--set {
+    color: #059669;
 }
 
 .prf-file-hint {
-    font-size: 0.73rem;
+    font-size: 0.7rem;
     color: #9ca3af;
     margin-top: 0.4rem;
     margin-left: 0.25rem;

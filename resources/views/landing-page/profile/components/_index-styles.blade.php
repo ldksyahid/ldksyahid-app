@@ -300,11 +300,11 @@
 @keyframes prfGrow {
     0%, 100% {
         transform: scale(1);
-        box-shadow: 0 0 0 3px rgba(0, 184, 173, 0.18);
+        box-shadow: 0 0 0 2px rgba(0, 184, 173, 0.2);
     }
     50% {
-        transform: scale(1.65);
-        box-shadow: 0 0 0 5px rgba(0, 184, 173, 0.08);
+        transform: scale(1.3);
+        box-shadow: 0 0 0 4px rgba(0, 184, 173, 0.1);
     }
 }
 
@@ -336,7 +336,7 @@
 
 .prf-actions {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 2fr;
     gap: 0.85rem;
 }
 
