@@ -379,6 +379,75 @@
     color: var(--kta-primary); font-weight: 700;
 }
 
+/* ─── Tabs ────────────────────────────────────────────────────── */
+.kta-tabs-wrapper {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: center;
+    background: white;
+    padding: 6px;
+    border-radius: 18px;
+    box-shadow: var(--kta-shadow-sm);
+    position: relative;
+    z-index: 1;
+}
+.kta-tabs-slider {
+    position: absolute;
+    height: calc(100% - 12px);
+    top: 6px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--kta-primary) 0%, var(--kta-primary-dark) 100%);
+    box-shadow: 0 4px 14px rgba(0,167,157,.35);
+    transition: all .4s cubic-bezier(.4,0,.2,1);
+    z-index: 1;
+    pointer-events: none;
+}
+.kta-tab-btn {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .7rem 1.25rem;
+    border: none; background: transparent;
+    border-radius: 14px;
+    font-weight: 600; font-size: .92rem;
+    color: var(--kta-muted);
+    cursor: pointer;
+    transition: color .3s ease, background .3s ease;
+    position: relative; z-index: 2;
+}
+@media (hover: hover) {
+    .kta-tab-btn:hover { color: var(--kta-primary); background: var(--kta-primary-light); }
+}
+.kta-tab-btn.active { color: white; }
+@media (min-width: 992px) {
+    .kta-tab-btn.active:hover { color: white; background: transparent; }
+}
+.kta-tab-icon { font-size: 1.05rem; }
+
+.kta-tab-contents { margin-top: 1.5rem; }
+.kta-tab-content {
+    display: none;
+    animation: ktaTabIn .45s cubic-bezier(.4,0,.2,1);
+}
+.kta-tab-content.active { display: block; }
+@keyframes ktaTabIn {
+    from { opacity: 0; transform: translateY(20px) scale(.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Mobile tab adjustments */
+@media (max-width: 991.98px) {
+    .kta-tabs-wrapper { padding: 5px; border-radius: 14px; display: flex; justify-content: center; }
+    .kta-tab-btn { padding: .55rem .9rem; font-size: .85rem; }
+    .kta-tab-text { display: none; }
+    .kta-tabs-slider { display: none; }
+    .kta-tab-btn.active {
+        background: linear-gradient(135deg, var(--kta-primary) 0%, var(--kta-primary-dark) 100%);
+        color: white;
+        box-shadow: 0 4px 14px rgba(0,167,157,.35);
+    }
+}
+
+
 /* Org description */
 .kta-org-desc {
     background: white;
