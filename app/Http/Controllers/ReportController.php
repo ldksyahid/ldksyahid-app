@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $reports = LkReport::orderBy('createdDate', 'desc')->get();
+        $reports = LkReport::orderBy('createdDate', 'desc')->paginate(12);
 
         return view('landing-page.report.index', compact('reports'))
             ->with('title', 'Lainnya');

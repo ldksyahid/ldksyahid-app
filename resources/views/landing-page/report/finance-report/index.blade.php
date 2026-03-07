@@ -1,333 +1,197 @@
 @extends('landing-page.template.body')
 
-@section('content')
-<!-- Page Header Start -->
-<div class="container-fluid p-0 mb-0 wow fadeIn" data-wow-delay="0.25s">
-    <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img class="w-100" src="https://lh3.googleusercontent.com/d/1wOvUz3jq66UwdPduMGiW4RUML9JMV-nC" alt="Finance Report Header Image" />
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Page Header End -->
 
-<!-- Finance Report Section Start -->
-<div class="container-xxl" style="background-color: #f5f6fa">
-    <div class="container py-5">
-        <!-- Breadcrumbs Card -->
-        <div class="card border-0 shadow-sm mb-4 wow fadeInUp" data-wow-delay="0.25s">
-            <div class="card-body py-3 px-4">
-                <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('home') }}" class="text-decoration-none">
-                                <i class="fas fa-home me-1"></i> Beranda
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('report.index') }}" class="text-decoration-none">
-                                <i class="fas fa-file-alt me-1"></i> Laporan
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            <i class="fas fa-chart-pie me-1"></i> Laporan Keuangan
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-        <!-- End Breadcrumbs Card -->
-
-        <!-- Introduction Card -->
-        <div class="card border-0 shadow-sm mb-5 wow fadeInUp" data-wow-delay="0.25s">
-            <div class="card-body p-4">
-                <div class="text-center mb-4">
-                    <h3 class="mb-3" style="color: #00a79d;">
-                        <i class="fas fa-chart-pie me-2"></i>Laporan Keuangan LDK Syahid
-                    </h3>
-                    <div class="divider-custom mx-auto" style="width: 100px; height: 3px; background-color: #00a79d;"></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-6 mb-4">
-                        <div class="d-flex align-items-start">
-                            <div class="flex-shrink-0">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
-                                    <i class="fas fa-hand-holding-usd" style="color: #00a79d;"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="mb-1">Transparansi Keuangan</h6>
-                                <p class="mb-0 text-muted small">Seluruh laporan keuangan diungkapkan secara terbuka dan transparan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 mb-4">
-                        <div class="d-flex align-items-start">
-                            <div class="flex-shrink-0">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
-                                    <i class="fas fa-balance-scale" style="color: #00a79d;"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="mb-1">Akuntabilitas Publik</h6>
-                                <p class="mb-0 text-muted small">Pertanggungjawaban penggunaan dana organisasi kepada anggota</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 mb-4">
-                        <div class="d-flex align-items-start">
-                            <div class="flex-shrink-0">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
-                                    <i class="fas fa-calendar-alt" style="color: #00a79d;"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="mb-1">Periodik dan Teratur</h6>
-                                <p class="mb-0 text-muted small">Diterbitkan secara berkala sesuai periode anggaran</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 mb-4">
-                        <div class="d-flex align-items-start">
-                            <div class="flex-shrink-0">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
-                                    <i class="fas fa-file-invoice-dollar" style="color: #00a79d;"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="mb-1">Standar Akuntansi</h6>
-                                <p class="mb-0 text-muted small">Mengikuti standar akuntansi yang berlaku dan dapat dipertanggungjawabkan</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-justify mt-4">
-                    <p class="mb-0" style="line-height: 1.6;">
-                        Laporan keuangan UKM LDK Syahid merupakan bentuk pertanggungjawaban publik atas pengelolaan dana organisasi.
-                        Setiap laporan mencakup realisasi anggaran, arus kas, dan posisi keuangan yang telah melalui proses audit internal
-                        untuk memastikan keakuratan dan kredibilitas informasi.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- LDK Accordion -->
-        <div class="finance-accordion-container wow fadeInUp" data-wow-delay="0.25s">
-            @php
-                $groupedReports = $reports->groupBy('ldkID');
-
-                // Create sorted array of LDKs with their reports
-                $sortedLdks = [];
-                foreach ($groupedReports as $ldkID => $ldkReports) {
-                    if ($ldkReports->first() && $ldkReports->first()->ldk) {
-                        $ldk = $ldkReports->first()->ldk;
-                        $ldkName = $ldk->ldkName;
-                        $logoGdriveID = $ldk->logoGdriveID;
-                    } else {
-                        $ldkName = 'LDK Tidak Diketahui';
-                        $logoGdriveID = null;
-                    }
-
-                    $sortedLdks[$ldkID] = [
-                        'name' => $ldkName,
-                        'logo' => $logoGdriveID,
-                        'reports' => $ldkReports,
-                        'count' => $ldkReports->count()
-                    ];
-                }
-
-                // Sort by LDK name
-                uasort($sortedLdks, function($a, $b) {
-                    return strcmp($a['name'], $b['name']);
-                });
-            @endphp
-
-            @if($reports && $reports->count() > 0)
-                <div class="accordion" id="ldkAccordion">
-                    @foreach($sortedLdks as $ldkID => $ldkData)
-                        @php
-                            $accordionId = 'ldkAccordion_' . $ldkID;
-                            $collapseId = 'collapse_' . $ldkID;
-                        @endphp
-
-                        <!-- LDK Accordion Item -->
-                        <div class="accordion-item border-0 mb-3">
-                            <div class="accordion-header" id="heading_{{ $ldkID }}">
-                                <button class="accordion-button collapsed d-flex justify-content-between align-items-center p-4"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#{{ $collapseId }}"
-                                        aria-expanded="false"
-                                        aria-controls="{{ $collapseId }}"
-                                        style="background-color: #fff; border-left: 4px solid #00a79d;">
-
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            @if($ldkData['logo'])
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
-                                                     style="width: 50px; height: 50px; background-color: rgba(0, 167, 157, 0.1); border: 2px solid #e9ecef; overflow: hidden; position: relative;">
-                                                    <img src="https://lh3.googleusercontent.com/d/{{ $ldkData['logo'] }}"
-                                                         alt="{{ $ldkData['name'] }} Logo"
-                                                         style="width: 36px; height: 36px; object-fit: contain; display: block;">
-                                                </div>
-                                            @else
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
-                                                     style="width: 50px; height: 50px; background-color: rgba(0, 167, 157, 0.1); border: 2px solid #e9ecef;">
-                                                    <i class="fas fa-university" style="color: #00a79d; font-size: 1.2rem;"></i>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="flex-grow-1 text-start">
-                                            <h5 class="mb-1" style="color: #00a79d; font-weight: 600;">
-                                                {{ $ldkData['name'] }}
-                                            </h5>
-                                            <p class="text-muted mb-0 small">
-                                                <i class="fas fa-file-pdf me-1"></i>
-                                                {{ $ldkData['count'] }} laporan keuangan
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="ms-3">
-                                        <i class="fas fa-chevron-down accordion-icon"></i>
-                                    </div>
-                                </button>
-                            </div>
-
-                            <div id="{{ $collapseId }}"
-                                 class="accordion-collapse collapse"
-                                 aria-labelledby="heading_{{ $ldkID }}">
-
-                                <div class="accordion-body p-0">
-                                    <div class="report-list">
-                                        @foreach($ldkData['reports'] as $report)
-                                        <div class="report-item d-flex align-items-center justify-content-between p-3 border-bottom">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
-                                                         style="width: 40px; height: 40px; background-color: rgba(0, 168, 204, 0.1);">
-                                                        <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h6 class="mb-1">{{ $report->fileName }}</h6>
-                                                    <small class="text-muted">
-                                                        <i class="far fa-clock me-1"></i>
-                                                        Diunggah: {{ $report->createdDate->format('d M Y') }}
-                                                    </small>
-                                                </div>
-                                            </div>
-
-                                            <div class="action-buttons">
-                                                <div class="btn-group" role="group">
-                                                    <!-- View Button -->
-                                                    <a href="{{ $report->fileViewUrl() }}"
-                                                       class="btn btn-outline-primary"
-                                                       target="_blank"
-                                                       data-bs-toggle="tooltip">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-
-                                                    <!-- Download Button -->
-                                                    <a href="{{ $report->fileUrl() }}"
-                                                       class="btn btn-outline-primary ms-2"
-                                                       download
-                                                       data-bs-toggle="tooltip">
-                                                        <i class="fas fa-download"></i>
-                                                    </a>
-
-                                                    <!-- Share Button -->
-                                                    <button type="button"
-                                                            class="btn btn-outline-primary ms-2"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#shareModal"
-                                                            data-report-name="{{ $report->fileName }}"
-                                                            data-report-url="{{ $report->fileUrl() }}"
-                                                            data-report-view-url="{{ $report->fileViewUrl() }}">
-                                                        <i class="fas fa-share-alt"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <!-- Empty State -->
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center py-5">
-                        <i class="fas fa-file-invoice-dollar display-1 text-muted mb-4"></i>
-                        <h4 class="text-muted mb-3">Belum ada laporan keuangan tersedia</h4>
-                        <p class="text-muted mb-0">Laporan keuangan akan diunggah sesuai periode yang ditentukan</p>
-                    </div>
-                </div>
-            @endif
-        </div>
-    </div>
-</div>
-<!-- Finance Report Section End -->
-
-<!-- Share Modal -->
-<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 12px; overflow: hidden;">
-            <div class="modal-header" style="background-color: #00a79d; color: white; border-bottom: none;">
-                <h5 class="modal-title" id="shareModalLabel" style="font-weight: 600;">
-                    <i class="fas fa-share-alt me-2" style="color: white !important;"></i><span style="color: white !important;">Bagikan Laporan</span>
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
-                        style="filter: brightness(0) invert(1); opacity: 0.8;"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="mb-4">
-                    <label class="form-label fw-medium" style="color: #495057; margin-bottom: 8px;">Nama Laporan</label>
-                    <input type="text" class="form-control" id="shareReportName" readonly
-                           style="border-radius: 8px; border: 1px solid #dee2e6; padding: 10px 15px; background-color: #f8f9fa;">
-                </div>
-                <div class="mb-4">
-                    <label class="form-label fw-medium" style="color: #495057; margin-bottom: 8px;">Link Laporan</label>
-                    <input type="text" class="form-control" id="shareReportUrl" readonly
-                           style="border-radius: 8px; border: 1px solid #dee2e6; padding: 10px 15px; background-color: #f8f9fa; cursor: pointer;"
-                           onclick="copyShareUrl()">
-                </div>
-                <div class="text-center mt-4 pt-3 border-top">
-                    <p class="mb-3 fw-medium" style="color: #495057;">Bagikan melalui:</p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="#" class="btn btn-success btn-share-whatsapp" target="_blank"
-                           style="border-radius: 8px; padding: 10px 20px; font-weight: 500;">
-                            <i class="fab fa-whatsapp me-2"></i> WhatsApp
-                        </a>
-                        <a href="#" class="btn btn-primary btn-share-telegram" target="_blank"
-                           style="border-radius: 8px; padding: 10px 20px; font-weight: 500; background-color: #0088cc; border-color: #0088cc;">
-                            <i class="fab fa-telegram me-2"></i> Telegram
-                        </a>
-                        <button class="btn btn-outline-primary" onclick="copyShareUrl()"
-                                style="border-radius: 8px; padding: 10px 20px; font-weight: 500;">
-                            <i class="fas fa-link me-2"></i> Salin Link
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
-
-@section('scripts')
-@include('landing-page.report.finance-report.components._index._index-scripts')
-@endsection
-
+{{-- ══════════════════════════════════════════════════
+     STYLES
+     ══════════════════════════════════════════════════ --}}
 @section('styles')
-@include('landing-page.report.finance-report.components._index._index-styles')
+@include('landing-page.report.finance-report.components._index-styles')
+@endsection
+
+
+{{-- ══════════════════════════════════════════════════
+     CONTENT
+     ══════════════════════════════════════════════════ --}}
+@section('content')
+
+<section class="fr-page-section py-5 wow fadeIn mt-5" data-wow-delay="0.1s">
+
+    {{-- ── Hero Jumbotron ─────────────────────────────────────────── --}}
+    <x-hero-jumbotron type="quran">
+        <div class="hero-slide">
+            <img class="hero-image"
+                 src="https://lh3.googleusercontent.com/d/1wOvUz3jq66UwdPduMGiW4RUML9JMV-nC"
+                 alt="Laporan Keuangan LDK Syahid" />
+        </div>
+    </x-hero-jumbotron>
+
+
+    {{-- ── Main Container ─────────────────────────────────────────── --}}
+    <div class="container mt-5" id="fr-main">
+
+        {{-- Section Header --}}
+        <div class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="fr-section-badge">
+                <span>💰</span>
+                <span>Laporan Keuangan</span>
+                <span class="fr-badge-pulse"></span>
+            </div>
+            <h2 class="fr-section-title mt-3">Laporan Keuangan LDK Syahid</h2>
+            <p class="fr-section-sub">Transparansi dan akuntabilitas pengelolaan keuangan seluruh divisi LDK Syahid</p>
+        </div>
+
+        {{-- ── LDK Accordion ─────────────────────────────────────── --}}
+        @php
+            $groupedReports = $reports->groupBy('ldkID');
+            $sortedLdks     = [];
+            foreach ($groupedReports as $ldkID => $ldkReports) {
+                if ($ldkReports->first() && $ldkReports->first()->ldk) {
+                    $ldk          = $ldkReports->first()->ldk;
+                    $ldkName      = $ldk->ldkName;
+                    $logoGdriveID = $ldk->logoGdriveID;
+                } else {
+                    $ldkName      = 'LDK Tidak Diketahui';
+                    $logoGdriveID = null;
+                }
+                $sortedLdks[$ldkID] = [
+                    'name'    => $ldkName,
+                    'logo'    => $logoGdriveID,
+                    'reports' => $ldkReports,
+                    'count'   => $ldkReports->count(),
+                ];
+            }
+            uasort($sortedLdks, fn($a, $b) => strcmp($a['name'], $b['name']));
+        @endphp
+
+        @if(!empty($sortedLdks))
+        <div class="fr-accordion wow fadeInUp" data-wow-delay="0.15s">
+
+            @foreach($sortedLdks as $ldkID => $ldkData)
+            @php $collapseId = 'fr-collapse-' . $ldkID; @endphp
+
+            <div class="fr-acc-item">
+
+                {{-- LDK Header Button --}}
+                <button class="fr-acc-btn collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#{{ $collapseId }}"
+                        aria-expanded="false"
+                        aria-controls="{{ $collapseId }}">
+                    <div class="fr-acc-left">
+                        <div class="fr-acc-logo">
+                            @if($ldkData['logo'])
+                                <img src="https://lh3.googleusercontent.com/d/{{ $ldkData['logo'] }}"
+                                     alt="{{ $ldkData['name'] }}" loading="lazy">
+                            @else
+                                <i class="fas fa-university"></i>
+                            @endif
+                        </div>
+                        <div class="fr-acc-info">
+                            <span class="fr-acc-name">{{ $ldkData['name'] }}</span>
+                            <span class="fr-acc-count">
+                                <i class="fas fa-file-pdf"></i>
+                                {{ $ldkData['count'] }} laporan
+                            </span>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down fr-acc-chevron"></i>
+                </button>
+
+                {{-- Collapsible Report List --}}
+                <div class="collapse" id="{{ $collapseId }}">
+                    <div class="fr-report-list">
+                        @foreach($ldkData['reports'] as $report)
+                        @php
+                            $rDate = $report->createdDate
+                                ? \Carbon\Carbon::parse($report->createdDate)
+                                : null;
+                        @endphp
+                        <div class="fr-report-item">
+
+                            {{-- Left: icon + info --}}
+                            <div class="fr-report-left">
+                                <div class="fr-report-icon">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="fr-report-info">
+                                    <span class="fr-report-name">{{ $report->fileName }}</span>
+                                    @if($rDate)
+                                    <span class="fr-report-date">
+                                        <i class="far fa-calendar-alt"></i>
+                                        {{ $rDate->isoFormat('D MMM Y') }}
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- Right: action + share buttons --}}
+                            <div class="fr-report-right">
+                                <div class="fr-report-btns">
+                                    <a href="{{ $report->fileViewUrl() }}" target="_blank" rel="noopener"
+                                       class="fr-action-btn fr-action-view">
+                                        <i class="fas fa-eye"></i>
+                                        <span>Lihat</span>
+                                    </a>
+                                    <a href="{{ $report->fileUrl() }}" target="_blank" rel="noopener"
+                                       class="fr-action-btn fr-action-download">
+                                        <i class="fas fa-download"></i>
+                                        <span>Unduh</span>
+                                    </a>
+                                </div>
+                                <div class="fr-share-row">
+                                    <button class="fr-share-btn fr-share-copy"
+                                            data-url="{{ $report->fileViewUrl() }}"
+                                            onclick="frCopyUrl(this.dataset.url, event)">
+                                        <i class="fas fa-link"></i><span>Salin URL</span>
+                                    </button>
+                                    <button class="fr-share-btn fr-share-wa"
+                                            data-url="{{ $report->fileViewUrl() }}"
+                                            data-title="{{ e($report->fileName) }}"
+                                            onclick="frShareWa(this.dataset.url, this.dataset.title, event)">
+                                        <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+                                    </button>
+                                    <button class="fr-share-btn fr-share-x"
+                                            data-url="{{ $report->fileViewUrl() }}"
+                                            data-title="{{ e($report->fileName) }}"
+                                            onclick="frShareX(this.dataset.url, this.dataset.title, event)">
+                                        <span style="font-weight:900;font-size:.85rem;line-height:1;letter-spacing:-1px;">X</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>{{-- /fr-report-item --}}
+                        @endforeach
+                    </div>{{-- /fr-report-list --}}
+                </div>{{-- /collapse --}}
+
+            </div>{{-- /fr-acc-item --}}
+            @endforeach
+
+        </div>{{-- /fr-accordion --}}
+
+        @else
+
+        {{-- Empty State --}}
+        <div class="fr-empty wow fadeInUp" data-wow-delay="0.2s">
+            <div class="fr-empty-icon">
+                <i class="fas fa-file-invoice-dollar"></i>
+            </div>
+            <h4 class="fr-empty-title">Belum ada laporan keuangan</h4>
+            <p class="fr-empty-sub">Laporan keuangan akan diunggah sesuai periode yang ditentukan</p>
+        </div>
+
+        @endif
+
+    </div>{{-- /container --}}
+</section>
+
+@endsection
+
+
+{{-- ══════════════════════════════════════════════════
+     SCRIPTS
+     ══════════════════════════════════════════════════ --}}
+@section('scripts')
+@include('landing-page.report.finance-report.components._index-scripts')
 @endsection
