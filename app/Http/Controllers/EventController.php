@@ -40,6 +40,32 @@ class EventController extends Controller
             });
         }
 
+        // Filter by status (upcoming / ongoing / past)
+        if ($request->filled('status')) {
+            $statuses = (array) $request->status;
+            $now = Carbon::now();
+            $query->where(function ($q) use ($statuses, $now) {
+                foreach ($statuses as $status) {
+                    if ($status === 'upcoming') {
+                        $q->orWhere(function ($sq) use ($now) {
+                            $sq->whereNotNull('start')->where('start', '>', $now);
+                        });
+                    } elseif ($status === 'ongoing') {
+                        $q->orWhere(function ($sq) use ($now) {
+                            $sq->whereNotNull('start')->whereNotNull('finished')
+                               ->where('start', '<=', $now)->where('finished', '>=', $now);
+                        });
+                    } elseif ($status === 'past') {
+                        $q->orWhere(function ($sq) use ($now) {
+                            $sq->where(function ($inner) use ($now) {
+                                $inner->whereNotNull('finished')->where('finished', '<', $now);
+                            })->orWhereNull('start')->orWhereNull('finished');
+                        });
+                    }
+                }
+            });
+        }
+
         // Sort
         $sort = $request->input('sort', 'newest');
         if ($sort === 'title') {
