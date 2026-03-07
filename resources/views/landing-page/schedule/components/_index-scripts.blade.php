@@ -48,9 +48,9 @@
         }
     }
 
-    /* ─── 2. MOBILE OWL CAROUSEL + CUSTOM DOTS ─── */
+    /* ─── 2. MOBILE OWL CAROUSEL + PREV/NEXT + COUNTER ─── */
     $(document).ready(function () {
-        var $c = $('#schCarousel');
+        var $c    = $('#schCarousel');
         if (!$c.length || window.innerWidth >= 768) return;
 
         $c.owlCarousel({
@@ -66,34 +66,36 @@
             mouseDrag   : true
         });
 
-        /* Build custom dots */
-        var total = $c.find('.owl-item:not(.cloned)').length;
-        var $dots = $('#schMobDots');
+        var total   = $c.find('.owl-item:not(.cloned)').length;
+        var current = 0;
+        var $nav    = $('#schMobNav');
+        var $prev   = $('#schMobPrev');
+        var $next   = $('#schMobNext');
+        var $ctr    = $('#schMobCounter');
 
-        for (var i = 0; i < total; i++) {
-            $dots.append(
-                '<button class="sch-mob-dot' + (i === 0 ? ' active' : '') +
-                '" data-idx="' + i + '" aria-label="Jadwal ' + (i + 1) + '"></button>'
-            );
+        function updateNav(idx) {
+            current = idx;
+            $ctr.text((idx + 1) + ' / ' + total);
+            $prev.prop('disabled', idx === 0);
+            $next.prop('disabled', idx === total - 1);
         }
 
-        function syncDots(idx) {
-            $dots.find('.sch-mob-dot').removeClass('active');
-            $dots.find('[data-idx="' + idx + '"]').addClass('active');
-        }
+        /* Init */
+        updateNav(0);
+        if (total <= 1) $nav.hide();
 
-        /* Dot click */
-        $dots.on('click', '.sch-mob-dot', function () {
-            $c.trigger('to.owl.carousel', [parseInt($(this).data('idx')), 400]);
+        /* Button clicks */
+        $prev.on('click', function () {
+            if (current > 0) $c.trigger('to.owl.carousel', [current - 1, 380]);
+        });
+        $next.on('click', function () {
+            if (current < total - 1) $c.trigger('to.owl.carousel', [current + 1, 380]);
         });
 
-        /* Sync on carousel change */
+        /* Sync on swipe/change */
         $c.on('changed.owl.carousel', function (e) {
-            syncDots(e.item.index);
+            updateNav(e.item.index);
         });
-
-        /* Hide dots if only one item */
-        if (total <= 1) $dots.hide();
     });
 
     /* ─── 3. MOBILE BOTTOM SHEET ─── */
@@ -111,20 +113,23 @@
         bsMonth.textContent = month  || '';
         bsImg.src           = imgSrc || '';
         bsImg.alt           = title  || '';
-        /* Scroll panel to top */
         if (bsPanel) bsPanel.scrollTop = 0;
         sheet.classList.add('is-open');
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('sch-modal-open');
         hideBtt();
         setTimeout(function () { if (bsClose) bsClose.focus(); }, 80);
     }
 
     function closeSheet() {
         if (!sheet) return;
+        sheet.classList.add('is-closing');
         sheet.classList.remove('is-open');
-        document.body.style.overflow = '';
+        document.body.classList.remove('sch-modal-open');
         showBtt();
-        setTimeout(function () { bsImg.src = ''; }, 400);
+        setTimeout(function () {
+            sheet.classList.remove('is-closing');
+            bsImg.src = '';
+        }, 420);
     }
 
     /* Open via card buttons */

@@ -142,7 +142,15 @@
                 </div>
                 @endforelse
             </div>
-            <div class="sch-mob-dots" id="schMobDots"></div>
+            <div class="sch-mob-nav" id="schMobNav">
+                <button class="sch-mob-nav-btn" id="schMobPrev" aria-label="Sebelumnya">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="sch-mob-counter" id="schMobCounter">1 / 1</span>
+                <button class="sch-mob-nav-btn" id="schMobNext" aria-label="Berikutnya">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
 
     </div>

@@ -348,30 +348,47 @@
     box-shadow: 0 4px 20px rgba(0,167,157,0.08);
 }
 
-/* ── Carousel dots ── */
-.sch-mob-dots {
+/* ── Carousel nav (prev/next + counter) ── */
+.sch-mob-nav {
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 0.5rem;
-    margin-top: 1.35rem;
-    padding: 0;
-    list-style: none;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.25rem;
 }
-.sch-mob-dot {
-    width: 8px;
-    height: 8px;
+.sch-mob-nav-btn {
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    background: rgba(0,167,157,0.25);
+    background: #e0f7f5;
+    color: #00a79d;
     border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
     cursor: pointer;
-    padding: 0;
-    transition: width 0.3s ease, border-radius 0.3s ease, background 0.3s ease;
+    transition: background 0.22s ease, color 0.22s ease, transform 0.2s ease;
+    flex-shrink: 0;
 }
-.sch-mob-dot.active {
-    width: 24px;
-    border-radius: 50rem;
+.sch-mob-nav-btn:hover {
     background: #00a79d;
+    color: #fff;
+    transform: scale(1.08);
+}
+.sch-mob-nav-btn:disabled {
+    background: #f3f4f6;
+    color: #c0c0c0;
+    cursor: not-allowed;
+    transform: none;
+}
+.sch-mob-counter {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #282d30;
+    min-width: 48px;
+    text-align: center;
+    letter-spacing: 0.03em;
 }
 
 /* ============================================================
@@ -384,10 +401,12 @@
     visibility: hidden;
     pointer-events: none;
 }
-.sch-bottom-sheet.is-open {
+.sch-bottom-sheet.is-open,
+.sch-bottom-sheet.is-closing {
     visibility: visible;
-    pointer-events: all;
+    pointer-events: none;
 }
+.sch-bottom-sheet.is-open { pointer-events: all; }
 
 .sch-bs-backdrop {
     position: absolute;
@@ -475,6 +494,9 @@
     display: block;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
+
+/* ── Scroll lock when sheet is open ── */
+body.sch-modal-open { overflow: hidden; }
 
 /* ============================================================
    RESPONSIVE
