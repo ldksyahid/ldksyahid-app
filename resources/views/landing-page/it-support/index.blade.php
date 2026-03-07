@@ -14,6 +14,10 @@
      CONTENT
      ══════════════════════════════════════════════════ --}}
 @section('content')
+@php
+    $accentColors = ['#00a79d', '#6366f1', '#10b981', '#f59e0b', '#0ea5e9', '#8b5cf6', '#ef4444', '#ec4899'];
+@endphp
+
 <section class="its-section">
 <div class="container">
 
@@ -35,44 +39,46 @@
     <div class="d-none d-lg-block">
 
         @if($postitsupport->isEmpty())
-
-            {{-- Empty State --}}
             <div class="its-empty-state wow fadeInUp" data-wow-delay="0.1s">
                 <div class="its-empty-visual">
                     <div class="its-empty-ring its-empty-ring-1"></div>
                     <div class="its-empty-ring its-empty-ring-2"></div>
-                    <div class="its-empty-icon-wrap">
-                        <i class="fas fa-users"></i>
-                    </div>
+                    <div class="its-empty-icon-wrap"><i class="fas fa-users"></i></div>
                 </div>
                 <h4 class="its-empty-title">Belum Ada Anggota</h4>
-                <p class="its-empty-sub">Tim IT Support LDK Syahid akan segera hadir. Pantau terus!</p>
+                <p class="its-empty-sub">Tim IT Support LDK Syahid akan segera hadir.</p>
             </div>
-
         @else
-
             <div class="its-grid">
                 @foreach($postitsupport as $member)
                 @php
-                    $isNew = $member->created_at && $member->created_at->gte(\Carbon\Carbon::now()->subDays(30));
-                    $photoUrl = 'https://lh3.googleusercontent.com/d/' . $member->gdrive_id;
-                    $delay = '0.' . ($loop->index % 4 + 1) . 's';
+                    $accent  = $accentColors[$loop->index % count($accentColors)];
+                    $isNew   = $member->created_at && $member->created_at->gte(\Carbon\Carbon::now()->subDays(30));
+                    $photo   = 'https://lh3.googleusercontent.com/d/' . $member->gdrive_id;
+                    $delay   = '0.' . ($loop->index % 4 + 1) . 's';
                 @endphp
-                <div class="its-card wow fadeInUp" data-wow-delay="{{ $delay }}">
+                <div class="its-card wow fadeInUp"
+                     data-wow-delay="{{ $delay }}"
+                     style="--its-accent: {{ $accent }}">
 
-                    {{-- Photo --}}
-                    <div class="its-card-img-wrap">
-                        <img src="{{ $photoUrl }}"
-                             alt="{{ $member->name }}"
-                             class="its-card-img"
-                             loading="lazy">
-
+                    {{-- Gradient header --}}
+                    <div class="its-card-hdr">
                         @if($isNew)
                         <div class="its-card-new-badge">Terbaru</div>
                         @endif
                     </div>
 
-                    {{-- Card Body --}}
+                    {{-- Circular photo — overlaps header --}}
+                    <div class="its-photo-band">
+                        <div class="its-photo-ring">
+                            <img src="{{ $photo }}"
+                                 alt="{{ $member->name }}"
+                                 class="its-card-img"
+                                 loading="lazy">
+                        </div>
+                    </div>
+
+                    {{-- Card body --}}
                     <div class="its-card-body">
                         <span class="its-position-badge">{{ $member->position }}</span>
                         <h3 class="its-card-name">{{ $member->name }}</h3>
@@ -107,7 +113,6 @@
                 </div>{{-- /its-card --}}
                 @endforeach
             </div>{{-- /its-grid --}}
-
         @endif
 
     </div>{{-- /desktop --}}
@@ -119,45 +124,46 @@
     <div class="d-lg-none">
 
         @if($postitsupport->isEmpty())
-
             <div class="its-empty-state">
                 <div class="its-empty-visual">
                     <div class="its-empty-ring its-empty-ring-1"></div>
                     <div class="its-empty-ring its-empty-ring-2"></div>
-                    <div class="its-empty-icon-wrap">
-                        <i class="fas fa-users"></i>
-                    </div>
+                    <div class="its-empty-icon-wrap"><i class="fas fa-users"></i></div>
                 </div>
                 <h4 class="its-empty-title">Belum Ada Anggota</h4>
                 <p class="its-empty-sub">Tim IT Support LDK Syahid akan segera hadir.</p>
             </div>
-
         @else
-
             <div class="its-mobile-carousel" id="its-mobile-carousel">
                 @foreach($postitsupport as $member)
                 @php
-                    $isNew    = $member->created_at && $member->created_at->gte(\Carbon\Carbon::now()->subDays(30));
-                    $photoUrl = 'https://lh3.googleusercontent.com/d/' . $member->gdrive_id;
+                    $accent = $accentColors[$loop->index % count($accentColors)];
+                    $isNew  = $member->created_at && $member->created_at->gte(\Carbon\Carbon::now()->subDays(30));
+                    $photo  = 'https://lh3.googleusercontent.com/d/' . $member->gdrive_id;
                 @endphp
                 <div class="its-mobile-card"
+                     style="--its-accent: {{ $accent }}"
                      data-name="{{ e($member->name) }}"
                      data-position="{{ e($member->position) }}"
                      data-forkat="{{ e($member->forkat) }}"
-                     data-photo="{{ $photoUrl }}"
+                     data-photo="{{ $photo }}"
                      data-instagram="{{ e($member->linkInstagram) }}"
                      data-linkedin="{{ e($member->linkLinkedin) }}"
+                     data-accent="{{ e($accent) }}"
                      onclick="itsOpenSheet(this)">
 
-                    {{-- Thumbnail --}}
-                    <div class="its-m-photo">
-                        <img src="{{ $photoUrl }}"
-                             alt="{{ $member->name }}"
-                             loading="lazy">
+                    {{-- Mobile gradient header --}}
+                    <div class="its-m-hdr">
                         @if($isNew)
                         <div class="its-card-new-badge">Terbaru</div>
                         @endif
-                        <div class="its-m-tap-hint">Tap untuk detail 👆</div>
+                    </div>
+
+                    {{-- Mobile circular photo --}}
+                    <div class="its-m-photo-band">
+                        <div class="its-m-photo-ring">
+                            <img src="{{ $photo }}" alt="{{ $member->name }}" loading="lazy">
+                        </div>
                     </div>
 
                     {{-- Mini body --}}
@@ -170,15 +176,14 @@
                             <span>{{ $member->forkat }}</span>
                         </div>
                         @endif
+                        <p class="its-m-tap-hint">Tap untuk detail 👆</p>
                     </div>
 
                 </div>{{-- /its-mobile-card --}}
                 @endforeach
             </div>{{-- /its-mobile-carousel --}}
 
-            {{-- Scroll indicator dots --}}
             <div class="its-carousel-dots" id="its-carousel-dots"></div>
-
         @endif
 
     </div>{{-- /mobile --}}
