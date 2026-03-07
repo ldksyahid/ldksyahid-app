@@ -104,6 +104,7 @@
                 box-shadow .4s cubic-bezier(.4,0,.2,1);
     display: flex; flex-direction: column;
     text-align: center;
+    z-index: 1;
 }
 .its-card:hover {
     transform: translateY(-12px);

@@ -378,14 +378,14 @@
     }
 
     .cu-form-card {
-        background: linear-gradient(135deg,
-            rgba(0, 167, 157, 0.04) 0%,
-            rgba(255, 255, 255, 0.88) 100%);
+        background: linear-gradient(135deg, rgba(0, 167, 157, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+        backdrop-filter: blur(20px);
         border: 2px solid rgba(0, 167, 157, 0.15);
-        border-radius: 24px;
-        padding: 2.25rem;
+        border-radius: 28px;
+        padding: 2.5rem;
         box-shadow: 0 20px 60px rgba(0, 167, 157, 0.08);
-        transition: all 0.4s ease;
+        transform: translateX(30px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .cu-form-card:hover {
