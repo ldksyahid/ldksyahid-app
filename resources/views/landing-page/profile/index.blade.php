@@ -1,197 +1,175 @@
 @extends('landing-page.template.body')
 
+@section('styles')
+@include('landing-page.profile.components._index-styles')
+@endsection
+
 @section('content')
-<!-- About Start -->
-<div class="container-xxl py-5">
-    <div id="space1" style="display:none;">
-        <br><br><br><br>
-    </div>
-    <div class="container">
-        <div class="row g-5">
-            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
-                <div class="position-relative overflow-hidden ps-5 pt-5 h-100" style="min-height: 400px">
-                        @if (Auth::User()->profile->profilepicture == null)
-                            <img class="position-sticky img-fluid" src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setShape('square')->setDimension(500)->setFontSize(250)->toBase64() }}" alt="" style="object-fit: cover;" width= "500px" height= "700px"/>
-                        @else
-                            <img class="position-sticky img-fluid" src="https://lh3.googleusercontent.com/d/{{Auth::User()->profile->gdrive_id}}" alt="" style="object-fit: cover"  width= "500px" height= "700px"/>
-                        @endif
-                        @if (Auth::User()->profile->profilepicture == !null )
-                        <form  action="/profile/{{Auth::User()->id}}/destroy" method="post" id="form-delete-pp">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="btn btn-primary w-100 py-3 fadeIn mx-auto">Hapus Poto Profil</button>
-                        </form>
-                        @endif
-                    <div class="position-absolute top-0 start-0 bg-white pe-3 pb-3" style="width: 250px; height: 150px">
-                        <div class="d-flex flex-column justify-content-center text-center bg-primary h-100 p-3">
-                            <h5 class="text-white">Sipaling {{Auth::User()->profile->sifat}}</h5>
-                        </div>
-                    </div>
+<section class="prf-section mt-5" id="photo">
+
+    {{-- ===== HERO ===== --}}
+    <div class="prf-hero">
+
+        {{-- Photo Column --}}
+        <div class="prf-photo-wrap wow fadeIn" data-wow-delay="0.1s">
+            <div class="prf-photo-frame">
+                @if (Auth::User()->profile->profilepicture == null)
+                    <img src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setShape('square')->setDimension(500)->setFontSize(250)->toBase64() }}"
+                         alt="{{ Auth::user()->name }}">
+                @else
+                    <img src="https://lh3.googleusercontent.com/d/{{ Auth::User()->profile->gdrive_id }}"
+                         alt="{{ Auth::user()->name }}">
+                @endif
+                {{-- Member Number Pill — di dalam frame agar overflow:hidden menahan posisinya --}}
+                <span class="prf-member-pill">{{ Auth::User()->profile->nomoranggota }}</span>
+            </div>
+
+            {{-- Sifat Badge --}}
+            <span class="prf-sifat-badge">Si Paling {{ Auth::User()->profile->sifat }}</span>
+
+            {{-- Delete Photo (only when photo exists) --}}
+            @if (Auth::User()->profile->profilepicture != null)
+            <div class="prf-delete-photo-form">
+                <form action="/profile/{{ Auth::User()->id }}/destroy" method="post" id="prf-form-delete-photo">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="prf-delete-photo-btn">
+                        <i class="fas fa-trash-alt"></i> Hapus Foto Profil
+                    </button>
+                </form>
+            </div>
+            @endif
+        </div>
+
+        {{-- Bio Column --}}
+        <div class="prf-bio-wrap wow fadeInUp" data-wow-delay="0.2s">
+            <div class="prf-bio-header">
+                <div class="prf-bio-name-group">
+                    <h1 class="prf-name">{{ Auth::User()->profile->namapanggilan }}</h1>
+                    <p class="prf-fullname">{{ Auth::user()->name }}</p>
                 </div>
+                <img class="prf-bio-logo"
+                     src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1"
+                     alt="LDK Syahid">
             </div>
-            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
-                <div class="h-100">
-                    <div class="border-start border-5 border-primary ps-4 mb-5">
-                        <div class="row">
-                            <div class="col-6">
-                                <h6 class="text-body mb-2">{{ Auth::user()->name }}</h6>
-                                <h1 class="display-4 mb-0">{{Auth::User()->profile->namapanggilan}}</h1>
-                            </div>
-                            <div class="col-6 text-end">
-                                <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1" alt="LDK Syahid" width="100px" height="100px">
-                            </div>
-                        </div>
-                    </div>
-                    <p class="" style="text-align: justify">{{Auth::User()->profile->tentangdiri}}</p>
-                    <div class="border-top mt-4 pt-4">
-                        <div class="row g-4">
-                            <div class="col-sm-6 d-flex wow fadeIn" data-wow-delay="0.1s">
-                                <i class="fa fa-university fa-2x text-primary flex-shrink-0 me-3"></i>
-                                <div class="row">
-                                    <h6 class="mb-0">Universitas</h6><br>
-                                    <p class="mb-0">{{Auth::User()->profile->universitas}}</p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 d-flex wow fadeIn" data-wow-delay="0.3s">
-                                <i class="fa fa-address-card fa-2x text-primary flex-shrink-0 me-3"></i>
-                                <div class="row">
-                                    <h6 class="mb-0">NIM</h6><br>
-                                    <p class="mb-0">{{Auth::User()->profile->nim}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-4">
-                        <div class="row g-4">
-                            <div class="col-sm-6 d-flex wow fadeIn" data-wow-delay="0.1s">
-                                <i class="fa fa-building fa-2x text-primary flex-shrink-0 me-3"></i>
-                                <div class="row">
-                                    <h6 class="mb-0">Fakultas</h6><br>
-                                    <p class="mb-0">{{Auth::User()->profile->fakultas}}</p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 d-flex wow fadeIn" data-wow-delay="0.3s">
-                                <i class="fas fa-book-reader fa-2x text-primary flex-shrink-0 me-3"></i>
-                                <div class="row">
-                                    <h6 class="mb-0">Program Studi</h6><br>
-                                    <p class="mb-0">{{Auth::User()->profile->programstudi}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-4">
-                        <div class="row g-4">
-                            <div class="col-sm-6 d-flex wow fadeIn" data-wow-delay="0.1s">
-                                <i class="fas fa-chess-pawn fa-2x text-primary flex-shrink-0 me-3"></i>
-                                <div class="row">
-                                    <h6 class="mb-0">Forum Angkatan</h6><br>
-                                    <p class="mb-0">{{Auth::User()->profile->forkat}}</p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 d-flex wow fadeIn" data-wow-delay="0.3s">
-                                <i class="fas fa-id-card-alt fa-2x text-primary flex-shrink-0 me-3"></i>
-                                <div class="row">
-                                    <h6 class="mb-0">Nomor Anggota</h6><br>
-                                    <p class="mb-0">{{Auth::User()->profile->nomoranggota}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-4">
-                        <div class="row g-4">
-                            <div class="col-sm-6 d-flex wow fadeIn" data-wow-delay="0.1s">
-                                <i class="fab fa-instagram fa-2x text-primary flex-shrink-0 me-3"></i>
-                                <div class="row">
-                                    <h6 class="mb-0">Akun Instagram</h6><br>
-                                    <p class="mb-0">{{Auth::User()->profile->akuninstagram}}</p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 d-flex wow fadeIn" data-wow-delay="0.3s">
-                                <i class="fab fa-linkedin fa-2x text-primary flex-shrink-0 me-3"></i>
-                                <div class="row">
-                                    <h6 class="mb-0">Akun LinkedIn</h6><br>
-                                    <p class="mb-0">{{Auth::User()->profile->akunlinkedin}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-4">
-                        <div class="row g-4">
-                            <div class="col-sm-6 d-flex wow fadeIn" data-wow-delay="0.1s">
-                                <i class="fa fa-envelope fa-2x text-primary flex-shrink-0 me-3"></i>
-                                <div class="row">
-                                    <h6 class="mb-0">Email</h6><br>
-                                    <p class="mb-0">{{Auth::User()->email}}</p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 d-flex wow fadeIn" data-wow-delay="0.3s">
-                                <i class="fa fa-puzzle-piece fa-2x text-primary flex-shrink-0 me-3"></i>
-                                <div class="row">
-                                    <h6 class="mb-0">Motto Hidup</h6><br>
-                                    <p class="mb-0">{{Auth::User()->profile->mottohidup}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 d-flex wow fadeInUp" data-wow-delay="0.5s">
-                <a class="btn btn-primary w-100 py-3 fadeIn mr-1" href="/" type="submit">Kembali</a>
-                <a class="btn btn-primary w-100 py-3 fadeIn website-responsive" id="download">Export PNG</a>
-                <a class="btn btn-primary w-100 py-3 fadeIn mx-auto" href="/profile/{{ Auth::user()->id }}/edit" type="submit">Ubah Profil</a>
-            </div>
+
+            <div class="prf-bio-divider"></div>
+
+            <p class="prf-tentang">{{ Auth::User()->profile->tentangdiri }}</p>
         </div>
     </div>
-    <div id="space2" style="display:none;">
-        <br><br><br><br><br>
+
+    {{-- ===== INFO CARDS ===== --}}
+    <div class="prf-info-section">
+
+        {{-- Academic Card --}}
+        <div class="prf-info-card wow fadeInUp" data-wow-delay="0.3s">
+            <p class="prf-card-title"><i class="fas fa-graduation-cap me-2"></i>Informasi Akademik</p>
+            <div class="prf-info-grid">
+
+                <div class="prf-info-item">
+                    <span class="prf-bullet"></span>
+                    <div>
+                        <p class="prf-item-label">Universitas</p>
+                        <p class="prf-item-value">{{ Auth::User()->profile->universitas }}</p>
+                    </div>
+                </div>
+
+                <div class="prf-info-item">
+                    <span class="prf-bullet"></span>
+                    <div>
+                        <p class="prf-item-label">NIM</p>
+                        <p class="prf-item-value">{{ Auth::User()->profile->nim }}</p>
+                    </div>
+                </div>
+
+                <div class="prf-info-item">
+                    <span class="prf-bullet"></span>
+                    <div>
+                        <p class="prf-item-label">Fakultas</p>
+                        <p class="prf-item-value">{{ Auth::User()->profile->fakultas }}</p>
+                    </div>
+                </div>
+
+                <div class="prf-info-item">
+                    <span class="prf-bullet"></span>
+                    <div>
+                        <p class="prf-item-label">Program Studi</p>
+                        <p class="prf-item-value">{{ Auth::User()->profile->programstudi }}</p>
+                    </div>
+                </div>
+
+                <div class="prf-info-item">
+                    <span class="prf-bullet"></span>
+                    <div>
+                        <p class="prf-item-label">Forum Angkatan</p>
+                        <p class="prf-item-value">{{ Auth::User()->profile->forkat }}</p>
+                    </div>
+                </div>
+
+                <div class="prf-info-item">
+                    <span class="prf-bullet"></span>
+                    <div>
+                        <p class="prf-item-label">Email</p>
+                        <p class="prf-item-value">{{ Auth::user()->email }}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {{-- Social & Motto Card --}}
+        <div class="prf-info-card wow fadeInUp" data-wow-delay="0.4s">
+            <p class="prf-card-title"><i class="fas fa-user-circle me-2"></i>Sosial & Motto</p>
+            <div class="prf-info-grid">
+
+                <div class="prf-info-item">
+                    <span class="prf-bullet"></span>
+                    <div>
+                        <p class="prf-item-label">Instagram</p>
+                        <p class="prf-item-value">{{ Auth::User()->profile->akuninstagram }}</p>
+                    </div>
+                </div>
+
+                <div class="prf-info-item">
+                    <span class="prf-bullet"></span>
+                    <div>
+                        <p class="prf-item-label">LinkedIn</p>
+                        <p class="prf-item-value">{{ Auth::User()->profile->akunlinkedin }}</p>
+                    </div>
+                </div>
+
+                <div class="prf-info-item prf-info-item--full">
+                    <span class="prf-bullet"></span>
+                    <div>
+                        <p class="prf-item-label">Motto Hidup</p>
+                        <p class="prf-item-value">{{ Auth::User()->profile->mottohidup }}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
-</div>
-<!-- About End -->
+
+    {{-- ===== ACTION BUTTONS ===== --}}
+    <div class="prf-actions-wrap wow fadeInUp" data-wow-delay="0.5s">
+        <div class="prf-actions">
+            <a href="/" class="prf-btn prf-btn-back">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+            <a class="prf-btn prf-btn-export" id="prf-download" role="button">
+                <i class="fas fa-download"></i> Export PNG
+            </a>
+            <a href="/profile/{{ Auth::user()->id }}/edit" class="prf-btn prf-btn-edit">
+                <i class="fas fa-edit"></i> Ubah Profil
+            </a>
+        </div>
+    </div>
+
+</section>
 @endsection
 
 @section('scripts')
-<script type="text/javascript">
-
-    jQuery(document).ready(function(){
-        jQuery("#download").click(function(){
-            document.getElementById('space1').style.display = "block";
-            document.getElementById('space2').style.display = "block";
-            document.getElementById('navbar').classList.remove("sticky-top");
-            screenshot();
-            setTimeout(function () { location.reload(1); }, 1000);
-        });
-    });
-
-    function screenshot(){
-        html2canvas(document.getElementById("photo"),{
-        }).then(function(canvas){
-           downloadImage(canvas.toDataURL(),"Profilku.png");
-        });
-    }
-
-    function downloadImage(uri, filename){
-      var link = document.createElement('a');
-      if(typeof link.download !== 'string'){
-         window.open(uri);
-      }
-      else{
-          link.href = uri;
-          link.download = filename;
-          accountForFirefox(clickLink, link);
-      }
-    }
-
-    function clickLink(link){
-        link.click();
-    }
-
-    function accountForFirefox(click){
-        var link = arguments[1];
-        document.body.appendChild(link);
-        click(link);
-        document.body.removeChild(link);
-    }
-
-
- </script>
+@include('landing-page.profile.components._index-scripts')
 @endsection
