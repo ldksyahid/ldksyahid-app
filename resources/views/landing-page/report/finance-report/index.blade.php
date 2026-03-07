@@ -37,7 +37,47 @@
                 <span class="fr-badge-pulse"></span>
             </div>
             <h2 class="fr-section-title mt-3">Laporan Keuangan LDK Syahid</h2>
-            <p class="fr-section-sub">Transparansi dan akuntabilitas pengelolaan keuangan seluruh divisi LDK Syahid</p>
+            <p class="fr-section-sub">Transparansi dan akuntabilitas pengelolaan keuangan LDK Syahid</p>
+        </div>
+
+        {{-- ── Info Card (Features) ────────────────────────────── --}}
+        <div class="fr-info-card wow fadeInUp mb-5" data-wow-delay="0.15s">
+            <div class="fr-features-grid">
+                <div class="fr-feature-item">
+                    <div class="fr-feature-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <div class="fr-feature-text">
+                        <span class="fr-feature-title">Transparansi Keuangan</span>
+                        <span class="fr-feature-sub">Seluruh laporan keuangan diungkapkan secara terbuka dan transparan</span>
+                    </div>
+                </div>
+                <div class="fr-feature-item">
+                    <div class="fr-feature-icon"><i class="fas fa-balance-scale"></i></div>
+                    <div class="fr-feature-text">
+                        <span class="fr-feature-title">Akuntabilitas Publik</span>
+                        <span class="fr-feature-sub">Pertanggungjawaban penggunaan dana organisasi kepada anggota</span>
+                    </div>
+                </div>
+                <div class="fr-feature-item">
+                    <div class="fr-feature-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="fr-feature-text">
+                        <span class="fr-feature-title">Periodik dan Teratur</span>
+                        <span class="fr-feature-sub">Diterbitkan secara berkala sesuai periode anggaran</span>
+                    </div>
+                </div>
+                <div class="fr-feature-item">
+                    <div class="fr-feature-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                    <div class="fr-feature-text">
+                        <span class="fr-feature-title">Standar Akuntansi</span>
+                        <span class="fr-feature-sub">Mengikuti standar akuntansi yang berlaku dan dapat dipertanggungjawabkan</span>
+                    </div>
+                </div>
+            </div>
+            <p class="fr-info-desc">
+                Laporan keuangan UKM LDK Syahid merupakan bentuk pertanggungjawaban publik atas
+                pengelolaan dana organisasi. Setiap laporan mencakup realisasi anggaran, arus kas,
+                dan posisi keuangan yang telah melalui proses audit internal untuk memastikan
+                keakuratan dan kredibilitas informasi.
+            </p>
         </div>
 
         {{-- ── LDK Accordion ─────────────────────────────────────── --}}
@@ -119,7 +159,7 @@
                                     @if($rDate)
                                     <span class="fr-report-date">
                                         <i class="far fa-calendar-alt"></i>
-                                        {{ $rDate->isoFormat('D MMM Y') }}
+                                        Diunggah {{ $rDate->isoFormat('D MMM Y') }}
                                     </span>
                                     @endif
                                 </div>
@@ -138,24 +178,11 @@
                                         <i class="fas fa-download"></i>
                                         <span>Unduh</span>
                                     </a>
-                                </div>
-                                <div class="fr-share-row">
-                                    <button class="fr-share-btn fr-share-copy"
+                                    <button class="fr-action-btn fr-share-copy"
                                             data-url="{{ $report->fileViewUrl() }}"
                                             onclick="frCopyUrl(this.dataset.url, event)">
-                                        <i class="fas fa-link"></i><span>Salin URL</span>
-                                    </button>
-                                    <button class="fr-share-btn fr-share-wa"
-                                            data-url="{{ $report->fileViewUrl() }}"
-                                            data-title="{{ e($report->fileName) }}"
-                                            onclick="frShareWa(this.dataset.url, this.dataset.title, event)">
-                                        <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
-                                    </button>
-                                    <button class="fr-share-btn fr-share-x"
-                                            data-url="{{ $report->fileViewUrl() }}"
-                                            data-title="{{ e($report->fileName) }}"
-                                            onclick="frShareX(this.dataset.url, this.dataset.title, event)">
-                                        <span style="font-weight:900;font-size:.85rem;line-height:1;letter-spacing:-1px;">X</span>
+                                        <i class="fas fa-link"></i>
+                                        <span>Salin URL</span>
                                     </button>
                                 </div>
                             </div>

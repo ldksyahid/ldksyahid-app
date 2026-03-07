@@ -40,6 +40,52 @@
 .fr-section-sub   { color: var(--fr-gray); font-size: 1rem; margin: .5rem 0 0; }
 
 
+/* ── Info Card ───────────────────────────────────────────────── */
+.fr-info-card {
+    background: white;
+    border-radius: 20px;
+    border: 1.5px solid var(--fr-gray-200);
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    padding: 2rem;
+    position: relative; z-index: 1;
+}
+
+.fr-features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.fr-feature-item {
+    display: flex; align-items: flex-start; gap: .9rem;
+}
+
+.fr-feature-icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--fr-primary-light);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.fr-feature-icon i { color: var(--fr-primary); font-size: 1rem; }
+
+.fr-feature-text { display: flex; flex-direction: column; gap: .2rem; }
+.fr-feature-title { font-size: .9rem; font-weight: 700; color: var(--fr-dark); }
+.fr-feature-sub   { font-size: .8rem; color: var(--fr-gray); line-height: 1.4; }
+
+.fr-info-desc {
+    font-size: .88rem; color: var(--fr-gray);
+    line-height: 1.7; margin: 0;
+    border-top: 1px solid var(--fr-gray-200);
+    padding-top: 1.25rem;
+}
+
+@media (max-width: 767.98px) {
+    .fr-features-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .fr-info-card { padding: 1.5rem; }
+}
+
+
 /* ── Accordion Container ─────────────────────────────────────── */
 .fr-accordion {
     display: flex; flex-direction: column;
@@ -153,10 +199,9 @@
 .fr-report-date i { font-size: .62rem; }
 
 
-/* ── Report Right (actions + share) ─────────────────────────── */
+/* ── Report Right (actions) ──────────────────────────────────── */
 .fr-report-right {
-    display: flex; flex-direction: column;
-    align-items: flex-end; gap: .45rem;
+    display: flex; align-items: center;
     flex-shrink: 0;
 }
 .fr-report-btns { display: flex; align-items: center; gap: .4rem; }
@@ -194,18 +239,7 @@
 }
 
 
-/* ── Share Buttons ───────────────────────────────────────────── */
-.fr-share-row { display: flex; align-items: center; gap: .3rem; }
-
-.fr-share-btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: .35rem;
-    border: 1.5px solid transparent; border-radius: 50px;
-    padding: 5px 14px; font-size: .74rem; font-weight: 600;
-    cursor: pointer; transition: all .22s ease; white-space: nowrap; line-height: 1;
-    background: none;
-}
-.fr-share-btn i { font-size: .72rem; }
-
+/* ── Share Copy Button ───────────────────────────────────────── */
 .fr-share-copy {
     background: color-mix(in srgb, var(--fr-primary) 8%, white);
     border-color: color-mix(in srgb, var(--fr-primary) 22%, transparent);
@@ -213,26 +247,7 @@
 }
 .fr-share-copy:hover {
     background: var(--fr-primary); color: white; border-color: var(--fr-primary);
-    box-shadow: 0 3px 10px rgba(0,167,157,.28); transform: translateY(-1px);
-}
-
-.fr-share-wa {
-    background: rgba(37,211,102,.08);
-    border-color: rgba(37,211,102,.28); color: #1da851;
-}
-.fr-share-wa:hover {
-    background: #25d366; color: white; border-color: #25d366;
-    box-shadow: 0 3px 10px rgba(37,211,102,.28); transform: translateY(-1px);
-}
-
-.fr-share-x {
-    background: rgba(26,26,46,.06);
-    border-color: rgba(26,26,46,.2); color: #1a1a2e;
-    width: 32px; height: 32px; padding: 0;
-}
-.fr-share-x:hover {
-    background: #1a1a2e; color: white; border-color: #1a1a2e;
-    box-shadow: 0 3px 10px rgba(0,0,0,.22); transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0,167,157,.30); transform: translateY(-1px);
 }
 
 /* SweetAlert position */
@@ -268,9 +283,8 @@
         align-items: flex-start;
         gap: .75rem;
     }
-    .fr-report-right { width: 100%; align-items: flex-start; }
+    .fr-report-right { width: 100%; }
     .fr-report-btns  { flex-wrap: wrap; }
-    .fr-share-row    { flex-wrap: wrap; }
     .fr-report-name  { white-space: normal; }
     .fr-section-title { font-size: 1.65rem; }
 }
@@ -278,8 +292,6 @@
 @media (max-width: 575.98px) {
     .fr-acc-btn     { padding: .9rem 1rem; }
     .fr-report-item { padding: .75rem 1rem; }
-    .fr-share-btn span  { display: none; }
-    .fr-share-btn   { width: 32px; height: 32px; padding: 0; }
     .fr-action-btn span { display: none; }
     .fr-action-btn  { width: 34px; height: 34px; padding: 0; justify-content: center; }
     .fr-section-title { font-size: 1.4rem; }
