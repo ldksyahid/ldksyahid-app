@@ -65,6 +65,14 @@
                         <span>Tahun: {{ $val }}</span> <i class="fas fa-times"></i>
                     </span>
                 @endforeach
+                @php
+                    $statusLabels = ['upcoming' => 'Akan Datang', 'ongoing' => 'Berlangsung', 'past' => 'Telah Selesai'];
+                @endphp
+                @foreach((array)request('status', []) as $val)
+                    <span class="sfb-pill" data-select-id="ev-status-select" data-value="{{ $val }}">
+                        <span>Status: {{ $statusLabels[$val] ?? $val }}</span> <i class="fas fa-times"></i>
+                    </span>
+                @endforeach
             </x-search-filter-bar>
         </div>
 
@@ -154,6 +162,20 @@
                 @foreach($years as $yr)
                     <option value="{{ $yr }}" {{ in_array($yr, (array)request('year')) ? 'selected' : '' }}>{{ $yr }}</option>
                 @endforeach
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="sfb-fm-field-wrap">
+            <div class="sfb-fm-field-label">
+                <div class="sfb-fm-field-icon"><i class="fas fa-flag"></i></div>
+                <label for="ev-status-select" class="sfb-fm-label">Status Kegiatan</label>
+            </div>
+            <select id="ev-status-select" class="form-select" multiple>
+                <option value="upcoming" {{ in_array('upcoming', (array)request('status')) ? 'selected' : '' }}>Akan Datang</option>
+                <option value="ongoing"  {{ in_array('ongoing',  (array)request('status')) ? 'selected' : '' }}>Berlangsung</option>
+                <option value="past"     {{ in_array('past',     (array)request('status')) ? 'selected' : '' }}>Telah Selesai</option>
             </select>
         </div>
     </div>

@@ -11,14 +11,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /* ─── Select2 init ────────────────────────────────────────── */
     if (typeof $.fn !== 'undefined' && typeof $.fn.select2 !== 'undefined') {
-        $('#ev-division-select, #ev-year-select').select2({
+        $('#ev-division-select, #ev-year-select, #ev-status-select').select2({
             placeholder: 'Pilih...',
             allowClear: true,
             width: '100%',
             dropdownParent: $('#ev-filter-modal'),
         });
         $(window).on('scroll', function () {
-            $('#ev-division-select, #ev-year-select').select2('close');
+            $('#ev-division-select, #ev-year-select, #ev-status-select').select2('close');
         });
     }
 
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ─── Filter badge counter ───────────────────────────────── */
     function updateFilterBadge() {
         var count = 0;
-        ['ev-division-select', 'ev-year-select'].forEach(function (id) {
+        ['ev-division-select', 'ev-year-select', 'ev-status-select'].forEach(function (id) {
             var el = document.getElementById(id);
             if (el && el.selectedOptions) count += el.selectedOptions.length;
         });
@@ -107,9 +107,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!container) return;
         container.innerHTML = '';
 
+        var statusLabels = { upcoming: 'Akan Datang', ongoing: 'Berlangsung', past: 'Telah Selesai' };
         var fieldMap = {
             'ev-division-select': 'Divisi',
             'ev-year-select':     'Tahun',
+            'ev-status-select':   'Status',
         };
 
         Object.keys(fieldMap).forEach(function (id) {
@@ -166,6 +168,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (yearEl && yearEl.selectedOptions) {
             Array.from(yearEl.selectedOptions).forEach(function (opt) {
                 params.append('year[]', opt.value);
+            });
+        }
+
+        var statusEl = document.getElementById('ev-status-select');
+        if (statusEl && statusEl.selectedOptions) {
+            Array.from(statusEl.selectedOptions).forEach(function (opt) {
+                params.append('status[]', opt.value);
             });
         }
 
@@ -264,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /* ─── Filter reset / clear ───────────────────────────────── */
     function evClearAllFilters() {
-        ['ev-division-select', 'ev-year-select'].forEach(function (id) {
+        ['ev-division-select', 'ev-year-select', 'ev-status-select'].forEach(function (id) {
             var el = document.getElementById(id);
             if (!el) return;
             for (var i = 0; i < el.options.length; i++) el.options[i].selected = false;
