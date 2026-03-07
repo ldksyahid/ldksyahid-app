@@ -135,7 +135,7 @@
                 </div>
             </button>
             {{-- Dark Mode Toggle (Desktop) --}}
-            <div class="dark-mode-toggle-container">
+            {{-- <div class="dark-mode-toggle-container">
                 <input type="checkbox" id="darkModeSwitch" class="dark-mode-checkbox">
                 <label for="darkModeSwitch" class="dark-mode-toggle" title="Toggle Dark Mode" tabindex="0" role="button" aria-label="Toggle dark mode">
                     <div class="toggle-track">
@@ -149,7 +149,7 @@
                         </div>
                     </div>
                 </label>
-            </div>
+            </div> --}}
             @guest
                 <div class="dropdown">
                     <button class="btn-user-fun" data-bs-toggle="dropdown">
@@ -246,7 +246,7 @@
                 </div>
             </button>
             {{-- Dark Mode Toggle (Mobile) --}}
-            <div class="dark-mode-toggle-container">
+            {{-- <div class="dark-mode-toggle-container">
                 <input type="checkbox" id="darkModeSwitchMobile" class="dark-mode-checkbox">
                 <label for="darkModeSwitchMobile" class="dark-mode-toggle dark-mode-toggle-sm" title="Toggle Dark Mode" tabindex="0" role="button" aria-label="Toggle dark mode">
                     <div class="toggle-track">
@@ -260,7 +260,7 @@
                         </div>
                     </div>
                 </label>
-            </div>
+            </div> --}}
             {{-- Mobile Toggle --}}
             <button class="mobile-toggle" id="mobileToggle">
                 <span></span>
