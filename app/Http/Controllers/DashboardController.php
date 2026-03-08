@@ -55,7 +55,7 @@ class DashboardController extends Controller
         $date = date('Y-m-d'); // Tanggal hari ini
 
 
-        $response = Http::withOptions(['verify' => false,])->get('https://api.myquran.com/v2/sholat/jadwal/1301/2026-02-16');
+        $response = Http::get("https://api.myquran.com/v2/sholat/jadwal/$cityId/$date");
         $prayerTimes = $response->json()['data']['jadwal'] ?? [];
 
         return view('admin-page.dashboard.index', [
