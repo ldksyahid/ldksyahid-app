@@ -84,28 +84,30 @@
     gap: .45rem;
 }
 .sl-info-title i { color: #00a79d; }
+
+/* List: padding-left bullet (no display:flex) to avoid code/strong wrapping issues */
 .sl-info-list {
     list-style: none;
     padding: 0; margin: 0;
 }
 .sl-info-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: .6rem;
-    padding: .38rem 0;
+    position: relative;
+    padding: .3rem 0 .3rem 1.1rem;
     font-size: .82rem;
     color: #475569;
-    line-height: 1.55;
+    line-height: 1.6;
     border-bottom: 1px dashed rgba(203,213,225,.6);
 }
 .sl-info-list li:last-child { border-bottom: none; }
 .sl-info-list li::before {
     content: '';
-    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    top: .72rem;
     width: 6px; height: 6px;
     border-radius: 50%;
     background: #00a79d;
-    margin-top: .5rem;
+    flex-shrink: 0;
 }
 .sl-info-list code {
     background: rgba(0, 167, 157, .1);
@@ -113,6 +115,8 @@
     border-radius: .3rem;
     padding: .05em .35em;
     font-size: .8em;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 /* ── Contact Card ───────────────────────────────────────── */
@@ -223,102 +227,61 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    align-items: start; /* prevent grid stretch so label centering stays correct */
+    align-items: start;
 }
 @media (max-width: 575.98px) {
     .sl-form-row-2 { grid-template-columns: 1fr; }
 }
 
-/* ── Floating Label Fields ──────────────────────────────── */
-.sl-field {
-    position: relative;
-}
-.sl-field input,
-.sl-field textarea {
-    width: 100%;
-    display: block;
+/* ── Floating Label — Bootstrap form-floating overrides ─── */
+/* Bootstrap handles vertical centering reliably via
+   height:100% label + flexbox internally.
+   We only override visual styles (colors, borders, etc.)   */
+
+.sl-field.form-floating > .form-control {
     border: 1.5px solid #e2e8f0;
     border-radius: .75rem;
-    padding: 1.5rem 1rem .5rem;
-    font-size: .9rem;
-    color: #1a1a2e;
     background: #f8fafc;
-    outline: none;
-    transition: border-color .2s, box-shadow .2s, background .2s;
-    resize: none;
+    color: #1a1a2e;
     font-family: inherit;
+    transition: border-color .2s, box-shadow .2s, background .2s;
     appearance: none;
     -webkit-appearance: none;
 }
-/* Explicit height so label centering (top: 1.75rem) is predictable */
-.sl-field input {
-    height: 3.5rem;
-}
-.sl-field textarea {
-    height: 110px;
-    padding-top: 1.75rem;
-}
-.sl-field label {
-    position: absolute;
-    left: 1rem;
-    /* 1.75rem = half of 3.5rem input height → always centers in input regardless of field container size */
-    top: 1.75rem;
-    transform: translateY(-50%);
-    font-size: .875rem;
-    color: #94a3b8;
-    pointer-events: none;
-    transition: top .18s ease, font-size .18s ease, color .18s ease, transform .18s ease;
-    z-index: 1;
-    margin: 0;
-    padding: 0;
-    white-space: nowrap;
-    line-height: 1;
-}
-/* Textarea label sits at top */
-.sl-field.sl-textarea label {
-    top: 1.2rem;
-    transform: none;
-}
-/* Floated (focus or has value) */
-.sl-field input:focus ~ label,
-.sl-field input:not(:placeholder-shown) ~ label {
-    top: .55rem;
-    transform: none;
-    font-size: .7rem;
-    color: #00a79d;
-    font-weight: 600;
-}
-.sl-field textarea:focus ~ label,
-.sl-field textarea:not(:placeholder-shown) ~ label {
-    top: .45rem;
-    font-size: .7rem;
-    color: #00a79d;
-    font-weight: 600;
-}
-/* Focus ring */
-.sl-field input:focus,
-.sl-field textarea:focus {
+.sl-field.form-floating > .form-control:focus {
     border-color: #00a79d;
     box-shadow: 0 0 0 3px rgba(0,167,157,.12);
     background: #fff;
+    outline: none;
 }
-/* Validation */
-.sl-field.sl-valid input,
-.sl-field.sl-valid textarea {
+/* Label default color */
+.sl-field.form-floating > label {
+    color: #94a3b8;
+    border: none;
+}
+/* Floated label color (Bootstrap transforms position, we set color) */
+.sl-field.form-floating > .form-control:focus ~ label,
+.sl-field.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: #00a79d;
+    font-weight: 600;
+    opacity: 1; /* override Bootstrap's default .65 opacity */
+}
+
+/* ── Validation states ──────────────────────────────────── */
+.sl-field.form-floating.sl-valid > .form-control {
     border-color: #10b981;
 }
-.sl-field.sl-invalid input,
-.sl-field.sl-invalid textarea {
+.sl-field.form-floating.sl-invalid > .form-control {
     border-color: #ef4444;
     box-shadow: 0 0 0 3px rgba(239,68,68,.08);
 }
-.sl-field.sl-invalid input:focus ~ label,
-.sl-field.sl-invalid textarea:focus ~ label,
-.sl-field.sl-invalid input:not(:placeholder-shown) ~ label,
-.sl-field.sl-invalid textarea:not(:placeholder-shown) ~ label {
+.sl-field.form-floating.sl-invalid > .form-control:focus ~ label,
+.sl-field.form-floating.sl-invalid > .form-control:not(:placeholder-shown) ~ label {
     color: #ef4444;
+    opacity: 1;
 }
-/* Error & hint */
+
+/* ── Error & hint ───────────────────────────────────────── */
 .sl-field-error {
     display: none;
     font-size: .72rem;
@@ -419,14 +382,13 @@
     transition: border-color .2s, color .2s, background .2s;
     font-family: inherit;
 }
-/* Fix #5 — hover bright/teal, not dark */
 .sl-send-again-btn:hover {
     border-color: #00a79d;
     color: #00a79d;
     background: rgba(0, 167, 157, .06);
 }
 
-/* ── Toast below navbar (Fix #4) ────────────────────────── */
+/* ── Toast below navbar ─────────────────────────────────── */
 .sl-swal-below-nav {
     padding-top: 72px !important;
 }
@@ -441,7 +403,7 @@
 @media (max-width: 767.98px) {
     .sl-page-section { padding-top: 5rem; padding-bottom: 3rem; }
     .sl-form-card    { padding: 1.35rem; border-radius: 1rem; }
-    .sl-info-col     { order: 2; } /* form first on mobile */
+    .sl-info-col     { order: 2; }
     .sl-form-col     { order: 1; }
 }
 </style>
