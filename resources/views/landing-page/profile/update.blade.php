@@ -6,21 +6,25 @@
 
 @section('content')
 <section class="prf-form-section">
-    <div class="prf-form-layout">
+    <div class="container">
+        <div class="row g-4 align-items-start">
 
         {{-- ===== LEFT DECO ===== --}}
-        <div class="prf-form-deco wow fadeInUp" data-wow-delay="0.1s">
-            <p class="prf-form-deco-label">Perbarui</p>
-            <h1 class="prf-form-deco-title">Update Profilmu Disini</h1>
-            <div class="prf-form-deco-bar"></div>
-            <div class="prf-form-deco-quote">
-                <p>"Dan siapakah yang lebih baik perkataannya daripada orang yang menyeru kepada Allah dan mengerjakan kebajikan dan berkata, 'Sungguh, aku termasuk orang-orang muslim (yang berserah diri)?'"</p>
-                <span>&#9679; QS. Fussilat 41: 33</span>
+        <div class="col-lg-5 wow fadeInLeft" data-wow-delay="0.1s">
+            <div class="prf-form-deco">
+                <p class="prf-form-deco-label">Perbarui</p>
+                <h1 class="prf-form-deco-title">Update Profilmu Disini</h1>
+                <div class="prf-form-deco-bar"></div>
+                <div class="prf-form-deco-quote">
+                    <p>"Dan siapakah yang lebih baik perkataannya daripada orang yang menyeru kepada Allah dan mengerjakan kebajikan dan berkata, 'Sungguh, aku termasuk orang-orang muslim (yang berserah diri)?'"</p>
+                    <span>&#9679; QS. Fussilat 41: 33</span>
+                </div>
             </div>
         </div>
 
         {{-- ===== FORM CARD ===== --}}
-        <div class="prf-form-card wow fadeInUp" data-wow-delay="0.2s">
+        <div class="col-lg-7 wow fadeInRight" data-wow-delay="0.2s">
+        <div class="prf-form-card">
 
             {{-- Mobile-only header --}}
             <div class="prf-mobile-form-title">
@@ -185,8 +189,10 @@
 
             </form>
         </div>
+        </div>{{-- /col-lg-7 --}}
 
-    </div>
+        </div>{{-- /row --}}
+    </div>{{-- /container --}}
 </section>
 @endsection
 

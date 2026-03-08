@@ -13,17 +13,6 @@
     position: relative;
 }
 
-/* --- Two-col layout --- */
-.prf-form-layout {
-    display: grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap: 3rem;
-    align-items: start;
-    max-width: 1020px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-}
-
 /* ============================================================
    LEFT DECORATIVE COLUMN
    ============================================================ */
@@ -98,24 +87,26 @@
     z-index: 1;
 }
 
-/* Mobile-only title (inside form card) */
-.prf-mobile-form-title {
-    display: none;
-    margin-bottom: 1.75rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #f3f4f6;
-}
+/* Mobile-only title — hidden (deco covers it) */
+.prf-mobile-form-title { display: none; }
 
 /* ============================================================
-   FORM CARD
+   FORM CARD  — matches cu-form-card style
    ============================================================ */
 .prf-form-card {
-    background: #fff;
-    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(0, 184, 173, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(0, 184, 173, 0.15);
+    border-radius: 28px;
     padding: 2.25rem 2.5rem;
-    box-shadow: 0 10px 40px rgba(0, 120, 116, 0.1);
+    box-shadow: 0 20px 60px rgba(0, 184, 173, 0.08);
     position: relative;
     z-index: 1;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.prf-form-card:hover {
+    border-color: rgba(0, 184, 173, 0.25);
+    box-shadow: 0 25px 70px rgba(0, 184, 173, 0.12);
 }
 
 /* --- Section titles within form --- */
@@ -148,19 +139,19 @@
     grid-column: 1 / -1;
 }
 
-/* --- Input Fields --- */
+/* --- Input Fields — matches cu-form-input style --- */
 .prf-field {
     position: relative;
 }
 
 .prf-field .form-floating > .form-control {
     border-radius: 14px;
-    background: #f6f8fa;
-    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(0, 184, 173, 0.2);
     padding: 0.85rem 1rem 0.35rem;
     font-size: 0.875rem;
     color: #1f2937;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease;
     height: auto;
     min-height: 3.25rem;
 }
@@ -170,13 +161,14 @@
     box-shadow: 0 0 0 4px rgba(0, 184, 173, 0.1);
     background: #fff;
     outline: none;
+    transform: translateY(-2px);
 }
 
 .prf-field .form-floating > .form-control:disabled {
-    background: #f0f0f0;
+    background: rgba(240, 240, 240, 0.8);
     color: #9ca3af;
     cursor: not-allowed;
-    border-color: transparent;
+    border-color: rgba(0, 184, 173, 0.1);
 }
 
 .prf-field .form-floating > label {
@@ -193,35 +185,30 @@
 
 /* Textarea */
 .prf-field .form-floating > textarea.form-control {
-    border-radius: 16px;
+    border-radius: 14px;
     min-height: 100px;
     resize: vertical;
     padding-top: 1.25rem;
 }
 
-/* File Input — custom label style, native input hidden */
-.prf-file-wrap {
-    margin-bottom: 0.25rem;
-}
+/* File Input */
+.prf-file-wrap { margin-bottom: 0.25rem; }
 
-/* Hide native input, label handles click */
 .prf-file-input {
     position: absolute;
-    width: 0;
-    height: 0;
+    width: 0; height: 0;
     opacity: 0;
     pointer-events: none;
 }
 
-/* Styled clickable label */
 .prf-file-label {
     display: flex;
     align-items: center;
     gap: 0.85rem;
     padding: 0.75rem 1rem 0.75rem 0.75rem;
-    background: #f6f8fa;
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 14px;
-    border: 2px dashed #d1d5db;
+    border: 2px dashed rgba(0, 184, 173, 0.3);
     cursor: pointer;
     transition: border-color 0.22s ease, background 0.22s ease;
     overflow: hidden;
@@ -233,11 +220,8 @@
     background: #f2fbfa;
 }
 
-/* Teal icon box */
 .prf-file-icon {
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
+    width: 38px; height: 38px; min-width: 38px;
     background: linear-gradient(135deg, #00b8ad 0%, #006D6D 100%);
     color: #fff;
     border-radius: 10px;
@@ -248,7 +232,6 @@
     flex-shrink: 0;
 }
 
-/* "Pilih Foto" text */
 .prf-file-btn-text {
     font-size: 0.8rem;
     font-weight: 700;
@@ -257,7 +240,6 @@
     flex-shrink: 0;
 }
 
-/* Separator */
 .prf-file-sep {
     color: #d1d5db;
     font-size: 1.1rem;
@@ -265,7 +247,6 @@
     flex-shrink: 0;
 }
 
-/* Filename display */
 .prf-file-name-display {
     font-size: 0.78rem;
     color: #9ca3af;
@@ -275,9 +256,7 @@
     flex: 1;
 }
 
-.prf-file-name-display--set {
-    color: #059669;
-}
+.prf-file-name-display--set { color: #059669; }
 
 .prf-file-hint {
     font-size: 0.7rem;
@@ -294,7 +273,6 @@
     margin-top: 2rem;
 }
 
-/* Base button */
 .prf-btn {
     display: flex;
     align-items: center;
@@ -345,17 +323,18 @@
 
 /* ============================================================
    RESPONSIVE
+   Bootstrap col-lg-* stacks at < 992px
    ============================================================ */
 
-/* --- Tablet --- */
+/* Below lg: columns stack, deco above form */
 @media (max-width: 991.98px) {
     .prf-form-section {
-        padding: 5.5rem 0 4rem;
+        padding: 5rem 0 4rem;
     }
 
-    .prf-form-layout {
-        grid-template-columns: 1fr 1.5fr;
-        gap: 2rem;
+    .prf-form-deco {
+        position: static;
+        margin-bottom: 0.5rem;
     }
 
     .prf-form-deco-title {
@@ -367,27 +346,23 @@
     }
 }
 
-/* --- Mobile --- */
-@media (max-width: 767.98px) {
+/* Mobile */
+@media (max-width: 575.98px) {
     .prf-form-section {
         padding: 4.5rem 0 3.5rem;
     }
 
-    .prf-form-layout {
-        grid-template-columns: 1fr;
-        padding: 0 1rem;
+    .prf-form-deco-title {
+        font-size: 1.45rem;
     }
 
-    .prf-form-deco {
-        display: none;
-    }
-
-    .prf-mobile-form-title {
-        display: block;
+    .prf-form-deco-quote {
+        padding: 1.1rem 1.25rem;
     }
 
     .prf-form-card {
-        padding: 1.5rem 1.25rem;
+        padding: 1.35rem 1.1rem;
+        border-radius: 20px;
     }
 
     .prf-fields-grid {
