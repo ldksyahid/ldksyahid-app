@@ -44,11 +44,6 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
-// Block direct browser access to admin-sw.js
-Route::get('/admin-sw.js', function () {
-    return redirect()->route('admin.dashboard');
-});
-
 // ======================================= START ROUTE LANDING PAGE =======================================
 // Route LandingPage Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
