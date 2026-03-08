@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getWrapper(name) {
         var el = form.querySelector('[name="' + name + '"]');
-        return el ? el.closest('.sl-field') : null;
+        return el ? el.closest('.sl-form-group') : null;
     }
 
     function clearErrors() {
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         /* Scroll to first invalid field */
-        var first = form.querySelector('.sl-field.sl-invalid input, .sl-field.sl-invalid textarea');
+        var first = form.querySelector('.sl-form-group.sl-invalid input, .sl-form-group.sl-invalid textarea');
         if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 

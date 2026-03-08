@@ -110,68 +110,83 @@
                         <div class="sl-form-rows">
 
                             {{-- Name --}}
-                            <div class="sl-field form-floating">
-                                <input type="text" class="form-control" id="sl-name"
-                                       placeholder="Nama Lengkap" name="name"
+                            <div class="sl-form-group">
+                                <label class="sl-form-label" for="sl-name">
+                                    <span>👤</span> Nama Lengkap <span class="sl-req">*</span>
+                                </label>
+                                <input type="text" class="sl-form-input" id="sl-name"
+                                       name="name" placeholder="Masukkan nama lengkapmu"
                                        autocomplete="name" required />
-                                <label for="sl-name">Nama Lengkap</label>
                                 <span class="sl-field-error" id="sl-err-name"></span>
                             </div>
 
                             {{-- Email + WhatsApp --}}
                             <div class="sl-form-row-2">
-                                <div class="sl-field form-floating">
-                                    <input type="email" class="form-control" id="sl-email"
-                                           placeholder="Alamat Email" name="email"
+                                <div class="sl-form-group">
+                                    <label class="sl-form-label" for="sl-email">
+                                        <span>✉️</span> Alamat Email <span class="sl-req">*</span>
+                                    </label>
+                                    <input type="email" class="sl-form-input" id="sl-email"
+                                           name="email" placeholder="contoh@email.com"
                                            autocomplete="email" required />
-                                    <label for="sl-email">Alamat Email</label>
                                     <span class="sl-field-error" id="sl-err-email"></span>
                                 </div>
-                                <div class="sl-field form-floating">
-                                    <input type="text" class="form-control" id="sl-whatsapp"
-                                           placeholder="WhatsApp Aktif" name="whatsapp"
+                                <div class="sl-form-group">
+                                    <label class="sl-form-label" for="sl-whatsapp">
+                                        <span>📱</span> WhatsApp Aktif <span class="sl-req">*</span>
+                                    </label>
+                                    <input type="text" class="sl-form-input" id="sl-whatsapp"
+                                           name="whatsapp" placeholder="+62xxx"
                                            value="+62" required />
-                                    <label for="sl-whatsapp">WhatsApp Aktif</label>
                                     <span class="sl-field-hint">Awali dengan +62</span>
                                     <span class="sl-field-error" id="sl-err-whatsapp"></span>
                                 </div>
                             </div>
 
                             {{-- Default Link --}}
-                            <div class="sl-field form-floating">
-                                <input type="text" class="form-control" id="sl-defaultLink"
-                                       placeholder="Link Asli (Original URL)"
-                                       name="defaultLink" required />
-                                <label for="sl-defaultLink">Link Asli (Original URL)</label>
+                            <div class="sl-form-group">
+                                <label class="sl-form-label" for="sl-defaultLink">
+                                    <span>🔗</span> Link Asli (Original URL) <span class="sl-req">*</span>
+                                </label>
+                                <input type="text" class="sl-form-input" id="sl-defaultLink"
+                                       name="defaultLink"
+                                       placeholder="https://contoh.com/halaman-panjang"
+                                       required />
                                 <span class="sl-field-error" id="sl-err-defaultLink"></span>
                             </div>
 
                             {{-- Custom Link --}}
-                            <div class="sl-field form-floating">
-                                <input type="text" class="form-control" id="sl-customLink"
-                                       placeholder="Custom Link yang Diinginkan"
+                            <div class="sl-form-group">
+                                <label class="sl-form-label" for="sl-customLink">
+                                    <span>✨</span> Custom Link yang Diinginkan <span class="sl-req">*</span>
+                                </label>
+                                <input type="text" class="sl-form-input" id="sl-customLink"
                                        name="customLink"
+                                       placeholder="https://ldksyah.id/nama-program"
                                        value="https://ldksyah.id/" required />
-                                <label for="sl-customLink">Custom Link yang Diinginkan</label>
                                 <span class="sl-field-hint">Contoh: https://ldksyah.id/nama-program</span>
                                 <span class="sl-field-error" id="sl-err-customLink"></span>
                             </div>
 
                             {{-- Note --}}
-                            <div class="sl-field form-floating">
-                                <textarea class="form-control" id="sl-note"
-                                          placeholder="Catatan / Keterangan"
-                                          name="note" style="height:110px" required></textarea>
-                                <label for="sl-note">Catatan / Keterangan</label>
+                            <div class="sl-form-group">
+                                <label class="sl-form-label" for="sl-note">
+                                    <span>📝</span> Catatan / Keterangan <span class="sl-req">*</span>
+                                </label>
+                                <textarea class="sl-form-textarea" id="sl-note"
+                                          name="note" rows="4"
+                                          placeholder="Tuliskan keterangan atau tujuan pembuatan shortlink..."
+                                          required></textarea>
                                 <span class="sl-field-error" id="sl-err-note"></span>
                             </div>
 
                             {{-- Submit --}}
-                            <button type="submit" class="sl-submit-btn" id="sl-submit">
+                            <button type="submit" class="sl-form-submit" id="sl-submit">
                                 <span class="sl-spinner"></span>
                                 <span class="sl-btn-text">
-                                    <i class="fas fa-paper-plane me-1"></i>
-                                    Kirim Permintaan
+                                    <span>🚀</span>
+                                    <span>Kirim Permintaan</span>
+                                    <i class="fas fa-paper-plane ms-1"></i>
                                 </span>
                             </button>
 
