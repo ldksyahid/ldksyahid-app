@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\SettingKey\Key1;
+use App\Constants\SettingKey\Key2;
+use App\Models\MsSetting;
 use Illuminate\Http\Request;
 use App\Models\ReqShortlink;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -13,7 +16,15 @@ class RequestShortlinkController extends Controller
      */
     public function create()
     {
-        return view('landing-page.service.short-link.index', ["title" => "Layanan"]);
+        $settings = [];
+        $getCpShortlink = MsSetting::getSettingValue1(Key1::LAYANAN, Key2::CpShortlink);
+        $getNamePerson = MsSetting::getSettingValue1(Key1::LAYANAN, 'Name Person Shortlink');
+        $getAngkatanShortlink = MsSetting::getSettingValue1(Key1::LAYANAN, 'Hashtag Angkatan Shortlink');
+        $settings['cpShortlink'] = !empty($getCpShortlink) ? $getCpShortlink : '+62895394755672';
+        $settings['namePerson'] = !empty($getNamePerson) ? $getNamePerson : 'Yusuf Wijaya';
+        $settings['angkatanShortlink'] = !empty($getAngkatanShortlink) ? $getAngkatanShortlink : 'PendarCakrawala';
+
+        return view('landing-page.service.short-link.index', ["title" => "Layanan"], compact('settings'));
     }
 
     /**

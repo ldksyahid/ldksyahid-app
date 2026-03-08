@@ -70,16 +70,16 @@ class MsSetting extends Model
      *
      * ```php
      * // Return as string
-     * $appName = MsSetting::getSettingValue('APP', 'NAME', MsSetting::TYPE_STRING);
+     * $appName = MsSetting::getSettingValue1('APP', 'NAME', MsSetting::TYPE_STRING);
      *
      * // Return as integer
-     * $limit = MsSetting::getSettingValue('APP', 'LIMIT', MsSetting::TYPE_INT);
+     * $limit = MsSetting::getSettingValue1('APP', 'LIMIT', MsSetting::TYPE_INT);
      *
      * // Return as boolean
-     * $isActive = MsSetting::getSettingValue('APP', 'ACTIVE', MsSetting::TYPE_BOOL);
+     * $isActive = MsSetting::getSettingValue1('APP', 'ACTIVE', MsSetting::TYPE_BOOL);
      *
      * // Return as float
-     * $rate = MsSetting::getSettingValue('APP', 'RATE', MsSetting::TYPE_FLOAT);
+     * $rate = MsSetting::getSettingValue1('APP', 'RATE', MsSetting::TYPE_FLOAT);
      * ```
      *
      * @param string $key1
@@ -88,7 +88,7 @@ class MsSetting extends Model
      *
      * @return string|int|bool|float|null
      */
-    public static function getSettingValue($key1, $key2, $type = self::TYPE_STRING)
+    public static function getSettingValue1($key1, $key2, $type = self::TYPE_STRING)
     {
         $model = self::where([
             'key1' => $key1,
