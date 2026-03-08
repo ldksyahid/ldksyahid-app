@@ -29,7 +29,29 @@ class CreateMsSettingTable extends Migration
                     'key2' => Key2::CpShortlink,
                 ],
                 [
-                    'value1' => '+62895394755672',
+                    'value1' => '+6281317209305',
+                    'value2' => null,
+                ]
+            );
+
+            DB::table(MsSetting::getTableName())->updateOrInsert(
+                [
+                    'key1' => Key1::LAYANAN,
+                    'key2' => 'Name Person Shortlink',
+                ],
+                [
+                    'value1' => 'MUHAMMAD FAKHRI ALFARISI',
+                    'value2' => null,
+                ]
+            );
+
+            DB::table(MsSetting::getTableName())->updateOrInsert(
+                [
+                    'key1' => Key1::LAYANAN,
+                    'key2' => 'Hashtag Angkatan Shortlink',
+                ],
+                [
+                    'value1' => 'KabinetAureans',
                     'value2' => null,
                 ]
             );
