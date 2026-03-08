@@ -15,23 +15,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var btt = document.querySelector('.back-to-top');
-    var _scrollY = 0;
+    var _touchBlock = null;
     function lockScroll() {
-        _scrollY = window.scrollY || window.pageYOffset;
-        document.body.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.top      = '-' + _scrollY + 'px';
-        document.body.style.width    = '100%';
+        document.documentElement.style.overflow = 'hidden';
         document.body.classList.add('rp-sheet-open');
+        _touchBlock = function (e) {
+            var sheet = document.getElementById('rp-bottom-sheet');
+            if (sheet && sheet.contains(e.target)) return;
+            e.preventDefault();
+        };
+        window.addEventListener('touchmove', _touchBlock, { passive: false });
         if (btt) { btt.style.opacity = '0'; btt.style.visibility = 'hidden'; }
     }
     function unlockScroll() {
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.top      = '';
-        document.body.style.width    = '';
+        document.documentElement.style.overflow = '';
         document.body.classList.remove('rp-sheet-open');
-        window.scrollTo({ top: _scrollY, left: 0, behavior: 'instant' });
+        if (_touchBlock) {
+            window.removeEventListener('touchmove', _touchBlock);
+            _touchBlock = null;
+        }
         if (btt) { btt.style.opacity = ''; btt.style.visibility = ''; }
     }
 

@@ -489,10 +489,6 @@ body.rp-sheet-open .back-to-top {
     opacity: 0 !important; visibility: hidden !important; pointer-events: none !important;
     transition: opacity .3s ease, visibility .3s ease !important;
 }
-/* Naikkan navbar di atas backdrop saat sheet terbuka */
-body.rp-sheet-open #mainNavbar {
-    z-index: 1080 !important;
-}
 
 /* Tablet: center sheet */
 @media (min-width: 768px) {
