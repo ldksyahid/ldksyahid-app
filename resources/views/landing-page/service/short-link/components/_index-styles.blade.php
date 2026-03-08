@@ -191,11 +191,17 @@
 
 /* ── Form Card ──────────────────────────────────────────── */
 .sl-form-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 1.25rem;
-    padding: 2rem;
-    box-shadow: 0 4px 28px rgba(0,0,0,.06);
+    background: linear-gradient(135deg, rgba(0, 167, 157, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(0, 167, 157, 0.15);
+    border-radius: 28px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 60px rgba(0, 167, 157, 0.08);
+    transition: border-color .3s, box-shadow .3s;
+}
+.sl-form-card:hover {
+    border-color: rgba(0, 167, 157, 0.25);
+    box-shadow: 0 25px 70px rgba(0, 167, 157, 0.12);
 }
 .sl-form-title {
     font-size: 1.05rem;
@@ -221,109 +227,147 @@
 .sl-form-rows {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
 }
 .sl-form-row-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: 1.25rem;
     align-items: start;
 }
 @media (max-width: 575.98px) {
     .sl-form-row-2 { grid-template-columns: 1fr; }
 }
 
-/* ── Floating Label — Bootstrap form-floating overrides ─── */
-/* Bootstrap handles vertical centering reliably via
-   height:100% label + flexbox internally.
-   We only override visual styles (colors, borders, etc.)   */
+/* ── Form Group / Label ─────────────────────────────────── */
+.sl-form-group { display: flex; flex-direction: column; }
+.sl-form-label {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    margin-bottom: .5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: .9rem;
+}
+.sl-req { color: #ef4444; font-weight: 700; margin-left: 1px; }
 
-.sl-field.form-floating > .form-control {
-    border: 1.5px solid #e2e8f0;
-    border-radius: .75rem;
-    background: #f8fafc;
-    color: #1a1a2e;
+/* ── Inputs ─────────────────────────────────────────────── */
+.sl-form-input {
+    width: 100%;
+    height: 50px;
+    padding: .875rem 1.125rem;
+    border: 2px solid rgba(0, 167, 157, .2);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .9);
+    color: #2c3e50;
     font-family: inherit;
-    transition: border-color .2s, box-shadow .2s, background .2s;
+    font-size: .9rem;
+    transition: border-color .3s, box-shadow .3s, transform .3s, background .3s;
     appearance: none;
     -webkit-appearance: none;
-}
-.sl-field.form-floating > .form-control:focus {
-    border-color: #00a79d;
-    box-shadow: 0 0 0 3px rgba(0,167,157,.12);
-    background: #fff;
     outline: none;
+    box-sizing: border-box;
+    display: block;
 }
-/* Label default color */
-.sl-field.form-floating > label {
-    color: #94a3b8;
-    border: none;
+.sl-form-textarea {
+    width: 100%;
+    padding: .875rem 1.125rem;
+    border: 2px solid rgba(0, 167, 157, .2);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .9);
+    color: #2c3e50;
+    font-family: inherit;
+    font-size: .9rem;
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.6;
+    transition: border-color .3s, box-shadow .3s, transform .3s, background .3s;
+    outline: none;
+    box-sizing: border-box;
+    display: block;
 }
-/* Floated label color (Bootstrap transforms position, we set color) */
-.sl-field.form-floating > .form-control:focus ~ label,
-.sl-field.form-floating > .form-control:not(:placeholder-shown) ~ label {
-    color: #00a79d;
-    font-weight: 600;
-    opacity: 1; /* override Bootstrap's default .65 opacity */
+.sl-form-input:focus,
+.sl-form-textarea:focus {
+    border-color: #00a79d;
+    box-shadow: 0 0 0 4px rgba(0, 167, 157, .1);
+    background: #fff;
+    transform: translateY(-2px);
 }
+.sl-form-input::placeholder,
+.sl-form-textarea::placeholder { color: rgba(0, 0, 0, .35); }
 
 /* ── Validation states ──────────────────────────────────── */
-.sl-field.form-floating.sl-valid > .form-control {
-    border-color: #10b981;
-}
-.sl-field.form-floating.sl-invalid > .form-control {
+.sl-form-group.sl-invalid .sl-form-input,
+.sl-form-group.sl-invalid .sl-form-textarea {
     border-color: #ef4444;
-    box-shadow: 0 0 0 3px rgba(239,68,68,.08);
+    background: rgba(239, 68, 68, .04);
 }
-.sl-field.form-floating.sl-invalid > .form-control:focus ~ label,
-.sl-field.form-floating.sl-invalid > .form-control:not(:placeholder-shown) ~ label {
-    color: #ef4444;
-    opacity: 1;
+.sl-form-group.sl-invalid .sl-form-input:focus,
+.sl-form-group.sl-invalid .sl-form-textarea:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, .1);
+    transform: none;
 }
+.sl-form-group.sl-valid .sl-form-input,
+.sl-form-group.sl-valid .sl-form-textarea { border-color: #10b981; }
 
 /* ── Error & hint ───────────────────────────────────────── */
 .sl-field-error {
     display: none;
-    font-size: .72rem;
+    font-size: .75rem;
     color: #ef4444;
-    margin-top: .3rem;
-    padding-left: .2rem;
+    font-weight: 500;
+    margin-top: .35rem;
 }
-.sl-field.sl-invalid .sl-field-error { display: block; }
+.sl-form-group.sl-invalid .sl-field-error { display: block; }
 .sl-field-hint {
     font-size: .72rem;
     color: #94a3b8;
     margin-top: .3rem;
     line-height: 1.4;
-    padding-left: .2rem;
 }
 
 /* ── Submit Button ──────────────────────────────────────── */
-.sl-submit-btn {
+.sl-form-submit {
+    position: relative;
+    overflow: hidden;
     width: 100%;
-    padding: .9rem;
-    background: var(--primary-gradient, linear-gradient(135deg, #00a79d 0%, #008f86 100%));
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #00a79d, #008f86);
     border: none;
-    border-radius: .75rem;
+    border-radius: 50px;
     color: #fff;
-    font-weight: 700;
-    font-size: .95rem;
+    font-weight: 600;
+    font-size: 1rem;
     letter-spacing: .02em;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: .5rem;
-    transition: opacity .2s, transform .15s, box-shadow .2s;
+    gap: .6rem;
+    transition: transform .3s, box-shadow .3s;
     margin-top: .25rem;
     font-family: inherit;
+    box-shadow: 0 4px 15px rgba(0, 167, 157, .35);
 }
-.sl-submit-btn:hover:not(:disabled) {
-    opacity: .9;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(0,167,157,.35);
+.sl-form-submit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #00d4c4 0%, #00a79d 100%);
+    opacity: 0;
+    transition: opacity .3s;
+    border-radius: 50px;
 }
-.sl-submit-btn:disabled {
+.sl-form-submit:hover:not(:disabled)::before { opacity: 1; }
+.sl-form-submit:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 167, 157, .45);
+}
+.sl-form-submit:active { transform: translateY(-1px); }
+.sl-form-submit > * { position: relative; z-index: 1; }
+.sl-form-submit:disabled {
     opacity: .65;
     cursor: not-allowed;
     transform: none;
@@ -336,8 +380,8 @@
     border-radius: 50%;
     animation: slSpin .7s linear infinite;
 }
-.sl-submit-btn.sl-loading .sl-spinner { display: block; }
-.sl-submit-btn.sl-loading .sl-btn-text { display: none; }
+.sl-form-submit.sl-loading .sl-spinner { display: block; }
+.sl-form-submit.sl-loading .sl-btn-text { display: none; }
 @keyframes slSpin { to { transform: rotate(360deg); } }
 
 /* ── Success Panel ──────────────────────────────────────── */
@@ -402,7 +446,7 @@
 /* ── Mobile tweaks ──────────────────────────────────────── */
 @media (max-width: 767.98px) {
     .sl-page-section { padding-top: 5rem; padding-bottom: 3rem; }
-    .sl-form-card    { padding: 1.35rem; border-radius: 1rem; }
+    .sl-form-card    { padding: 1.5rem; border-radius: 20px; }
     .sl-info-col     { order: 2; }
     .sl-form-col     { order: 1; }
 }
