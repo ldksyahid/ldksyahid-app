@@ -12,9 +12,37 @@ class CallKestariController extends Controller
        SECTION A — LANDING PAGE (Public)
        ========================================================================= */
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = CallKestari::where('appear', 'Up')->orderBy('created_at', 'desc')->get();
+        $query = CallKestari::where('appear', 'Up');
+
+        if ($request->filled('search')) {
+            $query->where('buttonName', 'like', '%' . $request->search . '%');
+        }
+
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'az') {
+            $query->orderBy('buttonName', 'asc');
+        } elseif ($sort === 'za') {
+            $query->orderBy('buttonName', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $data = $query->paginate(9)->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'cards'      => view('landing-page.service.call-kestari.components._ck-cards', compact('data'))->render(),
+                'pagination' => $data->hasPages()
+                    ? view('components.pagination-custom.index', ['paginator' => $data, 'itemLabel' => 'tautan'])->render()
+                    : '',
+                'total' => $data->total(),
+                'from'  => $data->firstItem() ?? 0,
+                'to'    => $data->lastItem()  ?? 0,
+            ]);
+        }
+
         return view('landing-page.service.call-kestari.index', compact('data'), ["title" => "Layanan"]);
     }
 
