@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* SweetAlert toast helper */
+    /* SweetAlert toast helper — below navbar (Fix #4) */
     function toast(icon, title) {
         if (typeof Swal === 'undefined') return;
         Swal.fire({
@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
             showConfirmButton: false,
             timer: 3500,
             timerProgressBar: true,
+            customClass: { container: 'sl-swal-below-nav' },
         });
     }
 
