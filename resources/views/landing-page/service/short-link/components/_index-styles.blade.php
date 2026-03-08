@@ -16,25 +16,25 @@
     display: inline-flex;
     align-items: center;
     gap: .5rem;
-    background: rgba(245, 158, 11, .08);
-    border: 1px solid rgba(245, 158, 11, .22);
+    background: rgba(0, 167, 157, .08);
+    border: 1px solid rgba(0, 167, 157, .22);
     border-radius: 99px;
     padding: .35rem 1rem .35rem .7rem;
     font-size: .78rem;
     font-weight: 600;
-    color: #b45309;
+    color: #007a73;
     letter-spacing: .04em;
     text-transform: uppercase;
 }
 .sl-badge-pulse {
     width: 7px; height: 7px;
     border-radius: 50%;
-    background: #f59e0b;
+    background: #00a79d;
     animation: slBadgePulse 2s infinite;
 }
 @keyframes slBadgePulse {
-    0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,.5); }
-    70%      { box-shadow: 0 0 0 7px rgba(245,158,11,0); }
+    0%,100% { box-shadow: 0 0 0 0 rgba(0,167,157,.5); }
+    70%      { box-shadow: 0 0 0 7px rgba(0,167,157,0); }
 }
 .sl-section-title {
     font-size: clamp(1.8rem, 4vw, 2.5rem);
@@ -68,8 +68,8 @@
 
 /* ── Info Cards ─────────────────────────────────────────── */
 .sl-info-card {
-    background: rgba(245, 158, 11, .05);
-    border: 1px solid rgba(245, 158, 11, .14);
+    background: rgba(0, 167, 157, .05);
+    border: 1px solid rgba(0, 167, 157, .14);
     border-radius: 1rem;
     padding: 1.35rem 1.5rem;
     margin-bottom: 1rem;
@@ -83,7 +83,7 @@
     align-items: center;
     gap: .45rem;
 }
-.sl-info-title i { color: #f59e0b; }
+.sl-info-title i { color: #00a79d; }
 .sl-info-list {
     list-style: none;
     padding: 0; margin: 0;
@@ -104,12 +104,12 @@
     flex-shrink: 0;
     width: 6px; height: 6px;
     border-radius: 50%;
-    background: #f59e0b;
+    background: #00a79d;
     margin-top: .5rem;
 }
 .sl-info-list code {
-    background: rgba(245,158,11,.12);
-    color: #b45309;
+    background: rgba(0, 167, 157, .1);
+    color: #007a73;
     border-radius: .3rem;
     padding: .05em .35em;
     font-size: .8em;
@@ -139,7 +139,7 @@
 .sl-contact-avatar {
     width: 44px; height: 44px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg, #00a79d, #008f86);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -205,13 +205,13 @@
 .sl-form-icon {
     width: 32px; height: 32px;
     border-radius: .6rem;
-    background: rgba(245, 158, 11, .12);
+    background: rgba(0, 167, 157, .1);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 }
-.sl-form-icon i { color: #f59e0b; font-size: .875rem; }
+.sl-form-icon i { color: #00a79d; font-size: .875rem; }
 
 /* ── Form Grid (no Bootstrap row) ──────────────────────── */
 .sl-form-rows {
@@ -223,6 +223,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+    align-items: start; /* prevent grid stretch so label centering stays correct */
 }
 @media (max-width: 575.98px) {
     .sl-form-row-2 { grid-template-columns: 1fr; }
@@ -238,7 +239,7 @@
     display: block;
     border: 1.5px solid #e2e8f0;
     border-radius: .75rem;
-    padding: 1.45rem 1rem .55rem;
+    padding: 1.5rem 1rem .5rem;
     font-size: .9rem;
     color: #1a1a2e;
     background: #f8fafc;
@@ -249,6 +250,10 @@
     appearance: none;
     -webkit-appearance: none;
 }
+/* Explicit height so label centering (top: 1.75rem) is predictable */
+.sl-field input {
+    height: 3.5rem;
+}
 .sl-field textarea {
     height: 110px;
     padding-top: 1.75rem;
@@ -256,7 +261,8 @@
 .sl-field label {
     position: absolute;
     left: 1rem;
-    top: 50%;
+    /* 1.75rem = half of 3.5rem input height → always centers in input regardless of field container size */
+    top: 1.75rem;
     transform: translateY(-50%);
     font-size: .875rem;
     color: #94a3b8;
@@ -268,7 +274,7 @@
     white-space: nowrap;
     line-height: 1;
 }
-/* Textarea label */
+/* Textarea label sits at top */
 .sl-field.sl-textarea label {
     top: 1.2rem;
     transform: none;
@@ -276,24 +282,24 @@
 /* Floated (focus or has value) */
 .sl-field input:focus ~ label,
 .sl-field input:not(:placeholder-shown) ~ label {
-    top: .42rem;
+    top: .55rem;
     transform: none;
     font-size: .7rem;
-    color: #f59e0b;
+    color: #00a79d;
     font-weight: 600;
 }
 .sl-field textarea:focus ~ label,
 .sl-field textarea:not(:placeholder-shown) ~ label {
-    top: .38rem;
+    top: .45rem;
     font-size: .7rem;
-    color: #f59e0b;
+    color: #00a79d;
     font-weight: 600;
 }
 /* Focus ring */
 .sl-field input:focus,
 .sl-field textarea:focus {
-    border-color: #f59e0b;
-    box-shadow: 0 0 0 3px rgba(245,158,11,.12);
+    border-color: #00a79d;
+    box-shadow: 0 0 0 3px rgba(0,167,157,.12);
     background: #fff;
 }
 /* Validation */
@@ -333,7 +339,7 @@
 .sl-submit-btn {
     width: 100%;
     padding: .9rem;
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: var(--primary-gradient, linear-gradient(135deg, #00a79d 0%, #008f86 100%));
     border: none;
     border-radius: .75rem;
     color: #fff;
@@ -352,7 +358,7 @@
 .sl-submit-btn:hover:not(:disabled) {
     opacity: .9;
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(245,158,11,.35);
+    box-shadow: 0 6px 20px rgba(0,167,157,.35);
 }
 .sl-submit-btn:disabled {
     opacity: .65;
@@ -410,12 +416,19 @@
     font-size: .875rem;
     color: #475569;
     cursor: pointer;
-    transition: border-color .2s, color .2s;
+    transition: border-color .2s, color .2s, background .2s;
     font-family: inherit;
 }
+/* Fix #5 — hover bright/teal, not dark */
 .sl-send-again-btn:hover {
-    border-color: #f59e0b;
-    color: #d97706;
+    border-color: #00a79d;
+    color: #00a79d;
+    background: rgba(0, 167, 157, .06);
+}
+
+/* ── Toast below navbar (Fix #4) ────────────────────────── */
+.sl-swal-below-nav {
+    padding-top: 72px !important;
 }
 
 /* ── Entrance Animations ────────────────────────────────── */
