@@ -6,21 +6,25 @@
 
 @section('content')
 <section class="prf-form-section">
-    <div class="prf-form-layout">
+    <div class="container">
+        <div class="row g-4 align-items-start">
 
         {{-- ===== LEFT DECO ===== --}}
-        <div class="prf-form-deco wow fadeInUp" data-wow-delay="0.1s">
-            <p class="prf-form-deco-label">Langkah Pertama</p>
-            <h1 class="prf-form-deco-title">Lengkapi Profilmu Dahulu</h1>
-            <div class="prf-form-deco-bar"></div>
-            <div class="prf-form-deco-quote">
-                <p>"Barang siapa mengerjakan kebajikan maka (pahalanya) untuk dirinya sendiri dan barang siapa berbuat jahat maka (dosanya) menjadi tanggungan dirinya sendiri. Dan Tuhanmu sama sekali tidak menzalimi hamba-hamba-Nya."</p>
-                <span>&#9679; QS. Fussilat 41: 46</span>
+        <div class="col-lg-5 wow fadeInLeft" data-wow-delay="0.1s">
+            <div class="prf-form-deco">
+                <p class="prf-form-deco-label">Langkah Pertama</p>
+                <h1 class="prf-form-deco-title">Lengkapi Profilmu Dahulu</h1>
+                <div class="prf-form-deco-bar"></div>
+                <div class="prf-form-deco-quote">
+                    <p>"Barang siapa mengerjakan kebajikan maka (pahalanya) untuk dirinya sendiri dan barang siapa berbuat jahat maka (dosanya) menjadi tanggungan dirinya sendiri. Dan Tuhanmu sama sekali tidak menzalimi hamba-hamba-Nya."</p>
+                    <span>&#9679; QS. Fussilat 41: 46</span>
+                </div>
             </div>
         </div>
 
         {{-- ===== FORM CARD ===== --}}
-        <div class="prf-form-card wow fadeInUp" data-wow-delay="0.2s">
+        <div class="col-lg-7 wow fadeInRight" data-wow-delay="0.2s">
+        <div class="prf-form-card">
 
             {{-- Mobile-only header --}}
             <div class="prf-mobile-form-title">
@@ -179,8 +183,10 @@
 
             </form>
         </div>
+        </div>{{-- /col-lg-7 --}}
 
-    </div>
+        </div>{{-- /row --}}
+    </div>{{-- /container --}}
 </section>
 @endsection
 
