@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\GoogleDrive;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -109,8 +110,8 @@ class Event extends Model
             $dates = explode(' - ', $request->start_date);
             if (count($dates) == 2) {
                 try {
-                    $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
-                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+                    $startDate = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                    $endDate = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
                     $query->whereBetween('start', [$startDate, $endDate]);
                 } catch (\Exception $e) {
                     // Invalid date format, skip filter
@@ -197,6 +198,7 @@ class Event extends Model
             'linkRegist' => $request->linkRegist,
             'start' => $request->start,
             'finished' => $request->finished,
+            'dateevent' => $request->start ? Carbon::parse($request->start)->toDateString() : now()->toDateString(),
             'location' => $request->location,
             'linkLocation' => $request->linkLocation,
             'place' => $request->place,
@@ -244,6 +246,7 @@ class Event extends Model
             'linkRegist' => $request->linkRegist,
             'start' => $request->start,
             'finished' => $request->finished,
+            'dateevent' => $request->start ? Carbon::parse($request->start)->toDateString() : $this->dateevent,
             'location' => $request->location,
             'linkLocation' => $request->linkLocation,
             'place' => $request->place,
