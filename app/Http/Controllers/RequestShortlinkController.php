@@ -21,14 +21,28 @@ class RequestShortlinkController extends Controller
      */
     public function store(Request $request)
     {
-        ReqShortlink::create([
-            "name" => $request->name,
-            "email" => $request->email,
-            "whatsapp" => $request->whatsapp,
-            "defaultLink" => $request->defaultLink,
-            "customLink" => $request->customLink,
-            "note" => $request->note,
+        $request->validate([
+            'name'        => 'required|string|max:255',
+            'email'       => 'required|email|max:255',
+            'whatsapp'    => 'required|string|max:20',
+            'defaultLink' => 'required|string|max:500',
+            'customLink'  => 'required|string|max:500',
+            'note'        => 'required|string',
         ]);
+
+        ReqShortlink::create([
+            'name'        => $request->name,
+            'email'       => $request->email,
+            'whatsapp'    => $request->whatsapp,
+            'defaultLink' => $request->defaultLink,
+            'customLink'  => $request->customLink,
+            'note'        => $request->note,
+        ]);
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
         Alert::success('Permintaan Perpendek URL berhasil dikirim', 'Kami akan menghubungimu melalui Whatsapp yang telah di daftarkan setelah Shortlink berhasil kami buat')->autoClose(15000)->width('40%');
         return redirect('/shortlink');
     }
