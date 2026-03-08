@@ -21,15 +21,6 @@
 /* ============================================================
    HERO
    ============================================================ */
-.prf-hero {
-    display: grid;
-    grid-template-columns: 290px 1fr;
-    gap: 3rem;
-    align-items: start;
-    max-width: 980px;
-    margin: 0 auto 2.5rem;
-    padding: 0 1.5rem;
-}
 
 /* --- Photo Wrap --- */
 .prf-photo-wrap {
@@ -200,25 +191,21 @@
 }
 
 /* ============================================================
-   INFO SECTION
+   INFO CARDS — matches prf-form-card glassmorphism style
    ============================================================ */
-.prf-info-section {
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 0 1.5rem 2rem;
-}
 
-/* --- Info Card --- */
 .prf-info-card {
-    background: #fff;
-    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(0, 167, 157, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(0, 167, 157, 0.15);
+    border-radius: 28px;
     padding: 1.75rem 2.25rem;
-    box-shadow: 0 8px 32px rgba(0, 167, 157, 0.09);
-    margin-bottom: 1.25rem;
+    box-shadow: 0 20px 60px rgba(0, 167, 157, 0.08);
     position: relative;
     z-index: 1;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     overflow: hidden;
+    height: 100%;
 }
 .prf-info-card::after {
     content: '';
@@ -237,8 +224,9 @@
 }
 .prf-info-card:hover::after { transform: translateX(100%); }
 .prf-info-card:hover {
+    border-color: rgba(0, 167, 157, 0.25);
+    box-shadow: 0 25px 70px rgba(0, 167, 157, 0.12);
     transform: translateY(-4px);
-    box-shadow: 0 18px 48px rgba(0, 167, 157, 0.15);
 }
 
 .prf-card-title {
@@ -271,7 +259,7 @@
     transition: background 0.22s ease;
 }
 .prf-info-item:hover {
-    background: #e0f7f5;
+    background: rgba(0, 167, 157, 0.08);
 }
 .prf-info-item--full { grid-column: 1 / -1; }
 
@@ -317,15 +305,11 @@
 /* ============================================================
    ACTIONS
    ============================================================ */
-.prf-actions-wrap {
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 0 1.5rem 4.5rem;
-}
 .prf-actions {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 0.85rem;
+    padding-bottom: 3rem;
 }
 
 /* Base button */
@@ -372,10 +356,11 @@
 
 /* ============================================================
    RESPONSIVE
+   Bootstrap col-lg-* stacks at < 992px
    ============================================================ */
 @media (max-width: 991.98px) {
     .prf-section { padding: 5.5rem 0 4rem; }
-    .prf-hero { grid-template-columns: 240px 1fr; gap: 2rem; }
+    .prf-photo-wrap { max-width: 260px; margin: 0 auto; }
     .prf-name { font-size: 2rem; }
     .prf-bio-logo { width: 64px; height: 64px; }
     .prf-info-card { padding: 1.5rem 1.5rem; }
@@ -383,18 +368,15 @@
 
 @media (max-width: 767.98px) {
     .prf-section { padding: 4.5rem 0 3rem; }
-    .prf-hero { grid-template-columns: 1fr; gap: 1.75rem; padding: 0 1rem; max-width: 100%; }
-    .prf-photo-wrap { max-width: 220px; margin: 0 auto; }
+    .prf-photo-wrap { max-width: 220px; }
     .prf-bio-wrap { padding-top: 0; }
     .prf-bio-header { align-items: center; }
     .prf-bio-logo { width: 52px; height: 52px; }
     .prf-name { font-size: 1.75rem; }
     .prf-tentang { text-align: left; }
-    .prf-info-section { padding: 0 1rem 1.25rem; }
     .prf-info-card { padding: 1.25rem 1rem; }
     .prf-info-grid { grid-template-columns: 1fr; gap: 0.25rem; }
     .prf-info-item--full { grid-column: auto; }
-    .prf-actions-wrap { padding: 0 1rem 3.5rem; }
     .prf-actions { grid-template-columns: 1fr; gap: 0.65rem; }
 }
 </style>
