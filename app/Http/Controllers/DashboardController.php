@@ -54,7 +54,8 @@ class DashboardController extends Controller
         $cityId = 1301; // ID kota untuk Jakarta Pusat (ganti sesuai lokasi)
         $date = date('Y-m-d'); // Tanggal hari ini
 
-        $response = Http::get("https://api.myquran.com/v2/sholat/jadwal/$cityId/$date");
+
+        $response = Http::withOptions(['verify' => false,])->get('https://api.myquran.com/v2/sholat/jadwal/1301/2026-02-16');
         $prayerTimes = $response->json()['data']['jadwal'] ?? [];
 
         return view('admin-page.dashboard.index', [
