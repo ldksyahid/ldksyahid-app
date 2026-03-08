@@ -110,24 +110,27 @@
                         <div class="sl-form-rows">
 
                             {{-- Name --}}
-                            <div class="sl-field">
-                                <input type="text" id="sl-name" placeholder=" "
-                                       name="name" autocomplete="name" required />
+                            <div class="sl-field form-floating">
+                                <input type="text" class="form-control" id="sl-name"
+                                       placeholder="Nama Lengkap" name="name"
+                                       autocomplete="name" required />
                                 <label for="sl-name">Nama Lengkap</label>
                                 <span class="sl-field-error" id="sl-err-name"></span>
                             </div>
 
                             {{-- Email + WhatsApp --}}
                             <div class="sl-form-row-2">
-                                <div class="sl-field">
-                                    <input type="email" id="sl-email" placeholder=" "
-                                           name="email" autocomplete="email" required />
+                                <div class="sl-field form-floating">
+                                    <input type="email" class="form-control" id="sl-email"
+                                           placeholder="Alamat Email" name="email"
+                                           autocomplete="email" required />
                                     <label for="sl-email">Alamat Email</label>
                                     <span class="sl-field-error" id="sl-err-email"></span>
                                 </div>
-                                <div class="sl-field">
-                                    <input type="text" id="sl-whatsapp" placeholder=" "
-                                           name="whatsapp" value="+62" required />
+                                <div class="sl-field form-floating">
+                                    <input type="text" class="form-control" id="sl-whatsapp"
+                                           placeholder="WhatsApp Aktif" name="whatsapp"
+                                           value="+62" required />
                                     <label for="sl-whatsapp">WhatsApp Aktif</label>
                                     <span class="sl-field-hint">Awali dengan +62</span>
                                     <span class="sl-field-error" id="sl-err-whatsapp"></span>
@@ -135,16 +138,18 @@
                             </div>
 
                             {{-- Default Link --}}
-                            <div class="sl-field">
-                                <input type="text" id="sl-defaultLink" placeholder=" "
+                            <div class="sl-field form-floating">
+                                <input type="text" class="form-control" id="sl-defaultLink"
+                                       placeholder="Link Asli (Original URL)"
                                        name="defaultLink" required />
                                 <label for="sl-defaultLink">Link Asli (Original URL)</label>
                                 <span class="sl-field-error" id="sl-err-defaultLink"></span>
                             </div>
 
                             {{-- Custom Link --}}
-                            <div class="sl-field">
-                                <input type="text" id="sl-customLink" placeholder=" "
+                            <div class="sl-field form-floating">
+                                <input type="text" class="form-control" id="sl-customLink"
+                                       placeholder="Custom Link yang Diinginkan"
                                        name="customLink"
                                        value="https://ldksyah.id/" required />
                                 <label for="sl-customLink">Custom Link yang Diinginkan</label>
@@ -153,9 +158,10 @@
                             </div>
 
                             {{-- Note --}}
-                            <div class="sl-field sl-textarea">
-                                <textarea id="sl-note" placeholder=" "
-                                          name="note" required></textarea>
+                            <div class="sl-field form-floating">
+                                <textarea class="form-control" id="sl-note"
+                                          placeholder="Catatan / Keterangan"
+                                          name="note" style="height:110px" required></textarea>
                                 <label for="sl-note">Catatan / Keterangan</label>
                                 <span class="sl-field-error" id="sl-err-note"></span>
                             </div>
