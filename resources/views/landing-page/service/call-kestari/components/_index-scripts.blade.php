@@ -150,78 +150,74 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ============================================================
        AJAX SEARCH / SORT / PAGINATION
        ============================================================ */
-    var BASE_URL    = document.getElementById('ck-base-url')  ? document.getElementById('ck-base-url').value  : '/callkestari';
-    var currentSort = document.getElementById('ck-sort-val')  ? document.getElementById('ck-sort-val').value  : 'newest';
+    var BASE_URL    = document.getElementById('ck-base-url') ? document.getElementById('ck-base-url').value : '/callkestari';
+    var currentSort = document.getElementById('ck-sort-val') ? document.getElementById('ck-sort-val').value : 'newest';
 
-    function ckBuildUrl(page) {
-        var params  = new URLSearchParams();
+    function ckBuildUrl() {
+        var params   = new URLSearchParams();
         var searchEl = document.getElementById('ck-search-input');
         var search   = searchEl ? searchEl.value.trim() : '';
         if (search) params.set('search', search);
         if (currentSort && currentSort !== 'newest') params.set('sort', currentSort);
-        if (page && parseInt(page) > 1) params.set('page', page);
         var q = params.toString();
         return BASE_URL + (q ? '?' + q : '');
     }
 
-    function ckLoad(page, pushState) {
-        var wrap       = document.getElementById('ck-cards-wrap');
-        var pgnWrap    = document.getElementById('ck-pagination-wrap');
-        var resultsEl  = document.getElementById('ck-results-info');
-        var searchEl   = document.getElementById('ck-search-input');
+    function ckLoad(url) {
+        var wrap      = document.getElementById('ck-cards-wrap');
+        var pgnWrap   = document.getElementById('ck-pagination-wrap');
+        var resultsEl = document.getElementById('ck-results-info');
+        var searchEl  = document.getElementById('ck-search-input');
+        var section   = document.getElementById('ck-main-section');
 
         if (wrap) wrap.classList.add('ck-cards-out');
 
-        fetch(ckBuildUrl(page), {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(function (r) { return r.json(); })
-        .then(function (json) {
-            if (wrap)    { wrap.innerHTML = json.cards; wrap.classList.remove('ck-cards-out'); }
-            if (pgnWrap) { pgnWrap.innerHTML = json.pagination || ''; }
+        if (section) {
+            window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
+        }
 
-            if (resultsEl) {
-                if (json.total > 0) {
-                    var info = 'Menampilkan <strong>' + json.from + '–' + json.to + '</strong>' +
-                               ' dari <strong>' + json.total + '</strong> tautan';
-                    var keyword = searchEl ? searchEl.value.trim() : '';
-                    if (keyword) info += ' untuk "<em>' + escHtml(keyword) + '</em>"';
-                    resultsEl.innerHTML = info;
-                } else {
-                    resultsEl.innerHTML = 'Tidak ada tautan yang ditemukan';
+        var minDelay  = new Promise(function (res) { setTimeout(res, 350); });
+        var fetchData = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                            .then(function (r) { return r.json(); });
+
+        Promise.all([fetchData, minDelay])
+            .then(function (results) {
+                var json = results[0];
+
+                if (wrap) {
+                    wrap.innerHTML = json.cards;
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
+                            wrap.classList.remove('ck-cards-out');
+                        });
+                    });
                 }
-            }
+                if (pgnWrap) { pgnWrap.innerHTML = json.pagination || ''; }
 
-            if (pushState) history.pushState(null, '', ckBuildUrl(page));
-
-            bindPaginationClicks();
-
-            /* Scroll to section top */
-            var section = document.getElementById('ck-main-section');
-            if (section) {
-                window.scrollTo({ top: section.offsetTop - 88, behavior: 'smooth' });
-            }
-        })
-        .catch(function () {
-            if (wrap) wrap.classList.remove('ck-cards-out');
-        });
-    }
-
-    /* Intercept pagination clicks */
-    function bindPaginationClicks() {
-        var pgnWrap = document.getElementById('ck-pagination-wrap');
-        if (!pgnWrap) return;
-        pgnWrap.querySelectorAll('a.pgn-nav, a.pgn-num').forEach(function (el) {
-            el.addEventListener('click', function (e) {
-                e.preventDefault();
-                try {
-                    var url  = new URL(el.href);
-                    var page = url.searchParams.get('page') || 1;
-                    ckLoad(page, true);
-                } catch (err) { ckLoad(1, true); }
+                if (resultsEl) {
+                    if (json.total > 0) {
+                        var info    = 'Menampilkan <strong>' + json.from + '–' + json.to + '</strong>' +
+                                      ' dari <strong>' + json.total + '</strong> tautan';
+                        var keyword = searchEl ? searchEl.value.trim() : '';
+                        if (keyword) info += ' untuk "<em>' + escHtml(keyword) + '</em>"';
+                        resultsEl.innerHTML = info;
+                    } else {
+                        resultsEl.innerHTML = 'Tidak ada tautan yang ditemukan';
+                    }
+                }
+            })
+            .catch(function () {
+                if (wrap) wrap.classList.remove('ck-cards-out');
             });
-        });
     }
+
+    /* Pagination — event delegation (no rebind needed) */
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest('#ck-pagination-wrap a.pgn-nav, #ck-pagination-wrap a.pgn-num');
+        if (!link) return;
+        e.preventDefault();
+        ckLoad(link.href);
+    });
 
     /* Search with debounce */
     var _searchTimer;
@@ -231,14 +227,14 @@ document.addEventListener('DOMContentLoaded', function () {
         searchInput.addEventListener('input', function () {
             if (searchClear) searchClear.style.display = this.value ? 'flex' : 'none';
             clearTimeout(_searchTimer);
-            _searchTimer = setTimeout(function () { ckLoad(1, true); }, 420);
+            _searchTimer = setTimeout(function () { ckLoad(ckBuildUrl()); }, 420);
         });
     }
     if (searchClear) {
         searchClear.addEventListener('click', function () {
             if (searchInput) { searchInput.value = ''; searchInput.focus(); }
             this.style.display = 'none';
-            ckLoad(1, true);
+            ckLoad(ckBuildUrl());
         });
     }
 
@@ -253,11 +249,9 @@ document.addEventListener('DOMContentLoaded', function () {
             this.classList.add('active');
             var sortVal = document.getElementById('ck-sort-val');
             if (sortVal) sortVal.value = currentSort;
-            ckLoad(1, true);
+            ckLoad(ckBuildUrl());
         });
     });
-
-    bindPaginationClicks();
 
 }); /* end DOMContentLoaded */
 </script>
