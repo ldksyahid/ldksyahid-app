@@ -1,9 +1,0 @@
-/*
- * Proker Counter by Yuda — External CSS
- * Global styles moved to resources/views/landing-page/service/proker-counter/components/_index-styles.blade.php
- * Only functional pseudo-content rules remain here.
- */
-
-/* Percentage suffix auto-appended by the JS display spans */
-.persentase::after  { content: "%"; }
-.konteneval::after  { content: "%"; }

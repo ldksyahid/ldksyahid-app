@@ -839,5 +839,9 @@ body.kk-sheet-open .back-to-top {
     .kk-acc-title-text { font-size: 0.8rem; }
     .kk-counter-wrap { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
 }
+
+/* From external code.js — percentage suffix auto-appended on display spans */
+.persentase::after  { content: "%"; }
+.konteneval::after  { content: "%"; }
 </style>
 @endverbatim
