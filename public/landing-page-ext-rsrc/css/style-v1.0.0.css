@@ -1424,6 +1424,11 @@ textarea.form-control {
 /* ========================================
    20. FOOTER
    ======================================== */
+footer {
+    color: #00A79D;
+    text-align: center;
+    padding: 0;
+}
 .footer {
     color: #999999;
     background: var(--dark);
