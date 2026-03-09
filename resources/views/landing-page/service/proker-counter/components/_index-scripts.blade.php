@@ -9,15 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     accHeaders.forEach(function (btn) {
         btn.addEventListener('click', function () {
             var item = btn.closest('.kk-acc-item');
-            var isOpen = item.classList.contains('kk-open');
-
-            /* Close all others */
-            document.querySelectorAll('.kk-acc-item.kk-open').forEach(function (openItem) {
-                if (openItem !== item) openItem.classList.remove('kk-open');
-            });
-
-            /* Toggle this one */
-            item.classList.toggle('kk-open', !isOpen);
+            item.classList.toggle('kk-open');
         });
     });
 
