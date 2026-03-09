@@ -30,7 +30,7 @@
 
         {{-- Custom CSS --}}
         <link href="{{ asset('landing-page-ext-rsrc/css/style-v1.0.0.css') }}" rel="stylesheet" />
-        <link rel="stylesheet" href="{{ asset('proker-counter-by-yuda-ext-rsrc/css/style-v1.0.0.css') }}">
+
         <link href="{{ asset('css/itsupport.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/pagination.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/cardservice.css') }}" rel="stylesheet" />
@@ -41,7 +41,7 @@
 
         {{-- Additional Scripts --}}
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
-        <script src="{{ asset('proker-counter-by-yuda-ext-rsrc/js/code.js') }}" charset="utf-8" async></script>
+
 
     </head>
 
