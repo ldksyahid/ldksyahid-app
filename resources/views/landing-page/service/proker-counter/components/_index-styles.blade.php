@@ -95,11 +95,11 @@
 
 /* How-to card */
 .kk-how-card {
-    background: transparent;
-    border: none;
-    border-left: 3px solid rgba(0,167,157,0.3);
-    border-radius: 0;
-    padding: 0.25rem 0 0.25rem 1.25rem;
+    background: linear-gradient(135deg, rgba(0,167,157,0.05) 0%, rgba(255,255,255,0.8) 100%);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(0,167,157,0.15);
+    border-radius: 20px;
+    padding: 1.25rem 1.5rem;
     margin-bottom: 1.25rem;
 }
 .kk-how-title {
