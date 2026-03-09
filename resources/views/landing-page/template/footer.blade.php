@@ -3,7 +3,7 @@
     {{-- Decorative Top Wave --}}
     <div class="footer-wave">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z" fill="#1a2332"></path>
+            <path d="M0,0 C240,80 480,0 720,40 C960,80 1200,0 1440,0 L1440,80 L0,80 Z" fill="#1a2332"></path>
         </svg>
     </div>
 
