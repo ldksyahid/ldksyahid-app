@@ -53,7 +53,17 @@
                                oninput="refreshValue()">
                     </div>
 
-                    {{-- Jumlah Pelaksanaan --}}
+                    {{-- ======================================================
+                         REQUIRED WRAPPER: article.proker > div#proker_1
+                         (external code.js uses these selectors)
+                         ====================================================== --}}
+                    <article class="proker">
+                    <div id="proker_1">
+
+                    {{-- Jumlah Pelaksanaan counter MUST be inside div#proker_1:
+                         code.js:637 does global querySelector("p[id='jumlah_pelaksanaan']")
+                         code.js:643 does parent.querySelector("p[id='jumlah_pelaksanaan']")
+                         where parent = article.proker div#proker_1 --}}
                     <div class="kk-counter-wrap">
                         <span class="kk-counter-label">
                             <i class="fas fa-redo-alt"></i> Jumlah Pelaksanaan
@@ -63,20 +73,13 @@
                                     onclick="kurang_pelaksanaan(1), refreshValue()">
                                 <i class="fas fa-minus"></i>
                             </button>
-                            <span class="kk-counter-val" id="jumlah_pelaksanaan">1</span>
+                            <p class="kk-counter-val" id="jumlah_pelaksanaan">1</p>
                             <button type="button" class="kk-counter-btn kk-counter-plus"
                                     onclick="tambah_pelaksanaan(1), refreshValue()">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
                     </div>
-
-                    {{-- ======================================================
-                         REQUIRED WRAPPER: article.proker > div#proker_1
-                         (external code.js uses these selectors)
-                         ====================================================== --}}
-                    <article class="proker">
-                    <div id="proker_1">
 
                     {{-- ── ACCORDION ── --}}
                     <div class="kk-accordion">
