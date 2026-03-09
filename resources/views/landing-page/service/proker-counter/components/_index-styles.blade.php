@@ -56,9 +56,9 @@
 }
 
 .kk-deco-quote {
-    background: linear-gradient(135deg, #f2fbfa 0%, #e8f8f6 100%);
-    border-radius: 20px;
-    padding: 1.5rem 1.75rem;
+    background: rgba(0,167,157,0.04);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
     position: relative;
     overflow: hidden;
     margin-bottom: 1.25rem;
@@ -95,11 +95,11 @@
 
 /* How-to card */
 .kk-how-card {
-    background: linear-gradient(135deg, rgba(0,167,157,0.05) 0%, rgba(255,255,255,0.8) 100%);
-    backdrop-filter: blur(20px);
-    border: 2px solid rgba(0,167,157,0.15);
-    border-radius: 20px;
-    padding: 1.25rem 1.5rem;
+    background: transparent;
+    border: none;
+    border-left: 3px solid rgba(0,167,157,0.3);
+    border-radius: 0;
+    padding: 0.25rem 0 0.25rem 1.25rem;
     margin-bottom: 1.25rem;
 }
 .kk-how-title {
@@ -179,8 +179,8 @@
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 .kk-form-card:hover {
-    border-color: rgba(0,167,157,0.25);
-    box-shadow: 0 25px 70px rgba(0,167,157,0.12);
+    border-color: rgba(0,167,157,0.18);
+    box-shadow: 0 8px 32px rgba(0,167,157,0.08);
 }
 
 /* ── Form Group (matches short-link .sl-form-group) ─────── */
@@ -213,21 +213,20 @@
 /* ── Inputs (matches short-link .sl-form-input) ─────────── */
 .kk-form-input {
     width: 100%;
-    padding: 0.75rem 1rem;
-    background: rgba(255,255,255,0.9);
-    border: 2px solid rgba(0,167,157,0.2);
-    border-radius: 14px;
+    padding: 0.7rem 1rem;
+    background: rgba(255,255,255,0.8);
+    border: 1.5px solid rgba(0,167,157,0.15);
+    border-radius: 12px;
     font-size: 0.875rem;
     color: #1f2937;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
     outline: none;
     box-sizing: border-box;
 }
 .kk-form-input:focus {
     border-color: #00a79d;
-    box-shadow: 0 0 0 4px rgba(0,167,157,0.1);
+    box-shadow: 0 0 0 3px rgba(0,167,157,0.08);
     background: #fff;
-    transform: translateY(-2px);
 }
 .kk-form-input::placeholder { color: #9ca3af; }
 .kk-form-input:disabled,
@@ -245,11 +244,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    background: rgba(0,167,157,0.06);
-    border: 2px solid rgba(0,167,157,0.12);
-    border-radius: 16px;
-    padding: 0.85rem 1.25rem;
-    margin-bottom: 1.5rem;
+    background: transparent;
+    border: 1px solid rgba(0,167,157,0.12);
+    border-radius: 12px;
+    padding: 0.7rem 1rem;
+    margin-bottom: 1.25rem;
 }
 .kk-counter-label {
     font-size: 0.83rem;
@@ -302,15 +301,14 @@
 }
 
 .kk-acc-item {
-    border: 2px solid rgba(0,167,157,0.15);
-    border-radius: 18px;
+    border: 1px solid rgba(0,167,157,0.12);
+    border-radius: 14px;
     overflow: hidden;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    background: rgba(255,255,255,0.6);
+    transition: border-color 0.25s ease;
+    background: transparent;
 }
 .kk-acc-item.kk-open {
-    border-color: rgba(0,167,157,0.3);
-    box-shadow: 0 8px 30px rgba(0,167,157,0.1);
+    border-color: rgba(0,167,157,0.22);
 }
 
 /* Accordion Header Button */
@@ -406,9 +404,8 @@
     justify-content: space-between;
     gap: 0.5rem;
     margin-bottom: 0.65rem;
-    padding: 0.5rem 0.75rem;
-    background: rgba(0,167,157,0.05);
-    border-radius: 10px;
+    padding: 0.35rem 0;
+    background: transparent;
 }
 .kk-dyn-label {
     font-size: 0.78rem;
@@ -634,20 +631,21 @@ div.jam     > div.choices {
     margin-top: 0.45rem;
 }
 
-/* ── Unsur sections override (external CSS removes sharp borders) */
+/* ── Unsur sections — minimal, no nested boxes */
 .unsur {
-    border: 1.5px solid rgba(0,167,157,0.12) !important;
-    border-radius: 14px !important;
-    margin: 0.65rem 0 !important;
-    padding: 0.75rem !important;
-    background: rgba(255,255,255,0.5);
+    border: none !important;
+    border-radius: 0 !important;
+    margin: 0.5rem 0 !important;
+    padding: 0.5rem 0 !important;
+    background: transparent !important;
 }
 
-/* Nested unsur */
+/* Nested unsur — same minimal treatment */
 .unsur .unsur {
-    border-color: rgba(0,167,157,0.08) !important;
-    background: rgba(255,255,255,0.3);
-    margin: 0.4rem 0 !important;
+    border: none !important;
+    background: transparent !important;
+    margin: 0.25rem 0 !important;
+    padding: 0.35rem 0 !important;
 }
 
 /* ============================================================
@@ -656,7 +654,7 @@ div.jam     > div.choices {
 .kk-result-section {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
-    border-top: 2px solid rgba(0,167,157,0.12);
+    border-top: 1px solid rgba(0,167,157,0.1);
 }
 
 .kk-proker-summary {
