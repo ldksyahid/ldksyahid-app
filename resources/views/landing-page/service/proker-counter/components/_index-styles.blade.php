@@ -453,12 +453,39 @@
 
 /* Custom checkbox */
 .kk-check {
+    appearance: none;
+    -webkit-appearance: none;
     width: 18px;
     height: 18px;
     min-width: 18px;
-    accent-color: #00a79d;
+    border: 2px solid rgba(0,167,157,0.35);
+    border-radius: 5px;
+    background: #fff;
     cursor: pointer;
-    border-radius: 4px;
+    position: relative;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+}
+.kk-check:hover {
+    border-color: #00a79d;
+    box-shadow: 0 0 0 3px rgba(0,167,157,0.12);
+}
+.kk-check:checked {
+    background: linear-gradient(135deg, #00a79d 0%, #006D6D 100%);
+    border-color: #00a79d;
+    box-shadow: 0 2px 8px rgba(0,167,157,0.35);
+}
+.kk-check:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
 }
 
 /* Terlaksana label */
@@ -534,10 +561,33 @@
     justify-content: center;
 }
 .kk-radio-input {
+    appearance: none;
+    -webkit-appearance: none;
     width: 18px;
     height: 18px;
-    accent-color: #00a79d;
+    min-width: 18px;
+    border: 2px solid rgba(0,167,157,0.35);
+    border-radius: 50%;
+    background: #fff;
     cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+}
+.kk-radio-input:hover {
+    border-color: #00a79d;
+    box-shadow: 0 0 0 3px rgba(0,167,157,0.12);
+}
+.kk-radio-input:checked {
+    border-color: #00a79d;
+    box-shadow: 0 2px 8px rgba(0,167,157,0.3);
+}
+.kk-radio-input:checked::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00a79d 0%, #006D6D 100%);
 }
 
 /* ── Parameter row ───────────────────────────────────────── */
@@ -549,6 +599,40 @@
 }
 .kk-param-row .kk-form-input { margin-bottom: 0; }
 .kk-param-row > div { grid-column: 1 / -1; }
+
+/* ── Dynamically cloned elements from tambah_pelaksanaan ─────
+   code.js appends raw clones directly into these exact-class divs.
+   Add spacing so stacked elements don't look cramped.
+   ──────────────────────────────────────────────────────────── */
+
+/* Cloned checkboxes appended into deskripsi / tujuan / sasaran / tempat */
+div.deskripsi > input.kk-check,
+div.tujuan    > input.kk-check,
+div.sasaran   > input.kk-check,
+div.tempat    > input.kk-check {
+    display: block;
+    margin-top: 0.55rem;
+}
+
+/* Cloned realisasi number input into div.parameter */
+div.parameter > input {
+    width: 100%;
+    margin-top: 0.55rem;
+    box-sizing: border-box;
+}
+
+/* Cloned realisasi dana input into div.akurasi */
+div.akurasi > input {
+    width: 100%;
+    margin-top: 0.55rem;
+    box-sizing: border-box;
+}
+
+/* Cloned choices (radio row) appended into div.tanggal and div.jam */
+div.tanggal > div.choices,
+div.jam     > div.choices {
+    margin-top: 0.45rem;
+}
 
 /* ── Unsur sections override (external CSS removes sharp borders) */
 .unsur {
