@@ -377,8 +377,9 @@ body.ad-rj-open .back-to-top { opacity: 0 !important; visibility: hidden !import
     padding: 2rem; border: 1px solid var(--ad-gray-200);
     box-shadow: 0 4px 20px rgba(0,0,0,.06);
     margin-bottom: 2rem;
+    z-index: 1;
+    position: relative;
 }
-
 
 /* ── Mobile: Floating Baca Juga button ──────────────────────────── */
 .ad-rj-float {

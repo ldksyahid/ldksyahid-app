@@ -290,6 +290,7 @@
         min-width: 0;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
         transition: all 0.3s ease;
+        z-index: 1;
     }
 
     .cu-loc-chip:hover {

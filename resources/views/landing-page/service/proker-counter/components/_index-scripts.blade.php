@@ -261,9 +261,20 @@ function tambah_pelaksanaan(nomorproker) {
   var wadah_parameter = parent.querySelector("div[class='parameter']");
   var wadah_akurasi = parent.querySelector("div[class='akurasi']");
 
-  var clone_deskripsi = wadah_deskripsi.querySelector("input[name='terlaksana']").cloneNode(true);
-  var clone_tujuan = wadah_tujuan.querySelector("input[name='terlaksana']").cloneNode(true);
-  var clone_sasaran = wadah_sasaran.querySelector("input[name='terlaksana']").cloneNode(true);
+  function cloneExecItem(wadah) {
+    var item = wadah.querySelector("label.kk-exec-item");
+    if (item) {
+      var cl = item.cloneNode(true);
+      cl.querySelector("input[name='terlaksana']").checked = false;
+      var numSpan = cl.querySelector(".kk-exec-num");
+      if (numSpan) numSpan.textContent = direncanakan + 1;
+      return cl;
+    }
+    return wadah.querySelector("input[name='terlaksana']").cloneNode(true);
+  }
+  var clone_deskripsi = cloneExecItem(wadah_deskripsi);
+  var clone_tujuan    = cloneExecItem(wadah_tujuan);
+  var clone_sasaran   = cloneExecItem(wadah_sasaran);
   var clone_tanggal = wadah_tanggal.querySelector("div[class='choices']").cloneNode(true);
   var clone_jam = wadah_jam.querySelector("div[class='choices']").cloneNode(true);
 
@@ -279,9 +290,22 @@ function tambah_pelaksanaan(nomorproker) {
     item.setAttribute("name", "jam_"+ (direncanakan + 1) +"");
   });
 
-  var clone_tempat= wadah_tempat.querySelector("input[name='terlaksana']").cloneNode(true);
-  var clone_parameter= wadah_parameter.querySelector("input[name='terlaksana']").cloneNode(true);
-  var clone_akurasi= wadah_akurasi.querySelector("input[name='realization']").cloneNode(true);
+  var clone_tempat = cloneExecItem(wadah_tempat);
+
+  function cloneRealisasiItem(wadah) {
+    var row = wadah.querySelector(".kk-realisasi-row");
+    if (row) {
+      var cl = row.cloneNode(true);
+      var lbl = cl.querySelector(".kk-realisasi-label");
+      if (lbl) lbl.textContent = "Ke-" + (direncanakan + 1);
+      var inp = cl.querySelector("input");
+      if (inp) inp.value = "";
+      return cl;
+    }
+    return wadah.querySelector("input").cloneNode(true);
+  }
+  var clone_parameter = cloneRealisasiItem(wadah_parameter);
+  var clone_akurasi   = cloneRealisasiItem(wadah_akurasi);
 
   wadah_deskripsi.appendChild(clone_deskripsi);
   wadah_tujuan.appendChild(clone_tujuan);
@@ -691,7 +715,7 @@ function refreshValue(){
   var rata_sesuai_parameter = roundAccurately(average(persen_sesuai_parameter), 2);
   document.querySelector("span[id='sesuai_parameter']").innerHTML = rata_sesuai_parameter;
 
-  var parameters = document.querySelectorAll('[id^=parameter_] span');
+  var parameters = document.querySelectorAll('[id^=parameter_] > span.nilai');
   parameters.forEach((item, i) => {
     item.innerHTML = persen_sesuai_parameter[i];
   });
