@@ -2241,6 +2241,8 @@ body.prayer-modal-open .back-to-top,
     let prayerData = null;
     let prayerClockInterval = null;
     let _prayerTouchLock = null;
+    let _prayerWheelLock = null;
+    let _prayerKeyLock  = null;
 
     /* ---- Live Clock (WIB = Asia/Jakarta) ---- */
     function tickPrayerClock() {
@@ -2349,9 +2351,16 @@ body.prayer-modal-open .back-to-top,
         renderModal();
         overlay.classList.add('active');
         document.body.classList.add('prayer-modal-open');
-        // Lock scroll — tanpa position:fixed agar navbar tidak hilang
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
+        // Lock scroll via events — tidak pakai overflow:hidden pada html
+        // agar position:sticky (kk-col-info dll.) tidak rusak
+        _prayerWheelLock = function(e) { e.preventDefault(); };
+        _prayerKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        window.addEventListener('wheel',   _prayerWheelLock, { passive: false });
+        window.addEventListener('keydown', _prayerKeyLock);
         // iOS Safari: cegah touchmove di luar modal
         _prayerTouchLock = function(e) {
             if (!document.getElementById('prayerModal')?.contains(e.target)) {
@@ -2370,8 +2379,14 @@ body.prayer-modal-open .back-to-top,
         overlay.classList.remove('active');
         document.body.classList.remove('prayer-modal-open');
         // Unlock scroll
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
+        if (_prayerWheelLock) {
+            window.removeEventListener('wheel', _prayerWheelLock);
+            _prayerWheelLock = null;
+        }
+        if (_prayerKeyLock) {
+            window.removeEventListener('keydown', _prayerKeyLock);
+            _prayerKeyLock = null;
+        }
         if (_prayerTouchLock) {
             document.removeEventListener('touchmove', _prayerTouchLock);
             _prayerTouchLock = null;
