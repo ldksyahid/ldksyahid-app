@@ -389,6 +389,8 @@ function tambah_deskripsi(nomorproker){
   var new_element = document.createElement("div")
   new_element.setAttribute("id", "deskripsi_" + (number));
   new_element.innerHTML = blueprint_element.innerHTML;
+  var entryNum = new_element.querySelector('.kk-entry-num');
+  if (entryNum) entryNum.textContent = 'Ke-' + number;
 
   child.appendChild(new_element);
 }
@@ -426,6 +428,8 @@ function tambah_tujuan(nomorproker){
   var new_element = document.createElement("div")
   new_element.setAttribute("id", "tujuan_" + (number));
   new_element.innerHTML = blueprint_element.innerHTML;
+  var entryNum = new_element.querySelector('.kk-entry-num');
+  if (entryNum) entryNum.textContent = 'Ke-' + number;
 
   child.appendChild(new_element);
 }
@@ -463,6 +467,8 @@ function tambah_sasaran(nomorproker){
   var new_element = document.createElement("div")
   new_element.setAttribute("id", "sasaran_" + (number));
   new_element.innerHTML = blueprint_element.innerHTML;
+  var entryNum = new_element.querySelector('.kk-entry-num');
+  if (entryNum) entryNum.textContent = 'Ke-' + number;
 
   child.appendChild(new_element);
 }
@@ -500,6 +506,8 @@ function tambah_tempat(nomorproker){
   var new_element = document.createElement("div")
   new_element.setAttribute("id", "tempat_" + (number));
   new_element.innerHTML = blueprint_element.innerHTML;
+  var entryNum = new_element.querySelector('.kk-entry-num');
+  if (entryNum) entryNum.textContent = 'Ke-' + number;
 
   child.appendChild(new_element);
 }
@@ -537,6 +545,8 @@ function tambah_parameter(nomorproker){
   var new_element = document.createElement("div");
   new_element.setAttribute("id", "parameter_" + (number));
   new_element.innerHTML = blueprint_element.innerHTML;
+  var entryNum = new_element.querySelector('.kk-entry-num');
+  if (entryNum) entryNum.textContent = 'Ke-' + number;
 
   child.appendChild(new_element);
 }
