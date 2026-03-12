@@ -637,6 +637,8 @@ body.kmb2-popup-open .back-to-top {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     z-index: 9100;
     opacity: 0;
     transition: opacity .3s ease;

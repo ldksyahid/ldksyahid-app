@@ -703,7 +703,7 @@
     @media (max-width: 767.98px) {
         .cu-section-title { font-size: 1.4rem; }
         .cu-section-sub   { font-size: 0.95rem; }
-        .cu-form-card     { padding: 1.25rem; }
+        .cu-form-card     { padding: 1.25rem; transform: translateX(0); }
         .cu-map-wrap      { height: 240px; }
         .cu-loc-row       { gap: 0.5rem; }
         .cu-loc-chip      { padding: 0.6rem 0.75rem; border-radius: 12px; }

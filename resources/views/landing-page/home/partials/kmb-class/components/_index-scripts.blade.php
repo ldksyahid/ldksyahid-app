@@ -5,9 +5,31 @@
 (function() {
     const KMB_DATA = @json($kelas);
     let currentIdx = 0;
+    let _kmbWheelLock = null, _kmbKeyLock = null, _kmbTouchLock = null;
 
     /* ── Helpers ── */
     function isDesktop() { return window.innerWidth >= 992; }
+
+    function lockScroll(container) {
+        _kmbWheelLock = function(e) { e.preventDefault(); };
+        _kmbKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        _kmbTouchLock = function(e) {
+            if (!container.contains(e.target)) e.preventDefault();
+        };
+        window.addEventListener('wheel',      _kmbWheelLock,  { passive: false });
+        window.addEventListener('keydown',    _kmbKeyLock);
+        document.addEventListener('touchmove', _kmbTouchLock, { passive: false });
+    }
+
+    function unlockScroll() {
+        if (_kmbWheelLock)  { window.removeEventListener('wheel',      _kmbWheelLock);   _kmbWheelLock  = null; }
+        if (_kmbKeyLock)    { window.removeEventListener('keydown',    _kmbKeyLock);      _kmbKeyLock    = null; }
+        if (_kmbTouchLock)  { document.removeEventListener('touchmove', _kmbTouchLock);  _kmbTouchLock  = null; }
+    }
 
     /* ── Back-to-top toggle (smooth) ── */
     function hideBackToTop() {
@@ -82,7 +104,7 @@
             bd.classList.add('active');
             md.classList.add('active');
         });
-        document.body.style.overflow = 'hidden';
+        lockScroll(document.getElementById('kmb2Modal'));
         hideBackToTop();
         document.getElementById('kmb2MClose').focus();
     }
@@ -95,7 +117,7 @@
         setTimeout(function() {
             bd.style.display = 'none';
             md.style.display = 'none';
-            document.body.style.overflow = '';
+            unlockScroll();
             showBackToTop();
         }, 350);
     }
@@ -110,7 +132,7 @@
             bd.classList.add('active');
             sh.classList.add('active');
         });
-        document.body.style.overflow = 'hidden';
+        lockScroll(document.getElementById('kmb2Sheet'));
         hideBackToTop();
     }
 
@@ -122,7 +144,7 @@
         setTimeout(function() {
             bd.style.display = 'none';
             sh.style.display = 'none';
-            document.body.style.overflow = '';
+            unlockScroll();
             showBackToTop();
         }, 380);
     }

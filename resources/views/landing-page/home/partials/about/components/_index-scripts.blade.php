@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const pbsDesc  = document.getElementById('pbsDesc');
         const pbsClose = document.getElementById('pbsClose');
 
+        let _pbsWheelLock = null, _pbsKeyLock = null, _pbsTouchLock = null;
+
         function openSheet(icon, title, desc) {
             pbsIcon.textContent  = icon;
             pbsTitle.textContent = title;
@@ -65,16 +67,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 backdrop.classList.add('active');
                 sheet.classList.add('active');
             });
-            // Sembunyikan back-to-top secara smooth
             document.body.classList.add('kmb2-popup-open');
+            // Lock scroll via events — tidak pakai overflow:hidden agar navbar & sticky aman
+            _pbsWheelLock = function(e) { e.preventDefault(); };
+            _pbsKeyLock   = function(e) {
+                if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            };
+            _pbsTouchLock = function(e) {
+                if (!sheet.contains(e.target)) e.preventDefault();
+            };
+            window.addEventListener('wheel',   _pbsWheelLock,  { passive: false });
+            window.addEventListener('keydown', _pbsKeyLock);
+            document.addEventListener('touchmove', _pbsTouchLock, { passive: false });
         }
 
         function closeSheet() {
             backdrop.classList.remove('active');
             sheet.classList.remove('active');
+            // Lepas scroll lock
+            if (_pbsWheelLock)  { window.removeEventListener('wheel',   _pbsWheelLock);  _pbsWheelLock  = null; }
+            if (_pbsKeyLock)    { window.removeEventListener('keydown', _pbsKeyLock);    _pbsKeyLock    = null; }
+            if (_pbsTouchLock)  { document.removeEventListener('touchmove', _pbsTouchLock); _pbsTouchLock = null; }
             setTimeout(() => {
                 backdrop.style.display = 'none';
-                // Tampilkan kembali back-to-top jika sudah scroll cukup
                 document.body.classList.remove('kmb2-popup-open');
                 if (window.jQuery && (window.scrollY || document.documentElement.scrollTop) > 300) {
                     jQuery('.back-to-top').stop(true).fadeIn(300);

@@ -62,11 +62,29 @@ document.addEventListener('DOMContentLoaded', function () {
     function showBtt() { if (btt) { btt.style.opacity = ''; btt.style.visibility = ''; } }
 
     /* ============================================================
-       4. BODY SCROLL LOCK helpers
+       4. BODY SCROLL LOCK helpers (event-based)
        ============================================================ */
-    /* Scroll lock: hanya pakai overflow:hidden — TIDAK position:fixed agar navbar tetap terlihat */
-    function lockScroll()   { document.body.classList.add('gl-sheet-open'); }
-    function unlockScroll() { document.body.classList.remove('gl-sheet-open'); }
+    var _glWheelLock = null, _glKeyLock = null, _glTouchLock = null;
+
+    function lockScroll(container) {
+        _glWheelLock = function(e) { e.preventDefault(); };
+        _glKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        _glTouchLock = function(e) {
+            if (!container || !container.contains(e.target)) e.preventDefault();
+        };
+        window.addEventListener('wheel',       _glWheelLock,  { passive: false });
+        window.addEventListener('keydown',     _glKeyLock);
+        document.addEventListener('touchmove', _glTouchLock,  { passive: false });
+    }
+    function unlockScroll() {
+        if (_glWheelLock)  { window.removeEventListener('wheel',       _glWheelLock);   _glWheelLock  = null; }
+        if (_glKeyLock)    { window.removeEventListener('keydown',     _glKeyLock);      _glKeyLock    = null; }
+        if (_glTouchLock)  { document.removeEventListener('touchmove', _glTouchLock);   _glTouchLock  = null; }
+    }
 
     /* ============================================================
        5. PHOTO ZOOM OVERLAY
@@ -131,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var iframe = document.getElementById('gl-video-iframe');
         if (iframe) iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
         document.getElementById('gl-video-overlay').classList.add('active');
-        lockScroll();
+        lockScroll(document.getElementById('gl-video-overlay'));
         hideBtt();
     };
 
@@ -179,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('gl-bs-backdrop').classList.add('active');
         document.getElementById('gl-bottom-sheet').classList.add('active');
-        lockScroll();
+        lockScroll(document.getElementById('gl-bottom-sheet'));
         hideBtt();
     };
 

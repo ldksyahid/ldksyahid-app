@@ -50,16 +50,32 @@
     };
 
     /* ── Mobile Baca Juga Sheet ──────────────────────────────────── */
+    var _adRjWheelLock = null, _adRjKeyLock = null, _adRjTouchLock = null;
+
     window.adOpenRjSheet = function () {
+        var sheet = document.getElementById('ad-rj-sheet');
         document.getElementById('ad-rj-backdrop').classList.add('active');
-        document.getElementById('ad-rj-sheet').classList.add('active');
-        document.body.classList.add('ad-rj-open');
+        sheet.classList.add('active');
+        _adRjWheelLock = function(e) { e.preventDefault(); };
+        _adRjKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        _adRjTouchLock = function(e) {
+            if (!sheet.contains(e.target)) e.preventDefault();
+        };
+        window.addEventListener('wheel',       _adRjWheelLock,  { passive: false });
+        window.addEventListener('keydown',     _adRjKeyLock);
+        document.addEventListener('touchmove', _adRjTouchLock,  { passive: false });
     };
 
     window.adCloseRjSheet = function () {
         document.getElementById('ad-rj-backdrop').classList.remove('active');
         document.getElementById('ad-rj-sheet').classList.remove('active');
-        document.body.classList.remove('ad-rj-open');
+        if (_adRjWheelLock)  { window.removeEventListener('wheel',       _adRjWheelLock);   _adRjWheelLock  = null; }
+        if (_adRjKeyLock)    { window.removeEventListener('keydown',     _adRjKeyLock);      _adRjKeyLock    = null; }
+        if (_adRjTouchLock)  { document.removeEventListener('touchmove', _adRjTouchLock);   _adRjTouchLock  = null; }
     };
 
     document.addEventListener('DOMContentLoaded', function () {
