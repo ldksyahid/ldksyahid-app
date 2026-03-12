@@ -19,20 +19,27 @@ document.addEventListener('DOMContentLoaded', function () {
             .replace(/"/g, '&quot;');
     }
 
-    var scrollY = 0;
-    function lockScroll() {
-        scrollY = window.scrollY;
-        document.body.style.overflow  = 'hidden';
-        document.body.style.position  = 'fixed';
-        document.body.style.top       = -scrollY + 'px';
-        document.body.style.width     = '100%';
+    /* ── Bottom sheet scroll lock ── */
+    var _arBsWheelLock = null, _arBsKeyLock = null, _arBsTouchLock = null;
+    function arBsLockScroll() {
+        var sh = document.getElementById('ar-bottom-sheet');
+        _arBsWheelLock = function(e) { e.preventDefault(); };
+        _arBsKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        _arBsTouchLock = function(e) {
+            if (!sh.contains(e.target)) e.preventDefault();
+        };
+        window.addEventListener('wheel',       _arBsWheelLock,  { passive: false });
+        window.addEventListener('keydown',     _arBsKeyLock);
+        document.addEventListener('touchmove', _arBsTouchLock,  { passive: false });
     }
-    function unlockScroll() {
-        document.body.style.overflow  = '';
-        document.body.style.position  = '';
-        document.body.style.top       = '';
-        document.body.style.width     = '';
-        window.scrollTo({ top: scrollY, left: 0, behavior: 'instant' });
+    function arBsUnlockScroll() {
+        if (_arBsWheelLock)  { window.removeEventListener('wheel',       _arBsWheelLock);   _arBsWheelLock  = null; }
+        if (_arBsKeyLock)    { window.removeEventListener('keydown',     _arBsKeyLock);      _arBsKeyLock    = null; }
+        if (_arBsTouchLock)  { document.removeEventListener('touchmove', _arBsTouchLock);   _arBsTouchLock  = null; }
     }
 
     var btt = document.querySelector('.back-to-top');
@@ -90,16 +97,22 @@ document.addEventListener('DOMContentLoaded', function () {
        — Capture phase → intercept sebelum Bootstrap/element lain
        — overflow:hidden di <html> → iOS Safari ikut terkunci
        — TIDAK pakai position:fixed agar navbar tidak terganggu */
-    var _arFmScrollY    = 0;
     var _arFmTouchBlock = null;
+    var _arFmWheelLock  = null, _arFmKeyLock = null;
 
     function arFmLockScroll() {
-        _arFmScrollY = window.scrollY;
-        document.documentElement.style.overflow = 'hidden';
+        _arFmWheelLock = function(e) { e.preventDefault(); };
+        _arFmKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        window.addEventListener('wheel',   _arFmWheelLock, { passive: false });
+        window.addEventListener('keydown', _arFmKeyLock);
     }
     function arFmUnlockScroll() {
-        document.documentElement.style.overflow = '';
-        window.scrollTo({ top: _arFmScrollY, left: 0, behavior: 'instant' });
+        if (_arFmWheelLock) { window.removeEventListener('wheel',   _arFmWheelLock); _arFmWheelLock = null; }
+        if (_arFmKeyLock)   { window.removeEventListener('keydown', _arFmKeyLock);   _arFmKeyLock   = null; }
     }
 
     if (filterModal) {
@@ -545,14 +558,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('ar-bottom-sheet').scrollTop = 0;
         document.getElementById('ar-bs-backdrop').classList.add('active');
         document.getElementById('ar-bottom-sheet').classList.add('active');
-        document.body.classList.add('ar-sheet-open');
+        arBsLockScroll();
         hideBtt();
     };
 
     function arCloseBs() {
         document.getElementById('ar-bs-backdrop').classList.remove('active');
         document.getElementById('ar-bottom-sheet').classList.remove('active');
-        document.body.classList.remove('ar-sheet-open');
+        arBsUnlockScroll();
         showBtt();
     }
 

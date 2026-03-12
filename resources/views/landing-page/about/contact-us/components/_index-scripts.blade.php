@@ -76,6 +76,29 @@
         var bsContent= document.getElementById('cu-bs-content');
         var btt      = document.querySelector('.back-to-top');
 
+        var _cuWheelLock = null, _cuKeyLock = null, _cuTouchLock = null;
+
+        function cuLockScroll() {
+            _cuWheelLock = function(e) { e.preventDefault(); };
+            _cuKeyLock   = function(e) {
+                if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            };
+            _cuTouchLock = function(e) {
+                if (!sheet.contains(e.target)) e.preventDefault();
+            };
+            window.addEventListener('wheel',       _cuWheelLock,  { passive: false });
+            window.addEventListener('keydown',     _cuKeyLock);
+            document.addEventListener('touchmove', _cuTouchLock,  { passive: false });
+        }
+
+        function cuUnlockScroll() {
+            if (_cuWheelLock)  { window.removeEventListener('wheel',       _cuWheelLock);   _cuWheelLock  = null; }
+            if (_cuKeyLock)    { window.removeEventListener('keydown',     _cuKeyLock);      _cuKeyLock    = null; }
+            if (_cuTouchLock)  { document.removeEventListener('touchmove', _cuTouchLock);   _cuTouchLock  = null; }
+        }
+
         var colorBg = {
             primary: 'rgba(0,167,157,0.12)',
             green:   'rgba(0,184,148,0.12)',
@@ -126,7 +149,7 @@
 
             if (backdrop) backdrop.classList.add('cu-bs-open');
             if (sheet) sheet.classList.add('cu-bs-open');
-            document.body.classList.add('cu-no-scroll');
+            cuLockScroll();
             if (btt) btt.classList.add('cu-hide-btt');
             if (sheet) sheet.focus();
         }
@@ -134,7 +157,7 @@
         function cuCloseSheet() {
             if (backdrop) backdrop.classList.remove('cu-bs-open');
             if (sheet) sheet.classList.remove('cu-bs-open');
-            document.body.classList.remove('cu-no-scroll');
+            cuUnlockScroll();
             if (btt) btt.classList.remove('cu-hide-btt');
         }
 
