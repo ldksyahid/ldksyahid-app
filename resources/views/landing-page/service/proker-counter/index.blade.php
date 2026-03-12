@@ -270,44 +270,54 @@
                                         {{-- Tanggal — class="tanggal" EXACT for JS --}}
                                         <div class="tanggal">
                                             <p class="kk-radio-label-p">
-                                                Tanggal
+                                                Tanggal Pelaksanaan
                                                 <span class="kk-inline-score nilai" id="sesuai_tanggal">-</span>
                                             </p>
-                                            <div class="kk-radio-options-label">
-                                                <span>Sesuai</span>
-                                                <span>±1–7 hr</span>
-                                                <span>±8–14 hr</span>
+                                            <span class="kk-dyn-hint">Seberapa sesuai tanggal pelaksanaan dengan yang direncanakan?</span>
+                                            <div class="kk-radio-options-label kk-radio-options-label--wt">
+                                                <span></span>
+                                                <span>Tepat</span>
+                                                <span>Telat 1–7 hr</span>
+                                                <span>Telat 8–14 hr</span>
                                                 <span>≥15 hr</span>
                                             </div>
-                                            {{-- class="choices" EXACT for JS --}}
-                                            <div class="choices">
-                                                <label class="kk-radio-wrap">
-                                                    <input type="radio" class="kk-radio-input" name="tanggal_1" id="sesuai" value="25" onchange="refreshValue()">
-                                                </label>
-                                                <label class="kk-radio-wrap">
-                                                    <input type="radio" class="kk-radio-input" name="tanggal_1" id="telat1minggu" value="20" onchange="refreshValue()">
-                                                </label>
-                                                <label class="kk-radio-wrap">
-                                                    <input type="radio" class="kk-radio-input" name="tanggal_1" id="telat2minggu" value="15" onchange="refreshValue()">
-                                                </label>
-                                                <label class="kk-radio-wrap">
-                                                    <input type="radio" class="kk-radio-input" name="tanggal_1" id="telat3minggu" value="5" onchange="refreshValue()">
-                                                </label>
+                                            {{-- kk-wt-row = label + choices wrapper, cloned per pelaksanaan --}}
+                                            <div class="kk-wt-row">
+                                                <span class="kk-wt-row-label">Ke-1</span>
+                                                {{-- class="choices" EXACT for JS --}}
+                                                <div class="choices">
+                                                    <label class="kk-radio-wrap">
+                                                        <input type="radio" class="kk-radio-input" name="tanggal_1" id="sesuai" value="25" onchange="refreshValue()">
+                                                    </label>
+                                                    <label class="kk-radio-wrap">
+                                                        <input type="radio" class="kk-radio-input" name="tanggal_1" id="telat1minggu" value="20" onchange="refreshValue()">
+                                                    </label>
+                                                    <label class="kk-radio-wrap">
+                                                        <input type="radio" class="kk-radio-input" name="tanggal_1" id="telat2minggu" value="15" onchange="refreshValue()">
+                                                    </label>
+                                                    <label class="kk-radio-wrap">
+                                                        <input type="radio" class="kk-radio-input" name="tanggal_1" id="telat3minggu" value="5" onchange="refreshValue()">
+                                                    </label>
+                                                </div>
                                             </div>
+                                        </div>{{-- /tanggal --}}
 
-                                            {{-- Jam --}}
+                                        {{-- Jam — class="jam" EXACT for JS (now sibling of tanggal, NOT nested) --}}
+                                        <div class="jam">
                                             <p class="kk-radio-label-p" style="margin-top:.85rem">
-                                                Jam
+                                                Jam Mulai
                                                 <span class="kk-inline-score nilai" id="sesuai_jam">-</span>
                                             </p>
-                                            <div class="kk-radio-options-label">
-                                                <span>Sesuai</span>
-                                                <span>+1–15 m</span>
-                                                <span>+16–30 m</span>
+                                            <span class="kk-dyn-hint">Seberapa tepat jam mulai pelaksanaan sesuai jadwal yang ditetapkan?</span>
+                                            <div class="kk-radio-options-label kk-radio-options-label--wt">
+                                                <span></span>
+                                                <span>Tepat</span>
+                                                <span>Telat 1–15 m</span>
+                                                <span>Telat 16–30 m</span>
                                                 <span>≥31 m</span>
                                             </div>
-                                            {{-- class="jam" EXACT for JS (nested in tanggal div here) --}}
-                                            <div class="jam">
+                                            <div class="kk-wt-row">
+                                                <span class="kk-wt-row-label">Ke-1</span>
                                                 {{-- class="choices" EXACT for JS --}}
                                                 <div class="choices">
                                                     <label class="kk-radio-wrap">
@@ -324,7 +334,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                        </div>{{-- /tanggal --}}
+                                        </div>{{-- /jam --}}
                                     </div>{{-- /waktu --}}
 
                                     {{-- Tempat --}}
