@@ -2461,21 +2461,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Mobile menu
     const backToTop = document.querySelector('.back-to-top');
+    let _menuWheelLock = null, _menuKeyLock = null, _menuTouchLock = null;
 
     function openMenu() {
         mobileMenu.classList.add('active');
         mobileOverlay.classList.add('active');
         mobileToggle.classList.add('active');
-        document.body.style.overflow = 'hidden';
         if (backToTop) backToTop.classList.add('hide-for-overlay');
+        // Blokir scroll background via events (tidak pakai overflow:hidden agar sticky tetap ok)
+        _menuWheelLock = function(e) { e.preventDefault(); };
+        _menuKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        _menuTouchLock = function(e) {
+            if (!mobileMenu.contains(e.target)) e.preventDefault();
+        };
+        window.addEventListener('wheel',   _menuWheelLock,  { passive: false });
+        window.addEventListener('keydown', _menuKeyLock);
+        document.addEventListener('touchmove', _menuTouchLock, { passive: false });
     }
 
     function closeMenu() {
         mobileMenu.classList.remove('active');
         mobileOverlay.classList.remove('active');
         mobileToggle.classList.remove('active');
-        document.body.style.overflow = '';
         if (backToTop) backToTop.classList.remove('hide-for-overlay');
+        if (_menuWheelLock)  { window.removeEventListener('wheel',   _menuWheelLock);  _menuWheelLock  = null; }
+        if (_menuKeyLock)    { window.removeEventListener('keydown', _menuKeyLock);    _menuKeyLock    = null; }
+        if (_menuTouchLock)  { document.removeEventListener('touchmove', _menuTouchLock); _menuTouchLock = null; }
     }
 
     mobileToggle?.addEventListener('click', () => mobileMenu.classList.contains('active') ? closeMenu() : openMenu());
