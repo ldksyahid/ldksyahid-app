@@ -670,10 +670,10 @@ function refreshValue(){
     var list_realisasi = document.querySelectorAll("#parameter_" + parseFloat(i+1) + " input[id='realisasi_parameter']");
     var item_realisasi = [];
     list_realisasi.forEach((list, j) => {
-      item_realisasi[j] = list.value;
+      item_realisasi[j] = (list.value || '').replace(/\./g, '');
     });
-    var item_estimasi = document.querySelector("#parameter_" + parseFloat(i+1) + " input[id='estimasi_parameter']").value;
-    var item_satuan = document.querySelector("#parameter_" + parseFloat(i+1) + " input[type='text']").value;
+    var item_estimasi = (document.querySelector("#parameter_" + parseFloat(i+1) + " input[id='estimasi_parameter']").value || '').replace(/\./g, '');
+    var item_satuan = document.querySelector("#parameter_" + parseFloat(i+1) + " input[name='parameter']").value;
 
     parent[i] = {"realisasi" : item_realisasi, "estimasi" : item_estimasi, "satuan" : item_satuan};
   })

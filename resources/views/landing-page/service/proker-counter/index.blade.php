@@ -47,6 +47,7 @@
                     <div class="kk-form-group">
                         <label class="kk-form-label" for="proker1">
                             <i class="fas fa-clipboard-list"></i> Nama Program Kerja
+                            <span class="kk-param-hint-inline">— nama kegiatan divisimu</span>
                         </label>
                         <input type="text" class="kk-form-input" id="proker1"
                                placeholder="Contoh: Workshop Keadministrasian"
@@ -119,6 +120,7 @@
 
                                         <div id="deskripsi_1">
                                             <div class="kk-check-row">
+                                                <label class="kk-form-label-sm">Deskripsi Kegiatan <span class="kk-param-hint-inline">— tuliskan nama kegiatan yang direncanakan</span></label>
                                                 <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Contoh: Memberikan Penyuluhan"
                                                        onchange="refreshValue()">
@@ -178,6 +180,7 @@
                                         </div>
                                         <div id="tujuan_1">
                                             <div class="kk-check-row">
+                                                <label class="kk-form-label-sm">Tujuan Program <span class="kk-param-hint-inline">— tujuan spesifik yang ingin dicapai proker</span></label>
                                                 <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Contoh: Memahami regulasi administrasi"
                                                        onchange="refreshValue()">
@@ -219,6 +222,7 @@
                                         </div>
                                         <div id="sasaran_1">
                                             <div class="kk-check-row">
+                                                <label class="kk-form-label-sm">Sasaran Program <span class="kk-param-hint-inline">— target peserta / kelompok penerima manfaat</span></label>
                                                 <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Contoh: Pengurus LDK Syahid"
                                                        onchange="refreshValue()">
@@ -346,6 +350,7 @@
                                         </div>
                                         <div id="tempat_1">
                                             <div class="kk-check-row">
+                                                <label class="kk-form-label-sm">Nama Tempat <span class="kk-param-hint-inline">— nama lokasi pelaksanaan kegiatan</span></label>
                                                 <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Contoh: Auditorium Harun Nasution"
                                                        onchange="refreshValue()">
@@ -407,9 +412,9 @@
                                                         Jumlah Target
                                                         <span class="kk-param-hint-inline">— berapa yang direncanakan?</span>
                                                     </label>
-                                                    <input type="number" class="kk-form-input" name="target_1"
+                                                    <input type="text" inputmode="numeric" class="kk-form-input" name="target_1"
                                                            id="estimasi_parameter" placeholder="Contoh: 30"
-                                                           min="1" oninput="refreshValue()">
+                                                           oninput="formatRupiah(this); refreshValue()">
                                                 </div>
                                                 <div>
                                                     <label class="kk-form-label-sm">
@@ -429,9 +434,9 @@
                                             <div class="parameter">
                                                 <div class="kk-realisasi-row">
                                                     <span class="kk-realisasi-label">Ke-1</span>
-                                                    <input type="number" class="kk-form-input" name="terlaksana"
+                                                    <input type="text" inputmode="numeric" class="kk-form-input" name="terlaksana"
                                                            id="realisasi_parameter" placeholder="Contoh: 10"
-                                                           min="1" oninput="refreshValue()">
+                                                           oninput="formatRupiah(this); refreshValue()">
                                                 </div>
                                             </div>
                                         </div>
@@ -456,13 +461,13 @@
                                 {{-- class="efisiensi_dana" needed for external JS selectors --}}
                                 <div class="unsur efisiensi_dana">
                                     <div class="kk-form-group kk-form-group--inner">
-                                        <label class="kk-form-label-sm">Estimasi Dana (Rp)</label>
+                                        <label class="kk-form-label-sm">Estimasi Dana <span class="kk-param-hint-inline">— total anggaran yang direncanakan (Rp)</span></label>
                                         <input type="text" inputmode="numeric" class="kk-form-input" name="estimation"
                                                id="estimasi_dana" placeholder="Contoh: 1.000.000"
                                                oninput="formatRupiah(this); refreshValue()" autocomplete="off">
                                     </div>
                                     <div class="kk-form-group kk-form-group--inner">
-                                        <label class="kk-form-label-sm">Realisasi Dana (Rp)</label>
+                                        <label class="kk-form-label-sm">Realisasi Dana <span class="kk-param-hint-inline">— total yang dikeluarkan per pelaksanaan (Rp)</span></label>
                                         {{-- class="akurasi" EXACT for JS --}}
                                         <div class="akurasi">
                                             <div class="kk-realisasi-row">
@@ -474,7 +479,7 @@
                                         </div>
                                     </div>
                                     <div class="kk-form-group kk-form-group--inner">
-                                        <label class="kk-form-label-sm">Skala Penurunan</label>
+                                        <label class="kk-form-label-sm">Skala Penurunan <span class="kk-param-hint-inline">— pengali penalti jika dana melebihi estimasi</span></label>
                                         <input type="text" class="kk-form-input kk-input-disabled"
                                                name="scale" id="skala_penurunan" placeholder="4" disabled>
                                     </div>
