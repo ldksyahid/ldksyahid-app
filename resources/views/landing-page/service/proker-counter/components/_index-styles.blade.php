@@ -436,16 +436,65 @@
 .kk-dyn-add:hover    { background: #00a79d; color: #fff; transform: scale(1.1); }
 .kk-dyn-remove:hover { background: #dc3545; color: #fff; transform: scale(1.1); }
 
-/* ── Check row (text + checkbox together) ────────────────── */
+/* ── Check row (text input above, checkboxes below) ─────── */
 .kk-check-row {
     display: flex;
-    align-items: center;
-    gap: 0.65rem;
+    flex-direction: column;
+    gap: 0.35rem;
     margin-bottom: 0.5rem;
 }
 .kk-check-row .kk-form-input {
-    flex: 1;
     margin-bottom: 0;
+}
+
+/* Exec area: hint + pill checkboxes in one row */
+.kk-exec-area {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0.1rem 0;
+}
+.kk-exec-hint {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+.kk-exec-area > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+/* Pill wrapper for each execution checkbox */
+.kk-exec-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.18rem 0.45rem 0.18rem 0.3rem;
+    border: 1.5px solid rgba(0,167,157,0.2);
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s;
+}
+.kk-exec-item:hover {
+    border-color: rgba(0,167,157,0.45);
+    background: rgba(0,167,157,0.04);
+}
+.kk-exec-item:has(.kk-check:checked) {
+    border-color: #00a79d;
+    background: rgba(0,167,157,0.1);
+}
+.kk-exec-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #9ca3af;
+    line-height: 1;
+    transition: color 0.18s;
+}
+.kk-exec-item:has(.kk-check:checked) .kk-exec-num {
+    color: #00a79d;
 }
 
 /* Custom checkbox */
@@ -485,17 +534,6 @@
     transform: rotate(45deg);
 }
 
-/* Terlaksana label */
-.kk-terlaksana-label {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #6b7280;
-    white-space: nowrap;
-    cursor: pointer;
-}
 
 /* ── Subsection titles ───────────────────────────────────── */
 .kk-subsection-title {
@@ -593,37 +631,32 @@
     grid-template-columns: 1fr 1fr;
     gap: 0.65rem;
     margin-top: 0.35rem;
+    margin-bottom: 0.4rem;
 }
 .kk-param-row .kk-form-input { margin-bottom: 0; }
-.kk-param-row > div { grid-column: 1 / -1; }
 
-/* ── Dynamically cloned elements from tambah_pelaksanaan ─────
-   code.js appends raw clones directly into these exact-class divs.
-   Add spacing so stacked elements don't look cramped.
-   ──────────────────────────────────────────────────────────── */
-
-/* Cloned checkboxes appended into deskripsi / tujuan / sasaran / tempat */
-div.deskripsi > input.kk-check,
-div.tujuan    > input.kk-check,
-div.sasaran   > input.kk-check,
-div.tempat    > input.kk-check {
-    display: block;
-    margin-top: 0.55rem;
+/* Realisasi stacked rows inside div.parameter and div.akurasi */
+div.parameter,
+div.akurasi {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.25rem;
 }
-
-/* Cloned realisasi number input into div.parameter */
-div.parameter > input {
-    width: 100%;
-    margin-top: 0.55rem;
-    box-sizing: border-box;
+.kk-realisasi-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
-
-/* Cloned realisasi dana input into div.akurasi */
-div.akurasi > input {
-    width: 100%;
-    margin-top: 0.55rem;
-    box-sizing: border-box;
+.kk-realisasi-row .kk-form-input { flex: 1; margin-bottom: 0; }
+.kk-realisasi-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #9ca3af;
+    white-space: nowrap;
+    min-width: 28px;
 }
+.kk-realisasi-heading { margin: 0.5rem 0 0 !important; }
 
 /* Cloned choices (radio row) appended into div.tanggal and div.jam */
 div.tanggal > div.choices,
@@ -829,7 +862,6 @@ body.kk-sheet-open .back-to-top {
     .kk-deco-title { font-size: 1.45rem; }
     .kk-result-section { display: none; } /* shown via bottom sheet on mobile */
     .kk-param-row { grid-template-columns: 1fr; }
-    .kk-param-row > div { grid-column: auto; }
     .kk-radio-options-label span { font-size: 0.55rem; }
 }
 

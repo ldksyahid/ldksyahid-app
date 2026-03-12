@@ -55,7 +55,7 @@
                             {!! substr(strip_tags($news->body), 0, 365) !!}...
                         </p>
                         @endif
-                        <a href="/news/{{ $news->id }}/show" class="news-card__read">
+                        <a href="/news/{{ $news->id }}" class="news-card__read">
                             <span>Baca Selengkapnya</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -93,7 +93,7 @@
                      data-news-date="{{ \Carbon\Carbon::parse($news->datepublish)->isoFormat('D MMMM YYYY') }}"
                      data-news-img="https://lh3.googleusercontent.com/d/{{ $news->gdrive_id }}"
                      data-news-excerpt="{!! substr(strip_tags($news->body), 0, 200) !!}..."
-                     data-news-url="/news/{{ $news->id }}/show">
+                     data-news-url="/news/{{ $news->id }}">
                     <div class="news-card__img-wrap">
                         <img src="https://lh3.googleusercontent.com/d/{{ $news->gdrive_id }}"
                              alt="{{ $news->title }}"

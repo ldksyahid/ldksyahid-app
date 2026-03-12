@@ -116,16 +116,19 @@
 
                                         <div id="deskripsi_1">
                                             <div class="kk-check-row">
-                                                <input type="text" class="kk-form-input kk-input-flex"
+                                                <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Memberikan Penyuluhan"
                                                        onchange="refreshValue()">
-                                                {{-- class="deskripsi" must be EXACT for external JS --}}
-                                                <div class="deskripsi">
-                                                    <label class="kk-terlaksana-label">
-                                                        <input type="checkbox" class="kk-check"
-                                                               name="terlaksana" onchange="refreshValue()">
-                                                        Terlaksana
-                                                    </label>
+                                                <div class="kk-exec-area">
+                                                    <span class="kk-exec-hint">Terlaksana di pelaksanaan ke:</span>
+                                                    {{-- class="deskripsi" must be EXACT for external JS --}}
+                                                    <div class="deskripsi">
+                                                        <label class="kk-exec-item">
+                                                            <input type="checkbox" class="kk-check"
+                                                                   name="terlaksana" onchange="refreshValue()">
+                                                            <span class="kk-exec-num">1</span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -169,16 +172,19 @@
                                         </div>
                                         <div id="tujuan_1">
                                             <div class="kk-check-row">
-                                                <input type="text" class="kk-form-input kk-input-flex"
+                                                <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Memahami regulasi administrasi"
                                                        onchange="refreshValue()">
-                                                {{-- class="tujuan" must be EXACT for external JS --}}
-                                                <div class="tujuan">
-                                                    <label class="kk-terlaksana-label">
-                                                        <input type="checkbox" class="kk-check"
-                                                               name="terlaksana" onchange="refreshValue()">
-                                                        Terlaksana
-                                                    </label>
+                                                <div class="kk-exec-area">
+                                                    <span class="kk-exec-hint">Terlaksana di pelaksanaan ke:</span>
+                                                    {{-- class="tujuan" must be EXACT for external JS --}}
+                                                    <div class="tujuan">
+                                                        <label class="kk-exec-item">
+                                                            <input type="checkbox" class="kk-check"
+                                                                   name="terlaksana" onchange="refreshValue()">
+                                                            <span class="kk-exec-num">1</span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -204,16 +210,19 @@
                                         </div>
                                         <div id="sasaran_1">
                                             <div class="kk-check-row">
-                                                <input type="text" class="kk-form-input kk-input-flex"
+                                                <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Pengurus LDK Syahid"
                                                        onchange="refreshValue()">
-                                                {{-- class="sasaran" must be EXACT for external JS --}}
-                                                <div class="sasaran">
-                                                    <label class="kk-terlaksana-label">
-                                                        <input type="checkbox" class="kk-check"
-                                                               name="terlaksana" onchange="refreshValue()">
-                                                        Terlaksana
-                                                    </label>
+                                                <div class="kk-exec-area">
+                                                    <span class="kk-exec-hint">Terlaksana di pelaksanaan ke:</span>
+                                                    {{-- class="sasaran" must be EXACT for external JS --}}
+                                                    <div class="sasaran">
+                                                        <label class="kk-exec-item">
+                                                            <input type="checkbox" class="kk-check"
+                                                                   name="terlaksana" onchange="refreshValue()">
+                                                            <span class="kk-exec-num">1</span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -325,16 +334,19 @@
                                         </div>
                                         <div id="tempat_1">
                                             <div class="kk-check-row">
-                                                <input type="text" class="kk-form-input kk-input-flex"
+                                                <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Ruang RK-09"
                                                        onchange="refreshValue()">
-                                                {{-- class="tempat" EXACT for JS --}}
-                                                <div class="tempat">
-                                                    <label class="kk-terlaksana-label">
-                                                        <input type="checkbox" class="kk-check"
-                                                               name="terlaksana" onchange="refreshValue()">
-                                                        Sesuai
-                                                    </label>
+                                                <div class="kk-exec-area">
+                                                    <span class="kk-exec-hint">Sesuai di pelaksanaan ke:</span>
+                                                    {{-- class="tempat" EXACT for JS --}}
+                                                    <div class="tempat">
+                                                        <label class="kk-exec-item">
+                                                            <input type="checkbox" class="kk-check"
+                                                                   name="terlaksana" onchange="refreshValue()">
+                                                            <span class="kk-exec-num">1</span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -381,10 +393,14 @@
                                                 <input type="text" class="kk-form-input" name="parameter"
                                                        placeholder="Satuan (e.g. anggota)"
                                                        onchange="refreshValue()">
-                                                {{-- class="parameter" EXACT for JS --}}
-                                                <div class="parameter">
+                                            </div>
+                                            <p class="kk-form-label-sm kk-realisasi-heading">Realisasi per pelaksanaan</p>
+                                            {{-- class="parameter" EXACT for JS --}}
+                                            <div class="parameter">
+                                                <div class="kk-realisasi-row">
+                                                    <span class="kk-realisasi-label">Ke-1</span>
                                                     <input type="number" class="kk-form-input" name="terlaksana"
-                                                           id="realisasi_parameter" placeholder="Realisasi (10)"
+                                                           id="realisasi_parameter" placeholder="10"
                                                            min="1" oninput="refreshValue()">
                                                 </div>
                                             </div>
@@ -419,9 +435,12 @@
                                         <label class="kk-form-label-sm">Realisasi Dana (Rp)</label>
                                         {{-- class="akurasi" EXACT for JS --}}
                                         <div class="akurasi">
-                                            <input type="number" class="kk-form-input" name="realization"
-                                                   id="realisasi_dana" placeholder="990000"
-                                                   oninput="refreshValue()" autocomplete="off">
+                                            <div class="kk-realisasi-row">
+                                                <span class="kk-realisasi-label">Ke-1</span>
+                                                <input type="number" class="kk-form-input" name="realization"
+                                                       id="realisasi_dana" placeholder="0"
+                                                       oninput="refreshValue()" autocomplete="off">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="kk-form-group kk-form-group--inner">
