@@ -120,7 +120,7 @@
 
                                         <div id="deskripsi_1">
                                             <div class="kk-check-row">
-                                                <label class="kk-form-label-sm">Deskripsi Kegiatan <span class="kk-param-hint-inline">— tuliskan nama kegiatan yang direncanakan</span></label>
+                                                <label class="kk-form-label-sm">Deskripsi Kegiatan <span class="kk-entry-num">Ke-1</span> <span class="kk-param-hint-inline">— tuliskan nama kegiatan yang direncanakan</span></label>
                                                 <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Contoh: Memberikan Penyuluhan"
                                                        onchange="refreshValue()">
@@ -180,7 +180,7 @@
                                         </div>
                                         <div id="tujuan_1">
                                             <div class="kk-check-row">
-                                                <label class="kk-form-label-sm">Tujuan Program <span class="kk-param-hint-inline">— tujuan spesifik yang ingin dicapai proker</span></label>
+                                                <label class="kk-form-label-sm">Tujuan Program <span class="kk-entry-num">Ke-1</span> <span class="kk-param-hint-inline">— tujuan spesifik yang ingin dicapai proker</span></label>
                                                 <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Contoh: Memahami regulasi administrasi"
                                                        onchange="refreshValue()">
@@ -222,7 +222,7 @@
                                         </div>
                                         <div id="sasaran_1">
                                             <div class="kk-check-row">
-                                                <label class="kk-form-label-sm">Sasaran Program <span class="kk-param-hint-inline">— target peserta / kelompok penerima manfaat</span></label>
+                                                <label class="kk-form-label-sm">Sasaran Program <span class="kk-entry-num">Ke-1</span> <span class="kk-param-hint-inline">— target peserta / kelompok penerima manfaat</span></label>
                                                 <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Contoh: Pengurus LDK Syahid"
                                                        onchange="refreshValue()">
@@ -350,7 +350,7 @@
                                         </div>
                                         <div id="tempat_1">
                                             <div class="kk-check-row">
-                                                <label class="kk-form-label-sm">Nama Tempat <span class="kk-param-hint-inline">— nama lokasi pelaksanaan kegiatan</span></label>
+                                                <label class="kk-form-label-sm">Nama Tempat <span class="kk-entry-num">Ke-1</span> <span class="kk-param-hint-inline">— nama lokasi pelaksanaan kegiatan</span></label>
                                                 <input type="text" class="kk-form-input"
                                                        name="target_1" placeholder="Contoh: Auditorium Harun Nasution"
                                                        onchange="refreshValue()">
@@ -410,6 +410,7 @@
                                                 <div>
                                                     <label class="kk-form-label-sm">
                                                         Jumlah Target
+                                                        <span class="kk-entry-num">Ke-1</span>
                                                         <span class="kk-param-hint-inline">— berapa yang direncanakan?</span>
                                                     </label>
                                                     <input type="text" inputmode="numeric" class="kk-form-input" name="target_1"

@@ -670,6 +670,18 @@ div.akurasi {
     min-width: 28px;
 }
 .kk-realisasi-heading { margin: 0.5rem 0 0 !important; }
+.kk-entry-num {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #00a79d;
+    background: rgba(0,167,157,0.1);
+    border-radius: 50rem;
+    padding: 0.1rem 0.5rem;
+    margin-left: 0.3rem;
+    margin-right: 0.1rem;
+    vertical-align: middle;
+}
 
 /* Cloned choices (radio row) appended into div.tanggal and div.jam */
 div.tanggal > div.choices,
