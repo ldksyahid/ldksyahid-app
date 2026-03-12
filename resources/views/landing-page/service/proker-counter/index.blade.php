@@ -101,15 +101,18 @@
                                     <div class="unsur">
                                         {{-- add_element kept for JS layout compatibility --}}
                                         <div class="kk-dyn-wrap add_element">
-                                            <p class="kk-dyn-label">Deskripsi Program</p>
+                                            <div class="kk-dyn-label-group">
+                                                <p class="kk-dyn-label">Deskripsi Program</p>
+                                                <span class="kk-dyn-hint">Kegiatan yang direncanakan dalam proker</span>
+                                            </div>
                                             <div class="kk-dyn-btns">
                                                 <button type="button" class="kk-dyn-btn kk-dyn-add"
                                                         onclick="tambah_deskripsi(1), refreshValue()">
-                                                    <i class="fas fa-plus"></i>
+                                                    <i class="fas fa-plus"></i> Tambah
                                                 </button>
                                                 <button type="button" class="kk-dyn-btn kk-dyn-remove"
                                                         onclick="kurang_deskripsi(1), refreshValue()">
-                                                    <i class="fas fa-minus"></i>
+                                                    <i class="fas fa-trash-alt"></i> Hapus
                                                 </button>
                                             </div>
                                         </div>
@@ -155,18 +158,21 @@
                                     {{-- Tujuan --}}
                                     <div class="unsur tujuan">
                                         <div class="kk-dyn-wrap add_element">
-                                            <p class="kk-dyn-label">
-                                                Tujuan
-                                                <span class="kk-inline-score nilai" id="sesuai_tujuan">-</span>
-                                            </p>
+                                            <div class="kk-dyn-label-group">
+                                                <p class="kk-dyn-label">
+                                                    Tujuan
+                                                    <span class="kk-inline-score nilai" id="sesuai_tujuan">-</span>
+                                                </p>
+                                                <span class="kk-dyn-hint">Tujuan yang ingin dicapai dari proker</span>
+                                            </div>
                                             <div class="kk-dyn-btns">
                                                 <button type="button" class="kk-dyn-btn kk-dyn-add"
                                                         onclick="tambah_tujuan(1), refreshValue()">
-                                                    <i class="fas fa-plus"></i>
+                                                    <i class="fas fa-plus"></i> Tambah
                                                 </button>
                                                 <button type="button" class="kk-dyn-btn kk-dyn-remove"
                                                         onclick="kurang_tujuan(1), refreshValue()">
-                                                    <i class="fas fa-minus"></i>
+                                                    <i class="fas fa-trash-alt"></i> Hapus
                                                 </button>
                                             </div>
                                         </div>
@@ -193,18 +199,21 @@
                                     {{-- Sasaran --}}
                                     <div class="unsur sasaran">
                                         <div class="kk-dyn-wrap add_element">
-                                            <p class="kk-dyn-label">
-                                                Sasaran
-                                                <span class="kk-inline-score nilai" id="sesuai_sasaran">-</span>
-                                            </p>
+                                            <div class="kk-dyn-label-group">
+                                                <p class="kk-dyn-label">
+                                                    Sasaran
+                                                    <span class="kk-inline-score nilai" id="sesuai_sasaran">-</span>
+                                                </p>
+                                                <span class="kk-dyn-hint">Target peserta / penerima manfaat proker</span>
+                                            </div>
                                             <div class="kk-dyn-btns">
                                                 <button type="button" class="kk-dyn-btn kk-dyn-add"
                                                         onclick="tambah_sasaran(1), refreshValue()">
-                                                    <i class="fas fa-plus"></i>
+                                                    <i class="fas fa-plus"></i> Tambah
                                                 </button>
                                                 <button type="button" class="kk-dyn-btn kk-dyn-remove"
                                                         onclick="kurang_sasaran(1), refreshValue()">
-                                                    <i class="fas fa-minus"></i>
+                                                    <i class="fas fa-trash-alt"></i> Hapus
                                                 </button>
                                             </div>
                                         </div>
@@ -317,18 +326,21 @@
                                     {{-- Tempat --}}
                                     <div class="unsur tempat">
                                         <div class="kk-dyn-wrap add_element">
-                                            <p class="kk-dyn-label">
-                                                Tempat
-                                                <span class="kk-inline-score nilai" id="sesuai_tempat">-</span>
-                                            </p>
+                                            <div class="kk-dyn-label-group">
+                                                <p class="kk-dyn-label">
+                                                    Tempat
+                                                    <span class="kk-inline-score nilai" id="sesuai_tempat">-</span>
+                                                </p>
+                                                <span class="kk-dyn-hint">Lokasi pelaksanaan kegiatan</span>
+                                            </div>
                                             <div class="kk-dyn-btns">
                                                 <button type="button" class="kk-dyn-btn kk-dyn-add"
                                                         onclick="tambah_tempat(1), refreshValue()">
-                                                    <i class="fas fa-plus"></i>
+                                                    <i class="fas fa-plus"></i> Tambah
                                                 </button>
                                                 <button type="button" class="kk-dyn-btn kk-dyn-remove"
                                                         onclick="kurang_tempat(1), refreshValue()">
-                                                    <i class="fas fa-minus"></i>
+                                                    <i class="fas fa-trash-alt"></i> Hapus
                                                 </button>
                                             </div>
                                         </div>
@@ -372,29 +384,47 @@
                                 <div class="unsur parameter">
                                     <div class="unsur">
                                         <div class="kk-dyn-wrap add_element">
-                                            <p class="kk-dyn-label">Parameter</p>
+                                            <div class="kk-dyn-label-group">
+                                                <p class="kk-dyn-label">Parameter Keberhasilan</p>
+                                                <span class="kk-dyn-hint">Indikator terukur (estimasi vs realisasi)</span>
+                                            </div>
                                             <div class="kk-dyn-btns">
                                                 <button type="button" class="kk-dyn-btn kk-dyn-add"
                                                         onclick="tambah_parameter(1), refreshValue()">
-                                                    <i class="fas fa-plus"></i>
+                                                    <i class="fas fa-plus"></i> Tambah
                                                 </button>
                                                 <button type="button" class="kk-dyn-btn kk-dyn-remove"
                                                         onclick="kurang_parameter(1), refreshValue()">
-                                                    <i class="fas fa-minus"></i>
+                                                    <i class="fas fa-trash-alt"></i> Hapus
                                                 </button>
                                             </div>
                                         </div>
                                         <div id="parameter_1">
                                             <span class="kk-inline-score nilai"></span>
                                             <div class="kk-param-row">
-                                                <input type="number" class="kk-form-input" name="target_1"
-                                                       id="estimasi_parameter" placeholder="Estimasi (10)"
-                                                       min="1" oninput="refreshValue()">
-                                                <input type="text" class="kk-form-input" name="parameter"
-                                                       placeholder="Satuan (e.g. anggota)"
-                                                       onchange="refreshValue()">
+                                                <div>
+                                                    <label class="kk-form-label-sm">
+                                                        Jumlah Target
+                                                        <span class="kk-param-hint-inline">— berapa yang direncanakan?</span>
+                                                    </label>
+                                                    <input type="number" class="kk-form-input" name="target_1"
+                                                           id="estimasi_parameter" placeholder="Contoh: 30"
+                                                           min="1" oninput="refreshValue()">
+                                                </div>
+                                                <div>
+                                                    <label class="kk-form-label-sm">
+                                                        Satuan
+                                                        <span class="kk-param-hint-inline">— peserta, sesi, %, dll</span>
+                                                    </label>
+                                                    <input type="text" class="kk-form-input" name="parameter"
+                                                           placeholder="peserta"
+                                                           onchange="refreshValue()">
+                                                </div>
                                             </div>
-                                            <p class="kk-form-label-sm kk-realisasi-heading">Realisasi per pelaksanaan</p>
+                                            <p class="kk-form-label-sm kk-realisasi-heading">
+                                                Jumlah Realisasi
+                                                <span class="kk-param-hint-inline">— berapa yang benar-benar tercapai?</span>
+                                            </p>
                                             {{-- class="parameter" EXACT for JS --}}
                                             <div class="parameter">
                                                 <div class="kk-realisasi-row">
