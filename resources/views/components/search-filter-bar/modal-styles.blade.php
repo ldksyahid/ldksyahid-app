@@ -11,7 +11,7 @@
     background: rgba(0,0,0,.45);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    z-index: 1040;
+    z-index: 1055;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity .3s ease, visibility .3s ease;
 }
@@ -20,7 +20,7 @@
 }
 
 /* ── Modal shell ───────────────────────────────────────────────── */
-.sfb-modal  { z-index: 1050; }
+.sfb-modal  { z-index: 1060; }
 .sfb-fm-dialog { max-width: 580px; }
 .sfb-fm-content {
     border-radius: 28px !important;
