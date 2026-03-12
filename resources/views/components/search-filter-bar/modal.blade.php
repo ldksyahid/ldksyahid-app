@@ -22,6 +22,38 @@
     IMPORTANT: wrap in @push('modals')...@endpush in the calling page.
 */ ?>
 
+{{-- ── Scroll lock for this modal instance ── --}}
+<script>
+(function () {
+    var _sfbWheelLock = null, _sfbKeyLock = null, _sfbTouchLock = null;
+    function sfbLockScroll() {
+        _sfbWheelLock = function(e) { e.preventDefault(); };
+        _sfbKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        _sfbTouchLock = function(e) {
+            if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
+        };
+        window.addEventListener('wheel',       _sfbWheelLock, { passive: false });
+        window.addEventListener('keydown',     _sfbKeyLock);
+        document.addEventListener('touchmove', _sfbTouchLock, { passive: false, capture: true });
+    }
+    function sfbUnlockScroll() {
+        if (_sfbWheelLock) { window.removeEventListener('wheel',       _sfbWheelLock); _sfbWheelLock = null; }
+        if (_sfbKeyLock)   { window.removeEventListener('keydown',     _sfbKeyLock);   _sfbKeyLock   = null; }
+        if (_sfbTouchLock) { document.removeEventListener('touchmove', _sfbTouchLock, { capture: true }); _sfbTouchLock = null; }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.sfb-modal').forEach(function (modal) {
+            modal.addEventListener('show.bs.modal',   sfbLockScroll);
+            modal.addEventListener('hidden.bs.modal', sfbUnlockScroll);
+        });
+    });
+})();
+</script>
+
 {{-- ── Custom blur backdrop (Bootstrap backdrop disabled via data-bs-backdrop="false") ── --}}
 <div id="{{ $prefix }}-fm-backdrop" class="sfb-fm-backdrop"></div>
 
