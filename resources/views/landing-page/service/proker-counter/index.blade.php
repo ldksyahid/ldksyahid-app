@@ -49,7 +49,7 @@
                             <i class="fas fa-clipboard-list"></i> Nama Program Kerja
                         </label>
                         <input type="text" class="kk-form-input" id="proker1"
-                               placeholder="e.g. Workshop Keadministrasian"
+                               placeholder="Contoh: Workshop Keadministrasian"
                                oninput="refreshValue()">
                     </div>
 
@@ -120,7 +120,7 @@
                                         <div id="deskripsi_1">
                                             <div class="kk-check-row">
                                                 <input type="text" class="kk-form-input"
-                                                       name="target_1" placeholder="Memberikan Penyuluhan"
+                                                       name="target_1" placeholder="Contoh: Memberikan Penyuluhan"
                                                        onchange="refreshValue()">
                                                 <div class="kk-exec-area">
                                                     <span class="kk-exec-hint">Terlaksana di pelaksanaan ke:</span>
@@ -179,7 +179,7 @@
                                         <div id="tujuan_1">
                                             <div class="kk-check-row">
                                                 <input type="text" class="kk-form-input"
-                                                       name="target_1" placeholder="Memahami regulasi administrasi"
+                                                       name="target_1" placeholder="Contoh: Memahami regulasi administrasi"
                                                        onchange="refreshValue()">
                                                 <div class="kk-exec-area">
                                                     <span class="kk-exec-hint">Terlaksana di pelaksanaan ke:</span>
@@ -220,7 +220,7 @@
                                         <div id="sasaran_1">
                                             <div class="kk-check-row">
                                                 <input type="text" class="kk-form-input"
-                                                       name="target_1" placeholder="Pengurus LDK Syahid"
+                                                       name="target_1" placeholder="Contoh: Pengurus LDK Syahid"
                                                        onchange="refreshValue()">
                                                 <div class="kk-exec-area">
                                                     <span class="kk-exec-hint">Terlaksana di pelaksanaan ke:</span>
@@ -347,7 +347,7 @@
                                         <div id="tempat_1">
                                             <div class="kk-check-row">
                                                 <input type="text" class="kk-form-input"
-                                                       name="target_1" placeholder="Ruang RK-09"
+                                                       name="target_1" placeholder="Contoh: Auditorium Harun Nasution"
                                                        onchange="refreshValue()">
                                                 <div class="kk-exec-area">
                                                     <span class="kk-exec-hint">Sesuai di pelaksanaan ke:</span>
@@ -400,7 +400,7 @@
                                             </div>
                                         </div>
                                         <div id="parameter_1">
-                                            <span class="kk-inline-score nilai"></span>
+                                            <span class="kk-inline-score nilai">-</span>
                                             <div class="kk-param-row">
                                                 <div>
                                                     <label class="kk-form-label-sm">
@@ -417,7 +417,7 @@
                                                         <span class="kk-param-hint-inline">— peserta, sesi, %, dll</span>
                                                     </label>
                                                     <input type="text" class="kk-form-input" name="parameter"
-                                                           placeholder="peserta"
+                                                           placeholder="Contoh: Peserta"
                                                            onchange="refreshValue()">
                                                 </div>
                                             </div>
@@ -430,7 +430,7 @@
                                                 <div class="kk-realisasi-row">
                                                     <span class="kk-realisasi-label">Ke-1</span>
                                                     <input type="number" class="kk-form-input" name="terlaksana"
-                                                           id="realisasi_parameter" placeholder="10"
+                                                           id="realisasi_parameter" placeholder="Contoh: 10"
                                                            min="1" oninput="refreshValue()">
                                                 </div>
                                             </div>
@@ -457,9 +457,9 @@
                                 <div class="unsur efisiensi_dana">
                                     <div class="kk-form-group kk-form-group--inner">
                                         <label class="kk-form-label-sm">Estimasi Dana (Rp)</label>
-                                        <input type="number" class="kk-form-input" name="estimation"
-                                               id="estimasi_dana" placeholder="1000000"
-                                               min="0" oninput="refreshValue()" autocomplete="off">
+                                        <input type="text" inputmode="numeric" class="kk-form-input" name="estimation"
+                                               id="estimasi_dana" placeholder="Contoh: 1.000.000"
+                                               oninput="formatRupiah(this); refreshValue()" autocomplete="off">
                                     </div>
                                     <div class="kk-form-group kk-form-group--inner">
                                         <label class="kk-form-label-sm">Realisasi Dana (Rp)</label>
@@ -467,9 +467,9 @@
                                         <div class="akurasi">
                                             <div class="kk-realisasi-row">
                                                 <span class="kk-realisasi-label">Ke-1</span>
-                                                <input type="number" class="kk-form-input" name="realization"
-                                                       id="realisasi_dana" placeholder="0"
-                                                       oninput="refreshValue()" autocomplete="off">
+                                                <input type="text" inputmode="numeric" class="kk-form-input" name="realization"
+                                                       id="realisasi_dana" placeholder="Contoh: 250.000"
+                                                       oninput="formatRupiah(this); refreshValue()" autocomplete="off">
                                             </div>
                                         </div>
                                     </div>
