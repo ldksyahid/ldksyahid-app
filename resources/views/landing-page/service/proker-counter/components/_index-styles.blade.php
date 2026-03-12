@@ -683,10 +683,33 @@ div.akurasi {
     vertical-align: middle;
 }
 
-/* Cloned choices (radio row) appended into div.tanggal and div.jam */
-div.tanggal > div.choices,
-div.jam     > div.choices {
-    margin-top: 0.45rem;
+/* Per-row wrapper for tanggal/jam cloning */
+.kk-wt-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+}
+.kk-wt-row .choices {
+    flex: 1;
+    margin-bottom: 0;
+}
+.kk-wt-row-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #9ca3af;
+    white-space: nowrap;
+    min-width: 28px;
+}
+/* Options-label with leading empty col to align with kk-wt-row (label + 4 options) */
+.kk-radio-options-label--wt {
+    display: grid;
+    grid-template-columns: 28px repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+}
+.kk-radio-options-label--wt span {
+    flex: unset;
 }
 
 /* ── Unsur sections — minimal, no nested boxes */

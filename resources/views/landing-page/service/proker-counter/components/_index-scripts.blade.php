@@ -304,14 +304,20 @@ function tambah_pelaksanaan(nomorproker) {
   var wadah_jam = parent.querySelector("div[class='jam']");
   var wadah_akurasi = parent.querySelector("div[class='akurasi']");
 
-  var clone_tanggal = wadah_tanggal.querySelector("div[class='choices']").cloneNode(true);
-  clone_tanggal.querySelectorAll("input[name='tanggal_1']").forEach((item) => {
-    item.setAttribute("name", "tanggal_"+ (direncanakan + 1) +"");
+  var clone_tanggal = wadah_tanggal.querySelector(".kk-wt-row").cloneNode(true);
+  var tglRowLabel = clone_tanggal.querySelector(".kk-wt-row-label");
+  if (tglRowLabel) tglRowLabel.textContent = "Ke-" + (direncanakan + 1);
+  clone_tanggal.querySelectorAll("input[type='radio']").forEach(function(item) {
+    item.setAttribute("name", "tanggal_"+ (direncanakan + 1));
+    item.checked = false;
   });
 
-  var clone_jam = wadah_jam.querySelector("div[class='choices']").cloneNode(true);
-  clone_jam.querySelectorAll("input[name='jam_1']").forEach((item) => {
-    item.setAttribute("name", "jam_"+ (direncanakan + 1) +"");
+  var clone_jam = wadah_jam.querySelector(".kk-wt-row").cloneNode(true);
+  var jamRowLabel = clone_jam.querySelector(".kk-wt-row-label");
+  if (jamRowLabel) jamRowLabel.textContent = "Ke-" + (direncanakan + 1);
+  clone_jam.querySelectorAll("input[type='radio']").forEach(function(item) {
+    item.setAttribute("name", "jam_"+ (direncanakan + 1));
+    item.checked = false;
   });
 
   wadah_tanggal.appendChild(clone_tanggal);
