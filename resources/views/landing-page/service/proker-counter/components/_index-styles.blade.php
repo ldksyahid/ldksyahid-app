@@ -407,34 +407,41 @@
     padding: 0.35rem 0;
     background: transparent;
 }
+.kk-dyn-label-group { flex: 1; min-width: 0; }
 .kk-dyn-label {
     font-size: 0.78rem;
     font-weight: 600;
     color: #374151;
+    margin: 0 0 0.1rem;
+}
+.kk-dyn-hint {
+    font-size: 0.68rem;
+    color: #9ca3af;
     margin: 0;
-    flex: 1;
+    line-height: 1.3;
 }
 .kk-dyn-btns {
     display: flex;
     gap: 0.4rem;
+    flex-shrink: 0;
 }
 .kk-dyn-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
+    border-radius: 50px;
     border: none;
-    font-size: 0.8rem;
+    font-size: 0.72rem;
+    font-weight: 600;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    transition: background 0.2s, transform 0.2s;
-    padding: 0;
+    gap: 0.25rem;
+    transition: background 0.2s, color 0.2s;
+    padding: 0.3rem 0.7rem;
+    white-space: nowrap;
 }
-.kk-dyn-add  { background: rgba(0,167,157,0.12); color: #00a79d; }
-.kk-dyn-remove { background: rgba(220,53,69,0.1); color: #dc3545; }
-.kk-dyn-add:hover    { background: #00a79d; color: #fff; transform: scale(1.1); }
-.kk-dyn-remove:hover { background: #dc3545; color: #fff; transform: scale(1.1); }
+.kk-dyn-add    { background: rgba(0,167,157,0.12); color: #00a79d; }
+.kk-dyn-remove { background: rgba(220,53,69,0.08); color: #dc3545; }
+.kk-dyn-add:hover    { background: #00a79d; color: #fff; }
+.kk-dyn-remove:hover { background: #dc3545; color: #fff; }
 
 /* ── Check row (text input above, checkboxes below) ─────── */
 .kk-check-row {
@@ -634,6 +641,12 @@
     margin-bottom: 0.4rem;
 }
 .kk-param-row .kk-form-input { margin-bottom: 0; }
+.kk-param-row .kk-form-label-sm { margin-bottom: 0.2rem; }
+.kk-param-hint-inline {
+    font-size: 0.65rem;
+    font-weight: 400;
+    color: #9ca3af;
+}
 
 /* Realisasi stacked rows inside div.parameter and div.akurasi */
 div.parameter,

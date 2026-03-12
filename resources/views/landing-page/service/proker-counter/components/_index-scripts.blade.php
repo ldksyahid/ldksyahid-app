@@ -686,58 +686,63 @@ function refreshValue(){
 
   parent["efisiensi_dana"] = {"estimasi_dana" : item_estimasi, "realisasi_dana" : item_realisasi_dana, "skala_penurunan" : item_skalaturun};
 
+  // Helper: tampilkan '-' jika nilai NaN/undefined, gunakan 0 untuk kalkulasi
+  function safeVal(v) { return (v === undefined || isNaN(v)) ? '-' : v; }
+  function safeCalc(v) { return (v === undefined || isNaN(v)) ? 0 : v; }
+
   // Rekap semua total_persentase
   var persen_sesuai_rencana = hitung_sesuai_rencana();
-  var rata_sesuai_rencana = roundAccurately(average(persen_sesuai_rencana), 2)
-  document.querySelector("span[id='sesuai_rencana']").innerHTML = rata_sesuai_rencana;
+  var rata_sesuai_rencana = roundAccurately(average(persen_sesuai_rencana), 2);
+  document.querySelector("span[id='sesuai_rencana']").innerHTML = safeVal(rata_sesuai_rencana);
 
   var persen_sesuai_tujuan = hitung_sesuai_tujuan();
   var rata_sesuai_tujuan = roundAccurately(average(persen_sesuai_tujuan), 2);
-  document.querySelector("span[id='sesuai_tujuan']").innerHTML = rata_sesuai_tujuan/2;
+  document.querySelector("span[id='sesuai_tujuan']").innerHTML = safeVal(rata_sesuai_tujuan/2);
 
   var persen_sesuai_sasaran = hitung_sesuai_sasaran();
   var rata_sesuai_sasaran = roundAccurately(average(persen_sesuai_sasaran), 2);
-  document.querySelector("span[id='sesuai_sasaran']").innerHTML = rata_sesuai_sasaran/2;
+  document.querySelector("span[id='sesuai_sasaran']").innerHTML = safeVal(rata_sesuai_sasaran/2);
 
   var rata_sesuai_tujuansasaran = (rata_sesuai_tujuan + rata_sesuai_sasaran) / 2;
-  document.querySelector("span[id='sesuai_tujuansasaran']").innerHTML = roundAccurately(rata_sesuai_tujuansasaran, 2);
+  document.querySelector("span[id='sesuai_tujuansasaran']").innerHTML = safeVal(roundAccurately(rata_sesuai_tujuansasaran, 2));
 
   var persen_sesuai_waktutempat = hitung_sesuai_waktutempat();
   var rata_sesuai_waktutempat = persen_sesuai_waktutempat.map(x => roundAccurately(average(x), 2));
 
-  document.querySelector("span[id='sesuai_waktutempat']").innerHTML = rata_sesuai_waktutempat[0] + rata_sesuai_waktutempat[1] + rata_sesuai_waktutempat[2];
-  document.querySelector("span[id='sesuai_waktu']").innerHTML = rata_sesuai_waktutempat[0] + rata_sesuai_waktutempat[1];
-  document.querySelector("span[id='sesuai_tanggal']").innerHTML = rata_sesuai_waktutempat[0];
-  document.querySelector("span[id='sesuai_jam']").innerHTML = rata_sesuai_waktutempat[1];
-  document.querySelector("span[id='sesuai_tempat']").innerHTML = rata_sesuai_waktutempat[2];
+  document.querySelector("span[id='sesuai_waktutempat']").innerHTML = safeVal(rata_sesuai_waktutempat[0] + rata_sesuai_waktutempat[1] + rata_sesuai_waktutempat[2]);
+  document.querySelector("span[id='sesuai_waktu']").innerHTML = safeVal(rata_sesuai_waktutempat[0] + rata_sesuai_waktutempat[1]);
+  document.querySelector("span[id='sesuai_tanggal']").innerHTML = safeVal(rata_sesuai_waktutempat[0]);
+  document.querySelector("span[id='sesuai_jam']").innerHTML = safeVal(rata_sesuai_waktutempat[1]);
+  document.querySelector("span[id='sesuai_tempat']").innerHTML = safeVal(rata_sesuai_waktutempat[2]);
 
   var persen_sesuai_parameter = hitung_sesuai_parameter();
   var rata_sesuai_parameter = roundAccurately(average(persen_sesuai_parameter), 2);
-  document.querySelector("span[id='sesuai_parameter']").innerHTML = rata_sesuai_parameter;
+  document.querySelector("span[id='sesuai_parameter']").innerHTML = safeVal(rata_sesuai_parameter);
 
   var parameters = document.querySelectorAll('[id^=parameter_] > span.nilai');
   parameters.forEach((item, i) => {
-    item.innerHTML = persen_sesuai_parameter[i];
+    var v = persen_sesuai_parameter[i];
+    item.innerHTML = safeVal(v);
   });
 
   var persen_estimasi_dana = hitung_estimasi_dana(esti, real, scale);
   var rata_sesuai_dana = roundAccurately(average(persen_estimasi_dana), 2);
-  document.querySelector("span[id='efisiensi_dana']").innerHTML = rata_sesuai_dana;
+  document.querySelector("span[id='efisiensi_dana']").innerHTML = safeVal(rata_sesuai_dana);
 
-  var persen_proker = ((20/100)*(rata_sesuai_rencana) +
-                      (25/100)*(rata_sesuai_tujuansasaran) +
-                      (15/100)*(rata_sesuai_waktutempat[0] + rata_sesuai_waktutempat[1] + rata_sesuai_waktutempat[2]) +
-                      (30/100)*(rata_sesuai_parameter) +
-                      (10/100)*(rata_sesuai_dana));
+  var persen_proker = ((20/100)*safeCalc(rata_sesuai_rencana) +
+                      (25/100)*safeCalc(rata_sesuai_tujuansasaran) +
+                      (15/100)*safeCalc(rata_sesuai_waktutempat[0] + rata_sesuai_waktutempat[1] + rata_sesuai_waktutempat[2]) +
+                      (30/100)*safeCalc(rata_sesuai_parameter) +
+                      (10/100)*safeCalc(rata_sesuai_dana));
 
   document.querySelector("span[id='namaproker']").innerHTML = document.querySelector("input[id='proker1']").value;
   document.querySelector("span[id='persen_proker']").innerHTML = roundAccurately(persen_proker, 2);
 
-  document.querySelector("td[id='sesuai_rencana']").innerHTML = roundAccurately((20/100)*rata_sesuai_rencana, 2);
-  document.querySelector("td[id='sesuai_tujuansasaran']").innerHTML = roundAccurately((25/100)*rata_sesuai_tujuansasaran, 2);
-  document.querySelector("td[id='sesuai_waktutempat']").innerHTML = roundAccurately((15/100)*(rata_sesuai_waktutempat[0] + rata_sesuai_waktutempat[1] + rata_sesuai_waktutempat[2]), 2);
-  document.querySelector("td[id='sesuai_parameter']").innerHTML = roundAccurately((30/100)*rata_sesuai_parameter, 2);
-  document.querySelector("td[id='efisiensi_dana']").innerHTML = roundAccurately((10/100)*rata_sesuai_dana, 2);
+  document.querySelector("td[id='sesuai_rencana']").innerHTML = roundAccurately((20/100)*safeCalc(rata_sesuai_rencana), 2);
+  document.querySelector("td[id='sesuai_tujuansasaran']").innerHTML = roundAccurately((25/100)*safeCalc(rata_sesuai_tujuansasaran), 2);
+  document.querySelector("td[id='sesuai_waktutempat']").innerHTML = roundAccurately((15/100)*safeCalc(rata_sesuai_waktutempat[0] + rata_sesuai_waktutempat[1] + rata_sesuai_waktutempat[2]), 2);
+  document.querySelector("td[id='sesuai_parameter']").innerHTML = roundAccurately((30/100)*safeCalc(rata_sesuai_parameter), 2);
+  document.querySelector("td[id='efisiensi_dana']").innerHTML = roundAccurately((10/100)*safeCalc(rata_sesuai_dana), 2);
 
   document.querySelector("td[id='persen_proker']").innerHTML = roundAccurately(persen_proker, 2);
 }
