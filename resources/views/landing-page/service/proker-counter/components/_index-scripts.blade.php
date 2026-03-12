@@ -8,6 +8,12 @@
 const roundAccurately = (number, decimalPlaces) => Number(Math.round(number + "e" + decimalPlaces) + "e-" + decimalPlaces);
 const average = arr => arr.reduce((acc,v) => acc + v) / arr.length;
 
+function formatRupiah(input) {
+  var raw = input.value.replace(/\D/g, '');
+  input.value = raw ? raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+}
+function parseRupiah(val) { return parseFloat((val || '').replace(/\./g, '')); }
+
 var bahan_hitung = {"proker" : [{
   "namaproker" : "",
   "jumlah_pelaksanaan" : 1,
@@ -252,15 +258,6 @@ function tambah_pelaksanaan(nomorproker) {
 
   var direncanakan = parseInt(bahan_hitung["proker"][0]["jumlah_pelaksanaan"]);
 
-  var wadah_deskripsi = parent.querySelector("div[class='deskripsi']");
-  var wadah_tujuan = parent.querySelector("div[class='tujuan']");
-  var wadah_sasaran = parent.querySelector("div[class='sasaran']");
-  var wadah_tanggal = parent.querySelector("div[class='tanggal']");
-  var wadah_jam = parent.querySelector("div[class='jam']");
-  var wadah_tempat = parent.querySelector("div[class='tempat']");
-  var wadah_parameter = parent.querySelector("div[class='parameter']");
-  var wadah_akurasi = parent.querySelector("div[class='akurasi']");
-
   function cloneExecItem(wadah) {
     var item = wadah.querySelector("label.kk-exec-item");
     if (item) {
@@ -272,25 +269,6 @@ function tambah_pelaksanaan(nomorproker) {
     }
     return wadah.querySelector("input[name='terlaksana']").cloneNode(true);
   }
-  var clone_deskripsi = cloneExecItem(wadah_deskripsi);
-  var clone_tujuan    = cloneExecItem(wadah_tujuan);
-  var clone_sasaran   = cloneExecItem(wadah_sasaran);
-  var clone_tanggal = wadah_tanggal.querySelector("div[class='choices']").cloneNode(true);
-  var clone_jam = wadah_jam.querySelector("div[class='choices']").cloneNode(true);
-
-  var list_tanggal = clone_tanggal.querySelectorAll("input[name='tanggal_1']");
-
-  list_tanggal.forEach((item, i) => {
-    item.setAttribute("name", "tanggal_"+ (direncanakan + 1) +"");
-  });
-
-  var list_jam = clone_jam.querySelectorAll("input[name='jam_1']");
-
-  list_jam.forEach((item, i) => {
-    item.setAttribute("name", "jam_"+ (direncanakan + 1) +"");
-  });
-
-  var clone_tempat = cloneExecItem(wadah_tempat);
 
   function cloneRealisasiItem(wadah) {
     var row = wadah.querySelector(".kk-realisasi-row");
@@ -304,17 +282,41 @@ function tambah_pelaksanaan(nomorproker) {
     }
     return wadah.querySelector("input").cloneNode(true);
   }
-  var clone_parameter = cloneRealisasiItem(wadah_parameter);
-  var clone_akurasi   = cloneRealisasiItem(wadah_akurasi);
 
-  wadah_deskripsi.appendChild(clone_deskripsi);
-  wadah_tujuan.appendChild(clone_tujuan);
-  wadah_sasaran.appendChild(clone_sasaran);
+  // Update ALL entries (deskripsi/tujuan/sasaran/tempat can be added multiple times)
+  parent.querySelectorAll("div[class='deskripsi']").forEach(function(wadah) {
+    wadah.appendChild(cloneExecItem(wadah));
+  });
+  parent.querySelectorAll("div[class='tujuan']").forEach(function(wadah) {
+    wadah.appendChild(cloneExecItem(wadah));
+  });
+  parent.querySelectorAll("div[class='sasaran']").forEach(function(wadah) {
+    wadah.appendChild(cloneExecItem(wadah));
+  });
+  parent.querySelectorAll("div[class='tempat']").forEach(function(wadah) {
+    wadah.appendChild(cloneExecItem(wadah));
+  });
+  parent.querySelectorAll("div[class='parameter']").forEach(function(wadah) {
+    wadah.appendChild(cloneRealisasiItem(wadah));
+  });
+
+  var wadah_tanggal = parent.querySelector("div[class='tanggal']");
+  var wadah_jam = parent.querySelector("div[class='jam']");
+  var wadah_akurasi = parent.querySelector("div[class='akurasi']");
+
+  var clone_tanggal = wadah_tanggal.querySelector("div[class='choices']").cloneNode(true);
+  clone_tanggal.querySelectorAll("input[name='tanggal_1']").forEach((item) => {
+    item.setAttribute("name", "tanggal_"+ (direncanakan + 1) +"");
+  });
+
+  var clone_jam = wadah_jam.querySelector("div[class='choices']").cloneNode(true);
+  clone_jam.querySelectorAll("input[name='jam_1']").forEach((item) => {
+    item.setAttribute("name", "jam_"+ (direncanakan + 1) +"");
+  });
+
   wadah_tanggal.appendChild(clone_tanggal);
   wadah_jam.appendChild(clone_jam);
-  wadah_tempat.appendChild(clone_tempat);
-  wadah_parameter.appendChild(clone_parameter);
-  wadah_akurasi.appendChild(clone_akurasi);
+  wadah_akurasi.appendChild(cloneRealisasiItem(wadah_akurasi));
 
   bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_rencana"]["deskripsi_program"][0]["terlaksana"].push(false);
   bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_tujuansasaran"]["tujuan"][0]["terlaksana"].push(false);
@@ -330,38 +332,46 @@ function tambah_pelaksanaan(nomorproker) {
 
 function kurang_pelaksanaan(nomorproker) {
   var parent = document.querySelector("article.proker div[id='proker_"+ nomorproker +"']");
-  var wadah_deskripsi = parent.querySelector("div[class='deskripsi']");
-  var wadah_tujuan = parent.querySelector("div[class='tujuan']");
-  var wadah_sasaran = parent.querySelector("div[class='sasaran']");
+
+  if (parseInt(bahan_hitung["proker"][0]["jumlah_pelaksanaan"]) <= 1) {
+    return console.log("Cannot remove the only one child");
+  }
+
+  // Remove last exec item from ALL entries
+  parent.querySelectorAll("div[class='deskripsi']").forEach(function(wadah) {
+    if (wadah.lastElementChild) wadah.removeChild(wadah.lastElementChild);
+  });
+  parent.querySelectorAll("div[class='tujuan']").forEach(function(wadah) {
+    if (wadah.lastElementChild) wadah.removeChild(wadah.lastElementChild);
+  });
+  parent.querySelectorAll("div[class='sasaran']").forEach(function(wadah) {
+    if (wadah.lastElementChild) wadah.removeChild(wadah.lastElementChild);
+  });
+  parent.querySelectorAll("div[class='tempat']").forEach(function(wadah) {
+    if (wadah.lastElementChild) wadah.removeChild(wadah.lastElementChild);
+  });
+  parent.querySelectorAll("div[class='parameter']").forEach(function(wadah) {
+    if (wadah.lastElementChild) wadah.removeChild(wadah.lastElementChild);
+  });
+
   var wadah_tanggal = parent.querySelector("div[class='tanggal']");
   var wadah_jam = parent.querySelector("div[class='jam']");
-  var wadah_tempat = parent.querySelector("div[class='tempat']");
-  var wadah_parameter = parent.querySelector("div[class='parameter']");
   var wadah_akurasi = parent.querySelector("div[class='akurasi']");
 
-  if (wadah_deskripsi.parentNode && wadah_deskripsi.childElementCount != 1) {
-    wadah_deskripsi.removeChild(wadah_deskripsi.lastElementChild);
-    wadah_tujuan.removeChild(wadah_tujuan.lastElementChild);
-    wadah_sasaran.removeChild(wadah_sasaran.lastElementChild);
-    wadah_tanggal.removeChild(wadah_tanggal.lastElementChild);
-    wadah_jam.removeChild(wadah_jam.lastElementChild);
-    wadah_tempat.removeChild(wadah_tempat.lastElementChild);
-    wadah_parameter.removeChild(wadah_parameter.lastElementChild);
-    wadah_akurasi.removeChild(wadah_akurasi.lastElementChild);
+  wadah_tanggal.removeChild(wadah_tanggal.lastElementChild);
+  wadah_jam.removeChild(wadah_jam.lastElementChild);
+  wadah_akurasi.removeChild(wadah_akurasi.lastElementChild);
 
-    bahan_hitung["proker"][0]["jumlah_pelaksanaan"] -= 1;
+  bahan_hitung["proker"][0]["jumlah_pelaksanaan"] -= 1;
 
-    bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_rencana"]["deskripsi_program"][0]["terlaksana"].pop();
-    bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_tujuansasaran"]["tujuan"][0]["terlaksana"].pop();
-    bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_tujuansasaran"]["sasaran"][0]["terlaksana"].pop();
-    bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_waktutempat"]["waktu"]["tanggal"].pop();
-    bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_waktutempat"]["waktu"]["jam"].pop();
-    bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_waktutempat"]["tempat"][0]["sesuai"].pop();
-    bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_parameter"]["parameter"][0]["realisasi"].pop();
-    bahan_hitung["proker"][0]["aspek_nilai"]["efisiensi_dana"]["realisasi_dana"].pop();
-  } else {
-    console.log("Cannot remove the only one child");
-  }
+  bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_rencana"]["deskripsi_program"][0]["terlaksana"].pop();
+  bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_tujuansasaran"]["tujuan"][0]["terlaksana"].pop();
+  bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_tujuansasaran"]["sasaran"][0]["terlaksana"].pop();
+  bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_waktutempat"]["waktu"]["tanggal"].pop();
+  bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_waktutempat"]["waktu"]["jam"].pop();
+  bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_waktutempat"]["tempat"][0]["sesuai"].pop();
+  bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_parameter"]["parameter"][0]["realisasi"].pop();
+  bahan_hitung["proker"][0]["aspek_nilai"]["efisiensi_dana"]["realisasi_dana"].pop();
 }
 
 function tambah_deskripsi(nomorproker){
@@ -674,10 +684,10 @@ function refreshValue(){
   var list_realisasi_dana = document.querySelectorAll("div.efisiensi_dana input[id='realisasi_dana']");
   var item_realisasi_dana = [];
   list_realisasi_dana.forEach((list, j) => {
-    item_realisasi_dana[j] = parseFloat(list.value);
+    item_realisasi_dana[j] = parseRupiah(list.value);
   });
 
-  var item_estimasi = parseFloat(document.querySelector("div.efisiensi_dana input[id='estimasi_dana']").value);
+  var item_estimasi = parseRupiah(document.querySelector("div.efisiensi_dana input[id='estimasi_dana']").value);
   var item_skalaturun = parseFloat(document.querySelector("div.efisiensi_dana input[id='skala_penurunan']").placeholder);
 
   var esti = item_estimasi;
