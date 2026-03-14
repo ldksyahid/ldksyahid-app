@@ -20,13 +20,15 @@
 }
 
 /* ── Modal shell ───────────────────────────────────────────────── */
-.sfb-modal  { z-index: 1060; }
+.sfb-modal  { z-index: 1060; overflow: hidden !important; } /* prevent outer scroll competing with body scroll */
 .sfb-fm-dialog { max-width: 580px; }
 .sfb-fm-content {
     border-radius: 28px !important;
     border: 1px solid rgba(0,167,157,.1) !important;
     box-shadow: 0 24px 80px rgba(0,0,0,.18), 0 8px 30px rgba(0,167,157,.12) !important;
     overflow: hidden; position: relative;
+    display: flex; flex-direction: column;
+    max-height: calc(100dvh - 3.5rem);
 }
 .sfb-fm-content::before {
     content: '';
@@ -108,7 +110,16 @@
 .sfb-fm-subtitle { font-size: .85rem; color: #6b7280; margin: 0; }
 
 /* ── Body ──────────────────────────────────────────────────────── */
-.sfb-fm-body { padding: 1.5rem 1.75rem; }
+.sfb-fm-body {
+    padding: 1.5rem 1.75rem;
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,167,157,.3) transparent;
+}
+.sfb-fm-body::-webkit-scrollbar { width: 4px; }
+.sfb-fm-body::-webkit-scrollbar-thumb {
+    background: rgba(0,167,157,.35); border-radius: 4px;
+}
 .sfb-fm-field-wrap { display: flex; flex-direction: column; gap: .5rem; }
 .sfb-fm-field-label {
     display: flex; align-items: center; gap: .55rem; margin-bottom: .55rem;

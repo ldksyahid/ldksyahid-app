@@ -1,7 +1,7 @@
 @extends('landing-page.template.body')
 
 @section('content')
-<div class="container-xxl py-5">
+<div class="container-xxl py-5 mt-5">
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-5 wow fadeIn" data-wow-delay="0.1s">
         <ol class="breadcrumb elegant-breadcrumb">

@@ -24,20 +24,14 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 /* === BREADCRUMB === */
 .elegant-breadcrumb {
-    background: linear-gradient(135deg, var(--white) 0%, var(--light) 100%);
+    background: transparent;
     border-radius: var(--radius-lg);
-    padding: 1.25rem 2rem;
-    margin-bottom: 2rem;
-    border: 1px solid rgba(0, 191, 166, 0.1);
-    box-shadow: var(--shadow);
+    padding: .75rem 0;
+    margin-bottom: 1.5rem;
+    border: none;
+    box-shadow: none;
 }
 
 .breadcrumb-item {
