@@ -216,6 +216,9 @@
              modal-backdrop at z-index:1040. Modals pushed here live at body level and work correctly.) --}}
         @stack('modals')
 
+        {{-- Welcome Revamp Popup (tampil sekali, ditandai di localStorage) --}}
+        @include('components.welcome-revamp-popup.index')
+
         {{-- Back to Top Button --}}
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top">
             <i class="bi bi-arrow-up"></i>
