@@ -14,7 +14,7 @@ class ITSupportController extends Controller
     public function index()
     {
         $postitsupport = ITSupport::orderBy('created_at', 'desc')->get();
-        return view('landing-page.it-support.index', compact('postitsupport'), ["title" => "Tentang Kami"]);
+        return view('landing-page.it-support.index', compact('postitsupport'), ["title" => "Tim Teknologi"]);
     }
 
     /**

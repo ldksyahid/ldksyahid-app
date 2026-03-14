@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\Request;
 
 class VerificationController extends Controller
 {
@@ -38,5 +39,52 @@ class VerificationController extends Controller
         $this->middleware('auth');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
+    }
+
+    /**
+     * Show the email verification notice.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function showNotice(Request $request)
+    {
+        return $request->user()->hasVerifiedEmail()
+            ? redirect($this->redirectPath())
+            : view('auth.verify.index');
+    }
+
+    /**
+     * Resend the email verification notification.
+     * Override default to support AJAX requests
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function resend(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            // Check if AJAX request
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Email Anda sudah terverifikasi!'
+                ]);
+            }
+            return redirect($this->redirectPath());
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        // Check if AJAX request
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Email verifikasi berhasil dikirim ulang! Segera periksa inbox kamu ya. 🎉'
+            ]);
+        }
+
+        // Fallback for non-AJAX
+        return back()->with('resent', true);
     }
 }

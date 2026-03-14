@@ -26,6 +26,7 @@ use App\Http\Controllers\FinanceReportController;
 use App\Http\Controllers\MsKTALDKSyahidController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShortLinkController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,7 +80,7 @@ Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule.in
 
 // Route LandingPage Tentang Kami
 Route::get('/about/contact', function () {
-    return view('landing-page.about.contact-us', ["title" => "Tentang Kami"]);
+    return view('landing-page.about.contact-us.index', ["title" => "Tentang Kami"]);
 })->name('aboutus');
 
 //Route LandingPage Structure
@@ -93,6 +94,10 @@ Route::get('/itsupport', [ITSupportController::class, 'index'])->name('itsupport
 
 // Route Landing Page Contact Us Hubungi Kami di Tentang Kami
 Route::post('/about/contact/message/store', [MessageContactController::class, 'store'])->name('messagecontact');
+
+// Route Newsletter Subscription
+Route::post('/subscribers/store', [SubscriptionController::class, 'store'])->name('subscribers.store');
+Route::post('/subscribers/unsubscribe', [SubscriptionController::class, 'unsubscribe'])->name('subscribers.unsubscribe');
 
 // Route Article Comment
 Route::post('/articlecomment', [ArticleCommentController::class, 'addarticlecomment'])->name('articlecomment')->middleware('auth');

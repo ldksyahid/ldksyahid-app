@@ -11,6 +11,7 @@ use App\Models\News;
 use App\Models\Event;
 use App\Models\MsKTALDKSyahid;
 use App\Models\Schedule;
+use App\Models\MsCatalogBook;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Jenssegers\Agent\Agent;
@@ -34,22 +35,18 @@ class HomeController extends Controller
             $postarticle= Article::orderBy('dateevent','desc')->limit(4)->get();
             $postevent= Event::orderBy('start','desc')->limit(4)->get();
         } else {
-            $postnews= News::orderBy('datepublish','desc')->limit(3)->get();
+            $postnews= News::orderBy('datepublish','desc')->limit(4)->get();
             $postarticle= Article::orderBy('dateevent','desc')->limit(3)->get();
-            $postevent= Event::orderBy('start','desc')->limit(3)->get();
+            $postevent= Event::orderBy('start','desc')->limit(4)->get();
         }
 
         $postgallery= Gallery::orderBy('created_at','desc')->limit(1)->get();
-        $postnews= News::orderBy('datepublish','desc')->limit(3)->get();
+        $postnews= News::orderBy('datepublish','desc')->limit(4)->get();
         $postschedule= Schedule::orderBy('created_at','desc')->limit(1)->get();
         $postjumbotron= Jumbotron::orderBy('created_at','desc')->get();
         $posttestimony = Testimony::getAPITestimony()->orderBy('created_at','desc')->get();
-        if (Auth::User() == !null) {
-            if (Auth::User()->email_verified_at == null) {
-                toast('Email Kamu Belum Terverifikasi Oleh Kami', 'warning')->autoClose(10000)->position('bottom-start')->timerProgressBar()->hideCloseButton();
-            }
-        }
-        return view('landing-page.home.index', compact('postjumbotron', 'postarticle', 'posttestimony', 'postgallery', 'postnews', 'postevent', 'postschedule'), ['title' => "Beranda"]);
+        $postlibrary= MsCatalogBook::where('flagActive', true)->orderBy('createdDate','desc')->limit(4)->get();
+        return view('landing-page.home.index', compact('postjumbotron', 'postarticle', 'posttestimony', 'postgallery', 'postnews', 'postevent', 'postschedule', 'postlibrary'), ['title' => "Beranda"]);
     }
 
     public function adminHome()

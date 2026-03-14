@@ -13,56 +13,45 @@ document.addEventListener('DOMContentLoaded', function() {
     initLikeButton();
 
     // Share functionality
+    function showShareToast(ok, msg) {
+        if (typeof Swal === 'undefined') return;
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: ok ? 'success' : 'error',
+            title: msg || (ok ? 'URL berhasil disalin!' : 'Gagal menyalin URL'),
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            customClass: { popup: 'swal-bd-toast' },
+        });
+    }
+
     window.copyBookLink = function() {
         const bookLink = window.location.href;
-        const bookTitle = '{{ $book->titleBook }}';
-
-        navigator.clipboard.writeText(bookLink).then(() => {
-            showSuccessMessage('📚 Link buku berhasil disalin!');
-            closeShareOptions();
-
-            // Add visual feedback
-            const copyBtn = document.querySelector('[onclick="copyBookLink()"]');
-            const originalHtml = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
-            copyBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
-            copyBtn.style.color = 'var(--white)';
-            copyBtn.style.borderColor = '#28a745';
-
-            setTimeout(() => {
-                copyBtn.innerHTML = originalHtml;
-                copyBtn.style.background = '';
-                copyBtn.style.color = '';
-                copyBtn.style.borderColor = '';
-            }, 2000);
-
-        }).catch(() => {
-            // Fallback for older browsers
-            const textArea = document.createElement('textarea');
-            textArea.value = bookLink;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            showSuccessMessage('📚 Link buku berhasil disalin!');
-            closeShareOptions();
-        });
+        closeShareOptions();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(bookLink).then(
+                function () { showShareToast(true, '📚 Link buku berhasil disalin!'); },
+                function () { showShareToast(false); }
+            );
+        } else {
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = bookLink;
+                ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none;';
+                document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+                document.body.removeChild(ta);
+                showShareToast(true, '📚 Link buku berhasil disalin!');
+            } catch(e) { showShareToast(false); }
+        }
     };
 
     window.shareOnWhatsApp = function() {
         const bookLink = window.location.href;
         const bookTitle = '{{ $book->titleBook }}';
-        const authorName = '{{ $book->authorName }}';
-        const message = `📚 *${bookTitle}* oleh ${authorName}
-
-🔖 Sinopsis: {{ Str::limit(strip_tags($book->description), 100) }}
-
-📖 Baca buku ini di: ${bookLink}
-
-#Buku #Literasi #Membaca`;
-
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+        const text = bookTitle + '\n' + bookLink;
+        window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
         closeShareOptions();
     };
 
@@ -165,33 +154,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Show success message
+    // Show general message via SweetAlert toast
     function showSuccessMessage(message) {
-        // Remove existing message
-        const existingMessage = document.querySelector('.success-message');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-
-        // Create new message element
-        const successMessage = document.createElement('div');
-        successMessage.className = 'success-message';
-        successMessage.innerHTML = `
-            <i class="fas fa-check-circle me-2"></i>
-            <span class="message-text">${message}</span>
-        `;
-
-        document.body.appendChild(successMessage);
-
-        // Remove message after 3 seconds with fade out effect
-        setTimeout(() => {
-            successMessage.classList.add('fade-out');
-            setTimeout(() => {
-                if (successMessage.parentNode) {
-                    successMessage.remove();
-                }
-            }, 300);
-        }, 2700);
+        if (typeof Swal === 'undefined') return;
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'info',
+            title: message,
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            customClass: { popup: 'swal-bd-toast' },
+        });
     }
 
     // Like functionality
@@ -323,31 +298,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showLikeSuccessMessage(message) {
-        // Remove existing message
-        const existingMessage = document.querySelector('.like-success-message');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-
-        // Create new message element
-        const successMessage = document.createElement('div');
-        successMessage.className = 'like-success-message';
-        successMessage.innerHTML = `
-            <i class="fas fa-heart me-2"></i>
-            <span class="message-text">${message}</span>
-        `;
-
-        document.body.appendChild(successMessage);
-
-        // Remove message after 3 seconds with fade out effect
-        setTimeout(() => {
-            successMessage.classList.add('fade-out');
-            setTimeout(() => {
-                if (successMessage.parentNode) {
-                    successMessage.remove();
-                }
-            }, 300);
-        }, 2700);
+        if (typeof Swal === 'undefined') return;
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            customClass: { popup: 'swal-bd-toast' },
+        });
     }
 
     function initElegantBookDetail() {
@@ -438,9 +399,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Add hover effects to detail items
-        const detailItems = document.querySelectorAll('.detail-item, .related-book-card');
-        detailItems.forEach(item => {
+        // Add hover effects to related book cards only (not detail-item rows)
+        const relatedCards = document.querySelectorAll('.related-book-card');
+        relatedCards.forEach(item => {
             item.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-5px)';
             });
@@ -467,8 +428,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }, observerOptions);
 
-        // Observe elements for scroll animations
-        document.querySelectorAll('.detail-item, .related-book-card').forEach(el => {
+        // Observe elements for scroll animations (related cards only — detail rows stay static)
+        document.querySelectorAll('.related-book-card').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(20px)';
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
