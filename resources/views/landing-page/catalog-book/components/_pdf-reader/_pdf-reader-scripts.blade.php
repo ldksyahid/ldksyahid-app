@@ -1,391 +1,167 @@
 <script>
-// Global variables
 let isFullscreen = false;
-let readerFrame = null;
+let readerFrame  = null;
 let readerStatus = null;
 
-document.addEventListener('DOMContentLoaded', function() {
-    initializeReader();
+document.addEventListener('DOMContentLoaded', function () {
+    readerFrame  = document.getElementById('reader-frame');
+    readerStatus = document.getElementById('pr-status');
+
+    if (!readerFrame) return;
+
+    readerFrame.addEventListener('load', function () {
+        setStatus('success', 'Buku siap dibaca');
+        showToast('success', 'Buku berhasil dimuat!');
+    });
+
+    readerFrame.addEventListener('error', function () {
+        setStatus('error', 'Gagal memuat buku');
+        showToast('error', 'Gagal memuat buku. Silakan coba lagi.');
+    });
+
+    setStatus('loading', 'Memuat buku…');
     setupEventListeners();
 });
 
-function initializeReader() {
-    readerFrame = document.getElementById('reader-frame');
-    readerStatus = document.querySelector('.reader-status');
-
-    if (!readerFrame) {
-        console.error('Elemen pembaca tidak ditemukan');
-        updateReaderStatus('error', 'Gagal memuat pembaca');
-        return;
-    }
-
-    // Wait for iframe to load
-    readerFrame.addEventListener('load', function() {
-        console.log('Buku berhasil dimuat');
-        updateReaderStatus('success', 'Buku siap dibaca');
-        showSuccessMessage('Buku berhasil dimuat!');
-    });
-
-    readerFrame.addEventListener('error', function() {
-        console.error('Gagal memuat buku digital');
-        updateReaderStatus('error', 'Gagal memuat buku');
-        showErrorMessage('Gagal memuat buku. Silakan coba lagi.');
-    });
-
-    // Show loading status initially
-    updateReaderStatus('loading', 'Memuat buku...');
-}
-
-function updateReaderStatus(status, message) {
+/* ── Status ── */
+function setStatus(type, message) {
     if (!readerStatus) return;
-
-    // Remove existing status classes
-    readerStatus.classList.remove('status-loading', 'status-success', 'status-error');
-
-    // Add new status class and update text
-    readerStatus.classList.add(`status-${status}`);
-    readerStatus.textContent = `Status: ${message}`;
-
-    // Update colors based on status
-    switch(status) {
-        case 'loading':
-            readerStatus.style.background = 'var(--warning)';
-            readerStatus.style.color = 'var(--dark)';
-            break;
-        case 'success':
-            readerStatus.style.background = 'var(--success)';
-            readerStatus.style.color = 'var(--white)';
-            break;
-        case 'error':
-            readerStatus.style.background = 'var(--danger)';
-            readerStatus.style.color = 'var(--white)';
-            break;
-        default:
-            readerStatus.style.background = 'var(--primary-light)';
-            readerStatus.style.color = 'var(--primary)';
-    }
+    readerStatus.className = 'pr-status status-' + type;
+    readerStatus.textContent = message;
 }
 
+/* ── Toast (SweetAlert) ── */
+function showToast(icon, title) {
+    if (typeof Swal === 'undefined') return;
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: title,
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+        customClass: { popup: 'swal-bd-toast' },
+    });
+}
+
+function showSuccessMessage(msg) { showToast('success', msg); }
+function showErrorMessage(msg)   { showToast('error',   msg); }
+
+/* ── Reload ── */
 function reloadReader() {
-    if (readerFrame) {
-        updateReaderStatus('loading', 'Memuat ulang...');
+    if (!readerFrame) return;
+    setStatus('loading', 'Memuat ulang…');
+    const src = readerFrame.src.split('?')[0];
+    readerFrame.src = src + '?t=' + Date.now();
 
-        // Add timestamp to prevent caching
-        const currentSrc = readerFrame.src.split('?')[0];
-        readerFrame.src = currentSrc + '?t=' + new Date().getTime();
-
-        console.log('Memuat ulang buku...');
-
-        // Show loading animation
-        const btn = event.target.closest('.btn-control');
-        if (btn) {
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-redo"></i>';
-            }, 1000);
-        }
+    const btn = event?.target?.closest('.pr-ctrl-btn');
+    if (btn) {
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        setTimeout(() => { btn.innerHTML = '<i class="fas fa-redo"></i>'; }, 1200);
     }
 }
 
+/* ── Open in new tab ── */
 function openInNewTab() {
-    const readerUrl = '{{ $book->getReaderLink() }}';
-    if (readerUrl) {
-        window.open(readerUrl, '_blank', 'noopener,noreferrer');
-        console.log('Membuka buku di tab baru');
-
-        // Show feedback
-        showSuccessMessage('Membuka di tab baru...');
+    const url = '{{ $book->getReaderLink() }}';
+    if (url) {
+        window.open(url, '_blank', 'noopener,noreferrer');
+        showToast('info', 'Membuka di tab baru…');
     } else {
-        console.error('URL buku tidak tersedia');
-        showErrorMessage('URL buku tidak tersedia');
+        showToast('error', 'URL buku tidak tersedia');
     }
 }
 
+/* ── Fullscreen ── */
 function toggleFullscreen() {
-    const readerContainer = document.querySelector('.reader-container-premium');
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-    const fullscreenControl = document.getElementById('fullscreen-control');
+    const wrap = document.querySelector('.pr-frame-wrap');
+    const btnMain = document.getElementById('fullscreen-btn');
+    const btnCtrl = document.getElementById('fullscreen-control');
 
     if (!isFullscreen) {
-        // Enter fullscreen
-        if (readerContainer.requestFullscreen) {
-            readerContainer.requestFullscreen();
-        } else if (readerContainer.webkitRequestFullscreen) {
-            readerContainer.webkitRequestFullscreen();
-        } else if (readerContainer.mozRequestFullScreen) {
-            readerContainer.mozRequestFullScreen();
-        } else if (readerContainer.msRequestFullscreen) {
-            readerContainer.msRequestFullscreen();
-        }
+        if (wrap.requestFullscreen)            wrap.requestFullscreen();
+        else if (wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+        else if (wrap.mozRequestFullScreen)    wrap.mozRequestFullScreen();
 
-        readerContainer.classList.add('fullscreen');
+        wrap.classList.add('fullscreen');
         document.body.classList.add('fullscreen-mode');
-
-        // Update buttons
-        if (fullscreenBtn) {
-            fullscreenBtn.innerHTML = '<i class="fas fa-compress me-2"></i>Keluar Layar Penuh';
-            fullscreenBtn.classList.add('btn-fullscreen-active');
-        }
-        if (fullscreenControl) {
-            fullscreenControl.innerHTML = '<i class="fas fa-compress"></i>';
-        }
-
+        if (btnMain) btnMain.innerHTML = '<i class="fas fa-compress"></i>Keluar Layar Penuh';
+        if (btnCtrl) btnCtrl.innerHTML = '<i class="fas fa-compress"></i>';
         isFullscreen = true;
-        updateReaderStatus('success', 'Mode Layar Penuh');
-        console.log('Mode layar penuh diaktifkan');
+        setStatus('success', 'Mode layar penuh');
     } else {
-        // Exit fullscreen
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
+        if (document.exitFullscreen)            document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        else if (document.mozCancelFullScreen)  document.mozCancelFullScreen();
 
-        readerContainer.classList.remove('fullscreen');
+        wrap.classList.remove('fullscreen');
         document.body.classList.remove('fullscreen-mode');
-
-        // Update buttons
-        if (fullscreenBtn) {
-            fullscreenBtn.innerHTML = '<i class="fas fa-expand me-2"></i>Layar Penuh';
-            fullscreenBtn.classList.remove('btn-fullscreen-active');
-        }
-        if (fullscreenControl) {
-            fullscreenControl.innerHTML = '<i class="fas fa-expand"></i>';
-        }
-
+        if (btnMain) btnMain.innerHTML = '<i class="fas fa-expand"></i>Layar Penuh';
+        if (btnCtrl) btnCtrl.innerHTML = '<i class="fas fa-expand"></i>';
         isFullscreen = false;
-        updateReaderStatus('success', 'Buku siap dibaca');
-        console.log('Mode layar penuh dinonaktifkan');
+        setStatus('success', 'Buku siap dibaca');
     }
 }
 
 function handleFullscreenChange() {
-    const readerContainer = document.querySelector('.reader-container-premium');
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-    const fullscreenControl = document.getElementById('fullscreen-control');
-
     if (!document.fullscreenElement &&
         !document.webkitFullscreenElement &&
-        !document.mozFullScreenElement &&
-        !document.msFullscreenElement) {
+        !document.mozFullScreenElement) {
 
-        readerContainer.classList.remove('fullscreen');
+        const wrap = document.querySelector('.pr-frame-wrap');
+        const btnMain = document.getElementById('fullscreen-btn');
+        const btnCtrl = document.getElementById('fullscreen-control');
+
+        wrap?.classList.remove('fullscreen');
         document.body.classList.remove('fullscreen-mode');
-
-        if (fullscreenBtn) {
-            fullscreenBtn.innerHTML = '<i class="fas fa-expand me-2"></i>Layar Penuh';
-            fullscreenBtn.classList.remove('btn-fullscreen-active');
-        }
-        if (fullscreenControl) {
-            fullscreenControl.innerHTML = '<i class="fas fa-expand"></i>';
-        }
-
+        if (btnMain) btnMain.innerHTML = '<i class="fas fa-expand"></i>Layar Penuh';
+        if (btnCtrl) btnCtrl.innerHTML = '<i class="fas fa-expand"></i>';
         isFullscreen = false;
-        updateReaderStatus('success', 'Buku siap dibaca');
+        setStatus('success', 'Buku siap dibaca');
     }
 }
 
+/* ── Event listeners ── */
 function setupEventListeners() {
-    // Fullscreen button
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-    const fullscreenControl = document.getElementById('fullscreen-control');
+    document.getElementById('fullscreen-btn')?.addEventListener('click', toggleFullscreen);
+    document.getElementById('fullscreen-control')?.addEventListener('click', toggleFullscreen);
 
-    if (fullscreenBtn) {
-        fullscreenBtn.addEventListener('click', toggleFullscreen);
-    }
+    ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange']
+        .forEach(ev => document.addEventListener(ev, handleFullscreenChange));
 
-    if (fullscreenControl) {
-        fullscreenControl.addEventListener('click', toggleFullscreen);
-    }
-
-    // Fullscreen change listeners
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
-
-    // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        // Only trigger if not in input fields
+    document.addEventListener('keydown', function (e) {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-
-        switch(e.key) {
-            case 'F11':
-                e.preventDefault();
-                toggleFullscreen();
-                break;
-            case 'Escape':
-                if (isFullscreen) {
-                    e.preventDefault();
-                    toggleFullscreen();
-                }
-                break;
-            case 'F5':
-                e.preventDefault();
-                reloadReader();
-                break;
-            case 'r':
-            case 'R':
-                if (e.ctrlKey || e.metaKey) {
-                    e.preventDefault();
-                    reloadReader();
-                }
-                break;
+        if (e.key === 'F11') { e.preventDefault(); toggleFullscreen(); }
+        if (e.key === 'Escape' && isFullscreen) { e.preventDefault(); toggleFullscreen(); }
+        if (e.key === 'F5') { e.preventDefault(); reloadReader(); }
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'r' || e.key === 'R')) {
+            e.preventDefault(); reloadReader();
         }
     });
 
-    // Add click animation to control buttons
-    document.querySelectorAll('.btn-control').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            // Add ripple effect
+    /* Ripple on control buttons */
+    document.querySelectorAll('.pr-ctrl-btn').forEach(btn => {
+        btn.addEventListener('click', function (e) {
             const ripple = document.createElement('span');
             const rect = btn.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-
-            ripple.style.cssText = `
-                position: absolute;
-                border-radius: 50%;
-                background: rgba(0, 191, 166, 0.6);
-                transform: scale(0);
-                animation: ripple 0.6s linear;
-                width: ${size}px;
-                height: ${size}px;
-                left: ${x}px;
-                top: ${y}px;
-            `;
-
-            btn.style.position = 'relative';
-            btn.style.overflow = 'hidden';
+            ripple.style.cssText = `position:absolute;border-radius:50%;width:${size}px;height:${size}px;`
+                + `left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px;`
+                + `background:rgba(255,255,255,0.5);transform:scale(0);animation:prRipple 0.5s linear;pointer-events:none;`;
             btn.appendChild(ripple);
-
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
+            setTimeout(() => ripple.remove(), 500);
         });
     });
 }
 
-function showSuccessMessage(message) {
-    showMessage(message, 'success');
-}
+/* ── Ripple keyframe ── */
+const _s = document.createElement('style');
+_s.textContent = `@keyframes prRipple { to { transform:scale(4); opacity:0; } }`;
+document.head.appendChild(_s);
 
-function showErrorMessage(message) {
-    showMessage(message, 'error');
-}
-
-function showMessage(message, type) {
-    // Remove existing messages
-    const existingMessage = document.querySelector('.reader-message');
-    if (existingMessage) {
-        existingMessage.remove();
-    }
-
-    const messageEl = document.createElement('div');
-    messageEl.className = `reader-message message-${type}`;
-    messageEl.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
-        ${message}
-    `;
-
-    // Add styles
-    messageEl.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow-elegant);
-        z-index: 10000;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        animation: slideInRight 0.3s ease-out;
-        max-width: 300px;
-    `;
-
-    document.body.appendChild(messageEl);
-
-    // Auto remove after 3 seconds
-    setTimeout(() => {
-        messageEl.style.animation = 'slideOutRight 0.3s ease-in forwards';
-        setTimeout(() => {
-            if (messageEl.parentNode) {
-                messageEl.remove();
-            }
-        }, 300);
-    }, 3000);
-}
-
-// Add CSS animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes ripple {
-        to {
-            transform: scale(4);
-            opacity: 0;
-        }
-    }
-
-    @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-
-    .btn-fullscreen-active {
-        background: linear-gradient(135deg, var(--warning) 0%, #ffb300 100%) !important;
-        border-color: var(--warning) !important;
-    }
-
-    .status-loading {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .status-loading::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-        animation: loading 1.5s infinite;
-    }
-
-    @keyframes loading {
-        0% { left: -100%; }
-        100% { left: 100%; }
-    }
-`;
-document.head.appendChild(style);
-
-// Export functions for global access
-window.reloadReader = reloadReader;
-window.openInNewTab = openInNewTab;
+/* ── Global exports ── */
+window.reloadReader    = reloadReader;
+window.openInNewTab    = openInNewTab;
 window.toggleFullscreen = toggleFullscreen;
 </script>
