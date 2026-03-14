@@ -16,10 +16,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function showShareToast(ok, msg) {
         if (typeof Swal === 'undefined') return;
         Swal.fire({
-            toast: true, position: 'top-end',
+            toast: true,
+            position: 'top-end',
             icon: ok ? 'success' : 'error',
             title: msg || (ok ? 'URL berhasil disalin!' : 'Gagal menyalin URL'),
-            showConfirmButton: false, timer: 2500, timerProgressBar: true,
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            customClass: { popup: 'swal-bd-toast' },
         });
     }
 
@@ -150,33 +154,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Show success message
+    // Show general message via SweetAlert toast
     function showSuccessMessage(message) {
-        // Remove existing message
-        const existingMessage = document.querySelector('.success-message');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-
-        // Create new message element
-        const successMessage = document.createElement('div');
-        successMessage.className = 'success-message';
-        successMessage.innerHTML = `
-            <i class="fas fa-check-circle me-2"></i>
-            <span class="message-text">${message}</span>
-        `;
-
-        document.body.appendChild(successMessage);
-
-        // Remove message after 3 seconds with fade out effect
-        setTimeout(() => {
-            successMessage.classList.add('fade-out');
-            setTimeout(() => {
-                if (successMessage.parentNode) {
-                    successMessage.remove();
-                }
-            }, 300);
-        }, 2700);
+        if (typeof Swal === 'undefined') return;
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'info',
+            title: message,
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            customClass: { popup: 'swal-bd-toast' },
+        });
     }
 
     // Like functionality
@@ -308,31 +298,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showLikeSuccessMessage(message) {
-        // Remove existing message
-        const existingMessage = document.querySelector('.like-success-message');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-
-        // Create new message element
-        const successMessage = document.createElement('div');
-        successMessage.className = 'like-success-message';
-        successMessage.innerHTML = `
-            <i class="fas fa-heart me-2"></i>
-            <span class="message-text">${message}</span>
-        `;
-
-        document.body.appendChild(successMessage);
-
-        // Remove message after 3 seconds with fade out effect
-        setTimeout(() => {
-            successMessage.classList.add('fade-out');
-            setTimeout(() => {
-                if (successMessage.parentNode) {
-                    successMessage.remove();
-                }
-            }, 300);
-        }, 2700);
+        if (typeof Swal === 'undefined') return;
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            customClass: { popup: 'swal-bd-toast' },
+        });
     }
 
     function initElegantBookDetail() {
@@ -423,9 +399,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Add hover effects to detail items
-        const detailItems = document.querySelectorAll('.detail-item, .related-book-card');
-        detailItems.forEach(item => {
+        // Add hover effects to related book cards only (not detail-item rows)
+        const relatedCards = document.querySelectorAll('.related-book-card');
+        relatedCards.forEach(item => {
             item.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-5px)';
             });
@@ -452,8 +428,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }, observerOptions);
 
-        // Observe elements for scroll animations
-        document.querySelectorAll('.detail-item, .related-book-card').forEach(el => {
+        // Observe elements for scroll animations (related cards only — detail rows stay static)
+        document.querySelectorAll('.related-book-card').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(20px)';
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
