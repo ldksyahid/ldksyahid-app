@@ -285,48 +285,116 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ============================================================
        5. AJAX LOAD PAGE
        ============================================================ */
+    function cbBuildSkeleton() {
+        /* Desktop: 4 skeleton cards */
+        var desktopCards = '';
+        for (var i = 0; i < 4; i++) {
+            desktopCards +=
+                '<div class="cb-skel-card">' +
+                    '<div class="cb-skel-cover cb-skel-base"></div>' +
+                    '<div class="cb-skel-content">' +
+                        '<div class="cb-skel-line cb-skel-badge cb-skel-base"></div>' +
+                        '<div class="cb-skel-line cb-skel-title cb-skel-base"></div>' +
+                        '<div class="cb-skel-line cb-skel-meta cb-skel-base"></div>' +
+                        '<div style="height:.5rem"></div>' +
+                        '<div class="cb-skel-line cb-skel-body cb-skel-base"></div>' +
+                        '<div class="cb-skel-line cb-skel-body cb-skel-w80 cb-skel-base"></div>' +
+                        '<div class="cb-skel-line cb-skel-body cb-skel-w60 cb-skel-base"></div>' +
+                        '<div class="cb-skel-actions">' +
+                            '<div class="cb-skel-btn cb-skel-base"></div>' +
+                            '<div class="cb-skel-btn-sm cb-skel-base"></div>' +
+                            '<div class="cb-skel-btn-sm cb-skel-base"></div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        /* Mobile: 3 skeleton cards in carousel */
+        var mobileCards = '';
+        for (var j = 0; j < 3; j++) {
+            mobileCards +=
+                '<div class="cb-skel-mobile-card">' +
+                    '<div class="cb-skel-mobile-cover cb-skel-base"></div>' +
+                    '<div class="cb-skel-mobile-info">' +
+                        '<div class="cb-skel-line cb-skel-mobile-title cb-skel-base"></div>' +
+                        '<div class="cb-skel-line cb-skel-mobile-auth cb-skel-base"></div>' +
+                        '<div class="cb-skel-line cb-skel-mobile-hint cb-skel-base"></div>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        return '<div class="d-none d-lg-block"><div class="cb-grid">' + desktopCards + '</div></div>' +
+               '<div class="d-lg-none"><div class="cb-skel-carousel">' + mobileCards + '</div></div>';
+    }
+
+    var FADE = 320; /* ms — harus <= CSS transition duration (350ms) */
+
+    function cbFadeOut(el) {
+        return new Promise(function (resolve) {
+            el.classList.add('cb-cards-out');
+            setTimeout(resolve, FADE);
+        });
+    }
+
+    function cbFadeIn(el) {
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                el.classList.remove('cb-cards-out');
+            });
+        });
+    }
+
     function cbLoadPage(url) {
         var wrap    = document.getElementById('cb-cards-wrap');
         var section = document.getElementById('cb-book-section');
 
-        if (wrap) wrap.classList.add('cb-cards-out');
         if (section) {
             var top = section.getBoundingClientRect().top + window.scrollY - 90;
             window.scrollTo({ top: top, behavior: 'smooth' });
         }
 
-        var minDelay  = new Promise(function (res) { setTimeout(res, 350); });
         var fetchData = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                             .then(function (r) { return r.json(); });
 
-        Promise.all([fetchData, minDelay])
+        /* Phase 1 — fade out current content → show skeleton */
+        var skeletonShown = wrap
+            ? cbFadeOut(wrap).then(function () {
+                wrap.innerHTML = cbBuildSkeleton();
+                cbFadeIn(wrap);
+              })
+            : Promise.resolve();
+
+        /* Phase 2 — wait: data ready + skeleton visible at least 400ms */
+        var minSkeleton = new Promise(function (res) { setTimeout(res, FADE + 400); });
+
+        Promise.all([fetchData, skeletonShown, minSkeleton])
             .then(function (results) {
                 var data = results[0];
+                if (!wrap) return;
 
-                if (wrap) {
+                /* Phase 3 — fade out skeleton → show real content */
+                cbFadeOut(wrap).then(function () {
                     wrap.innerHTML = data.html;
-                    requestAnimationFrame(function () {
-                        requestAnimationFrame(function () {
-                            wrap.classList.remove('cb-cards-out');
-                        });
-                    });
-                }
+                    cbFadeIn(wrap);
 
-                var info = document.getElementById('cb-results-info');
-                if (info) {
-                    if (data.total > 0) {
-                        info.innerHTML =
-                            'Menampilkan <strong>' + data.from + '–' + data.to + '</strong>' +
-                            ' dari <strong>' + data.total + '</strong> buku';
-                    } else {
-                        info.innerHTML = 'Tidak ada buku yang ditemukan';
+                    var info = document.getElementById('cb-results-info');
+                    if (info) {
+                        if (data.total > 0) {
+                            info.innerHTML =
+                                'Menampilkan <strong>' + data.from + '–' + data.to + '</strong>' +
+                                ' dari <strong>' + data.total + '</strong> buku';
+                        } else {
+                            info.innerHTML = 'Tidak ada buku yang ditemukan';
+                        }
                     }
-                }
 
-                initCarouselDots();
+                    initCarouselDots();
+                });
             })
             .catch(function () {
-                if (wrap) wrap.classList.remove('cb-cards-out');
+                if (wrap) {
+                    wrap.classList.remove('cb-cards-out');
+                }
                 window.location.href = url;
             });
     }
