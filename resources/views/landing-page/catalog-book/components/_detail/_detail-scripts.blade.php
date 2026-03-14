@@ -13,56 +13,41 @@ document.addEventListener('DOMContentLoaded', function() {
     initLikeButton();
 
     // Share functionality
+    function showShareToast(ok, msg) {
+        if (typeof Swal === 'undefined') return;
+        Swal.fire({
+            toast: true, position: 'top-end',
+            icon: ok ? 'success' : 'error',
+            title: msg || (ok ? 'URL berhasil disalin!' : 'Gagal menyalin URL'),
+            showConfirmButton: false, timer: 2500, timerProgressBar: true,
+        });
+    }
+
     window.copyBookLink = function() {
         const bookLink = window.location.href;
-        const bookTitle = '{{ $book->titleBook }}';
-
-        navigator.clipboard.writeText(bookLink).then(() => {
-            showSuccessMessage('📚 Link buku berhasil disalin!');
-            closeShareOptions();
-
-            // Add visual feedback
-            const copyBtn = document.querySelector('[onclick="copyBookLink()"]');
-            const originalHtml = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
-            copyBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
-            copyBtn.style.color = 'var(--white)';
-            copyBtn.style.borderColor = '#28a745';
-
-            setTimeout(() => {
-                copyBtn.innerHTML = originalHtml;
-                copyBtn.style.background = '';
-                copyBtn.style.color = '';
-                copyBtn.style.borderColor = '';
-            }, 2000);
-
-        }).catch(() => {
-            // Fallback for older browsers
-            const textArea = document.createElement('textarea');
-            textArea.value = bookLink;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            showSuccessMessage('📚 Link buku berhasil disalin!');
-            closeShareOptions();
-        });
+        closeShareOptions();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(bookLink).then(
+                function () { showShareToast(true, '📚 Link buku berhasil disalin!'); },
+                function () { showShareToast(false); }
+            );
+        } else {
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = bookLink;
+                ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none;';
+                document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+                document.body.removeChild(ta);
+                showShareToast(true, '📚 Link buku berhasil disalin!');
+            } catch(e) { showShareToast(false); }
+        }
     };
 
     window.shareOnWhatsApp = function() {
         const bookLink = window.location.href;
         const bookTitle = '{{ $book->titleBook }}';
-        const authorName = '{{ $book->authorName }}';
-        const message = `📚 *${bookTitle}* oleh ${authorName}
-
-🔖 Sinopsis: {{ Str::limit(strip_tags($book->description), 100) }}
-
-📖 Baca buku ini di: ${bookLink}
-
-#Buku #Literasi #Membaca`;
-
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+        const text = bookTitle + '\n' + bookLink;
+        window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
         closeShareOptions();
     };
 

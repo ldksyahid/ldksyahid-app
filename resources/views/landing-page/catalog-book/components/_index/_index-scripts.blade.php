@@ -1,513 +1,711 @@
+{{-- ── Hero Jumbotron scripts ── --}}
+@include('components.hero-jumbotron.scripts')
+
+{{-- ── Select2 JS ── --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
-    // Filter and Search Functionality
-    $(document).ready(function() {
-        const searchInput = $('#search-input');
-        const clearBtn = $('#clear-search');
-        let isSearching = false;
+document.addEventListener('DOMContentLoaded', function () {
 
-        // Function untuk update clear button
-        function updateClearButton() {
-            if (!isSearching && searchInput.val().length > 0) {
-                clearBtn.show();
-            } else {
-                clearBtn.hide();
-            }
-        }
+    /* ============================================================
+       0. UTILITIES
+       ============================================================ */
+    function escHtml(str) {
+        if (str == null) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
 
-        // Function untuk reset search state
-        function resetSearchState(submitButton, originalText) {
-            isSearching = false;
-            submitButton.prop('disabled', false).html(originalText);
-            updateClearButton();
-        }
-
-        // Initialize Select2 for filter modal
-        $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year, #filterModal #language, #filterModal #author_type, #filterModal #availability').each(function () {
-            $(this).select2({
-                placeholder: $(this).attr('name') === 'category[]' ? "Pilih kategori buku" :
-                            $(this).attr('name') === 'author[]' ? "Pilih penulis" :
-                            $(this).attr('name') === 'publisher[]' ? "Pilih penerbit" :
-                            $(this).attr('name') === 'year[]' ? "Pilih tahun" :
-                            $(this).attr('name') === 'language[]' ? "Pilih bahasa" :
-                            $(this).attr('name') === 'author_type[]' ? "Pilih kategori penulis" :
-                            $(this).attr('name') === 'availability[]' ? "Pilih ketersediaan" : "Pilih opsi",
-                allowClear: true,
-                width: '100%',
-                dropdownParent: $('#filterModal'),
-                dropdownPosition: 'below'
-            });
-        });
-
-        // Set initial values for Select2 based on URL parameters when modal is shown
-        $('#filterModal').on('show.bs.modal', function() {
-            const currentCategories = @json(request('category', []));
-            const currentAuthors = @json(request('author', []));
-            const currentPublishers = @json(request('publisher', []));
-            const currentYears = @json(request('year', []));
-            const currentLanguages = @json(request('language', []));
-            const currentAuthorTypes = @json(request('author_type', []));
-            const currentAvailabilities = @json(request('availability', []));
-
-            $('#filterModal #category').val(currentCategories).trigger('change');
-            $('#filterModal #author').val(currentAuthors).trigger('change');
-            $('#filterModal #publisher').val(currentPublishers).trigger('change');
-            $('#filterModal #year').val(currentYears).trigger('change');
-            $('#filterModal #language').val(currentLanguages).trigger('change');
-            $('#filterModal #author_type').val(currentAuthorTypes).trigger('change');
-            $('#filterModal #availability').val(currentAvailabilities).trigger('change');
-        });
-
-        // Submit filter form when apply button is clicked - FIXED VERSION
-        $('#filter-form').on('submit', function(e) {
+    /* ── Bottom sheet scroll lock ── */
+    var _cbTouchBlock = null;
+    function cbLockScroll() {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.classList.add('cb-sheet-open');
+        _cbTouchBlock = function (e) {
+            var sheet = document.getElementById('cb-bottom-sheet');
+            if (sheet && sheet.contains(e.target)) return;
             e.preventDefault();
-            $('#filterModal').modal('hide');
-
-            // Build clean URL base
-            const currentUrl = "{{ url('/perpustakaan') }}";
-
-            // Get search and sort parameters if exist
-            const currentSearchParams = new URLSearchParams(window.location.search);
-            const currentSearch = currentSearchParams.get('search');
-            const currentSort = currentSearchParams.get('sort');
-
-            // Build new search params
-            const newSearchParams = new URLSearchParams();
-
-            // Add search parameter if exists
-            if (currentSearch) {
-                newSearchParams.append('search', currentSearch);
-            }
-
-            // Add sort parameter if exists
-            if (currentSort) {
-                newSearchParams.append('sort', currentSort);
-            }
-
-            // Get unique values dari semua filter
-            const getUniqueValues = (selector) => {
-                const values = $(selector).val();
-                return values && Array.isArray(values)
-                    ? [...new Set(values.filter(v => v && v !== ''))]
-                    : [];
-            };
-
-            // Add filter parameters untuk semua filter
-            const addFilterParams = (values, paramName) => {
-                values.forEach(value => {
-                    newSearchParams.append(`${paramName}[]`, value);
-                });
-            };
-
-            addFilterParams(getUniqueValues('#filterModal #category'), 'category');
-            addFilterParams(getUniqueValues('#filterModal #author'), 'author');
-            addFilterParams(getUniqueValues('#filterModal #publisher'), 'publisher');
-            addFilterParams(getUniqueValues('#filterModal #year'), 'year');
-            addFilterParams(getUniqueValues('#filterModal #language'), 'language');
-            addFilterParams(getUniqueValues('#filterModal #author_type'), 'author_type');
-            addFilterParams(getUniqueValues('#filterModal #availability'), 'availability');
-
-            // Build final URL
-            let finalUrl = currentUrl;
-            if (newSearchParams.toString()) {
-                finalUrl += '?' + newSearchParams.toString();
-            }
-
-            window.location.href = finalUrl;
-        });
-
-        // Function to clear all filters - PERBAIKAN
-        function clearAllFilters() {
-            // Clear all Select2 filters in modal (SEMUA FILTER)
-            $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year, #filterModal #language, #filterModal #author_type, #filterModal #availability').val(null).trigger('change');
-
-            // Build clean URL - hanya pertahankan search dan sort
-            const currentUrl = "{{ url('/perpustakaan') }}";
-            const currentSearchParams = new URLSearchParams(window.location.search);
-            const newSearchParams = new URLSearchParams();
-
-            // Hanya pertahankan search dan sort parameters
-            const search = currentSearchParams.get('search');
-            const sort = currentSearchParams.get('sort');
-
-            if (search) newSearchParams.append('search', search);
-            if (sort) newSearchParams.append('sort', sort);
-
-            // Build final URL
-            let finalUrl = currentUrl;
-            if (newSearchParams.toString()) {
-                finalUrl += '?' + newSearchParams.toString();
-            }
-
-            window.location.href = finalUrl;
+        };
+        window.addEventListener('touchmove', _cbTouchBlock, { passive: false });
+    }
+    function cbUnlockScroll() {
+        document.documentElement.style.overflow = '';
+        document.body.classList.remove('cb-sheet-open');
+        if (_cbTouchBlock) {
+            window.removeEventListener('touchmove', _cbTouchBlock);
+            _cbTouchBlock = null;
         }
+    }
 
-        // Reset all filters when reset button is clicked - PERBAIKAN
-        $('a[href="{{ url('/perpustakaan') }}"]').on('click', function(e) {
-            e.preventDefault();
-            $('#filterModal').modal('hide');
-            clearAllFilters();
-        });
-
-        // Clear all filters in modal (without applying) - PERBAIKAN
-        $('.clear-all-filters').on('click', function() {
-            // Clear semua filter di modal
-            $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year, #filterModal #language, #filterModal #author_type, #filterModal #availability').val(null).trigger('change');
-        });
-
-        // Reset all filters when reset button is clicked
-        $('a[href="{{ url('/perpustakaan') }}"]').on('click', function(e) {
-            e.preventDefault();
-            $('#filterModal').modal('hide');
-            clearAllFilters();
-        });
-
-        // Close modal when cancel button is clicked
-        $('button[data-bs-dismiss="modal"]').on('click', function() {
-            $('#filterModal').modal('hide');
-        });
-
-        // Clear all filters in modal (without applying)
-        $('.clear-all-filters').on('click', function() {
-            $('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year').val(null).trigger('change');
-        });
-
-        // Search functionality dengan loading state
-        searchInput.on('input', function () {
-            if (!isSearching) {
-                updateClearButton();
-            }
-        });
-
-        clearBtn.on('click', function () {
-            if (!isSearching) {
-                searchInput.val('');
-                $('#search-form').submit();
-            }
-        });
-
-        // Auto-submit search form on enter
-        searchInput.on('keypress', function(e) {
-            if (e.which === 13 && !isSearching) {
-                $('#search-form').submit();
-            }
-        });
-
-        // Loading state untuk search form
-        $('#search-form').on('submit', function(e) {
-            if (isSearching) {
+    /* ── Filter modal scroll lock ── */
+    var _cbFmWheelLock = null, _cbFmKeyLock = null, _cbFmTouchBlock = null;
+    function cbFmLockScroll() {
+        _cbFmWheelLock = function(e) { e.preventDefault(); };
+        _cbFmKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key))
                 e.preventDefault();
-                return;
-            }
+        };
+        window.addEventListener('wheel',   _cbFmWheelLock, { passive: false });
+        window.addEventListener('keydown', _cbFmKeyLock);
+    }
+    function cbFmUnlockScroll() {
+        if (_cbFmWheelLock) { window.removeEventListener('wheel',   _cbFmWheelLock); _cbFmWheelLock = null; }
+        if (_cbFmKeyLock)   { window.removeEventListener('keydown', _cbFmKeyLock);   _cbFmKeyLock   = null; }
+    }
 
-            const submitButton = $(this).find('button[type="submit"]');
-            const originalText = submitButton.html();
 
-            // Set state searching
-            isSearching = true;
+    /* ============================================================
+       1. CARD TAB SWITCHING  (event delegation — works after AJAX)
+       ============================================================ */
+    var cbCardsWrap = document.getElementById('cb-cards-wrap');
+    if (cbCardsWrap) {
+        cbCardsWrap.addEventListener('click', function (e) {
+            var btn = e.target.closest('.cb-tab');
+            if (!btn) return;
+            e.stopPropagation();
 
-            // Sembunyikan tombol clear
-            clearBtn.hide();
+            var nav           = btn.closest('.cb-tabs-nav');
+            var tabsContainer = btn.closest('.cb-card-tabs');
+            if (!nav || !tabsContainer) return;
 
-            // Hanya disable tombol submit, biarkan input tetap aktif
-            submitButton.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Mencari...');
+            nav.querySelectorAll('.cb-tab').forEach(function (t) {
+                t.classList.remove('active');
+            });
+            tabsContainer.querySelectorAll('.cb-tab-pane').forEach(function (p) {
+                p.classList.remove('active');
+            });
 
-            // Jika form di-submit secara manual (bukan oleh script lain)
-            if (e.originalEvent) {
-                // Biarkan form submit normal
-                // Reset state akan dilakukan setelah halaman reload
-            } else {
-                // Reset state setelah halaman selesai load
-                $(window).on('load', function() {
-                    resetSearchState(submitButton, originalText);
-                });
-            }
+            btn.classList.add('active');
+            var targetId   = btn.getAttribute('data-target');
+            var targetPane = tabsContainer.querySelector('#' + targetId);
+            if (targetPane) targetPane.classList.add('active');
         });
+    }
 
-        // Close select2 dropdowns on window scroll
-        $(window).on('scroll', function () {
-            $('.select2-container--open').select2('close');
-        });
 
-        // Initialize select2 for existing dropdowns (if any)
-        $('#category, #author, #publisher, #year').not('#filterModal #category, #filterModal #author, #filterModal #publisher, #filterModal #year').each(function () {
+    /* ============================================================
+       2. SELECT2 INIT
+       ============================================================ */
+    if (typeof $.fn !== 'undefined' && typeof $.fn.select2 !== 'undefined') {
+        var $filterSelects = $(
+            '#cb-category-select, #cb-author-select, #cb-publisher-select, ' +
+            '#cb-year-select, #cb-language-select, #cb-author-type-select, #cb-availability-select'
+        );
+        $filterSelects.each(function () {
             $(this).select2({
-                placeholder: "Semua",
+                placeholder: 'Semua',
                 allowClear: true,
                 width: '100%',
-                dropdownPosition: 'below'
+                dropdownParent: $('#cb-filter-modal'),
+            });
+        });
+        $(window).on('scroll', function () { $filterSelects.select2('close'); });
+    }
+
+
+    /* ============================================================
+       2. FILTER COUNT BADGE
+       ============================================================ */
+    var filterSelectIds = [
+        'cb-category-select', 'cb-author-select', 'cb-publisher-select',
+        'cb-year-select', 'cb-language-select', 'cb-author-type-select', 'cb-availability-select'
+    ];
+
+    /* ── Filter snapshot (restore on close without apply) ── */
+    var _cbFilterSnapshot = {};
+    var _cbApplied = false;
+
+    function cbSnapshotFilters() {
+        _cbFilterSnapshot = {};
+        filterSelectIds.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            _cbFilterSnapshot[id] = Array.from(el.selectedOptions).map(function (o) { return o.value; });
+        });
+    }
+
+    function cbRestoreFilters() {
+        filterSelectIds.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            var vals = _cbFilterSnapshot[id] || [];
+            for (var i = 0; i < el.options.length; i++) {
+                el.options[i].selected = vals.indexOf(el.options[i].value) !== -1;
+            }
+            if (typeof $ !== 'undefined') $(el).trigger('change');
+        });
+    }
+
+    function updateFilterBadge() {
+        var count = 0;
+        filterSelectIds.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el && el.selectedOptions) count += el.selectedOptions.length;
+        });
+        var badge    = document.getElementById('cb-filter-count');
+        var clearBtn = document.getElementById('cb-filter-clear');
+        if (badge)    { badge.textContent = count; badge.style.display = count > 0 ? 'flex' : 'none'; }
+        if (clearBtn) { clearBtn.style.display = count > 0 ? 'flex' : 'none'; }
+    }
+
+    /* Filter modal backdrop */
+    var filterModal = document.getElementById('cb-filter-modal');
+    var fmBackdrop  = document.getElementById('cb-fm-backdrop');
+
+    if (filterModal) {
+        filterModal.addEventListener('show.bs.modal', function () {
+            cbSnapshotFilters();
+            _cbApplied = false;
+            updateFilterBadge();
+            if (fmBackdrop) fmBackdrop.classList.add('active');
+            cbFmLockScroll();
+            _cbFmTouchBlock = function (e) {
+                if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
+            };
+            window.addEventListener('touchmove', _cbFmTouchBlock, { passive: false, capture: true });
+        });
+        filterModal.addEventListener('hidden.bs.modal', function () {
+            if (!_cbApplied) {
+                cbRestoreFilters();
+                updateFilterBadge();
+            }
+            _cbApplied = false;
+            if (fmBackdrop) fmBackdrop.classList.remove('active');
+            cbFmUnlockScroll();
+            if (_cbFmTouchBlock) {
+                window.removeEventListener('touchmove', _cbFmTouchBlock, { capture: true });
+                _cbFmTouchBlock = null;
+            }
+        });
+    }
+    if (fmBackdrop) {
+        fmBackdrop.addEventListener('click', function () {
+            var modal = bootstrap.Modal.getInstance(filterModal);
+            if (modal) modal.hide();
+        });
+    }
+
+
+    /* ============================================================
+       3. BUILD URL FROM FORM STATE
+       ============================================================ */
+    function cbBuildUrl(page) {
+        var params = new URLSearchParams();
+
+        var searchEl = document.getElementById('cb-search-input');
+        var search   = searchEl ? searchEl.value.trim() : '';
+        if (search) params.set('search', search);
+
+        var fieldMap = {
+            'cb-category-select':     'category',
+            'cb-author-select':       'author',
+            'cb-publisher-select':    'publisher',
+            'cb-year-select':         'year',
+            'cb-language-select':     'language',
+            'cb-author-type-select':  'author_type',
+            'cb-availability-select': 'availability',
+        };
+        Object.keys(fieldMap).forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el || !el.selectedOptions) return;
+            Array.from(el.selectedOptions).forEach(function (opt) {
+                params.append(fieldMap[id] + '[]', opt.value);
             });
         });
 
-        // Show active filter count on filter button (TANPA TOMBOL X)
-        function updateFilterButton() {
-            // Fix: Use proper JSON syntax for Blade
-            const activeFilters = {
-                category: @json(request('category', [])),
-                author: @json(request('author', [])),
-                publisher: @json(request('publisher', [])),
-                year: @json(request('year', [])),
-                language: @json(request('language', [])),
-                author_type: @json(request('author_type', [])),
-                availability: @json(request('availability', []))
-            };
+        var sortEl = document.getElementById('cb-sort-val');
+        var sort   = sortEl ? sortEl.value : 'newest';
+        if (sort && sort !== 'newest') params.set('sort', sort);
 
-            let activeCount = 0;
+        if (page && page > 1) params.set('page', page);
 
-            Object.values(activeFilters).forEach(filter => {
-                if (filter && filter.length > 0) {
-                    if (Array.isArray(filter)) {
-                        activeCount += filter.length;
-                    } else {
-                        activeCount += 1;
-                    }
+        var base = document.getElementById('cb-base-url').value;
+        var qs   = params.toString();
+        return base + (qs ? '?' + qs : '');
+    }
+
+
+    /* ============================================================
+       4. ACTIVE FILTER PILLS (JS-driven)
+       ============================================================ */
+    var pillFieldMap = {
+        'cb-category-select':     'Kategori',
+        'cb-author-select':       'Penulis',
+        'cb-publisher-select':    'Penerbit',
+        'cb-year-select':         'Tahun',
+        'cb-language-select':     'Bahasa',
+        'cb-author-type-select':  'Kat. Penulis',
+        'cb-availability-select': 'Ketersediaan',
+    };
+
+    function buildActivePills() {
+        var container = document.getElementById('cb-active-pills');
+        if (!container) return;
+        container.innerHTML = '';
+
+        Object.keys(pillFieldMap).forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            Array.from(el.selectedOptions).forEach(function (opt) {
+                var pill = document.createElement('span');
+                pill.className = 'sfb-pill';
+                pill.innerHTML =
+                    '<span>' + escHtml(pillFieldMap[id]) + ': ' + escHtml(opt.text) + '</span>' +
+                    ' <i class="fas fa-times"></i>';
+                pill.dataset.selectId = id;
+                pill.dataset.value    = opt.value;
+
+                var icon = pill.querySelector('i');
+                if (icon) {
+                    icon.addEventListener('click', function () {
+                        var p   = this.closest('.sfb-pill');
+                        var sel = document.getElementById(p.dataset.selectId);
+                        if (!sel) return;
+                        for (var i = 0; i < sel.options.length; i++) {
+                            if (sel.options[i].value === p.dataset.value) sel.options[i].selected = false;
+                        }
+                        if (typeof $ !== 'undefined') $(sel).trigger('change');
+                        updateFilterBadge();
+                        buildActivePills();
+                        cbLoadPage(cbBuildUrl());
+                    });
                 }
+                container.appendChild(pill);
             });
+        });
+    }
 
-            const filterButton = $('button[data-bs-target="#filterModal"]');
-            const filterIcon = filterButton.find('i');
-            const filterText = filterButton.find('span');
 
-            if (activeCount > 0) {
-                filterButton.addClass('btn-primary').removeClass('btn-outline-primary');
-                filterButton.css({
-                    'background-color': '#00bfa6',
-                    'border-color': '#00bfa6',
-                    'color': 'white'
-                });
+    /* ============================================================
+       5. AJAX LOAD PAGE
+       ============================================================ */
+    function cbLoadPage(url) {
+        var wrap    = document.getElementById('cb-cards-wrap');
+        var section = document.getElementById('cb-book-section');
 
-                // Hanya badge tanpa tombol X
-                if (!filterButton.find('.filter-badge').length) {
-                    filterText.after('<span class="filter-badge badge rounded-circle bg-white text-primary ms-1">' + activeCount + '</span>');
-                } else {
-                    filterButton.find('.filter-badge').text(activeCount);
-                }
-            } else {
-                filterButton.removeClass('btn-primary').addClass('btn-outline-primary');
-                filterButton.css({
-                    'background-color': 'transparent',
-                    'border-color': '#00bfa6',
-                    'color': '#00bfa6'
-                });
-                filterButton.find('.filter-badge').remove();
-            }
+        if (wrap) wrap.classList.add('cb-cards-out');
+        if (section) {
+            var top = section.getBoundingClientRect().top + window.scrollY - 90;
+            window.scrollTo({ top: top, behavior: 'smooth' });
         }
 
-        // Call update function on page load
-        updateFilterButton();
+        var minDelay  = new Promise(function (res) { setTimeout(res, 350); });
+        var fetchData = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                            .then(function (r) { return r.json(); });
 
-        // Update filter button when modal is shown/hidden
-        $('#filterModal').on('shown.bs.modal', function() {
-            updateFilterButton();
-        });
+        Promise.all([fetchData, minDelay])
+            .then(function (results) {
+                var data = results[0];
 
-        $('#filterModal').on('hidden.bs.modal', function() {
-            updateFilterButton();
-        });
-
-        // Reset state ketika halaman selesai load
-        $(window).on('load', function() {
-            isSearching = false;
-            const submitButton = $('#search-form').find('button[type="submit"]');
-            submitButton.prop('disabled', false).html('<i class="fas fa-search me-2"></i> Cari');
-
-            // Update clear button
-            updateClearButton();
-
-            // Update filter button
-            updateFilterButton();
-        });
-
-        // Inisialisasi clear button saat pertama kali load
-        updateClearButton();
-
-        // Fix untuk dropdown di mobile
-        function fixMobileDropdowns() {
-            if ($(window).width() <= 576) {
-                // Reposition dropdown menus untuk mobile
-                $('.dropdown-menu').each(function() {
-                    const $dropdown = $(this);
-                    const $toggle = $dropdown.prev('.dropdown-toggle');
-
-                    if ($toggle.length) {
-                        $toggle.off('click.mobile-fix').on('click.mobile-fix', function(e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-
-                            // Close other open dropdowns
-                            $('.dropdown-menu').not($dropdown).removeClass('show');
-
-                            // Toggle current dropdown
-                            $dropdown.toggleClass('show');
-
-                            // Position dropdown
-                            if ($dropdown.hasClass('show')) {
-                                const rect = $toggle[0].getBoundingClientRect();
-                                $dropdown.css({
-                                    'position': 'fixed',
-                                    'top': '50%',
-                                    'left': '50%',
-                                    'transform': 'translate(-50%, -50%)',
-                                    'width': '90%',
-                                    'max-width': '300px',
-                                    'z-index': '1060'
-                                });
-                            }
+                if (wrap) {
+                    wrap.innerHTML = data.html;
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
+                            wrap.classList.remove('cb-cards-out');
                         });
+                    });
+                }
+
+                var info = document.getElementById('cb-results-info');
+                if (info) {
+                    if (data.total > 0) {
+                        info.innerHTML =
+                            'Menampilkan <strong>' + data.from + '–' + data.to + '</strong>' +
+                            ' dari <strong>' + data.total + '</strong> buku';
+                    } else {
+                        info.innerHTML = 'Tidak ada buku yang ditemukan';
                     }
-                });
+                }
 
-                // Close dropdowns when clicking outside
-                $(document).on('click touchstart', function(e) {
-                    if (!$(e.target).closest('.dropdown').length) {
-                        $('.dropdown-menu').removeClass('show');
-                    }
-                });
-            }
-        }
-
-        // Panggil fungsi fix saat load dan resize
-        fixMobileDropdowns();
-        $(window).on('resize', fixMobileDropdowns);
-    });
-
-    // Share Functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        // Function to show success message
-        function showCopySuccess(message) {
-            // Remove existing success message
-            const existingMessage = document.querySelector('.copy-success');
-            if (existingMessage) {
-                existingMessage.remove();
-            }
-
-            // Create new success message
-            const successMessage = document.createElement('div');
-            successMessage.className = 'copy-success';
-            successMessage.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(successMessage);
-
-            // Remove message after 3 seconds with fade out effect
-            setTimeout(() => {
-                successMessage.classList.add('fade-out');
-                setTimeout(() => {
-                    if (successMessage.parentNode) {
-                        successMessage.remove();
-                    }
-                }, 300);
-            }, 2700);
-        }
-
-        // Copy link functionality
-        document.querySelectorAll('.copy-link').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const link = this.getAttribute('data-link');
-                const fullLink = link;
-
-                navigator.clipboard.writeText(fullLink).then(() => {
-                    showCopySuccess('Link berhasil disalin!');
-                }).catch(() => {
-                    const textArea = document.createElement('textarea');
-                    textArea.value = fullLink;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    showCopySuccess('Link berhasil disalin!');
-                });
-
-                // Close dropdown
-                $(this).closest('.dropdown').find('.dropdown-toggle').dropdown('hide');
+                initCarouselDots();
+            })
+            .catch(function () {
+                if (wrap) wrap.classList.remove('cb-cards-out');
+                window.location.href = url;
             });
-        });
+    }
 
-        // WhatsApp share functionality
-        document.querySelectorAll('.share-wa').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const link = this.getAttribute('data-link');
-                const title = this.getAttribute('data-title');
-                const fullLink = link;
 
-                const message = `📚 *${title}* \n\nBaca buku ini di: ${fullLink}`;
-                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-
-                window.open(whatsappUrl, '_blank');
-                $(this).closest('.dropdown').find('.dropdown-toggle').dropdown('hide');
-            });
-        });
-    });
-
-    // Smooth scrolling for pagination
-    $(document).on('click', '.pagination a', function(e) {
+    /* ============================================================
+       6. AJAX PAGINATION
+       ============================================================ */
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest('#cb-cards-wrap .pgn-nav[href], #cb-cards-wrap .pgn-num[href]');
+        if (!link) return;
         e.preventDefault();
-        const url = $(this).attr('href');
-
-        window.location.href = url;
+        cbLoadPage(link.href);
     });
 
-    // Loading state untuk filter form
-    $('#filter-form').on('submit', function() {
-        const submitButton = $(this).find('button[type="submit"]');
-        const originalText = submitButton.html();
 
-        submitButton.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Memproses...');
+    /* ============================================================
+       7. SEARCH — debounced AJAX
+       ============================================================ */
+    var searchInput = document.getElementById('cb-search-input');
+    var searchClear = document.getElementById('cb-search-clear');
+    var searchTimer = null;
 
-        setTimeout(() => {
-            submitButton.prop('disabled', false).html(originalText);
-        }, 2000);
-    });
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            if (searchClear) searchClear.style.display = this.value ? 'flex' : 'none';
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function () { cbLoadPage(cbBuildUrl()); }, 420);
+        });
+        searchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                clearTimeout(searchTimer);
+                cbLoadPage(cbBuildUrl());
+            }
+        });
+        if (searchClear) searchClear.style.display = searchInput.value ? 'flex' : 'none';
+    }
 
-    // Mobile Share Functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        // Copy Link for Mobile
-        document.querySelectorAll('.copy-link-mobile').forEach(button => {
-            button.addEventListener('click', function() {
-                const link = this.getAttribute('data-link');
-                copyToClipboard(link);
-                showCopySuccess();
+    if (searchClear) {
+        searchClear.addEventListener('click', function () {
+            if (searchInput) { searchInput.value = ''; this.style.display = 'none'; }
+            clearTimeout(searchTimer);
+            cbLoadPage(cbBuildUrl());
+        });
+    }
+
+
+    /* ============================================================
+       8. FILTER APPLY / RESET
+       ============================================================ */
+    var applyBtn = document.getElementById('cb-apply-filter');
+    if (applyBtn) {
+        applyBtn.addEventListener('click', function () {
+            _cbApplied = true;
+            var modal = bootstrap.Modal.getInstance(document.getElementById('cb-filter-modal'));
+            if (modal) modal.hide();
+            updateFilterBadge();
+            buildActivePills();
+            cbLoadPage(cbBuildUrl());
+        });
+    }
+
+    function cbClearAllFilters() {
+        filterSelectIds.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            for (var i = 0; i < el.options.length; i++) el.options[i].selected = false;
+            if (typeof $ !== 'undefined') $(el).trigger('change');
+        });
+        updateFilterBadge();
+    }
+
+    var resetBtn = document.getElementById('cb-reset-filter');
+    if (resetBtn) resetBtn.addEventListener('click', cbClearAllFilters);
+
+    var filterClearBtn = document.getElementById('cb-filter-clear');
+    if (filterClearBtn) {
+        filterClearBtn.addEventListener('click', function () {
+            cbClearAllFilters();
+            buildActivePills();
+            cbLoadPage(cbBuildUrl());
+        });
+    }
+
+
+    /* ============================================================
+       9. SORT DROPDOWN
+       ============================================================ */
+    document.querySelectorAll('[data-sort][data-sort-prefix="cb"]').forEach(function (el) {
+        el.addEventListener('click', function (e) {
+            e.preventDefault();
+            var val    = this.dataset.sort;
+            var sortEl = document.getElementById('cb-sort-val');
+            if (sortEl) sortEl.value = val;
+            document.querySelectorAll('[data-sort][data-sort-prefix="cb"]').forEach(function (s) {
+                s.classList.toggle('active', s.dataset.sort === val);
             });
+            cbLoadPage(cbBuildUrl());
+        });
+    });
+
+
+    /* ============================================================
+       10. MOBILE CAROUSEL DOTS
+       ============================================================ */
+    function initCarouselDots() {
+        var carousel = document.getElementById('cb-mobile-carousel');
+        var dotsWrap = document.getElementById('cb-carousel-dots');
+        if (!carousel || !dotsWrap) return;
+
+        var cards = carousel.querySelectorAll('.cb-mobile-card');
+        dotsWrap.innerHTML = '';
+
+        if (cards.length <= 1) { dotsWrap.style.display = 'none'; return; }
+        dotsWrap.style.display = 'flex';
+
+        var dots = [];
+        cards.forEach(function (card, i) {
+            var dot = document.createElement('button');
+            dot.className = 'cb-dot' + (i === 0 ? ' active' : '');
+            dot.title = 'Buku ' + (i + 1);
+            dot.addEventListener('click', function () {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            });
+            dotsWrap.appendChild(dot);
+            dots.push(dot);
         });
 
-        // WhatsApp Share for Mobile
-        document.querySelectorAll('.share-wa-mobile').forEach(button => {
-            button.addEventListener('click', function() {
-                const link = this.getAttribute('data-link');
-                const title = this.getAttribute('data-title');
-                const text = `Lihat buku "${title}" di: ${link}`;
-                const encodedText = encodeURIComponent(text);
-                window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+        var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                var idx = Array.from(cards).indexOf(entry.target);
+                dots.forEach(function (d, i) { d.classList.toggle('active', i === idx); });
             });
+        }, { root: carousel, threshold: 0.55 });
+
+        cards.forEach(function (c) { obs.observe(c); });
+    }
+    initCarouselDots();
+
+
+    /* ============================================================
+       11. SHARE FUNCTIONS (exposed globally)
+       ============================================================ */
+    function showCopyToast(ok) {
+        if (typeof Swal === 'undefined') return;
+        Swal.fire({
+            toast: true, position: 'top-end',
+            icon: ok ? 'success' : 'error',
+            title: ok ? 'URL berhasil disalin!' : 'Gagal menyalin URL',
+            showConfirmButton: false, timer: 2500, timerProgressBar: true,
+            customClass: { container: 'cb-swal-above-sheet' }
+        });
+    }
+
+    window.cbCopyUrl = function (url, ev) {
+        if (ev) ev.stopPropagation();
+        var full = (url && url.indexOf('http') === 0) ? url : window.location.origin + url;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(full).then(
+                function () { showCopyToast(true); },
+                function () { showCopyToast(false); }
+            );
+        } else {
+            try {
+                var ta = document.createElement('textarea');
+                ta.value = full;
+                ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none;';
+                document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+                document.body.removeChild(ta); showCopyToast(true);
+            } catch (e) { showCopyToast(false); }
+        }
+    };
+
+    window.cbShareWa = function (url, title, ev) {
+        if (ev) ev.stopPropagation();
+        var full = (url && url.indexOf('http') === 0) ? url : window.location.origin + url;
+        var text = (title ? title + '\n' : '') + full;
+        window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+    };
+
+
+    /* ============================================================
+       12. MOBILE BOTTOM SHEET
+       ============================================================ */
+    window.cbOpenBottomSheet = function (el) {
+        var content = document.getElementById('cb-bs-content');
+        if (!content) return;
+
+        var title        = el.dataset.title        || '';
+        var author       = el.dataset.author       || '';
+        var authorType   = el.dataset.authorType   || '';
+        var publisher    = el.dataset.publisher    || '';
+        var year         = el.dataset.year         || '';
+        var edition      = el.dataset.edition      || '';
+        var isbn         = el.dataset.isbn         || '';
+        var pages        = el.dataset.pages        || '';
+        var likes        = el.dataset.likes        || '0';
+        var date         = el.dataset.date         || '';
+        var category     = el.dataset.category     || '';
+        var language     = el.dataset.language     || '';
+        var availability = el.dataset.availability || '';
+        var synopsis     = el.dataset.synopsis     || '';
+        var cover        = el.dataset.cover        || '';
+        var url          = el.dataset.url          || '#';
+        var spine        = el.dataset.spine        || 'var(--cb-primary)';
+        var isPrem       = el.dataset.prem         === '1';
+        var isNew        = el.dataset.new          === '1';
+
+        /* ── Cover ── */
+        var imgHtml = cover
+            ? '<img src="' + escHtml(cover) + '" alt="' + escHtml(title) + '" class="cb-bs-cover-img" loading="lazy">'
+            : '<div class="cb-bs-cover-fallback"><i class="fas fa-book-open"></i></div>';
+
+        /* ── Spec rows helper ── */
+        function specRow(label, val) {
+            if (!val) return '';
+            return '<div class="cb-bs-spec-row">' +
+                '<span class="cb-bs-spec-lbl">' + escHtml(label) + '</span>' +
+                '<span class="cb-bs-spec-val">' + val + '</span>' +
+                '</div>';
+        }
+        var specRowsHtml =
+            specRow('Judul',           escHtml(title)) +
+            specRow('Penulis',         escHtml(author)) +
+            (authorType ? specRow('Kategori Penulis', escHtml(authorType)) : '') +
+            specRow('Penerbit',        escHtml(publisher)) +
+            specRow('Tahun Terbit',    escHtml(year)) +
+            (edition ? specRow('Edisi', escHtml(edition)) : '') +
+            (isbn    ? specRow('ISBN',  escHtml(isbn))    : '') +
+            specRow('Bahasa',          escHtml(language)) +
+            (pages   ? specRow('Jumlah Halaman', escHtml(pages) + ' halaman') : '') +
+            specRow('Ketersediaan',    escHtml(availability)) +
+            '<div class="cb-bs-spec-row">' +
+                '<span class="cb-bs-spec-lbl">Disukai</span>' +
+                '<span class="cb-bs-spec-val"><i class="fas fa-heart" style="color:#ef4444;margin-right:.3rem;font-size:.7rem;"></i>' + escHtml(likes) + '</span>' +
+            '</div>';
+
+        /* ── Tabs: show Sinopsis tab only if synopsis exists ── */
+        var hasSyn = synopsis.trim().length > 0;
+        var tabsHtml =
+            '<div class="cb-bs-tabs">' +
+                '<div class="cb-bs-tabs-nav">' +
+                    '<button class="cb-bs-tab active" data-bst="cb-bst-spec">Spesifikasi</button>' +
+                    (hasSyn ? '<button class="cb-bs-tab" data-bst="cb-bst-syn">Sinopsis</button>' : '') +
+                '</div>' +
+                '<div class="cb-bs-tab-pane active" id="cb-bst-spec">' +
+                    '<div class="cb-bs-spec-list">' + specRowsHtml + '</div>' +
+                '</div>' +
+                (hasSyn ?
+                    '<div class="cb-bs-tab-pane" id="cb-bst-syn">' +
+                        '<p class="cb-bs-synopsis">' + escHtml(synopsis) + '</p>' +
+                    '</div>'
+                : '') +
+            '</div>';
+
+        /* ── Full HTML ── */
+        content.innerHTML =
+            /* Cover area */
+            '<div class="cb-bs-cover-wrap">' +
+                '<div class="cb-bs-drag-handle"></div>' +
+                imgHtml +
+                '<div class="cb-bs-cover-gradient"></div>' +
+                (isPrem ? '<span class="cb-bs-prem-badge"><i class="fas fa-crown"></i> Premium</span>' : '') +
+                (isNew  ? '<span class="cb-bs-new-badge-cover">Baru</span>' : '') +
+            '</div>' +
+
+            /* Info section */
+            '<div class="cb-bs-info">' +
+
+                /* Top row: category + meta */
+                '<div class="cb-bs-top-row">' +
+                    (category ?
+                        '<span class="cb-bs-cat" style="background:color-mix(in srgb,' + escHtml(spine) + ' 15%,white);color:' + escHtml(spine) + ';">' +
+                            '<i class="fas fa-tag" style="font-size:.6rem;"></i>' + escHtml(category) +
+                        '</span>'
+                    : '') +
+                    '<div class="cb-bs-meta-row">' +
+                        (date ? '<span class="cb-bs-meta-item"><i class="fas fa-calendar-alt"></i>' + escHtml(date) + '</span>' : '') +
+                        '<span class="cb-bs-meta-item cb-bs-meta-likes"><i class="fas fa-heart"></i>' + escHtml(likes) + '</span>' +
+                    '</div>' +
+                '</div>' +
+
+                /* Title */
+                '<h5 class="cb-bs-title">' + escHtml(title) + '</h5>' +
+
+                /* Author line */
+                (author ?
+                    '<p class="cb-bs-author">' +
+                        '<i class="fas fa-user-edit" style="font-size:.72rem;"></i>' +
+                        escHtml(author) +
+                        (authorType ? '<span class="cb-bs-author-type"> • ' + escHtml(authorType) + '</span>' : '') +
+                    '</p>'
+                : '') +
+
+                /* Tabs */
+                tabsHtml +
+
+                /* CTA */
+                '<a href="' + escHtml(url) + '" class="cb-bs-btn-primary">' +
+                    '<i class="fas fa-book-open"></i><span>Lihat Detail Buku</span>' +
+                '</a>' +
+
+                /* Share */
+                '<div class="cb-bs-share-wrap">' +
+                    '<span class="cb-bs-share-label">Bagikan</span>' +
+                    '<div class="cb-bs-share-row">' +
+                        '<button class="cb-bs-share-btn cb-bs-share-copy cb-bs-copy-btn"><i class="fas fa-link"></i><span>Salin URL</span></button>' +
+                        '<button class="cb-bs-share-btn cb-bs-share-wa  cb-bs-wa-btn" ><i class="fab fa-whatsapp"></i><span>WhatsApp</span></button>' +
+                    '</div>' +
+                '</div>' +
+
+            '</div>'; /* /cb-bs-info */
+
+        /* ── Wire tab switching ── */
+        content.addEventListener('click', function (e) {
+            var btn = e.target.closest('.cb-bs-tab');
+            if (!btn) return;
+            var nav = btn.closest('.cb-bs-tabs-nav');
+            var tabs = btn.closest('.cb-bs-tabs');
+            if (!nav || !tabs) return;
+            nav.querySelectorAll('.cb-bs-tab').forEach(function (t) { t.classList.remove('active'); });
+            tabs.querySelectorAll('.cb-bs-tab-pane').forEach(function (p) { p.classList.remove('active'); });
+            btn.classList.add('active');
+            var pane = tabs.querySelector('#' + btn.dataset.bst);
+            if (pane) pane.classList.add('active');
+        }, { once: false });
+
+        /* ── Wire share buttons ── */
+        var bsCopyBtn = content.querySelector('.cb-bs-copy-btn');
+        var bsWaBtn   = content.querySelector('.cb-bs-wa-btn');
+        if (bsCopyBtn) bsCopyBtn.addEventListener('click', function (e) {
+            e.stopPropagation(); cbCopyUrl(url);
+        });
+        if (bsWaBtn) bsWaBtn.addEventListener('click', function (e) {
+            e.stopPropagation(); cbShareWa(url, title);
         });
 
-        // Copy to Clipboard Function
-        function copyToClipboard(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-        }
+        document.getElementById('cb-bottom-sheet').scrollTop = 0;
+        document.getElementById('cb-bs-backdrop').classList.add('active');
+        document.getElementById('cb-bottom-sheet').classList.add('active');
+        cbLockScroll();
+    };
 
-        // Show Copy Success Message
-        function showCopySuccess() {
-            const successMsg = document.createElement('div');
-            successMsg.className = 'copy-success';
-            successMsg.innerHTML = '<i class="fas fa-check-circle me-2"></i>Link berhasil disalin!';
-            document.body.appendChild(successMsg);
+    function cbCloseBs() {
+        document.getElementById('cb-bs-backdrop').classList.remove('active');
+        document.getElementById('cb-bottom-sheet').classList.remove('active');
+        cbUnlockScroll();
+    }
 
-            setTimeout(() => {
-                successMsg.classList.add('fade-out');
-                setTimeout(() => {
-                    document.body.removeChild(successMsg);
-                }, 300);
-            }, 2000);
-        }
+    var bsClose    = document.getElementById('cb-bs-close');
+    var bsBackdrop = document.getElementById('cb-bs-backdrop');
+    if (bsClose)    bsClose.addEventListener('click', cbCloseBs);
+    if (bsBackdrop) bsBackdrop.addEventListener('click', cbCloseBs);
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        var bs = document.getElementById('cb-bottom-sheet');
+        if (bs && bs.classList.contains('active')) cbCloseBs();
     });
+
+
+    /* ============================================================
+       13. INITIAL STATE — sync server-rendered pills
+       ============================================================ */
+    document.querySelectorAll('#cb-active-pills .sfb-pill[data-select-id]').forEach(function (pill) {
+        var icon = pill.querySelector('i.fa-times');
+        if (!icon) return;
+        icon.addEventListener('click', function () {
+            var p   = this.closest('.sfb-pill');
+            var sel = document.getElementById(p.dataset.selectId);
+            if (!sel) return;
+            for (var i = 0; i < sel.options.length; i++) {
+                if (sel.options[i].value === p.dataset.value) sel.options[i].selected = false;
+            }
+            if (typeof $ !== 'undefined') $(sel).trigger('change');
+            updateFilterBadge();
+            buildActivePills();
+            cbLoadPage(cbBuildUrl());
+        });
+    });
+
+    updateFilterBadge();
+
+}); /* end DOMContentLoaded */
 </script>

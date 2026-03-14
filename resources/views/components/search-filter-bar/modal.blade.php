@@ -27,12 +27,20 @@
 (function () {
     var _sfbWheelLock = null, _sfbKeyLock = null, _sfbTouchLock = null;
     function sfbLockScroll() {
-        _sfbWheelLock = function(e) { e.preventDefault(); };
-        _sfbKeyLock   = function(e) {
+        /* wheel: allow scrolling INSIDE .sfb-fm-body, block outside */
+        _sfbWheelLock = function(e) {
+            if (e.target.closest('.sfb-fm-body')) return;
+            e.preventDefault();
+        };
+        /* keyboard: allow scroll keys when focus is inside .sfb-fm-body */
+        _sfbKeyLock = function(e) {
+            var active = document.activeElement;
+            if (active && active.closest('.sfb-fm-body')) return;
             if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
                 e.preventDefault();
             }
         };
+        /* touch: allow touch-scroll inside .sfb-fm-body */
         _sfbTouchLock = function(e) {
             if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
         };
