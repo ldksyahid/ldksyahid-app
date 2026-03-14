@@ -158,4 +158,11 @@
     #wrp-body { padding: 1rem 1.25rem .875rem; }
     #wrp-footer { padding: .75rem 1.25rem 1.25rem; }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] #wrp-card { background: #1a1f2e; }
+[data-theme="dark"] #wrp-desc { color: #9ca3af; }
+[data-theme="dark"] .wrp-feat { background: #1e2d2c; border-color: rgba(0,167,157,.18); }
+[data-theme="dark"] .wrp-feat:hover { background: #223d3b; }
+[data-theme="dark"] .wrp-feat-text { color: #d1d5db; }
 </style>

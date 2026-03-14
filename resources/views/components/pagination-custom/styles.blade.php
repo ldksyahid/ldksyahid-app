@@ -117,5 +117,17 @@ button.pgn-edge:last-child  { border-radius: 14px 50px 50px 14px; }
     .pgn-ellipsis { height: 34px; font-size: .7rem; flex-shrink: 0; }
     .pgn-info { font-size: .78rem; text-align: center; }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .pgn-nav,
+[data-theme="dark"] .pgn-num {
+    background: #1a1f2e;
+    border-color: rgba(0,167,157,.5);
+}
+[data-theme="dark"] .pgn-nav[disabled] {
+    background: #1e2535;
+    color: #3d5054;
+    border-color: #2a3545;
+}
 </style>
 @endverbatim

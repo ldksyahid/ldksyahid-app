@@ -1271,4 +1271,30 @@
         .pillar-sheet-backdrop,
         .pillar-bottom-sheet { display: none !important; }
     }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .intro-card-cr,
+[data-theme="dark"] .history-card-cr,
+[data-theme="dark"] .vision-card-cr { background: #1a1f2e; }
+[data-theme="dark"] .badge-inner { background: #1e2d2c; color: #4dd9cf; border-color: rgba(0,167,157,.25); }
+[data-theme="dark"] .img-float-tag { background: #1a1f2e; color: #9ca3af; }
+[data-theme="dark"] .timeline-node { background: #1a1f2e; border-color: rgba(0,167,157,.4); }
+[data-theme="dark"] .kl-pusat-card,
+[data-theme="dark"] .kl-card { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .mc-front { background: #1a1f2e; }
+[data-theme="dark"] #tab-keluarga { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .pillar-bottom-sheet { background: #1a1f2e; }
+[data-theme="dark"] .pbs-title { color: #e2e8f0; }
+[data-theme="dark"] .pbs-desc { color: #9ca3af; }
+[data-theme="dark"] .intro-title    { color: #e2e8f0; }
+[data-theme="dark"] .intro-subtitle { color: #9ca3af; }
+[data-theme="dark"] .intro-body p   { color: #cbd5e0; }
+[data-theme="dark"] .feature-cr     { background: rgba(0,167,157,.1); color: #e2e8f0; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .pillar-hover-card { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .pillar-hover-card p { color: #9ca3af; }
+[data-theme="dark"] .pillar-hover-card::after { border-top-color: #1a1f2e; }
+[data-theme="dark"] .kl-pusat-card .h6,
+[data-theme="dark"] .kl-card .h6,
+[data-theme="dark"] .kl-pusat-card p,
+[data-theme="dark"] .kl-card p { color: #9ca3af; }
 </style>

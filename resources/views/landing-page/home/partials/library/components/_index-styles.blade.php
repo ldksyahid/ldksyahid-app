@@ -722,4 +722,28 @@ body.library-sheet-open .back-to-top {
         transform: translate(-50%, 0);
     }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .library-heading    { color: #e2e8f0; }
+[data-theme="dark"] .library-subtitle   { color: #9ca3af; }
+[data-theme="dark"] .library-card { background: #1a1f2e; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .library-card__title a { color: #e2e8f0; }
+[data-theme="dark"] .library-card__author,
+[data-theme="dark"] .library-card__publisher,
+[data-theme="dark"] .library-card__pages { color: #9ca3af; }
+[data-theme="dark"] .library-card-mobile { background: #1a1f2e; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .library-card-mobile__content { background: #1a1f2e; }
+[data-theme="dark"] .library-card-mobile__title { color: #e2e8f0; }
+[data-theme="dark"] .library-card-mobile__author { color: #9ca3af; }
+[data-theme="dark"] .library-btn-view-all,
+[data-theme="dark"] .library-btn-all { background: #1a1f2e; color: #00c4b8; border-color: rgba(0,167,157,.4); }
+[data-theme="dark"] .library-empty { background: #1a1f2e; }
+[data-theme="dark"] .library-empty h4 { color: #e2e8f0; }
+[data-theme="dark"] .library-empty p   { color: #9ca3af; }
+[data-theme="dark"] .library-sheet { background: #1a1f2e; }
+[data-theme="dark"] .library-sheet__handle { background: rgba(255,255,255,.15); }
+[data-theme="dark"] .library-sheet__close { background: #252b3b; color: #4dd9cf; }
+[data-theme="dark"] .library-sheet__img-gradient { background: linear-gradient(to bottom, transparent, #1a1f2e); }
+[data-theme="dark"] .library-sheet__title { color: #e2e8f0; }
+[data-theme="dark"] .library-sheet__meta { color: #9ca3af; }
 </style>

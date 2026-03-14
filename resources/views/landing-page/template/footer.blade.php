@@ -732,5 +732,12 @@
     .toast-below-navbar {
         margin-top: 80px !important;
     }
+
+    /* ── Dark Mode ── */
+    [data-theme="dark"] .footer-wave {
+        background: linear-gradient(to bottom, #0f1117 0%, #1a2332 100%);
+    }
+    [data-theme="dark"] .footer-wave svg path { fill: #1a2332; }
+    [data-theme="dark"] .footer-logo { background: #252b3b; border-color: rgba(0,167,157,.35); }
 </style>
 

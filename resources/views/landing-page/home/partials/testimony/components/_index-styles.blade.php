@@ -1012,4 +1012,17 @@ body.testimony-sheet-open {
         padding: 0.4rem 0.8rem;
     }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .stat-card { background: #1a1f2e; border-color: rgba(0,167,157,.1); }
+[data-theme="dark"] .testimony-card { background: #1a1f2e; border-color: rgba(0,167,157,.1); }
+[data-theme="dark"] .testimony-card__text { color: #9ca3af; }
+[data-theme="dark"] .testimony-card__name { color: #e2e8f0; }
+[data-theme="dark"] .testimony-card__role { color: #9ca3af; }
+[data-theme="dark"] .testimony-empty-mobile { background: #1a1f2e; }
+[data-theme="dark"] .testimony-sheet { background: #1a1f2e; }
+[data-theme="dark"] .testimony-sheet__header { background: #1a1f2e; }
+[data-theme="dark"] .testimony-sheet__name { color: #e2e8f0; }
+[data-theme="dark"] .testimony-sheet__role { color: #9ca3af; }
+[data-theme="dark"] .testimony-sheet__text { color: #9ca3af; }
 </style>

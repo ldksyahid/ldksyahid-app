@@ -670,5 +670,15 @@ body.cs-sheet-open { overflow: hidden; }
     .cs-mobile-card { flex: 0 0 80vw; }
     .cs-mobile-carousel { padding: 0 calc(50% - 40vw) 1rem; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .cs-info-card    { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .cs-mobile-card  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .cs-card         { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .cs-card-title   { color: #e2e8f0; }
+[data-theme="dark"] .cs-card-meta    { color: #9ca3af; }
+[data-theme="dark"] .cs-bottom-sheet { background: #1a1f2e; border-color: rgba(0,167,157,.25); }
+[data-theme="dark"] .cs-bs-title     { color: #e2e8f0; }
+[data-theme="dark"] .cs-section-title { color: #e2e8f0; }
 </style>
 @endverbatim

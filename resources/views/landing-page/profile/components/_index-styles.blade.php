@@ -379,5 +379,14 @@
     .prf-info-item--full { grid-column: auto; }
     .prf-actions { grid-template-columns: 1fr; gap: 0.65rem; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .prf-name         { color: #e2e8f0; }
+[data-theme="dark"] .prf-fullname     { color: #9ca3af; }
+[data-theme="dark"] .prf-tentang      { color: #cbd5e0; }
+[data-theme="dark"] .prf-info-card    { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .prf-item-label   { color: #9ca3af; }
+[data-theme="dark"] .prf-item-value   { color: #e2e8f0; }
+[data-theme="dark"] .prf-btn-back     { background: #252b3b; color: #9ca3af; }
 </style>
 @endverbatim

@@ -156,4 +156,13 @@
     .ds-status-icon { width: 60px; height: 60px; font-size: 1.4rem; }
     .ds-status-title { font-size: 1.15rem; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .ds-card         { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .ds-status-title { color: #e2e8f0; }
+[data-theme="dark"] .ds-status-sub   { color: #9ca3af; }
+[data-theme="dark"] .ds-detail-row   { border-bottom-color: rgba(0,167,157,.12); }
+[data-theme="dark"] .ds-detail-key   { color: #9ca3af; }
+[data-theme="dark"] .ds-detail-val   { color: #e2e8f0; }
+[data-theme="dark"] .ds-btn          { background: #1e2535; border-color: rgba(0,167,157,.25); color: #e2e8f0; }
 </style>

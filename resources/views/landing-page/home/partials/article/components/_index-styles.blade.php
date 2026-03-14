@@ -761,4 +761,16 @@ body.art-sheet-open .back-to-top {
         display: none;
     }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .art-card { background: #1a1f2e; }
+[data-theme="dark"] .art-card__title a { color: #e2e8f0; }
+[data-theme="dark"] .art-card__meta { color: #9ca3af; }
+[data-theme="dark"] .art-btn-all { background: #1a1f2e; color: #00c4b8; border-color: rgba(0,167,157,.4); }
+[data-theme="dark"] .art-empty { background: #1a1f2e; color: #9ca3af; }
+[data-theme="dark"] .art-sheet { background: #1a1f2e; }
+[data-theme="dark"] .art-sheet__img-gradient { background: linear-gradient(to bottom, transparent, #1a1f2e); }
+[data-theme="dark"] .art-sheet__title { color: #e2e8f0; }
+[data-theme="dark"] .art-sheet__meta { color: #9ca3af; }
+[data-theme="dark"] .art-sheet__body { color: #cbd5e0; }
 </style>

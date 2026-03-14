@@ -470,4 +470,17 @@ body.gl-sheet-open { overflow: hidden !important; touch-action: none; }
 @media (max-width: 767.98px) {
     .section-title-gal { font-size: 1.4rem; }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .gl-event-card { background: #1a1f2e; }
+[data-theme="dark"] .gl-card-body { background: linear-gradient(to bottom, transparent, #1a1f2e); }
+[data-theme="dark"] .gl-card-title { color: #e2e8f0; }
+[data-theme="dark"] .gl-card-meta { color: #9ca3af; }
+[data-theme="dark"] .gl-mobile-card { background: #1a1f2e; }
+[data-theme="dark"] .gl-empty-state { background: #1a1f2e; color: #9ca3af; }
+[data-theme="dark"] .gl-bottom-sheet { background: #1a1f2e; }
+[data-theme="dark"] .gl-bs-content { background: linear-gradient(to bottom, transparent, #1a1f2e); }
+[data-theme="dark"] .gl-bs-title { color: #e2e8f0; }
+[data-theme="dark"] .gl-bs-meta { color: #9ca3af; }
+[data-theme="dark"] .gl-bs-doc { color: #00c4b8; border-color: rgba(0,167,157,.3); }
 </style>

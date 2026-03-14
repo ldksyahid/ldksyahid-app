@@ -356,6 +356,14 @@
         .vepm-ring-1 { width: 65px; height: 65px; animation-delay: 0s; }
         .vepm-ring-2 { width: 100px; height: 100px; animation-delay: 0.9s; }
     }
+
+    /* ── Dark Mode ── */
+    [data-theme="dark"] .vepm-box { background: #1a1f2e; }
+    [data-theme="dark"] .vepm-title { color: #e2e8f0; }
+    [data-theme="dark"] .vepm-desc { color: #9ca3af; }
+    [data-theme="dark"] .vepm-step-label { color: #9ca3af; }
+    [data-theme="dark"] .vepm-email-chip { background: #252b3b; color: #4dd9cf; border-color: rgba(0,167,157,.3); }
+    [data-theme="dark"] .vepm-note { background: #1e2d2c; color: #9ca3af; border-color: rgba(0,167,157,.2); }
 </style>
 
 <style>

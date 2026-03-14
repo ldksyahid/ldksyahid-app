@@ -936,4 +936,27 @@
             align-self: flex-start;
         }
     }
+
+    /* ── Dark Mode ── */
+    [data-theme="dark"] .hero-carousel-card   { background: #1a1f2e; }
+    [data-theme="dark"] .hero-desktop-content { background: #1a1f2e; }
+    [data-theme="dark"] .hero-divider-desktop { background: #1a1f2e; }
+    [data-theme="dark"] .hero-mobile-content  { background: #1a1f2e; }
+    [data-theme="dark"] .hero-divider-mobile  { background: #1a1f2e; }
+    [data-theme="dark"] .hadith-desktop-wrapper:not(.expanded)::after {
+        background: linear-gradient(to bottom, transparent, #1a1f2e);
+    }
+    [data-theme="dark"] .hadith-mobile-wrapper:not(.expanded)::after {
+        background: linear-gradient(to bottom, transparent, #1a1f2e);
+    }
+    [data-theme="dark"] .carousel-indicators-fun { background: #1a1f2e; }
+
+    /* Text colors */
+    [data-theme="dark"] .hero-desktop-arab   { color: #e2e8f0; }
+    [data-theme="dark"] .hero-desktop-text   { color: #9ca3af; }
+    [data-theme="dark"] .hero-mobile-arab    { color: #e2e8f0; }
+    [data-theme="dark"] .hero-mobile-desc    { color: #9ca3af; }
+    [data-theme="dark"] .hero-desktop-number { color: #4dd9cf; }
+    [data-theme="dark"] .hadith-number       { color: #4dd9cf; }
+    [data-theme="dark"] .floating-icon       { opacity: .15; }
 </style>

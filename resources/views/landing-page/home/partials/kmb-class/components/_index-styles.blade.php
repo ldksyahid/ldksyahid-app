@@ -886,4 +886,20 @@ body.kmb2-popup-open .back-to-top {
     .kmb2-cta    { padding:1.25rem; }
     .kmb2-cta-chips span { width:42px; height:42px; border-radius:12px; }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .kmb2-card { background: rgba(26,31,46,.92); border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .kmb2-card-name { color: #e2e8f0; }
+[data-theme="dark"] .kmb2-card-preview { color: #9ca3af; }
+[data-theme="dark"] .kmb2-photo-chip,
+[data-theme="dark"] .kmb2-modal-photo-chip,
+[data-theme="dark"] .kmb2-sheet-photo-chip { background: #1a1f2e; border-color: #252b3b; }
+[data-theme="dark"] .kmb2-modal { background: #1a1f2e; }
+[data-theme="dark"] .kmb2-modal-title { color: #e2e8f0; }
+[data-theme="dark"] .kmb2-modal-desc { color: #9ca3af; }
+[data-theme="dark"] .kmb2-modal-dots .mdot { background: #374151; }
+[data-theme="dark"] .kmb2-sheet { background: #1a1f2e; }
+[data-theme="dark"] .kmb2-sheet-title { color: #e2e8f0; }
+[data-theme="dark"] .kmb2-sheet-desc { color: #9ca3af; }
+[data-theme="dark"] .kmb2-sheet-dots .sdot { background: #374151; }
 </style>
