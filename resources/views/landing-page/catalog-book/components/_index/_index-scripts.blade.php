@@ -41,8 +41,13 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ── Filter modal scroll lock ── */
     var _cbFmWheelLock = null, _cbFmKeyLock = null, _cbFmTouchBlock = null;
     function cbFmLockScroll() {
-        _cbFmWheelLock = function(e) { e.preventDefault(); };
-        _cbFmKeyLock   = function(e) {
+        _cbFmWheelLock = function(e) {
+            if (e.target.closest('.sfb-fm-body')) return; /* allow scroll inside modal body */
+            e.preventDefault();
+        };
+        _cbFmKeyLock = function(e) {
+            var active = document.activeElement;
+            if (active && active.closest('.sfb-fm-body')) return;
             if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key))
                 e.preventDefault();
         };
