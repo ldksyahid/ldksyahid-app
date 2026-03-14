@@ -651,4 +651,20 @@
         font-size: 0.65rem;
     }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .schedule-card-fun { background: #1a1f2e; }
+[data-theme="dark"] .schedule-info-box {
+    background: linear-gradient(135deg, #1e2d2c 0%, #1a1f2e 50%, #1e2535 100%);
+    border-color: rgba(0,167,157,.15);
+}
+[data-theme="dark"] .schedule-btn-view-all { background: #1a1f2e; color: #00c4b8; border-color: rgba(0,167,157,.3); }
+[data-theme="dark"] .info-date-wrapper { background: #252b3b; }
+[data-theme="dark"] .info-description { background: linear-gradient(135deg, rgba(0,167,157,.1) 0%, rgba(0,167,157,.05) 100%); }
+[data-theme="dark"] .info-description p { color: #cbd5e0; }
+[data-theme="dark"] .date-label { color: #9ca3af; }
+[data-theme="dark"] .date-year { color: #9ca3af; }
+[data-theme="dark"] .empty-card { background: #1a1f2e; }
+[data-theme="dark"] .empty-title { color: #e2e8f0; }
+[data-theme="dark"] .empty-text { color: #9ca3af; }
 </style>

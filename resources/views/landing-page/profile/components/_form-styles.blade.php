@@ -377,5 +377,28 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .prf-form-deco-title  { color: #e2e8f0; }
+[data-theme="dark"] .prf-form-deco-quote  { background: rgba(0,167,157,.08); }
+[data-theme="dark"] .prf-form-deco-quote p { color: #cbd5e0; }
+[data-theme="dark"] .prf-form-card        { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .prf-field .form-floating > .form-control {
+    background: #1e2535;
+    border-color: rgba(0,167,157,.25);
+    color: #e2e8f0;
+}
+[data-theme="dark"] .prf-field .form-floating > .form-control:focus {
+    background: #252b3b;
+    border-color: #00b8ad;
+    box-shadow: 0 0 0 4px rgba(0,184,173,.1);
+}
+[data-theme="dark"] .prf-field .form-floating > .form-control:disabled {
+    background: #0f1117 !important;
+    color: #6b7280;
+}
+[data-theme="dark"] .prf-field .form-floating > label { color: #9ca3af; }
+[data-theme="dark"] .prf-file-label       { background: #1e2535; border-color: rgba(0,167,157,.3); }
+[data-theme="dark"] .prf-btn-back         { background: #252b3b; color: #9ca3af; }
 </style>
 @endverbatim

@@ -759,5 +759,26 @@ body.ar-sheet-open .back-to-top {
 @media (max-width: 576px) {
     .ar-mobile-card { flex: 0 0 86vw; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .ar-card {
+    background: #1a1f2e;
+    border-color: rgba(0,167,157,.2);
+}
+[data-theme="dark"] .ar-card-title a { color: #e2e8f0; }
+[data-theme="dark"] .ar-card-meta    { color: #9ca3af; }
+[data-theme="dark"] .ar-mobile-card  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .ar-bottom-sheet {
+    background: #1a1f2e;
+    border-color: rgba(0,167,157,.25);
+}
+[data-theme="dark"] .ar-sheet__img-gradient { background: linear-gradient(to bottom, transparent, #1a1f2e); }
+[data-theme="dark"] .ar-sheet__title  { color: #e2e8f0; }
+[data-theme="dark"] .ar-sheet__meta   { color: #9ca3af; }
+[data-theme="dark"] .ar-btn-all {
+    background: #1a1f2e;
+    color: #00c4b8;
+    border-color: rgba(0,167,157,.4);
+}
 </style>
 @endverbatim

@@ -878,4 +878,34 @@
     .share-options-floating { min-width: 150px; top: calc(100% + 6px); }
     .share-option-btn { width: 44px; height: 44px; font-size: 0.95rem; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .cover-container        { background: #1a1f2e; box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+[data-theme="dark"] .quick-actions          { background: #1a1f2e; box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+[data-theme="dark"] .book-header-elegant    { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .book-title-elegant    { color: #e2e8f0; }
+[data-theme="dark"] .book-subtitle-elegant { color: #9ca3af; }
+[data-theme="dark"] .book-author-small     { color: #9ca3af; }
+[data-theme="dark"] .book-meta-small       { color: #9ca3af; }
+[data-theme="dark"] .content-card          { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .content-text          { color: #cbd5e0; }
+[data-theme="dark"] .detail-item           { border-bottom-color: rgba(0,167,157,.1); }
+[data-theme="dark"] .detail-item:hover     { background: rgba(0,167,157,.05); }
+[data-theme="dark"] .detail-label          { color: #9ca3af; }
+[data-theme="dark"] .detail-value          { color: #e2e8f0; }
+[data-theme="dark"] .bd-stat strong        { color: #e2e8f0; }
+[data-theme="dark"] .bd-stat               { color: #9ca3af; }
+[data-theme="dark"] .related-books-elegant { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .section-title         { color: #e2e8f0; }
+[data-theme="dark"] .tabs-navigation       { background: #252b3b; border-bottom-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .nav-tab               { color: #9ca3af; }
+[data-theme="dark"] .nav-tab:hover         { background: rgba(0,167,157,.1); color: #4dd9cf; }
+[data-theme="dark"] .nav-tab.active        { color: #00c4b8; border-bottom-color: #00c4b8; }
+[data-theme="dark"] .disqus-container,
+[data-theme="dark"] #disqus_thread         { background: #1a1f2e; }
+[data-theme="dark"] .related-book-card     { background: #252b3b; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .book-title-small      { color: #e2e8f0; }
+[data-theme="dark"] .share-options-floating { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .btn-like,
+[data-theme="dark"] .btn-outline           { background: #252b3b; border-color: rgba(0,167,157,.2); color: #e2e8f0; }
 </style>

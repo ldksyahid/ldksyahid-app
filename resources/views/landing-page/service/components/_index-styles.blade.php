@@ -388,5 +388,15 @@ body.sv-sheet-open .back-to-top {
     .sv-section-title { font-size: 1.4rem; }
     .sv-m-thumb { width: 62px; height: 62px; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .sv-card         { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .sv-card-title   { color: #e2e8f0; }
+[data-theme="dark"] .sv-card-meta    { color: #9ca3af; }
+[data-theme="dark"] .sv-mobile-card  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .sv-bottom-sheet { background: #1a1f2e; border-color: rgba(0,167,157,.25); }
+[data-theme="dark"] .sv-bs-title     { color: #e2e8f0; }
+[data-theme="dark"] .sv-bs-meta      { color: #9ca3af; }
+[data-theme="dark"] .sv-bs-img-gradient { background: linear-gradient(to bottom, transparent, #1a1f2e); }
 </style>
 @endverbatim

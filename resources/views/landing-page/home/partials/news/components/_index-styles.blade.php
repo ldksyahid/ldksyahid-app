@@ -769,4 +769,22 @@ body.news-sheet-open .back-to-top {
         display: none;
     }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .news-card { background: #1a1f2e; border-color: rgba(0,167,157,.12); }
+[data-theme="dark"] .news-card__title a { color: #e2e8f0; }
+[data-theme="dark"] .news-card__meta { color: #9ca3af; }
+[data-theme="dark"] .news-card__excerpt { color: #9ca3af; }
+[data-theme="dark"] .news-card__date-badge { background: rgba(26,31,46,.95); }
+[data-theme="dark"] .news-card__date-month { color: #9ca3af; }
+[data-theme="dark"] .news-btn-all { background: #1a1f2e; color: #00c4b8; border-color: rgba(0,167,157,.25); }
+[data-theme="dark"] .news-empty { background: #1a1f2e; }
+[data-theme="dark"] .news-empty h4 { color: #e2e8f0; }
+[data-theme="dark"] .news-empty p { color: #9ca3af; }
+[data-theme="dark"] .news-sheet { background: #1a1f2e; }
+[data-theme="dark"] .news-sheet__img-gradient { background: linear-gradient(to top, #1a1f2e, transparent); }
+[data-theme="dark"] .news-sheet__title { color: #e2e8f0; }
+[data-theme="dark"] .news-sheet__meta-item { color: #9ca3af; }
+[data-theme="dark"] .news-sheet__meta-text span:not(.news-sheet__meta-label) { color: #e2e8f0; }
+[data-theme="dark"] .news-sheet__excerpt { color: #9ca3af; }
 </style>

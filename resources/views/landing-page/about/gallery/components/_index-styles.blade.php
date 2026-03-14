@@ -468,5 +468,27 @@ body.gl-sheet-open { overflow: hidden !important; touch-action: none; }
     /* Hide prev/next zoom nav on touch (use swipe) */
     .gl-zoom-prev, .gl-zoom-next { display: none; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .gl-event-card {
+    background: #1a1f2e;
+    border-color: rgba(0,167,157,.2);
+}
+[data-theme="dark"] .gl-event-title { color: #e2e8f0; }
+[data-theme="dark"] .gl-event-meta  { color: #9ca3af; }
+[data-theme="dark"] .gl-mobile-card {
+    background: #1a1f2e;
+    border-color: rgba(0,167,157,.2);
+}
+[data-theme="dark"] .gl-empty-state {
+    background: #1a1f2e;
+    border-color: rgba(0,167,157,.2);
+}
+[data-theme="dark"] .gl-bottom-sheet {
+    background: #1a1f2e;
+    border-color: rgba(0,167,157,.25);
+}
+[data-theme="dark"] .gl-zoom-overlay { background: rgba(0,0,0,.92); }
+[data-theme="dark"] .gl-zoom-content { background: #1a1f2e; }
 </style>
 @endverbatim

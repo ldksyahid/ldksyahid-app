@@ -606,5 +606,36 @@
 @media (max-width: 767.98px) {
     .nw-section-title { font-size: 1.55rem; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+/* Section header */
+[data-theme="dark"] .nw-section-title  { color: #e2e8f0; }
+[data-theme="dark"] .nw-section-sub    { color: #9ca3af; }
+[data-theme="dark"] .nw-results-info   { color: #9ca3af; }
+[data-theme="dark"] .nw-results-info strong { color: #e2e8f0; }
+/* Desktop card */
+[data-theme="dark"] .nw-card           { background: #1a1f2e; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .nw-card-title a   { color: #e2e8f0; }
+[data-theme="dark"] .nw-card-excerpt   { color: #9ca3af; }
+[data-theme="dark"] .nw-card-meta-name { color: #e2e8f0; }
+[data-theme="dark"] .nw-card-meta-label { color: #9ca3af; }
+[data-theme="dark"] .nw-card-people    { border-top-color: rgba(0,167,157,.15); border-bottom-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .nw-card-people-divider { background: rgba(0,167,157,.2); }
+[data-theme="dark"] .nw-card-share     { border-top-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .nw-card-share-label { color: #6b7280; }
+/* Mobile card */
+[data-theme="dark"] .nw-mobile-card    { background: #1a1f2e; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .nw-m-title        { color: #e2e8f0; }
+/* Bottom sheet */
+[data-theme="dark"] .nw-bottom-sheet   { background: #1a1f2e; }
+[data-theme="dark"] .nw-bs-close       { background: #252b3b; color: #9ca3af; }
+[data-theme="dark"] .nw-bs-img-gradient { background: linear-gradient(to bottom, transparent, #1a1f2e); }
+[data-theme="dark"] .nw-bs-title       { color: #e2e8f0; }
+[data-theme="dark"] .nw-bs-meta-name   { color: #e2e8f0; }
+[data-theme="dark"] .nw-bs-meta-label  { color: #9ca3af; }
+[data-theme="dark"] .nw-bs-share       { border-top-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .nw-bs-share-title { color: #6b7280; }
+[data-theme="dark"] .nw-bs-share-btn:hover { background: #252b3b; }
+[data-theme="dark"] .nw-bs-share-lbl   { color: #9ca3af; }
 </style>
 @endverbatim

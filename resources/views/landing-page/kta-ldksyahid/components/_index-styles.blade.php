@@ -504,5 +504,16 @@
     .kta-card-body { padding: 1.1rem 1.1rem; }
     .kta-main { padding: 3rem 0 1.5rem; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .kta-card      { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .kta-card-body { background: #1a1f2e; }
+[data-theme="dark"] .kta-card-name { color: #e2e8f0; }
+[data-theme="dark"] .kta-card-meta { color: #9ca3af; }
+[data-theme="dark"] .kta-org-card  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .kta-org-desc  { background: #252b3b; border-color: rgba(0,167,157,.2); color: #e2e8f0; }
+[data-theme="dark"] .kta-info-nav  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .kta-info-label { color: #9ca3af; }
+[data-theme="dark"] .kta-info-value { color: #e2e8f0; }
 </style>
 @endverbatim

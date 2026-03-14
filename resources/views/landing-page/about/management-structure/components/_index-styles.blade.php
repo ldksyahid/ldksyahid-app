@@ -896,4 +896,17 @@ body.ms-modal-open .back-to-top {
     .ms-lb-body  { padding: 1rem; }
 }
 
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .ms-lb-overlay  { background: rgba(0,0,0,.88); }
+[data-theme="dark"] .ms-lb-content  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .ms-lb-header   { background: #1a1f2e; border-bottom-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .ms-lb-name     { color: #e2e8f0; }
+[data-theme="dark"] .ms-lb-position { color: #9ca3af; }
+[data-theme="dark"] .ms-lb-body     { background: #1a1f2e; }
+[data-theme="dark"] .ms-photo-frame { background: #252b3b; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .ms-card        { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .ms-card-name   { color: #e2e8f0; }
+[data-theme="dark"] .ms-card-pos    { color: #9ca3af; }
+[data-theme="dark"] .ms-section-title { color: #e2e8f0; }
+
 </style>

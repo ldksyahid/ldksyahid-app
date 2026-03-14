@@ -723,6 +723,36 @@ body.cb-sheet-open .back-to-top {
     .cb-mobile-carousel { padding: 0 calc(50% - 37.5vw) 1rem; }
 }
 
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .cb-section-title  { color: #e2e8f0; }
+[data-theme="dark"] .cb-section-sub    { color: #9ca3af; }
+[data-theme="dark"] .cb-results-info   { color: #9ca3af; }
+[data-theme="dark"] .cb-results-info strong { color: #e2e8f0; }
+[data-theme="dark"] .cb-book-card      { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .cb-card-title     { color: #e2e8f0; }
+[data-theme="dark"] .cb-card-title a   { color: #e2e8f0; }
+[data-theme="dark"] .cb-card-meta-row  { color: #9ca3af; }
+[data-theme="dark"] .cb-spec-row       { border-bottom-color: rgba(0,167,157,.1); }
+[data-theme="dark"] .cb-spec-label     { color: #9ca3af; }
+[data-theme="dark"] .cb-spec-value     { color: #e2e8f0; }
+[data-theme="dark"] .cb-mobile-card    { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .cb-m-title        { color: #e2e8f0; }
+[data-theme="dark"] .cb-m-author       { color: #9ca3af; }
+[data-theme="dark"] .cb-bottom-sheet   { background: #1a1f2e; border-color: rgba(0,167,157,.25); }
+[data-theme="dark"] .cb-bs-title       { color: #e2e8f0; }
+[data-theme="dark"] .cb-bs-meta-row    { color: #9ca3af; }
+[data-theme="dark"] .cb-bs-img-gradient { background: linear-gradient(to bottom, transparent, #1a1f2e); }
+[data-theme="dark"] .cb-bs-close       { background: #252b3b; color: #9ca3af; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .cb-bs-author      { color: #9ca3af; }
+[data-theme="dark"] .cb-bs-tabs-nav    { border-bottom-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .cb-bs-tab         { color: #9ca3af; }
+[data-theme="dark"] .cb-bs-tab.active  { color: #00c4b8; }
+[data-theme="dark"] .cb-bs-spec-row    { border-bottom-color: rgba(0,167,157,.1); }
+[data-theme="dark"] .cb-bs-spec-lbl    { color: #9ca3af; }
+[data-theme="dark"] .cb-bs-spec-val    { color: #e2e8f0; }
+[data-theme="dark"] .cb-bs-synopsis    { color: #cbd5e0; }
+[data-theme="dark"] .cb-bs-share-label { color: #9ca3af; }
+[data-theme="dark"] .cb-bs-share-btn   { background: #252b3b; border-color: rgba(0,167,157,.2); color: #9ca3af; }
 
 </style>
 @endverbatim

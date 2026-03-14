@@ -535,5 +535,28 @@ body.its-sheet-open .back-to-top {
     .its-mobile-card { flex: 0 0 68vw; }
     .its-section { padding: 3rem 0 4.5rem; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .its-section-title  { color: #e2e8f0; }
+[data-theme="dark"] .its-section-sub    { color: #9ca3af; }
+[data-theme="dark"] .its-card           { background: #1a1f2e; }
+[data-theme="dark"] .its-photo-band     { background: #1a1f2e; }
+[data-theme="dark"] .its-photo-ring     { border-color: #1a1f2e; }
+[data-theme="dark"] .its-card-name      { color: #e2e8f0; }
+[data-theme="dark"] .its-forkat         { color: #9ca3af; }
+[data-theme="dark"] .its-empty-title    { color: #e2e8f0; }
+[data-theme="dark"] .its-empty-sub      { color: #9ca3af; }
+[data-theme="dark"] .its-mobile-card    { background: #1a1f2e; }
+[data-theme="dark"] .its-m-photo-band   { background: #1a1f2e; }
+[data-theme="dark"] .its-m-photo-ring   { border-color: #1a1f2e; }
+[data-theme="dark"] .its-m-name         { color: #e2e8f0; }
+[data-theme="dark"] .its-forkat--sm     { color: #9ca3af; }
+[data-theme="dark"] .its-bottom-sheet   { background: #1a1f2e; }
+[data-theme="dark"] .its-bs-photo-band  { background: #1a1f2e; }
+[data-theme="dark"] .its-bs-photo-ring  { border-color: #1a1f2e; }
+[data-theme="dark"] .its-bs-hdr::after  { background: linear-gradient(to top, #1a1f2e 0%, transparent 100%) !important; }
+[data-theme="dark"] .its-bs-close       { background: #252b3b; color: #4dd9cf; box-shadow: none; }
+[data-theme="dark"] .its-bs-name        { color: #e2e8f0; }
+[data-theme="dark"] .its-bs-forkat      { color: #9ca3af; }
 </style>
 @endverbatim

@@ -36,6 +36,11 @@
         <link href="{{ asset('css/cardservice.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/cardcelengan.css') }}" rel="stylesheet" />
 
+        {{-- Dark Mode: apply theme sebelum render untuk hindari flash --}}
+        <script>
+            (function(){if(localStorage.getItem('darkMode')==='enabled')document.documentElement.setAttribute('data-theme','dark');})();
+        </script>
+
         {{-- ReCaptcha --}}
         {!! ReCaptcha::htmlScriptTagJsApi() !!}
 
@@ -201,6 +206,14 @@
             @keyframes ldkDotBounce {
                 0%, 100% { transform: translateY(0); }
                 50%       { transform: translateY(-7px); }
+            }
+
+            /* ── Dark Mode ── */
+            [data-theme="dark"] #spinner { background: #0f1117; }
+            [data-theme="dark"] .ldk-spin-brand { color: #e2e8f0; }
+            [data-theme="dark"] .ldk-spin-img {
+                mix-blend-mode: normal;
+                filter: brightness(1.15) drop-shadow(0 0 10px rgba(0,167,157,0.35));
             }
         </style>
 
