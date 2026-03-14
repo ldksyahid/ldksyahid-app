@@ -26,10 +26,43 @@ class CelenganSyahidController extends Controller
 {
     public $pathCampaignsGDrive = '1w48iZmjPCkYwVUL26zIj8fBIX37OMaGT';
 
-    public function indexLanding()
+    public function indexLanding(Request $request)
     {
-        $postcampaign = Campaign::getCampaigns();
-        return view('landing-page.service.celengan-syahid.index', compact('postcampaign'), ["title" => "Layanan"]);
+        $query = Campaign::with(['donation' => function ($q) {
+            $q->where('payment_status', 'PAID');
+        }]);
+
+        if ($request->filled('search')) {
+            $query->where('judul', 'like', '%' . trim($request->search) . '%');
+        }
+
+        if ($request->filled('category')) {
+            $query->whereIn('kategori', (array) $request->category);
+        }
+
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'deadline') {
+            $query->orderBy('deadline', 'asc');
+        } elseif ($sort === 'title') {
+            $query->orderBy('judul', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $campaigns = $query->paginate(9)->appends($request->except('_token'));
+
+        if ($request->header('X-Requested-With') === 'XMLHttpRequest') {
+            $html = view('landing-page.service.celengan-syahid.components._index._campaign-cards', compact('campaigns'))->render();
+            return response()->json([
+                'html'  => $html,
+                'total' => $campaigns->total(),
+                'from'  => $campaigns->firstItem() ?? 0,
+                'to'    => $campaigns->lastItem() ?? 0,
+            ]);
+        }
+
+        $categories = Campaign::getCategoryOptions();
+        return view('landing-page.service.celengan-syahid.index', compact('campaigns', 'categories'), ['title' => 'Layanan']);
     }
 
     public function storeDonationCampaign(Request $request)
