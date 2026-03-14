@@ -14,14 +14,61 @@ class MessageContactController extends Controller
      */
     public function store(Request $request)
     {
-        $messagecontact = MessageContact::create([
-            "name" => $request->name,
-            "email" => $request->email,
-            "subject" => $request->subject,
-            "message" => $request->message,
-        ]);
-        Alert::success('Pesan Kamu Berhasil Dikirim', 'Terimakasih, Kami akan Menindaklanjuti Pesan kamu secepatnya!')->autoClose(5000)->width('40%');
-        return redirect()->back();
+        try {
+            // Validate request
+            $validated = $request->validate([
+                'name' => 'required|min:3|max:100',
+                'email' => 'required|email|max:255',
+                'subject' => 'required|min:5|max:200',
+                'message' => 'required|min:10|max:1000',
+            ], [
+                'name.required' => 'Nama wajib diisi!',
+                'name.min' => 'Nama minimal 3 karakter!',
+                'email.required' => 'Email wajib diisi!',
+                'email.email' => 'Format email tidak valid!',
+                'subject.required' => 'Subjek wajib diisi!',
+                'subject.min' => 'Subjek minimal 5 karakter!',
+                'message.required' => 'Pesan wajib diisi!',
+                'message.min' => 'Pesan minimal 10 karakter!',
+            ]);
+
+            $messagecontact = MessageContact::create([
+                "name" => $request->name,
+                "email" => $request->email,
+                "subject" => $request->subject,
+                "message" => $request->message,
+            ]);
+
+            // Check if AJAX request
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pesan Kamu Berhasil Dikirim! Terimakasih, Kami akan Menindaklanjuti Pesan kamu secepatnya. 🎉'
+                ]);
+            }
+
+            // Fallback for non-AJAX
+            Alert::success('Pesan Kamu Berhasil Dikirim', 'Terimakasih, Kami akan Menindaklanjuti Pesan kamu secepatnya!')->autoClose(5000)->width('40%');
+            return redirect()->back();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $e->errors(),
+                    'message' => 'Validasi gagal. Harap periksa kembali data Anda.'
+                ], 422);
+            }
+            throw $e;
+        } catch (\Exception $e) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.'
+                ], 500);
+            }
+            Alert::error('Error', 'Terjadi kesalahan saat mengirim pesan!');
+            return redirect()->back();
+        }
     }
 
     /**

@@ -1,0 +1,173 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Viewport animations
+    var animEls = document.querySelectorAll('.testimony-sidebar, .stat-card-animate, .testimony-card-animate');
+    if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) {
+                    e.target.classList.add('is-visible');
+                    obs.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        animEls.forEach(function(el) { obs.observe(el); });
+    } else {
+        animEls.forEach(function(el) { el.classList.add('is-visible'); });
+    }
+
+    // Mobile Carousel with Dots
+    if (typeof jQuery !== 'undefined' && jQuery('.testimony-carousel').length) {
+        var $carousel = jQuery('.testimony-carousel');
+        var $dots = jQuery('.testimony-carousel-dot');
+
+        if ($carousel.data('owl.carousel')) {
+            $carousel.owlCarousel('destroy');
+        }
+
+        $carousel.owlCarousel({
+            items: 1,
+            margin: 16,
+            stagePadding: 40,
+            loop: false,
+            dots: false, // Disable default dots
+            nav: false,
+            autoplay: false,
+            smartSpeed: 400,
+            touchDrag: true,
+            mouseDrag: true,
+            onChanged: function(event) {
+                // Update custom dots on slide change
+                var currentIndex = event.item.index - event.relatedTarget._clones.length / 2;
+                var totalItems = event.item.count;
+
+                // Adjust index for proper display
+                if (currentIndex < 0) {
+                    currentIndex = totalItems + currentIndex;
+                } else if (currentIndex >= totalItems) {
+                    currentIndex = currentIndex - totalItems;
+                }
+
+                $dots.removeClass('active');
+                $dots.eq(currentIndex).addClass('active');
+            },
+            responsive: {
+                0: {
+                    items: 1,
+                    stagePadding: 30,
+                    margin: 12
+                },
+                576: {
+                    items: 1,
+                    stagePadding: 50,
+                    margin: 16
+                }
+            }
+        });
+
+        // Custom dots click handler
+        $dots.on('click', function() {
+            var index = jQuery(this).data('slide');
+            $carousel.trigger('to.owl.carousel', [index, 400]);
+        });
+    }
+
+    // Bottom Sheet
+    var $overlay = jQuery('#testimonySheetOverlay');
+    var $sheet = jQuery('#testimonySheet');
+    var $body = jQuery('body');
+    var $backToTop = jQuery('.back-to-top');
+
+    function openSheet(data) {
+        jQuery('#testimonySheetAvatar').attr('src', data.img).attr('alt', data.name);
+        jQuery('#testimonySheetName').text(data.name);
+        jQuery('#testimonySheetRole').text(data.role);
+        jQuery('#testimonySheetText').text('"' + data.text + '"');
+
+        $body.addClass('testimony-sheet-open');
+        $overlay.addClass('active');
+
+        // Hide back-to-top button smoothly
+        if ($backToTop.length) {
+            $backToTop.addClass('hide-for-overlay');
+        }
+
+        setTimeout(function() {
+            $sheet.addClass('active');
+        }, 50);
+
+        if ($sheet[0]) {
+            $sheet[0].scrollTop = 0;
+        }
+    }
+
+    function closeSheet() {
+        $sheet.removeClass('active');
+        setTimeout(function() {
+            $overlay.removeClass('active');
+            $body.removeClass('testimony-sheet-open');
+
+            // Show back-to-top button smoothly
+            if ($backToTop.length) {
+                $backToTop.removeClass('hide-for-overlay');
+            }
+        }, 400);
+    }
+
+    // Handle button clicks
+    jQuery(document).on('click', '.testimony-card-mobile__btn', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var $btn = jQuery(this);
+        openSheet({
+            name: $btn.data('name'),
+            role: $btn.data('role'),
+            img: $btn.data('img'),
+            text: $btn.data('text')
+        });
+    });
+
+    // Close handlers
+    jQuery('#testimonySheetClose').on('click', closeSheet);
+    $overlay.on('click', closeSheet);
+
+    jQuery(document).on('keydown', function(e) {
+        if (e.key === 'Escape' && $sheet.hasClass('active')) {
+            closeSheet();
+        }
+    });
+
+    // Swipe down to close
+    var startY = 0, currentY = 0;
+    var el = $sheet[0];
+    if (el) {
+        el.addEventListener('touchstart', function(e) {
+            if (this.scrollTop <= 0) {
+                startY = e.touches[0].clientY;
+            }
+        }, { passive: true });
+
+        el.addEventListener('touchmove', function(e) {
+            if (!startY) return;
+            currentY = e.touches[0].clientY;
+            var diff = currentY - startY;
+
+            if (diff > 0 && this.scrollTop <= 0) {
+                e.preventDefault();
+                var val = Math.min(diff * 0.6, 200);
+                this.style.transform = 'translateY(' + val + 'px)';
+            }
+        }, { passive: false });
+
+        el.addEventListener('touchend', function() {
+            if (currentY - startY > 80) {
+                closeSheet();
+            }
+            this.style.transform = '';
+            startY = 0;
+            currentY = 0;
+        }, { passive: true });
+    }
+});
+</script>

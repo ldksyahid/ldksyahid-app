@@ -9,21 +9,88 @@ use RealRashid\SweetAlert\Facades\Alert;
 class NewsController extends Controller
 {
     /**
-     * Landing page - Display all news
+     * Landing page - Display news with search, filter, sort, pagination
      */
-    public function index()
+    public function index(Request $request)
     {
-        $postnews = News::orderBy('datepublish', 'desc')->get();
-        return view('landing-page.news.index', compact('postnews'), ["title" => "Berita"]);
+        $query = News::query();
+
+        // Search by title
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter by publisher
+        if ($request->filled('publisher')) {
+            $query->whereIn('publisher', (array)$request->publisher);
+        }
+
+        // Filter by reporter
+        if ($request->filled('reporter')) {
+            $query->whereIn('reporter', (array)$request->reporter);
+        }
+
+        // Filter by editor
+        if ($request->filled('editor')) {
+            $query->whereIn('editor', (array)$request->editor);
+        }
+
+        // Filter by year (from datepublish)
+        if ($request->filled('year')) {
+            $years = (array)$request->year;
+            $query->where(function ($q) use ($years) {
+                foreach ($years as $y) {
+                    $q->orWhereYear('datepublish', (int)$y);
+                }
+            });
+        }
+
+        // Sort
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'title') {
+            $query->orderBy('title', 'asc');
+        } else {
+            $query->orderBy('datepublish', 'desc');
+        }
+
+        $postnews = $query->paginate(9)->appends($request->query());
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html'  => view('landing-page.news.components._news-cards', compact('postnews'))->render(),
+                'total' => $postnews->total(),
+                'from'  => $postnews->firstItem(),
+                'to'    => $postnews->lastItem(),
+            ]);
+        }
+
+        // Filter options
+        $publishers = News::select('publisher')->distinct()->orderBy('publisher')->pluck('publisher');
+        $reporters  = News::select('reporter')->distinct()->orderBy('reporter')->pluck('reporter');
+        $editors    = News::select('editor')->distinct()->orderBy('editor')->pluck('editor');
+        $years      = News::selectRaw('YEAR(datepublish) as year')
+                         ->distinct()
+                         ->orderByRaw('year DESC')
+                         ->pluck('year');
+
+        return view('landing-page.news.index', compact(
+            'postnews', 'publishers', 'reporters', 'editors', 'years'
+        ))->with('title', 'Berita');
     }
 
     /**
-     * Landing page - Show single news detail
+     * Landing page - Show single news detail with related news
      */
     public function show($id)
     {
-        $postnews = News::find($id);
-        return view('landing-page.news.detail', compact('postnews'), ["title" => "Berita"]);
+        $postnews    = News::findOrFail($id);
+        $relatedNews = News::where('id', '!=', $id)
+                           ->orderBy('datepublish', 'desc')
+                           ->limit(4)
+                           ->get();
+
+        return view('landing-page.news.detail', compact('postnews', 'relatedNews'))
+                   ->with('title', $postnews->title);
     }
 
     /**

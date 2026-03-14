@@ -14,7 +14,14 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Article::query()->orderBy('dateevent', 'desc');
+        // Sort order
+        $sortParam = $request->get('sort', 'newest');
+        $query = Article::query();
+        if ($sortParam === 'title') {
+            $query->orderBy('title', 'asc');
+        } else {
+            $query->orderBy('dateevent', 'desc');
+        }
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
@@ -49,10 +56,21 @@ class ArticleController extends Controller
 
         $postarticle = $query->paginate(9)->withQueryString();
 
-        $themes = Article::select('theme')->distinct()->orderBy('theme')->pluck('theme');
+        $themes  = Article::select('theme')->distinct()->orderBy('theme')->pluck('theme');
         $writers = Article::select('writer')->distinct()->orderBy('writer')->pluck('writer');
         $editors = Article::select('editor')->distinct()->orderBy('editor')->pluck('editor');
-        $years = Article::selectRaw('YEAR(created_at) as year')->distinct()->orderByDesc('year')->pluck('year');
+        $years   = Article::selectRaw('YEAR(created_at) as year')->distinct()->orderByDesc('year')->pluck('year');
+
+        // AJAX request — return JSON with rendered cards partial
+        if ($request->ajax()) {
+            return response()->json([
+                'html'  => view('landing-page.article.components._article-cards',
+                                compact('postarticle'))->render(),
+                'total' => $postarticle->total(),
+                'from'  => (int) $postarticle->firstItem(),
+                'to'    => (int) $postarticle->lastItem(),
+            ]);
+        }
 
         return view('landing-page.article.index', compact('postarticle', 'themes', 'writers', 'editors', 'years'), [
             "title" => "Artikel"
