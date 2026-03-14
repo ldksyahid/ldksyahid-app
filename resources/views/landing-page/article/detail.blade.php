@@ -106,7 +106,7 @@
     <div class="row g-4">
 
         {{-- Reader --}}
-        <div class="col-lg-8 wow fadeInUp" data-wow-delay="0.2s">
+        <div class="ad-page col-lg-8 wow fadeInUp" data-wow-delay="0.2s">
             <div class="ad-reader-card">
                 <div class="ad-reader-bar">
                     <div class="ad-reader-dots">

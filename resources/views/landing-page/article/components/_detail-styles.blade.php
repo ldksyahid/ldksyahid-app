@@ -13,6 +13,8 @@
     --ad-gray-200:      #e5e7eb;
 }
 
+/* ── Page wrapper ── */
+.ad-page { min-height: 100vh; position: relative; z-index: 1; }
 
 /* ── Hero ──────────────────────────────────────────────────────── */
 .ad-hero {
