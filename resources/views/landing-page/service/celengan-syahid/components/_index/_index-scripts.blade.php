@@ -1,6 +1,9 @@
 {{-- ── Hero Jumbotron shared scripts ── --}}
 @include('components.hero-jumbotron.scripts')
 
+{{-- ── Skeleton cards shared scripts ── --}}
+@include('components.skeleton-cards.scripts')
+
 {{-- ── Select2 JS ── --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -266,41 +269,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function csBuildSkeleton() {
-        /* Desktop: 3 skeleton cards */
-        var desktopCards = '';
-        for (var i = 0; i < 3; i++) {
-            desktopCards +=
-                '<div class="cs-skel-card">' +
-                    '<div class="cs-skel-img cs-skel-base"></div>' +
-                    '<div class="cs-skel-body">' +
-                        '<div class="cs-skel-line cs-skel-org cs-skel-base"></div>' +
-                        '<div class="cs-skel-line cs-skel-title cs-skel-base"></div>' +
-                        '<div class="cs-skel-line cs-skel-title2 cs-skel-base"></div>' +
-                        '<div class="cs-skel-line cs-skel-prog cs-skel-base"></div>' +
-                        '<div class="cs-skel-line cs-skel-stats cs-skel-base"></div>' +
-                        '<div class="cs-skel-line cs-skel-btn cs-skel-base"></div>' +
-                    '</div>' +
-                '</div>';
-        }
-        /* Mobile: 3 skeleton cards */
-        var mobileCards = '';
-        for (var j = 0; j < 3; j++) {
-            mobileCards +=
-                '<div class="cs-skel-mobile-card">' +
-                    '<div class="cs-skel-m-img cs-skel-base"></div>' +
-                    '<div class="cs-skel-m-body">' +
-                        '<div class="cs-skel-line cs-skel-m-title cs-skel-base"></div>' +
-                        '<div class="cs-skel-line cs-skel-m-sub cs-skel-base"></div>' +
-                        '<div class="cs-skel-line cs-skel-m-prog cs-skel-base"></div>' +
-                    '</div>' +
-                '</div>';
-        }
-        return '<div class="d-none d-lg-block"><div class="cs-skel-grid">' + desktopCards + '</div></div>' +
-               '<div class="d-lg-none"><div class="cs-skel-carousel">' + mobileCards + '</div></div>';
-    }
-
-
     /* ============================================================
        AJAX LOAD PAGE
        ============================================================ */
@@ -322,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
         /* Phase 1 — fade out current → show skeleton */
         var skeletonShown = wrap
             ? csFadeOut(wrap).then(function () {
-                wrap.innerHTML = csBuildSkeleton();
+                wrap.innerHTML = buildSkeleton('campaign', 3, 3);
                 csFadeIn(wrap);
               })
             : Promise.resolve();

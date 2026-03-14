@@ -1,6 +1,9 @@
 {{-- ── Hero Jumbotron scripts (hadith/quran countdown + API) ── --}}
 @include('components.hero-jumbotron.scripts')
 
+{{-- ── Skeleton cards shared scripts ── --}}
+@include('components.skeleton-cards.scripts')
+
 {{-- ── Select2 JS ── --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -231,52 +234,70 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     /* ============================================================
-       5. AJAX LOAD PAGE
+       5. AJAX LOAD PAGE  (3-phase: fade → skeleton → content)
        ============================================================ */
+    var FADE = 300;
+
+    function arFadeOut(el) {
+        return new Promise(function (resolve) {
+            el.classList.add('ar-cards-out');
+            setTimeout(resolve, FADE);
+        });
+    }
+    function arFadeIn(el) {
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                el.classList.remove('ar-cards-out');
+            });
+        });
+    }
+
     function arLoadPage(url) {
         var wrap    = document.getElementById('ar-cards-wrap');
         var section = document.getElementById('ar-article-section');
-
-        if (wrap) wrap.classList.add('ar-cards-out');
 
         if (section) {
             var top = section.getBoundingClientRect().top + window.scrollY - 90;
             window.scrollTo({ top: top, behavior: 'smooth' });
         }
 
-        var minDelay  = new Promise(function (res) { setTimeout(res, 350); });
         var fetchData = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                             .then(function (r) { return r.json(); });
 
-        Promise.all([fetchData, minDelay])
+        /* Phase 1 — fade out → show skeleton */
+        var skeletonShown = wrap
+            ? arFadeOut(wrap).then(function () {
+                wrap.innerHTML = buildSkeleton('article', 3, 3);
+                arFadeIn(wrap);
+              })
+            : Promise.resolve();
+
+        /* Phase 2 — wait: data + min skeleton time */
+        var minSkeleton = new Promise(function (res) { setTimeout(res, FADE + 400); });
+
+        Promise.all([fetchData, skeletonShown, minSkeleton])
             .then(function (results) {
                 var data = results[0];
+                if (!wrap) return;
 
-                if (wrap) {
+                /* Phase 3 — fade out skeleton → show content */
+                arFadeOut(wrap).then(function () {
                     wrap.innerHTML = data.html;
+                    arFadeIn(wrap);
 
-                    /* Two rAF frames before removing class so browser paints first */
-                    requestAnimationFrame(function () {
-                        requestAnimationFrame(function () {
-                            wrap.classList.remove('ar-cards-out');
-                        });
-                    });
-                }
-
-                /* Update results info */
-                var info = document.getElementById('ar-results-info');
-                if (info) {
-                    if (data.total > 0) {
-                        info.innerHTML =
-                            'Menampilkan <strong>' + data.from + '–' + data.to + '</strong>' +
-                            ' dari <strong>' + data.total + '</strong> artikel';
-                    } else {
-                        info.innerHTML = 'Tidak ada artikel yang ditemukan';
+                    var info = document.getElementById('ar-results-info');
+                    if (info) {
+                        if (data.total > 0) {
+                            info.innerHTML =
+                                'Menampilkan <strong>' + data.from + '–' + data.to + '</strong>' +
+                                ' dari <strong>' + data.total + '</strong> artikel';
+                        } else {
+                            info.innerHTML = 'Tidak ada artikel yang ditemukan';
+                        }
                     }
-                }
 
-                /* Re-init carousel dots for fresh cards */
-                initCarouselDots();
+                    initCarouselDots();
+                });
             })
             .catch(function () {
                 if (wrap) wrap.classList.remove('ar-cards-out');

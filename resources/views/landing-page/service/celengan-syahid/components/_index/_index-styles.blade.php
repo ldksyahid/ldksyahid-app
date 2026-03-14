@@ -13,6 +13,9 @@
 {{-- ── Select2 CSS ── --}}
 <link href="{{ asset('assets/external/css/select2.min.css') }}" rel="stylesheet" />
 
+{{-- ── Skeleton cards shared styles ── --}}
+@include('components.skeleton-cards.styles')
+
 @verbatim
 <style>
 /* ================================================================
@@ -645,53 +648,6 @@ body.cs-sheet-open { overflow: hidden; }
 
 
 /* ================================================================
-   SKELETON LOADING
-   ================================================================ */
-@keyframes csShimmer {
-    0%   { background-position: -600px 0; }
-    100% { background-position: 600px 0; }
-}
-.cs-skel-base {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
-    background-size: 1200px 100%;
-    animation: csShimmer 1.4s infinite linear;
-    border-radius: 8px;
-}
-
-/* Desktop skeleton */
-.cs-skel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-.cs-skel-card {
-    background: #fff; border-radius: 20px;
-    overflow: hidden;
-    box-shadow: var(--cs-shadow);
-}
-.cs-skel-img { aspect-ratio: 4/3; border-radius: 0; }
-.cs-skel-body { padding: 1.25rem; display: flex; flex-direction: column; gap: .625rem; }
-.cs-skel-line { height: 14px; border-radius: 6px; }
-.cs-skel-org   { height: 18px; width: 45%; }
-.cs-skel-title { height: 20px; width: 90%; }
-.cs-skel-title2 { height: 20px; width: 65%; }
-.cs-skel-prog  { height: 6px; width: 100%; border-radius: 10px; }
-.cs-skel-stats { height: 58px; width: 100%; border-radius: 14px; }
-.cs-skel-btn   { height: 38px; width: 100%; border-radius: 30px; margin-top: .25rem; }
-
-/* Mobile skeleton */
-.cs-skel-carousel {
-    display: flex; gap: 1rem; overflow: hidden;
-    padding: 0 calc(50% - 140px) 1rem;
-}
-.cs-skel-mobile-card {
-    flex: 0 0 280px; background: #fff; border-radius: 20px;
-    overflow: hidden; box-shadow: var(--cs-shadow);
-}
-.cs-skel-m-img  { aspect-ratio: 4/3; border-radius: 0; }
-.cs-skel-m-body { padding: 1rem; display: flex; flex-direction: column; gap: .5rem; }
-.cs-skel-m-title { height: 15px; width: 85%; }
-.cs-skel-m-sub   { height: 12px; width: 55%; }
-.cs-skel-m-prog  { height: 5px; width: 100%; border-radius: 10px; }
-
-
-/* ================================================================
    PAGINATION WRAP
    ================================================================ */
 .cs-pagination-wrap { padding-bottom: 1rem; }
@@ -702,7 +658,6 @@ body.cs-sheet-open { overflow: hidden; }
    ================================================================ */
 @media (max-width: 1199.98px) {
     .cs-grid { grid-template-columns: repeat(2, 1fr); }
-    .cs-skel-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 991.98px) {
     .cs-section-title { font-size: 1.6rem; }
@@ -714,8 +669,6 @@ body.cs-sheet-open { overflow: hidden; }
 @media (max-width: 575.98px) {
     .cs-mobile-card { flex: 0 0 80vw; }
     .cs-mobile-carousel { padding: 0 calc(50% - 40vw) 1rem; }
-    .cs-skel-mobile-card { flex: 0 0 80vw; }
-    .cs-skel-carousel { padding: 0 calc(50% - 40vw) 1rem; }
 }
 </style>
 @endverbatim

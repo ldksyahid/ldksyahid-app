@@ -13,6 +13,9 @@
 {{-- ── Select2 CSS ── --}}
 <link href="{{ asset('assets/external/css/select2.min.css') }}" rel="stylesheet" />
 
+{{-- ── Skeleton cards shared styles ── --}}
+@include('components.skeleton-cards.styles')
+
 @verbatim
 <style>
 /* ================================================================
@@ -721,83 +724,5 @@ body.cb-sheet-open .back-to-top {
 }
 
 
-/* ================================================================
-   SKELETON LOADING
-   ================================================================ */
-@keyframes cbShimmer {
-    0%   { background-position: -600px 0; }
-    100% { background-position: 600px 0; }
-}
-
-.cb-skel-base {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
-    background-size: 1200px 100%;
-    animation: cbShimmer 1.4s infinite linear;
-    border-radius: 8px;
-}
-
-/* ── Desktop skeleton card ── */
-.cb-skel-card {
-    display: flex;
-    gap: 1.25rem;
-    background: #fff;
-    border-radius: 18px;
-    padding: 1.25rem 1.5rem;
-    box-shadow: 0 4px 18px rgba(0,0,0,.07);
-    margin-bottom: 1.25rem;
-    overflow: hidden;
-}
-.cb-skel-cover {
-    flex-shrink: 0;
-    width: 130px;
-    min-height: 190px;
-    border-radius: 12px;
-}
-.cb-skel-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: .6rem;
-    padding-top: .25rem;
-}
-.cb-skel-line { height: 14px; border-radius: 6px; }
-.cb-skel-title  { height: 20px; width: 65%; }
-.cb-skel-badge  { height: 22px; width: 90px; border-radius: 20px; }
-.cb-skel-meta   { height: 12px; width: 45%; }
-.cb-skel-body   { width: 100%; }
-.cb-skel-w80    { width: 80%; }
-.cb-skel-w60    { width: 60%; }
-.cb-skel-actions {
-    display: flex;
-    gap: .75rem;
-    margin-top: .5rem;
-}
-.cb-skel-btn    { height: 36px; width: 110px; border-radius: 20px; }
-.cb-skel-btn-sm { height: 36px; width: 36px;  border-radius: 50%; }
-
-/* ── Mobile skeleton carousel ── */
-.cb-skel-carousel {
-    display: flex;
-    gap: 1rem;
-    overflow: hidden;
-    padding: 0 calc(50% - 130px) 1rem;
-}
-.cb-skel-mobile-card {
-    flex: 0 0 260px;
-    background: #fff;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 18px rgba(0,0,0,.08);
-}
-.cb-skel-mobile-cover { height: 200px; border-radius: 0; }
-.cb-skel-mobile-info  { padding: 1rem; display: flex; flex-direction: column; gap: .5rem; }
-.cb-skel-mobile-title { height: 16px; width: 85%; }
-.cb-skel-mobile-auth  { height: 12px; width: 55%; }
-.cb-skel-mobile-hint  { height: 10px; width: 40%; margin-top: .25rem; }
-
-@media (max-width: 575.98px) {
-    .cb-skel-mobile-card { flex: 0 0 75vw; }
-    .cb-skel-carousel    { padding: 0 calc(50% - 37.5vw) 1rem; }
-}
 </style>
 @endverbatim
