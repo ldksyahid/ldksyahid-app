@@ -12,10 +12,78 @@ class EventController extends Controller
        SECTION A — LANDING PAGE (Public)
        ========================================================================= */
 
-    public function index()
+    public function index(Request $request)
     {
-        $postevent = Event::orderBy('start', 'desc')->get();
-        return view('landing-page.event.index', compact('postevent'), ["title" => "Kegiatan"]);
+        $query = Event::query();
+
+        // Search by title or division
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('division', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by division
+        if ($request->filled('division')) {
+            $query->whereIn('division', (array) $request->division);
+        }
+
+        // Filter by year (based on start date)
+        if ($request->filled('year')) {
+            $years_filter = (array) $request->year;
+            $query->where(function ($q) use ($years_filter) {
+                foreach ($years_filter as $yr) {
+                    $q->orWhereYear('start', $yr);
+                }
+            });
+        }
+
+        // Filter by status (upcoming / ongoing / past)
+        if ($request->filled('status')) {
+            $statuses = (array) $request->status;
+            $now = Carbon::now();
+            $query->where(function ($q) use ($statuses, $now) {
+                foreach ($statuses as $status) {
+                    if ($status === 'upcoming') {
+                        $q->orWhere(function ($sq) use ($now) {
+                            $sq->whereNotNull('start')->where('start', '>', $now);
+                        });
+                    } elseif ($status === 'ongoing') {
+                        $q->orWhere(function ($sq) use ($now) {
+                            $sq->whereNotNull('start')->whereNotNull('finished')
+                               ->where('start', '<=', $now)->where('finished', '>=', $now);
+                        });
+                    } elseif ($status === 'past') {
+                        $q->orWhere(function ($sq) use ($now) {
+                            $sq->where(function ($inner) use ($now) {
+                                $inner->whereNotNull('finished')->where('finished', '<', $now);
+                            })->orWhereNull('start')->orWhereNull('finished');
+                        });
+                    }
+                }
+            });
+        }
+
+        // Sort
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'title') {
+            $query->orderBy('title', 'asc');
+        } else {
+            $query->orderByRaw('COALESCE(start, created_at) DESC');
+        }
+
+        $postevent = $query->paginate(9);
+        $divisions = Event::getDivisions();
+        $years     = Event::getYears();
+
+        if ($request->ajax()) {
+            return view('landing-page.event.components._event-cards', compact('postevent'));
+        }
+
+        return view('landing-page.event.index', compact('postevent', 'divisions', 'years'))
+            ->with('title', 'Kegiatan');
     }
 
     public function show($id)

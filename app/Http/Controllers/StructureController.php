@@ -14,7 +14,7 @@ class StructureController extends Controller
     public function index()
     {
         $poststructure = Structure::orderBy('created_at','desc')->get();
-        return view('landing-page.about.management-structur', compact('poststructure'),["title" => "Tentang Kami"]);
+        return view('landing-page.about.management-structure.index', compact('poststructure'),["title" => "Tentang Kami"]);
     }
 
     /**

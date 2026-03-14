@@ -73,6 +73,6 @@ class LoginController extends Controller
     {
         $title = 'Masuk';
 
-        return view('auth.login', compact('title'));
+        return view('auth.login.index', compact('title'));
     }
 }

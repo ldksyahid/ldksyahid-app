@@ -83,6 +83,6 @@ class RegisterController extends Controller
     {
         $title = 'Daftar';
 
-        return view('auth.register', compact('title'));
+        return view('auth.register.index', compact('title'));
     }
 }

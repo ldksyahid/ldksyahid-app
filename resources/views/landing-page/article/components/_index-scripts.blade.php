@@ -1,0 +1,632 @@
+{{-- ── Hero Jumbotron scripts (hadith/quran countdown + API) ── --}}
+@include('components.hero-jumbotron.scripts')
+
+{{-- ── Skeleton cards shared scripts ── --}}
+@include('components.skeleton-cards.scripts')
+
+{{-- ── Select2 JS ── --}}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ============================================================
+       0. UTILITIES
+       ============================================================ */
+    function escHtml(str) {
+        if (str == null) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    /* ── Bottom sheet scroll lock ── */
+    var _arBsWheelLock = null, _arBsKeyLock = null, _arBsTouchLock = null;
+    function arBsLockScroll() {
+        var sh = document.getElementById('ar-bottom-sheet');
+        _arBsWheelLock = function(e) { e.preventDefault(); };
+        _arBsKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        _arBsTouchLock = function(e) {
+            if (!sh.contains(e.target)) e.preventDefault();
+        };
+        window.addEventListener('wheel',       _arBsWheelLock,  { passive: false });
+        window.addEventListener('keydown',     _arBsKeyLock);
+        document.addEventListener('touchmove', _arBsTouchLock,  { passive: false });
+    }
+    function arBsUnlockScroll() {
+        if (_arBsWheelLock)  { window.removeEventListener('wheel',       _arBsWheelLock);   _arBsWheelLock  = null; }
+        if (_arBsKeyLock)    { window.removeEventListener('keydown',     _arBsKeyLock);      _arBsKeyLock    = null; }
+        if (_arBsTouchLock)  { document.removeEventListener('touchmove', _arBsTouchLock);   _arBsTouchLock  = null; }
+    }
+
+    var btt = document.querySelector('.back-to-top');
+    function hideBtt() {
+        if (btt) { btt.style.transition = 'opacity .3s,visibility .3s'; btt.style.opacity = '0'; btt.style.visibility = 'hidden'; }
+    }
+    function showBtt() {
+        if (btt) { btt.style.opacity = ''; btt.style.visibility = ''; }
+    }
+
+
+    /* ============================================================
+       1. SELECT2 INIT
+       ============================================================ */
+    if (typeof $.fn !== 'undefined' && typeof $.fn.select2 !== 'undefined') {
+        var $filterSelects = $('#ar-theme-select, #ar-writer-select, #ar-editor-select, #ar-year-select');
+
+        $filterSelects.each(function () {
+            $(this).select2({
+                placeholder: 'Semua',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#ar-filter-modal'),
+            });
+        });
+        $(window).on('scroll', function () { $filterSelects.select2('close'); });
+    }
+
+
+    /* ============================================================
+       2. FILTER COUNT BADGE
+       ============================================================ */
+    function updateFilterBadge() {
+        var count = 0;
+        ['ar-theme-select', 'ar-writer-select', 'ar-editor-select', 'ar-year-select'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el && el.selectedOptions) count += el.selectedOptions.length;
+        });
+        var badge = document.getElementById('ar-filter-count');
+        if (badge) {
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'flex' : 'none';
+        }
+        var clearBtn = document.getElementById('ar-filter-clear');
+        if (clearBtn) {
+            clearBtn.style.display = count > 0 ? 'flex' : 'none';
+        }
+    }
+
+    /* Custom blur backdrop — show/hide with filter modal */
+    var filterModal = document.getElementById('ar-filter-modal');
+    var fmBackdrop  = document.getElementById('ar-fm-backdrop');
+
+    /* Prevent background scroll when filter modal is open.
+       — Capture phase → intercept sebelum Bootstrap/element lain
+       — overflow:hidden di <html> → iOS Safari ikut terkunci
+       — TIDAK pakai position:fixed agar navbar tidak terganggu */
+    var _arFmTouchBlock = null;
+    var _arFmWheelLock  = null, _arFmKeyLock = null;
+
+    function arFmLockScroll() {
+        _arFmWheelLock = function(e) { e.preventDefault(); };
+        _arFmKeyLock   = function(e) {
+            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        window.addEventListener('wheel',   _arFmWheelLock, { passive: false });
+        window.addEventListener('keydown', _arFmKeyLock);
+    }
+    function arFmUnlockScroll() {
+        if (_arFmWheelLock) { window.removeEventListener('wheel',   _arFmWheelLock); _arFmWheelLock = null; }
+        if (_arFmKeyLock)   { window.removeEventListener('keydown', _arFmKeyLock);   _arFmKeyLock   = null; }
+    }
+
+    if (filterModal) {
+        filterModal.addEventListener('show.bs.modal', function () {
+            updateFilterBadge();
+            if (fmBackdrop) fmBackdrop.classList.add('active');
+            arFmLockScroll();
+            _arFmTouchBlock = function (e) {
+                if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
+            };
+            /* capture:true → intercept sebelum elemen lain; passive:false → boleh preventDefault */
+            window.addEventListener('touchmove', _arFmTouchBlock, { passive: false, capture: true });
+        });
+        filterModal.addEventListener('hidden.bs.modal', function () {
+            if (fmBackdrop) fmBackdrop.classList.remove('active');
+            arFmUnlockScroll();
+            if (_arFmTouchBlock) {
+                window.removeEventListener('touchmove', _arFmTouchBlock, { capture: true });
+                _arFmTouchBlock = null;
+            }
+        });
+    }
+
+    /* Click on custom backdrop → close modal */
+    if (fmBackdrop) {
+        fmBackdrop.addEventListener('click', function () {
+            var modal = bootstrap.Modal.getInstance(filterModal);
+            if (modal) modal.hide();
+        });
+    }
+
+
+    /* ============================================================
+       3. BUILD URL FROM FORM STATE
+       ============================================================ */
+    function arBuildUrl(page) {
+        var params = new URLSearchParams();
+
+        var searchEl = document.getElementById('ar-search-input');
+        var search   = searchEl ? searchEl.value.trim() : '';
+        if (search) params.set('search', search);
+
+        var fieldMap = {
+            'ar-theme-select':  'theme',
+            'ar-writer-select': 'writer',
+            'ar-editor-select': 'editor',
+            'ar-year-select':   'created_year',
+        };
+        Object.keys(fieldMap).forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el || !el.selectedOptions) return;
+            Array.from(el.selectedOptions).forEach(function (opt) {
+                params.append(fieldMap[id] + '[]', opt.value);
+            });
+        });
+
+        var sortEl = document.getElementById('ar-sort-val');
+        var sort   = sortEl ? sortEl.value : 'newest';
+        if (sort && sort !== 'newest') params.set('sort', sort);
+
+        if (page && page > 1) params.set('page', page);
+
+        var base = document.getElementById('ar-base-url').value;
+        var qs   = params.toString();
+        return base + (qs ? '?' + qs : '');
+    }
+
+
+    /* ============================================================
+       4. ACTIVE FILTER PILLS (JS-driven)
+       ============================================================ */
+    function buildActivePills() {
+        var container = document.getElementById('ar-active-pills');
+        if (!container) return;
+        container.innerHTML = '';
+
+        var fieldMap = {
+            'ar-theme-select':  'Tema',
+            'ar-writer-select': 'Penulis',
+            'ar-editor-select': 'Editor',
+            'ar-year-select':   'Tahun',
+        };
+
+        Object.keys(fieldMap).forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            Array.from(el.selectedOptions).forEach(function (opt) {
+                var pill = document.createElement('span');
+                pill.className = 'sfb-pill';
+                pill.innerHTML =
+                    '<span>' + escHtml(fieldMap[id]) + ': ' + escHtml(opt.text) + '</span>' +
+                    ' <i class="fas fa-times"></i>';
+                pill.dataset.selectId = id;
+                pill.dataset.value    = opt.value;
+
+                var icon = pill.querySelector('i');
+                if (icon) {
+                    icon.addEventListener('click', function () {
+                        var p   = this.closest('.sfb-pill');
+                        var sel = document.getElementById(p.dataset.selectId);
+                        if (!sel) return;
+                        for (var i = 0; i < sel.options.length; i++) {
+                            if (sel.options[i].value === p.dataset.value) sel.options[i].selected = false;
+                        }
+                        if (typeof $ !== 'undefined') $(sel).trigger('change');
+                        updateFilterBadge();
+                        buildActivePills();
+                        arLoadPage(arBuildUrl());
+                    });
+                }
+
+                container.appendChild(pill);
+            });
+        });
+    }
+
+
+    /* ============================================================
+       5. AJAX LOAD PAGE  (3-phase: fade → skeleton → content)
+       ============================================================ */
+    var FADE = 300;
+
+    function arFadeOut(el) {
+        return new Promise(function (resolve) {
+            el.classList.add('ar-cards-out');
+            setTimeout(resolve, FADE);
+        });
+    }
+    function arFadeIn(el) {
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                el.classList.remove('ar-cards-out');
+            });
+        });
+    }
+
+    function arLoadPage(url) {
+        var wrap    = document.getElementById('ar-cards-wrap');
+        var section = document.getElementById('ar-article-section');
+
+        if (section) {
+            var top = section.getBoundingClientRect().top + window.scrollY - 90;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+
+        var fetchData = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                            .then(function (r) { return r.json(); });
+
+        /* Phase 1 — fade out → show skeleton */
+        var skeletonShown = wrap
+            ? arFadeOut(wrap).then(function () {
+                wrap.innerHTML = buildSkeleton('article', 3, 3);
+                arFadeIn(wrap);
+              })
+            : Promise.resolve();
+
+        /* Phase 2 — wait: data + min skeleton time */
+        var minSkeleton = new Promise(function (res) { setTimeout(res, FADE + 400); });
+
+        Promise.all([fetchData, skeletonShown, minSkeleton])
+            .then(function (results) {
+                var data = results[0];
+                if (!wrap) return;
+
+                /* Phase 3 — fade out skeleton → show content */
+                arFadeOut(wrap).then(function () {
+                    wrap.innerHTML = data.html;
+                    arFadeIn(wrap);
+
+                    var info = document.getElementById('ar-results-info');
+                    if (info) {
+                        if (data.total > 0) {
+                            info.innerHTML =
+                                'Menampilkan <strong>' + data.from + '–' + data.to + '</strong>' +
+                                ' dari <strong>' + data.total + '</strong> artikel';
+                        } else {
+                            info.innerHTML = 'Tidak ada artikel yang ditemukan';
+                        }
+                    }
+
+                    initCarouselDots();
+                });
+            })
+            .catch(function () {
+                if (wrap) wrap.classList.remove('ar-cards-out');
+                window.location.href = url;
+            });
+    }
+
+
+    /* ============================================================
+       6. AJAX PAGINATION (click on pgn links inside cards wrap)
+       ============================================================ */
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest('#ar-cards-wrap .pgn-nav[href], #ar-cards-wrap .pgn-num[href]');
+        if (!link) return;
+        e.preventDefault();
+        arLoadPage(link.href);
+    });
+
+
+    /* ============================================================
+       7. SEARCH — debounced AJAX
+       ============================================================ */
+    var searchInput = document.getElementById('ar-search-input');
+    var searchClear = document.getElementById('ar-search-clear');
+    var searchTimer = null;
+
+    if (searchInput) {
+        /* Show/hide clear button on input */
+        searchInput.addEventListener('input', function () {
+            if (searchClear) searchClear.style.display = this.value ? 'flex' : 'none';
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function () {
+                arLoadPage(arBuildUrl());
+            }, 420);
+        });
+
+        /* Suppress native form submit (we handle via JS) */
+        searchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                clearTimeout(searchTimer);
+                arLoadPage(arBuildUrl());
+            }
+        });
+
+        /* Initial clear button state */
+        if (searchClear) {
+            searchClear.style.display = searchInput.value ? 'flex' : 'none';
+        }
+    }
+
+    if (searchClear) {
+        searchClear.addEventListener('click', function () {
+            if (searchInput) { searchInput.value = ''; this.style.display = 'none'; }
+            clearTimeout(searchTimer);
+            arLoadPage(arBuildUrl());
+        });
+    }
+
+
+    /* ============================================================
+       8. FILTER APPLY / RESET
+       ============================================================ */
+    var applyBtn = document.getElementById('ar-apply-filter');
+    if (applyBtn) {
+        applyBtn.addEventListener('click', function () {
+            var modal = bootstrap.Modal.getInstance(document.getElementById('ar-filter-modal'));
+            if (modal) modal.hide();
+            updateFilterBadge();
+            buildActivePills();
+            arLoadPage(arBuildUrl());
+        });
+    }
+
+    function arClearAllFilters() {
+        ['ar-theme-select', 'ar-writer-select', 'ar-editor-select', 'ar-year-select'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            for (var i = 0; i < el.options.length; i++) el.options[i].selected = false;
+            if (typeof $ !== 'undefined') $(el).trigger('change');
+        });
+        updateFilterBadge();
+    }
+
+    var resetBtn = document.getElementById('ar-reset-filter');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', arClearAllFilters);
+    }
+
+    /* Clear-all button next to Filter button */
+    var filterClearBtn = document.getElementById('ar-filter-clear');
+    if (filterClearBtn) {
+        filterClearBtn.addEventListener('click', function () {
+            arClearAllFilters();
+            buildActivePills();
+            arLoadPage(arBuildUrl());
+        });
+    }
+
+
+    /* ============================================================
+       9. SORT DROPDOWN
+       ============================================================ */
+    document.querySelectorAll('[data-sort][data-sort-prefix="ar"]').forEach(function (el) {
+        el.addEventListener('click', function (e) {
+            e.preventDefault();
+            var val    = this.dataset.sort;
+            var sortEl = document.getElementById('ar-sort-val');
+            if (sortEl) sortEl.value = val;
+
+            /* Update active class */
+            document.querySelectorAll('[data-sort][data-sort-prefix="ar"]').forEach(function (s) {
+                s.classList.toggle('active', s.dataset.sort === val);
+            });
+            arLoadPage(arBuildUrl());
+        });
+    });
+
+
+    /* ============================================================
+       10. MOBILE CAROUSEL — Scroll Snap Dots
+       ============================================================ */
+    function initCarouselDots() {
+        var carousel = document.getElementById('ar-mobile-carousel');
+        var dotsWrap = document.getElementById('ar-carousel-dots');
+        if (!carousel || !dotsWrap) return;
+
+        var cards = carousel.querySelectorAll('.ar-mobile-card');
+        dotsWrap.innerHTML = '';
+
+        if (cards.length <= 1) { dotsWrap.style.display = 'none'; return; }
+        dotsWrap.style.display = 'flex';
+
+        var dots = [];
+        cards.forEach(function (card, i) {
+            var dot = document.createElement('span');
+            dot.className = 'ar-dot' + (i === 0 ? ' active' : '');
+            dot.title = 'Artikel ' + (i + 1);
+            dot.addEventListener('click', function () {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            });
+            dotsWrap.appendChild(dot);
+            dots.push(dot);
+        });
+
+        /* IntersectionObserver to track visible card */
+        var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                var idx = Array.from(cards).indexOf(entry.target);
+                dots.forEach(function (d, i) { d.classList.toggle('active', i === idx); });
+            });
+        }, { root: carousel, threshold: 0.55 });
+
+        cards.forEach(function (c) { obs.observe(c); });
+    }
+    initCarouselDots();
+
+
+    /* ============================================================
+       11a. SHARE FUNCTIONS
+       ============================================================ */
+    window.arCopyUrl = function (url, ev) {
+        if (ev) ev.stopPropagation();
+        var full = window.location.origin + url;
+        function showCopyToast(ok) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: ok ? 'success' : 'error',
+                title: ok ? 'URL berhasil disalin!' : 'Gagal menyalin URL',
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true,
+                customClass: { container: 'ar-swal-below-nav' }
+            });
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(full).then(
+                function () { showCopyToast(true); },
+                function () { showCopyToast(false); }
+            );
+        } else {
+            try {
+                var ta = document.createElement('textarea');
+                ta.value = full;
+                ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none;';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showCopyToast(true);
+            } catch (e) { showCopyToast(false); }
+        }
+    };
+
+    window.arShareWa = function (url, title, ev) {
+        if (ev) ev.stopPropagation();
+        var full = window.location.origin + url;
+        var text = (title ? title + '\n' : '') + full;
+        window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+    };
+
+
+    /* ============================================================
+       11. MOBILE BOTTOM SHEET
+       ============================================================ */
+    window.arOpenBottomSheet = function (el) {
+        var content = document.getElementById('ar-bs-content');
+        if (!content) return;
+
+        var title  = el.dataset.title;
+        var theme  = el.dataset.theme;
+        var date   = el.dataset.date;
+        var writer = el.dataset.writer;
+        var editor = el.dataset.editor;
+        var image  = el.dataset.image;
+        var url    = el.dataset.url;
+
+        content.innerHTML =
+            /* Image + gradient + handle */
+            '<div class="ar-bs-img-wrap">' +
+                '<div class="ar-bs-drag-handle"></div>' +
+                '<img src="https://lh3.googleusercontent.com/d/' + escHtml(image) +
+                     '" alt="' + escHtml(title) + '" class="ar-bs-img-photo" loading="lazy">' +
+                '<div class="ar-bs-img-gradient"></div>' +
+            '</div>' +
+            /* Info */
+            '<div class="ar-bs-info">' +
+                '<div class="ar-bs-theme"><span class="ar-bs-theme-dot"></span>' + escHtml(theme) + '</div>' +
+                '<h5 class="ar-bs-title">' + escHtml(title) + '</h5>' +
+                '<div class="ar-bs-metas">' +
+                    '<div class="ar-bs-meta-item">' +
+                        '<div class="ar-bs-meta-icon"><i class="far fa-calendar-alt"></i></div>' +
+                        '<div class="ar-bs-meta-text">' +
+                            '<span class="ar-bs-meta-label">Tanggal</span>' +
+                            '<span class="ar-bs-meta-name">' + escHtml(date) + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="ar-bs-meta-item">' +
+                        '<div class="ar-bs-meta-icon"><i class="fas fa-pen"></i></div>' +
+                        '<div class="ar-bs-meta-text">' +
+                            '<span class="ar-bs-meta-label">Penulis</span>' +
+                            '<span class="ar-bs-meta-name">' + escHtml(writer) + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    (editor ?
+                        '<div class="ar-bs-meta-item">' +
+                            '<div class="ar-bs-meta-icon"><i class="fas fa-edit"></i></div>' +
+                            '<div class="ar-bs-meta-text">' +
+                                '<span class="ar-bs-meta-label">Editor</span>' +
+                                '<span class="ar-bs-meta-name">' + escHtml(editor) + '</span>' +
+                            '</div>' +
+                        '</div>'
+                    : '') +
+                '</div>' +
+                '<a href="' + escHtml(url) + '" class="ar-bs-btn">' +
+                    '<i class="fas fa-book-open"></i><span>Baca Artikel</span>' +
+                '</a>' +
+                '<div class="ar-share-wrap ar-bs-share-row">' +
+                    '<span class="ar-share-label">Bagikan</span>' +
+                    '<div class="ar-share-row">' +
+                        '<button class="ar-share-btn ar-share-copy ar-bs-copy-btn">' +
+                            '<i class="fas fa-link"></i><span>Salin URL</span>' +
+                        '</button>' +
+                        '<button class="ar-share-btn ar-share-wa ar-bs-wa-btn">' +
+                            '<i class="fab fa-whatsapp"></i><span>WhatsApp</span>' +
+                        '</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+
+        /* Wire share buttons */
+        var bsCopyBtn = content.querySelector('.ar-bs-copy-btn');
+        var bsWaBtn   = content.querySelector('.ar-bs-wa-btn');
+        if (bsCopyBtn) bsCopyBtn.addEventListener('click', function () { arCopyUrl(url); });
+        if (bsWaBtn)   bsWaBtn.addEventListener('click',   function () { arShareWa(url, title); });
+
+        document.getElementById('ar-bottom-sheet').scrollTop = 0;
+        document.getElementById('ar-bs-backdrop').classList.add('active');
+        document.getElementById('ar-bottom-sheet').classList.add('active');
+        arBsLockScroll();
+        hideBtt();
+    };
+
+    function arCloseBs() {
+        document.getElementById('ar-bs-backdrop').classList.remove('active');
+        document.getElementById('ar-bottom-sheet').classList.remove('active');
+        arBsUnlockScroll();
+        showBtt();
+    }
+
+    var bsClose    = document.getElementById('ar-bs-close');
+    var bsBackdrop = document.getElementById('ar-bs-backdrop');
+    if (bsClose)    bsClose.addEventListener('click', arCloseBs);
+    if (bsBackdrop) bsBackdrop.addEventListener('click', arCloseBs);
+
+    /* Escape key */
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        var bs = document.getElementById('ar-bottom-sheet');
+        if (bs && bs.classList.contains('active')) arCloseBs();
+    });
+
+
+    /* ============================================================
+       12. INITIAL STATE — sync pills if server rendered filters
+       ============================================================ */
+    /* The server renders initial pills in the Blade template.
+       Wire up their click handlers to deselect + re-fetch. */
+    document.querySelectorAll('#ar-active-pills .sfb-pill[data-select-id]').forEach(function (pill) {
+        var icon = pill.querySelector('i.fa-times');
+        if (!icon) return;
+        icon.addEventListener('click', function () {
+            var p   = this.closest('.sfb-pill');
+            var sel = document.getElementById(p.dataset.selectId);
+            if (!sel) return;
+            for (var i = 0; i < sel.options.length; i++) {
+                if (sel.options[i].value === p.dataset.value) sel.options[i].selected = false;
+            }
+            if (typeof $ !== 'undefined') $(sel).trigger('change');
+            updateFilterBadge();
+            buildActivePills();
+            arLoadPage(arBuildUrl());
+        });
+    });
+
+    /* Sync filter badge on init */
+    updateFilterBadge();
+
+}); /* end DOMContentLoaded */
+</script>

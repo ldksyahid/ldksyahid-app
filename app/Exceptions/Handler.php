@@ -3,7 +3,9 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\ViewErrorBag;
 use Spatie\Permission\Exceptions\UnauthorizedException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -33,6 +35,20 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
+    protected function renderHttpException(HttpExceptionInterface $e)
+    {
+        $view = "errors.{$e->getStatusCode()}";
+
+        if (!view()->exists($view)) {
+            $view = 'errors.default';
+        }
+
+        return response()->view($view, [
+            'errors' => new ViewErrorBag,
+            'exception' => $e,
+        ], $e->getStatusCode(), $e->getHeaders());
+    }
+
     public function register()
     {
         $this->reportable(function (Throwable $e) {
