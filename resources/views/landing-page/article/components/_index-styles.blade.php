@@ -13,6 +13,9 @@
 {{-- ── Select2 CSS ── --}}
 <link href="{{ asset('assets/external/css/select2.min.css') }}" rel="stylesheet" />
 
+{{-- ── Skeleton cards shared styles ── --}}
+@include('components.skeleton-cards.styles')
+
 @verbatim
 <style>
 /* ================================================================

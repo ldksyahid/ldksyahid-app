@@ -13,6 +13,9 @@
 {{-- ── Select2 CSS ── --}}
 <link href="{{ asset('assets/external/css/select2.min.css') }}" rel="stylesheet" />
 
+{{-- ── Skeleton cards shared styles ── --}}
+@include('components.skeleton-cards.styles')
+
 @verbatim
 <style>
 /* ================================================================
@@ -71,7 +74,8 @@
 }
 
 /* ─── AJAX Transition ────────────────────────────────────────── */
-.ev-page-transitioning { opacity: .45; pointer-events: none; transition: opacity .25s ease; }
+#ev-cards-wrap { transition: opacity .35s ease, transform .35s ease; }
+#ev-cards-wrap.ev-cards-out { opacity: 0; transform: translateY(16px); pointer-events: none; }
 
 /* ─── Desktop Grid ───────────────────────────────────────────── */
 .ev-grid {

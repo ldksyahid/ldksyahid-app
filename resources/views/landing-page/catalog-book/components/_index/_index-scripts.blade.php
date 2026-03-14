@@ -1,6 +1,9 @@
 {{-- ── Hero Jumbotron scripts ── --}}
 @include('components.hero-jumbotron.scripts')
 
+{{-- ── Skeleton cards shared scripts ── --}}
+@include('components.skeleton-cards.scripts')
+
 {{-- ── Select2 JS ── --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -285,48 +288,6 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ============================================================
        5. AJAX LOAD PAGE
        ============================================================ */
-    function cbBuildSkeleton() {
-        /* Desktop: 4 skeleton cards */
-        var desktopCards = '';
-        for (var i = 0; i < 4; i++) {
-            desktopCards +=
-                '<div class="cb-skel-card">' +
-                    '<div class="cb-skel-cover cb-skel-base"></div>' +
-                    '<div class="cb-skel-content">' +
-                        '<div class="cb-skel-line cb-skel-badge cb-skel-base"></div>' +
-                        '<div class="cb-skel-line cb-skel-title cb-skel-base"></div>' +
-                        '<div class="cb-skel-line cb-skel-meta cb-skel-base"></div>' +
-                        '<div style="height:.5rem"></div>' +
-                        '<div class="cb-skel-line cb-skel-body cb-skel-base"></div>' +
-                        '<div class="cb-skel-line cb-skel-body cb-skel-w80 cb-skel-base"></div>' +
-                        '<div class="cb-skel-line cb-skel-body cb-skel-w60 cb-skel-base"></div>' +
-                        '<div class="cb-skel-actions">' +
-                            '<div class="cb-skel-btn cb-skel-base"></div>' +
-                            '<div class="cb-skel-btn-sm cb-skel-base"></div>' +
-                            '<div class="cb-skel-btn-sm cb-skel-base"></div>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
-        }
-
-        /* Mobile: 3 skeleton cards in carousel */
-        var mobileCards = '';
-        for (var j = 0; j < 3; j++) {
-            mobileCards +=
-                '<div class="cb-skel-mobile-card">' +
-                    '<div class="cb-skel-mobile-cover cb-skel-base"></div>' +
-                    '<div class="cb-skel-mobile-info">' +
-                        '<div class="cb-skel-line cb-skel-mobile-title cb-skel-base"></div>' +
-                        '<div class="cb-skel-line cb-skel-mobile-auth cb-skel-base"></div>' +
-                        '<div class="cb-skel-line cb-skel-mobile-hint cb-skel-base"></div>' +
-                    '</div>' +
-                '</div>';
-        }
-
-        return '<div class="d-none d-lg-block"><div class="cb-grid">' + desktopCards + '</div></div>' +
-               '<div class="d-lg-none"><div class="cb-skel-carousel">' + mobileCards + '</div></div>';
-    }
-
     var FADE = 320; /* ms — harus <= CSS transition duration (350ms) */
 
     function cbFadeOut(el) {
@@ -359,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
         /* Phase 1 — fade out current content → show skeleton */
         var skeletonShown = wrap
             ? cbFadeOut(wrap).then(function () {
-                wrap.innerHTML = cbBuildSkeleton();
+                wrap.innerHTML = buildSkeleton('book', 4, 3);
                 cbFadeIn(wrap);
               })
             : Promise.resolve();

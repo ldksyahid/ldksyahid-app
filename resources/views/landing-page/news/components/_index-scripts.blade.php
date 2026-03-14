@@ -1,6 +1,9 @@
 {{-- ── Hero Jumbotron scripts ── --}}
 @include('components.hero-jumbotron.scripts')
 
+{{-- ── Skeleton cards shared scripts ── --}}
+@include('components.skeleton-cards.scripts')
+
 {{-- ── Select2 JS ── --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -193,48 +196,70 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     /* ============================================================
-       5. AJAX LOAD PAGE
+       5. AJAX LOAD PAGE  (3-phase: fade → skeleton → content)
        ============================================================ */
+    var FADE = 300;
+
+    function nwFadeOut(el) {
+        return new Promise(function (resolve) {
+            el.classList.add('nw-cards-out');
+            setTimeout(resolve, FADE);
+        });
+    }
+    function nwFadeIn(el) {
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                el.classList.remove('nw-cards-out');
+            });
+        });
+    }
+
     function nwLoadPage(url) {
         var wrap    = document.getElementById('nw-cards-wrap');
         var section = document.getElementById('nw-news-section');
-
-        if (wrap) wrap.classList.add('nw-cards-out');
 
         if (section) {
             var top = section.getBoundingClientRect().top + window.scrollY - 90;
             window.scrollTo({ top: top, behavior: 'smooth' });
         }
 
-        var minDelay  = new Promise(function (res) { setTimeout(res, 350); });
         var fetchData = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                             .then(function (r) { return r.json(); });
 
-        Promise.all([fetchData, minDelay])
+        /* Phase 1 — fade out → show skeleton */
+        var skeletonShown = wrap
+            ? nwFadeOut(wrap).then(function () {
+                wrap.innerHTML = buildSkeleton('news', 3, 3);
+                nwFadeIn(wrap);
+              })
+            : Promise.resolve();
+
+        /* Phase 2 — wait: data + min skeleton time */
+        var minSkeleton = new Promise(function (res) { setTimeout(res, FADE + 400); });
+
+        Promise.all([fetchData, skeletonShown, minSkeleton])
             .then(function (results) {
                 var data = results[0];
+                if (!wrap) return;
 
-                if (wrap) {
+                /* Phase 3 — fade out skeleton → show content */
+                nwFadeOut(wrap).then(function () {
                     wrap.innerHTML = data.html;
-                    requestAnimationFrame(function () {
-                        requestAnimationFrame(function () {
-                            wrap.classList.remove('nw-cards-out');
-                        });
-                    });
-                }
+                    nwFadeIn(wrap);
 
-                var info = document.getElementById('nw-results-info');
-                if (info) {
-                    if (data.total > 0) {
-                        info.innerHTML =
-                            'Menampilkan <strong>' + data.from + '–' + data.to + '</strong>' +
-                            ' dari <strong>' + data.total + '</strong> berita';
-                    } else {
-                        info.innerHTML = 'Tidak ada berita yang ditemukan';
+                    var info = document.getElementById('nw-results-info');
+                    if (info) {
+                        if (data.total > 0) {
+                            info.innerHTML =
+                                'Menampilkan <strong>' + data.from + '–' + data.to + '</strong>' +
+                                ' dari <strong>' + data.total + '</strong> berita';
+                        } else {
+                            info.innerHTML = 'Tidak ada berita yang ditemukan';
+                        }
                     }
-                }
 
-                initCarouselDots();
+                    initCarouselDots();
+                });
             })
             .catch(function () {
                 if (wrap) wrap.classList.remove('nw-cards-out');

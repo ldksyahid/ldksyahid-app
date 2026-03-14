@@ -1,5 +1,8 @@
 @include('components.hero-jumbotron.scripts')
 
+{{-- ── Skeleton cards shared scripts ── --}}
+@include('components.skeleton-cards.scripts')
+
 {{-- ── Select2 JS ── --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -194,27 +197,54 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    /* ─── Load cards via AJAX ────────────────────────────────── */
-    var _ajaxReq = null;
+    /* ─── Load cards via AJAX  (3-phase: fade → skeleton → content) ─── */
+    var FADE = 300;
+
+    function evFadeOut(el) {
+        return new Promise(function (resolve) {
+            el.classList.add('ev-cards-out');
+            setTimeout(resolve, FADE);
+        });
+    }
+    function evFadeIn(el) {
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                el.classList.remove('ev-cards-out');
+            });
+        });
+    }
+
     function loadEvents(url, pushState) {
         var wrap = document.getElementById('ev-cards-wrap');
         if (!wrap) return;
-        wrap.classList.add('ev-page-transitioning');
 
-        if (_ajaxReq) _ajaxReq.abort();
-        _ajaxReq = $.ajax({
-            url: url,
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            success: function (html) {
-                wrap.innerHTML = html;
-                wrap.classList.remove('ev-page-transitioning');
-                if (pushState) history.pushState(null, '', url);
-                initCarouselDots();
-            },
-            error: function (xhr) {
-                if (xhr.statusText !== 'abort') wrap.classList.remove('ev-page-transitioning');
-            }
+        var fetchData = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                            .then(function (r) { return r.text(); });
+
+        /* Phase 1 — fade out → show skeleton */
+        var skeletonShown = evFadeOut(wrap).then(function () {
+            wrap.innerHTML = buildSkeleton('event', 3, 3);
+            evFadeIn(wrap);
         });
+
+        /* Phase 2 — wait: data + min skeleton time */
+        var minSkeleton = new Promise(function (res) { setTimeout(res, FADE + 400); });
+
+        Promise.all([fetchData, skeletonShown, minSkeleton])
+            .then(function (results) {
+                var html = results[0];
+
+                /* Phase 3 — fade out skeleton → show content */
+                evFadeOut(wrap).then(function () {
+                    wrap.innerHTML = html;
+                    evFadeIn(wrap);
+                    if (pushState) history.pushState(null, '', url);
+                    initCarouselDots();
+                });
+            })
+            .catch(function () {
+                wrap.classList.remove('ev-cards-out');
+            });
     }
 
     /* ─── Pagination — event delegation ──────────────────────── */
