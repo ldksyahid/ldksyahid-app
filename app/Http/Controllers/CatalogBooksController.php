@@ -30,6 +30,15 @@ class CatalogBooksController extends Controller
         $authorTypes = LkAuthorType::select('authorTypeID', 'authorTypeName')->distinct()->orderBy('authorTypeName')->get();
         $availabilityTypes = LkAvailabilityType::select('availabilityTypeID', 'availabilityTypeName')->distinct()->orderBy('availabilityTypeName')->get();
 
+        if ($request->ajax()) {
+            return response()->json([
+                'html'  => view('landing-page.catalog-book.components._index._catalog-cards', compact('books'))->render(),
+                'total' => $books->total(),
+                'from'  => $books->firstItem(),
+                'to'    => $books->lastItem(),
+            ]);
+        }
+
         return view('landing-page.catalog-book.index', compact('books', 'categories', 'authors', 'publishers', 'years', 'languages', 'authorTypes', 'availabilityTypes'), [
             "title" => "Perpustakaan",
         ]);
