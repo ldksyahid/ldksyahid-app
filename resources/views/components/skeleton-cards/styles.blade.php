@@ -11,14 +11,26 @@
 
 /* ── Shared shimmer animation ── */
 @keyframes skShimmer {
-    0%   { background-position: -600px 0; }
-    100% { background-position:  600px 0; }
+    to { transform: translateX(200%); }
 }
 .sk-base {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
-    background-size: 1200px 100%;
-    animation: skShimmer 1.4s infinite linear;
+    position: relative;
+    overflow: hidden;
+    background: #e0e0e0;
     border-radius: 8px;
+}
+.sk-base::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.75) 50%,
+        transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: skShimmer 1.5s ease-in-out infinite;
 }
 
 /* ================================================================
@@ -214,9 +226,14 @@
 .sk-ck-marrow { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
 
 /* ── Dark Mode ── */
-[data-theme="dark"] .sk-base {
-    background: linear-gradient(90deg, #1e2535 25%, #252d42 37%, #1e2535 63%);
-    background-size: 1200px 100%;
+[data-theme="dark"] .sk-base { background: #252d42; }
+[data-theme="dark"] .sk-base::after {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.12) 50%,
+        transparent 100%
+    );
 }
 [data-theme="dark"] .sk-campaign-card,
 [data-theme="dark"] .sk-campaign-mcard,
@@ -231,7 +248,7 @@
 [data-theme="dark"] .sk-news-mcard,
 [data-theme="dark"] .sk-news-mavatar,
 [data-theme="dark"] .sk-gallery-card,
-[data-theme="dark"] .sk-gallery-mcard { background: #1a1f2e; }
+[data-theme="dark"] .sk-gallery-mcard { background: #161b27; }
 [data-theme="dark"] .sk-ck-card,
 [data-theme="dark"] .sk-ck-mcard  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .sk-ck-icon-wrap { background: rgba(0,167,157,.1); }
