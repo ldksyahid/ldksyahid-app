@@ -672,6 +672,8 @@ body.cs-sheet-open { overflow: hidden; }
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .cs-results-info        { color: #9ca3af; }
+[data-theme="dark"] .cs-results-info strong { color: #e2e8f0; }
 [data-theme="dark"] .cs-info-card    { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .cs-mobile-card  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .cs-card         { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
