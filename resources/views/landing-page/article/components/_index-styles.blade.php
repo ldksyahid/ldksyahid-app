@@ -761,6 +761,8 @@ body.ar-sheet-open .back-to-top {
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .ar-results-info        { color: #9ca3af; }
+[data-theme="dark"] .ar-results-info strong { color: #e2e8f0; }
 [data-theme="dark"] .ar-card {
     background: #1a1f2e;
     border-color: rgba(0,167,157,.2);

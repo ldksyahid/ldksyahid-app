@@ -734,6 +734,7 @@
     }
 
     /* ── Dark Mode ── */
+    [data-theme="dark"] .footer-wave { background: transparent; }
     [data-theme="dark"] .footer-logo { background: #252b3b; border-color: rgba(0,167,157,.35); }
 </style>
 

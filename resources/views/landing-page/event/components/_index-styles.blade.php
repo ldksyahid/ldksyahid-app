@@ -637,7 +637,8 @@
 /* Section header */
 [data-theme="dark"] .ev-section-title  { color: #e2e8f0; }
 [data-theme="dark"] .ev-section-sub    { color: #9ca3af; }
-[data-theme="dark"] .ev-results-info   { color: #9ca3af; }
+[data-theme="dark"] .ev-results-info        { color: #9ca3af; }
+[data-theme="dark"] .ev-results-info strong { color: #e2e8f0; }
 /* Desktop card */
 [data-theme="dark"] .ev-card           { background: #1a1f2e; border-color: rgba(0,167,157,.15); }
 [data-theme="dark"] .ev-card-body      { background: #1a1f2e; border-top-color: rgba(0,167,157,.4); }
