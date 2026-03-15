@@ -47,8 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ─── Filter modal — backdrop blur + scroll lock ──────────── */
     var filterModal = document.getElementById('ev-filter-modal');
     var fmBackdrop  = document.getElementById('ev-fm-backdrop');
-    var _evFmScrollY    = 0;
-    var _evFmTouchBlock = null;
+    var _evFmScrollY = 0;
 
     function evFmLockScroll() {
         _evFmScrollY = window.scrollY;
@@ -64,18 +63,10 @@ document.addEventListener('DOMContentLoaded', function () {
             updateFilterBadge();
             if (fmBackdrop) fmBackdrop.classList.add('active');
             evFmLockScroll();
-            _evFmTouchBlock = function (e) {
-                if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
-            };
-            window.addEventListener('touchmove', _evFmTouchBlock, { passive: false, capture: true });
         });
         filterModal.addEventListener('hidden.bs.modal', function () {
             if (fmBackdrop) fmBackdrop.classList.remove('active');
             evFmUnlockScroll();
-            if (_evFmTouchBlock) {
-                window.removeEventListener('touchmove', _evFmTouchBlock, { capture: true });
-                _evFmTouchBlock = null;
-            }
         });
     }
 

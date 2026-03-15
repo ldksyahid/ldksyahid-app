@@ -27,22 +27,22 @@
 (function () {
     var _sfbWheelLock = null, _sfbKeyLock = null, _sfbTouchLock = null;
     function sfbLockScroll() {
-        /* wheel: allow scrolling INSIDE .sfb-fm-body, block outside */
+        /* wheel: allow scrolling INSIDE modal (incl. Select2 dropdown), block outside */
         _sfbWheelLock = function(e) {
-            if (e.target.closest('.sfb-fm-body')) return;
+            if (e.target.closest('.sfb-modal')) return;
             e.preventDefault();
         };
-        /* keyboard: allow scroll keys when focus is inside .sfb-fm-body */
+        /* keyboard: allow scroll keys when focus is inside modal */
         _sfbKeyLock = function(e) {
             var active = document.activeElement;
-            if (active && active.closest('.sfb-fm-body')) return;
+            if (active && active.closest('.sfb-modal')) return;
             if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
                 e.preventDefault();
             }
         };
-        /* touch: allow touch-scroll inside .sfb-fm-body */
+        /* touch: allow touch-scroll inside modal (incl. Select2 dropdown) */
         _sfbTouchLock = function(e) {
-            if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
+            if (!e.target.closest('.sfb-modal')) e.preventDefault();
         };
         window.addEventListener('wheel',       _sfbWheelLock, { passive: false });
         window.addEventListener('keydown',     _sfbKeyLock);

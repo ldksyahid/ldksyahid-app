@@ -100,42 +100,13 @@ document.addEventListener('DOMContentLoaded', function () {
        — Capture phase → intercept sebelum Bootstrap/element lain
        — overflow:hidden di <html> → iOS Safari ikut terkunci
        — TIDAK pakai position:fixed agar navbar tidak terganggu */
-    var _arFmTouchBlock = null;
-    var _arFmWheelLock  = null, _arFmKeyLock = null;
-
-    function arFmLockScroll() {
-        _arFmWheelLock = function(e) { e.preventDefault(); };
-        _arFmKeyLock   = function(e) {
-            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
-                e.preventDefault();
-            }
-        };
-        window.addEventListener('wheel',   _arFmWheelLock, { passive: false });
-        window.addEventListener('keydown', _arFmKeyLock);
-    }
-    function arFmUnlockScroll() {
-        if (_arFmWheelLock) { window.removeEventListener('wheel',   _arFmWheelLock); _arFmWheelLock = null; }
-        if (_arFmKeyLock)   { window.removeEventListener('keydown', _arFmKeyLock);   _arFmKeyLock   = null; }
-    }
-
     if (filterModal) {
         filterModal.addEventListener('show.bs.modal', function () {
             updateFilterBadge();
             if (fmBackdrop) fmBackdrop.classList.add('active');
-            arFmLockScroll();
-            _arFmTouchBlock = function (e) {
-                if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
-            };
-            /* capture:true → intercept sebelum elemen lain; passive:false → boleh preventDefault */
-            window.addEventListener('touchmove', _arFmTouchBlock, { passive: false, capture: true });
         });
         filterModal.addEventListener('hidden.bs.modal', function () {
             if (fmBackdrop) fmBackdrop.classList.remove('active');
-            arFmUnlockScroll();
-            if (_arFmTouchBlock) {
-                window.removeEventListener('touchmove', _arFmTouchBlock, { capture: true });
-                _arFmTouchBlock = null;
-            }
         });
     }
 
