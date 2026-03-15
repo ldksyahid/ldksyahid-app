@@ -672,15 +672,50 @@ body.cs-sheet-open { overflow: hidden; }
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
+/* Section header */
+[data-theme="dark"] .cs-section-title  { color: #e2e8f0; }
+[data-theme="dark"] .cs-section-sub    { color: #9ca3af; }
+[data-theme="dark"] .cs-section-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
+/* Results info */
 [data-theme="dark"] .cs-results-info        { color: #9ca3af; }
 [data-theme="dark"] .cs-results-info strong { color: #e2e8f0; }
-[data-theme="dark"] .cs-info-card    { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
-[data-theme="dark"] .cs-mobile-card  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
-[data-theme="dark"] .cs-card         { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
-[data-theme="dark"] .cs-card-title   { color: #e2e8f0; }
-[data-theme="dark"] .cs-card-meta    { color: #9ca3af; }
-[data-theme="dark"] .cs-bottom-sheet { background: #1a1f2e; border-color: rgba(0,167,157,.25); }
-[data-theme="dark"] .cs-bs-title     { color: #e2e8f0; }
-[data-theme="dark"] .cs-section-title { color: #e2e8f0; }
+/* Info card (Ayat / About) */
+[data-theme="dark"] .cs-info-card   { background: #1a1f2e; }
+[data-theme="dark"] .cs-info-verse  { color: #9ca3af; }
+/* Desktop campaign card — correct class */
+[data-theme="dark"] .cs-campaign-card { background: #1a1f2e; }
+[data-theme="dark"] .cs-card-title    { color: #e2e8f0; }
+[data-theme="dark"] .cs-org-name      { color: #9ca3af; }
+[data-theme="dark"] .cs-progress-track { background: #252b3b; }
+[data-theme="dark"] .cs-stats-row     { background: #252b3b; }
+[data-theme="dark"] .cs-stat-value    { color: #e2e8f0; }
+[data-theme="dark"] .cs-stat-sep      { background: rgba(255,255,255,.1); }
+[data-theme="dark"] .cs-percent-chip  { background: rgba(20,27,45,.9); color: #4dd9cf; }
+[data-theme="dark"] .cs-share-btn     { background: #1e2535; border-color: rgba(0,167,157,.25); color: #9ca3af; }
+/* Empty state */
+[data-theme="dark"] .cs-empty-title   { color: #e2e8f0; }
+[data-theme="dark"] .cs-empty-sub     { color: #9ca3af; }
+/* Mobile carousel */
+[data-theme="dark"] .cs-mobile-card       { background: #1a1f2e; }
+[data-theme="dark"] .cs-m-title           { color: #e2e8f0; }
+[data-theme="dark"] .cs-m-org-name        { color: #9ca3af; }
+[data-theme="dark"] .cs-m-progress-track  { background: #252b3b; }
+[data-theme="dark"] .cs-dot               { background: rgba(255,255,255,.2); }
+[data-theme="dark"] .cs-dot.active        { background: #00a79d; }
+/* Bottom sheet */
+[data-theme="dark"] .cs-bottom-sheet      { background: #1a1f2e; }
+[data-theme="dark"] .cs-bs-close          { background: #252b3b; color: #4dd9cf; box-shadow: none; }
+[data-theme="dark"] .cs-bs-cover-fallback { background: rgba(0,167,157,.1); }
+[data-theme="dark"] .cs-bs-cat-badge      { background: rgba(0,167,157,.15); color: #4dd9cf; }
+[data-theme="dark"] .cs-bs-title          { color: #e2e8f0; }
+[data-theme="dark"] .cs-bs-org-name       { color: #9ca3af; }
+[data-theme="dark"] .cs-bs-progress-track { background: #252b3b; }
+[data-theme="dark"] .cs-bs-stats          { background: #252b3b; }
+[data-theme="dark"] .cs-bs-stat-val       { color: #e2e8f0; }
+[data-theme="dark"] .cs-bs-stat-sep       { background: rgba(255,255,255,.1); }
+[data-theme="dark"] .cs-bs-excerpt        { color: #9ca3af; }
+[data-theme="dark"] .cs-bs-btn-detail     { background: #252b3b; color: #e2e8f0; }
+[data-theme="dark"] .cs-bs-share-wrap     { border-top-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .cs-bs-share-btn      { background: #1e2535; border-color: rgba(0,167,157,.2); color: #e2e8f0; }
 </style>
 @endverbatim
