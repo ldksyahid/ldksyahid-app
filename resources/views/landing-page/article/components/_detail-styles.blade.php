@@ -555,11 +555,14 @@ body.ad-rj-open { overflow: hidden !important; touch-action: none; }
 [data-theme="dark"] .ad-date-chip   { background: #252b3b; border-color: rgba(0,167,157,.25); color: #9ca3af; }
 /* Title & badges */
 [data-theme="dark"] .ad-title        { color: #e2e8f0; }
+[data-theme="dark"] .ad-theme-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
 /* Author chips */
 [data-theme="dark"] .ad-author-chip  { background: #252b3b; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .ad-author-icon  { background: rgba(0,167,157,.15); color: #4dd9cf; }
 [data-theme="dark"] .ad-author-name  { color: #e2e8f0; }
 [data-theme="dark"] .ad-author-label { color: #9ca3af; }
 [data-theme="dark"] .ad-author-divider { background: rgba(0,167,157,.2); }
+[data-theme="dark"] .ad-section-divider-icon { background: rgba(0,167,157,.12); border-color: rgba(0,167,157,.2); }
 /* Share */
 [data-theme="dark"] .ad-share-label  { color: #9ca3af; }
 [data-theme="dark"] .ad-share-label::before,

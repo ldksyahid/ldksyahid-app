@@ -902,4 +902,6 @@ body.kmb2-popup-open .back-to-top {
 [data-theme="dark"] .kmb2-sheet-title { color: #e2e8f0; }
 [data-theme="dark"] .kmb2-sheet-desc { color: #9ca3af; }
 [data-theme="dark"] .kmb2-sheet-dots .sdot { background: #374151; }
+[data-theme="dark"] .kmb2-title     { color: #e2e8f0; }
+[data-theme="dark"] .kmb2-title-hl  { color: #4dd9cf; }
 </style>

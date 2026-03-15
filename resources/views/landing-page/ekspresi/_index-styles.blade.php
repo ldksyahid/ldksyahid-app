@@ -776,4 +776,7 @@
       margin-top: 30px;
     }
   }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .section-title h2 { color: #e2e8f0; }
 </style>

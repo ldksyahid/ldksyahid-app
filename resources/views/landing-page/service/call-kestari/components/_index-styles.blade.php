@@ -416,6 +416,16 @@ body.ck-sheet-open .back-to-top {
 [data-theme="dark"] .ck-bs-name        { color: #e2e8f0; }
 [data-theme="dark"] .ck-bs-link        { color: #9ca3af; }
 [data-theme="dark"] .ck-bs-share-label { color: #9ca3af; }
+[data-theme="dark"] .ck-bs-share-label::before,
+[data-theme="dark"] .ck-bs-share-label::after { background: rgba(255,255,255,.1); }
 [data-theme="dark"] .ck-bs-share-btn   { background: #252b3b; border-color: rgba(0,167,157,.2); color: #9ca3af; }
+[data-theme="dark"] .ck-section-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
+[data-theme="dark"] .ck-card-icon-wrap { background: rgba(0,167,157,.1); }
+[data-theme="dark"] .ck-card:hover .ck-card-icon-wrap { background: linear-gradient(135deg, rgba(0,167,157,.2), rgba(0,167,157,.08)); }
+[data-theme="dark"] .ck-m-icon         { background: rgba(0,167,157,.15); }
+[data-theme="dark"] .ck-m-hint         { color: #4dd9cf; }
+[data-theme="dark"] .ck-empty-icon     { background: rgba(0,167,157,.15); }
+[data-theme="dark"] .ck-bs-icon-wrap   { background: rgba(0,167,157,.1); }
+[data-theme="dark"] .ck-bs-icon        { background: #252b3b; }
 </style>
 @endverbatim

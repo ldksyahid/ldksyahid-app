@@ -470,24 +470,39 @@ body.gl-sheet-open { overflow: hidden !important; touch-action: none; }
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
-[data-theme="dark"] .gl-event-card {
-    background: #1a1f2e;
-    border-color: rgba(0,167,157,.2);
-}
-[data-theme="dark"] .gl-event-title { color: #e2e8f0; }
-[data-theme="dark"] .gl-event-meta  { color: #9ca3af; }
-[data-theme="dark"] .gl-mobile-card {
-    background: #1a1f2e;
-    border-color: rgba(0,167,157,.2);
-}
-[data-theme="dark"] .gl-empty-state {
-    background: #1a1f2e;
-    border-color: rgba(0,167,157,.2);
-}
-[data-theme="dark"] .gl-bottom-sheet {
-    background: #1a1f2e;
-    border-color: rgba(0,167,157,.25);
-}
+[data-theme="dark"] .gl-section-title { color: #e2e8f0; }
+[data-theme="dark"] .gl-section-sub   { color: #9ca3af; }
+
+/* Desktop event card */
+[data-theme="dark"] .gl-event-card    { background: #1a1f2e; box-shadow: 0 4px 24px rgba(0,0,0,.3); }
+[data-theme="dark"] .gl-card-body     { background: linear-gradient(to bottom, #1e2535 0%, #1a1f2e 60px); }
+[data-theme="dark"] .gl-card-title    { color: #e2e8f0; }
+[data-theme="dark"] .gl-card-desc     { color: #9ca3af; }
+[data-theme="dark"] .gl-card-footer   { border-top-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .gl-video-label   { color: #9ca3af; }
+[data-theme="dark"] .gl-event-title   { color: #e2e8f0; }
+[data-theme="dark"] .gl-event-meta    { color: #9ca3af; }
+
+/* Mobile card */
+[data-theme="dark"] .gl-mobile-card   { background: #1a1f2e; box-shadow: 0 4px 20px rgba(0,0,0,.3); }
+[data-theme="dark"] .gl-m-title       { color: #e2e8f0; }
+[data-theme="dark"] .gl-m-desc        { color: #9ca3af; }
+
+/* Empty state */
+[data-theme="dark"] .gl-empty-state    { background: #1a1f2e; }
+[data-theme="dark"] .gl-empty-state h4 { color: #e2e8f0; }
+
+/* Bottom sheet */
+[data-theme="dark"] .gl-bottom-sheet   { background: #1a1f2e; }
+[data-theme="dark"] .gl-bs-content     { background: linear-gradient(to bottom, #1a1f2e 0%, #1a1f2e 200px); }
+[data-theme="dark"] .gl-bs-content::before { background: rgba(0,167,157,.35); }
+[data-theme="dark"] .gl-bs-close       { background: rgba(255,255,255,.08); color: #e2e8f0; }
+[data-theme="dark"] .gl-bs-header      { border-bottom-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .gl-bs-title       { color: #e2e8f0; }
+[data-theme="dark"] .gl-bs-desc        { color: #9ca3af; }
+[data-theme="dark"] .gl-bs-video-label { color: #9ca3af; }
+
+/* Lightbox overlays */
 [data-theme="dark"] .gl-zoom-overlay { background: rgba(0,0,0,.92); }
 [data-theme="dark"] .gl-zoom-content { background: #1a1f2e; }
 </style>

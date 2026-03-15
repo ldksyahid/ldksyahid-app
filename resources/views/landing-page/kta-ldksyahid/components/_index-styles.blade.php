@@ -506,6 +506,7 @@
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .kta-section-title { color: #e2e8f0; }
 [data-theme="dark"] .kta-card      { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .kta-card-body { background: #1a1f2e; }
 [data-theme="dark"] .kta-card-name { color: #e2e8f0; }

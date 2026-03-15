@@ -472,6 +472,7 @@ body.gl-sheet-open { overflow: hidden !important; touch-action: none; }
 }
 
 /* ── Dark Mode ── */
+[data-theme="dark"] .section-title-gal { color: #e2e8f0; }
 [data-theme="dark"] .gl-event-card { background: #1a1f2e; }
 [data-theme="dark"] .gl-card-body { background: linear-gradient(to bottom, transparent, #1a1f2e); }
 [data-theme="dark"] .gl-card-title { color: #e2e8f0; }
@@ -482,5 +483,12 @@ body.gl-sheet-open { overflow: hidden !important; touch-action: none; }
 [data-theme="dark"] .gl-bs-content { background: linear-gradient(to bottom, transparent, #1a1f2e); }
 [data-theme="dark"] .gl-bs-title { color: #e2e8f0; }
 [data-theme="dark"] .gl-bs-meta { color: #9ca3af; }
-[data-theme="dark"] .gl-bs-doc { color: #00c4b8; border-color: rgba(0,167,157,.3); }
+[data-theme="dark"] .gl-bs-doc          { color: #00c4b8; border-color: rgba(0,167,157,.3); }
+[data-theme="dark"] .gl-m-title         { color: #e2e8f0; }
+[data-theme="dark"] .gl-m-desc          { color: #9ca3af; }
+[data-theme="dark"] .gl-card-desc       { color: #9ca3af; }
+[data-theme="dark"] .gl-card-footer     { border-top-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .gl-bs-desc         { color: #9ca3af; }
+[data-theme="dark"] .gl-bs-header       { border-bottom-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .gl-bs-video-label  { color: #9ca3af; }
 </style>
