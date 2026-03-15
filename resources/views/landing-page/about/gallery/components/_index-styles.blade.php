@@ -4,6 +4,9 @@
 {{-- ── Pagination shared styles ── --}}
 @include('components.pagination-custom.styles')
 
+{{-- ── Skeleton cards shared styles ── --}}
+@include('components.skeleton-cards.styles')
+
 @verbatim
 <style>
 /* ================================================================

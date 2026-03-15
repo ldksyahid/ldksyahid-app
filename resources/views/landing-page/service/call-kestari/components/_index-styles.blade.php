@@ -1,3 +1,6 @@
+{{-- ── Skeleton cards shared styles ── --}}
+@include('components.skeleton-cards.styles')
+
 {{-- ── Search-Filter-Bar component styles ── --}}
 @include('components.search-filter-bar.styles')
 
