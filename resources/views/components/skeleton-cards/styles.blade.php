@@ -11,14 +11,24 @@
 
 /* ── Shared shimmer animation ── */
 @keyframes skShimmer {
-    0%   { background-position: -600px 0; }
-    100% { background-position:  600px 0; }
+    0%   { background-position: -800px 0; }
+    100% { background-position:  800px 0; }
 }
 .sk-base {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
-    background-size: 1200px 100%;
-    animation: skShimmer 1.4s infinite linear;
+    background: linear-gradient(
+        90deg,
+        #e8e8e8 0%,
+        #e8e8e8 25%,
+        #f8f8f8 40%,
+        #ffffff 50%,
+        #f8f8f8 60%,
+        #e8e8e8 75%,
+        #e8e8e8 100%
+    );
+    background-size: 1600px 100%;
+    animation: skShimmer 1.6s infinite linear;
     border-radius: 8px;
+    will-change: background-position;
 }
 
 /* ================================================================
@@ -215,8 +225,17 @@
 
 /* ── Dark Mode ── */
 [data-theme="dark"] .sk-base {
-    background: linear-gradient(90deg, #1e2535 25%, #252d42 37%, #1e2535 63%);
-    background-size: 1200px 100%;
+    background: linear-gradient(
+        90deg,
+        #252d42 0%,
+        #252d42 25%,
+        #3d5070 40%,
+        #5a7298 50%,
+        #3d5070 60%,
+        #252d42 75%,
+        #252d42 100%
+    );
+    background-size: 1600px 100%;
 }
 [data-theme="dark"] .sk-campaign-card,
 [data-theme="dark"] .sk-campaign-mcard,
@@ -231,7 +250,7 @@
 [data-theme="dark"] .sk-news-mcard,
 [data-theme="dark"] .sk-news-mavatar,
 [data-theme="dark"] .sk-gallery-card,
-[data-theme="dark"] .sk-gallery-mcard { background: #1a1f2e; }
+[data-theme="dark"] .sk-gallery-mcard { background: #161b27; }
 [data-theme="dark"] .sk-ck-card,
 [data-theme="dark"] .sk-ck-mcard  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .sk-ck-icon-wrap { background: rgba(0,167,157,.1); }
