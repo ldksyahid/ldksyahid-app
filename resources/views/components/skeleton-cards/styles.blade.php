@@ -11,24 +11,26 @@
 
 /* ── Shared shimmer animation ── */
 @keyframes skShimmer {
-    0%   { background-position: -800px 0; }
-    100% { background-position:  800px 0; }
+    to { transform: translateX(200%); }
 }
 .sk-base {
+    position: relative;
+    overflow: hidden;
+    background: #e0e0e0;
+    border-radius: 8px;
+}
+.sk-base::after {
+    content: '';
+    position: absolute;
+    inset: 0;
     background: linear-gradient(
         90deg,
-        #e8e8e8 0%,
-        #e8e8e8 25%,
-        #f8f8f8 40%,
-        #ffffff 50%,
-        #f8f8f8 60%,
-        #e8e8e8 75%,
-        #e8e8e8 100%
+        transparent 0%,
+        rgba(255,255,255,0.75) 50%,
+        transparent 100%
     );
-    background-size: 1600px 100%;
-    animation: skShimmer 1.6s infinite linear;
-    border-radius: 8px;
-    will-change: background-position;
+    transform: translateX(-100%);
+    animation: skShimmer 1.5s ease-in-out infinite;
 }
 
 /* ================================================================
@@ -224,18 +226,14 @@
 .sk-ck-marrow { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
 
 /* ── Dark Mode ── */
-[data-theme="dark"] .sk-base {
+[data-theme="dark"] .sk-base { background: #252d42; }
+[data-theme="dark"] .sk-base::after {
     background: linear-gradient(
         90deg,
-        #252d42 0%,
-        #252d42 25%,
-        #3d5070 40%,
-        #5a7298 50%,
-        #3d5070 60%,
-        #252d42 75%,
-        #252d42 100%
+        transparent 0%,
+        rgba(255,255,255,0.12) 50%,
+        transparent 100%
     );
-    background-size: 1600px 100%;
 }
 [data-theme="dark"] .sk-campaign-card,
 [data-theme="dark"] .sk-campaign-mcard,
