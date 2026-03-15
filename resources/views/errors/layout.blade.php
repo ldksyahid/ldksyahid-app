@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
     <head>
+        <script>(function(){if(localStorage.getItem('darkMode')==='enabled')document.documentElement.setAttribute('data-theme','dark');})()</script>
         <meta charset="utf-8" />
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
         <title>@yield('title') &#9679; LDK Syahid</title>
@@ -59,6 +60,9 @@
                     <span class="brand-tagline">UIN Jakarta</span>
                 </div>
             </a>
+            <button id="errDarkToggle" class="error-dark-toggle" title="Mode Gelap">
+                <i class="fas fa-moon"></i>
+            </button>
         </div>
 
         {{-- Error Content --}}
