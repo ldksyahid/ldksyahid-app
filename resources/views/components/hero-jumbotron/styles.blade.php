@@ -335,7 +335,14 @@
 [data-theme="dark"] .hero-desktop-number { color: #4dd9cf; }
 [data-theme="dark"] .hadith-number       { color: #4dd9cf; }
 [data-theme="dark"] .floating-icon       { opacity: .15; filter: drop-shadow(0 2px 5px rgba(0,0,0,.3)); }
+[data-theme="dark"] .floating-shape      { display: none !important; }
 [data-theme="dark"] .hero-desktop-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
 [data-theme="dark"] .hero-mobile-badge   { background: rgba(0,167,157,.15); color: #4dd9cf; }
+[data-theme="dark"] .desktop-toggle-btn  { border-color: rgba(0,167,157,.3); color: #4dd9cf; }
+[data-theme="dark"] .desktop-toggle-btn:hover,
+[data-theme="dark"] .desktop-toggle-btn:focus { border-color: rgba(0,167,157,.3) !important; color: #4dd9cf !important; }
+[data-theme="dark"] .hadith-toggle        { border-color: rgba(0,167,157,.3); color: #4dd9cf; }
+[data-theme="dark"] .hadith-toggle:hover,
+[data-theme="dark"] .hadith-toggle:focus  { border-color: rgba(0,167,157,.3) !important; color: #4dd9cf !important; }
 </style>
 @endverbatim
