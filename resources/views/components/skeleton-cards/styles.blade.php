@@ -60,13 +60,18 @@
 .sk-article-pname  { height: 13px; width: 70%; border-radius: 4px; }
 .sk-article-btn    { height: 38px; width: 100%; border-radius: 30px; margin-top: .25rem; }
 
-.sk-article-carousel { display: flex; gap: 1rem; overflow: hidden; padding: 0 calc(50% - 140px) 1rem; }
-.sk-article-mcard    { flex: 0 0 280px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.07); display: flex; }
-.sk-article-mimg     { width: 100px; flex-shrink: 0; border-radius: 0; }
-.sk-article-mbody    { flex: 1; padding: .75rem; display: flex; flex-direction: column; gap: .4rem; }
-.sk-article-mtheme   { height: 10px; width: 60%; border-radius: 4px; }
-.sk-article-mttl     { height: 14px; width: 90%; border-radius: 4px; }
-.sk-article-mttl2    { height: 14px; width: 65%; border-radius: 4px; }
+.sk-article-carousel { display: flex; gap: 1rem; overflow: hidden; padding: .25rem 1.25rem 1rem; }
+.sk-article-mcard    { flex: 0 0 82vw; max-width: 300px; background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.09); }
+.sk-article-mimg     { aspect-ratio: 3/2; width: 100%; border-radius: 0; }
+.sk-article-mbody    { padding: .85rem 1rem 1rem; display: flex; flex-direction: column; gap: .45rem; }
+.sk-article-mtheme   { height: 22px; width: 80px; border-radius: 8px; }
+.sk-article-mttl     { height: 16px; width: 90%; border-radius: 4px; }
+.sk-article-mttl2    { height: 16px; width: 70%; border-radius: 4px; }
+.sk-article-mpeople  { display: flex; align-items: center; gap: .5rem; margin-top: .25rem; }
+.sk-article-mavatar  { height: 28px; width: 28px; border-radius: 50%; flex-shrink: 0; }
+.sk-article-mpinfo   { display: flex; flex-direction: column; gap: .3rem; flex: 1; }
+.sk-article-mplabel  { height: 9px; width: 40%; border-radius: 4px; }
+.sk-article-mpname   { height: 12px; width: 65%; border-radius: 4px; }
 
 /* ================================================================
    BOOK  (catalog)
@@ -127,6 +132,29 @@
 .sk-event-mttl2    { height: 15px; width: 60%; border-radius: 4px; }
 
 /* ================================================================
+   GALLERY  (about/gallery)
+   ================================================================ */
+/* Desktop — single-column list of event cards */
+.sk-gallery-list   { display: flex; flex-direction: column; gap: 2.25rem; }
+.sk-gallery-card   { background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.07); }
+.sk-gallery-header { height: 56px; border-radius: 0; }
+.sk-gallery-body   { padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem; }
+.sk-gallery-ttl    { height: 22px; width: 58%; border-radius: 6px; }
+.sk-gallery-desc   { height: 15px; width: 95%; border-radius: 4px; }
+.sk-gallery-desc2  { height: 15px; width: 72%; border-radius: 4px; }
+.sk-gallery-photos { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin-top: .25rem; }
+.sk-gallery-photo  { aspect-ratio: 1; border-radius: 10px; }
+
+/* Mobile — single-column list */
+.sk-gallery-mlist  { display: flex; flex-direction: column; gap: 1rem; }
+.sk-gallery-mcard  { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.09); }
+.sk-gallery-mthumb { aspect-ratio: 4/3; width: 100%; border-radius: 0; }
+.sk-gallery-mbody  { padding: .9rem 1.1rem 1.1rem; display: flex; flex-direction: column; gap: .5rem; }
+.sk-gallery-mttl   { height: 18px; width: 75%; border-radius: 4px; }
+.sk-gallery-mdesc  { height: 13px; width: 90%; border-radius: 4px; }
+.sk-gallery-mdesc2 { height: 13px; width: 60%; border-radius: 4px; }
+
+/* ================================================================
    NEWS
    ================================================================ */
 .sk-news-grid    { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
@@ -145,13 +173,45 @@
 .sk-news-pname   { height: 13px; width: 70%; border-radius: 4px; }
 .sk-news-btn     { height: 38px; width: 100%; border-radius: 30px; margin-top: .25rem; }
 
-.sk-news-carousel { display: flex; gap: 1rem; overflow: hidden; padding: 0 calc(50% - 140px) 1rem; }
-.sk-news-mcard    { flex: 0 0 280px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.07); display: flex; }
-.sk-news-mimg     { width: 100px; flex-shrink: 0; border-radius: 0; }
-.sk-news-mbody    { flex: 1; padding: .75rem; display: flex; flex-direction: column; gap: .4rem; }
-.sk-news-mpub     { height: 10px; width: 60%; border-radius: 4px; }
-.sk-news-mttl     { height: 14px; width: 90%; border-radius: 4px; }
-.sk-news-mttl2    { height: 14px; width: 65%; border-radius: 4px; }
+.sk-news-carousel { display: flex; gap: 1rem; overflow: hidden; padding: .25rem .5rem 1rem; }
+.sk-news-mcard    { flex: 0 0 85vw; max-width: 340px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.07); }
+.sk-news-mimg     { aspect-ratio: 16/9; width: 100%; border-radius: 0; }
+.sk-news-mbody    { padding: 1rem; display: flex; flex-direction: column; gap: .5rem; }
+.sk-news-mpub     { height: 20px; width: 80px; border-radius: 50px; }
+.sk-news-mttl     { height: 15px; width: 90%; border-radius: 4px; }
+.sk-news-mttl2    { height: 15px; width: 68%; border-radius: 4px; }
+.sk-news-mpeople  { display: flex; align-items: center; gap: .5rem; margin-top: .25rem; }
+.sk-news-mavatar  { height: 28px; width: 28px; border-radius: 50%; flex-shrink: 0; }
+.sk-news-mpinfo   { display: flex; flex-direction: column; gap: .3rem; flex: 1; }
+.sk-news-mplabel  { height: 9px; width: 40%; border-radius: 4px; }
+.sk-news-mpname   { height: 12px; width: 65%; border-radius: 4px; }
+
+/* ================================================================
+   CALL KESTARI  (service/call-kestari)
+   Breakpoint: md (768px) — same as real cards
+   ================================================================ */
+/* Desktop — 3-col grid */
+.sk-ck-grid      { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
+.sk-ck-card      { background: #fff; border-radius: 22px; overflow: hidden; border: 1.5px solid #e5e7eb; box-shadow: 0 4px 20px rgba(0,0,0,.06); display: flex; flex-direction: column; }
+.sk-ck-icon-wrap { padding: 1.85rem 2rem; background: #e0f7f5; display: flex; align-items: center; justify-content: center; }
+.sk-ck-icon      { width: 66px; height: 66px; border-radius: 18px; }
+.sk-ck-body      { padding: 1.2rem 1.4rem 1.4rem; display: flex; flex-direction: column; gap: .55rem; flex: 1; }
+.sk-ck-name      { height: 20px; width: 75%; border-radius: 6px; }
+.sk-ck-link      { height: 13px; width: 90%; border-radius: 4px; }
+.sk-ck-link2     { height: 13px; width: 60%; border-radius: 4px; }
+.sk-ck-footer    { display: flex; align-items: center; gap: .6rem; border-top: 1px solid #e5e7eb; padding-top: .85rem; margin-top: .75rem; }
+.sk-ck-share     { height: 30px; width: 74px; border-radius: 50px; }
+.sk-ck-share2    { height: 30px; width: 84px; border-radius: 50px; }
+.sk-ck-cta       { height: 34px; width: 90px; border-radius: 50px; margin-left: auto; }
+
+/* Mobile — vertical list */
+.sk-ck-mlist  { display: flex; flex-direction: column; gap: .7rem; }
+.sk-ck-mcard  { display: flex; align-items: center; gap: .8rem; background: #fff; border-radius: 18px; border: 1.5px solid #e5e7eb; padding: .85rem; box-shadow: 0 3px 14px rgba(0,0,0,.07); }
+.sk-ck-micon  { width: 50px; height: 50px; border-radius: 14px; flex-shrink: 0; }
+.sk-ck-minfo  { flex: 1; display: flex; flex-direction: column; gap: .35rem; }
+.sk-ck-mname  { height: 16px; width: 70%; border-radius: 4px; }
+.sk-ck-mlink  { height: 11px; width: 85%; border-radius: 4px; }
+.sk-ck-marrow { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
 
 /* ── Dark Mode ── */
 [data-theme="dark"] .sk-base {
@@ -162,11 +222,19 @@
 [data-theme="dark"] .sk-campaign-mcard,
 [data-theme="dark"] .sk-article-card,
 [data-theme="dark"] .sk-article-mcard,
+[data-theme="dark"] .sk-article-mavatar,
 [data-theme="dark"] .sk-book-card,
 [data-theme="dark"] .sk-book-mcard,
 [data-theme="dark"] .sk-event-card,
 [data-theme="dark"] .sk-event-mcard,
 [data-theme="dark"] .sk-news-card,
-[data-theme="dark"] .sk-news-mcard { background: #1a1f2e; }
+[data-theme="dark"] .sk-news-mcard,
+[data-theme="dark"] .sk-news-mavatar,
+[data-theme="dark"] .sk-gallery-card,
+[data-theme="dark"] .sk-gallery-mcard { background: #1a1f2e; }
+[data-theme="dark"] .sk-ck-card,
+[data-theme="dark"] .sk-ck-mcard  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .sk-ck-icon-wrap { background: rgba(0,167,157,.1); }
+[data-theme="dark"] .sk-ck-footer { border-top-color: rgba(0,167,157,.12); }
 </style>
 @endverbatim

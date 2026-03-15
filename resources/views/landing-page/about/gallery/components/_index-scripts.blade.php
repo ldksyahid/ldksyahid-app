@@ -1,6 +1,9 @@
 {{-- ── Hero Jumbotron hadith system ── --}}
 @include('components.hero-jumbotron.scripts')
 
+{{-- ── Skeleton cards shared scripts ── --}}
+@include('components.skeleton-cards.scripts')
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -14,38 +17,57 @@ document.addEventListener('DOMContentLoaded', function () {
         glLoadPage(link.href);
     });
 
+    var FADE = 300;
+
     function glLoadPage(url) {
         var wrap = document.getElementById('gl-cards-wrap');
 
-        /* 1. Fade-out + slide down */
+        /* Phase 1 — fade out */
         if (wrap) wrap.classList.add('gl-cards-out');
 
-        /* 2. Smooth scroll ke section header */
+        /* Smooth scroll ke section header */
         var section = document.getElementById('gl-gallery-section');
         if (section) {
             var top = section.getBoundingClientRect().top + window.scrollY - 90;
             window.scrollTo({ top: top, behavior: 'smooth' });
         }
 
-        /* 3. Fetch data — parallel dengan fade & scroll.
-              Tunggu keduanya (fetch + min 350ms fade) selesai dulu. */
-        var minDelay   = new Promise(function (res) { setTimeout(res, 350); });
-        var fetchData  = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                            .then(function (r) { return r.json(); });
-
-        Promise.all([fetchData, minDelay])
-            .then(function (results) {
-                var data = results[0];
-                if (wrap) {
-                    wrap.innerHTML = data.html;
-                    /* Dua frame sebelum hapus class agar browser sempat paint dulu */
+        /* Phase 1→2 — setelah fade selesai, tampilkan skeleton */
+        var skeletonShown = new Promise(function (resolve) {
+            setTimeout(function () {
+                if (wrap && typeof buildSkeleton === 'function') {
+                    wrap.innerHTML = buildSkeleton('gallery', 3, 3);
                     requestAnimationFrame(function () {
                         requestAnimationFrame(function () {
                             wrap.classList.remove('gl-cards-out');
                         });
                     });
                 }
-                GL_DATA = data.glData;
+                resolve();
+            }, FADE);
+        });
+
+        /* Fetch data paralel */
+        var fetchData   = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                            .then(function (r) { return r.json(); });
+        var minSkeleton = new Promise(function (res) { setTimeout(res, FADE + 400); });
+
+        /* Phase 3 — fade out skeleton → tampilkan konten asli */
+        Promise.all([fetchData, skeletonShown, minSkeleton])
+            .then(function (results) {
+                var data = results[0];
+                if (wrap) {
+                    wrap.classList.add('gl-cards-out');
+                    setTimeout(function () {
+                        wrap.innerHTML = data.html;
+                        GL_DATA = data.glData;
+                        requestAnimationFrame(function () {
+                            requestAnimationFrame(function () {
+                                wrap.classList.remove('gl-cards-out');
+                            });
+                        });
+                    }, FADE);
+                }
             })
             .catch(function () {
                 if (wrap) wrap.classList.remove('gl-cards-out');
