@@ -609,6 +609,7 @@
 
 /* ── Dark Mode ──────────────────────────────────────────── */
 /* Section header */
+[data-theme="dark"] .nw-section-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
 [data-theme="dark"] .nw-section-title  { color: #e2e8f0; }
 [data-theme="dark"] .nw-section-sub    { color: #9ca3af; }
 [data-theme="dark"] .nw-results-info   { color: #9ca3af; }

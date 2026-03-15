@@ -2325,12 +2325,12 @@ body.prayer-modal-open .back-to-top,
 [data-theme="dark"] .navbar-brand-fun .brand-name { color: #e2e8f0; }
 
 /* Nav links */
-[data-theme="dark"] .nav-menu .nav-link { color: #cbd5e0 !important; }
+[data-theme="dark"] .nav-menu .nav-link { color: #e2e8f0 !important; }
 [data-theme="dark"] .nav-menu .nav-link:hover {
     color: #4dd9cf !important;
     background: rgba(0,167,157,.12) !important;
 }
-[data-theme="dark"] .navbar-floating.scrolled .nav-menu .nav-link { color: #cbd5e0 !important; }
+[data-theme="dark"] .navbar-floating.scrolled .nav-menu .nav-link { color: #e2e8f0 !important; }
 [data-theme="dark"] .navbar-floating.scrolled .nav-menu .nav-link:hover {
     color: #4dd9cf !important;
     background: rgba(0,167,157,.12) !important;

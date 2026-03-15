@@ -335,5 +335,7 @@
 [data-theme="dark"] .hero-desktop-number { color: #4dd9cf; }
 [data-theme="dark"] .hadith-number       { color: #4dd9cf; }
 [data-theme="dark"] .floating-icon       { opacity: .15; filter: drop-shadow(0 2px 5px rgba(0,0,0,.3)); }
+[data-theme="dark"] .hero-desktop-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
+[data-theme="dark"] .hero-mobile-badge   { background: rgba(0,167,157,.15); color: #4dd9cf; }
 </style>
 @endverbatim
