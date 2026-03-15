@@ -1,3 +1,6 @@
+{{-- ── Skeleton cards shared buildSkeleton() helper ── --}}
+@include('components.skeleton-cards.scripts')
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -169,42 +172,66 @@ document.addEventListener('DOMContentLoaded', function () {
         var resultsEl = document.getElementById('ck-results-info');
         var searchEl  = document.getElementById('ck-search-input');
         var section   = document.getElementById('ck-main-section');
-
-        if (wrap) wrap.classList.add('ck-cards-out');
+        var FADE      = 300;
 
         if (section) {
             window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
         }
 
-        var minDelay  = new Promise(function (res) { setTimeout(res, 350); });
-        var fetchData = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                            .then(function (r) { return r.json(); });
+        /* Phase 1 — fade out */
+        if (wrap) wrap.classList.add('ck-cards-out');
 
-        Promise.all([fetchData, minDelay])
+        /* Phase 2 — show skeleton after fade */
+        var skeletonShown = new Promise(function (resolve) {
+            setTimeout(function () {
+                if (wrap) {
+                    wrap.innerHTML = buildSkeleton('callkestari', 3, 6);
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
+                            if (wrap) wrap.classList.remove('ck-cards-out');
+                            resolve();
+                        });
+                    });
+                } else {
+                    resolve();
+                }
+            }, FADE);
+        });
+
+        var fetchData   = fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                              .then(function (r) { return r.json(); });
+        var minSkeleton = new Promise(function (res) { setTimeout(res, FADE + 400); });
+
+        /* Phase 3 — fade out skeleton, show real content */
+        Promise.all([fetchData, skeletonShown, minSkeleton])
             .then(function (results) {
                 var json = results[0];
 
-                if (wrap) {
-                    wrap.innerHTML = json.cards;
-                    requestAnimationFrame(function () {
-                        requestAnimationFrame(function () {
-                            wrap.classList.remove('ck-cards-out');
-                        });
-                    });
-                }
-                if (pgnWrap) { pgnWrap.innerHTML = json.pagination || ''; }
+                if (wrap) wrap.classList.add('ck-cards-out');
 
-                if (resultsEl) {
-                    if (json.total > 0) {
-                        var info    = 'Menampilkan <strong>' + json.from + '–' + json.to + '</strong>' +
-                                      ' dari <strong>' + json.total + '</strong> tautan';
-                        var keyword = searchEl ? searchEl.value.trim() : '';
-                        if (keyword) info += ' untuk "<em>' + escHtml(keyword) + '</em>"';
-                        resultsEl.innerHTML = info;
-                    } else {
-                        resultsEl.innerHTML = 'Tidak ada tautan yang ditemukan';
+                setTimeout(function () {
+                    if (wrap) {
+                        wrap.innerHTML = json.cards;
+                        requestAnimationFrame(function () {
+                            requestAnimationFrame(function () {
+                                if (wrap) wrap.classList.remove('ck-cards-out');
+                            });
+                        });
                     }
-                }
+                    if (pgnWrap) { pgnWrap.innerHTML = json.pagination || ''; }
+
+                    if (resultsEl) {
+                        if (json.total > 0) {
+                            var info    = 'Menampilkan <strong>' + json.from + '–' + json.to + '</strong>' +
+                                          ' dari <strong>' + json.total + '</strong> tautan';
+                            var keyword = searchEl ? searchEl.value.trim() : '';
+                            if (keyword) info += ' untuk "<em>' + escHtml(keyword) + '</em>"';
+                            resultsEl.innerHTML = info;
+                        } else {
+                            resultsEl.innerHTML = 'Tidak ada tautan yang ditemukan';
+                        }
+                    }
+                }, FADE);
             })
             .catch(function () {
                 if (wrap) wrap.classList.remove('ck-cards-out');

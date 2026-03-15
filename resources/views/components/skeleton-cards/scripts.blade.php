@@ -82,6 +82,13 @@ if (typeof window.buildSkeleton === 'undefined') {
                             '<div class="sk-article-mtheme sk-base"></div>' +
                             '<div class="sk-article-mttl   sk-base"></div>' +
                             '<div class="sk-article-mttl2  sk-base"></div>' +
+                            '<div class="sk-article-mpeople">' +
+                                '<div class="sk-article-mavatar sk-base"></div>' +
+                                '<div class="sk-article-mpinfo">' +
+                                    '<div class="sk-article-mplabel sk-base"></div>' +
+                                    '<div class="sk-article-mpname  sk-base"></div>' +
+                                '</div>' +
+                            '</div>' +
                         '</div>' +
                     '</div>';
             }
@@ -166,6 +173,40 @@ if (typeof window.buildSkeleton === 'undefined') {
                    '<div class="d-lg-none"><div class="sk-event-carousel">'       + mobile  + '</div></div>';
         }
 
+        /* ── gallery ─────────────────────────────────────────── */
+        if (type === 'gallery') {
+            for (var i = 0; i < dc; i++) {
+                desktop +=
+                    '<div class="sk-gallery-card">' +
+                        '<div class="sk-gallery-header sk-base"></div>' +
+                        '<div class="sk-gallery-body">' +
+                            '<div class="sk-gallery-ttl   sk-base"></div>' +
+                            '<div class="sk-gallery-desc  sk-base"></div>' +
+                            '<div class="sk-gallery-desc2 sk-base"></div>' +
+                            '<div class="sk-gallery-photos">' +
+                                '<div class="sk-gallery-photo sk-base"></div>' +
+                                '<div class="sk-gallery-photo sk-base"></div>' +
+                                '<div class="sk-gallery-photo sk-base"></div>' +
+                                '<div class="sk-gallery-photo sk-base"></div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+            }
+            for (var j = 0; j < mc; j++) {
+                mobile +=
+                    '<div class="sk-gallery-mcard">' +
+                        '<div class="sk-gallery-mthumb sk-base"></div>' +
+                        '<div class="sk-gallery-mbody">' +
+                            '<div class="sk-gallery-mttl   sk-base"></div>' +
+                            '<div class="sk-gallery-mdesc  sk-base"></div>' +
+                            '<div class="sk-gallery-mdesc2 sk-base"></div>' +
+                        '</div>' +
+                    '</div>';
+            }
+            return '<div class="d-none d-lg-block"><div class="sk-gallery-list">'  + desktop + '</div></div>' +
+                   '<div class="d-lg-none"><div class="sk-gallery-mlist">'         + mobile  + '</div></div>';
+        }
+
         /* ── news ────────────────────────────────────────────── */
         if (type === 'news') {
             for (var i = 0; i < dc; i++) {
@@ -197,11 +238,53 @@ if (typeof window.buildSkeleton === 'undefined') {
                             '<div class="sk-news-mpub  sk-base"></div>' +
                             '<div class="sk-news-mttl  sk-base"></div>' +
                             '<div class="sk-news-mttl2 sk-base"></div>' +
+                            '<div class="sk-news-mpeople">' +
+                                '<div class="sk-news-mavatar sk-base"></div>' +
+                                '<div class="sk-news-mpinfo">' +
+                                    '<div class="sk-news-mplabel sk-base"></div>' +
+                                    '<div class="sk-news-mpname  sk-base"></div>' +
+                                '</div>' +
+                            '</div>' +
                         '</div>' +
                     '</div>';
             }
             return '<div class="d-none d-lg-block"><div class="sk-news-grid">'  + desktop + '</div></div>' +
                    '<div class="d-lg-none"><div class="sk-news-carousel">'       + mobile  + '</div></div>';
+        }
+
+        /* ── callkestari ─────────────────────────────────────── */
+        if (type === 'callkestari') {
+            for (var i = 0; i < dc; i++) {
+                desktop +=
+                    '<div class="sk-ck-card">' +
+                        '<div class="sk-ck-icon-wrap">' +
+                            '<div class="sk-ck-icon sk-base"></div>' +
+                        '</div>' +
+                        '<div class="sk-ck-body">' +
+                            '<div class="sk-ck-name  sk-base"></div>' +
+                            '<div class="sk-ck-link  sk-base"></div>' +
+                            '<div class="sk-ck-link2 sk-base"></div>' +
+                            '<div class="sk-ck-footer">' +
+                                '<div class="sk-ck-share  sk-base"></div>' +
+                                '<div class="sk-ck-share2 sk-base"></div>' +
+                                '<div class="sk-ck-cta    sk-base"></div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+            }
+            for (var j = 0; j < mc; j++) {
+                mobile +=
+                    '<div class="sk-ck-mcard">' +
+                        '<div class="sk-ck-micon sk-base"></div>' +
+                        '<div class="sk-ck-minfo">' +
+                            '<div class="sk-ck-mname sk-base"></div>' +
+                            '<div class="sk-ck-mlink sk-base"></div>' +
+                        '</div>' +
+                        '<div class="sk-ck-marrow sk-base"></div>' +
+                    '</div>';
+            }
+            return '<div class="d-none d-md-block"><div class="sk-ck-grid">'  + desktop + '</div></div>' +
+                   '<div class="d-md-none"><div class="sk-ck-mlist">'         + mobile  + '</div></div>';
         }
 
         return ''; /* unknown type */
