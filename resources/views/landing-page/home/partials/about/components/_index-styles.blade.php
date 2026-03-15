@@ -1302,4 +1302,22 @@
 [data-theme="dark"] .vision-title-cr   { color: #e2e8f0; }
 [data-theme="dark"] .mission-title-cr  { color: #e2e8f0; }
 [data-theme="dark"] .kl-pusat-name     { color: #e2e8f0; }
+
+/* Misi card — front face */
+[data-theme="dark"] .mc-title          { color: #e2e8f0; }
+[data-theme="dark"] .mc-desc           { color: #9ca3af; }
+[data-theme="dark"] .mc-num            { color: #4dd9cf; background: rgba(0,167,157,.15); }
+
+/* Misi card — back face */
+[data-theme="dark"] .mc-back           { background: linear-gradient(135deg, #0d3b38 0%, #1a4a46 100%); }
+[data-theme="dark"] .mc-title-back     { color: #e2e8f0; }
+[data-theme="dark"] .mc-detail         { color: #cbd5e0; }
+
+/* Keluarga section */
+[data-theme="dark"] .kl-pusat-sub      { color: #9ca3af; }
+[data-theme="dark"] .kl-name           { color: #e2e8f0; }
+[data-theme="dark"] .kl-fakultas-label span { background: rgba(0,167,157,.15); color: #4dd9cf; }
+
+/* Mission/Keluarga badge */
+[data-theme="dark"] .mission-badge-cr  { background: rgba(0,167,157,.15); color: #4dd9cf; }
 </style>
