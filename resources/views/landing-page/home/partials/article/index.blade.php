@@ -46,7 +46,7 @@
                 <div class="art-card__body">
                     <span class="art-card__theme" style="--theme-color: {{ $accent }}">{{ $article->theme ?? 'Artikel' }}</span>
                     <h5 class="art-card__title">
-                        <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
+                        <a href="{{ $article->getArticleUrl() }}">{{ $article->title }}</a>
                     </h5>
                     <div class="art-card__people-card" style="--card-accent: {{ $accent }}">
                         <div class="art-card__meta">
@@ -71,7 +71,7 @@
                         </div>
                         @endif
                     </div>
-                    <a href="/articles/{{ $article->id }}" class="art-card__read">
+                    <a href="{{ $article->getArticleUrl() }}" class="art-card__read">
                         <span>Baca Selengkapnya</span> <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -102,7 +102,7 @@
                      data-article-date="{{ \Carbon\Carbon::parse($article->dateevent)->isoFormat('D MMMM YYYY') }}"
                      data-article-img="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
                      data-article-editor="{{ $article->editor }}"
-                     data-article-url="/articles/{{ $article->id }}"
+                     data-article-url="{{ $article->getArticleUrl() }}"
                      data-article-accent="{{ $accent }}">
                     <div class="art-card__img-wrap">
                         <img src="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
