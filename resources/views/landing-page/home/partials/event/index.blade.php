@@ -36,7 +36,7 @@
                      style="--ev-color: {{ $scheme['primary'] }}; --ev-gradient: {{ $scheme['gradient'] }}; --anim-delay: {{ $key * 0.1 }}s">
 
                     <div class="event-card__img-wrap">
-                        <a href="/events/{{ $event->id }}">
+                        <a href="{{ $event->getEventUrl() }}">
                             <img src="https://lh3.googleusercontent.com/d/{{ $event->gdrive_id }}"
                                  alt="{{ $event->title }}"
                                  class="event-card__img"
@@ -57,12 +57,12 @@
                             {{ $event->division }}
                         </div>
                         <h4 class="event-card__title">
-                            <a href="/events/{{ $event->id }}">{{ $event->title }}</a>
+                            <a href="{{ $event->getEventUrl() }}">{{ $event->title }}</a>
                         </h4>
                         <p class="event-card__desc">
                             {!! \Illuminate\Support\Str::limit(strip_tags($event->broadcast), 100, '...') !!}
                         </p>
-                        <a href="/events/{{ $event->id }}" class="event-card__btn" style="background: {{ $scheme['gradient'] }}">
+                        <a href="{{ $event->getEventUrl() }}" class="event-card__btn" style="background: {{ $scheme['gradient'] }}">
                             <span>Lihat Detail</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -114,7 +114,7 @@
                      data-event-month="{{ $date->isoFormat('MMM') }}"
                      data-event-img="https://lh3.googleusercontent.com/d/{{ $event->gdrive_id }}"
                      data-event-desc="{!! \Illuminate\Support\Str::limit(strip_tags($event->broadcast), 200, '...') !!}"
-                     data-event-url="/events/{{ $event->id }}"
+                     data-event-url="{{ $event->getEventUrl() }}"
                      data-event-color="{{ $scheme['primary'] }}">
 
                     <div class="event-card-mobile__img-wrap">

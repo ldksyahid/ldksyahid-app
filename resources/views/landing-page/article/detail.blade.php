@@ -142,7 +142,7 @@
                 </div>
                 <div class="ad-related-list">
                     @foreach($relatedArticles as $i => $article)
-                    <a href="{{ url('/articles/' . $article->id) }}" class="ad-related-card">
+                    <a href="{{ $article->getArticleUrl() }}" class="ad-related-card">
                         <div class="ad-related-img-wrap">
                             <img src="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
                                  alt="{{ $article->title }}" loading="lazy">
@@ -210,7 +210,7 @@
     </div>
     <div class="ad-rj-grid">
         @foreach($relatedArticles as $i => $article)
-        <a href="{{ url('/articles/' . $article->id) }}" class="ad-rj-item">
+        <a href="{{ $article->getArticleUrl() }}" class="ad-rj-item">
             <div class="ad-rj-item-img">
                 <img src="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
                      alt="{{ $article->title }}" loading="lazy">
