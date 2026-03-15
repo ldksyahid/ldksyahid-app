@@ -263,4 +263,14 @@
     .dn-amount-input { font-size: 1.1rem; }
     .dn-total-value { font-size: 1.15rem; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .dn-context-info { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .dn-section      { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .dn-section-title { color: #e2e8f0; }
+[data-theme="dark"] .dn-amount-input { background: #1e2535; border-color: rgba(0,167,157,.25); color: #e2e8f0; }
+[data-theme="dark"] .dn-amount-input:focus { background: #252b3b; border-color: #00a79d; }
+[data-theme="dark"] .dn-preset-btn   { background: #252b3b; border-color: rgba(0,167,157,.2); color: #e2e8f0; }
+[data-theme="dark"] .dn-total-label  { color: #9ca3af; }
+[data-theme="dark"] .dn-total-value  { color: #e2e8f0; }
 </style>

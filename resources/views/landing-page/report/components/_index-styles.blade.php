@@ -516,5 +516,32 @@ body.rp-sheet-open .back-to-top {
     .rp-section-title { font-size: 1.4rem; }
     .rp-m-thumb { width: 58px; height: 58px; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .rp-section-title  { color: #e2e8f0; }
+[data-theme="dark"] .rp-section-sub    { color: #9ca3af; }
+[data-theme="dark"] .rp-info-card      { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .rp-info-desc      { color: #9ca3af; border-top-color: rgba(0,167,157,.12); }
+[data-theme="dark"] .rp-feature-item   { background: #252b3b; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .rp-feature-title  { color: #e2e8f0; }
+[data-theme="dark"] .rp-feature-sub    { color: #9ca3af; }
+[data-theme="dark"] .rp-card           { background: #1a1f2e; }
+[data-theme="dark"] .rp-card-title a   { color: #e2e8f0; }
+[data-theme="dark"] .rp-card-desc      { color: #9ca3af; }
+[data-theme="dark"] .rp-card-share-label { color: #9ca3af; }
+[data-theme="dark"] .rp-card-share-btn  { background: #252b3b; border-color: rgba(0,167,157,.2); color: #9ca3af; }
+[data-theme="dark"] .rp-empty-title    { color: #e2e8f0; }
+[data-theme="dark"] .rp-empty-sub      { color: #9ca3af; }
+[data-theme="dark"] .rp-m-list-card    { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .rp-m-title        { color: #e2e8f0; }
+[data-theme="dark"] .rp-m-desc         { color: #9ca3af; }
+[data-theme="dark"] .rp-m-arrow        { color: rgba(255,255,255,.2); }
+[data-theme="dark"] .rp-bottom-sheet   { background: #1a1f2e; }
+[data-theme="dark"] .rp-bs-close       { background: #252b3b; color: #4dd9cf; box-shadow: none; }
+[data-theme="dark"] .rp-bs-img-gradient { background: linear-gradient(to top, #1a1f2e 0%, transparent 100%); }
+[data-theme="dark"] .rp-bs-title       { color: #e2e8f0; }
+[data-theme="dark"] .rp-bs-desc        { color: #9ca3af; }
+[data-theme="dark"] .rp-bs-share-label { color: #9ca3af; }
+[data-theme="dark"] .rp-bs-share-btn   { background: #252b3b; border-color: rgba(0,167,157,.2); color: #9ca3af; }
 </style>
 @endverbatim

@@ -314,5 +314,42 @@
         padding: .7rem 1rem;
     }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .sfb-field {
+    background: #1a1f2e;
+    border-color: rgba(0,167,157,.3);
+}
+[data-theme="dark"] .sfb-field .sfb-input { color: #e2e8f0; }
+[data-theme="dark"] .sfb-field .sfb-input::placeholder { color: #3d5a57; }
+[data-theme="dark"] .sfb-clear { background: #1e3a38; }
+[data-theme="dark"] .sfb-filter-clear {
+    background: #3a1e1e;
+    border-color: rgba(239,68,68,.35);
+}
+[data-theme="dark"] .sfb-sort-btn {
+    background: #1a1f2e;
+    color: #00c4b8;
+    border-color: rgba(0,167,157,.35);
+}
+[data-theme="dark"] .sfb-sort-btn:hover,
+[data-theme="dark"] .sfb-sort-btn:focus { background: #1e2f2e; }
+[data-theme="dark"] .sfb-sort-menu {
+    background: #1a1f2e !important;
+    border-color: rgba(0,167,157,.25) !important;
+}
+[data-theme="dark"] .sfb-sort-item { color: #cbd5e0 !important; }
+[data-theme="dark"] .sfb-sort-item i:first-child { color: #4a6a68; }
+[data-theme="dark"] .sfb-sort-item:hover { background: #1e3a38 !important; color: #00c4b8 !important; }
+[data-theme="dark"] .sfb-sort-item:hover i:first-child { color: #00c4b8; }
+[data-theme="dark"] .sfb-sort-item.active {
+    background: linear-gradient(135deg, #1a3a36, #1e4240) !important;
+}
+[data-theme="dark"] .sfb-pill {
+    background: #1e3a38;
+    color: #4dd9cf;
+    border-color: rgba(0,167,157,.3);
+}
+[data-theme="dark"] .sfb-badge { border-color: white; }
 </style>
 @endverbatim

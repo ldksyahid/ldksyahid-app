@@ -300,4 +300,12 @@
     .cd-tabs-nav::-webkit-scrollbar { display: none; }
     .cd-tab-body { padding: 1.25rem 1rem; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .cd-tab-body     { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .cd-title        { color: #e2e8f0; }
+[data-theme="dark"] .cd-tabs-nav     { background: #252b3b; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .cd-amount       { color: #e2e8f0; }
+[data-theme="dark"] .cd-meta         { color: #9ca3af; }
+[data-theme="dark"] .cd-progress-wrap { background: #252b3b; }
 </style>

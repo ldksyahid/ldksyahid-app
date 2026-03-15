@@ -363,5 +363,64 @@
     .sfb-fm-ring-1     { width: 76px; height: 76px; }
     .sfb-fm-ring-2     { width: 104px; height: 104px; }
 }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .sfb-fm-content {
+    background: #1a1f2e !important;
+    border-color: rgba(0,167,157,.15) !important;
+}
+[data-theme="dark"] .sfb-fm-close { background: #252b3b; color: #9ca3af; }
+[data-theme="dark"] .sfb-fm-close:hover { background: #1e3a38; color: #00a79d; }
+[data-theme="dark"] .sfb-fm-header {
+    background: linear-gradient(to bottom, #1e2f2e, #1a1f2e);
+    border-bottom-color: rgba(0,167,157,.12);
+}
+[data-theme="dark"] .sfb-fm-badge { background: #1e3a38; border-color: rgba(0,167,157,.25); }
+[data-theme="dark"] .sfb-fm-title { color: #e2e8f0; }
+[data-theme="dark"] .sfb-fm-subtitle { color: #9ca3af; }
+[data-theme="dark"] .sfb-fm-body { background: #1a1f2e; }
+[data-theme="dark"] .sfb-fm-field-icon { background: #1e3a38; }
+[data-theme="dark"] .sfb-fm-label { color: #e2e8f0; }
+[data-theme="dark"] .sfb-fm-footer {
+    background: linear-gradient(to top, #1e2f2e, #1a1f2e);
+    border-top-color: rgba(0,167,157,.12);
+}
+[data-theme="dark"] .sfb-fm-btn-close {
+    background: #252b3b;
+    border-color: #374151;
+    color: #9ca3af;
+}
+[data-theme="dark"] .sfb-fm-btn-close:hover { background: #1e3a38; color: #00c4b8; }
+[data-theme="dark"] .sfb-fm-btn-reset {
+    background: #252b3b;
+    border-color: rgba(245,158,11,.3);
+    color: #f59e0b;
+}
+[data-theme="dark"] .sfb-fm-btn-reset:hover { background: #2d2218; }
+/* Select2 dark */
+[data-theme="dark"] .select2-container--default .select2-selection--multiple {
+    background: #252b3b !important;
+    border-color: #374151 !important;
+}
+[data-theme="dark"] .select2-container--default .select2-selection--multiple .select2-search__field {
+    color: #e2e8f0 !important;
+}
+[data-theme="dark"] .select2-container--default .select2-dropdown {
+    background: #1a1f2e !important;
+    border-color: rgba(0,167,157,.25) !important;
+}
+[data-theme="dark"] .select2-container--default .select2-search--dropdown .select2-search__field {
+    background: #252b3b !important;
+    border-color: #374151 !important;
+    color: #e2e8f0 !important;
+}
+[data-theme="dark"] .select2-container--default .select2-results__option { color: #cbd5e0 !important; }
+[data-theme="dark"] .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background: rgba(0,167,157,.15) !important;
+}
+[data-theme="dark"] .select2-container--default .select2-selection--multiple .select2-selection__clear {
+    background: #374151 !important;
+    color: #9ca3af !important;
+}
 </style>
 @endverbatim
