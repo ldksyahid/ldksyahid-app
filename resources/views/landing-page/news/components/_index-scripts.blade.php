@@ -74,8 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Custom blur backdrop for filter modal */
     var filterModal = document.getElementById('nw-filter-modal');
     var fmBackdrop  = document.getElementById('nw-fm-backdrop');
-    var _fmScrollY  = 0;
-    var _fmTouchBlock = null;
+    var _fmScrollY = 0;
 
     function nwFmLockScroll() {
         _fmScrollY = window.scrollY;
@@ -91,18 +90,10 @@ document.addEventListener('DOMContentLoaded', function () {
             updateFilterBadge();
             if (fmBackdrop) fmBackdrop.classList.add('active');
             nwFmLockScroll();
-            _fmTouchBlock = function (e) {
-                if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
-            };
-            window.addEventListener('touchmove', _fmTouchBlock, { passive: false, capture: true });
         });
         filterModal.addEventListener('hidden.bs.modal', function () {
             if (fmBackdrop) fmBackdrop.classList.remove('active');
             nwFmUnlockScroll();
-            if (_fmTouchBlock) {
-                window.removeEventListener('touchmove', _fmTouchBlock, { capture: true });
-                _fmTouchBlock = null;
-            }
         });
     }
     if (fmBackdrop) {

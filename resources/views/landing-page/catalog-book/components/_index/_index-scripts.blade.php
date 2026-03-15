@@ -42,15 +42,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ── Filter modal scroll lock ── */
-    var _cbFmWheelLock = null, _cbFmKeyLock = null, _cbFmTouchBlock = null;
+    var _cbFmWheelLock = null, _cbFmKeyLock = null;
     function cbFmLockScroll() {
         _cbFmWheelLock = function(e) {
-            if (e.target.closest('.sfb-fm-body')) return; /* allow scroll inside modal body */
+            if (e.target.closest('.sfb-modal')) return;
             e.preventDefault();
         };
         _cbFmKeyLock = function(e) {
             var active = document.activeElement;
-            if (active && active.closest('.sfb-fm-body')) return;
+            if (active && active.closest('.sfb-modal')) return;
             if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key))
                 e.preventDefault();
         };
@@ -168,10 +168,6 @@ document.addEventListener('DOMContentLoaded', function () {
             updateFilterBadge();
             if (fmBackdrop) fmBackdrop.classList.add('active');
             cbFmLockScroll();
-            _cbFmTouchBlock = function (e) {
-                if (!e.target.closest('.sfb-fm-body')) e.preventDefault();
-            };
-            window.addEventListener('touchmove', _cbFmTouchBlock, { passive: false, capture: true });
         });
         filterModal.addEventListener('hidden.bs.modal', function () {
             if (!_cbApplied) {
@@ -181,10 +177,6 @@ document.addEventListener('DOMContentLoaded', function () {
             _cbApplied = false;
             if (fmBackdrop) fmBackdrop.classList.remove('active');
             cbFmUnlockScroll();
-            if (_cbFmTouchBlock) {
-                window.removeEventListener('touchmove', _cbFmTouchBlock, { capture: true });
-                _cbFmTouchBlock = null;
-            }
         });
     }
     if (fmBackdrop) {
