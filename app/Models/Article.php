@@ -6,6 +6,7 @@ use App\Services\GoogleDrive;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class Article extends Model
 {
@@ -177,6 +178,28 @@ class Article extends Model
     }
 
     /**
+     * Generate unique slug from title
+     */
+    public static function generateSlug(string $title): string
+    {
+        $slug = Str::slug($title);
+        $original = $slug;
+        $i = 1;
+        while (self::where('slug', $slug)->exists()) {
+            $slug = $original . '-' . $i++;
+        }
+        return $slug;
+    }
+
+    /**
+     * Get URL for this article (slug if available, fallback to id)
+     */
+    public function getArticleUrl(): string
+    {
+        return '/articles/' . ($this->slug ?: $this->id);
+    }
+
+    /**
      * Save new article
      */
     public static function saveModel(Request $request): self
@@ -190,6 +213,7 @@ class Article extends Model
 
         return self::create([
             'title' => $request->title,
+            'slug' => self::generateSlug($request->title),
             'theme' => $request->theme,
             'dateevent' => $request->datearticle,
             'writer' => $request->writer,

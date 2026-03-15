@@ -58,7 +58,7 @@
                  data-wow-delay="0.{{ ($loop->index % 3 + 1) }}s">
 
                 {{-- Poster Image --}}
-                <a href="{{ route('event.show', $event->id) }}" class="ev-card-img-wrap">
+                <a href="{{ $event->getEventUrl() }}" class="ev-card-img-wrap">
                     <img src="{{ $event->getPosterUrl() ?? 'https://placehold.co/400x300/e0f7f5/00a79d?text=Event' }}"
                          alt="{{ $event->title }}"
                          class="ev-card-img" loading="lazy">
@@ -91,7 +91,7 @@
                     </span>
 
                     <h3 class="ev-card-title">
-                        <a href="{{ route('event.show', $event->id) }}">{{ $event->title }}</a>
+                        <a href="{{ $event->getEventUrl() }}">{{ $event->title }}</a>
                     </h3>
 
                     @if($excerpt)
@@ -113,7 +113,7 @@
                         @endif
                     </div>
 
-                    <a href="{{ route('event.show', $event->id) }}" class="ev-read-btn">
+                    <a href="{{ $event->getEventUrl() }}" class="ev-read-btn">
                         <span>Lihat Detail</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -123,20 +123,20 @@
                         <div class="ev-card-share-btns">
                             <button class="ev-card-share-btn ev-card-share-btn--copy"
                                     title="Salin URL"
-                                    data-url="/events/{{ $event->id }}"
+                                    data-url="{{ $event->getEventUrl() }}"
                                     onclick="evCopyUrl(this.dataset.url, event)">
                                 <i class="fas fa-link"></i>
                             </button>
                             <button class="ev-card-share-btn ev-card-share-btn--wa"
                                     title="WhatsApp"
-                                    data-url="/events/{{ $event->id }}"
+                                    data-url="{{ $event->getEventUrl() }}"
                                     data-title="{{ e($event->title) }}"
                                     onclick="evShareWa(this.dataset.url, this.dataset.title, event)">
                                 <i class="fab fa-whatsapp"></i>
                             </button>
                             <button class="ev-card-share-btn ev-card-share-btn--tw"
                                     title="X"
-                                    data-url="/events/{{ $event->id }}"
+                                    data-url="{{ $event->getEventUrl() }}"
                                     data-title="{{ e($event->title) }}"
                                     onclick="evShareTw(this.dataset.url, this.dataset.title, event)">
                                 <span class="xi">X</span>
@@ -193,7 +193,7 @@
                  data-status="{{ $st['label'] }}"
                  data-status-cls="{{ $st['cls'] }}"
                  data-poster="{{ $event->getPosterUrl() ?? '' }}"
-                 data-url="/events/{{ $event->id }}"
+                 data-url="{{ $event->getEventUrl() }}"
                  data-excerpt="{{ e($excerpt) }}"
                  onclick="evOpenBottomSheet(this)">
 
@@ -228,18 +228,18 @@
                         <span class="ev-card-share-label">Bagikan</span>
                         <div class="ev-card-share-btns">
                             <button class="ev-card-share-btn ev-card-share-btn--copy"
-                                    data-url="/events/{{ $event->id }}"
+                                    data-url="{{ $event->getEventUrl() }}"
                                     onclick="evCopyUrl(this.dataset.url, event)">
                                 <i class="fas fa-link"></i>
                             </button>
                             <button class="ev-card-share-btn ev-card-share-btn--wa"
-                                    data-url="/events/{{ $event->id }}"
+                                    data-url="{{ $event->getEventUrl() }}"
                                     data-title="{{ e($event->title) }}"
                                     onclick="evShareWa(this.dataset.url, this.dataset.title, event)">
                                 <i class="fab fa-whatsapp"></i>
                             </button>
                             <button class="ev-card-share-btn ev-card-share-btn--tw"
-                                    data-url="/events/{{ $event->id }}"
+                                    data-url="{{ $event->getEventUrl() }}"
                                     data-title="{{ e($event->title) }}"
                                     onclick="evShareTw(this.dataset.url, this.dataset.title, event)">
                                 <span class="xi">X</span>

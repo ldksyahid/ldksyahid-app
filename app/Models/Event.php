@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class Event extends Model
 {
@@ -178,6 +179,28 @@ class Event extends Model
     }
 
     /**
+     * Generate unique slug from title
+     */
+    public static function generateSlug(string $title): string
+    {
+        $slug = Str::slug($title);
+        $original = $slug;
+        $i = 1;
+        while (self::where('slug', $slug)->exists()) {
+            $slug = $original . '-' . $i++;
+        }
+        return $slug;
+    }
+
+    /**
+     * Get URL for this event (slug if available, fallback to id)
+     */
+    public function getEventUrl(): string
+    {
+        return '/events/' . ($this->slug ?: $this->id);
+    }
+
+    /**
      * Save new event
      */
     public static function saveModel(Request $request): self
@@ -191,6 +214,7 @@ class Event extends Model
 
         return self::create([
             'title' => $request->title,
+            'slug' => self::generateSlug($request->title),
             'division' => $request->division,
             'broadcast' => $request->broadcast,
             'tag' => $request->tag,

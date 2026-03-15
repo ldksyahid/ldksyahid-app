@@ -69,11 +69,11 @@ Route::get('/service', function () {
 
 // Route LandingPage Artikel
 Route::get('/articles', [ArticleController::class, 'index'])->name('article.index');
-Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('article.show');
+Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('article.show');
 
 // Route LandingPage Event
 Route::get('/events', [EventController::class, 'index'])->name('event.index');
-Route::get('/events/{id}', [EventController::class, 'show'])->name('event.show');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('event.show');
 
 //Route LandingPage Schedule
 Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule.index');

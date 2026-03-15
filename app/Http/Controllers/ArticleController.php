@@ -80,10 +80,12 @@ class ArticleController extends Controller
     /**
      * Display the specified article (Landing Page)
      */
-    public function show($id)
+    public function show($article)
     {
-        $dt = Carbon::now();
-        $postarticle = Article::find($id);
+        $postarticle = is_numeric($article)
+            ? Article::findOrFail($article)
+            : Article::where('slug', $article)->firstOrFail();
+
         $relatedArticles = Article::where('id', '!=', $postarticle->id)
             ->latest()
             ->take(5)
