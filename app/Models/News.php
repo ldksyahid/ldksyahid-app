@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use App\Services\GoogleDrive;
 
 class News extends Model
@@ -162,6 +163,28 @@ class News extends Model
     }
 
     /**
+     * Generate unique slug from title
+     */
+    public static function generateSlug(string $title): string
+    {
+        $slug = Str::slug($title);
+        $original = $slug;
+        $i = 1;
+        while (self::where('slug', $slug)->exists()) {
+            $slug = $original . '-' . $i++;
+        }
+        return $slug;
+    }
+
+    /**
+     * Get URL for this news (slug if available, fallback to id)
+     */
+    public function getNewsUrl(): string
+    {
+        return '/news/' . ($this->slug ?: $this->id);
+    }
+
+    /**
      * Save new news
      */
     public static function saveModel($request)
@@ -177,6 +200,7 @@ class News extends Model
             'datepublish' => $request->datepublish,
             'publisher' => $request->publisher,
             'title' => $request->title,
+            'slug' => self::generateSlug($request->title),
             'reporter' => $request->reporter,
             'editor' => $request->editor,
             'picture' => $uploadResult['fileName'],
