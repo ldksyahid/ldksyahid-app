@@ -514,8 +514,8 @@
 
 .tabs-content { padding: 0; }
 
-.tab-pane { display: none; animation: bdFadeIn 0.35s ease; }
-.tab-pane.active { display: block; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: bdFadeIn 0.35s ease both; }
 
 @keyframes bdFadeIn {
     from { opacity: 0; transform: translateY(8px); }
@@ -887,6 +887,7 @@
 [data-theme="dark"] .book-subtitle-elegant { color: #9ca3af; }
 [data-theme="dark"] .book-author-small     { color: #9ca3af; }
 [data-theme="dark"] .book-meta-small       { color: #9ca3af; }
+[data-theme="dark"] .book-tabs-elegant     { background: #1a1f2e; }
 [data-theme="dark"] .content-card          { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .content-text          { color: #cbd5e0; }
 [data-theme="dark"] .detail-item           { border-bottom-color: rgba(0,167,157,.1); }
@@ -898,6 +899,7 @@
 [data-theme="dark"] .related-books-elegant { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .section-title         { color: #e2e8f0; }
 [data-theme="dark"] .tabs-navigation       { background: #252b3b; border-bottom-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .tab-pane             { background: transparent; }
 [data-theme="dark"] .nav-tab               { color: #9ca3af; }
 [data-theme="dark"] .nav-tab:hover         { background: rgba(0,167,157,.1); color: #4dd9cf; }
 [data-theme="dark"] .nav-tab.active        { color: #00c4b8; border-bottom-color: #00c4b8; }
