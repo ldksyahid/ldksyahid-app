@@ -774,11 +774,13 @@ body.ar-sheet-open .back-to-top {
 [data-theme="dark"] .ar-card-theme      { background: rgba(0,167,157,.15); color: #4dd9cf; }
 [data-theme="dark"] .ar-card:hover .ar-card-theme { background: #00a79d; color: white; }
 [data-theme="dark"] .ar-card-people     { background: rgba(0,167,157,.06); }
+[data-theme="dark"] .ar-card:hover .ar-card-people { background: rgba(0,167,157,.12); }
 [data-theme="dark"] .ar-card-avatar     { background: rgba(0,167,157,.15); }
 [data-theme="dark"] .ar-card-meta-name  { color: #e2e8f0; }
 [data-theme="dark"] .ar-card-date       { background: rgba(30,37,58,.92); }
 [data-theme="dark"] .ar-card-date-month { color: #9ca3af; }
 [data-theme="dark"] .ar-read-btn        { background: rgba(0,167,157,.12); color: #4dd9cf; }
+[data-theme="dark"] .ar-card:hover .ar-read-btn { color: white; }
 /* Mobile carousel card */
 [data-theme="dark"] .ar-mobile-card     { background: #1a1f2e; }
 [data-theme="dark"] .ar-m-title         { color: #e2e8f0; }

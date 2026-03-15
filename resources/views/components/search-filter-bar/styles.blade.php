@@ -319,8 +319,13 @@
 [data-theme="dark"] .sfb-field {
     background: #1a1f2e;
     border-color: rgba(0,167,157,.3);
+    box-shadow: 0 4px 16px rgba(0,0,0,.35);
 }
-[data-theme="dark"] .sfb-field .sfb-input { color: #e2e8f0; }
+[data-theme="dark"] .sfb-field:focus-within {
+    border-color: #00a79d;
+    box-shadow: 0 4px 16px rgba(0,0,0,.4), 0 0 0 4px rgba(0,167,157,.18);
+}
+[data-theme="dark"] .sfb-field .sfb-input { background: transparent}
 [data-theme="dark"] .sfb-field .sfb-input::placeholder { color: #3d5a57; }
 [data-theme="dark"] .sfb-clear { background: #1e3a38; }
 [data-theme="dark"] .sfb-filter-clear {

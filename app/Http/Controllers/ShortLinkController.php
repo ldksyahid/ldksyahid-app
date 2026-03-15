@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\MsShortlink;
 use AshAllenDesign\ShortURL\Classes\Resolver;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 
 class ShortLinkController extends Controller
 {
@@ -109,6 +108,8 @@ class ShortLinkController extends Controller
     {
         $shortURL = MsShortlink::where('url_key', $shortURLKey)->firstOrFail();
         $resolver->handleVisit(request(), $shortURL);
-        return Redirect::to($shortURL->destination_url);
+        return view('landing-page.service.short-link.redirect', [
+            'destination' => $shortURL->destination_url,
+        ]);
     }
 }
