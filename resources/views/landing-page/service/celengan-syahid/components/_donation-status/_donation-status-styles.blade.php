@@ -158,11 +158,20 @@
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
-[data-theme="dark"] .ds-card         { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
-[data-theme="dark"] .ds-status-title { color: #e2e8f0; }
-[data-theme="dark"] .ds-status-sub   { color: #9ca3af; }
-[data-theme="dark"] .ds-detail-row   { border-bottom-color: rgba(0,167,157,.12); }
-[data-theme="dark"] .ds-detail-key   { color: #9ca3af; }
-[data-theme="dark"] .ds-detail-val   { color: #e2e8f0; }
-[data-theme="dark"] .ds-btn          { background: #1e2535; border-color: rgba(0,167,157,.25); color: #e2e8f0; }
+/* Status banner */
+[data-theme="dark"] .ds-status-banner.paid    { background: rgba(22,163,74,.12); }
+[data-theme="dark"] .ds-status-banner.pending { background: rgba(217,119,6,.12); }
+[data-theme="dark"] .ds-status-banner.failed  { background: rgba(220,38,38,.12); }
+[data-theme="dark"] .ds-status-title  { color: #e2e8f0; }
+[data-theme="dark"] .ds-status-sub    { color: #9ca3af; }
+/* Detail card */
+[data-theme="dark"] .ds-detail-card   { background: #1a1f2e; }
+[data-theme="dark"] .ds-detail-header { border-bottom-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .ds-detail-title  { color: #e2e8f0; }
+[data-theme="dark"] .ds-detail-row:nth-child(even) { background: #252b3b; }
+[data-theme="dark"] .ds-detail-key    { color: #9ca3af; }
+[data-theme="dark"] .ds-detail-val    { color: #e2e8f0; }
+/* Buttons */
+[data-theme="dark"] .ds-btn-outline { background: #1a1f2e; }
+[data-theme="dark"] .ds-btn-gray    { background: #252b3b; border-color: rgba(255,255,255,.1); color: #e2e8f0; }
 </style>
