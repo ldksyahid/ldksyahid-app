@@ -745,5 +745,20 @@
     background: #1a1f2e;
     border-color: rgba(0,167,157,.2);
 }
+[data-theme="dark"] .cu-loc-label  { color: #9ca3af; }
+[data-theme="dark"] .cu-loc-val    { color: #e2e8f0; }
+[data-theme="dark"] .cu-form-label { color: #e2e8f0; }
+[data-theme="dark"] .cu-bs-close   { background: #252b3b; color: #9ca3af; }
+[data-theme="dark"] .cu-bs-close:hover { background: #1e2535; color: #4dd9cf; }
+[data-theme="dark"] .cu-bs-content .cu-bs-title { color: #e2e8f0; }
+[data-theme="dark"] .cu-bs-content .cu-bs-body  { color: #9ca3af; }
+[data-theme="dark"] .cu-bs-content .cu-bs-social-item {
+    background: #1e2535;
+    color: #e2e8f0;
+}
+[data-theme="dark"] .cu-bs-content .cu-bs-social-item:hover {
+    background: rgba(0,167,157,.15);
+    color: #4dd9cf;
+}
 </style>
 @endverbatim
