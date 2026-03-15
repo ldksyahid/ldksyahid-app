@@ -376,4 +376,17 @@
         padding-right: env(safe-area-inset-right);
     }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .pr-header   { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .pr-title    { color: #e2e8f0; }
+[data-theme="dark"] .pr-author   { color: #9ca3af; }
+[data-theme="dark"] .pr-bar      { background: #252b3b; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .pr-url-pill { background: #1e2535; border-color: rgba(0,167,157,.2); color: #9ca3af; }
+[data-theme="dark"] .pr-ctrl-btn { background: #252b3b; color: #e2e8f0; }
+[data-theme="dark"] .pr-controls { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .pr-frame-wrap { background: #0f1117; }
+[data-theme="dark"] .pr-status.status-loading { background: #2d2a1e; color: #fbbf24; }
+[data-theme="dark"] .pr-status.status-success { background: #1a2d1e; color: #4ade80; }
+[data-theme="dark"] .pr-status.status-error   { background: #2d1a1a; color: #f87171; }
 </style>

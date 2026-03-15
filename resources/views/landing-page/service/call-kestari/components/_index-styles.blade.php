@@ -393,5 +393,39 @@ body.ck-sheet-open .back-to-top {
     .ck-section-title { font-size: 1.4rem; }
     .ck-m-icon { width: 44px; height: 44px; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .ck-section-title  { color: #e2e8f0; }
+[data-theme="dark"] .ck-section-sub    { color: #9ca3af; }
+[data-theme="dark"] .ck-results-info   { color: #9ca3af; }
+[data-theme="dark"] .ck-results-info strong { color: #e2e8f0; }
+[data-theme="dark"] .ck-card           { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .ck-card-icon      { background: #252b3b; }
+[data-theme="dark"] .ck-card-name      { color: #e2e8f0; }
+[data-theme="dark"] .ck-card-link      { color: #9ca3af; }
+[data-theme="dark"] .ck-card-footer    { border-top-color: rgba(0,167,157,.12); }
+[data-theme="dark"] .ck-m-card         { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .ck-m-name         { color: #e2e8f0; }
+[data-theme="dark"] .ck-m-link         { color: #9ca3af; }
+[data-theme="dark"] .ck-m-arrow        { color: rgba(255,255,255,.2); }
+[data-theme="dark"] .ck-empty-title    { color: #e2e8f0; }
+[data-theme="dark"] .ck-empty-sub      { color: #9ca3af; }
+[data-theme="dark"] .ck-bottom-sheet   { background: #1a1f2e; }
+[data-theme="dark"] .ck-bs-close       { background: #252b3b; color: #4dd9cf; box-shadow: none; }
+[data-theme="dark"] .ck-bs-drag-handle { background: rgba(255,255,255,.15); }
+[data-theme="dark"] .ck-bs-name        { color: #e2e8f0; }
+[data-theme="dark"] .ck-bs-link        { color: #9ca3af; }
+[data-theme="dark"] .ck-bs-share-label { color: #9ca3af; }
+[data-theme="dark"] .ck-bs-share-label::before,
+[data-theme="dark"] .ck-bs-share-label::after { background: rgba(255,255,255,.1); }
+[data-theme="dark"] .ck-bs-share-btn   { background: #252b3b; border-color: rgba(0,167,157,.2); color: #9ca3af; }
+[data-theme="dark"] .ck-section-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
+[data-theme="dark"] .ck-card-icon-wrap { background: rgba(0,167,157,.1); }
+[data-theme="dark"] .ck-card:hover .ck-card-icon-wrap { background: linear-gradient(135deg, rgba(0,167,157,.2), rgba(0,167,157,.08)); }
+[data-theme="dark"] .ck-m-icon         { background: rgba(0,167,157,.15); }
+[data-theme="dark"] .ck-m-hint         { color: #4dd9cf; }
+[data-theme="dark"] .ck-empty-icon     { background: rgba(0,167,157,.15); }
+[data-theme="dark"] .ck-bs-icon-wrap   { background: rgba(0,167,157,.1); }
+[data-theme="dark"] .ck-bs-icon        { background: #252b3b; }
 </style>
 @endverbatim

@@ -152,5 +152,21 @@
 .sk-news-mpub     { height: 10px; width: 60%; border-radius: 4px; }
 .sk-news-mttl     { height: 14px; width: 90%; border-radius: 4px; }
 .sk-news-mttl2    { height: 14px; width: 65%; border-radius: 4px; }
+
+/* ── Dark Mode ── */
+[data-theme="dark"] .sk-base {
+    background: linear-gradient(90deg, #1e2535 25%, #252d42 37%, #1e2535 63%);
+    background-size: 1200px 100%;
+}
+[data-theme="dark"] .sk-campaign-card,
+[data-theme="dark"] .sk-campaign-mcard,
+[data-theme="dark"] .sk-article-card,
+[data-theme="dark"] .sk-article-mcard,
+[data-theme="dark"] .sk-book-card,
+[data-theme="dark"] .sk-book-mcard,
+[data-theme="dark"] .sk-event-card,
+[data-theme="dark"] .sk-event-mcard,
+[data-theme="dark"] .sk-news-card,
+[data-theme="dark"] .sk-news-mcard { background: #1a1f2e; }
 </style>
 @endverbatim

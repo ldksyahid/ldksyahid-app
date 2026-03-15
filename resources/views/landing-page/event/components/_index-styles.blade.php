@@ -632,5 +632,41 @@
 @media (max-width: 767.98px) {
     .ev-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+/* Section header */
+[data-theme="dark"] .ev-section-title  { color: #e2e8f0; }
+[data-theme="dark"] .ev-section-sub    { color: #9ca3af; }
+[data-theme="dark"] .ev-results-info        { color: #9ca3af; }
+[data-theme="dark"] .ev-results-info strong { color: #e2e8f0; }
+/* Desktop card */
+[data-theme="dark"] .ev-card           { background: #1a1f2e; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .ev-card-body      { background: #1a1f2e; border-top-color: rgba(0,167,157,.4); }
+[data-theme="dark"] .ev-card-title     { color: #e2e8f0; }
+[data-theme="dark"] .ev-card-title a   { color: #e2e8f0; }
+[data-theme="dark"] .ev-card-excerpt   { color: #9ca3af; }
+[data-theme="dark"] .ev-card-meta-row  { color: #9ca3af; }
+[data-theme="dark"] .ev-card-share     { border-top-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .ev-card-share-label { color: #6b7280; }
+/* Empty state */
+[data-theme="dark"] .ev-empty-title    { color: #e2e8f0; }
+[data-theme="dark"] .ev-empty-sub      { color: #9ca3af; }
+[data-theme="dark"] .ev-empty-tip      { background: #252b3b; color: #9ca3af; }
+/* Mobile card */
+[data-theme="dark"] .ev-mobile-card    { background: #1a1f2e; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .ev-m-body         { background: #1a1f2e; border-top-color: rgba(0,167,157,.4); }
+[data-theme="dark"] .ev-m-title        { color: #e2e8f0; }
+[data-theme="dark"] .ev-m-date         { color: #9ca3af; }
+/* Bottom sheet — fix wrong class: ev-sheet-* → ev-bs-* */
+[data-theme="dark"] .ev-bottom-sheet   { background: #1a1f2e; }
+[data-theme="dark"] .ev-bs-close       { background: #252b3b; color: #9ca3af; }
+[data-theme="dark"] .ev-bs-img-gradient { background: linear-gradient(to top, #1a1f2e 0%, transparent 100%); }
+[data-theme="dark"] .ev-bs-title       { color: #e2e8f0; }
+[data-theme="dark"] .ev-bs-meta-row    { color: #9ca3af; }
+[data-theme="dark"] .ev-bs-excerpt     { color: #9ca3af !important; }
+[data-theme="dark"] .ev-bs-share       { border-top-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .ev-bs-share-title { color: #6b7280; }
+[data-theme="dark"] .ev-bs-share-btn   { background: #252b3b; }
+[data-theme="dark"] .ev-bs-share-lbl   { color: #9ca3af; }
 </style>
 @endverbatim

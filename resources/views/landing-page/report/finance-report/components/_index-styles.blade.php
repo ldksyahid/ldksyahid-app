@@ -296,5 +296,27 @@
     .fr-action-btn  { width: 34px; height: 34px; padding: 0; justify-content: center; }
     .fr-section-title { font-size: 1.4rem; }
 }
+
+/* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .fr-section-title  { color: #e2e8f0; }
+[data-theme="dark"] .fr-section-sub    { color: #9ca3af; }
+[data-theme="dark"] .fr-info-card      { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .fr-feature-title  { color: #e2e8f0; }
+[data-theme="dark"] .fr-feature-sub    { color: #9ca3af; }
+[data-theme="dark"] .fr-info-desc      { color: #9ca3af; border-top-color: rgba(0,167,157,.12); }
+[data-theme="dark"] .fr-acc-item       { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .fr-acc-btn        { background: transparent; color: #e2e8f0; }
+[data-theme="dark"] .fr-acc-btn:hover  { background: rgba(0,167,157,.06); }
+[data-theme="dark"] .fr-acc-btn:not(.collapsed) { background: rgba(0,167,157,.1); }
+[data-theme="dark"] .fr-acc-name       { color: #e2e8f0; }
+[data-theme="dark"] .fr-acc-count      { color: #9ca3af; }
+[data-theme="dark"] .fr-report-list    { border-top-color: rgba(0,167,157,.12); }
+[data-theme="dark"] .fr-report-item    { border-bottom-color: rgba(0,167,157,.1); }
+[data-theme="dark"] .fr-report-item:hover { background: rgba(0,167,157,.05); }
+[data-theme="dark"] .fr-report-name    { color: #e2e8f0; }
+[data-theme="dark"] .fr-report-date    { color: #9ca3af; }
+[data-theme="dark"] .fr-empty          { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
+[data-theme="dark"] .fr-empty-title    { color: #e2e8f0; }
+[data-theme="dark"] .fr-empty-sub      { color: #9ca3af; }
 </style>
 @endverbatim

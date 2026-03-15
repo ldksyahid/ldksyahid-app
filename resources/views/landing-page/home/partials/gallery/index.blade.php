@@ -1,7 +1,38 @@
-{{-- Gallery Section - Modern & Elegant --}}
+@php
+    /* ── Persiapkan data galeri untuk JS (sama dengan about/gallery) ── */
+    $homeGlData = [];
+    foreach ($postgallery as $post) {
+        $photos = [];
+        if (!empty($post->gdrive_id)) $photos[] = $post->gdrive_id;
+        for ($i = 1; $i <= 12; $i++) {
+            $k = 'gdrive_id_' . $i;
+            if (!empty($post->$k)) $photos[] = $post->$k;
+        }
+
+        $videoId = '';
+        $url = $post->linkEmbedYoutube ?? '';
+        if ($url) {
+            if      (preg_match('/youtube\.com\/embed\/([^\&\?\/]+)/', $url, $m))  $videoId = $m[1];
+            elseif  (preg_match('/youtube\.com\/watch\?v=([^\&\?\/]+)/', $url, $m)) $videoId = $m[1];
+            elseif  (preg_match('/youtu\.be\/([^\&\?\/]+)/', $url, $m))            $videoId = $m[1];
+        }
+
+        $homeGlData[] = [
+            'name'    => $post->eventName        ?? '',
+            'theme'   => $post->eventTheme       ?? '',
+            'desc'    => $post->eventDescription ?? '',
+            'photos'  => $photos,
+            'videoId' => $videoId,
+            'linkDoc' => $post->linkDoc          ?? '',
+        ];
+    }
+@endphp
+
+{{-- Gallery Section --}}
 <section class="gallery-elegant py-5" id="gallery-section">
     <div class="container">
-        {{-- Section Header (Centered) --}}
+
+        {{-- Section Header --}}
         <div class="text-center mb-5 gallery-header-wrap">
             <div class="section-badge-gal">
                 <span class="badge-emoji-gal">📸</span>
@@ -16,169 +47,126 @@
             </p>
         </div>
 
-        {{-- Gallery Items --}}
-        @forelse($postgallery as $key => $gallery)
-        <div class="gallery-item-elegant" style="--anim-delay: {{ $key * 0.1 }}s">
-            {{-- Event Header --}}
-            <div class="event-header-gal">
-                <div class="event-info-gal">
-                    <div class="event-badge-gal">
-                        <span class="badge-icon">🎯</span>
-                        <span>{{ $gallery->eventName }}</span>
-                    </div>
-                    <h3 class="event-title-gal">{{ $gallery->eventTheme }}</h3>
-                    <p class="event-desc-gal d-none d-md-block">{{ $gallery->eventDescription }}</p>
-                </div>
-                @if (!empty($gallery->linkDoc))
-                <a href="{{ $gallery->linkDoc }}" target="_blank" rel="noopener noreferrer" class="doc-link-gal">
-                    <i class="fas fa-link"></i>
-                    <span class="d-none d-md-inline">{{ \Illuminate\Support\Str::limit($gallery->linkDoc, 35, '...') }}</span>
-                    <span class="d-md-none">Dokumentasi</span>
-                    <i class="fas fa-external-link-alt ms-1"></i>
-                </a>
-                @endif
-            </div>
+        @if(count($postgallery) > 0)
 
-            {{-- Desktop Gallery Grid --}}
-            <div class="gallery-grid-desktop d-none d-lg-block">
-                {{-- Main Image (Full Width Row) --}}
-                @if ($gallery->gdrive_id)
-                <div class="gallery-main-img-full">
-                    <div class="img-wrapper-main">
-                        <img src="https://lh3.googleusercontent.com/d/{{ $gallery->gdrive_id }}"
-                             alt="{{ $gallery->eventTheme }}"
-                             class="img-main-gal">
-                    </div>
-                </div>
-                @endif
+        {{-- ── Desktop Card List ── --}}
+        <div class="d-none d-lg-block" id="hgl-desktop-list">
+            @foreach($postgallery as $idx => $post)
+            @php
+                $pcount   = count($homeGlData[$idx]['photos']);
+                $hasVideo = !empty($homeGlData[$idx]['videoId']);
+                $ytThumb  = $hasVideo
+                    ? 'https://img.youtube.com/vi/' . $homeGlData[$idx]['videoId'] . '/maxresdefault.jpg'
+                    : '';
+            @endphp
+            <div class="gl-event-card" data-gl-idx="{{ $idx }}">
 
-                {{-- Thumbnail Grid (Full Width Row) --}}
-                <div class="gallery-thumbs-grid">
-                    @php $thumbCount = 0; @endphp
-                    @for($i = 1; $i <= 12; $i++)
-                        @php $gdriveKey = 'gdrive_id_' . $i; @endphp
-                        @if ($gallery->$gdriveKey && $thumbCount < 8)
-                        @php $thumbCount++; @endphp
-                        <div class="gallery-thumb-item">
-                            <div class="img-wrapper-thumb">
-                                <img src="https://lh3.googleusercontent.com/d/{{ $gallery->$gdriveKey }}"
-                                     alt="Foto {{ $i }}"
-                                     class="img-thumb-gal">
-                            </div>
-                        </div>
+                <div class="gl-card-header">
+                    <div class="gl-card-header-left">
+                        <span class="gl-card-header-name">{{ $post->eventName }}</span>
+                    </div>
+                    <div class="gl-card-header-badges">
+                        @if($hasVideo)
+                        <span class="gl-video-badge"><i class="fab fa-youtube"></i> Video</span>
                         @endif
-                    @endfor
+                        @if($pcount > 0)
+                        <span class="gl-photo-count"><i class="fas fa-images"></i> {{ $pcount }} foto</span>
+                        @endif
+                    </div>
+                </div>
 
-                    {{-- Show remaining count if more than 8 --}}
-                    @php
-                        $totalImages = 0;
-                        for($i = 1; $i <= 12; $i++) {
-                            $gdriveKey = 'gdrive_id_' . $i;
-                            if ($gallery->$gdriveKey) $totalImages++;
-                        }
-                        $remaining = $totalImages - 8;
-                    @endphp
-                    @if($remaining > 0 && isset($gallery->gdrive_id_9))
-                    <div class="gallery-thumb-item">
-                        <div class="img-wrapper-thumb more-wrapper">
-                            <img src="https://lh3.googleusercontent.com/d/{{ $gallery->gdrive_id_9 }}"
-                                 alt="More"
-                                 class="img-thumb-gal">
-                            <div class="more-overlay-count">
-                                <span class="more-number">+{{ $remaining }}</span>
-                            </div>
+                <div class="gl-card-body">
+                    <h3 class="gl-card-title">{{ $post->eventTheme }}</h3>
+                    <p class="gl-card-desc">{{ $post->eventDescription }}</p>
+
+                    @if($pcount > 0)
+                    <div class="gl-photo-grid">
+                        @foreach($homeGlData[$idx]['photos'] as $pidx => $pid)
+                        <div class="gl-grid-item" onclick="hglOpenZoomInline({{ $idx }}, {{ $pidx }})">
+                            <img src="https://lh3.googleusercontent.com/d/{{ $pid }}"
+                                 alt="Foto {{ $pidx + 1 }}" loading="lazy">
                         </div>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    @if($hasVideo)
+                    <div class="gl-video-section">
+                        <div class="gl-video-label">
+                            <i class="fab fa-youtube"></i> Video Dokumentasi
+                        </div>
+                        <div class="gl-video-thumb" onclick="hglOpenVideo('{{ $homeGlData[$idx]['videoId'] }}')">
+                            <img src="{{ $ytThumb }}" alt="YouTube"
+                                 onerror="this.src='https://img.youtube.com/vi/{{ $homeGlData[$idx]['videoId'] }}/hqdefault.jpg'">
+                            <div class="gl-play-btn"><i class="fas fa-play"></i></div>
+                        </div>
+                    </div>
+                    @endif
+
+                    @if(!empty($post->linkDoc))
+                    <div class="gl-card-footer">
+                        <a href="{{ $post->linkDoc }}" target="_blank" rel="noopener" class="gl-doc-link">
+                            <i class="fas fa-folder-open"></i>
+                            <span>Dokumentasi Lengkap</span>
+                        </a>
                     </div>
                     @endif
                 </div>
 
-                {{-- Video Section (Desktop - Full Width Row) --}}
-                @if ($gallery->linkEmbedYoutube)
-                @php
-                    $url = $gallery->linkEmbedYoutube;
-                    $videoId = '';
-                    if (preg_match('/youtube\.com\/embed\/([^\&\?\/]+)/', $url, $matches)) {
-                        $videoId = $matches[1];
-                    } elseif (preg_match('/youtube\.com\/watch\?v=([^\&\?\/]+)/', $url, $matches)) {
-                        $videoId = $matches[1];
-                    } elseif (preg_match('/youtu\.be\/([^\&\?\/]+)/', $url, $matches)) {
-                        $videoId = $matches[1];
-                    }
-                    $thumbnailUrl = $videoId ? "https://img.youtube.com/vi/{$videoId}/maxresdefault.jpg" : '';
-                @endphp
-                @if($videoId)
-                <div class="gallery-video-section">
-                    <a href="{{ $gallery->linkEmbedYoutube }}" class="glightbox-gal video-link-gal">
-                        <img src="{{ $thumbnailUrl }}"
-                             class="video-thumb-gal"
-                             alt="Video"
-                             onerror="this.src='https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg'">
-                        <div class="video-play-overlay">
-                            <div class="play-button-gal">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                @endif
-                @endif
             </div>
+            @endforeach
+        </div>{{-- /hgl-desktop-list --}}
 
-            {{-- Mobile Grid (Show All Images) --}}
-            <div class="gallery-mobile-grid d-lg-none">
-                {{-- Main Image (Full Width) --}}
-                @if ($gallery->gdrive_id)
-                <div class="mobile-grid-main">
-                    <div class="mobile-img-wrapper">
-                        <img src="https://lh3.googleusercontent.com/d/{{ $gallery->gdrive_id }}"
-                             alt="{{ $gallery->eventTheme }}"
-                             class="mobile-img-main">
-                    </div>
-                </div>
-                @endif
-
-                {{-- Thumbnail Grid --}}
-                <div class="mobile-grid-thumbs">
-                    @for($i = 1; $i <= 12; $i++)
-                        @php $gdriveKey = 'gdrive_id_' . $i; @endphp
-                        @if ($gallery->$gdriveKey)
-                        <div class="mobile-thumb-item">
-                            <div class="mobile-thumb-wrapper">
-                                <img src="https://lh3.googleusercontent.com/d/{{ $gallery->$gdriveKey }}"
-                                     alt="Foto {{ $i }}"
-                                     class="mobile-thumb-img">
-                            </div>
-                        </div>
-                        @endif
-                    @endfor
-                </div>
-
-                {{-- Video (Mobile) --}}
-                @if ($gallery->linkEmbedYoutube && $videoId)
-                <div class="mobile-video-wrapper">
-                    <div class="mobile-video-card">
-                        <div class="iframe-wrapper-mobile">
-                            <iframe width="100%"
-                                    height="100%"
-                                    src="{{ $gallery->linkEmbedYoutube }}"
-                                    title="Video"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen>
-                            </iframe>
+        {{-- ── Mobile Card List ── --}}
+        <div class="d-lg-none" id="hgl-mobile-list">
+            @foreach($postgallery as $idx => $post)
+            @php
+                $mpcount = count($homeGlData[$idx]['photos']);
+                $mthumb  = $mpcount > 0 ? $homeGlData[$idx]['photos'][0] : null;
+                $mhasVid = !empty($homeGlData[$idx]['videoId']);
+            @endphp
+            <div class="gl-mobile-card" data-gl-idx="{{ $idx }}" onclick="hglOpenBottomSheet({{ $idx }})">
+                @if($mthumb)
+                <div class="gl-mobile-thumb">
+                    <img src="https://lh3.googleusercontent.com/d/{{ $mthumb }}"
+                         alt="{{ $post->eventTheme }}" loading="lazy">
+                    <div class="gl-mobile-thumb-bottom">
+                        <span class="gl-m-tag-img">{{ Str::limit($post->eventName, 22) }}</span>
+                        <div class="gl-m-badges">
+                            @if($mpcount > 0)
+                            <span class="gl-m-count"><i class="fas fa-images"></i> {{ $mpcount }}</span>
+                            @endif
+                            @if($mhasVid)
+                            <span class="gl-m-video"><i class="fab fa-youtube"></i></span>
+                            @endif
                         </div>
                     </div>
                 </div>
+                @else
+                <div class="gl-mobile-card-no-thumb">
+                    <span class="gl-m-tag">{{ Str::limit($post->eventName, 28) }}</span>
+                </div>
                 @endif
+                <div class="gl-mobile-card-body">
+                    <h5 class="gl-m-title">{{ $post->eventTheme }}</h5>
+                    <p class="gl-m-desc">{{ Str::limit($post->eventDescription, 90) }}</p>
+                    <div class="gl-m-tap-hint">
+                        <span>Lihat galeri</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
             </div>
+            @endforeach
+        </div>{{-- /hgl-mobile-list --}}
+
+        @else
+        {{-- Empty State --}}
+        <div class="gl-empty-state">
+            <div class="gl-empty-icon">📷</div>
+            <h4>Dokumentasi Belum Tersedia</h4>
+            <p>Dokumentasi kegiatan akan segera hadir. Tunggu ya!</p>
         </div>
-        @empty
-        <div class="empty-state-gal">
-            <div class="empty-icon-gal">📷</div>
-            <h4 class="empty-title-gal">Dokumentasi Belum Tersedia</h4>
-            <p class="empty-text-gal">Dokumentasi kegiatan akan segera hadir. Tunggu ya!</p>
-        </div>
-        @endforelse
+        @endif
 
         {{-- View All Button --}}
         @if(count($postgallery) > 0)
@@ -189,8 +177,44 @@
             </a>
         </div>
         @endif
+
     </div>
 </section>
+
+{{-- ── Overlays (di luar .container) ── --}}
+
+{{-- Video Lightbox --}}
+<div class="gl-video-overlay" id="hgl-video-overlay">
+    <div class="gl-video-wrap">
+        <iframe id="hgl-video-iframe" src="" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+    </div>
+    <button class="gl-video-close" id="hgl-video-close" aria-label="Tutup video">
+        <i class="fas fa-times"></i>
+    </button>
+</div>
+
+{{-- Photo Zoom Overlay --}}
+<div class="gl-zoom-overlay" id="hgl-zoom-overlay">
+    <div class="gl-zoom-img-wrap">
+        <img id="hgl-zoom-img" src="" alt="Foto galeri">
+    </div>
+    <button class="gl-zoom-close" id="hgl-zoom-close" aria-label="Tutup"><i class="fas fa-times"></i></button>
+    <button class="gl-zoom-prev"  id="hgl-zoom-prev"  aria-label="Sebelumnya"><i class="fas fa-chevron-left"></i></button>
+    <button class="gl-zoom-next"  id="hgl-zoom-next"  aria-label="Berikutnya"><i class="fas fa-chevron-right"></i></button>
+    <div class="gl-zoom-counter"  id="hgl-zoom-counter"></div>
+</div>
+
+{{-- Mobile Bottom Sheet --}}
+<div class="gl-bs-backdrop" id="hgl-bs-backdrop"></div>
+<div class="gl-bottom-sheet"  id="hgl-bottom-sheet">
+    <div class="gl-bs-handle"></div>
+    <button class="gl-bs-close" id="hgl-bs-close" aria-label="Tutup"><i class="fas fa-times"></i></button>
+    <div class="gl-bs-content"  id="hgl-bs-content"></div>
+</div>
+
+<script>var HGL_DATA = {!! json_encode($homeGlData) !!};</script>
 
 @include('landing-page.home.partials.gallery.components._index-styles')
 @include('landing-page.home.partials.gallery.components._index-scripts')
