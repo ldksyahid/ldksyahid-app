@@ -2243,6 +2243,7 @@ body.prayer-modal-open .back-to-top,
 }
 [data-theme="dark"] .dropdown-title { color: #e2e8f0 !important; }
 [data-theme="dark"] .dropdown-desc  { color: #9ca3af !important; }
+[data-theme="dark"] .dropdown-icon  { background: rgba(0,167,157,.15) !important; color: #4dd9cf !important; }
 
 /* Dropdown item hover */
 [data-theme="dark"] .nav-menu .dropdown-fun .dropdown-item:hover,
@@ -2267,6 +2268,12 @@ body.prayer-modal-open .back-to-top,
 [data-theme="dark"] .nav-menu .dropdown-fun .dropdown-item.active,
 [data-theme="dark"] .nav-actions .dropdown-fun .dropdown-item.active {
     background: linear-gradient(135deg, rgba(0,167,157,.18), rgba(0,167,157,.1)) !important;
+}
+[data-theme="dark"] .nav-menu .dropdown-fun .dropdown-item:hover .dropdown-icon,
+[data-theme="dark"] .nav-actions .dropdown-fun .dropdown-item:hover .dropdown-icon,
+[data-theme="dark"] .nav-menu .dropdown-fun .dropdown-item.active .dropdown-icon,
+[data-theme="dark"] .nav-actions .dropdown-fun .dropdown-item.active .dropdown-icon {
+    background: #00a79d !important; color: #fff !important;
 }
 
 /* Prayer button */
@@ -2325,12 +2332,12 @@ body.prayer-modal-open .back-to-top,
 [data-theme="dark"] .navbar-brand-fun .brand-name { color: #e2e8f0; }
 
 /* Nav links */
-[data-theme="dark"] .nav-menu .nav-link { color: #cbd5e0 !important; }
+[data-theme="dark"] .nav-menu .nav-link { color: #e2e8f0 !important; }
 [data-theme="dark"] .nav-menu .nav-link:hover {
     color: #4dd9cf !important;
     background: rgba(0,167,157,.12) !important;
 }
-[data-theme="dark"] .navbar-floating.scrolled .nav-menu .nav-link { color: #cbd5e0 !important; }
+[data-theme="dark"] .navbar-floating.scrolled .nav-menu .nav-link { color: #e2e8f0 !important; }
 [data-theme="dark"] .navbar-floating.scrolled .nav-menu .nav-link:hover {
     color: #4dd9cf !important;
     background: rgba(0,167,157,.12) !important;
@@ -2363,6 +2370,12 @@ body.prayer-modal-open .back-to-top,
 [data-theme="dark"] .mobile-nav-fun > a.active    { background: rgba(0,167,157,.18) !important; color: #4dd9cf !important; }
 [data-theme="dark"] .mobile-dropdown.open .mobile-dropdown-toggle { background: rgba(0,167,157,.18) !important; color: #4dd9cf !important; }
 [data-theme="dark"] .mobile-dropdown-menu a.active { background: rgba(0,167,157,.15) !important; color: #4dd9cf !important; }
+[data-theme="dark"] .mobile-close   { background: rgba(0,167,157,.15); color: #4dd9cf; }
+[data-theme="dark"] .mobile-close:hover { background: #00a79d; color: #fff; }
+[data-theme="dark"] .mobile-toggle  { background: rgba(0,167,157,.15); }
+[data-theme="dark"] .mobile-toggle span { background: #4dd9cf; }
+[data-theme="dark"] .mobile-toggle.active { background: #00a79d; }
+[data-theme="dark"] .mobile-toggle.active span { background: #fff; }
 </style>
 
 <script>

@@ -711,6 +711,7 @@
     }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .cu-section-badge { background: rgba(0,167,157,.15); color: #4dd9cf; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .cu-section-title { color: #e2e8f0; }
 [data-theme="dark"] .cu-section-sub   { color: #9ca3af; }
 [data-theme="dark"] .cu-loc-chip {
