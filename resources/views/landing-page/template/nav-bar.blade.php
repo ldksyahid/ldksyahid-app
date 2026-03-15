@@ -2372,10 +2372,14 @@ body.prayer-modal-open .back-to-top,
 [data-theme="dark"] .mobile-dropdown-menu a.active { background: rgba(0,167,157,.15) !important; color: #4dd9cf !important; }
 [data-theme="dark"] .mobile-close   { background: rgba(0,167,157,.15); color: #4dd9cf; }
 [data-theme="dark"] .mobile-close:hover { background: #00a79d; color: #fff; }
-[data-theme="dark"] .mobile-toggle  { background: rgba(0,167,157,.15); }
-[data-theme="dark"] .mobile-toggle span { background: #4dd9cf; }
-[data-theme="dark"] .mobile-toggle.active { background: #00a79d; }
-[data-theme="dark"] .mobile-toggle.active span { background: #fff; }
+[data-theme="dark"] .mobile-toggle,
+[data-theme="dark"] .navbar-floating.scrolled .mobile-toggle  { background: rgba(0,167,157,.15); }
+[data-theme="dark"] .mobile-toggle span,
+[data-theme="dark"] .navbar-floating.scrolled .mobile-toggle span { background: #4dd9cf; }
+[data-theme="dark"] .mobile-toggle.active,
+[data-theme="dark"] .navbar-floating.scrolled .mobile-toggle.active { background: #00a79d; }
+[data-theme="dark"] .mobile-toggle.active span,
+[data-theme="dark"] .navbar-floating.scrolled .mobile-toggle.active span { background: #fff; }
 </style>
 
 <script>
