@@ -724,6 +724,7 @@ body.cb-sheet-open .back-to-top {
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .cb-section-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
 [data-theme="dark"] .cb-section-title  { color: #e2e8f0; }
 [data-theme="dark"] .cb-section-sub    { color: #9ca3af; }
 [data-theme="dark"] .cb-results-info   { color: #9ca3af; }

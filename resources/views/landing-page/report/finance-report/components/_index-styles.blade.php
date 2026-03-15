@@ -298,6 +298,7 @@
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .fr-section-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
 [data-theme="dark"] .fr-section-title  { color: #e2e8f0; }
 [data-theme="dark"] .fr-section-sub    { color: #9ca3af; }
 [data-theme="dark"] .fr-info-card      { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
