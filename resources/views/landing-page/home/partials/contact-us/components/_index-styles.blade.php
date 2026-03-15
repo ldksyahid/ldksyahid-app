@@ -608,23 +608,25 @@
     }
 
     /* ── Dark Mode ── */
+    [data-theme="dark"] .contact-badge              { background: rgba(0,167,157,.15); color: #4dd9cf; border-color: rgba(0,167,157,.2); }
     [data-theme="dark"] .contact-heading            { color: #e2e8f0; }
+    [data-theme="dark"] .contact-subheading          { color: #cbd5e0; }
     [data-theme="dark"] .contact-form-card__title   { color: #e2e8f0; }
+    [data-theme="dark"] .contact-form-card__subtitle { color: #cbd5e0; }
     [data-theme="dark"] .contact-quote-card { background: linear-gradient(135deg, rgba(0,167,157,.1) 0%, rgba(26,31,46,.8) 100%); border-color: rgba(0,167,157,.2); }
-    [data-theme="dark"] .contact-quote-card__text { color: #9ca3af; }
+    [data-theme="dark"] .contact-quote-card__text { color: #cbd5e0; }
     [data-theme="dark"] .contact-method-item { background: #1a1f2e; border-color: rgba(0,167,157,.15); }
-    [data-theme="dark"] .contact-method-item__text { color: #9ca3af; }
+    [data-theme="dark"] .contact-method-item:hover { background: #1e2535; }
+    [data-theme="dark"] .contact-method-item__label  { color: #9ca3af; }
+    [data-theme="dark"] .contact-method-item__text { color: #cbd5e0; }
     [data-theme="dark"] .contact-form-card { background: linear-gradient(135deg, rgba(0,167,157,.08) 0%, rgba(26,31,46,.95) 100%); border-color: rgba(0,167,157,.2); }
+    [data-theme="dark"] .contact-form__label        { color: #e2e8f0; }
     [data-theme="dark"] .contact-form__input,
     [data-theme="dark"] .contact-form__textarea { background: #1e2535; border-color: rgba(0,167,157,.2); color: #e2e8f0; }
     [data-theme="dark"] .contact-form__input:focus,
     [data-theme="dark"] .contact-form__textarea:focus { background: #252b3b; border-color: #00a79d; }
     [data-theme="dark"] .contact-form__input::placeholder,
     [data-theme="dark"] .contact-form__textarea::placeholder { color: rgba(255,255,255,.25); }
-    [data-theme="dark"] .contact-form__label        { color: #9ca3af; }
-    [data-theme="dark"] .contact-subheading          { color: #9ca3af; }
-    [data-theme="dark"] .contact-method-item__label  { color: #9ca3af; }
-    [data-theme="dark"] .contact-form-card__subtitle { color: #9ca3af; }
 </style>
 
 <script>

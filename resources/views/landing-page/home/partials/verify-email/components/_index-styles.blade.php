@@ -364,6 +364,8 @@
     [data-theme="dark"] .vepm-step-label { color: #9ca3af; }
     [data-theme="dark"] .vepm-email-chip { background: #252b3b; color: #4dd9cf; border-color: rgba(0,167,157,.3); }
     [data-theme="dark"] .vepm-note { background: #1e2d2c; color: #9ca3af; border-color: rgba(0,167,157,.2); }
+    [data-theme="dark"] .vepm-close { background: #252b3b; color: #9ca3af; }
+    [data-theme="dark"] .vepm-close:hover { background: rgba(0,167,157,.15); color: #4dd9cf; }
 </style>
 
 <style>
