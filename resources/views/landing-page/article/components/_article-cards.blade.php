@@ -40,7 +40,7 @@
             <div class="ar-card wow fadeInUp" style="--ar-accent: {{ $accent }}" data-wow-delay="0.{{ ($loop->index % 3 + 1) }}s">
 
                 {{-- Full-width Image --}}
-                <a href="/articles/{{ $article->id }}" class="ar-card-img-wrap">
+                <a href="{{ $article->getArticleUrl() }}" class="ar-card-img-wrap">
                     <img src="https://lh3.googleusercontent.com/d/{{ $article->gdrive_id }}"
                          alt="{{ $article->title }}"
                          class="ar-card-img" loading="lazy">
@@ -54,7 +54,7 @@
                 <div class="ar-card-body">
                     <span class="ar-card-theme">{{ $article->theme }}</span>
                     <h3 class="ar-card-title">
-                        <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
+                        <a href="{{ $article->getArticleUrl() }}">{{ $article->title }}</a>
                     </h3>
 
                     {{-- People Card --}}
@@ -82,7 +82,7 @@
                         @endif
                     </div>
 
-                    <a href="/articles/{{ $article->id }}" class="ar-read-btn">
+                    <a href="{{ $article->getArticleUrl() }}" class="ar-read-btn">
                         <span>Baca Artikel</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -90,12 +90,12 @@
                         <span class="ar-share-label">Bagikan</span>
                         <div class="ar-share-row">
                             <button class="ar-share-btn ar-share-copy"
-                                    data-url="/articles/{{ $article->id }}"
+                                    data-url="{{ $article->getArticleUrl() }}"
                                     onclick="arCopyUrl(this.dataset.url, event)">
                                 <i class="fas fa-link"></i><span>Salin URL</span>
                             </button>
                             <button class="ar-share-btn ar-share-wa"
-                                    data-url="/articles/{{ $article->id }}"
+                                    data-url="{{ $article->getArticleUrl() }}"
                                     data-title="{{ e($article->title) }}"
                                     onclick="arShareWa(this.dataset.url, this.dataset.title, event)">
                                 <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
@@ -147,7 +147,7 @@
                  data-writer="{{ e($article->writer) }}"
                  data-editor="{{ e($article->editor) }}"
                  data-image="{{ $article->gdrive_id }}"
-                 data-url="/articles/{{ $article->id }}"
+                 data-url="{{ $article->getArticleUrl() }}"
                  onclick="arOpenBottomSheet(this)">
 
                 <div class="ar-m-thumb">
@@ -178,12 +178,12 @@
                         <span class="ar-share-label">Bagikan</span>
                         <div class="ar-share-row ar-share-row--sm">
                             <button class="ar-share-btn ar-share-copy"
-                                    data-url="/articles/{{ $article->id }}"
+                                    data-url="{{ $article->getArticleUrl() }}"
                                     onclick="arCopyUrl(this.dataset.url, event)">
                                 <i class="fas fa-link"></i><span>Salin URL</span>
                             </button>
                             <button class="ar-share-btn ar-share-wa"
-                                    data-url="/articles/{{ $article->id }}"
+                                    data-url="{{ $article->getArticleUrl() }}"
                                     data-title="{{ e($article->title) }}"
                                     onclick="arShareWa(this.dataset.url, this.dataset.title, event)">
                                 <i class="fab fa-whatsapp"></i><span>WhatsApp</span>

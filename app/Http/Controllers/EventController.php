@@ -86,9 +86,11 @@ class EventController extends Controller
             ->with('title', 'Kegiatan');
     }
 
-    public function show($id)
+    public function show($event)
     {
-        $postevent = Event::find($id);
+        $postevent = is_numeric($event)
+            ? Event::findOrFail($event)
+            : Event::where('slug', $event)->firstOrFail();
         return view('landing-page.event.detail', compact('postevent'), ["title" => "Kegiatan"]);
     }
 
