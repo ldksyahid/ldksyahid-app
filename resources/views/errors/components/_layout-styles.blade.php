@@ -538,4 +538,102 @@
         .bg-icon { display: none; }
         .error-footer { padding: 0.5rem; font-size: 0.72rem; }
     }
+
+    /* ========== Navbar flex + Dark Toggle Button ========== */
+    .error-navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .error-dark-toggle {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(0, 167, 157, 0.1);
+        color: var(--err-primary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        transition: background 0.3s ease, transform 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .error-dark-toggle:hover {
+        background: rgba(0, 167, 157, 0.2);
+        transform: scale(1.1) rotate(20deg);
+    }
+
+    /* ========== Dark Mode ========== */
+    [data-theme="dark"] body {
+        background: #0f1623 !important;
+    }
+
+    [data-theme="dark"] .error-card {
+        background: #1a2235;
+    }
+
+    [data-theme="dark"] .error-card::after {
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+    }
+
+    [data-theme="dark"] .error-navbar .brand-name {
+        color: #e2e8f0;
+    }
+
+    [data-theme="dark"] .error-navbar .brand-tagline {
+        color: #9ca3af;
+    }
+
+    [data-theme="dark"] .error-title {
+        color: #e2e8f0;
+    }
+
+    [data-theme="dark"] .error-message {
+        color: #9ca3af;
+    }
+
+    [data-theme="dark"] .btn-err-secondary {
+        background: rgba(0, 167, 157, 0.1);
+        border-color: rgba(0, 167, 157, 0.3);
+        color: #4dd9cf !important;
+    }
+
+    [data-theme="dark"] .btn-err-secondary:hover {
+        background: rgba(0, 167, 157, 0.2);
+        border-color: rgba(0, 167, 157, 0.6);
+        box-shadow: 0 4px 15px rgba(0, 167, 157, 0.2);
+    }
+
+    [data-theme="dark"] .error-card-glow {
+        box-shadow: 0 25px 70px rgba(0, 167, 157, 0.15), 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="dark"] .error-icon-bg {
+        background: linear-gradient(135deg, rgba(0,167,157,.2), rgba(0,167,157,.05));
+    }
+
+    [data-theme="dark"] .error-footer {
+        color: #9ca3af;
+    }
+
+    [data-theme="dark"] .error-footer a {
+        color: #4dd9cf;
+    }
+
+    [data-theme="dark"] .error-footer a:hover {
+        color: #00a79d;
+    }
+
+    [data-theme="dark"] .error-dark-toggle {
+        background: rgba(0, 167, 157, 0.15);
+        color: #4dd9cf;
+    }
+
+    [data-theme="dark"] .error-dark-toggle:hover {
+        background: rgba(0, 167, 157, 0.25);
+    }
 </style>
