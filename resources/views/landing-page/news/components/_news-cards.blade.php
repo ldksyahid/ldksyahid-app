@@ -46,7 +46,7 @@
                  data-wow-delay="0.{{ ($loop->index % 3 + 1) }}s">
 
                 {{-- Featured Image --}}
-                <a href="/news/{{ $news->id }}" class="nw-card-img-wrap">
+                <a href="{{ $news->getNewsUrl() }}" class="nw-card-img-wrap">
                     <img src="{{ $news->getPictureUrl() }}"
                          alt="{{ $news->title }}"
                          class="nw-card-img" loading="lazy">
@@ -65,7 +65,7 @@
 
                     {{-- Title --}}
                     <h3 class="nw-card-title">
-                        <a href="/news/{{ $news->id }}">{{ $news->title }}</a>
+                        <a href="{{ $news->getNewsUrl() }}">{{ $news->title }}</a>
                     </h3>
 
                     {{-- Excerpt --}}
@@ -95,7 +95,7 @@
                     </div>
 
                     {{-- Read CTA --}}
-                    <a href="/news/{{ $news->id }}" class="nw-read-btn">
+                    <a href="{{ $news->getNewsUrl() }}" class="nw-read-btn">
                         <span>Baca Selengkapnya</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -106,20 +106,20 @@
                         <div class="nw-card-share-btns">
                             <button class="nw-card-share-btn nw-card-share-btn--copy"
                                     title="Salin URL"
-                                    data-url="/news/{{ $news->id }}"
+                                    data-url="{{ $news->getNewsUrl() }}"
                                     onclick="nwCopyUrl(this.dataset.url, event)">
                                 <i class="fas fa-link"></i>
                             </button>
                             <button class="nw-card-share-btn nw-card-share-btn--wa"
                                     title="WhatsApp"
-                                    data-url="/news/{{ $news->id }}"
+                                    data-url="{{ $news->getNewsUrl() }}"
                                     data-title="{{ e($news->title) }}"
                                     onclick="nwShareWa(this.dataset.url, this.dataset.title, event)">
                                 <i class="fab fa-whatsapp"></i>
                             </button>
                             <button class="nw-card-share-btn nw-card-share-btn--tw"
                                     title="X"
-                                    data-url="/news/{{ $news->id }}"
+                                    data-url="{{ $news->getNewsUrl() }}"
                                     data-title="{{ e($news->title) }}"
                                     onclick="nwShareTw(this.dataset.url, this.dataset.title, event)">
                                 <span class="xi">X</span>
@@ -173,7 +173,7 @@
                  data-reporter="{{ e($news->reporter) }}"
                  data-editor="{{ e($news->editor ?? '') }}"
                  data-image="{{ $news->gdrive_id }}"
-                 data-url="/news/{{ $news->id }}"
+                 data-url="{{ $news->getNewsUrl() }}"
                  data-excerpt="{{ e($excerpt) }}"
                  onclick="nwOpenBottomSheet(this)">
 
@@ -206,20 +206,20 @@
                         <div class="nw-card-share-btns">
                             <button class="nw-card-share-btn nw-card-share-btn--copy"
                                     title="Salin URL"
-                                    data-url="/news/{{ $news->id }}"
+                                    data-url="{{ $news->getNewsUrl() }}"
                                     onclick="nwCopyUrl(this.dataset.url, event)">
                                 <i class="fas fa-link"></i>
                             </button>
                             <button class="nw-card-share-btn nw-card-share-btn--wa"
                                     title="WhatsApp"
-                                    data-url="/news/{{ $news->id }}"
+                                    data-url="{{ $news->getNewsUrl() }}"
                                     data-title="{{ e($news->title) }}"
                                     onclick="nwShareWa(this.dataset.url, this.dataset.title, event)">
                                 <i class="fab fa-whatsapp"></i>
                             </button>
                             <button class="nw-card-share-btn nw-card-share-btn--tw"
                                     title="X"
-                                    data-url="/news/{{ $news->id }}"
+                                    data-url="{{ $news->getNewsUrl() }}"
                                     data-title="{{ e($news->title) }}"
                                     onclick="nwShareTw(this.dataset.url, this.dataset.title, event)">
                                 <span class="xi">X</span>

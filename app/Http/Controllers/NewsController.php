@@ -80,11 +80,15 @@ class NewsController extends Controller
 
     /**
      * Landing page - Show single news detail with related news
+     * Accepts either numeric ID (legacy) or slug (new)
      */
-    public function show($id)
+    public function show($news)
     {
-        $postnews    = News::findOrFail($id);
-        $relatedNews = News::where('id', '!=', $id)
+        $postnews = is_numeric($news)
+            ? News::findOrFail($news)
+            : News::where('slug', $news)->firstOrFail();
+
+        $relatedNews = News::where('id', '!=', $postnews->id)
                            ->orderBy('datepublish', 'desc')
                            ->limit(4)
                            ->get();

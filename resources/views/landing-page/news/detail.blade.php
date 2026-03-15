@@ -199,7 +199,7 @@
                         @else
                             <div class="nd-related-list">
                                 @foreach($relatedNews as $rel)
-                                <a href="{{ route('news.show', $rel->id) }}" class="nd-related-item">
+                                <a href="{{ $rel->getNewsUrl() }}" class="nd-related-item">
                                     <img src="{{ $rel->getPictureUrl() }}"
                                          alt="{{ $rel->title }}"
                                          class="nd-related-thumb" loading="lazy">
