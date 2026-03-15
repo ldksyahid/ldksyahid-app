@@ -773,4 +773,18 @@ body.art-sheet-open .back-to-top {
 [data-theme="dark"] .art-sheet__title { color: #e2e8f0; }
 [data-theme="dark"] .art-sheet__meta { color: #9ca3af; }
 [data-theme="dark"] .art-sheet__body { color: #cbd5e0; }
+[data-theme="dark"] .art-heading            { color: #e2e8f0; }
+[data-theme="dark"] .art-heading__highlight { color: #4dd9cf; }
+[data-theme="dark"] .art-card__title                        { color: #e2e8f0; }
+[data-theme="dark"] .art-card__people-card                  { background: #252b3b; }
+[data-theme="dark"] .art-card:hover .art-card__people-card  { background: #2d3548; }
+[data-theme="dark"] .art-card__meta-name                    { color: #e2e8f0; }
+[data-theme="dark"] .art-card:hover .art-card__meta-name    { color: #e2e8f0; }
+[data-theme="dark"] .art-card__meta-label                   { color: #9ca3af; }
+[data-theme="dark"] .art-card__theme                        { background: rgba(0,167,157,.15); color: #4dd9cf; }
+[data-theme="dark"] .art-card__read                         { background: rgba(0,167,157,.15); color: #4dd9cf; }
+[data-theme="dark"] .art-card__tap-hint     { background: rgba(26,31,46,.92); color: #e2e8f0; }
+[data-theme="dark"] .art-sheet__meta-item   { color: #9ca3af; }
+[data-theme="dark"] .art-sheet__meta-icon   { background: rgba(0,167,157,.15); }
+[data-theme="dark"] .art-sheet__meta-text span:not(.art-sheet__meta-label) { color: #e2e8f0; }
 </style>

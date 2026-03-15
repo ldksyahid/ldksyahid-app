@@ -653,6 +653,8 @@
 }
 
 /* ── Dark Mode ── */
+[data-theme="dark"] .section-title-fun       { color: #e2e8f0; }
+[data-theme="dark"] .section-title-highlight { color: #e2e8f0; }
 [data-theme="dark"] .schedule-card-fun { background: #1a1f2e; }
 [data-theme="dark"] .schedule-info-box {
     background: linear-gradient(135deg, #1e2d2c 0%, #1a1f2e 50%, #1e2535 100%);

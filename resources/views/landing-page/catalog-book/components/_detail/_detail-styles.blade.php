@@ -906,6 +906,19 @@
 [data-theme="dark"] .related-book-card     { background: #252b3b; border-color: rgba(0,167,157,.15); }
 [data-theme="dark"] .book-title-small      { color: #e2e8f0; }
 [data-theme="dark"] .share-options-floating { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
-[data-theme="dark"] .btn-like,
+[data-theme="dark"] .btn-like:not(.liked),
 [data-theme="dark"] .btn-outline           { background: #252b3b; border-color: rgba(0,167,157,.2); color: #e2e8f0; }
+[data-theme="dark"] .btn-like.liked        { background: linear-gradient(135deg,#ef4444 0%,#dc2626 100%); color: #fff; box-shadow: 0 6px 20px rgba(239,68,68,.4); }
+[data-theme="dark"] .tags-section          { border-top-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .tags-title            { color: #9ca3af; }
+[data-theme="dark"] .tag-elegant           { background: rgba(0,167,157,.15); color: #4dd9cf; }
+[data-theme="dark"] .tag-elegant:hover     { background: rgba(0,167,157,.35); color: #e2e8f0; }
+[data-theme="dark"] .availability.available { background: rgba(34,197,94,.15); color: #4ade80; }
+
+@media (max-width: 768px) {
+    [data-theme="dark"] .tabs-navigation { background: #1a1f2e; }
+    [data-theme="dark"] .nav-tab         { background: #2d3548; color: #9ca3af; }
+    [data-theme="dark"] .nav-tab:hover   { background: rgba(0,167,157,.15); color: #4dd9cf; }
+    [data-theme="dark"] .nav-tab.active  { background: #00a79d; color: #fff; border-bottom-color: transparent; }
+}
 </style>

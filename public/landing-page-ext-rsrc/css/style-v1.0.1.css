@@ -2947,6 +2947,9 @@ footer {
 [data-theme="dark"] .card-modern     { background: #1a1f2e; border-color: #2d3548; color: #e2e8f0; }
 [data-theme="dark"] .card-body       { background: transparent; }
 
+/* ── Back to top ── */
+[data-theme="dark"] .back-to-top { color: #fff !important; }
+
 /* ── Gallery (home + about) ── */
 [data-theme="dark"] .gallery-item-elegant { background: #1a1f2e; }
 [data-theme="dark"] .gl-event-card        { background: #1a1f2e; }

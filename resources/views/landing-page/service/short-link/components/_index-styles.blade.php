@@ -452,6 +452,8 @@
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
+[data-theme="dark"] .sl-section-title { color: #e2e8f0; }
+[data-theme="dark"] .sl-section-sub   { color: #9ca3af; }
 [data-theme="dark"] .sl-contact-card  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .sl-contact-title { color: #9ca3af; }
 [data-theme="dark"] .sl-contact-name  { color: #e2e8f0; }

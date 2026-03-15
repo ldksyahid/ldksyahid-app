@@ -1273,6 +1273,7 @@
     }
 
 /* ── Dark Mode ── */
+[data-theme="dark"] .section-title-cr { color: #e2e8f0; }
 [data-theme="dark"] .intro-card-cr,
 [data-theme="dark"] .history-card-cr,
 [data-theme="dark"] .vision-card-cr { background: #1a1f2e; }
@@ -1296,5 +1297,9 @@
 [data-theme="dark"] .kl-pusat-card .h6,
 [data-theme="dark"] .kl-card .h6,
 [data-theme="dark"] .kl-pusat-card p,
-[data-theme="dark"] .kl-card p { color: #9ca3af; }
+[data-theme="dark"] .kl-card p         { color: #9ca3af; }
+[data-theme="dark"] .history-title-cr  { color: #e2e8f0; }
+[data-theme="dark"] .vision-title-cr   { color: #e2e8f0; }
+[data-theme="dark"] .mission-title-cr  { color: #e2e8f0; }
+[data-theme="dark"] .kl-pusat-name     { color: #e2e8f0; }
 </style>
