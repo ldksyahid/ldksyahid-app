@@ -119,15 +119,33 @@ button.pgn-edge:last-child  { border-radius: 14px 50px 50px 14px; }
 }
 
 /* ── Dark Mode ── */
+[data-theme="dark"] .pgn-info          { color: #9ca3af; }
+[data-theme="dark"] .pgn-info strong   { color: #4dd9cf; }
+[data-theme="dark"] .pgn-ellipsis      { color: #4dd9cf; }
+
 [data-theme="dark"] .pgn-nav,
 [data-theme="dark"] .pgn-num {
     background: #1a1f2e;
-    border-color: rgba(0,167,157,.5);
+    border-color: rgba(0,167,157,.4);
+    color: #4dd9cf;
+}
+[data-theme="dark"] .pgn-nav:hover:not([disabled]),
+[data-theme="dark"] .pgn-num:hover:not(.active) {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0,167,157,.3);
+}
+[data-theme="dark"] .pgn-num.active {
+    background: linear-gradient(135deg, var(--primary) 0%, #007a72 100%);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(0,167,157,.35);
 }
 [data-theme="dark"] .pgn-nav[disabled] {
-    background: #1e2535;
-    color: #3d5054;
-    border-color: #2a3545;
+    background: #161b28;
+    color: #2e3d4a;
+    border-color: #222a38;
 }
 </style>
 @endverbatim
