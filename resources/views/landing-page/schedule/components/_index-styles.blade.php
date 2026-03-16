@@ -202,7 +202,7 @@
 }
 
 .sch-img-wrap {
-    padding: 0 1.75rem 1.75rem;
+    padding: 1.75rem 1.75rem;
 }
 .sch-img {
     width: 100%;

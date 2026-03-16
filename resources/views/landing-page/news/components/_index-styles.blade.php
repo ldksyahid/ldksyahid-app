@@ -633,7 +633,8 @@
 [data-theme="dark"] .nw-bs-img-gradient { background: linear-gradient(to bottom, transparent, #1a1f2e); }
 [data-theme="dark"] .nw-bs-title       { color: #e2e8f0; }
 [data-theme="dark"] .nw-bs-meta-name   { color: #e2e8f0; }
-[data-theme="dark"] .nw-bs-meta-label  { color: #9ca3af; }
+[data-theme="dark"] .nw-card-meta-label   { color: #e2e8f0; }
+[data-theme="dark"] .nw-bs-meta-label  { color: #e2e8f0; }
 [data-theme="dark"] .nw-bs-share       { border-top-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .nw-bs-share-title { color: #6b7280; }
 [data-theme="dark"] .nw-bs-share-btn:hover { background: #252b3b; }

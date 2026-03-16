@@ -2913,6 +2913,8 @@ footer {
 [data-theme="dark"] hr            { border-color: #2d3548; }
 [data-theme="dark"] .border       { border-color: #2d3548 !important; }
 [data-theme="dark"] .decorative-bg { opacity: 0.18; }
+[data-theme="dark"] .auth-btn { color: #e2e8f0; }
+[data-theme="dark"] .auth-card-icon { color: #e2e8f0; }
 
 /* ── Navbar ── */
 [data-theme="dark"] .navbar-floating {

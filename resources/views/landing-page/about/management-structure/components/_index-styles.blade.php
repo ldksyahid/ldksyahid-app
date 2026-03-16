@@ -910,6 +910,7 @@ body.ms-modal-open .back-to-top {
 [data-theme="dark"] .ms-section-title { color: #e2e8f0; }
 [data-theme="dark"] .ms-mob-hname     { color: #e2e8f0; }
 [data-theme="dark"] .ms-dm-name       { color: #e2e8f0; }
+[data-theme="dark"] .ms-di-chart-toggle-label       { color: #e2e8f0; }
 [data-theme="dark"] .ms-lb-close      { color: #e2e8f0; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .ms-dm-sheet      { background: #1a1f2e; }
 [data-theme="dark"] .ms-dm-photo-wrap { background: linear-gradient(135deg, rgba(0,167,157,.08) 0%, rgba(26,31,46,.6) 100%); }
