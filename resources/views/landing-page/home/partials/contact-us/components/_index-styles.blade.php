@@ -621,6 +621,7 @@
     [data-theme="dark"] .contact-method-item__text { color: #cbd5e0; }
     [data-theme="dark"] .contact-form-card { background: linear-gradient(135deg, rgba(0,167,157,.08) 0%, rgba(26,31,46,.95) 100%); border-color: rgba(0,167,157,.2); }
     [data-theme="dark"] .contact-form__label        { color: #e2e8f0; }
+    [data-theme="dark"] .contact-method-item__label        { color: #e2e8f0; }
     [data-theme="dark"] .contact-form__input,
     [data-theme="dark"] .contact-form__textarea { background: #1e2535; border-color: rgba(0,167,157,.2); color: #e2e8f0; }
     [data-theme="dark"] .contact-form__input:focus,

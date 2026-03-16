@@ -510,7 +510,7 @@
 [data-theme="dark"] .kta-section-title { color: #e2e8f0; }
 /* Tabs */
 [data-theme="dark"] .kta-tabs-wrapper  { background: #1a1f2e; box-shadow: 0 2px 12px rgba(0,0,0,.3); }
-[data-theme="dark"] .kta-tab-btn       { color: #9ca3af; }
+[data-theme="dark"] .kta-tab-btn       { color: #e2e8f0; }
 [data-theme="dark"] .kta-tab-btn:hover { color: #4dd9cf !important; background: rgba(0,167,157,.12) !important; }
 [data-theme="dark"] .kta-tab-btn.active { color: #fff; }
 /* Cards */

@@ -787,4 +787,5 @@ body.art-sheet-open .back-to-top {
 [data-theme="dark"] .art-sheet__meta-item   { color: #9ca3af; }
 [data-theme="dark"] .art-sheet__meta-icon   { background: rgba(0,167,157,.15); }
 [data-theme="dark"] .art-sheet__meta-text span:not(.art-sheet__meta-label) { color: #e2e8f0; }
+[data-theme="dark"] .art-sheet__meta-label { color: #e2e8f0; }
 </style>
