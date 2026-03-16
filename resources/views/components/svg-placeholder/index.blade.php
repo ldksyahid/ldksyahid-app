@@ -14,5 +14,5 @@
         <path d="M0,10 L20,10 L20,30 L40,30 L40,10 L60,10 L60,40 L0,40 Z" opacity="0"/>
     </g>
     <!-- Text -->
-    <text x="200" y="275" text-anchor="middle" fill="#6c757d" font-family="sans-serif" font-size="14" class="svg-placeholder-text">No Image</text>
+    <text x="200" y="275" text-anchor="middle" fill="#6c757d" font-family="sans-serif" font-size="15" class="svg-placeholder-text">No Image</text>
 </svg>
