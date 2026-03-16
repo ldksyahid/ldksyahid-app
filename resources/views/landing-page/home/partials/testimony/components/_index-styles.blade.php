@@ -1034,4 +1034,9 @@ body.testimony-sheet-open {
 [data-theme="dark"] .stat-card__label               { color: #9ca3af; }
 [data-theme="dark"] .testimony-card-mobile          { background: rgba(26,31,46,.92); border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .testimony-card-mobile__name    { color: #e2e8f0; }
+[data-theme="dark"] .profile__role    { color: #e2e8f0; }
+[data-theme="dark"] .testimony-sheet__role    { color: #e2e8f0; }
+[data-theme="dark"] .stat-compact__label { color: #e2e8f0; }
+[data-theme="dark"] .testimony-stats-compact { background: transparent; }
+[data-theme="dark"] .testimony-carousel-dots { background: transparent; }
 </style>

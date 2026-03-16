@@ -1320,4 +1320,11 @@
 
 /* Mission/Keluarga badge */
 [data-theme="dark"] .mission-badge-cr  { background: rgba(0,167,157,.15); color: #4dd9cf; }
+[data-theme="dark"] .timeline-card-cr p { color: #e2e8f0; }
+[data-theme="dark"] .timeline-card-cr h5 { color: #e2e8f0; }
+[data-theme="dark"] .tab-btn-cr { color: #e2e8f0; }
+[data-theme="dark"] .img-float-tag { color: #e2e8f0; }
+[data-theme="dark"] .badge-est { color: #e2e8f0; }
+[data-theme="dark"] .history-body-cr p { color: #e2e8f0; }
+[data-theme="dark"] .vision-quote-cr { color: #e2e8f0; }
 </style>
