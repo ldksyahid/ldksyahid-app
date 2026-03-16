@@ -890,6 +890,7 @@
 [data-theme="dark"] .book-tabs-elegant     { background: #1a1f2e; }
 [data-theme="dark"] .content-card          { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .content-title         { color: #e2e8f0; }
+[data-theme="dark"] .action-group         { color: #e2e8f0; }
 [data-theme="dark"] .content-text          { color: #cbd5e0; }
 [data-theme="dark"] .comments-description  { color: #9ca3af; }
 [data-theme="dark"] .detail-item           { border-bottom-color: rgba(0,167,157,.1); }

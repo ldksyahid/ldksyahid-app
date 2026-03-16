@@ -796,6 +796,7 @@ body.ar-sheet-open .back-to-top {
 [data-theme="dark"] .ar-bs-title        { color: #e2e8f0; }
 [data-theme="dark"] .ar-bs-meta-icon    { background: rgba(0,167,157,.15); }
 [data-theme="dark"] .ar-bs-meta-name    { color: #e2e8f0; }
+[data-theme="dark"] .ar-card-meta-label    { color: #e2e8f0; }
 [data-theme="dark"] .ar-bs-meta-label   { color: #9ca3af; opacity: 1; }
 [data-theme="dark"] .ar-bs-meta-item    { color: #9ca3af; }
 [data-theme="dark"] .ar-share-label     { color: #9ca3af; }

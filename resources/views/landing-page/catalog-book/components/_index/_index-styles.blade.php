@@ -751,9 +751,9 @@ body.cb-sheet-open .back-to-top {
 [data-theme="dark"] .cb-bs-spec-row    { border-bottom-color: rgba(0,167,157,.1); }
 [data-theme="dark"] .cb-bs-spec-lbl    { color: #9ca3af; }
 [data-theme="dark"] .cb-bs-spec-val    { color: #e2e8f0; }
+[data-theme="dark"] .cb-tab:hover:not(.active)    { color: #e2e8f0; }
 [data-theme="dark"] .cb-bs-synopsis    { color: #cbd5e0; }
 [data-theme="dark"] .cb-bs-share-label { color: #9ca3af; }
 [data-theme="dark"] .cb-bs-share-btn   { background: #252b3b; border-color: rgba(0,167,157,.2); color: #9ca3af; }
-
 </style>
 @endverbatim

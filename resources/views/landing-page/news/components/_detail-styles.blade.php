@@ -500,11 +500,11 @@
 /* ── Dark Mode ──────────────────────────────────────────── */
 /* Body & content card */
 [data-theme="dark"] .nd-body-card     { background: #1a1f2e; border-color: rgba(0,167,157,.15); }
-[data-theme="dark"] .nd-body          { color: #cbd5e0 !important; }
-[data-theme="dark"] .nd-body *        { color: #cbd5e0 !important; }
-[data-theme="dark"] .nd-body p        { color: #cbd5e0 !important; }
-[data-theme="dark"] .nd-body ul li    { color: #cbd5e0 !important; }
-[data-theme="dark"] .nd-body ol li    { color: #cbd5e0 !important; }
+[data-theme="dark"] .nd-body          { color: #e2e8f0 !important; }
+[data-theme="dark"] .nd-body *        { color: #e2e8f0 !important; }
+[data-theme="dark"] .nd-body p        { color: #e2e8f0 !important; }
+[data-theme="dark"] .nd-body ul li    { color: #e2e8f0 !important; }
+[data-theme="dark"] .nd-body ol li    { color: #e2e8f0 !important; }
 [data-theme="dark"] .nd-body h2,
 [data-theme="dark"] .nd-body h3,
 [data-theme="dark"] .nd-body h4       { color: #e2e8f0 !important; }

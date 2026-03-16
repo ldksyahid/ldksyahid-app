@@ -876,6 +876,7 @@ body.event-sheet-open .back-to-top {
 [data-theme="dark"] .event-sheet__title { color: #e2e8f0; }
 [data-theme="dark"] .event-sheet__meta { color: #9ca3af; }
 [data-theme="dark"] .event-sheet__body { color: #cbd5e0; }
+[data-theme="dark"] .news-sheet__meta-label            { color: #e2e8f0; }
 [data-theme="dark"] .event-heading            { color: #e2e8f0; }
 [data-theme="dark"] .event-heading__highlight { color: #4dd9cf; }
 </style>
