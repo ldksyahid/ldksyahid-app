@@ -293,46 +293,94 @@
 
 /* ─── Empty State ──────────────────────────────────────────────── */
 .nw-empty-state {
-    text-align: center; padding: 3.5rem 1.5rem;
+    text-align: center;
+    padding: 3.5rem 1.5rem 4rem;
+    color: var(--nw-gray);
 }
 .nw-empty-visual {
-    position: relative; width: 120px; height: 120px;
-    margin: 0 auto 1.5rem;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px; height: 160px;
+    margin: 0 auto 2rem;
 }
-.nw-empty-deco, .nw-empty-ring {
-    position: absolute; border-radius: 50%;
-}
-.nw-empty-deco { opacity: .35; }
-.nw-empty-deco-1 { width: 80px; height: 80px; background: var(--nw-primary-light); top: 10px; left: 20px; animation: nwFloat 3s ease-in-out infinite; }
-.nw-empty-deco-2 { width: 50px; height: 50px; background: rgba(99,102,241,.15); top: 0; right: 10px; animation: nwFloat 4s ease-in-out infinite reverse; }
-.nw-empty-deco-3 { width: 30px; height: 30px; background: rgba(245,158,11,.15); bottom: 10px; left: 10px; animation: nwFloat 2.5s ease-in-out infinite; }
-.nw-empty-ring { border: 2px solid; }
-.nw-empty-ring-1 { width: 100px; height: 100px; border-color: rgba(0,167,157,.15); top: 10px; left: 10px; animation: nwSpin 8s linear infinite; }
-.nw-empty-ring-2 { width: 70px; height: 70px; border-color: rgba(0,167,157,.1); top: 25px; left: 25px; animation: nwSpin 5s linear infinite reverse; }
 .nw-empty-icon-wrap {
-    position: absolute; inset: 0;
+    position: relative; z-index: 3;
+    width: 88px; height: 88px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #00c4b8, #00a79d);
     display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 2rem;
+    box-shadow: 0 12px 36px rgba(0,167,157,.38), 0 4px 12px rgba(0,0,0,.06);
+    animation: nwEmptyFloat 3.2s ease-in-out infinite;
 }
-.nw-empty-icon-wrap i { font-size: 2.2rem; color: var(--nw-primary); opacity: .7; }
-.nw-empty-sparkle { position: absolute; font-size: 1.1rem; animation: nwFloat 3s ease-in-out infinite; }
-.nw-empty-sparkle-1 { top: -8px; right: 12px; animation-delay: 0s; }
-.nw-empty-sparkle-2 { bottom: -4px; right: 4px; animation-delay: .8s; }
-.nw-empty-sparkle-3 { top: 4px; left: 4px; animation-delay: 1.6s; }
-@keyframes nwFloat {
-    0%,100% { transform: translateY(0); }
-    50%      { transform: translateY(-8px); }
+@keyframes nwEmptyFloat {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50%       { transform: translateY(-10px) rotate(2deg); }
 }
-@keyframes nwSpin { to { transform: rotate(360deg); } }
+.nw-empty-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid rgba(0,167,157,.14);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: nwEmptyRing 3s ease-out infinite;
+}
+.nw-empty-ring-1 { width: 116px; height: 116px; animation-delay: 0s; }
+.nw-empty-ring-2 { width: 150px; height: 150px; animation-delay: .85s; }
+@keyframes nwEmptyRing {
+    0%   { opacity: .55; transform: translate(-50%, -50%) scale(.85); }
+    100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.35); }
+}
+.nw-empty-deco {
+    position: absolute;
+    border-radius: 50%;
+    opacity: .72;
+    animation: nwEmptyDeco 4s ease-in-out infinite;
+}
+.nw-empty-deco-1 { width: 14px; height: 14px; background: #6366f1; top: 10px; right: 16px; animation-delay: 0s; }
+.nw-empty-deco-2 { width: 10px; height: 10px; background: #f59e0b; bottom: 18px; left: 10px; animation-delay: 1.1s; }
+.nw-empty-deco-3 { width: 8px; height: 8px; background: #ef4444; top: 32px; left: 20px; animation-delay: .55s; }
+@keyframes nwEmptyDeco {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%       { transform: translateY(-7px) scale(1.15); }
+}
+.nw-empty-sparkle {
+    position: absolute; font-size: .85rem;
+    animation: nwEmptySparkle 3.5s ease-in-out infinite;
+    pointer-events: none; user-select: none;
+}
+.nw-empty-sparkle-1 { top: -8px;  right: -10px; animation-delay: 0s; }
+.nw-empty-sparkle-2 { bottom: -6px; left: -12px; animation-delay: 1.2s; }
+.nw-empty-sparkle-3 { top: 6px;  left: -14px; animation-delay: 2.1s; font-size: .7rem; }
+@keyframes nwEmptySparkle {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: .7; }
+    50%       { transform: scale(1.3) rotate(15deg); opacity: 1; }
+}
 .nw-empty-title {
-    font-size: 1.25rem; font-weight: 800; color: var(--nw-dark); margin: 0 0 .5rem;
+    font-size: 1.35rem; font-weight: 800;
+    color: var(--nw-dark); margin: 0 0 .5rem;
+    letter-spacing: -.2px;
 }
-.nw-empty-sub { font-size: .9rem; color: var(--nw-gray); margin: 0 0 1.25rem; }
-.nw-empty-tips { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+.nw-empty-sub {
+    font-size: .88rem; color: var(--nw-gray);
+    margin: 0 auto .85rem; max-width: 320px; line-height: 1.55;
+}
+.nw-empty-tips {
+    display: flex; flex-wrap: wrap;
+    justify-content: center; gap: .45rem;
+    margin-top: .5rem;
+}
 .nw-empty-tip {
-    display: inline-block;
-    background: var(--nw-gray-100); color: var(--nw-gray);
-    border-radius: 50px; padding: .3rem .85rem;
-    font-size: .78rem; font-weight: 500;
+    display: inline-flex; align-items: center; gap: .3rem;
+    background: #f0fefa;
+    border: 1.5px solid rgba(0,167,157,.18);
+    border-radius: 50px;
+    padding: .32rem 1rem;
+    font-size: .78rem; font-weight: 600;
+    color: #007d76;
+    box-shadow: 0 2px 8px rgba(0,167,157,.07);
 }
 
 
@@ -614,6 +662,10 @@
 [data-theme="dark"] .nw-section-sub    { color: #9ca3af; }
 [data-theme="dark"] .nw-results-info   { color: #9ca3af; }
 [data-theme="dark"] .nw-results-info strong { color: #e2e8f0; }
+/* Empty state */
+[data-theme="dark"] .nw-empty-title   { color: #e2e8f0; }
+[data-theme="dark"] .nw-empty-sub     { color: #9ca3af; }
+[data-theme="dark"] .nw-empty-tip     { background: rgba(0,167,157,.12); border-color: rgba(0,167,157,.25); color: #4dd9d3; }
 /* Desktop card */
 [data-theme="dark"] .nw-card           { background: #1a1f2e; border-color: rgba(0,167,157,.15); }
 [data-theme="dark"] .nw-card-title a   { color: #e2e8f0; }
