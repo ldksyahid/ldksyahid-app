@@ -317,9 +317,16 @@
     // ========================================
     // 11. IMAGE ERROR HANDLING
     // ========================================
+    window.onImgErr = function(el) {
+        if (!el.dataset.err) {
+            el.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid meet'%3E%3Crect width='400' height='300' fill='%23e9ecef'/%3E%3Cpolygon points='80,240 200,120 320,240' fill='%23ced4da'/%3E%3Cpolygon points='200,240 300,160 400,240' fill='%23adb5bd'/%3E%3Ccircle cx='310' cy='100' r='35' fill='%23dee2e6'/%3E%3Crect y='240' width='400' height='60' fill='%23dee2e6'/%3E%3Ctext x='200' y='275' text-anchor='middle' fill='%236c757d' font-family='sans-serif' font-size='15'%3ENo Image%3C/text%3E%3C/svg%3E";
+            el.dataset.err = 1;
+        }
+    };
+
     const ImageErrorHandler = {
         init: function() {
-            const defaultImage = 'https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd';
+            const defaultImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid meet'%3E%3Crect width='400' height='300' fill='%23e9ecef'/%3E%3Cpolygon points='80,240 200,120 320,240' fill='%23ced4da'/%3E%3Cpolygon points='200,240 300,160 400,240' fill='%23adb5bd'/%3E%3Ccircle cx='310' cy='100' r='35' fill='%23dee2e6'/%3E%3Crect y='240' width='400' height='60' fill='%23dee2e6'/%3E%3Ctext x='200' y='275' text-anchor='middle' fill='%236c757d' font-family='sans-serif' font-size='15'%3ENo Image%3C/text%3E%3C/svg%3E";
 
             document.querySelectorAll('img').forEach(img => {
                 img.addEventListener('error', function() {

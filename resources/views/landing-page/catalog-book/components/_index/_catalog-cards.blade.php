@@ -94,7 +94,7 @@
                 $isPrem = (($book->authorTypeID == 1 || $book->authorTypeID == 2) && $book->availabilityTypeID == 2);
                 $cover  = $book->coverImageUrl()
                     ? $book->coverImageUrl()
-                    : 'https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd';
+                    : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid meet'%3E%3Crect width='400' height='300' fill='%23e9ecef'/%3E%3Cpolygon points='80,240 200,120 320,240' fill='%23ced4da'/%3E%3Cpolygon points='200,240 300,160 400,240' fill='%23adb5bd'/%3E%3Ccircle cx='310' cy='100' r='35' fill='%23dee2e6'/%3E%3Crect y='240' width='400' height='60' fill='%23dee2e6'/%3E%3Ctext x='200' y='275' text-anchor='middle' fill='%236c757d' font-family='sans-serif' font-size='15'%3ENo Image%3C/text%3E%3C/svg%3E";
             @endphp
             <div class="cb-book-card wow fadeInUp" style="--cb-spine: {{ $spine }}"
                  data-wow-delay="0.{{ ($loop->index % 4 + 1) }}s">
@@ -289,7 +289,7 @@
                 $isPrem = (($book->authorTypeID == 1 || $book->authorTypeID == 2) && $book->availabilityTypeID == 2);
                 $cover  = $book->coverImageUrl()
                     ? $book->coverImageUrl()
-                    : 'https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd';
+                    : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid meet'%3E%3Crect width='400' height='300' fill='%23e9ecef'/%3E%3Cpolygon points='80,240 200,120 320,240' fill='%23ced4da'/%3E%3Cpolygon points='200,240 300,160 400,240' fill='%23adb5bd'/%3E%3Ccircle cx='310' cy='100' r='35' fill='%23dee2e6'/%3E%3Crect y='240' width='400' height='60' fill='%23dee2e6'/%3E%3Ctext x='200' y='275' text-anchor='middle' fill='%236c757d' font-family='sans-serif' font-size='15'%3ENo Image%3C/text%3E%3C/svg%3E";
             @endphp
             <div class="cb-mobile-card"
                  data-title="{{ e($book->titleBook) }}"
