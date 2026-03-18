@@ -48,7 +48,7 @@
                                 src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}"
                                 alt="Foto Pengurus LDK Syahid {{ $data->batch }}"
                                 loading="lazy"
-                                onerror="if(!this.dataset.err){this.src='https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd';this.dataset.err=1;}"
+                                onerror="onImgErr(this)"
                             >
                         </div>
 
@@ -150,7 +150,7 @@
                                     src="https://lh3.googleusercontent.com/d/{{ $data->gdrive_id }}"
                                     alt="Foto Pengurus LDK Syahid {{ $data->batch }}"
                                     loading="lazy"
-                                    onerror="if(!this.dataset.err){this.src='https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd';this.dataset.err=1;}"
+                                    onerror="onImgErr(this)"
                                 >
                             </div>
 
