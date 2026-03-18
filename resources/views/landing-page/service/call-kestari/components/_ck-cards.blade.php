@@ -8,11 +8,25 @@
 
     {{-- ── Empty State ──────────────────────────────────────────── --}}
     <div class="ck-empty-state">
-        <div class="ck-empty-icon">
-            <i class="fas fa-phone-slash"></i>
+        <div class="ck-empty-visual">
+            <div class="ck-empty-deco ck-empty-deco-1"></div>
+            <div class="ck-empty-deco ck-empty-deco-2"></div>
+            <div class="ck-empty-deco ck-empty-deco-3"></div>
+            <div class="ck-empty-ring ck-empty-ring-1"></div>
+            <div class="ck-empty-ring ck-empty-ring-2"></div>
+            <div class="ck-empty-icon-wrap">
+                <i class="fas fa-link"></i>
+                <span class="ck-empty-sparkle ck-empty-sparkle-1">✨</span>
+                <span class="ck-empty-sparkle ck-empty-sparkle-2">📞</span>
+                <span class="ck-empty-sparkle ck-empty-sparkle-3">🔍</span>
+            </div>
         </div>
         <h4 class="ck-empty-title">Tautan Tidak Ditemukan</h4>
-        <p class="ck-empty-sub">Coba ubah kata kunci pencarian atau hapus filter yang aktif</p>
+        <p class="ck-empty-sub">Coba ubah kata kunci pencarian atau reset pencarian</p>
+        <div class="ck-empty-tips">
+            <span class="ck-empty-tip">💡 Coba kata kunci lebih umum</span>
+            <span class="ck-empty-tip">🔄 Reset pencarian</span>
+        </div>
     </div>
 
 @else
