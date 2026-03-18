@@ -29,7 +29,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
         {{-- Custom CSS --}}
-        <link href="{{ asset('landing-page-ext-rsrc/css/style-v1.0.2.css') }}" rel="stylesheet" />
+        <link href="{{ asset('landing-page-ext-rsrc/css/style-v1.0.3.css') }}" rel="stylesheet" />
 
         <link href="{{ asset('css/itsupport.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/pagination.css') }}" rel="stylesheet" />
@@ -246,7 +246,7 @@
         <script src="{{ asset('landing-page-ext-rsrc/lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
         {{-- Custom JavaScript --}}
-        <script src="{{ asset('landing-page-ext-rsrc/js/main-v1.0.0.js') }}"></script>
+        <script src="{{ asset('landing-page-ext-rsrc/js/main-v1.0.1.js') }}"></script>
 
         @yield('scripts')
 
