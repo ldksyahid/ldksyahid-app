@@ -25,7 +25,12 @@
             transition: background 0.3s;
         }
 
-        [data-theme="dark"] body { background: #0f1117; }
+        [data-theme="dark"] body {
+            background:
+                radial-gradient(ellipse at 15% 50%, rgba(0,180,170,0.22) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 50%, rgba(255,154,158,0.18) 0%, transparent 55%),
+                #0f1117;
+        }
 
         /* ── Spinner ── */
         .spinner-fun-ldk {
