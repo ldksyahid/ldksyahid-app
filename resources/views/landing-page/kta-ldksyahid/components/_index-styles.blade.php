@@ -209,7 +209,7 @@
     transition: background .2s ease;
 }
 .kta-info-item:last-child { border-bottom: none; }
-.kta-info-item:hover { background: #fafcfc; margin: 0 -.5rem; padding: .8rem .5rem; border-radius: 10px; }
+.kta-info-item:hover { background: rgba(0,167,157,.04); margin: 0 -.5rem; padding: .8rem .5rem; border-radius: 10px; }
 
 .kta-info-label {
     display: flex; align-items: center; gap: .45rem;
@@ -241,22 +241,25 @@
 /* ─── Quote / Slogan ──────────────────────────────────────────── */
 .kta-quote-wrap {
     position: relative;
-    background: linear-gradient(135deg, #f2fbfa 0%, #e6f8f6 100%);
-    border-radius: 14px;
-    padding: 1.5rem 1.25rem 1.25rem 2rem;
+    background: rgba(0, 167, 157, 0.04);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
     overflow: hidden;
 }
-.kta-quote-mark {
-    font-size: 5.5rem; line-height: .8;
-    color: rgba(0,167,157,.12);
+.kta-quote-wrap::before {
+    content: '\201C';
+    position: absolute;
+    top: -10px; left: 12px;
+    font-size: 6rem; line-height: 1;
+    color: rgba(0, 167, 157, 0.12);
     font-family: Georgia, serif;
-    position: absolute; top: .5rem; left: .85rem;
-    pointer-events: none; user-select: none;
-    font-style: normal;
+    pointer-events: none;
 }
+.kta-quote-mark { display: none; }
 .kta-quote-text {
-    font-size: .95rem; font-style: italic;
-    color: var(--kta-dark); line-height: 1.85;
+    font-size: .92rem; font-style: italic;
+    color: #374151; line-height: 1.8;
+    text-align: justify;
     position: relative; z-index: 1; margin: 0;
     font-weight: 500;
 }
@@ -523,5 +526,9 @@
 [data-theme="dark"] .kta-info-nav  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .kta-info-label { color: #9ca3af; }
 [data-theme="dark"] .kta-info-value { color: #e2e8f0; }
+[data-theme="dark"] .kta-info-item:hover { background: rgba(0,167,157,.07) !important; }
+[data-theme="dark"] .kta-quote-wrap { background: rgba(0,167,157,.08); }
+[data-theme="dark"] .kta-quote-wrap::before { color: rgba(0,167,157,.18); }
+[data-theme="dark"] .kta-quote-text { color: #cbd5e0; }
 </style>
 @endverbatim

@@ -965,5 +965,9 @@ body.kk-sheet-open .back-to-top {
 [data-theme="dark"] .kk-table tbody tr.kk-table-total td  { background: rgba(0,167,157,.1); color: #e2e8f0; }
 [data-theme="dark"] .kk-bottom-sheet    { background: #1a1f2e; }
 [data-theme="dark"] .kk-bs-close        { background: #252b3b; color: #4dd9cf; box-shadow: none; }
+[data-theme="dark"] .kk-bs-content      { color: #e2e8f0; }
+[data-theme="dark"] .kk-bs-content table { background: transparent; }
+[data-theme="dark"] .kk-bs-content td,
+[data-theme="dark"] .kk-bs-content th   { background: transparent; }
 </style>
 @endverbatim

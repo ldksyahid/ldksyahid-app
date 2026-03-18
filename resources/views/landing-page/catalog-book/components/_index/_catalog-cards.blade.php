@@ -76,8 +76,13 @@
                     <span class="cb-empty-sparkle cb-empty-sparkle-3">🔍</span>
                 </div>
             </div>
-            <h4 class="cb-empty-title">Belum Ada Buku</h4>
-            <p class="cb-empty-sub">Coba ubah kata kunci pencarian atau reset filter</p>
+            <h4 class="cb-empty-title">Buku Tidak Ditemukan</h4>
+            <p class="cb-empty-sub">Coba ubah kata kunci atau hapus beberapa filter yang aktif</p>
+            <div class="cb-empty-tips">
+                <span class="cb-empty-tip">💡 Coba kata kunci lebih umum</span>
+                <span class="cb-empty-tip">🗑️ Hapus beberapa filter</span>
+                <span class="cb-empty-tip">📚 Coba kategori berbeda</span>
+            </div>
         </div>
     @else
         <div class="cb-grid">
@@ -89,7 +94,7 @@
                 $isPrem = (($book->authorTypeID == 1 || $book->authorTypeID == 2) && $book->availabilityTypeID == 2);
                 $cover  = $book->coverImageUrl()
                     ? $book->coverImageUrl()
-                    : 'https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd';
+                    : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid meet'%3E%3Crect width='400' height='300' fill='%23e9ecef'/%3E%3Cpolygon points='80,240 200,120 320,240' fill='%23ced4da'/%3E%3Cpolygon points='200,240 300,160 400,240' fill='%23adb5bd'/%3E%3Ccircle cx='310' cy='100' r='35' fill='%23dee2e6'/%3E%3Crect y='240' width='400' height='60' fill='%23dee2e6'/%3E%3Ctext x='200' y='275' text-anchor='middle' fill='%236c757d' font-family='sans-serif' font-size='15'%3ENo Image%3C/text%3E%3C/svg%3E";
             @endphp
             <div class="cb-book-card wow fadeInUp" style="--cb-spine: {{ $spine }}"
                  data-wow-delay="0.{{ ($loop->index % 4 + 1) }}s">
@@ -255,16 +260,24 @@
     @if($books->isEmpty())
         <div class="cb-empty-state">
             <div class="cb-empty-visual">
+                <div class="cb-empty-deco cb-empty-deco-1"></div>
+                <div class="cb-empty-deco cb-empty-deco-2"></div>
+                <div class="cb-empty-deco cb-empty-deco-3"></div>
                 <div class="cb-empty-ring cb-empty-ring-1"></div>
                 <div class="cb-empty-ring cb-empty-ring-2"></div>
                 <div class="cb-empty-icon-wrap">
                     <i class="fas fa-book-open"></i>
                     <span class="cb-empty-sparkle cb-empty-sparkle-1">📚</span>
                     <span class="cb-empty-sparkle cb-empty-sparkle-2">✨</span>
+                    <span class="cb-empty-sparkle cb-empty-sparkle-3">🔍</span>
                 </div>
             </div>
-            <h4 class="cb-empty-title">Belum Ada Buku</h4>
-            <p class="cb-empty-sub">Coba ubah kata kunci atau reset filter</p>
+            <h4 class="cb-empty-title">Buku Tidak Ditemukan</h4>
+            <p class="cb-empty-sub">Coba ubah kata kunci atau hapus filter yang aktif</p>
+            <div class="cb-empty-tips">
+                <span class="cb-empty-tip">💡 Kata kunci lebih umum</span>
+                <span class="cb-empty-tip">🗑️ Hapus filter</span>
+            </div>
         </div>
     @else
         <div class="cb-mobile-carousel" id="cb-mobile-carousel">
@@ -276,7 +289,7 @@
                 $isPrem = (($book->authorTypeID == 1 || $book->authorTypeID == 2) && $book->availabilityTypeID == 2);
                 $cover  = $book->coverImageUrl()
                     ? $book->coverImageUrl()
-                    : 'https://lh3.googleusercontent.com/d/11uThObxFLEhUURq0ggI5ncJDdlPYkKyd';
+                    : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid meet'%3E%3Crect width='400' height='300' fill='%23e9ecef'/%3E%3Cpolygon points='80,240 200,120 320,240' fill='%23ced4da'/%3E%3Cpolygon points='200,240 300,160 400,240' fill='%23adb5bd'/%3E%3Ccircle cx='310' cy='100' r='35' fill='%23dee2e6'/%3E%3Crect y='240' width='400' height='60' fill='%23dee2e6'/%3E%3Ctext x='200' y='275' text-anchor='middle' fill='%236c757d' font-family='sans-serif' font-size='15'%3ENo Image%3C/text%3E%3C/svg%3E";
             @endphp
             <div class="cb-mobile-card"
                  data-title="{{ e($book->titleBook) }}"

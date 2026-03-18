@@ -396,8 +396,23 @@
     0%,100% { transform: scale(1) rotate(0deg); opacity: .7; }
     50%      { transform: scale(1.3) rotate(15deg); opacity: 1; }
 }
-.cb-empty-title { font-size: 1.35rem; font-weight: 800; color: var(--cb-dark); margin: 0 0 .5rem; }
-.cb-empty-sub { font-size: .88rem; color: var(--cb-gray); margin: 0 auto; max-width: 320px; line-height: 1.55; }
+.cb-empty-title { font-size: 1.35rem; font-weight: 800; color: var(--cb-dark); margin: 0 0 .5rem; letter-spacing: -.2px; }
+.cb-empty-sub { font-size: .88rem; color: var(--cb-gray); margin: 0 auto .85rem; max-width: 320px; line-height: 1.55; }
+.cb-empty-tips {
+    display: flex; flex-wrap: wrap;
+    justify-content: center; gap: .45rem;
+    margin-top: .5rem;
+}
+.cb-empty-tip {
+    display: inline-flex; align-items: center; gap: .3rem;
+    background: #f0fefa;
+    border: 1.5px solid rgba(0,167,157,.18);
+    border-radius: 50px;
+    padding: .32rem 1rem;
+    font-size: .78rem; font-weight: 600;
+    color: #007d76;
+    box-shadow: 0 2px 8px rgba(0,167,157,.07);
+}
 
 
 /* ================================================================
@@ -728,6 +743,9 @@ body.cb-sheet-open .back-to-top {
 [data-theme="dark"] .cb-section-title  { color: #e2e8f0; }
 [data-theme="dark"] .cb-section-sub    { color: #9ca3af; }
 [data-theme="dark"] .cb-results-info   { color: #9ca3af; }
+[data-theme="dark"] .cb-empty-title    { color: #e2e8f0; }
+[data-theme="dark"] .cb-empty-sub      { color: #9ca3af; }
+[data-theme="dark"] .cb-empty-tip      { background: rgba(0,167,157,.12); border-color: rgba(0,167,157,.25); color: #4dd9d3; }
 [data-theme="dark"] .cb-results-info strong { color: #e2e8f0; }
 [data-theme="dark"] .cb-book-card      { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .cb-card-title     { color: #e2e8f0; }
@@ -752,6 +770,7 @@ body.cb-sheet-open .back-to-top {
 [data-theme="dark"] .cb-bs-spec-lbl    { color: #9ca3af; }
 [data-theme="dark"] .cb-bs-spec-val    { color: #e2e8f0; }
 [data-theme="dark"] .cb-tab:hover:not(.active)    { color: #e2e8f0; }
+[data-theme="dark"] .cb-synopsis-text    { color: #e2e8f0; }
 [data-theme="dark"] .cb-bs-synopsis    { color: #cbd5e0; }
 [data-theme="dark"] .cb-bs-share-label { color: #9ca3af; }
 [data-theme="dark"] .cb-bs-share-btn   { background: #252b3b; border-color: rgba(0,167,157,.2); color: #9ca3af; }
