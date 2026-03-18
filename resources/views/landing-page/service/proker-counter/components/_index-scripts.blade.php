@@ -835,6 +835,8 @@ document.addEventListener('DOMContentLoaded', function () {
        BOTTOM SHEET — SCORE RESULTS (mobile)
        ============================================================ */
     function buildScoreSheet() {
+        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
         function getSpan(id) {
             var el = document.querySelector('span[id="' + id + '"]');
             return el ? el.innerHTML : '-';
@@ -849,6 +851,20 @@ document.addEventListener('DOMContentLoaded', function () {
         var totalSpan   = document.querySelector('span[id="persen_proker"]');
         var totalVal    = totalSpan ? (totalSpan.innerHTML || '0') : '0';
 
+        /* ── colour tokens (light / dark) ─────────────────────── */
+        var clrLabel    = isDark ? '#e2e8f0' : '#374151';
+        var clrBobot    = isDark ? '#9ca3af' : '#9ca3af';
+        var clrBorder   = isDark ? 'rgba(0,167,157,.15)' : 'rgba(0,167,157,.08)';
+        var clrHeadBg   = isDark ? 'rgba(0,167,157,.15)' : 'rgba(0,167,157,.08)';
+        var clrName     = isDark ? '#e2e8f0' : '#1f2937';
+        var clrSubLabel = isDark ? '#9ca3af' : '#9ca3af';
+        var clrTblBrd   = isDark ? 'rgba(0,167,157,.2)' : 'rgba(0,167,157,.12)';
+        var clrRowBg    = isDark ? 'rgba(0,167,157,.05)' : 'transparent';
+        var clrCopyBdr  = isDark ? 'rgba(0,167,157,.35)' : 'rgba(0,167,157,.3)';
+        var clrCopyBg   = isDark ? 'rgba(0,167,157,.12)' : 'rgba(0,167,157,.08)';
+        var clrWaBdr    = isDark ? 'rgba(37,211,102,.35)' : 'rgba(37,211,102,.28)';
+        var clrWaBg     = isDark ? 'rgba(37,211,102,.1)'  : 'rgba(37,211,102,.08)';
+
         var rows = [
             { label: 'Kesesuaian Rencana',         bobot: '20%', id: 'sesuai_rencana' },
             { label: 'Kesesuaian Tujuan & Sasaran', bobot: '25%', id: 'sesuai_tujuansasaran' },
@@ -857,38 +873,39 @@ document.addEventListener('DOMContentLoaded', function () {
             { label: 'Akurasi Dana',                bobot: '10%', id: 'efisiensi_dana' },
         ];
 
-        var rowsHtml = rows.map(function (r) {
-            var tdVal = getTd(r.id);
+        var rowsHtml = rows.map(function (r, i) {
+            var tdVal  = getTd(r.id);
+            var rowBg  = (isDark && i % 2 === 1) ? 'background:rgba(0,167,157,.04);' : '';
             return '<tr>' +
-                '<td style="padding:0.65rem 0.85rem;font-size:.83rem;color:#374151;border-bottom:1px solid rgba(0,167,157,.08)">' + r.label + '</td>' +
-                '<td style="padding:0.65rem 0.5rem;font-size:.75rem;color:#9ca3af;text-align:center;border-bottom:1px solid rgba(0,167,157,.08)">' + r.bobot + '</td>' +
-                '<td style="padding:0.65rem 0.85rem;font-size:.85rem;font-weight:700;color:#00a79d;text-align:right;border-bottom:1px solid rgba(0,167,157,.08)">' + tdVal + '%</td>' +
+                '<td style="padding:0.65rem 0.85rem;font-size:.83rem;color:' + clrLabel + ';border-bottom:1px solid ' + clrBorder + ';' + rowBg + '">' + r.label + '</td>' +
+                '<td style="padding:0.65rem 0.5rem;font-size:.75rem;color:' + clrBobot + ';text-align:center;border-bottom:1px solid ' + clrBorder + ';' + rowBg + '">' + r.bobot + '</td>' +
+                '<td style="padding:0.65rem 0.85rem;font-size:.85rem;font-weight:700;color:#00c4b8;text-align:right;border-bottom:1px solid ' + clrBorder + ';' + rowBg + '">' + tdVal + '%</td>' +
             '</tr>';
         }).join('');
 
         return '<div style="text-align:center;margin-bottom:1.25rem">' +
-            '<p style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;margin:0 0 .2rem">Rekap Nilai</p>' +
-            '<p style="font-size:1rem;font-weight:700;color:#1f2937;margin:0 0 .75rem">' + nameText + '</p>' +
+            '<p style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:' + clrSubLabel + ';margin:0 0 .2rem">Rekap Nilai</p>' +
+            '<p style="font-size:1rem;font-weight:700;color:' + clrName + ';margin:0 0 .75rem">' + nameText + '</p>' +
             '<div style="display:inline-flex;align-items:center;justify-content:center;gap:.4rem;background:linear-gradient(135deg,#00a79d,#006D6D);border-radius:50rem;padding:.6rem 1.5rem">' +
                 '<span style="color:#fff;font-size:.75rem;font-weight:600">Total Nilai</span>' +
                 '<span style="color:#fff;font-size:1.35rem;font-weight:800">' + totalVal + '%</span>' +
             '</div>' +
         '</div>' +
-        '<div style="border:2px solid rgba(0,167,157,.12);border-radius:16px;overflow:hidden;margin-bottom:1rem">' +
+        '<div style="border:2px solid ' + clrTblBrd + ';border-radius:16px;overflow:hidden;margin-bottom:1rem">' +
             '<table style="width:100%;border-collapse:collapse">' +
                 '<thead><tr>' +
-                    '<th style="padding:.6rem .85rem;background:rgba(0,167,157,.08);font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#00a79d;text-align:left">Kriteria</th>' +
-                    '<th style="padding:.6rem .5rem;background:rgba(0,167,157,.08);font-size:.68rem;font-weight:700;text-transform:uppercase;color:#00a79d;text-align:center">Bobot</th>' +
-                    '<th style="padding:.6rem .85rem;background:rgba(0,167,157,.08);font-size:.68rem;font-weight:700;text-transform:uppercase;color:#00a79d;text-align:right">Nilai</th>' +
+                    '<th style="padding:.6rem .85rem;background:' + clrHeadBg + ';font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#00a79d;text-align:left">Kriteria</th>' +
+                    '<th style="padding:.6rem .5rem;background:' + clrHeadBg + ';font-size:.68rem;font-weight:700;text-transform:uppercase;color:#00a79d;text-align:center">Bobot</th>' +
+                    '<th style="padding:.6rem .85rem;background:' + clrHeadBg + ';font-size:.68rem;font-weight:700;text-transform:uppercase;color:#00a79d;text-align:right">Nilai</th>' +
                 '</tr></thead>' +
                 '<tbody>' + rowsHtml + '</tbody>' +
             '</table>' +
         '</div>' +
         '<div style="display:flex;gap:.65rem">' +
-            '<button onclick="kkCopyUrl()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:.4rem;border:1.5px solid rgba(0,167,157,.3);border-radius:50px;padding:.75rem;font-size:.8rem;font-weight:600;color:#00a79d;background:rgba(0,167,157,.08);cursor:pointer;transition:all .2s">' +
+            '<button onclick="kkCopyUrl()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:.4rem;border:1.5px solid ' + clrCopyBdr + ';border-radius:50px;padding:.75rem;font-size:.8rem;font-weight:600;color:#00a79d;background:' + clrCopyBg + ';cursor:pointer;transition:all .2s">' +
                 '<i class="fas fa-link"></i><span>Salin URL</span>' +
             '</button>' +
-            '<button onclick="kkShareWa()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:.4rem;border:1.5px solid rgba(37,211,102,.28);border-radius:50px;padding:.75rem;font-size:.8rem;font-weight:600;color:#1da851;background:rgba(37,211,102,.08);cursor:pointer;transition:all .2s">' +
+            '<button onclick="kkShareWa()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:.4rem;border:1.5px solid ' + clrWaBdr + ';border-radius:50px;padding:.75rem;font-size:.8rem;font-weight:600;color:#1da851;background:' + clrWaBg + ';cursor:pointer;transition:all .2s">' +
                 '<i class="fab fa-whatsapp"></i><span>WhatsApp</span>' +
             '</button>' +
         '</div>';
