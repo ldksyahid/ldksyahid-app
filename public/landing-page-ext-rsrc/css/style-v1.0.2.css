@@ -2397,25 +2397,46 @@ footer {
 
 /* Quote block */
 .auth-quote {
-    padding: 1rem 1.25rem 1rem 1.5rem;
-    background: linear-gradient(135deg, var(--primary-light) 0%, rgba(224, 247, 245, 0.4) 100%);
-    border-radius: var(--radius);
+    background: rgba(0, 167, 157, 0.04);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    position: relative;
+    overflow: hidden;
     margin-bottom: 1.5rem;
 }
 
+.auth-quote::before {
+    content: '\201C';
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    font-size: 6rem;
+    line-height: 1;
+    color: rgba(0, 167, 157, 0.12);
+    font-family: Georgia, serif;
+    pointer-events: none;
+}
+
 .auth-quote p {
-    font-size: 0.875rem;
-    color: var(--dark);
+    font-size: 0.87rem;
+    color: #374151;
     font-style: italic;
-    line-height: 1.75;
-    margin-bottom: 0.4rem;
+    line-height: 1.8;
+    text-align: justify;
+    margin-bottom: 0.85rem;
+    position: relative;
+    z-index: 1;
 }
 
 .auth-quote cite {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     color: var(--primary);
     font-style: normal;
-    font-weight: 600;
+    font-weight: 700;
+    display: block;
+    text-align: right;
+    position: relative;
+    z-index: 1;
 }
 
 /* Animated feature list */
@@ -3012,6 +3033,11 @@ footer {
 [data-theme="dark"] .auth-heading,
 [data-theme="dark"] .auth-card-title  { color: #e2e8f0; }
 [data-theme="dark"] .auth-divider-line { background: #2d3548; }
+[data-theme="dark"] .auth-quote         { background: rgba(0,167,157,.08); }
+[data-theme="dark"] .auth-quote p       { color: #cbd5e0; }
+[data-theme="dark"] .auth-badge         { background: rgba(0,167,157,.15); border-color: rgba(0,167,157,.3); }
+[data-theme="dark"] .auth-features li   { color: #cbd5e0; }
+[data-theme="dark"] .auth-card-subtitle { color: #94a3b8; }
 
 /* ── Welcome Popup ── */
 [data-theme="dark"] #wrp-card          { background: #1a1f2e; }
