@@ -42,13 +42,13 @@
                     </div>
 
                     {{-- Load More (only if > 10) --}}
-                    @if(count($posttestimony) > 10)
+                    @if(count($posttestimony) > 6)
                     <div class="testi-load-more-wrap" id="testiLoadMoreWrap">
                         <div class="testi-load-more-line"></div>
                         <button class="testi-load-more-btn" id="testiLoadMoreBtn">
                             <span class="testi-lm-icon"><i class="fas fa-chevron-down"></i></span>
                             <span class="testi-lm-text">Lihat Lebih Banyak</span>
-                            <span class="testi-lm-count">+{{ count($posttestimony) - 10 }} testimoni</span>
+                            <span class="testi-lm-count">+{{ count($posttestimony) - 6 }} testimoni</span>
                         </button>
                         <div class="testi-load-more-line"></div>
                     </div>
@@ -169,7 +169,7 @@
                 {{-- Custom Dots / Counter Navigation --}}
                 @if(count($posttestimony) > 1)
                 <div class="testimony-carousel-dots">
-                    @if(count($posttestimony) <= 10)
+                    @if(count($posttestimony) <= 6)
                         @foreach($posttestimony as $key => $testimony)
                         <button class="testimony-carousel-dot {{ $key == 0 ? 'active' : '' }}"
                                 data-slide="{{ $key }}"
