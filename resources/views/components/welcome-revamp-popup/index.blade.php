@@ -19,35 +19,35 @@
                 <span id="wrp-header-dot2"></span>
                 <div id="wrp-badge">
                     <i class="fas fa-star-and-crescent"></i>
-                    <span>Eid Mubarak &bull; 1447 Hijriah</span>
+                    <span>Eid Mubarak &bull; 1447 H</span>
                 </div>
-                <h2>Selamat Hari Raya<br>Idul Fitri 1447 H 🌙</h2>
+                <h2>Hayooo, Lebaran<br>udah tiba bestie! 🌙✨</h2>
             </div>
 
             {{-- Body --}}
             <div id="wrp-body">
                 <p id="wrp-desc">
-                    Taqabbalallahu minna wa minkum. Semoga Allah ﷻ menerima
-                    amal ibadah kita selama Ramadan dan mempertemukan kita
-                    kembali di Ramadan berikutnya.
+                    Jujur aja, Ramadan tahun ini cepet banget berlalu 😭
+                    Semoga amal kita diterima Allah ﷻ ya — dan beneran deh,
+                    mohon maaf lahir batin dari LDK Syahid! 🤍
                 </p>
 
                 <div id="wrp-features">
                     <div class="wrp-feat">
                         <div class="wrp-feat-icon"><i class="fas fa-heart"></i></div>
-                        <div class="wrp-feat-text">Mohon maaf lahir dan batin dari keluarga besar LDK Syahid</div>
+                        <div class="wrp-feat-text">Maaf-maafan dulu yuk, no hard feelings! 🤝</div>
                     </div>
                     <div class="wrp-feat">
                         <div class="wrp-feat-icon"><i class="fas fa-hands-helping"></i></div>
-                        <div class="wrp-feat-text">Minal Aidin wal Faizin — semoga kita kembali fitri</div>
+                        <div class="wrp-feat-text">Minal aidin wal faizin — semoga kita beneran balik fitri 🌿</div>
                     </div>
                     <div class="wrp-feat">
                         <div class="wrp-feat-icon"><i class="fas fa-mosque"></i></div>
-                        <div class="wrp-feat-text">Semoga amal ibadah Ramadan kita diterima Allah ﷻ</div>
+                        <div class="wrp-feat-text">Ibadah Ramadan kita semoga di-acc Allah ﷻ, aamiin 🙏</div>
                     </div>
                     <div class="wrp-feat">
                         <div class="wrp-feat-icon"><i class="fas fa-star-and-crescent"></i></div>
-                        <div class="wrp-feat-text">Selamat merayakan Lebaran bersama keluarga tercinta</div>
+                        <div class="wrp-feat-text">Gas nikmatin Lebaran sama keluarga, jangan lupa THR-nya 😄</div>
                     </div>
                 </div>
             </div>
