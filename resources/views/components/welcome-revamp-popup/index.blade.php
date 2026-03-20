@@ -27,8 +27,8 @@
             {{-- Body --}}
             <div id="wrp-body">
                 <p id="wrp-desc">
-                    Jujur aja, Ramadan tahun ini cepet banget berlalu 😭
-                    Semoga amal kita diterima Allah ﷻ ya — dan beneran deh,
+                    Honestly, Ramadan tahun ini cepet banget berlalu 😭
+                    Semoga amal kita diterima Allah ﷻ ya — and literally,
                     mohon maaf lahir batin dari LDK Syahid! 🤍
                 </p>
 
@@ -39,7 +39,7 @@
                     </div>
                     <div class="wrp-feat">
                         <div class="wrp-feat-icon"><i class="fas fa-hands-helping"></i></div>
-                        <div class="wrp-feat-text">Minal aidin wal faizin — semoga kita beneran balik fitri 🌿</div>
+                        <div class="wrp-feat-text">Minal aidin wal faizin — semoga kita actually balik fitri 🌿</div>
                     </div>
                     <div class="wrp-feat">
                         <div class="wrp-feat-icon"><i class="fas fa-mosque"></i></div>
