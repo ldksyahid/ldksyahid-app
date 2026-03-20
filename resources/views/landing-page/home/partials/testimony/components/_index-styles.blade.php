@@ -212,6 +212,8 @@
                 border-color 0.4s ease;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
 }
 
 .testimony-card::after {
@@ -292,6 +294,8 @@
     color: var(--primary);
     margin: 0 0 0.25rem;
     line-height: 1.2;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .profile__role {
@@ -335,6 +339,40 @@
     flex: 1;
     position: relative;
     z-index: 2;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* ── Read More Button (Desktop) ── */
+.testi-read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: gap 0.2s ease, opacity 0.2s ease;
+    position: relative;
+    z-index: 2;
+    opacity: 0.75;
+}
+
+.testi-read-more i {
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+}
+
+@media (hover: hover) {
+    .testi-read-more:hover {
+        opacity: 1;
+        gap: 0.6rem;
+    }
+    .testi-read-more:hover i { transform: translateX(3px); }
 }
 
 /* ═══════════════════════════════════════════════
@@ -1012,6 +1050,119 @@ body.testimony-sheet-open {
         padding: 0.4rem 0.8rem;
     }
 }
+
+/* ── Load More ── */
+.testi-load-more-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.testi-load-more-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,167,157,0.18), transparent);
+}
+
+.testi-load-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1.6rem;
+    background: white;
+    border: 1.5px solid rgba(0,167,157,0.22);
+    border-radius: 50px;
+    color: var(--primary);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 3px 14px rgba(0,167,157,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.testi-load-more-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--primary-gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.testi-load-more-btn:hover {
+    border-color: transparent;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,167,157,0.28);
+}
+
+.testi-load-more-btn:hover::before { opacity: 1; }
+
+.testi-lm-icon,
+.testi-lm-text,
+.testi-lm-count {
+    position: relative;
+    z-index: 1;
+}
+
+.testi-lm-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(0,167,157,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+}
+
+.testi-load-more-btn:hover .testi-lm-icon {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(2px);
+}
+
+.testi-lm-count {
+    font-size: 0.76rem;
+    font-weight: 500;
+    opacity: 0.65;
+}
+
+/* Cards reveal animation */
+@keyframes testiReveal {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.testi-card-reveal {
+    animation: testiReveal 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: var(--anim-delay, 0s);
+}
+
+/* Mobile slide counter */
+.testi-slide-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.testi-slide-sep {
+    color: rgba(0, 167, 157, 0.4);
+    font-weight: 400;
+}
+
+/* Dark mode */
+[data-theme="dark"] .testi-load-more-btn { background: #1a1f2e; border-color: rgba(0,167,157,.25); }
+[data-theme="dark"] .testi-load-more-btn:hover { border-color: transparent; }
+[data-theme="dark"] .testi-load-more-line { background: linear-gradient(90deg, transparent, rgba(0,167,157,.12), transparent); }
 
 /* ── Dark Mode ── */
 [data-theme="dark"] .stat-card { background: #1a1f2e; border-color: rgba(0,167,157,.1); }

@@ -469,11 +469,15 @@
 /* ─── Bottom Sheet ───────────────────────────────────────────── */
 .ev-bs-backdrop {
     display: none;
-    position: fixed; inset: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
     background: rgba(0,0,0,.45);
     backdrop-filter: blur(3px);
     z-index: 1040;
     transition: opacity .3s ease;
+    transform: translateZ(0);
+    will-change: transform;
 }
 .ev-bs-backdrop.active { display: block; }
 
@@ -632,12 +636,16 @@
 
 /* ── Lightbox — fullscreen image ── */
 .ev-bs-lightbox {
-    position: fixed; inset: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
     background: rgba(0,0,0,.95);
     z-index: 9999;
     display: flex; align-items: center; justify-content: center;
     opacity: 0; visibility: hidden;
     transition: opacity .3s ease, visibility .3s ease;
+    transform: translateZ(0);
+    will-change: transform;
 }
 .ev-bs-lightbox.active { opacity: 1; visibility: visible; }
 .ev-bs-lightbox-img {

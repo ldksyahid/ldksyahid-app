@@ -290,10 +290,13 @@
 .ms-lightbox {
     display: none;
     position: fixed;
-    inset: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
     z-index: 9999;
     align-items: center;
     justify-content: center;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .ms-lightbox.ms-lb-active { display: flex; }
@@ -635,10 +638,13 @@
 .ms-detail-modal {
     display: none;
     position: fixed;
-    inset: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
     z-index: 9999;
     align-items: flex-end;
     justify-content: center;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .ms-detail-modal.ms-dm-active { display: flex; }
