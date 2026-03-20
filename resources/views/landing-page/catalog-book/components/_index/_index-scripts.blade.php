@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ── Bottom sheet scroll lock ── */
     var _cbTouchBlock = null;
     function cbLockScroll() {
-        document.documentElement.style.overflow = 'hidden';
         document.body.classList.add('cb-sheet-open');
         _cbTouchBlock = function (e) {
             var sheet = document.getElementById('cb-bottom-sheet');
@@ -33,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('touchmove', _cbTouchBlock, { passive: false });
     }
     function cbUnlockScroll() {
-        document.documentElement.style.overflow = '';
         document.body.classList.remove('cb-sheet-open');
         if (_cbTouchBlock) {
             window.removeEventListener('touchmove', _cbTouchBlock);

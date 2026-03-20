@@ -23,10 +23,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var _scrollY = 0;
     function lockScroll() {
         _scrollY = window.scrollY;
-        document.documentElement.style.overflow = 'hidden';
     }
     function unlockScroll() {
-        document.documentElement.style.overflow = '';
         window.scrollTo({ top: _scrollY, left: 0, behavior: 'instant' });
     }
 
@@ -78,10 +76,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function nwFmLockScroll() {
         _fmScrollY = window.scrollY;
-        document.documentElement.style.overflow = 'hidden';
     }
     function nwFmUnlockScroll() {
-        document.documentElement.style.overflow = '';
         window.scrollTo({ top: _fmScrollY, left: 0, behavior: 'instant' });
     }
 
