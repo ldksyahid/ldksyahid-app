@@ -34,12 +34,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ─── Scroll lock/unlock (bottom sheet) ──────────────────── */
-    var _scrollY = 0;
     function lockScroll() {
-        _scrollY = window.scrollY;
+        document.body.style.overflow = 'hidden';
     }
     function unlockScroll() {
-        window.scrollTo({ top: _scrollY, left: 0, behavior: 'instant' });
+        document.body.style.overflow = '';
     }
 
     /* ─── Filter modal — backdrop blur + scroll lock ──────────── */
