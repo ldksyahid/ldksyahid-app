@@ -234,6 +234,11 @@
              modal-backdrop at z-index:1040. Modals pushed here live at body level and work correctly.) --}}
         @stack('modals')
 
+        {{-- Email Verified Success Popup --}}
+        @if(session('verified'))
+            @include('components.email-verified-popup.index')
+        @endif
+
         {{-- Welcome Popup (hanya tampil di halaman utama) --}}
         @if(request()->routeIs('home'))
             @include('components.welcome-revamp-popup.index')
