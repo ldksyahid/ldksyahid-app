@@ -12,16 +12,21 @@
     /* Sudah pernah ditampilkan — skip */
     if (localStorage.getItem(LS_KEY)) return;
 
+    function lockScroll() { document.body.style.overflow = 'hidden'; }
+    function unlockScroll() { document.body.style.overflow = ''; }
+
     /* Tutup saja (tanpa tandai — popup muncul lagi di kunjungan berikutnya) */
     function closePopup() {
         if (!backdrop) return;
         backdrop.classList.remove('active');
+        unlockScroll();
     }
 
     /* Tutup & tandai di localStorage — tidak muncul lagi */
     function dismissPopup() {
         if (!backdrop) return;
         backdrop.classList.remove('active');
+        unlockScroll();
         localStorage.setItem(LS_KEY, '1');
     }
 
@@ -48,7 +53,10 @@
     /* Tampilkan setelah halaman selesai dimuat */
     function showPopup() {
         setTimeout(function () {
-            if (backdrop) backdrop.classList.add('active');
+            if (backdrop) {
+                backdrop.classList.add('active');
+                lockScroll();
+            }
         }, 800);
     }
 
