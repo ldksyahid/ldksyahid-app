@@ -68,36 +68,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Desktop Load More
     (function() {
+        var PAGE_SIZE = 6;
         var grid = document.getElementById('testimonyGrid');
         var btn  = document.getElementById('testiLoadMoreBtn');
         var wrap = document.getElementById('testiLoadMoreWrap');
+        var countEl = wrap ? wrap.querySelector('.testi-lm-count') : null;
         if (!grid || !btn) return;
 
         var hiddenCards = Array.prototype.slice.call(
             grid.querySelectorAll('.testimony-card[data-testi-idx]')
         ).filter(function(card) {
-            return parseInt(card.dataset.testiIdx, 10) >= 10;
+            return parseInt(card.dataset.testiIdx, 10) >= 6;
         });
 
-        // Hide cards beyond index 9 on load
+        // Hide cards beyond index 5 on load
         hiddenCards.forEach(function(card) { card.style.display = 'none'; });
 
-        btn.addEventListener('click', function() {
-            // Animate button out
-            if (wrap) {
-                wrap.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-                wrap.style.opacity = '0';
-                wrap.style.transform = 'translateY(6px)';
-                setTimeout(function() { wrap.style.display = 'none'; }, 260);
-            }
+        var shownCount = 0;
 
-            // Reveal hidden cards with staggered animation
-            hiddenCards.forEach(function(card, i) {
+        btn.addEventListener('click', function() {
+            var batch = hiddenCards.slice(shownCount, shownCount + PAGE_SIZE);
+
+            // Reveal batch with staggered animation
+            batch.forEach(function(card, i) {
                 card.style.display = '';
                 card.style.setProperty('--anim-delay', (i * 0.07) + 's');
                 void card.offsetWidth; // reflow
                 card.classList.add('testi-card-reveal');
+                card.addEventListener('animationend', function handler() {
+                    card.classList.remove('testi-card-reveal');
+                    card.removeEventListener('animationend', handler);
+                });
             });
+
+            shownCount += batch.length;
+            var remaining = hiddenCards.length - shownCount;
+
+            if (remaining <= 0) {
+                // No more cards — hide button
+                if (wrap) {
+                    wrap.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+                    wrap.style.opacity = '0';
+                    wrap.style.transform = 'translateY(6px)';
+                    setTimeout(function() { wrap.style.display = 'none'; }, 260);
+                }
+            } else {
+                // Update count label
+                if (countEl) {
+                    countEl.textContent = '+' + remaining + ' testimoni';
+                }
+            }
         });
     }());
 
