@@ -86,27 +86,8 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ============================================================
        4. BODY SCROLL LOCK helpers (event-based)
        ============================================================ */
-    var _glWheelLock = null, _glKeyLock = null, _glTouchLock = null;
-
-    function lockScroll(container) {
-        _glWheelLock = function(e) { e.preventDefault(); };
-        _glKeyLock   = function(e) {
-            if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
-                e.preventDefault();
-            }
-        };
-        _glTouchLock = function(e) {
-            if (!container || !container.contains(e.target)) e.preventDefault();
-        };
-        window.addEventListener('wheel',       _glWheelLock,  { passive: false });
-        window.addEventListener('keydown',     _glKeyLock);
-        document.addEventListener('touchmove', _glTouchLock,  { passive: false });
-    }
-    function unlockScroll() {
-        if (_glWheelLock)  { window.removeEventListener('wheel',       _glWheelLock);   _glWheelLock  = null; }
-        if (_glKeyLock)    { window.removeEventListener('keydown',     _glKeyLock);      _glKeyLock    = null; }
-        if (_glTouchLock)  { document.removeEventListener('touchmove', _glTouchLock);   _glTouchLock  = null; }
-    }
+    function lockScroll() {}
+    function unlockScroll() {}
 
     /* ============================================================
        5. PHOTO ZOOM OVERLAY
