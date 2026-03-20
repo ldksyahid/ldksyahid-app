@@ -1857,7 +1857,8 @@ body.prayer-modal-open .back-to-top,
 /* Prayer Modal Overlay */
 .prayer-modal-overlay {
     position: fixed;
-    inset: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.55);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
@@ -1869,6 +1870,8 @@ body.prayer-modal-open .back-to-top,
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .prayer-modal-overlay.active {
@@ -2506,8 +2509,9 @@ body.prayer-modal-open .back-to-top,
         renderModal();
         overlay.classList.add('active');
         document.body.classList.add('prayer-modal-open');
-        // Lock scroll via events — tidak pakai overflow:hidden pada html
-        // agar position:sticky (kk-col-info dll.) tidak rusak
+        document.body.style.overflow = 'hidden';
+        // Lock scroll via events juga untuk iOS Safari
+
         _prayerWheelLock = function(e) { e.preventDefault(); };
         _prayerKeyLock   = function(e) {
             if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
@@ -2533,6 +2537,7 @@ body.prayer-modal-open .back-to-top,
         if (!overlay) return;
         overlay.classList.remove('active');
         document.body.classList.remove('prayer-modal-open');
+        document.body.style.overflow = '';
         // Unlock scroll
         if (_prayerWheelLock) {
             window.removeEventListener('wheel', _prayerWheelLock);

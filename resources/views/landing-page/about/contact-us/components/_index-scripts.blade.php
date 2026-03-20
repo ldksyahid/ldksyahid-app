@@ -79,24 +79,11 @@
         var _cuWheelLock = null, _cuKeyLock = null, _cuTouchLock = null;
 
         function cuLockScroll() {
-            _cuWheelLock = function(e) { e.preventDefault(); };
-            _cuKeyLock   = function(e) {
-                if ([' ','ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key)) {
-                    e.preventDefault();
-                }
-            };
-            _cuTouchLock = function(e) {
-                if (!sheet.contains(e.target)) e.preventDefault();
-            };
-            window.addEventListener('wheel',       _cuWheelLock,  { passive: false });
-            window.addEventListener('keydown',     _cuKeyLock);
-            document.addEventListener('touchmove', _cuTouchLock,  { passive: false });
+            document.body.style.overflow = 'hidden';
         }
 
         function cuUnlockScroll() {
-            if (_cuWheelLock)  { window.removeEventListener('wheel',       _cuWheelLock);   _cuWheelLock  = null; }
-            if (_cuKeyLock)    { window.removeEventListener('keydown',     _cuKeyLock);      _cuKeyLock    = null; }
-            if (_cuTouchLock)  { document.removeEventListener('touchmove', _cuTouchLock);   _cuTouchLock  = null; }
+            document.body.style.overflow = '';
         }
 
         var colorBg = {
