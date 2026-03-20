@@ -1,7 +1,9 @@
 <style>
 /* ── Welcome Revamp Popup  (prefix: wrp-) ─────────────────────── */
 #wrp-backdrop {
-    position: fixed; inset: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
     background: rgba(8, 16, 24, .62);
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     z-index: 99998;
@@ -9,6 +11,8 @@
     padding: 1.25rem 1rem;
     opacity: 0; visibility: hidden;
     transition: opacity .4s ease, visibility .4s ease;
+    transform: translateZ(0);
+    will-change: transform;
 }
 #wrp-backdrop.active { opacity: 1; visibility: visible; }
 
