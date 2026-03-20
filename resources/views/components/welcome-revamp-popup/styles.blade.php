@@ -131,7 +131,7 @@
 
 /* ── Footer ── */
 #wrp-footer {
-    display: flex; flex-direction: column; gap: .42rem;
+    display: flex; flex-direction: column; gap: .55rem;
     padding: .875rem 1.5rem 1.5rem;
 }
 #wrp-btn-explore {
@@ -149,6 +149,14 @@
     box-shadow: 0 9px 26px rgba(0,167,157,.48);
     filter: brightness(1.06);
 }
+#wrp-btn-dismiss {
+    background: none; border: none;
+    font-size: .76rem; color: #9ca3af;
+    cursor: pointer; padding: .25rem;
+    text-decoration: underline; text-underline-offset: 3px;
+    transition: color .18s;
+}
+#wrp-btn-dismiss:hover { color: #6b7280; }
 /* ── Responsive ── */
 @media (max-width: 480px) {
     #wrp-card { border-radius: 22px; }
@@ -165,4 +173,6 @@
 [data-theme="dark"] .wrp-feat { background: #1e2d2c; border-color: rgba(0,167,157,.18); }
 [data-theme="dark"] .wrp-feat:hover { background: #223d3b; }
 [data-theme="dark"] .wrp-feat-text { color: #d1d5db; }
+[data-theme="dark"] #wrp-btn-dismiss { color: #6b7280; }
+[data-theme="dark"] #wrp-btn-dismiss:hover { color: #9ca3af; }
 </style>
