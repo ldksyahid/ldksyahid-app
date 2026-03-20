@@ -16,10 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
         animEls.forEach(function(el) { el.classList.add('is-visible'); });
     }
 
-    // Mobile Carousel with Dots
+    // Mobile Carousel with Dots / Counter
     if (typeof jQuery !== 'undefined' && jQuery('.testimony-carousel').length) {
         var $carousel = jQuery('.testimony-carousel');
         var $dots = jQuery('.testimony-carousel-dot');
+        var $slideNum = jQuery('#testiSlideNum');
+        var hasCounter = $slideNum.length > 0;
 
         if ($carousel.data('owl.carousel')) {
             $carousel.owlCarousel('destroy');
@@ -30,47 +32,94 @@ document.addEventListener('DOMContentLoaded', function() {
             margin: 16,
             stagePadding: 40,
             loop: false,
-            dots: false, // Disable default dots
+            dots: false,
             nav: false,
             autoplay: false,
             smartSpeed: 400,
             touchDrag: true,
             mouseDrag: true,
             onChanged: function(event) {
-                // Update custom dots on slide change
                 var currentIndex = event.item.index - event.relatedTarget._clones.length / 2;
                 var totalItems = event.item.count;
+                if (currentIndex < 0) currentIndex = totalItems + currentIndex;
+                else if (currentIndex >= totalItems) currentIndex = currentIndex - totalItems;
 
-                // Adjust index for proper display
-                if (currentIndex < 0) {
-                    currentIndex = totalItems + currentIndex;
-                } else if (currentIndex >= totalItems) {
-                    currentIndex = currentIndex - totalItems;
+                if (hasCounter) {
+                    $slideNum.text(currentIndex + 1);
+                } else {
+                    $dots.removeClass('active');
+                    $dots.eq(currentIndex).addClass('active');
                 }
-
-                $dots.removeClass('active');
-                $dots.eq(currentIndex).addClass('active');
             },
             responsive: {
-                0: {
-                    items: 1,
-                    stagePadding: 30,
-                    margin: 12
-                },
-                576: {
-                    items: 1,
-                    stagePadding: 50,
-                    margin: 16
-                }
+                0: { items: 1, stagePadding: 30, margin: 12 },
+                576: { items: 1, stagePadding: 50, margin: 16 }
             }
         });
 
-        // Custom dots click handler
-        $dots.on('click', function() {
-            var index = jQuery(this).data('slide');
-            $carousel.trigger('to.owl.carousel', [index, 400]);
-        });
+        // Custom dots click handler (only when dots exist)
+        if (!hasCounter) {
+            $dots.on('click', function() {
+                var index = jQuery(this).data('slide');
+                $carousel.trigger('to.owl.carousel', [index, 400]);
+            });
+        }
     }
+
+    // Desktop Load More
+    (function() {
+        var PAGE_SIZE = 6;
+        var grid = document.getElementById('testimonyGrid');
+        var btn  = document.getElementById('testiLoadMoreBtn');
+        var wrap = document.getElementById('testiLoadMoreWrap');
+        var countEl = wrap ? wrap.querySelector('.testi-lm-count') : null;
+        if (!grid || !btn) return;
+
+        var hiddenCards = Array.prototype.slice.call(
+            grid.querySelectorAll('.testimony-card[data-testi-idx]')
+        ).filter(function(card) {
+            return parseInt(card.dataset.testiIdx, 10) >= 6;
+        });
+
+        // Hide cards beyond index 5 on load
+        hiddenCards.forEach(function(card) { card.style.display = 'none'; });
+
+        var shownCount = 0;
+
+        btn.addEventListener('click', function() {
+            var batch = hiddenCards.slice(shownCount, shownCount + PAGE_SIZE);
+
+            // Reveal batch with staggered animation
+            batch.forEach(function(card, i) {
+                card.style.display = '';
+                card.style.setProperty('--anim-delay', (i * 0.07) + 's');
+                void card.offsetWidth; // reflow
+                card.classList.add('testi-card-reveal');
+                card.addEventListener('animationend', function handler() {
+                    card.classList.remove('testi-card-reveal');
+                    card.removeEventListener('animationend', handler);
+                });
+            });
+
+            shownCount += batch.length;
+            var remaining = hiddenCards.length - shownCount;
+
+            if (remaining <= 0) {
+                // No more cards — hide button
+                if (wrap) {
+                    wrap.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+                    wrap.style.opacity = '0';
+                    wrap.style.transform = 'translateY(6px)';
+                    setTimeout(function() { wrap.style.display = 'none'; }, 260);
+                }
+            } else {
+                // Update count label
+                if (countEl) {
+                    countEl.textContent = '+' + remaining + ' testimoni';
+                }
+            }
+        });
+    }());
 
     // Bottom Sheet
     var $overlay = jQuery('#testimonySheetOverlay');

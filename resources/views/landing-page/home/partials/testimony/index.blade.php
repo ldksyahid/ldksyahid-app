@@ -7,9 +7,11 @@
                 {{-- Left Side - Testimony Cards --}}
                 <div class="col-lg-7 order-2 order-lg-1">
                     {{-- Testimony Cards Grid --}}
-                    <div class="testimony-grid">
+                    <div class="testimony-grid" id="testimonyGrid">
                 @forelse($posttestimony as $key => $testimony)
-                <div class="testimony-card testimony-card-animate" style="--anim-delay: {{ $key * 0.1 }}s">
+                <div class="testimony-card testimony-card-animate"
+                     style="--anim-delay: {{ ($key % 10) * 0.08 }}s"
+                     data-testi-idx="{{ $key }}">
                     <div class="testimony-card__quote">"</div>
                     <div class="testimony-card__profile">
                         <div class="profile__avatar-wrap">
@@ -38,6 +40,19 @@
                 </div>
                 @endforelse
                     </div>
+
+                    {{-- Load More (only if > 10) --}}
+                    @if(count($posttestimony) > 6)
+                    <div class="testi-load-more-wrap" id="testiLoadMoreWrap">
+                        <div class="testi-load-more-line"></div>
+                        <button class="testi-load-more-btn" id="testiLoadMoreBtn">
+                            <span class="testi-lm-icon"><i class="fas fa-chevron-down"></i></span>
+                            <span class="testi-lm-text">Lihat Lebih Banyak</span>
+                            <span class="testi-lm-count">+{{ count($posttestimony) - 6 }} testimoni</span>
+                        </button>
+                        <div class="testi-load-more-line"></div>
+                    </div>
+                    @endif
                 </div>
 
                 {{-- Right Side - Header & Stats --}}
@@ -151,14 +166,22 @@
                     @endforelse
                 </div>
 
-                {{-- Custom Dots Navigation --}}
+                {{-- Custom Dots / Counter Navigation --}}
                 @if(count($posttestimony) > 1)
                 <div class="testimony-carousel-dots">
-                    @foreach($posttestimony as $key => $testimony)
-                    <button class="testimony-carousel-dot {{ $key == 0 ? 'active' : '' }}"
-                            data-slide="{{ $key }}"
-                            aria-label="Go to slide {{ $key + 1 }}"></button>
-                    @endforeach
+                    @if(count($posttestimony) <= 6)
+                        @foreach($posttestimony as $key => $testimony)
+                        <button class="testimony-carousel-dot {{ $key == 0 ? 'active' : '' }}"
+                                data-slide="{{ $key }}"
+                                aria-label="Go to slide {{ $key + 1 }}"></button>
+                        @endforeach
+                    @else
+                        <span class="testi-slide-counter">
+                            <span id="testiSlideNum">1</span>
+                            <span class="testi-slide-sep">/</span>
+                            <span>{{ count($posttestimony) }}</span>
+                        </span>
+                    @endif
                 </div>
                 @endif
             </div>
