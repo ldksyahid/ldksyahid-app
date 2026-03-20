@@ -378,4 +378,9 @@
         pointer-events: none !important;
     }
     @keyframes vepmFadeOut { to { opacity: 0; } }
+
+    @keyframes veSuccessIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
 </style>

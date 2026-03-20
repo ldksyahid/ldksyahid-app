@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var _touchBlock = null;
 
     function lockScroll() {
-        document.documentElement.style.overflow = 'hidden';
         document.body.classList.add('cs-sheet-open');
         _touchBlock = function (e) {
             var sheet = document.getElementById('cs-bottom-sheet');
@@ -60,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (btt) { btt.style.opacity = '0'; btt.style.visibility = 'hidden'; }
     }
     function unlockScroll() {
-        document.documentElement.style.overflow = '';
         document.body.classList.remove('cs-sheet-open');
         if (_touchBlock) {
             window.removeEventListener('touchmove', _touchBlock);

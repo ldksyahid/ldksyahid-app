@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\HasApiTokens;
 use App\Http\Controllers\LibraryFunctionController as LFC;
+use App\Notifications\VerifyEmailNotification;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -390,6 +391,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isProtected(): bool
     {
         return $this->id == self::PROTECTED_USER_ID;
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new VerifyEmailNotification());
     }
 
     public function profile()
