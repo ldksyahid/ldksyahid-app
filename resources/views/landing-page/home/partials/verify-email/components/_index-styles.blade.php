@@ -2,7 +2,8 @@
     /* ===== VERIFY EMAIL POPUP MODAL ===== */
     .vepm-overlay {
         position: fixed;
-        inset: 0;
+        top: 0; left: 0; right: 0; bottom: 0;
+        width: 100%; height: 100%;
         background: rgba(0, 0, 0, 0.55);
         backdrop-filter: blur(5px);
         -webkit-backdrop-filter: blur(5px);
@@ -12,6 +13,8 @@
         justify-content: center;
         padding: 1rem;
         animation: vepmFadeIn 0.35s ease;
+        transform: translateZ(0);
+        will-change: transform;
     }
 
     @keyframes vepmFadeIn {
