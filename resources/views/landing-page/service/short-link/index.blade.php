@@ -45,7 +45,7 @@
                         Cara Penggunaan
                     </p>
                     <ul class="sl-info-list">
-                        <li>Isi formulir di samping dengan data yang benar dan lengkap</li>
+                        <li>Isi formulir tersebut dengan data yang benar dan lengkap</li>
                         <li>Masukkan link asli yang ingin dipendekkan</li>
                         <li>Tentukan custom link dengan format <code>https://ldksyah.id/kata-kunci</code></li>
                         <li>Klik <strong>Kirim Permintaan</strong> lalu tunggu konfirmasi</li>
