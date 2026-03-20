@@ -29,27 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ============================================================
        3. SCROLL LOCK helpers
        ============================================================ */
-    var _hglWheelLock = null, _hglKeyLock = null, _hglTouchLock = null;
-
-    function lockScroll(container) {
-        _hglWheelLock = function (e) { e.preventDefault(); };
-        _hglKeyLock   = function (e) {
-            if ([' ', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.key)) {
-                e.preventDefault();
-            }
-        };
-        _hglTouchLock = function (e) {
-            if (!container || !container.contains(e.target)) e.preventDefault();
-        };
-        window.addEventListener('wheel',       _hglWheelLock,  { passive: false });
-        window.addEventListener('keydown',     _hglKeyLock);
-        document.addEventListener('touchmove', _hglTouchLock,  { passive: false });
-    }
-    function unlockScroll() {
-        if (_hglWheelLock)  { window.removeEventListener('wheel',       _hglWheelLock);  _hglWheelLock  = null; }
-        if (_hglKeyLock)    { window.removeEventListener('keydown',     _hglKeyLock);     _hglKeyLock    = null; }
-        if (_hglTouchLock)  { document.removeEventListener('touchmove', _hglTouchLock);  _hglTouchLock  = null; }
-    }
+    function lockScroll() {}
+    function unlockScroll() {}
 
     /* ============================================================
        4. PHOTO ZOOM OVERLAY

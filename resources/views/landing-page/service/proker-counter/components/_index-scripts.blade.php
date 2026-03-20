@@ -796,7 +796,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var btt = document.querySelector('.back-to-top');
 
     function lockScroll() {
-        document.documentElement.style.overflow = 'hidden';
         document.body.classList.add('kk-sheet-open');
         _touchBlock = function (e) {
             var sheet = document.getElementById('kk-bottom-sheet');
@@ -808,7 +807,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function unlockScroll() {
-        document.documentElement.style.overflow = '';
         document.body.classList.remove('kk-sheet-open');
         if (_touchBlock) {
             window.removeEventListener('touchmove', _touchBlock);
