@@ -122,9 +122,15 @@
 
                     {{-- Actions — desktop only --}}
                     <div class="cd-action-row d-none d-lg-flex">
+                        @if($isDeadlinePassed)
+                        <span class="cd-btn-donate cd-btn-ended">
+                            <i class="fas fa-times-circle"></i> Campaign Berakhir
+                        </span>
+                        @else
                         <a href="{{ route('service.celengansyahid.detail.donatenow', $data->link) }}" class="cd-btn-donate">
                             <i class="fas fa-heart"></i> Donasi Sekarang
                         </a>
+                        @endif
                         <div class="cd-share-row">
                             <span class="cd-share-label">Bagikan:</span>
                             <button class="cd-share-btn cd-share-copy" onclick="cdCopyUrl(event)" title="Salin URL">
@@ -234,9 +240,15 @@
     <a href="{{ route('service.celengansyahid') }}" class="cd-mobile-back-btn" title="Kembali ke Celengan Syahid">
         <i class="fas fa-arrow-left"></i>
     </a>
+    @if($isDeadlinePassed)
+    <span class="cd-mobile-donate-btn cd-btn-ended">
+        <i class="fas fa-times-circle"></i> Campaign Berakhir
+    </span>
+    @else
     <a href="{{ route('service.celengansyahid.detail.donatenow', $data->link) }}" class="cd-mobile-donate-btn">
         <i class="fas fa-heart"></i> Donasi Sekarang
     </a>
+    @endif
 </div>
 
 @endsection
