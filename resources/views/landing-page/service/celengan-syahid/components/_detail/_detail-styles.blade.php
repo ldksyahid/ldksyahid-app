@@ -141,6 +141,11 @@
     box-shadow: 0 4px 14px rgba(0,167,157,.3);
 }
 .cd-btn-donate:hover { color: #fff; filter: brightness(.9); transform: translateY(-1px); }
+.cd-btn-ended {
+    background: #e5e7eb !important; color: #9ca3af !important;
+    cursor: not-allowed; pointer-events: none;
+    box-shadow: none !important; transform: none !important;
+}
 
 .cd-share-row {
     display: flex; gap: .5rem; align-items: center;
