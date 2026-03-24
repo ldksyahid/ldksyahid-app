@@ -9,7 +9,7 @@ class ForceHttps
 {
     public function handle(Request $request, Closure $next)
     {
-        // Hanya aktif di production dan jika belum HTTPS
+        // Only active in production and when the request is not already HTTPS
         if (app()->environment('production') && !$request->secure()) {
             return redirect()->secure($request->getRequestUri(), 301);
         }

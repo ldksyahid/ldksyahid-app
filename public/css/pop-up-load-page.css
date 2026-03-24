@@ -33,7 +33,7 @@
   left :-100px; /* Ensure the image fits within the container */
 }
 
-/* CSS untuk layar kecil (mobile) */
+/* CSS for small screens (mobile) */
 @media (max-width: 768px) {
     #dialog {
         top: -10%; /* Atur posisi top sesuai kebutuhan */

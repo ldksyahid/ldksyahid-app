@@ -464,7 +464,7 @@
     }
     
     .why-us .owl-carousel .content {
-      padding: 20px; /* Ditambah untuk ruang lebih */
+      padding: 20px; /* Increased for more spacing */
     }
   }
 

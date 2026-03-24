@@ -1,1 +1,1 @@
-{{-- Tidak ada script khusus untuk halaman lupa password --}}
+{{-- No custom scripts for the forgot password page --}}

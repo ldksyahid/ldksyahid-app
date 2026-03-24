@@ -4,12 +4,12 @@
     var LS_KEY     = 'ldksyahid_welcome_popup_eid_fitri';
     var backdrop   = document.getElementById('wrp-backdrop');
 
-    /* Hapus key lama jika masih ada */
+    /* Remove old key if it still exists */
     if (localStorage.getItem(LS_KEY_OLD)) {
         localStorage.removeItem(LS_KEY_OLD);
     }
 
-    /* Sudah pernah ditampilkan — skip */
+    /* Already shown before — skip */
     if (localStorage.getItem(LS_KEY)) return;
 
     function lockScroll() { document.body.style.overflow = 'hidden'; }

@@ -271,7 +271,7 @@
 </div>
 <!-- Sidebar End -->
 
-{{-- Script untuk membuka dropdown yang memiliki submenu aktif --}}
+{{-- Script to open dropdowns that have an active submenu --}}
 <script>
 $(document).ready(function() {
     // Remove Bootstrap data-bs-toggle to prevent conflict

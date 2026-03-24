@@ -173,7 +173,7 @@
                 </div>
             </div>
 
-            {{-- Kabar Terbaru Pane --}}
+            {{-- Latest Updates Pane --}}
             <div id="cd-pane-updates" class="cd-tab-pane">
                 <div class="cd-tab-body">
                     @if($data->kabar_terbaru)
