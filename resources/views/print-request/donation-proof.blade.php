@@ -28,14 +28,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Bukti Donasi #{{ $donation->id }}</title>
     <link rel="icon" href="{{ $logoUrl }}" type="image/x-icon" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'DejaVu Sans', 'Helvetica Neue', Arial, sans-serif;
             background: #eef2f7;
             color: #1a2332;
             -webkit-print-color-adjust: exact;
@@ -269,7 +266,7 @@
 
         {{-- Campaign --}}
         <div class="dp-sec">
-            <div class="dp-sec-icon">🏕</div>
+            <div class="dp-sec-icon">C</div>
             <div class="dp-sec-label">Informasi Campaign</div>
             <div class="dp-sec-line"></div>
         </div>
@@ -277,23 +274,23 @@
             <div class="dp-campaign-name">{{ $campaign->judul }}</div>
             <div class="dp-campaign-tags">
                 @if($campaign->kategori)
-                <span class="dp-campaign-tag">📂 {{ $campaign->kategori }}</span>
+                <span class="dp-campaign-tag">Kategori: {{ $campaign->kategori }}</span>
                 @endif
                 @if($campaign->kota || $campaign->provinsi)
-                <span class="dp-campaign-tag">📍 {{ implode(', ', array_filter([$campaign->kota, $campaign->provinsi])) }}</span>
+                <span class="dp-campaign-tag">Lokasi: {{ implode(', ', array_filter([$campaign->kota, $campaign->provinsi])) }}</span>
                 @endif
                 @if($campaign->target_biaya)
-                <span class="dp-campaign-tag">🎯 Target {{ LFC::formatRupiah($campaign->target_biaya) }}</span>
+                <span class="dp-campaign-tag">Target: {{ LFC::formatRupiah($campaign->target_biaya) }}</span>
                 @endif
                 @if($deadlineStr)
-                <span class="dp-campaign-tag">📅 Deadline {{ $deadlineStr }}</span>
+                <span class="dp-campaign-tag">Deadline: {{ $deadlineStr }}</span>
                 @endif
             </div>
         </div>
 
         {{-- Donor Info --}}
         <div class="dp-sec">
-            <div class="dp-sec-icon">👤</div>
+            <div class="dp-sec-icon">D</div>
             <div class="dp-sec-label">Informasi Donatur</div>
             <div class="dp-sec-line"></div>
         </div>
@@ -326,7 +323,7 @@
 
         @if($donation->pesan_donatur)
         <div class="dp-sec" style="margin-top:1rem">
-            <div class="dp-sec-icon">💬</div>
+            <div class="dp-sec-icon">P</div>
             <div class="dp-sec-label">Pesan Donatur</div>
             <div class="dp-sec-line"></div>
         </div>
@@ -335,7 +332,7 @@
 
         {{-- Payment Details --}}
         <div class="dp-sec">
-            <div class="dp-sec-icon">💳</div>
+            <div class="dp-sec-icon">Rp</div>
             <div class="dp-sec-label">Rincian Pembayaran</div>
             <div class="dp-sec-line"></div>
         </div>
@@ -378,7 +375,7 @@
 
         {{-- Org Info --}}
         <div class="dp-sec">
-            <div class="dp-sec-icon">🏢</div>
+            <div class="dp-sec-icon">O</div>
             <div class="dp-sec-label">Penyelenggara</div>
             <div class="dp-sec-line"></div>
         </div>
