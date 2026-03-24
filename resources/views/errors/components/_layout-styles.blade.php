@@ -636,4 +636,10 @@
     [data-theme="dark"] .error-dark-toggle:hover {
         background: rgba(0, 167, 157, 0.25);
     }
+
+    /* Text selection */
+    ::selection         { background: rgba(0,167,157,.25); color: inherit; }
+    ::-moz-selection    { background: rgba(0,167,157,.25); color: inherit; }
+    [data-theme="dark"] ::selection      { background: rgba(0,167,157,.4); color: #fff; }
+    [data-theme="dark"] ::-moz-selection { background: rgba(0,167,157,.4); color: #fff; }
 </style>
