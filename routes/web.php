@@ -40,6 +40,12 @@ use App\Http\Controllers\SubscriptionController;
 */
 Auth::routes(['verify' => true]);
 
+// Throttle ketat untuk login: maks 5 percobaan per menit
+Route::middleware('throttle:5,1')->group(function () {
+    Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
+    Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail']);
+});
+
 // Route Template
 Route::get('/welcome', function () {
     return view('welcome');
