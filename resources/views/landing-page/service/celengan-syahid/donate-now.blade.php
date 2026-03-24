@@ -188,9 +188,6 @@
                                     name="pekerjaan_donatur"
                                     required>
                                 <option value="">Pilih Pekerjaan</option>
-                                @foreach($jobs as $id => $name)
-                                    <option value="{{ $name }}">{{ $name }}</option>
-                                @endforeach
                             </select>
                         </div>
                         <div class="dn-invalid-msg">Pekerjaan wajib dipilih</div>

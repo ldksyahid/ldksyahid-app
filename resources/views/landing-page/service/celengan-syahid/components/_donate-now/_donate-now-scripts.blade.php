@@ -127,11 +127,19 @@ $(function () {
         dropdownParent: $('body')
     });
     $pekerjaan.select2({
-        placeholder: 'Pilih Pekerjaan',
+        placeholder: 'Cari atau pilih pekerjaan…',
         allowClear: false,
         width: '100%',
-        minimumResultsForSearch: 8,
-        dropdownParent: $('body')
+        minimumInputLength: 0,
+        dropdownParent: $('body'),
+        ajax: {
+            url: '{{ route("service.celengansyahid.api.jobs") }}',
+            dataType: 'json',
+            delay: 200,
+            data: function (params) { return { q: params.term || '' }; },
+            processResults: function (data) { return { results: data.results }; },
+            cache: true
+        }
     });
 
     function clearSelectError($sel) {
