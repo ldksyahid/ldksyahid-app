@@ -43,140 +43,150 @@
         .wrap {
             width: 700px;
             margin: 0 auto;
-            border: 1px solid #cccccc;
+            border: 1px solid #b2e8e4;
             border-radius: 14px;
             overflow: hidden;
         }
 
         /* ════════ HEADER ════════ */
-        .hdr {
-            background-color: #00a79d;
-            padding: 0;
-        }
+        .hdr { background-color: #00a79d; padding: 0; }
         .hdr table { width: 100%; border-collapse: collapse; }
-        .hdr-left  { padding: 16px 20px; vertical-align: middle; }
-        .hdr-right { padding: 16px 20px; vertical-align: middle; text-align: right; }
+        .hdr-left  { padding: 18px 22px; vertical-align: middle; }
+        .hdr-right { padding: 18px 22px; vertical-align: middle; text-align: right; }
 
-        .hdr-logo  { width: 44px; height: 44px; vertical-align: middle; background-color: #ffffff; border: 2px solid rgba(255,255,255,0.6); border-radius: 10px; padding: 3px; }
-        .hdr-org   { vertical-align: middle; padding-left: 10px; }
-        .hdr-org-name { font-size: 14px; font-weight: bold; color: #ffffff; }
-        .hdr-org-sub  { font-size: 9px; color: #e0f7f5; margin-top: 2px; }
-
-        .hdr-tag   {
-            font-size: 8px; font-weight: bold; color: #e0f7f5;
-            letter-spacing: 2px; text-transform: uppercase;
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 20px;
-            padding: 2px 8px;
+        .hdr-logo {
+            width: 52px; height: 52px; vertical-align: middle;
+            background-color: #ffffff; border-radius: 12px;
+            padding: 4px;
         }
-        .hdr-title { font-size: 22px; font-weight: bold; color: #ffffff; margin-top: 4px; }
-        .hdr-sub   { font-size: 9px; color: #e0f7f5; margin-top: 2px; }
+        .hdr-org       { vertical-align: middle; padding-left: 12px; }
+        .hdr-org-name  { font-size: 15px; font-weight: bold; color: #ffffff; letter-spacing: .3px; }
+        .hdr-org-sub   { font-size: 9px; color: #c8f5f1; margin-top: 3px; }
+
+        .hdr-tag {
+            display: block;
+            font-size: 7px; font-weight: bold; color: rgba(255,255,255,0.8);
+            letter-spacing: 2.5px; text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 20px; padding: 2px 10px;
+            margin-bottom: 6px;
+        }
+        .hdr-title { font-size: 26px; font-weight: bold; color: #ffffff; line-height: 1.1; }
+        .hdr-sub   { font-size: 9px; color: #c8f5f1; margin-top: 3px; letter-spacing: .5px; }
 
         /* ════════ META STRIP ════════ */
-        .meta { background-color: #e8faf8; border-bottom: 1px solid #b2f0eb; }
+        .meta { background-color: #e8faf8; }
         .meta table { width: 100%; border-collapse: collapse; }
-        .meta td { padding: 8px 14px; border-right: 1px solid #b2f0eb; vertical-align: top; }
+        .meta td { padding: 10px 16px; border-right: 1px solid #b2f0eb; vertical-align: top; }
         .meta td:last-child { border-right: none; }
         .meta-lbl { font-size: 7px; font-weight: bold; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; }
-        .meta-val { font-size: 10px; font-weight: bold; color: #1a2332; margin-top: 2px; }
+        .meta-val { font-size: 10px; font-weight: bold; color: #1a2332; margin-top: 3px; }
         .pill {
             font-size: 9px; font-weight: bold;
-            padding: 2px 8px;
-            border: 1px solid;
+            padding: 3px 10px; border: 1px solid;
             border-radius: 20px;
         }
 
         /* ════════ BODY ════════ */
-        .body-pad { padding: 16px 20px 12px; }
+        .body-pad { padding: 18px 22px 14px; }
 
         /* Section heading */
-        .sec-hdr { margin-bottom: 8px; margin-top: 16px; }
+        .sec-hdr { margin-bottom: 10px; margin-top: 18px; }
         .sec-hdr:first-child { margin-top: 0; }
         .sec-hdr table { width: 100%; border-collapse: collapse; }
         .sec-hdr td { vertical-align: middle; padding: 0; }
         .sec-icon {
-            width: 22px; height: 22px;
-            background-color: #00a79d;
-            border-radius: 6px;
+            width: 24px; height: 24px;
+            background-color: #006b65;
+            border-radius: 7px;
             color: #ffffff; font-size: 8px; font-weight: bold;
             text-align: center; vertical-align: middle;
-            padding-top: 5px;
+            padding-top: 6px;
         }
-        .sec-lbl { font-size: 8px; font-weight: bold; color: #00a79d; text-transform: uppercase; letter-spacing: 1.5px; padding-left: 7px; white-space: nowrap; }
-        .sec-line td { border-bottom: 1px solid #ccecea; }
+        .sec-lbl {
+            font-size: 8px; font-weight: bold; color: #006b65;
+            text-transform: uppercase; letter-spacing: 2px;
+            padding-left: 8px; white-space: nowrap;
+        }
+        .sec-line td { border-bottom: 1.5px solid #b2f0eb; }
 
         /* Campaign */
         .campaign-box {
             background-color: #e8faf8;
             border: 1px solid #99ddd9;
             border-radius: 10px;
-            padding: 10px 12px;
-            margin-bottom: 2px;
+            padding: 12px 14px;
         }
-        .campaign-name { font-size: 13px; font-weight: bold; color: #1a2332; margin-bottom: 6px; }
-        .tag-wrap { margin-top: 4px; }
+        .campaign-name { font-size: 14px; font-weight: bold; color: #1a2332; margin-bottom: 8px; line-height: 1.35; }
+        .tag-wrap { margin-top: 2px; }
         .tag {
             font-size: 8px; font-weight: bold;
-            color: #007a73; background-color: #c8f0ec;
-            border: 1px solid #99ddd9;
+            color: #006b65; background-color: #c8f0ec;
+            border: 1px solid #8ed8d3;
             border-radius: 20px;
-            padding: 1px 7px; margin-right: 4px;
+            padding: 2px 9px; margin-right: 5px;
         }
 
-        /* Fields layout (two-column using table) */
+        /* Fields */
         .fields { width: 100%; border-collapse: collapse; }
         .fields td { vertical-align: top; padding: 3px; }
         .field-box {
-            background-color: #f5f5f5;
+            background-color: #ffffff;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
-            padding: 7px 10px;
+            padding: 8px 11px;
         }
         .field-lbl { font-size: 7px; font-weight: bold; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
         .field-val { font-size: 11px; font-weight: bold; color: #1a2332; }
 
         /* Payment table */
-        .pay-wrap { border: 1px solid #ccecea; border-radius: 10px; overflow: hidden; }
+        .pay-wrap { border: 1px solid #b2f0eb; border-radius: 10px; overflow: hidden; }
         .pay-tbl { width: 100%; border-collapse: collapse; }
-        .pay-tbl td { padding: 9px 14px; border-bottom: 1px solid #ccecea; vertical-align: middle; }
+        .pay-tbl td { padding: 10px 16px; border-bottom: 1px solid #e0f7f5; vertical-align: middle; }
         .pay-tbl tr:last-child td { border-bottom: none; }
         .pay-tbl tr.alt td { background-color: #f0fdfc; }
-        .pay-tbl tr.total td { background-color: #00a79d; }
+        .pay-tbl tr.total td { background-color: #006b65; padding: 14px 16px; }
         .pay-lbl   { font-size: 12px; color: #374151; }
         .pay-sub   { font-size: 9px; color: #9ca3af; margin-top: 2px; }
         .pay-val   { font-size: 12px; font-weight: bold; color: #1a2332; text-align: right; }
-        .pay-lbl-t { font-size: 9px; font-weight: bold; color: #e0f7f5; text-transform: uppercase; letter-spacing: 1px; }
-        .pay-val-t { font-size: 15px; font-weight: bold; color: #ffffff; text-align: right; }
+        .pay-lbl-t { font-size: 9px; font-weight: bold; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 1.2px; }
+        .pay-val-t { font-size: 20px; font-weight: bold; color: #ffffff; text-align: right; }
 
         /* Message */
         .msg-box {
-            background-color: #fefce8;
+            background-color: #fffbeb;
             border: 1px solid #fde68a;
             border-radius: 8px;
-            padding: 9px 12px;
+            padding: 10px 14px;
             font-size: 11px; color: #374151;
-            line-height: 1.6; font-style: italic;
+            line-height: 1.7; font-style: italic;
         }
 
         /* Org info */
+        .org-box {
+            background-color: #f8fffe;
+            border: 1px solid #d0eeec;
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
         .org-tbl { width: 100%; border-collapse: collapse; }
-        .org-tbl td { vertical-align: top; padding-right: 16px; width: 50%; }
-        .org-tbl td:last-child { padding-right: 0; }
-        .org-lbl  { font-size: 7px; font-weight: bold; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .org-text { font-size: 10px; color: #374151; line-height: 1.8; }
+        .org-tbl td { vertical-align: top; padding-right: 14px; width: 50%; }
+        .org-tbl td:last-child { padding-right: 0; padding-left: 14px; }
+        .org-lbl  { font-size: 7px; font-weight: bold; color: #00a79d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .org-text { font-size: 10px; color: #374151; line-height: 1.9; }
 
         /* ════════ FOOTER ════════ */
         .footer {
-            background-color: #f5f5f5;
-            border-top: 1px solid #e0e0e0;
-            padding: 10px 20px 14px;
+            background-color: #f0fdfc;
+            border-top: 1px solid #b2f0eb;
+            padding: 12px 22px 16px;
         }
         .footer table { width: 100%; border-collapse: collapse; }
         .footer td { vertical-align: bottom; }
-        .footer td:last-child { text-align: center; width: 150px; }
-        .disclaimer  { font-size: 8px; color: #9ca3af; line-height: 1.7; font-style: italic; }
-        .print-info  { font-size: 7px; color: #c0c0c0; margin-top: 4px; }
-        .sign-box    { height: 50px; border-bottom: 1px solid #cccccc; margin-bottom: 4px; }
+        .footer td:last-child { text-align: center; width: 155px; }
+        .disclaimer  { font-size: 8px; color: #6b7280; line-height: 1.8; font-style: italic; }
+        .print-info  { font-size: 7px; color: #a0aec0; margin-top: 5px; }
+        .sign-box    { height: 52px; border: 1px solid #d0eeec; border-radius: 8px; background-color: #ffffff; margin-bottom: 5px; }
         .sign-lbl    { font-size: 8px; color: #9ca3af; }
 
         /* ════════ PRINT ════════ */
@@ -388,6 +398,7 @@
                 </tr>
             </table>
         </div>
+        <div class="org-box">
         <table class="org-tbl">
             <tr>
                 <td>
@@ -408,6 +419,7 @@
                 </td>
             </tr>
         </table>
+        </div>
 
     </div>{{-- /body --}}
 
