@@ -15,6 +15,7 @@ use Laravolt\Indonesia\Models\City;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\DonationInvoice;
+use App\Mail\DonationSuccess;
 use App\Services\GoogleDrive;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -234,20 +235,36 @@ class CelenganSyahidController extends Controller
         }
 
         try {
-            DB::transaction(function () use ($external_id, $dataXendit, $status) {
+            DB::transaction(function () use ($external_id, $dataXendit) {
                 Donation::updatePaymentStatus($external_id, $dataXendit);
+            });
 
-                if ($status === 'PAID') {
-                    $donationData = Donation::where('doc_no', $external_id)->first();
-                    if ($donationData) {
-                        Wablas::sendPaidSimpleText([
-                            'donaturName'    => $donationData->nama_donatur,
-                            'donationAmount' => $donationData->jumlah_donasi,
-                            'donaturTelp'    => $donationData->no_telp_donatur,
-                        ]);
+            if ($status === 'PAID') {
+                $donationData = Donation::with('campaign')->where('doc_no', $external_id)->first();
+                if ($donationData) {
+                    Wablas::sendPaidSimpleText([
+                        'donaturName'    => $donationData->nama_donatur,
+                        'donationAmount' => $donationData->jumlah_donasi,
+                        'donaturTelp'    => $donationData->no_telp_donatur,
+                    ]);
+
+                    if ($donationData->email_donatur) {
+                        try {
+                            $pdf = PDF::loadView('print-request.donation-proof', [
+                                'donation' => $donationData,
+                                'campaign' => $donationData->campaign,
+                            ])->setPaper('a4');
+
+                            Mail::to($donationData->email_donatur)
+                                ->send(new DonationSuccess($donationData, $pdf->output()));
+                        } catch (\Exception $mailEx) {
+                            Log::error('callbackDonation: email failed: ' . $mailEx->getMessage(), [
+                                'external_id' => $external_id,
+                            ]);
+                        }
                     }
                 }
-            });
+            }
         } catch (\Exception $e) {
             Log::error('callbackDonation error: ' . $e->getMessage(), [
                 'external_id' => $external_id,
