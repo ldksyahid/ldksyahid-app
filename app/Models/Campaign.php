@@ -67,6 +67,25 @@ class Campaign extends Model
             ->toArray();
     }
 
+    public static function getStatusOptions(): array
+    {
+        return [
+            'aktif'    => 'Aktif',
+            'berakhir' => 'Berakhir',
+        ];
+    }
+
+    public static function getOrganizerOptions(): array
+    {
+        $rows = self::select('nama_pj')->distinct()->orderByRaw('nama_pj IS NULL ASC')->orderBy('nama_pj')->pluck('nama_pj');
+        $options = [];
+        foreach ($rows as $val) {
+            $key            = $val ?? '__ldk__';
+            $options[$key]  = $val ?? 'UKM LDK Syahid';
+        }
+        return $options;
+    }
+
     /* ================================================================
        QUERIES
        ================================================================ */

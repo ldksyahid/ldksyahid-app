@@ -20,7 +20,25 @@ document.addEventListener('DOMContentLoaded', function () {
             width: '100%',
             dropdownParent: $('#cs-filter-modal'),
         });
-        $(window).on('scroll', function () { $('#cs-category-select').select2('close'); });
+        $('#cs-status-select').select2({
+            placeholder: 'Semua status',
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#cs-filter-modal'),
+            minimumResultsForSearch: Infinity,
+            closeOnSelect: true,
+        });
+        $('#cs-organizer-select').select2({
+            placeholder: 'Semua penyelenggara',
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#cs-filter-modal'),
+        });
+        $(window).on('scroll', function () {
+            $('#cs-category-select').select2('close');
+            $('#cs-status-select').select2('close');
+            $('#cs-organizer-select').select2('close');
+        });
     }
 
 
@@ -342,15 +360,17 @@ document.addEventListener('DOMContentLoaded', function () {
         if (search && search.value.trim()) params.set('search', search.value.trim());
         if (sort && sort.value)            params.set('sort',   sort.value);
 
-        /* Category pills */
+        /* Active filter pills → URL params */
         var pills = document.querySelectorAll('#cs-active-pills .sfb-pill');
-        var cats  = [];
+        var cats = [], sts = [], orgs = [];
         pills.forEach(function (p) {
-            if (p.dataset.selectId === 'cs-category-select') {
-                cats.push(p.dataset.value);
-            }
+            if (p.dataset.selectId === 'cs-category-select')  cats.push(p.dataset.value);
+            if (p.dataset.selectId === 'cs-status-select')    sts.push(p.dataset.value);
+            if (p.dataset.selectId === 'cs-organizer-select') orgs.push(p.dataset.value);
         });
-        cats.forEach(function (c) { params.append('category', c); });
+        cats.forEach(function (c) { params.append('category',  c); });
+        sts.forEach(function (s)  { params.append('status',    s); });
+        orgs.forEach(function (o) { params.append('organizer', o); });
 
         var q = params.toString();
         return (base ? base.value : window.location.pathname) + (q ? '?' + q : '');
@@ -441,21 +461,56 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     /* ============================================================
-       FILTER MODAL — sync select with active pills on open
+       FILTER MODAL — backdrop blur + sync select on open
        ============================================================ */
     var filterModal = document.getElementById('cs-filter-modal');
+    var fmBackdrop  = document.getElementById('cs-fm-backdrop');
+
     if (filterModal) {
         filterModal.addEventListener('show.bs.modal', function () {
-            var sel = document.getElementById('cs-category-select');
+            if (fmBackdrop) fmBackdrop.classList.add('active');
+        });
+        filterModal.addEventListener('hidden.bs.modal', function () {
+            if (fmBackdrop) fmBackdrop.classList.remove('active');
+        });
+    }
+    if (fmBackdrop) {
+        fmBackdrop.addEventListener('click', function () {
+            var modal = bootstrap.Modal.getInstance(filterModal);
+            if (modal) modal.hide();
+        });
+    }
+    if (filterModal) {
+        filterModal.addEventListener('show.bs.modal', function () {
             var pillsWrap = document.getElementById('cs-active-pills');
-            if (!sel || !pillsWrap) return;
-            var activeCats = Array.from(
-                pillsWrap.querySelectorAll('.sfb-pill[data-select-id="cs-category-select"]')
-            ).map(function (p) { return p.dataset.value; });
-            Array.from(sel.options).forEach(function (opt) {
-                opt.selected = activeCats.indexOf(opt.value) !== -1;
-            });
-            if (typeof $ !== 'undefined') $(sel).trigger('change');
+            if (!pillsWrap) return;
+
+            /* Sync category */
+            var catSel = document.getElementById('cs-category-select');
+            if (catSel) {
+                var activeCats = Array.from(pillsWrap.querySelectorAll('.sfb-pill[data-select-id="cs-category-select"]'))
+                    .map(function (p) { return p.dataset.value; });
+                Array.from(catSel.options).forEach(function (o) { o.selected = activeCats.indexOf(o.value) !== -1; });
+                if (typeof $ !== 'undefined') $(catSel).trigger('change');
+            }
+
+            /* Sync organizer */
+            var orgSel = document.getElementById('cs-organizer-select');
+            if (orgSel) {
+                var activeOrgs = Array.from(pillsWrap.querySelectorAll('.sfb-pill[data-select-id="cs-organizer-select"]'))
+                    .map(function (p) { return p.dataset.value; });
+                Array.from(orgSel.options).forEach(function (o) { o.selected = activeOrgs.indexOf(o.value) !== -1; });
+                if (typeof $ !== 'undefined') $(orgSel).trigger('change');
+            }
+
+            /* Sync status (multiple) */
+            var stsSel = document.getElementById('cs-status-select');
+            if (stsSel) {
+                var activeSts = Array.from(pillsWrap.querySelectorAll('.sfb-pill[data-select-id="cs-status-select"]'))
+                    .map(function (p) { return p.dataset.value; });
+                Array.from(stsSel.options).forEach(function (o) { o.selected = activeSts.indexOf(o.value) !== -1; });
+                if (typeof $ !== 'undefined') $(stsSel).trigger('change');
+            }
         });
     }
 
@@ -467,28 +522,45 @@ document.addEventListener('DOMContentLoaded', function () {
         var applyBtn = e.target.closest('#cs-apply-filter');
         if (!applyBtn) return;
 
-        var sel = document.getElementById('cs-category-select');
         var pillsWrap = document.getElementById('cs-active-pills');
+        if (pillsWrap) {
+            /* Remove all existing filter pills */
+            pillsWrap.querySelectorAll('.sfb-pill').forEach(function (p) { p.remove(); });
 
-        if (sel && pillsWrap) {
-            /* Remove old category pills */
-            pillsWrap.querySelectorAll('.sfb-pill[data-select-id="cs-category-select"]')
-                .forEach(function (p) { p.remove(); });
-
-            /* Create pills for each selected option */
-            Array.from(sel.options).forEach(function (opt) {
-                if (!opt.selected) return;
+            /* Helper: create a pill */
+            function mkPill(selectId, value, label) {
                 var pill = document.createElement('span');
                 pill.className = 'sfb-pill';
-                pill.dataset.selectId = 'cs-category-select';
-                pill.dataset.value = opt.value;
-                pill.innerHTML = '<span>Kategori: ' + opt.text + '</span> <i class="fas fa-times"></i>';
+                pill.dataset.selectId = selectId;
+                pill.dataset.value    = value;
+                pill.innerHTML = '<span>' + label + '</span> <i class="fas fa-times"></i>';
                 pillsWrap.appendChild(pill);
-            });
+            }
 
-            /* Update filter count badge + clear button */
-            var count = Array.from(sel.options).filter(function (o) { return o.selected; }).length;
-            csUpdateBadge(count);
+            /* Category */
+            var catSel = document.getElementById('cs-category-select');
+            if (catSel) {
+                Array.from(catSel.options).forEach(function (o) {
+                    if (o.selected) mkPill('cs-category-select', o.value, 'Kategori: ' + o.text);
+                });
+            }
+
+            /* Status (single) */
+            var stsSel = document.getElementById('cs-status-select');
+            if (stsSel && stsSel.value) {
+                mkPill('cs-status-select', stsSel.value, 'Status: ' + stsSel.options[stsSel.selectedIndex].text);
+            }
+
+            /* Organizer */
+            var orgSel = document.getElementById('cs-organizer-select');
+            if (orgSel) {
+                Array.from(orgSel.options).forEach(function (o) {
+                    if (o.selected) mkPill('cs-organizer-select', o.value, 'Penyelenggara: ' + o.text);
+                });
+            }
+
+            /* Update badge count */
+            csUpdateBadge(pillsWrap.querySelectorAll('.sfb-pill').length);
         }
 
         /* Close modal */
@@ -515,19 +587,23 @@ document.addEventListener('DOMContentLoaded', function () {
         /* Reset search */
         if (searchInput) { searchInput.value = ''; if (searchClear) searchClear.style.display = 'none'; }
 
-        /* Reset select */
-        var sel = document.getElementById('cs-category-select');
-        if (sel) {
-            Array.from(sel.options).forEach(function (o) { o.selected = false; });
-            if (typeof $ !== 'undefined') $(sel).trigger('change');
+        /* Reset all filter selects */
+        var catSel = document.getElementById('cs-category-select');
+        if (catSel) {
+            Array.from(catSel.options).forEach(function (o) { o.selected = false; });
+            if (typeof $ !== 'undefined') $(catSel).trigger('change');
+        }
+        var stsSel = document.getElementById('cs-status-select');
+        if (stsSel) { stsSel.value = ''; if (typeof $ !== 'undefined') $(stsSel).trigger('change'); }
+        var orgSel = document.getElementById('cs-organizer-select');
+        if (orgSel) {
+            Array.from(orgSel.options).forEach(function (o) { o.selected = false; });
+            if (typeof $ !== 'undefined') $(orgSel).trigger('change');
         }
 
-        /* Remove category pills */
+        /* Remove all active pills */
         var pillsWrap = document.getElementById('cs-active-pills');
-        if (pillsWrap) {
-            pillsWrap.querySelectorAll('.sfb-pill[data-select-id="cs-category-select"]')
-                .forEach(function (p) { p.remove(); });
-        }
+        if (pillsWrap) pillsWrap.querySelectorAll('.sfb-pill').forEach(function (p) { p.remove(); });
 
         /* Update badge + clear button */
         csUpdateBadge(0);
@@ -542,11 +618,18 @@ document.addEventListener('DOMContentLoaded', function () {
     var filterClearBtn = document.getElementById('cs-filter-clear');
     if (filterClearBtn) {
         filterClearBtn.addEventListener('click', function () {
-            /* Deselect all */
-            var sel = document.getElementById('cs-category-select');
-            if (sel) {
-                Array.from(sel.options).forEach(function (o) { o.selected = false; });
-                if (typeof $ !== 'undefined') $(sel).trigger('change');
+            /* Deselect all filter selects */
+            var catSel = document.getElementById('cs-category-select');
+            if (catSel) {
+                Array.from(catSel.options).forEach(function (o) { o.selected = false; });
+                if (typeof $ !== 'undefined') $(catSel).trigger('change');
+            }
+            var stsSel = document.getElementById('cs-status-select');
+            if (stsSel) { stsSel.value = ''; if (typeof $ !== 'undefined') $(stsSel).trigger('change'); }
+            var orgSel = document.getElementById('cs-organizer-select');
+            if (orgSel) {
+                Array.from(orgSel.options).forEach(function (o) { o.selected = false; });
+                if (typeof $ !== 'undefined') $(orgSel).trigger('change');
             }
             /* Remove all pills */
             var pillsWrap = document.getElementById('cs-active-pills');
