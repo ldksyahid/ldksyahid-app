@@ -21,14 +21,14 @@
                     <i class="fas fa-moon"></i>
                     <span>Puasa Syawal &bull; 6 Hari</span>
                 </div>
-                <h2>Bestie, jangan lupa<br>puasa Syawal yaa! 🌙✨</h2>
+                <h2>Gaess, jangan lupa<br>puasa Syawal yaa! 🌙✨</h2>
             </div>
 
             {{-- Body --}}
             <div id="wrp-body">
                 <p id="wrp-desc">
                     6 hari puasa Syawal = pahala puasa <em>setahun penuh</em>!
-                    That's literally insane bestie — Ramadan udah kelar
+                    That's literally insane gaess — Ramadan udah kelar
                     tapi bonus pahalanya masih ada loh 🙏
                 </p>
 
@@ -43,7 +43,7 @@
                     </div>
                     <div class="wrp-feat">
                         <div class="wrp-feat-icon"><i class="fas fa-check-circle"></i></div>
-                        <div class="wrp-feat-text">Boleh nyicil, gak harus 6 hari berturut-turut — fleksibel banget bestie 🤝</div>
+                        <div class="wrp-feat-text">Boleh nyicil, gak harus 6 hari berturut-turut — fleksibel banget gaess 🤝</div>
                     </div>
                     <div class="wrp-feat">
                         <div class="wrp-feat-icon"><i class="fas fa-fire"></i></div>
