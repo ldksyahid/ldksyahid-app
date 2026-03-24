@@ -315,6 +315,12 @@
     transition: var(--cs-transition);
     box-shadow: 0 4px 14px rgba(0,167,157,.28);
 }
+.cs-btn-ended {
+    background: #e5e7eb !important; color: #9ca3af !important;
+    cursor: not-allowed; pointer-events: none;
+    box-shadow: none !important; transform: none !important;
+    filter: none !important;
+}
 .cs-btn-donate:hover {
     color: #fff;
     filter: brightness(.9);

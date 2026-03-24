@@ -7,8 +7,9 @@
     $logoSrc  = $data->gdrive_id_1
                     ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id_1
                     : 'https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1';
-    $orgName  = ($data->nama_pj && $data->link_pj) ? $data->nama_pj : 'UKM LDK Syahid';
-    $orgLink  = ($data->nama_pj && $data->link_pj) ? $data->link_pj : 'https://www.ldksyah.id/';
+    $orgName          = ($data->nama_pj && $data->link_pj) ? $data->nama_pj : 'UKM LDK Syahid';
+    $orgLink          = ($data->nama_pj && $data->link_pj) ? $data->link_pj : 'https://www.ldksyah.id/';
+    $isDeadlinePassed = $data->deadline && strtotime($data->deadline) < time();
 @endphp
 
 
@@ -27,6 +28,20 @@
 
 <section class="dn-page py-5 mt-5">
     <div class="container" style="max-width: 720px;">
+
+        {{-- ── Deadline Ended Notice ───────────────────────────── --}}
+        @if($isDeadlinePassed)
+        <div class="dn-ended-notice wow fadeInDown" data-wow-delay="0.05s">
+            <i class="fas fa-times-circle"></i>
+            <div>
+                <strong>Campaign Ini Telah Berakhir</strong>
+                <span>Donasi tidak dapat dilakukan karena kampanye sudah melewati batas waktu.</span>
+            </div>
+            <a href="{{ route('service.celengansyahid.detail', $data->link) }}" class="dn-ended-back">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+        </div>
+        @endif
 
         {{-- ── Campaign Context Header ─────────────────────────── --}}
         <div class="dn-context-wrap wow fadeInUp" data-wow-delay="0.1s">
@@ -230,7 +245,7 @@
                         <i class="fas fa-arrow-left"></i>
                         <span>Kembali</span>
                     </a>
-                    <button type="submit" class="dn-submit-btn">
+                    <button type="submit" class="dn-submit-btn" {{ $isDeadlinePassed ? 'disabled' : '' }}>
                         <i class="fas fa-lock"></i> Lanjutkan Pembayaran
                     </button>
                 </div>
