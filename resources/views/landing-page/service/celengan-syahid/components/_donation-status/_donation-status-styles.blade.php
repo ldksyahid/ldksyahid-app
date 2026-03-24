@@ -157,6 +157,22 @@
     .ds-status-title { font-size: 1.15rem; }
 }
 
+/* ── Polling indicator ─────────────────────────────────── */
+.ds-polling-indicator {
+    display: flex; align-items: center; gap: .4rem;
+    font-size: .75rem; color: var(--ds-warning);
+    margin-top: .25rem;
+}
+.ds-polling-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0;
+    animation: ds-blink 1.4s ease-in-out infinite;
+}
+@keyframes ds-blink {
+    0%, 100% { opacity: .25; transform: scale(1); }
+    50%       { opacity: 1;   transform: scale(1.25); }
+}
+
 /* ── Dark Mode ──────────────────────────────────────────── */
 /* Status banner */
 [data-theme="dark"] .ds-status-banner.paid    { background: rgba(22,163,74,.12); }
