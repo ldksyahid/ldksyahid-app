@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreDonationRequest;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\LibraryFunctionController as LFC;
 use App\Models\Campaign;
@@ -121,17 +122,12 @@ class CelenganSyahidController extends Controller
         return response()->json(['results' => array_values($results)]);
     }
 
-    public function storeDonationCampaign(Request $request)
+    public function storeDonationCampaign(StoreDonationRequest $request)
     {
         $jumlah_donasi = (int) LFC::replaceamount($request->input('jumlah_donasi'));
 
         if ($jumlah_donasi < 10000) {
             Alert::warning('Maaf!', 'Silahkan masukkan donasi minimal Rp10.000');
-            return Redirect::back();
-        }
-
-        if (!$request->input('g-recaptcha-response')) {
-            Alert::warning('Maaf!', 'Silahkan verifikasi Captcha terlebih dahulu');
             return Redirect::back();
         }
 

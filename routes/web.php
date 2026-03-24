@@ -146,10 +146,17 @@ Route::get('/celengansyahid/yuk-donasi/{link}/status/{id}', [CelenganSyahidContr
 Route::get('/celengansyahid/payment/{id}', [CelenganSyahidController::class, 'openPaymentGateway'])->name('service.celengansyahid.detail.donateNow.gateway');
 Route::get('/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController::class, 'savePaymentDonation'])->name('service.celengansyahid.savePayment');
 
-Route::get('/celengansyahid/api/jobs', [CelenganSyahidController::class, 'getJobs'])->name('service.celengansyahid.api.jobs');
-Route::get('/celengansyahid/api/check-payment/{id}', [CelenganSyahidController::class, 'checkPaymentStatus'])->name('service.celengansyahid.api.checkPayment');
-Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
-Route::post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+// API: max 60 req/min per IP (Select2 + polling)
+Route::middleware('throttle:60,1')->group(function () {
+    Route::get('/celengansyahid/api/jobs', [CelenganSyahidController::class, 'getJobs'])->name('service.celengansyahid.api.jobs');
+    Route::get('/celengansyahid/api/check-payment/{id}', [CelenganSyahidController::class, 'checkPaymentStatus'])->name('service.celengansyahid.api.checkPayment');
+});
+
+// Donation store: max 10 submissions/minute per IP
+Route::middleware('throttle:10,1')->post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
+
+// Xendit webhook: max 120 callbacks/minute (Xendit retries are frequent)
+Route::middleware('throttle:120,1')->post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
 
 // Route LandingPage Catalog Books
 Route::get('/perpustakaan', [CatalogBooksController::class, 'index'])->name('catalog.books.index');
