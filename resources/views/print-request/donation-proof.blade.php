@@ -186,8 +186,6 @@
         .footer td:last-child { text-align: center; width: 155px; }
         .disclaimer  { font-size: 8px; color: #6b7280; line-height: 1.8; font-style: italic; }
         .print-info  { font-size: 7px; color: #a0aec0; margin-top: 5px; }
-        .sign-box    { height: 52px; border: 1px solid #d0eeec; border-radius: 8px; background-color: #ffffff; margin-bottom: 5px; }
-        .sign-lbl    { font-size: 8px; color: #9ca3af; }
 
         /* ════════ PRINT ════════ */
         @media print {
@@ -436,8 +434,6 @@
                     <div class="print-info">Dicetak pada: {{ $printDate }}</div>
                 </td>
                 <td>
-                    <div class="sign-box"></div>
-                    <div class="sign-lbl">Tanda Tangan Pengelola</div>
                 </td>
             </tr>
         </table>
