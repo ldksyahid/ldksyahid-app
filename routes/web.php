@@ -46,6 +46,11 @@ Route::middleware('throttle:5,1')->group(function () {
     Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail']);
 });
 
+// Throttle untuk register: maks 5 akun per 10 menit
+Route::middleware('throttle:5,10')->group(function () {
+    Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
+});
+
 // Route Template
 Route::get('/welcome', function () {
     return view('welcome');
@@ -99,11 +104,17 @@ Route::get('/about/gallery', [GalleryController::class, 'index'])->name('gallery
 Route::get('/itsupport', [ITSupportController::class, 'index'])->name('itsupport.index');
 
 // Route Landing Page Contact Us Hubungi Kami di Tentang Kami
-Route::post('/about/contact/message/store', [MessageContactController::class, 'store'])->name('messagecontact');
+// Throttle untuk contact form: maks 5 pesan per 10 menit
+Route::middleware('throttle:5,10')->group(function () {
+    Route::post('/about/contact/message/store', [MessageContactController::class, 'store'])->name('messagecontact');
+});
 
 // Route Newsletter Subscription
-Route::post('/subscribers/store', [SubscriptionController::class, 'store'])->name('newsletter.store');
-Route::post('/subscribers/unsubscribe', [SubscriptionController::class, 'unsubscribe'])->name('subscribers.unsubscribe');
+// Throttle untuk newsletter: maks 5 subscribe per 10 menit
+Route::middleware('throttle:5,10')->group(function () {
+    Route::post('/subscribers/store', [SubscriptionController::class, 'store'])->name('newsletter.store');
+    Route::post('/subscribers/unsubscribe', [SubscriptionController::class, 'unsubscribe'])->name('subscribers.unsubscribe');
+});
 
 // Route Article Comment
 Route::post('/articlecomment', [ArticleCommentController::class, 'addarticlecomment'])->name('articlecomment')->middleware('auth');
