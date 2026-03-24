@@ -10,7 +10,25 @@ use Illuminate\Http\Request;
 class Donation extends Model
 {
     use HasFactory, UsesUuid;
-    protected $guarded =[];
+    protected $fillable = [
+        'doc_no',
+        'jumlah_donasi',
+        'nama_donatur',
+        'email_donatur',
+        'no_telp_donatur',
+        'pesan_donatur',
+        'captcha',
+        'campaign_id',
+        'payment_status',
+        'payment_link',
+        'usia',
+        'domisili',
+        'pekerjaan',
+        'metode_pembayaran',
+        'nama_merchant',
+        'biaya_admin',
+        'total_tagihan',
+    ];
 
     protected static array $allowedSorts = [
         'nama_donatur',
