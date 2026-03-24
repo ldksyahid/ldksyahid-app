@@ -28,11 +28,11 @@ class APINewsController extends Controller
 
     public function destroy($id)
     {
-        // hapus file
+        // delete file
         $gambar = News::where('id',$id)->first();
         File::delete($gambar->picture);
 
-        // hapus data
+        // delete record
         News::where('id',$id)->delete();
 
         return response()->json('News deleted successfully');
@@ -64,11 +64,11 @@ class APINewsController extends Controller
             $filename = time().$request->file('picture')->getClientOriginalName();
             $path = $request->file('picture')->storeAs('Images/uploads/news',$filename);
 
-            // hapus file
+            // delete old file
             $gambar = News::where('id',$id)->first();
             File::delete($gambar->picture);
 
-            // upload file
+            // upload new file
             $update = News::where("id", $id)-> update([
                 'picture' => $path,
             ]);

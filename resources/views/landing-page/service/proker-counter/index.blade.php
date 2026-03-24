@@ -142,7 +142,7 @@
                             </div>
                         </div>
 
-                        {{-- SECTION 2: Kesesuaian Tujuan dan Sasaran (25%) --}}
+                        {{-- SECTION 2: Goal and Target Alignment (25%) --}}
                         <div class="kk-acc-item">
                             <button type="button" class="kk-acc-header collapsible">
                                 <div class="kk-acc-header-left">
@@ -245,7 +245,7 @@
                             </div>
                         </div>
 
-                        {{-- SECTION 3: Kesesuaian Waktu dan Tempat (15%) --}}
+                        {{-- SECTION 3: Time and Venue Alignment (15%) --}}
                         <div class="kk-acc-item">
                             <button type="button" class="kk-acc-header collapsible">
                                 <div class="kk-acc-header-left">

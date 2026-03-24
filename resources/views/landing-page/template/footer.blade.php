@@ -153,7 +153,7 @@
                             </div>
                         </form>
 
-                        {{-- Inline Script untuk Newsletter --}}
+                        {{-- Inline Script for Newsletter --}}
                         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                         <script>
                         // Toast configuration - positioned below navbar

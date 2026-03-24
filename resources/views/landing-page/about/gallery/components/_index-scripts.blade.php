@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             window.scrollTo({ top: top, behavior: 'smooth' });
         }
 
-        /* Phase 1→2 — setelah fade selesai, tampilkan skeleton */
+        /* Phase 1→2 — after fade completes, show skeleton */
         var skeletonShown = new Promise(function (resolve) {
             setTimeout(function () {
                 if (wrap && typeof buildSkeleton === 'function') {

@@ -44,7 +44,7 @@ class CatalogBooksController extends Controller
         ]);
     }
 
-    // Di CatalogBooksController.php, dalam method show()
+    // CatalogBooksController.php — show() method
     public function show($slug)
     {
         $book = MsCatalogBook::where('slug', $slug)->firstOrFail();
