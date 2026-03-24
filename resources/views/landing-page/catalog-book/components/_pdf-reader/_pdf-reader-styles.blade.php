@@ -378,14 +378,26 @@
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
-[data-theme="dark"] .pr-header   { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
-[data-theme="dark"] .pr-title    { color: #e2e8f0; }
-[data-theme="dark"] .pr-author   { color: #9ca3af; }
-[data-theme="dark"] .pr-bar      { background: #252b3b; border-color: rgba(0,167,157,.15); }
-[data-theme="dark"] .pr-url-pill { background: #1e2535; border-color: rgba(0,167,157,.2); color: #9ca3af; }
-[data-theme="dark"] .pr-ctrl-btn { background: #252b3b; color: #e2e8f0; }
-[data-theme="dark"] .pr-controls { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
-[data-theme="dark"] .pr-frame-wrap { background: #0f1117; }
+[data-theme="dark"] .pr-header          { background: #1a1f2e; box-shadow: 0 4px 24px rgba(0,0,0,.3); }
+[data-theme="dark"] .pr-title           { color: #e2e8f0; }
+[data-theme="dark"] .pr-author          { color: #9ca3af; }
+[data-theme="dark"] .pr-author-type     { color: #6b7280; }
+[data-theme="dark"] .pr-meta-item       { background: #252b3b; color: #9ca3af; }
+[data-theme="dark"] .pr-btn-back        { background: #252b3b; color: #e2e8f0; }
+[data-theme="dark"] .pr-btn-back:hover  { background: rgba(0,167,157,.15); color: #4dd9cf; }
+
+/* Frame wrapper & browser bar */
+[data-theme="dark"] .pr-frame-wrap      { background: #0f1117; border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .pr-reader-bar      { background: #1e2535; border-color: rgba(0,167,157,.12); }
+[data-theme="dark"] .pr-reader-url-pill { background: #141a27; border-color: rgba(0,167,157,.18); color: #9ca3af; }
+[data-theme="dark"] .pr-reader-open     { background: #252b3b; border-color: rgba(0,167,157,.2); color: #9ca3af; }
+[data-theme="dark"] .pr-reader-open:hover { background: #00a79d; border-color: #00a79d; color: #fff; }
+
+/* Controls */
+[data-theme="dark"] .pr-controls        { background: #1a1f2e; }
+[data-theme="dark"] .pr-ctrl-btn        { background: #252b3b; color: #e2e8f0; }
+
+/* Status badges */
 [data-theme="dark"] .pr-status.status-loading { background: #2d2a1e; color: #fbbf24; }
 [data-theme="dark"] .pr-status.status-success { background: #1a2d1e; color: #4ade80; }
 [data-theme="dark"] .pr-status.status-error   { background: #2d1a1a; color: #f87171; }
