@@ -47,6 +47,33 @@ class CelenganSyahidController extends Controller
             $query->whereIn('kategori', (array) $request->category);
         }
 
+        if ($request->filled('status')) {
+            $selectedStatuses = (array) $request->status;
+            $hasAktif    = in_array('aktif',    $selectedStatuses);
+            $hasBerakhir = in_array('berakhir', $selectedStatuses);
+            if ($hasAktif && !$hasBerakhir) {
+                $today = now()->toDateString();
+                $query->where(function ($q) use ($today) {
+                    $q->whereNull('deadline')->orWhere('deadline', '>=', $today);
+                });
+            } elseif ($hasBerakhir && !$hasAktif) {
+                $query->where('deadline', '<', now()->toDateString());
+            }
+        }
+
+        if ($request->filled('organizer')) {
+            $organizers = (array) $request->organizer;
+            $query->where(function ($q) use ($organizers) {
+                foreach ($organizers as $org) {
+                    if ($org === '__ldk__') {
+                        $q->orWhereNull('nama_pj');
+                    } else {
+                        $q->orWhere('nama_pj', $org);
+                    }
+                }
+            });
+        }
+
         $sort = $request->input('sort', 'newest');
         if ($sort === 'deadline') {
             $query->orderBy('deadline', 'asc');
@@ -69,7 +96,9 @@ class CelenganSyahidController extends Controller
         }
 
         $categories = Campaign::getCategoryOptions();
-        return view('landing-page.service.celengan-syahid.index', compact('campaigns', 'categories'), ['title' => 'Layanan']);
+        $statuses   = Campaign::getStatusOptions();
+        $organizers = Campaign::getOrganizerOptions();
+        return view('landing-page.service.celengan-syahid.index', compact('campaigns', 'categories', 'statuses', 'organizers'), ['title' => 'Layanan']);
     }
 
     public function showLanding($link)
