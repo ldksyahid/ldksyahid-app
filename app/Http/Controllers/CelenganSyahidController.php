@@ -10,7 +10,6 @@ use App\Models\Donation;
 use App\Services\Xendit;
 use App\Services\Wablas;
 use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\File;
 use Laravolt\Indonesia\Models\Province;
 use Laravolt\Indonesia\Models\City;
 use Illuminate\Support\Str;
@@ -18,6 +17,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\DonationInvoice;
 use App\Services\GoogleDrive;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -25,6 +26,10 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 class CelenganSyahidController extends Controller
 {
     public $pathCampaignsGDrive = '1w48iZmjPCkYwVUL26zIj8fBIX37OMaGT';
+
+    /* ================================================================
+       LANDING PAGE
+       ================================================================ */
 
     public function indexLanding(Request $request)
     {
@@ -65,149 +70,230 @@ class CelenganSyahidController extends Controller
         return view('landing-page.service.celengan-syahid.index', compact('campaigns', 'categories'), ['title' => 'Layanan']);
     }
 
+    public function showLanding($link)
+    {
+        $data = Campaign::getDataDonationCampaignByLink($link);
+
+        if (!$data) {
+            abort(404);
+        }
+
+        return view('landing-page.service.celengan-syahid.detail', [
+            'data'  => $data,
+            'title' => 'Layanan',
+        ]);
+    }
+
+    /* ================================================================
+       DONATE NOW
+       ================================================================ */
+
+    public function donateNow($link)
+    {
+        $data   = Campaign::where('link', $link)->firstOrFail();
+        $cities = City::pluck('name', 'id');
+
+        return view('landing-page.service.celengan-syahid.donate-now', [
+            'data'   => $data,
+            'title'  => 'Layanan',
+            'cities' => $cities,
+        ]);
+    }
+
+    /**
+     * API endpoint: return jobs list (used by Select2 AJAX).
+     */
+    public function getJobs(Request $request)
+    {
+        $jobs   = config('jobs.list', []);
+        $search = trim($request->input('q', ''));
+
+        if ($search !== '') {
+            $jobs = array_values(array_filter(
+                $jobs,
+                fn ($job) => mb_stripos($job, $search) !== false
+            ));
+        }
+
+        $results = array_map(fn ($job) => ['id' => $job, 'text' => $job], $jobs);
+
+        return response()->json(['results' => array_values($results)]);
+    }
+
     public function storeDonationCampaign(Request $request)
     {
-        $jumlah_donasi = (int) LFC::replaceamount($request['jumlah_donasi']);
-        $external_id = Str::random(10);
+        $jumlah_donasi = (int) LFC::replaceamount($request->input('jumlah_donasi'));
+
         if ($jumlah_donasi < 10000) {
             Alert::warning('Maaf!', 'Silahkan masukkan donasi minimal Rp10.000');
             return Redirect::back();
         }
-        else if($request['g-recaptcha-response'] == null){
+
+        if (!$request->input('g-recaptcha-response')) {
             Alert::warning('Maaf!', 'Silahkan verifikasi Captcha terlebih dahulu');
             return Redirect::back();
         }
-        else
-        {
+
+        $campaign = Campaign::where('link', $request->input('linkcampaign'))->first();
+        if (!$campaign) {
+            abort(404, 'Campaign tidak ditemukan');
+        }
+
+        try {
+            $external_id    = Str::random(10);
             $xendit_request = Xendit::postInvoice($external_id, $jumlah_donasi);
             $responseXendit = $xendit_request->object();
-            $postDonation = Donation::createDonation($request, $external_id, $jumlah_donasi, $responseXendit->status, $responseXendit->invoice_url);
-            $campaign = Campaign::where('link', $request['linkcampaign'])->first();
-            $expiredDate = $responseXendit->expiry_date;
-            $carbonDate = Carbon::parse($expiredDate)->setTimezone('Asia/Jakarta');
+
+            $postDonation = DB::transaction(function () use ($request, $external_id, $jumlah_donasi, $responseXendit) {
+                return Donation::createDonation(
+                    $request,
+                    $external_id,
+                    $jumlah_donasi,
+                    $responseXendit->status,
+                    $responseXendit->invoice_url
+                );
+            });
+
+            $carbonDate    = Carbon::parse($responseXendit->expiry_date)->setTimezone('Asia/Jakarta');
             $formattedDate = $carbonDate->isoFormat('dddd, D MMMM YYYY') . ' Pukul ' . $carbonDate->isoFormat('HH:mm');
+
             $data = [
-                'donaturTelp' => $request->input('no_telp_donatur'),
-                'campaignName' => $campaign['judul'],
-                'linkCampaign' => $request['linkcampaign'],
-                'donaturName' => $request->input('nama_donatur'),
+                'donaturTelp'    => $request->input('no_telp_donatur'),
+                'campaignName'   => $campaign->judul,
+                'linkCampaign'   => $request->input('linkcampaign'),
+                'donaturName'    => $request->input('nama_donatur'),
                 'donaturMessage' => $request->input('pesan_donatur'),
                 'donationAmount' => $request->input('jumlah_donasi'),
-                'donationID' => $postDonation->id,
-                'invoiceUrl' => $responseXendit->invoice_url,
-                'merchantName' => $responseXendit->merchant_name,
-                'logo' => $responseXendit->merchant_profile_picture_url,
-                'expiredDate' => $formattedDate,
+                'donationID'     => $postDonation->id,
+                'invoiceUrl'     => $responseXendit->invoice_url,
+                'merchantName'   => $responseXendit->merchant_name,
+                'logo'           => $responseXendit->merchant_profile_picture_url,
+                'expiredDate'    => $formattedDate,
             ];
+
             Wablas::sendInvoiceSimpleText($data);
             Mail::to($request->input('email_donatur'))->send(new DonationInvoice($data));
-            return Redirect::route('service.celengansyahid.detail.donateNow.status', array('link' => $request['linkcampaign'],'id' => $postDonation->id));
+
+            return Redirect::route('service.celengansyahid.detail.donateNow.status', [
+                'link' => $request->input('linkcampaign'),
+                'id'   => $postDonation->id,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('storeDonationCampaign error: ' . $e->getMessage(), [
+                'linkcampaign' => $request->input('linkcampaign'),
+            ]);
+            Alert::error('Maaf!', 'Terjadi kesalahan. Silahkan coba lagi.');
+            return Redirect::back();
         }
     }
 
     public function openPaymentGateway($id)
     {
         $data = Donation::getDonationById($id);
+
+        if (!$data || !$data->payment_link) {
+            abort(404);
+        }
+
         return redirect()->away($data->payment_link);
     }
 
+    /**
+     * Xendit payment callback (webhook).
+     *
+     * IMPORTANT: This route must be excluded from CSRF in
+     * App\Http\Middleware\VerifyCsrfToken::$except.
+     */
     public function callbackDonation()
     {
-        $dataXendit = request()->all();
-        $response = response()->json($dataXendit);
-        $status = $dataXendit['status'];
-        $external_id = $dataXendit['external_id'];
-        Donation::updatePaymentStatus($external_id, $dataXendit);
-        $donationData = Donation::where('doc_no', $external_id)->first();
-        if ($status == 'PAID') {
-            $data = [
-                'donaturName' => $donationData->nama_donatur ?? null,
-                'donationAmount' => $donationData->jumlah_donasi ?? 0,
-                'donaturTelp' => $donationData->no_telp_donatur ?? null,
-            ];
-            Wablas::sendPaidSimpleText($data);
+        // 1. Verify Xendit webhook token
+        $webhookToken = config('services.xendit.webhook_token');
+        if ($webhookToken && request()->header('x-callback-token') !== $webhookToken) {
+            Log::warning('Xendit callback: invalid token', [
+                'ip' => request()->ip(),
+            ]);
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
-        return $response;
-    }
 
-    public function showLanding($link)
-    {
-        $data = Campaign::getDataDonationCampaignByLink($link);
-        return view('landing-page.service.celengan-syahid.detail')->with([
-            'data' => $data,
-            "title" => "Layanan"
-        ]);
-    }
+        $dataXendit = request()->all();
 
-    public function donateNow($link)
-    {
-        $data = Campaign::where('link',$link)->first();
-        $cities = City::pluck('name', 'id');
-        $jobs = [
-            'Guru', 'Dokter', 'Pengusaha', 'Karyawan', 'Mahasiswa', 'Petani', 'TNI', 'Polisi', 'Nelayan', 'Wirausaha',
-            'PNS', 'Pilot', 'Pemadam Kebakaran', 'Seniman', 'Pedagang', 'Pekerja Konstruksi', 'Penyanyi', 'Penulis', 'Desainer',
-            'Montir', 'Sopir', 'Koki', 'Tukang Kayu', 'Tukang Las', 'Tukang Jahit', 'Tukang Listrik', 'Pelaut', 'Peternak', 'Konsultan',
-            'Arsitek', 'Pemilik Toko', 'Programmer', 'Bidan', 'Pramugari', 'Pramugara', 'Manajer', 'Marketing', 'Bendahara', 'Admin',
-            'Satpam', 'Sekretaris', 'Dosen', 'Peneliti', 'Guru Les', 'Pemandu Wisata', 'Tukang Cukur', 'Petugas Kebersihan', 'Suster',
-            'Pandai Besi', 'Penjaga Toko', 'Karyawan Bank', 'Akuntan', 'Farmasi', 'Quality Assurance', 'Quality Control', 'Software Engineer',
-            'Content Creator', 'Animator', 'HR Specialist', 'Data Analyst', 'Translator', 'Yoga Instructor', 'Fitness Trainer',
-            'Interior Designer', 'Environmental Scientist', 'Event Planner', 'Financial Advisor', 'Travel Blogger', 'Photographer',
-            'Nutritionist', 'Game Developer', 'Social Worker', 'Civil Engineer', 'Robotics Engineer', 'Ethical Hacker', 'Ethnographer',
-            'Meteorologist', 'Political Analyst', 'Fashion Designer', 'Archaeologist', 'Art Therapist', 'Cryptocurrency Trader',
-            'Blockchain Developer', 'Ethical Hacker', 'Marine Biologist', 'Zoologist', 'Personal Chef', 'Astronomer', 'Geologist',
-            'Speech Therapist', 'Neuroscientist', 'Voice Actor', 'Film Director', 'Sound Designer', 'Ethical Hacker', 'AI Researcher',
-            'Astrophysicist', 'Data Scientist', 'Climate Change Analyst', 'Wildlife Biologist', 'Forensic Scientist', 'Futurist',
-            'Food Scientist', 'Neonatal Nurse', 'Cybersecurity Analyst', 'Chemical Engineer', 'Environmental Engineer', 'Bioinformatician',
-            'Content Creator', 'Animator', 'HR Specialist', 'Data Analyst', 'Translator', 'Yoga Instructor', 'Fitness Trainer',
-            'Interior Designer', 'Environmental Scientist', 'Event Planner', 'Financial Advisor', 'Travel Blogger', 'Photographer',
-            'Nutritionist', 'Game Developer', 'Social Worker', 'Civil Engineer', 'Robotics Engineer', 'Ethical Hacker', 'Ethnographer',
-            'Meteorologist', 'Political Analyst', 'Fashion Designer', 'Archaeologist', 'Art Therapist', 'Cryptocurrency Trader',
-            'Blockchain Developer', 'Ethical Hacker', 'Marine Biologist', 'Zoologist', 'Personal Chef', 'Astronomer', 'Geologist',
-            'Speech Therapist', 'Neuroscientist', 'Voice Actor', 'Film Director', 'Sound Designer', 'Ethical Hacker', 'AI Researcher',
-            'Astrophysicist', 'Data Scientist', 'Climate Change Analyst', 'Wildlife Biologist', 'Forensic Scientist', 'Futurist',
-            'Food Scientist', 'Neonatal Nurse', 'Cybersecurity Analyst', 'Chemical Engineer', 'Environmental Engineer', 'Bioinformatician',
-            'Urban Planner', 'Fashion Stylist', 'Interior Decorator', 'User Experience Designer', 'Public Relations Specialist',
-            'Media Buyer', 'Podcaster', 'Motivational Speaker', 'Cartoonist', 'Technical Writer', 'Historian', 'Sociologist',
-            'Dentist', 'Chiropractor', 'Flight Attendant', 'Event Coordinator', 'Investment Banker', 'Clinical Psychologist',
-            'Physical Therapist', 'Geophysicist', 'Horticulturist', 'Automotive Mechanic', 'Physical Education Teacher',
-            'Speech Language Pathologist', 'Nurse Anesthetist', 'Animal Trainer', 'Brand Manager', 'Air Traffic Controller',
-            'Loan Officer', 'Museum Curator', 'Park Ranger', 'Podiatrist', 'Chief Executive Officer', 'Chief Financial Officer',
-            'Chief Operating Officer', 'Chief Technology Officer', 'Chief Marketing Officer', 'Chief Creative Officer',
-            'Chief Human Resources Officer', 'Chief Data Officer', 'Chief Diversity Officer', 'Chief Sustainability Officer', 'Lainnya'
-        ];
-        return view('landing-page.service.celengan-syahid.donate-now')->with([
-            'data' => $data,
-            "title" => "Layanan",
-            "cities" => $cities,
-            "jobs" => $jobs
-        ]);
+        // 2. Validate required fields
+        foreach (['status', 'external_id', 'amount'] as $field) {
+            if (empty($dataXendit[$field])) {
+                return response()->json(['message' => "Missing field: {$field}"], 400);
+            }
+        }
+
+        $status      = $dataXendit['status'];
+        $external_id = $dataXendit['external_id'];
+
+        // 3. Only accept known statuses
+        $allowedStatuses = ['PAID', 'PENDING', 'SETTLED', 'EXPIRED', 'FAILED'];
+        if (!in_array($status, $allowedStatuses, true)) {
+            return response()->json(['message' => 'Unknown status'], 400);
+        }
+
+        try {
+            DB::transaction(function () use ($external_id, $dataXendit, $status) {
+                Donation::updatePaymentStatus($external_id, $dataXendit);
+
+                if ($status === 'PAID') {
+                    $donationData = Donation::where('doc_no', $external_id)->first();
+                    if ($donationData) {
+                        Wablas::sendPaidSimpleText([
+                            'donaturName'    => $donationData->nama_donatur,
+                            'donationAmount' => $donationData->jumlah_donasi,
+                            'donaturTelp'    => $donationData->no_telp_donatur,
+                        ]);
+                    }
+                }
+            });
+        } catch (\Exception $e) {
+            Log::error('callbackDonation error: ' . $e->getMessage(), [
+                'external_id' => $external_id,
+            ]);
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
+
+        return response()->json(['message' => 'OK'], 200);
     }
 
     public function donationStatus($link, $id)
     {
-        $data = Donation::where('id',$id)->first();
-        $campaign = Campaign::where('link', $link)->first();
-        return view('landing-page.service.celengan-syahid.donation-status')->with([
-            'data' => $data,
-            "title" => "Layanan",
-            'campaign' => $campaign,
+        $donation = Donation::with('campaign')
+            ->where('id', $id)
+            ->whereHas('campaign', fn ($q) => $q->where('link', $link))
+            ->firstOrFail();
+
+        return view('landing-page.service.celengan-syahid.donation-status', [
+            'data'     => $donation,
+            'campaign' => $donation->campaign,
+            'title'    => 'Layanan',
         ]);
     }
 
     public function savePaymentDonation($link, $id)
     {
-        $donation = Donation::where('id',$id)->first();
-        $campaign = Campaign::where('link', $link)->first();
-        $pdf = PDF::loadView('print-request.donation-proof', compact(['donation', 'campaign']));
-        return $pdf->setPaper('a4')->stream('Bukti Pembayaran Donasi'." - ".$donation->id.".pdf");
+        $donation = Donation::with('campaign')
+            ->where('id', $id)
+            ->whereHas('campaign', fn ($q) => $q->where('link', $link))
+            ->firstOrFail();
+
+        $campaign = $donation->campaign;
+
+        $pdf = PDF::loadView('print-request.donation-proof', compact('donation', 'campaign'));
+        return $pdf->setPaper('a4')->stream('Bukti Pembayaran Donasi - ' . $donation->id . '.pdf');
     }
+
+    /* ================================================================
+       ADMIN — DONATIONS
+       ================================================================ */
 
     public function indexAdminDonation(Request $request)
     {
-        $items = Donation::searchAdminDonations($request);
+        $items      = Donation::searchAdminDonations($request);
         $tableConfig = Donation::getTableConfig();
 
-        // Add campaign_name to each donation item
         $campaignNames = Campaign::pluck('judul', 'id')->toArray();
         $items->getCollection()->transform(function ($donation) use ($campaignNames) {
             $donation->campaign_name = $campaignNames[$donation->campaign_id] ?? '-';
@@ -216,22 +302,20 @@ class CelenganSyahidController extends Controller
         });
 
         $paymentStatusOptions = Donation::getPaymentStatusOptions();
-        $campaignOptions = Donation::getCampaignOptions();
+        $campaignOptions      = Donation::getCampaignOptions();
 
         if ($request->ajax()) {
             return response()->json([
-                'tableBody' => view('components.admin-index.index-table', [
-                    'items' => $items,
-                    'tableConfig' => $tableConfig,
-                ])->render(),
+                'tableBody'  => view('components.admin-index.index-table', compact('items', 'tableConfig'))->render(),
                 'pagination' => $items->appends($request->query())->links()->render(),
-                'total' => $items->total(),
-                'from' => $items->firstItem(),
-                'to' => $items->lastItem()
+                'total'      => $items->total(),
+                'from'       => $items->firstItem(),
+                'to'         => $items->lastItem(),
             ]);
         }
 
-        return view('admin-page.service.celengan-syahid.donation.index', compact('items', 'tableConfig', 'paymentStatusOptions', 'campaignOptions'))
+        return view('admin-page.service.celengan-syahid.donation.index',
+            compact('items', 'tableConfig', 'paymentStatusOptions', 'campaignOptions'))
             ->with('title', 'Celengan Syahid');
     }
 
@@ -239,79 +323,55 @@ class CelenganSyahidController extends Controller
     {
         try {
             Donation::deleteDonation($id);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Donation has been deleted!'
-            ]);
+            return response()->json(['success' => true, 'message' => 'Donation has been deleted!']);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error deleting donation: ' . $e->getMessage()
-            ], 500);
+            Log::error('destroyAdminDonation: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Error deleting donation: ' . $e->getMessage()], 500);
         }
     }
 
     public function bulkDeleteDonation(Request $request)
     {
+        $ids = $request->input('ids', []);
+
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'No donations selected for deletion'], 400);
+        }
+
         try {
-            $ids = $request->input('ids', []);
-
-            if (empty($ids)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No donations selected for deletion'
-                ], 400);
-            }
-
             $deleted = Donation::bulkDeleteDonations($ids);
-
-            return response()->json([
-                'success' => true,
-                'message' => "{$deleted} donation(s) have been deleted!"
-            ]);
+            return response()->json(['success' => true, 'message' => "{$deleted} donation(s) have been deleted!"]);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error deleting donations: ' . $e->getMessage()
-            ], 500);
+            Log::error('bulkDeleteDonation: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Error deleting donations: ' . $e->getMessage()], 500);
         }
     }
+
+    /* ================================================================
+       ADMIN — CAMPAIGNS
+       ================================================================ */
 
     public function dashboardCelenganSyahid()
     {
         $pythonExecutable = '/home/ldksyah1/virtualenv/ucupspython/3.9/bin/python';
-        // $pythonExecutable = 'C:\Users\ESB\AppData\Local\Programs\Python\Python313\python.exe';
+        $scriptPath       = '/home/ldksyah1/public_html/public/machine-learning/models/donation-class-machine.py';
 
-        $scriptPath = '/home/ldksyah1/public_html/public/machine-learning/models/donation-class-machine.py';
-        // $scriptPath = 'machine-learning/models/donation-class-machine.py';
-
-        $command = [
-            $pythonExecutable,
-            $scriptPath
-        ];
-
-        $process = new Process($command, null, null, null, null);
-
+        $process = new Process([$pythonExecutable, $scriptPath], null, null, null, null);
         $process->start();
-
         $process->wait();
 
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
 
-        return view('admin-page.service.celengan-syahid.dashboard', ["title" => "Celengan Syahid"]);
+        return view('admin-page.service.celengan-syahid.dashboard', ['title' => 'Celengan Syahid']);
     }
-
-
 
     public function indexAdminCampaign(Request $request)
     {
-        $items = Campaign::searchAdminCampaigns($request);
+        $items       = Campaign::searchAdminCampaigns($request);
         $tableConfig = Campaign::getTableConfig();
 
-        // Format target_biaya for display
         $items->getCollection()->transform(function ($campaign) {
             $campaign->target_biaya = LFC::formatRupiah($campaign->target_biaya);
             return $campaign;
@@ -321,178 +381,177 @@ class CelenganSyahidController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'tableBody' => view('components.admin-index.index-table', [
-                    'items' => $items,
-                    'tableConfig' => $tableConfig,
-                ])->render(),
+                'tableBody'  => view('components.admin-index.index-table', compact('items', 'tableConfig'))->render(),
                 'pagination' => $items->appends($request->query())->links()->render(),
-                'total' => $items->total(),
-                'from' => $items->firstItem(),
-                'to' => $items->lastItem()
+                'total'      => $items->total(),
+                'from'       => $items->firstItem(),
+                'to'         => $items->lastItem(),
             ]);
         }
 
-        return view('admin-page.service.celengan-syahid.campaign.index', compact('items', 'tableConfig', 'categoryOptions'))
+        return view('admin-page.service.celengan-syahid.campaign.index',
+            compact('items', 'tableConfig', 'categoryOptions'))
             ->with('title', 'Celengan Syahid');
     }
 
     public function createAdminCampaign()
     {
         $provinces = Province::pluck('name', 'id');
-        return view('admin-page.service.celengan-syahid.campaign.create', compact(['provinces']),["title" => "Celengan Syahid"]);
+        return view('admin-page.service.celengan-syahid.campaign.create',
+            compact('provinces'), ['title' => 'Celengan Syahid']);
     }
 
-    public function previewAdminCampaign($id)
+    public function storeAdminCampaign(Request $request)
     {
-        $province = Province::pluck('name', 'id');
-        $data = Campaign::getDataDonationCampaignById($id);
-        return view('admin-page.service.celengan-syahid.campaign.view')->with([
-            'data' => $data,
-            "title" => "Celengan Syahid",
-            "province" => $province
-        ]);
-    }
+        try {
+            $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
 
-     public function storeAdminCampaign(Request $request)
-    {
-        $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
+            $fileNamePoster = time() . '_poster_' . $request->file('poster')->getClientOriginalName();
+            $uploadResultPoster = $gdriveService->uploadImage(
+                $request->file('poster'),
+                $fileNamePoster,
+                $this->pathCampaignsGDrive . '/' . $fileNamePoster
+            );
 
-        $target_biaya = LFC::replaceamount($request['target_biaya']);
-        $provinsi = ucwords(strtolower($request["provinsi"]));
-        $city = City::where('id', $request['kota'])->first();
-        $kota = ucwords(strtolower($city->name));
+            $uploadResultLogoPic = [];
+            if ($request->hasFile('logo_pj')) {
+                $fileNameLogo = time() . '_logo-pic_' . $request->file('logo_pj')->getClientOriginalName();
+                $uploadResultLogoPic = $gdriveService->uploadImage(
+                    $request->file('logo_pj'),
+                    $fileNameLogo,
+                    $this->pathCampaignsGDrive . '/' . $fileNameLogo
+                );
+            }
 
-        $fileNamePoster = time() . '_poster_' . $request->file('poster')->getClientOriginalName();
-        $filePathPoster = $this->pathCampaignsGDrive . '/' . $fileNamePoster;
-        $uploadResultPoster = $gdriveService->uploadImage($request->file('poster'), $fileNamePoster, $filePathPoster);
+            Campaign::createCampaign($request->all(), $uploadResultPoster, $uploadResultLogoPic);
 
-        $uploadResultLogoPic = [];
-        if (!empty($request->logo_pj)) {
-            $fileNameLogoPic = time() . '_logo-pic_' . $request->file('logo_pj')->getClientOriginalName();
-            $filePathLogoPic = $this->pathCampaignsGDrive . '/' . $fileNameLogoPic;
-            $uploadResultLogoPic = $gdriveService->uploadImage($request->file('logo_pj'), $fileNameLogoPic, $filePathLogoPic);
+            Alert::success('Success', 'Campaign has been uploaded!');
+        } catch (\Exception $e) {
+            Log::error('storeAdminCampaign: ' . $e->getMessage());
+            Alert::error('Error', 'Gagal menyimpan campaign: ' . $e->getMessage());
         }
-        Campaign::createCampaign($request->all(), $provinsi, $kota, $target_biaya, $uploadResultPoster, $uploadResultLogoPic);
-        Alert::success('Success', 'Campaign has been uploaded !');
+
         return redirect('/admin/service/celengansyahid/campaigns');
     }
 
     public function editAdminCampaign($id)
     {
         $province = Province::pluck('name', 'id');
-        $data = Campaign::findOrFail($id);
-        return view('admin-page.service.celengan-syahid.campaign.update', compact(['province', 'data']),["title" => "Celengan Syahid"]);
+        $data     = Campaign::findOrFail($id);
+        return view('admin-page.service.celengan-syahid.campaign.update',
+            compact('province', 'data'), ['title' => 'Celengan Syahid']);
     }
 
     public function updateAdminCampaign(Request $request, $id)
     {
-        $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
-        $campaignModel = Campaign::find($id);
-        $target_biaya = LFC::replaceamount($request['target_biaya']);
-        $provinsi = ucwords(strtolower($request["provinsi"]));
-        $city = City::where('id', $request['kota'])->first();
-        if ($city != null) {
-            $kota = ucwords(strtolower($city->name));
-        } else {
-            $kota = $request['kota'];
-        }
+        try {
+            $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
+            $campaign      = Campaign::findOrFail($id);
 
-        if ($request->file('poster')) {
-            $fileNamePoster = time() . '_poster_' . $request->file('poster')->getClientOriginalName();
-            $filePathPoster = $this->pathCampaignsGDrive . '/' . $fileNamePoster;
-            $uploadResultPoster = $gdriveService->uploadImage($request->file('poster'), $fileNamePoster, $filePathPoster);
-            if (!empty($uploadResultPoster)) {
-                $oldGdriveID = $campaignModel->gdrive_id;
-                if ($oldGdriveID) {
-                    $gdriveService->deleteImage($oldGdriveID);
+            if ($request->hasFile('poster')) {
+                $fileNamePoster = time() . '_poster_' . $request->file('poster')->getClientOriginalName();
+                $uploaded = $gdriveService->uploadImage(
+                    $request->file('poster'),
+                    $fileNamePoster,
+                    $this->pathCampaignsGDrive . '/' . $fileNamePoster
+                );
+                if (!empty($uploaded)) {
+                    if ($campaign->gdrive_id) {
+                        $gdriveService->deleteImage($campaign->gdrive_id);
+                    }
+                    $campaign->update([
+                        'poster'    => $uploaded['fileName'],
+                        'gdrive_id' => $uploaded['gdriveID'],
+                    ]);
                 }
-
-                $campaignModel->update([
-                    'poster' => $uploadResultPoster['fileName'],
-                    'gdrive_id' => $uploadResultPoster['gdriveID'],
-                ]);
             }
-        }
-        if ($request->file('logo_pj')) {
-            $fileNameLogoPic = time() . '_logo-pic_' . $request->file('logo_pj')->getClientOriginalName();
-            $filePathLogoPic = $this->pathCampaignsGDrive . '/' . $fileNameLogoPic;
-            $uploadResultLogoPic = $gdriveService->uploadImage($request->file('logo_pj'), $fileNameLogoPic, $filePathLogoPic);
-            if (!empty($uploadResultLogoPic)) {
-                $oldGdriveID = $campaignModel->gdrive_id_1;
-                if ($oldGdriveID) {
-                    $gdriveService->deleteImage($oldGdriveID);
+
+            if ($request->hasFile('logo_pj')) {
+                $fileNameLogo = time() . '_logo-pic_' . $request->file('logo_pj')->getClientOriginalName();
+                $uploaded = $gdriveService->uploadImage(
+                    $request->file('logo_pj'),
+                    $fileNameLogo,
+                    $this->pathCampaignsGDrive . '/' . $fileNameLogo
+                );
+                if (!empty($uploaded)) {
+                    if ($campaign->gdrive_id_1) {
+                        $gdriveService->deleteImage($campaign->gdrive_id_1);
+                    }
+                    $campaign->update([
+                        'logo_pj'    => $uploaded['fileName'],
+                        'gdrive_id_1' => $uploaded['gdriveID'],
+                    ]);
                 }
-
-                $campaignModel->update([
-                    'logo_pj' => $uploadResultLogoPic['fileName'],
-                    'gdrive_id_1' => $uploadResultLogoPic['gdriveID'],
-                ]);
             }
+
+            Campaign::updateCampaign($id, $request->all());
+
+            toast('Campaign has been updated!', 'success')->autoClose(1500)->width('400px');
+        } catch (\Exception $e) {
+            Log::error('updateAdminCampaign: ' . $e->getMessage());
+            Alert::error('Error', 'Gagal memperbarui campaign: ' . $e->getMessage());
         }
-        Campaign::updateCampaign($id, $request->all(), $provinsi, $kota, $target_biaya);
-        toast('Campaign has been updated !', 'success')->autoClose(1500)->width('400px');
+
         return redirect('/admin/service/celengansyahid/campaigns');
+    }
+
+    public function previewAdminCampaign($id)
+    {
+        $province = Province::pluck('name', 'id');
+        $data     = Campaign::getDataDonationCampaignById($id);
+        return view('admin-page.service.celengan-syahid.campaign.view', [
+            'data'     => $data,
+            'title'    => 'Celengan Syahid',
+            'province' => $province,
+        ]);
     }
 
     public function destroyAdminCampaign($id)
     {
         try {
             $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
-            $campaignModel = Campaign::findOrFail($id);
+            $campaign      = Campaign::findOrFail($id);
 
-            if (!empty($campaignModel->gdrive_id)) {
-                $gdriveService->deleteImage($campaignModel->gdrive_id);
+            if ($campaign->gdrive_id) {
+                $gdriveService->deleteImage($campaign->gdrive_id);
             }
-
-            if (!empty($campaignModel->gdrive_id_1)) {
-                $gdriveService->deleteImage($campaignModel->gdrive_id_1);
+            if ($campaign->gdrive_id_1) {
+                $gdriveService->deleteImage($campaign->gdrive_id_1);
             }
 
             Campaign::deleteCampaign($id);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Campaign has been deleted!'
-            ]);
+            return response()->json(['success' => true, 'message' => 'Campaign has been deleted!']);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error deleting campaign: ' . $e->getMessage()
-            ], 500);
+            Log::error('destroyAdminCampaign: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Error deleting campaign: ' . $e->getMessage()], 500);
         }
     }
 
     public function bulkDeleteCampaign(Request $request)
     {
+        $ids = $request->input('ids', []);
+
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'No campaigns selected for deletion'], 400);
+        }
+
         try {
-            $ids = $request->input('ids', []);
-
-            if (empty($ids)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No campaigns selected for deletion'
-                ], 400);
-            }
-
             $deleted = Campaign::bulkDeleteCampaigns($ids);
-
-            return response()->json([
-                'success' => true,
-                'message' => "{$deleted} campaign(s) have been deleted!"
-            ]);
+            return response()->json(['success' => true, 'message' => "{$deleted} campaign(s) have been deleted!"]);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error deleting campaigns: ' . $e->getMessage()
-            ], 500);
+            Log::error('bulkDeleteCampaign: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Error deleting campaigns: ' . $e->getMessage()], 500);
         }
     }
 
-    public function storeCity(request $request)
+    public function storeCity(Request $request)
     {
-        $dataProvince = Province::where('name', $request['id'])->first();
-        $codeProvince = $dataProvince->code;
-        $cities = City::where('province_code', $codeProvince)->pluck('name', 'id');
+        $dataProvince = Province::where('name', $request->input('id'))->first();
+        if (!$dataProvince) {
+            return response()->json([]);
+        }
+        $cities = City::where('province_code', $dataProvince->code)->pluck('name', 'id');
         return response()->json($cities);
     }
 }

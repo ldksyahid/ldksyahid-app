@@ -643,6 +643,14 @@
 /* SweetAlert above sheet */
 .cs-swal-above-sheet { z-index: 1200 !important; }
 
+/* SweetAlert toast below navbar */
+.swal2-container.swal2-top-end,
+.swal2-container.swal2-top-start,
+.swal2-container.swal2-top {
+    top: 80px !important;
+    padding-top: 0 !important;
+}
+
 /* Body lock when sheet open */
 body.cs-sheet-open { overflow: hidden; }
 
