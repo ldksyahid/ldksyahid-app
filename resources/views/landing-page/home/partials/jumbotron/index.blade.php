@@ -101,7 +101,7 @@
                         <span>detik</span>
                     </div>
 
-                    {{-- PEMBATAS SETENGAH LINGKARAN DENGAN WARNA PUTIH --}}
+                    {{-- SEMICIRCLE DIVIDER - WHITE --}}
                     <div class="hero-divider-desktop"></div>
 
                     <div class="container position-relative" style="z-index: 20;">
@@ -147,7 +147,7 @@
                         <div class="floating-shape shape-2"></div>
                     </div>
 
-                    {{-- PEMBATAS SETENGAH LINGKARAN MOBILE DENGAN WARNA PUTIH --}}
+                    {{-- MOBILE SEMICIRCLE DIVIDER - WHITE --}}
                     <div class="hero-divider-mobile"></div>
 
                     <div class="hero-mobile-badge">

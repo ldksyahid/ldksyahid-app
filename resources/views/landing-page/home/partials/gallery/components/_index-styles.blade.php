@@ -73,7 +73,7 @@
 }
 
 /* ═══════════════════════════════════════════════
-   EVENT CARD (Desktop) — sama persis dengan about/gallery
+   EVENT CARD (Desktop) — identical to about/gallery
    ═══════════════════════════════════════════════ */
 .gl-event-card {
     background: white; border-radius: 24px;
@@ -228,7 +228,7 @@
 .gl-empty-state h4 { font-weight: 700; color: var(--dark); margin-bottom: .5rem; }
 
 /* ═══════════════════════════════════════════════
-   MOBILE CARD — sama persis dengan about/gallery
+   MOBILE CARD — identical to about/gallery
    ═══════════════════════════════════════════════ */
 .gl-mobile-card {
     background: white; border-radius: 20px; overflow: hidden;

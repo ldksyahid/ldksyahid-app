@@ -586,7 +586,7 @@ function refreshValue(){
   var child = parent.querySelector("p[id='jumlah_pelaksanaan']");
   child.innerHTML = bahan_hitung["proker"][0]["jumlah_pelaksanaan"];
 
-  // 1. Kesesuaian Rencana
+  // 1. Plan Alignment
   var parent = bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_rencana"]["deskripsi_program"];
 
   parent.forEach((item, i) => {
@@ -600,7 +600,7 @@ function refreshValue(){
     parent[i] = {"deskripsi" : item_deskripsi, "terlaksana" : item_terlaksana};
   })
 
-  // 2. Kesesuaian Tujuan dan Sasaran
+  // 2. Goal and Target Alignment
   var parent = bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_tujuansasaran"]["tujuan"];
   parent.forEach((item, i) => {
     var list_terlaksana = document.querySelectorAll("#tujuan_" + parseFloat(i+1) + " input[type='checkbox']");
@@ -625,7 +625,7 @@ function refreshValue(){
     parent[i] = {"deskripsi" : item_deskripsi, "terlaksana" : item_terlaksana};
   })
 
-  // 3. Kesesuaian waktu dan tempat
+  // 3. Time and Venue Alignment
   var parent = bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_waktutempat"]["waktu"]["tanggal"];
 
   parent.forEach((item, i) => {
@@ -666,7 +666,7 @@ function refreshValue(){
     parent[i] = {"opsi" : filtered_id[0], "persen" : filtered_value[0]};
   })
 
-  // 3. tempat
+  // 3. venue
   var parent = bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_waktutempat"]["tempat"];
   parent.forEach((item, i) => {
     var list_terlaksana = document.querySelectorAll("#tempat_" + parseFloat(i+1) + " input[type='checkbox']");
@@ -679,7 +679,7 @@ function refreshValue(){
     parent[i] = {"namatempat" : item_deskripsi, "sesuai" : item_terlaksana};
   })
 
-  // 4. Kesesuaian Parameter Keberhasilan
+  // 4. Success Parameter Alignment
   var parent = bahan_hitung["proker"][0]["aspek_nilai"]["sesuai_parameter"]["parameter"];
 
   parent.forEach((item, i) => {

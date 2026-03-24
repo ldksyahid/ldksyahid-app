@@ -183,7 +183,7 @@
         var $c = $('#msCarousel');
         if (!$c.length || window.innerWidth > 991) return;
 
-        /* Init carousel — sama persis dengan artikel carousel */
+        /* Init carousel — identical to the article carousel */
         $c.owlCarousel({
             items       : 1,
             loop        : false,

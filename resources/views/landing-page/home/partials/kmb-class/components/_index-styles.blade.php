@@ -443,7 +443,7 @@ body.kmb2-popup-open .back-to-top {
     transition: transform .25s ease !important;
     appearance: none;
 }
-/* hover saja yang membesar, focus tidak (supaya tidak membesar saat popup pertama dibuka) */
+/* only hover enlarges it, not focus (so it doesn't enlarge when popup first opens) */
 .kmb2-modal-x:hover {
     transform: scale(1.2) !important;
     background: rgba(0,0,0,.28) !important;

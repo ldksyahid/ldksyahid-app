@@ -158,7 +158,7 @@
         overflow: visible;
     }
 
-    /* PEMBATAS DESKTOP - WARNA PUTIH */
+    /* DESKTOP DIVIDER - WHITE */
     .hero-divider-desktop {
         position: absolute;
         top: -40px;
@@ -549,7 +549,7 @@
         overflow: visible;
     }
 
-    /* PEMBATAS MOBILE - WARNA PUTIH */
+    /* MOBILE DIVIDER - WHITE */
     .hero-divider-mobile {
         position: absolute;
         top: -30px;

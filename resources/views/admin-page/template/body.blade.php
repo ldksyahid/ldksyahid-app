@@ -518,7 +518,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Dark mode overrides - digunakan saat class dark-mode ada di html atau body */
+        /* Dark mode overrides - applied when dark-mode class is present on html or body */
         html.dark-mode body {
             background-color: #1a1d21 !important;
             color: #e4e6eb;

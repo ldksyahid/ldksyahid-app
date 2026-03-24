@@ -2574,8 +2574,8 @@ footer {
 }
 
 /*
- * Icon ditempatkan di dalam .form-floating yang sudah position:relative (Bootstrap).
- * Sehingga top:50% selalu relatif terhadap tinggi input (58px) — perfectly centered.
+ * Icon is placed inside .form-floating which already has position:relative (Bootstrap).
+ * So top:50% is always relative to the input height (58px) — perfectly centered.
  */
 .auth-input-icon {
     position: absolute;
