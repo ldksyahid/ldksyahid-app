@@ -138,7 +138,7 @@
                         </p>
 
                         {{-- Subscribe Form --}}
-                        <form id="newsletterForm" class="footer-subscribe-form" method="POST" action="{{ route('subscribers.store') }}" onsubmit="return handleNewsletterSubmit(event);">
+                        <form id="newsletterForm" class="footer-subscribe-form" method="POST" action="{{ route('newsletter.store') }}" onsubmit="return handleNewsletterSubmit(event);">
                             @csrf
                             <div class="subscribe-input-wrapper">
                                 <input class="subscribe-input"
@@ -191,7 +191,7 @@
 
                             // Send AJAX request
                             const formData = new FormData(form);
-                            fetch('{{ route("subscribers.store") }}', {
+                            fetch('{{ route("newsletter.store") }}', {
                                 method: 'POST',
                                 body: formData,
                                 headers: {

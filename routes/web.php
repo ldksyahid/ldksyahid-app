@@ -102,7 +102,7 @@ Route::get('/itsupport', [ITSupportController::class, 'index'])->name('itsupport
 Route::post('/about/contact/message/store', [MessageContactController::class, 'store'])->name('messagecontact');
 
 // Route Newsletter Subscription
-Route::post('/subscribers/store', [SubscriptionController::class, 'store'])->name('subscribers.store');
+Route::post('/subscribers/store', [SubscriptionController::class, 'store'])->name('newsletter.store');
 Route::post('/subscribers/unsubscribe', [SubscriptionController::class, 'unsubscribe'])->name('subscribers.unsubscribe');
 
 // Route Article Comment
