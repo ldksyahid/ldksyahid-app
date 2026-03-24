@@ -105,9 +105,15 @@
 
                     {{-- Actions --}}
                     <div class="cs-card-actions">
+                        @if($isDeadlinePassed)
+                        <span class="cs-btn-donate cs-btn-ended">
+                            <i class="fas fa-times-circle"></i><span>Campaign Berakhir</span>
+                        </span>
+                        @else
                         <a href="{{ route('service.celengansyahid.detail.donatenow', $campaign->link) }}" class="cs-btn-donate">
                             <i class="fas fa-heart"></i><span>Donasi Sekarang</span>
                         </a>
+                        @endif
                         <div class="cs-share-group">
                             <button class="cs-share-btn cs-share-copy"
                                     onclick="csCopyUrl('{{ route('service.celengansyahid.detail', $campaign->link) }}', event)"

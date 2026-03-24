@@ -232,6 +232,28 @@
 }
 .dn-submit-btn:hover { filter: brightness(.9); transform: translateY(-1px); }
 .dn-submit-btn:active { transform: translateY(0); }
+.dn-submit-btn:disabled { background: #e5e7eb; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; filter: none; }
+
+/* ── Deadline ended notice ── */
+.dn-ended-notice {
+    display: flex; align-items: center; gap: 1rem;
+    background: #fff5f5; border: 1px solid #fecaca;
+    border-radius: 14px; padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem; color: #b91c1c;
+}
+.dn-ended-notice i { font-size: 1.4rem; flex-shrink: 0; }
+.dn-ended-notice div { flex: 1; display: flex; flex-direction: column; gap: .2rem; }
+.dn-ended-notice strong { font-size: .95rem; }
+.dn-ended-notice span { font-size: .8rem; color: #ef4444; }
+.dn-ended-back {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; gap: .35rem;
+    background: #fee2e2; color: #b91c1c;
+    border-radius: 30px; padding: .4rem 1rem;
+    font-size: .8rem; font-weight: 600; text-decoration: none;
+    transition: background .2s;
+}
+.dn-ended-back:hover { background: #fecaca; color: #b91c1c; }
 
 /* ── Action row (back + submit) ── */
 .dn-action-row {
