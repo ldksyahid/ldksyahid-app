@@ -70,6 +70,16 @@
                         <span>Kategori: {{ $val }}</span> <i class="fas fa-times"></i>
                     </span>
                 @endforeach
+                @foreach((array)request('status', []) as $val)
+                    <span class="sfb-pill" data-select-id="cs-status-select" data-value="{{ $val }}">
+                        <span>Status: {{ $statuses[$val] ?? $val }}</span> <i class="fas fa-times"></i>
+                    </span>
+                @endforeach
+                @foreach((array)request('organizer', []) as $val)
+                    <span class="sfb-pill" data-select-id="cs-organizer-select" data-value="{{ $val }}">
+                        <span>Penyelenggara: {{ $organizers[$val] ?? $val }}</span> <i class="fas fa-times"></i>
+                    </span>
+                @endforeach
             </x-search-filter-bar>
         </div>
 
@@ -146,6 +156,38 @@
                 @foreach($categories as $val => $label)
                     <option value="{{ $val }}"
                         {{ in_array($val, (array)request('category')) ? 'selected' : '' }}>
+                        {{ $label }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="sfb-fm-field-wrap">
+            <div class="sfb-fm-field-label">
+                <div class="sfb-fm-field-icon"><i class="fas fa-toggle-on"></i></div>
+                <label for="cs-status-select" class="sfb-fm-label">Status Campaign</label>
+            </div>
+            <select id="cs-status-select" class="form-select" multiple>
+                @foreach($statuses as $val => $label)
+                    <option value="{{ $val }}"
+                        {{ in_array($val, (array)request('status')) ? 'selected' : '' }}>
+                        {{ $label }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="sfb-fm-field-wrap">
+            <div class="sfb-fm-field-label">
+                <div class="sfb-fm-field-icon"><i class="fas fa-building"></i></div>
+                <label for="cs-organizer-select" class="sfb-fm-label">Penyelenggara</label>
+            </div>
+            <select id="cs-organizer-select" class="form-select" multiple>
+                @foreach($organizers as $val => $label)
+                    <option value="{{ $val }}"
+                        {{ in_array($val, (array)request('organizer')) ? 'selected' : '' }}>
                         {{ $label }}
                     </option>
                 @endforeach

@@ -116,7 +116,7 @@
                             <span class="cd-days-badge ended">{{ $daysLeft }}</span>
                         @else
                             <span>Sisa waktu</span>
-                            <span class="cd-days-badge">{{ $daysLeft }}</span>
+                            <span class="cd-days-badge">{{ $daysLeft }} hari</span>
                         @endif
                     </div>
 
