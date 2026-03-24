@@ -96,12 +96,12 @@ button.pgn-edge:last-child  { border-radius: 14px 50px 50px 14px; }
     .pgn-wrap { width: 100%; }
     .pgn-inner {
         flex-wrap: wrap;           /* boleh banyak baris */
-        justify-content: center;   /* semua baris centered */
+        justify-content: center;   /* all rows centered */
         width: 100%;
         padding: .25rem .5rem;
         gap: .3rem;
     }
-    /* Nomor halaman: baris sendiri di atas */
+    /* Page numbers: own row at the top */
     .pgn-pages {
         order: -1;                 /* tampil sebelum nav buttons */
         width: 100%;

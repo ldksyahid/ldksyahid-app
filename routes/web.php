@@ -40,13 +40,13 @@ use App\Http\Controllers\SubscriptionController;
 */
 Auth::routes(['verify' => true]);
 
-// Throttle ketat untuk login: maks 5 percobaan per menit
+// Strict throttle for login: max 5 attempts per minute
 Route::middleware('throttle:5,1')->group(function () {
     Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
     Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail']);
 });
 
-// Throttle untuk register: maks 5 akun per 10 menit
+// Throttle for register: max 5 accounts per 10 minutes
 Route::middleware('throttle:5,10')->group(function () {
     Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
 });
@@ -103,14 +103,14 @@ Route::get('/about/gallery', [GalleryController::class, 'index'])->name('gallery
 //Route LandingPage IT Support
 Route::get('/itsupport', [ITSupportController::class, 'index'])->name('itsupport.index');
 
-// Route Landing Page Contact Us Hubungi Kami di Tentang Kami
-// Throttle untuk contact form: maks 5 pesan per 10 menit
+// Route Landing Page Contact Us
+// Throttle for contact form: max 5 messages per 10 minutes
 Route::middleware('throttle:5,10')->group(function () {
     Route::post('/about/contact/message/store', [MessageContactController::class, 'store'])->name('messagecontact');
 });
 
 // Route Newsletter Subscription
-// Throttle untuk newsletter: maks 5 subscribe per 10 menit
+// Throttle for newsletter: max 5 subscriptions per 10 minutes
 Route::middleware('throttle:5,10')->group(function () {
     Route::post('/subscribers/store', [SubscriptionController::class, 'store'])->name('newsletter.store');
     Route::post('/subscribers/unsubscribe', [SubscriptionController::class, 'unsubscribe'])->name('subscribers.unsubscribe');

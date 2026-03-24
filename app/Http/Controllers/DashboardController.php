@@ -28,7 +28,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Hitung total data
+        // Count totals for each entity
         $userCount = User::count();
         $newsCount = News::count();
         $articleCount = Article::count();
@@ -50,9 +50,9 @@ class DashboardController extends Controller
         $catalogBookCount = MsCatalogBook::count();
         $financeReportCount = MsFinanceReport::count();
 
-        // Ambil data waktu solat dari API Kemenag
-        $cityId = 1301; // ID kota untuk Jakarta Pusat (ganti sesuai lokasi)
-        $date = date('Y-m-d'); // Tanggal hari ini
+        // Fetch prayer times from Kemenag API
+        $cityId = 1301; // City ID for Central Jakarta (change as needed)
+        $date = date('Y-m-d'); // Today's date
 
 
         $response = Http::get("https://api.myquran.com/v2/sholat/jadwal/$cityId/$date");

@@ -143,7 +143,7 @@
     letter-spacing: .5px; margin-top: 1px;
 }
 
-/* "Terbaru" badge */
+/* "Latest" badge */
 .ar-card-badge-new {
     position: absolute; top: .75rem; right: .75rem; z-index: 2;
     background: linear-gradient(135deg, var(--ar-primary) 0%, #00d9bb 100%);

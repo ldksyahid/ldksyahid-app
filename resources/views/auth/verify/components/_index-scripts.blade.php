@@ -1,1 +1,1 @@
-{{-- Tidak ada script khusus untuk halaman verifikasi email --}}
+{{-- No custom scripts for the email verification page --}}
