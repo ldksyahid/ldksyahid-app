@@ -1,11 +1,11 @@
 {{-- ================================================================
-     WELCOME EID FITRI POPUP
-     Muncul sekali per browser — ditandai di localStorage.
-     Key: ldksyahid_welcome_popup_eid_fitri
+     WELCOME SYAWAL FASTING POPUP
+     Appears once per browser — marked in localStorage.
+     Key: ldksyahid_welcome_popup_syawal_fasting
      ================================================================ --}}
 @include('components.welcome-revamp-popup.styles')
 
-<div id="wrp-backdrop" role="dialog" aria-modal="true" aria-label="Selamat Hari Raya Idul Fitri 1447 Hijriah">
+<div id="wrp-backdrop" role="dialog" aria-modal="true" aria-label="Ajakan Puasa Syawal 6 Hari">
     <div id="wrp-outer">
 
         <div id="wrp-card">
@@ -18,36 +18,36 @@
                 <span id="wrp-header-dot1"></span>
                 <span id="wrp-header-dot2"></span>
                 <div id="wrp-badge">
-                    <i class="fas fa-star-and-crescent"></i>
-                    <span>Eid Mubarak &bull; 1447 H</span>
+                    <i class="fas fa-moon"></i>
+                    <span>Puasa Syawal &bull; 6 Hari</span>
                 </div>
-                <h2>Hayooo, Lebaran<br>udah tiba bestie! 🌙✨</h2>
+                <h2>Bestie, jangan lupa<br>puasa Syawal yaa! 🌙✨</h2>
             </div>
 
             {{-- Body --}}
             <div id="wrp-body">
                 <p id="wrp-desc">
-                    Honestly, Ramadan tahun ini cepet banget berlalu 😭
-                    Semoga amal kita diterima Allah ﷻ ya — and literally,
-                    mohon maaf lahir batin dari LDK Syahid! 🤍
+                    6 hari puasa Syawal = pahala puasa <em>setahun penuh</em>!
+                    That's literally insane bestie — Ramadan udah kelar
+                    tapi bonus pahalanya masih ada loh 🙏
                 </p>
 
                 <div id="wrp-features">
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-heart"></i></div>
-                        <div class="wrp-feat-text">Maaf-maafan dulu yuk, no hard feelings! 🤝</div>
+                        <div class="wrp-feat-icon"><i class="fas fa-star"></i></div>
+                        <div class="wrp-feat-text">6 hari = setahun puasa. Literally salah satu deal terbaik di Islam! ✨</div>
                     </div>
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-hands-helping"></i></div>
-                        <div class="wrp-feat-text">Minal aidin wal faizin — semoga kita actually balik fitri 🌿</div>
+                        <div class="wrp-feat-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div class="wrp-feat-text">Mulai 2 Syawal — gaskeun sekarang, jangan sampe kelewat bulannya! 📅</div>
                     </div>
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-mosque"></i></div>
-                        <div class="wrp-feat-text">Ibadah Ramadan kita semoga di-acc Allah ﷻ, aamiin 🙏</div>
+                        <div class="wrp-feat-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="wrp-feat-text">Boleh nyicil, gak harus 6 hari berturut-turut — fleksibel banget bestie 🤝</div>
                     </div>
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-star-and-crescent"></i></div>
-                        <div class="wrp-feat-text">Gas nikmatin Lebaran sama keluarga, jangan lupa THR-nya 😄</div>
+                        <div class="wrp-feat-icon"><i class="fas fa-fire"></i></div>
+                        <div class="wrp-feat-text">Ramadan udah kelar, tapi momentum ibadahnya jangan ikut kelar ya! 🔥</div>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
             <div id="wrp-footer">
                 <button id="wrp-btn-explore">
                     <i class="fas fa-moon"></i>
-                    <span>Eid Mubarak! 🌙</span>
+                    <span>Yuk mulai puasa! 🌙</span>
                 </button>
                 <button id="wrp-btn-dismiss">
                     Jangan tampilkan lagi
