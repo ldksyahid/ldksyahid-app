@@ -24,6 +24,9 @@
     @if($campaigns->isEmpty())
         <div class="cs-empty-state">
             <div class="cs-empty-visual">
+                <div class="cs-empty-deco cs-empty-deco-1"></div>
+                <div class="cs-empty-deco cs-empty-deco-2"></div>
+                <div class="cs-empty-deco cs-empty-deco-3"></div>
                 <div class="cs-empty-ring cs-empty-ring-1"></div>
                 <div class="cs-empty-ring cs-empty-ring-2"></div>
                 <div class="cs-empty-icon-wrap">
@@ -34,7 +37,12 @@
                 </div>
             </div>
             <h4 class="cs-empty-title">Belum Ada Campaign</h4>
-            <p class="cs-empty-sub">Coba ubah kata kunci pencarian atau reset filter</p>
+            <p class="cs-empty-sub">Coba ubah kata kunci pencarian atau hapus beberapa filter yang aktif</p>
+            <div class="cs-empty-tips">
+                <span class="cs-empty-tip">💡 Coba kata kunci lebih umum</span>
+                <span class="cs-empty-tip">🗑️ Hapus beberapa filter</span>
+                <span class="cs-empty-tip">📅 Coba status berbeda</span>
+            </div>
         </div>
     @else
         <div class="cs-grid">
@@ -140,7 +148,10 @@
     @if($campaigns->isEmpty())
         <div class="cs-empty-state">
             <div class="cs-empty-visual">
+                <div class="cs-empty-deco cs-empty-deco-1"></div>
+                <div class="cs-empty-deco cs-empty-deco-2"></div>
                 <div class="cs-empty-ring cs-empty-ring-1"></div>
+                <div class="cs-empty-ring cs-empty-ring-2"></div>
                 <div class="cs-empty-icon-wrap">
                     <i class="fas fa-hand-holding-heart"></i>
                     <span class="cs-empty-sparkle cs-empty-sparkle-1">💝</span>
@@ -148,7 +159,11 @@
                 </div>
             </div>
             <h4 class="cs-empty-title">Belum Ada Campaign</h4>
-            <p class="cs-empty-sub">Coba ubah kata kunci atau reset filter</p>
+            <p class="cs-empty-sub">Coba ubah kata kunci atau hapus filter yang aktif</p>
+            <div class="cs-empty-tips">
+                <span class="cs-empty-tip">💡 Kata kunci lebih umum</span>
+                <span class="cs-empty-tip">🗑️ Hapus filter</span>
+            </div>
         </div>
     @else
         <div class="cs-mobile-carousel" id="cs-mobile-carousel">
