@@ -50,17 +50,17 @@
                         <div class="wrp-feat-text">Ramadan udah kelar, tapi momentum ibadahnya jangan ikut kelar ya! 🔥</div>
                     </div>
                 </div>
-            </div>
 
-            {{-- Hadith --}}
-            <div id="wrp-hadith">
-                <div id="wrp-hadith-arabic">
-                    مَنْ صَامَ رَمَضَانَ ثُمَّ أَتْبَعَهُ سِتًّا مِنْ شَوَّالٍ كَانَ كَصِيَامِ الدَّهْرِ
+                {{-- Hadith --}}
+                <div id="wrp-hadith">
+                    <div id="wrp-hadith-arabic">
+                        مَنْ صَامَ رَمَضَانَ ثُمَّ أَتْبَعَهُ سِتًّا مِنْ شَوَّالٍ كَانَ كَصِيَامِ الدَّهْرِ
+                    </div>
+                    <div id="wrp-hadith-trans">
+                        &ldquo;Barangsiapa berpuasa Ramadan kemudian mengikutinya dengan enam hari di bulan Syawal, maka ia seperti berpuasa sepanjang tahun.&rdquo;
+                    </div>
+                    <div id="wrp-hadith-source">HR. Muslim, no. 1164</div>
                 </div>
-                <div id="wrp-hadith-trans">
-                    &ldquo;Barangsiapa berpuasa Ramadan kemudian mengikutinya dengan enam hari di bulan Syawal, maka ia seperti berpuasa sepanjang tahun.&rdquo;
-                </div>
-                <div id="wrp-hadith-source">HR. Muslim, no. 1164</div>
             </div>
 
             {{-- Footer --}}
