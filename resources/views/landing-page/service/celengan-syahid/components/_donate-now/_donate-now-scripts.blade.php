@@ -110,17 +110,59 @@
         });
     });
 
-    /* ── Searchable select (native datalist) ─────────────────── */
-    // The select elements use <datalist> — nothing extra needed.
-    // Below handles graceful fallback for browsers that don't style
-    // required <select> properly inside was-validated.
-    document.querySelectorAll('.dn-select[required]').forEach(function (sel) {
-        sel.addEventListener('change', function () {
-            if (this.value) {
-                this.classList.remove('is-invalid');
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(function () {
+    var $domisili  = $('#dn-domisili');
+    var $pekerjaan = $('#dn-pekerjaan');
+
+    $domisili.select2({
+        placeholder: 'Pilih Kota',
+        allowClear: false,
+        width: '100%',
+        minimumResultsForSearch: 8,
+        dropdownParent: $('body')
+    });
+    $pekerjaan.select2({
+        placeholder: 'Cari atau pilih pekerjaan…',
+        allowClear: false,
+        width: '100%',
+        minimumInputLength: 0,
+        dropdownParent: $('body'),
+        ajax: {
+            url: '{{ route("service.celengansyahid.api.jobs") }}',
+            dataType: 'json',
+            delay: 200,
+            data: function (params) { return { q: params.term || '' }; },
+            processResults: function (data) { return { results: data.results }; },
+            cache: true
+        }
+    });
+
+    function clearSelectError($sel) {
+        $sel.closest('.dn-select-wrap').removeClass('is-invalid');
+        $sel.closest('.dn-field').find('.dn-invalid-msg').hide();
+    }
+
+    $domisili.on('select2:select',  function () { clearSelectError($(this)); });
+    $pekerjaan.on('select2:select', function () { clearSelectError($(this)); });
+
+    // Visual validation for Select2 fields on form submit
+    $('.dn-form').on('submit.dnS2', function () {
+        [$domisili, $pekerjaan].forEach(function ($sel) {
+            var $wrap = $sel.closest('.dn-select-wrap');
+            var $msg  = $wrap.next('.dn-invalid-msg');
+            if (!$sel.val()) {
+                $wrap.addClass('is-invalid');
+                $msg.show();
+            } else {
+                $wrap.removeClass('is-invalid');
+                $msg.hide();
             }
         });
     });
-
-})();
+});
 </script>

@@ -58,12 +58,6 @@
 <section class="cd-page py-5 mt-5">
     <div class="container cd-page-content">
 
-        {{-- ── Back Link ──────────────────────────────────────── --}}
-        <a href="{{ route('service.celengansyahid') }}" class="cd-back-link wow fadeIn" data-wow-delay="0.05s">
-            <i class="fas fa-arrow-left"></i>
-            <span>Kembali ke Celengan Syahid</span>
-        </a>
-
         {{-- ── Main Grid: Image + Info Panel ──────────────────── --}}
         <div class="row g-4 align-items-start wow fadeInUp" data-wow-delay="0.1s">
 
@@ -223,12 +217,23 @@
 
         </div>{{-- /cd-tabs-wrap --}}
 
+        <div class="my-3 wow fadeInUp" data-wow-delay="0.15s">
+            {{-- ── Back Link ──────────────────────────────────────── --}}
+            <a href="{{ route('service.celengansyahid') }}" class="cd-back-link wow fadeIn" data-wow-delay="0.05s">
+                <span class="cd-back-icon"><i class="fas fa-arrow-left"></i></span>
+                <span>Kembali ke Celengan Syahid</span>
+            </a>
+        </div>
+
     </div>{{-- /container --}}
 </section>
 
 
 {{-- ── Mobile Sticky Donate Footer (d-lg-none) ──────────────────── --}}
 <div class="cd-mobile-footer d-lg-none">
+    <a href="{{ route('service.celengansyahid') }}" class="cd-mobile-back-btn" title="Kembali ke Celengan Syahid">
+        <i class="fas fa-arrow-left"></i>
+    </a>
     <a href="{{ route('service.celengansyahid.detail.donatenow', $data->link) }}" class="cd-mobile-donate-btn">
         <i class="fas fa-heart"></i> Donasi Sekarang
     </a>

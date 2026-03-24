@@ -28,12 +28,6 @@
 <section class="dn-page py-5 mt-5">
     <div class="container" style="max-width: 720px;">
 
-        {{-- ── Back Link ────────────────────────────────────────── --}}
-        <a href="{{ route('service.celengansyahid.detail', $data->link) }}" class="dn-back-link wow fadeIn" data-wow-delay="0.05s">
-            <i class="fas fa-arrow-left"></i>
-            <span>Kembali ke Detail Campaign</span>
-        </a>
-
         {{-- ── Campaign Context Header ─────────────────────────── --}}
         <div class="dn-context-wrap wow fadeInUp" data-wow-delay="0.1s">
             <div class="row g-0">
@@ -194,9 +188,6 @@
                                     name="pekerjaan_donatur"
                                     required>
                                 <option value="">Pilih Pekerjaan</option>
-                                @foreach($jobs as $id => $name)
-                                    <option value="{{ $name }}">{{ $name }}</option>
-                                @endforeach
                             </select>
                         </div>
                         <div class="dn-invalid-msg">Pekerjaan wajib dipilih</div>
@@ -234,9 +225,15 @@
                     <span class="dn-total-label"><i class="fas fa-receipt me-1"></i> Total Donasi</span>
                     <span class="dn-total-value" id="dn-total-value">Rp0</span>
                 </div>
-                <button type="submit" class="dn-submit-btn">
-                    <i class="fas fa-lock"></i> Lanjutkan Pembayaran
-                </button>
+                <div class="dn-action-row">
+                    <a href="{{ route('service.celengansyahid.detail', $data->link) }}" class="dn-back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Kembali</span>
+                    </a>
+                    <button type="submit" class="dn-submit-btn">
+                        <i class="fas fa-lock"></i> Lanjutkan Pembayaran
+                    </button>
+                </div>
             </div>
 
         </form>
