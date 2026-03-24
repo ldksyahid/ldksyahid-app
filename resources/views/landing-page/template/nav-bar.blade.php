@@ -2388,7 +2388,7 @@ body.prayer-modal-open .back-to-top,
 <script>
 /* ===== PRAYER TIMES ===== */
 (function() {
-    const CITY_ID = 1301; // Jakarta Pusat — sesuaikan jika perlu
+    const CITY_ID = 1301; // Central Jakarta — change if needed
     const PRAYERS = [
         { key: 'subuh',   name: 'Subuh'   },
         { key: 'dzuhur',  name: 'Dzuhur'  },

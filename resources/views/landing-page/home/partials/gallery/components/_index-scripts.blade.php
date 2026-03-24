@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (videoOverlay && videoOverlay.classList.contains('active')) { hglCloseVideo(); return; }
             if (bs           && bs.classList.contains('active'))           { hglCloseBs();    return; }
         }
-        /* Arrow keys untuk zoom */
+        /* Arrow keys for zoom */
         var zoomOverlay = document.getElementById('hgl-zoom-overlay');
         if (zoomOverlay && zoomOverlay.classList.contains('active')) {
             if (e.key === 'ArrowLeft')  { zoomIdx = (zoomIdx - 1 + zoomPhotos.length) % zoomPhotos.length; renderZoom(); }
