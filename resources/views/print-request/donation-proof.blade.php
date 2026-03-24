@@ -125,6 +125,7 @@
             border: 1px solid #8ed8d3;
             border-radius: 20px;
             padding: 2px 9px; margin-right: 5px;
+            white-space: nowrap; display: inline-block;
         }
 
         /* Fields */
