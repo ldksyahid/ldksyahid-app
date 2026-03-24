@@ -3110,3 +3110,12 @@ html[data-theme="dark"] .swal2-toast .swal2-icon.swal2-info    { border-color: #
 
 /* Timer progress bar in toast */
 html[data-theme="dark"] .swal2-toast .swal2-timer-progress-bar { background: rgba(0,167,157,.6); }
+
+/* ========================================
+   Text Selection
+   ======================================== */
+::selection         { background: rgba(0,167,157,.25); color: inherit; }
+::-moz-selection    { background: rgba(0,167,157,.25); color: inherit; }
+
+html[data-theme="dark"] ::selection      { background: rgba(0,167,157,.4); color: #fff; }
+html[data-theme="dark"] ::-moz-selection { background: rgba(0,167,157,.4); color: #fff; }
