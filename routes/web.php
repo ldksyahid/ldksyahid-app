@@ -147,6 +147,7 @@ Route::get('/celengansyahid/payment/{id}', [CelenganSyahidController::class, 'op
 Route::get('/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController::class, 'savePaymentDonation'])->name('service.celengansyahid.savePayment');
 
 Route::get('/celengansyahid/api/jobs', [CelenganSyahidController::class, 'getJobs'])->name('service.celengansyahid.api.jobs');
+Route::get('/celengansyahid/api/check-payment/{id}', [CelenganSyahidController::class, 'checkPaymentStatus'])->name('service.celengansyahid.api.checkPayment');
 Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
 Route::post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
 
