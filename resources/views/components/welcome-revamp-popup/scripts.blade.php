@@ -1,13 +1,15 @@
 <script>
 (function () {
-    var LS_KEY_OLD = 'ldksyahid_welcome_popup';
-    var LS_KEY     = 'ldksyahid_welcome_popup_eid_fitri';
-    var backdrop   = document.getElementById('wrp-backdrop');
+    var LS_KEYS_OLD = [
+        'ldksyahid_welcome_popup',
+        'ldksyahid_welcome_popup_eid_fitri',
+        'ldksyahid_welcome_popup_arafah_fasting',
+    ];
+    var LS_KEY   = 'ldksyahid_welcome_popup_syawal_fasting';
+    var backdrop = document.getElementById('wrp-backdrop');
 
-    /* Remove old key if it still exists */
-    if (localStorage.getItem(LS_KEY_OLD)) {
-        localStorage.removeItem(LS_KEY_OLD);
-    }
+    /* Remove old keys if they still exist */
+    LS_KEYS_OLD.forEach(function (key) { localStorage.removeItem(key); });
 
     /* Already shown before — skip */
     if (localStorage.getItem(LS_KEY)) return;
