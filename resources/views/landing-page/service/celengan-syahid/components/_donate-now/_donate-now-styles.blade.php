@@ -203,6 +203,46 @@
 }
 
 
+/* ── reCAPTCHA wrapper ── */
+.dn-captcha-wrap {
+    margin: 1.25rem 0;
+}
+.dn-captcha-inner {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    /* Selalu putih — background iframe reCAPTCHA tidak bisa diubah */
+    background: #ffffff;
+    border: 2px solid var(--dn-gray-200);
+    border-radius: var(--dn-radius);
+    padding: 0;
+    box-shadow: var(--dn-shadow);
+    transition: border-color .25s ease, box-shadow .25s ease;
+    overflow: hidden;
+    transform: translateZ(0);
+    isolation: isolate;
+}
+.dn-captcha-inner:focus-within {
+    border-color: var(--dn-primary);
+    box-shadow: 0 0 0 3px rgba(0,167,157,.12);
+}
+.dn-captcha-inner .g-recaptcha,
+.dn-captcha-inner > div {
+    margin: 0 !important;
+    display: block !important;
+}
+
+/* Dark mode: tetap putih (iframe), hanya border yang disesuaikan */
+[data-theme="dark"] .dn-captcha-inner {
+    background: #ffffff;
+    border-color: rgba(0,167,157,.4);
+}
+[data-theme="dark"] .dn-captcha-inner:focus-within {
+    border-color: var(--dn-primary);
+    box-shadow: 0 0 0 3px rgba(0,167,157,.2);
+}
+
+
 /* ── Total row ── */
 .dn-total-row {
     display: flex; align-items: center; gap: .75rem;
