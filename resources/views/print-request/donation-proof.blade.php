@@ -10,7 +10,8 @@
 
     $donationDate = \Carbon\Carbon::parse($donation->created_at)->locale('id')->isoFormat('dddd, D MMMM Y');
     $donationTime = \Carbon\Carbon::parse($donation->created_at)->format('H:i') . ' WIB';
-    $printDate    = \Carbon\Carbon::now('Asia/Jakarta')->isoFormat('D MMMM Y · H:i') . ' WIB';
+    $printDate    = \Carbon\Carbon::now('Asia/Jakarta')->isoFormat('D MMMM Y') . ' pukul '
+                    . \Carbon\Carbon::now('Asia/Jakarta')->format('H:i') . ' WIB';
 
     $logoUrl = 'https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1';
 
@@ -20,6 +21,8 @@
     $deadlineStr   = $campaign->deadline
                         ? \Carbon\Carbon::parse($campaign->deadline)->locale('id')->isoFormat('D MMMM Y')
                         : null;
+    $location      = implode(', ', array_filter([$campaign->kota, $campaign->provinsi]));
+    $paymentMethod = implode(' - ', array_filter([$donation->metode_pembayaran, $donation->nama_merchant]));
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -27,399 +30,416 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Bukti Donasi #{{ $donation->id }}</title>
-    <link rel="icon" href="{{ $logoUrl }}" type="image/x-icon" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
-            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-            background: #eef2f7;
+            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-size: 12px;
             color: #1a2332;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
+            background-color: #ffffff;
+            margin: 0; padding: 0;
         }
 
-        /* ── Page wrapper ── */
-        .dp-wrap { max-width: 760px; margin: 2rem auto; }
-        .dp-card {
-            background: #fff;
-            border-radius: 20px;
+        /* ── Outer wrapper ── */
+        .wrap {
+            width: 700px;
+            margin: 0 auto;
+            border: 1px solid #b2e8e4;
+            border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 12px 50px rgba(0,0,0,.13);
         }
 
-        /* ════════════════ HEADER ════════════════ */
-        .dp-header {
-            background: linear-gradient(135deg, #006b65 0%, #00a79d 45%, #00c9bc 80%, #2ed8cd 100%);
-            padding: 1.75rem 2.25rem;
-            display: flex; align-items: center; justify-content: space-between;
-            position: relative; overflow: hidden;
-            -webkit-print-color-adjust: exact; print-color-adjust: exact;
-        }
-        .dp-hd1 { position:absolute; top:-50px; right:-50px; width:200px; height:200px; background:rgba(255,255,255,.07); border-radius:50%; }
-        .dp-hd2 { position:absolute; bottom:-80px; left:35%; width:260px; height:260px; background:rgba(255,255,255,.04); border-radius:50%; }
-        .dp-hd3 { position:absolute; top:10px; left:45%; width:80px; height:80px; background:rgba(255,255,255,.05); border-radius:50%; }
+        /* ════════ HEADER ════════ */
+        .hdr { background-color: #00a79d; padding: 0; }
+        .hdr table { width: 100%; border-collapse: collapse; }
+        .hdr-left  { padding: 18px 22px; vertical-align: middle; }
+        .hdr-right { padding: 18px 22px; vertical-align: middle; text-align: right; }
 
-        .dp-brand { display:flex; align-items:center; gap:.875rem; position:relative; z-index:1; }
-        .dp-logo-ring {
-            width:60px; height:60px;
-            background:rgba(255,255,255,.22); border-radius:16px;
-            display:flex; align-items:center; justify-content:center;
-            padding:6px; flex-shrink:0; border:1.5px solid rgba(255,255,255,.3);
+        .hdr-logo {
+            width: 52px; height: 52px; vertical-align: middle;
+            background-color: #ffffff; border-radius: 12px;
+            padding: 4px;
         }
-        .dp-logo-ring img { width:100%; height:100%; object-fit:contain; border-radius:10px; }
-        .dp-org-name { font-size:1.05rem; font-weight:800; color:#fff; line-height:1.2; }
-        .dp-org-sub  { font-size:.72rem; color:rgba(255,255,255,.8); margin-top:.15rem; }
+        .hdr-org       { vertical-align: middle; padding-left: 12px; }
+        .hdr-org-name  { font-size: 15px; font-weight: bold; color: #ffffff; letter-spacing: .3px; }
+        .hdr-org-sub   { font-size: 9px; color: #c8f5f1; margin-top: 3px; }
 
-        .dp-doc-badge { text-align:right; position:relative; z-index:1; }
-        .dp-doc-tag {
-            display:inline-block;
-            background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3);
-            color:rgba(255,255,255,.9); font-size:.58rem; font-weight:700;
-            letter-spacing:2.5px; text-transform:uppercase;
-            padding:.22rem .7rem; border-radius:20px; margin-bottom:.4rem;
+        .hdr-tag {
+            display: block;
+            font-size: 7px; font-weight: bold; color: rgba(255,255,255,0.8);
+            letter-spacing: 2.5px; text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 20px; padding: 2px 10px;
+            margin-bottom: 6px;
         }
-        .dp-doc-title { font-size:1.75rem; font-weight:900; color:#fff; line-height:1.05; letter-spacing:-.5px; }
-        .dp-doc-sub   { font-size:.7rem; color:rgba(255,255,255,.75); margin-top:.15rem; }
+        .hdr-title { font-size: 26px; font-weight: bold; color: #ffffff; line-height: 1.1; }
+        .hdr-sub   { font-size: 9px; color: #c8f5f1; margin-top: 3px; letter-spacing: .5px; }
 
-        /* ════════════════ META STRIP ════════════════ */
-        .dp-meta {
-            display:flex; background:#f0fdfc;
-            border-bottom:1.5px solid #b2f0eb;
-        }
-        .dp-meta-item {
-            flex:1; padding:.75rem 1.25rem;
-            border-right:1px solid #b2f0eb;
-        }
-        .dp-meta-item:last-child { border-right:none; }
-        .dp-meta-label { font-size:.58rem; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:1.2px; margin-bottom:.18rem; }
-        .dp-meta-value { font-size:.8rem; font-weight:700; color:#1a2332; }
-
-        .dp-status-pill {
-            display:inline-flex; align-items:center; gap:.3rem;
-            padding:.2rem .65rem; border-radius:20px;
-            font-size:.7rem; font-weight:700;
-        }
-        .dp-status-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
-
-        /* ════════════════ BODY ════════════════ */
-        .dp-body { padding:1.75rem 2.25rem 1.25rem; }
-
-        /* Section header */
-        .dp-sec {
-            display:flex; align-items:center; gap:.5rem;
-            margin-bottom:.875rem; margin-top:1.5rem;
-        }
-        .dp-sec:first-child { margin-top:0; }
-        .dp-sec-icon {
-            width:26px; height:26px;
-            background:linear-gradient(135deg,#00a79d,#00c9bc);
-            border-radius:7px;
-            display:flex; align-items:center; justify-content:center;
-            font-size:.75rem; flex-shrink:0;
-        }
-        .dp-sec-label { font-size:.62rem; font-weight:700; color:#00a79d; text-transform:uppercase; letter-spacing:1.5px; }
-        .dp-sec-line   { flex:1; height:1px; background:#e0f7f5; }
-
-        /* Campaign card */
-        .dp-campaign {
-            background:linear-gradient(135deg,#e8fbf9 0%,#f0fdfc 100%);
-            border:1.5px solid rgba(0,167,157,.2);
-            border-radius:14px; padding:1rem 1.25rem;
-            position:relative; overflow:hidden;
-            margin-bottom:.25rem;
-        }
-        .dp-campaign::before {
-            content:''; position:absolute; top:0; left:0;
-            width:4px; height:100%;
-            background:linear-gradient(180deg,#00a79d,#00c9bc);
-            border-radius:4px 0 0 4px;
-        }
-        .dp-campaign-name { font-size:.95rem; font-weight:800; color:#1a2332; line-height:1.35; padding-left:.25rem; margin-bottom:.5rem; }
-        .dp-campaign-tags { display:flex; flex-wrap:wrap; gap:.375rem; padding-left:.25rem; }
-        .dp-campaign-tag {
-            display:inline-flex; align-items:center; gap:.25rem;
-            background:rgba(0,167,157,.1); color:#007a73;
-            font-size:.65rem; font-weight:600;
-            padding:.18rem .6rem; border-radius:20px;
+        /* ════════ META STRIP ════════ */
+        .meta { background-color: #e8faf8; }
+        .meta table { width: 100%; border-collapse: collapse; }
+        .meta td { padding: 10px 16px; border-right: 1px solid #b2f0eb; vertical-align: top; }
+        .meta td:last-child { border-right: none; }
+        .meta-lbl { font-size: 7px; font-weight: bold; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; }
+        .meta-val { font-size: 10px; font-weight: bold; color: #1a2332; margin-top: 3px; }
+        .pill {
+            font-size: 9px; font-weight: bold;
+            padding: 3px 10px; border: 1px solid;
+            border-radius: 20px;
         }
 
-        /* Info grid */
-        .dp-grid { display:grid; grid-template-columns:1fr 1fr; gap:.625rem; }
-        .dp-field {
-            background:#f9fafb; border:1px solid #e9ecef;
-            border-radius:11px; padding:.75rem 1rem;
-        }
-        .dp-field.span2 { grid-column:1/-1; }
-        .dp-field-label { font-size:.58rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:1px; margin-bottom:.2rem; }
-        .dp-field-value { font-size:.85rem; font-weight:600; color:#1a2332; word-break:break-word; }
-        .dp-field-empty { color:#d1d5db; font-style:italic; }
+        /* ════════ BODY ════════ */
+        .body-pad { padding: 18px 22px 14px; }
 
-        /* Payment breakdown */
-        .dp-payment-table {
-            width:100%; border-radius:14px; overflow:hidden;
-            border:1px solid #e0f7f5;
+        /* Section heading */
+        .sec-hdr { margin-bottom: 10px; margin-top: 18px; }
+        .sec-hdr:first-child { margin-top: 0; }
+        .sec-hdr table { width: 100%; border-collapse: collapse; }
+        .sec-hdr td { vertical-align: middle; padding: 0; }
+        .sec-icon {
+            width: 24px; height: 24px;
+            background-color: #006b65;
+            border-radius: 7px;
+            color: #ffffff; font-size: 8px; font-weight: bold;
+            text-align: center; vertical-align: middle;
+            padding-top: 6px;
         }
-        .dp-payment-row {
-            display:flex; align-items:center; justify-content:space-between;
-            padding:.75rem 1.25rem;
-            border-bottom:1px solid #e0f7f5;
+        .sec-lbl {
+            font-size: 8px; font-weight: bold; color: #006b65;
+            text-transform: uppercase; letter-spacing: 2px;
+            padding-left: 8px; white-space: nowrap;
         }
-        .dp-payment-row:last-child { border-bottom:none; }
-        .dp-payment-row.total {
-            background:linear-gradient(135deg,#006b65,#00a79d 50%,#00c4b8);
-            -webkit-print-color-adjust:exact; print-color-adjust:exact;
-        }
-        .dp-pay-label { font-size:.78rem; color:#374151; font-weight:500; }
-        .dp-pay-label-sub { font-size:.65rem; color:#9ca3af; margin-top:.1rem; }
-        .dp-pay-value { font-size:.85rem; font-weight:700; color:#1a2332; }
-        .dp-payment-row.total .dp-pay-label { color:rgba(255,255,255,.8); font-size:.72rem; text-transform:uppercase; letter-spacing:.8px; }
-        .dp-payment-row.total .dp-pay-value { color:#fff; font-size:1.2rem; font-weight:900; }
+        .sec-line td { border-bottom: 1.5px solid #b2f0eb; }
 
-        /* Message box */
-        .dp-msg-box {
-            background:#fefce8; border:1px solid #fde68a;
-            border-radius:11px; padding:.875rem 1.125rem;
-            font-size:.82rem; color:#374151; line-height:1.6;
-            font-style:italic;
+        /* Campaign */
+        .campaign-box {
+            background-color: #e8faf8;
+            border: 1px solid #99ddd9;
+            border-radius: 10px;
+            padding: 12px 14px;
         }
-        .dp-msg-box::before { content:'"'; font-size:1.5rem; color:#d97706; line-height:0; vertical-align:-.3rem; margin-right:.25rem; }
-        .dp-msg-box::after  { content:'"'; font-size:1.5rem; color:#d97706; line-height:0; vertical-align:-.3rem; margin-left:.1rem; }
+        .campaign-name { font-size: 14px; font-weight: bold; color: #1a2332; margin-bottom: 8px; line-height: 1.35; }
+        .tag-wrap { margin-top: 2px; }
+        .tag {
+            font-size: 8px; font-weight: bold;
+            color: #006b65; background-color: #c8f0ec;
+            border: 1px solid #8ed8d3;
+            border-radius: 20px;
+            padding: 2px 9px; margin-right: 5px;
+        }
+
+        /* Fields */
+        .fields { width: 100%; border-collapse: collapse; }
+        .fields td { vertical-align: top; padding: 3px; }
+        .field-box {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 8px 11px;
+        }
+        .field-lbl { font-size: 7px; font-weight: bold; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+        .field-val { font-size: 11px; font-weight: bold; color: #1a2332; }
+
+        /* Payment table */
+        .pay-wrap { border: 1px solid #b2f0eb; border-radius: 10px; overflow: hidden; }
+        .pay-tbl { width: 100%; border-collapse: collapse; }
+        .pay-tbl td { padding: 10px 16px; border-bottom: 1px solid #e0f7f5; vertical-align: middle; }
+        .pay-tbl tr:last-child td { border-bottom: none; }
+        .pay-tbl tr.alt td { background-color: #f0fdfc; }
+        .pay-tbl tr.total td { background-color: #006b65; padding: 14px 16px; }
+        .pay-lbl   { font-size: 12px; color: #374151; }
+        .pay-sub   { font-size: 9px; color: #9ca3af; margin-top: 2px; }
+        .pay-val   { font-size: 12px; font-weight: bold; color: #1a2332; text-align: right; }
+        .pay-lbl-t { font-size: 9px; font-weight: bold; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 1.2px; }
+        .pay-val-t { font-size: 20px; font-weight: bold; color: #ffffff; text-align: right; }
+
+        /* Message */
+        .msg-box {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 11px; color: #374151;
+            line-height: 1.7; font-style: italic;
+        }
 
         /* Org info */
-        .dp-org-row { display:flex; gap:1.5rem; }
-        .dp-org-col { flex:1; }
-        .dp-org-col-label { font-size:.6rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:1px; margin-bottom:.3rem; }
-        .dp-org-col-text  { font-size:.78rem; color:#374151; line-height:1.7; }
-
-        /* ════════════════ FOOTER ════════════════ */
-        .dp-footer {
-            background:#f9fafb; border-top:1.5px solid #e9ecef;
-            padding:1.125rem 2.25rem 1.375rem;
-            display:flex; align-items:flex-end; justify-content:space-between; gap:2rem;
+        .org-box {
+            background-color: #f8fffe;
+            border: 1px solid #d0eeec;
+            border-radius: 10px;
+            padding: 12px 14px;
         }
-        .dp-disclaimer { flex:1; font-size:.62rem; color:#9ca3af; line-height:1.7; font-style:italic; }
-        .dp-print-info  { font-size:.6rem; color:#d1d5db; margin-top:.375rem; }
-        .dp-sign { text-align:center; flex-shrink:0; min-width:140px; }
-        .dp-sign-box { height:55px; border-bottom:1.5px solid #d1d5db; margin-bottom:.35rem; }
-        .dp-sign-label { font-size:.6rem; color:#9ca3af; font-weight:500; }
+        .org-tbl { width: 100%; border-collapse: collapse; }
+        .org-tbl td { vertical-align: top; padding-right: 14px; width: 50%; }
+        .org-tbl td:last-child { padding-right: 0; padding-left: 14px; }
+        .org-lbl  { font-size: 7px; font-weight: bold; color: #00a79d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .org-text { font-size: 10px; color: #374151; line-height: 1.9; }
 
-        /* ════════════════ PRINT ════════════════ */
+        /* ════════ FOOTER ════════ */
+        .footer {
+            background-color: #f0fdfc;
+            border-top: 1px solid #b2f0eb;
+            padding: 12px 22px 16px;
+        }
+        .footer table { width: 100%; border-collapse: collapse; }
+        .footer td { vertical-align: bottom; }
+        .footer td:last-child { text-align: center; width: 155px; }
+        .disclaimer  { font-size: 8px; color: #6b7280; line-height: 1.8; font-style: italic; }
+        .print-info  { font-size: 7px; color: #a0aec0; margin-top: 5px; }
+
+        /* ════════ PRINT ════════ */
         @media print {
-            body { background:#fff; }
-            .dp-wrap { margin:0; max-width:100%; }
-            .dp-card { box-shadow:none; border-radius:0; }
-            .dp-header, .dp-payment-row.total { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+            body { background-color: #ffffff; }
+            .wrap { border: none; width: 100%; margin: 0; }
         }
-        @page { size:A4; margin:0; }
+        @page { size: A4; margin: 12mm 10mm; }
     </style>
 </head>
 <body>
-<div class="dp-wrap">
-<div class="dp-card">
+<div class="wrap">
 
-    {{-- ══ HEADER ══ --}}
-    <div class="dp-header">
-        <div class="dp-hd1"></div><div class="dp-hd2"></div><div class="dp-hd3"></div>
-        <div class="dp-brand">
-            <div class="dp-logo-ring"><img src="{{ $logoUrl }}" alt="LDK Syahid"></div>
-            <div>
-                <div class="dp-org-name">UKM LDK Syahid</div>
-                <div class="dp-org-sub">UIN Syarif Hidayatullah Jakarta</div>
-            </div>
-        </div>
-        <div class="dp-doc-badge">
-            <div class="dp-doc-tag">Dokumen Resmi</div>
-            <div class="dp-doc-title">Bukti<br>Donasi</div>
-            <div class="dp-doc-sub">Celengan Syahid</div>
-        </div>
+    {{-- HEADER --}}
+    <div class="hdr">
+        <table>
+            <tr>
+                <td class="hdr-left">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="vertical-align:middle">
+                                <img src="{{ $logoUrl }}" class="hdr-logo" alt="">
+                            </td>
+                            <td class="hdr-org">
+                                <div class="hdr-org-name">UKM LDK Syahid</div>
+                                <div class="hdr-org-sub">UIN Syarif Hidayatullah Jakarta</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td class="hdr-right">
+                    <div class="hdr-tag">Dokumen Resmi</div>
+                    <div class="hdr-title">Bukti Donasi</div>
+                    <div class="hdr-sub">Program Celengan Syahid</div>
+                </td>
+            </tr>
+        </table>
     </div>
 
-    {{-- ══ META STRIP ══ --}}
-    <div class="dp-meta">
-        <div class="dp-meta-item">
-            <div class="dp-meta-label">No. Donasi</div>
-            <div class="dp-meta-value" style="font-size:.7rem; word-break:break-all">{{ $donation->id }}</div>
-        </div>
-        <div class="dp-meta-item">
-            <div class="dp-meta-label">Tanggal Donasi</div>
-            <div class="dp-meta-value" style="font-size:.72rem">{{ $donationDate }}</div>
-        </div>
-        <div class="dp-meta-item">
-            <div class="dp-meta-label">Waktu</div>
-            <div class="dp-meta-value">{{ $donationTime }}</div>
-        </div>
-        <div class="dp-meta-item">
-            <div class="dp-meta-label">Status Pembayaran</div>
-            <div class="dp-meta-value">
-                <span class="dp-status-pill"
-                      style="background:{{ $statusBg }};color:{{ $statusColor }};border:1px solid {{ $statusBdr }}">
-                    <span class="dp-status-dot" style="background:{{ $statusColor }}"></span>
-                    {{ $statusLabel }}
-                </span>
-            </div>
-        </div>
+    {{-- META STRIP --}}
+    <div class="meta">
+        <table>
+            <tr>
+                <td>
+                    <div class="meta-lbl">No. Donasi</div>
+                    <div class="meta-val" style="font-size:8px; word-break:break-all">{{ $donation->id }}</div>
+                </td>
+                <td>
+                    <div class="meta-lbl">Tanggal Donasi</div>
+                    <div class="meta-val" style="font-size:9px">{{ $donationDate }}</div>
+                </td>
+                <td>
+                    <div class="meta-lbl">Waktu</div>
+                    <div class="meta-val">{{ $donationTime }}</div>
+                </td>
+                <td>
+                    <div class="meta-lbl">Status Pembayaran</div>
+                    <div class="meta-val">
+                        <span class="pill"
+                              style="color:{{ $statusColor }};background-color:{{ $statusBg }};border-color:{{ $statusBdr }}">
+                            {{ $statusLabel }}
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 
-    {{-- ══ BODY ══ --}}
-    <div class="dp-body">
+    {{-- BODY --}}
+    <div class="body-pad">
 
         {{-- Campaign --}}
-        <div class="dp-sec">
-            <div class="dp-sec-icon">🏕</div>
-            <div class="dp-sec-label">Informasi Campaign</div>
-            <div class="dp-sec-line"></div>
+        <div class="sec-hdr">
+            <table>
+                <tr>
+                    <td style="width:22px"><div class="sec-icon">C</div></td>
+                    <td style="width:1px"><span class="sec-lbl">Informasi Campaign</span></td>
+                    <td class="sec-line"><table width="100%"><tr><td></td></tr></table></td>
+                </tr>
+            </table>
         </div>
-        <div class="dp-campaign">
-            <div class="dp-campaign-name">{{ $campaign->judul }}</div>
-            <div class="dp-campaign-tags">
-                @if($campaign->kategori)
-                <span class="dp-campaign-tag">📂 {{ $campaign->kategori }}</span>
-                @endif
-                @if($campaign->kota || $campaign->provinsi)
-                <span class="dp-campaign-tag">📍 {{ implode(', ', array_filter([$campaign->kota, $campaign->provinsi])) }}</span>
-                @endif
-                @if($campaign->target_biaya)
-                <span class="dp-campaign-tag">🎯 Target {{ LFC::formatRupiah($campaign->target_biaya) }}</span>
-                @endif
-                @if($deadlineStr)
-                <span class="dp-campaign-tag">📅 Deadline {{ $deadlineStr }}</span>
-                @endif
+        <div class="campaign-box">
+            <div class="campaign-name">{{ $campaign->judul }}</div>
+            <div class="tag-wrap">
+                @if($campaign->kategori)<span class="tag">Kategori: {{ $campaign->kategori }}</span>@endif
+                @if($location)<span class="tag">Lokasi: {{ $location }}</span>@endif
+                @if($campaign->target_biaya)<span class="tag">Target: {{ LFC::formatRupiah($campaign->target_biaya) }}</span>@endif
+                @if($deadlineStr)<span class="tag">Deadline: {{ $deadlineStr }}</span>@endif
             </div>
         </div>
 
         {{-- Donor Info --}}
-        <div class="dp-sec">
-            <div class="dp-sec-icon">👤</div>
-            <div class="dp-sec-label">Informasi Donatur</div>
-            <div class="dp-sec-line"></div>
+        <div class="sec-hdr">
+            <table>
+                <tr>
+                    <td style="width:22px"><div class="sec-icon">D</div></td>
+                    <td style="width:1px"><span class="sec-lbl">Informasi Donatur</span></td>
+                    <td class="sec-line"><table width="100%"><tr><td></td></tr></table></td>
+                </tr>
+            </table>
         </div>
-        <div class="dp-grid">
-            <div class="dp-field span2">
-                <div class="dp-field-label">Nama Lengkap</div>
-                <div class="dp-field-value">{{ $donation->nama_donatur }}</div>
-            </div>
-            <div class="dp-field">
-                <div class="dp-field-label">Email</div>
-                <div class="dp-field-value">{{ $donation->email_donatur ?: '—' }}</div>
-            </div>
-            <div class="dp-field">
-                <div class="dp-field-label">Nomor Kontak</div>
-                <div class="dp-field-value">{{ $donation->no_telp_donatur ?: '—' }}</div>
-            </div>
-            <div class="dp-field">
-                <div class="dp-field-label">Usia</div>
-                <div class="dp-field-value">{{ $donation->usia ? $donation->usia . ' tahun' : '—' }}</div>
-            </div>
-            <div class="dp-field">
-                <div class="dp-field-label">Domisili</div>
-                <div class="dp-field-value">{{ $donation->domisili ?: '—' }}</div>
-            </div>
-            <div class="dp-field span2">
-                <div class="dp-field-label">Pekerjaan</div>
-                <div class="dp-field-value">{{ $donation->pekerjaan ?: '—' }}</div>
-            </div>
-        </div>
+        <table class="fields">
+            <tr>
+                <td colspan="2">
+                    <div class="field-box">
+                        <div class="field-lbl">Nama Lengkap</div>
+                        <div class="field-val">{{ $donation->nama_donatur }}</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:50%">
+                    <div class="field-box">
+                        <div class="field-lbl">Email</div>
+                        <div class="field-val">{{ $donation->email_donatur ?: '—' }}</div>
+                    </div>
+                </td>
+                <td style="width:50%">
+                    <div class="field-box">
+                        <div class="field-lbl">Nomor Kontak</div>
+                        <div class="field-val">{{ $donation->no_telp_donatur ?: '—' }}</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:50%">
+                    <div class="field-box">
+                        <div class="field-lbl">Usia</div>
+                        <div class="field-val">{{ $donation->usia ? $donation->usia . ' tahun' : '—' }}</div>
+                    </div>
+                </td>
+                <td style="width:50%">
+                    <div class="field-box">
+                        <div class="field-lbl">Domisili</div>
+                        <div class="field-val">{{ $donation->domisili ?: '—' }}</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="field-box">
+                        <div class="field-lbl">Pekerjaan</div>
+                        <div class="field-val">{{ $donation->pekerjaan ?: '—' }}</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
 
+        {{-- Pesan --}}
         @if($donation->pesan_donatur)
-        <div class="dp-sec" style="margin-top:1rem">
-            <div class="dp-sec-icon">💬</div>
-            <div class="dp-sec-label">Pesan Donatur</div>
-            <div class="dp-sec-line"></div>
+        <div class="sec-hdr" style="margin-top:14px">
+            <table>
+                <tr>
+                    <td style="width:22px"><div class="sec-icon">P</div></td>
+                    <td style="width:1px"><span class="sec-lbl">Pesan Donatur</span></td>
+                    <td class="sec-line"><table width="100%"><tr><td></td></tr></table></td>
+                </tr>
+            </table>
         </div>
-        <div class="dp-msg-box">{{ $donation->pesan_donatur }}</div>
+        <div class="msg-box">&ldquo;{{ $donation->pesan_donatur }}&rdquo;</div>
         @endif
 
-        {{-- Payment Details --}}
-        <div class="dp-sec">
-            <div class="dp-sec-icon">💳</div>
-            <div class="dp-sec-label">Rincian Pembayaran</div>
-            <div class="dp-sec-line"></div>
+        {{-- Payment --}}
+        <div class="sec-hdr">
+            <table>
+                <tr>
+                    <td style="width:22px"><div class="sec-icon">Rp</div></td>
+                    <td style="width:1px"><span class="sec-lbl">Rincian Pembayaran</span></td>
+                    <td class="sec-line"><table width="100%"><tr><td></td></tr></table></td>
+                </tr>
+            </table>
         </div>
-        <div class="dp-payment-table">
-            <div class="dp-payment-row" style="background:#f8fffe">
-                <div>
-                    <div class="dp-pay-label">Jumlah Donasi</div>
-                </div>
-                <div class="dp-pay-value">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</div>
-            </div>
+        <div class="pay-wrap">
+        <table class="pay-tbl">
+            <tr class="alt">
+                <td class="pay-lbl">Jumlah Donasi</td>
+                <td class="pay-val">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</td>
+            </tr>
             @if($hasBiayaAdmin)
-            <div class="dp-payment-row">
-                <div>
-                    <div class="dp-pay-label">Biaya Admin</div>
-                    @if($donation->metode_pembayaran || $donation->nama_merchant)
-                    <div class="dp-pay-label-sub">
-                        {{ implode(' — ', array_filter([$donation->metode_pembayaran, $donation->nama_merchant])) }}
-                    </div>
-                    @endif
-                </div>
-                <div class="dp-pay-value">{{ LFC::formatRupiah($donation->biaya_admin) }}</div>
-            </div>
+            <tr>
+                <td>
+                    <div class="pay-lbl">Biaya Admin</div>
+                    @if($paymentMethod)<div class="pay-sub">{{ $paymentMethod }}</div>@endif
+                </td>
+                <td class="pay-val">{{ LFC::formatRupiah($donation->biaya_admin) }}</td>
+            </tr>
             @else
-            <div class="dp-payment-row">
-                <div>
-                    <div class="dp-pay-label">Metode Pembayaran</div>
-                </div>
-                <div class="dp-pay-value" style="font-size:.8rem; color:#374151; font-weight:500">
-                    {{ implode(' — ', array_filter([$donation->metode_pembayaran, $donation->nama_merchant])) ?: '—' }}
-                </div>
-            </div>
+            <tr>
+                <td class="pay-lbl">Metode Pembayaran</td>
+                <td class="pay-val" style="font-size:11px; font-weight:normal; color:#374151">
+                    {{ $paymentMethod ?: '—' }}
+                </td>
+            </tr>
             @endif
-            <div class="dp-payment-row total">
-                <div>
-                    <div class="dp-pay-label">Total Tagihan</div>
-                </div>
-                <div class="dp-pay-value">{{ LFC::formatRupiah($totalTagihan) }}</div>
-            </div>
+            <tr class="total">
+                <td class="pay-lbl-t">Total Tagihan</td>
+                <td class="pay-val-t">{{ LFC::formatRupiah($totalTagihan) }}</td>
+            </tr>
+        </table>
         </div>
 
-        {{-- Org Info --}}
-        <div class="dp-sec">
-            <div class="dp-sec-icon">🏢</div>
-            <div class="dp-sec-label">Penyelenggara</div>
-            <div class="dp-sec-line"></div>
+        {{-- Org --}}
+        <div class="sec-hdr">
+            <table>
+                <tr>
+                    <td style="width:22px"><div class="sec-icon">O</div></td>
+                    <td style="width:1px"><span class="sec-lbl">Penyelenggara</span></td>
+                    <td class="sec-line"><table width="100%"><tr><td></td></tr></table></td>
+                </tr>
+            </table>
         </div>
-        <div class="dp-org-row">
-            <div class="dp-org-col">
-                <div class="dp-org-col-label">Alamat</div>
-                <div class="dp-org-col-text">
-                    Gedung Student Center Lantai 3<br>
-                    Ruang LDK Syahid<br>
-                    UIN Syarif Hidayatullah Jakarta
-                </div>
-            </div>
-            <div class="dp-org-col">
-                <div class="dp-org-col-label">Kontak Resmi</div>
-                <div class="dp-org-col-text">
-                    UKM LDK Syahid<br>
-                    ldk.ormawa@apps.uinjkt.ac.id<br>
-                    www.ldksyah.id
-                </div>
-            </div>
+        <div class="org-box">
+        <table class="org-tbl">
+            <tr>
+                <td>
+                    <div class="org-lbl">Alamat</div>
+                    <div class="org-text">
+                        Gedung Student Center Lantai 3<br>
+                        Ruang LDK Syahid<br>
+                        UIN Syarif Hidayatullah Jakarta
+                    </div>
+                </td>
+                <td>
+                    <div class="org-lbl">Kontak Resmi</div>
+                    <div class="org-text">
+                        UKM LDK Syahid<br>
+                        ldk.ormawa@apps.uinjkt.ac.id<br>
+                        www.ldksyah.id
+                    </div>
+                </td>
+            </tr>
+        </table>
         </div>
 
-    </div>{{-- /dp-body --}}
+    </div>{{-- /body --}}
 
-    {{-- ══ FOOTER ══ --}}
-    <div class="dp-footer">
-        <div>
-            <div class="dp-disclaimer">
-                * Bukti pembayaran yang sah yang dikeluarkan oleh UKM LDK Syahid UIN Syarif Hidayatullah Jakarta.<br>
-                Dokumen ini berlaku sebagai bukti penerimaan donasi resmi dari program Celengan Syahid.
-            </div>
-            <div class="dp-print-info">Dicetak pada: {{ $printDate }}</div>
-        </div>
-        <div class="dp-sign">
-            <div class="dp-sign-box"></div>
-            <div class="dp-sign-label">Tanda Tangan Pengelola</div>
-        </div>
+    {{-- FOOTER --}}
+    <div class="footer">
+        <table>
+            <tr>
+                <td>
+                    <div class="disclaimer">
+                        * Bukti pembayaran yang sah yang dikeluarkan oleh UKM LDK Syahid<br>
+                        UIN Syarif Hidayatullah Jakarta. Dokumen ini berlaku sebagai bukti<br>
+                        penerimaan donasi resmi dari program Celengan Syahid.
+                    </div>
+                    <div class="print-info">Dicetak pada: {{ $printDate }}</div>
+                </td>
+                <td>
+                </td>
+            </tr>
+        </table>
     </div>
 
-</div>{{-- /dp-card --}}
-</div>{{-- /dp-wrap --}}
+</div>{{-- /wrap --}}
 
 <script>
     window.onafterprint = window.close;
