@@ -230,8 +230,10 @@
             </div>
 
             {{-- ── reCAPTCHA ──────────────────────────────────── --}}
-            <div class="wow fadeInUp" data-wow-delay="0.18s">
-                {!! htmlFormSnippet() !!}
+            <div class="dn-captcha-wrap wow fadeInUp" data-wow-delay="0.18s">
+                <div class="dn-captcha-inner">
+                    {!! htmlFormSnippet() !!}
+                </div>
             </div>
 
             {{-- ── Total + Submit ─────────────────────────────── --}}
