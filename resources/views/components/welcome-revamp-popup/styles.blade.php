@@ -36,6 +36,9 @@
     overflow: hidden;
     box-shadow: 0 28px 64px rgba(0,0,0,.16), 0 6px 22px rgba(5,150,105,.1);
     position: relative;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100svh - 2.5rem);
 }
 
 /* ── Close X ── */
@@ -104,7 +107,7 @@
 }
 
 /* ── Body ── */
-#wrp-body { padding: 1.25rem 1.5rem 1rem; }
+#wrp-body { padding: 1.25rem 1.5rem 1rem; overflow-y: auto; flex: 1; min-height: 0; }
 
 #wrp-desc {
     font-size: .815rem; color: #6b7280; line-height: 1.7;
@@ -117,8 +120,8 @@
     background: linear-gradient(135deg, #f0fdf4, #dcfce7);
     border: 1px solid rgba(5,150,105,.18);
     border-radius: 10px;
-    padding: .75rem 1.5rem;
-    margin: 0 1.5rem .875rem;
+    padding: .75rem 1rem;
+    margin-top: .9rem;
     text-align: center;
 }
 #wrp-hadith-arabic {
