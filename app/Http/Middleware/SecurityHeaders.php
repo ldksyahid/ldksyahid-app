@@ -40,7 +40,7 @@ class SecurityHeaders
             "font-src 'self' https: data:",                              // allow Google Fonts etc.
             "connect-src 'self' https:",                                 // allow AJAX to HTTPS
             "media-src 'self' https:",
-            "frame-src 'self' https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com https://anyflip.com https://www.anyflip.com https://disqus.com https://disquscdn.com https://*.disqus.com https://*.disquscdn.com",  // allow video, doc, flipbook & comment embeds
+            "frame-src 'self' https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com https://www.google.com https://anyflip.com https://www.anyflip.com https://disqus.com https://disquscdn.com https://*.disqus.com https://*.disquscdn.com",  // allow video, doc, maps, flipbook & comment embeds
             "object-src 'none'",                                         // block Flash & plugins
             "base-uri 'self'",                                           // prevent base tag injection
             "form-action 'self'",                                        // forms may only submit to same origin
