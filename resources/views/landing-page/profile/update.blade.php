@@ -177,7 +177,7 @@
                     <p class="prf-file-hint">JPG / PNG &middot; maks. 2 MB &middot; kosongkan jika tidak ingin mengubah foto</p>
                 </div>
 
-                {{-- ---- Tombol ---- --}}
+                {{-- ---- Buttons ---- --}}
                 <div class="prf-form-actions">
                     <a href="/profile" class="prf-btn prf-btn-back">
                         <i class="fas fa-arrow-left"></i> Kembali

@@ -15,14 +15,14 @@
     function lockScroll() { document.body.style.overflow = 'hidden'; }
     function unlockScroll() { document.body.style.overflow = ''; }
 
-    /* Tutup saja (tanpa tandai — popup muncul lagi di kunjungan berikutnya) */
+    /* Close only (without marking — popup will show again on next visit) */
     function closePopup() {
         if (!backdrop) return;
         backdrop.classList.remove('active');
         unlockScroll();
     }
 
-    /* Tutup & tandai di localStorage — tidak muncul lagi */
+    /* Close & mark in localStorage — will not show again */
     function dismissPopup() {
         if (!backdrop) return;
         backdrop.classList.remove('active');
@@ -38,19 +38,19 @@
     if (btnDismiss) btnDismiss.addEventListener('click', dismissPopup);
     if (btnX)       btnX.addEventListener('click', closePopup);
 
-    /* Klik area gelap di luar card */
+    /* Click on dark backdrop outside the card */
     if (backdrop) {
         backdrop.addEventListener('click', function (e) {
             if (e.target === backdrop) closePopup();
         });
     }
 
-    /* Tombol Escape */
+    /* Escape key */
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closePopup();
     });
 
-    /* Tampilkan setelah halaman selesai dimuat */
+    /* Show popup after page has fully loaded */
     function showPopup() {
         setTimeout(function () {
             if (backdrop) {

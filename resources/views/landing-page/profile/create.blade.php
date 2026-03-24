@@ -171,7 +171,7 @@
                     <p class="prf-file-hint">JPG / PNG &middot; maks. 2 MB</p>
                 </div>
 
-                {{-- ---- Tombol ---- --}}
+                {{-- ---- Buttons ---- --}}
                 <div class="prf-form-actions">
                     <a href="/" class="prf-btn prf-btn-back">
                         <i class="fas fa-arrow-left"></i> Kembali

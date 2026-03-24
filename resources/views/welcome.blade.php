@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>MyDios &mdash; Laravel {{ Illuminate\Foundation\Application::VERSION }}</title>
 
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23e74430' d='M13 2L3 14h9l-1 8 10-12h-9l1-8z'/></svg>" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -149,10 +150,6 @@
         }
         .pill i { color: var(--red); font-size: 14px; }
         .pill:hover { background: rgba(231,68,48,.18); border-color: rgba(231,68,48,.5); color: #fff; transform: translateY(-2px); }
-
-        .pill-wa { border-color: rgba(231,68,48,.35); background: rgba(231,68,48,.1); }
-        .pill-wa:hover { background: var(--red); border-color: var(--red); }
-        .pill-wa:hover i { color: #fff; }
 
         /* ── HERO ── */
         .hero {
@@ -333,9 +330,14 @@
             background: radial-gradient(circle at 80% 20%, rgba(231,68,48,.1), transparent 60%);
             opacity: 0;
             transition: opacity .4s;
+            z-index: 0;
+            pointer-events: none;
         }
         .card:hover { transform: translateY(-8px); border-color: rgba(231,68,48,.4); box-shadow: 0 24px 48px -12px rgba(231,68,48,.3), 0 0 0 1px rgba(231,68,48,.1); }
         .card:hover::before { opacity: 1; }
+
+        /* ensure card content stays above ::before overlay */
+        .card-accent, .card-icon-wrap, .card h2, .card p, .card .tags, .card-cta { position: relative; z-index: 1; }
 
         /* top accent line */
         .card-accent {
@@ -374,7 +376,7 @@
 
         .card p {
             font-size: 15px;
-            color: #64748b;
+            color: #94a3b8;
             line-height: 1.75;
             margin-bottom: 24px;
         }
@@ -391,13 +393,9 @@
             border-radius: 50px;
             border: 1px solid rgba(231,68,48,.3);
             background: rgba(231,68,48,.07);
-            transition: all .28s cubic-bezier(.175,.885,.32,1.275);
-            position: relative; overflow: hidden;
+            transition: color .28s, background .28s, border-color .28s, transform .28s, box-shadow .28s;
         }
-        .card-cta::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--red),#b83322); opacity:0; transition:opacity .28s; z-index:0; }
-        .card-cta > * { position: relative; z-index: 1; }
-        .card-cta:hover { color:#fff; border-color:var(--red); transform:translateY(-2px); box-shadow:0 8px 24px rgba(231,68,48,.4); }
-        .card-cta:hover::before { opacity:1; }
+        .card-cta:hover { color:#fff; background: var(--red); border-color: var(--red); transform:translateY(-2px); box-shadow:0 8px 24px rgba(231,68,48,.4); }
         .card-cta i { transition: transform .28s; }
         .card-cta:hover i { transform: translateX(4px); }
 
@@ -506,7 +504,8 @@
 
         /* ── RESPONSIVE ── */
         @media (max-width: 860px) {
-            .cards { grid-template-columns: 1fr; }
+            .wrap { padding: 0 20px 48px; }
+            .cards { grid-template-columns: 1fr; gap: 16px; }
             .stats-bar { flex-wrap: wrap; }
             .stat-item { flex: 1 1 40%; border-right: none; border-bottom: 1px solid var(--border); }
             .stat-item:last-child, .stat-item:nth-last-child(-n+2):not(:nth-child(odd)) { border-bottom: none; }
@@ -515,12 +514,24 @@
         }
 
         @media (max-width: 560px) {
-            nav { flex-direction: column; gap: 16px; }
+            .wrap { padding: 0 16px 40px; }
+            nav { flex-direction: column; gap: 14px; align-items: flex-start; }
+            .nav-pills { flex-wrap: wrap; gap: 8px; }
+            .hero { padding: 60px 0 50px; }
             .hero-title { letter-spacing: -2px; }
-            .hero-actions { flex-direction: column; align-items: center; }
-            .stats-bar { flex-direction: column; }
-            .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+            .hero-actions { flex-direction: column; align-items: stretch; }
+            .hero-actions .btn-primary,
+            .hero-actions .btn-ghost { justify-content: center; }
+            .stats-bar { flex-direction: column; margin-bottom: 48px; }
+            .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding: 18px 10px; }
             .stat-item:last-child { border-bottom: none; }
+            .cards { margin-bottom: 48px; }
+            .card { padding: 28px 22px; }
+            .terminal { margin-bottom: 48px; }
+            .terminal-body { padding: 18px 16px; font-size: 13px; }
+            .section-label { font-size: 10px; letter-spacing: 2px; }
+            .footer-meta { gap: 8px; }
+            .meta-sep { display: none; }
         }
     </style>
 </head>
@@ -542,9 +553,6 @@
             <div class="nav-pills">
                 <span class="pill"><i class="fas fa-code-branch"></i> Laravel v{{ Illuminate\Foundation\Application::VERSION }}</span>
                 <span class="pill"><i class="fas fa-server"></i> PHP v{{ PHP_VERSION }}</span>
-                <a href="https://wa.me/62895394755672" target="_blank" rel="noopener noreferrer" class="pill pill-wa">
-                    <i class="fab fa-whatsapp" style="color:var(--red)"></i> Contact
-                </a>
             </div>
         </nav>
 
@@ -565,9 +573,6 @@
             <div class="hero-actions">
                 <a href="https://laravel.com/docs" target="_blank" rel="noopener noreferrer" class="btn-primary">
                     <i class="fas fa-book-open"></i> Read the Docs
-                </a>
-                <a href="https://wa.me/62895394755672" target="_blank" rel="noopener noreferrer" class="btn-ghost">
-                    <i class="fab fa-whatsapp"></i> WhatsApp MyDios
                 </a>
             </div>
         </section>
@@ -678,7 +683,7 @@
         {{-- ── FOOTER ── --}}
         <footer>
             <div class="footer-brand">
-                <i class="fas fa-bolt"></i>
+                <i class="fas fa-bolt" style="font-size:16px;color:#e74430;"></i>
                 MyDios
             </div>
 

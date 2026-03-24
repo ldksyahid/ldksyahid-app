@@ -85,7 +85,7 @@
                     {{-- ── ACCORDION ── --}}
                     <div class="kk-accordion">
 
-                        {{-- SECTION 1: Kesesuaian Rencana (20%) --}}
+                        {{-- SECTION 1: Plan Alignment (20%) --}}
                         <div class="kk-acc-item">
                             <button type="button" class="kk-acc-header collapsible">
                                 <div class="kk-acc-header-left">
@@ -383,7 +383,7 @@
                             </div>
                         </div>
 
-                        {{-- SECTION 4: Kesesuaian Parameter Keberhasilan (30%) --}}
+                        {{-- SECTION 4: Success Parameter Alignment (30%) --}}
                         <div class="kk-acc-item">
                             <button type="button" class="kk-acc-header collapsible">
                                 <div class="kk-acc-header-left">
