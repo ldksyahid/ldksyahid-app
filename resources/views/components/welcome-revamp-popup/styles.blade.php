@@ -112,6 +112,30 @@
     text-align: center;
 }
 
+/* ── Hadith ── */
+#wrp-hadith {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1px solid rgba(5,150,105,.18);
+    border-radius: 10px;
+    padding: .75rem 1.5rem;
+    margin: 0 1.5rem .875rem;
+    text-align: center;
+}
+#wrp-hadith-arabic {
+    font-size: 1rem; line-height: 1.9;
+    color: #065f46; font-weight: 600;
+    direction: rtl; font-family: 'Amiri', 'Traditional Arabic', serif;
+    margin-bottom: .35rem;
+}
+#wrp-hadith-trans {
+    font-size: .75rem; color: #374151; line-height: 1.55;
+    font-style: italic; margin-bottom: .3rem;
+}
+#wrp-hadith-source {
+    font-size: .68rem; color: #059669; font-weight: 700;
+    letter-spacing: .04em;
+}
+
 #wrp-features { display: flex; flex-direction: column; gap: .42rem; }
 
 .wrp-feat {
@@ -177,6 +201,9 @@
 [data-theme="dark"] .wrp-feat { background: #0f2d1f; border-color: rgba(5,150,105,.2); }
 [data-theme="dark"] .wrp-feat:hover { background: #143d28; }
 [data-theme="dark"] .wrp-feat-text { color: #d1d5db; }
+[data-theme="dark"] #wrp-hadith { background: linear-gradient(135deg, #052e16, #14532d); border-color: rgba(5,150,105,.25); }
+[data-theme="dark"] #wrp-hadith-arabic { color: #6ee7b7; }
+[data-theme="dark"] #wrp-hadith-trans { color: #d1d5db; }
 [data-theme="dark"] #wrp-btn-dismiss { color: #6b7280; }
 [data-theme="dark"] #wrp-btn-dismiss:hover { color: #9ca3af; }
 </style>
