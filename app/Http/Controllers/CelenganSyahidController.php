@@ -289,6 +289,15 @@ class CelenganSyahidController extends Controller
         ]);
     }
 
+    public function checkPaymentStatus($id)
+    {
+        $donation = Donation::select('payment_status')->find($id);
+        if (!$donation) {
+            return response()->json(['status' => 'NOT_FOUND'], 404);
+        }
+        return response()->json(['status' => $donation->payment_status]);
+    }
+
     public function savePaymentDonation($link, $id)
     {
         $donation = Donation::with('campaign')
