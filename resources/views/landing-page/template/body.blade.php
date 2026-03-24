@@ -239,7 +239,7 @@
             @include('components.email-verified-popup.index')
         @endif
 
-        {{-- Welcome Popup (hanya tampil di halaman utama) --}}
+        {{-- Welcome Popup (shown only on the home page) --}}
         @if(request()->routeIs('home'))
             @include('components.welcome-revamp-popup.index')
         @endif

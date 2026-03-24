@@ -554,7 +554,7 @@
     color: var(--white);
 }
 
-/* --- Stage-outer — sama persis dengan artikel carousel --- */
+/* --- Stage-outer — identical to the article carousel --- */
 .ms-carousel.owl-carousel .owl-stage-outer {
     overflow: hidden;
     padding: 8px 0 16px;
