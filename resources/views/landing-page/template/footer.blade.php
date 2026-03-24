@@ -242,7 +242,7 @@
                     </div>
                     <div class="copyright-right">
                         <span>Developed by</span>
-                        <a href="/itsupport" class="copyright-link">IT Support</a>
+                        <a href="/itsupport" class="copyright-link">IT Support UKM LDK Syahid</a>
                         <span class="dev-emoji">👨‍💻</span>
                     </div>
                 </div>
