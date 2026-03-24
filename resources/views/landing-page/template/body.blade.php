@@ -36,7 +36,7 @@
         <link href="{{ asset('css/cardservice.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/cardcelengan.css') }}" rel="stylesheet" />
 
-        {{-- Dark Mode: apply theme sebelum render untuk hindari flash --}}
+        {{-- Dark Mode: apply theme before render to avoid flash --}}
         <script>
             (function(){if(localStorage.getItem('darkMode')==='enabled')document.documentElement.setAttribute('data-theme','dark');})();
         </script>

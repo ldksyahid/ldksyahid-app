@@ -110,7 +110,7 @@ class APITestimonyController extends Controller
                 $path = $request->file('picture')->storeAs('Images/uploads/testimonies',$filename);
                 $validasi['picture']=$path;
 
-                // hapus file
+                // delete old file
                 $gambar = Testimony::where('id',$id)->first();
                 File::delete($gambar->picture);
             }
@@ -138,7 +138,7 @@ class APITestimonyController extends Controller
     public function destroy($id)
     {
         try {
-            // hapus file
+            // delete file
             $gambar = Testimony::where('id',$id)->first();
             File::delete($gambar->picture);
 

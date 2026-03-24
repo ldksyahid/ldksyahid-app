@@ -14,7 +14,7 @@ class Add1columnToDonationsTable extends Migration
     public function up()
     {
         Schema::table('donations', function (Blueprint $table) {
-            $table->id('idInc')->before('id'); // Menambahkan kolom idInc sebelum kolom id
+            $table->id('idInc')->before('id'); // Add idInc column before the id column
         });
     }
 

@@ -135,7 +135,7 @@
 }
 .its-card:hover .its-card-hdr::after { transform: translateX(100%); }
 
-/* "Terbaru" badge on header */
+/* "Latest" badge on header */
 .its-card-new-badge {
     position: absolute; top: .8rem; right: .8rem;
     background: rgba(255,255,255,.22);
