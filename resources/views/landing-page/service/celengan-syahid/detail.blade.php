@@ -193,25 +193,33 @@
             <div id="cd-pane-donors" class="cd-tab-pane">
                 <div class="cd-tab-body">
                     @if($donorCount > 0)
-                        <div class="cd-donor-list">
-                            @foreach($data->donation as $donation)
-                                @if($donation->payment_status === 'PAID')
-                                <div class="cd-donor-item">
-                                    <div class="cd-donor-avatar">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div class="cd-donor-info">
-                                        <p class="cd-donor-name">{{ $donation->nama_donatur }}</p>
-                                        <span class="cd-donor-amount">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</span>
-                                        @if($donation->pesan_donatur)
-                                            <p class="cd-donor-msg">{{ $donation->pesan_donatur }}</p>
-                                        @endif
-                                    </div>
-                                    <span class="cd-donor-time">{{ $donation->created_at->diffForHumans() }}</span>
+                        @php $paidDonations = $data->donation->where('payment_status', 'PAID')->values(); @endphp
+                        <div class="cd-donor-list" id="cd-donor-list">
+                            @foreach($paidDonations as $i => $donation)
+                            <div class="cd-donor-item{{ $i >= 5 ? ' cd-donor-hidden' : '' }}" data-donor-idx="{{ $i }}">
+                                <div class="cd-donor-avatar">
+                                    <i class="fas fa-user"></i>
                                 </div>
-                                @endif
+                                <div class="cd-donor-info">
+                                    <p class="cd-donor-name">{{ $donation->nama_donatur }}</p>
+                                    <span class="cd-donor-amount">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</span>
+                                    @if($donation->pesan_donatur)
+                                        <p class="cd-donor-msg">{{ $donation->pesan_donatur }}</p>
+                                    @endif
+                                </div>
+                                <span class="cd-donor-time">{{ $donation->created_at->diffForHumans() }}</span>
+                            </div>
                             @endforeach
                         </div>
+                        @if($donorCount > 5)
+                        <div class="cd-donor-loadmore-wrap" id="cd-donor-loadmore-wrap">
+                            <button class="cd-donor-loadmore" id="cd-donor-loadmore" type="button">
+                                <i class="fas fa-chevron-down"></i>
+                                <span id="cd-donor-loadmore-text">Lihat Lebih Banyak</span>
+                                <span class="cd-donor-loadmore-count" id="cd-donor-loadmore-count">({{ $donorCount - 5 }} lagi)</span>
+                            </button>
+                        </div>
+                        @endif
                     @else
                         <div class="cd-no-donors">
                             <i class="fas fa-hand-holding-heart"></i>
