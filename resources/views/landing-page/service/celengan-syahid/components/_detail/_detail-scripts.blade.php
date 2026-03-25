@@ -46,6 +46,37 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    /* ── Donor list: show 5 at a time ── */
+    var loadMoreBtn  = document.getElementById('cd-donor-loadmore');
+    var loadMoreWrap = document.getElementById('cd-donor-loadmore-wrap');
+    var loadMoreText = document.getElementById('cd-donor-loadmore-text');
+    var loadMoreCount= document.getElementById('cd-donor-loadmore-count');
+    var BATCH        = 5;
+
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function () {
+            var hidden = document.querySelectorAll('#cd-donor-list .cd-donor-hidden');
+            var toShow = Array.from(hidden).slice(0, BATCH);
+
+            toShow.forEach(function (item, i) {
+                item.classList.remove('cd-donor-hidden');
+                /* stagger: each item reveals 60ms after the previous */
+                setTimeout(function () {
+                    item.style.display = 'flex';
+                    item.classList.add('cd-donor-reveal');
+                }, i * 60);
+            });
+
+            /* Update button state */
+            var remaining = document.querySelectorAll('#cd-donor-list .cd-donor-hidden').length;
+            if (remaining === 0) {
+                if (loadMoreWrap) loadMoreWrap.style.display = 'none';
+            } else {
+                if (loadMoreCount) loadMoreCount.textContent = '(' + remaining + ' lagi)';
+            }
+        });
+    }
+
     /* ── Progress bar animated fill on scroll ── */
     var fills = document.querySelectorAll('.cd-progress-fill');
     if ('IntersectionObserver' in window && fills.length) {
