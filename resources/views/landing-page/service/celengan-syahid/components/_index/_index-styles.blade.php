@@ -91,27 +91,65 @@
 /* ================================================================
    INFO CARD (Ayat / About)
    ================================================================ */
-.cs-info-card {
-    background: var(--cs-white);
-    border-radius: var(--cs-radius-xl);
-    padding: 2rem 2.25rem;
-    box-shadow: var(--cs-shadow);
-    position: relative;
-    overflow: hidden;
+/* ── Ayat / Landasan ── */
+.cs-ayat-wrap { text-align: center; }
+
+.cs-ayat-label {
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--cs-primary);
+    margin-bottom: .5rem;
 }
 
-.cs-info-verse {
-    font-size: 1rem;
-    font-style: italic;
-    color: var(--cs-dark);
-    line-height: 1.75;
-    margin: 0;
+.cs-ayat-bar {
+    width: 48px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--cs-primary) 0%, var(--cs-primary-dk) 100%);
+    border-radius: 50rem;
+    margin: 0 auto 1.5rem;
 }
-.cs-info-source {
-    font-size: .82rem;
+
+.cs-ayat-quote {
+    background: rgba(0,167,157,.04);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    max-width: 780px;
+    margin: 0 auto;
+    border: 1px solid rgba(0,167,157,.1);
+}
+.cs-ayat-quote::before {
+    content: '\201C';
+    position: absolute;
+    top: -14px;
+    left: 16px;
+    font-size: 7rem;
+    line-height: 1;
+    color: rgba(0,167,157,.1);
+    font-family: Georgia, serif;
+    pointer-events: none;
+}
+.cs-ayat-quote p {
+    font-size: .93rem;
+    line-height: 1.85;
+    color: var(--cs-dark);
+    font-style: italic;
+    text-align: center;
+    margin-bottom: .75rem;
+    position: relative;
+    z-index: 1;
+}
+.cs-ayat-quote span {
+    font-size: .78rem;
+    font-weight: 700;
     color: var(--cs-primary);
-    font-weight: 600;
-    margin-top: .5rem;
+    display: block;
+    text-align: right;
+    position: relative;
+    z-index: 1;
 }
 
 
@@ -738,8 +776,8 @@ body.cs-sheet-open { overflow: hidden; }
 [data-theme="dark"] .cs-results-info        { color: #9ca3af; }
 [data-theme="dark"] .cs-results-info strong { color: #e2e8f0; }
 /* Info card (Ayat / About) */
-[data-theme="dark"] .cs-info-card   { background: #1a1f2e; }
-[data-theme="dark"] .cs-info-verse  { color: #9ca3af; }
+[data-theme="dark"] .cs-ayat-quote   { background: rgba(0,167,157,.08); border-color: rgba(0,167,157,.15); }
+[data-theme="dark"] .cs-ayat-quote p { color: #cbd5e0; }
 /* Desktop campaign card — correct class */
 [data-theme="dark"] .cs-campaign-card { background: #1a1f2e; }
 [data-theme="dark"] .cs-card-title    { color: #e2e8f0; }

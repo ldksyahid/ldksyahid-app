@@ -41,13 +41,15 @@
         </div>
 
         {{-- ── Info Card (Ayat) ────────────────────────────────── --}}
-        <div class="cs-info-card wow fadeInUp mb-4" data-wow-delay="0.15s">
-            <p class="cs-info-verse">
-                "Dan berbuat-baiklah kepada kedua orang tua, karib-kerabat, anak-anak yatim, orang-orang miskin,
+        <div class="cs-ayat-wrap wow fadeInUp mb-5" data-wow-delay="0.15s">
+            <p class="cs-ayat-label">Landasan Kami</p>
+            <div class="cs-ayat-bar"></div>
+            <div class="cs-ayat-quote">
+                <p>"Dan berbuat-baiklah kepada kedua orang tua, karib-kerabat, anak-anak yatim, orang-orang miskin,
                 tetangga dekat dan tetangga jauh, teman sejawat, ibnu sabil dan hamba sahaya yang kamu miliki.
-                Sungguh, Allah tidak menyukai orang yang sombong dan membanggakan diri,"
-            </p>
-            <p class="cs-info-source">● QS. An-Nisa 4: Ayat 36</p>
+                Sungguh, Allah tidak menyukai orang yang sombong dan membanggakan diri,"</p>
+                <span>&#9679; QS. An-Nisa 4: Ayat 36</span>
+            </div>
         </div>
 
         {{-- ── Search + Filter Bar ─────────────────────────────── --}}
