@@ -1305,7 +1305,7 @@ $(document).ready(function() {
         startDate = picker.startDate.format('YYYY-MM-DD');
         endDate   = picker.endDate.format('YYYY-MM-DD');
         tp.page   = 1;
-        loadStats();
+        loadStats(false);
         loadTopPages();
         resetCountdown();
     });
@@ -1315,7 +1315,7 @@ $(document).ready(function() {
         endDate   = moment().format('YYYY-MM-DD');
         $(this).val(moment().subtract(29,'days').format('DD MMM YYYY') + ' – ' + moment().format('DD MMM YYYY'));
         tp.page = 1;
-        loadStats();
+        loadStats(false);
         loadTopPages();
         resetCountdown();
     });
@@ -1340,26 +1340,32 @@ $(document).ready(function() {
         requestAnimationFrame(step);
     }
 
-    function renderSummary(s) {
-        animateCount(document.getElementById('adm-va-stat-today'),      s.today);
-        animateCount(document.getElementById('adm-va-stat-month'),      s.month);
-        animateCount(document.getElementById('adm-va-stat-year'),       s.year);
-        animateCount(document.getElementById('adm-va-stat-alltime'),    s.allTime);
-        animateCount(document.getElementById('adm-va-stat-active'),     s.activeNow);
-        animateCount(document.getElementById('adm-va-stat-bot-today'),  s.botToday);
-        animateCount(document.getElementById('adm-va-stat-bot-month'),  s.botMonth);
-        animateCount(document.getElementById('adm-va-stat-bot-year'),   s.botYear);
-        animateCount(document.getElementById('adm-va-stat-bot-alltime'),s.botAllTime);
+    function setCount(el, newVal, suffix) {
+        if (!el) return;
+        el.textContent = newVal.toLocaleString() + (suffix || '');
+    }
+
+    function renderSummary(s, animate) {
+        var fn = animate ? animateCount : setCount;
+        fn(document.getElementById('adm-va-stat-today'),      s.today);
+        fn(document.getElementById('adm-va-stat-month'),      s.month);
+        fn(document.getElementById('adm-va-stat-year'),       s.year);
+        fn(document.getElementById('adm-va-stat-alltime'),    s.allTime);
+        fn(document.getElementById('adm-va-stat-active'),     s.activeNow);
+        fn(document.getElementById('adm-va-stat-bot-today'),  s.botToday);
+        fn(document.getElementById('adm-va-stat-bot-month'),  s.botMonth);
+        fn(document.getElementById('adm-va-stat-bot-year'),   s.botYear);
+        fn(document.getElementById('adm-va-stat-bot-alltime'),s.botAllTime);
         var el = document.getElementById('adm-va-stat-bot-ratio');
         if (el) {
             var total = s.allTime + s.botAllTime;
             var pct   = total > 0 ? Math.round(s.botAllTime / total * 100) : 0;
-            animateCount(el, pct, '%');
+            fn(el, pct, '%');
         }
     }
 
     // ── Fetch summary + charts ────────────────────────────────────────
-    function loadStats() {
+    function loadStats(animate) {
         fetch(API_URL + '?start_date=' + startDate + '&end_date=' + endDate, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
@@ -1367,7 +1373,7 @@ $(document).ready(function() {
         .then(function (d) {
             lastChartData  = d.chart;
             lastDeviceData = d.devices;
-            if (d.summary) renderSummary(d.summary);
+            if (d.summary && animate !== false) renderSummary(d.summary, true);
             renderLine(d.chart);
             renderDevice(d.devices);
             renderCountries(d.countries || []);
@@ -1534,8 +1540,8 @@ $(document).ready(function() {
             html += '<div style="display:flex;align-items:center;gap:6px;">'
                 + '<span style="width:18px;font-size:.9rem;">' + flag + '</span>'
                 + '<span style="width:100px;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (c.country || c.countryCode) + '</span>'
-                + '<div style="flex:1;background:' + barBg + ';border-radius:3px;height:8px;">'
-                +   '<div style="width:' + pct + '%;background:' + barColor + ';border-radius:3px;height:8px;"></div>'
+                + '<div style="flex:1;background:' + barBg + ';border-radius:3px;height:8px;overflow:hidden;">'
+                +   '<div class="adm-va-cnt-bar" data-pct="' + pct + '" style="width:0;background:' + barColor + ';border-radius:3px;height:8px;transition:width 0.6s ease-out;"></div>'
                 + '</div>'
                 + '<span class="adm-va-cnt-num" data-val="' + val + '" data-suffix="' + valueSuffix.trim() + '"'
                 + ' style="width:' + numWidth + ';text-align:right;font-size:.75rem;color:#6c757d;">0' + valueSuffix + '</span>'
@@ -1550,6 +1556,11 @@ $(document).ready(function() {
             var target = parseInt(span.dataset.val) || 0;
             var suf    = span.dataset.suffix ? ' ' + span.dataset.suffix : '';
             animateCount(span, target, suf);
+        });
+        requestAnimationFrame(function () {
+            container.querySelectorAll('.adm-va-cnt-bar').forEach(function (bar) {
+                bar.style.width = (bar.dataset.pct || 0) + '%';
+            });
         });
     }
 
