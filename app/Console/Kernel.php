@@ -16,6 +16,12 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        // Visitor analytics: re-aggregate page stats every hour
+        $schedule->command('visitors:aggregate')->hourly();
+
+        // Auto-cleanup disabled — visitor data is kept indefinitely
+        // $schedule->command('visitors:cleanup')->dailyAt('02:00');
     }
 
     /**
@@ -32,5 +38,7 @@ class Kernel extends ConsoleKernel
 
     protected $commands = [
         Commands\RunDonationClassMachine::class,
+        Commands\CleanupVisitorLogs::class,
+        Commands\AggregateVisitorStats::class,
     ];
 }

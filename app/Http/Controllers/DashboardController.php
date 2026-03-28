@@ -23,6 +23,7 @@ use App\Models\MsCatalogBook;
 use App\Models\MsFinanceReport;
 use AshAllenDesign\ShortURL\Models\ShortURL;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\VisitorAnalyticsController;
 
 class DashboardController extends Controller
 {
@@ -49,6 +50,9 @@ class DashboardController extends Controller
         $reqShortlinkCount = ReqShortlink::count();
         $catalogBookCount = MsCatalogBook::count();
         $financeReportCount = MsFinanceReport::count();
+
+        // Visitor analytics summary
+        $visitorSummary = VisitorAnalyticsController::getSummary();
 
         // Fetch prayer times from Kemenag API
         $cityId = 1301; // City ID for Central Jakarta (change as needed)
@@ -81,6 +85,7 @@ class DashboardController extends Controller
             'reqShortlinkCount' => $reqShortlinkCount,
             'catalogBookCount' => $catalogBookCount,
             'financeReportCount' => $financeReportCount,
+            'visitorSummary' => $visitorSummary,
         ]);
     }
 }
