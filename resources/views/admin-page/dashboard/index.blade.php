@@ -368,7 +368,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                             <h5 class="section-title mb-0">
-                                <i class="fas fa-book-open me-2"></i>Hadits &amp; Al-Quran Harian
+                                <i class="fas fa-book-open me-2"></i>Hadits &amp; Al-Qur'an Harian
                             </h5>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="text-muted small">
