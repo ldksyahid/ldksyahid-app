@@ -1326,17 +1326,14 @@ $(document).ready(function() {
     // ── Render summary cards ──────────────────────────────────────────
     function animateCount(el, newVal, suffix) {
         if (!el) return;
-        var raw     = el.textContent.replace(/[^0-9]/g, '');
-        var fromVal = raw !== '' ? parseInt(raw) : 0;
-        if (fromVal === newVal) return;
-        var start    = null;
-        var duration = 500;
         suffix = suffix || '';
+        var start    = null;
+        var duration = 600;
         function step(ts) {
             if (!start) start = ts;
             var progress = Math.min((ts - start) / duration, 1);
             var eased    = 1 - Math.pow(1 - progress, 3);
-            var cur      = Math.round(fromVal + (newVal - fromVal) * eased);
+            var cur      = Math.round(newVal * eased);
             el.textContent = cur.toLocaleString() + suffix;
             if (progress < 1) requestAnimationFrame(step);
         }
