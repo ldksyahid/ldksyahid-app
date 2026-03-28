@@ -393,8 +393,8 @@
             <div class="col-md-12 mb-4">
                 <div class="greeting-card d-flex justify-content-between align-items-center flex-wrap">
                     <div>
-                        <div class="greeting-text" id="greetingText">Selamat Datang</div>
-                        <div class="greeting-sub" id="greetingSub">Semoga harimu produktif!</div>
+                        <div class="greeting-text" id="greetingText">Welcome</div>
+                        <div class="greeting-sub" id="greetingSub">Have a productive day!</div>
                     </div>
                     <div class="text-end mt-2 mt-md-0">
                         <div class="live-clock" id="liveClock">--:--:--</div>
@@ -409,17 +409,17 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                             <h5 class="section-title mb-0">
-                                <i class="fas fa-book-open me-2"></i>Hadits &amp; Al-Qur'an Harian
+                                <i class="fas fa-book-open me-2"></i>Daily Hadith &amp; Al-Qur'an
                             </h5>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="text-muted small">
-                                    Konten berikutnya dalam
+                                    Next content in
                                     <span class="fw-semibold" style="color:#00a79d;" id="adm-hq-countdown">60</span>
-                                    detik
+                                    seconds
                                 </span>
                                 <button id="adm-hq-refresh"
                                     style="background:transparent; color:#00a79d; border:1px solid #00a79d; border-radius:6px; padding:2px 9px; cursor:pointer; line-height:1.5;"
-                                    data-bs-toggle="tooltip" title="Refresh Sekarang">
+                                    data-bs-toggle="tooltip" title="Refresh Now">
                                     <i class="fas fa-sync-alt fa-xs"></i>
                                 </button>
                             </div>
@@ -427,17 +427,17 @@
                         <div class="d-flex align-items-center gap-2 mb-2">
                             <span class="adm-hq-fade" id="adm-hq-source"
                                 style="background:#00a79d; color:#fff; font-size:0.78rem; padding:3px 10px; border-radius:20px; white-space:nowrap;">
-                                Memuat...
+                                Loading...
                             </span>
                             <span class="text-muted small adm-hq-fade" id="adm-hq-number"></span>
                         </div>
                         <div class="adm-hq-text-wrapper" id="adm-hq-wrapper">
                             <p class="adm-hq-arab adm-hq-fade" id="adm-hq-arab"></p>
-                            <p class="adm-hq-text adm-hq-fade" id="adm-hq-text">Sedang memuat konten...</p>
+                            <p class="adm-hq-text adm-hq-fade" id="adm-hq-text">Loading content...</p>
                         </div>
                         <button id="adm-hq-toggle"
                             style="background:transparent; border:none; color:#00a79d; font-size:0.85rem; padding:0; margin-top:0.5rem; cursor:pointer; display:none;">
-                            <span id="adm-hq-toggle-text">Lihat Selengkapnya</span>
+                            <span id="adm-hq-toggle-text">Read More</span>
                             <i class="fas fa-chevron-down fa-xs ms-1" id="adm-hq-toggle-icon"></i>
                         </button>
                     </div>
@@ -822,12 +822,12 @@ $(document).ready(function() {
         var seconds = String(now.getSeconds()).padStart(2, '0');
         $('#liveClock').text(hours + ':' + minutes + ':' + seconds);
 
-        var days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-        var months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
         $('#liveDate').text(days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear());
 
         var h = now.getHours();
-        var greeting = h < 11 ? 'Selamat Pagi' : h < 15 ? 'Selamat Siang' : h < 18 ? 'Selamat Sore' : 'Selamat Malam';
+        var greeting = h < 11 ? 'Good Morning' : h < 15 ? 'Good Afternoon' : h < 18 ? 'Good Evening' : 'Good Night';
         var icon = h < 11 ? '&#9728;' : h < 15 ? '&#9728;' : h < 18 ? '&#127749;' : '&#127769;';
         $('#greetingText').html(icon + ' ' + greeting + ', ' + userName);
     }
@@ -1084,7 +1084,7 @@ $(document).ready(function() {
         var icon     = getEl('adm-hq-toggle-icon');
         if (wrapper) wrapper.classList.remove('expanded');
         if (toggle)  { toggle.classList.remove('expanded'); }
-        if (toggleTxt) toggleTxt.textContent = 'Lihat Selengkapnya';
+        if (toggleTxt) toggleTxt.textContent = 'Read More';
         if (icon)    icon.style.transform = '';
         var arabEl = getEl('adm-hq-arab');
         var textEl = getEl('adm-hq-text');
@@ -1106,7 +1106,7 @@ $(document).ready(function() {
         var numEl  = getEl('adm-hq-number');
         var toggle = getEl('adm-hq-toggle');
         if (textEl) textEl.innerHTML  = msg;
-        if (srcEl)  srcEl.textContent = (contentType === 'quran') ? 'Al-Quran' : 'Hadits';
+        if (srcEl)  srcEl.textContent = (contentType === 'quran') ? 'Al-Quran' : 'Hadith';
         if (arabEl) arabEl.textContent = '';
         if (numEl)  numEl.textContent  = '';
         if (toggle) toggle.style.display = 'none';
@@ -1117,7 +1117,7 @@ $(document).ready(function() {
         if (retryCount < MAX_RETRY) {
             retryTimeout = setTimeout(fetchContent, delay || 3000);
         } else {
-            showError('Gagal memuat konten setelah ' + MAX_RETRY + ' percobaan. Silakan refresh halaman.');
+            showError('Failed to load content after ' + MAX_RETRY + ' attempts. Please refresh the page.');
             retryCount = 0;
         }
     }
@@ -1141,10 +1141,10 @@ $(document).ready(function() {
             .catch(function(e){
                 retryCount++;
                 var msg = e.name === 'AbortError'
-                    ? 'Timeout memuat hadits. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')'
+                    ? 'Hadith load timed out. Retrying... (' + retryCount + '/' + MAX_RETRY + ')'
                     : (e.message === 'Failed to fetch'
-                        ? 'Koneksi terputus. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')'
-                        : 'Gagal memuat hadits. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')');
+                        ? 'Connection lost. Retrying... (' + retryCount + '/' + MAX_RETRY + ')'
+                        : 'Failed to load hadith. Retrying... (' + retryCount + '/' + MAX_RETRY + ')');
                 fadeOut(function(){ showError(msg); fadeIn(); scheduleRetry(3000); });
             })
             .finally(function(){ isFetching = false; });
@@ -1175,10 +1175,10 @@ $(document).ready(function() {
             .catch(function(e){
                 retryCount++;
                 var msg = e.name === 'AbortError'
-                    ? 'Timeout memuat ayat. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')'
+                    ? 'Verse load timed out. Retrying... (' + retryCount + '/' + MAX_RETRY + ')'
                     : (e.message === 'Failed to fetch'
-                        ? 'Koneksi terputus. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')'
-                        : 'Gagal memuat ayat. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')');
+                        ? 'Connection lost. Retrying... (' + retryCount + '/' + MAX_RETRY + ')'
+                        : 'Failed to load verse. Retrying... (' + retryCount + '/' + MAX_RETRY + ')');
                 fadeOut(function(){ showError(msg); fadeIn(); scheduleRetry(3000); });
             })
             .finally(function(){ isFetching = false; });
@@ -1199,7 +1199,7 @@ $(document).ready(function() {
             var icon      = getEl('adm-hq-toggle-icon');
             if (wrapper) {
                 var exp = wrapper.classList.toggle('expanded');
-                if (toggleTxt) toggleTxt.textContent = exp ? 'Sembunyikan' : 'Lihat Selengkapnya';
+                if (toggleTxt) toggleTxt.textContent = exp ? 'Show Less' : 'Read More';
                 if (icon)      icon.style.transform  = exp ? 'rotate(180deg)' : '';
             }
         }
@@ -1587,7 +1587,7 @@ $(document).ready(function() {
             + '</div>';
         if (allCountries.length > COUNTRIES_LIMIT) {
             html += '<button id="adm-va-countries-toggle" style="background:transparent;border:none;color:#00a79d;font-size:.8rem;padding:6px 0 0;cursor:pointer;">'
-                + '<i class="fas fa-chevron-down fa-xs me-1"></i>Lihat Lebih Banyak (' + (allCountries.length - COUNTRIES_LIMIT) + ' lainnya)'
+                + '<i class="fas fa-chevron-down fa-xs me-1"></i>Show More (' + (allCountries.length - COUNTRIES_LIMIT) + ' more)'
                 + '</button>';
         }
         el.innerHTML = html;
@@ -1606,8 +1606,8 @@ $(document).ready(function() {
             rows.innerHTML = buildCountryRows(visible, max, barBg, 'visitors', '');
             animateCountryRows(rows);
             btn.innerHTML = countriesExpanded
-                ? '<i class="fas fa-chevron-up fa-xs me-1"></i>Lihat Lebih Sedikit'
-                : '<i class="fas fa-chevron-down fa-xs me-1"></i>Lihat Lebih Banyak (' + (allCountries.length - COUNTRIES_LIMIT) + ' lainnya)';
+                ? '<i class="fas fa-chevron-up fa-xs me-1"></i>Show Less'
+                : '<i class="fas fa-chevron-down fa-xs me-1"></i>Show More (' + (allCountries.length - COUNTRIES_LIMIT) + ' more)';
         }
     });
 
@@ -1632,7 +1632,7 @@ $(document).ready(function() {
             + '</div>';
         if (allBotCountries.length > COUNTRIES_LIMIT) {
             html += '<button id="adm-va-bot-countries-toggle" style="background:transparent;border:none;color:#ef4444;font-size:.8rem;padding:6px 0 0;cursor:pointer;">'
-                + '<i class="fas fa-chevron-down fa-xs me-1"></i>Lihat Lebih Banyak (' + (allBotCountries.length - COUNTRIES_LIMIT) + ' lainnya)'
+                + '<i class="fas fa-chevron-down fa-xs me-1"></i>Show More (' + (allBotCountries.length - COUNTRIES_LIMIT) + ' more)'
                 + '</button>';
         }
         el.innerHTML = html;
@@ -1651,8 +1651,8 @@ $(document).ready(function() {
             rows.innerHTML = buildCountryRows(visible, max, barBg, 'hits', ' hits');
             animateCountryRows(rows);
             btn.innerHTML = botCountriesExpanded
-                ? '<i class="fas fa-chevron-up fa-xs me-1"></i>Lihat Lebih Sedikit'
-                : '<i class="fas fa-chevron-down fa-xs me-1"></i>Lihat Lebih Banyak (' + (allBotCountries.length - COUNTRIES_LIMIT) + ' lainnya)';
+                ? '<i class="fas fa-chevron-up fa-xs me-1"></i>Show Less'
+                : '<i class="fas fa-chevron-down fa-xs me-1"></i>Show More (' + (allBotCountries.length - COUNTRIES_LIMIT) + ' more)';
         }
     });
 
