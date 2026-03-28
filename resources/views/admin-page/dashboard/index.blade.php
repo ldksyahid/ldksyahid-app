@@ -274,6 +274,52 @@
         color: #b0b3b8 !important;
     }
 
+    /* ===== Admin Hadith / Quran Daily Widget ===== */
+    .adm-hq-arab {
+        font-size: 1.35rem;
+        line-height: 2.1;
+        text-align: right;
+        direction: rtl;
+        color: #2d2d2d;
+        margin-bottom: 0.5rem;
+    }
+    .adm-hq-text-wrapper {
+        max-height: 82px;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+        position: relative;
+    }
+    .adm-hq-text-wrapper.expanded { max-height: 1200px; }
+    .adm-hq-text-wrapper.adm-hq-no-overflow { max-height: none; }
+    .adm-hq-text-wrapper:not(.expanded):not(.adm-hq-no-overflow)::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 36px;
+        background: linear-gradient(to bottom, transparent, #fff);
+        pointer-events: none;
+    }
+    .adm-hq-text {
+        font-size: 0.9rem;
+        line-height: 1.8;
+        color: #495057;
+        font-style: italic;
+        margin-bottom: 0;
+    }
+    .adm-hq-fade {
+        transition: opacity 0.3s ease;
+    }
+    .adm-hq-fade.fade-out { opacity: 0; }
+    #adm-hq-toggle-icon {
+        transition: transform 0.3s ease;
+        display: inline-block;
+    }
+    html.dark-mode .adm-hq-arab { color: #e4e6eb; }
+    html.dark-mode .adm-hq-text { color: #b0b3b8; }
+    html.dark-mode .adm-hq-text-wrapper:not(.expanded):not(.adm-hq-no-overflow)::after {
+        background: linear-gradient(to bottom, transparent, #2b2f33);
+    }
+
     @media (max-width: 768px) {
         .page-title { font-size: 1.35rem; }
         .section-title { font-size: 1rem; }
@@ -316,28 +362,42 @@
                 </div>
             </div>
 
-            <!-- Prayer Times -->
+            <!-- Hadith / Quran Daily -->
             <div class="col-md-12 mb-4">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <h5 class="section-title mb-3"><i class="fas fa-mosque me-2"></i>Prayer Times - Jakarta</h5>
-                        <div class="row g-3">
-                            @php
-                                $prayers = ['Imsak', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
-                                $icons = ['fa-moon', 'fa-sun', 'fa-sun', 'fa-cloud-sun', 'fa-moon', 'fa-star'];
-                            @endphp
-                            @foreach ($prayers as $index => $name)
-                            <div class="col-6 col-md-4 col-lg-2">
-                                <div class="prayer-card text-center p-3">
-                                    <div class="prayer-icon mx-auto mb-2">
-                                        <i class="fa {{ $icons[$index] }}"></i>
-                                    </div>
-                                    <div class="prayer-name mb-1">{{ $name }}</div>
-                                    <div class="prayer-time">{{ $prayerTimes[strtolower($name)] ?? '-' }}</div>
-                                </div>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                            <h5 class="section-title mb-0">
+                                <i class="fas fa-book-open me-2"></i>Hadits &amp; Al-Quran Harian
+                            </h5>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="text-muted small">
+                                    Konten berikutnya dalam
+                                    <span class="fw-semibold" style="color:#00a79d;" id="adm-hq-countdown">60</span>
+                                    detik
+                                </span>
+                                <button id="adm-hq-refresh" title="Muat konten baru"
+                                    style="background:transparent; color:#00a79d; border:1px solid #00a79d; border-radius:6px; padding:2px 9px; cursor:pointer; line-height:1.5;">
+                                    <i class="fas fa-sync-alt fa-xs"></i>
+                                </button>
                             </div>
-                            @endforeach
                         </div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="adm-hq-fade" id="adm-hq-source"
+                                style="background:#00a79d; color:#fff; font-size:0.78rem; padding:3px 10px; border-radius:20px; white-space:nowrap;">
+                                Memuat...
+                            </span>
+                            <span class="text-muted small adm-hq-fade" id="adm-hq-number"></span>
+                        </div>
+                        <p class="adm-hq-arab adm-hq-fade" id="adm-hq-arab"></p>
+                        <div class="adm-hq-text-wrapper" id="adm-hq-wrapper">
+                            <p class="adm-hq-text adm-hq-fade" id="adm-hq-text">Sedang memuat konten...</p>
+                        </div>
+                        <button id="adm-hq-toggle"
+                            style="background:transparent; border:none; color:#00a79d; font-size:0.85rem; padding:0; margin-top:0.5rem; cursor:pointer; display:none;">
+                            <span id="adm-hq-toggle-text">Lihat Selengkapnya</span>
+                            <i class="fas fa-chevron-down fa-xs ms-1" id="adm-hq-toggle-icon"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -644,5 +704,238 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+<script>
+(function () {
+    /* ================================================================
+       ADMIN DASHBOARD — Hadith / Quran Daily Widget
+       Prefix: adm-hq-   (no conflict with hero-jumbotron hj-)
+       ================================================================ */
+
+    var contentType = (Math.random() < 0.5) ? 'hadith' : 'quran';
+    var timeLeft = 60, countdownInterval = null, isFetching = false;
+    var retryCount = 0, MAX_RETRY = 5, retryTimeout = null;
+
+    var books = [
+        { id: 'bukhari',    name: 'HR. Bukhari',    max: 6638 },
+        { id: 'muslim',     name: 'HR. Muslim',     max: 4930 },
+        { id: 'abu-daud',   name: 'HR. Abu Daud',   max: 4419 },
+        { id: 'tirmidzi',   name: 'HR. Tirmidzi',   max: 3625 },
+        { id: 'ibnu-majah', name: 'HR. Ibnu Majah', max: 4285 },
+        { id: 'nasai',      name: 'HR. Nasai',      max: 5364 },
+    ];
+
+    var surahMaxAyah = [
+        7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,
+        111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,
+        73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,
+        18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,
+        12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,
+        29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,
+        5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6
+    ];
+
+    function getEl(id) { return document.getElementById(id); }
+
+    function getFadeEls() {
+        return ['adm-hq-arab','adm-hq-text','adm-hq-source','adm-hq-number']
+            .map(function(id){ return getEl(id); })
+            .filter(function(el){ return el; });
+    }
+
+    function fadeOut(cb) {
+        var els = getFadeEls(), done = 0, total = els.length;
+        if (!total) { cb(); return; }
+        els.forEach(function(el){ el.classList.add('fade-out'); });
+        els.forEach(function(el){
+            var h = function(){
+                el.removeEventListener('transitionend', h);
+                if (++done === total) cb();
+            };
+            el.addEventListener('transitionend', h);
+            setTimeout(function(){
+                if (el.classList.contains('fade-out') && done < total) {
+                    el.removeEventListener('transitionend', h);
+                    if (++done === total) cb();
+                }
+            }, 400);
+        });
+    }
+
+    function fadeIn() {
+        getFadeEls().forEach(function(el){ el.classList.remove('fade-out'); });
+    }
+
+    function checkOverflow() {
+        var wrapper = getEl('adm-hq-wrapper');
+        var toggle  = getEl('adm-hq-toggle');
+        if (!wrapper || !toggle) return;
+        var overflow = wrapper.scrollHeight > 90;
+        toggle.style.display = overflow ? 'inline-block' : 'none';
+        wrapper.classList.toggle('adm-hq-no-overflow', !overflow);
+    }
+
+    function updateCountdown() {
+        var el = getEl('adm-hq-countdown');
+        if (el) el.textContent = timeLeft;
+    }
+
+    function resetCountdown() { timeLeft = 60; updateCountdown(); }
+
+    function startCountdown() {
+        if (countdownInterval) clearInterval(countdownInterval);
+        countdownInterval = setInterval(function(){
+            timeLeft--;
+            updateCountdown();
+            if (timeLeft <= 0) {
+                contentType = (contentType === 'hadith') ? 'quran' : 'hadith';
+                timeLeft = 60;
+                fetchContent();
+            }
+        }, 1000);
+    }
+
+    function applyContent(arabText, idText, sourceLabel, numberLabel) {
+        var wrapper  = getEl('adm-hq-wrapper');
+        var toggle   = getEl('adm-hq-toggle');
+        var toggleTxt = getEl('adm-hq-toggle-text');
+        var icon     = getEl('adm-hq-toggle-icon');
+        if (wrapper) wrapper.classList.remove('expanded');
+        if (toggle)  { toggle.classList.remove('expanded'); }
+        if (toggleTxt) toggleTxt.textContent = 'Lihat Selengkapnya';
+        if (icon)    icon.style.transform = '';
+        var arabEl = getEl('adm-hq-arab');
+        var textEl = getEl('adm-hq-text');
+        var srcEl  = getEl('adm-hq-source');
+        var numEl  = getEl('adm-hq-number');
+        if (arabEl) arabEl.textContent = arabText;
+        if (textEl) textEl.innerHTML   = '\u201c' + idText + '\u201d';
+        if (srcEl)  srcEl.textContent  = sourceLabel;
+        if (numEl)  numEl.textContent  = numberLabel;
+        fadeIn();
+        setTimeout(checkOverflow, 100);
+        resetCountdown();
+    }
+
+    function showError(msg) {
+        var textEl = getEl('adm-hq-text');
+        var srcEl  = getEl('adm-hq-source');
+        var arabEl = getEl('adm-hq-arab');
+        var numEl  = getEl('adm-hq-number');
+        var toggle = getEl('adm-hq-toggle');
+        if (textEl) textEl.innerHTML  = msg;
+        if (srcEl)  srcEl.textContent = (contentType === 'quran') ? 'Al-Quran' : 'Hadits';
+        if (arabEl) arabEl.textContent = '';
+        if (numEl)  numEl.textContent  = '';
+        if (toggle) toggle.style.display = 'none';
+    }
+
+    function scheduleRetry(delay) {
+        if (retryTimeout) clearTimeout(retryTimeout);
+        if (retryCount < MAX_RETRY) {
+            retryTimeout = setTimeout(fetchContent, delay || 3000);
+        } else {
+            showError('Gagal memuat konten setelah ' + MAX_RETRY + ' percobaan. Silakan refresh halaman.');
+            retryCount = 0;
+        }
+    }
+
+    function fetchRandomHadith() {
+        var book   = books[Math.floor(Math.random() * books.length)];
+        var number = Math.floor(Math.random() * book.max) + 1;
+        var ctrl   = new AbortController();
+        var tId    = setTimeout(function(){ ctrl.abort(); }, 10000);
+        fetch('https://api.hadith.gading.dev/books/' + book.id + '/' + number, { signal: ctrl.signal })
+            .then(function(r){ clearTimeout(tId); return r.json(); })
+            .then(function(json){
+                if (json.code === 200 && json.data && json.data.contents) {
+                    retryCount = 0;
+                    var c = json.data.contents;
+                    fadeOut(function(){
+                        applyContent(c.arab, c.id, book.name, book.name + ' No. ' + c.number);
+                    });
+                } else { throw new Error('Invalid response'); }
+            })
+            .catch(function(e){
+                retryCount++;
+                var msg = e.name === 'AbortError'
+                    ? 'Timeout memuat hadits. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')'
+                    : (e.message === 'Failed to fetch'
+                        ? 'Koneksi terputus. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')'
+                        : 'Gagal memuat hadits. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')');
+                fadeOut(function(){ showError(msg); fadeIn(); scheduleRetry(3000); });
+            })
+            .finally(function(){ isFetching = false; });
+    }
+
+    function fetchRandomAyah() {
+        var surahNo = Math.floor(Math.random() * 114) + 1;
+        var ayahNo  = Math.floor(Math.random() * surahMaxAyah[surahNo - 1]) + 1;
+        var ctrl    = new AbortController();
+        var tId     = setTimeout(function(){ ctrl.abort(); }, 10000);
+        fetch('https://quran-api-id.vercel.app/surah/' + surahNo + '/' + ayahNo, { signal: ctrl.signal })
+            .then(function(r){ clearTimeout(tId); return r.json(); })
+            .then(function(json){
+                if (json.code === 200 && json.data) {
+                    retryCount = 0;
+                    var d = json.data;
+                    var arabText  = d.text && d.text.arab ? d.text.arab : '';
+                    var idText    = d.translation && d.translation.id ? d.translation.id : '';
+                    var surahName = (d.surah && d.surah.name && d.surah.name.transliteration)
+                                  ? 'QS. ' + d.surah.name.transliteration.id
+                                  : 'QS. Surah ' + surahNo;
+                    var fullRef   = surahName + ': ' + ayahNo;
+                    fadeOut(function(){
+                        applyContent(arabText, idText, surahName, fullRef);
+                    });
+                } else { throw new Error('Invalid response'); }
+            })
+            .catch(function(e){
+                retryCount++;
+                var msg = e.name === 'AbortError'
+                    ? 'Timeout memuat ayat. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')'
+                    : (e.message === 'Failed to fetch'
+                        ? 'Koneksi terputus. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')'
+                        : 'Gagal memuat ayat. Mencoba lagi... (' + retryCount + '/' + MAX_RETRY + ')');
+                fadeOut(function(){ showError(msg); fadeIn(); scheduleRetry(3000); });
+            })
+            .finally(function(){ isFetching = false; });
+    }
+
+    function fetchContent() {
+        if (isFetching) return;
+        isFetching = true;
+        if (contentType === 'quran') { fetchRandomAyah(); } else { fetchRandomHadith(); }
+    }
+
+    /* Toggle expand/collapse */
+    document.addEventListener('click', function(e){
+        if (e.target.closest('#adm-hq-toggle')) {
+            e.preventDefault();
+            var wrapper   = getEl('adm-hq-wrapper');
+            var toggleTxt = getEl('adm-hq-toggle-text');
+            var icon      = getEl('adm-hq-toggle-icon');
+            if (wrapper) {
+                var exp = wrapper.classList.toggle('expanded');
+                if (toggleTxt) toggleTxt.textContent = exp ? 'Sembunyikan' : 'Lihat Selengkapnya';
+                if (icon)      icon.style.transform  = exp ? 'rotate(180deg)' : '';
+            }
+        }
+        /* Manual refresh button */
+        if (e.target.closest('#adm-hq-refresh')) {
+            e.preventDefault();
+            retryCount = 0;
+            if (retryTimeout) clearTimeout(retryTimeout);
+            contentType = (Math.random() < 0.5) ? 'hadith' : 'quran';
+            fetchContent();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+        fetchContent();
+        startCountdown();
+        window.addEventListener('resize', checkOverflow);
+    });
+})();
 </script>
 @endsection
