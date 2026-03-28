@@ -120,7 +120,7 @@
             <button class="btn-prayer-navbar" id="prayerNavBtn">
                 <span class="prayer-nav-icon-wrap"><i class="fas fa-mosque"></i></span>
                 <span class="prayer-nav-text">
-                    <span class="prayer-nav-label" id="prayerNavName">Sholat</span>
+                    <span class="prayer-nav-label" id="prayerNavName">Prayer</span>
                     <span class="prayer-nav-time-display" id="prayerNavTime">--:--</span>
                 </span>
             </button>
@@ -165,11 +165,11 @@
                 <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end bg-light border-0 m-0 dropdown-profile">
-                <a href="/profile" class="dropdown-item">Profil Aku</a>
+                <a href="/profile" class="dropdown-item">My Profile</a>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                     onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">
-                    {{ __('Keluar') }}
+                    {{ __('Logout') }}
                 </a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -203,14 +203,14 @@
                     <span id="prayerCurrentTime">--:--:--</span>
                 </div>
             </div>
-            <h3 class="prayer-modal-title">Jadwal Sholat Hari Ini</h3>
+            <h3 class="prayer-modal-title">Today's Prayer Schedule</h3>
             <p class="prayer-modal-date" id="prayerModalDate"></p>
-            <p class="prayer-modal-location" id="prayerModalLocation">Untuk Wilayah Jakarta & Sekitarnya</p>
+            <p class="prayer-modal-location" id="prayerModalLocation">Jakarta & Surrounding Area</p>
         </div>
         <div class="prayer-list" id="prayerModalBody">
             <div class="prayer-modal-loading">
                 <i class="fas fa-spinner"></i>
-                <p>Memuat jadwal sholat...</p>
+                <p>Loading prayer schedule...</p>
             </div>
         </div>
     </div>
@@ -459,8 +459,8 @@ html.dark-mode .prayer-modal-loading { color: #9ca3af; }
     }
 
     function formatDate(d) {
-        const days   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-        const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
     }
 
@@ -492,20 +492,20 @@ html.dark-mode .prayer-modal-loading { color: #9ca3af; }
         const locEl  = document.getElementById('prayerModalLocation');
         if (!body) return;
         if (!prayerData) {
-            body.innerHTML = '<div class="prayer-modal-loading"><i class="fas fa-spinner"></i><p>Memuat jadwal sholat...</p></div>';
+            body.innerHTML = '<div class="prayer-modal-loading"><i class="fas fa-spinner"></i><p>Loading prayer schedule...</p></div>';
             return;
         }
         const jadwal = prayerData.jadwal;
         const next   = getNextPrayer(jadwal);
         if (dateEl) dateEl.textContent = formatDate(new Date());
-        if (locEl && prayerData.lokasi) locEl.textContent = 'Untuk Wilayah ' + prayerData.lokasi + ' & Sekitarnya';
+        if (locEl && prayerData.lokasi) locEl.textContent = prayerData.lokasi + ' & Surrounding Area';
         body.innerHTML = PRAYERS.map(p => {
             const time = jadwal[p.key] || '--:--';
             const isNext = p.key === next.key;
             return `<div class="prayer-item ${isNext ? 'next-prayer' : ''}">
                 <div class="prayer-item-dot"></div>
                 <span class="prayer-item-name">${p.name}</span>
-                ${isNext ? '<span class="prayer-next-badge">Berikutnya</span>' : ''}
+                ${isNext ? '<span class="prayer-next-badge">Next</span>' : ''}
                 <span class="prayer-item-time">${time}</span>
             </div>`;
         }).join('');

@@ -75,7 +75,7 @@
                     icon: 'error',
                     confirmButtonColor: '#00a79d'
                 });
-                // Focus pada Select2
+                // Focus on Select2
                 $(ldkID).select2('open');
                 return;
             }
