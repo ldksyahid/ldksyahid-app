@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JumbotronController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\VisitorAnalyticsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\EventController;
@@ -199,6 +200,11 @@ Route::get('/admin/api/motivasi-quotes', function () {
         return response()->json(['error' => true, 'message' => 'Request failed'], 500);
     }
 })->name('admin.api.motivasi-quotes')->middleware(['auth']);
+
+// Route AdminPage Visitor Analytics
+Route::get('/admin/analytics/visitors', [VisitorAnalyticsController::class, 'index'])->name('admin.analytics.visitors')->middleware(['role:Superadmin|HelperAdmin']);
+Route::get('/admin/api/visitor-stats', [VisitorAnalyticsController::class, 'apiStats'])->name('admin.api.visitor-stats')->middleware(['auth']);
+Route::get('/admin/api/visitor-top-pages', [VisitorAnalyticsController::class, 'topPagesAjax'])->name('admin.api.visitor-top-pages')->middleware(['auth']);
 
 // Route AdminPage User
 Route::get('/admin/user', [UserController::class, 'indexAdmin'])->name('admin.user.index')->middleware(['role:Superadmin']);
