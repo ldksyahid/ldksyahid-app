@@ -114,6 +114,7 @@
             renderLineChart(data.chart);
             renderDeviceChart(data.devices);
             renderCountries(data.countries || []);
+            renderBotCountries(data.botCountries || []);
         })
         .catch(function () {});
     }
@@ -233,21 +234,42 @@
             type: 'line',
             data: {
                 labels: chart.labels,
-                datasets: [{
-                    label: 'Visitors',
-                    data: chart.data,
-                    borderColor: '#00a79d',
-                    backgroundColor: 'rgba(0,167,157,.1)',
-                    borderWidth: 2,
-                    pointRadius: 3,
-                    fill: true,
-                    tension: 0.3,
-                }]
+                datasets: [
+                    {
+                        label: 'Visitors',
+                        data: chart.data,
+                        borderColor: '#00a79d',
+                        backgroundColor: 'rgba(0,167,157,.1)',
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        fill: true,
+                        tension: 0.3,
+                        order: 1,
+                    },
+                    {
+                        label: 'Bots',
+                        data: chart.botData || [],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239,68,68,.06)',
+                        borderWidth: 1.5,
+                        pointRadius: 2,
+                        borderDash: [4, 3],
+                        fill: false,
+                        tension: 0.3,
+                        order: 2,
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { font: { size: 11 }, color: tickColor, boxWidth: 24, padding: 12 }
+                    }
+                },
                 scales: {
                     x: { ticks: { color: tickColor, maxTicksLimit: 10, font: { size: 11 } }, grid: { color: gridColor } },
                     y: { beginAtZero: true, ticks: { color: tickColor, precision: 0, font: { size: 11 } }, grid: { color: gridColor } }
@@ -307,6 +329,40 @@
                 +   '<div style="width:' + pct + '%;background:' + barFg + ';border-radius:4px;height:10px;"></div>'
                 + '</div>'
                 + '<span style="width:50px;text-align:right;font-size:.82rem;color:#6c757d;">' + fmt(c.visitors) + '</span>'
+                + '</div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+    }
+
+    // ── Bot country breakdown ──────────────────────────────────────
+    function renderBotCountries(countries) {
+        var el = document.getElementById('va-bot-countries-list');
+        if (!el) return;
+
+        if (!countries || countries.length === 0) {
+            el.innerHTML = '<p class="text-muted small text-center py-3">No bot traffic recorded in this period.</p>';
+            return;
+        }
+
+        var max = countries[0].hits;
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var barBg  = isDark ? 'rgba(239,68,68,.2)' : 'rgba(239,68,68,.12)';
+        var barFg  = '#ef4444';
+
+        var html = '<div style="display:flex;flex-direction:column;gap:6px;">';
+        countries.forEach(function (c) {
+            var flag = c.countryCode
+                ? String.fromCodePoint.apply(null, c.countryCode.toUpperCase().split('').map(function(ch){ return 0x1F1E6 + ch.charCodeAt(0) - 65; }))
+                : '🌐';
+            var pct = max > 0 ? Math.round((c.hits / max) * 100) : 0;
+            html += '<div style="display:flex;align-items:center;gap:8px;">'
+                + '<span style="width:22px;text-align:center;font-size:1rem;">' + flag + '</span>'
+                + '<span style="width:130px;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="' + (c.country || c.countryCode) + '">' + (c.country || c.countryCode) + '</span>'
+                + '<div style="flex:1;background:' + barBg + ';border-radius:4px;height:10px;">'
+                +   '<div style="width:' + pct + '%;background:' + barFg + ';border-radius:4px;height:10px;"></div>'
+                + '</div>'
+                + '<span style="width:50px;text-align:right;font-size:.82rem;color:#6c757d;">' + fmt(c.hits) + ' hits</span>'
                 + '</div>';
         });
         html += '</div>';
