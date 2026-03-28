@@ -244,11 +244,6 @@
             margin: 0;
         }
 
-        .navbar .dark-mode-toggle-container {
-            margin-right: -10px;
-            margin-top: 7px;
-        }
-
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .dark-mode-toggle {
@@ -433,6 +428,20 @@
             .flex-column.gap-2 > .btn {
                 width: 100%;
             }
+        }
+
+        /* ===== Dark Mode - Sidebar Dropdown Items ===== */
+        html.dark-mode .sidebar .dropdown-item {
+            color: #9ca3af;
+        }
+        html.dark-mode .sidebar .dropdown-item:hover {
+            background-color: rgba(255,255,255,0.06) !important;
+            color: #e4e6eb !important;
+        }
+        html.dark-mode .sidebar .dropdown-item.active,
+        html.dark-mode .sidebar .dropdown-item:active {
+            background-color: rgba(0,167,157,0.15) !important;
+            color: #00a79d !important;
         }
     </style>
 
