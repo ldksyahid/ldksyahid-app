@@ -119,6 +119,17 @@
         </div>
     </div>
 
+    {{-- Bot Traffic by Country --}}
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <h6 class="va-section-title mb-1"><i class="fas fa-robot me-2" style="color:#ef4444;"></i>Bot Traffic by Country</h6>
+            <p class="text-muted mb-3" style="font-size:.75rem;">Countries where bot traffic originated (crawlers, scrapers, link preview bots)</p>
+            <div id="va-bot-countries-list">
+                <p class="text-muted small text-center py-3">Loading...</p>
+            </div>
+        </div>
+    </div>
+
     {{-- Top Pages --}}
     <div class="card border-0 shadow-sm">
         <div class="card-body">
