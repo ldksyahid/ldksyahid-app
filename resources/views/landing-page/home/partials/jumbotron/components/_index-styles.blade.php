@@ -52,6 +52,13 @@
         display: block;
     }
 
+    /* Override global .carousel-item img rule (object-fit:cover; height:80vh)
+       yang menyebabkan image terpotong horizontal di viewport sempit */
+    .hero-carousel-card .hero-image {
+        height: auto;
+        object-fit: fill;
+    }
+
     /* Desktop Image Height */
     @media (min-width: 992px) {
         .hero-slide {
