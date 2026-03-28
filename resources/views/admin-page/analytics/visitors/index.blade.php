@@ -108,6 +108,17 @@
 
     </div>
 
+    {{-- Top Countries --}}
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <h6 class="va-section-title mb-1"><i class="fas fa-globe me-2"></i>Top Countries</h6>
+            <p class="text-muted mb-3" style="font-size:.75rem;">Visitors by country in the selected period</p>
+            <div id="va-countries-list">
+                <p class="text-muted small text-center py-3">Loading...</p>
+            </div>
+        </div>
+    </div>
+
     {{-- Top Pages --}}
     <div class="card border-0 shadow-sm">
         <div class="card-body">

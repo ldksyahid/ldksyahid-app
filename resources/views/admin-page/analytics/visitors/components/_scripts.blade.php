@@ -113,6 +113,7 @@
             renderSummary(data.summary);
             renderLineChart(data.chart);
             renderDeviceChart(data.devices);
+            renderCountries(data.countries || []);
         })
         .catch(function () {});
     }
@@ -276,6 +277,40 @@
                 plugins: { legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 16 } } }
             }
         });
+    }
+
+    // ── Country breakdown ──────────────────────────────────────────
+    function renderCountries(countries) {
+        var el = document.getElementById('va-countries-list');
+        if (!el) return;
+
+        if (!countries || countries.length === 0) {
+            el.innerHTML = '<p class="text-muted small text-center py-3">No country data available. Make sure GeoLite2-Country.mmdb is installed.</p>';
+            return;
+        }
+
+        var max = countries[0].visitors;
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var barBg  = isDark ? 'rgba(0,167,157,.25)' : 'rgba(0,167,157,.15)';
+        var barFg  = '#00a79d';
+
+        var html = '<div style="display:flex;flex-direction:column;gap:6px;">';
+        countries.forEach(function (c, i) {
+            var flag = c.countryCode
+                ? String.fromCodePoint.apply(null, c.countryCode.toUpperCase().split('').map(function(ch){ return 0x1F1E6 + ch.charCodeAt(0) - 65; }))
+                : '🌐';
+            var pct = max > 0 ? Math.round((c.visitors / max) * 100) : 0;
+            html += '<div style="display:flex;align-items:center;gap:8px;">'
+                + '<span style="width:22px;text-align:center;font-size:1rem;">' + flag + '</span>'
+                + '<span style="width:130px;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="' + (c.country || c.countryCode) + '">' + (c.country || c.countryCode) + '</span>'
+                + '<div style="flex:1;background:' + barBg + ';border-radius:4px;height:10px;">'
+                +   '<div style="width:' + pct + '%;background:' + barFg + ';border-radius:4px;height:10px;"></div>'
+                + '</div>'
+                + '<span style="width:50px;text-align:right;font-size:.82rem;color:#6c757d;">' + fmt(c.visitors) + '</span>'
+                + '</div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
     }
 
     // ── Helpers ────────────────────────────────────────────────────

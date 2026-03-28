@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\GeoIpHelper;
 use App\Models\TrVisitorLog;
 use Closure;
 use Illuminate\Http\Request;
@@ -109,6 +110,9 @@ class TrackVisitor
 
         $path = '/' . ltrim($request->path(), '/');
 
+        // Geo lookup
+        $geo = GeoIpHelper::lookup($ip);
+
         // Check if this IP has already visited THIS specific page today
         // (must happen BEFORE inserting new log so we don't count the current visit)
         $isUniqueOnPage = DB::table('tr_visitor_log')
@@ -130,6 +134,8 @@ class TrackVisitor
             'os'            => $os,
             'isUniqueDaily' => $isUniqueDaily,
             'isBot'         => $isBot,
+            'country'       => $geo['country'],
+            'countryCode'   => $geo['countryCode'],
             'visitedAt'     => now(),
         ]);
 
