@@ -25,6 +25,8 @@ class TrVisitorLog extends Model
         'os',
         'isUniqueDaily',
         'isBot',
+        'country',
+        'countryCode',
         'visitedAt',
     ];
 
