@@ -321,6 +321,9 @@
     @keyframes adm-va-sh { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
     .adm-va-sort-th:hover { color:#00a79d !important; }
 
+    /* Visitor Analytics stat cards */
+    .adm-va-stat-card { border-radius: 20px !important; }
+
     /* Visitor Analytics skeleton (class-based for dark mode) */
     .adm-va-skel-div {
         height:12px; border-radius:3px;
@@ -472,35 +475,35 @@
                         </p>
                         <div class="row g-3 mb-3">
                             <div class="col-6 col-md">
-                                <div class="p-3 rounded-3 text-center" style="background:rgba(0,167,157,.08);">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(0,167,157,.08);">
                                     <div class="fw-bold fs-4" style="color:#00a79d;" id="adm-va-stat-today">{{ number_format($visitorSummary['today']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-sun fa-xs me-1"></i>Today</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
-                                <div class="p-3 rounded-3 text-center" style="background:rgba(99,102,241,.08);">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(99,102,241,.08);">
                                     <div class="fw-bold fs-4" style="color:#6366f1;" id="adm-va-stat-month">{{ number_format($visitorSummary['month']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-calendar-alt fa-xs me-1"></i>This Month</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
-                                <div class="p-3 rounded-3 text-center" style="background:rgba(234,179,8,.08);">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(234,179,8,.08);">
                                     <div class="fw-bold fs-4" style="color:#ca8a04;" id="adm-va-stat-year">{{ number_format($visitorSummary['year']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-calendar fa-xs me-1"></i>This Year</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
-                                <div class="p-3 rounded-3 text-center" style="background:rgba(245,158,11,.08);">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(245,158,11,.08);">
                                     <div class="fw-bold fs-4" style="color:#f59e0b;" id="adm-va-stat-alltime">{{ number_format($visitorSummary['allTime']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-history fa-xs me-1"></i>All-Time</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">since first recorded</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
-                                <div class="p-3 rounded-3 text-center" style="background:rgba(16,185,129,.08);"
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(16,185,129,.08);"
                                     data-bs-toggle="tooltip" data-bs-placement="bottom"
                                     title="Visitors (distinct IPs) who loaded a page within the last 30 minutes. Does not mean they are online right now.">
                                     <div class="fw-bold fs-4" style="color:#10b981;" id="adm-va-stat-active">{{ number_format($visitorSummary['activeNow']) }}</div>
@@ -516,28 +519,28 @@
                         </p>
                         <div class="row g-3 mb-4">
                             <div class="col-6 col-md">
-                                <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(239,68,68,.07);">
                                     <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-today">{{ number_format($visitorSummary['botToday']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-sun fa-xs me-1"></i>Today</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
-                                <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(239,68,68,.07);">
                                     <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-month">{{ number_format($visitorSummary['botMonth']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-calendar-alt fa-xs me-1"></i>This Month</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
-                                <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(239,68,68,.07);">
                                     <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-year">{{ number_format($visitorSummary['botYear']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-calendar fa-xs me-1"></i>This Year</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
-                                <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(239,68,68,.07);">
                                     <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-alltime">{{ number_format($visitorSummary['botAllTime']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-history fa-xs me-1"></i>All-Time</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">since first recorded</div>
@@ -550,7 +553,7 @@
                             <div class="col-6 col-md"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom"
                                 title="Percentage of bot traffic out of total traffic (bots + visitors)">
-                                <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(239,68,68,.07);">
                                     <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-ratio">{{ $botPct }}%</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-percent fa-xs me-1"></i>Bot Ratio</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">of total traffic</div>
@@ -1243,7 +1246,7 @@ $(document).ready(function() {
     var tpTimer = null;
 
     // ── Countdown + auto-refresh ──────────────────────────────────────
-    var timeLeft          = 15;
+    var timeLeft          = 30;
     var countdownInterval = null;
 
     function updateCountdown() {
@@ -1251,7 +1254,7 @@ $(document).ready(function() {
         if (el) el.textContent = timeLeft;
     }
 
-    function resetCountdown() { timeLeft = 15; updateCountdown(); }
+    function resetCountdown() { timeLeft = 30; updateCountdown(); }
 
     function startCountdown() {
         if (countdownInterval) clearInterval(countdownInterval);
@@ -1261,7 +1264,7 @@ $(document).ready(function() {
             if (timeLeft <= 0) {
                 loadStats();
                 loadTopPages();
-                timeLeft = 15;
+                timeLeft = 30;
             }
         }, 1000);
     }
@@ -1509,6 +1512,8 @@ $(document).ready(function() {
         var ctx = document.getElementById('adm-va-device-chart');
         if (!ctx) return;
         if (devChart) devChart.destroy();
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var legendColor = isDark ? '#dee2e6' : '#666';
         devChart = new Chart(ctx.getContext('2d'), {
             type: 'doughnut',
             data: {
@@ -1518,7 +1523,7 @@ $(document).ready(function() {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } } }
+                plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10, color: legendColor, usePointStyle: true, pointStyle: 'rectRounded' } } }
             }
         });
     }
