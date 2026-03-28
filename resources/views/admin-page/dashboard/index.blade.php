@@ -414,8 +414,9 @@
                                     <span class="fw-semibold" style="color:#00a79d;" id="adm-hq-countdown">60</span>
                                     detik
                                 </span>
-                                <button id="adm-hq-refresh" title="Muat konten baru"
-                                    style="background:transparent; color:#00a79d; border:1px solid #00a79d; border-radius:6px; padding:2px 9px; cursor:pointer; line-height:1.5;">
+                                <button id="adm-hq-refresh"
+                                    style="background:transparent; color:#00a79d; border:1px solid #00a79d; border-radius:6px; padding:2px 9px; cursor:pointer; line-height:1.5;"
+                                    data-bs-toggle="tooltip" title="Refresh Sekarang">
                                     <i class="fas fa-sync-alt fa-xs"></i>
                                 </button>
                             </div>
@@ -541,6 +542,15 @@
                             <span class="text-muted fw-normal" style="font-size:.7rem;"> — visitors by country</span>
                         </p>
                         <div id="adm-va-countries-list" class="mb-4">
+                            <p class="text-muted small text-center py-2">Loading...</p>
+                        </div>
+
+                        {{-- Bot Traffic by Country --}}
+                        <p class="mb-2" style="font-size:.78rem;font-weight:600;color:#ef4444;">
+                            <i class="fas fa-robot fa-xs me-1"></i>Bot Traffic by Country
+                            <span class="text-muted fw-normal" style="font-size:.7rem;"> — countries where bot traffic originated</span>
+                        </p>
+                        <div id="adm-va-bot-countries-list" class="mb-4">
                             <p class="text-muted small text-center py-2">Loading...</p>
                         </div>
 
@@ -1271,6 +1281,7 @@ $(document).ready(function() {
             renderLine(d.chart);
             renderDevice(d.devices);
             renderCountries(d.countries || []);
+            renderBotCountries(d.botCountries || []);
         })
         .catch(function () {});
     }
@@ -1441,6 +1452,36 @@ $(document).ready(function() {
                 +   '<div style="width:' + pct + '%;background:#00a79d;border-radius:3px;height:8px;"></div>'
                 + '</div>'
                 + '<span style="width:36px;text-align:right;font-size:.75rem;color:#6c757d;">' + c.visitors + '</span>'
+                + '</div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+    }
+
+    // ── Bot country breakdown ─────────────────────────────────────────
+    function renderBotCountries(countries) {
+        var el = document.getElementById('adm-va-bot-countries-list');
+        if (!el) return;
+        if (!countries || countries.length === 0) {
+            el.innerHTML = '<p class="text-muted small text-center py-2">No bot traffic recorded in this period.</p>';
+            return;
+        }
+        var max    = countries[0].hits;
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var barBg  = isDark ? 'rgba(239,68,68,.2)' : 'rgba(239,68,68,.12)';
+        var html   = '<div style="display:flex;flex-direction:column;gap:5px;">';
+        countries.forEach(function (c) {
+            var flag = c.countryCode
+                ? String.fromCodePoint.apply(null, c.countryCode.toUpperCase().split('').map(function(ch){ return 0x1F1E6 + ch.charCodeAt(0) - 65; }))
+                : '🌐';
+            var pct = max > 0 ? Math.round((c.hits / max) * 100) : 0;
+            html += '<div style="display:flex;align-items:center;gap:6px;">'
+                + '<span style="width:18px;font-size:.9rem;">' + flag + '</span>'
+                + '<span style="width:100px;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (c.country || c.countryCode) + '</span>'
+                + '<div style="flex:1;background:' + barBg + ';border-radius:3px;height:8px;">'
+                +   '<div style="width:' + pct + '%;background:#ef4444;border-radius:3px;height:8px;"></div>'
+                + '</div>'
+                + '<span style="width:52px;text-align:right;font-size:.75rem;color:#6c757d;">' + c.hits + ' hits</span>'
                 + '</div>';
         });
         html += '</div>';

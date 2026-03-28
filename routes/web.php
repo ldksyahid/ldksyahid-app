@@ -202,7 +202,6 @@ Route::get('/admin/api/motivasi-quotes', function () {
 })->name('admin.api.motivasi-quotes')->middleware(['auth']);
 
 // Route AdminPage Visitor Analytics
-Route::get('/admin/analytics/visitors', [VisitorAnalyticsController::class, 'index'])->name('admin.analytics.visitors')->middleware(['role:Superadmin|HelperAdmin']);
 Route::get('/admin/api/visitor-stats', [VisitorAnalyticsController::class, 'apiStats'])->name('admin.api.visitor-stats')->middleware(['auth']);
 Route::get('/admin/api/visitor-top-pages', [VisitorAnalyticsController::class, 'topPagesAjax'])->name('admin.api.visitor-top-pages')->middleware(['auth']);
 
