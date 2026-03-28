@@ -62,6 +62,7 @@
     .greeting-card .greeting-sub {
         font-size: 0.9rem;
         opacity: 0.85;
+        max-width: 560px;
     }
     .greeting-card .live-clock {
         font-size: 2rem;
@@ -284,12 +285,12 @@
         margin-bottom: 0.5rem;
     }
     .adm-hq-text-wrapper {
-        max-height: 82px;
+        max-height: 155px;
         overflow: hidden;
-        transition: max-height 0.4s ease;
+        transition: max-height 0.5s ease;
         position: relative;
     }
-    .adm-hq-text-wrapper.expanded { max-height: 1200px; }
+    .adm-hq-text-wrapper.expanded { max-height: 2000px; }
     .adm-hq-text-wrapper.adm-hq-no-overflow { max-height: none; }
     .adm-hq-text-wrapper:not(.expanded):not(.adm-hq-no-overflow)::after {
         content: '';
@@ -389,8 +390,8 @@
                             </span>
                             <span class="text-muted small adm-hq-fade" id="adm-hq-number"></span>
                         </div>
-                        <p class="adm-hq-arab adm-hq-fade" id="adm-hq-arab"></p>
                         <div class="adm-hq-text-wrapper" id="adm-hq-wrapper">
+                            <p class="adm-hq-arab adm-hq-fade" id="adm-hq-arab"></p>
                             <p class="adm-hq-text adm-hq-fade" id="adm-hq-text">Sedang memuat konten...</p>
                         </div>
                         <button id="adm-hq-toggle"
@@ -568,44 +569,60 @@ $(document).ready(function() {
     updateClock();
     setInterval(updateClock, 1000);
 
-    // === Rotating Greeting Messages ===
-    var greetingMessages = [
-        'Semoga harimu produktif!',
-        'Tetap semangat dan istiqomah!',
-        'Jangan lupa istirahat ya!',
-        'Bismillah, semoga dimudahkan!',
-        'Keep up the great work!',
-        'Yuk, kelola data dengan rapi!',
-        'Semoga selalu dalam lindungan-Nya!',
-        'Senyum dulu, baru kerja~',
-        'Have a wonderful day!',
-        'Jaga kesehatan, jaga ibadah!',
-        'Awali dengan Bismillah, akhiri dengan Alhamdulillah!',
-        'Sedikit-sedikit, lama-lama jadi bukit!',
-        'Jangan lupa minum air putih ya!',
-        'Setiap langkah kecil tetap berarti!',
-        'Barakallahu fiikum, tetap produktif!',
-        'Ingat niat, ingat tujuan!',
-        'Kerja cerdas, bukan cuma kerja keras!',
-        'Jadilah bermanfaat untuk sesama!',
-        'Allah bersama orang-orang yang sabar!',
-        'Fokus, konsisten, dan tawakal!',
-    ];
-    function randomMsg() {
-        return greetingMessages[Math.floor(Math.random() * greetingMessages.length)];
+    // === Motivational Quotes from API (quotes.liupurnomo.com) ===
+    var greetingRetryCount = 0, GREETING_MAX_RETRY = 5, greetingRetryTimer = null;
+
+    function applyGreetingQuote($sub, html, animate) {
+        if (animate) {
+            $sub.animate({ opacity: 0 }, 400, function() {
+                $sub.html(html);
+                $sub.animate({ opacity: 1 }, 400);
+            });
+        } else {
+            $sub.html(html);
+        }
     }
 
-    // Random on page load
-    $('#greetingSub').html(randomMsg());
-
-    function rotateGreeting() {
+    function fetchMotivasiQuote(animate) {
         var $sub = $('#greetingSub');
-        $sub.animate({ opacity: 0 }, 400, function() {
-            $sub.html(randomMsg());
-            $sub.animate({ opacity: 1 }, 400);
+        $.ajax({
+            url: '{{ route("admin.api.motivasi-quotes") }}',
+            method: 'GET',
+            timeout: 10000,
+            success: function(json) {
+                if (json.data && json.data.text) {
+                    greetingRetryCount = 0;
+                    var text   = json.data.text;
+                    var author = json.data.author
+                        ? ' <span style="font-size:0.8em;opacity:0.75;font-style:normal;font-weight:400;">— ' + json.data.author + '</span>'
+                        : '';
+                    applyGreetingQuote($sub, '<em>' + text + '</em>' + author, animate);
+                } else {
+                    scheduleGreetingRetry(animate);
+                }
+            },
+            error: function() {
+                scheduleGreetingRetry(animate);
+            }
         });
     }
-    setInterval(rotateGreeting, 10000);
+
+    function scheduleGreetingRetry(animate) {
+        greetingRetryCount++;
+        if (greetingRetryCount <= GREETING_MAX_RETRY) {
+            greetingRetryTimer = setTimeout(function() {
+                fetchMotivasiQuote(animate);
+            }, 3000);
+        }
+        // If all retries exhausted, keep the previous text displayed
+    }
+
+    fetchMotivasiQuote(false);
+    setInterval(function() {
+        greetingRetryCount = 0;
+        if (greetingRetryTimer) clearTimeout(greetingRetryTimer);
+        fetchMotivasiQuote(true);
+    }, 10000);
 
     // === Animated Counter (Count-Up) ===
     var counterAnimated = false;
@@ -770,7 +787,7 @@ $(document).ready(function() {
         var wrapper = getEl('adm-hq-wrapper');
         var toggle  = getEl('adm-hq-toggle');
         if (!wrapper || !toggle) return;
-        var overflow = wrapper.scrollHeight > 90;
+        var overflow = wrapper.scrollHeight > wrapper.offsetHeight + 5;
         toggle.style.display = overflow ? 'inline-block' : 'none';
         wrapper.classList.toggle('adm-hq-no-overflow', !overflow);
     }
