@@ -455,8 +455,11 @@
                             </div>
                         </div>
 
-                        {{-- Summary Cards --}}
-                        <div class="row g-3 mb-4">
+                        {{-- Summary Cards: Human Visitors --}}
+                        <p class="mb-2" style="font-size:.75rem;font-weight:600;color:#00a79d;">
+                            <i class="fas fa-users fa-xs me-1"></i>Pengunjung
+                        </p>
+                        <div class="row g-3 mb-3">
                             <div class="col-6 col-md">
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(0,167,157,.08);">
                                     <div class="fw-bold fs-4" style="color:#00a79d;">{{ number_format($visitorSummary['today']) }}</div>
@@ -494,6 +497,42 @@
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">active in last 30 min</div>
                                 </div>
                             </div>
+                        </div>
+
+                        {{-- Summary Cards: Bot Traffic --}}
+                        <p class="mb-2" style="font-size:.75rem;font-weight:600;color:#ef4444;">
+                            <i class="fas fa-robot fa-xs me-1"></i>Bot
+                        </p>
+                        <div class="row g-3 mb-4">
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
+                                    <div class="fw-bold fs-4" style="color:#ef4444;">{{ number_format($visitorSummary['botToday']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-sun fa-xs me-1"></i>Today</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
+                                    <div class="fw-bold fs-4" style="color:#ef4444;">{{ number_format($visitorSummary['botMonth']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-calendar-alt fa-xs me-1"></i>This Month</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
+                                    <div class="fw-bold fs-4" style="color:#ef4444;">{{ number_format($visitorSummary['botYear']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-calendar fa-xs me-1"></i>This Year</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
+                                    <div class="fw-bold fs-4" style="color:#ef4444;">{{ number_format($visitorSummary['botAllTime']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-history fa-xs me-1"></i>All-Time</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">since first recorded</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md d-none d-md-block"></div>
                         </div>
 
                         {{-- Date Range + Countdown Bar --}}
