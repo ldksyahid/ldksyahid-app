@@ -1354,21 +1354,42 @@ $(document).ready(function() {
             type: 'line',
             data: {
                 labels: chart.labels,
-                datasets: [{
-                    label: 'Visitors',
-                    data: chart.data,
-                    borderColor: '#00a79d',
-                    backgroundColor: 'rgba(0,167,157,.08)',
-                    borderWidth: 2,
-                    pointRadius: 2,
-                    fill: true,
-                    tension: 0.3,
-                }]
+                datasets: [
+                    {
+                        label: 'Visitors',
+                        data: chart.data,
+                        borderColor: '#00a79d',
+                        backgroundColor: 'rgba(0,167,157,.08)',
+                        borderWidth: 2,
+                        pointRadius: 2,
+                        fill: true,
+                        tension: 0.3,
+                        order: 1,
+                    },
+                    {
+                        label: 'Bots',
+                        data: chart.botData || [],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239,68,68,.05)',
+                        borderWidth: 1.5,
+                        pointRadius: 2,
+                        borderDash: [4, 3],
+                        fill: false,
+                        tension: 0.3,
+                        order: 2,
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { font: { size: 10 }, color: tickColor, boxWidth: 20, padding: 10 }
+                    }
+                },
                 scales: {
                     x: { ticks: { color: tickColor, maxTicksLimit: 8, font: { size: 10 } }, grid: { color: gridColor } },
                     y: { beginAtZero: true, ticks: { color: tickColor, precision: 0, font: { size: 10 } }, grid: { color: gridColor } }
