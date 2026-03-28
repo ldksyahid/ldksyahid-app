@@ -317,6 +317,7 @@
     }
     html.dark-mode .adm-hq-arab { color: #e4e6eb; }
     html.dark-mode .adm-hq-text { color: #b0b3b8; }
+    html.dark-mode #adm-hq-source { color: #fff !important; }
     html.dark-mode .adm-hq-text-wrapper:not(.expanded):not(.adm-hq-no-overflow)::after {
         background: linear-gradient(to bottom, transparent, #2b2f33);
     }
