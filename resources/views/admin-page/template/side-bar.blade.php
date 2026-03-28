@@ -271,6 +271,26 @@
 </div>
 <!-- Sidebar End -->
 
+<style>
+/* Dark mode sidebar active & click state override */
+html.dark-mode .sidebar .navbar .dropdown-item {
+    color: #9ca3af;
+    background-color: transparent;
+}
+html.dark-mode .sidebar .navbar .dropdown-item:hover {
+    background-color: rgba(255,255,255,0.07) !important;
+    color: #e4e6eb !important;
+}
+html.dark-mode .sidebar .navbar .dropdown-item.active,
+html.dark-mode .sidebar .navbar .dropdown-item.active:hover,
+html.dark-mode .sidebar .navbar .dropdown-item.active:focus,
+html.dark-mode .sidebar .navbar .dropdown-item.active:active,
+html.dark-mode .sidebar .navbar .dropdown-item:active {
+    background-color: rgba(0,167,157,0.15) !important;
+    color: #00a79d !important;
+}
+</style>
+
 {{-- Script to open dropdowns that have an active submenu --}}
 <script>
 $(document).ready(function() {
