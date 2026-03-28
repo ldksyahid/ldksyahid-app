@@ -290,10 +290,6 @@ $(document).ready(function() {
         var $menu = $dropdown.find('.dropdown-menu');
         var isOpen = $menu.hasClass('show');
 
-        // Close all other dropdowns first with slide up
-        $('.sidebar .dropdown-menu.show').not($menu).slideUp(250).removeClass('show');
-        $('.sidebar .dropdown-toggle[aria-expanded="true"]').not($this).attr('aria-expanded', 'false');
-
         // Toggle current dropdown with slide animation
         if (isOpen) {
             $menu.slideUp(250, function() {
