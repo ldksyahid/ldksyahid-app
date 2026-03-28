@@ -27,16 +27,18 @@ class VisitorAnalyticsController extends Controller
     {
         [$startDate, $endDate] = $this->parseDateRange($request);
 
-        $summary  = $this->getSummary();
-        $chart    = $this->getChartData($startDate, $endDate);
-        $topPages = $this->getTopPages($startDate, $endDate);
-        $devices  = $this->getDeviceBreakdown($startDate, $endDate);
+        $summary   = $this->getSummary();
+        $chart     = $this->getChartData($startDate, $endDate);
+        $topPages  = $this->getTopPages($startDate, $endDate);
+        $devices   = $this->getDeviceBreakdown($startDate, $endDate);
+        $countries = $this->getCountryStats($startDate, $endDate);
 
         return response()->json([
-            'summary'  => $summary,
-            'chart'    => $chart,
-            'topPages' => $topPages,
-            'devices'  => $devices,
+            'summary'   => $summary,
+            'chart'     => $chart,
+            'topPages'  => $topPages,
+            'devices'   => $devices,
+            'countries' => $countries,
         ]);
     }
 
@@ -180,6 +182,34 @@ class VisitorAnalyticsController extends Controller
             'from'       => $items->firstItem() ?? 0,
             'to'         => $items->lastItem() ?? 0,
         ]);
+    }
+
+    /**
+     * Top countries by distinct visitors within the date range.
+     */
+    private function getCountryStats(string $startDate, string $endDate): array
+    {
+        return TrVisitorLog::select(
+                'countryCode',
+                'country',
+                DB::raw('COUNT(DISTINCT ipHash) as visitors'),
+                DB::raw('COUNT(*) as hits')
+            )
+            ->whereNotNull('countryCode')
+            ->where('isBot', 0)
+            ->where('visitedAt', '>=', $startDate . ' 00:00:00')
+            ->where('visitedAt', '<=', $endDate . ' 23:59:59')
+            ->groupBy('countryCode', 'country')
+            ->orderByDesc('visitors')
+            ->limit(15)
+            ->get()
+            ->map(fn ($r) => [
+                'countryCode' => $r->countryCode,
+                'country'     => $r->country,
+                'visitors'    => (int) $r->visitors,
+                'hits'        => (int) $r->hits,
+            ])
+            ->toArray();
     }
 
     /**

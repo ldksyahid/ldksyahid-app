@@ -535,6 +535,15 @@
                             </div>
                         </div>
 
+                        {{-- Top Countries --}}
+                        <p class="mb-2" style="font-size:.78rem;font-weight:600;color:#00a79d;">
+                            <i class="fas fa-globe fa-xs me-1"></i>Top Countries
+                            <span class="text-muted fw-normal" style="font-size:.7rem;"> — visitors by country</span>
+                        </p>
+                        <div id="adm-va-countries-list" class="mb-4">
+                            <p class="text-muted small text-center py-2">Loading...</p>
+                        </div>
+
                         {{-- Top Pages header --}}
                         <p class="mb-2" style="font-size:.78rem;font-weight:600;color:#00a79d;">
                             <i class="fas fa-file-alt fa-xs me-1"></i>Top Pages
@@ -1261,6 +1270,7 @@ $(document).ready(function() {
             lastDeviceData = d.devices;
             renderLine(d.chart);
             renderDevice(d.devices);
+            renderCountries(d.countries || []);
         })
         .catch(function () {});
     }
@@ -1383,6 +1393,37 @@ $(document).ready(function() {
                 plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } } }
             }
         });
+    }
+
+    // ── Country breakdown ─────────────────────────────────────────────
+    function renderCountries(countries) {
+        var el = document.getElementById('adm-va-countries-list');
+        if (!el) return;
+        if (!countries || countries.length === 0) {
+            el.innerHTML = '<p class="text-muted small text-center py-2">No country data yet.</p>';
+            return;
+        }
+        var max    = countries[0].visitors;
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var barBg  = isDark ? 'rgba(0,167,157,.2)' : 'rgba(0,167,157,.12)';
+        var top5   = countries.slice(0, 5);
+        var html   = '<div style="display:flex;flex-direction:column;gap:5px;">';
+        top5.forEach(function (c) {
+            var flag = c.countryCode
+                ? String.fromCodePoint.apply(null, c.countryCode.toUpperCase().split('').map(function(ch){ return 0x1F1E6 + ch.charCodeAt(0) - 65; }))
+                : '🌐';
+            var pct = max > 0 ? Math.round((c.visitors / max) * 100) : 0;
+            html += '<div style="display:flex;align-items:center;gap:6px;">'
+                + '<span style="width:18px;font-size:.9rem;">' + flag + '</span>'
+                + '<span style="width:100px;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (c.country || c.countryCode) + '</span>'
+                + '<div style="flex:1;background:' + barBg + ';border-radius:3px;height:8px;">'
+                +   '<div style="width:' + pct + '%;background:#00a79d;border-radius:3px;height:8px;"></div>'
+                + '</div>'
+                + '<span style="width:36px;text-align:right;font-size:.75rem;color:#6c757d;">' + c.visitors + '</span>'
+                + '</div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
     }
 
     // ── Re-render charts on dark/light mode toggle ────────────────────
