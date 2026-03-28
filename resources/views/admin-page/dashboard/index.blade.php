@@ -453,6 +453,17 @@
                                 </h5>
                                 <p class="text-muted mb-0" style="font-size:.75rem;">Public page visitor statistics</p>
                             </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="text-muted small" style="white-space:nowrap;">
+                                    Auto-refresh in
+                                    <span id="adm-va-countdown" class="fw-semibold" style="color:#00a79d;">15</span>s
+                                </span>
+                                <button id="adm-va-refresh" type="button"
+                                    style="background:transparent;color:#00a79d;border:1px solid #00a79d;border-radius:6px;padding:2px 9px;cursor:pointer;line-height:1.5;"
+                                    data-bs-toggle="tooltip" title="Refresh now">
+                                    <i class="fas fa-sync-alt fa-xs"></i>
+                                </button>
+                            </div>
                         </div>
 
                         {{-- Summary Cards: Human Visitors --}}
@@ -462,28 +473,28 @@
                         <div class="row g-3 mb-3">
                             <div class="col-6 col-md">
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(0,167,157,.08);">
-                                    <div class="fw-bold fs-4" style="color:#00a79d;">{{ number_format($visitorSummary['today']) }}</div>
+                                    <div class="fw-bold fs-4" style="color:#00a79d;" id="adm-va-stat-today">{{ number_format($visitorSummary['today']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-sun fa-xs me-1"></i>Today</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(99,102,241,.08);">
-                                    <div class="fw-bold fs-4" style="color:#6366f1;">{{ number_format($visitorSummary['month']) }}</div>
+                                    <div class="fw-bold fs-4" style="color:#6366f1;" id="adm-va-stat-month">{{ number_format($visitorSummary['month']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-calendar-alt fa-xs me-1"></i>This Month</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(234,179,8,.08);">
-                                    <div class="fw-bold fs-4" style="color:#ca8a04;">{{ number_format($visitorSummary['year']) }}</div>
+                                    <div class="fw-bold fs-4" style="color:#ca8a04;" id="adm-va-stat-year">{{ number_format($visitorSummary['year']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-calendar fa-xs me-1"></i>This Year</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(245,158,11,.08);">
-                                    <div class="fw-bold fs-4" style="color:#f59e0b;">{{ number_format($visitorSummary['allTime']) }}</div>
+                                    <div class="fw-bold fs-4" style="color:#f59e0b;" id="adm-va-stat-alltime">{{ number_format($visitorSummary['allTime']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-history fa-xs me-1"></i>All-Time</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">since first recorded</div>
                                 </div>
@@ -492,7 +503,7 @@
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(16,185,129,.08);"
                                     data-bs-toggle="tooltip" data-bs-placement="bottom"
                                     title="Visitors (distinct IPs) who loaded a page within the last 30 minutes. Does not mean they are online right now.">
-                                    <div class="fw-bold fs-4" style="color:#10b981;">{{ number_format($visitorSummary['activeNow']) }}</div>
+                                    <div class="fw-bold fs-4" style="color:#10b981;" id="adm-va-stat-active">{{ number_format($visitorSummary['activeNow']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-circle fa-xs me-1" style="color:#10b981;"></i>Active Now</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">active in last 30 min</div>
                                 </div>
@@ -506,28 +517,28 @@
                         <div class="row g-3 mb-4">
                             <div class="col-6 col-md">
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
-                                    <div class="fw-bold fs-4" style="color:#ef4444;">{{ number_format($visitorSummary['botToday']) }}</div>
+                                    <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-today">{{ number_format($visitorSummary['botToday']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-sun fa-xs me-1"></i>Today</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
-                                    <div class="fw-bold fs-4" style="color:#ef4444;">{{ number_format($visitorSummary['botMonth']) }}</div>
+                                    <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-month">{{ number_format($visitorSummary['botMonth']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-calendar-alt fa-xs me-1"></i>This Month</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
-                                    <div class="fw-bold fs-4" style="color:#ef4444;">{{ number_format($visitorSummary['botYear']) }}</div>
+                                    <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-year">{{ number_format($visitorSummary['botYear']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-calendar fa-xs me-1"></i>This Year</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md">
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
-                                    <div class="fw-bold fs-4" style="color:#ef4444;">{{ number_format($visitorSummary['botAllTime']) }}</div>
+                                    <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-alltime">{{ number_format($visitorSummary['botAllTime']) }}</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-history fa-xs me-1"></i>All-Time</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">since first recorded</div>
                                 </div>
@@ -540,29 +551,20 @@
                                 data-bs-toggle="tooltip" data-bs-placement="bottom"
                                 title="Percentage of bot traffic out of total traffic (bots + visitors)">
                                 <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
-                                    <div class="fw-bold fs-4" style="color:#ef4444;">{{ $botPct }}%</div>
+                                    <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-ratio">{{ $botPct }}%</div>
                                     <div class="small text-muted mt-1"><i class="fas fa-percent fa-xs me-1"></i>Bot Ratio</div>
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">of total traffic</div>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- Date Range + Countdown Bar --}}
+                        {{-- Date Range Bar --}}
                         <div class="d-flex align-items-center gap-2 flex-wrap py-2 mb-3"
                             style="border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);">
                             <i class="fas fa-calendar-alt fa-xs text-muted"></i>
                             <input type="text" id="adm-va-daterange" class="form-control form-control-sm"
                                 style="max-width:260px;flex:1;font-size:.8rem;cursor:pointer;"
                                 placeholder="Select date range" autocomplete="off">
-                            <span class="text-muted small ms-auto" style="white-space:nowrap;">
-                                Auto-refresh in
-                                <span id="adm-va-countdown" class="fw-semibold" style="color:#00a79d;">60</span>s
-                            </span>
-                            <button id="adm-va-refresh" type="button"
-                                style="background:transparent;color:#00a79d;border:1px solid #00a79d;border-radius:6px;padding:2px 9px;cursor:pointer;line-height:1.5;"
-                                data-bs-toggle="tooltip" title="Refresh now">
-                                <i class="fas fa-sync-alt fa-xs"></i>
-                            </button>
                         </div>
 
                         {{-- Charts Row --}}
@@ -1241,7 +1243,7 @@ $(document).ready(function() {
     var tpTimer = null;
 
     // ── Countdown + auto-refresh ──────────────────────────────────────
-    var timeLeft          = 60;
+    var timeLeft          = 15;
     var countdownInterval = null;
 
     function updateCountdown() {
@@ -1249,7 +1251,7 @@ $(document).ready(function() {
         if (el) el.textContent = timeLeft;
     }
 
-    function resetCountdown() { timeLeft = 60; updateCountdown(); }
+    function resetCountdown() { timeLeft = 15; updateCountdown(); }
 
     function startCountdown() {
         if (countdownInterval) clearInterval(countdownInterval);
@@ -1258,7 +1260,7 @@ $(document).ready(function() {
             updateCountdown();
             if (timeLeft <= 0) {
                 loadStats();
-                timeLeft = 60;
+                timeLeft = 15;
             }
         }, 1000);
     }
@@ -1320,6 +1322,26 @@ $(document).ready(function() {
     // ── Cached chart data (for theme re-render) ───────────────────────
     var lastChartData = null, lastDeviceData = null;
 
+    // ── Render summary cards ──────────────────────────────────────────
+    function renderSummary(s) {
+        function fmt(n) { return n.toLocaleString(); }
+        var el;
+        if ((el = document.getElementById('adm-va-stat-today')))     el.textContent = fmt(s.today);
+        if ((el = document.getElementById('adm-va-stat-month')))     el.textContent = fmt(s.month);
+        if ((el = document.getElementById('adm-va-stat-year')))      el.textContent = fmt(s.year);
+        if ((el = document.getElementById('adm-va-stat-alltime')))   el.textContent = fmt(s.allTime);
+        if ((el = document.getElementById('adm-va-stat-active')))    el.textContent = fmt(s.activeNow);
+        if ((el = document.getElementById('adm-va-stat-bot-today'))) el.textContent = fmt(s.botToday);
+        if ((el = document.getElementById('adm-va-stat-bot-month'))) el.textContent = fmt(s.botMonth);
+        if ((el = document.getElementById('adm-va-stat-bot-year')))  el.textContent = fmt(s.botYear);
+        if ((el = document.getElementById('adm-va-stat-bot-alltime'))) el.textContent = fmt(s.botAllTime);
+        if ((el = document.getElementById('adm-va-stat-bot-ratio'))) {
+            var total = s.allTime + s.botAllTime;
+            var pct   = total > 0 ? Math.round(s.botAllTime / total * 100) : 0;
+            el.textContent = pct + '%';
+        }
+    }
+
     // ── Fetch summary + charts ────────────────────────────────────────
     function loadStats() {
         fetch(API_URL + '?start_date=' + startDate + '&end_date=' + endDate, {
@@ -1329,6 +1351,7 @@ $(document).ready(function() {
         .then(function (d) {
             lastChartData  = d.chart;
             lastDeviceData = d.devices;
+            if (d.summary) renderSummary(d.summary);
             renderLine(d.chart);
             renderDevice(d.devices);
             renderCountries(d.countries || []);
@@ -1479,65 +1502,111 @@ $(document).ready(function() {
     }
 
     // ── Country breakdown ─────────────────────────────────────────────
-    function renderCountries(countries) {
-        var el = document.getElementById('adm-va-countries-list');
-        if (!el) return;
-        if (!countries || countries.length === 0) {
-            el.innerHTML = '<p class="text-muted small text-center py-2">No country data yet.</p>';
-            return;
-        }
-        var max    = countries[0].visitors;
-        var isDark = document.documentElement.classList.contains('dark-mode');
-        var barBg  = isDark ? 'rgba(0,167,157,.2)' : 'rgba(0,167,157,.12)';
-        var top5   = countries.slice(0, 5);
-        var html   = '<div style="display:flex;flex-direction:column;gap:5px;">';
-        top5.forEach(function (c) {
-            var flag = c.countryCode
-                ? String.fromCodePoint.apply(null, c.countryCode.toUpperCase().split('').map(function(ch){ return 0x1F1E6 + ch.charCodeAt(0) - 65; }))
-                : '🌐';
-            var pct = max > 0 ? Math.round((c.visitors / max) * 100) : 0;
-            html += '<div style="display:flex;align-items:center;gap:6px;">'
-                + '<span style="width:18px;font-size:.9rem;">' + flag + '</span>'
-                + '<span style="width:100px;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (c.country || c.countryCode) + '</span>'
-                + '<div style="flex:1;background:' + barBg + ';border-radius:3px;height:8px;">'
-                +   '<div style="width:' + pct + '%;background:#00a79d;border-radius:3px;height:8px;"></div>'
-                + '</div>'
-                + '<span style="width:36px;text-align:right;font-size:.75rem;color:#6c757d;">' + c.visitors + '</span>'
-                + '</div>';
-        });
-        html += '</div>';
-        el.innerHTML = html;
-    }
+    var allCountries = [], countriesExpanded = false;
+    var COUNTRIES_LIMIT = 15;
 
-    // ── Bot country breakdown ─────────────────────────────────────────
-    function renderBotCountries(countries) {
-        var el = document.getElementById('adm-va-bot-countries-list');
-        if (!el) return;
-        if (!countries || countries.length === 0) {
-            el.innerHTML = '<p class="text-muted small text-center py-2">No bot traffic recorded in this period.</p>';
-            return;
-        }
-        var max    = countries[0].hits;
-        var isDark = document.documentElement.classList.contains('dark-mode');
-        var barBg  = isDark ? 'rgba(239,68,68,.2)' : 'rgba(239,68,68,.12)';
-        var html   = '<div style="display:flex;flex-direction:column;gap:5px;">';
+    function buildCountryRows(countries, max, barBg, valueKey, valueSuffix) {
+        var html = '';
         countries.forEach(function (c) {
             var flag = c.countryCode
                 ? String.fromCodePoint.apply(null, c.countryCode.toUpperCase().split('').map(function(ch){ return 0x1F1E6 + ch.charCodeAt(0) - 65; }))
                 : '🌐';
-            var pct = max > 0 ? Math.round((c.hits / max) * 100) : 0;
+            var val = c[valueKey] || 0;
+            var pct = max > 0 ? Math.round((val / max) * 100) : 0;
             html += '<div style="display:flex;align-items:center;gap:6px;">'
                 + '<span style="width:18px;font-size:.9rem;">' + flag + '</span>'
                 + '<span style="width:100px;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (c.country || c.countryCode) + '</span>'
                 + '<div style="flex:1;background:' + barBg + ';border-radius:3px;height:8px;">'
-                +   '<div style="width:' + pct + '%;background:#ef4444;border-radius:3px;height:8px;"></div>'
+                +   '<div style="width:' + pct + '%;background:' + (valueSuffix === ' hits' ? '#ef4444' : '#00a79d') + ';border-radius:3px;height:8px;"></div>'
                 + '</div>'
-                + '<span style="width:52px;text-align:right;font-size:.75rem;color:#6c757d;">' + c.hits + ' hits</span>'
+                + '<span style="width:' + (valueSuffix ? '52px' : '36px') + ';text-align:right;font-size:.75rem;color:#6c757d;">' + val + valueSuffix + '</span>'
                 + '</div>';
         });
-        html += '</div>';
+        return html;
+    }
+
+    function renderCountries(countries) {
+        var el = document.getElementById('adm-va-countries-list');
+        if (!el) return;
+        allCountries = countries || [];
+        countriesExpanded = false;
+        if (allCountries.length === 0) {
+            el.innerHTML = '<p class="text-muted small text-center py-2">No country data yet.</p>';
+            return;
+        }
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var barBg  = isDark ? 'rgba(0,167,157,.2)' : 'rgba(0,167,157,.12)';
+        var max    = allCountries[0].visitors;
+        var visible = allCountries.slice(0, COUNTRIES_LIMIT);
+        var html = '<div id="adm-va-countries-rows" style="display:flex;flex-direction:column;gap:5px;">'
+            + buildCountryRows(visible, max, barBg, 'visitors', '')
+            + '</div>';
+        if (allCountries.length > COUNTRIES_LIMIT) {
+            html += '<button id="adm-va-countries-toggle" style="background:transparent;border:none;color:#00a79d;font-size:.8rem;padding:6px 0 0;cursor:pointer;">'
+                + '<i class="fas fa-chevron-down fa-xs me-1"></i>Lihat Lebih Banyak (' + (allCountries.length - COUNTRIES_LIMIT) + ' lainnya)'
+                + '</button>';
+        }
         el.innerHTML = html;
     }
+
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('#adm-va-countries-toggle')) {
+            var btn    = document.getElementById('adm-va-countries-toggle');
+            var rows   = document.getElementById('adm-va-countries-rows');
+            var isDark = document.documentElement.classList.contains('dark-mode');
+            var barBg  = isDark ? 'rgba(0,167,157,.2)' : 'rgba(0,167,157,.12)';
+            var max    = allCountries[0].visitors;
+            countriesExpanded = !countriesExpanded;
+            var visible = countriesExpanded ? allCountries : allCountries.slice(0, COUNTRIES_LIMIT);
+            rows.innerHTML = buildCountryRows(visible, max, barBg, 'visitors', '');
+            btn.innerHTML = countriesExpanded
+                ? '<i class="fas fa-chevron-up fa-xs me-1"></i>Lihat Lebih Sedikit'
+                : '<i class="fas fa-chevron-down fa-xs me-1"></i>Lihat Lebih Banyak (' + (allCountries.length - COUNTRIES_LIMIT) + ' lainnya)';
+        }
+    });
+
+    // ── Bot country breakdown ─────────────────────────────────────────
+    var allBotCountries = [], botCountriesExpanded = false;
+
+    function renderBotCountries(countries) {
+        var el = document.getElementById('adm-va-bot-countries-list');
+        if (!el) return;
+        allBotCountries = countries || [];
+        botCountriesExpanded = false;
+        if (allBotCountries.length === 0) {
+            el.innerHTML = '<p class="text-muted small text-center py-2">No bot traffic recorded in this period.</p>';
+            return;
+        }
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var barBg  = isDark ? 'rgba(239,68,68,.2)' : 'rgba(239,68,68,.12)';
+        var max    = allBotCountries[0].hits;
+        var visible = allBotCountries.slice(0, COUNTRIES_LIMIT);
+        var html = '<div id="adm-va-bot-countries-rows" style="display:flex;flex-direction:column;gap:5px;">'
+            + buildCountryRows(visible, max, barBg, 'hits', ' hits')
+            + '</div>';
+        if (allBotCountries.length > COUNTRIES_LIMIT) {
+            html += '<button id="adm-va-bot-countries-toggle" style="background:transparent;border:none;color:#ef4444;font-size:.8rem;padding:6px 0 0;cursor:pointer;">'
+                + '<i class="fas fa-chevron-down fa-xs me-1"></i>Lihat Lebih Banyak (' + (allBotCountries.length - COUNTRIES_LIMIT) + ' lainnya)'
+                + '</button>';
+        }
+        el.innerHTML = html;
+    }
+
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('#adm-va-bot-countries-toggle')) {
+            var btn    = document.getElementById('adm-va-bot-countries-toggle');
+            var rows   = document.getElementById('adm-va-bot-countries-rows');
+            var isDark = document.documentElement.classList.contains('dark-mode');
+            var barBg  = isDark ? 'rgba(239,68,68,.2)' : 'rgba(239,68,68,.12)';
+            var max    = allBotCountries[0].hits;
+            botCountriesExpanded = !botCountriesExpanded;
+            var visible = botCountriesExpanded ? allBotCountries : allBotCountries.slice(0, COUNTRIES_LIMIT);
+            rows.innerHTML = buildCountryRows(visible, max, barBg, 'hits', ' hits');
+            btn.innerHTML = botCountriesExpanded
+                ? '<i class="fas fa-chevron-up fa-xs me-1"></i>Lihat Lebih Sedikit'
+                : '<i class="fas fa-chevron-down fa-xs me-1"></i>Lihat Lebih Banyak (' + (allBotCountries.length - COUNTRIES_LIMIT) + ' lainnya)';
+        }
+    });
 
     // ── Re-render charts on dark/light mode toggle ────────────────────
     new MutationObserver(function () {
