@@ -1260,6 +1260,7 @@ $(document).ready(function() {
             updateCountdown();
             if (timeLeft <= 0) {
                 loadStats();
+                loadTopPages();
                 timeLeft = 15;
             }
         }, 1000);
@@ -1323,22 +1324,40 @@ $(document).ready(function() {
     var lastChartData = null, lastDeviceData = null;
 
     // ── Render summary cards ──────────────────────────────────────────
+    function animateCount(el, newVal, suffix) {
+        if (!el) return;
+        var raw     = el.textContent.replace(/[^0-9]/g, '');
+        var fromVal = raw !== '' ? parseInt(raw) : 0;
+        if (fromVal === newVal) return;
+        var start    = null;
+        var duration = 500;
+        suffix = suffix || '';
+        function step(ts) {
+            if (!start) start = ts;
+            var progress = Math.min((ts - start) / duration, 1);
+            var eased    = 1 - Math.pow(1 - progress, 3);
+            var cur      = Math.round(fromVal + (newVal - fromVal) * eased);
+            el.textContent = cur.toLocaleString() + suffix;
+            if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+
     function renderSummary(s) {
-        function fmt(n) { return n.toLocaleString(); }
-        var el;
-        if ((el = document.getElementById('adm-va-stat-today')))     el.textContent = fmt(s.today);
-        if ((el = document.getElementById('adm-va-stat-month')))     el.textContent = fmt(s.month);
-        if ((el = document.getElementById('adm-va-stat-year')))      el.textContent = fmt(s.year);
-        if ((el = document.getElementById('adm-va-stat-alltime')))   el.textContent = fmt(s.allTime);
-        if ((el = document.getElementById('adm-va-stat-active')))    el.textContent = fmt(s.activeNow);
-        if ((el = document.getElementById('adm-va-stat-bot-today'))) el.textContent = fmt(s.botToday);
-        if ((el = document.getElementById('adm-va-stat-bot-month'))) el.textContent = fmt(s.botMonth);
-        if ((el = document.getElementById('adm-va-stat-bot-year')))  el.textContent = fmt(s.botYear);
-        if ((el = document.getElementById('adm-va-stat-bot-alltime'))) el.textContent = fmt(s.botAllTime);
-        if ((el = document.getElementById('adm-va-stat-bot-ratio'))) {
+        animateCount(document.getElementById('adm-va-stat-today'),      s.today);
+        animateCount(document.getElementById('adm-va-stat-month'),      s.month);
+        animateCount(document.getElementById('adm-va-stat-year'),       s.year);
+        animateCount(document.getElementById('adm-va-stat-alltime'),    s.allTime);
+        animateCount(document.getElementById('adm-va-stat-active'),     s.activeNow);
+        animateCount(document.getElementById('adm-va-stat-bot-today'),  s.botToday);
+        animateCount(document.getElementById('adm-va-stat-bot-month'),  s.botMonth);
+        animateCount(document.getElementById('adm-va-stat-bot-year'),   s.botYear);
+        animateCount(document.getElementById('adm-va-stat-bot-alltime'),s.botAllTime);
+        var el = document.getElementById('adm-va-stat-bot-ratio');
+        if (el) {
             var total = s.allTime + s.botAllTime;
             var pct   = total > 0 ? Math.round(s.botAllTime / total * 100) : 0;
-            el.textContent = pct + '%';
+            animateCount(el, pct, '%');
         }
     }
 
@@ -1507,6 +1526,8 @@ $(document).ready(function() {
 
     function buildCountryRows(countries, max, barBg, valueKey, valueSuffix) {
         var html = '';
+        var barColor = valueSuffix === ' hits' ? '#ef4444' : '#00a79d';
+        var numWidth = valueSuffix ? '52px' : '36px';
         countries.forEach(function (c) {
             var flag = c.countryCode
                 ? String.fromCodePoint.apply(null, c.countryCode.toUpperCase().split('').map(function(ch){ return 0x1F1E6 + ch.charCodeAt(0) - 65; }))
@@ -1517,12 +1538,22 @@ $(document).ready(function() {
                 + '<span style="width:18px;font-size:.9rem;">' + flag + '</span>'
                 + '<span style="width:100px;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (c.country || c.countryCode) + '</span>'
                 + '<div style="flex:1;background:' + barBg + ';border-radius:3px;height:8px;">'
-                +   '<div style="width:' + pct + '%;background:' + (valueSuffix === ' hits' ? '#ef4444' : '#00a79d') + ';border-radius:3px;height:8px;"></div>'
+                +   '<div style="width:' + pct + '%;background:' + barColor + ';border-radius:3px;height:8px;"></div>'
                 + '</div>'
-                + '<span style="width:' + (valueSuffix ? '52px' : '36px') + ';text-align:right;font-size:.75rem;color:#6c757d;">' + val + valueSuffix + '</span>'
+                + '<span class="adm-va-cnt-num" data-val="' + val + '" data-suffix="' + valueSuffix.trim() + '"'
+                + ' style="width:' + numWidth + ';text-align:right;font-size:.75rem;color:#6c757d;">0' + valueSuffix + '</span>'
                 + '</div>';
         });
         return html;
+    }
+
+    function animateCountryRows(container) {
+        if (!container) return;
+        container.querySelectorAll('.adm-va-cnt-num').forEach(function (span) {
+            var target = parseInt(span.dataset.val) || 0;
+            var suf    = span.dataset.suffix ? ' ' + span.dataset.suffix : '';
+            animateCount(span, target, suf);
+        });
     }
 
     function renderCountries(countries) {
@@ -1547,6 +1578,7 @@ $(document).ready(function() {
                 + '</button>';
         }
         el.innerHTML = html;
+        animateCountryRows(document.getElementById('adm-va-countries-rows'));
     }
 
     document.addEventListener('click', function (e) {
@@ -1559,6 +1591,7 @@ $(document).ready(function() {
             countriesExpanded = !countriesExpanded;
             var visible = countriesExpanded ? allCountries : allCountries.slice(0, COUNTRIES_LIMIT);
             rows.innerHTML = buildCountryRows(visible, max, barBg, 'visitors', '');
+            animateCountryRows(rows);
             btn.innerHTML = countriesExpanded
                 ? '<i class="fas fa-chevron-up fa-xs me-1"></i>Lihat Lebih Sedikit'
                 : '<i class="fas fa-chevron-down fa-xs me-1"></i>Lihat Lebih Banyak (' + (allCountries.length - COUNTRIES_LIMIT) + ' lainnya)';
@@ -1590,6 +1623,7 @@ $(document).ready(function() {
                 + '</button>';
         }
         el.innerHTML = html;
+        animateCountryRows(document.getElementById('adm-va-bot-countries-rows'));
     }
 
     document.addEventListener('click', function (e) {
@@ -1602,6 +1636,7 @@ $(document).ready(function() {
             botCountriesExpanded = !botCountriesExpanded;
             var visible = botCountriesExpanded ? allBotCountries : allBotCountries.slice(0, COUNTRIES_LIMIT);
             rows.innerHTML = buildCountryRows(visible, max, barBg, 'hits', ' hits');
+            animateCountryRows(rows);
             btn.innerHTML = botCountriesExpanded
                 ? '<i class="fas fa-chevron-up fa-xs me-1"></i>Lihat Lebih Sedikit'
                 : '<i class="fas fa-chevron-down fa-xs me-1"></i>Lihat Lebih Banyak (' + (allBotCountries.length - COUNTRIES_LIMIT) + ' lainnya)';
