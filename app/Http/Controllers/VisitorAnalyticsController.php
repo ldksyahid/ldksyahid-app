@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\DB;
 class VisitorAnalyticsController extends Controller
 {
     /**
-     * Full analytics page.
-     */
-    public function index()
-    {
-        return view('admin-page.analytics.visitors.index', [
-            'title' => 'Visitor Analytics',
-        ]);
-    }
-
-    /**
      * JSON stats endpoint for AJAX charts.
      */
     public function apiStats(Request $request)
