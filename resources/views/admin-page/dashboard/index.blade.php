@@ -457,7 +457,7 @@
 
                         {{-- Summary Cards: Human Visitors --}}
                         <p class="mb-2" style="font-size:.75rem;font-weight:600;color:#00a79d;">
-                            <i class="fas fa-users fa-xs me-1"></i>Pengunjung
+                            <i class="fas fa-users fa-xs me-1"></i>Visitors
                         </p>
                         <div class="row g-3 mb-3">
                             <div class="col-6 col-md">
@@ -532,7 +532,19 @@
                                     <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">since first recorded</div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md d-none d-md-block"></div>
+                            @php
+                                $totalTraffic = $visitorSummary['allTime'] + $visitorSummary['botAllTime'];
+                                $botPct = $totalTraffic > 0 ? round($visitorSummary['botAllTime'] / $totalTraffic * 100) : 0;
+                            @endphp
+                            <div class="col-6 col-md"
+                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                title="Percentage of bot traffic out of total traffic (bots + visitors)">
+                                <div class="p-3 rounded-3 text-center" style="background:rgba(239,68,68,.07);">
+                                    <div class="fw-bold fs-4" style="color:#ef4444;">{{ $botPct }}%</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-percent fa-xs me-1"></i>Bot Ratio</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">of total traffic</div>
+                                </div>
+                            </div>
                         </div>
 
                         {{-- Date Range + Countdown Bar --}}
