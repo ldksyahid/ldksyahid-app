@@ -212,7 +212,6 @@ class VisitorAnalyticsController extends Controller
             ->where('visitedAt', '<=', $endDate . ' 23:59:59')
             ->groupBy('countryCode', 'country')
             ->orderByDesc('visitors')
-            ->limit(15)
             ->get()
             ->map(fn ($r) => [
                 'countryCode' => $r->countryCode,
@@ -240,7 +239,6 @@ class VisitorAnalyticsController extends Controller
             ->where('visitedAt', '<=', $endDate . ' 23:59:59')
             ->groupBy('countryCode', 'country')
             ->orderByDesc('hits')
-            ->limit(10)
             ->get()
             ->map(fn ($r) => [
                 'countryCode' => $r->countryCode,
