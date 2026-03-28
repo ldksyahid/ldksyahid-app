@@ -1119,6 +1119,22 @@
             background-color: #00a79d !important;
             color: #fff !important;
         }
+        html.dark-mode .daterangepicker th.prev,
+        html.dark-mode .daterangepicker th.next {
+            padding: 4px 10px !important;
+        }
+        html.dark-mode .daterangepicker .prev span,
+        html.dark-mode .daterangepicker .next span {
+            border-color: #e4e6eb !important;
+        }
+        html.dark-mode .daterangepicker th.prev:hover,
+        html.dark-mode .daterangepicker th.next:hover {
+            background-color: #373b3e !important;
+        }
+        html.dark-mode .daterangepicker th.prev:hover span,
+        html.dark-mode .daterangepicker th.next:hover span {
+            border-color: #fff !important;
+        }
 
         /* Global form dark mode overrides (all admin forms) */
         html.dark-mode .section-title {
