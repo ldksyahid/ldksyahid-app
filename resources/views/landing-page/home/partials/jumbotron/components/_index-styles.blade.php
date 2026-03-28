@@ -50,18 +50,16 @@
         width: 100%;
         height: auto;
         display: block;
-        object-fit: cover;
     }
 
     /* Desktop Image Height */
     @media (min-width: 992px) {
         .hero-slide {
-            height: 550px;
+            height: auto;
         }
 
         .hero-image {
-            height: 550px;
-            object-fit: cover;
+            height: auto;
         }
     }
 
@@ -828,8 +826,7 @@
         }
 
         .hero-image {
-            height: 220px;
-            object-fit: cover;
+            height: auto;
         }
 
         /* Dark nav buttons, scale only on click - no color change */

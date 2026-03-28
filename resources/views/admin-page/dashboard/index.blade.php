@@ -1,6 +1,7 @@
 @extends('admin-page.template.body')
 
 @section('styles')
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <style>
     .page-title {
         font-size: 1.65rem;
@@ -315,6 +316,41 @@
         transition: transform 0.3s ease;
         display: inline-block;
     }
+    /* Visitor Analytics range button */
+    .adm-va-range.active { background:#00a79d; border-color:#00a79d; color:#fff; }
+    @keyframes adm-va-sh { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .adm-va-sort-th:hover { color:#00a79d !important; }
+
+    /* Visitor Analytics skeleton (class-based for dark mode) */
+    .adm-va-skel-div {
+        height:12px; border-radius:3px;
+        background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%);
+        background-size:200% 100%;
+        animation: adm-va-sh 1.2s infinite;
+    }
+
+    /* Visitor Analytics pagination */
+    #adm-va-tp-pagination .pagination { margin-bottom:0; }
+    #adm-va-tp-pagination .page-link { font-size:.8rem; padding:.3rem .6rem; color:#00a79d; }
+    #adm-va-tp-pagination .page-item.active .page-link { background:#00a79d; border-color:#00a79d; color:#fff; }
+    #adm-va-tp-pagination .page-link:focus { box-shadow:0 0 0 .15rem rgba(0,167,157,.25); }
+
+    html.dark-mode #adm-va-daterange { background-color:#2b2f33; border-color:#3a3e44; color:#dee2e6; }
+    html.dark-mode #adm-va-daterange::placeholder { color:#6c757d; }
+    html.dark-mode #adm-va-refresh { color:#00a79d; border-color:#00a79d; }
+    html.dark-mode .adm-va-skel-div {
+        background: linear-gradient(90deg, #2c2f33 25%, #3a3e44 50%, #2c2f33 75%);
+        background-size:200% 100%;
+    }
+    html.dark-mode #adm-va-tp-pagination .page-link { background-color:#2b2f33; border-color:#3a3e44; color:#00a79d; }
+    html.dark-mode #adm-va-tp-pagination .page-item.active .page-link { background:#00a79d; border-color:#00a79d; color:#fff; }
+    html.dark-mode #adm-va-tp-pagination .page-item.disabled .page-link { background-color:#2b2f33; border-color:#3a3e44; color:#6c757d; }
+    html.dark-mode #adm-va-tp-search { background-color:#2b2f33; border-color:#3a3e44; color:#dee2e6; }
+    html.dark-mode #adm-va-tp-search::placeholder { color:#6c757d; }
+    html.dark-mode #adm-va-tp-search:focus { background-color:#2b2f33; border-color:#00a79d; color:#dee2e6; box-shadow:0 0 0 .15rem rgba(0,167,157,.25); }
+    html.dark-mode #adm-va-tp-clear { color:#6c757d; }
+    html.dark-mode #adm-va-tp-clear:hover { color:#dee2e6; }
+
     html.dark-mode .adm-hq-arab { color: #e4e6eb; }
     html.dark-mode .adm-hq-text { color: #b0b3b8; }
     html.dark-mode #adm-hq-source { color: #fff !important; }
@@ -400,6 +436,168 @@
                             <span id="adm-hq-toggle-text">Lihat Selengkapnya</span>
                             <i class="fas fa-chevron-down fa-xs ms-1" id="adm-hq-toggle-icon"></i>
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visitor Analytics -->
+            <div class="col-md-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        {{-- Header --}}
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                            <div>
+                                <h5 class="section-title mb-0">
+                                    <i class="fas fa-chart-line me-2"></i>Visitor Analytics
+                                </h5>
+                                <p class="text-muted mb-0" style="font-size:.75rem;">Public page visitor statistics</p>
+                            </div>
+                        </div>
+
+                        {{-- Summary Cards --}}
+                        <div class="row g-3 mb-4">
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-3 text-center" style="background:rgba(0,167,157,.08);">
+                                    <div class="fw-bold fs-4" style="color:#00a79d;">{{ number_format($visitorSummary['today']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-sun fa-xs me-1"></i>Today</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-3 text-center" style="background:rgba(99,102,241,.08);">
+                                    <div class="fw-bold fs-4" style="color:#6366f1;">{{ number_format($visitorSummary['month']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-calendar-alt fa-xs me-1"></i>This Month</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-3 text-center" style="background:rgba(234,179,8,.08);">
+                                    <div class="fw-bold fs-4" style="color:#ca8a04;">{{ number_format($visitorSummary['year']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-calendar fa-xs me-1"></i>This Year</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-3 text-center" style="background:rgba(245,158,11,.08);">
+                                    <div class="fw-bold fs-4" style="color:#f59e0b;">{{ number_format($visitorSummary['allTime']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-history fa-xs me-1"></i>All-Time</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">since first recorded</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-3 text-center" style="background:rgba(16,185,129,.08);"
+                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    title="Visitors (distinct IPs) who loaded a page within the last 30 minutes. Does not mean they are online right now.">
+                                    <div class="fw-bold fs-4" style="color:#10b981;">{{ number_format($visitorSummary['activeNow']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-circle fa-xs me-1" style="color:#10b981;"></i>Active Now</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">active in last 30 min</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Date Range + Countdown Bar --}}
+                        <div class="d-flex align-items-center gap-2 flex-wrap py-2 mb-3"
+                            style="border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);">
+                            <i class="fas fa-calendar-alt fa-xs text-muted"></i>
+                            <input type="text" id="adm-va-daterange" class="form-control form-control-sm"
+                                style="max-width:260px;flex:1;font-size:.8rem;cursor:pointer;"
+                                placeholder="Select date range" autocomplete="off">
+                            <span class="text-muted small ms-auto" style="white-space:nowrap;">
+                                Auto-refresh in
+                                <span id="adm-va-countdown" class="fw-semibold" style="color:#00a79d;">60</span>s
+                            </span>
+                            <button id="adm-va-refresh" type="button"
+                                style="background:transparent;color:#00a79d;border:1px solid #00a79d;border-radius:6px;padding:2px 9px;cursor:pointer;line-height:1.5;"
+                                data-bs-toggle="tooltip" title="Refresh now">
+                                <i class="fas fa-sync-alt fa-xs"></i>
+                            </button>
+                        </div>
+
+                        {{-- Charts Row --}}
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-8">
+                                <p class="mb-1" style="font-size:.78rem;font-weight:600;color:#00a79d;">
+                                    <i class="fas fa-chart-area fa-xs me-1"></i>Daily Visitor Trend
+                                    <span class="text-muted fw-normal" style="font-size:.7rem;"> — visitors per day</span>
+                                </p>
+                                <div style="position:relative; height:220px; background:rgba(0,0,0,.03); border-radius:12px; padding:12px;">
+                                    <canvas id="adm-va-line-chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="mb-1" style="font-size:.78rem;font-weight:600;color:#00a79d;">
+                                    <i class="fas fa-mobile-alt fa-xs me-1"></i>Device Breakdown
+                                    <span class="text-muted fw-normal" style="font-size:.7rem;"> — mobile, desktop, tablet</span>
+                                </p>
+                                <div style="position:relative; height:220px; background:rgba(0,0,0,.03); border-radius:12px; padding:12px;">
+                                    <canvas id="adm-va-device-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Top Countries --}}
+                        <p class="mb-2" style="font-size:.78rem;font-weight:600;color:#00a79d;">
+                            <i class="fas fa-globe fa-xs me-1"></i>Top Countries
+                            <span class="text-muted fw-normal" style="font-size:.7rem;"> — visitors by country</span>
+                        </p>
+                        <div id="adm-va-countries-list" class="mb-4">
+                            <p class="text-muted small text-center py-2">Loading...</p>
+                        </div>
+
+                        {{-- Top Pages header --}}
+                        <p class="mb-2" style="font-size:.78rem;font-weight:600;color:#00a79d;">
+                            <i class="fas fa-file-alt fa-xs me-1"></i>Top Pages
+                            <span class="text-muted fw-normal" style="font-size:.7rem;"> — most visited pages in the selected period</span>
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                            <span class="text-muted small" id="adm-va-tp-info"></span>
+                            <div style="position:relative;">
+                                <i class="fas fa-search" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);color:#adb5bd;font-size:.7rem;pointer-events:none;"></i>
+                                <input type="text" id="adm-va-tp-search" class="form-control form-control-sm"
+                                    style="padding-left:26px;padding-right:26px;font-size:.8rem;min-width:170px;"
+                                    placeholder="Search path..." autocomplete="off">
+                                <button id="adm-va-tp-clear" type="button" class="d-none"
+                                    style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:#adb5bd;padding:0;cursor:pointer;line-height:1;">
+                                    <i class="fas fa-times fa-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- Top Pages table --}}
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover mb-0" style="font-size:.85rem;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-muted fw-normal" style="font-size:.75rem;width:32px;">#</th>
+                                        <th class="text-muted fw-normal" style="font-size:.75rem;">
+                                            PATH
+                                            <i class="fas fa-question-circle fa-xs ms-1 text-muted" style="cursor:default;"
+                                                data-bs-toggle="tooltip" title="The URL path of the visited page (e.g. /about, /news/5)"></i>
+                                        </th>
+                                        <th class="adm-va-sort-th text-end fw-normal" data-sort="hits"
+                                            style="font-size:.75rem;cursor:pointer;white-space:nowrap;">
+                                            HITS
+                                            <i class="fas fa-question-circle fa-xs ms-1 text-muted" style="cursor:default;"
+                                                data-bs-toggle="tooltip" title="Total page loads (hits). Repeat visits from the same person are counted separately."></i>
+                                            <span class="adm-va-sort-arrow" id="adm-va-arrow-hits" style="color:#00a79d;">↓</span>
+                                        </th>
+                                        <th class="adm-va-sort-th text-end fw-normal" data-sort="uniques"
+                                            style="font-size:.75rem;cursor:pointer;white-space:nowrap;">
+                                            Visitors
+                                            <i class="fas fa-question-circle fa-xs ms-1 text-muted" style="cursor:default;"
+                                                data-bs-toggle="tooltip" title="Number of distinct visitors (different people) who opened this page."></i>
+                                            <span class="adm-va-sort-arrow" id="adm-va-arrow-uniques" style="color:#adb5bd;"></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adm-va-top-pages">
+                                    <tr><td colspan="4" class="text-center text-muted py-2">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {{-- Pagination --}}
+                        <div class="d-flex justify-content-center mt-2" id="adm-va-tp-pagination"></div>
                     </div>
                 </div>
             </div>
@@ -954,6 +1152,290 @@ $(document).ready(function() {
         startCountdown();
         window.addEventListener('resize', checkOverflow);
     });
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script>
+// === Visitor Analytics Widget ===
+(function () {
+    'use strict';
+
+    // Init Bootstrap tooltips
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+        new bootstrap.Tooltip(el, { trigger: 'hover focus' });
+    });
+
+    var API_URL   = '{{ route("admin.api.visitor-stats") }}';
+    var TP_URL    = '{{ route("admin.api.visitor-top-pages") }}';
+    var lineChart = null;
+    var devChart  = null;
+
+    // Date range state (default: last 30 days)
+    var startDate = moment().subtract(29, 'days').format('YYYY-MM-DD');
+    var endDate   = moment().format('YYYY-MM-DD');
+
+    // Top pages state
+    var tp      = { search: '', sortBy: 'hits', sortOrder: 'desc', page: 1 };
+    var tpTimer = null;
+
+    // ── Countdown + auto-refresh ──────────────────────────────────────
+    var timeLeft          = 60;
+    var countdownInterval = null;
+
+    function updateCountdown() {
+        var el = document.getElementById('adm-va-countdown');
+        if (el) el.textContent = timeLeft;
+    }
+
+    function resetCountdown() { timeLeft = 60; updateCountdown(); }
+
+    function startCountdown() {
+        if (countdownInterval) clearInterval(countdownInterval);
+        countdownInterval = setInterval(function () {
+            timeLeft--;
+            updateCountdown();
+            if (timeLeft <= 0) {
+                loadStats();
+                timeLeft = 60;
+            }
+        }, 1000);
+    }
+
+    document.getElementById('adm-va-refresh').addEventListener('click', function () {
+        loadStats();
+        loadTopPages();
+        resetCountdown();
+    });
+
+    // ── Daterangepicker ───────────────────────────────────────────────
+    $('#adm-va-daterange').daterangepicker({
+        autoUpdateInput: true,
+        startDate: moment().subtract(29, 'days'),
+        endDate:   moment(),
+        locale: {
+            format: 'DD MMM YYYY',
+            separator: ' – ',
+            applyLabel: 'Apply',
+            cancelLabel: 'Clear',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: 'Custom',
+            daysOfWeek: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+            monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+            firstDay: 1,
+        },
+        ranges: {
+            'Today':       [moment(), moment()],
+            'Last 7 Days': [moment().subtract(6,  'days'), moment()],
+            'Last 30 Days':[moment().subtract(29, 'days'), moment()],
+            'Last 90 Days':[moment().subtract(89, 'days'), moment()],
+            'This Month':  [moment().startOf('month'), moment()],
+            'This Year':   [moment().startOf('year'),  moment()],
+        },
+        opens: 'right',
+    });
+
+    $('#adm-va-daterange').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD MMM YYYY') + ' – ' + picker.endDate.format('DD MMM YYYY'));
+        startDate = picker.startDate.format('YYYY-MM-DD');
+        endDate   = picker.endDate.format('YYYY-MM-DD');
+        tp.page   = 1;
+        loadStats();
+        loadTopPages();
+        resetCountdown();
+    });
+
+    $('#adm-va-daterange').on('cancel.daterangepicker', function () {
+        startDate = moment().subtract(29, 'days').format('YYYY-MM-DD');
+        endDate   = moment().format('YYYY-MM-DD');
+        $(this).val(moment().subtract(29,'days').format('DD MMM YYYY') + ' – ' + moment().format('DD MMM YYYY'));
+        tp.page = 1;
+        loadStats();
+        loadTopPages();
+        resetCountdown();
+    });
+
+    // ── Cached chart data (for theme re-render) ───────────────────────
+    var lastChartData = null, lastDeviceData = null;
+
+    // ── Fetch summary + charts ────────────────────────────────────────
+    function loadStats() {
+        fetch(API_URL + '?start_date=' + startDate + '&end_date=' + endDate, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            lastChartData  = d.chart;
+            lastDeviceData = d.devices;
+            renderLine(d.chart);
+            renderDevice(d.devices);
+            renderCountries(d.countries || []);
+        })
+        .catch(function () {});
+    }
+
+    // ── Top Pages ─────────────────────────────────────────────────────
+    function loadTopPages() {
+        var sk = '';
+        for (var i = 0; i < 5; i++) {
+            sk += '<tr>'
+                + '<td><div class="adm-va-skel-div" style="width:20px;"></div></td>'
+                + '<td><div class="adm-va-skel-div"></div></td>'
+                + '<td><div class="adm-va-skel-div" style="width:50px;margin-left:auto;"></div></td>'
+                + '<td><div class="adm-va-skel-div" style="width:50px;margin-left:auto;"></div></td>'
+                + '</tr>';
+        }
+        document.getElementById('adm-va-top-pages').innerHTML = sk;
+
+        $.ajax({
+            url: TP_URL,
+            data: { start_date: startDate, end_date: endDate, search: tp.search, sort_by: tp.sortBy, sort_order: tp.sortOrder, page: tp.page },
+            success: function (res) {
+                $('#adm-va-top-pages').html(res.html);
+                $('#adm-va-tp-pagination').html(res.pagination || '');
+                $('#adm-va-tp-info').text(res.total > 0 ? (res.from + '–' + res.to + ' / ' + res.total + ' paths') : '');
+                updateAdmSortArrows();
+                document.querySelectorAll('#adm-va-top-pages [data-bs-toggle="tooltip"]').forEach(function (el) {
+                    new bootstrap.Tooltip(el, { trigger: 'hover focus' });
+                });
+            },
+            error: function () {
+                $('#adm-va-top-pages').html('<tr><td colspan="4" class="text-center text-muted py-2 small">Failed to load data</td></tr>');
+            }
+        });
+    }
+
+    function updateAdmSortArrows() {
+        document.querySelectorAll('.adm-va-sort-arrow').forEach(function (el) { el.textContent = ''; el.style.color = '#adb5bd'; });
+        var a = document.getElementById('adm-va-arrow-' + tp.sortBy);
+        if (a) { a.textContent = tp.sortOrder === 'asc' ? '↑' : '↓'; a.style.color = '#00a79d'; }
+    }
+
+    // Sort headers
+    $(document).on('click', '.adm-va-sort-th', function () {
+        var col = $(this).data('sort');
+        if (tp.sortBy === col) { tp.sortOrder = tp.sortOrder === 'desc' ? 'asc' : 'desc'; }
+        else { tp.sortBy = col; tp.sortOrder = 'desc'; }
+        tp.page = 1;
+        loadTopPages();
+    });
+
+    // Search
+    document.getElementById('adm-va-tp-search').addEventListener('input', function () {
+        document.getElementById('adm-va-tp-clear').classList.toggle('d-none', this.value === '');
+        var val = this.value;
+        clearTimeout(tpTimer);
+        tpTimer = setTimeout(function () { tp.search = val; tp.page = 1; loadTopPages(); }, 350);
+    });
+    document.getElementById('adm-va-tp-clear').addEventListener('click', function () {
+        document.getElementById('adm-va-tp-search').value = '';
+        this.classList.add('d-none');
+        tp.search = ''; tp.page = 1; loadTopPages();
+    });
+
+    // Pagination intercept
+    $(document).on('click', '#adm-va-tp-pagination .pagination a', function (e) {
+        e.preventDefault();
+        var url = new URL($(this).attr('href'), window.location.origin);
+        tp.page = parseInt(url.searchParams.get('page')) || 1;
+        loadTopPages();
+    });
+
+    // ── Chart renderers ───────────────────────────────────────────────
+    function renderLine(chart) {
+        var ctx = document.getElementById('adm-va-line-chart');
+        if (!ctx) return;
+        var isDark    = document.documentElement.classList.contains('dark-mode');
+        var gridColor = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.05)';
+        var tickColor = isDark ? '#adb5bd' : '#6c757d';
+        if (lineChart) lineChart.destroy();
+        lineChart = new Chart(ctx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: chart.labels,
+                datasets: [{
+                    label: 'Visitors',
+                    data: chart.data,
+                    borderColor: '#00a79d',
+                    backgroundColor: 'rgba(0,167,157,.08)',
+                    borderWidth: 2,
+                    pointRadius: 2,
+                    fill: true,
+                    tension: 0.3,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: tickColor, maxTicksLimit: 8, font: { size: 10 } }, grid: { color: gridColor } },
+                    y: { beginAtZero: true, ticks: { color: tickColor, precision: 0, font: { size: 10 } }, grid: { color: gridColor } }
+                }
+            }
+        });
+    }
+
+    function renderDevice(d) {
+        var ctx = document.getElementById('adm-va-device-chart');
+        if (!ctx) return;
+        if (devChart) devChart.destroy();
+        devChart = new Chart(ctx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Desktop', 'Mobile', 'Tablet', 'Bot'],
+                datasets: [{ data: [d.desktop, d.mobile, d.tablet, d.bot], backgroundColor: ['#6366f1','#00a79d','#f59e0b','#ef4444'], borderWidth: 2 }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } } }
+            }
+        });
+    }
+
+    // ── Country breakdown ─────────────────────────────────────────────
+    function renderCountries(countries) {
+        var el = document.getElementById('adm-va-countries-list');
+        if (!el) return;
+        if (!countries || countries.length === 0) {
+            el.innerHTML = '<p class="text-muted small text-center py-2">No country data yet.</p>';
+            return;
+        }
+        var max    = countries[0].visitors;
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var barBg  = isDark ? 'rgba(0,167,157,.2)' : 'rgba(0,167,157,.12)';
+        var top5   = countries.slice(0, 5);
+        var html   = '<div style="display:flex;flex-direction:column;gap:5px;">';
+        top5.forEach(function (c) {
+            var flag = c.countryCode
+                ? String.fromCodePoint.apply(null, c.countryCode.toUpperCase().split('').map(function(ch){ return 0x1F1E6 + ch.charCodeAt(0) - 65; }))
+                : '🌐';
+            var pct = max > 0 ? Math.round((c.visitors / max) * 100) : 0;
+            html += '<div style="display:flex;align-items:center;gap:6px;">'
+                + '<span style="width:18px;font-size:.9rem;">' + flag + '</span>'
+                + '<span style="width:100px;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (c.country || c.countryCode) + '</span>'
+                + '<div style="flex:1;background:' + barBg + ';border-radius:3px;height:8px;">'
+                +   '<div style="width:' + pct + '%;background:#00a79d;border-radius:3px;height:8px;"></div>'
+                + '</div>'
+                + '<span style="width:36px;text-align:right;font-size:.75rem;color:#6c757d;">' + c.visitors + '</span>'
+                + '</div>';
+        });
+        html += '</div>';
+        el.innerHTML = html;
+    }
+
+    // ── Re-render charts on dark/light mode toggle ────────────────────
+    new MutationObserver(function () {
+        if (lastChartData)  renderLine(lastChartData);
+        if (lastDeviceData) renderDevice(lastDeviceData);
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    // ── Init ──────────────────────────────────────────────────────────
+    loadStats();
+    loadTopPages();
+    startCountdown();
 })();
 </script>
 @endsection
