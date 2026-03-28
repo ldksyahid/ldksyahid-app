@@ -186,6 +186,20 @@ Route::get('/admin', [HomeController::class, 'adminHome'])->name('admin')->middl
 // Route AdminPage Dashboard
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
 
+// Proxy: Motivational Quotes (avoids CORS from quotes.liupurnomo.com)
+Route::get('/admin/api/motivasi-quotes', function () {
+    try {
+        $response = \Illuminate\Support\Facades\Http::timeout(8)
+            ->get('https://quotes.liupurnomo.com/api/quotes/random');
+        if ($response->successful()) {
+            return response()->json($response->json());
+        }
+        return response()->json(['error' => true, 'message' => 'Upstream error'], 502);
+    } catch (\Exception $e) {
+        return response()->json(['error' => true, 'message' => 'Request failed'], 500);
+    }
+})->name('admin.api.motivasi-quotes')->middleware(['auth']);
+
 // Route AdminPage User
 Route::get('/admin/user', [UserController::class, 'indexAdmin'])->name('admin.user.index')->middleware(['role:Superadmin']);
 Route::get('/admin/user/create', [UserController::class, 'create'])->name('admin.user.create')->middleware(['role:Superadmin']);
