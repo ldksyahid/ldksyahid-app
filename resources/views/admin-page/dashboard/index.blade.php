@@ -1340,7 +1340,7 @@ $(document).ready(function() {
     // ── Top Pages ─────────────────────────────────────────────────────
     function loadTopPages() {
         var sk = '';
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 15; i++) {
             sk += '<tr>'
                 + '<td><div class="adm-va-skel-div" style="width:20px;"></div></td>'
                 + '<td><div class="adm-va-skel-div"></div></td>'
