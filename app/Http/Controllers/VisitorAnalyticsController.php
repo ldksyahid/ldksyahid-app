@@ -87,7 +87,22 @@ class VisitorAnalyticsController extends Controller
             ->distinct('ipHash')
             ->count('ipHash');
 
-        return compact('today', 'month', 'year', 'allTime', 'activeNow');
+        $botToday = TrVisitorLog::whereDate('visitedAt', today())
+            ->where('isBot', 1)
+            ->count();
+
+        $botMonth = TrVisitorLog::whereYear('visitedAt', now()->year)
+            ->whereMonth('visitedAt', now()->month)
+            ->where('isBot', 1)
+            ->count();
+
+        $botYear = TrVisitorLog::whereYear('visitedAt', now()->year)
+            ->where('isBot', 1)
+            ->count();
+
+        $botAllTime = TrVisitorLog::where('isBot', 1)->count();
+
+        return compact('today', 'month', 'year', 'allTime', 'activeNow', 'botToday', 'botMonth', 'botYear', 'botAllTime');
     }
 
     /**
