@@ -27,18 +27,20 @@ class VisitorAnalyticsController extends Controller
     {
         [$startDate, $endDate] = $this->parseDateRange($request);
 
-        $summary   = $this->getSummary();
-        $chart     = $this->getChartData($startDate, $endDate);
-        $topPages  = $this->getTopPages($startDate, $endDate);
-        $devices   = $this->getDeviceBreakdown($startDate, $endDate);
-        $countries = $this->getCountryStats($startDate, $endDate);
+        $summary      = $this->getSummary();
+        $chart        = $this->getChartData($startDate, $endDate);
+        $topPages     = $this->getTopPages($startDate, $endDate);
+        $devices      = $this->getDeviceBreakdown($startDate, $endDate);
+        $countries    = $this->getCountryStats($startDate, $endDate);
+        $botCountries = $this->getBotCountryStats($startDate, $endDate);
 
         return response()->json([
-            'summary'   => $summary,
-            'chart'     => $chart,
-            'topPages'  => $topPages,
-            'devices'   => $devices,
-            'countries' => $countries,
+            'summary'      => $summary,
+            'chart'        => $chart,
+            'topPages'     => $topPages,
+            'devices'      => $devices,
+            'countries'    => $countries,
+            'botCountries' => $botCountries,
         ]);
     }
 
@@ -99,33 +101,37 @@ class VisitorAnalyticsController extends Controller
     }
 
     /**
-     * Line chart: unique visitors per day within the date range.
+     * Line chart: unique visitors + bot hits per day within the date range.
      */
     private function getChartData(string $startDate, string $endDate): array
     {
-        $rows = TrVisitorLog::selectRaw('DATE(visitedAt) as date, COUNT(*) as uniqueCount')
+        $rows = TrVisitorLog::selectRaw(
+                'DATE(visitedAt) as date,
+                 SUM(CASE WHEN isBot = 0 AND isUniqueDaily = 1 THEN 1 ELSE 0 END) as humanCount,
+                 SUM(CASE WHEN isBot = 1 THEN 1 ELSE 0 END) as botCount'
+            )
             ->where('visitedAt', '>=', $startDate . ' 00:00:00')
             ->where('visitedAt', '<=', $endDate . ' 23:59:59')
-            ->where('isUniqueDaily', 1)
-            ->where('isBot', 0)
             ->groupByRaw('DATE(visitedAt)')
             ->orderByRaw('DATE(visitedAt)')
             ->get()
             ->keyBy('date');
 
-        $labels  = [];
-        $data    = [];
-        $current = Carbon::parse($startDate);
-        $end     = Carbon::parse($endDate);
+        $labels   = [];
+        $data     = [];
+        $botData  = [];
+        $current  = Carbon::parse($startDate);
+        $end      = Carbon::parse($endDate);
 
         while ($current->lte($end)) {
-            $date     = $current->toDateString();
-            $labels[] = $date;
-            $data[]   = $rows->has($date) ? (int) $rows[$date]->uniqueCount : 0;
+            $date      = $current->toDateString();
+            $labels[]  = $date;
+            $data[]    = $rows->has($date) ? (int) $rows[$date]->humanCount : 0;
+            $botData[] = $rows->has($date) ? (int) $rows[$date]->botCount   : 0;
             $current->addDay();
         }
 
-        return compact('labels', 'data');
+        return compact('labels', 'data', 'botData');
     }
 
     /**
@@ -207,6 +213,34 @@ class VisitorAnalyticsController extends Controller
                 'countryCode' => $r->countryCode,
                 'country'     => $r->country,
                 'visitors'    => (int) $r->visitors,
+                'hits'        => (int) $r->hits,
+            ])
+            ->toArray();
+    }
+
+    /**
+     * Top countries by bot traffic within the date range.
+     */
+    private function getBotCountryStats(string $startDate, string $endDate): array
+    {
+        return TrVisitorLog::select(
+                'countryCode',
+                'country',
+                DB::raw('COUNT(DISTINCT ipHash) as bots'),
+                DB::raw('COUNT(*) as hits')
+            )
+            ->whereNotNull('countryCode')
+            ->where('isBot', 1)
+            ->where('visitedAt', '>=', $startDate . ' 00:00:00')
+            ->where('visitedAt', '<=', $endDate . ' 23:59:59')
+            ->groupBy('countryCode', 'country')
+            ->orderByDesc('hits')
+            ->limit(10)
+            ->get()
+            ->map(fn ($r) => [
+                'countryCode' => $r->countryCode,
+                'country'     => $r->country,
+                'bots'        => (int) $r->bots,
                 'hits'        => (int) $r->hits,
             ])
             ->toArray();
