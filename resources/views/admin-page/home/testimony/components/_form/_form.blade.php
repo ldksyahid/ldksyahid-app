@@ -79,7 +79,7 @@
                                     @if ($operation !== 'view')
                                         <input type="file" class="form-control @error('picture') is-invalid @enderror" id="picture" name="picture"
                                             accept="image/jpeg,image/png,image/jpg"
-                                            style="max-width: 300px;"
+                                            style="max-width: 260px; width: 100%;"
                                             {{ $operation === 'create' ? 'required' : '' }}>
                                         @error('picture')
                                             <div class="invalid-feedback">{{ $message }}</div>
