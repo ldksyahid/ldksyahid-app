@@ -73,7 +73,8 @@
     .image-preview-container {
         position: relative;
         width: 100%;
-        max-height: 300px;
+        max-width: 300px;
+        aspect-ratio: 11 / 8;
         border-radius: 12px;
         overflow: hidden;
         border: 2px solid #dee2e6;
@@ -85,13 +86,16 @@
         object-fit: cover;
         display: block;
     }
-    .image-preview-container .svg-placeholder {
-        width: 100% !important;
-        height: auto !important;
-        border: none !important;
-    }
     .image-preview-container.has-image {
         border-color: #00a79d;
+    }
+    /* Make SVG placeholder fill the container */
+    .image-preview-container .svg-placeholder {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 10px !important;
+        border: none !important;
+        display: block;
     }
 
     /* View mode specific */
@@ -115,8 +119,8 @@
             width: 100%;
         }
         .image-preview-container {
-            width: 120px;
-            height: 160px;
+            max-width: 100%;
+            width: 100%;
         }
     }
 </style>
