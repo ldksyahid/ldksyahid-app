@@ -187,11 +187,12 @@ class VisitorAnalyticsController extends Controller
         ])->render();
 
         return response()->json([
-            'html'       => $html,
-            'pagination' => (string) $items->links('pagination::bootstrap-4'),
-            'total'      => $items->total(),
-            'from'       => $items->firstItem() ?? 0,
-            'to'         => $items->lastItem() ?? 0,
+            'html'         => $html,
+            'total'        => $items->total(),
+            'from'         => $items->firstItem() ?? 0,
+            'to'           => $items->lastItem() ?? 0,
+            'current_page' => $items->currentPage(),
+            'last_page'    => $items->lastPage(),
         ]);
     }
 
