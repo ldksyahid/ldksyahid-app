@@ -333,10 +333,13 @@
     }
 
     /* Visitor Analytics pagination */
-    #adm-va-tp-pagination .pagination { margin-bottom:0; }
-    #adm-va-tp-pagination .page-link { font-size:.8rem; padding:.3rem .6rem; color:#00a79d; }
+    #adm-va-tp-pagination .pagination { margin-bottom:0; flex-wrap:wrap; gap:.25rem; }
+    #adm-va-tp-pagination .page-link { font-size:.8rem; padding:.3rem .55rem; color:#00a79d; border-radius:.375rem !important; min-width:2rem; text-align:center; }
     #adm-va-tp-pagination .page-item.active .page-link { background:#00a79d; border-color:#00a79d; color:#fff; }
     #adm-va-tp-pagination .page-link:focus { box-shadow:0 0 0 .15rem rgba(0,167,157,.25); }
+    @media (max-width:575.98px) {
+        #adm-va-tp-pagination .page-link { font-size:.75rem; padding:.25rem .45rem; min-width:1.8rem; }
+    }
 
     html.dark-mode #adm-va-daterange { background-color:#2b2f33; border-color:#3a3e44; color:#dee2e6; }
     html.dark-mode #adm-va-daterange::placeholder { color:#6c757d; }
@@ -1403,7 +1406,7 @@ $(document).ready(function() {
             data: { start_date: startDate, end_date: endDate, search: tp.search, sort_by: tp.sortBy, sort_order: tp.sortOrder, page: tp.page },
             success: function (res) {
                 $('#adm-va-top-pages').html(res.html);
-                $('#adm-va-tp-pagination').html(res.pagination || '');
+                renderAdmPagination(res.current_page, res.last_page);
                 $('#adm-va-tp-info').text(res.total > 0 ? (res.from + '–' + res.to + ' / ' + res.total + ' paths') : '');
                 updateAdmSortArrows();
                 document.querySelectorAll('#adm-va-top-pages [data-bs-toggle="tooltip"]').forEach(function (el) {
@@ -1444,11 +1447,51 @@ $(document).ready(function() {
         tp.search = ''; tp.page = 1; loadTopPages();
     });
 
+    // Pagination renderer (smart ellipsis, mobile-friendly)
+    function renderAdmPagination(current, last) {
+        var $el = $('#adm-va-tp-pagination');
+        if (!last || last <= 1) { $el.html(''); return; }
+
+        var delta = window.innerWidth < 576 ? 1 : 2;
+        var pages = {};
+        pages[1] = true;
+        pages[last] = true;
+        for (var i = Math.max(1, current - delta); i <= Math.min(last, current + delta); i++) {
+            pages[i] = true;
+        }
+        var sorted = Object.keys(pages).map(Number).sort(function(a,b){return a-b;});
+        var items = [];
+        for (var k = 0; k < sorted.length; k++) {
+            if (k > 0 && sorted[k] - sorted[k-1] > 1) {
+                items.push('...');
+            }
+            items.push(sorted[k]);
+        }
+
+        var html = '<nav aria-label="Top pages pagination"><ul class="pagination pagination-sm justify-content-center mb-0 flex-wrap gap-1">';
+        html += '<li class="page-item' + (current <= 1 ? ' disabled' : '') + '">';
+        html += '<a class="page-link adm-va-pg-btn" data-page="' + (current - 1) + '" href="#" aria-label="Previous">‹</a></li>';
+        for (var j = 0; j < items.length; j++) {
+            var p = items[j];
+            if (p === '...') {
+                html += '<li class="page-item disabled"><span class="page-link px-2">…</span></li>';
+            } else {
+                html += '<li class="page-item' + (p === current ? ' active' : '') + '">';
+                html += '<a class="page-link adm-va-pg-btn" data-page="' + p + '" href="#">' + p + '</a></li>';
+            }
+        }
+        html += '<li class="page-item' + (current >= last ? ' disabled' : '') + '">';
+        html += '<a class="page-link adm-va-pg-btn" data-page="' + (current + 1) + '" href="#" aria-label="Next">›</a></li>';
+        html += '</ul></nav>';
+        $el.html(html);
+    }
+
     // Pagination intercept
-    $(document).on('click', '#adm-va-tp-pagination .pagination a', function (e) {
+    $(document).on('click', '#adm-va-tp-pagination .adm-va-pg-btn', function (e) {
         e.preventDefault();
-        var url = new URL($(this).attr('href'), window.location.origin);
-        tp.page = parseInt(url.searchParams.get('page')) || 1;
+        var page = parseInt($(this).data('page'));
+        if (!page || page < 1) return;
+        tp.page = page;
         loadTopPages();
     });
 
