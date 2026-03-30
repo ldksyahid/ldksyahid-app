@@ -43,13 +43,13 @@ Auth::routes(['verify' => true]);
 
 // Strict throttle for login: max 5 attempts per minute
 Route::middleware('throttle:5,1')->group(function () {
-    Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
-    Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail']);
+    Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login');
+    Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 });
 
 // Throttle for register: max 5 accounts per 10 minutes
 Route::middleware('throttle:5,10')->group(function () {
-    Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
+    Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('register');
 });
 
 // Route Template
