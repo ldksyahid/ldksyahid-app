@@ -3038,6 +3038,7 @@ footer {
 [data-theme="dark"] .auth-badge         { background: rgba(0,167,157,.15); border-color: rgba(0,167,157,.3); }
 [data-theme="dark"] .auth-features li   { color: #cbd5e0; }
 [data-theme="dark"] .auth-card-subtitle { color: #94a3b8; }
+[data-theme="dark"] .auth-status-alert  { background: rgba(0,167,157,.12); border-color: rgba(0,167,157,.28); color: #cbd5e0; }
 
 /* ── Welcome Popup ── */
 [data-theme="dark"] #wrp-card          { background: #1a1f2e; }

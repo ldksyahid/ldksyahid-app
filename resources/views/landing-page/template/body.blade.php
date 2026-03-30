@@ -29,7 +29,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
         {{-- Custom CSS --}}
-        <link href="{{ asset('landing-page-ext-rsrc/css/style-v1.0.4.css') }}" rel="stylesheet" />
+        <link href="{{ asset('landing-page-ext-rsrc/css/style-v1.0.5.css') }}" rel="stylesheet" />
 
         <link href="{{ asset('css/itsupport.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/pagination.css') }}" rel="stylesheet" />
