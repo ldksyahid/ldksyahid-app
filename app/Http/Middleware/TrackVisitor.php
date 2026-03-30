@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\DatacenterDetector;
 use App\Helpers\GeoIpHelper;
 use App\Models\TrVisitorLog;
 use Closure;
@@ -92,9 +93,17 @@ class TrackVisitor
         $agent = new Agent();
         $agent->setUserAgent($request->userAgent());
 
-        $isBot     = $agent->isRobot() ? 1 : 0;
-        $browser   = $agent->browser() ?: null;
-        $os        = $agent->platform() ?: null;
+        $isBot   = $agent->isRobot() ? 1 : 0;
+        $browser = $agent->browser() ?: null;
+        $os      = $agent->platform() ?: null;
+
+        // Secondary bot detection: flag datacenter IPs that passed user-agent check.
+        // Bots disguised as browsers (headless, scrapers) are caught here via ASN lookup.
+        if (!$isBot && DatacenterDetector::isDatacenter($ip)) {
+            $isBot   = 1;
+            $browser = null;
+            $os      = null;
+        }
 
         if ($isBot) {
             $deviceType = 'bot';
