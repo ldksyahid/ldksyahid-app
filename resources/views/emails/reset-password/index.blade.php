@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>{{ config('app.name') }}</title>
+    <title>Reset Password – LDK Syahid</title>
     <style>
         @media only screen and (max-width: 600px) {
             .card      { width: 100% !important; }
@@ -51,47 +51,52 @@
 
                         <!-- Greeting -->
                         <h1 style="margin:0 0 6px;font-size:22px;color:#1a202c;font-weight:700;line-height:1.3;">
-                            @if (! empty($greeting)){{ $greeting }}@else Assalamu'alaikum! 👋@endif
+                            Assalamu'alaikum, {{ $name }}! 👋
                         </h1>
-
-                        <!-- Intro Lines -->
-                        @foreach ($introLines as $line)
-                        <p style="margin:0 0 14px;font-size:15px;color:#4a5568;line-height:1.65;">{{ $line }}</p>
-                        @endforeach
+                        <p style="margin:0 0 22px;font-size:15px;color:#4a5568;line-height:1.65;">
+                            Kami menerima permintaan untuk mereset password akun kamu di
+                            <strong style="color:#00a79d;">LDK Syahid</strong>.
+                            Klik tombol di bawah untuk membuat password baru.
+                        </p>
 
                         <!-- CTA Button -->
-                        @isset($actionText)
                         <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:28px 0;">
                             <tr><td align="center">
-                                <a href="{{ $actionUrl }}" target="_blank" rel="noopener"
+                                <a href="{{ $url }}" target="_blank" rel="noopener"
                                    style="display:inline-block;background:#00a79d;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;padding:14px 38px;border-radius:50px;letter-spacing:0.2px;mso-padding-alt:0;border-top:14px solid #00a79d;border-bottom:14px solid #00a79d;border-left:38px solid #00a79d;border-right:38px solid #00a79d;">
-                                    {{ $actionText }}
+                                    🔑&nbsp;&nbsp;Reset Password Sekarang
                                 </a>
                             </td></tr>
                         </table>
-                        @endisset
 
-                        <!-- Outro Lines -->
-                        @foreach ($outroLines as $line)
-                        <p style="margin:0 0 8px;font-size:13px;color:#a0aec0;line-height:1.6;">{{ $line }}</p>
-                        @endforeach
+                        <!-- Info box -->
+                        <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+                               style="background:#f0fffe;border:1px solid #b2ede9;border-radius:10px;margin:0 0 24px;">
+                            <tr><td style="padding:13px 16px;font-size:13px;color:#1a6b66;line-height:1.6;">
+                                ⏳&nbsp; Link reset password ini <strong>hanya berlaku selama 60 menit</strong>.
+                                Jika sudah kadaluarsa, kamu bisa meminta link baru dari halaman lupa password.
+                            </td></tr>
+                        </table>
+
+                        <!-- Closing note -->
+                        <p style="margin:0;font-size:13px;color:#a0aec0;line-height:1.6;">
+                            Jika kamu tidak merasa meminta reset password, abaikan saja email ini — akun kamu tetap aman dan tidak ada perubahan yang dilakukan.
+                        </p>
 
                     </td>
                 </tr>
 
                 <!-- ── Subcopy (fallback link) ── -->
-                @isset($actionText)
                 <tr>
                     <td class="sub-pad" style="padding:0 40px 28px;border-top:1px solid #e2e8f0;">
                         <p style="margin:22px 0 6px;font-size:12px;color:#a0aec0;line-height:1.5;">
                             Jika tombol di atas tidak berfungsi, salin dan tempel link berikut ke browser kamu:
                         </p>
                         <p style="margin:0;font-size:11px;color:#718096;word-break:break-all;line-height:1.5;">
-                            <a href="{{ $actionUrl }}" style="color:#00a79d;text-decoration:underline;">{{ $displayableActionUrl }}</a>
+                            <a href="{{ $url }}" style="color:#00a79d;text-decoration:underline;">{{ $url }}</a>
                         </p>
                     </td>
                 </tr>
-                @endisset
 
                 <!-- ── Footer ── -->
                 <tr>
