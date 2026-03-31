@@ -32,11 +32,11 @@
                         return;
                     }
 
-                    // Check file size (20MB max)
-                    if (file.size > 20 * 1024 * 1024) {
+                    // Check file size (25MB max)
+                    if (file.size > 25 * 1024 * 1024) {
                         Swal.fire({
                             title: 'File Too Large!',
-                            text: 'PDF file must be less than 20MB.',
+                            text: 'PDF file must be less than 25MB.',
                             icon: 'error',
                             confirmButtonColor: '#00a79d'
                         });

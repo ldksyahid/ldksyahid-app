@@ -97,11 +97,11 @@ class MsFinanceReport extends Model
         $rules = [
             'fileName' => 'required|string|max:255',
             'ldkID' => 'required|exists:lk_ldk,ldkID',
-            'pdfFile' => 'required_if:financeReportID,null|nullable|mimes:pdf|max:20480', // 20MB max
+            'pdfFile' => 'required_if:financeReportID,null|nullable|mimes:pdf|max:25600', // 20MB max
         ];
 
         if ($ignoreId !== null) {
-            $rules['pdfFile'] = 'nullable|mimes:pdf|max:20480';
+            $rules['pdfFile'] = 'nullable|mimes:pdf|max:25600';
         }
 
         return $request->validate($rules);
