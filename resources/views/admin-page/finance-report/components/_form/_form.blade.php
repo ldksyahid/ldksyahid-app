@@ -243,9 +243,9 @@
                                         @enderror
                                         <div class="form-text">
                                             @if($operation === 'create')
-                                                Upload a PDF file (max 5MB)
+                                                Upload a PDF file (max 20MB)
                                             @else
-                                                Upload a new PDF file to replace the current one (max 5MB)
+                                                Upload a new PDF file to replace the current one (max 20MB)
                                             @endif
                                         </div>
                                     </div>
