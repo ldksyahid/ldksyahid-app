@@ -230,7 +230,7 @@
 
     /* Background body */
     [data-theme="dark"] #zakat-calculator {
-        background-color: #0f1116;
+        background-color: transparent;
     }
 
     /* Badge */
@@ -311,10 +311,10 @@
 </style>
 
 <section id="zakat-calculator">
-    <div class="container" data-aos="fade-up">
+    <div class="container">
 
         {{-- Header --}}
-        <div class="text-center mb-5">
+        <div class="text-center mb-5 wow fadeInUp" data-wow-delay="0.08s">
             <div class="sl-gold-badge">
                 <span class="sl-gold-badge-pulse"></span>
                 <i class="fas fa-coins text-warning"></i>
@@ -327,7 +327,7 @@
         <div class="row g-4">
 
             {{-- KIRI: Main Calculator --}}
-            <div class="col-lg-7">
+            <div class="col-lg-7 wow fadeInLeft" data-wow-delay="0.12s">
                 <div class="sl-zakat-card h-100">
                     <label class="sl-zakat-label">Jenis Zakat</label>
                     <div class="sl-pill-wrap">
@@ -385,7 +385,7 @@
             </div>
 
             {{-- KANAN: Edukasi & Catatan --}}
-            <div class="col-lg-5">
+            <div class="col-lg-5 wow fadeInRight" data-wow-delay="0.15s">
 
                 {{-- Panduan Nisab --}}
                 <div class="sl-zakat-card mb-4">
