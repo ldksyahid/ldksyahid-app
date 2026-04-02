@@ -421,4 +421,25 @@ Route::middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|
         Route::post('/bulk-delete', [FinanceReportController::class, 'bulkDelete'])->name('bulk-delete');
     });
 
+Route::get('/layanan/kalkulator-zakat', function () {
+    return view('landing-page.service.zakat-calculator.index', [
+        'title' => 'Kalkulator Zakat'
+    ]);
+})->name('zakat-calculator.index');
+
+Route::middleware(['auth', 'role:Superadmin|HelperLetter'])
+    ->prefix('/admin/e-persuratan')
+    ->name('admin.e-persuratan.')
+    ->group(function () {
+        
+        Route::get('/', [\App\Http\Controllers\LetterController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\LetterController::class, 'create'])->name('create');
+        Route::post('/store', [\App\Http\Controllers\LetterController::class, 'store'])->name('store');
+        
+        Route::middleware(['role:Superadmin'])->group(function () {
+            Route::post('/approve/{id}', [\App\Http\Controllers\LetterController::class, 'approve'])->name('approve');
+        });
+
+        Route::get('/{id}', [\App\Http\Controllers\LetterController::class, 'show'])->name('show');
+});
 // ======================================= END ROUTE ADMIN PAGE =======================================
