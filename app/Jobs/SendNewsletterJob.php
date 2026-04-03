@@ -18,12 +18,12 @@ class SendNewsletterJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Jumlah percobaan ulang jika job gagal.
+     * Number of retry attempts if the job fails.
      */
     public int $tries = 3;
 
     /**
-     * Timeout per job (detik).
+     * Timeout per job (seconds).
      */
     public int $timeout = 120;
 
@@ -34,14 +34,14 @@ class SendNewsletterJob implements ShouldQueue
         $news = News::find($this->newsId);
 
         if (!$news) {
-            Log::warning("[SendNewsletterJob] News ID {$this->newsId} tidak ditemukan, job dibatalkan.");
+            Log::warning("[SendNewsletterJob] News ID {$this->newsId} not found, job cancelled.");
             return;
         }
 
         $emails = TrSubscription::where('flagActive', true)->pluck('email');
 
         if ($emails->isEmpty()) {
-            Log::info("[SendNewsletterJob] Tidak ada subscriber aktif, job selesai.");
+            Log::info("[SendNewsletterJob] No active subscribers, job finished.");
             return;
         }
 
@@ -54,10 +54,10 @@ class SendNewsletterJob implements ShouldQueue
                 $sent++;
             } catch (\Throwable $e) {
                 $failed++;
-                Log::error("[SendNewsletterJob] Gagal kirim ke {$email}: " . $e->getMessage());
+                Log::error("[SendNewsletterJob] Failed to send to {$email}: " . $e->getMessage());
             }
         }
 
-        Log::info("[SendNewsletterJob] Newsletter news ID {$this->newsId} selesai. Terkirim: {$sent}, Gagal: {$failed}.");
+        Log::info("[SendNewsletterJob] Newsletter for news ID {$this->newsId} complete. Sent: {$sent}, Failed: {$failed}.");
     }
 }

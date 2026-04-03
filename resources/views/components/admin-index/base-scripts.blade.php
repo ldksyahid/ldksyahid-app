@@ -370,7 +370,7 @@
         $(document).on('change', '.select2-filter', function() {
             const value = $(this).val();
             const name = $(this).attr('name');
-            if (value) { currentParams[name] = value; } else { delete currentParams[name]; }
+            if (value !== '' && value !== null) { currentParams[name] = value; } else { delete currentParams[name]; }
             loadData();
         });
         @endif
@@ -382,7 +382,7 @@
 
             const value = $(this).val();
             const name = $(this).attr('name') || $(this).data('column');
-            if (value) { currentParams[name] = value; } else { delete currentParams[name]; }
+            if (value !== '' && value !== null) { currentParams[name] = value; } else { delete currentParams[name]; }
             loadData();
         });
 
@@ -393,7 +393,7 @@
 
             const value = $(this).val();
             const name = $(this).attr('name') || $(this).data('column');
-            if (value) { currentParams[name] = value; } else { delete currentParams[name]; }
+            if (value !== '' && value !== null) { currentParams[name] = value; } else { delete currentParams[name]; }
             loadData();
         });
 

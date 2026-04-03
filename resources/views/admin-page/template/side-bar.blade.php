@@ -105,6 +105,7 @@
                         <a href="/admin/finance-report" class="dropdown-item {{ $isActive('admin/finance-report') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Finance Report</a>
                     </div>
                 </div>
+                <a href="/admin/subscription" class="nav-item nav-link {{ $isActive('admin/subscription') ? 'active' : '' }}"><i class="fa fa-envelope me-2"></i>Subscription</a>
             </div>
 
         {{-- HelperAdmin Sidebar --}}

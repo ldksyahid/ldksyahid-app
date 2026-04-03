@@ -202,7 +202,7 @@
                                                 style="width: 100%">
                                                 <option value="">{{ $col['placeholder'] ?? 'All' }}</option>
                                                 @foreach($col['options'] as $optValue => $optLabel)
-                                                <option value="{{ $optValue }}" {{ request($col['filterKey'] ?? $col['key']) == $optValue ? 'selected' : '' }}>
+                                                <option value="{{ $optValue }}" {{ request()->has($col['filterKey'] ?? $col['key']) && request($col['filterKey'] ?? $col['key']) == $optValue ? 'selected' : '' }}>
                                                     {{ $optLabel }}
                                                 </option>
                                                 @endforeach
