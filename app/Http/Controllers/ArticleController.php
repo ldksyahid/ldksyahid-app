@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Jobs\SendArticleNewsletterJob;
 use App\Models\Article;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
@@ -147,7 +148,8 @@ class ArticleController extends Controller
         ]);
 
         try {
-            Article::saveModel($request);
+            $article = Article::saveModel($request);
+            SendArticleNewsletterJob::dispatch($article->id)->delay(now()->addSeconds(5));
             Alert::success('Success', 'Article has been created!');
             return redirect()->route('admin.article.index');
         } catch (\Exception $e) {
