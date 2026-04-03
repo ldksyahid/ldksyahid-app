@@ -105,7 +105,12 @@
                         <a href="/admin/finance-report" class="dropdown-item {{ $isActive('admin/finance-report') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Finance Report</a>
                     </div>
                 </div>
-                <a href="/admin/subscription" class="nav-item nav-link {{ $isActive('admin/subscription') ? 'active' : '' }}"><i class="fa fa-envelope me-2"></i>Subscription</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/subscription']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-paper-plane me-2"></i>Email Config</a>
+                    <div class="dropdown-menu bg-transparent border-0 ">
+                        <a href="/admin/subscription" class="dropdown-item {{ $isActive('admin/subscription') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Subscription</a>
+                    </div>
+                </div>
             </div>
 
         {{-- HelperAdmin Sidebar --}}
