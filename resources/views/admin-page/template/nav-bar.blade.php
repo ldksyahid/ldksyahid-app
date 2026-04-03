@@ -26,6 +26,9 @@
 
         // Reports submenus
         'admin/finance-report' => ['parent' => 'Reports', 'parentIcon' => 'fa-file-alt', 'name' => 'Finance Report', 'icon' => 'fa-file-invoice-dollar'],
+
+        // Email Config submenus
+        'admin/subscription' => ['parent' => 'Email Config', 'parentIcon' => 'fa-paper-plane', 'name' => 'Subscription', 'icon' => 'fa-envelope'],
     ];
 
     // Main pages (no parent)
