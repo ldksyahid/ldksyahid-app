@@ -99,7 +99,7 @@
                         <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                             <tr><td style="border-top:1px solid #e2e8f0;padding-top:20px;">
                                 <p style="margin:0;font-size:12px;color:#a0aec0;line-height:1.6;text-align:center;">
-                                    Kamu menerima email ini karena terdaftar sebagai pelanggan newsletter atau keluarga LDK Syahid.<br/>
+                                    Kamu menerima email ini karena terdaftar sebagai pelanggan atau keluarga LDK Syahid.<br/>
                                     Ingin berhenti berlangganan?
                                     <a href="{{ $unsubscribeUrl }}" style="color:#718096;text-decoration:underline;">Klik di sini</a>.
                                 </p>

@@ -39,7 +39,7 @@
                             LDK Syahid
                         </div>
                         <div style="color:rgba(255,255,255,0.8);font-size:12px;margin-top:5px;letter-spacing:0.2px;">
-                            Newsletter · Konfirmasi Langganan
+                            Konfirmasi Langganan
                         </div>
                     </td>
                 </tr>
@@ -63,7 +63,7 @@
                         </h1>
                         <p style="margin:0 0 16px;font-size:14px;color:#4a5568;line-height:1.65;">
                             Jazakallahu Khairan Katsiiran! Email <strong style="color:#00a79d;">{{ $email }}</strong>
-                            kamu telah berhasil didaftarkan ke newsletter LDK Syahid.
+                            kamu telah berhasil didaftarkan ke daftar langganan LDK Syahid.
                         </p>
                         <p style="margin:0 0 28px;font-size:14px;color:#4a5568;line-height:1.65;">
                             Kini kamu akan mendapatkan informasi terbaru seputar kegiatan, program, dan agenda

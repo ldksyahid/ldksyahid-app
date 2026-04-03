@@ -39,7 +39,7 @@
                             LDK Syahid
                         </div>
                         <div style="color:rgba(255,255,255,0.8);font-size:12px;margin-top:5px;letter-spacing:0.2px;">
-                            Newsletter · Berhenti Berlangganan
+                            Berhenti Berlangganan
                         </div>
                     </td>
                 </tr>
@@ -63,7 +63,7 @@
                         </h1>
                         <p style="margin:0 0 16px;font-size:14px;color:#4a5568;line-height:1.65;">
                             Email <strong style="color:#718096;">{{ $email }}</strong> telah berhasil dihapus
-                            dari daftar newsletter LDK Syahid.
+                            dari daftar langganan LDK Syahid.
                         </p>
                         <p style="margin:0 0 28px;font-size:14px;color:#4a5568;line-height:1.65;">
                             Kami sangat menghargai setiap waktu yang telah kamu luangkan bersama kami.
