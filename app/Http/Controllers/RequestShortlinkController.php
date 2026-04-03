@@ -7,6 +7,7 @@ use App\Constants\SettingKey\Key2;
 use App\Models\MsSetting;
 use Illuminate\Http\Request;
 use App\Models\ReqShortlink;
+use App\Services\WahaWhatsapp;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RequestShortlinkController extends Controller
@@ -42,6 +43,16 @@ class RequestShortlinkController extends Controller
         ]);
 
         ReqShortlink::create([
+            'name'        => $request->name,
+            'email'       => $request->email,
+            'whatsapp'    => $request->whatsapp,
+            'defaultLink' => $request->defaultLink,
+            'customLink'  => $request->customLink,
+            'note'        => $request->note,
+        ]);
+
+        // Kirim notifikasi WhatsApp ke admin/operator
+        WahaWhatsapp::sendShortlinkRequestNotif([
             'name'        => $request->name,
             'email'       => $request->email,
             'whatsapp'    => $request->whatsapp,
