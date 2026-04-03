@@ -35,8 +35,8 @@ return [
         ],
 
         'database' => [
-            'driver' => 'database',
-            'table' => 'jobs',
+            'driver' => 'custom-database',
+            'table' => 'tr_job_queue',
             'queue' => 'default',
             'retry_after' => 90,
             'after_commit' => false,
