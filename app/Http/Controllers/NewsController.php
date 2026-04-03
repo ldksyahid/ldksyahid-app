@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\News;
+use App\Jobs\SendNewsletterJob;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class NewsController extends Controller
@@ -151,7 +152,8 @@ class NewsController extends Controller
         ]);
 
         try {
-            News::saveModel($request);
+            $news = News::saveModel($request);
+            SendNewsletterJob::dispatch($news->id);
             Alert::success('Success', 'News has been created!');
             return redirect()->route('admin.news.index');
         } catch (\Exception $e) {
