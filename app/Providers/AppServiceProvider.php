@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\LibraryFunctionController as LFC;
+use App\Models\TrJobQueueConnector;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
+
+        $this->app['queue']->addConnector('custom-database', function () {
+            return new TrJobQueueConnector($this->app['db']);
+        });
         // Share isSuperadmin with all admin views
         View::composer('admin-page.*', function ($view) {
             if (auth()->check()) {

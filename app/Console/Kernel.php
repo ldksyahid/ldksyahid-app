@@ -20,6 +20,11 @@ class Kernel extends ConsoleKernel
         // Visitor analytics: re-aggregate page stats every hour
         $schedule->command('visitors:aggregate')->hourly();
 
+        // Queue worker: proses semua pending jobs setiap menit
+        $schedule->command('queue:work --stop-when-empty --tries=3 --timeout=120')
+                 ->everyMinute()
+                 ->withoutOverlapping();
+
         // Auto-cleanup disabled — visitor data is kept indefinitely
         // $schedule->command('visitors:cleanup')->dailyAt('02:00');
     }
