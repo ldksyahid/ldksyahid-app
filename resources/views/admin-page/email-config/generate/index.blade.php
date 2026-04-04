@@ -150,7 +150,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin.email-config.generate.send') }}" method="POST" id="generateEmailForm">
+            <form action="{{ route('admin.email-config.generate.send') }}" method="POST" enctype="multipart/form-data" id="generateEmailForm">
                 @csrf
 
                 <div class="col-md-12 mb-4">
@@ -179,6 +179,25 @@
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="section-title mb-4"><i class="fas fa-paperclip me-2"></i>Attachment <span class="text-muted fw-normal small">(Optional)</span></h5>
+                            <div class="mb-2">
+                                <label for="attachment" class="form-label fw-semibold">File</label>
+                                <input type="file" id="attachment" name="attachments[]" multiple
+                                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png"
+                                    class="form-control @error('attachments.*') is-invalid @enderror">
+                                <div class="form-text">Accepted: PDF, Word, Excel, PowerPoint, Image. Max 10MB per file.</div>
+                                @error('attachments.*')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div id="attachmentPreview" class="d-flex flex-wrap gap-2 mt-2"></div>
                         </div>
                     </div>
                 </div>
@@ -267,6 +286,21 @@ $(document).ready(function () {
             ['view', ['fullscreen', 'codeview']],
         ],
         callbacks: { onInit: function() { $('body > .note-popover').hide(); } }
+    });
+
+    // Attachment preview
+    $('#attachment').on('change', function() {
+        const preview = $('#attachmentPreview').empty();
+        Array.from(this.files).forEach(function(file) {
+            const ext = file.name.split('.').pop().toLowerCase();
+            const icon = ['jpg','jpeg','png'].includes(ext) ? 'fa-image'
+                       : ext === 'pdf' ? 'fa-file-pdf'
+                       : ['doc','docx'].includes(ext) ? 'fa-file-word'
+                       : ['xls','xlsx'].includes(ext) ? 'fa-file-excel'
+                       : ['ppt','pptx'].includes(ext) ? 'fa-file-powerpoint'
+                       : 'fa-file';
+            preview.append(`<span class="badge bg-secondary"><i class="fas ${icon} me-1"></i>${file.name}</span>`);
+        });
     });
 
     // Load subscriber count

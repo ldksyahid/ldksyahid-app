@@ -19,9 +19,10 @@ class SendGeneratedEmailJob implements ShouldQueue
     public int $timeout = 120;
 
     public function __construct(
-        public string $subject,
-        public string $body,
-        public array  $emails,
+        public string  $subject,
+        public string  $body,
+        public array   $emails,
+        public array   $attachmentPaths = [],
     ) {}
 
     public function handle(): void
@@ -31,11 +32,19 @@ class SendGeneratedEmailJob implements ShouldQueue
 
         foreach ($this->emails as $email) {
             try {
-                Mail::to($email)->send(new GeneratedEmailMail($this->subject, $this->body));
+                Mail::to($email)->send(new GeneratedEmailMail($this->subject, $this->body, $this->attachmentPaths));
                 $sent++;
             } catch (\Throwable $e) {
                 $failed++;
                 Log::error("[SendGeneratedEmailJob] Failed to send to {$email}: " . $e->getMessage());
+            }
+        }
+
+        // Clean up attachment files after all emails sent
+        foreach ($this->attachmentPaths as $path) {
+            $fullPath = storage_path('app/' . $path);
+            if (file_exists($fullPath)) {
+                @unlink($fullPath);
             }
         }
 
