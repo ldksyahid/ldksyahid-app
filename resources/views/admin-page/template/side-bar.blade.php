@@ -106,9 +106,10 @@
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/subscription']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-paper-plane me-2"></i>Email Config</a>
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/subscription', 'admin/email-config']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-paper-plane me-2"></i>Email Config</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
                         <a href="/admin/subscription" class="dropdown-item {{ $isActive('admin/subscription') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Subscription</a>
+                        <a href="/admin/email-config/generate" class="dropdown-item {{ $isActive('admin/email-config/generate') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Generate Email</a>
                     </div>
                 </div>
             </div>

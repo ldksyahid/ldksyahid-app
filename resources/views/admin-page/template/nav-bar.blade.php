@@ -29,6 +29,7 @@
 
         // Email Config submenus
         'admin/subscription' => ['parent' => 'Email Config', 'parentIcon' => 'fa-paper-plane', 'name' => 'Subscription', 'icon' => 'fa-envelope'],
+        'admin/email-config/generate' => ['parent' => 'Email Config', 'parentIcon' => 'fa-paper-plane', 'name' => 'Generate Email', 'icon' => 'fa-pen-to-square'],
     ];
 
     // Main pages (no parent)
