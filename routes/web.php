@@ -28,6 +28,7 @@ use App\Http\Controllers\MsKTALDKSyahidController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShortLinkController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\GenerateEmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -276,6 +277,15 @@ Route::middleware(['role:Superadmin'])
         Route::put('/{id}/update', [SubscriptionController::class, 'update'])->name('update');
         Route::delete('/{id}', [SubscriptionController::class, 'destroy'])->name('destroy');
         Route::post('/bulk-delete', [SubscriptionController::class, 'bulkDelete'])->name('bulk-delete');
+    });
+
+// Route AdminPage Email Config - Generate Email
+Route::middleware(['role:Superadmin'])
+    ->prefix('/admin/email-config/generate')
+    ->name('admin.email-config.generate')
+    ->group(function () {
+        Route::get('/', [GenerateEmailController::class, 'index'])->name('');
+        Route::post('/send', [GenerateEmailController::class, 'send'])->name('.send');
     });
 
 // Route AdminPage News
