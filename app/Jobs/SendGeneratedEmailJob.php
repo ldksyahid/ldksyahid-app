@@ -19,10 +19,10 @@ class SendGeneratedEmailJob implements ShouldQueue
     public int $timeout = 120;
 
     public function __construct(
-        public string  $subject,
-        public string  $body,
-        public array   $emails,
-        public array   $attachmentPaths = [],
+        public string $subject,
+        public string $body,
+        public array  $emails,
+        public array  $attachmentPaths = [],
     ) {}
 
     public function handle(): void
