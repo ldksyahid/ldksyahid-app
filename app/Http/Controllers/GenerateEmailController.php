@@ -49,17 +49,12 @@ class GenerateEmailController extends Controller
         }
 
         $attachmentPaths = [];
-        Log::info($request->hasFile('attachments')
-            ? "Attachments uploaded: " . implode(', ', array_map(fn($f) => $f->getClientOriginalName(), $request->file('attachments')))
-            : "No attachments uploaded.");
+
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $attachmentPaths[] = $file->store('email-attachments');
             }
         }
-        Log::info($attachmentPaths
-            ? "Attachments stored at: " . implode(', ', $attachmentPaths)
-            : "No attachments stored.");
 
         SendGeneratedEmailJob::dispatch(
             $request->subject,
