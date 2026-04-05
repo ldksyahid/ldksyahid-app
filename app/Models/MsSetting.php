@@ -116,4 +116,45 @@ class MsSetting extends Model
                 return (string) $value;
         }
     }
+
+    /**
+     * Get setting value2 by key1 and key2 with dynamic return type casting.
+     *
+     * This method retrieves value2 from ms_setting table
+     * and converts it based on the given $type constant.
+     *
+     * @param string $key1
+     * @param string $key2
+     * @param string $type Use class constant (default: TYPE_STRING)
+     *
+     * @return string|int|bool|float|null
+     */
+    public static function getSettingValue2($key1, $key2, $type = self::TYPE_STRING)
+    {
+        $model = self::where([
+            'key1' => $key1,
+            'key2' => $key2
+        ])->first();
+
+        if (empty($model)) {
+            return null;
+        }
+
+        $value = $model->value2;
+
+        switch ($type) {
+            case self::TYPE_INT:
+                return (int) $value;
+
+            case self::TYPE_BOOL:
+                return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+
+            case self::TYPE_FLOAT:
+                return (float) $value;
+
+            case self::TYPE_STRING:
+            default:
+                return (string) $value;
+        }
+    }
 }
