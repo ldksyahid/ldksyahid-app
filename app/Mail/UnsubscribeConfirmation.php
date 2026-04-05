@@ -19,7 +19,7 @@ class UnsubscribeConfirmation extends Mailable
 
     public function build()
     {
-        return $this->subject('Kamu Telah Berhenti Berlangganan dari Newsletter LDK Syahid')
+        return $this->subject('Kamu Telah Berhenti Berlangganan dari LDK Syahid')
                     ->view('emails.subscription.unsubscribe');
     }
 }
