@@ -42,11 +42,11 @@ class SendGeneratedEmailJob implements ShouldQueue
         }
 
         // Clean up attachment files after all emails sent
-        foreach ($this->attachmentPaths as $path) {
-            if (Storage::exists($path)) {
-                Storage::delete($path);
-            } else {
-                Log::warning("[SendGeneratedEmailJob] Attachment file not found for deletion: {$path}");
+        if ($sent > 0) {
+            foreach ($this->attachmentPaths as $path) {
+                if (Storage::exists($path)) {
+                    Storage::delete($path);
+                }
             }
         }
 
