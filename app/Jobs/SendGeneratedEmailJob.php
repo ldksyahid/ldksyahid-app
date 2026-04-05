@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class SendGeneratedEmailJob implements ShouldQueue
 {
@@ -42,9 +43,10 @@ class SendGeneratedEmailJob implements ShouldQueue
 
         // Clean up attachment files after all emails sent
         foreach ($this->attachmentPaths as $path) {
-            $fullPath = storage_path('app/' . $path);
-            if (file_exists($fullPath)) {
-                @unlink($fullPath);
+            if (Storage::exists($path)) {
+                Storage::delete($path);
+            } else {
+                Log::warning("[SendGeneratedEmailJob] Attachment file not found for deletion: {$path}");
             }
         }
 
