@@ -19,8 +19,11 @@ class GeneratedEmailMail extends Mailable
 
     public function build()
     {
-        $mail = $this->subject($this->emailSubject)
-                     ->view('emails.general.send');
+        $this->subject($this->emailSubject)
+            ->view('emails.general.send')
+            ->with([
+                'body' => $this->emailBody
+            ]);
 
         foreach ($this->attachmentPaths as $path) {
             $fullPath = Storage::path($path);
@@ -30,6 +33,6 @@ class GeneratedEmailMail extends Mailable
             }
         }
 
-        return $mail;
+        return $this;
     }
 }
