@@ -29,6 +29,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShortLinkController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\GenerateEmailController;
+use App\Http\Controllers\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -445,6 +446,14 @@ Route::middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|
         Route::put('/{financeReport}', [FinanceReportController::class, 'update'])->name('update');
         Route::delete('/{financeReport}', [FinanceReportController::class, 'destroy'])->name('destroy');
         Route::post('/bulk-delete', [FinanceReportController::class, 'bulkDelete'])->name('bulk-delete');
+    });
+
+Route::middleware(['role:Superadmin'])
+    ->prefix('/admin/setting')
+    ->name('admin.setting.')
+    ->group(function () {
+        Route::get('/', [SettingController::class, 'index'])->name('index');
+        Route::post('/update', [SettingController::class, 'update'])->name('update');
     });
 
 // ======================================= END ROUTE ADMIN PAGE =======================================
