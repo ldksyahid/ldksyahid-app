@@ -106,36 +106,70 @@ class TrSubscription extends Model
     */
 
     /**
-     * Subscribe email
+     * Subscribe email — handles both new and re-subscribe.
      */
     public static function subscribe(Request $request): array
     {
         try {
-            self::validateRequest($request);
+            // Validate format only (uniqueness handled manually below)
+            $request->validate([
+                'email' => 'required|email|max:255',
+            ], [
+                'email.required' => 'Email wajib diisi!',
+                'email.email'    => 'Format email tidak valid!',
+            ]);
 
+            $existing = self::where('email', $request->email)->first();
+
+            if ($existing) {
+                if ($existing->flagActive) {
+                    return [
+                        'success' => false,
+                        'errors'  => ['email' => ['Email ini sudah terdaftar sebagai pelanggan aktif kami.']],
+                        'status'  => 422,
+                    ];
+                }
+
+                // Re-subscribe: reaktivasi
+                $existing->update([
+                    'flagActive'       => true,
+                    'subscribedDate'   => now(),
+                    'unsubscribedDate' => null,
+                ]);
+
+                return [
+                    'success'        => true,
+                    'is_resubscribe' => true,
+                    'message'        => 'Selamat datang kembali! Email kamu berhasil didaftarkan kembali. 🎉',
+                ];
+            }
+
+            // New subscription
             self::create([
-                'email' => $request->email,
-                'flagActive' => true,
+                'email'          => $request->email,
+                'flagActive'     => true,
                 'subscribedDate' => now(),
             ]);
 
             return [
-                'success' => true,
-                'message' => 'Terima kasih! Email Anda berhasil didaftarkan untuk berlangganan kepada kami. 🎉',
+                'success'        => true,
+                'is_resubscribe' => false,
+                'message'        => 'Terima kasih! Email kamu berhasil didaftarkan untuk berlangganan kepada kami. 🎉',
             ];
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             return [
                 'success' => false,
-                'errors' => $e->errors(),
+                'errors'  => $e->errors(),
                 'message' => $e->getMessage(),
-                'status' => 422,
+                'status'  => 422,
             ];
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'errors' => ['email' => ['Terjadi kesalahan saat mendaftarkan email.']],
+                'errors'  => ['email' => ['Terjadi kesalahan saat mendaftarkan email.']],
                 'message' => $e->getMessage(),
-                'status' => 500,
+                'status'  => 500,
             ];
         }
     }
