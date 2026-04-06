@@ -88,7 +88,7 @@
     }
 @endphp
 <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
-    <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+    <a href="index.html" class="navbar-brand d-none d-md-flex d-lg-none me-4">
         <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
     </a>
     <a href="#" class="sidebar-toggler flex-shrink-0">
@@ -270,8 +270,7 @@
 .btn-prayer-navbar:focus { box-shadow: none; outline: none; }
 .content .navbar .navbar-nav.ms-auto > .nav-item:has(.btn-prayer-navbar) { margin-right: 8px; }
 @media (max-width: 575.98px) {
-    .btn-prayer-navbar { padding: 0 0.55rem; gap: 0.35rem; height: 32px; border-radius: 8px; }
-    .prayer-nav-label { display: none; }
+    .btn-prayer-navbar { padding: 0 0.44rem; gap: 0.35rem; height: 32px; border-radius: 8px; }
     .prayer-nav-time-display { font-size: 0.75rem; }
     .content .navbar .navbar-nav.ms-auto > .nav-item:has(.btn-prayer-navbar) { margin-right: 4px; }
 }
