@@ -284,6 +284,86 @@ $cuInfoCards = [
 
 
 {{-- =============================================
+     SUBSCRIBE SECTION
+     ============================================= --}}
+<section class="cu-subscribe-section py-5">
+    <div class="container">
+        <div class="cu-subscribe-glass wow fadeInUp" data-wow-delay="0.1s">
+            <div class="cu-subscribe-inner">
+
+                {{-- LEFT: Info + benefits --}}
+                <div class="cu-subscribe-left">
+                    <div class="cu-subscribe-icon-wrap">
+                        <span>💌</span>
+                    </div>
+                    <h3 class="cu-subscribe-title">Tetap Terhubung<br>Bersama Kami</h3>
+                    <p class="cu-subscribe-sub">
+                        Jadilah bagian dari komunitas LDK Syahid. Dapatkan kabar kegiatan, artikel inspiratif, dan informasi penting langsung ke emailmu — gratis, tanpa spam.
+                    </p>
+                    <div class="cu-subscribe-benefits">
+                        <div class="cu-benefit-item">
+                            <span class="cu-benefit-icon">🎯</span>
+                            <div class="cu-benefit-text">
+                                <span class="cu-benefit-title">Konten Berkualitas</span>
+                                <span class="cu-benefit-desc">Artikel islami & kajian pilihan</span>
+                            </div>
+                        </div>
+                        <div class="cu-benefit-item">
+                            <span class="cu-benefit-icon">🔔</span>
+                            <div class="cu-benefit-text">
+                                <span class="cu-benefit-title">Info Kegiatan Terkini</span>
+                                <span class="cu-benefit-desc">Agenda & pengumuman penting</span>
+                            </div>
+                        </div>
+                        <div class="cu-benefit-item">
+                            <span class="cu-benefit-icon">💡</span>
+                            <div class="cu-benefit-text">
+                                <span class="cu-benefit-title">Inspirasi Harian</span>
+                                <span class="cu-benefit-desc">Motivasi & renungan islami</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- DIVIDER --}}
+                <div class="cu-subscribe-divider"></div>
+
+                {{-- RIGHT: Form --}}
+                <div class="cu-subscribe-right">
+                    <h4 class="cu-subscribe-form-title">Daftar Sekarang</h4>
+                    <p class="cu-subscribe-form-sub">Isi emailmu di bawah dan mulai terima update dari kami.</p>
+
+                    <form id="cuNewsletterForm" class="cu-subscribe-form" method="POST" action="{{ route('newsletter.store') }}">
+                        @csrf
+                        <label class="cu-subscribe-label" for="cuNewsletterEmail">
+                            <i class="fas fa-envelope"></i> Alamat Email
+                        </label>
+                        <div class="cu-subscribe-row">
+                            <input class="cu-subscribe-input"
+                                   type="email"
+                                   id="cuNewsletterEmail"
+                                   name="email"
+                                   placeholder="contoh@email.com"
+                                   required />
+                        </div>
+                        <button type="submit" class="cu-subscribe-btn" id="cuSubscribeBtn">
+                            <span class="cu-subscribe-btn-txt">Berlangganan Sekarang</span>
+                            <i class="fas fa-paper-plane cu-subscribe-btn-ico"></i>
+                        </button>
+                        <p class="cu-subscribe-note">
+                            <i class="fas fa-shield-alt"></i>
+                            Kami menghormati privasimu. Berhenti berlangganan kapan saja.
+                        </p>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{{-- =============================================
      MOBILE BOTTOM SHEET
      ============================================= --}}
 <div class="cu-bs-backdrop" id="cu-bs-backdrop"></div>
