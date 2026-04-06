@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\SettingKey\Key1;
+use App\Models\MsSetting;
 use App\Models\User;
 use App\Models\News;
 use App\Models\Article;
@@ -51,6 +53,23 @@ class DashboardController extends Controller
         $catalogBookCount = MsCatalogBook::count();
         $financeReportCount = MsFinanceReport::count();
 
+        // Deadline alerts: show when within 30 days of deadline or overdue
+        $deadlineAlerts = MsSetting::where('key1', Key1::DEADLINE)
+            ->get()
+            ->map(function ($row) {
+                $deadline     = \Carbon\Carbon::parse($row->value1);
+                $daysRemaining = (int) now()->diffInDays($deadline, false);
+                return [
+                    'label'          => $row->key2,
+                    'date_formatted' => $deadline->translatedFormat('d F Y'),
+                    'cost'           => $row->value2 ? 'Rp ' . number_format((int) $row->value2, 0, ',', '.') : null,
+                    'days_remaining' => $daysRemaining,
+                    'is_overdue'     => $daysRemaining < 0,
+                ];
+            })
+            ->filter(fn($item) => $item['days_remaining'] <= 30)
+            ->values();
+
         // Visitor analytics summary
         $visitorSummary = VisitorAnalyticsController::getSummary();
 
@@ -85,7 +104,8 @@ class DashboardController extends Controller
             'reqShortlinkCount' => $reqShortlinkCount,
             'catalogBookCount' => $catalogBookCount,
             'financeReportCount' => $financeReportCount,
-            'visitorSummary' => $visitorSummary,
+            'visitorSummary'   => $visitorSummary,
+            'deadlineAlerts'   => $deadlineAlerts,
         ]);
     }
 }

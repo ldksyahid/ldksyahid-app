@@ -379,6 +379,14 @@
         .quick-action-btn { font-size: 0.75rem; padding: 0.5rem 0.6rem; gap: 0.4rem; }
         .quick-action-btn .qa-icon { width: 28px; height: 28px; font-size: 0.7rem; border-radius: 6px; }
     }
+    /* Deadline Alert Dark Mode */
+    html.dark-mode .alert-danger {
+        background-color: rgba(220, 53, 69, 0.15) !important;
+        border: 1px solid rgba(220, 53, 69, 0.35) !important;
+        color: #f8a0a8 !important;
+    }
+    html.dark-mode .alert-danger .badge.bg-warning { background-color: #f5a623 !important; }
+    html.dark-mode .alert-danger .badge.bg-dark     { background-color: #495057 !important; }
 </style>
 @endsection
 
@@ -391,6 +399,38 @@
                 <span>LDK&nbsp;Syahid</span>
                 <span class="highlighted-text ms-1">Dashboard</span>
             </h1>
+
+            {{-- Deadline Alerts --}}
+            @if($deadlineAlerts->isNotEmpty())
+                @foreach($deadlineAlerts as $alert)
+                <div class="col-md-12 mb-3">
+                    <div class="alert alert-danger border-0 shadow-sm rounded-3 d-flex align-items-start gap-3 mb-0" role="alert">
+                        <div class="flex-shrink-0 pt-1">
+                            <i class="fas fa-exclamation-triangle fa-lg"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold mb-1">
+                                Deadline {{ $alert['label'] }}
+                            </div>
+                            <div class="small mb-1 opacity-75">
+                                Please contact the Developer Team immediately.
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <span><i class="fas fa-calendar-alt me-1"></i>{{ $alert['date_formatted'] }}</span>
+                                @if($alert['cost'])
+                                    <span><i class="fas fa-tag me-1"></i>{{ $alert['cost'] }}</span>
+                                @endif
+                                @if($alert['is_overdue'])
+                                    <span class="badge bg-dark text-white">OVERDUE {{ abs($alert['days_remaining']) }} days</span>
+                                @else
+                                    <span class="badge bg-warning text-dark">{{ $alert['days_remaining'] }} days left</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            @endif
 
             <!-- Greeting Header + Live Clock -->
             <div class="col-md-12 mb-4">
