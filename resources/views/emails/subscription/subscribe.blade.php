@@ -48,7 +48,7 @@
                 <tr>
                     <td align="center" style="background:#f0fffe;padding:12px 16px;border-bottom:1px solid #e2e8f0;">
                         <span style="display:inline-block;background:#00a79d;color:#ffffff;font-size:12px;font-weight:600;padding:4px 16px;border-radius:50px;letter-spacing:0.4px;">
-                            🎉 &nbsp;Kamu Berhasil Berlangganan!
+                            🎉 &nbsp;{{ $isResubscribe ? 'Selamat Datang Kembali!' : 'Kamu Berhasil Berlangganan!' }}
                         </span>
                     </td>
                 </tr>
@@ -61,14 +61,25 @@
                         <h1 style="margin:0 0 6px;font-size:20px;color:#1a202c;font-weight:700;line-height:1.3;">
                             Assalamu'alaikum 🤍
                         </h1>
+                        @if($isResubscribe)
+                        <p style="margin:0 0 16px;font-size:14px;color:#4a5568;line-height:1.65;">
+                            Marhaban! Senang melihatmu kembali! Email <strong style="color:#00a79d;">{{ $email }}</strong>
+                            kamu telah berhasil didaftarkan <strong>kembali</strong> ke daftar pelanggan LDK Syahid.
+                        </p>
+                        <p style="margin:0 0 28px;font-size:14px;color:#4a5568;line-height:1.65;">
+                            Kamu kini aktif kembali dan akan menerima informasi terbaru seputar kegiatan, program, dan agenda
+                            <strong>UKM LDK Syahid UIN Jakarta</strong> langsung di inboxmu. 🕌
+                        </p>
+                        @else
                         <p style="margin:0 0 16px;font-size:14px;color:#4a5568;line-height:1.65;">
                             Jazakallahu Khairan Katsiiran! Email <strong style="color:#00a79d;">{{ $email }}</strong>
-                            kamu telah berhasil didaftarkan ke daftar langganan LDK Syahid.
+                            kamu telah berhasil didaftarkan ke daftar pelanggan LDK Syahid.
                         </p>
                         <p style="margin:0 0 28px;font-size:14px;color:#4a5568;line-height:1.65;">
                             Kini kamu akan mendapatkan informasi terbaru seputar kegiatan, program, dan agenda
                             <strong>UKM LDK Syahid UIN Jakarta</strong> langsung di inboxmu. 🕌
                         </p>
+                        @endif
 
                         <!-- Info box -->
                         <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
@@ -99,10 +110,17 @@
                         </table>
 
                         <!-- Closing note -->
+                        @if($isResubscribe)
+                        <p style="margin:0;font-size:13px;color:#a0aec0;line-height:1.6;">
+                            Jika kamu ingin berhenti berlangganan kembali, kamu dapat melakukannya
+                            kapan saja melalui link unsubscribe di setiap email yang kami kirimkan.
+                        </p>
+                        @else
                         <p style="margin:0;font-size:13px;color:#a0aec0;line-height:1.6;">
                             Jika kamu merasa tidak mendaftar, abaikan email ini atau
                             hubungi kami melalui media sosial LDK Syahid.
                         </p>
+                        @endif
 
                     </td>
                 </tr>

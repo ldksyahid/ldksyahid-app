@@ -9,6 +9,8 @@ class MsSetting extends Model
 
     protected $table = 'ms_setting';
 
+    public $timestamps = false;
+
     // Mass assignable attributes
     protected $fillable = [
         'key1',
@@ -115,6 +117,23 @@ class MsSetting extends Model
             default:
                 return (string) $value;
         }
+    }
+
+    /**
+     * Get all settings grouped by key1.
+     */
+    public static function getAllGrouped()
+    {
+        return self::orderBy('key1')->orderBy('key2')->get()->groupBy('key1');
+    }
+
+    /**
+     * Update value1 and value2 for a given key1 + key2 pair.
+     */
+    public static function updateByKey(string $key1, string $key2, ?string $value1, ?string $value2): void
+    {
+        self::where(['key1' => $key1, 'key2' => $key2])
+            ->update(['value1' => $value1, 'value2' => $value2]);
     }
 
     /**

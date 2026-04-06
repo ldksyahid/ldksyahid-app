@@ -260,6 +260,16 @@
         {{-- Custom JavaScript --}}
         <script src="{{ asset('landing-page-ext-rsrc/js/main-v1.0.1.js') }}"></script>
 
+        {{-- Global: disable submit button on form submit to prevent double-process --}}
+        <script>
+        $(document).on('submit', 'form:not([onsubmit]):not([data-no-global-loading])', function () {
+            var $btn = $(this).find('button[type="submit"]');
+            if ($btn.length && !$btn.prop('disabled')) {
+                $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Memproses...');
+            }
+        });
+        </script>
+
         @yield('scripts')
 
         {{-- SweetAlert --}}
