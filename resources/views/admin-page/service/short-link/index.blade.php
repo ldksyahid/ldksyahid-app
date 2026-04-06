@@ -213,6 +213,7 @@ $(document).ready(function() {
     // Shorten form
     $('#shortenForm').on('submit', function(e) {
         e.preventDefault();
+        var $btn = $(this).find('button[type="submit"]');
         $.ajax({
             url: '{{ route("admin.service.shortlink.shorten") }}',
             type: 'POST',
@@ -225,6 +226,9 @@ $(document).ready(function() {
             error: function(xhr) {
                 var msg = xhr.responseJSON?.errors?.url?.[0] || 'Error shortening URL';
                 Toast.fire({ icon: 'error', title: msg });
+            },
+            complete: function() {
+                $btn.prop('disabled', false).html('Shorten');
             }
         });
     });

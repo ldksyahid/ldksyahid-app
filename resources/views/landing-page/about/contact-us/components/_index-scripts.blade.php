@@ -266,6 +266,61 @@
 
 
         /* ================================================
+           5. NEWSLETTER SUBSCRIBE
+           ================================================ */
+        var cuNlForm = document.getElementById('cuNewsletterForm');
+        if (cuNlForm) {
+            cuNlForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                var emailInput = document.getElementById('cuNewsletterEmail');
+                var btn        = document.getElementById('cuSubscribeBtn');
+                var btnTxt     = btn.querySelector('.cu-subscribe-btn-txt');
+                var btnIco     = btn.querySelector('.cu-subscribe-btn-ico');
+                var email      = emailInput.value.trim();
+
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email || !emailRegex.test(email)) {
+                    window.CuContactToast.fire({ icon: 'error', title: 'Masukkan alamat email yang valid!' });
+                    emailInput.focus();
+                    return;
+                }
+
+                btn.disabled = true;
+                btnTxt.textContent = 'Mengirim...';
+                if (btnIco) btnIco.className = 'fas fa-spinner fa-spin cu-subscribe-btn-ico';
+
+                fetch('{{ route("newsletter.store") }}', {
+                    method: 'POST',
+                    body: new FormData(cuNlForm),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.success) {
+                        window.CuContactToast.fire({ icon: 'success', title: data.message || 'Berhasil berlangganan! Terima kasih 🎉' });
+                        cuNlForm.reset();
+                    } else {
+                        var errorMsg = (data.errors && data.errors.email && data.errors.email[0]) || data.message || 'Terjadi kesalahan!';
+                        window.CuContactToast.fire({ icon: 'error', title: errorMsg });
+                    }
+                })
+                .catch(function () {
+                    window.CuContactToast.fire({ icon: 'error', title: 'Terjadi kesalahan jaringan!' });
+                })
+                .finally(function () {
+                    btn.disabled = false;
+                    btnTxt.textContent = 'Berlangganan';
+                    if (btnIco) btnIco.className = 'fas fa-paper-plane cu-subscribe-btn-ico';
+                });
+            });
+        }
+
+
+        /* ================================================
            5. INTERSECTION OBSERVER — entrance animations
            ================================================ */
         var cuObserver = new IntersectionObserver(function (entries) {

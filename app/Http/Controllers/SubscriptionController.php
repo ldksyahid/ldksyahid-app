@@ -31,8 +31,9 @@ class SubscriptionController extends Controller
         }
 
         // Send subscribe confirmation email
+        $isResubscribe = $result['is_resubscribe'] ?? false;
         try {
-            Mail::to($request->email)->send(new SubscribeConfirmation($request->email));
+            Mail::to($request->email)->send(new SubscribeConfirmation($request->email, $isResubscribe));
         } catch (\Throwable $e) {
             Log::error('[SubscriptionController] Failed to send subscribe email', [
                 'email' => $request->email,

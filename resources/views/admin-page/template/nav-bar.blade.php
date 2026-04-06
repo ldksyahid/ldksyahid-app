@@ -42,6 +42,7 @@
         'admin/news' => ['name' => 'News', 'icon' => 'fa-newspaper'],
         'admin/ktaldksyahid' => ['name' => 'KTA LDK Syahid', 'icon' => 'fa-id-card'],
         'admin/catalog/books' => ['name' => 'Book Catalog', 'icon' => 'fa-book'],
+        'admin/setting' => ['name' => 'Setting', 'icon' => 'fa-cog'],
     ];
 
     // Get current path
@@ -88,7 +89,7 @@
     }
 @endphp
 <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
-    <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+    <a href="index.html" class="navbar-brand d-none d-md-flex d-lg-none me-4">
         <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
     </a>
     <a href="#" class="sidebar-toggler flex-shrink-0">
@@ -248,25 +249,32 @@
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 0 0.6rem;
+    padding: 0 0.8rem;
     height: 36px;
-    background: transparent;
-    border: none;
+    background: rgba(0,167,157,0.08);
+    border: 1px solid rgba(0,167,157,0.22);
     outline: none;
-    border-radius: 6px;
+    border-radius: 10px;
     color: #00a79d;
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
     white-space: nowrap;
     font-family: inherit;
     line-height: 1;
     text-align: left;
 }
 .btn-prayer-navbar:hover {
-    background: rgba(0,167,157,0.1);
+    background: rgba(0,167,157,0.15);
+    border-color: rgba(0,167,157,0.4);
     color: #007a73;
 }
 .btn-prayer-navbar:focus { box-shadow: none; outline: none; }
+.content .navbar .navbar-nav.ms-auto > .nav-item:has(.btn-prayer-navbar) { margin-right: 8px; }
+@media (max-width: 575.98px) {
+    .btn-prayer-navbar { padding: 0 0.44rem; gap: 0.35rem; height: 32px; border-radius: 8px; }
+    .prayer-nav-time-display { font-size: 0.75rem; }
+    .content .navbar .navbar-nav.ms-auto > .nav-item:has(.btn-prayer-navbar) { margin-right: 4px; }
+}
 .prayer-nav-icon-wrap {
     font-size: 1rem;
     line-height: 1;
@@ -405,10 +413,13 @@
 
 /* Dark Mode */
 html.dark-mode .btn-prayer-navbar {
+    background: rgba(0,167,157,0.1);
+    border-color: rgba(0,167,157,0.28);
     color: #3ecfc6;
 }
 html.dark-mode .btn-prayer-navbar:hover {
-    background: rgba(0,167,157,0.12);
+    background: rgba(0,167,157,0.18);
+    border-color: rgba(0,167,157,0.45);
     color: #4dd9cf;
 }
 html.dark-mode .prayer-modal { background: #1a1f2e; box-shadow: 0 30px 70px rgba(0,0,0,0.6); }

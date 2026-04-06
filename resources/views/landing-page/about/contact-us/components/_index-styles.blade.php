@@ -713,6 +713,251 @@
         .cu-loc-ico       { font-size: 1.3rem; }
     }
 
+    /* ------------------------------------------------
+       SUBSCRIBE SECTION
+       ------------------------------------------------ */
+    .cu-subscribe-section { background: transparent; }
+
+    .cu-subscribe-glass {
+        background: linear-gradient(135deg, rgba(0, 167, 157, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 2px solid rgba(0, 167, 157, 0.15);
+        border-radius: 28px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0, 167, 157, 0.08);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cu-subscribe-glass:hover {
+        border-color: rgba(0, 167, 157, 0.25);
+        box-shadow: 0 25px 70px rgba(0, 167, 157, 0.12);
+    }
+
+    /* Two-column grid */
+    .cu-subscribe-inner {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 0;
+        align-items: center;
+    }
+
+    /* ── LEFT ── */
+    .cu-subscribe-left { padding-right: 3rem; }
+
+    .cu-subscribe-icon-wrap {
+        width: 52px;
+        height: 52px;
+        background: rgba(0, 167, 157, 0.1);
+        border: 1.5px solid rgba(0, 167, 157, 0.2);
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.1rem;
+        transition: transform 0.3s ease;
+    }
+
+    .cu-subscribe-glass:hover .cu-subscribe-icon-wrap {
+        transform: rotate(-8deg) scale(1.05);
+    }
+
+    .cu-subscribe-title {
+        font-size: 1.7rem;
+        font-weight: 800;
+        color: var(--dark);
+        line-height: 1.2;
+        margin-bottom: 0.75rem;
+    }
+
+    .cu-subscribe-sub {
+        color: var(--gray);
+        font-size: 0.9rem;
+        line-height: 1.75;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Benefit items */
+    .cu-subscribe-benefits {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .cu-benefit-item {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+    }
+
+    .cu-benefit-icon {
+        width: 38px;
+        height: 38px;
+        background: rgba(0, 167, 157, 0.08);
+        border: 1px solid rgba(0, 167, 157, 0.15);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+        transition: transform 0.3s ease;
+    }
+
+    .cu-benefit-item:hover .cu-benefit-icon {
+        transform: scale(1.1);
+    }
+
+    .cu-benefit-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    .cu-benefit-title {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--dark);
+        line-height: 1.3;
+    }
+
+    .cu-benefit-desc {
+        font-size: 0.78rem;
+        color: var(--gray);
+        line-height: 1.3;
+    }
+
+    /* ── DIVIDER ── */
+    .cu-subscribe-divider {
+        width: 1px;
+        height: 260px;
+        background: linear-gradient(to bottom, transparent, rgba(0, 167, 157, 0.25) 30%, rgba(0, 167, 157, 0.25) 70%, transparent);
+        flex-shrink: 0;
+    }
+
+    /* ── RIGHT ── */
+    .cu-subscribe-right { padding-left: 3rem; }
+
+    .cu-subscribe-form-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 0.4rem;
+    }
+
+    .cu-subscribe-form-sub {
+        color: var(--gray);
+        font-size: 0.85rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .cu-subscribe-label {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .cu-subscribe-label i { color: var(--primary); font-size: 0.8rem; }
+
+    .cu-subscribe-row { margin-bottom: 0.75rem; }
+
+    .cu-subscribe-input {
+        width: 100%;
+        height: 50px;
+        padding: 0 1.125rem;
+        border: 2px solid rgba(0, 167, 157, 0.2);
+        border-radius: 14px;
+        font-size: 0.9rem;
+        font-family: inherit;
+        color: var(--dark);
+        background: rgba(255, 255, 255, 0.9);
+        transition: all 0.3s ease;
+        -webkit-appearance: none;
+        appearance: none;
+        display: block;
+    }
+
+    .cu-subscribe-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(0, 167, 157, 0.1);
+        background: white;
+    }
+
+    .cu-subscribe-input::placeholder { color: rgba(0, 0, 0, 0.35); }
+
+    .cu-subscribe-btn {
+        width: 100%;
+        height: 50px;
+        padding: 0 1.5rem;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        border: none;
+        border-radius: 14px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+        font-family: inherit;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 167, 157, 0.3);
+        margin-bottom: 0.75rem;
+    }
+
+    .cu-subscribe-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 167, 157, 0.4);
+    }
+
+    .cu-subscribe-btn:active { transform: translateY(0); }
+
+    .cu-subscribe-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .cu-subscribe-note {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--gray);
+        font-size: 0.75rem;
+        margin: 0;
+    }
+
+    .cu-subscribe-note i { font-size: 0.7rem; color: var(--primary); }
+
+    /* Responsive */
+    @media (max-width: 991.98px) {
+        .cu-subscribe-inner {
+            grid-template-columns: 1fr;
+        }
+        .cu-subscribe-divider {
+            width: 100%; height: 1px;
+            background: linear-gradient(to right, transparent, rgba(0, 167, 157, 0.25) 30%, rgba(0, 167, 157, 0.25) 70%, transparent);
+            margin: 2rem 0;
+        }
+        .cu-subscribe-left  { padding-right: 0; }
+        .cu-subscribe-right { padding-left: 0; }
+    }
+
+    @media (max-width: 767.98px) {
+        .cu-subscribe-glass { padding: 2rem 1.25rem; border-radius: 20px; }
+        .cu-subscribe-title { font-size: 1.4rem; }
+    }
+
+
 /* ── Dark Mode ──────────────────────────────────────────── */
 [data-theme="dark"] .cu-section-badge { background: rgba(0,167,157,.15); color: #4dd9cf; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .cu-section-title { color: #e2e8f0; }
@@ -764,5 +1009,38 @@
     background: rgba(0,167,157,.15);
     color: #4dd9cf;
 }
+[data-theme="dark"] .cu-subscribe-glass {
+    background: #1a1f2e;
+    border-color: rgba(0,167,157,.2);
+}
+[data-theme="dark"] .cu-subscribe-title      { color: #e2e8f0; }
+[data-theme="dark"] .cu-subscribe-sub        { color: #9ca3af; }
+[data-theme="dark"] .cu-subscribe-form-title { color: #e2e8f0; }
+[data-theme="dark"] .cu-subscribe-form-sub   { color: #9ca3af; }
+[data-theme="dark"] .cu-subscribe-label      { color: #e2e8f0; }
+[data-theme="dark"] .cu-subscribe-icon-wrap {
+    background: rgba(0,167,157,.12);
+    border-color: rgba(0,167,157,.25);
+}
+[data-theme="dark"] .cu-benefit-icon {
+    background: rgba(0,167,157,.1);
+    border-color: rgba(0,167,157,.2);
+}
+[data-theme="dark"] .cu-benefit-title { color: #e2e8f0; }
+[data-theme="dark"] .cu-benefit-desc  { color: #6b7280; }
+[data-theme="dark"] .cu-subscribe-divider {
+    background: linear-gradient(to bottom, transparent, rgba(0,167,157,.2) 30%, rgba(0,167,157,.2) 70%, transparent);
+}
+[data-theme="dark"] .cu-subscribe-input {
+    background: #1e2535;
+    border-color: rgba(0,167,157,.25);
+    color: #e2e8f0;
+}
+[data-theme="dark"] .cu-subscribe-input:focus {
+    background: #252b3b;
+    border-color: #00a79d;
+}
+[data-theme="dark"] .cu-subscribe-input::placeholder { color: rgba(226,232,240,0.35); }
+[data-theme="dark"] .cu-subscribe-note { color: #6b7280; }
 </style>
 @endverbatim

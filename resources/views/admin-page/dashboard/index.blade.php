@@ -379,6 +379,56 @@
         .quick-action-btn { font-size: 0.75rem; padding: 0.5rem 0.6rem; gap: 0.4rem; }
         .quick-action-btn .qa-icon { width: 28px; height: 28px; font-size: 0.7rem; border-radius: 6px; }
     }
+    /* ── Deadline Alert ── */
+    .deadline-alert {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(220, 53, 69, 0.12);
+        padding: 1rem 1.25rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        overflow: hidden;
+        transition: opacity 0.35s ease, transform 0.35s ease, max-height 0.4s ease, padding 0.35s ease, margin 0.35s ease;
+        max-height: 200px;
+    }
+    .deadline-alert.dismissing {
+        opacity: 0;
+        transform: translateY(-8px);
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0 !important;
+    }
+    .deadline-alert .da-icon {
+        width: 42px; height: 42px; flex-shrink: 0;
+        background: rgba(220, 53, 69, 0.1);
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        color: #dc3545; font-size: 1.1rem;
+    }
+    .deadline-alert .da-title   { font-weight: 700; font-size: 0.95rem; color: #dc3545; margin-bottom: 0.15rem; }
+    .deadline-alert .da-sub     { font-size: 0.78rem; color: #6c757d; margin-bottom: 0.4rem; }
+    .deadline-alert .da-meta    { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: #495057; }
+    .deadline-alert .da-close {
+        margin-left: auto; flex-shrink: 0;
+        background: none; border: none; cursor: pointer;
+        color: #adb5bd; font-size: 1rem; padding: 0.2rem 0.4rem;
+        border-radius: 6px; line-height: 1; transition: color 0.2s, background 0.2s;
+    }
+    .deadline-alert .da-close:hover { color: #dc3545; background: rgba(220,53,69,0.08); }
+    /* Dark Mode */
+    html.dark-mode .deadline-alert {
+        background: #2b2f33;
+        border-left-color: #e05260;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    html.dark-mode .deadline-alert .da-icon  { background: rgba(220,53,69,0.18); color: #f07080; }
+    html.dark-mode .deadline-alert .da-title { color: #f07080; }
+    html.dark-mode .deadline-alert .da-sub   { color: #8a9099; }
+    html.dark-mode .deadline-alert .da-meta  { color: #c8cdd3; }
+    html.dark-mode .deadline-alert .da-close { color: #6c757d; }
+    html.dark-mode .deadline-alert .da-close:hover { color: #f07080; background: rgba(220,53,69,0.15); }
 </style>
 @endsection
 
@@ -391,6 +441,37 @@
                 <span>LDK&nbsp;Syahid</span>
                 <span class="highlighted-text ms-1">Dashboard</span>
             </h1>
+
+            {{-- Deadline Alerts --}}
+            @if($deadlineAlerts->isNotEmpty())
+                @foreach($deadlineAlerts as $alert)
+                <div class="col-md-12 mb-3 deadline-alert-wrap">
+                    <div class="deadline-alert">
+                        <div class="da-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="da-title">Deadline {{ $alert['label'] }}</div>
+                            <div class="da-sub">Please contact the Developer Team immediately.</div>
+                            <div class="da-meta">
+                                <span><i class="fas fa-calendar-alt me-1"></i>{{ $alert['date_formatted'] }}</span>
+                                @if($alert['cost'])
+                                    <span><i class="fas fa-tag me-1"></i>{{ $alert['cost'] }}</span>
+                                @endif
+                                @if($alert['is_overdue'])
+                                    <span class="badge bg-danger text-white">OVERDUE {{ abs($alert['days_remaining']) }} days</span>
+                                @else
+                                    <span class="badge bg-warning text-dark">{{ $alert['days_remaining'] }} days left</span>
+                                @endif
+                            </div>
+                        </div>
+                        <button type="button" class="da-close btn-dismiss-deadline" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                @endforeach
+            @endif
 
             <!-- Greeting Header + Live Clock -->
             <div class="col-md-12 mb-4">
@@ -739,6 +820,8 @@
                                 ['icon' => 'fa-book', 'label' => 'Add Book Catalog', 'route' => 'admin.catalog.books.create', 'roles' => ['Superadmin', 'HelperLetter', 'HelperMedia']],
                                 ['icon' => 'fa-file-alt', 'label' => 'Add Finance Report', 'route' => 'admin.finance-report.create', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter']],
                                 ['icon' => 'fa-link', 'label' => 'Add Shortlink', 'route' => 'admin.service.shortlink.index', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter']],
+                                ['icon' => 'fa-paper-plane', 'label' => 'Generate Email', 'route' => 'admin.email-config.generate', 'roles' => ['Superadmin']],
+                                ['icon' => 'fa-envelope-open-text', 'label' => 'Add Subscriber', 'route' => 'admin.subscription.create', 'roles' => ['Superadmin']],
                             ];
                         @endphp
                         <div class="row g-2">
@@ -987,6 +1070,13 @@ $(document).ready(function() {
                 legend: { position: 'bottom', labels: { padding: 15, usePointStyle: true } }
             }
         }
+    });
+    // Deadline alert dismiss with animation
+    $(document).on('click', '.btn-dismiss-deadline', function () {
+        var $alert = $(this).closest('.deadline-alert');
+        var $wrap  = $(this).closest('.deadline-alert-wrap');
+        $alert.addClass('dismissing');
+        setTimeout(function () { $wrap.remove(); }, 420);
     });
 });
 </script>
