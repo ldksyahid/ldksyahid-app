@@ -1854,6 +1854,18 @@
         });
     </script>
 
+    {{-- Global: disable submit button on form submit to prevent double-process --}}
+    <script>
+    $(document).ready(function () {
+        $(document).on('submit', 'form:not([data-no-global-loading])', function () {
+            var $btn = $(this).find('button[type="submit"].btn-custom-primary');
+            if ($btn.length && !$btn.prop('disabled')) {
+                $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Saving...');
+            }
+        });
+    });
+    </script>
+
     {{-- Script Admin Page Start --}}
     @yield('scripts')
     @stack('scripts')
