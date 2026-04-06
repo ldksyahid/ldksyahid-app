@@ -268,6 +268,13 @@
     color: #007a73;
 }
 .btn-prayer-navbar:focus { box-shadow: none; outline: none; }
+.content .navbar .navbar-nav.ms-auto > .nav-item:has(.btn-prayer-navbar) { margin-right: 8px; }
+@media (max-width: 575.98px) {
+    .btn-prayer-navbar { padding: 0 0.55rem; gap: 0.35rem; height: 32px; border-radius: 8px; }
+    .prayer-nav-label { display: none; }
+    .prayer-nav-time-display { font-size: 0.75rem; }
+    .content .navbar .navbar-nav.ms-auto > .nav-item:has(.btn-prayer-navbar) { margin-right: 4px; }
+}
 .prayer-nav-icon-wrap {
     font-size: 1rem;
     line-height: 1;
