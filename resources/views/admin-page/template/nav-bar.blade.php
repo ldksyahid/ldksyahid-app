@@ -248,22 +248,23 @@
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 0 0.6rem;
+    padding: 0 0.8rem;
     height: 36px;
-    background: transparent;
-    border: none;
+    background: rgba(0,167,157,0.08);
+    border: 1px solid rgba(0,167,157,0.22);
     outline: none;
-    border-radius: 6px;
+    border-radius: 10px;
     color: #00a79d;
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
     white-space: nowrap;
     font-family: inherit;
     line-height: 1;
     text-align: left;
 }
 .btn-prayer-navbar:hover {
-    background: rgba(0,167,157,0.1);
+    background: rgba(0,167,157,0.15);
+    border-color: rgba(0,167,157,0.4);
     color: #007a73;
 }
 .btn-prayer-navbar:focus { box-shadow: none; outline: none; }
@@ -405,10 +406,13 @@
 
 /* Dark Mode */
 html.dark-mode .btn-prayer-navbar {
+    background: rgba(0,167,157,0.1);
+    border-color: rgba(0,167,157,0.28);
     color: #3ecfc6;
 }
 html.dark-mode .btn-prayer-navbar:hover {
-    background: rgba(0,167,157,0.12);
+    background: rgba(0,167,157,0.18);
+    border-color: rgba(0,167,157,0.45);
     color: #4dd9cf;
 }
 html.dark-mode .prayer-modal { background: #1a1f2e; box-shadow: 0 30px 70px rgba(0,0,0,0.6); }
