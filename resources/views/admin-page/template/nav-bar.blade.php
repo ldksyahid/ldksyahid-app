@@ -42,6 +42,7 @@
         'admin/news' => ['name' => 'News', 'icon' => 'fa-newspaper'],
         'admin/ktaldksyahid' => ['name' => 'KTA LDK Syahid', 'icon' => 'fa-id-card'],
         'admin/catalog/books' => ['name' => 'Book Catalog', 'icon' => 'fa-book'],
+        'admin/setting' => ['name' => 'Setting', 'icon' => 'fa-cog'],
     ];
 
     // Get current path
