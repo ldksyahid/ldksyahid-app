@@ -778,6 +778,7 @@
                                 ['icon' => 'fa-id-card', 'title' => 'KTA LDK', 'count' => $idCardCount],
                                 ['icon' => 'fa-book', 'title' => 'Book Catalog', 'count' => $catalogBookCount],
                                 ['icon' => 'fa-file-alt', 'title' => 'Finance Report', 'count' => $financeReportCount],
+                                ['icon' => 'fa-rss', 'title' => 'Subscribers', 'count' => $subscriberCount],
                             ];
                         @endphp
                         <div class="row g-3" id="widgetSection">

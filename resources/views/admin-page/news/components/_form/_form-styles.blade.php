@@ -123,6 +123,56 @@
         font-weight: 600;
     }
 
+    /* Email Notification Warning */
+    .email-notif-warning {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(245, 158, 11, 0.12);
+        padding: 1rem 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+        transition: opacity 0.35s ease, transform 0.35s ease, max-height 0.4s ease, padding 0.35s ease, margin 0.35s ease;
+        max-height: 200px;
+    }
+    .email-notif-warning.dismissing {
+        opacity: 0;
+        transform: translateY(-8px);
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0 !important;
+    }
+    .email-notif-warning .en-icon {
+        width: 42px; height: 42px; flex-shrink: 0;
+        background: rgba(245, 158, 11, 0.1);
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        color: #f59e0b; font-size: 1.1rem;
+    }
+    .email-notif-warning .en-title { font-weight: 700; font-size: 0.95rem; color: #d97706; margin-bottom: 0.15rem; }
+    .email-notif-warning .en-sub   { font-size: 0.78rem; color: #6c757d; margin-bottom: 0.4rem; }
+    .email-notif-warning .en-meta  { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: #495057; }
+    .email-notif-warning .en-close {
+        margin-left: auto; flex-shrink: 0; align-self: flex-start;
+        background: none; border: none; cursor: pointer;
+        color: #adb5bd; font-size: 1rem; padding: 0.2rem 0.4rem;
+        border-radius: 6px; line-height: 1; transition: color 0.2s, background 0.2s;
+    }
+    .email-notif-warning .en-close:hover { color: #f59e0b; background: rgba(245, 158, 11, 0.08); }
+    html.dark-mode .email-notif-warning {
+        background: #2b2f33;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+    html.dark-mode .email-notif-warning .en-icon  { background: rgba(245, 158, 11, 0.18); color: #fbbf24; }
+    html.dark-mode .email-notif-warning .en-title { color: #fbbf24; }
+    html.dark-mode .email-notif-warning .en-sub   { color: #8a9099; }
+    html.dark-mode .email-notif-warning .en-meta  { color: #c8cdd3; }
+    html.dark-mode .email-notif-warning .en-close { color: #6c757d; }
+    html.dark-mode .email-notif-warning .en-close:hover { color: #fbbf24; background: rgba(245, 158, 11, 0.15); }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .page-title { font-size: 1.35rem; }

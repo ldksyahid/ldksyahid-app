@@ -192,5 +192,12 @@
                 confirmButtonColor: '#00a79d'
             });
         @endif
+
+        // Email notification warning dismiss
+        $(document).on('click', '.en-close', function () {
+            var $warn = $(this).closest('.email-notif-warning');
+            $warn.addClass('dismissing');
+            setTimeout(function () { $warn.remove(); }, 420);
+        });
     });
 </script>
