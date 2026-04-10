@@ -69,6 +69,13 @@
     transform: translateY(-4px) scale(1.015);
     box-shadow: 0 6px 12px rgba(0,0,0,.1), 0 28px 60px rgba(0,0,0,.32);
 }
+/* Default avatar — show full image without cropping */
+.kta-photo--default {
+    object-fit: contain;
+    object-position: center center;
+    background: linear-gradient(180deg, rgba(255,255,255,.08) 0%, rgba(255,255,255,.18) 100%);
+    height: 230px;
+}
 /* LDK badge — bottom right of photo */
 .kta-ldk-badge {
     position: absolute; bottom: -14px; right: -14px;
@@ -206,10 +213,8 @@
     display: flex; gap: .85rem; align-items: flex-start;
     padding: .8rem 0;
     border-bottom: 1px solid var(--kta-gray-100);
-    transition: background .2s ease;
 }
 .kta-info-item:last-child { border-bottom: none; }
-.kta-info-item:hover { background: rgba(0,167,157,.04); margin: 0 -.5rem; padding: .8rem .5rem; border-radius: 10px; }
 
 .kta-info-label {
     display: flex; align-items: center; gap: .45rem;
@@ -526,7 +531,6 @@
 [data-theme="dark"] .kta-info-nav  { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .kta-info-label { color: #9ca3af; }
 [data-theme="dark"] .kta-info-value { color: #e2e8f0; }
-[data-theme="dark"] .kta-info-item:hover { background: rgba(0,167,157,.07) !important; }
 [data-theme="dark"] .kta-quote-wrap { background: rgba(0,167,157,.08); }
 [data-theme="dark"] .kta-quote-wrap::before { color: rgba(0,167,157,.18); }
 [data-theme="dark"] .kta-quote-text { color: #cbd5e0; }
