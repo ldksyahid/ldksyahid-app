@@ -19,6 +19,24 @@
 
             @if ($operation !== 'view')
                 <div class="col-md-12 my-3">
+                    @if ($operation === 'create')
+                        <div class="email-notif-warning">
+                            <div class="en-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="en-title">Email Notification Warning</div>
+                                <div class="en-sub">Please make sure all the information is correct before submitting.</div>
+                                <div class="en-meta">
+                                    <span><i class="fas fa-paper-plane me-1"></i>Publishing this news will <strong>automatically send an email notification</strong> to all active subscribers.</span>
+                                </div>
+                            </div>
+                            <button type="button" class="en-close" aria-label="Close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    @endif
+
                     @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
