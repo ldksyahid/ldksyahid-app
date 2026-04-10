@@ -23,6 +23,7 @@ use App\Models\MsShortlink;
 use App\Models\ReqShortlink;
 use App\Models\MsCatalogBook;
 use App\Models\MsFinanceReport;
+use App\Models\TrSubscription;
 use AshAllenDesign\ShortURL\Models\ShortURL;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\VisitorAnalyticsController;
@@ -52,6 +53,7 @@ class DashboardController extends Controller
         $reqShortlinkCount = ReqShortlink::count();
         $catalogBookCount = MsCatalogBook::count();
         $financeReportCount = MsFinanceReport::count();
+        $subscriberCount = TrSubscription::where('flagActive', true)->count();
 
         // Deadline alerts: show when within 30 days of deadline or overdue
         $deadlineAlerts = MsSetting::where('key1', Key1::DEADLINE)
@@ -104,6 +106,7 @@ class DashboardController extends Controller
             'reqShortlinkCount' => $reqShortlinkCount,
             'catalogBookCount' => $catalogBookCount,
             'financeReportCount' => $financeReportCount,
+            'subscriberCount' => $subscriberCount,
             'visitorSummary'   => $visitorSummary,
             'deadlineAlerts'   => $deadlineAlerts,
         ]);
