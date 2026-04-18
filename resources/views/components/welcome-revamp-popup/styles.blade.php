@@ -34,7 +34,7 @@
     background: #fff;
     border-radius: 26px;
     overflow: hidden;
-    box-shadow: 0 28px 64px rgba(0,0,0,.16), 0 6px 22px rgba(5,150,105,.1);
+    box-shadow: 0 28px 64px rgba(0,0,0,.16), 0 6px 22px rgba(37,99,235,.1);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -57,7 +57,7 @@
 
 /* ── Header ── */
 #wrp-header {
-    background: linear-gradient(145deg, #059669 0%, #10b981 50%, #047857 100%);
+    background: linear-gradient(145deg, #1d4ed8 0%, #3b82f6 50%, #2563eb 100%);
     padding: 2rem 1.75rem 1.5rem;
     text-align: center;
     position: relative; overflow: hidden;
@@ -117,8 +117,8 @@
 
 /* ── Hadith ── */
 #wrp-hadith {
-    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-    border: 1px solid rgba(5,150,105,.18);
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border: 1px solid rgba(37,99,235,.18);
     border-radius: 10px;
     padding: .75rem 1rem;
     margin-top: .9rem;
@@ -126,7 +126,7 @@
 }
 #wrp-hadith-arabic {
     font-size: 1rem; line-height: 1.9;
-    color: #065f46; font-weight: 600;
+    color: #1e40af; font-weight: 600;
     direction: rtl; font-family: 'Amiri', 'Traditional Arabic', serif;
     margin-bottom: .35rem;
 }
@@ -135,7 +135,7 @@
     font-style: italic; margin-bottom: .3rem;
 }
 #wrp-hadith-source {
-    font-size: .68rem; color: #059669; font-weight: 700;
+    font-size: .68rem; color: #2563eb; font-weight: 700;
     letter-spacing: .04em;
 }
 
@@ -143,18 +143,18 @@
 
 .wrp-feat {
     display: flex; align-items: center; gap: .7rem;
-    background: #ecfdf5;
-    border: 1px solid rgba(5,150,105,.12);
+    background: #eff6ff;
+    border: 1px solid rgba(37,99,235,.12);
     border-radius: 11px; padding: .52rem .8rem;
     transition: background .18s;
 }
-.wrp-feat:hover { background: #d1fae5; }
+.wrp-feat:hover { background: #dbeafe; }
 .wrp-feat-icon {
     width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
-    background: linear-gradient(135deg, #059669, #10b981);
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
     display: flex; align-items: center; justify-content: center;
     color: #fff; font-size: .76rem;
-    box-shadow: 0 3px 8px rgba(5,150,105,.3);
+    box-shadow: 0 3px 8px rgba(37,99,235,.3);
 }
 .wrp-feat-text {
     font-size: .79rem; color: #374151; font-weight: 500; line-height: 1.4;
@@ -167,17 +167,17 @@
 }
 #wrp-btn-explore {
     display: flex; align-items: center; justify-content: center; gap: .45rem;
-    background: linear-gradient(135deg, #059669, #10b981);
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
     color: #fff; border: none;
     font-size: .88rem; font-weight: 700;
     padding: .8rem 1.5rem; border-radius: 50px;
     cursor: pointer;
-    box-shadow: 0 5px 18px rgba(5,150,105,.4);
+    box-shadow: 0 5px 18px rgba(37,99,235,.4);
     transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
 }
 #wrp-btn-explore:hover {
     transform: translateY(-2px);
-    box-shadow: 0 9px 26px rgba(5,150,105,.5);
+    box-shadow: 0 9px 26px rgba(37,99,235,.5);
     filter: brightness(1.06);
 }
 #wrp-btn-dismiss {
@@ -201,11 +201,11 @@
 /* ── Dark Mode ── */
 [data-theme="dark"] #wrp-card { background: #1a1f2e; }
 [data-theme="dark"] #wrp-desc { color: #9ca3af; }
-[data-theme="dark"] .wrp-feat { background: #0f2d1f; border-color: rgba(5,150,105,.2); }
-[data-theme="dark"] .wrp-feat:hover { background: #143d28; }
+[data-theme="dark"] .wrp-feat { background: #0f1d3a; border-color: rgba(37,99,235,.2); }
+[data-theme="dark"] .wrp-feat:hover { background: #172554; }
 [data-theme="dark"] .wrp-feat-text { color: #d1d5db; }
-[data-theme="dark"] #wrp-hadith { background: linear-gradient(135deg, #052e16, #14532d); border-color: rgba(5,150,105,.25); }
-[data-theme="dark"] #wrp-hadith-arabic { color: #6ee7b7; }
+[data-theme="dark"] #wrp-hadith { background: linear-gradient(135deg, #172554, #1e3a8a); border-color: rgba(37,99,235,.25); }
+[data-theme="dark"] #wrp-hadith-arabic { color: #93c5fd; }
 [data-theme="dark"] #wrp-hadith-trans { color: #d1d5db; }
 [data-theme="dark"] #wrp-btn-dismiss { color: #6b7280; }
 [data-theme="dark"] #wrp-btn-dismiss:hover { color: #9ca3af; }

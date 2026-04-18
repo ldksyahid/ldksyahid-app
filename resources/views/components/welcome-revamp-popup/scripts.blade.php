@@ -4,8 +4,9 @@
         'ldksyahid_welcome_popup',
         'ldksyahid_welcome_popup_eid_fitri',
         'ldksyahid_welcome_popup_arafah_fasting',
+        'ldksyahid_welcome_popup_syawal_fasting',
     ];
-    var LS_KEY   = 'ldksyahid_welcome_popup_syawal_fasting';
+    var LS_KEY   = 'ldksyahid_welcome_popup_self_reward';
     var backdrop = document.getElementById('wrp-backdrop');
 
     /* Remove old keys if they still exist */
