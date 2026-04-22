@@ -86,8 +86,6 @@ Route::get('/service', function () {
     return view('landing-page.service.index', ["title" => "Layanan"]);
 });
 
-
-
 // Route LandingPage Artikel
 Route::get('/articles', [ArticleController::class, 'index'])->name('article.index');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('article.show');
@@ -125,6 +123,7 @@ Route::middleware('throttle:5,10')->group(function () {
     Route::post('/subscribers/store', [SubscriptionController::class, 'store'])->name('newsletter.store');
     Route::post('/subscribers/unsubscribe', [SubscriptionController::class, 'unsubscribe'])->name('subscribers.unsubscribe');
 });
+Route::get('/unsubscribe', [SubscriptionController::class, 'unsubscribePage'])->name('unsubscribe.page');
 
 // Route Article Comment
 Route::post('/articlecomment', [ArticleCommentController::class, 'addarticlecomment'])->name('articlecomment')->middleware('auth');
@@ -270,6 +269,30 @@ Route::put('/admin/article/{id}/update', [ArticleController::class, 'update'])->
 Route::delete('/admin/article/{id}', [ArticleController::class, 'destroy'])->name('admin.article.destroy')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 Route::post('/admin/article/bulk-delete', [ArticleController::class, 'bulkDelete'])->name('admin.article.bulk-delete')->middleware(['role:Superadmin']);
 Route::get('/admin/article/{id}/preview', [ArticleController::class, 'showAdmin'])->name('admin.article.preview')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
+
+// Route AdminPage Subscription
+Route::middleware(['role:Superadmin'])
+    ->prefix('/admin/subscription')
+    ->name('admin.subscription.')
+    ->group(function () {
+        Route::get('/', [SubscriptionController::class, 'indexAdmin'])->name('index');
+        Route::get('/create', [SubscriptionController::class, 'create'])->name('create');
+        Route::post('/store', [SubscriptionController::class, 'adminStore'])->name('store');
+        Route::get('/{id}', [SubscriptionController::class, 'showAdmin'])->name('show');
+        Route::get('/{id}/edit', [SubscriptionController::class, 'edit'])->name('edit');
+        Route::put('/{id}/update', [SubscriptionController::class, 'update'])->name('update');
+        Route::delete('/{id}', [SubscriptionController::class, 'destroy'])->name('destroy');
+        Route::post('/bulk-delete', [SubscriptionController::class, 'bulkDelete'])->name('bulk-delete');
+    });
+
+// Route AdminPage Email Config - Generate Email
+Route::middleware(['role:Superadmin'])
+    ->prefix('/admin/email-config/generate')
+    ->name('admin.email-config.generate.')
+    ->group(function () {
+        Route::get('/', [GenerateEmailController::class, 'index'])->name('index');   // → admin.email-config.generate.index
+        Route::post('/send', [GenerateEmailController::class, 'send'])->name('send'); // → admin.email-config.generate.send
+    });
 
 // Route AdminPage News
 Route::get('/admin/news', [NewsController::class, 'indexAdmin'])->name('admin.news.index')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
@@ -437,4 +460,5 @@ Route::middleware(['role:Superadmin'])
         Route::get('/', [SettingController::class, 'index'])->name('index');
         Route::post('/update', [SettingController::class, 'update'])->name('update');
     });
+
 // ======================================= END ROUTE ADMIN PAGE =======================================
