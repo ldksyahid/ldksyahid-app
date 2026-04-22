@@ -76,10 +76,17 @@ Route::get('/kalkulatorkestari', function () {
     return view('landing-page.service.proker-counter.index', ["title" => "Layanan"]);
 });
 
+// Route LandingPage Layanan => Kalkulator Zakat
+Route::get('/service/zakat-calculator', function () {
+    return view('landing-page.service.zakat-calculator.index', ["title" => "Kalkulator Zakat"]);
+})->name('zakat-calculator');
+
 // Route LandingPage Layanan
 Route::get('/service', function () {
     return view('landing-page.service.index', ["title" => "Layanan"]);
 });
+
+
 
 // Route LandingPage Artikel
 Route::get('/articles', [ArticleController::class, 'index'])->name('article.index');
