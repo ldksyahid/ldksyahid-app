@@ -1,13 +1,11 @@
 @extends('landing-page.template.body')
 
-
 {{-- ══════════════════════════════════════════════════
      STYLES
      ══════════════════════════════════════════════════ --}}
 @section('styles')
 @include('landing-page.service.components._index-styles')
 @endsection
-
 
 {{-- ══════════════════════════════════════════════════
      CONTENT
@@ -16,7 +14,7 @@
 
 <section class="sv-page-section py-5 wow fadeIn mt-5" data-wow-delay="0.1s">
 
-    {{-- ── Hero Jumbotron (Hadith type) ──────────────────────────── --}}
+    {{-- ── Hero Jumbotron ──────────────────────────────────────── --}}
     <x-hero-jumbotron type="hadith">
         <div class="hero-slide">
             <img class="hero-image"
@@ -25,8 +23,7 @@
         </div>
     </x-hero-jumbotron>
 
-
-    {{-- ── Service Section ────────────────────────────────────────── --}}
+    {{-- ── Service Section ─────────────────────────────────────── --}}
     <div class="container mt-5" id="sv-section">
 
         {{-- Section Header --}}
@@ -40,11 +37,45 @@
             <p class="sv-section-sub">Berbagai layanan digital untuk mendukung kegiatan dan administrasi UKM LDK Syahid</p>
         </div>
 
-
         {{-- ══════════════════════════════════════════════════
              DESKTOP GRID  (hidden below md)
              ══════════════════════════════════════════════════ --}}
         <div class="sv-grid wow fadeInUp" data-wow-delay="0.15s">
+
+            {{-- ── Kalkulator Zakat ─────────────────────────────── --}}
+            <div class="sv-card" style="--sv-accent: #22c55e;">
+                <div class="sv-card-img-wrap">
+                    <img src="https://lh3.googleusercontent.com/d/18YyQOsL76IgJ3vnsWtkmLzzQT_UCVQCy"
+                         alt="Kalkulator Zakat" class="sv-card-img" loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/400x200/22c55e/ffffff?text=Kalkulator+Zakat'">
+                </div>
+                <div class="sv-card-body">
+                    <div class="sv-card-title-row">
+                        <span class="sv-card-dot"></span>
+                        <h5 class="sv-card-title">Kalkulator Zakat</h5>
+                    </div>
+                    <p class="sv-card-desc">
+                        Hitung kewajiban zakat Anda secara otomatis — mencakup Zakat Penghasilan, Maal, Emas/Perak,
+                        Perdagangan, Pertanian, Peternakan, dan Fitrah — sesuai nisab harga emas terkini
+                        dan pedoman syariat Islam.
+                    </p>
+                    <div class="sv-card-footer">
+                        <div class="sv-card-share-row">
+                            <button class="sv-card-share-btn sv-share-copy"
+                                    onclick="svCopyUrl('{{ url('/service/zakat-calculator') }}', event)">
+                                <i class="fas fa-link"></i><span>Salin URL</span>
+                            </button>
+                            <button class="sv-card-share-btn sv-share-wa"
+                                    onclick="svShareWa('{{ url('/service/zakat-calculator') }}', 'Kalkulator Zakat', event)">
+                                <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+                            </button>
+                        </div>
+                        <a href="{{ route('zakat-calculator') }}" target="_blank" rel="noopener" class="sv-card-cta">
+                            <i class="fas fa-arrow-right"></i><span>Mulai</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
             {{-- ── Call Kestari ─────────────────────────────────── --}}
             <div class="sv-card" style="--sv-accent: #00a79d;">
@@ -166,6 +197,30 @@
              ══════════════════════════════════════════════════ --}}
         <div class="sv-mobile-list wow fadeInUp" data-wow-delay="0.15s">
 
+            {{-- ── Kalkulator Zakat ─────────────────────────────── --}}
+            <div class="sv-m-card"
+                 style="--sv-accent: #22c55e;"
+                 onclick="svOpenSheet(this)"
+                 data-title="Kalkulator Zakat"
+                 data-desc="Hitung kewajiban zakat Anda secara otomatis — mencakup Zakat Penghasilan, Maal, Emas/Perak, Perdagangan, Pertanian, Peternakan, dan Fitrah — sesuai nisab harga emas terkini dan pedoman syariat Islam."
+                 data-image="18YyQOsL76IgJ3vnsWtkmLzzQT_UCVQCy"
+                 data-url="{{ route('zakat-calculator') }}"
+                 data-accent="#22c55e"
+                 data-label="Mulai"
+                 data-disabled="0">
+                <div class="sv-m-thumb">
+                    <img src="https://lh3.googleusercontent.com/d/18YyQOsL76IgJ3vnsWtkmLzzQT_UCVQCy"
+                         alt="Kalkulator Zakat" loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/80x80/22c55e/ffffff?text=Z'">
+                </div>
+                <div class="sv-m-info">
+                    <h5 class="sv-m-title">Kalkulator Zakat</h5>
+                    <p class="sv-m-desc">Hitung 7 jenis zakat sesuai nisab & pedoman syariat</p>
+                    <span class="sv-m-hint"><i class="fas fa-info-circle"></i> Ketuk untuk detail</span>
+                </div>
+                <i class="fas fa-chevron-right sv-m-arrow"></i>
+            </div>
+
             {{-- ── Call Kestari ─────────────────────────────────── --}}
             <div class="sv-m-card"
                  style="--sv-accent: #00a79d;"
@@ -254,7 +309,6 @@
     </div>{{-- /container --}}
 </section>
 
-
 {{-- ══════════════════════════════════════════════════
      MOBILE BOTTOM SHEET
      ══════════════════════════════════════════════════ --}}
@@ -270,7 +324,6 @@
 </div>
 
 @endsection
-
 
 {{-- ══════════════════════════════════════════════════
      SCRIPTS
