@@ -821,7 +821,7 @@
                                 ['icon' => 'fa-book', 'label' => 'Add Book Catalog', 'route' => 'admin.catalog.books.create', 'roles' => ['Superadmin', 'HelperLetter', 'HelperMedia']],
                                 ['icon' => 'fa-file-alt', 'label' => 'Add Finance Report', 'route' => 'admin.finance-report.create', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter']],
                                 ['icon' => 'fa-link', 'label' => 'Add Shortlink', 'route' => 'admin.service.shortlink.index', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter']],
-                                ['icon' => 'fa-paper-plane', 'label' => 'Generate Email', 'route' => 'admin.email-config.generate', 'roles' => ['Superadmin']],
+                                ['icon' => 'fa-paper-plane', 'label' => 'Generate Email', 'route' => 'admin.email-config.generate.index', 'roles' => ['Superadmin']],
                                 ['icon' => 'fa-envelope-open-text', 'label' => 'Add Subscriber', 'route' => 'admin.subscription.create', 'roles' => ['Superadmin']],
                             ];
                         @endphp
