@@ -76,11 +76,6 @@ Route::get('/kalkulatorkestari', function () {
     return view('landing-page.service.proker-counter.index', ["title" => "Layanan"]);
 });
 
-// Route LandingPage Layanan => Kalkulator Zakat
-Route::get('/service/zakat-calculator', function () {
-    return view('landing-page.service.zakat-calculator.index', ["title" => "Kalkulator Zakat"]);
-})->name('zakat-calculator');
-
 // Route LandingPage Layanan
 Route::get('/service', function () {
     return view('landing-page.service.index', ["title" => "Layanan"]);
@@ -288,10 +283,10 @@ Route::middleware(['role:Superadmin'])
 // Route AdminPage Email Config - Generate Email
 Route::middleware(['role:Superadmin'])
     ->prefix('/admin/email-config/generate')
-    ->name('admin.email-config.generate.')
+    ->name('admin.email-config.generate')
     ->group(function () {
-        Route::get('/', [GenerateEmailController::class, 'index'])->name('index');   // → admin.email-config.generate.index
-        Route::post('/send', [GenerateEmailController::class, 'send'])->name('send'); // → admin.email-config.generate.send
+        Route::get('/', [GenerateEmailController::class, 'index'])->name('');
+        Route::post('/send', [GenerateEmailController::class, 'send'])->name('.send');
     });
 
 // Route AdminPage News
