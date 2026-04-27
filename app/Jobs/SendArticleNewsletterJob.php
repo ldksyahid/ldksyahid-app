@@ -11,13 +11,19 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
+/**
+ * Dispatcher job: query semua subscriber aktif, lalu dispatch SendSingleMailJob
+ * per email sehingga setiap pengiriman berdiri sendiri.
+ *
+ * Dengan $tries = 1, dispatcher tidak pernah retry — mencegah duplicate dispatch.
+ * Retry per-email ditangani oleh SendSingleMailJob ($tries = 3).
+ */
 class SendArticleNewsletterJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 3;
+    public int $tries   = 1;
     public int $timeout = 120;
 
     public function __construct(public int $articleId) {}
@@ -38,19 +44,10 @@ class SendArticleNewsletterJob implements ShouldQueue
             return;
         }
 
-        $sent   = 0;
-        $failed = 0;
-
         foreach ($emails as $email) {
-            try {
-                Mail::to($email)->send(new ArticleNewsletterMail($article, $email));
-                $sent++;
-            } catch (\Throwable $e) {
-                $failed++;
-                Log::error("[SendArticleNewsletterJob] Failed to send to {$email}: " . $e->getMessage());
-            }
+            SendSingleMailJob::dispatch($email, new ArticleNewsletterMail($article, $email));
         }
 
-        Log::info("[SendArticleNewsletterJob] Article ID {$this->articleId} complete. Sent: {$sent}, Failed: {$failed}.");
+        Log::info("[SendArticleNewsletterJob] Dispatched {$emails->count()} individual send jobs for article ID {$this->articleId}.");
     }
 }
