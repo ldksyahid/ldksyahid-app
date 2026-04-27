@@ -9,14 +9,19 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 
+/**
+ * Dispatcher job: dispatch SendSingleMailJob per email sehingga setiap
+ * pengiriman berdiri sendiri — tidak ada duplicate akibat retry timeout.
+ *
+ * File attachment di-cleanup oleh CleanupStorageFilesJob yang di-dispatch
+ * dengan delay 30 menit, memberi waktu semua individual send jobs selesai.
+ */
 class SendGeneratedEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries   = 3;
+    public int $tries   = 1;
     public int $timeout = 120;
 
     public function __construct(
@@ -28,28 +33,22 @@ class SendGeneratedEmailJob implements ShouldQueue
 
     public function handle(): void
     {
-        $sent   = 0;
-        $failed = 0;
+        if (empty($this->emails)) {
+            Log::info("[SendGeneratedEmailJob] No recipients, job finished.");
+            return;
+        }
+
+        $mailable = new GeneratedEmailMail($this->subject, $this->body, $this->attachmentPaths);
 
         foreach ($this->emails as $email) {
-            try {
-                Mail::to($email)->send(new GeneratedEmailMail($this->subject, $this->body, $this->attachmentPaths));
-                $sent++;
-            } catch (\Throwable $e) {
-                $failed++;
-                Log::error("[SendGeneratedEmailJob] Failed to send to {$email}: " . $e->getMessage());
-            }
+            SendSingleMailJob::dispatch($email, $mailable);
         }
 
-        // Clean up attachment files after all emails sent
-        if ($sent > 0) {
-            foreach ($this->attachmentPaths as $path) {
-                if (Storage::exists($path)) {
-                    Storage::delete($path);
-                }
-            }
-        }
+        Log::info("[SendGeneratedEmailJob] Dispatched " . count($this->emails) . " individual send jobs. Subject: \"{$this->subject}\".");
 
-        Log::info("[SendGeneratedEmailJob] Subject: \"{$this->subject}\" — Sent: {$sent}, Failed: {$failed}.");
+        if (!empty($this->attachmentPaths)) {
+            CleanupStorageFilesJob::dispatch($this->attachmentPaths)
+                ->delay(now()->addMinutes(30));
+        }
     }
 }
