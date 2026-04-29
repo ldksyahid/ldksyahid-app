@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Cache\RateLimiting\Limit;
 use App\Http\Controllers\LibraryFunctionController as LFC;
 use App\Models\TrJobQueueConnector;
 
@@ -33,6 +35,11 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app['queue']->addConnector('custom-database', function () {
             return new TrJobQueueConnector($this->app['db']);
+        });
+
+        // Batasi pengiriman email agar tidak kena rate-limit SMTP Gmail
+        RateLimiter::for('send-email', function (object $job) {
+            return Limit::perMinute(10);
         });
         // Share isSuperadmin with all admin views
         View::composer('admin-page.*', function ($view) {
