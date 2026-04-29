@@ -9,6 +9,8 @@ use Illuminate\Queue\Connectors\ConnectorInterface;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Carbon;
 
+const TZ_JAKARTA = 'Asia/Jakarta';
+
 // ---------------------------------------------------------------------------
 // Job Record — maps custom column names to Laravel's expected property names
 // ---------------------------------------------------------------------------
@@ -23,7 +25,7 @@ class TrJobQueueRecord extends DatabaseJobRecord
 
     public function touch()
     {
-        $this->record->reservedDate = $this->currentTime();
+        $this->record->reservedDate = Carbon::now(TZ_JAKARTA)->format('Y-m-d H:i:s');
         return $this->record->reservedDate;
     }
 
@@ -39,14 +41,26 @@ class TrJobQueueRecord extends DatabaseJobRecord
 // ---------------------------------------------------------------------------
 class TrJobQueueDriver extends DatabaseQueue
 {
+    /** Waktu sekarang sebagai string DATETIME Asia/Jakarta. */
+    private function nowDatetime(): string
+    {
+        return Carbon::now(TZ_JAKARTA)->format('Y-m-d H:i:s');
+    }
+
+    /** Konversi Unix timestamp ke string DATETIME Asia/Jakarta. */
+    private function toDatetime(int $timestamp): string
+    {
+        return Carbon::createFromTimestamp($timestamp, TZ_JAKARTA)->format('Y-m-d H:i:s');
+    }
+
     protected function buildDatabaseRecord($queue, $payload, $availableAt, $attempts = 0)
     {
         return [
             'queue'        => $queue,
             'attempts'     => $attempts,
             'reservedDate' => null,
-            'availableDate' => $availableAt,
-            'createdDate'  => $this->currentTime(),
+            'availableDate' => $this->toDatetime($availableAt),
+            'createdDate'  => $this->nowDatetime(),
             'payload'      => $payload,
         ];
     }
@@ -70,13 +84,15 @@ class TrJobQueueDriver extends DatabaseQueue
     {
         $query->where(function ($query) {
             $query->whereNull('reservedDate')
-                  ->where('availableDate', '<=', $this->currentTime());
+                  ->where('availableDate', '<=', $this->nowDatetime());
         });
     }
 
     protected function isReservedButExpired($query)
     {
-        $expiration = Carbon::now()->subSeconds($this->retryAfter)->getTimestamp();
+        $expiration = Carbon::now(TZ_JAKARTA)
+            ->subSeconds($this->retryAfter)
+            ->format('Y-m-d H:i:s');
 
         $query->orWhere(function ($query) use ($expiration) {
             $query->where('reservedDate', '<=', $expiration);
