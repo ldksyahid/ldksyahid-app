@@ -13,9 +13,9 @@
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div>
                     <h1 class="page-title mb-0">
-                        <i class="fas fa-list-alt me-2"></i>Job Queue Log
+                        <i class="fas fa-stream me-2"></i>Job Queue Log
                     </h1>
-                    <p class="text-muted mb-0 mt-1 small">Monitor job queue in real-time</p>
+                    <p class="text-muted mb-0 mt-1 small">Monitor email job queue in real-time</p>
                 </div>
                 <div class="d-flex align-items-center gap-3 flex-wrap">
                     <div class="live-indicator" id="live-indicator">
@@ -23,7 +23,7 @@
                         <span class="live-label" id="live-label">LIVE</span>
                     </div>
                     <span class="text-muted small" id="last-updated-text">Connecting...</span>
-                    <button class="btn btn-sm btn-outline-secondary" id="btn-pause-resume">
+                    <button class="btn btn-sm btn-outline-secondary btn-rounded" id="btn-pause-resume">
                         <i class="fas fa-pause me-1"></i>Pause
                     </button>
                 </div>
@@ -95,8 +95,7 @@
                 </select>
                 <input type="text" class="form-control form-control-sm filter-control" id="filter-search"
                     placeholder="Search job type..." style="max-width:200px;">
-                <button class="btn btn-sm btn-outline-danger ms-auto" id="btn-delete-stuck"
-                    title="Delete all stuck jobs (attempts ≥ 3)">
+                <button class="btn btn-sm btn-outline-danger btn-rounded ms-auto" id="btn-delete-stuck">
                     <i class="fas fa-trash-alt me-1"></i>Delete Stuck
                 </button>
             </div>
@@ -105,109 +104,75 @@
         {{-- Table --}}
         <div class="col-12 mb-3">
             <div class="table-card">
-            <div class="table-responsive">
-                <table class="table table-hover table-sm align-middle mb-0" id="jobs-table">
-                    <thead>
-                        <tr>
-                            <th>
-                                ID
-                                <i class="fas fa-info-circle tooltip-icon"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="Unique identifier of the job in the queue"></i>
-                            </th>
-                            <th>
-                                Job Type
-                                <i class="fas fa-info-circle tooltip-icon"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="The class name of the queued job (e.g. SendSingleMailJob)"></i>
-                            </th>
-                            <th>
-                                Queue
-                                <i class="fas fa-info-circle tooltip-icon"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="Queue channel name this job is assigned to"></i>
-                            </th>
-                            <th>
-                                Status
-                                <i class="fas fa-info-circle tooltip-icon"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="Pending = waiting, Processing = reserved by worker, Delayed = scheduled for later, Stuck = attempts ≥ 3 (likely failing)"></i>
-                            </th>
-                            <th>
-                                Attempts
-                                <i class="fas fa-info-circle tooltip-icon"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="How many times this job has been tried. High numbers may indicate repeated failures"></i>
-                            </th>
-                            <th>
-                                Available Date
-                                <i class="fas fa-info-circle tooltip-icon"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="The earliest date this job is allowed to be picked up and processed by the worker"></i>
-                            </th>
-                            <th>
-                                Reserved Date
-                                <i class="fas fa-info-circle tooltip-icon"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="The date the worker reserved this job. Empty means it has not been picked up yet"></i>
-                            </th>
-                            <th>
-                                Created Date
-                                <i class="fas fa-info-circle tooltip-icon"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="The date this job was first added to the queue"></i>
-                            </th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="jobs-tbody">
-                        <tr>
-                            <td colspan="9" class="text-center py-5 text-muted">
-                                <i class="fas fa-spinner fa-spin me-2"></i>Loading...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            {{-- Pagination --}}
-            <div class="table-pagination d-flex align-items-center justify-content-between flex-wrap gap-2" id="pagination-bar">
-                <span class="text-muted small" id="pagination-info"></span>
-                <div class="d-flex gap-1" id="pagination-controls"></div>
-            </div>
-            </div>{{-- /.table-card --}}
-        </div>
-
-        {{-- Activity Feed --}}
-        <div class="col-12">
-            <div class="activity-feed-wrapper">
-                <div class="activity-feed-header">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="fas fa-stream text-muted small"></i>
-                        <span class="fw-semibold small">Activity Feed</span>
-                        <span class="badge bg-secondary rounded-pill" id="feed-count">0</span>
-                        <span class="text-muted" style="font-size:0.72rem;">(tracks changes in current view)</span>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-xs btn-outline-secondary" id="btn-clear-feed">Clear</button>
-                        <button class="btn btn-xs btn-outline-secondary" id="btn-toggle-feed">
-                            <i class="fas fa-chevron-up" id="feed-toggle-icon"></i>
-                        </button>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm align-middle mb-0" id="jobs-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    ID
+                                    <i class="fas fa-info-circle tooltip-icon"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Unique identifier of the job in the queue"></i>
+                                </th>
+                                <th class="text-center">
+                                    Job Type
+                                    <i class="fas fa-info-circle tooltip-icon"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="The class name of the queued job (e.g. SendSingleMailJob)"></i>
+                                </th>
+                                <th class="text-center">
+                                    Queue
+                                    <i class="fas fa-info-circle tooltip-icon"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Queue channel name this job is assigned to"></i>
+                                </th>
+                                <th class="text-center">
+                                    Status
+                                    <i class="fas fa-info-circle tooltip-icon"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Pending = waiting, Processing = reserved by worker, Delayed = scheduled for later, Stuck = attempts ≥ 3 (likely failing)"></i>
+                                </th>
+                                <th class="text-center">
+                                    Attempts
+                                    <i class="fas fa-info-circle tooltip-icon"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="How many times this job has been tried. High numbers may indicate repeated failures"></i>
+                                </th>
+                                <th class="text-center">
+                                    Available Date
+                                    <i class="fas fa-info-circle tooltip-icon"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="The earliest date this job is allowed to be picked up and processed by the worker"></i>
+                                </th>
+                                <th class="text-center">
+                                    Reserved Date
+                                    <i class="fas fa-info-circle tooltip-icon"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="The date the worker reserved this job. Empty means it has not been picked up yet"></i>
+                                </th>
+                                <th class="text-center">
+                                    Created Date
+                                    <i class="fas fa-info-circle tooltip-icon"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="The date this job was first added to the queue"></i>
+                                </th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jobs-tbody">
+                            <tr>
+                                <td colspan="9" class="text-center py-5 text-muted">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="activity-feed-body" id="feed-body">
-                    <div class="feed-empty" id="feed-empty">
-                        <i class="fas fa-clock me-2"></i>Waiting for queue activity...
-                    </div>
-                    <div id="feed-entries"></div>
+
+                {{-- Pagination --}}
+                <div class="table-pagination d-flex align-items-center justify-content-between flex-wrap gap-2" id="pagination-bar">
+                    <span class="text-muted small" id="pagination-info"></span>
+                    <div class="d-flex gap-1 flex-wrap" id="pagination-controls"></div>
                 </div>
             </div>
         </div>
@@ -218,13 +183,13 @@
 {{-- Job Detail Modal --}}
 <div class="modal fade" id="job-detail-modal" tabindex="-1" aria-labelledby="jobDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="jobDetailModalLabel">
-                    <i class="fas fa-info-circle me-2 text-primary"></i>
+        <div class="modal-content jql-modal-content">
+            <div class="modal-header jql-modal-header">
+                <h5 class="modal-title text-white" id="jobDetailModalLabel">
+                    <i class="fas fa-stream me-2"></i>
                     Job Details &mdash; <span id="modal-job-id">—</span>
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row g-3">
@@ -257,15 +222,13 @@
                         </div>
                     </div>
 
-                    {{-- Mail Info --}}
                     <div class="col-12">
                         <div class="detail-section-title">MAIL INFO</div>
                         <div class="detail-infobox" id="m-mail-info">
-                            <span class="text-muted">No mail info available</span>
+                            <span class="text-muted small">No mail info available</span>
                         </div>
                     </div>
 
-                    {{-- Timestamps --}}
                     <div class="col-12">
                         <div class="detail-section-title">TIMESTAMPS</div>
                         <div class="row g-2">
@@ -284,11 +247,10 @@
                         </div>
                     </div>
 
-                    {{-- Raw Payload --}}
                     <div class="col-12">
                         <div class="detail-section-title d-flex align-items-center justify-content-between">
                             <span>RAW PAYLOAD</span>
-                            <button class="btn btn-xs btn-outline-secondary" id="btn-toggle-payload">
+                            <button class="btn btn-xs btn-outline-secondary btn-rounded" id="btn-toggle-payload">
                                 <i class="fas fa-chevron-down me-1"></i>Show
                             </button>
                         </div>
@@ -297,10 +259,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-outline-danger" id="modal-btn-delete">
+                <button type="button" class="btn btn-sm btn-outline-danger btn-rounded" id="modal-btn-delete">
                     <i class="fas fa-trash-alt me-1"></i>Delete Job
                 </button>
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-sm btn-secondary btn-rounded" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

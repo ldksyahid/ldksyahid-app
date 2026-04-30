@@ -8,13 +8,11 @@ $(function () {
     var secondsSince    = 0;
     var currentPage     = 1;
     var previousStats   = null;
-    var previousJobs    = {};   // id → { status, attempts }
-    var currentJobs     = {};   // id → full job object (for modal)
-    var activityCount   = 0;
-    var feedCollapsed   = false;
+    var previousJobs    = {};
+    var currentJobs     = {};
     var currentModalId  = null;
 
-    var POLL_INTERVAL  = 3000;   // ms
+    var POLL_INTERVAL   = 3000;
     var STUCK_THRESHOLD = 3;
 
     // CSRF for AJAX mutations
@@ -23,8 +21,34 @@ $(function () {
     });
 
     // ── Bootstrap Tooltips ─────────────────────────────────────────────────
-    var tooltipEls = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    tooltipEls.forEach(function (el) { new bootstrap.Tooltip(el, { trigger: 'hover' }); });
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+        new bootstrap.Tooltip(el, { trigger: 'hover' });
+    });
+
+    // ── SweetAlert2 Helper ─────────────────────────────────────────────────
+    function swalConfirm(opts, onConfirm) {
+        Swal.fire($.extend({
+            showCancelButton   : true,
+            confirmButtonColor : '#dc3545',
+            cancelButtonColor  : '#6c757d',
+            confirmButtonText  : 'Yes, delete',
+            cancelButtonText   : 'Cancel',
+            borderRadius       : '16px',
+        }, opts)).then(function (result) {
+            if (result.isConfirmed) onConfirm();
+        });
+    }
+
+    function swalSuccess(msg) {
+        Swal.fire({
+            icon: 'success', title: 'Done!', text: msg,
+            timer: 1800, showConfirmButton: false,
+        });
+    }
+
+    function swalError(msg) {
+        Swal.fire({ icon: 'error', title: 'Error', text: msg });
+    }
 
     // ── Polling ────────────────────────────────────────────────────────────
     function startPolling() {
@@ -49,9 +73,9 @@ $(function () {
     // ── Fetch Data ─────────────────────────────────────────────────────────
     function fetchData() {
         var params = {
-            status : $('#filter-status').val()  || 'all',
-            queue  : $('#filter-queue').val()   || 'all',
-            search : $('#filter-search').val()  || '',
+            status : $('#filter-status').val() || 'all',
+            queue  : $('#filter-queue').val()  || 'all',
+            search : $('#filter-search').val() || '',
             page   : currentPage
         };
 
@@ -60,7 +84,6 @@ $(function () {
                 updateStats(response.stats);
                 updateQueuesFilter(response.queues);
                 updateTable(response.jobs);
-                detectChanges(response.jobs.data, response.stats);
                 resetUpdateTimer();
                 setLiveState(true);
             })
@@ -72,10 +95,10 @@ $(function () {
 
     // ── Stats ──────────────────────────────────────────────────────────────
     function updateStats(stats) {
-        setStatCard('total',      stats.total,      'stat-icon-total');
-        setStatCard('pending',    stats.pending,     'stat-icon-pending');
-        setStatCard('processing', stats.processing,  'stat-icon-processing');
-        setStatCard('delayed',    stats.delayed,     'stat-icon-delayed');
+        $('#stat-total').text(Number(stats.total).toLocaleString());
+        $('#stat-pending').text(Number(stats.pending).toLocaleString());
+        $('#stat-processing').text(Number(stats.processing).toLocaleString());
+        $('#stat-delayed').text(Number(stats.delayed).toLocaleString());
 
         if (previousStats) {
             setChange('total',      stats.total      - previousStats.total);
@@ -86,16 +109,11 @@ $(function () {
         previousStats = stats;
     }
 
-    function setStatCard(key, val, _) {
-        $('#stat-' + key).text(Number(val).toLocaleString());
-    }
-
     function setChange(key, diff) {
         var $el = $('#stat-' + key + '-change');
         if (diff === 0) { $el.text('').removeClass('up down'); return; }
         $el.text((diff > 0 ? '▲ +' : '▼ ') + diff)
-           .removeClass('up down')
-           .addClass(diff > 0 ? 'up' : 'down');
+           .removeClass('up down').addClass(diff > 0 ? 'up' : 'down');
     }
 
     // ── Queues Filter ──────────────────────────────────────────────────────
@@ -107,7 +125,7 @@ $(function () {
             $sel.append('<option value="' + q + '">' + q + '</option>');
         });
         if (current && current !== 'all') $sel.val(current);
-        $sel.trigger('change.select2'); // notify Select2 to re-render
+        $sel.trigger('change.select2');
     }
 
     // ── Table ──────────────────────────────────────────────────────────────
@@ -116,26 +134,23 @@ $(function () {
         var $tbody = $('#jobs-tbody');
 
         if (jobs.length === 0) {
-            $tbody.html('<tr><td colspan="9" class="text-center py-5 text-muted">' +
-                '<i class="fas fa-inbox me-2"></i>No jobs found for current filter.</td></tr>');
+            $tbody.html(
+                '<tr><td colspan="9" class="text-center py-5 text-muted">' +
+                '<i class="fas fa-inbox me-2"></i>No jobs found for current filter.</td></tr>'
+            );
             updatePagination(paginator);
             return;
         }
 
-        // Build map of new jobs for flash detection
-        var newIds = {};
-        jobs.forEach(function (j) { newIds[j.ID] = true; });
+        var nextJobs = {};
+        jobs.forEach(function (j) { nextJobs[j.ID] = j; });
 
         var html = '';
-        var nextJobs = {};
-        jobs.forEach(function (j) {
-            nextJobs[j.ID] = j;
-            html += buildRow(j);
-        });
+        jobs.forEach(function (j) { html += buildRow(j); });
 
         $tbody.html(html);
 
-        // Flash rows that are new
+        // Flash new rows
         jobs.forEach(function (j) {
             if (!currentJobs[j.ID]) {
                 $tbody.find('tr[data-id="' + j.ID + '"]').addClass('row-flash');
@@ -147,46 +162,44 @@ $(function () {
     }
 
     function buildRow(j) {
-        var badge   = buildBadge(j.job_status);
-        var avail   = j.availableDate  || '—';
+        var badge    = buildBadge(j.job_status);
+        var avail    = j.availableDate || '—';
         var reserved = j.reservedDate  ? j.reservedDate : '<span class="text-muted">—</span>';
-        var created = j.createdDate    || '—';
-        var jobType = escHtml(j.job_type || 'Unknown');
+        var created  = j.createdDate   || '—';
+        var jobType  = escHtml(j.job_type || 'Unknown');
 
         return '<tr data-id="' + j.ID + '">' +
-            '<td><span class="text-muted small">#</span>' + j.ID + '</td>' +
+            '<td><span class="text-muted" style="font-size:0.75rem">#</span>' + j.ID + '</td>' +
             '<td><code class="small">' + jobType + '</code></td>' +
-            '<td><span class="badge bg-light text-dark border small">' + escHtml(j.queue) + '</span></td>' +
+            '<td><span class="badge bg-light text-dark border small rounded-pill">' + escHtml(j.queue) + '</span></td>' +
             '<td>' + badge + '</td>' +
             '<td>' + buildAttemptsBadge(j.attempts) + '</td>' +
             '<td class="small">' + avail + '</td>' +
             '<td class="small">' + reserved + '</td>' +
             '<td class="small">' + created + '</td>' +
-            '<td><button class="btn btn-xs btn-outline-primary btn-detail" data-id="' + j.ID + '">' +
-            '<i class="fas fa-eye me-1"></i>Detail</button></td>' +
+            '<td>' +
+            '<button class="btn btn-xs btn-outline-primary btn-detail" data-id="' + j.ID + '">' +
+            '<i class="fas fa-eye me-1"></i>Detail</button>' +
+            '</td>' +
             '</tr>';
     }
 
     function buildBadge(status) {
         var map = {
-            pending:    ['badge-pending',    '⏳', 'Pending'],
-            processing: ['badge-processing', '●',  'Processing'],
-            delayed:    ['badge-delayed',    '⏱',  'Delayed'],
-            stuck:      ['badge-stuck',      '⚠',  'Stuck'],
+            pending:    ['badge-pending',    'Pending'],
+            processing: ['badge-processing', 'Processing'],
+            delayed:    ['badge-delayed',    'Delayed'],
+            stuck:      ['badge-stuck',      'Stuck'],
         };
         var cfg = map[status] || map.pending;
         return '<span class="badge-status ' + cfg[0] + '">' +
-               '<span class="status-dot"></span>' + cfg[2] + '</span>';
+               '<span class="status-dot"></span>' + cfg[1] + '</span>';
     }
 
     function buildAttemptsBadge(attempts) {
         if (attempts === 0) return '<span class="text-muted">0</span>';
-        if (attempts >= STUCK_THRESHOLD) {
-            return '<span class="badge bg-danger rounded-pill">' + attempts + '</span>';
-        }
-        if (attempts >= 2) {
-            return '<span class="badge bg-warning text-dark rounded-pill">' + attempts + '</span>';
-        }
+        if (attempts >= STUCK_THRESHOLD) return '<span class="badge bg-danger rounded-pill">' + attempts + '</span>';
+        if (attempts >= 2)              return '<span class="badge bg-warning text-dark rounded-pill">' + attempts + '</span>';
         return '<span class="badge bg-light text-dark border rounded-pill">' + attempts + '</span>';
     }
 
@@ -195,23 +208,29 @@ $(function () {
         var from  = p.from  || 0;
         var to    = p.to    || 0;
         var total = p.total || 0;
+
         $('#pagination-info').text(
             total === 0 ? 'No results' :
-            'Showing ' + from + '–' + to + ' of ' + total + ' jobs'
+            'Showing ' + from + '–' + to + ' of ' + total.toLocaleString() + ' jobs'
         );
 
         var $ctrl = $('#pagination-controls').empty();
-        if (p.last_page <= 1) return;
+        if (!p.last_page || p.last_page <= 1) return;
 
+        // Prev button
         $ctrl.append(
-            '<button class="btn btn-sm btn-outline-secondary" id="pg-prev" ' +
-            (p.current_page <= 1 ? 'disabled' : '') + '>' +
+            '<button class="btn btn-sm btn-outline-secondary" id="pg-prev"' +
+            (p.current_page <= 1 ? ' disabled' : '') + '>' +
             '<i class="fas fa-chevron-left"></i></button>'
         );
 
-        // Show limited pages
+        // Page numbers (window of 5)
         var start = Math.max(1, p.current_page - 2);
         var end   = Math.min(p.last_page, p.current_page + 2);
+        if (start > 1) {
+            $ctrl.append('<button class="btn btn-sm btn-outline-secondary pg-num" data-page="1">1</button>');
+            if (start > 2) $ctrl.append('<span class="px-1 text-muted">…</span>');
+        }
         for (var i = start; i <= end; i++) {
             $ctrl.append(
                 '<button class="btn btn-sm ' +
@@ -219,95 +238,34 @@ $(function () {
                 ' pg-num" data-page="' + i + '">' + i + '</button>'
             );
         }
-
-        $ctrl.append(
-            '<button class="btn btn-sm btn-outline-secondary" id="pg-next" ' +
-            (p.current_page >= p.last_page ? 'disabled' : '') + '>' +
-            '<i class="fas fa-chevron-right"></i></button>'
-        );
-    }
-
-    // ── Activity Feed ──────────────────────────────────────────────────────
-    function detectChanges(jobs, stats) {
-        var currentIds = {};
-        jobs.forEach(function (j) { currentIds[j.ID] = { status: j.job_status, attempts: j.attempts }; });
-
-        // New jobs on current page
-        Object.keys(currentIds).forEach(function (id) {
-            if (!previousJobs[id]) {
-                addFeedEntry('new', 'fas fa-plus-circle',
-                    'Job <strong>#' + id + '</strong> added to queue',
-                    currentJobs[id] ? currentJobs[id].job_type : '');
-            } else {
-                // Status changed
-                if (previousJobs[id].status !== currentIds[id].status) {
-                    addFeedEntry('status', 'fas fa-exchange-alt',
-                        'Job <strong>#' + id + '</strong> changed to <em>' + currentIds[id].status + '</em>',
-                        currentJobs[id] ? currentJobs[id].job_type : '');
-                }
-                // Attempts increased
-                if (currentIds[id].attempts > previousJobs[id].attempts) {
-                    addFeedEntry('attempts', 'fas fa-exclamation-triangle',
-                        'Job <strong>#' + id + '</strong> attempts reached <strong>' + currentIds[id].attempts + '</strong>',
-                        currentJobs[id] ? currentJobs[id].job_type : '');
-                }
-            }
-        });
-
-        // Jobs removed from current page
-        Object.keys(previousJobs).forEach(function (id) {
-            if (!currentIds[id]) {
-                addFeedEntry('removed', 'fas fa-check-circle',
-                    'Job <strong>#' + id + '</strong> removed from queue', '');
-            }
-        });
-
-        // Stats changes summary
-        if (previousStats) {
-            var diff = stats.stuck - previousStats.stuck;
-            if (diff > 0) {
-                addFeedEntry('attempts', 'fas fa-exclamation-circle',
-                    'Stuck jobs increased by <strong>' + diff + '</strong> (total: ' + stats.stuck + ')', '');
-            }
+        if (end < p.last_page) {
+            if (end < p.last_page - 1) $ctrl.append('<span class="px-1 text-muted">…</span>');
+            $ctrl.append('<button class="btn btn-sm btn-outline-secondary pg-num" data-page="' + p.last_page + '">' + p.last_page + '</button>');
         }
 
-        previousJobs = currentIds;
-    }
-
-    function addFeedEntry(type, icon, msg, jobType) {
-        var now   = new Date();
-        var time  = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
-        var typeStr = jobType ? '<span class="feed-type"> — ' + escHtml(jobType) + '</span>' : '';
-
-        var html = '<div class="feed-entry">' +
-            '<span class="feed-time">' + time + '</span>' +
-            '<span class="feed-icon ' + type + '"><i class="' + icon + '"></i></span>' +
-            '<span class="feed-msg">' + msg + typeStr + '</span>' +
-            '</div>';
-
-        $('#feed-empty').hide();
-        $('#feed-entries').prepend(html);
-        activityCount++;
-        $('#feed-count').text(activityCount);
-
-        // Keep max 50 entries
-        var entries = $('#feed-entries .feed-entry');
-        if (entries.length > 50) entries.last().remove();
+        // Next button
+        $ctrl.append(
+            '<button class="btn btn-sm btn-outline-secondary" id="pg-next"' +
+            (p.current_page >= p.last_page ? ' disabled' : '') + '>' +
+            '<i class="fas fa-chevron-right"></i></button>'
+        );
     }
 
     // ── Detail Modal ───────────────────────────────────────────────────────
     function openDetail(id) {
         var j = currentJobs[id];
-        if (!j) return;
+        if (!j) { swalError('Job data not found in current view. Try refreshing.'); return; }
 
         currentModalId = id;
         $('#modal-job-id').text('#' + id);
-        $('#m-job-type').text(j.job_type   || '—');
-        $('#m-job-full').text(j.job_full   || '—');
-        $('#m-queue').text(j.queue         || '—');
-        $('#m-uuid').text(j.job_uuid       || '—');
-        $('#m-attempts').text(j.attempts + (j.attempts >= STUCK_THRESHOLD ? ' ⚠ High attempts' : ''));
-        $('#m-created').text(j.createdDate   || '—');
+        $('#m-job-type').text(j.job_type  || '—');
+        $('#m-job-full').text(j.job_full  || '—');
+        $('#m-queue').text(j.queue        || '—');
+        $('#m-uuid').text(j.job_uuid      || '—');
+        $('#m-attempts').text(
+            j.attempts + (j.attempts >= STUCK_THRESHOLD ? '  ⚠ High — may be stuck' : '')
+        );
+        $('#m-created').text(j.createdDate    || '—');
         $('#m-available').text(j.availableDate || '—');
         $('#m-reserved').text(j.reservedDate  || '—');
         $('#m-status').html(buildBadge(j.job_status));
@@ -315,11 +273,13 @@ $(function () {
         $('#btn-toggle-payload').html('<i class="fas fa-chevron-down me-1"></i>Show');
 
         // Mail info
-        var mi  = j.mail_info || {};
+        var mi = j.mail_info || {};
         var mailHtml = '';
         if (mi.to)      mailHtml += buildInfoRow('To',      mi.to);
         if (mi.subject) mailHtml += buildInfoRow('Subject', mi.subject);
-        $('#m-mail-info').html(mailHtml || '<span class="text-muted small">No mail info extractable from payload</span>');
+        $('#m-mail-info').html(
+            mailHtml || '<span class="text-muted small">No mail info extractable from payload</span>'
+        );
 
         $('#job-detail-modal').modal('show');
     }
@@ -327,20 +287,29 @@ $(function () {
     function buildInfoRow(key, val) {
         return '<div class="info-row">' +
             '<span class="info-key">' + escHtml(key) + '</span>' +
-            '<span class="info-val">' + escHtml(val) + '</span>' +
+            '<span class="info-val">'  + escHtml(val) + '</span>' +
             '</div>';
     }
 
     // ── Delete Job ─────────────────────────────────────────────────────────
     function deleteJob(id, callback) {
         $.ajax({
-            url    : '/admin/email-config/job-queue-log/' + id,
-            type   : 'DELETE',
-        }).done(function () {
-            if (callback) callback();
-            fetchData();
-        }).fail(function () {
-            alert('Failed to delete job #' + id);
+            url  : '/admin/email-config/job-queue-log/' + id,
+            type : 'DELETE',
+        }).done(function (res) {
+            if (res.success) {
+                swalSuccess('Job #' + id + ' has been deleted.');
+                if (callback) callback();
+                fetchData();
+            } else {
+                swalError(res.message || 'Failed to delete job.');
+            }
+        }).fail(function (xhr) {
+            var msg = 'Failed to delete job.';
+            if (xhr.status === 404) {
+                try { msg = JSON.parse(xhr.responseText).message; } catch(e) {}
+            }
+            swalError(msg);
         });
     }
 
@@ -348,7 +317,6 @@ $(function () {
     function setLiveState(live) {
         if (live) {
             $('#live-indicator').removeClass('paused');
-            $('#live-dot').css('animation', '');
             $('#live-label').text(isPaused ? 'PAUSED' : 'LIVE');
         } else {
             $('#live-label').text('ERROR');
@@ -358,13 +326,9 @@ $(function () {
     function escHtml(s) {
         if (!s) return '';
         return String(s)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
-
-    function pad(n) { return n < 10 ? '0' + n : n; }
 
     // ── Event Handlers ─────────────────────────────────────────────────────
 
@@ -372,8 +336,7 @@ $(function () {
     $('#btn-pause-resume').on('click', function () {
         isPaused = !isPaused;
         if (isPaused) {
-            stopPolling();
-            clearInterval(updateTimer);
+            stopPolling(); clearInterval(updateTimer);
             $(this).html('<i class="fas fa-play me-1"></i>Resume');
             $('#live-indicator').addClass('paused');
             $('#live-label').text('PAUSED');
@@ -382,27 +345,21 @@ $(function () {
             $(this).html('<i class="fas fa-pause me-1"></i>Pause');
             $('#live-indicator').removeClass('paused');
             $('#live-label').text('LIVE');
-            fetchData();
-            startPolling();
+            fetchData(); startPolling();
         }
     });
 
-    // Filters trigger immediate re-fetch on page 1
+    // Filters
     $('#filter-status, #filter-queue').on('change', function () {
-        currentPage = 1;
-        fetchData();
+        currentPage = 1; fetchData();
     });
-
     var searchTimer;
     $('#filter-search').on('input', function () {
         clearTimeout(searchTimer);
-        searchTimer = setTimeout(function () {
-            currentPage = 1;
-            fetchData();
-        }, 400);
+        searchTimer = setTimeout(function () { currentPage = 1; fetchData(); }, 400);
     });
 
-    // Pagination prev/next
+    // Pagination
     $(document).on('click', '#pg-prev', function () {
         if (currentPage > 1) { currentPage--; fetchData(); }
     });
@@ -410,36 +367,49 @@ $(function () {
         currentPage++; fetchData();
     });
     $(document).on('click', '.pg-num', function () {
-        currentPage = parseInt($(this).data('page'));
-        fetchData();
+        var page = parseInt($(this).data('page'));
+        if (page !== currentPage) { currentPage = page; fetchData(); }
     });
 
-    // Open detail modal
+    // Open detail
     $(document).on('click', '.btn-detail', function () {
         openDetail($(this).data('id'));
     });
 
-    // Delete job from modal
+    // Delete from modal
     $('#modal-btn-delete').on('click', function () {
         if (!currentModalId) return;
-        if (!confirm('Delete job #' + currentModalId + '? This cannot be undone.')) return;
-        deleteJob(currentModalId, function () {
-            $('#job-detail-modal').modal('hide');
+        swalConfirm({
+            title: 'Delete Job #' + currentModalId + '?',
+            text : 'This job will be permanently removed from the queue.',
+            icon : 'warning',
+        }, function () {
+            deleteJob(currentModalId, function () {
+                $('#job-detail-modal').modal('hide');
+            });
         });
     });
 
-    // Delete stuck jobs
+    // Delete stuck
     $('#btn-delete-stuck').on('click', function () {
-        if (!confirm('Delete ALL stuck jobs (attempts ≥ 3)? This cannot be undone.')) return;
-        $.ajax({
-            url  : '/admin/email-config/job-queue-log',
-            type : 'DELETE',
-        }).done(function (res) {
-            addFeedEntry('removed', 'fas fa-trash-alt',
-                'Deleted <strong>' + (res.deleted || 0) + '</strong> stuck jobs', '');
-            fetchData();
-        }).fail(function () {
-            alert('Failed to delete stuck jobs.');
+        if (!previousStats || previousStats.stuck === 0) {
+            swalError('There are no stuck jobs to delete.');
+            return;
+        }
+        swalConfirm({
+            title: 'Delete All Stuck Jobs?',
+            text : 'This will permanently delete all jobs with ' + STUCK_THRESHOLD + ' or more attempts (' + previousStats.stuck + ' jobs).',
+            icon : 'warning',
+        }, function () {
+            $.ajax({
+                url  : '/admin/email-config/job-queue-log',
+                type : 'DELETE',
+            }).done(function (res) {
+                swalSuccess('Deleted ' + (res.deleted || 0) + ' stuck job(s) successfully.');
+                fetchData();
+            }).fail(function () {
+                swalError('Failed to delete stuck jobs.');
+            });
         });
     });
 
@@ -455,29 +425,7 @@ $(function () {
         }
     });
 
-    // Clear activity feed
-    $('#btn-clear-feed').on('click', function () {
-        $('#feed-entries').empty();
-        $('#feed-empty').show();
-        activityCount = 0;
-        $('#feed-count').text(0);
-    });
-
-    // Toggle feed collapse
-    $('#btn-toggle-feed').on('click', function () {
-        feedCollapsed = !feedCollapsed;
-        if (feedCollapsed) {
-            $('#feed-body').slideUp(200);
-            $('#feed-toggle-icon').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-        } else {
-            $('#feed-body').slideDown(200);
-            $('#feed-toggle-icon').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-        }
-    });
-
     // ── Init ───────────────────────────────────────────────────────────────
-
-    // Init Select2 on filter dropdowns
     $('#filter-status').select2({
         minimumResultsForSearch: Infinity,
         width: '180px',

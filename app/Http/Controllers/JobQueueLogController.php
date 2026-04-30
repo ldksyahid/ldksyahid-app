@@ -65,7 +65,11 @@ class JobQueueLogController extends Controller
 
     public function destroy($id)
     {
-        TrJobQueue::findOrFail($id)->delete();
+        $job = TrJobQueue::find($id);
+        if (!$job) {
+            return response()->json(['success' => false, 'message' => 'Job #' . $id . ' was not found. It may have already been processed or deleted.'], 404);
+        }
+        $job->delete();
         return response()->json(['success' => true]);
     }
 
