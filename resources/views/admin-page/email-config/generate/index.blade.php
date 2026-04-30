@@ -376,13 +376,15 @@ $(document).ready(function () {
     $('#generateEmailForm').on('submit', function(e) {
         e.preventDefault();
 
-        // Hard guard — once confirmed, block every subsequent submit attempt
+        // Hard guard — lock immediately to block any subsequent submit attempt
         if (isSubmitting) return;
+        isSubmitting = true;
 
         var formEl = this;
 
         const subject = $('#subject').val().trim();
         if (!subject) {
+            isSubmitting = false;
             resetSubmitBtn();
             Swal.fire({ icon: 'error', title: 'Subject Required', text: 'Please enter an email subject.', confirmButtonColor: '#00a79d' });
             return;
@@ -390,6 +392,7 @@ $(document).ready(function () {
 
         const body = $('.summernote').summernote('code');
         if (!body || body === '<p><br></p>' || body.trim() === '') {
+            isSubmitting = false;
             resetSubmitBtn();
             Swal.fire({ icon: 'error', title: 'Body Required', text: 'Please write the email body.', confirmButtonColor: '#00a79d' });
             return;
@@ -400,6 +403,7 @@ $(document).ready(function () {
         if (recipientType === 'custom') {
             const emails = parseEmails($('#custom_emails').val());
             if (emails.length === 0) {
+                isSubmitting = false;
                 resetSubmitBtn();
                 Swal.fire({ icon: 'error', title: 'No Recipients', text: 'Please enter at least one valid email address.', confirmButtonColor: '#00a79d' });
                 return;
@@ -418,10 +422,10 @@ $(document).ready(function () {
             cancelButtonText: 'Cancel',
         }).then((result) => {
             if (result.isConfirmed) {
-                isSubmitting = true;
                 $('#submitBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Sending...');
                 HTMLFormElement.prototype.submit.call(formEl);
             } else {
+                isSubmitting = false;
                 resetSubmitBtn();
             }
         });

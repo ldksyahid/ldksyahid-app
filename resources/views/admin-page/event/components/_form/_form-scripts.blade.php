@@ -65,7 +65,9 @@
         });
 
         // Form validation and submission
+        var isSubmitting = false;
         document.querySelector('form')?.addEventListener('submit', function(e) {
+            if (isSubmitting) { e.preventDefault(); return; }
             const title = document.getElementById('title')?.value;
             if (!title) {
                 e.preventDefault();
@@ -106,6 +108,14 @@
                     return;
                 }
             }
+
+            // Lock submission
+            isSubmitting = true;
+        });
+
+        // Reset guard on bfcache restore (browser back)
+        window.addEventListener('pageshow', function(e) {
+            if (e.persisted) { isSubmitting = false; }
         });
 
         // Helper function to validate URLs

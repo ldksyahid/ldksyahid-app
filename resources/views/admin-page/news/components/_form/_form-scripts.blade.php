@@ -79,9 +79,11 @@
         }
 
         // Form validation
+        var isSubmitting = false;
         const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', function(e) {
+                if (isSubmitting) { e.preventDefault(); return; }
                 const title = document.getElementById('title');
                 const datepublish = document.getElementById('datepublish');
                 const publisher = document.getElementById('publisher');
@@ -145,10 +147,20 @@
                     return;
                 }
 
-                // Show loading
+                // Lock submission and show loading
+                isSubmitting = true;
                 const submitBtn = $(form).find('button[type="submit"]');
                 if (submitBtn.length) {
                     submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin me-1"></i> Processing...');
+                }
+            });
+
+            // Reset guard on bfcache restore (browser back)
+            window.addEventListener('pageshow', function(e) {
+                if (e.persisted) {
+                    isSubmitting = false;
+                    var btn = $(form).find('button[type="submit"]');
+                    if (btn.length) btn.prop('disabled', false).html('<i class="fa fa-save me-1"></i> Save');
                 }
             });
         }
