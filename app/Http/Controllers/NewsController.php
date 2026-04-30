@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\News;
 use App\Jobs\SendNewsletterJob;
+use Illuminate\Support\Facades\Cache;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class NewsController extends Controller
@@ -140,6 +141,14 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
+        // Server-side guard: prevent duplicate submission within 30 seconds
+        $lockKey = 'news_store_lock_' . auth()->id();
+        if (Cache::has($lockKey)) {
+            Alert::warning('Warning', 'News is already being processed. Please wait.');
+            return redirect()->route('admin.news.index');
+        }
+        Cache::put($lockKey, true, 30);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'datepublish' => 'required|date',
