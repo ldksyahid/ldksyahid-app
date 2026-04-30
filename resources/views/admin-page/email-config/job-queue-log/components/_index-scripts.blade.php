@@ -1,3 +1,4 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 $(function () {
@@ -25,29 +26,33 @@ $(function () {
         new bootstrap.Tooltip(el, { trigger: 'hover' });
     });
 
-    // ── SweetAlert2 Helper ─────────────────────────────────────────────────
+    // ── SweetAlert2 Helpers (matches admin-page pattern) ──────────────────
     function swalConfirm(opts, onConfirm) {
         Swal.fire($.extend({
+            title              : 'Are you sure?',
+            text               : "You won't be able to revert this!",
+            icon               : 'warning',
             showCancelButton   : true,
-            confirmButtonColor : '#dc3545',
-            cancelButtonColor  : '#6c757d',
-            confirmButtonText  : 'Yes, delete',
-            cancelButtonText   : 'Cancel',
-            borderRadius       : '16px',
+            confirmButtonColor : '#3085d6',
+            cancelButtonColor  : '#d33',
+            confirmButtonText  : 'Yes, delete it!',
         }, opts)).then(function (result) {
             if (result.isConfirmed) onConfirm();
         });
     }
 
     function swalSuccess(msg) {
-        Swal.fire({
-            icon: 'success', title: 'Done!', text: msg,
-            timer: 1800, showConfirmButton: false,
-        });
+        Swal.mixin({
+            toast             : true,
+            position          : 'top-end',
+            showConfirmButton : false,
+            timer             : 1500,
+            width             : '350px',
+        }).fire({ icon: 'success', title: msg });
     }
 
     function swalError(msg) {
-        Swal.fire({ icon: 'error', title: 'Error', text: msg });
+        Swal.fire({ icon: 'error', title: 'Error!', text: msg, confirmButtonColor: '#00a79d' });
     }
 
     // ── Polling ────────────────────────────────────────────────────────────
