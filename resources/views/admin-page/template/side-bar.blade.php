@@ -110,6 +110,7 @@
                     <div class="dropdown-menu bg-transparent border-0 ">
                         <a href="/admin/subscription" class="dropdown-item {{ $isActive('admin/subscription') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Subscription</a>
                         <a href="/admin/email-config/generate" class="dropdown-item {{ $isActive('admin/email-config/generate') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Generate Email</a>
+                        <a href="/admin/email-config/job-queue-log" class="dropdown-item {{ $isActive('admin/email-config/job-queue-log') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Job Queue Log</a>
                     </div>
                 </div>
                 <a href="/admin/setting" class="nav-item nav-link {{ $isActive('admin/setting') ? 'active' : '' }}"><i class="fas fa-cog me-2"></i>Setting</a>
