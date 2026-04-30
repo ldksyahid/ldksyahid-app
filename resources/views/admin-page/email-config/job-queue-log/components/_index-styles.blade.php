@@ -15,6 +15,7 @@
 .btn-rounded { border-radius: 8px !important; }
 .btn          { border-radius: 8px !important; }
 .btn-xs       { padding: 2px 10px; font-size: 0.72rem; border-radius: 6px !important; }
+.back-to-top  { border-radius: 50% !important; }
 
 /* ── Live Indicator ── */
 .live-indicator {
