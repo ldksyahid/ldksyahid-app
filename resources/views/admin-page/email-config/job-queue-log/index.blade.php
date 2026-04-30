@@ -15,7 +15,7 @@
                     <h1 class="page-title mb-0">
                         <i class="fas fa-stream me-2"></i>Job Queue Log
                     </h1>
-                    <p class="text-muted mb-0 mt-1 small">Monitor email job queue in real-time</p>
+                    <p class="text-muted mb-0 mt-1 small">Monitor job queue in real-time</p>
                 </div>
                 <div class="d-flex align-items-center gap-3 flex-wrap">
                     <div class="live-indicator" id="live-indicator">
