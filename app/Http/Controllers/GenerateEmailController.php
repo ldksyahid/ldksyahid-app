@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\SendGeneratedEmailJob;
 use App\Models\TrSubscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -18,6 +19,14 @@ class GenerateEmailController extends Controller
 
     public function send(Request $request)
     {
+        // Server-side guard: prevent duplicate submission within 30 seconds
+        $lockKey = 'generate_email_lock_' . auth()->id();
+        if (Cache::has($lockKey)) {
+            Alert::warning('Warning', 'Email is already being processed. Please wait.');
+            return redirect()->route('admin.email-config.generate');
+        }
+        Cache::put($lockKey, true, 30);
+
         $request->validate([
             'subject'       => 'required|string|max:255',
             'body'          => 'required|string',
