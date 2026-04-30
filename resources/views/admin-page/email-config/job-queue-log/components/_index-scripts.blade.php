@@ -1,3 +1,4 @@
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 $(function () {
     // ── State ──────────────────────────────────────────────────────────────
@@ -106,6 +107,7 @@ $(function () {
             $sel.append('<option value="' + q + '">' + q + '</option>');
         });
         if (current && current !== 'all') $sel.val(current);
+        $sel.trigger('change.select2'); // notify Select2 to re-render
     }
 
     // ── Table ──────────────────────────────────────────────────────────────
@@ -474,6 +476,19 @@ $(function () {
     });
 
     // ── Init ───────────────────────────────────────────────────────────────
+
+    // Init Select2 on filter dropdowns
+    $('#filter-status').select2({
+        minimumResultsForSearch: Infinity,
+        width: '180px',
+        dropdownAutoWidth: false,
+    });
+    $('#filter-queue').select2({
+        minimumResultsForSearch: Infinity,
+        width: '180px',
+        dropdownAutoWidth: false,
+    });
+
     fetchData();
     startPolling();
 });

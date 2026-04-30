@@ -15,7 +15,7 @@
                     <h1 class="page-title mb-0">
                         <i class="fas fa-list-alt me-2"></i>Job Queue Log
                     </h1>
-                    <p class="text-muted mb-0 mt-1 small">Monitor email job queue in real-time</p>
+                    <p class="text-muted mb-0 mt-1 small">Monitor job queue in real-time</p>
                 </div>
                 <div class="d-flex align-items-center gap-3 flex-wrap">
                     <div class="live-indicator" id="live-indicator">
@@ -83,18 +83,18 @@
         {{-- Filter Bar --}}
         <div class="col-12 mb-3">
             <div class="filter-bar">
-                <select class="form-select form-select-sm filter-control" id="filter-status">
+                <select id="filter-status">
                     <option value="all">All Statuses</option>
                     <option value="pending">Pending</option>
                     <option value="processing">Processing</option>
                     <option value="delayed">Delayed</option>
                     <option value="stuck">Stuck</option>
                 </select>
-                <select class="form-select form-select-sm filter-control" id="filter-queue">
+                <select id="filter-queue">
                     <option value="all">All Queues</option>
                 </select>
                 <input type="text" class="form-control form-control-sm filter-control" id="filter-search"
-                    placeholder="Search job type...">
+                    placeholder="Search job type..." style="max-width:200px;">
                 <button class="btn btn-sm btn-outline-danger ms-auto" id="btn-delete-stuck"
                     title="Delete all stuck jobs (attempts ≥ 3)">
                     <i class="fas fa-trash-alt me-1"></i>Delete Stuck
@@ -104,6 +104,7 @@
 
         {{-- Table --}}
         <div class="col-12 mb-3">
+            <div class="table-card">
             <div class="table-responsive">
                 <table class="table table-hover table-sm align-middle mb-0" id="jobs-table">
                     <thead>
@@ -178,10 +179,11 @@
             </div>
 
             {{-- Pagination --}}
-            <div class="d-flex align-items-center justify-content-between mt-2 flex-wrap gap-2" id="pagination-bar">
+            <div class="table-pagination d-flex align-items-center justify-content-between flex-wrap gap-2" id="pagination-bar">
                 <span class="text-muted small" id="pagination-info"></span>
                 <div class="d-flex gap-1" id="pagination-controls"></div>
             </div>
+            </div>{{-- /.table-card --}}
         </div>
 
         {{-- Activity Feed --}}

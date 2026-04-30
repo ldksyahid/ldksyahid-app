@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
 <style>
 /* ── Page Title ── */
 .page-title {
@@ -78,8 +79,91 @@
 }
 .filter-control { max-width: 180px; }
 
+/* Search input in filter bar */
+.filter-bar .form-control {
+    border-radius: 8px !important;
+    border-color: #dee2e6;
+    font-size: 0.875rem;
+    height: 31px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.filter-bar .form-control:focus {
+    border-color: #00a79d !important;
+    box-shadow: 0 0 0 0.2rem rgba(0,167,157,0.25) !important;
+}
+
+/* ── Select2 in Filter Bar ── */
+.filter-bar .select2-container .select2-selection--single {
+    height: 31px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px !important;
+    background-color: #fff;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.filter-bar .select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 29px;
+    padding-left: 10px;
+    padding-right: 28px;
+    font-size: 0.875rem;
+    color: #495057;
+}
+.filter-bar .select2-container .select2-selection--single .select2-selection__arrow {
+    height: 29px;
+    right: 8px;
+}
+.filter-bar .select2-container--open .select2-selection--single,
+.filter-bar .select2-container--focus .select2-selection--single {
+    border-color: #00a79d !important;
+    box-shadow: 0 0 0 0.2rem rgba(0,167,157,0.25) !important;
+    outline: none;
+}
+
+/* ── Select2 Global (Dropdown List) ── */
+.select2-container--default .select2-results__option {
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    color: #333;
+    transition: background-color 0.15s ease;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected],
+.select2-container--default .select2-results__option--highlighted {
+    background-color: #00a79d !important;
+    color: #fff !important;
+}
+.select2-container--default .select2-results__option[aria-selected="true"] {
+    background-color: #e0f7f5 !important;
+    color: #008b84 !important;
+    font-weight: 600;
+}
+.select2-container--default .select2-selection__arrow b {
+    border-color: #00a79d transparent transparent transparent;
+}
+.select2-dropdown {
+    border-radius: 10px !important;
+    border: 1px solid #00bfa6 !important;
+    font-size: 0.875rem;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    animation: select2FadeIn 0.15s ease forwards;
+}
+.select2-results__option { border-bottom: 1px solid #f0fffe; cursor: pointer; }
+.select2-results__option:last-child { border-bottom: none; }
+@keyframes select2FadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Table Card ── */
+.table-card {
+    background: #fff; border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    overflow: hidden;
+}
+.table-card .table-responsive { margin-bottom: 0; }
+
 /* ── Table ── */
-#jobs-table { font-size: 0.875rem; }
+#jobs-table { font-size: 0.875rem; margin-bottom: 0; }
 #jobs-table thead th {
     font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
     letter-spacing: 0.04em; color: #6c757d;
@@ -88,6 +172,12 @@
 }
 #jobs-table tbody td { padding: 0.55rem 0.75rem; vertical-align: middle; }
 #jobs-table tbody tr { transition: background 0.15s ease; }
+
+/* ── Pagination inside card ── */
+.table-pagination {
+    padding: 0.65rem 1rem; border-top: 1px solid #e9ecef;
+    background: #fff;
+}
 
 .tooltip-icon {
     color: #adb5bd; font-size: 0.7rem; cursor: help;
@@ -204,11 +294,37 @@
 /* ── Dark Mode ── */
 html.dark-mode .stat-card,
 html.dark-mode .filter-bar,
+html.dark-mode .table-card,
+html.dark-mode .table-pagination,
 html.dark-mode .activity-feed-wrapper,
 html.dark-mode .modal-content {
     background: #2b2f33 !important;
     box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
 }
+html.dark-mode .table-pagination { border-top-color: #373b3e !important; }
+html.dark-mode .filter-bar .form-control {
+    background-color: #1a1d21; border-color: #373b3e; color: #e4e6eb;
+}
+html.dark-mode .filter-bar .form-control:focus {
+    background-color: #1a1d21; border-color: #00a79d !important; color: #e4e6eb;
+    box-shadow: 0 0 0 0.2rem rgba(0,167,157,0.25) !important;
+}
+html.dark-mode .filter-bar .select2-container .select2-selection--single {
+    background-color: #1a1d21 !important; border-color: #373b3e !important;
+}
+html.dark-mode .filter-bar .select2-container .select2-selection--single .select2-selection__rendered {
+    color: #e4e6eb !important;
+}
+html.dark-mode .filter-bar .select2-container--open .select2-selection--single,
+html.dark-mode .filter-bar .select2-container--focus .select2-selection--single {
+    border-color: #00a79d !important;
+    box-shadow: 0 0 0 0.2rem rgba(0,167,157,0.25) !important;
+}
+html.dark-mode .select2-dropdown {
+    background-color: #2b2f33 !important; border-color: #373b3e !important;
+}
+html.dark-mode .select2-container--default .select2-results__option { color: #e4e6eb !important; }
+html.dark-mode .select2-results__option { border-bottom-color: #373b3e !important; }
 html.dark-mode #jobs-table thead th {
     background: #1a1d21; color: #9ca3af; border-bottom-color: #373b3e;
 }
