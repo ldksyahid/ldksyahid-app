@@ -29,6 +29,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShortLinkController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\GenerateEmailController;
+use App\Http\Controllers\JobQueueLogController;
 use App\Http\Controllers\SettingController;
 
 /*
@@ -292,6 +293,17 @@ Route::middleware(['role:Superadmin'])
     ->group(function () {
         Route::get('/', [GenerateEmailController::class, 'index'])->name('');
         Route::post('/send', [GenerateEmailController::class, 'send'])->name('.send');
+    });
+
+// Route AdminPage Email Config - Job Queue Log
+Route::middleware(['role:Superadmin'])
+    ->prefix('/admin/email-config/job-queue-log')
+    ->name('admin.email-config.job-queue-log')
+    ->group(function () {
+        Route::get('/', [JobQueueLogController::class, 'index'])->name('');
+        Route::get('/data', [JobQueueLogController::class, 'data'])->name('.data');
+        Route::delete('/{id}', [JobQueueLogController::class, 'destroy'])->name('.destroy');
+        Route::delete('/', [JobQueueLogController::class, 'destroyStuck'])->name('.destroy-stuck');
     });
 
 // Route AdminPage News
