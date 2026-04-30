@@ -106,13 +106,13 @@
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/subscription', 'admin/email-config']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-paper-plane me-2"></i>Email Config</a>
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/subscription', 'admin/email-config/generate']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-paper-plane me-2"></i>Email Config</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
                         <a href="/admin/subscription" class="dropdown-item {{ $isActive('admin/subscription') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Subscription</a>
                         <a href="/admin/email-config/generate" class="dropdown-item {{ $isActive('admin/email-config/generate') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Generate Email</a>
-                        <a href="/admin/email-config/job-queue-log" class="dropdown-item {{ $isActive('admin/email-config/job-queue-log') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Job Queue Log</a>
                     </div>
                 </div>
+                <a href="/admin/email-config/job-queue-log" class="nav-item nav-link {{ $isActive('admin/email-config/job-queue-log') ? 'active' : '' }}"><i class="fas fa-stream me-2"></i>Job Queue Log</a>
                 <a href="/admin/setting" class="nav-item nav-link {{ $isActive('admin/setting') ? 'active' : '' }}"><i class="fas fa-cog me-2"></i>Setting</a>
             </div>
 
