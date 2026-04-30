@@ -363,6 +363,7 @@ $(document).ready(function () {
     // Form submit
     $('#generateEmailForm').on('submit', function(e) {
         e.preventDefault();
+        var formEl = this;
 
         const subject = $('#subject').val().trim();
         if (!subject) {
@@ -399,7 +400,10 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $('#submitBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Sending...');
-                this.submit();
+                $(formEl).off('submit');
+                formEl.submit();
+            } else {
+                $('#submitBtn').prop('disabled', false).html('<i class="fas fa-paper-plane me-1"></i> Send Email');
             }
         });
     });
