@@ -13,11 +13,11 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Dispatcher job: query semua subscriber aktif, lalu dispatch SendSingleMailJob
- * per email sehingga setiap pengiriman berdiri sendiri.
+ * Dispatcher job: queries all active subscribers, then dispatches
+ * a SendSingleMailJob per email so each send is independent.
  *
- * Dengan $tries = 1, dispatcher tidak pernah retry — mencegah duplicate dispatch.
- * Retry per-email ditangani oleh SendSingleMailJob ($tries = 3).
+ * With $tries = 1, the dispatcher never retries — preventing duplicate dispatch.
+ * Per-email retry is handled by SendSingleMailJob.
  */
 class SendArticleNewsletterJob implements ShouldQueue
 {
@@ -44,8 +44,11 @@ class SendArticleNewsletterJob implements ShouldQueue
             return;
         }
 
-        foreach ($emails as $email) {
-            SendSingleMailJob::dispatch($email, new ArticleNewsletterMail($article, $email));
+        foreach ($emails as $index => $email) {
+            $delaySec = (int) floor($index / 10) * 60;
+
+            SendSingleMailJob::dispatch($email, new ArticleNewsletterMail($article, $email))
+                ->delay(now()->addSeconds($delaySec));
         }
 
         Log::info("[SendArticleNewsletterJob] Dispatched {$emails->count()} individual send jobs for article ID {$this->articleId}.");

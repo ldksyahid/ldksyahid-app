@@ -11,11 +11,11 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Dispatcher job: dispatch SendSingleMailJob per email sehingga setiap
- * pengiriman berdiri sendiri — tidak ada duplicate akibat retry timeout.
+ * Dispatcher job: dispatches a SendSingleMailJob per email so each
+ * send is independent — no duplicates from retry timeouts.
  *
- * File attachment di-cleanup oleh CleanupStorageFilesJob yang di-dispatch
- * dengan delay 30 menit, memberi waktu semua individual send jobs selesai.
+ * File attachments are cleaned up by CleanupStorageFilesJob, dispatched
+ * with a 30-minute delay to allow all individual send jobs to complete.
  */
 class SendGeneratedEmailJob implements ShouldQueue
 {
@@ -40,8 +40,11 @@ class SendGeneratedEmailJob implements ShouldQueue
 
         $mailable = new GeneratedEmailMail($this->subject, $this->body, $this->attachmentPaths);
 
-        foreach ($this->emails as $email) {
-            SendSingleMailJob::dispatch($email, $mailable);
+        foreach ($this->emails as $index => $email) {
+            $delaySec = (int) floor($index / 10) * 60;
+
+            SendSingleMailJob::dispatch($email, $mailable)
+                ->delay(now()->addSeconds($delaySec));
         }
 
         Log::info("[SendGeneratedEmailJob] Dispatched " . count($this->emails) . " individual send jobs. Subject: \"{$this->subject}\".");
