@@ -13,18 +13,18 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Dispatcher job: query semua subscriber aktif, lalu dispatch SendSingleMailJob
- * per email sehingga setiap pengiriman berdiri sendiri.
+ * Dispatcher job: queries all active subscribers, then dispatches
+ * a SendSingleMailJob per email so each send is independent.
  *
- * Dengan $tries = 1, dispatcher tidak pernah retry — mencegah duplicate dispatch.
- * Retry per-email ditangani oleh SendSingleMailJob ($tries = 3).
+ * With $tries = 1, the dispatcher never retries — preventing duplicate dispatch.
+ * Per-email retry is handled by SendSingleMailJob.
  */
 class SendNewsletterJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Tidak perlu retry: jika dispatcher gagal, tidak ada email yang keluar ganda.
+     * No retry needed: if the dispatcher fails, no duplicate emails are sent.
      */
     public int $tries = 1;
 
@@ -48,8 +48,13 @@ class SendNewsletterJob implements ShouldQueue
             return;
         }
 
-        foreach ($emails as $email) {
-            SendSingleMailJob::dispatch($email, new NewsletterMail($news, $email));
+        foreach ($emails as $index => $email) {
+            // Staggered delay: 10 emails per minute (matching rate limiter)
+            // Batch 0 → 0s, batch 1 → 60s, etc.
+            $delaySec = (int) floor($index / 10) * 60;
+
+            SendSingleMailJob::dispatch($email, new NewsletterMail($news, $email))
+                ->delay(now()->addSeconds($delaySec));
         }
 
         Log::info("[SendNewsletterJob] Dispatched {$emails->count()} individual send jobs for news ID {$this->newsId}.");

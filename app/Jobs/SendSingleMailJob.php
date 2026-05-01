@@ -15,22 +15,29 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 /**
- * Kirim satu email ke satu penerima.
- * Job ini di-dispatch oleh dispatcher jobs (SendNewsletterJob, dll.)
- * sehingga setiap email berdiri sendiri — tidak ada duplicate akibat retry.
+ * Send a single email to one recipient.
+ * Dispatched by dispatcher jobs (SendNewsletterJob, etc.)
+ * so each email is independent — no duplicates from retries.
  */
 class SendSingleMailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Jumlah percobaan lebih tinggi agar job dapat bertahan beberapa hari
-     * saat Gmail daily limit sedang aktif dan job di-release ke esok hari.
+     * Unlimited pickup attempts, since the rate limiter and
+     * WaitForGmailDailyReset often release the job without a real error.
+     * Only actual exceptions are counted via $maxExceptions.
      */
-    public int $tries = 10;
+    public int $tries = 0;
 
     /**
-     * Timeout per pengiriman satu email.
+     * Number of real exceptions (not releases from rate limiter/middleware)
+     * before the job is marked as permanently failed.
+     */
+    public int $maxExceptions = 5;
+
+    /**
+     * Timeout per single email send.
      */
     public int $timeout = 60;
 
@@ -41,8 +48,8 @@ class SendSingleMailJob implements ShouldQueue
 
     /**
      * Middleware stack:
-     * 1. RateLimited  — batasi 10 email/menit agar tidak kena throttle SMTP
-     * 2. WaitForGmailDailyReset — tunda job jika daily limit Gmail sedang aktif
+     * 1. RateLimited  — limit to 10 emails/min to avoid SMTP throttling
+     * 2. WaitForGmailDailyReset — hold job if Gmail daily limit is active
      */
     public function middleware(): array
     {
@@ -53,8 +60,8 @@ class SendSingleMailJob implements ShouldQueue
     }
 
     /**
-     * Tunggu sebelum retry akibat SMTP error sementara (bukan daily limit).
-     * Daily limit ditangani oleh WaitForGmailDailyReset middleware.
+     * Backoff before retry on transient SMTP errors (not daily limit).
+     * Daily limit is handled by WaitForGmailDailyReset middleware.
      */
     public function backoff(): array
     {
@@ -67,23 +74,23 @@ class SendSingleMailJob implements ShouldQueue
             Mail::to($this->email)->send($this->mailable);
         } catch (\Swift_TransportException $e) {
             if ($this->isGmailDailyLimitError($e)) {
-                // Set cache flag selama 24 jam — middleware akan menahan job lain
+                // Set 24-hour cache flag — middleware will hold other jobs
                 $resetAt = now()->addHours(24);
                 Cache::put('gmail_daily_limit_exceeded', $resetAt->timestamp, $resetAt);
 
-                // Tunda job ini sampai limit selesai
+                // Release this job until the limit resets
                 $this->release((int) $resetAt->diffInSeconds(now()));
                 return;
             }
 
-            // SMTP error lain (koneksi terputus, dll.) — retry normal dengan backoff
+            // Other SMTP errors (connection lost, etc.) — normal retry with backoff
             throw $e;
         }
     }
 
     public function failed(\Throwable $exception): void
     {
-        Log::error("[SendSingleMailJob] Gagal kirim ke {$this->email} setelah {$this->tries}x percobaan: " . $exception->getMessage());
+        Log::error("[SendSingleMailJob] Failed to send to {$this->email} after {$this->maxExceptions} exceptions: " . $exception->getMessage());
     }
 
     private function isGmailDailyLimitError(\Swift_TransportException $e): bool
