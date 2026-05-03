@@ -8,7 +8,6 @@ use App\Models\MsSetting;
 use App\Models\MsShortlink;
 use App\Models\ReqShortlink;
 use App\Services\Fonnte;
-use AshAllenDesign\ShortURL\Classes\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -83,13 +82,18 @@ class FonnteWebhookController extends Controller
         }
 
         try {
-            $builder = new Builder();
-            $shortURL = $builder
-                ->destinationUrl($req->defaultLink)
-                ->urlKey($urlKey)
-                ->make();
-
+            // Create shortlink directly (bypass Builder to avoid Auth::user() dependency)
             $shortlinkUrl = config('app.url') . '/' . $urlKey;
+
+            MsShortlink::create([
+                'destination_url'      => $req->defaultLink,
+                'default_short_url'    => $shortlinkUrl,
+                'url_key'              => $urlKey,
+                'single_use'           => false,
+                'track_visits'         => true,
+                'redirect_status_code' => 301,
+                'created_by'           => 'Fonnte Webhook',
+            ]);
 
             // Update request record
             $req->update(['fixCustomLink' => $shortlinkUrl]);
@@ -117,9 +121,10 @@ class FonnteWebhookController extends Controller
     private function rejectRequest(ReqShortlink $req, string $cacheKey): void
     {
         Fonnte::sendShortlinkRejected([
-            'name'       => $req->name,
-            'whatsapp'   => $req->whatsapp,
-            'customLink' => $req->customLink,
+            'name'        => $req->name,
+            'whatsapp'    => $req->whatsapp,
+            'customLink'  => $req->customLink,
+            'defaultLink' => $req->defaultLink,
         ]);
 
         Cache::forget($cacheKey);
