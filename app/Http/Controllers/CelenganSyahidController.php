@@ -9,7 +9,7 @@ use App\Http\Controllers\LibraryFunctionController as LFC;
 use App\Models\Campaign;
 use App\Models\Donation;
 use App\Services\Xendit;
-use App\Services\Wablas;
+use App\Services\Fonnte;
 use RealRashid\SweetAlert\Facades\Alert;
 use Laravolt\Indonesia\Models\Province;
 use Laravolt\Indonesia\Models\City;
@@ -197,7 +197,7 @@ class CelenganSyahidController extends Controller
                 'expiredDate'    => $formattedDate,
             ];
 
-            Wablas::sendInvoiceSimpleText($data);
+            Fonnte::sendInvoiceSimpleText($data);
             Mail::to($request->input('email_donatur'))->send(new DonationInvoice($data));
 
             return Redirect::route('service.celengansyahid.detail.donateNow.status', [
@@ -267,7 +267,7 @@ class CelenganSyahidController extends Controller
             if ($status === 'PAID') {
                 $donationData = Donation::with('campaign')->where('doc_no', $external_id)->first();
                 if ($donationData) {
-                    Wablas::sendPaidSimpleText([
+                    Fonnte::sendPaidSimpleText([
                         'donaturName'    => $donationData->nama_donatur,
                         'donationAmount' => $donationData->jumlah_donasi,
                         'donaturTelp'    => $donationData->no_telp_donatur,
