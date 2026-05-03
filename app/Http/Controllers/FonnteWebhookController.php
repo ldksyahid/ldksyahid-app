@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Log;
 
 class FonnteWebhookController extends Controller
 {
+    private function notifyAdmin(string $message)
+    {
+        Fonnte::send($this->getAdminPhone(), $message);
+    }
+
     /**
      * Handle incoming Fonnte webhook (WhatsApp message received).
      */
@@ -109,8 +114,18 @@ class FonnteWebhookController extends Controller
             Cache::forget($cacheKey);
 
             Log::info('Fonnte webhook: shortlink approved', ['req_id' => $req->id, 'url_key' => $urlKey]);
+            $this->notifyAdmin(
+                "✅ *SHORTLINK BERHASIL DIKIRIM*\n\n"
+                . "👤 {$req->name}\n"
+                . "📱 {$req->whatsapp}\n\n"
+                . "🔗 {$shortlinkUrl}\n\n"
+                . "Status: Pesan berhasil dikirim ke user."
+            );
         } catch (\Exception $e) {
-            Fonnte::send($this->getAdminPhone(), "⚠️ *Gagal buat shortlink:* " . $e->getMessage() . "\nSilahkan proses manual via web panel.");
+            $this->notifyAdmin(
+                "⚠️ *Gagal buat shortlink:* " . $e->getMessage() . "\nSilahkan proses manual via web panel."
+            );
+
             Log::error('Fonnte webhook: shortlink creation failed', ['req_id' => $req->id, 'error' => $e->getMessage()]);
         }
     }
@@ -130,6 +145,14 @@ class FonnteWebhookController extends Controller
         Cache::forget($cacheKey);
 
         Log::info('Fonnte webhook: shortlink rejected', ['req_id' => $req->id]);
+
+        $this->notifyAdmin(
+            "❌ *SHORTLINK DITOLAK & NOTIF TERKIRIM*\n\n"
+            . "👤 {$req->name}\n"
+            . "📱 {$req->whatsapp}\n\n"
+            . "✂️ {$req->customLink}\n\n"
+            . "Status: Pesan penolakan berhasil dikirim ke user."
+        );
     }
 
     /**
@@ -157,7 +180,7 @@ class FonnteWebhookController extends Controller
     private function isAdminCp(string $normalizedSender): bool
     {
         $cpPhone = MsSetting::getSettingValue1(Key1::LAYANAN, Key2::CpShortlink);
-        $cpPhone = !empty($cpPhone) ? $cpPhone : '+6281317209305';
+        $cpPhone = !empty($cpPhone) ? $cpPhone : '+62895394755672';
         $normalizedCp = preg_replace('/[^0-9]/', '', $cpPhone);
 
         return $normalizedSender === $normalizedCp;
@@ -169,6 +192,6 @@ class FonnteWebhookController extends Controller
     private function getAdminPhone(): string
     {
         $cpPhone = MsSetting::getSettingValue1(Key1::LAYANAN, Key2::CpShortlink);
-        return !empty($cpPhone) ? $cpPhone : '+6281317209305';
+        return !empty($cpPhone) ? $cpPhone : '+62895394755672';
     }
 }
