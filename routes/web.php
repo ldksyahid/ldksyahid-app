@@ -31,6 +31,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\GenerateEmailController;
 use App\Http\Controllers\JobQueueLogController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\FonnteWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -167,6 +168,9 @@ Route::middleware('throttle:10,1')->post('/celengansyahid/donation/store', [Cele
 
 // Xendit webhook: max 120 callbacks/minute (Xendit retries are frequent)
 Route::middleware('throttle:120,1')->post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+
+// Fonnte WhatsApp webhook
+Route::middleware('throttle:60,1')->post('/webhook/fonnte', [FonnteWebhookController::class, 'handle'])->name('webhook.fonnte');
 
 // Route LandingPage Catalog Books
 Route::get('/perpustakaan', [CatalogBooksController::class, 'index'])->name('catalog.books.index');

@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        '/celengansyahid/donation/callback'
+        '/celengansyahid/donation/callback',
+        '/webhook/fonnte',
     ];
 }
