@@ -7,6 +7,7 @@ use App\Constants\SettingKey\Key2;
 use App\Models\MsSetting;
 use Illuminate\Http\Request;
 use App\Models\ReqShortlink;
+use App\Services\Fonnte;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RequestShortlinkController extends Controller
@@ -48,6 +49,20 @@ class RequestShortlinkController extends Controller
             'defaultLink' => $request->defaultLink,
             'customLink'  => $request->customLink,
             'note'        => $request->note,
+        ]);
+
+        // Send WhatsApp notification to CP Shortlink
+        $getCpShortlink = MsSetting::getSettingValue1(Key1::LAYANAN, Key2::CpShortlink);
+        $cpPhone = !empty($getCpShortlink) ? $getCpShortlink : '+6281317209305';
+
+        Fonnte::sendShortlinkRequestNotification([
+            'name'        => $request->name,
+            'email'       => $request->email,
+            'whatsapp'    => $request->whatsapp,
+            'defaultLink' => $request->defaultLink,
+            'customLink'  => $request->customLink,
+            'note'        => $request->note,
+            'cpPhone'     => $cpPhone,
         ]);
 
         if ($request->ajax()) {

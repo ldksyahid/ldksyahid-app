@@ -45,4 +45,29 @@ class Fonnte
 
         return self::send($data['donaturTelp'], $message);
     }
+
+    public static function sendShortlinkRequestNotification($data)
+    {
+        $appUrl = config('app.url');
+        $adminUrl = $appUrl . '/admin/reqservice/shortlink';
+        $date = now()->format('d M Y, H:i') . ' WIB';
+
+        $message = "📩 *[REQUEST SHORTLINK BARU]* 📩\n\n"
+            . "_Permintaan shortlink baru!_\n\n"
+            . "➖➖➖➖➖➖➖➖➖\n"
+            . "📋 *Detail Permintaan:*\n\n"
+            . "👤 *Nama:* " . $data['name'] . "\n"
+            . "📧 *Email:* " . $data['email'] . "\n"
+            . "📱 *WhatsApp:* " . $data['whatsapp'] . "\n\n"
+            . "🔗 *Link Asli:*\n" . $data['defaultLink'] . "\n\n"
+            . "✂️ *Custom Link yang Diminta:*\n" . $data['customLink'] . "\n\n"
+            . "📝 *Catatan:*\n" . $data['note'] . "\n\n"
+            . "🕐 *Waktu Request:* " . $date . "\n"
+            . "➖➖➖➖➖➖➖➖➖\n\n"
+            . "Silahkan proses permintaan ini melalui halaman admin:\n"
+            . $adminUrl . "\n\n"
+            . "#LDKSyahid\n#LayananShortlink";
+
+        return self::send($data['cpPhone'], $message);
+    }
 }
