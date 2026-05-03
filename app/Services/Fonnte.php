@@ -76,30 +76,27 @@ class Fonnte
         return self::send($data['cpPhone'], $message);
     }
 
-   public static function sendShortlinkApproved($data)
+    public static function sendShortlinkApproved($data)
     {
-        $adminName = $data['adminName'] ?? 'Admin';
-
         $angkatan = MsSetting::getSettingValue1(Key1::LAYANAN, 'Hashtag Angkatan Shortlink') ?: 'PendarCakrawala';
         $cp = MsSetting::getSettingValue1(Key1::LAYANAN, Key2::CpShortlink) ?: '-';
+        $namePerson = MsSetting::getSettingValue1(Key1::LAYANAN, 'Name Person Shortlink') ?: 'Admin';
 
         $message = "*[KUSTOM URL KAMU SUDAH JADI]*\n\n"
             . "_Assalammu'alaikum_\n\n"
-            . "Halo {$data['name']} 😀, Perkenalkan Saya _{$adminName}_, Berikut hasil link yang telah kami Kustom menggunakan layanan kami :\n\n"
+            . "Halo {$data['name']} 😀\n\n"
+            . "Berikut hasil link yang telah kami kustom:\n\n"
 
-            // 🔗 HASIL SHORTLINK
             . "🔗 *Link Kustom:*\n{$data['shortlinkUrl']}\n\n"
-
-            // 🌐 LINK ASLI
             . "🌐 *Link Asal:*\n{$data['defaultLink']}\n\n"
 
-            . "*Link Tersebut Wajib digunakan dengan Sebagaimana Mestinya*\n\n"
+            . "*Link tersebut wajib digunakan dengan sebagaimana mestinya*\n\n"
 
-            // 📱 KONTAK ADMIN
-            . "Jika ada kendala, silakan hubungi admin:\n"
+            // ✅ tambah nama admin
+            . "Jika ada kendala, hubungi admin ({$namePerson}):\n"
             . "📱 {$cp}\n\n"
 
-            . "Terimakasih {$data['name']} karena telah menggunakan layanan kami 😉\n\n"
+            . "Terimakasih {$data['name']} telah menggunakan layanan kami 😉\n\n"
             . "_Wassalammua'laikum_\n\n"
             . "#KitaAdalahSaudara\n"
             . "#LDKSyahid\n"
@@ -111,25 +108,21 @@ class Fonnte
 
     public static function sendShortlinkRejected($data)
     {
-        $adminName = $data['adminName'] ?? 'Admin';
-
         $angkatan = MsSetting::getSettingValue1(Key1::LAYANAN, 'Hashtag Angkatan Shortlink') ?: 'PendarCakrawala';
         $cp = MsSetting::getSettingValue1(Key1::LAYANAN, Key2::CpShortlink) ?: '-';
+        $namePerson = MsSetting::getSettingValue1(Key1::LAYANAN, 'Name Person Shortlink') ?: 'Admin';
 
         $message = "*[KUSTOM URL TIDAK DAPAT DIPROSES]*\n\n"
             . "_Assalammu'alaikum_\n\n"
-            . "Halo {$data['name']} 😀, Perkenalkan Saya _{$adminName}_.\n\n"
+            . "Halo {$data['name']} 🙏\n\n"
 
-            // ✂️ CUSTOM REQUEST
-            . "✂️ *Custom Link Diminta:*\n{$data['customLink']}\n\n"
-
-            // 🌐 LINK ASAL
+            . "✂️ *Custom Link:*\n{$data['customLink']}\n\n"
             . "🌐 *Link Asal:*\n{$data['defaultLink']}\n\n"
 
             . "Mohon maaf, permintaan tersebut belum dapat kami proses saat ini.\n\n"
 
-            // 📱 KONTAK ADMIN
-            . "Silakan hubungi admin untuk informasi lebih lanjut:\n"
+            // ✅ tambah nama admin
+            . "Silakan hubungi admin ({$namePerson}) untuk informasi lebih lanjut:\n"
             . "📱 {$cp}\n\n"
 
             . "Terimakasih atas pengertiannya 🙏\n\n"
