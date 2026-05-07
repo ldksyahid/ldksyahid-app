@@ -104,12 +104,14 @@ $(function () {
         $('#stat-pending').text(Number(stats.pending).toLocaleString());
         $('#stat-processing').text(Number(stats.processing).toLocaleString());
         $('#stat-delayed').text(Number(stats.delayed).toLocaleString());
+        $('#stat-failed').text(Number(stats.failed).toLocaleString());
 
         if (previousStats) {
             setChange('total',      stats.total      - previousStats.total);
             setChange('pending',    stats.pending    - previousStats.pending);
             setChange('processing', stats.processing - previousStats.processing);
             setChange('delayed',    stats.delayed    - previousStats.delayed);
+            setChange('failed',     stats.failed     - previousStats.failed);
         }
         previousStats = stats;
 

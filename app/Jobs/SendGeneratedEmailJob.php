@@ -8,20 +8,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 /**
  * Dispatcher job: dispatches a SendSingleMailJob per email so each
  * send is independent — no duplicates from retry timeouts.
  *
- * File attachments are cleaned up by CleanupStorageFilesJob, dispatched
- * with a 30-minute delay to allow all individual send jobs to complete.
+ * Uses a cache lock to prevent duplicate dispatch on retry.
+ * File attachments are cleaned up by CleanupStorageFilesJob.
  */
 class SendGeneratedEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries   = 1;
+    public int $tries   = 3;
     public int $timeout = 120;
 
     public function __construct(
@@ -33,6 +34,14 @@ class SendGeneratedEmailJob implements ShouldQueue
 
     public function handle(): void
     {
+        // Use subject + recipient count + timestamp hash as unique key
+        $lockKey = 'generated_email_dispatched_' . md5($this->subject . count($this->emails) . json_encode($this->attachmentPaths));
+
+        if (Cache::has($lockKey)) {
+            Log::info("[SendGeneratedEmailJob] Already dispatched for subject \"{$this->subject}\", skipping duplicate.");
+            return;
+        }
+
         if (empty($this->emails)) {
             Log::info("[SendGeneratedEmailJob] No recipients, job finished.");
             return;
@@ -46,6 +55,8 @@ class SendGeneratedEmailJob implements ShouldQueue
             SendSingleMailJob::dispatch($email, $mailable)
                 ->delay(now()->addSeconds($delaySec));
         }
+
+        Cache::put($lockKey, true, now()->addHours(24));
 
         Log::info("[SendGeneratedEmailJob] Dispatched " . count($this->emails) . " individual send jobs. Subject: \"{$this->subject}\".");
 
