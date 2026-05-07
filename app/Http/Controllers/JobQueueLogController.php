@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TrJobQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class JobQueueLogController extends Controller
 {
@@ -16,8 +17,9 @@ class JobQueueLogController extends Controller
 
     public function data(Request $request)
     {
-        $now   = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
-        $query = TrJobQueue::query();
+        $now               = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
+        $dailyLimitActive  = $this->isGmailDailyLimitActive();
+        $query             = TrJobQueue::query();
 
         switch ($request->get('status', 'all')) {
             case 'pending':
@@ -28,9 +30,21 @@ class JobQueueLogController extends Controller
                 break;
             case 'delayed':
                 $query->whereNull('reservedDate')->where('availableDate', '>', $now);
+                if ($dailyLimitActive) {
+                    $query->where('attempts', 0);
+                }
+                break;
+            case 'daily_limit':
+                $query->whereNull('reservedDate')->where('availableDate', '>', $now)->where('attempts', '>', 0);
                 break;
             case 'stuck':
                 $query->where('attempts', '>=', 8);
+                if ($dailyLimitActive) {
+                    $query->where(function ($q) use ($now) {
+                        $q->where('availableDate', '<=', $now)
+                          ->orWhereNotNull('reservedDate');
+                    });
+                }
                 break;
         }
 
@@ -44,22 +58,23 @@ class JobQueueLogController extends Controller
 
         $jobs = $query->orderByDesc('ID')->paginate(15);
 
-        $jobs->getCollection()->transform(function ($job) use ($now) {
+        $jobs->getCollection()->transform(function ($job) use ($now, $dailyLimitActive) {
             $payload            = json_decode($job->payload, true) ?? [];
             $job->job_type      = $this->parseJobType($payload);
             $job->job_full      = $payload['displayName'] ?? 'Unknown';
             $job->job_uuid      = $payload['uuid'] ?? '-';
-            $job->job_status    = $this->computeStatus($job, $now);
+            $job->job_status    = $this->computeStatus($job, $now, $dailyLimitActive);
             $job->mail_info     = $this->extractMailInfo($payload);
             $job->payload_clean = $this->cleanPayload($payload);
             return $job;
         });
 
         return response()->json([
-            'jobs'        => $jobs,
-            'stats'       => $this->getStats($now),
-            'queues'      => TrJobQueue::distinct()->pluck('queue'),
-            'server_time' => $now,
+            'jobs'              => $jobs,
+            'stats'             => $this->getStats($now, $dailyLimitActive),
+            'queues'            => TrJobQueue::distinct()->pluck('queue'),
+            'server_time'       => $now,
+            'gmail_daily_limit' => $dailyLimitActive,
         ]);
     }
 
@@ -75,18 +90,45 @@ class JobQueueLogController extends Controller
 
     public function destroyStuck()
     {
-        $count = TrJobQueue::where('attempts', '>=', 8)->delete();
+        $query = TrJobQueue::where('attempts', '>=', 8);
+
+        // When daily limit is active, don't delete jobs that are just waiting for reset
+        if ($this->isGmailDailyLimitActive()) {
+            $now = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
+            $query->where(function ($q) use ($now) {
+                $q->where('availableDate', '<=', $now)
+                  ->orWhereNotNull('reservedDate');
+            });
+        }
+
+        $count = $query->delete();
         return response()->json(['success' => true, 'deleted' => $count]);
     }
 
-    private function getStats(string $now): array
+    private function getStats(string $now, bool $dailyLimitActive): array
     {
+        $delayedBase = TrJobQueue::whereNull('reservedDate')->where('availableDate', '>', $now);
+        $stuckBase   = TrJobQueue::where('attempts', '>=', 8);
+
+        $dailyLimitCount = 0;
+        if ($dailyLimitActive) {
+            $dailyLimitCount = (clone $delayedBase)->where('attempts', '>', 0)->count();
+            $delayedCount    = (clone $delayedBase)->where('attempts', 0)->count();
+            $stuckCount      = (clone $stuckBase)->where(function ($q) use ($now) {
+                $q->where('availableDate', '<=', $now)->orWhereNotNull('reservedDate');
+            })->count();
+        } else {
+            $delayedCount = $delayedBase->count();
+            $stuckCount   = $stuckBase->count();
+        }
+
         return [
-            'total'      => TrJobQueue::count(),
-            'pending'    => TrJobQueue::whereNull('reservedDate')->where('availableDate', '<=', $now)->count(),
-            'processing' => TrJobQueue::whereNotNull('reservedDate')->count(),
-            'delayed'    => TrJobQueue::whereNull('reservedDate')->where('availableDate', '>', $now)->count(),
-            'stuck'      => TrJobQueue::where('attempts', '>=', 8)->count(),
+            'total'       => TrJobQueue::count(),
+            'pending'     => TrJobQueue::whereNull('reservedDate')->where('availableDate', '<=', $now)->count(),
+            'processing'  => TrJobQueue::whereNotNull('reservedDate')->count(),
+            'delayed'     => $delayedCount,
+            'stuck'       => $stuckCount,
+            'daily_limit' => $dailyLimitCount,
         ];
     }
 
@@ -100,12 +142,20 @@ class JobQueueLogController extends Controller
         return 'Unknown';
     }
 
-    private function computeStatus($job, string $now): string
+    private function computeStatus($job, string $now, bool $dailyLimitActive): string
     {
+        if ($dailyLimitActive && $job->availableDate > $now && is_null($job->reservedDate) && $job->attempts > 0) {
+            return 'daily_limit';
+        }
         if ($job->attempts >= 8) return 'stuck';
         if (!is_null($job->reservedDate)) return 'processing';
         if ($job->availableDate > $now) return 'delayed';
         return 'pending';
+    }
+
+    private function isGmailDailyLimitActive(): bool
+    {
+        return Cache::has('gmail_daily_limit_exceeded');
     }
 
     private function extractMailInfo(array $payload): array
