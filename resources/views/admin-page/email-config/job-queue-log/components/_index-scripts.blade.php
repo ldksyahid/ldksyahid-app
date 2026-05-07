@@ -16,6 +16,9 @@ $(function () {
 
     var POLL_INTERVAL   = 3000;
     var STUCK_THRESHOLD = 8;
+    var CRON_INTERVAL   = 600;  // cron schedule:run every 10 minutes (seconds)
+    var serverOffset    = 0;    // ms difference: serverTime - clientTime
+    var countdownStarted = false;
 
     // CSRF for AJAX mutations
     $.ajaxSetup({
@@ -88,6 +91,8 @@ $(function () {
         $.getJSON('/admin/job-queue-log/data', params)
             .done(function (response) {
                 isFailedView = !!response.is_failed_view;
+                syncServerTime(response.server_time);
+                if (!countdownStarted) { startWorkerCountdown(); countdownStarted = true; }
                 updateStats(response.stats, response.gmail_daily_limit);
                 updateQueuesFilter(response.queues);
                 updateTable(response.jobs);
@@ -141,6 +146,39 @@ $(function () {
         } else {
             $('#btn-delete-stuck').show();
             $('#btn-retry-all-failed, #btn-delete-all-failed').hide();
+        }
+    }
+
+    // ── Worker Countdown (synced to server time) ────────────────────────
+    function syncServerTime(serverTimeStr) {
+        var st = new Date(serverTimeStr.replace(' ', 'T'));
+        serverOffset = st.getTime() - Date.now();
+    }
+
+    function getSecondsUntilNextCron() {
+        var now = new Date(Date.now() + serverOffset);
+        var elapsed = (now.getMinutes() % 10) * 60 + now.getSeconds();
+        return CRON_INTERVAL - elapsed;
+    }
+
+    function startWorkerCountdown() {
+        $('#worker-countdown').show();
+        updateCountdownDisplay();
+        setInterval(updateCountdownDisplay, 1000);
+    }
+
+    function updateCountdownDisplay() {
+        var secs = getSecondsUntilNextCron();
+        var m = Math.floor(secs / 60);
+        var s = secs % 60;
+        $('#countdown-value').text(m + ':' + (s < 10 ? '0' : '') + s);
+
+        // Visual urgency: highlight when worker is about to run
+        var $el = $('#worker-countdown');
+        if (secs <= 30) {
+            $el.addClass('countdown-imminent');
+        } else {
+            $el.removeClass('countdown-imminent');
         }
     }
 
