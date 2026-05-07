@@ -189,6 +189,8 @@
 .badge-delayed     .status-dot { background: #0063cc; }
 .badge-daily-limit .status-dot { background: #e65100; animation: livePulse 1.5s ease-in-out infinite; }
 .badge-stuck       .status-dot { background: #dc3545; }
+.badge-failed      { background: rgba(108,117,125,0.12); color: #495057; border: 1px solid rgba(108,117,125,0.25); }
+.badge-failed      .status-dot { background: #6c757d; }
 
 /* ── Daily Limit Alert Banner ── */
 .daily-limit-alert {
@@ -277,6 +279,8 @@
     .filter-bar .form-control,
     .filter-bar .filter-search { max-width: 100% !important; width: 100% !important; }
     .filter-bar #btn-delete-stuck { margin-left: 0 !important; width: 100%; }
+    .filter-bar .filter-actions { width: 100%; display: flex; flex-direction: column; gap: 0.35rem; }
+    .filter-bar .filter-actions .btn { width: 100%; margin-left: 0 !important; }
 
     /* Daily Limit Banner */
     .daily-limit-alert { padding: 0.65rem 0.8rem; font-size: 0.8rem; }
@@ -379,6 +383,7 @@ html.dark-mode .badge-pending    { background: rgba(255,193,7,0.1);  border-colo
 html.dark-mode .badge-processing { background: rgba(40,167,69,0.1);  border-color: rgba(40,167,69,0.2); }
 html.dark-mode .badge-delayed    { background: rgba(0,123,255,0.08); border-color: rgba(0,123,255,0.15); }
 html.dark-mode .badge-stuck       { background: rgba(220,53,69,0.1);  border-color: rgba(220,53,69,0.2); }
+html.dark-mode .badge-failed      { background: rgba(108,117,125,0.15); border-color: rgba(108,117,125,0.25); color: #9ca3af; }
 html.dark-mode .badge-daily-limit { background: rgba(255,152,0,0.1);  border-color: rgba(255,152,0,0.2); color: #ffb74d; }
 html.dark-mode .badge-light { background: #374151 !important; color: #e4e6eb !important; border-color: #4b5563 !important; }
 html.dark-mode .daily-limit-alert {

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\TrJobQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class JobQueueLogController extends Controller
 {
@@ -20,9 +22,16 @@ class JobQueueLogController extends Controller
     {
         $now               = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
         $dailyLimitActive  = $this->isGmailDailyLimitActive();
-        $query             = TrJobQueue::query();
+        $status            = $request->get('status', 'all');
 
-        switch ($request->get('status', 'all')) {
+        // Failed jobs come from a different table — handle separately
+        if ($status === 'failed') {
+            return $this->failedData($request, $now, $dailyLimitActive);
+        }
+
+        $query = TrJobQueue::query();
+
+        switch ($status) {
             case 'pending':
                 $query->whereNull('reservedDate')->where('availableDate', '<=', $now);
                 break;
@@ -67,6 +76,7 @@ class JobQueueLogController extends Controller
             $job->job_status    = $this->computeStatus($job, $now, $dailyLimitActive);
             $job->mail_info     = $this->extractMailInfo($payload);
             $job->payload_clean = $this->cleanPayload($payload);
+            unset($job->payload);
             return $job;
         });
 
@@ -76,6 +86,49 @@ class JobQueueLogController extends Controller
             'queues'            => TrJobQueue::distinct()->pluck('queue'),
             'server_time'       => $now,
             'gmail_daily_limit' => $dailyLimitActive,
+            'is_failed_view'    => false,
+        ]);
+    }
+
+    private function failedData(Request $request, string $now, bool $dailyLimitActive)
+    {
+        $query = DB::table('failed_jobs');
+
+        if ($request->filled('queue') && $request->get('queue') !== 'all') {
+            $query->where('queue', $request->get('queue'));
+        }
+
+        if ($request->filled('search')) {
+            $query->where('payload', 'like', '%' . $request->get('search') . '%');
+        }
+
+        $jobs = $query->orderByDesc('id')->paginate(15);
+
+        $jobs->getCollection()->transform(function ($job) {
+            $payload            = json_decode($job->payload, true) ?? [];
+            $job->ID            = $job->id;
+            $job->job_type      = $this->parseJobType($payload);
+            $job->job_full      = $payload['displayName'] ?? 'Unknown';
+            $job->job_uuid      = $payload['uuid'] ?? $job->uuid;
+            $job->job_status    = 'failed';
+            $job->mail_info     = $this->extractMailInfo($payload);
+            $job->payload_clean = $this->cleanPayload($payload);
+            $job->attempts      = '-';
+            $job->availableDate = null;
+            $job->reservedDate  = null;
+            $job->createdDate   = $job->failed_at;
+            $job->exception_short = Str::limit($job->exception, 300);
+            unset($job->exception, $job->payload);
+            return $job;
+        });
+
+        return response()->json([
+            'jobs'              => $jobs,
+            'stats'             => $this->getStats($now, $dailyLimitActive),
+            'queues'            => TrJobQueue::distinct()->pluck('queue'),
+            'server_time'       => $now,
+            'gmail_daily_limit' => $dailyLimitActive,
+            'is_failed_view'    => true,
         ]);
     }
 
@@ -88,6 +141,54 @@ class JobQueueLogController extends Controller
         $job->delete();
         return response()->json(['success' => true]);
     }
+
+    // ── Failed Job Operations ────────────────────────────────────────────
+
+    public function retryFailed($id)
+    {
+        $job = DB::table('failed_jobs')->where('id', $id)->first();
+        if (!$job) {
+            return response()->json(['success' => false, 'message' => 'Failed job #' . $id . ' not found.'], 404);
+        }
+
+        Artisan::call('queue:retry', ['id' => [$job->uuid]]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function retryAllFailed()
+    {
+        $count = DB::table('failed_jobs')->count();
+        if ($count === 0) {
+            return response()->json(['success' => false, 'message' => 'No failed jobs to retry.'], 404);
+        }
+
+        Artisan::call('queue:retry', ['id' => ['all']]);
+
+        return response()->json(['success' => true, 'retried' => $count]);
+    }
+
+    public function destroyFailed($id)
+    {
+        $job = DB::table('failed_jobs')->where('id', $id)->first();
+        if (!$job) {
+            return response()->json(['success' => false, 'message' => 'Failed job #' . $id . ' not found.'], 404);
+        }
+
+        DB::table('failed_jobs')->where('id', $id)->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function destroyAllFailed()
+    {
+        $count = DB::table('failed_jobs')->count();
+        DB::table('failed_jobs')->truncate();
+
+        return response()->json(['success' => true, 'deleted' => $count]);
+    }
+
+    // ── Stuck Job Operations ─────────────────────────────────────────────
 
     public function destroyStuck()
     {
