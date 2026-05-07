@@ -22,6 +22,10 @@
                         <span class="live-dot" id="live-dot"></span>
                         <span class="live-label" id="live-label">LIVE</span>
                     </div>
+                    <div class="worker-countdown" id="worker-countdown" style="display:none;">
+                        <i class="fas fa-bolt"></i>
+                        Worker in <span id="countdown-value">—</span>
+                    </div>
                     <span class="text-muted small d-none d-sm-inline" id="last-updated-text">Connecting...</span>
                     <button class="btn btn-sm btn-outline-secondary btn-rounded" id="btn-pause-resume">
                         <i class="fas fa-pause me-1"></i>Pause
