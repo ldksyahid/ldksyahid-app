@@ -30,7 +30,7 @@ class JobQueueLogController extends Controller
                 $query->whereNull('reservedDate')->where('availableDate', '>', $now);
                 break;
             case 'stuck':
-                $query->where('attempts', '>=', 3);
+                $query->where('attempts', '>=', 8);
                 break;
         }
 
@@ -75,7 +75,7 @@ class JobQueueLogController extends Controller
 
     public function destroyStuck()
     {
-        $count = TrJobQueue::where('attempts', '>=', 3)->delete();
+        $count = TrJobQueue::where('attempts', '>=', 8)->delete();
         return response()->json(['success' => true, 'deleted' => $count]);
     }
 
@@ -86,7 +86,7 @@ class JobQueueLogController extends Controller
             'pending'    => TrJobQueue::whereNull('reservedDate')->where('availableDate', '<=', $now)->count(),
             'processing' => TrJobQueue::whereNotNull('reservedDate')->count(),
             'delayed'    => TrJobQueue::whereNull('reservedDate')->where('availableDate', '>', $now)->count(),
-            'stuck'      => TrJobQueue::where('attempts', '>=', 3)->count(),
+            'stuck'      => TrJobQueue::where('attempts', '>=', 8)->count(),
         ];
     }
 
@@ -102,7 +102,7 @@ class JobQueueLogController extends Controller
 
     private function computeStatus($job, string $now): string
     {
-        if ($job->attempts >= 3) return 'stuck';
+        if ($job->attempts >= 8) return 'stuck';
         if (!is_null($job->reservedDate)) return 'processing';
         if ($job->availableDate > $now) return 'delayed';
         return 'pending';

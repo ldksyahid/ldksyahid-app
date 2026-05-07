@@ -159,7 +159,6 @@
     /* Info Card */
     .info-card {
         border: 1px solid #dee2e6;
-        border-left: 4px solid #00a79d;
         background-color: #f8f9fa !important;
         border-radius: 8px;
     }
@@ -219,7 +218,6 @@
     }
     html.dark-mode .info-card {
         border-color: #373b3e;
-        border-left-color: #00a79d;
         background-color: #2b2f33 !important;
         color: #e4e6eb;
     }
