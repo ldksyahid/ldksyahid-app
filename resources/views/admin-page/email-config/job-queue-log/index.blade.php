@@ -10,19 +10,19 @@
 
         {{-- Page Header --}}
         <div class="col-12 mb-3">
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 page-header">
                 <div>
                     <h1 class="page-title mb-0">
                         <i class="fas fa-stream me-2"></i>Job Queue Log
                     </h1>
-                    <p class="text-muted mb-0 mt-1 small">Monitor job queue in real-time</p>
+                    <p class="text-muted mb-0 mt-1 small d-none d-md-block">Monitor job queue in real-time</p>
                 </div>
-                <div class="d-flex align-items-center gap-3 flex-wrap">
+                <div class="d-flex align-items-center gap-2 gap-md-3 flex-wrap header-controls">
                     <div class="live-indicator" id="live-indicator">
                         <span class="live-dot" id="live-dot"></span>
                         <span class="live-label" id="live-label">LIVE</span>
                     </div>
-                    <span class="text-muted small" id="last-updated-text">Connecting...</span>
+                    <span class="text-muted small d-none d-sm-inline" id="last-updated-text">Connecting...</span>
                     <button class="btn btn-sm btn-outline-secondary btn-rounded" id="btn-pause-resume">
                         <i class="fas fa-pause me-1"></i>Pause
                     </button>
@@ -111,8 +111,8 @@
                 <select id="filter-queue">
                     <option value="all">All Queues</option>
                 </select>
-                <input type="text" class="form-control form-control-sm filter-control" id="filter-search"
-                    placeholder="Search job type..." style="max-width:200px;">
+                <input type="text" class="form-control form-control-sm filter-search" id="filter-search"
+                    placeholder="Search job type...">
                 <button class="btn btn-sm btn-outline-danger btn-rounded ms-auto" id="btn-delete-stuck">
                     <i class="fas fa-trash-alt me-1"></i>Delete Stuck
                 </button>
