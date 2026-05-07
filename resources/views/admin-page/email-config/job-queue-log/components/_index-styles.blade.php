@@ -39,6 +39,21 @@
     50%       { opacity: 0.5; transform: scale(0.85); }
 }
 
+/* ── Worker Countdown ── */
+.worker-countdown {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(0,123,255,0.08); border: 1px solid rgba(0,123,255,0.2);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 0.75rem; font-weight: 700; color: #0063cc;
+    letter-spacing: 0.02em;
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+.worker-countdown i { font-size: 0.7rem; }
+.worker-countdown.countdown-imminent {
+    background: rgba(40,167,69,0.12); border-color: rgba(40,167,69,0.3);
+    color: #1e7e34; animation: livePulse 1.5s ease-in-out infinite;
+}
+
 /* ── Stats Cards ── */
 .stat-card {
     background: #fff; border-radius: 14px;
@@ -302,10 +317,11 @@
     }
     #pagination-controls .btn { font-size: 0.7rem; padding: 2px 8px; }
 
-    /* Live Indicator */
+    /* Live Indicator & Countdown */
     .live-indicator { padding: 3px 8px; }
     .live-label { font-size: 0.68rem; }
     .live-dot { width: 6px; height: 6px; }
+    .worker-countdown { padding: 3px 8px; font-size: 0.68rem; }
 
     /* Modal */
     .jql-modal-content { border-radius: 10px; }
@@ -373,6 +389,12 @@ html.dark-mode .table { --bs-table-hover-bg: rgba(255,255,255,0.04); }
 html.dark-mode .bg-light { background: #23272b !important; }
 html.dark-mode .live-indicator {
     background: rgba(0,200,83,0.08); border-color: rgba(0,200,83,0.2);
+}
+html.dark-mode .worker-countdown {
+    background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.2); color: #60a5fa;
+}
+html.dark-mode .worker-countdown.countdown-imminent {
+    background: rgba(40,167,69,0.1); border-color: rgba(40,167,69,0.2); color: #4ade80;
 }
 html.dark-mode .detail-infobox { background: #1a1d21; border-color: #373b3e; }
 html.dark-mode .detail-infobox .info-val { color: #e4e6eb; }
