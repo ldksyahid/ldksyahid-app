@@ -6,6 +6,7 @@ use App\Models\TrJobQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class JobQueueLogController extends Controller
 {
@@ -129,6 +130,7 @@ class JobQueueLogController extends Controller
             'delayed'     => $delayedCount,
             'stuck'       => $stuckCount,
             'daily_limit' => $dailyLimitCount,
+            'failed'      => DB::table('failed_jobs')->count(),
         ];
     }
 

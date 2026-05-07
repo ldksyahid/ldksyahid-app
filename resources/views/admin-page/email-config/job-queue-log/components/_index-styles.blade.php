@@ -57,6 +57,7 @@
 .stat-icon-pending    { background: rgba(255,193,7,0.15);  color: #d39e00; }
 .stat-icon-processing { background: rgba(40,167,69,0.12);  color: #28a745; }
 .stat-icon-delayed    { background: rgba(0,123,255,0.12);  color: #0063cc; }
+.stat-icon-failed     { background: rgba(220,53,69,0.12);  color: #dc3545; }
 .stat-info  { flex: 1; min-width: 0; }
 .stat-value { font-size: 1.6rem; font-weight: 700; line-height: 1; color: #212529; }
 .stat-label { font-size: 0.82rem; font-weight: 600; color: #495057; margin-top: 3px; }

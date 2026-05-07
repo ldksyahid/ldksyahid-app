@@ -33,7 +33,7 @@
         {{-- Stats Cards --}}
         <div class="col-12 mb-3">
             <div class="row g-3">
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="stat-card">
                         <div class="stat-icon stat-icon-total"><i class="fas fa-layer-group"></i></div>
                         <div class="stat-info">
@@ -44,7 +44,7 @@
                         <div class="stat-change" id="stat-total-change"></div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="stat-card">
                         <div class="stat-icon stat-icon-pending"><i class="fas fa-clock"></i></div>
                         <div class="stat-info">
@@ -55,7 +55,7 @@
                         <div class="stat-change" id="stat-pending-change"></div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="stat-card">
                         <div class="stat-icon stat-icon-processing"><i class="fas fa-spinner fa-spin-pulse"></i></div>
                         <div class="stat-info">
@@ -66,7 +66,7 @@
                         <div class="stat-change" id="stat-processing-change"></div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="stat-card">
                         <div class="stat-icon stat-icon-delayed"><i class="fas fa-hourglass-half"></i></div>
                         <div class="stat-info">
@@ -75,6 +75,17 @@
                             <div class="stat-sub">scheduled</div>
                         </div>
                         <div class="stat-change" id="stat-delayed-change"></div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-failed"><i class="fas fa-times-circle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-failed">—</div>
+                            <div class="stat-label">Failed</div>
+                            <div class="stat-sub">permanently failed</div>
+                        </div>
+                        <div class="stat-change" id="stat-failed-change"></div>
                     </div>
                 </div>
             </div>
