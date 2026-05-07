@@ -118,15 +118,24 @@
                     <option value="delayed">Delayed</option>
                     <option value="daily_limit">Daily Limit</option>
                     <option value="stuck">Stuck</option>
+                    <option value="failed">Failed</option>
                 </select>
                 <select id="filter-queue">
                     <option value="all">All Queues</option>
                 </select>
                 <input type="text" class="form-control form-control-sm filter-search" id="filter-search"
                     placeholder="Search job type...">
-                <button class="btn btn-sm btn-outline-danger btn-rounded ms-auto" id="btn-delete-stuck">
-                    <i class="fas fa-trash-alt me-1"></i>Delete Stuck
-                </button>
+                <div class="d-flex gap-1 ms-auto filter-actions">
+                    <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-stuck">
+                        <i class="fas fa-trash-alt me-1"></i>Delete Stuck
+                    </button>
+                    <button class="btn btn-sm btn-outline-success btn-rounded" id="btn-retry-all-failed" style="display:none;">
+                        <i class="fas fa-redo me-1"></i>Retry All
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-all-failed" style="display:none;">
+                        <i class="fas fa-trash-alt me-1"></i>Delete All Failed
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -251,6 +260,11 @@
                         </div>
                     </div>
 
+                    <div class="col-12" id="m-exception-section" style="display:none;">
+                        <div class="detail-section-title">EXCEPTION</div>
+                        <pre class="raw-payload" id="m-exception" style="display:block; max-height:180px;"></pre>
+                    </div>
+
                     <div class="col-12">
                         <div class="detail-section-title">MAIL INFO</div>
                         <div class="detail-infobox" id="m-mail-info">
@@ -288,6 +302,9 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-success btn-rounded" id="modal-btn-retry" style="display:none;">
+                    <i class="fas fa-redo me-1"></i>Retry Job
+                </button>
                 <button type="button" class="btn btn-sm btn-outline-danger btn-rounded" id="modal-btn-delete">
                     <i class="fas fa-trash-alt me-1"></i>Delete Job
                 </button>
