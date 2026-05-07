@@ -130,7 +130,7 @@
                                     Status
                                     <i class="fas fa-info-circle tooltip-icon"
                                         data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Pending = waiting, Processing = reserved by worker, Delayed = scheduled for later, Stuck = attempts ≥ 3 (likely failing)"></i>
+                                        title="Pending = waiting, Processing = reserved by worker, Delayed = scheduled for later, Stuck = attempts ≥ 8 (likely failing)"></i>
                                 </th>
                                 <th class="text-center">
                                     Attempts
