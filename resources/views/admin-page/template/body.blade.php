@@ -1153,7 +1153,6 @@
         }
         html.dark-mode .info-card {
             border-color: #373b3e !important;
-            border-left-color: #00a79d !important;
             background-color: #2b2f33 !important;
             color: #e4e6eb;
         }

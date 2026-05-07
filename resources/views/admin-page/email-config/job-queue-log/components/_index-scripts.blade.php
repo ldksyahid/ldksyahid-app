@@ -12,9 +12,10 @@ $(function () {
     var previousJobs    = {};
     var currentJobs     = {};
     var currentModalId  = null;
+    var isFailedView    = false;
 
     var POLL_INTERVAL   = 3000;
-    var STUCK_THRESHOLD = 3;
+    var STUCK_THRESHOLD = 8;
 
     // CSRF for AJAX mutations
     $.ajaxSetup({
@@ -84,11 +85,13 @@ $(function () {
             page   : currentPage
         };
 
-        $.getJSON('/admin/email-config/job-queue-log/data', params)
+        $.getJSON('/admin/job-queue-log/data', params)
             .done(function (response) {
-                updateStats(response.stats);
+                isFailedView = !!response.is_failed_view;
+                updateStats(response.stats, response.gmail_daily_limit);
                 updateQueuesFilter(response.queues);
                 updateTable(response.jobs);
+                toggleFilterActions();
                 resetUpdateTimer();
                 setLiveState(true);
             })
@@ -99,19 +102,29 @@ $(function () {
     }
 
     // ── Stats ──────────────────────────────────────────────────────────────
-    function updateStats(stats) {
+    function updateStats(stats, gmailDailyLimit) {
         $('#stat-total').text(Number(stats.total).toLocaleString());
         $('#stat-pending').text(Number(stats.pending).toLocaleString());
         $('#stat-processing').text(Number(stats.processing).toLocaleString());
         $('#stat-delayed').text(Number(stats.delayed).toLocaleString());
+        $('#stat-failed').text(Number(stats.failed).toLocaleString());
 
         if (previousStats) {
             setChange('total',      stats.total      - previousStats.total);
             setChange('pending',    stats.pending    - previousStats.pending);
             setChange('processing', stats.processing - previousStats.processing);
             setChange('delayed',    stats.delayed    - previousStats.delayed);
+            setChange('failed',     stats.failed     - previousStats.failed);
         }
         previousStats = stats;
+
+        // Gmail daily limit banner
+        if (gmailDailyLimit && stats.daily_limit > 0) {
+            $('#daily-limit-job-count').text(stats.daily_limit);
+            $('#daily-limit-banner').slideDown(200);
+        } else {
+            $('#daily-limit-banner').slideUp(200);
+        }
     }
 
     function setChange(key, diff) {
@@ -119,6 +132,16 @@ $(function () {
         if (diff === 0) { $el.text('').removeClass('up down'); return; }
         $el.text((diff > 0 ? '▲ +' : '▼ ') + diff)
            .removeClass('up down').addClass(diff > 0 ? 'up' : 'down');
+    }
+
+    function toggleFilterActions() {
+        if (isFailedView) {
+            $('#btn-delete-stuck').hide();
+            $('#btn-retry-all-failed, #btn-delete-all-failed').show();
+        } else {
+            $('#btn-delete-stuck').show();
+            $('#btn-retry-all-failed, #btn-delete-all-failed').hide();
+        }
     }
 
     // ── Queues Filter ──────────────────────────────────────────────────────
@@ -183,18 +206,27 @@ $(function () {
             '<td class="small">' + reserved + '</td>' +
             '<td class="small">' + created + '</td>' +
             '<td>' +
+            '<div class="d-flex gap-1 justify-content-center flex-wrap">' +
             '<button class="btn btn-xs btn-outline-primary btn-detail" data-id="' + j.ID + '">' +
             '<i class="fas fa-eye me-1"></i>Detail</button>' +
-            '</td>' +
+            (isFailedView
+                ? '<button class="btn btn-xs btn-outline-success btn-retry-single" data-id="' + j.ID + '">' +
+                  '<i class="fas fa-redo me-1"></i>Retry</button>' +
+                  '<button class="btn btn-xs btn-outline-danger btn-delete-failed" data-id="' + j.ID + '">' +
+                  '<i class="fas fa-trash-alt me-1"></i>Del</button>'
+                : '') +
+            '</div></td>' +
             '</tr>';
     }
 
     function buildBadge(status) {
         var map = {
-            pending:    ['badge-pending',    'Pending'],
-            processing: ['badge-processing', 'Processing'],
-            delayed:    ['badge-delayed',    'Delayed'],
-            stuck:      ['badge-stuck',      'Stuck'],
+            pending:     ['badge-pending',     'Pending'],
+            processing:  ['badge-processing',  'Processing'],
+            delayed:     ['badge-delayed',     'Delayed'],
+            daily_limit: ['badge-daily-limit', 'Daily Limit'],
+            stuck:       ['badge-stuck',       'Stuck'],
+            failed:      ['badge-failed',      'Failed'],
         };
         var cfg = map[status] || map.pending;
         return '<span class="badge-status ' + cfg[0] + '">' +
@@ -202,6 +234,7 @@ $(function () {
     }
 
     function buildAttemptsBadge(attempts) {
+        if (attempts === '-') return '<span class="text-muted">—</span>';
         if (attempts === 0) return '<span class="text-muted">0</span>';
         if (attempts >= STUCK_THRESHOLD) return '<span class="badge bg-danger rounded-pill">' + attempts + '</span>';
         if (attempts >= 2)              return '<span class="badge bg-warning text-dark rounded-pill">' + attempts + '</span>';
@@ -267,9 +300,15 @@ $(function () {
         $('#m-job-full').text(j.job_full  || '—');
         $('#m-queue').text(j.queue        || '—');
         $('#m-uuid').text(j.job_uuid      || '—');
-        $('#m-attempts').text(
-            j.attempts + (j.attempts >= STUCK_THRESHOLD ? '  ⚠ High — may be stuck' : '')
-        );
+        var attemptNote = '';
+        if (j.job_status === 'failed') {
+            attemptNote = '  — permanently failed';
+        } else if (j.job_status === 'daily_limit') {
+            attemptNote = '  — waiting for Gmail daily limit reset';
+        } else if (j.attempts >= STUCK_THRESHOLD) {
+            attemptNote = '  ⚠ High — may be stuck';
+        }
+        $('#m-attempts').text(j.attempts + attemptNote);
         $('#m-created').text(j.createdDate    || '—');
         $('#m-available').text(j.availableDate || '—');
         $('#m-reserved').text(j.reservedDate  || '—');
@@ -286,6 +325,21 @@ $(function () {
             mailHtml || '<span class="text-muted small">No mail info extractable from payload</span>'
         );
 
+        // Exception section (failed jobs only)
+        if (isFailedView && j.exception_short) {
+            $('#m-exception').text(j.exception_short);
+            $('#m-exception-section').show();
+        } else {
+            $('#m-exception-section').hide();
+        }
+
+        // Modal retry button (failed jobs only)
+        if (isFailedView) {
+            $('#modal-btn-retry').show();
+        } else {
+            $('#modal-btn-retry').hide();
+        }
+
         $('#job-detail-modal').modal('show');
     }
 
@@ -298,8 +352,11 @@ $(function () {
 
     // ── Delete Job ─────────────────────────────────────────────────────────
     function deleteJob(id, callback) {
+        var url = isFailedView
+            ? '/admin/job-queue-log/failed/' + id
+            : '/admin/job-queue-log/' + id;
         $.ajax({
-            url  : '/admin/email-config/job-queue-log/' + id,
+            url  : url,
             type : 'DELETE',
         }).done(function (res) {
             if (res.success) {
@@ -407,7 +464,7 @@ $(function () {
             icon : 'warning',
         }, function () {
             $.ajax({
-                url  : '/admin/email-config/job-queue-log',
+                url  : '/admin/job-queue-log',
                 type : 'DELETE',
             }).done(function (res) {
                 swalSuccess('Deleted ' + (res.deleted || 0) + ' stuck job(s) successfully.');
@@ -415,6 +472,120 @@ $(function () {
             }).fail(function () {
                 swalError('Failed to delete stuck jobs.');
             });
+        });
+    });
+
+    // ── Failed Job Actions ────────────────────────────────────────────
+
+    // Retry single failed job (inline button)
+    $(document).on('click', '.btn-retry-single', function () {
+        var id = $(this).data('id');
+        swalConfirm({
+            title: 'Retry Failed Job #' + id + '?',
+            text : 'This job will be pushed back to the queue for re-processing.',
+            icon : 'question',
+            confirmButtonText: 'Yes, retry it!',
+            confirmButtonColor: '#28a745',
+        }, function () {
+            $.post('/admin/job-queue-log/failed/' + id + '/retry')
+                .done(function (res) {
+                    if (res.success) {
+                        swalSuccess('Job #' + id + ' has been queued for retry.');
+                        fetchData();
+                    } else {
+                        swalError(res.message || 'Failed to retry job.');
+                    }
+                })
+                .fail(function (xhr) {
+                    var msg = 'Failed to retry job.';
+                    try { msg = JSON.parse(xhr.responseText).message; } catch(e) {}
+                    swalError(msg);
+                });
+        });
+    });
+
+    // Delete single failed job (inline button)
+    $(document).on('click', '.btn-delete-failed', function () {
+        var id = $(this).data('id');
+        swalConfirm({
+            title: 'Delete Failed Job #' + id + '?',
+            text : 'This failed job record will be permanently removed.',
+        }, function () {
+            deleteJob(id);
+        });
+    });
+
+    // Retry all failed jobs
+    $('#btn-retry-all-failed').on('click', function () {
+        if (!previousStats || previousStats.failed === 0) {
+            swalError('There are no failed jobs to retry.');
+            return;
+        }
+        swalConfirm({
+            title: 'Retry All Failed Jobs?',
+            text : 'All ' + previousStats.failed + ' failed job(s) will be pushed back to the queue.',
+            icon : 'question',
+            confirmButtonText: 'Yes, retry all!',
+            confirmButtonColor: '#28a745',
+        }, function () {
+            $.post('/admin/job-queue-log/failed/retry-all')
+                .done(function (res) {
+                    swalSuccess('Retried ' + (res.retried || 0) + ' failed job(s) successfully.');
+                    fetchData();
+                })
+                .fail(function () {
+                    swalError('Failed to retry jobs.');
+                });
+        });
+    });
+
+    // Delete all failed jobs
+    $('#btn-delete-all-failed').on('click', function () {
+        if (!previousStats || previousStats.failed === 0) {
+            swalError('There are no failed jobs to delete.');
+            return;
+        }
+        swalConfirm({
+            title: 'Delete All Failed Jobs?',
+            text : 'All ' + previousStats.failed + ' failed job record(s) will be permanently removed.',
+        }, function () {
+            $.ajax({
+                url  : '/admin/job-queue-log/failed/all',
+                type : 'DELETE',
+            }).done(function (res) {
+                swalSuccess('Deleted ' + (res.deleted || 0) + ' failed job(s) successfully.');
+                fetchData();
+            }).fail(function () {
+                swalError('Failed to delete failed jobs.');
+            });
+        });
+    });
+
+    // Retry from modal
+    $('#modal-btn-retry').on('click', function () {
+        if (!currentModalId) return;
+        swalConfirm({
+            title: 'Retry Failed Job #' + currentModalId + '?',
+            text : 'This job will be pushed back to the queue for re-processing.',
+            icon : 'question',
+            confirmButtonText: 'Yes, retry it!',
+            confirmButtonColor: '#28a745',
+        }, function () {
+            $.post('/admin/job-queue-log/failed/' + currentModalId + '/retry')
+                .done(function (res) {
+                    if (res.success) {
+                        swalSuccess('Job #' + currentModalId + ' has been queued for retry.');
+                        $('#job-detail-modal').modal('hide');
+                        fetchData();
+                    } else {
+                        swalError(res.message || 'Failed to retry job.');
+                    }
+                })
+                .fail(function (xhr) {
+                    var msg = 'Failed to retry job.';
+                    try { msg = JSON.parse(xhr.responseText).message; } catch(e) {}
+                    swalError(msg);
+                });
         });
     });
 
