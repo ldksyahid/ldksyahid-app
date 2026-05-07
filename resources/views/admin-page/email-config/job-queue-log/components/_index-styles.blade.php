@@ -73,6 +73,7 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.07);
 }
 .filter-control { max-width: 200px; }
+.filter-search { max-width: 200px; }
 
 /* Search input */
 .filter-bar .form-control {
@@ -248,18 +249,63 @@
 }
 
 /* ── Mobile Responsive ── */
-@media (max-width: 576px) {
-    .page-title { font-size: 1.3rem; }
-    .page-title::after { width: 80px; }
-    .stat-value { font-size: 1.3rem; }
-    .filter-bar { gap: 0.4rem; padding: 0.5rem 0.7rem; }
-    .filter-bar .form-control { max-width: 100%; }
-    #jobs-table { font-size: 0.8rem; }
-    #jobs-table thead th,
-    #jobs-table tbody td { padding: 0.4rem 0.5rem; }
-    .live-indicator { padding: 3px 9px; }
-    .jql-modal-content { border-radius: 12px; }
-    .table-pagination { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+@media (max-width: 767px) {
+    /* Container */
+    .container-fluid.pt-4.px-4 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; padding-top: 0.75rem !important; }
+    .row.p-2.bg-light { padding: 0.5rem !important; }
+
+    /* Page Header — stack vertically */
+    .page-title { font-size: 1.2rem; }
+    .page-title::after { width: 70px; height: 3px; }
+    .page-title .me-2 { margin-right: 0.35rem !important; }
+
+    /* Stats Cards */
+    .stat-card { padding: 0.7rem 0.75rem; gap: 0.6rem; border-radius: 10px; }
+    .stat-icon { width: 36px; height: 36px; border-radius: 8px; font-size: 0.95rem; }
+    .stat-value { font-size: 1.15rem; }
+    .stat-label { font-size: 0.72rem; }
+    .stat-sub { font-size: 0.65rem; }
+    .stat-change { top: 5px; right: 7px; font-size: 0.65rem; }
+
+    /* Filter Bar — stack elements */
+    .filter-bar {
+        flex-direction: column; align-items: stretch;
+        gap: 0.45rem; padding: 0.6rem 0.7rem;
+    }
+    .filter-bar .select2-container { width: 100% !important; }
+    .filter-bar .form-control,
+    .filter-bar .filter-search { max-width: 100% !important; width: 100% !important; }
+    .filter-bar #btn-delete-stuck { margin-left: 0 !important; width: 100%; }
+
+    /* Daily Limit Banner */
+    .daily-limit-alert { padding: 0.65rem 0.8rem; font-size: 0.8rem; }
+    .daily-limit-alert i { font-size: 1rem; }
+
+    /* Table */
+    #jobs-table { font-size: 0.75rem; }
+    #jobs-table thead th { font-size: 0.7rem; padding: 0.4rem 0.4rem; }
+    #jobs-table tbody td { padding: 0.35rem 0.4rem; }
+    .badge-status { font-size: 0.65rem; padding: 2px 6px; gap: 3px; }
+    .status-dot { width: 5px; height: 5px; }
+    .btn-detail { font-size: 0.65rem !important; padding: 2px 6px !important; }
+    .btn-detail .me-1 { margin-right: 0.15rem !important; }
+
+    /* Pagination */
+    .table-pagination {
+        flex-direction: column; align-items: center;
+        gap: 0.4rem; padding: 0.5rem 0.7rem;
+    }
+    #pagination-controls .btn { font-size: 0.7rem; padding: 2px 8px; }
+
+    /* Live Indicator */
+    .live-indicator { padding: 3px 8px; }
+    .live-label { font-size: 0.68rem; }
+    .live-dot { width: 6px; height: 6px; }
+
+    /* Modal */
+    .jql-modal-content { border-radius: 10px; }
+    .jql-modal-header { padding: 0.75rem 1rem; }
+    .jql-modal-header .modal-title { font-size: 0.95rem; }
 }
 
 /* ── Dark Mode ── */
