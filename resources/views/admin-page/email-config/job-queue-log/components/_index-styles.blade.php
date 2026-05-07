@@ -57,6 +57,7 @@
 .stat-icon-pending    { background: rgba(255,193,7,0.15);  color: #d39e00; }
 .stat-icon-processing { background: rgba(40,167,69,0.12);  color: #28a745; }
 .stat-icon-delayed    { background: rgba(0,123,255,0.12);  color: #0063cc; }
+.stat-icon-failed     { background: rgba(220,53,69,0.12);  color: #dc3545; }
 .stat-info  { flex: 1; min-width: 0; }
 .stat-value { font-size: 1.6rem; font-weight: 700; line-height: 1; color: #212529; }
 .stat-label { font-size: 0.82rem; font-weight: 600; color: #495057; margin-top: 3px; }
@@ -73,6 +74,7 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.07);
 }
 .filter-control { max-width: 200px; }
+.filter-search { max-width: 200px; }
 
 /* Search input */
 .filter-bar .form-control {
@@ -179,12 +181,26 @@
 .badge-pending    { background: rgba(255,193,7,0.15);  color: #d39e00;  border: 1px solid rgba(255,193,7,0.3); }
 .badge-processing { background: rgba(40,167,69,0.12);  color: #1e7e34;  border: 1px solid rgba(40,167,69,0.25); }
 .badge-delayed    { background: rgba(0,123,255,0.1);   color: #0056b3;  border: 1px solid rgba(0,123,255,0.2); }
-.badge-stuck      { background: rgba(220,53,69,0.1);   color: #b02a37;  border: 1px solid rgba(220,53,69,0.2); }
+.badge-stuck       { background: rgba(220,53,69,0.1);   color: #b02a37;  border: 1px solid rgba(220,53,69,0.2); }
+.badge-daily-limit { background: rgba(255,152,0,0.12);  color: #e65100;  border: 1px solid rgba(255,152,0,0.25); }
 .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-.badge-pending    .status-dot { background: #d39e00; }
-.badge-processing .status-dot { background: #28a745; animation: livePulse 1.5s ease-in-out infinite; }
-.badge-delayed    .status-dot { background: #0063cc; }
-.badge-stuck      .status-dot { background: #dc3545; }
+.badge-pending     .status-dot { background: #d39e00; }
+.badge-processing  .status-dot { background: #28a745; animation: livePulse 1.5s ease-in-out infinite; }
+.badge-delayed     .status-dot { background: #0063cc; }
+.badge-daily-limit .status-dot { background: #e65100; animation: livePulse 1.5s ease-in-out infinite; }
+.badge-stuck       .status-dot { background: #dc3545; }
+.badge-failed      { background: rgba(108,117,125,0.12); color: #495057; border: 1px solid rgba(108,117,125,0.25); }
+.badge-failed      .status-dot { background: #6c757d; }
+
+/* ── Daily Limit Alert Banner ── */
+.daily-limit-alert {
+    background: linear-gradient(135deg, rgba(255,152,0,0.1) 0%, rgba(255,193,7,0.08) 100%);
+    border: 1px solid rgba(255,152,0,0.3);
+    border-left: 4px solid #ff9800;
+    border-radius: 10px; padding: 0.85rem 1.1rem;
+    color: #e65100; font-size: 0.88rem;
+}
+.daily-limit-alert i { font-size: 1.2rem; color: #ff9800; }
 
 /* ── Row Flash ── */
 @keyframes rowFlash {
@@ -236,18 +252,65 @@
 }
 
 /* ── Mobile Responsive ── */
-@media (max-width: 576px) {
-    .page-title { font-size: 1.3rem; }
-    .page-title::after { width: 80px; }
-    .stat-value { font-size: 1.3rem; }
-    .filter-bar { gap: 0.4rem; padding: 0.5rem 0.7rem; }
-    .filter-bar .form-control { max-width: 100%; }
-    #jobs-table { font-size: 0.8rem; }
-    #jobs-table thead th,
-    #jobs-table tbody td { padding: 0.4rem 0.5rem; }
-    .live-indicator { padding: 3px 9px; }
-    .jql-modal-content { border-radius: 12px; }
-    .table-pagination { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+@media (max-width: 767px) {
+    /* Container */
+    .container-fluid.pt-4.px-4 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; padding-top: 0.75rem !important; }
+    .row.p-2.bg-light { padding: 0.5rem !important; }
+
+    /* Page Header — stack vertically */
+    .page-title { font-size: 1.2rem; }
+    .page-title::after { width: 70px; height: 3px; }
+    .page-title .me-2 { margin-right: 0.35rem !important; }
+
+    /* Stats Cards */
+    .stat-card { padding: 0.7rem 0.75rem; gap: 0.6rem; border-radius: 10px; }
+    .stat-icon { width: 36px; height: 36px; border-radius: 8px; font-size: 0.95rem; }
+    .stat-value { font-size: 1.15rem; }
+    .stat-label { font-size: 0.72rem; }
+    .stat-sub { font-size: 0.65rem; }
+    .stat-change { top: 5px; right: 7px; font-size: 0.65rem; }
+
+    /* Filter Bar — stack elements */
+    .filter-bar {
+        flex-direction: column; align-items: stretch;
+        gap: 0.45rem; padding: 0.6rem 0.7rem;
+    }
+    .filter-bar .select2-container { width: 100% !important; }
+    .filter-bar .form-control,
+    .filter-bar .filter-search { max-width: 100% !important; width: 100% !important; }
+    .filter-bar #btn-delete-stuck { margin-left: 0 !important; width: 100%; }
+    .filter-bar .filter-actions { width: 100%; display: flex; flex-direction: column; gap: 0.35rem; }
+    .filter-bar .filter-actions .btn { width: 100%; margin-left: 0 !important; }
+
+    /* Daily Limit Banner */
+    .daily-limit-alert { padding: 0.65rem 0.8rem; font-size: 0.8rem; }
+    .daily-limit-alert i { font-size: 1rem; }
+
+    /* Table */
+    #jobs-table { font-size: 0.75rem; }
+    #jobs-table thead th { font-size: 0.7rem; padding: 0.4rem 0.4rem; }
+    #jobs-table tbody td { padding: 0.35rem 0.4rem; }
+    .badge-status { font-size: 0.65rem; padding: 2px 6px; gap: 3px; }
+    .status-dot { width: 5px; height: 5px; }
+    .btn-detail { font-size: 0.65rem !important; padding: 2px 6px !important; }
+    .btn-detail .me-1 { margin-right: 0.15rem !important; }
+
+    /* Pagination */
+    .table-pagination {
+        flex-direction: column; align-items: center;
+        gap: 0.4rem; padding: 0.5rem 0.7rem;
+    }
+    #pagination-controls .btn { font-size: 0.7rem; padding: 2px 8px; }
+
+    /* Live Indicator */
+    .live-indicator { padding: 3px 8px; }
+    .live-label { font-size: 0.68rem; }
+    .live-dot { width: 6px; height: 6px; }
+
+    /* Modal */
+    .jql-modal-content { border-radius: 10px; }
+    .jql-modal-header { padding: 0.75rem 1rem; }
+    .jql-modal-header .modal-title { font-size: 0.95rem; }
 }
 
 /* ── Dark Mode ── */
@@ -319,6 +382,12 @@ html.dark-mode .detail-section-title { border-bottom-color: #373b3e; }
 html.dark-mode .badge-pending    { background: rgba(255,193,7,0.1);  border-color: rgba(255,193,7,0.2); }
 html.dark-mode .badge-processing { background: rgba(40,167,69,0.1);  border-color: rgba(40,167,69,0.2); }
 html.dark-mode .badge-delayed    { background: rgba(0,123,255,0.08); border-color: rgba(0,123,255,0.15); }
-html.dark-mode .badge-stuck      { background: rgba(220,53,69,0.1);  border-color: rgba(220,53,69,0.2); }
+html.dark-mode .badge-stuck       { background: rgba(220,53,69,0.1);  border-color: rgba(220,53,69,0.2); }
+html.dark-mode .badge-failed      { background: rgba(108,117,125,0.15); border-color: rgba(108,117,125,0.25); color: #9ca3af; }
+html.dark-mode .badge-daily-limit { background: rgba(255,152,0,0.1);  border-color: rgba(255,152,0,0.2); color: #ffb74d; }
 html.dark-mode .badge-light { background: #374151 !important; color: #e4e6eb !important; border-color: #4b5563 !important; }
+html.dark-mode .daily-limit-alert {
+    background: linear-gradient(135deg, rgba(255,152,0,0.08) 0%, rgba(255,193,7,0.05) 100%);
+    border-color: rgba(255,152,0,0.2); color: #ffb74d;
+}
 </style>

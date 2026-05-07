@@ -10,19 +10,19 @@
 
         {{-- Page Header --}}
         <div class="col-12 mb-3">
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 page-header">
                 <div>
                     <h1 class="page-title mb-0">
                         <i class="fas fa-stream me-2"></i>Job Queue Log
                     </h1>
-                    <p class="text-muted mb-0 mt-1 small">Monitor job queue in real-time</p>
+                    <p class="text-muted mb-0 mt-1 small d-none d-md-block">Monitor job queue in real-time</p>
                 </div>
-                <div class="d-flex align-items-center gap-3 flex-wrap">
+                <div class="d-flex align-items-center gap-2 gap-md-3 flex-wrap header-controls">
                     <div class="live-indicator" id="live-indicator">
                         <span class="live-dot" id="live-dot"></span>
                         <span class="live-label" id="live-label">LIVE</span>
                     </div>
-                    <span class="text-muted small" id="last-updated-text">Connecting...</span>
+                    <span class="text-muted small d-none d-sm-inline" id="last-updated-text">Connecting...</span>
                     <button class="btn btn-sm btn-outline-secondary btn-rounded" id="btn-pause-resume">
                         <i class="fas fa-pause me-1"></i>Pause
                     </button>
@@ -33,7 +33,7 @@
         {{-- Stats Cards --}}
         <div class="col-12 mb-3">
             <div class="row g-3">
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="stat-card">
                         <div class="stat-icon stat-icon-total"><i class="fas fa-layer-group"></i></div>
                         <div class="stat-info">
@@ -44,7 +44,7 @@
                         <div class="stat-change" id="stat-total-change"></div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="stat-card">
                         <div class="stat-icon stat-icon-pending"><i class="fas fa-clock"></i></div>
                         <div class="stat-info">
@@ -55,7 +55,7 @@
                         <div class="stat-change" id="stat-pending-change"></div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="stat-card">
                         <div class="stat-icon stat-icon-processing"><i class="fas fa-spinner fa-spin-pulse"></i></div>
                         <div class="stat-info">
@@ -66,7 +66,7 @@
                         <div class="stat-change" id="stat-processing-change"></div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="stat-card">
                         <div class="stat-icon stat-icon-delayed"><i class="fas fa-hourglass-half"></i></div>
                         <div class="stat-info">
@@ -75,6 +75,34 @@
                             <div class="stat-sub">scheduled</div>
                         </div>
                         <div class="stat-change" id="stat-delayed-change"></div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-failed"><i class="fas fa-times-circle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-failed">—</div>
+                            <div class="stat-label">Failed</div>
+                            <div class="stat-sub">permanently failed</div>
+                        </div>
+                        <div class="stat-change" id="stat-failed-change"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Gmail Daily Limit Banner --}}
+        <div class="col-12 mb-3" id="daily-limit-banner" style="display:none;">
+            <div class="daily-limit-alert">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Gmail Daily Sending Limit Active</strong>
+                        <div class="small mt-1">
+                            Email jobs are paused until the limit resets.
+                            <span id="daily-limit-job-count" class="fw-semibold"></span> job(s) waiting.
+                            Attempts will increase but these jobs are <strong>not stuck</strong> — they will resume automatically.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,16 +116,26 @@
                     <option value="pending">Pending</option>
                     <option value="processing">Processing</option>
                     <option value="delayed">Delayed</option>
+                    <option value="daily_limit">Daily Limit</option>
                     <option value="stuck">Stuck</option>
+                    <option value="failed">Failed</option>
                 </select>
                 <select id="filter-queue">
                     <option value="all">All Queues</option>
                 </select>
-                <input type="text" class="form-control form-control-sm filter-control" id="filter-search"
-                    placeholder="Search job type..." style="max-width:200px;">
-                <button class="btn btn-sm btn-outline-danger btn-rounded ms-auto" id="btn-delete-stuck">
-                    <i class="fas fa-trash-alt me-1"></i>Delete Stuck
-                </button>
+                <input type="text" class="form-control form-control-sm filter-search" id="filter-search"
+                    placeholder="Search job type...">
+                <div class="d-flex gap-1 ms-auto filter-actions">
+                    <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-stuck">
+                        <i class="fas fa-trash-alt me-1"></i>Delete Stuck
+                    </button>
+                    <button class="btn btn-sm btn-outline-success btn-rounded" id="btn-retry-all-failed" style="display:none;">
+                        <i class="fas fa-redo me-1"></i>Retry All
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-all-failed" style="display:none;">
+                        <i class="fas fa-trash-alt me-1"></i>Delete All Failed
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -130,7 +168,7 @@
                                     Status
                                     <i class="fas fa-info-circle tooltip-icon"
                                         data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Pending = waiting, Processing = reserved by worker, Delayed = scheduled for later, Stuck = attempts ≥ 3 (likely failing)"></i>
+                                        title="Pending = waiting, Processing = reserved by worker, Delayed = scheduled for later, Daily Limit = paused by Gmail limit, Stuck = attempts ≥ 8 (likely failing)"></i>
                                 </th>
                                 <th class="text-center">
                                     Attempts
@@ -222,6 +260,11 @@
                         </div>
                     </div>
 
+                    <div class="col-12" id="m-exception-section" style="display:none;">
+                        <div class="detail-section-title">EXCEPTION</div>
+                        <pre class="raw-payload" id="m-exception" style="display:block; max-height:180px;"></pre>
+                    </div>
+
                     <div class="col-12">
                         <div class="detail-section-title">MAIL INFO</div>
                         <div class="detail-infobox" id="m-mail-info">
@@ -259,6 +302,9 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-success btn-rounded" id="modal-btn-retry" style="display:none;">
+                    <i class="fas fa-redo me-1"></i>Retry Job
+                </button>
                 <button type="button" class="btn btn-sm btn-outline-danger btn-rounded" id="modal-btn-delete">
                     <i class="fas fa-trash-alt me-1"></i>Delete Job
                 </button>

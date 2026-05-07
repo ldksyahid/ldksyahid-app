@@ -301,13 +301,19 @@ Route::middleware(['role:Superadmin'])
 
 // Route AdminPage Email Config - Job Queue Log
 Route::middleware(['role:Superadmin'])
-    ->prefix('/admin/email-config/job-queue-log')
-    ->name('admin.email-config.job-queue-log')
+    ->prefix('/admin/job-queue-log')
+    ->name('admin.job-queue-log')
     ->group(function () {
         Route::get('/', [JobQueueLogController::class, 'index'])->name('');
         Route::get('/data', [JobQueueLogController::class, 'data'])->name('.data');
         Route::delete('/{id}', [JobQueueLogController::class, 'destroy'])->name('.destroy');
         Route::delete('/', [JobQueueLogController::class, 'destroyStuck'])->name('.destroy-stuck');
+
+        // Failed jobs (static routes before parameterized to avoid {id} capturing "all"/"retry-all")
+        Route::post('/failed/retry-all', [JobQueueLogController::class, 'retryAllFailed'])->name('.failed.retry-all');
+        Route::delete('/failed/all', [JobQueueLogController::class, 'destroyAllFailed'])->name('.failed.destroy-all');
+        Route::post('/failed/{id}/retry', [JobQueueLogController::class, 'retryFailed'])->name('.failed.retry');
+        Route::delete('/failed/{id}', [JobQueueLogController::class, 'destroyFailed'])->name('.failed.destroy');
     });
 
 // Route AdminPage News
