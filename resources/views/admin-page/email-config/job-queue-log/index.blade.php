@@ -80,6 +80,23 @@
             </div>
         </div>
 
+        {{-- Gmail Daily Limit Banner --}}
+        <div class="col-12 mb-3" id="daily-limit-banner" style="display:none;">
+            <div class="daily-limit-alert">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Gmail Daily Sending Limit Active</strong>
+                        <div class="small mt-1">
+                            Email jobs are paused until the limit resets.
+                            <span id="daily-limit-job-count" class="fw-semibold"></span> job(s) waiting.
+                            Attempts will increase but these jobs are <strong>not stuck</strong> — they will resume automatically.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- Filter Bar --}}
         <div class="col-12 mb-3">
             <div class="filter-bar">
@@ -88,6 +105,7 @@
                     <option value="pending">Pending</option>
                     <option value="processing">Processing</option>
                     <option value="delayed">Delayed</option>
+                    <option value="daily_limit">Daily Limit</option>
                     <option value="stuck">Stuck</option>
                 </select>
                 <select id="filter-queue">
@@ -130,7 +148,7 @@
                                     Status
                                     <i class="fas fa-info-circle tooltip-icon"
                                         data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Pending = waiting, Processing = reserved by worker, Delayed = scheduled for later, Stuck = attempts ≥ 8 (likely failing)"></i>
+                                        title="Pending = waiting, Processing = reserved by worker, Delayed = scheduled for later, Daily Limit = paused by Gmail limit, Stuck = attempts ≥ 8 (likely failing)"></i>
                                 </th>
                                 <th class="text-center">
                                     Attempts

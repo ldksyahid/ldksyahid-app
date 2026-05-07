@@ -14,7 +14,7 @@ $(function () {
     var currentModalId  = null;
 
     var POLL_INTERVAL   = 3000;
-    var STUCK_THRESHOLD = 3;
+    var STUCK_THRESHOLD = 8;
 
     // CSRF for AJAX mutations
     $.ajaxSetup({
@@ -86,7 +86,7 @@ $(function () {
 
         $.getJSON('/admin/email-config/job-queue-log/data', params)
             .done(function (response) {
-                updateStats(response.stats);
+                updateStats(response.stats, response.gmail_daily_limit);
                 updateQueuesFilter(response.queues);
                 updateTable(response.jobs);
                 resetUpdateTimer();
@@ -99,7 +99,7 @@ $(function () {
     }
 
     // ── Stats ──────────────────────────────────────────────────────────────
-    function updateStats(stats) {
+    function updateStats(stats, gmailDailyLimit) {
         $('#stat-total').text(Number(stats.total).toLocaleString());
         $('#stat-pending').text(Number(stats.pending).toLocaleString());
         $('#stat-processing').text(Number(stats.processing).toLocaleString());
@@ -112,6 +112,14 @@ $(function () {
             setChange('delayed',    stats.delayed    - previousStats.delayed);
         }
         previousStats = stats;
+
+        // Gmail daily limit banner
+        if (gmailDailyLimit && stats.daily_limit > 0) {
+            $('#daily-limit-job-count').text(stats.daily_limit);
+            $('#daily-limit-banner').slideDown(200);
+        } else {
+            $('#daily-limit-banner').slideUp(200);
+        }
     }
 
     function setChange(key, diff) {
@@ -191,10 +199,11 @@ $(function () {
 
     function buildBadge(status) {
         var map = {
-            pending:    ['badge-pending',    'Pending'],
-            processing: ['badge-processing', 'Processing'],
-            delayed:    ['badge-delayed',    'Delayed'],
-            stuck:      ['badge-stuck',      'Stuck'],
+            pending:     ['badge-pending',     'Pending'],
+            processing:  ['badge-processing',  'Processing'],
+            delayed:     ['badge-delayed',     'Delayed'],
+            daily_limit: ['badge-daily-limit', 'Daily Limit'],
+            stuck:       ['badge-stuck',       'Stuck'],
         };
         var cfg = map[status] || map.pending;
         return '<span class="badge-status ' + cfg[0] + '">' +
@@ -267,9 +276,13 @@ $(function () {
         $('#m-job-full').text(j.job_full  || '—');
         $('#m-queue').text(j.queue        || '—');
         $('#m-uuid').text(j.job_uuid      || '—');
-        $('#m-attempts').text(
-            j.attempts + (j.attempts >= STUCK_THRESHOLD ? '  ⚠ High — may be stuck' : '')
-        );
+        var attemptNote = '';
+        if (j.job_status === 'daily_limit') {
+            attemptNote = '  — waiting for Gmail daily limit reset';
+        } else if (j.attempts >= STUCK_THRESHOLD) {
+            attemptNote = '  ⚠ High — may be stuck';
+        }
+        $('#m-attempts').text(j.attempts + attemptNote);
         $('#m-created').text(j.createdDate    || '—');
         $('#m-available').text(j.availableDate || '—');
         $('#m-reserved').text(j.reservedDate  || '—');
