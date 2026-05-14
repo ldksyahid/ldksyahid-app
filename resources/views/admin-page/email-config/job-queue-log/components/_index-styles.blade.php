@@ -211,7 +211,6 @@
 .daily-limit-alert {
     background: linear-gradient(135deg, rgba(255,152,0,0.1) 0%, rgba(255,193,7,0.08) 100%);
     border: 1px solid rgba(255,152,0,0.3);
-    border-left: 4px solid #ff9800;
     border-radius: 10px; padding: 0.85rem 1.1rem;
     color: #e65100; font-size: 0.88rem;
 }

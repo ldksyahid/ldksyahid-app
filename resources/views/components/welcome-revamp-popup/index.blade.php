@@ -1,11 +1,11 @@
 {{-- ================================================================
-     WELCOME SELF-REWARD POPUP
+     WELCOME QURBAN POPUP
      Appears once per browser — marked in localStorage.
-     Key: ldksyahid_welcome_popup_self_reward
+     Key: ldksyahid_welcome_popup_qurban
      ================================================================ --}}
 @include('components.welcome-revamp-popup.styles')
 
-<div id="wrp-backdrop" role="dialog" aria-modal="true" aria-label="Manajemen Self-Reward yang Berkah">
+<div id="wrp-backdrop" role="dialog" aria-modal="true" aria-label="Yuk Qurban Bareng!">
     <div id="wrp-outer">
 
         <div id="wrp-card">
@@ -13,61 +13,57 @@
             {{-- Close X --}}
             <button id="wrp-x" aria-label="Tutup popup"><i class="fas fa-times"></i></button>
 
-            {{-- Header --}}
+            {{-- Header — flex-shrink:0 supaya tidak terpotong --}}
             <div id="wrp-header">
                 <span id="wrp-header-dot1"></span>
                 <span id="wrp-header-dot2"></span>
                 <div id="wrp-badge">
                     <i class="fas fa-star"></i>
-                    <span>Gaya Hidup &bull; Self-Reward</span>
+                    <span>Ibadah &bull; Qurban</span>
                 </div>
-                <h2>Gaes, udah capek? Gaskeun<br>self-reward yang berkah! 💙✨</h2>
+                <h2>Bestie, yuk qurban bareng!<br>Jangan cuma rebahan doang 🐐</h2>
             </div>
 
-            {{-- Body --}}
+            {{-- Body — scrollable --}}
             <div id="wrp-body">
                 <p id="wrp-desc">
-                    Self-reward itu bukan hal yang guilty loh gaes — it's literally
-                    self-care! Yang penting reward-mu berkah dan gak bikin dompet
-                    nangis <em>fr fr</em> 😭🙏
+                    Qurban itu ibadah paling W bestie — niatnya lillah, manfaatnya buat
+                    sesama, pahalanya? <em>No cap</em>, gak ada habisnya! 🙏✨
                 </p>
 
                 <div id="wrp-features">
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-check-circle"></i></div>
-                        <div class="wrp-feat-text">Self-reward halal itu valid banget! Niatkan sebagai bentuk syukur — bukan flexing doang, no cap ✨</div>
-                    </div>
-                    <div class="wrp-feat">
                         <div class="wrp-feat-icon"><i class="fas fa-heart"></i></div>
-                        <div class="wrp-feat-text">Istirahat yang ikhlas itu hits different — menjaga diri sendiri literally bagian dari ibadah gaes 💫</div>
+                        <div class="wrp-feat-text">Qurban itu bentuk cinta ke Allah yang hits different — sunnah Nabi Ibrahim yang vibes-nya masih relevan sampe sekarang! 💜</div>
                     </div>
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-utensils"></i></div>
-                        <div class="wrp-feat-text">Makan enak yang halal, nongkrong sama squad, atau upgrade skill — that's a W reward fr! 🏆</div>
+                        <div class="wrp-feat-icon"><i class="fas fa-users"></i></div>
+                        <div class="wrp-feat-text">Daging qurban-mu nyebar ke seluruh penjuru — literally jadi berkah buat saudara kita yang butuh, no cap! 🌍</div>
                     </div>
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-balance-scale"></i></div>
-                        <div class="wrp-feat-text">Jangan sampe reward-mu jadi red flag buat ibadah & tanggung jawab — stay balanced, gaes! ⚖️</div>
+                        <div class="wrp-feat-icon"><i class="fas fa-coins"></i></div>
+                        <div class="wrp-feat-text">Bisa patungan bareng squad! Sapi dibagi 7, kambing sendiri — investasi akhirat yang paling worth it fr fr 💰</div>
+                    </div>
+                    <div class="wrp-feat">
+                        <div class="wrp-feat-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div class="wrp-feat-text">Idul Adha udah deket gaes — jangan sampe kelewatan momen ibadah yang satu ini, yuk gas! 📅</div>
                     </div>
                 </div>
 
-                {{-- Hadith --}}
-                <div id="wrp-hadith">
-                    <div id="wrp-hadith-arabic">
-                        إِنَّ لِنَفْسِكَ عَلَيْكَ حَقًّا
-                    </div>
-                    <div id="wrp-hadith-trans">
-                        &ldquo;Sesungguhnya dirimu memiliki hak atas dirimu.&rdquo;
-                    </div>
-                    <div id="wrp-hadith-source">HR. Bukhari, no. 1968</div>
+                {{-- Mini Game: Kambing Runner (Chrome Dino style) --}}
+                <div id="wrp-minigame">
+                    <div id="wrp-game-label">🐐 Kambing Runner — loncat hindari halangan!</div>
+                    <canvas id="wrp-dino-canvas"></canvas>
+                    <p id="wrp-game-hint">Tap kanvas atau tekan Spasi &bull; Double jump OK!</p>
                 </div>
-            </div>
 
-            {{-- Footer --}}
+            </div>{{-- /wrp-body --}}
+
+            {{-- Footer — flex-shrink:0 supaya tidak terpotong --}}
             <div id="wrp-footer">
                 <button id="wrp-btn-explore">
                     <i class="fas fa-star"></i>
-                    <span>Slay dengan cara berkah! 💙</span>
+                    <span>Gaspol Qurban Sekarang! 🐐🔥</span>
                 </button>
                 <button id="wrp-btn-dismiss">
                     Jangan tampilkan lagi
