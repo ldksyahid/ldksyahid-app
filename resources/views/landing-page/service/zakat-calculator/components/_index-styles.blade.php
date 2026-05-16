@@ -228,88 +228,183 @@
 
 /* ── Gold Price Panel ───────────────────────────────────── */
 .zk-gold-panel {
-    background: #fffbeb;
-    border: 1.5px solid #fde68a;
-    border-radius: 16px;
-    padding: 1rem 1.25rem;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #78350f 0%, #92400e 35%, #b45309 65%, #d97706 100%);
+    border-radius: 18px;
+    padding: 1.4rem 1.6rem 1.25rem;
     margin-bottom: 1.5rem;
+    box-shadow: 0 8px 32px rgba(146,64,14,0.28), 0 2px 8px rgba(146,64,14,0.18);
 }
-.zk-gold-title {
-    font-size: 0.73rem;
-    font-weight: 700;
+/* Animated shimmer overlay */
+.zk-gold-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255,255,255,0.09) 50%,
+        transparent 70%
+    );
+    animation: zkGoldShimmer 5s ease-in-out infinite;
+    pointer-events: none;
+}
+@keyframes zkGoldShimmer {
+    0%   { transform: translateX(-120%); }
+    50%  { transform: translateX(120%); }
+    100% { transform: translateX(120%); }
+}
+/* Top row */
+.zk-gold-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.1rem;
+    position: relative;
+}
+.zk-gold-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.zk-gold-icon-wrap {
+    width: 42px;
+    height: 42px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    color: #fef3c7;
+    flex-shrink: 0;
+    backdrop-filter: blur(4px);
+}
+.zk-gold-brand-info { line-height: 1.3; }
+.zk-gold-brand-label {
+    font-size: 0.65rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #92400e;
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.65);
+    margin: 0 0 0.15rem;
 }
-.zk-gold-input-wrap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 0.65rem;
-}
-.zk-gold-prefix,
-.zk-gold-suffix {
+.zk-gold-brand-src {
+    font-size: 0.78rem;
     font-weight: 700;
-    color: #92400e;
-    font-size: 0.85rem;
-    white-space: nowrap;
+    color: #fef3c7;
+    margin: 0;
 }
-.zk-gold-input {
-    width: 160px;
-    height: 38px;
-    padding: 0.45rem 0.75rem;
-    border: 1.5px solid #fbbf24;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: #92400e;
-    background: #fff;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+.zk-gold-brand-src a {
+    color: #fef3c7;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    transition: border-color 0.2s;
 }
-.zk-gold-input:focus {
-    border-color: #f59e0b;
-    box-shadow: 0 0 0 3px rgba(251,191,36,0.2);
-}
-.zk-gold-ref {
-    font-size: 0.7rem;
-    color: #b45309;
-    line-height: 1.4;
-}
-.zk-gold-ref a { color: #b45309; text-decoration: underline; }
-
-/* Badge harga aktif */
-.zk-gold-badge {
+.zk-gold-brand-src a:hover { border-color: rgba(255,255,255,0.7); }
+/* Fetch button */
+.zk-gold-fetch-btn {
+    position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    background: rgba(0,167,157,0.08);
-    border: 1px solid rgba(0,167,157,0.22);
-    border-radius: 99px;
-    padding: 0.3rem 0.9rem 0.3rem 0.65rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #007a73;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-}
-.zk-gold-badge-pulse {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #00a79d;
-    animation: zkBadgePulse 2s infinite;
+    gap: 0.4rem;
+    padding: 0.42rem 1rem;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    white-space: nowrap;
     flex-shrink: 0;
+    backdrop-filter: blur(4px);
+    letter-spacing: 0.02em;
 }
-@keyframes zkBadgePulse {
-    0%,100% { transform: scale(1);   opacity: 1; }
-    50%      { transform: scale(1.5); opacity: 0.5; }
+.zk-gold-fetch-btn:hover {
+    background: rgba(255,255,255,0.26);
+    border-color: rgba(255,255,255,0.55);
+    transform: translateY(-1px);
 }
+.zk-gold-fetch-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+/* Big price display */
+.zk-gold-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+.zk-gold-price-cur {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    line-height: 1;
+}
+.zk-gold-price-num {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.zk-gold-price-unit {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    align-self: flex-end;
+    margin-bottom: 0.15rem;
+}
+/* Footer live indicator */
+.zk-gold-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+.zk-gold-live-dot {
+    width: 8px;
+    height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 0 rgba(74,222,128,0.6);
+    animation: zkGoldPulse 2.2s ease-out infinite;
+}
+@keyframes zkGoldPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(74,222,128,0.6); }
+    70%  { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+    100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+}
+.zk-gold-live-label {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.55);
+    font-weight: 500;
+}
+/* Fetch status (on top of dark bg) */
+.zk-gold-fetch-status {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+    margin-top: 0.65rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    position: relative;
+}
+.zk-gold-fetch-status.zk-fetch-ok      { background: rgba(74,222,128,0.15); color: #86efac; }
+.zk-gold-fetch-status.zk-fetch-fail    { background: rgba(248,113,113,0.15); color: #fca5a5; }
+.zk-gold-fetch-status.zk-fetch-loading { background: rgba(255,255,255,0.1);  color: rgba(255,255,255,0.75); }
+/* Dark mode — panel already dark, minimal override */
+[data-theme="dark"] .zk-gold-panel { box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3); }
 
 /* ── Form Group ─────────────────────────────────────────── */
 .zk-form-group {
@@ -731,7 +826,7 @@
 
 @media (max-width: 575.98px) {
     .zk-pill { font-size: 0.78rem; padding: 0.38rem 0.8rem; }
-    .zk-gold-input { width: 130px; }
+    .zk-gold-price-num { font-size: 1.9rem; }
 }
 
 /* ── Dark Mode ──────────────────────────────────────────── */
@@ -745,9 +840,7 @@
 [data-theme="dark"] .zk-method-body     { color: #9ca3af; }
 [data-theme="dark"] .zk-form-card       { background: #1a1f2e; border-color: rgba(0,167,157,0.2); }
 [data-theme="dark"] .zk-card-title      { color: #e2e8f0; }
-[data-theme="dark"] .zk-gold-panel      { background: rgba(245,158,11,0.05); border-color: rgba(245,158,11,0.2); }
-[data-theme="dark"] .zk-gold-input      { background: #1e2535; color: #fbbf24; border-color: rgba(251,191,36,0.3); }
-[data-theme="dark"] .zk-gold-badge      { background: rgba(0,167,157,0.1); border-color: rgba(0,167,157,0.25); }
+[data-theme="dark"] .zk-gold-panel      { box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3); }
 [data-theme="dark"] .zk-form-label      { color: #e2e8f0; }
 [data-theme="dark"] .zk-input-group      { background: #1e2535; border-color: rgba(0,167,157,0.25); }
 [data-theme="dark"] .zk-input-group:focus-within { border-color: #00a79d; }
@@ -778,5 +871,181 @@
 [data-theme="dark"] .zk-warning-title   { color: #fbbf24; }
 [data-theme="dark"] .zk-warning-list li { color: #9ca3af; }
 [data-theme="dark"] .zk-warning-list a  { color: #fbbf24; }
+
+/* =========================================================
+   ORG POPUP MODAL
+   ========================================================= */
+.zk-org-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+    animation: zkFadeIn 0.2s ease;
+}
+.zk-org-backdrop.zk-visible { display: block; }
+
+.zk-org-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+.zk-org-modal.zk-visible { display: flex; }
+
+.zk-org-modal-inner {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem 2rem 2.25rem;
+    width: 100%;
+    max-width: 580px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.1);
+    animation: zkSlideUp 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    position: relative;
+}
+
+@keyframes zkFadeIn   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zkFadeOut  { from { opacity: 1; } to { opacity: 0; } }
+@keyframes zkSlideUp  { from { opacity: 0; transform: translateY(24px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes zkSlideDown{ from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(20px) scale(0.96); } }
+
+.zk-org-backdrop.zk-closing { animation: zkFadeOut 0.28s ease forwards; }
+.zk-org-modal.zk-closing .zk-org-modal-inner { animation: zkSlideDown 0.28s cubic-bezier(0.4,0,1,1) forwards; }
+
+.zk-org-header { margin-bottom: 0.35rem; padding-right: 2.5rem; }
+.zk-org-header-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #00a79d;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 0.2rem;
+}
+.zk-org-header-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+.zk-org-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0,0,0,0.06);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 0.85rem;
+    transition: background 0.2s, color 0.2s;
+    z-index: 1;
+}
+.zk-org-close:hover { background: rgba(0,0,0,0.12); color: #111; }
+
+.zk-org-subtitle {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin: 0 0 1.25rem;
+}
+
+.zk-org-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.85rem;
+}
+
+.zk-org-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0.75rem 0.85rem;
+    border: 1.5px solid rgba(0,167,157,0.15);
+    border-radius: 14px;
+    background: rgba(0,167,157,0.03);
+    text-decoration: none !important;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s, transform 0.15s;
+}
+.zk-org-card:hover {
+    border-color: #00a79d;
+    background: rgba(0,167,157,0.07);
+    box-shadow: 0 4px 16px rgba(0,167,157,0.12);
+    transform: translateY(-2px);
+}
+
+.zk-org-logo-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0,0,0,0.07);
+    flex-shrink: 0;
+}
+.zk-org-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 4px;
+}
+
+.zk-org-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: center;
+    line-height: 1.3;
+}
+.zk-org-tagline {
+    font-size: 0.68rem;
+    color: #6b7280;
+    text-align: center;
+    line-height: 1.4;
+}
+.zk-org-cta {
+    margin-top: auto;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #00a79d;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Dark mode - org modal */
+[data-theme="dark"] .zk-org-modal-inner { background: #1e2535; }
+[data-theme="dark"] .zk-org-header-label { color: #2dd4bf; }
+[data-theme="dark"] .zk-org-header-title { color: #e2e8f0; }
+[data-theme="dark"] .zk-org-close { background: rgba(255,255,255,0.08); color: #9ca3af; }
+[data-theme="dark"] .zk-org-close:hover { background: rgba(255,255,255,0.15); color: #e2e8f0; }
+[data-theme="dark"] .zk-org-subtitle { color: #6b7280; }
+[data-theme="dark"] .zk-org-card { background: rgba(0,167,157,0.05); border-color: rgba(0,167,157,0.2); }
+[data-theme="dark"] .zk-org-card:hover { background: rgba(0,167,157,0.12); border-color: #2dd4bf; }
+[data-theme="dark"] .zk-org-logo-wrap { background: #252b3b; border-color: rgba(255,255,255,0.08); }
+[data-theme="dark"] .zk-org-name { color: #e2e8f0; }
+[data-theme="dark"] .zk-org-tagline { color: #6b7280; }
+[data-theme="dark"] .zk-org-cta { color: #2dd4bf; }
+
+/* Responsive - org modal */
+@media (max-width: 480px) {
+    .zk-org-modal-inner { padding: 1.5rem 1.25rem 1.75rem; }
+    .zk-org-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.65rem; }
+    .zk-org-card { padding: 0.85rem 0.6rem 0.75rem; }
+    .zk-org-logo-wrap { width: 48px; height: 48px; }
+}
 </style>
 @endverbatim

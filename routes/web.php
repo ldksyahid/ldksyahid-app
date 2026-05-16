@@ -83,6 +83,54 @@ Route::get('/kalkulator-zakat', function () {
     return view('landing-page.service.zakat-calculator.index', ["title" => "Kalkulator Zakat"]);
 })->name('zakat-calculator');
 
+// API: Ambil harga emas 1gr dari Antam (logammulia.com), cache 30 menit
+Route::get('/api/harga-emas', function () {
+    $data = \Illuminate\Support\Facades\Cache::remember('antam_gold_price', 1800, function () {
+        try {
+            $response = \Illuminate\Support\Facades\Http::timeout(10)
+                ->withHeaders([
+                    'User-Agent'      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                    'Accept'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language' => 'id-ID,id;q=0.9,en;q=0.8',
+                    'Cache-Control'   => 'no-cache',
+                    'Referer'         => 'https://www.logammulia.com/',
+                ])
+                ->get('https://www.logammulia.com/id/harga-emas-hari-ini');
+
+            if (!$response->successful()) {
+                return ['success' => false, 'price' => null];
+            }
+
+            $html = $response->body();
+
+            // Pattern 1: cari harga setelah "1 gr" dalam format X.XXX.XXX
+            if (preg_match('/1\s*gr\b.{0,200}?(\d{1,2}[.,]\d{3}[.,]\d{3})/si', $html, $m)) {
+                $price = (int) preg_replace('/[^0-9]/', '', $m[1]);
+                if ($price >= 1000000 && $price <= 15000000) {
+                    return ['success' => true, 'price' => $price];
+                }
+            }
+
+            // Pattern 2: fallback — semua angka di rentang harga emas 1gr
+            if (preg_match_all('/(\d{1,2}\.\d{3}\.\d{3})/', $html, $matches)) {
+                foreach ($matches[1] as $val) {
+                    $price = (int) str_replace('.', '', $val);
+                    if ($price >= 1500000 && $price <= 10000000) {
+                        return ['success' => true, 'price' => $price];
+                    }
+                }
+            }
+
+            return ['success' => false, 'price' => null];
+        } catch (\Exception $e) {
+            return ['success' => false, 'price' => null];
+        }
+    });
+
+    return response()->json($data)
+        ->header('Access-Control-Allow-Origin', '*');
+})->name('api.harga-emas');
+
 // Route LandingPage Layanan
 Route::get('/service', function () {
     return view('landing-page.service.index', ["title" => "Layanan"]);
