@@ -1,4 +1,3 @@
-{{-- FILE: resources/views/landing-page/service/zakat-calculator/components/_index-scripts.blade.php --}}
 <script>
 $(document).ready(function () {
 
@@ -85,8 +84,8 @@ $(document).ready(function () {
     /* -------------------------------------------------------
        EVENT: Klik Pill
     ------------------------------------------------------- */
-    $('.sl-pill').on('click', function () {
-        $('.sl-pill').removeClass('active');
+    $('.zk-pill').on('click', function () {
+        $('.zk-pill').removeClass('active');
         $(this).addClass('active');
         currentType = $(this).data('type');
         showInputSection(currentType);
@@ -101,7 +100,7 @@ $(document).ready(function () {
         $('#pertanianInputSection').hide();
         $('#peternakanInputSection').hide();
 
-        if (type === 'fitrah')        $('#fitrahInputSection').show();
+        if (type === 'fitrah')           $('#fitrahInputSection').show();
         else if (type === 'perdagangan') $('#perdaganganInputSection').show();
         else if (type === 'pertanian')   $('#pertanianInputSection').show();
         else if (type === 'peternakan')  $('#peternakanInputSection').show();
@@ -160,6 +159,7 @@ $(document).ready(function () {
             case 'perdagangan':
                 hint = 'Nisab: Rp ' + formatRibuan(nisabTahun) + ' (setara 85gr emas, ≥ 1 haul) | Ref: Fatwa MUI No.4/2014';
                 desc = 'Zakat atas usaha perdagangan. Dihitung dari <strong>(Stok + Piutang Lancar + Kas/Bank) − Utang Jatuh Tempo</strong>. Tarif <strong>2,5%</strong> jika mencapai nisab.';
+                $('#nisabDescDagang').html(hint);
                 break;
 
             case 'pertanian':
@@ -170,6 +170,7 @@ $(document).ready(function () {
             case 'peternakan':
                 hint = 'Nisab berbeda tiap jenis hewan. Disyaratkan ≥ 1 haul. | Ref: Kitab Fiqh Zakat Yusuf Qardhawi';
                 desc = 'Zakat atas hewan ternak yang digembalakan (sa\'imah) dan telah dimiliki selama <strong>1 haul</strong>. Nisab dan kadar zakat berbeda untuk tiap jenis hewan.';
+                $('#nisabDescPeternakan').html(hint);
                 break;
 
             case 'fitrah':
@@ -187,11 +188,11 @@ $(document).ready(function () {
     ------------------------------------------------------- */
     function showPrefix() {
         $('#currencyPrefix').removeClass('hidden');
-        $('#total_wealth').removeClass('no-prefix').addClass('sl-input-with-prefix').attr('placeholder', 'Contoh: 5.000.000');
+        $('#total_wealth').removeClass('no-prefix').addClass('zk-input-with-prefix').attr('placeholder', 'Contoh: 5.000.000');
     }
     function hidePrefix() {
         $('#currencyPrefix').addClass('hidden');
-        $('#total_wealth').removeClass('sl-input-with-prefix').addClass('no-prefix').attr('placeholder', 'Contoh: 100 (gram)');
+        $('#total_wealth').removeClass('zk-input-with-prefix').addClass('no-prefix').attr('placeholder', 'Contoh: 100 (gram)');
     }
 
     /* -------------------------------------------------------
@@ -231,13 +232,12 @@ $(document).ready(function () {
 
         /* ---- Perdagangan ---- */
         } else if (currentType === 'perdagangan') {
-            let stok     = parseRibuan($('#stok_barang').val());
-            let piutang  = parseRibuan($('#piutang_dagang').val());
-            let kas      = parseRibuan($('#kas_bank').val());
-            let utang    = parseRibuan($('#utang_dagang').val());
+            let stok    = parseRibuan($('#stok_barang').val());
+            let piutang = parseRibuan($('#piutang_dagang').val());
+            let kas     = parseRibuan($('#kas_bank').val());
+            let utang   = parseRibuan($('#utang_dagang').val());
             let asetBersih = stok + piutang + kas - utang;
 
-            // Tampilkan aset bersih live
             $('#total_perdagangan_display')
                 .text('Rp ' + formatRibuan(asetBersih))
                 .removeClass('text-danger text-success')
@@ -253,17 +253,12 @@ $(document).ready(function () {
 
         /* ---- Pertanian ---- */
         } else if (currentType === 'pertanian') {
-            let kg     = parseFloat($('#hasil_panen_kg').val()) || 0;
-            let tarif  = $('input[name="tarif_pertanian"]:checked').val() === 'irigasi' ? 0.05 : 0.10;
+            let kg    = parseFloat($('#hasil_panen_kg').val()) || 0;
+            let tarif = $('input[name="tarif_pertanian"]:checked').val() === 'irigasi' ? 0.05 : 0.10;
             let tarifLabel = tarif === 0.05 ? '5% (Irigasi)' : '10% (Tadah Hujan)';
             if (kg >= nisabPertanian) {
-                total = kg * goldPrice * 0.025 * (tarif / 0.025); // konversi: zakat = kg * tarif, dalam Rp = kg * harga_beras_equiv
-                // ---- koreksi: zakat pertanian dalam KG, lalu dikonversi Rp ----
-                // Nilai hasil panen = kg × harga gabah estimasi
-                // Tapi karena tidak ada input harga gabah, kita pakai nilai uang alternatif
-                // → tampilkan dalam KG dan Rp estimasi
                 let zakatKg = kg * tarif;
-                let hargaGabahEstimasi = 6000; // Rp/kg, estimasi harga gabah 2024
+                let hargaGabahEstimasi = 6000;
                 total = zakatKg * hargaGabahEstimasi;
                 wajib = true;
                 extraInfo = 'Zakat: ' + zakatKg.toFixed(2) + ' kg gabah ≈ Rp ' + formatRibuan(total) + ' (est. Rp 6.000/kg) | Tarif: ' + tarifLabel;
@@ -273,14 +268,12 @@ $(document).ready(function () {
         } else if (currentType === 'peternakan') {
             let jenis  = $('#jenis_hewan').val();
             let jumlah = parseInt($('#jumlah_hewan').val()) || 0;
-            // kerbau = mengikuti nisab sapi
             let tabel  = jenis === 'kerbau' ? peternakanNisab.sapi : peternakanNisab[jenis];
             if (tabel && jumlah > 0) {
                 let row = tabel.find(r => jumlah >= r.min && jumlah <= r.max);
-                if (!row) row = tabel[tabel.length - 1]; // ambil baris terakhir jika > max
+                if (!row) row = tabel[tabel.length - 1];
                 if (row && row.zakat !== 0) {
                     wajib = row.zakat > 0 || row.zakat === null;
-                    // Tidak ada nilai Rp untuk peternakan — tampilkan keterangan
                     total = 0;
                     extraInfo = row.keterangan;
                     showPeternakanResult(wajib, row);
@@ -307,13 +300,13 @@ $(document).ready(function () {
 
         $('#resultBox').fadeIn();
         $('#totalZakat').html('Rp ' + formatRibuan(Math.round(total)));
-        $('#extraInfo').html(extraInfo ? '<small class="text-muted d-block mt-1">' + extraInfo + '</small>' : '');
+        $('#extraInfo').html(extraInfo ? '<small class="zk-form-hint d-block mt-1">' + extraInfo + '</small>' : '');
 
         if (wajib) {
-            $('#statusZakat').text('✅ Wajib Zakat').attr('class', 'fw-bold mb-2 text-uppercase text-success');
+            $('#statusZakat').text('✅ Wajib Zakat').attr('class', 'zk-result-status text-success');
             $('#payButtonContainer').slideDown();
         } else {
-            $('#statusZakat').text('❌ Belum Wajib Zakat').attr('class', 'fw-bold mb-2 text-uppercase text-muted');
+            $('#statusZakat').text('❌ Belum Wajib Zakat').attr('class', 'zk-result-status text-muted');
             $('#payButtonContainer').hide();
         }
     }
@@ -324,12 +317,12 @@ $(document).ready(function () {
     function showPeternakanResult(wajib, row) {
         $('#resultBox').fadeIn();
         if (wajib) {
-            $('#statusZakat').text('✅ Wajib Zakat').attr('class', 'fw-bold mb-2 text-uppercase text-success');
+            $('#statusZakat').text('✅ Wajib Zakat').attr('class', 'zk-result-status text-success');
             $('#totalZakat').html('<span style="font-size:1.1rem">' + row.keterangan + '</span>');
-            $('#extraInfo').html('<small class="text-muted">Zakat peternakan dibayarkan dalam bentuk hewan, bukan uang tunai.</small>');
+            $('#extraInfo').html('<small class="zk-form-hint">Zakat peternakan dibayarkan dalam bentuk hewan, bukan uang tunai.</small>');
             $('#payButtonContainer').slideDown();
         } else {
-            $('#statusZakat').text('❌ Belum Wajib Zakat').attr('class', 'fw-bold mb-2 text-uppercase text-muted');
+            $('#statusZakat').text('❌ Belum Wajib Zakat').attr('class', 'zk-result-status text-muted');
             $('#totalZakat').html('<span style="font-size:1rem; color:#94a3b8">' + row.keterangan + '</span>');
             $('#extraInfo').html('');
             $('#payButtonContainer').hide();
@@ -358,6 +351,14 @@ $(document).ready(function () {
     $('#hasil_panen_kg, #jumlah_hewan').on('input', calculate);
     $('#jenis_hewan').on('change', function () { $('#jumlah_hewan').val(''); resetResult(); calculate(); });
     $('input[name="tarif_pertanian"]').on('change', calculate);
+
+    /* -------------------------------------------------------
+       ACCORDION — Panduan Nisab (custom, no Bootstrap dependency)
+    ------------------------------------------------------- */
+    $(document).on('click', '.zk-acc-header', function () {
+        const $item = $(this).closest('.zk-acc-item');
+        $item.toggleClass('zk-open');
+    });
 
 });
 </script>
