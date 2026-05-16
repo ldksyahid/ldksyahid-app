@@ -2,16 +2,16 @@
 $(document).ready(function () {
 
     /* -------------------------------------------------------
-       KONFIGURASI AWAL
+       INITIAL CONFIGURATION
     ------------------------------------------------------- */
-    let   goldPrice     = 2600000;   // Rp/gram — bisa diubah user
-    const nisabGram     = 85;        // gram emas
-    const fitrahPerJiwa = 50000;     // Rp/jiwa (BAZNAS Pusat)
-    const nisabPertanian = 653;      // kg gabah setara
+    let   goldPrice     = 2600000;   // Rp/gram — fetched from Antam on load
+    const nisabGram     = 85;        // grams of gold for nisab
+    const fitrahPerJiwa = 50000;     // Rp/person (BAZNAS national standard)
+    const nisabPertanian = 653;      // kg of unhulled rice equivalent
     let   currentType   = 'penghasilan';
 
-    /* Tabel Nisab Peternakan
-       Sumber: Fiqh Zakat Yusuf Qardhawi & Keputusan Menteri Agama RI */
+    /* Livestock nisab table
+       Source: Fiqh Zakat by Yusuf Qardhawi & Ministry of Religion RI */
     const peternakanNisab = {
         kambing: [
             { min: 1,   max: 39,  zakat: 0,  keterangan: 'Belum wajib' },
@@ -44,18 +44,17 @@ $(document).ready(function () {
             { min: 91,  max: 120, zakat: 2,  keterangan: '2 ekor unta hiqqah' },
             { min: 121, max: 999, zakat: null, keterangan: 'Setiap 40 ekor: 1 bintu labun; setiap 50 ekor: 1 hiqqah' },
         ],
-        kerbau: [] // Kerbau = sama dengan sapi (qiyas), dihandle di JS
+        kerbau: [] // Buffalo uses same table as sapi (qiyas)
     };
 
     /* -------------------------------------------------------
-       INISIALISASI
+       INITIALIZATION
     ------------------------------------------------------- */
-    $('#goldPriceInput').val(formatRibuan(goldPrice));
     updateGoldBadge();
     updateUI();
 
     /* -------------------------------------------------------
-       FORMAT RIBUAN
+       NUMBER FORMATTING
     ------------------------------------------------------- */
     function formatRibuan(n) {
         return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -64,25 +63,12 @@ $(document).ready(function () {
         return parseFloat((s || '').replace(/\./g, '')) || 0;
     }
 
-    /* -------------------------------------------------------
-       EVENT: Input harga emas
-    ------------------------------------------------------- */
-    $('#goldPriceInput').on('input', function () {
-        let raw = $(this).val().replace(/\./g, '').replace(/\D/g, '');
-        let num = parseInt(raw) || 0;
-        $(this).val(num > 0 ? formatRibuan(num) : '');
-        goldPrice = num > 0 ? num : 2600000;
-        updateGoldBadge();
-        updateUI();
-        calculate();
-    });
-
     function updateGoldBadge() {
-        $('#goldPriceDisplay').text('Rp ' + formatRibuan(goldPrice) + '/gr');
+        $('#goldPriceDisplay').text(formatRibuan(goldPrice));
     }
 
     /* -------------------------------------------------------
-       EVENT: Klik Pill
+       EVENT: Zakat type pill selection
     ------------------------------------------------------- */
     $('.zk-pill').on('click', function () {
         $('.zk-pill').removeClass('active');
@@ -108,7 +94,7 @@ $(document).ready(function () {
     }
 
     /* -------------------------------------------------------
-       FORMAT RIBUAN real-time pada input uang
+       REAL-TIME CURRENCY FORMATTING on money inputs
     ------------------------------------------------------- */
     function attachRibuanFormat(selector) {
         $(selector).on('input', function () {
@@ -130,7 +116,7 @@ $(document).ready(function () {
     attachRibuanFormat('#utang_dagang');
 
     /* -------------------------------------------------------
-       UPDATE UI — label, hint, deskripsi per jenis
+       UI UPDATE — labels, hints, description per zakat type
     ------------------------------------------------------- */
     function updateUI() {
         const nisabTahun = goldPrice * nisabGram;
@@ -184,7 +170,7 @@ $(document).ready(function () {
     }
 
     /* -------------------------------------------------------
-       HELPER: Prefix Rp
+       HELPER: Show/hide currency prefix for gold input
     ------------------------------------------------------- */
     function showPrefix() {
         $('#currencyPrefix').removeClass('hidden');
@@ -196,7 +182,7 @@ $(document).ready(function () {
     }
 
     /* -------------------------------------------------------
-       RESET HASIL
+       RESET RESULT
     ------------------------------------------------------- */
     function resetResult() {
         $('#resultBox').hide();
@@ -209,28 +195,28 @@ $(document).ready(function () {
     }
 
     /* -------------------------------------------------------
-       KALKULASI UTAMA
+       MAIN CALCULATION
     ------------------------------------------------------- */
     function calculate() {
         const nisabVal = goldPrice * nisabGram;
         let total = 0, wajib = false, extraInfo = '';
 
-        /* ---- Penghasilan ---- */
+        /* ---- Income (Penghasilan) ---- */
         if (currentType === 'penghasilan') {
             let w = parseRibuan($('#total_wealth').val());
             if (w >= nisabVal / 12) { total = w * 0.025; wajib = true; }
 
-        /* ---- Maal ---- */
+        /* ---- Wealth (Maal) ---- */
         } else if (currentType === 'maal') {
             let w = parseRibuan($('#total_wealth').val());
             if (w >= nisabVal) { total = w * 0.025; wajib = true; }
 
-        /* ---- Emas ---- */
+        /* ---- Gold ---- */
         } else if (currentType === 'emas') {
             let gram = parseFloat($('#total_wealth').val()) || 0;
             if (gram >= 85) { total = gram * goldPrice * 0.025; wajib = true; }
 
-        /* ---- Perdagangan ---- */
+        /* ---- Trade (Perdagangan) ---- */
         } else if (currentType === 'perdagangan') {
             let stok    = parseRibuan($('#stok_barang').val());
             let piutang = parseRibuan($('#piutang_dagang').val());
@@ -251,7 +237,7 @@ $(document).ready(function () {
                 extraInfo = 'Aset bersih dagang: Rp ' + formatRibuan(asetBersih);
             }
 
-        /* ---- Pertanian ---- */
+        /* ---- Agriculture (Pertanian) ---- */
         } else if (currentType === 'pertanian') {
             let kg    = parseFloat($('#hasil_panen_kg').val()) || 0;
             let tarif = $('input[name="tarif_pertanian"]:checked').val() === 'irigasi' ? 0.05 : 0.10;
@@ -264,7 +250,7 @@ $(document).ready(function () {
                 extraInfo = 'Zakat: ' + zakatKg.toFixed(2) + ' kg gabah ≈ Rp ' + formatRibuan(total) + ' (est. Rp 6.000/kg) | Tarif: ' + tarifLabel;
             }
 
-        /* ---- Peternakan ---- */
+        /* ---- Livestock (Peternakan) ---- */
         } else if (currentType === 'peternakan') {
             let jenis  = $('#jenis_hewan').val();
             let jumlah = parseInt($('#jumlah_hewan').val()) || 0;
@@ -292,7 +278,7 @@ $(document).ready(function () {
     }
 
     /* -------------------------------------------------------
-       TAMPIL HASIL — uang
+       DISPLAY RESULT — monetary zakat types
     ------------------------------------------------------- */
     function showMoneyResult(wajib, total, extraInfo) {
         const hasInput = hasAnyInput();
@@ -312,7 +298,7 @@ $(document).ready(function () {
     }
 
     /* -------------------------------------------------------
-       TAMPIL HASIL — peternakan (non-uang)
+       DISPLAY RESULT — livestock (non-monetary)
     ------------------------------------------------------- */
     function showPeternakanResult(wajib, row) {
         $('#resultBox').fadeIn();
@@ -330,7 +316,7 @@ $(document).ready(function () {
     }
 
     /* -------------------------------------------------------
-       HELPER: cek apakah ada input
+       HELPER: check whether the user has entered any input
     ------------------------------------------------------- */
     function hasAnyInput() {
         if (currentType === 'fitrah') return true;
@@ -358,6 +344,108 @@ $(document).ready(function () {
     $(document).on('click', '.zk-acc-header', function () {
         const $item = $(this).closest('.zk-acc-item');
         $item.toggleClass('zk-open');
+    });
+
+    /* -------------------------------------------------------
+       GOLD PRICE FETCH — auto-fetch Antam price via API
+    ------------------------------------------------------- */
+    function fetchGoldPrice(showStatus) {
+        const $btn      = $('#zkFetchGoldBtn');
+        const $icon     = $('#zkFetchIcon');
+        const $btnText  = $('#zkFetchBtnText');
+        const $status   = $('#zkGoldFetchStatus');
+
+        // Disable button and spin icon while fetching
+        $btn.prop('disabled', true);
+        $icon.addClass('fa-spin');
+        $btnText.text('Mengambil...');
+
+        if (showStatus) {
+            $status.removeClass('zk-fetch-ok zk-fetch-fail')
+                   .addClass('zk-fetch-loading')
+                   .html('<i class="fas fa-circle-notch fa-spin"></i> Mengambil harga emas dari Antam…')
+                   .show();
+        }
+
+        $.ajax({
+            url: '/api/harga-emas',
+            method: 'GET',
+            timeout: 15000,
+            success: function (data) {
+                if (data.success && data.price) {
+                    goldPrice = data.price;
+                    updateGoldBadge();
+                    updateUI();
+                    calculate();
+
+                    if (showStatus) {
+                        $status.removeClass('zk-fetch-loading zk-fetch-fail')
+                               .addClass('zk-fetch-ok')
+                               .html('<i class="fas fa-check-circle"></i> Harga emas berhasil diperbarui: <strong>Rp ' + formatRibuan(goldPrice) + '/gr</strong> (Antam)')
+                               .show();
+                        setTimeout(function () { $status.fadeOut(); }, 5000);
+                    }
+                } else {
+                    if (showStatus) {
+                        $status.removeClass('zk-fetch-loading zk-fetch-ok')
+                               .addClass('zk-fetch-fail')
+                               .html('<i class="fas fa-exclamation-circle"></i> Gagal mengambil harga. Menggunakan harga default.')
+                               .show();
+                        setTimeout(function () { $status.fadeOut(); }, 5000);
+                    }
+                }
+            },
+            error: function () {
+                if (showStatus) {
+                    $status.removeClass('zk-fetch-loading zk-fetch-ok')
+                           .addClass('zk-fetch-fail')
+                           .html('<i class="fas fa-exclamation-circle"></i> Koneksi gagal. Gunakan tombol Perbarui untuk mencoba lagi.')
+                           .show();
+                    setTimeout(function () { $status.fadeOut(); }, 5000);
+                }
+            },
+            complete: function () {
+                $btn.prop('disabled', false);
+                $icon.removeClass('fa-spin');
+                $btnText.text('Perbarui');
+            }
+        });
+    }
+
+    // Auto-fetch on page load (silent — no status message shown)
+    fetchGoldPrice(false);
+
+    // Manual refresh button
+    $('#zkFetchGoldBtn').on('click', function () {
+        fetchGoldPrice(true);
+    });
+
+    /* -------------------------------------------------------
+       ORG MODAL — open/close zakat organization popup
+    ------------------------------------------------------- */
+    function openOrgModal() {
+        $('#zkOrgBackdrop').addClass('zk-visible');
+        $('#zkOrgModal').addClass('zk-visible');
+        $('body').css('overflow', 'hidden');
+    }
+
+    function closeOrgModal() {
+        $('#zkOrgBackdrop').addClass('zk-closing');
+        $('#zkOrgModal').addClass('zk-closing');
+        setTimeout(function () {
+            $('#zkOrgBackdrop').removeClass('zk-visible zk-closing');
+            $('#zkOrgModal').removeClass('zk-visible zk-closing');
+            $('body').css('overflow', '');
+        }, 150); // matches CSS animation duration
+    }
+
+    $('#zkOpenOrgModal').on('click', function () { openOrgModal(); });
+    $('#zkOrgClose').on('click', function ()     { closeOrgModal(); });
+    $('#zkOrgBackdrop').on('click', function ()  { closeOrgModal(); });
+
+    // Close modal on ESC key
+    $(document).on('keydown', function (e) {
+        if (e.key === 'Escape') { closeOrgModal(); }
     });
 
 });

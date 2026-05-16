@@ -51,25 +51,34 @@
 
                     {{-- Gold Price Panel --}}
                     <div class="zk-gold-panel">
-                        <div class="zk-gold-title"><i class="fas fa-cog"></i> Pengaturan Harga Emas</div>
-                        <div class="zk-gold-input-wrap">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="zk-gold-prefix">Rp</span>
-                                <input type="text" id="goldPriceInput" class="zk-gold-input"
-                                       placeholder="2.600.000" inputmode="numeric">
-                                <span class="zk-gold-suffix">/gram</span>
+                        <div class="zk-gold-shimmer"></div>
+                        <div class="zk-gold-top">
+                            <div class="zk-gold-brand">
+                                <div class="zk-gold-icon-wrap">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="zk-gold-brand-info">
+                                    <p class="zk-gold-brand-label">Harga Emas</p>
+                                    <p class="zk-gold-brand-src">
+                                        <a href="https://www.logammulia.com/id/harga-emas-hari-ini" target="_blank" rel="noopener">Antam · logammulia.com</a>
+                                    </p>
+                                </div>
                             </div>
-                            <div class="zk-gold-ref">
-                                Default: Rp 2.600.000/gr &nbsp;|&nbsp;
-                                Ref: <a href="https://www.logammulia.com/id/harga-emas-hari-ini" target="_blank" rel="noopener">Antam</a>
-                                / <a href="https://www.lbma.org.uk/prices-and-data/precious-metal-prices" target="_blank" rel="noopener">LBMA</a>
-                                — perbarui sesuai harga aktual
-                            </div>
+                            <button type="button" class="zk-gold-fetch-btn" id="zkFetchGoldBtn">
+                                <i class="fas fa-sync-alt" id="zkFetchIcon"></i>
+                                <span id="zkFetchBtnText">Perbarui</span>
+                            </button>
                         </div>
-                        <span class="zk-gold-badge">
-                            <span class="zk-gold-badge-pulse"></span>
-                            Harga Aktif: <span id="goldPriceDisplay">Rp 2.600.000/gr</span>
-                        </span>
+                        <div class="zk-gold-price-row">
+                            <span class="zk-gold-price-cur">Rp</span>
+                            <span class="zk-gold-price-num" id="goldPriceDisplay">2.600.000</span>
+                            <span class="zk-gold-price-unit">/gram</span>
+                        </div>
+                        <div class="zk-gold-footer">
+                            <span class="zk-gold-live-dot"></span>
+                            <span class="zk-gold-live-label">Harga aktif · diperbarui otomatis</span>
+                        </div>
+                        <div id="zkGoldFetchStatus" class="zk-gold-fetch-status" style="display:none;"></div>
                     </div>
 
                     {{-- Jenis Zakat --}}
@@ -218,10 +227,10 @@
                         <div class="zk-result-amount" id="totalZakat">Rp 0</div>
                         <div id="extraInfo"></div>
                         <div id="payButtonContainer" style="display:none;" class="mt-4">
-                            <a href="{{ url('/donasi') }}" class="zk-pay-btn text-decoration-none">
+                            <button type="button" class="zk-pay-btn" id="zkOpenOrgModal">
                                 <i class="fas fa-heart"></i>
                                 <span>Tunaikan Zakat Sekarang</span>
-                            </a>
+                            </button>
                         </div>
                     </div>
 
@@ -370,7 +379,7 @@
                 <div class="zk-warning-card mt-4">
                     <p class="zk-warning-title"><i class="fas fa-exclamation-triangle"></i> Catatan Penting</p>
                     <ul class="zk-warning-list">
-                        <li>Harga emas dapat diperbarui manual. Ref: <a href="https://www.logammulia.com/id/harga-emas-hari-ini" target="_blank" rel="noopener">Antam</a> / <a href="https://www.lbma.org.uk" target="_blank" rel="noopener">LBMA</a>.</li>
+                        <li>Harga emas diambil otomatis dari <a href="https://www.logammulia.com/id/harga-emas-hari-ini" target="_blank" rel="noopener">logammulia.com (Antam)</a>. Gunakan tombol <em>Perbarui</em> untuk menyegarkan data.</li>
                         <li>Zakat Pertanian: konversi nilai Rp menggunakan estimasi harga gabah Rp 6.000/kg. Sesuaikan dengan harga aktual daerah Anda.</li>
                         <li>Zakat Peternakan dibayarkan dalam bentuk <strong>hewan</strong>, bukan uang tunai. Nilai Rp di hasil hanya estimasi.</li>
                         <li>Kalkulator ini bersifat alat bantu estimasi. Konsultasikan ke lembaga amil zakat untuk kepastian hukum.</li>
@@ -383,6 +392,96 @@
         </div>{{-- /zk-layout --}}
     </div>{{-- /container --}}
 </section>
+{{-- ===== POPUP: Pilih Lembaga Zakat ===== --}}
+<div class="zk-org-backdrop" id="zkOrgBackdrop"></div>
+<div class="zk-org-modal" id="zkOrgModal" role="dialog" aria-modal="true" aria-label="Pilih Lembaga Zakat">
+    <div class="zk-org-modal-inner">
+
+        <button type="button" class="zk-org-close" id="zkOrgClose" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="zk-org-header">
+            <p class="zk-org-header-label">Tunaikan Zakatmu</p>
+            <h5 class="zk-org-header-title">Pilih Lembaga Zakat Terpercaya</h5>
+        </div>
+
+        <p class="zk-org-subtitle">
+            Semua lembaga di bawah terdaftar resmi dan terpercaya dalam pengelolaan zakat di Indonesia.
+        </p>
+
+        <div class="zk-org-grid">
+
+            <a href="https://digital.dompetdhuafa.org/" target="_blank" rel="noopener" class="zk-org-card">
+                <div class="zk-org-logo-wrap">
+                    <img src="https://logo.clearbit.com/dompetdhuafa.org"
+                         alt="Dompet Dhuafa" class="zk-org-logo"
+                         onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=dompetdhuafa.org&sz=64'">
+                </div>
+                <span class="zk-org-name">Dompet Dhuafa</span>
+                <span class="zk-org-tagline">Zakat, Infak &amp; Sedekah</span>
+                <span class="zk-org-cta">Bayar Zakat <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <a href="https://www.rumahzakat.org/" target="_blank" rel="noopener" class="zk-org-card">
+                <div class="zk-org-logo-wrap">
+                    <img src="https://logo.clearbit.com/rumahzakat.org"
+                         alt="Rumah Zakat" class="zk-org-logo"
+                         onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=rumahzakat.org&sz=64'">
+                </div>
+                <span class="zk-org-name">Rumah Zakat</span>
+                <span class="zk-org-tagline">Berbagi untuk Sesama</span>
+                <span class="zk-org-cta">Bayar Zakat <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <a href="https://baznas.go.id/" target="_blank" rel="noopener" class="zk-org-card">
+                <div class="zk-org-logo-wrap">
+                    <img src="https://logo.clearbit.com/baznas.go.id"
+                         alt="BAZNAS" class="zk-org-logo"
+                         onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=baznas.go.id&sz=64'">
+                </div>
+                <span class="zk-org-name">BAZNAS</span>
+                <span class="zk-org-tagline">Badan Amil Zakat Nasional</span>
+                <span class="zk-org-cta">Bayar Zakat <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <a href="https://donasi.lazismu.org/" target="_blank" rel="noopener" class="zk-org-card">
+                <div class="zk-org-logo-wrap">
+                    <img src="https://logo.clearbit.com/lazismu.org"
+                         alt="Lazismu" class="zk-org-logo"
+                         onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=lazismu.org&sz=64'">
+                </div>
+                <span class="zk-org-name">Lazismu</span>
+                <span class="zk-org-tagline">Zakat Infak Sedekah Muhammadiyah</span>
+                <span class="zk-org-cta">Bayar Zakat <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <a href="https://rumah-yatim.org/" target="_blank" rel="noopener" class="zk-org-card">
+                <div class="zk-org-logo-wrap">
+                    <img src="https://logo.clearbit.com/rumah-yatim.org"
+                         alt="Rumah Yatim" class="zk-org-logo"
+                         onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=rumah-yatim.org&sz=64'">
+                </div>
+                <span class="zk-org-name">Rumah Yatim</span>
+                <span class="zk-org-tagline">Berbagi Bersama Yatim &amp; Dhuafa</span>
+                <span class="zk-org-cta">Bayar Zakat <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <a href="https://kitabisa.com/" target="_blank" rel="noopener" class="zk-org-card">
+                <div class="zk-org-logo-wrap">
+                    <img src="https://logo.clearbit.com/kitabisa.com"
+                         alt="Kitabisa" class="zk-org-logo"
+                         onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=kitabisa.com&sz=64'">
+                </div>
+                <span class="zk-org-name">Kitabisa</span>
+                <span class="zk-org-tagline">Platform Donasi &amp; Zakat Online</span>
+                <span class="zk-org-cta">Bayar Zakat <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+        </div>{{-- /zk-org-grid --}}
+    </div>{{-- /zk-org-modal-inner --}}
+</div>{{-- /zk-org-modal --}}
+
 @endsection
 
 @section('scripts')
