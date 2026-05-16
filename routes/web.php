@@ -79,7 +79,7 @@ Route::get('/kalkulatorkestari', function () {
 });
 
 // Route LandingPage Layanan => Kalkulator Zakat
-Route::get('/service/zakat-calculator', function () {
+Route::get('/kalkulator-zakat', function () {
     return view('landing-page.service.zakat-calculator.index', ["title" => "Kalkulator Zakat"]);
 })->name('zakat-calculator');
 

@@ -62,11 +62,11 @@
                     <div class="sv-card-footer">
                         <div class="sv-card-share-row">
                             <button class="sv-card-share-btn sv-share-copy"
-                                    onclick="svCopyUrl('{{ url('/service/zakat-calculator') }}', event)">
+                                    onclick="svCopyUrl('{{ url('/kalkulator-zakat') }}', event)">
                                 <i class="fas fa-link"></i><span>Salin URL</span>
                             </button>
                             <button class="sv-card-share-btn sv-share-wa"
-                                    onclick="svShareWa('{{ url('/service/zakat-calculator') }}', 'Kalkulator Zakat', event)">
+                                    onclick="svShareWa('{{ url('/kalkulator-zakat') }}', 'Kalkulator Zakat', event)">
                                 <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
                             </button>
                         </div>
