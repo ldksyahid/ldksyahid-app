@@ -459,8 +459,7 @@
 /* ── Description box ────────────────────────────────────── */
 .zk-desc-box {
     background: rgba(0,167,157,0.06);
-    border-left: 3px solid #00a79d;
-    border-radius: 0 10px 10px 0;
+    border-radius: 10px;
     padding: 0.6rem 1rem;
     margin-top: 0.75rem;
     margin-bottom: 1.25rem;
