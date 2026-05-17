@@ -32,6 +32,8 @@ use App\Http\Controllers\GenerateEmailController;
 use App\Http\Controllers\JobQueueLogController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\FonnteWebhookController;
+use App\Http\Controllers\Admin\AdminFormController;
+use App\Http\Controllers\PublicFormController;
 
 /*
 |--------------------------------------------------------------------------
@@ -529,6 +531,47 @@ Route::middleware(['role:Superadmin'])
     ->group(function () {
         Route::get('/', [SettingController::class, 'index'])->name('index');
         Route::post('/update', [SettingController::class, 'update'])->name('update');
+    });
+
+// ======================================= DYNAMIC FORMS — ADMIN =======================================
+
+Route::middleware(['auth', 'role:Superadmin|HelperAdmin'])
+    ->prefix('/admin/forms')
+    ->name('admin.forms.')
+    ->group(function () {
+        // Form CRUD
+        Route::get('/',                [AdminFormController::class, 'index'])   ->name('index');
+        Route::get('/create',          [AdminFormController::class, 'create'])  ->name('create');
+        Route::post('/',               [AdminFormController::class, 'store'])   ->name('store');
+        Route::get('/{id}',            [AdminFormController::class, 'show'])    ->name('show');
+        Route::get('/{id}/edit',       [AdminFormController::class, 'edit'])    ->name('edit');
+        Route::put('/{id}',            [AdminFormController::class, 'update'])  ->name('update');
+        Route::delete('/{id}',         [AdminFormController::class, 'destroy']) ->name('destroy');
+
+        // Form lifecycle
+        Route::post('/{id}/publish',   [AdminFormController::class, 'publish']) ->name('publish');
+        Route::post('/{id}/close',     [AdminFormController::class, 'close'])   ->name('close');
+
+        // Form builder (visual drag-drop editor)
+        Route::get('/{id}/builder',    [AdminFormController::class, 'builder']) ->name('builder');
+
+        // Field management (AJAX — called from builder UI)
+        Route::post('/{id}/fields',              [AdminFormController::class, 'addField'])     ->name('fields.add');
+        Route::put('/{id}/fields/{fieldID}',     [AdminFormController::class, 'updateField'])  ->name('fields.update');
+        Route::delete('/{id}/fields/{fieldID}',  [AdminFormController::class, 'removeField'])  ->name('fields.remove');
+        Route::post('/{id}/fields/reorder',      [AdminFormController::class, 'reorderFields'])->name('fields.reorder');
+    });
+
+// ======================================= DYNAMIC FORMS — PUBLIC =======================================
+
+// Public form submission — throttle to 5 per 10 minutes per IP
+Route::prefix('/form')
+    ->name('forms.')
+    ->group(function () {
+        Route::get('/{slug}',          [PublicFormController::class, 'show'])     ->name('show');
+        Route::post('/{slug}',         [PublicFormController::class, 'submit'])   ->name('submit')
+             ->middleware('throttle:5,10');
+        Route::get('/{slug}/terima-kasih', [PublicFormController::class, 'thankYou'])->name('thank-you');
     });
 
 // ======================================= END ROUTE ADMIN PAGE =======================================

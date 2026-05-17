@@ -99,6 +99,7 @@
                 </div>
                 <a href="/admin/ktaldksyahid" class="nav-item nav-link {{ $isActive('admin/ktaldksyahid') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i>KTA LDK Syahid</a>
                 <a href="/admin/catalog/books" class="nav-item nav-link {{ $isActive('admin/catalog/books') ? 'active' : '' }}"><i class="fa fa-book me-2"></i>Book Catalog</a>
+                <a href="/admin/forms" class="nav-item nav-link {{ $isActive('admin/forms') ? 'active' : '' }}"><i class="fas fa-clipboard-list me-2"></i>Dynamic Forms</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/finance-report']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fa fa-file-alt me-2"></i>Reports</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
@@ -128,6 +129,7 @@
                     </div>
                 </div>
                 <a href="/admin/event" class="nav-item nav-link {{ $isActive('admin/event') ? 'active' : '' }}"><i class="fas fa-calendar-check me-2"></i>Event</a>
+                <a href="/admin/forms" class="nav-item nav-link {{ $isActive('admin/forms') ? 'active' : '' }}"><i class="fas fa-clipboard-list me-2"></i>Dynamic Forms</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/service/shortlink']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
