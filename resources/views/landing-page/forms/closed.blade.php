@@ -16,35 +16,35 @@
                     </div>
 
                     {{-- Title --}}
-                    <h3 style="font-weight:800;color:#111827;margin-bottom:.5rem;">
-                        Formulir Tidak Tersedia
+                    <h3 style="font-weight:800;color:var(--bs-body-color,#111827);margin-bottom:.5rem;">
+                        Form Not Available
                     </h3>
 
                     {{-- Reason --}}
-                    <p style="color:#6b7280;font-size:.95rem;line-height:1.6;margin-bottom:1.5rem;">
+                    <p style="color:var(--bs-secondary-color,#6b7280);font-size:.95rem;line-height:1.6;margin-bottom:1.5rem;">
                         @if($form->status === 'closed')
-                            Formulir <strong>{{ $form->title }}</strong> telah ditutup
-                            dan tidak menerima pengisian baru.
+                            The form <strong>{{ $form->title }}</strong> has been closed
+                            and is no longer accepting submissions.
                         @elseif($form->status === 'draft')
-                            Formulir ini belum dipublikasikan.
+                            This form has not been published yet.
                         @elseif($form->maxSubmission && $form->totalSubmission >= $form->maxSubmission)
-                            Formulir <strong>{{ $form->title }}</strong> telah mencapai
-                            batas maksimum pengisian ({{ number_format($form->maxSubmission) }}).
+                            The form <strong>{{ $form->title }}</strong> has reached its
+                            maximum submission limit ({{ number_format($form->maxSubmission) }}).
                         @elseif($form->endDate && now()->gt($form->endDate))
-                            Formulir <strong>{{ $form->title }}</strong> sudah melewati
-                            batas waktu pengisian
-                            ({{ $form->endDate->timezone('Asia/Jakarta')->format('d F Y, H:i') }} WIB).
+                            The form <strong>{{ $form->title }}</strong> has passed its
+                            closing time
+                            ({{ $form->endDate->timezone('Asia/Jakarta')->format('d F Y, H:i') }}).
                         @elseif($form->startDate && now()->lt($form->startDate))
-                            Formulir <strong>{{ $form->title }}</strong> belum dibuka.
-                            Pembukaan: {{ $form->startDate->timezone('Asia/Jakarta')->format('d F Y, H:i') }} WIB.
+                            The form <strong>{{ $form->title }}</strong> is not open yet.
+                            Opens: {{ $form->startDate->timezone('Asia/Jakarta')->format('d F Y, H:i') }}.
                         @else
-                            Formulir ini sedang tidak menerima pengisian.
+                            This form is not currently accepting submissions.
                         @endif
                     </p>
 
                     <a href="{{ url('/') }}" class="auth-btn" style="display:inline-flex;text-decoration:none;width:auto;padding:.6rem 2rem;">
                         <i class="fas fa-home"></i>
-                        <span>Kembali ke Beranda</span>
+                        <span>Back to Home</span>
                         <div class="auth-btn-shine"></div>
                     </a>
 

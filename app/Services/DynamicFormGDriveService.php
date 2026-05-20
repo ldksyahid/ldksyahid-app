@@ -300,6 +300,20 @@ class DynamicFormGDriveService
     }
 
     /**
+     * Permanently delete the form's root GDrive folder and all its contents
+     * (spreadsheet + attachments folder + all uploaded files).
+     * Non-fatal: logs error but does not throw.
+     */
+    public function deleteFormFolder(string $folderID): void
+    {
+        try {
+            $this->driveService->files->delete($folderID);
+        } catch (\Exception $e) {
+            Log::warning("[DynamicFormGDriveService] Failed to delete folder {$folderID}: " . $e->getMessage());
+        }
+    }
+
+    /**
      * Revoke a specific user's access to a folder by listing and deleting their permission.
      */
     public function revokeAccess(string $folderID, string $email): void
@@ -377,6 +391,35 @@ class DynamicFormGDriveService
             'id'  => $spreadsheetID,
             'url' => "https://docs.google.com/spreadsheets/d/{$spreadsheetID}/edit",
         ];
+    }
+
+    // =========================================================================
+    // Update spreadsheet headers — overwrites row 1 with the current field list
+    // =========================================================================
+
+    /**
+     * Overwrite the header row (row 1) of an existing spreadsheet.
+     * Called by the Form Builder whenever a field is added.
+     *
+     * @param  string $spreadsheetID  The GDrive Spreadsheet ID
+     * @param  array  $headers        Ordered list of header strings
+     */
+    public function updateSpreadsheetHeaders(string $spreadsheetID, array $headers): void
+    {
+        if (empty($headers)) {
+            return;
+        }
+
+        $body = new Google_Service_Sheets_ValueRange([
+            'values' => [array_values($headers)],
+        ]);
+
+        $this->sheetsService->spreadsheets_values->update(
+            $spreadsheetID,
+            'Sheet1!A1',
+            $body,
+            ['valueInputOption' => 'RAW']
+        );
     }
 
     // =========================================================================

@@ -66,6 +66,9 @@
     $colspan = $tableConfig['colspan'] ?? 6;
     $columns = $tableConfig['columns'] ?? [];
     $actions = $tableConfig['actions'] ?? [];
+    $deleteOwnerField     = $actions['delete']['ownerField'] ?? null;
+    $deleteOwnerCompareBy = $actions['delete']['ownerCompareField'] ?? 'email';
+    $currentUser          = auth()->user();
 @endphp
 
 @if ($items->count() > 0)
@@ -73,7 +76,8 @@
     <tr>
         {{-- Checkbox Column --}}
         <td>
-            <input type="checkbox" name="ids[]" value="{{ $item->{$idKey} }}" {{ $isSuperadmin ? '' : 'disabled' }}>
+            @php $isItemOwner = $deleteOwnerField && $currentUser && $item->{$deleteOwnerField} === $currentUser->{$deleteOwnerCompareBy}; @endphp
+            <input type="checkbox" name="ids[]" value="{{ $item->{$idKey} }}" {{ (!$isSuperadmin && !$isItemOwner) ? 'disabled' : '' }}>
         </td>
 
         {{-- Row Number --}}
@@ -241,7 +245,12 @@
                 {{-- Edit Button --}}
                 @if(isset($actions['edit']) && $actions['edit']['enabled'])
                     @php
-                        $isEditProtected = isset($actions['edit']['protectedId']) && $item->{$idKey} == $actions['edit']['protectedId'];
+                        $isEditProtected     = isset($actions['edit']['protectedId']) && $item->{$idKey} == $actions['edit']['protectedId'];
+                        $editOwnerField      = $actions['edit']['ownerField'] ?? null;
+                        $editOwnerCompareBy  = $actions['edit']['ownerCompareField'] ?? 'email';
+                        $isEditOwnerRestricted = $editOwnerField && $currentUser && $item->{$editOwnerField} !== $currentUser->{$editOwnerCompareBy} && !$isSuperadmin;
+                        $editDisabled        = $isEditProtected || $isEditOwnerRestricted;
+                        $editTitle           = $isEditProtected ? 'Protected' : ($isEditOwnerRestricted ? 'Only the creator can edit this' : 'Edit');
                     @endphp
                     @if(($actions['edit']['type'] ?? 'link') === 'modal')
                         <button type="button"
@@ -249,13 +258,13 @@
                             @foreach($actions['edit']['modalData'] ?? [] as $dataKey => $dataField)
                                 data-{{ $dataKey }}="{{ data_get($item, $dataField) }}"
                             @endforeach
-                            title="Edit"
-                            {{ $isEditProtected ? 'disabled' : '' }}>
+                            title="{{ $editTitle }}"
+                            {{ $editDisabled ? 'disabled' : '' }}>
                             <i class="fa fa-edit"></i>
                         </button>
                     @else
-                        @if($isEditProtected)
-                            <button type="button" class="btn btn-sm {{ $actions['edit']['class'] ?? 'btn-custom-primary' }}" disabled title="Protected">
+                        @if($editDisabled)
+                            <button type="button" class="btn btn-sm {{ $actions['edit']['class'] ?? 'btn-custom-primary' }}" disabled title="{{ $editTitle }}">
                                 <i class="fa fa-edit" style="color: white;"></i>
                             </button>
                         @else
@@ -270,14 +279,16 @@
                 {{-- Delete Button --}}
                 @if(isset($actions['delete']) && $actions['delete']['enabled'])
                     @php
-                        $isDeleteProtected = isset($actions['delete']['protectedId']) && $item->{$idKey} == $actions['delete']['protectedId'];
-                        $isSuperadminOnly = ($actions['delete']['superadminOnly'] ?? false) && !$isSuperadmin;
+                        $isDeleteProtected  = isset($actions['delete']['protectedId']) && $item->{$idKey} == $actions['delete']['protectedId'];
+                        $isSuperadminOnly   = ($actions['delete']['superadminOnly'] ?? false) && !$isSuperadmin;
+                        $isOwnerRestricted  = $deleteOwnerField && $currentUser && $item->{$deleteOwnerField} !== $currentUser->{$deleteOwnerCompareBy} && !$isSuperadmin;
+                        $deleteTitle        = $isDeleteProtected ? 'Protected' : ($isOwnerRestricted ? 'Only the creator can delete this' : 'Delete');
                     @endphp
                     <button type="button"
                         class="btn btn-sm {{ $actions['delete']['class'] ?? 'btn-custom-primary' }} {{ $actions['delete']['btnClass'] ?? 'delete-btn' }} delete-action-btn"
                         data-id="{{ $item->{$idKey} }}"
-                        title="{{ $isDeleteProtected ? 'Protected' : 'Delete' }}"
-                        {{ $isDeleteProtected || $isSuperadminOnly ? 'disabled' : '' }}>
+                        title="{{ $deleteTitle }}"
+                        {{ $isDeleteProtected || $isSuperadminOnly || $isOwnerRestricted ? 'disabled' : '' }}>
                         <i class="fa fa-trash"></i>
                     </button>
                 @endif
@@ -287,19 +298,95 @@
                     @foreach($actions['custom'] as $customAction)
                         @if($customAction['enabled'] ?? true)
                             @php
-                                $customUrl = '';
-                                if (isset($customAction['urlBuilder'])) {
-                                    $customUrl = $customAction['urlBuilder']($item);
-                                } elseif (isset($customAction['route'])) {
-                                    $customUrl = route($customAction['route'], $item->{$customAction['routeKey'] ?? $idKey});
-                                }
+                                $customType           = $customAction['type'] ?? 'link';
+                                $customOwnerField     = $customAction['ownerField'] ?? null;
+                                $customOwnerCompareBy = $customAction['ownerCompareField'] ?? 'email';
+                                $isCustomOwnerRestricted = $customOwnerField && $currentUser && $item->{$customOwnerField} !== $currentUser->{$customOwnerCompareBy} && !$isSuperadmin;
                             @endphp
-                            <a href="{{ $customUrl }}"
-                               target="{{ $customAction['target'] ?? '_self' }}"
-                               class="btn btn-sm {{ $customAction['class'] ?? 'btn-success' }}"
-                               title="{{ $customAction['title'] ?? '' }}">
-                                <i class="fa {{ $customAction['icon'] ?? 'fa-link' }}" style="color: white;"></i>
-                            </a>
+
+                            @if($customType === 'status-toggle')
+                                {{-- Single slot: route/icon/class change per status value. Button is a direct
+                                     child of .btn-group so Bootstrap border-radius rules apply correctly. --}}
+                                @php
+                                    $toggleFieldVal = $item->{$customAction['field']};
+                                    $toggleState    = $customAction['states'][$toggleFieldVal] ?? null;
+                                @endphp
+                                @if($toggleState && !($toggleState['hidden'] ?? false))
+                                    @if($isCustomOwnerRestricted)
+                                        <button type="button"
+                                                class="btn btn-sm {{ $toggleState['class'] ?? 'btn-custom-primary' }}"
+                                                title="Only the creator can change the status"
+                                                disabled>
+                                            <i class="fa {{ $toggleState['icon'] ?? 'fa-link' }}" style="color:white;"></i>
+                                        </button>
+                                    @else
+                                        <button type="button"
+                                                class="btn btn-sm {{ $toggleState['class'] ?? 'btn-custom-primary' }}"
+                                                title="{{ $toggleState['title'] ?? '' }}"
+                                                data-url="{{ route($toggleState['route'], $item->{$customAction['routeKey'] ?? $idKey}) }}"
+                                                data-token="{{ csrf_token() }}"
+                                                data-confirm-title="{{ $toggleState['confirm']['title'] ?? ('Confirm ' . ($toggleState['title'] ?? 'Action')) }}"
+                                                data-confirm-text="{{ $toggleState['confirm']['text'] ?? 'Are you sure you want to continue?' }}"
+                                                data-confirm-btn="{{ $toggleState['confirm']['confirmButtonText'] ?? 'Yes, Continue' }}"
+                                                data-success-msg="{{ $toggleState['successMsg'] ?? 'Done!' }}"
+                                                onclick="confirmStatusToggle(this)">
+                                            <i class="fa {{ $toggleState['icon'] ?? 'fa-link' }}" style="color:white;"></i>
+                                        </button>
+                                    @endif
+                                @endif
+
+                            @elseif($customType === 'post-form')
+                                {{-- Conditional POST button, direct child of .btn-group. --}}
+                                @php
+                                    $showCustomAction = true;
+                                    if (isset($customAction['conditionField'], $customAction['conditionValues'])) {
+                                        $showCustomAction = in_array($item->{$customAction['conditionField']}, $customAction['conditionValues']);
+                                    }
+                                @endphp
+                                @if($showCustomAction)
+                                    @if($isCustomOwnerRestricted)
+                                        <button type="button"
+                                                class="btn btn-sm {{ $customAction['class'] ?? 'btn-custom-primary' }}"
+                                                title="Only the creator can perform this action"
+                                                disabled>
+                                            <i class="fa {{ $customAction['icon'] ?? 'fa-link' }}" style="color:white;"></i>
+                                        </button>
+                                    @else
+                                        <button type="button"
+                                                class="btn btn-sm {{ $customAction['class'] ?? 'btn-custom-primary' }}"
+                                                title="{{ $customAction['title'] ?? '' }}"
+                                                onclick="submitPostAction('{{ route($customAction['route'], $item->{$customAction['routeKey'] ?? $idKey}) }}','{{ csrf_token() }}')">
+                                            <i class="fa {{ $customAction['icon'] ?? 'fa-link' }}" style="color:white;"></i>
+                                        </button>
+                                    @endif
+                                @endif
+
+                            @else
+                                {{-- Default: anchor link --}}
+                                @php
+                                    $customUrl = '';
+                                    if (isset($customAction['urlBuilder'])) {
+                                        $customUrl = $customAction['urlBuilder']($item);
+                                    } elseif (isset($customAction['route'])) {
+                                        $customUrl = route($customAction['route'], $item->{$customAction['routeKey'] ?? $idKey});
+                                    }
+                                @endphp
+                                @if($isCustomOwnerRestricted)
+                                    <button type="button"
+                                            class="btn btn-sm {{ $customAction['class'] ?? 'btn-success' }}"
+                                            title="Only the creator can access this"
+                                            disabled>
+                                        <i class="fa {{ $customAction['icon'] ?? 'fa-link' }}" style="color:white;"></i>
+                                    </button>
+                                @else
+                                    <a href="{{ $customUrl }}"
+                                       target="{{ $customAction['target'] ?? '_self' }}"
+                                       class="btn btn-sm {{ $customAction['class'] ?? 'btn-success' }}"
+                                       title="{{ $customAction['title'] ?? '' }}">
+                                        <i class="fa {{ $customAction['icon'] ?? 'fa-link' }}" style="color: white;"></i>
+                                    </a>
+                                @endif
+                            @endif
                         @endif
                     @endforeach
                 @endif
@@ -317,3 +404,78 @@
         </td>
     </tr>
 @endif
+
+@once
+<script>
+// Used by post-form type (direct submit, navigates away)
+function submitPostAction(url, token) {
+    const f = document.createElement('form');
+    f.method = 'POST';
+    f.action = url;
+    const t = document.createElement('input');
+    t.type = 'hidden'; t.name = '_token'; t.value = token;
+    f.appendChild(t);
+    document.body.appendChild(f);
+    f.submit();
+}
+
+// Used by status-toggle type (AJAX, stays on page)
+function confirmStatusToggle(btn) {
+    const url        = btn.dataset.url;
+    const token      = btn.dataset.token;
+    const title      = btn.dataset.confirmTitle;
+    const text       = btn.dataset.confirmText;
+    const confirmBtn = btn.dataset.confirmBtn;
+    const successMsg = btn.dataset.successMsg;
+
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#00a79d',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: confirmBtn,
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+
+        const originalHtml = btn.innerHTML;
+        btn.disabled  = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN':     token,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept':           'application/json'
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            btn.disabled  = false;
+            btn.innerHTML = originalHtml;
+
+            if (data.success !== false) {
+                if (window.Toast) {
+                    window.Toast.fire({ icon: 'success', title: successMsg });
+                }
+                if (typeof window.loadData === 'function') {
+                    window.loadData();
+                } else {
+                    location.reload();
+                }
+            } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Something went wrong.' });
+            }
+        })
+        .catch(err => {
+            btn.disabled  = false;
+            btn.innerHTML = originalHtml;
+            Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+        });
+    });
+}
+</script>
+@endonce

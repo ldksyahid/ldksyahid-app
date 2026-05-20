@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Konfirmasi Pengisian Formulir – LDK Syahid</title>
+    <title>Form Submission Confirmation – LDK Syahid</title>
     <style>
         @media only screen and (max-width: 600px) {
             .card     { width: 100% !important; }
@@ -28,14 +28,22 @@
                 <!-- Header -->
                 <tr>
                     <td class="hdr-pad" align="center"
-                        style="background:linear-gradient(135deg,#1a6b3a 0%,#2ea65a 100%);padding:32px 40px;">
-                        <p style="margin:0 0 10px;font-size:13px;color:rgba(255,255,255,0.8);letter-spacing:1px;text-transform:uppercase;">
-                            LDK Syahid
+                        style="background:linear-gradient(135deg,#00a79d 0%,#008b84 100%);padding:32px 40px;">
+
+                        <!-- Logo: swap the <p> below for an <img> tag when a logo image is available -->
+                        <p style="margin:0 0 14px;font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:2px;text-transform:uppercase;">
+                            ✦ LDK Syahid ✦
                         </p>
-                        <h1 style="margin:0;font-size:22px;font-weight:700;color:#ffffff;line-height:1.3;">
-                            Formulir Berhasil Terkirim ✅
+
+                        <!-- Icon badge -->
+                        <div style="display:inline-block;background:rgba(255,255,255,0.15);border-radius:50%;width:56px;height:56px;line-height:56px;text-align:center;margin-bottom:14px;">
+                            <span style="font-size:26px;">✅</span>
+                        </div>
+
+                        <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#ffffff;line-height:1.3;">
+                            Form Successfully Submitted
                         </h1>
-                        <p style="margin:10px 0 0;font-size:14px;color:rgba(255,255,255,0.85);">
+                        <p style="margin:0;font-size:14px;color:rgba(255,255,255,0.85);">
                             {{ $formTitle }}
                         </p>
                     </td>
@@ -47,17 +55,20 @@
 
                         <!-- Greeting -->
                         <p style="margin:0 0 6px;font-size:15px;color:#374151;font-weight:600;">
-                            Assalamu'alaikum, {{ $respondentName ?: 'Akhi/Ukhti' }} 👋
+                            Hello, {{ $respondentName ?: 'Respondent' }} 👋
                         </p>
-                        <p style="margin:0 0 24px;font-size:14px;color:#6b7280;line-height:1.6;">
-                            Terima kasih telah mengisi formulir <strong>{{ $formTitle }}</strong>.
-                            Berikut adalah ringkasan jawaban yang telah kamu kirimkan.
+                        <p style="margin:0 0 8px;font-size:14px;color:#6b7280;line-height:1.6;">
+                            Thank you for submitting the form <strong style="color:#00a79d;">{{ $formTitle }}</strong>.
+                            Below is a summary of your submitted answers.
                         </p>
 
                         <!-- Submission timestamp -->
-                        <p style="margin:0 0 16px;font-size:12px;color:#9ca3af;">
-                            Dikirim pada: {{ $submittedAt }}
+                        <p style="margin:0 0 20px;font-size:12px;color:#9ca3af;">
+                            Submitted at: {{ $submittedAt }}
                         </p>
+
+                        <!-- Divider -->
+                        <hr style="border:none;border-top:1px solid #e5e7eb;margin:0 0 20px;" />
 
                         <!-- Answers table -->
                         <table class="ans-table" width="100%" cellpadding="0" cellspacing="0" role="presentation"
@@ -71,8 +82,8 @@
                                     <td style="padding:10px 14px;font-size:13px;color:#111827;
                                                border-bottom:1px solid #e5e7eb;vertical-align:top;word-break:break-word;">
                                         @if (str_starts_with((string) $value, 'https://'))
-                                            <a href="{{ $value }}" style="color:#2ea65a;text-decoration:none;">
-                                                Lihat File ↗
+                                            <a href="{{ $value }}" style="color:#00a79d;text-decoration:none;font-weight:600;">
+                                                View File ↗
                                             </a>
                                         @elseif ($value !== null && $value !== '')
                                             {{ $value }}
@@ -85,9 +96,9 @@
                         </table>
 
                         <!-- Footer note -->
-                        <p style="margin:24px 0 0;font-size:13px;color:#6b7280;line-height:1.6;">
-                            Jika kamu merasa tidak mengisi formulir ini, abaikan saja email ini.
-                            Data kamu disimpan dengan aman oleh tim LDK Syahid.
+                        <p style="margin:24px 0 0;font-size:13px;color:#6b7280;line-height:1.6;padding:16px;background:#f0fdf4;border-radius:8px;border-left:3px solid #00a79d;">
+                            If you did not submit this form, please ignore this email.
+                            Your data is securely stored by the LDK Syahid team.
                         </p>
 
                     </td>
@@ -97,11 +108,14 @@
                 <tr>
                     <td class="ftr-pad" align="center"
                         style="background:#f9fafb;padding:24px 40px;border-top:1px solid #e5e7eb;">
-                        <p style="margin:0 0 6px;font-size:12px;color:#9ca3af;">
-                            Email ini dikirim secara otomatis oleh sistem LDK Syahid.
+                        <p style="margin:0 0 4px;font-size:12px;color:#9ca3af;">
+                            This email was sent automatically by the LDK Syahid system.
                         </p>
-                        <p style="margin:0;font-size:12px;color:#9ca3af;">
-                            <a href="{{ config('app.url') }}" style="color:#2ea65a;text-decoration:none;">
+                        <p style="margin:0 0 8px;font-size:12px;color:#9ca3af;">
+                            Please do not reply to this email.
+                        </p>
+                        <p style="margin:0;font-size:12px;">
+                            <a href="{{ config('app.url') }}" style="color:#00a79d;text-decoration:none;font-weight:600;">
                                 {{ config('app.url') }}
                             </a>
                         </p>
