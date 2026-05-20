@@ -112,7 +112,7 @@ class AdminFormController extends Controller
                 'collaboratorEmails'  => $collaboratorEmails,
                 'totalSubmission'     => 0,
                 'flagActive'          => true,
-                'createdBy'           => $user->email,
+                'createdBy'           => $user->name,
                 'createdDate'         => $now,
             ]);
 
@@ -170,7 +170,7 @@ class AdminFormController extends Controller
     {
         $form = MsForm::with(['activeFields', 'sections'])->where('flagActive', true)->findOrFail($id);
 
-        return view('admin-page.forms.show', compact('form'))
+        return view('admin-page.forms.view', compact('form'))
             ->with('title', $form->title);
     }
 
@@ -263,7 +263,7 @@ class AdminFormController extends Controller
     // Publish / Close / Archive actions
     // -------------------------------------------------------------------------
 
-    public function publish(int $id)
+    public function publish(Request $request, int $id)
     {
         $form = MsForm::where('flagActive', true)->findOrFail($id);
 
@@ -275,11 +275,15 @@ class AdminFormController extends Controller
 
         TrFormAuditLog::recordAction($form->formID, TrFormAuditLog::ACTION_PUBLISH);
 
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => "Form \"{$form->title}\" is now live."]);
+        }
+
         Alert::success('Published!', "Form \"{$form->title}\" is now live and accepting submissions.");
         return redirect()->route('admin.forms.show', $form->formID);
     }
 
-    public function close(int $id)
+    public function close(Request $request, int $id)
     {
         $form = MsForm::where('flagActive', true)->findOrFail($id);
 
@@ -290,6 +294,10 @@ class AdminFormController extends Controller
         ]);
 
         TrFormAuditLog::recordAction($form->formID, TrFormAuditLog::ACTION_CLOSE);
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => "Form \"{$form->title}\" has been closed."]);
+        }
 
         Alert::success('Closed', "Form \"{$form->title}\" has been closed. No new submissions will be accepted.");
         return redirect()->route('admin.forms.show', $form->formID);
@@ -302,6 +310,11 @@ class AdminFormController extends Controller
     public function destroy(int $id)
     {
         $form = MsForm::where('flagActive', true)->findOrFail($id);
+
+        // Delete the GDrive folder (contains spreadsheet + attachments) — non-fatal
+        if ($form->gdriveFolderID) {
+            (new DynamicFormGDriveService())->deleteFormFolder($form->gdriveFolderID);
+        }
 
         $form->update([
             'flagActive' => false,
@@ -319,6 +332,49 @@ class AdminFormController extends Controller
 
         Alert::success('Deleted', "Form \"{$form->title}\" has been deleted.");
         return redirect()->route('admin.forms.index');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids', []);
+
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'No forms selected for deletion.'], 400);
+        }
+
+        try {
+            $forms        = MsForm::whereIn('formID', $ids)->where('flagActive', true)->get();
+            $deleted      = 0;
+            $now          = Carbon::now();
+            $editor       = auth()->user()->email;
+            $gdriveService = new DynamicFormGDriveService();
+
+            foreach ($forms as $form) {
+                // Delete GDrive folder (non-fatal)
+                if ($form->gdriveFolderID) {
+                    $gdriveService->deleteFormFolder($form->gdriveFolderID);
+                }
+
+                $form->update([
+                    'flagActive' => false,
+                    'editedBy'   => $editor,
+                    'editedDate' => $now,
+                ]);
+                TrFormAuditLog::recordAction($form->formID, TrFormAuditLog::ACTION_DELETE, [
+                    'title' => $form->title,
+                ]);
+                $deleted++;
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$deleted} form(s) have been deleted.",
+            ]);
+
+        } catch (\Throwable $e) {
+            Log::error('[AdminFormController::bulkDelete] ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Error deleting forms: ' . $e->getMessage()], 500);
+        }
     }
 
     // =========================================================================
@@ -555,12 +611,8 @@ class AdminFormController extends Controller
             $fields  = $form->activeFields()->get()->all();
             $headers = DynamicFormGDriveService::buildSpreadsheetHeaders($fields);
 
-            $service = new DynamicFormGDriveService();
+            (new DynamicFormGDriveService())->updateSpreadsheetHeaders($form->gdriveSpreadsheetID, $headers);
 
-            $headerRow = new \Google_Service_Sheets_ValueRange(['values' => [$headers]]);
-            // We call the Sheets service directly here for the header update
-            // A proper refactor would expose a dedicated updateHeader() method on the service
-            // but to keep things simple we leverage the service's client
         } catch (\Throwable $e) {
             Log::error('[AdminFormController::regenerateSpreadsheetHeaders] ' . $e->getMessage());
         }

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    @include('admin-page.forms.components._form._form', ['operation' => 'edit', 'form' => $form])
+    @include('admin-page.forms.components._form._form', ['operation' => 'view', 'form' => $form])
 @endsection
 
 @section('scripts')

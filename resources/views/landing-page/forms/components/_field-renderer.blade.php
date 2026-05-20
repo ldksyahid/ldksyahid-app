@@ -8,6 +8,25 @@
     $oldValue  = old($fieldName);
     $isError   = $errors->has($fieldName);
     $classes   = 'form-control' . ($isError ? ' is-invalid' : '');
+
+    // Icon mapping for field type labels
+    $fieldIconMap = [
+        'short_text' => 'fa-font',
+        'long_text'  => 'fa-align-left',
+        'email'      => 'fa-envelope',
+        'number'     => 'fa-hashtag',
+        'phone'      => 'fa-phone',
+        'url'        => 'fa-link',
+        'date'       => 'fa-calendar',
+        'time'       => 'fa-clock',
+        'datetime'   => 'fa-calendar-alt',
+        'dropdown'   => 'fa-chevron-down',
+        'radio'      => 'fa-dot-circle',
+        'checkbox'   => 'fa-check-square',
+        'file'       => 'fa-file-upload',
+        'image'      => 'fa-image',
+    ];
+    $fieldIcon = $fieldIconMap[$field->fieldType] ?? null;
 @endphp
 
 @switch($field->fieldType)
@@ -16,7 +35,10 @@
 @case('section_break')
     <div class="form-field-wrap">
         @if($field->label)
-        <div class="section-break-title">{{ $field->label }}</div>
+        <div class="section-break-title">
+            <i class="fas fa-grip-lines me-2" style="color:#00a79d;font-size:.85em;"></i>
+            {{ $field->label }}
+        </div>
         @endif
         @if($field->helpText)
         <div class="section-break-desc">{{ $field->helpText }}</div>
@@ -36,12 +58,13 @@
     </div>
     @break
 
-{{-- ===== SHORT TEXT ===== --}}
+{{-- ===== SHORT TEXT / PHONE / URL ===== --}}
 @case('short_text')
 @case('phone')
 @case('url')
     <div class="form-field-wrap auth-input-wrap">
         <label class="form-field-label" for="{{ $fieldID }}">
+            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
             {{ $field->label }}
             @if($field->isRequired) <span class="form-field-required">*</span> @endif
         </label>
@@ -64,7 +87,7 @@
     </div>
     @break
 
-{{-- ===== EMAIL (system field uses auth styling) ===== --}}
+{{-- ===== EMAIL (system field uses auth floating label; custom uses standard) ===== --}}
 @case('email')
     <div class="form-field-wrap auth-input-wrap">
         @if($field->isSystemField)
@@ -75,7 +98,7 @@
                     class="form-control has-icon {{ $isError ? 'is-invalid' : '' }}"
                     id="{{ $fieldID }}"
                     name="{{ $fieldName }}"
-                    placeholder="nama@contoh.com"
+                    placeholder="name@example.com"
                     value="{{ $oldValue ?? '' }}"
                     required autocomplete="email"
                 >
@@ -87,11 +110,12 @@
             </div>
         @else
             <label class="form-field-label" for="{{ $fieldID }}">
+                <i class="fas fa-envelope" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>
                 {{ $field->label }}
                 @if($field->isRequired) <span class="form-field-required">*</span> @endif
             </label>
             <input type="email" id="{{ $fieldID }}" name="{{ $fieldName }}"
-                   class="{{ $classes }}" placeholder="{{ $field->placeholder ?? 'nama@contoh.com' }}"
+                   class="{{ $classes }}" placeholder="{{ $field->placeholder ?? 'name@example.com' }}"
                    value="{{ $oldValue ?? '' }}"
                    {{ $field->isRequired ? 'required' : '' }} maxlength="255">
         @endif
@@ -99,7 +123,7 @@
         @if($field->helpText && !$field->isSystemField)
         <p class="form-field-help">{{ $field->helpText }}</p>
         @elseif($field->isSystemField)
-        <p class="form-field-help">Email untuk konfirmasi pengisian akan dikirim ke alamat ini.</p>
+        <p class="form-field-help">A confirmation email will be sent to this address.</p>
         @endif
 
         @error($fieldName)
@@ -112,6 +136,7 @@
 @case('number')
     <div class="form-field-wrap auth-input-wrap">
         <label class="form-field-label" for="{{ $fieldID }}">
+            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
             {{ $field->label }}
             @if($field->isRequired) <span class="form-field-required">*</span> @endif
         </label>
@@ -135,6 +160,7 @@
 @case('long_text')
     <div class="form-field-wrap">
         <label class="form-field-label" for="{{ $fieldID }}">
+            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
             {{ $field->label }}
             @if($field->isRequired) <span class="form-field-required">*</span> @endif
         </label>
@@ -157,6 +183,7 @@
 @case('datetime')
     <div class="form-field-wrap auth-input-wrap">
         <label class="form-field-label" for="{{ $fieldID }}">
+            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
             {{ $field->label }}
             @if($field->isRequired) <span class="form-field-required">*</span> @endif
         </label>
@@ -177,13 +204,14 @@
 @case('dropdown')
     <div class="form-field-wrap auth-input-wrap">
         <label class="form-field-label" for="{{ $fieldID }}">
+            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
             {{ $field->label }}
             @if($field->isRequired) <span class="form-field-required">*</span> @endif
         </label>
         <select id="{{ $fieldID }}" name="{{ $fieldName }}"
                 class="form-select {{ $isError ? 'is-invalid' : '' }}"
                 {{ $field->isRequired ? 'required' : '' }}>
-            <option value="">-- Pilih --</option>
+            <option value="">-- Select --</option>
             @foreach($field->options ?? [] as $option)
             <option value="{{ $option['value'] }}"
                     {{ $oldValue == $option['value'] ? 'selected' : '' }}>
@@ -201,6 +229,7 @@
     <div class="form-field-wrap">
         <fieldset>
             <legend class="form-field-label">
+                @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
                 {{ $field->label }}
                 @if($field->isRequired) <span class="form-field-required">*</span> @endif
             </legend>
@@ -228,6 +257,7 @@
     <div class="form-field-wrap">
         <fieldset>
             <legend class="form-field-label">
+                @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
                 {{ $field->label }}
                 @if($field->isRequired) <span class="form-field-required">*</span> @endif
             </legend>
@@ -254,6 +284,7 @@
 @case('image')
     <div class="form-field-wrap">
         <label class="form-field-label">
+            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
             {{ $field->label }}
             @if($field->isRequired) <span class="form-field-required">*</span> @endif
         </label>
@@ -267,20 +298,20 @@
                    @endif>
             <div>
                 <i class="fas fa-{{ $field->fieldType === 'image' ? 'image' : 'cloud-upload-alt' }} fa-2x mb-2"
-                   style="color:#86efac;"></i>
+                   style="color:#00a79d;"></i>
             </div>
-            <div style="font-size:.875rem;font-weight:600;color:#374151;">Klik atau drag file ke sini</div>
+            <div style="font-size:.875rem;font-weight:600;color:var(--bs-body-color,#374151);">Click or drag file here</div>
             @if(!empty($field->validation['acceptedTypes']))
-            <div style="font-size:.75rem;color:#9ca3af;margin-top:.25rem;">
+            <div style="font-size:.75rem;color:var(--bs-secondary-color,#9ca3af);margin-top:.25rem;">
                 Format: {{ implode(', ', (array) $field->validation['acceptedTypes']) }}
             </div>
             @endif
             @if(!empty($field->validation['maxSizeKB']))
-            <div style="font-size:.75rem;color:#9ca3af;">
-                Maks: {{ number_format($field->validation['maxSizeKB'] / 1024, 1) }} MB
+            <div style="font-size:.75rem;color:var(--bs-secondary-color,#9ca3af);">
+                Max: {{ number_format($field->validation['maxSizeKB'] / 1024, 1) }} MB
             </div>
             @endif
-            <div class="file-upload-name">Belum ada file dipilih</div>
+            <div class="file-upload-name">No file selected</div>
         </div>
 
         @if($field->helpText) <p class="form-field-help">{{ $field->helpText }}</p> @endif

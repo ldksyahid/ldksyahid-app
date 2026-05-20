@@ -81,14 +81,14 @@
         5 => '100px',  // Submissions
         6 => '150px',  // Created By
         7 => '130px',  // Created Date
-        8 => '120px',  // Action
+        8 => '205px',  // Action (5 buttons: View, Edit, Delete, Builder, Publish/Close)
     ];
 @endphp
 
 @section('content')
 <x-admin-index.template
     pageTitle="Dynamic Forms"
-    pageIcon="fa-wpforms"
+    pageIcon="fa-clipboard-list"
     highlightedText="Dynamic Form Management"
     :guideCards="$guideCards"
     addButtonText="Create Form"
@@ -106,8 +106,8 @@
     defaultSortBy="createdDate"
     defaultSortOrder="desc"
     entityName="forms"
-    entityIcon="fa-wpforms"
-    dateRangeField="createdDate"
+    entityIcon="fa-clipboard-list"
+    dateRangeField="created_at"
     select2Field="status"
     select2Placeholder="All Statuses"
     :isSuperadmin="$isSuperadmin"

@@ -16,7 +16,7 @@
                     {{-- Header --}}
                     <div class="auth-card-header">
                         <div class="auth-card-icon">
-                            <i class="fas fa-wpforms"></i>
+                            <i class="fas fa-clipboard-list"></i>
                         </div>
                         <div class="auth-card-title">{{ $form->title }}</div>
                         @if($form->description)
@@ -57,14 +57,14 @@
                         {{-- Submit button --}}
                         <button type="submit" class="auth-btn mt-2" id="btnSubmitForm">
                             <i class="fas fa-paper-plane"></i>
-                            <span>Kirim Formulir</span>
+                            <span>Submit Form</span>
                             <div class="auth-btn-shine"></div>
                         </button>
 
                         {{-- Privacy note --}}
                         <p style="font-size:.75rem;color:var(--bs-secondary-color,#6b7280);text-align:center;margin-top:.85rem;margin-bottom:0;">
                             <i class="fas fa-shield-alt me-1"></i>
-                            Data kamu aman. Email konfirmasi akan dikirim setelah submit berhasil.
+                            Your data is safe. A confirmation email will be sent after successful submission.
                         </p>
 
                     </form>
@@ -74,10 +74,10 @@
                 {{-- Form metadata footer --}}
                 <div style="text-align:center;margin-top:1rem;font-size:.75rem;color:#9ca3af;">
                     @if($form->endDate)
-                    <span><i class="fas fa-calendar-times me-1"></i>Ditutup: {{ $form->endDate->timezone('Asia/Jakarta')->format('d F Y, H:i') }} WIB</span>
+                    <span><i class="fas fa-calendar-times me-1"></i>Closes: {{ $form->endDate->timezone('Asia/Jakarta')->format('d F Y, H:i') }}</span>
                     @endif
                     @if($form->maxSubmission)
-                    <span class="ms-2"><i class="fas fa-users me-1"></i>Sisa kuota: {{ max(0, $form->maxSubmission - $form->totalSubmission) }}</span>
+                    <span class="ms-2"><i class="fas fa-users me-1"></i>Remaining quota: {{ max(0, $form->maxSubmission - $form->totalSubmission) }}</span>
                     @endif
                 </div>
 
@@ -114,8 +114,8 @@
 }
 .form-field-wrap .form-control:focus,
 .form-field-wrap .form-select:focus {
-    border-color: #1a6b3a;
-    box-shadow: 0 0 0 3px rgba(26,107,58,.12);
+    border-color: #00a79d;
+    box-shadow: 0 0 0 3px rgba(0,167,157,.12);
 }
 .section-break-title {
     font-weight: 700;
@@ -139,7 +139,7 @@
     cursor: pointer;
     transition: all .2s;
 }
-.file-upload-area:hover { border-color: #1a6b3a; background: rgba(26,107,58,.03); }
+.file-upload-area:hover { border-color: #00a79d; background: rgba(0,167,157,.03); }
 .file-upload-area input[type="file"] { display: none; }
 .file-upload-name { font-size: .8rem; color: #6b7280; margin-top: .5rem; }
 </style>
@@ -151,10 +151,10 @@
 document.getElementById('publicFormSubmit').addEventListener('submit', function(e) {
     const btn = document.getElementById('btnSubmitForm');
     btn.disabled = true;
-    btn.querySelector('span').textContent = 'Mengirim...';
+    btn.querySelector('span').textContent = 'Submitting...';
 
     // Re-enable after 10s in case of network issue
-    setTimeout(() => { btn.disabled = false; btn.querySelector('span').textContent = 'Kirim Formulir'; }, 10000);
+    setTimeout(() => { btn.disabled = false; btn.querySelector('span').textContent = 'Submit Form'; }, 10000);
 });
 
 // File upload preview label
@@ -163,7 +163,7 @@ document.querySelectorAll('.file-upload-area').forEach(function(area) {
     const label = area.querySelector('.file-upload-name');
 
     area.addEventListener('click', () => input.click());
-    area.addEventListener('dragover', e => { e.preventDefault(); area.style.borderColor = '#1a6b3a'; });
+    area.addEventListener('dragover', e => { e.preventDefault(); area.style.borderColor = '#00a79d'; });
     area.addEventListener('dragleave', () => area.style.borderColor = '');
     area.addEventListener('drop', function(e) {
         e.preventDefault();
@@ -176,7 +176,7 @@ document.querySelectorAll('.file-upload-area').forEach(function(area) {
 
     if (input) {
         input.addEventListener('change', function() {
-            label.textContent = this.files[0] ? this.files[0].name : 'Belum ada file dipilih';
+            label.textContent = this.files[0] ? this.files[0].name : 'No file selected';
         });
     }
 });

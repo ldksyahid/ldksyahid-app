@@ -540,10 +540,11 @@ Route::middleware(['auth', 'role:Superadmin|HelperAdmin'])
     ->name('admin.forms.')
     ->group(function () {
         // Form CRUD
-        Route::get('/',                [AdminFormController::class, 'index'])   ->name('index');
-        Route::get('/create',          [AdminFormController::class, 'create'])  ->name('create');
-        Route::post('/',               [AdminFormController::class, 'store'])   ->name('store');
-        Route::get('/{id}',            [AdminFormController::class, 'show'])    ->name('show');
+        Route::get('/',                [AdminFormController::class, 'index'])      ->name('index');
+        Route::get('/create',          [AdminFormController::class, 'create'])     ->name('create');
+        Route::post('/',               [AdminFormController::class, 'store'])      ->name('store');
+        Route::post('/bulk-delete',    [AdminFormController::class, 'bulkDelete']) ->name('bulk-delete');
+        Route::get('/{id}',            [AdminFormController::class, 'show'])       ->name('show');
         Route::get('/{id}/edit',       [AdminFormController::class, 'edit'])    ->name('edit');
         Route::put('/{id}',            [AdminFormController::class, 'update'])  ->name('update');
         Route::delete('/{id}',         [AdminFormController::class, 'destroy']) ->name('destroy');

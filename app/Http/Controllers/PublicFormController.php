@@ -89,7 +89,7 @@ class PublicFormController extends Controller
         // 2. Rate limit check
         if (TrFormSubmission::isRateLimited($form->formID, $request->ip())) {
             return back()
-                ->withErrors(['rate_limit' => 'Terlalu banyak pengiriman. Silakan coba lagi beberapa saat.'])
+                ->withErrors(['rate_limit' => 'Too many submissions. Please try again in a few moments.'])
                 ->withInput();
         }
 
@@ -113,7 +113,7 @@ class PublicFormController extends Controller
             $rules[$fieldKey] = $field->buildValidationRules();
 
             if ($field->isRequired) {
-                $messages[$fieldKey . '.required'] = "Field \"{$field->label}\" wajib diisi.";
+                $messages[$fieldKey . '.required'] = "The field \"{$field->label}\" is required.";
             }
         }
 
@@ -280,7 +280,7 @@ class PublicFormController extends Controller
             ]);
 
             return back()
-                ->withErrors(['error' => 'Terjadi kesalahan saat memproses pengiriman. Silakan coba lagi.'])
+                ->withErrors(['error' => 'An error occurred while processing your submission. Please try again.'])
                 ->withInput();
         }
     }
@@ -294,7 +294,7 @@ class PublicFormController extends Controller
         $form = MsForm::where('slug', $slug)->where('flagActive', true)->firstOrFail();
 
         return view('landing-page.forms.thank-you', compact('form'))
-            ->with('title', 'Terima Kasih – ' . $form->title);
+            ->with('title', 'Thank You – ' . $form->title);
     }
 
     // -------------------------------------------------------------------------
