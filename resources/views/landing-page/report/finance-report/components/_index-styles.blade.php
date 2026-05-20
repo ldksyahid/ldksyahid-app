@@ -297,6 +297,47 @@
     .fr-section-title { font-size: 1.4rem; }
 }
 
+/* ── Contact Person ── */
+.fr-cp-card {
+    background: var(--fr-card-bg, #fff);
+    border: 1px solid var(--fr-border, #e5e7eb);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+}
+.fr-cp-header {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 600;
+    color: var(--fr-primary, #1d4ed8);
+    margin-bottom: 1rem;
+}
+.fr-cp-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.fr-cp-avatar i {
+    font-size: 2.25rem;
+    color: var(--fr-primary, #1d4ed8);
+}
+.fr-cp-name {
+    display: block;
+    font-weight: 600;
+    font-size: .95rem;
+}
+.fr-cp-wa {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin-top: .25rem;
+    color: #16a34a;
+    font-size: .875rem;
+    text-decoration: none;
+}
+.fr-cp-wa:hover { text-decoration: underline; }
+.fr-cp-wa .fa-whatsapp { font-size: 1rem; }
+
 /* ── Dark Mode ──────────────────────────────────────────── */
 [data-theme="dark"] .fr-section-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
 [data-theme="dark"] .fr-section-title  { color: #e2e8f0; }
