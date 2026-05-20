@@ -209,29 +209,29 @@
         </div>
 
         {{-- ── Contact Person ─────────────────────────────────────── --}}
-        <div class="fr-cp-card wow fadeInUp mt-4" data-wow-delay="0.2s">
-            <div class="fr-cp-header">
-                <i class="fas fa-headset"></i>
-                <span>Narahubung Laporan Keuangan</span>
+<div class="fr-cp-card wow fadeInUp mt-4" data-wow-delay="0.2s">
+    <div class="fr-cp-header">
+        <i class="fas fa-headset"></i>
+        <span>Narahubung Laporan Keuangan</span>
+    </div>
+    <div class="fr-cp-body">
+        <div class="fr-cp-item">
+            <div class="fr-cp-avatar">
+                <i class="fas fa-user-circle"></i>
             </div>
-        <div class="fr-cp-body">
-            <div class="fr-cp-item">
-                <div class="fr-cp-avatar">
-                    <i class="fas fa-user-circle"></i>
-                </div>
             <div class="fr-cp-info">
                 <span class="fr-cp-name">Nazwa Maulida Noor</span>
-                    <a href="https://wa.me/6281389069943?text={{ urlencode('Halo Biro Keuangan LDK Syahid, saya ingin bertanya mengenai Laporan Keuangan.' . "\n" . url('/laporan-keuangan')) }}"
+                <a href="https://wa.me/6281389069943?text={{ urlencode('Halo Kestari LDK Syahid, saya ingin bertanya mengenai Laporan Keuangan.' . "\n" . url('/laporan-keuangan')) }}"
                    target="_blank"
                    rel="noopener"
                    class="fr-cp-wa">
                     <i class="fab fa-whatsapp"></i>
                     081389069943
                 </a>
-                </div>
-            </div>
             </div>
         </div>
+    </div>
+</div>
 
         @endif
 
