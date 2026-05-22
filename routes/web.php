@@ -83,9 +83,9 @@ Route::get('/kalkulator-zakat', function () {
     return view('landing-page.service.zakat-calculator.index', ["title" => "Layanan"]);
 })->name('zakat-calculator');
 
-// API: Ambil harga emas Antam 1gr dari logam-mulia-api (Cloudflare Workers)
+// API: Fetch Antam 1gr gold price via logam-mulia-api (Cloudflare Workers)
 // Source: https://github.com/iamutaki/logam-mulia-api
-// Cache: 1 jam
+// Cache: 1 hour
 Route::get('/api/harga-emas', function () {
     if (request()->query('force') === '1') {
         \Illuminate\Support\Facades\Cache::forget('antam_gold_price_1gr');
@@ -102,7 +102,7 @@ Route::get('/api/harga-emas', function () {
 
             $items = $response->json()['data'] ?? [];
 
-            // Ambil harga jual Emas Batangan standar 1gr
+            // Find sell price for standard Emas Batangan (gold bar) 1gr
             foreach ($items as $item) {
                 if (
                     ($item['material'] ?? '') === 'gold' &&
