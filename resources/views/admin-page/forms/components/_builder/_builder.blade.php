@@ -25,7 +25,7 @@
                 <a href="{{ url('/form/' . $form->slug) }}" target="_blank" class="btn btn-outline-info btn-sm">
                     <i class="fa fa-eye me-1"></i> Preview Form
                 </a>
-                <a href="{{ route('admin.forms.show', $form->formID) }}" class="btn btn-outline-secondary btn-sm">
+                <a href="{{ route('admin.forms.index') }}" class="btn btn-outline-secondary btn-sm">
                     <i class="fa fa-arrow-left me-1"></i> Back
                 </a>
             </div>
