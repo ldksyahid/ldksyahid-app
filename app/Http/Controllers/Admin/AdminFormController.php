@@ -152,8 +152,8 @@ class AdminFormController extends Controller
                 'slug'  => $form->slug,
             ]);
 
-            Alert::success('Created!', "Form \"{$form->title}\" was created successfully. Now add your fields in the Form Builder.");
-            return redirect()->route('admin.forms.builder', $form->formID);
+            Alert::success('Created!', "Form \"{$form->title}\" was created successfully.");
+            return redirect()->route('admin.forms.index');
 
         } catch (\Throwable $e) {
             Log::error('[AdminFormController::store] ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
@@ -171,7 +171,7 @@ class AdminFormController extends Controller
         $form = MsForm::with(['activeFields', 'sections'])->where('flagActive', true)->findOrFail($id);
 
         return view('admin-page.forms.view', compact('form'))
-            ->with('title', $form->title);
+            ->with('title', 'Dynamic Forms');
     }
 
     // -------------------------------------------------------------------------
@@ -185,7 +185,7 @@ class AdminFormController extends Controller
         $fieldTypes = self::getFieldTypeDefinitions();
 
         return view('admin-page.forms.builder', compact('form', 'fieldTypes'))
-            ->with('title', 'Builder: ' . $form->title);
+            ->with('title', 'Dynamic Forms');
     }
 
     // -------------------------------------------------------------------------
@@ -197,7 +197,7 @@ class AdminFormController extends Controller
         $form = MsForm::where('flagActive', true)->findOrFail($id);
 
         return view('admin-page.forms.edit', compact('form'))
-            ->with('title', 'Edit Form: ' . $form->title);
+            ->with('title', 'Dynamic Forms');
     }
 
     public function update(Request $request, int $id)
@@ -250,7 +250,7 @@ class AdminFormController extends Controller
             ]);
 
             Alert::success('Saved!', 'Changes saved successfully.');
-            return redirect()->route('admin.forms.show', $form->formID);
+            return redirect()->route('admin.forms.index');
 
         } catch (\Throwable $e) {
             Log::error('[AdminFormController::update] ' . $e->getMessage());

@@ -5,22 +5,22 @@
         [
             'icon'        => 'fa-plus-circle',
             'title'       => 'Create a New Form',
-            'description' => 'Click the <strong>"Create Form"</strong> button to get started. After creation, use the Form Builder to add your questions.'
+            'description' => 'Click the <strong>"Create Form"</strong> button to get started. Fill in the form details and collaborator emails — a Google Drive folder and spreadsheet will be set up automatically.'
         ],
         [
             'icon'        => 'fa-hammer',
-            'title'       => 'Form Builder',
-            'description' => 'Use the <i class="fa fa-hammer small"></i> Builder button to add and arrange fields with drag-and-drop reordering.'
+            'title'       => 'Add Fields via Builder',
+            'description' => 'Use the <i class="fa fa-hammer small"></i> Builder button to add and arrange fields with drag-and-drop reordering. System fields (e.g. Name, Email) are added automatically.'
         ],
         [
             'icon'        => 'fa-share-alt',
             'title'       => 'Publish & Share',
-            'description' => 'Click "Publish" on the form detail page to activate it. Copy the public URL and share it with respondents.'
+            'description' => 'Use the <strong>Publish</strong> button in the actions column to activate the form. Open the form view page to copy the public URL and share it with respondents.'
         ],
         [
             'icon'        => 'fa-table',
             'title'       => 'View Responses in Google Sheets',
-            'description' => 'All answers are automatically written to a Google Spreadsheet. Access it via the Spreadsheet link on the form detail page.'
+            'description' => 'All submissions are automatically written to a Google Spreadsheet. Open the form view page to access the Spreadsheet and Attachments Folder links.'
         ],
     ];
 

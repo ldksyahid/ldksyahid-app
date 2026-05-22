@@ -19,25 +19,13 @@
                     <span class="highlighted-text ms-1">Form</span>
                     <small class="d-block mt-2">{{ $form->title }}</small>
                 @else
-                    <i class="fas fa-clipboard-list me-2"></i>
-                    <span>Form</span>
-                    <span class="highlighted-text ms-1">Detail</span>
+                    <i class="fas fa-eye me-2"></i>
+                    <span>View</span>
+                    <span class="highlighted-text ms-1">Form</span>
                     <small class="d-block mt-2">{{ $form->title }}</small>
                 @endif
             </h1>
         </div>
-
-        {{-- Breadcrumb (view only) --}}
-        @if($operation === 'view')
-        <div class="col-12 mb-3">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0" style="font-size:.85rem;">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.forms.index') }}">Forms</a></li>
-                    <li class="breadcrumb-item active">{{ Str::limit($form->title, 40) }}</li>
-                </ol>
-            </nav>
-        </div>
-        @endif
 
         {{-- Validation Errors (create / edit only) --}}
         @if($operation !== 'view' && $errors->any())
@@ -60,203 +48,213 @@
             $isOwner   = auth()->check() && auth()->user()->email === $form->createdBy;
             $canManage = $isOwner || ($isSuperadmin ?? false);
         @endphp
-        <div class="col-12">
-            <div class="row g-4">
+        <div class="col-md-12 mb-4">
 
-                {{-- Left column --}}
-                <div class="col-lg-8">
-
-                    {{-- Stats --}}
-                    <div class="detail-card">
-                        <div class="row g-3">
-                            <div class="col-4">
-                                <div class="stat-box">
-                                    <div class="stat-num">{{ number_format($form->totalSubmission) }}</div>
-                                    <div class="stat-lbl">Total Submissions</div>
-                                </div>
+            {{-- Stats Card --}}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-4">
+                            <div class="stat-box">
+                                <div class="stat-num">{{ number_format($form->totalSubmission) }}</div>
+                                <div class="stat-lbl">Total Submissions</div>
                             </div>
-                            <div class="col-4">
-                                <div class="stat-box">
-                                    <div class="stat-num">{{ $form->activeFields->count() }}</div>
-                                    <div class="stat-lbl">Fields</div>
-                                </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-box">
+                                <div class="stat-num">{{ $form->activeFields->count() }}</div>
+                                <div class="stat-lbl">Fields</div>
                             </div>
-                            <div class="col-4">
-                                <div class="stat-box">
-                                    <div class="stat-num">v{{ $form->version }}</div>
-                                    <div class="stat-lbl">Version</div>
-                                </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-box">
+                                <div class="stat-num">v{{ $form->version }}</div>
+                                <div class="stat-lbl">Version</div>
                             </div>
                         </div>
                     </div>
-
-                    {{-- Form Information --}}
-                    <div class="detail-card">
-                        <div class="detail-card-header">
-                            <h5><i class="fa fa-info-circle me-2 text-primary"></i>Form Information</h5>
-                            <span class="badge status-badge-lg
-                                @if($form->status === 'published') bg-success
-                                @elseif($form->status === 'draft') bg-secondary
-                                @elseif($form->status === 'closed') bg-warning text-dark
-                                @else bg-dark @endif">
-                                {{ ucfirst($form->status) }}
-                            </span>
-                        </div>
-
-                        @if($form->description)
-                        <p class="text-muted mb-3" style="font-size:.9rem;">{{ $form->description }}</p>
-                        @endif
-
-                        <table class="table table-borderless table-sm" style="font-size:.875rem;">
-                            <tr>
-                                <th class="text-muted fw-normal" style="width:150px;">Public URL</th>
-                                <td>
-                                    <code id="formPublicUrl">{{ url('/form/' . $form->slug) }}</code>
-                                    <button class="copy-url-btn ms-1" onclick="copyFormUrl()" title="Copy URL">
-                                        <i class="fa fa-copy"></i> Copy
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="text-muted fw-normal">Created By</th>
-                                <td>{{ $form->createdBy }}</td>
-                            </tr>
-                            <tr>
-                                <th class="text-muted fw-normal">Created Date</th>
-                                <td>{{ $form->createdDate?->timezone('Asia/Jakarta')->format('d F Y, H:i') }} WIB</td>
-                            </tr>
-                            @if($form->startDate || $form->endDate)
-                            <tr>
-                                <th class="text-muted fw-normal">Active Period</th>
-                                <td>
-                                    {{ $form->startDate ? $form->startDate->format('d M Y H:i') : '—' }}
-                                    until
-                                    {{ $form->endDate ? $form->endDate->format('d M Y H:i') : 'no limit' }}
-                                </td>
-                            </tr>
-                            @endif
-                            @if($form->maxSubmission)
-                            <tr>
-                                <th class="text-muted fw-normal">Max. Submissions</th>
-                                <td>{{ number_format($form->maxSubmission) }}</td>
-                            </tr>
-                            @endif
-                            @if($form->confirmationMessage)
-                            <tr>
-                                <th class="text-muted fw-normal">Confirmation Msg</th>
-                                <td style="font-style:italic;color:#6b7280;">{{ $form->confirmationMessage }}</td>
-                            </tr>
-                            @endif
-                        </table>
-                    </div>
-
-                    {{-- Fields list --}}
-                    <div class="detail-card">
-                        <div class="detail-card-header">
-                            <h5><i class="fa fa-list me-2 text-info"></i>Form Fields</h5>
-                        </div>
-
-                        @forelse($form->activeFields as $field)
-                        <span class="field-pill {{ $field->isSystemField ? 'system' : '' }}">
-                            <i class="fa
-                                @switch($field->fieldType)
-                                    @case('email') fa-envelope @break
-                                    @case('file') @case('image') fa-file-upload @break
-                                    @case('dropdown') fa-chevron-circle-down @break
-                                    @case('radio') fa-dot-circle @break
-                                    @case('checkbox') fa-check-square @break
-                                    @case('date') @case('datetime') fa-calendar @break
-                                    @case('number') fa-hashtag @break
-                                    @case('section_break') fa-minus @break
-                                    @default fa-font
-                                @endswitch
-                                fa-sm"></i>
-                            {{ $field->label }}
-                            @if($field->isRequired) <span style="color:#ef4444;">*</span> @endif
-                            @if($field->isSystemField) <i class="fa fa-lock fa-xs" title="System field"></i> @endif
-                        </span>
-                        @empty
-                        <p class="text-muted mb-0" style="font-size:.875rem;">
-                            No fields yet.
-                            @if($canManage)
-                                <a href="{{ route('admin.forms.builder', $form->formID) }}">Open Form Builder</a> to add fields.
-                            @endif
-                        </p>
-                        @endforelse
-                    </div>
-
-                    {{-- Bottom Actions --}}
-                    <div class="row mb-5">
-                        <div class="col-md-12 d-flex justify-content-end gap-2">
-                            <a href="{{ route('admin.forms.index') }}" class="btn btn-secondary">
-                                <i class="fa fa-arrow-left me-1"></i> Back
-                            </a>
-                            <a href="{{ route('admin.forms.edit', $form->formID) }}" class="btn btn-custom-primary">
-                                <i class="fa fa-edit me-1"></i> Edit
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-
-                {{-- Right column --}}
-                <div class="col-lg-4">
-
-                    {{-- Google Drive --}}
-                    <div class="detail-card">
-                        <div class="detail-card-header">
-                            <h5><i class="fab fa-google-drive me-2 text-success"></i>Google Drive</h5>
-                        </div>
-
-                        @if($form->gdriveSpreadsheetUrl)
-                        <a href="{{ $form->gdriveSpreadsheetUrl }}" target="_blank" class="gdrive-link">
-                            <i class="fas fa-table gdrive-icon text-success"></i>
-                            <span class="gdrive-text">
-                                <strong>Responses Spreadsheet</strong>
-                                <small>All form submissions are automatically written here as rows.</small>
-                            </span>
-                            <i class="fas fa-external-link-alt gdrive-ext"></i>
-                        </a>
-                        @endif
-
-                        @if($form->gdriveAttachmentsFolderUrl)
-                        <a href="{{ $form->gdriveAttachmentsFolderUrl }}" target="_blank" class="gdrive-link">
-                            <i class="fas fa-folder gdrive-icon text-warning"></i>
-                            <span class="gdrive-text">
-                                <strong>Attachments Folder</strong>
-                                <small>Uploaded files (images, documents) from respondents are stored here.</small>
-                            </span>
-                            <i class="fas fa-external-link-alt gdrive-ext"></i>
-                        </a>
-                        @endif
-
-                        @if(!$form->gdriveSpreadsheetUrl && !$form->gdriveAttachmentsFolderUrl)
-                        <p class="text-muted mb-0" style="font-size:.8rem;">
-                            <i class="fa fa-info-circle me-1"></i>
-                            Google Drive not yet configured.
-                        </p>
-                        @endif
-                    </div>
-
-                    {{-- Collaborators --}}
-                    @if($form->collaboratorEmails && count($form->collaboratorEmails))
-                    <div class="detail-card">
-                        <div class="detail-card-header">
-                            <h5><i class="fa fa-users me-2 text-warning"></i>Collaborators</h5>
-                        </div>
-                        @foreach($form->collaboratorEmails as $collab)
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <span style="width:32px;height:32px;background:#f0fdf4;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                <i class="fa fa-user fa-sm text-success"></i>
-                            </span>
-                            <span style="font-size:.85rem;word-break:break-all;">{{ $collab }}</span>
-                        </div>
-                        @endforeach
-                    </div>
-                    @endif
-
                 </div>
             </div>
+
+            {{-- Main Detail Card --}}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row">
+
+                        {{-- Left: Basic Info --}}
+                        <div class="col-md-8">
+                            <h5 class="section-title mb-3 d-flex align-items-center justify-content-between">
+                                <span><i class="fas fa-info-circle me-2"></i>Basic Information</span>
+                                <span class="badge status-badge-lg
+                                    @if($form->status === 'published') bg-success
+                                    @elseif($form->status === 'draft') bg-secondary
+                                    @elseif($form->status === 'closed') bg-warning text-dark
+                                    @else bg-dark @endif">
+                                    {{ ucfirst($form->status) }}
+                                </span>
+                            </h5>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Form Title</label>
+                                <div class="form-control-plaintext">{{ $form->title }}</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Description</label>
+                                <div class="form-control-plaintext">{{ $form->description ?: '—' }}</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Confirmation Message</label>
+                                <div class="form-control-plaintext">{{ $form->confirmationMessage ?: '—' }}</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Redirect URL <span class="text-muted small">(Optional)</span></label>
+                                <div class="form-control-plaintext">
+                                    @if($form->redirectUrl)
+                                        <a href="{{ $form->redirectUrl }}" target="_blank">{{ $form->redirectUrl }}</a>
+                                    @else
+                                        —
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Public URL</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <code id="formPublicUrl">{{ url('/form/' . $form->slug) }}</code>
+                                    <button class="copy-url-btn" onclick="copyFormUrl()" title="Copy URL">
+                                        <i class="fa fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Created By</label>
+                                    <div class="form-control-plaintext">{{ $form->createdBy }}</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Created Date</label>
+                                    <div class="form-control-plaintext">
+                                        {{ $form->createdDate?->timezone('Asia/Jakarta')->format('d F Y, H:i') }} WIB
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Right: Rules + GDrive + Collaborators --}}
+                        <div class="col-md-4">
+                            <h5 class="section-title mb-3"><i class="fas fa-cog me-2"></i>Submission Rules</h5>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Max. Submissions</label>
+                                <div class="form-control-plaintext">{{ $form->maxSubmission ? number_format($form->maxSubmission) : 'Unlimited' }}</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Start Date</label>
+                                <div class="form-control-plaintext">{{ $form->startDate ? $form->startDate->format('d M Y H:i') . ' WIB' : '—' }}</div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">End Date</label>
+                                <div class="form-control-plaintext">{{ $form->endDate ? $form->endDate->format('d M Y H:i') . ' WIB' : '—' }}</div>
+                            </div>
+
+                            <h5 class="section-title mb-3"><i class="fab fa-google-drive me-2"></i>Google Drive</h5>
+
+                            @if($form->gdriveSpreadsheetUrl)
+                            <a href="{{ $form->gdriveSpreadsheetUrl }}" target="_blank" class="gdrive-link">
+                                <i class="fas fa-table gdrive-icon text-success"></i>
+                                <span class="gdrive-text">
+                                    <strong>Responses Spreadsheet</strong>
+                                    <small>All form submissions are automatically written here as rows.</small>
+                                </span>
+                                <i class="fas fa-external-link-alt gdrive-ext"></i>
+                            </a>
+                            @endif
+
+                            @if($form->gdriveAttachmentsFolderUrl)
+                            <a href="{{ $form->gdriveAttachmentsFolderUrl }}" target="_blank" class="gdrive-link">
+                                <i class="fas fa-folder gdrive-icon text-warning"></i>
+                                <span class="gdrive-text">
+                                    <strong>Attachments Folder</strong>
+                                    <small>Uploaded files (images, documents) from respondents are stored here.</small>
+                                </span>
+                                <i class="fas fa-external-link-alt gdrive-ext"></i>
+                            </a>
+                            @endif
+
+                            @if(!$form->gdriveSpreadsheetUrl && !$form->gdriveAttachmentsFolderUrl)
+                            <p class="text-muted mb-3" style="font-size:.8rem;">
+                                <i class="fa fa-info-circle me-1"></i> Google Drive not yet configured.
+                            </p>
+                            @endif
+
+                            @if($form->collaboratorEmails && count($form->collaboratorEmails))
+                            <h5 class="section-title mb-3 mt-3"><i class="fa fa-users me-2"></i>Collaborators</h5>
+                            @foreach($form->collaboratorEmails as $collab)
+                            <div class="form-control-plaintext py-1">
+                                <i class="fa fa-user fa-sm text-success me-2"></i>{{ $collab }}
+                            </div>
+                            @endforeach
+                            @endif
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {{-- Fields Card --}}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="section-title mb-3"><i class="fa fa-list me-2"></i>Form Fields</h5>
+                    @forelse($form->activeFields as $field)
+                    <span class="field-pill {{ $field->isSystemField ? 'system' : '' }}">
+                        <i class="fa
+                            @switch($field->fieldType)
+                                @case('email') fa-envelope @break
+                                @case('file') @case('image') fa-file-upload @break
+                                @case('dropdown') fa-chevron-circle-down @break
+                                @case('radio') fa-dot-circle @break
+                                @case('checkbox') fa-check-square @break
+                                @case('date') @case('datetime') fa-calendar @break
+                                @case('number') fa-hashtag @break
+                                @case('section_break') fa-minus @break
+                                @default fa-font
+                            @endswitch
+                            fa-sm"></i>
+                        {{ $field->label }}
+                        @if($field->isRequired) <span style="color:#ef4444;">*</span> @endif
+                        @if($field->isSystemField) <i class="fa fa-lock fa-xs" title="System field"></i> @endif
+                    </span>
+                    @empty
+                    <p class="text-muted mb-0" style="font-size:.875rem;">
+                        No fields yet.
+                        @if($canManage)
+                            <a href="{{ route('admin.forms.builder', $form->formID) }}">Open Form Builder</a> to add fields.
+                        @endif
+                    </p>
+                    @endforelse
+                </div>
+            </div>
+
+            {{-- Actions --}}
+            <div class="row mb-5">
+                <div class="col-md-12 d-flex justify-content-end gap-2">
+                    <a href="{{ route('admin.forms.index') }}" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left me-1"></i> Back
+                    </a>
+                    @if($canManage)
+                    <a href="{{ route('admin.forms.index') }}" class="btn btn-custom-primary">
+                        <i class="fa fa-edit me-1"></i> Edit
+                    </a>
+                    @endif
+                </div>
+            </div>
+
         </div>
         {{-- ===================== END VIEW MODE ===================== --}}
 
@@ -393,7 +391,7 @@
                         <i class="fa fa-plus-circle me-1"></i> Create Form & Setup GDrive
                     </button>
                     @else
-                    <a href="{{ route('admin.forms.show', $form->formID) }}" class="btn btn-danger">
+                    <a href="{{ route('admin.forms.index') }}" class="btn btn-danger">
                         <i class="fa fa-times me-1"></i> Cancel
                     </a>
                     <button type="submit" class="btn btn-custom-primary" id="btnSave">
