@@ -390,15 +390,18 @@ class AdminFormController extends Controller
         $form = MsForm::where('flagActive', true)->findOrFail($formID);
 
         $validated = $request->validate([
-            'fieldType'        => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph',
-            'label'            => 'required|string|max:500',
-            'placeholder'      => 'nullable|string|max:255',
-            'helpText'         => 'nullable|string|max:500',
-            'isRequired'       => 'nullable|boolean',
-            'formSectionID'    => 'nullable|integer|exists:ms_form_section,formSectionID',
-            'options'          => 'nullable|array',
-            'options.*.label'  => 'required_with:options|string|max:255',
-            'options.*.value'  => 'required_with:options|string|max:255',
+            'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph',
+            'label'                  => 'required|string|max:500',
+            'placeholder'            => 'nullable|string|max:255',
+            'helpText'               => 'nullable|string|max:500',
+            'isRequired'             => 'nullable|boolean',
+            'formSectionID'          => 'nullable|integer|exists:ms_form_section,formSectionID',
+            'options'                => 'nullable|array',
+            'options.*.label'        => 'required_with:options|string|max:255',
+            'options.*.value'        => 'required_with:options|string|max:255',
+            'validation'             => 'nullable|array',
+            'validation.maxSizeKB'   => 'nullable|integer|min:1',
+            'validation.acceptedTypes' => 'nullable|array',
         ]);
 
         try {
@@ -420,6 +423,7 @@ class AdminFormController extends Controller
                 'isSystemField' => false,
                 'sortOrder'     => $maxOrder + 1,
                 'options'       => $validated['options']        ?? null,
+                'validation'    => $validated['validation']     ?? null,
                 'flagActive'    => true,
                 'createdDate'   => $now,
             ]);

@@ -178,6 +178,14 @@
 .options-list .option-row { display: flex; gap: .5rem; margin-bottom: .4rem; align-items: center; }
 .options-list .option-row input { flex: 1; }
 
+/* ===== DELETING STATE ===== */
+.field-card--deleting {
+    opacity: .45;
+    pointer-events: none;
+    border-color: #ef4444 !important;
+    transition: opacity .2s;
+}
+
 /* ===== SORTABLE GHOST ===== */
 .sortable-ghost { opacity: .4; background: #f0fdf4 !important; border: 2px dashed #86efac !important; }
 .sortable-chosen { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
