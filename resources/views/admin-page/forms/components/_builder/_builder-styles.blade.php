@@ -139,7 +139,7 @@
     padding: 1.1rem 1.3rem; border-bottom: none;
 }
 .bm-header--add { background: linear-gradient(135deg, #00a79d 0%, #00756e 100%); }
-.bm-header--edit { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+.bm-header--edit { background: linear-gradient(135deg, #00a79d 0%, #00756e 100%); }
 .bm-header-icon {
     width: 44px; height: 44px; flex-shrink: 0; border-radius: 11px;
     background: rgba(255,255,255,.2);
@@ -162,7 +162,8 @@
     padding: .65rem .85rem;
     background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
 }
-.bm-required-toggle label { font-size: .85rem; font-weight: 500; color: #166534; margin: 0; cursor: pointer; }
+.bm-required-toggle .form-check-input { margin: 0; flex-shrink: 0; }
+.bm-required-toggle label { font-size: .85rem; font-weight: 500; color: #166534; margin: 0; cursor: pointer; line-height: 1; }
 .bm-btn-submit {
     display: inline-flex; align-items: center; gap: .4rem;
     padding: .5rem 1.15rem; border: none; border-radius: 8px;
@@ -171,8 +172,8 @@
 }
 .bm-btn-submit--add { background: #00a79d; color: #fff; box-shadow: 0 2px 8px rgba(0,167,157,.3); }
 .bm-btn-submit--add:hover { background: #00958c; box-shadow: 0 4px 12px rgba(0,167,157,.4); }
-.bm-btn-submit--edit { background: #f59e0b; color: #fff; box-shadow: 0 2px 8px rgba(245,158,11,.3); }
-.bm-btn-submit--edit:hover { background: #d97706; box-shadow: 0 4px 12px rgba(245,158,11,.4); }
+.bm-btn-submit--edit { background: #00a79d; color: #fff; box-shadow: 0 2px 8px rgba(0,167,157,.3); }
+.bm-btn-submit--edit:hover { background: #00958c; box-shadow: 0 4px 12px rgba(0,167,157,.4); }
 .field-modal-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; margin-bottom: .3rem; display: block; }
 .options-list .option-row { display: flex; gap: .5rem; margin-bottom: .4rem; align-items: center; }
 .options-list .option-row input { flex: 1; }
@@ -182,16 +183,19 @@
 .sortable-chosen { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
 
 /* ===== DARK MODE ===== */
+/* card base — neutral dark, teal accent on section-title border only */
+html.dark-mode .card { background: #1a1d23; border-color: #2d3139 !important; }
 html.dark-mode .section-title { border-bottom-color: #2d4a30; }
-html.dark-mode .card { background: #1a1d23; border-color: #2d4a30 !important; }
-html.dark-mode .builder-card-header { border-bottom-color: #2d4a30; }
-html.dark-mode .builder-bottom-bar { border-top-color: #2d4a30; }
-html.dark-mode .field-type-btn { background: #1a2d1e; border-color: #2d4a30; color: #c8cdd3; }
-html.dark-mode .field-type-btn:hover { background: #1f3524; border-color: #2d4a30; color: #86efac; }
+html.dark-mode .builder-card-header { border-bottom-color: #2d3139; }
+html.dark-mode .builder-bottom-bar { border-top-color: #2d3139; }
+/* field type buttons — neutral default, green only on hover */
+html.dark-mode .field-type-btn { background: #22252d; border-color: #2d3139; color: #c8cdd3; }
+html.dark-mode .field-type-btn:hover { background: #1a2d1e; border-color: #2d4a30; color: #86efac; }
 html.dark-mode .field-type-btn:hover i { color: #86efac; }
-html.dark-mode .field-type-group-label { color: #6b7280; border-bottom-color: #2d4a30; }
-html.dark-mode .field-card { background: #1a2d1e; border-color: #2d4a30; }
-html.dark-mode .field-card:hover { border-color: #86efac; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+html.dark-mode .field-type-group-label { color: #6b7280; border-bottom-color: #2d3139; }
+/* field cards — neutral dark default */
+html.dark-mode .field-card { background: #22252d; border-color: #2d3139; }
+html.dark-mode .field-card:hover { border-color: #2d4a30; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
 html.dark-mode .field-card.is-system { background: #2d2510; border-color: #4a3a1a; }
 html.dark-mode .field-card-system-badge { background: rgba(251,191,36,.15); color: #fbbf24; border-color: rgba(251,191,36,.3); }
 html.dark-mode .field-card-label { color: #e4e6eb; }
@@ -199,13 +203,14 @@ html.dark-mode .field-card-type { color: #6b7280; }
 html.dark-mode .field-card-actions button { color: #6b7280; }
 html.dark-mode .field-card-actions button:hover { color: #86efac; background: #1f3524; }
 html.dark-mode .field-card-actions button.btn-del:hover { color: #f87171; background: rgba(239,68,68,.15); }
-html.dark-mode .drop-zone-empty { background: #1a2d1e; border-color: #2d4a30; color: #6b7280; }
+html.dark-mode .drop-zone-empty { background: #22252d; border-color: #374151; color: #6b7280; }
+/* modals */
 html.dark-mode .bm-card { background: #1a1d23; }
-html.dark-mode .bm-body { background: #1a1d23; }
-html.dark-mode .bm-footer { background: #1a1d23; border-top-color: #2d4a30; }
+html.dark-mode .bm-body { background: #22252d; }
+html.dark-mode .bm-footer { background: #1a1d23; border-top-color: #2d3139; }
 html.dark-mode .bm-required-toggle { background: #1a2d1e; border-color: #2d4a30; }
 html.dark-mode .bm-required-toggle label { color: #86efac; }
-html.dark-mode .bm-card .form-control { background: #1a2d1e; color: #e4e6eb; border-color: #2d4a30; }
+html.dark-mode .bm-card .form-control { background: #2d3139; color: #e4e6eb; border-color: #374151; }
 html.dark-mode .bm-card .form-control::placeholder { color: #6b7280; }
 html.dark-mode .field-modal-label { color: #9ca3af; }
 </style>
