@@ -109,21 +109,28 @@ function submitAddField() {
 }
 
 // ===== EDIT FIELD =====
-let currentEditFieldID = null;
+let currentEditCard = null;
 
-function openEditModal(fieldID, label, placeholder, helpText, isRequired) {
-    currentEditFieldID = fieldID;
-    document.getElementById('editFieldID').value     = fieldID;
-    document.getElementById('editLabel').value       = label;
-    document.getElementById('editPlaceholder').value = placeholder;
-    document.getElementById('editHelpText').value    = helpText;
-    document.getElementById('editIsRequired').checked= isRequired;
+function openEditModal(btn) {
+    const card        = btn.closest('.field-card');
+    currentEditCard   = card;
+    const fieldID     = card.dataset.fieldId;
+    const label       = card.dataset.label;
+    const placeholder = card.dataset.placeholder;
+    const helpText    = card.dataset.helpText;
+    const isRequired  = card.dataset.isRequired === '1';
+
+    document.getElementById('editFieldID').value      = fieldID;
+    document.getElementById('editLabel').value        = label;
+    document.getElementById('editPlaceholder').value  = placeholder;
+    document.getElementById('editHelpText').value     = helpText;
+    document.getElementById('editIsRequired').checked = isRequired;
 
     new bootstrap.Modal(document.getElementById('editFieldModal')).show();
 }
 
 function submitEditField() {
-    const fieldID     = currentEditFieldID;
+    const fieldID     = document.getElementById('editFieldID').value;
     const label       = document.getElementById('editLabel').value.trim();
     const placeholder = document.getElementById('editPlaceholder').value.trim();
     const helpText    = document.getElementById('editHelpText').value.trim();
@@ -139,9 +146,19 @@ function submitEditField() {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            const card = document.querySelector(`.field-card[data-field-id="${fieldID}"]`);
-            if (card) {
-                card.querySelector('.field-card-label').textContent = label + (isRequired ? ' *' : '');
+            if (currentEditCard) {
+                // Update data-* attributes so next openEditModal gets fresh values
+                currentEditCard.dataset.label       = label;
+                currentEditCard.dataset.placeholder  = placeholder;
+                currentEditCard.dataset.helpText     = helpText;
+                currentEditCard.dataset.isRequired   = isRequired ? '1' : '0';
+
+                // Update visible label text (preserve icon + badges)
+                const labelDiv = currentEditCard.querySelector('.field-card-label');
+                const icon     = labelDiv.querySelector('i');
+                const required = isRequired ? '<span class="field-card-required">*</span>' : '';
+                const badge    = labelDiv.querySelector('.field-card-system-badge')?.outerHTML ?? '';
+                labelDiv.innerHTML = (icon?.outerHTML ?? '') + ' ' + label + ' ' + required + badge;
             }
             bootstrap.Modal.getInstance(document.getElementById('editFieldModal')).hide();
             Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Field updated successfully.', showConfirmButton: false, timer: 2500, timerProgressBar: true });
@@ -153,7 +170,11 @@ function submitEditField() {
 }
 
 // ===== REMOVE FIELD =====
-function removeField(fieldID, label) {
+function removeField(btn) {
+    const card    = btn.closest('.field-card');
+    const fieldID = card.dataset.fieldId;
+    const label   = card.dataset.label;
+
     Swal.fire({
         title: 'Remove this field?',
         html: `Field <strong>"${label}"</strong> will be permanently removed from this form.`,
@@ -173,7 +194,7 @@ function removeField(fieldID, label) {
         .then(r => r.json())
         .then(data => {
             if (data.success) {
-                document.querySelector(`.field-card[data-field-id="${fieldID}"]`)?.remove();
+                card.remove();
                 updateFieldCount(-1);
                 Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `Field "${label}" removed.`, showConfirmButton: false, timer: 2500, timerProgressBar: true });
             } else {

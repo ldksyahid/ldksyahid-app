@@ -213,4 +213,19 @@ html.dark-mode .bm-required-toggle label { color: #86efac; }
 html.dark-mode .bm-card .form-control { background: #2d3139; color: #e4e6eb; border-color: #374151; }
 html.dark-mode .bm-card .form-control::placeholder { color: #6b7280; }
 html.dark-mode .field-modal-label { color: #9ca3af; }
+/* modal outline buttons */
+html.dark-mode .bm-body .btn-outline-secondary,
+html.dark-mode .bm-footer .btn-outline-secondary {
+    color: #c8cdd3; border-color: #374151; background: transparent;
+}
+html.dark-mode .bm-body .btn-outline-secondary:hover,
+html.dark-mode .bm-footer .btn-outline-secondary:hover {
+    color: #e4e6eb; border-color: #6b7280; background: #2d3139;
+}
+html.dark-mode .bm-body .btn-outline-danger {
+    color: #f87171; border-color: #4b1c1c; background: transparent;
+}
+html.dark-mode .bm-body .btn-outline-danger:hover {
+    color: #fff; border-color: #ef4444; background: #7f1d1d;
+}
 </style>

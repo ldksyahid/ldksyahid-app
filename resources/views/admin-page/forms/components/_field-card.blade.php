@@ -3,7 +3,11 @@
     Variables: $field (MsFormField)
 --}}
 <div class="field-card {{ $field->isSystemField ? 'is-system' : '' }}"
-     data-field-id="{{ $field->formFieldID }}">
+     data-field-id="{{ $field->formFieldID }}"
+     data-label="{{ $field->label }}"
+     data-placeholder="{{ $field->placeholder ?? '' }}"
+     data-help-text="{{ $field->helpText ?? '' }}"
+     data-is-required="{{ $field->isRequired ? '1' : '0' }}">
 
     {{-- Drag handle (hidden for system fields) --}}
     @if(!$field->isSystemField)
@@ -63,20 +67,13 @@
 
     {{-- Actions --}}
     <div class="field-card-actions">
-        <button type="button" title="Edit field"
-                onclick="openEditModal(
-                    {{ $field->formFieldID }},
-                    {{ json_encode($field->label) }},
-                    {{ json_encode($field->placeholder ?? '') }},
-                    {{ json_encode($field->helpText ?? '') }},
-                    {{ $field->isRequired ? 'true' : 'false' }}
-                )">
+        <button type="button" title="Edit field" onclick="openEditModal(this)">
             <i class="fa fa-edit"></i>
         </button>
 
         @if(!$field->isSystemField)
         <button type="button" class="btn-del" title="Hapus field"
-                onclick="removeField({{ $field->formFieldID }}, {{ json_encode($field->label) }})">
+                onclick="removeField(this)">
             <i class="fa fa-trash"></i>
         </button>
         @endif
