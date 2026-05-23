@@ -24,8 +24,9 @@
 /* ─── Page ─────────────────────────────────────────────────────── */
 .gf-page {
     min-height: 100vh;
-    background: var(--gf-bg);
     padding: 5rem 0 4rem;
+    position: relative;
+    z-index: 2;
 }
 
 .gf-wrap {
@@ -447,7 +448,6 @@
 /* ─── Thank You / Closed State Cards ──────────────────────────── */
 .gf-state-page {
     min-height: 100vh;
-    background: var(--gf-bg);
     display: flex;
     align-items: center;
     padding: 5rem 0 3rem;
