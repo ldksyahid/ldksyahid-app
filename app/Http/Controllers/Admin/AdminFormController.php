@@ -182,6 +182,11 @@ class AdminFormController extends Controller
     {
         $form = MsForm::with(['activeFields', 'sections'])->where('flagActive', true)->findOrFail($id);
 
+        if (!$this->canManageForm($form)) {
+            Alert::error('Access Denied', 'You do not have permission to manage this form.');
+            return redirect()->route('admin.forms.index');
+        }
+
         $fieldTypes = self::getFieldTypeDefinitions();
 
         return view('admin-page.forms.builder', compact('form', 'fieldTypes'))
@@ -196,6 +201,11 @@ class AdminFormController extends Controller
     {
         $form = MsForm::where('flagActive', true)->findOrFail($id);
 
+        if (!$this->canManageForm($form)) {
+            Alert::error('Access Denied', 'You do not have permission to edit this form.');
+            return redirect()->route('admin.forms.index');
+        }
+
         return view('admin-page.forms.edit', compact('form'))
             ->with('title', 'Dynamic Forms');
     }
@@ -203,6 +213,11 @@ class AdminFormController extends Controller
     public function update(Request $request, int $id)
     {
         $form = MsForm::where('flagActive', true)->findOrFail($id);
+
+        if (!$this->canManageForm($form)) {
+            Alert::error('Access Denied', 'You do not have permission to edit this form.');
+            return redirect()->route('admin.forms.index');
+        }
 
         $validated = $request->validate([
             'title'               => 'required|string|max:255',
@@ -267,6 +282,14 @@ class AdminFormController extends Controller
     {
         $form = MsForm::where('flagActive', true)->findOrFail($id);
 
+        if (!$this->canManageForm($form)) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+            }
+            Alert::error('Access Denied', 'You do not have permission to publish this form.');
+            return redirect()->route('admin.forms.index');
+        }
+
         $form->update([
             'status'     => 'published',
             'editedBy'   => auth()->user()->email,
@@ -286,6 +309,14 @@ class AdminFormController extends Controller
     public function close(Request $request, int $id)
     {
         $form = MsForm::where('flagActive', true)->findOrFail($id);
+
+        if (!$this->canManageForm($form)) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+            }
+            Alert::error('Access Denied', 'You do not have permission to close this form.');
+            return redirect()->route('admin.forms.index');
+        }
 
         $form->update([
             'status'     => 'closed',
@@ -310,6 +341,14 @@ class AdminFormController extends Controller
     public function destroy(int $id)
     {
         $form = MsForm::where('flagActive', true)->findOrFail($id);
+
+        if (!$this->canManageForm($form)) {
+            if (request()->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+            }
+            Alert::error('Access Denied', 'You do not have permission to delete this form.');
+            return redirect()->route('admin.forms.index');
+        }
 
         // Delete the GDrive folder (contains spreadsheet + attachments) — non-fatal
         if ($form->gdriveFolderID) {
@@ -343,7 +382,8 @@ class AdminFormController extends Controller
         }
 
         try {
-            $forms        = MsForm::whereIn('formID', $ids)->where('flagActive', true)->get();
+            $forms        = MsForm::whereIn('formID', $ids)->where('flagActive', true)->get()
+                                  ->filter(fn ($form) => $this->canManageForm($form));
             $deleted      = 0;
             $now          = Carbon::now();
             $editor       = auth()->user()->email;
@@ -388,6 +428,10 @@ class AdminFormController extends Controller
     public function addField(Request $request, int $formID)
     {
         $form = MsForm::where('flagActive', true)->findOrFail($formID);
+
+        if (!$this->canManageForm($form)) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
 
         $validated = $request->validate([
             'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph',
@@ -468,6 +512,10 @@ class AdminFormController extends Controller
                             ->where('flagActive', true)
                             ->firstOrFail();
 
+        if (!$this->canManageForm($form)) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
         // System fields can have their label updated but not removed or type-changed
         $validated = $request->validate([
             'label'         => 'required|string|max:500',
@@ -523,6 +571,10 @@ class AdminFormController extends Controller
                             ->where('flagActive', true)
                             ->firstOrFail();
 
+        if (!$this->canManageForm($form)) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
         if ($field->isSystemField) {
             return response()->json(['success' => false, 'message' => 'System fields cannot be deleted.'], 422);
         }
@@ -567,6 +619,12 @@ class AdminFormController extends Controller
             'order.*' => 'integer',
         ]);
 
+        $form = MsForm::findOrFail($formID);
+
+        if (!$this->canManageForm($form)) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
         try {
             foreach ($validated['order'] as $sortOrder => $fieldID) {
                 MsFormField::where('formFieldID', $fieldID)
@@ -574,7 +632,6 @@ class AdminFormController extends Controller
                            ->update(['sortOrder' => $sortOrder]);
             }
 
-            $form = MsForm::findOrFail($formID);
             $form->increment('version');
 
             // Reorder spreadsheet columns to match the new field order
@@ -599,6 +656,18 @@ class AdminFormController extends Controller
     // =========================================================================
     // Private helpers
     // =========================================================================
+
+    /**
+     * Check if the current authenticated user is allowed to manage (edit/delete/build/publish) a form.
+     * Only the form creator and Superadmin users have management rights.
+     */
+    private function canManageForm(MsForm $form): bool
+    {
+        $user = auth()->user();
+        return $user->hasRole('Superadmin')
+            || $form->createdBy === $user->email
+            || $form->createdBy === $user->name;
+    }
 
     /**
      * Parse a comma- or newline-separated string of emails into a clean array.

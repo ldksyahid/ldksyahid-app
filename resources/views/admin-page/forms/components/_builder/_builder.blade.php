@@ -106,8 +106,8 @@
                                     $canAccessGdrive = ($isSuperadmin ?? false)
                                         || ($currentUser && in_array($currentUser->email, $form->collaboratorEmails ?? []));
                                 @endphp
-                                @if($form->gdriveSpreadsheetUrl)
                                 @if($canAccessGdrive)
+                                @if($form->gdriveSpreadsheetUrl)
                                 <a href="{{ $form->gdriveSpreadsheetUrl }}" target="_blank" class="gdrive-link">
                                     <i class="fas fa-table gdrive-icon text-success"></i>
                                     <span class="gdrive-text">
@@ -116,19 +116,8 @@
                                     </span>
                                     <i class="fas fa-external-link-alt gdrive-ext"></i>
                                 </a>
-                                @else
-                                <span class="gdrive-link gdrive-link-disabled" title="Akses dibatasi — tambahkan email Anda sebagai collaborator">
-                                    <i class="fas fa-table gdrive-icon text-success"></i>
-                                    <span class="gdrive-text">
-                                        <strong>Responses Spreadsheet</strong>
-                                        <small>All submissions are written here as rows.</small>
-                                    </span>
-                                    <i class="fas fa-lock gdrive-ext"></i>
-                                </span>
-                                @endif
                                 @endif
                                 @if($form->gdriveAttachmentsFolderUrl)
-                                @if($canAccessGdrive)
                                 <a href="{{ $form->gdriveAttachmentsFolderUrl }}" target="_blank" class="gdrive-link">
                                     <i class="fas fa-folder gdrive-icon text-warning"></i>
                                     <span class="gdrive-text">
@@ -137,21 +126,13 @@
                                     </span>
                                     <i class="fas fa-external-link-alt gdrive-ext"></i>
                                 </a>
+                                @endif
                                 @else
-                                <span class="gdrive-link gdrive-link-disabled" title="Akses dibatasi — tambahkan email Anda sebagai collaborator">
-                                    <i class="fas fa-folder gdrive-icon text-warning"></i>
-                                    <span class="gdrive-text">
-                                        <strong>Attachments Folder</strong>
-                                        <small>Uploaded files from respondents are stored here.</small>
-                                    </span>
-                                    <i class="fas fa-lock gdrive-ext"></i>
-                                </span>
-                                @endif
-                                @endif
-                                <p class="mb-0 mt-2" style="font-size:.75rem; color:#6b7280;">
+                                <p class="mb-0" style="font-size:.75rem; color:#6b7280;">
                                     <i class="fa fa-lock fa-xs me-1 text-warning"></i>
                                     Google Drive access is restricted to the form creator and superadmin only.
                                 </p>
+                                @endif
                             @else
                             <p class="text-muted mb-0" style="font-size:.8rem;">
                                 <i class="fa fa-info-circle me-1"></i>
