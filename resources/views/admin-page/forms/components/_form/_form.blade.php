@@ -165,7 +165,14 @@
 
                             <h5 class="section-title mb-3"><i class="fab fa-google-drive me-2"></i>Google Drive</h5>
 
+                            @php
+                                $currentUser      = auth()->user();
+                                $canAccessGdrive  = ($isSuperadmin ?? false)
+                                    || ($currentUser && in_array($currentUser->email, $form->collaboratorEmails ?? []));
+                            @endphp
+
                             @if($form->gdriveSpreadsheetUrl)
+                            @if($canAccessGdrive)
                             <a href="{{ $form->gdriveSpreadsheetUrl }}" target="_blank" class="gdrive-link">
                                 <i class="fas fa-table gdrive-icon text-success"></i>
                                 <span class="gdrive-text">
@@ -174,9 +181,20 @@
                                 </span>
                                 <i class="fas fa-external-link-alt gdrive-ext"></i>
                             </a>
+                            @else
+                            <span class="gdrive-link gdrive-link-disabled" title="Akses dibatasi — tambahkan email Anda sebagai collaborator">
+                                <i class="fas fa-table gdrive-icon text-success"></i>
+                                <span class="gdrive-text">
+                                    <strong>Responses Spreadsheet</strong>
+                                    <small>All form submissions are automatically written here as rows.</small>
+                                </span>
+                                <i class="fas fa-lock gdrive-ext"></i>
+                            </span>
+                            @endif
                             @endif
 
                             @if($form->gdriveAttachmentsFolderUrl)
+                            @if($canAccessGdrive)
                             <a href="{{ $form->gdriveAttachmentsFolderUrl }}" target="_blank" class="gdrive-link">
                                 <i class="fas fa-folder gdrive-icon text-warning"></i>
                                 <span class="gdrive-text">
@@ -185,6 +203,16 @@
                                 </span>
                                 <i class="fas fa-external-link-alt gdrive-ext"></i>
                             </a>
+                            @else
+                            <span class="gdrive-link gdrive-link-disabled" title="Akses dibatasi — tambahkan email Anda sebagai collaborator">
+                                <i class="fas fa-folder gdrive-icon text-warning"></i>
+                                <span class="gdrive-text">
+                                    <strong>Attachments Folder</strong>
+                                    <small>Uploaded files (images, documents) from respondents are stored here.</small>
+                                </span>
+                                <i class="fas fa-lock gdrive-ext"></i>
+                            </span>
+                            @endif
                             @endif
 
                             @if(!$form->gdriveSpreadsheetUrl && !$form->gdriveAttachmentsFolderUrl)
@@ -352,11 +380,10 @@
 
                             @if($operation === 'create')
                             <h5 class="section-title"><i class="fab fa-google-drive me-2"></i>Google Drive</h5>
-                            <div class="alert alert-info py-2 px-3 mb-3" style="font-size:.8rem;border-radius:8px;">
+                            <div class="alert alert-info gdrive-info-alert py-2 px-3 mb-3" style="font-size:.8rem;border-radius:8px;">
                                 <i class="fa fa-info-circle me-1"></i>
-                                A Google Drive folder and spreadsheet will be automatically created at:
-                                <strong>dynamic_form / {Form Title}</strong>.
-                                Files are created by the service account — add your email as a collaborator below to gain access.
+                                The Google Drive folder used to store the spreadsheet and attachment files will be created automatically using the service account
+                                — add your email as a collaborator below to gain access.
                             </div>
                             @else
                             <h5 class="section-title"><i class="fab fa-google-drive me-2"></i>Collaborators</h5>

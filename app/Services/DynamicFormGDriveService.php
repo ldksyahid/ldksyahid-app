@@ -99,8 +99,16 @@ class DynamicFormGDriveService
         array  $fileFieldLabels = [],
         array  $spreadsheetHeaders = []
     ): array {
+        // 0. Restrict the root folder first.
+        //    The root folder's anyoneWithLink permission propagates to every child
+        //    created inside it. Child items inherit it from the root, so trying to
+        //    delete it on the child returns 404 (no direct permission found).
+        //    Removing it from the root stops the inheritance at the source.
+        $this->restrictAccess($this->rootFolderID);
+
         // 1. Create the form folder inside the root dynamic_form folder
         $formFolderID = $this->createFolder($formTitle, $this->rootFolderID);
+        $this->restrictAccess($formFolderID);
 
         // 2. Create the Google Spreadsheet inside the form folder
         $spreadsheet = $this->createSpreadsheet(
@@ -108,15 +116,18 @@ class DynamicFormGDriveService
             $formFolderID,
             $spreadsheetHeaders
         );
+        $this->restrictAccess($spreadsheet['id']);
 
         // 3. Create the attachments folder
         $attachmentsFolderID  = $this->createFolder('attachments', $formFolderID);
+        $this->restrictAccess($attachmentsFolderID);
         $attachmentsFolderUrl = "https://drive.google.com/drive/folders/{$attachmentsFolderID}";
 
         // 4. Create per-field subfolders inside attachments/
         $fieldFolders = [];
         foreach ($fileFieldLabels as $label) {
             $subFolderID  = $this->createFolder($label, $attachmentsFolderID);
+            $this->restrictAccess($subFolderID);
             $subFolderUrl = "https://drive.google.com/drive/folders/{$subFolderID}";
 
             $fieldFolders[] = [
@@ -296,6 +307,32 @@ class DynamicFormGDriveService
         } catch (\Exception $e) {
             // Non-fatal: log and continue. A bad email should not stop form creation.
             Log::warning("[DynamicFormGDriveService] Failed to grant access to {$email}: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Remove public "anyone with the link" access from a file or folder.
+     *
+     * In Google Drive API v3, the "anyone with the link" permission always has
+     * the fixed ID 'anyoneWithLink'. We delete it directly instead of listing
+     * all permissions first — listPermissions does not reliably return inherited
+     * permissions propagated from ancestor folders, so the list-then-delete
+     * approach silently misses them.
+     *
+     * A 404 response means the permission was never set (file is already private),
+     * which is the desired outcome and not treated as an error.
+     * Non-fatal: logs warning but does not throw.
+     */
+    private function restrictAccess(string $fileID): void
+    {
+        try {
+            $this->driveService->permissions->delete($fileID, 'anyoneWithLink');
+        } catch (\Exception $e) {
+            $msg = $e->getMessage();
+            // 404 = permission not found (file already private) — expected, not an error
+            if (strpos($msg, '404') === false && strpos($msg, 'fileNotFound') === false) {
+                Log::warning("[DynamicFormGDriveService] Could not restrict access on {$fileID}: {$msg}");
+            }
         }
     }
 

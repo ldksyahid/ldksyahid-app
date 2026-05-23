@@ -11,34 +11,35 @@
             </h1>
         </div>
 
-        {{-- Breadcrumb + Actions --}}
-        <div class="col-12 d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <p class="text-muted mb-0" style="font-size:.875rem;">
-                <a href="{{ route('admin.forms.show', $form->formID) }}">{{ Str::limit($form->title, 40) }}</a>
-                &nbsp;·&nbsp; v{{ $form->version }}
-                &nbsp;·&nbsp;
-                <span class="badge @if($form->status==='published') bg-success @elseif($form->status==='draft') bg-secondary @else bg-warning text-dark @endif">
-                    {{ ucfirst($form->status) }}
-                </span>
-            </p>
-            <div class="d-flex gap-2 flex-wrap">
-                <a href="{{ url('/form/' . $form->slug) }}" target="_blank" class="btn btn-outline-info btn-sm">
-                    <i class="fa fa-eye me-1"></i> Preview Form
-                </a>
-                <a href="{{ route('admin.forms.index') }}" class="btn btn-outline-secondary btn-sm">
-                    <i class="fa fa-arrow-left me-1"></i> Back
-                </a>
-            </div>
-        </div>
-
         {{-- Alert zone --}}
         <div class="col-12 mb-2" id="builderAlertWrap" style="display:none;">
             <div id="builderAlert"></div>
         </div>
 
-        {{-- Builder Grid --}}
-        <div class="col-12">
-            <div class="builder-wrap">
+        {{-- Main Builder Card --}}
+        <div class="col-12 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+
+                    {{-- Breadcrumb + Preview button --}}
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4 builder-card-header">
+                        <p class="text-muted mb-0" style="font-size:.875rem;">
+                            <a href="{{ route('admin.forms.show', $form->formID) }}">{{ Str::limit($form->title, 40) }}</a>
+                            &nbsp;·&nbsp; v{{ $form->version }}
+                            &nbsp;·&nbsp;
+                            <span class="badge @if($form->status==='published') bg-success @elseif($form->status==='draft') bg-secondary @else bg-warning text-dark @endif">
+                                {{ ucfirst($form->status) }}
+                            </span>
+                        </p>
+                        <a href="{{ url('/form/' . $form->slug) }}" target="_blank" class="btn-preview-form">
+                            <i class="fa fa-eye"></i>
+                            <span>Preview Form</span>
+                            <i class="fa fa-external-link-alt btn-preview-ext"></i>
+                        </a>
+                    </div>
+
+                    {{-- Builder Grid --}}
+                    <div class="builder-wrap">
 
                 {{-- ===== LEFT: Field Type Palette ===== --}}
                 <div>
@@ -101,7 +102,13 @@
                     <div class="panel-card mb-3">
                         <div class="panel-header"><i class="fab fa-google-drive text-success"></i> Google Drive</div>
                         @if($form->gdriveSpreadsheetUrl || $form->gdriveAttachmentsFolderUrl)
+                            @php
+                                $currentUser     = auth()->user();
+                                $canAccessGdrive = ($isSuperadmin ?? false)
+                                    || ($currentUser && in_array($currentUser->email, $form->collaboratorEmails ?? []));
+                            @endphp
                             @if($form->gdriveSpreadsheetUrl)
+                            @if($canAccessGdrive)
                             <a href="{{ $form->gdriveSpreadsheetUrl }}" target="_blank" class="gdrive-link-row">
                                 <i class="fas fa-table" style="color:#34d399;"></i>
                                 <span class="glr-text">
@@ -110,8 +117,19 @@
                                 </span>
                                 <i class="fas fa-external-link-alt glr-ext"></i>
                             </a>
+                            @else
+                            <span class="gdrive-link-row gdrive-link-row-disabled" title="Akses dibatasi — tambahkan email Anda sebagai collaborator">
+                                <i class="fas fa-table" style="color:#34d399;"></i>
+                                <span class="glr-text">
+                                    <strong>Responses Spreadsheet</strong>
+                                    <small>All submissions are written here as rows.</small>
+                                </span>
+                                <i class="fas fa-lock glr-ext"></i>
+                            </span>
+                            @endif
                             @endif
                             @if($form->gdriveAttachmentsFolderUrl)
+                            @if($canAccessGdrive)
                             <a href="{{ $form->gdriveAttachmentsFolderUrl }}" target="_blank" class="gdrive-link-row">
                                 <i class="fas fa-folder" style="color:#fbbf24;"></i>
                                 <span class="glr-text">
@@ -120,6 +138,16 @@
                                 </span>
                                 <i class="fas fa-external-link-alt glr-ext"></i>
                             </a>
+                            @else
+                            <span class="gdrive-link-row gdrive-link-row-disabled" title="Akses dibatasi — tambahkan email Anda sebagai collaborator">
+                                <i class="fas fa-folder" style="color:#fbbf24;"></i>
+                                <span class="glr-text">
+                                    <strong>Attachments Folder</strong>
+                                    <small>Uploaded files from respondents are stored here.</small>
+                                </span>
+                                <i class="fas fa-lock glr-ext"></i>
+                            </span>
+                            @endif
                             @endif
                         @else
                         <div class="panel-body">
@@ -142,6 +170,18 @@
                     </div>
                 </div>
 
+                    </div>{{-- end builder-wrap --}}
+
+                </div>{{-- end card-body --}}
+            </div>{{-- end card --}}
+        </div>{{-- end col-12 --}}
+
+        {{-- Bottom action bar — Back on the right --}}
+        <div class="col-12 builder-bottom-bar">
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('admin.forms.show', $form->formID) }}" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left me-1"></i> Back
+                </a>
             </div>
         </div>
 
@@ -151,21 +191,22 @@
 {{-- ===== ADD FIELD MODAL ===== --}}
 <div class="modal fade add-field-modal" id="addFieldModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fa fa-plus-square me-2 text-primary"></i>
-                    Add Field: <span id="modalFieldTypeLabel"></span>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content bm-card">
+            <div class="bm-header bm-header--add">
+                <div class="bm-header-icon"><i class="fa fa-plus-square"></i></div>
+                <div class="bm-header-text">
+                    <div class="bm-header-title">Add New Field</div>
+                    <div class="bm-header-sub" id="modalFieldTypeLabel"></div>
+                </div>
+                <button type="button" class="btn-close bm-btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body bm-body">
                 <input type="hidden" id="modalFieldType">
                 <input type="hidden" id="modalFormID" value="{{ $form->formID }}">
 
                 <div class="row g-3">
                     <div class="col-12">
-                        <label class="field-modal-label">Label / Question <span style="color:#ef4444">*</span></label>
+                        <label class="field-modal-label">Label / Question <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="modalLabel" placeholder="e.g. Full Name" maxlength="500">
                     </div>
                     <div class="col-md-6">
@@ -177,15 +218,15 @@
                         <input type="text" class="form-control" id="modalHelpText" placeholder="Optional — hint shown below the field" maxlength="500">
                     </div>
                     <div class="col-12">
-                        <div class="form-check">
+                        <div class="bm-required-toggle">
                             <input class="form-check-input" type="checkbox" id="modalIsRequired">
-                            <label class="form-check-label" for="modalIsRequired">Required</label>
+                            <label for="modalIsRequired">Mark as Required</label>
                         </div>
                     </div>
 
                     {{-- Options section (shown only for choice fields) --}}
                     <div class="col-12" id="optionsSection" style="display:none;">
-                        <label class="field-modal-label">Options <span style="color:#ef4444">*</span></label>
+                        <label class="field-modal-label">Options <span class="text-danger">*</span></label>
                         <div id="optionsList">
                             <div class="options-list">
                                 <div class="option-row">
@@ -213,16 +254,17 @@
                             <div class="col-md-6">
                                 <label class="field-modal-label">Accepted File Types</label>
                                 <input type="text" class="form-control form-control-sm" id="modalAcceptedTypes" placeholder="pdf,doc,docx">
-                                <div style="font-size:.75rem;color:#9ca3af;margin-top:.2rem;">Comma-separated, without dots.</div>
+                                <div class="form-text">Comma-separated, without dots.</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-custom-primary" id="btnAddField" onclick="submitAddField()"
-                        style="background:#00a79d;border-color:#00a79d;color:#fff;">
+            <div class="bm-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="fa fa-times me-1"></i> Cancel
+                </button>
+                <button type="button" class="bm-btn-submit bm-btn-submit--add" id="btnAddField" onclick="submitAddField()">
                     <i class="fa fa-plus me-1"></i> Add Field
                 </button>
             </div>
@@ -233,16 +275,20 @@
 {{-- ===== EDIT FIELD MODAL ===== --}}
 <div class="modal fade" id="editFieldModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="fa fa-edit me-2 text-warning"></i>Edit Field</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content bm-card">
+            <div class="bm-header bm-header--edit">
+                <div class="bm-header-icon"><i class="fa fa-edit"></i></div>
+                <div class="bm-header-text">
+                    <div class="bm-header-title">Edit Field</div>
+                    <div class="bm-header-sub">Update label, placeholder, or help text</div>
+                </div>
+                <button type="button" class="btn-close bm-btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body bm-body">
                 <input type="hidden" id="editFieldID">
                 <div class="row g-3">
                     <div class="col-12">
-                        <label class="field-modal-label">Label <span style="color:#ef4444">*</span></label>
+                        <label class="field-modal-label">Label <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="editLabel" maxlength="500">
                     </div>
                     <div class="col-md-6">
@@ -254,16 +300,18 @@
                         <input type="text" class="form-control" id="editHelpText" maxlength="500">
                     </div>
                     <div class="col-12">
-                        <div class="form-check">
+                        <div class="bm-required-toggle">
                             <input class="form-check-input" type="checkbox" id="editIsRequired">
-                            <label class="form-check-label" for="editIsRequired">Required</label>
+                            <label for="editIsRequired">Mark as Required</label>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-warning" onclick="submitEditField()">
+            <div class="bm-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="fa fa-times me-1"></i> Cancel
+                </button>
+                <button type="button" class="bm-btn-submit bm-btn-submit--edit" onclick="submitEditField()">
                     <i class="fa fa-save me-1"></i> Save Changes
                 </button>
             </div>

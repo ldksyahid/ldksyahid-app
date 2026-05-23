@@ -152,8 +152,8 @@ class AdminFormController extends Controller
                 'slug'  => $form->slug,
             ]);
 
-            Alert::success('Created!', "Form \"{$form->title}\" was created successfully.");
-            return redirect()->route('admin.forms.index');
+            Alert::success('Created!', "Form \"{$form->title}\" was created. Start building your form fields.");
+            return redirect()->route('admin.forms.builder', $form->formID);
 
         } catch (\Throwable $e) {
             Log::error('[AdminFormController::store] ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
