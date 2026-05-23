@@ -207,6 +207,14 @@ html.dark-mode .file-type-pill:has(input:checked) { background: #00a79d; border-
     transition: opacity .2s;
 }
 
+/* ===== SAVING STATE ===== */
+.field-card--saving {
+    opacity: .45;
+    pointer-events: none;
+    border-color: #00a79d !important;
+    transition: opacity .2s;
+}
+
 /* ===== SORTABLE GHOST ===== */
 .sortable-ghost { opacity: .4; background: #f0fdf4 !important; border: 2px dashed #86efac !important; }
 .sortable-chosen { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
