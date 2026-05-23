@@ -43,9 +43,9 @@
 
                 {{-- ===== LEFT: Field Type Palette ===== --}}
                 <div>
-                    <div class="panel-card">
-                        <div class="panel-header"><i class="fa fa-plus-square text-primary"></i> Add Field</div>
-                        <div class="panel-body" style="max-height: calc(100vh - 220px); overflow-y: auto;">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body" style="max-height: calc(100vh - 220px); overflow-y: auto;">
+                            <h5 class="section-title"><i class="fa fa-plus-square me-2"></i>Add Field</h5>
                             @php
                                 $groups = collect($fieldTypes)->groupBy('group');
                             @endphp
@@ -70,13 +70,12 @@
 
                 {{-- ===== MIDDLE: Drop Zone ===== --}}
                 <div>
-                    <div class="panel-card">
-                        <div class="panel-header">
-                            <i class="fa fa-list text-info"></i>
-                            <span>Active Fields</span>
-                            <span class="ms-auto badge bg-light text-dark border" id="fieldCount">{{ $form->activeFields->count() }} fields</span>
-                        </div>
-                        <div class="panel-body">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="section-title d-flex align-items-center justify-content-between">
+                                <span><i class="fa fa-list me-2"></i>Active Fields</span>
+                                <span class="badge bg-light text-dark border" id="fieldCount">{{ $form->activeFields->count() }} fields</span>
+                            </h5>
 
                             @if($form->activeFields->isEmpty())
                             <div class="drop-zone-empty" id="emptyZone">
@@ -90,7 +89,6 @@
                                 @include('admin-page.forms.components._field-card', ['field' => $field])
                                 @endforeach
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -99,73 +97,75 @@
                 <div class="builder-sidebar-right">
 
                     {{-- Google Drive --}}
-                    <div class="panel-card mb-3">
-                        <div class="panel-header"><i class="fab fa-google-drive text-success"></i> Google Drive</div>
-                        @if($form->gdriveSpreadsheetUrl || $form->gdriveAttachmentsFolderUrl)
-                            @php
-                                $currentUser     = auth()->user();
-                                $canAccessGdrive = ($isSuperadmin ?? false)
-                                    || ($currentUser && in_array($currentUser->email, $form->collaboratorEmails ?? []));
-                            @endphp
-                            @if($form->gdriveSpreadsheetUrl)
-                            @if($canAccessGdrive)
-                            <a href="{{ $form->gdriveSpreadsheetUrl }}" target="_blank" class="gdrive-link-row">
-                                <i class="fas fa-table" style="color:#34d399;"></i>
-                                <span class="glr-text">
-                                    <strong>Responses Spreadsheet</strong>
-                                    <small>All submissions are written here as rows.</small>
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body">
+                            <h5 class="section-title"><i class="fab fa-google-drive me-2"></i>Google Drive</h5>
+                            @if($form->gdriveSpreadsheetUrl || $form->gdriveAttachmentsFolderUrl)
+                                @php
+                                    $currentUser     = auth()->user();
+                                    $canAccessGdrive = ($isSuperadmin ?? false)
+                                        || ($currentUser && in_array($currentUser->email, $form->collaboratorEmails ?? []));
+                                @endphp
+                                @if($form->gdriveSpreadsheetUrl)
+                                @if($canAccessGdrive)
+                                <a href="{{ $form->gdriveSpreadsheetUrl }}" target="_blank" class="gdrive-link">
+                                    <i class="fas fa-table gdrive-icon text-success"></i>
+                                    <span class="gdrive-text">
+                                        <strong>Responses Spreadsheet</strong>
+                                        <small>All submissions are written here as rows.</small>
+                                    </span>
+                                    <i class="fas fa-external-link-alt gdrive-ext"></i>
+                                </a>
+                                @else
+                                <span class="gdrive-link gdrive-link-disabled" title="Akses dibatasi — tambahkan email Anda sebagai collaborator">
+                                    <i class="fas fa-table gdrive-icon text-success"></i>
+                                    <span class="gdrive-text">
+                                        <strong>Responses Spreadsheet</strong>
+                                        <small>All submissions are written here as rows.</small>
+                                    </span>
+                                    <i class="fas fa-lock gdrive-ext"></i>
                                 </span>
-                                <i class="fas fa-external-link-alt glr-ext"></i>
-                            </a>
+                                @endif
+                                @endif
+                                @if($form->gdriveAttachmentsFolderUrl)
+                                @if($canAccessGdrive)
+                                <a href="{{ $form->gdriveAttachmentsFolderUrl }}" target="_blank" class="gdrive-link">
+                                    <i class="fas fa-folder gdrive-icon text-warning"></i>
+                                    <span class="gdrive-text">
+                                        <strong>Attachments Folder</strong>
+                                        <small>Uploaded files from respondents are stored here.</small>
+                                    </span>
+                                    <i class="fas fa-external-link-alt gdrive-ext"></i>
+                                </a>
+                                @else
+                                <span class="gdrive-link gdrive-link-disabled" title="Akses dibatasi — tambahkan email Anda sebagai collaborator">
+                                    <i class="fas fa-folder gdrive-icon text-warning"></i>
+                                    <span class="gdrive-text">
+                                        <strong>Attachments Folder</strong>
+                                        <small>Uploaded files from respondents are stored here.</small>
+                                    </span>
+                                    <i class="fas fa-lock gdrive-ext"></i>
+                                </span>
+                                @endif
+                                @endif
                             @else
-                            <span class="gdrive-link-row gdrive-link-row-disabled" title="Akses dibatasi — tambahkan email Anda sebagai collaborator">
-                                <i class="fas fa-table" style="color:#34d399;"></i>
-                                <span class="glr-text">
-                                    <strong>Responses Spreadsheet</strong>
-                                    <small>All submissions are written here as rows.</small>
-                                </span>
-                                <i class="fas fa-lock glr-ext"></i>
-                            </span>
-                            @endif
-                            @endif
-                            @if($form->gdriveAttachmentsFolderUrl)
-                            @if($canAccessGdrive)
-                            <a href="{{ $form->gdriveAttachmentsFolderUrl }}" target="_blank" class="gdrive-link-row">
-                                <i class="fas fa-folder" style="color:#fbbf24;"></i>
-                                <span class="glr-text">
-                                    <strong>Attachments Folder</strong>
-                                    <small>Uploaded files from respondents are stored here.</small>
-                                </span>
-                                <i class="fas fa-external-link-alt glr-ext"></i>
-                            </a>
-                            @else
-                            <span class="gdrive-link-row gdrive-link-row-disabled" title="Akses dibatasi — tambahkan email Anda sebagai collaborator">
-                                <i class="fas fa-folder" style="color:#fbbf24;"></i>
-                                <span class="glr-text">
-                                    <strong>Attachments Folder</strong>
-                                    <small>Uploaded files from respondents are stored here.</small>
-                                </span>
-                                <i class="fas fa-lock glr-ext"></i>
-                            </span>
-                            @endif
-                            @endif
-                        @else
-                        <div class="panel-body">
                             <p class="text-muted mb-0" style="font-size:.8rem;">
                                 <i class="fa fa-info-circle me-1"></i>
                                 Google Drive not yet configured.
                             </p>
+                            @endif
                         </div>
-                        @endif
                     </div>
 
                     {{-- Tips --}}
-                    <div class="panel-card">
-                        <div class="panel-header"><i class="fa fa-info-circle text-muted"></i> Tips</div>
-                        <div class="panel-body" style="font-size:.8rem; color:#6b7280; line-height:1.6;">
-                            <p class="mb-2"><i class="fa fa-lock fa-xs me-1 text-warning"></i> <strong>Email field</strong> cannot be removed — it is required on every form.</p>
-                            <p class="mb-2"><i class="fa fa-arrows-alt fa-xs me-1"></i> Drag and drop to reorder fields.</p>
-                            <p class="mb-0"><i class="fa fa-save fa-xs me-1"></i> Changes are saved automatically to the database.</p>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="section-title"><i class="fa fa-info-circle me-2"></i>Tips</h5>
+                            <div style="font-size:.8rem; color:#6b7280; line-height:1.6;">
+                                <p class="mb-2"><i class="fa fa-lock fa-xs me-1 text-warning"></i> <strong>Email field</strong> cannot be removed — it is required on every form.</p>
+                                <p class="mb-2"><i class="fa fa-arrows-alt fa-xs me-1"></i> Drag and drop to reorder fields.</p>
+                                <p class="mb-0"><i class="fa fa-save fa-xs me-1"></i> Changes are saved automatically to the database.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
         {{-- Bottom action bar — Back on the right --}}
         <div class="col-12 builder-bottom-bar">
             <div class="d-flex justify-content-end">
-                <a href="{{ route('admin.forms.show', $form->formID) }}" class="btn btn-secondary">
+                <a href="{{ route('admin.forms.index') }}" class="btn btn-secondary">
                     <i class="fa fa-arrow-left me-1"></i> Back
                 </a>
             </div>
