@@ -89,7 +89,7 @@ class PublicFormController extends Controller
         // 2. Rate limit check
         if (TrFormSubmission::isRateLimited($form->formID, $request->ip())) {
             return back()
-                ->withErrors(['rate_limit' => 'Too many submissions. Please try again in a few moments.'])
+                ->withErrors(['rate_limit' => 'Terlalu banyak pengiriman formulir. Silakan coba lagi beberapa saat kemudian.'])
                 ->withInput();
         }
 
@@ -109,12 +109,30 @@ class PublicFormController extends Controller
                 continue;
             }
 
-            $fieldKey        = 'field_' . $field->formFieldID;
+            $fieldKey         = 'field_' . $field->formFieldID;
             $rules[$fieldKey] = $field->buildValidationRules();
 
-            if ($field->isRequired) {
-                $messages[$fieldKey . '.required'] = "The field \"{$field->label}\" is required.";
-            }
+            // Indonesian validation messages per field
+            $lbl = "\"{$field->label}\"";
+            $messages[$fieldKey . '.required']   = "Kolom {$lbl} wajib diisi.";
+            $messages[$fieldKey . '.email']       = "Format email pada kolom {$lbl} tidak valid.";
+            $messages[$fieldKey . '.url']         = "Format URL pada kolom {$lbl} tidak valid. Gunakan awalan https://.";
+            $messages[$fieldKey . '.numeric']     = "Kolom {$lbl} harus berupa angka.";
+            $messages[$fieldKey . '.integer']     = "Kolom {$lbl} harus berupa bilangan bulat.";
+            $messages[$fieldKey . '.min']         = "Kolom {$lbl} harus memiliki minimal :min karakter.";
+            $messages[$fieldKey . '.max']         = "Kolom {$lbl} tidak boleh lebih dari :max karakter.";
+            $messages[$fieldKey . '.min.numeric'] = "Nilai kolom {$lbl} minimal adalah :min.";
+            $messages[$fieldKey . '.max.numeric'] = "Nilai kolom {$lbl} maksimal adalah :max.";
+            $messages[$fieldKey . '.date']        = "Format tanggal pada kolom {$lbl} tidak valid.";
+            $messages[$fieldKey . '.before']      = "Tanggal pada kolom {$lbl} harus sebelum :date.";
+            $messages[$fieldKey . '.after']       = "Tanggal pada kolom {$lbl} harus setelah :date.";
+            $messages[$fieldKey . '.file']        = "Kolom {$lbl} harus berupa file yang valid.";
+            $messages[$fieldKey . '.image']       = "File pada kolom {$lbl} harus berupa gambar (jpg, png, dll).";
+            $messages[$fieldKey . '.mimes']       = "Format file pada kolom {$lbl} tidak didukung.";
+            $messages[$fieldKey . '.mimetypes']   = "Format file pada kolom {$lbl} tidak didukung.";
+            $messages[$fieldKey . '.max.file']    = "Ukuran file pada kolom {$lbl} tidak boleh lebih dari :max KB.";
+            $messages[$fieldKey . '.regex']       = "Format isian pada kolom {$lbl} tidak valid.";
+            $messages[$fieldKey . '.in']          = "Pilihan pada kolom {$lbl} tidak valid.";
         }
 
         $validated = $request->validate($rules, $messages);
@@ -280,7 +298,7 @@ class PublicFormController extends Controller
             ]);
 
             return back()
-                ->withErrors(['error' => 'An error occurred while processing your submission. Please try again.'])
+                ->withErrors(['error' => 'Terjadi kesalahan saat memproses formulir Anda. Silakan coba lagi.'])
                 ->withInput();
         }
     }

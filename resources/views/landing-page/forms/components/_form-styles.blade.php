@@ -118,7 +118,7 @@
 .gf-textarea {
     display: block;
     width: 100%;
-    background: transparent;
+    background: var(--gf-card-bg);
     border: none;
     border-bottom: 1px solid #9aa0a6;
     border-radius: 0;
@@ -168,7 +168,7 @@
     padding: 8px 32px 6px 0;
     font-size: .9375rem;
     color: var(--gf-text);
-    background: transparent;
+    background: var(--gf-card-bg);
     border: none;
     border-bottom: 1px solid #9aa0a6;
     border-radius: 0;
@@ -451,6 +451,8 @@
     display: flex;
     align-items: center;
     padding: 5rem 0 3rem;
+    position: relative;
+    z-index: 2;
 }
 
 .gf-state-card {
@@ -567,6 +569,7 @@
 [data-theme="dark"] .gf-input,
 [data-theme="dark"] .gf-textarea {
     color: var(--gf-text);
+    background: var(--gf-card-bg);
     border-bottom-color: #4b5563;
 }
 

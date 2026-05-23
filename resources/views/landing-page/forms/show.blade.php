@@ -18,18 +18,6 @@
             @endif
         </div>
 
-        {{-- ── Validation errors ────────────────────────────────────── --}}
-        @if($errors->any())
-        <div class="gf-error-card">
-            <strong>Terdapat kesalahan pada isian Anda:</strong>
-            <ul class="mb-0 mt-2 ps-3">
-                @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
-
         {{-- ── Form ─────────────────────────────────────────────────── --}}
         <form action="{{ route('forms.submit', $form->slug) }}" method="POST"
               enctype="multipart/form-data" id="publicFormSubmit" novalidate>
