@@ -94,8 +94,9 @@ function submitAddField() {
         if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
     }
 
+    const addModal = document.getElementById('addFieldModal');
     const btn = document.getElementById('btnAddField');
-    btn.disabled = true;
+    setModalLock(addModal, true);
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Adding...';
 
     fetch(`/admin/forms/${FORM_ID}/fields`, {
@@ -105,11 +106,11 @@ function submitAddField() {
     })
     .then(r => r.json())
     .then(data => {
-        btn.disabled = false;
+        setModalLock(addModal, false);
         btn.innerHTML = '<i class="fa fa-plus me-1"></i> Add Field';
 
         if (data.success) {
-            bootstrap.Modal.getInstance(document.getElementById('addFieldModal')).hide();
+            bootstrap.Modal.getInstance(addModal).hide();
 
             const emptyZone = document.getElementById('emptyZone');
             if (emptyZone) emptyZone.remove();
@@ -122,7 +123,7 @@ function submitAddField() {
         }
     })
     .catch(err => {
-        btn.disabled = false;
+        setModalLock(addModal, false);
         btn.innerHTML = '<i class="fa fa-plus me-1"></i> Add Field';
         showAlert('danger', 'Error: ' + err.message);
     });
@@ -228,9 +229,13 @@ function submitEditField() {
         if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
     }
 
+    const editModal = document.getElementById('editFieldModal');
     const btn = document.querySelector('#editFieldModal .bm-btn-submit--edit');
-    btn.disabled = true;
+    const editBtn = currentEditCard?.querySelector('.field-card-actions button');
+    setModalLock(editModal, true);
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...';
+    if (editBtn) { editBtn.disabled = true; editBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>'; }
+    if (currentEditCard) currentEditCard.classList.add('field-card--saving');
 
     fetch(`/admin/forms/${FORM_ID}/fields/${fieldID}`, {
         method: 'PUT',
@@ -239,8 +244,10 @@ function submitEditField() {
     })
     .then(r => r.json())
     .then(data => {
-        btn.disabled = false;
+        setModalLock(editModal, false);
         btn.innerHTML = '<i class="fa fa-save me-1"></i> Save Changes';
+        if (editBtn) { editBtn.disabled = false; editBtn.innerHTML = '<i class="fa fa-edit"></i>'; }
+        if (currentEditCard) currentEditCard.classList.remove('field-card--saving');
 
         if (data.success) {
             if (currentEditCard) {
@@ -275,8 +282,10 @@ function submitEditField() {
         }
     })
     .catch(err => {
-        btn.disabled = false;
+        setModalLock(editModal, false);
         btn.innerHTML = '<i class="fa fa-save me-1"></i> Save Changes';
+        if (editBtn) { editBtn.disabled = false; editBtn.innerHTML = '<i class="fa fa-edit"></i>'; }
+        if (currentEditCard) currentEditCard.classList.remove('field-card--saving');
         showAlert('danger', 'Error: ' + err.message);
     });
 }
@@ -349,6 +358,13 @@ function removeOption(btn) {
     const rows = document.querySelectorAll('.option-row');
     if (rows.length <= 1) return;
     btn.closest('.option-row').remove();
+}
+
+// ===== MODAL LOCK =====
+function setModalLock(modalEl, locked) {
+    modalEl.querySelectorAll('input, textarea, select, button').forEach(el => {
+        el.disabled = locked;
+    });
 }
 
 // ===== HELPERS =====
