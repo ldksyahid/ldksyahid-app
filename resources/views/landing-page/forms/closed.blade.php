@@ -7,7 +7,7 @@
 @section('content')
 <div class="gf-state-page">
     <div class="container">
-        <div class="gf-state-card" style="border-top-color:#6b7280;">
+        <div class="gf-state-card">
 
             {{-- Icon --}}
             <div class="gf-state-icon-wrap closed">

@@ -459,7 +459,6 @@
     background: var(--gf-card-bg);
     border-radius: var(--gf-radius);
     border: 1px solid var(--gf-border);
-    border-top: 6px solid var(--gf-primary);
     box-shadow: 0 4px 20px rgba(0,0,0,.07);
     padding: 2.5rem 2rem;
     text-align: center;

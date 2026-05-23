@@ -88,13 +88,18 @@ class PublicFormController extends Controller
 
         // 2. Rate limit check
         if (TrFormSubmission::isRateLimited($form->formID, $request->ip())) {
-            return back()
-                ->withErrors(['rate_limit' => 'Terlalu banyak pengiriman formulir. Silakan coba lagi beberapa saat kemudian.'])
-                ->withInput();
+            $msg = 'Terlalu banyak pengiriman formulir. Silakan coba lagi beberapa saat kemudian.';
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $msg], 429);
+            }
+            return back()->withErrors(['rate_limit' => $msg])->withInput();
         }
 
         // 3. Check if form is still accepting submissions (could have closed between page load and submit)
         if (!$form->isAcceptingSubmissions()) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Formulir ini sudah tidak menerima pengisian.'], 422);
+            }
             return view('landing-page.forms.closed', compact('form'))
                 ->with('title', $form->title);
         }
@@ -297,9 +302,11 @@ class PublicFormController extends Controller
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return back()
-                ->withErrors(['error' => 'Terjadi kesalahan saat memproses formulir Anda. Silakan coba lagi.'])
-                ->withInput();
+            $msg = 'Terjadi kesalahan saat memproses formulir Anda. Silakan coba lagi.';
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $msg], 500);
+            }
+            return back()->withErrors(['error' => $msg])->withInput();
         }
     }
 
@@ -321,9 +328,19 @@ class PublicFormController extends Controller
 
     /**
      * Return the appropriate success response (redirect or custom URL).
+     * For AJAX requests, returns JSON so the frontend can act accordingly.
      */
     private function successResponse(MsForm $form, Request $request, ?int $submissionID = null)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'success'             => true,
+                'redirectUrl'         => $form->redirectUrl ?: null,
+                'formTitle'           => $form->title,
+                'confirmationMessage' => $form->confirmationMessage ?: null,
+            ]);
+        }
+
         if ($form->redirectUrl) {
             return redirect($form->redirectUrl);
         }
