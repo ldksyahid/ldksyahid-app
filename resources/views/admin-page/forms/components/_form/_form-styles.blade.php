@@ -61,6 +61,14 @@
 .form-text { font-size: 0.8rem; color: #6c757d; }
 .invalid-feedback { font-size: 0.85rem; }
 
+/* ===== NUMBER INPUT SPIN BUTTONS ===== */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] { -moz-appearance: textfield; }
+
 /* ===== VIEW MODE — plaintext display ===== */
 .form-control-plaintext {
     padding: 0.375rem 0;
