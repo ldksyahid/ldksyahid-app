@@ -225,6 +225,10 @@ function submitEditField() {
         if (acceptedTypes) body.validation.acceptedTypes = acceptedTypes.split(',').map(s => s.trim());
     }
 
+    const btn = document.querySelector('#editFieldModal .bm-btn-submit--edit');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...';
+
     fetch(`/admin/forms/${FORM_ID}/fields/${fieldID}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
@@ -232,6 +236,9 @@ function submitEditField() {
     })
     .then(r => r.json())
     .then(data => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa fa-save me-1"></i> Save Changes';
+
         if (data.success) {
             if (currentEditCard) {
                 // Sync data-* attributes for next open
@@ -255,7 +262,11 @@ function submitEditField() {
             showAlert('danger', 'Failed to update field.');
         }
     })
-    .catch(err => showAlert('danger', 'Error: ' + err.message));
+    .catch(err => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa fa-save me-1"></i> Save Changes';
+        showAlert('danger', 'Error: ' + err.message);
+    });
 }
 
 // ===== REMOVE FIELD =====
@@ -276,6 +287,14 @@ function removeField(btn) {
     }).then((result) => {
         if (!result.isConfirmed) return;
 
+        // Show loading state on the card
+        card.classList.add('field-card--deleting');
+        const delBtn = card.querySelector('.btn-del');
+        if (delBtn) {
+            delBtn.disabled = true;
+            delBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+        }
+
         fetch(`/admin/forms/${FORM_ID}/fields/${fieldID}`, {
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': CSRF_TOKEN }
@@ -287,10 +306,17 @@ function removeField(btn) {
                 updateFieldCount(-1);
                 Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `Field "${label}" removed.`, showConfirmButton: false, timer: 2500, timerProgressBar: true });
             } else {
+                // Restore card on failure
+                card.classList.remove('field-card--deleting');
+                if (delBtn) { delBtn.disabled = false; delBtn.innerHTML = '<i class="fa fa-trash"></i>'; }
                 showAlert('danger', data.message || 'Cannot remove this field.');
             }
         })
-        .catch(err => showAlert('danger', 'Error: ' + err.message));
+        .catch(err => {
+            card.classList.remove('field-card--deleting');
+            if (delBtn) { delBtn.disabled = false; delBtn.innerHTML = '<i class="fa fa-trash"></i>'; }
+            showAlert('danger', 'Error: ' + err.message);
+        });
     });
 }
 
