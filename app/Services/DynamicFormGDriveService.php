@@ -467,6 +467,45 @@ class DynamicFormGDriveService
     }
 
     // =========================================================================
+    // Rename a folder (used when a file/image field label is updated)
+    // =========================================================================
+
+    /**
+     * Rename an existing GDrive folder.
+     * Called when a file/image field's label is updated in the form builder.
+     */
+    public function renameFolder(string $folderID, string $newName): void
+    {
+        $metadata = new Google_Service_Drive_DriveFile(['name' => $newName]);
+        $this->driveService->files->update($folderID, $metadata);
+    }
+
+    // =========================================================================
+    // Create a single per-field subfolder inside an existing attachments folder
+    // =========================================================================
+
+    /**
+     * Create one subfolder inside the form's existing attachments folder.
+     * Called when a file/image field is added to an already-configured form.
+     * Does NOT create a new root folder, spreadsheet, or attachments folder.
+     *
+     * @param  string $attachmentsFolderID  ID of the form's existing attachments/ folder
+     * @param  string $fieldLabel           Used as the subfolder name
+     * @return array  {gdriveFolderID, gdriveAttachmentsFolderUrl}
+     */
+    public function createFieldAttachmentFolder(string $attachmentsFolderID, string $fieldLabel): array
+    {
+        $subFolderID  = $this->createFolder($fieldLabel, $attachmentsFolderID);
+        $this->restrictAccess($subFolderID);
+        $subFolderUrl = "https://drive.google.com/drive/folders/{$subFolderID}";
+
+        return [
+            'gdriveFolderID'             => $subFolderID,
+            'gdriveAttachmentsFolderUrl' => $subFolderUrl,
+        ];
+    }
+
+    // =========================================================================
     // Reorder spreadsheet columns — rearranges ALL rows to match new field order
     // =========================================================================
 
