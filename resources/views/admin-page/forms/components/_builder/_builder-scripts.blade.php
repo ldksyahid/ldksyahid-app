@@ -258,6 +258,15 @@ function submitEditField() {
                 const required = isRequired ? '<span class="field-card-required">*</span>' : '';
                 const badge    = labelDiv.querySelector('.field-card-system-badge')?.outerHTML ?? '';
                 labelDiv.innerHTML = (icon?.outerHTML ?? '') + ' ' + label + ' ' + required + badge;
+
+                // Refresh field type + help text subtitle
+                const typeDiv = currentEditCard.querySelector('.field-card-type');
+                if (typeDiv) {
+                    const rawType   = currentEditCard.dataset.fieldType ?? '';
+                    const typeLabel = rawType.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase());
+                    const truncated = helpText.length > 50 ? helpText.substring(0, 50) + '…' : helpText;
+                    typeDiv.textContent = helpText ? `${typeLabel} · ${truncated}` : typeLabel;
+                }
             }
             bootstrap.Modal.getInstance(document.getElementById('editFieldModal')).hide();
             Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Field updated successfully.', showConfirmButton: false, timer: 2500, timerProgressBar: true });
