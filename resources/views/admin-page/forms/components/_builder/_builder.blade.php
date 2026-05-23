@@ -148,6 +148,10 @@
                                 </span>
                                 @endif
                                 @endif
+                                <p class="mb-0 mt-2" style="font-size:.75rem; color:#6b7280;">
+                                    <i class="fa fa-lock fa-xs me-1 text-warning"></i>
+                                    Google Drive access is restricted to the form creator and superadmin only.
+                                </p>
                             @else
                             <p class="text-muted mb-0" style="font-size:.8rem;">
                                 <i class="fa fa-info-circle me-1"></i>
