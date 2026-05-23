@@ -1,6 +1,7 @@
 @extends('admin-page.template.body')
 
 @section('styles')
+    @include('admin-page.forms.components._form._form-styles')
     @include('admin-page.forms.components._builder._builder-styles')
 @endsection
 
