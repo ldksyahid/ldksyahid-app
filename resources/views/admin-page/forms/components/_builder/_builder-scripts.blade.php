@@ -114,23 +114,74 @@ let currentEditCard = null;
 function openEditModal(btn) {
     const card        = btn.closest('.field-card');
     currentEditCard   = card;
-    const fieldID     = card.dataset.fieldId;
+    const fieldType   = card.dataset.fieldType;
     const label       = card.dataset.label;
     const placeholder = card.dataset.placeholder;
     const helpText    = card.dataset.helpText;
     const isRequired  = card.dataset.isRequired === '1';
+    const options     = JSON.parse(card.dataset.options  || '[]');
+    const validation  = JSON.parse(card.dataset.validation || '{}');
 
-    document.getElementById('editFieldID').value      = fieldID;
+    const isDisplay = ['section_break', 'paragraph'].includes(fieldType);
+
+    document.getElementById('editFieldID').value      = card.dataset.fieldId;
     document.getElementById('editLabel').value        = label;
     document.getElementById('editPlaceholder').value  = placeholder;
     document.getElementById('editHelpText').value     = helpText;
     document.getElementById('editIsRequired').checked = isRequired;
 
+    // Hide placeholder for display-only types (section_break, paragraph)
+    document.getElementById('editPlaceholderWrap').style.display = isDisplay ? 'none' : '';
+
+    // Show / hide options section
+    const isChoice = CHOICE_TYPES.includes(fieldType);
+    document.getElementById('editOptionsSection').style.display = isChoice ? '' : 'none';
+    if (isChoice) {
+        const listEl = document.getElementById('editOptionsListInner');
+        listEl.innerHTML = '';
+        const opts = options.length ? options : [{label:'', value:''}, {label:'', value:''}];
+        opts.forEach((opt, idx) => {
+            const val = opt.label ?? opt.value ?? opt ?? '';
+            const row = document.createElement('div');
+            row.className = 'option-row';
+            row.innerHTML = `
+                <input type="text" class="form-control form-control-sm edit-option-input" value="${val.replace(/"/g,'&quot;')}" placeholder="Option ${idx + 1}">
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeEditOption(this)">×</button>`;
+            listEl.appendChild(row);
+        });
+    }
+
+    // Show / hide file section
+    const isFile = FILE_TYPES.includes(fieldType);
+    document.getElementById('editFileSection').style.display = isFile ? '' : 'none';
+    if (isFile) {
+        document.getElementById('editMaxSizeKB').value     = validation?.maxSizeKB ?? '';
+        document.getElementById('editAcceptedTypes').value = (validation?.acceptedTypes ?? []).join(',');
+    }
+
     new bootstrap.Modal(document.getElementById('editFieldModal')).show();
+}
+
+function addEditOption() {
+    const list = document.getElementById('editOptionsListInner');
+    const idx  = list.querySelectorAll('.option-row').length + 1;
+    const row  = document.createElement('div');
+    row.className = 'option-row';
+    row.innerHTML = `
+        <input type="text" class="form-control form-control-sm edit-option-input" placeholder="Option ${idx}">
+        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeEditOption(this)">×</button>`;
+    list.appendChild(row);
+}
+
+function removeEditOption(btn) {
+    const rows = document.querySelectorAll('#editOptionsListInner .option-row');
+    if (rows.length <= 1) return;
+    btn.closest('.option-row').remove();
 }
 
 function submitEditField() {
     const fieldID     = document.getElementById('editFieldID').value;
+    const fieldType   = currentEditCard?.dataset.fieldType ?? '';
     const label       = document.getElementById('editLabel').value.trim();
     const placeholder = document.getElementById('editPlaceholder').value.trim();
     const helpText    = document.getElementById('editHelpText').value.trim();
@@ -138,22 +189,40 @@ function submitEditField() {
 
     if (!label) { document.getElementById('editLabel').focus(); return; }
 
+    const body = { label, placeholder, helpText, isRequired };
+
+    if (CHOICE_TYPES.includes(fieldType)) {
+        body.options = Array.from(document.querySelectorAll('.edit-option-input'))
+            .map(i => i.value.trim()).filter(v => v.length > 0)
+            .map(v => ({ label: v, value: v }));
+    }
+
+    if (FILE_TYPES.includes(fieldType)) {
+        const maxSizeKB     = parseInt(document.getElementById('editMaxSizeKB').value);
+        const acceptedTypes = document.getElementById('editAcceptedTypes').value.trim();
+        body.validation = {};
+        if (maxSizeKB > 0) body.validation.maxSizeKB     = maxSizeKB;
+        if (acceptedTypes) body.validation.acceptedTypes = acceptedTypes.split(',').map(s => s.trim());
+    }
+
     fetch(`/admin/forms/${FORM_ID}/fields/${fieldID}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
-        body: JSON.stringify({ label, placeholder, helpText, isRequired })
+        body: JSON.stringify(body)
     })
     .then(r => r.json())
     .then(data => {
         if (data.success) {
             if (currentEditCard) {
-                // Update data-* attributes so next openEditModal gets fresh values
-                currentEditCard.dataset.label       = label;
-                currentEditCard.dataset.placeholder  = placeholder;
-                currentEditCard.dataset.helpText     = helpText;
-                currentEditCard.dataset.isRequired   = isRequired ? '1' : '0';
+                // Sync data-* attributes for next open
+                currentEditCard.dataset.label      = label;
+                currentEditCard.dataset.placeholder = placeholder;
+                currentEditCard.dataset.helpText    = helpText;
+                currentEditCard.dataset.isRequired  = isRequired ? '1' : '0';
+                if (body.options !== undefined)    currentEditCard.dataset.options    = JSON.stringify(body.options);
+                if (body.validation !== undefined) currentEditCard.dataset.validation = JSON.stringify(body.validation);
 
-                // Update visible label text (preserve icon + badges)
+                // Refresh visible label
                 const labelDiv = currentEditCard.querySelector('.field-card-label');
                 const icon     = labelDiv.querySelector('i');
                 const required = isRequired ? '<span class="field-card-required">*</span>' : '';
