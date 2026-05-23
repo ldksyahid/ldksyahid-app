@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Form Submission Confirmation – LDK Syahid</title>
+    <title>Konfirmasi Pengiriman Formulir – LDK Syahid</title>
     <style>
         @media only screen and (max-width: 600px) {
             .card     { width: 100% !important; }
@@ -30,7 +30,7 @@
                     <td class="hdr-pad" align="center"
                         style="background:linear-gradient(135deg,#00a79d 0%,#008b84 100%);padding:32px 40px;">
 
-                        <!-- Logo: swap the <p> below for an <img> tag when a logo image is available -->
+                        <!-- Org label -->
                         <p style="margin:0 0 14px;font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:2px;text-transform:uppercase;">
                             ✦ LDK Syahid ✦
                         </p>
@@ -41,7 +41,7 @@
                         </div>
 
                         <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#ffffff;line-height:1.3;">
-                            Form Successfully Submitted
+                            Alhamdulillah, Formulir Berhasil Dikirim!
                         </h1>
                         <p style="margin:0;font-size:14px;color:rgba(255,255,255,0.85);">
                             {{ $formTitle }}
@@ -53,18 +53,25 @@
                 <tr>
                     <td class="body-pad" style="padding:32px 40px;">
 
-                        <!-- Greeting -->
-                        <p style="margin:0 0 6px;font-size:15px;color:#374151;font-weight:600;">
-                            Hello, {{ $respondentName ?: 'Respondent' }} 👋
+                        <!-- Islamic greeting -->
+                        <p style="margin:0 0 4px;font-size:14px;color:#374151;font-weight:600;font-style:italic;">
+                            Assalamu'alaikum Warahmatullahi Wabarakatuh,
                         </p>
-                        <p style="margin:0 0 8px;font-size:14px;color:#6b7280;line-height:1.6;">
-                            Thank you for submitting the form <strong style="color:#00a79d;">{{ $formTitle }}</strong>.
-                            Below is a summary of your submitted answers.
+
+                        <!-- Name greeting -->
+                        <p style="margin:0 0 12px;font-size:15px;color:#374151;font-weight:600;">
+                            {{ $respondentName ?: 'Saudaraku' }}
+                        </p>
+
+                        <p style="margin:0 0 8px;font-size:14px;color:#6b7280;line-height:1.7;">
+                            Jazakumullahu Khairan atas partisipasi Anda dalam mengisi formulir
+                            <strong style="color:#00a79d;">{{ $formTitle }}</strong>.
+                            Berikut adalah ringkasan jawaban yang telah Anda kirimkan.
                         </p>
 
                         <!-- Submission timestamp -->
                         <p style="margin:0 0 20px;font-size:12px;color:#9ca3af;">
-                            Submitted at: {{ $submittedAt }}
+                            Dikirim pada: {{ $submittedAt }}
                         </p>
 
                         <!-- Divider -->
@@ -83,7 +90,7 @@
                                                border-bottom:1px solid #e5e7eb;vertical-align:top;word-break:break-word;">
                                         @if (str_starts_with((string) $value, 'https://'))
                                             <a href="{{ $value }}" style="color:#00a79d;text-decoration:none;font-weight:600;">
-                                                View File ↗
+                                                Lihat File ↗
                                             </a>
                                         @elseif ($value !== null && $value !== '')
                                             {{ $value }}
@@ -96,9 +103,9 @@
                         </table>
 
                         <!-- Footer note -->
-                        <p style="margin:24px 0 0;font-size:13px;color:#6b7280;line-height:1.6;padding:16px;background:#f0fdf4;border-radius:8px;border-left:3px solid #00a79d;">
-                            If you did not submit this form, please ignore this email.
-                            Your data is securely stored by the LDK Syahid team.
+                        <p style="margin:24px 0 0;font-size:13px;color:#6b7280;line-height:1.7;padding:16px;background:#f0fdf4;border-radius:8px;border-left:3px solid #00a79d;">
+                            Jika Anda tidak merasa mengisi formulir ini, abaikan email ini.
+                            Data Anda tersimpan dengan aman oleh tim LDK Syahid.
                         </p>
 
                     </td>
@@ -108,11 +115,14 @@
                 <tr>
                     <td class="ftr-pad" align="center"
                         style="background:#f9fafb;padding:24px 40px;border-top:1px solid #e5e7eb;">
+                        <p style="margin:0 0 6px;font-size:13px;color:#6b7280;font-style:italic;">
+                            Wassalamu'alaikum Warahmatullahi Wabarakatuh
+                        </p>
                         <p style="margin:0 0 4px;font-size:12px;color:#9ca3af;">
-                            This email was sent automatically by the LDK Syahid system.
+                            Email ini dikirim secara otomatis oleh sistem LDK Syahid.
                         </p>
                         <p style="margin:0 0 8px;font-size:12px;color:#9ca3af;">
-                            Please do not reply to this email.
+                            Mohon tidak membalas email ini.
                         </p>
                         <p style="margin:0;font-size:12px;">
                             <a href="{{ config('app.url') }}" style="color:#00a79d;text-decoration:none;font-weight:600;">

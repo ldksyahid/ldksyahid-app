@@ -1,280 +1,374 @@
 {{--
     Renders a single form field for the public form.
     Variable: $field (MsFormField instance)
+    Each field type renders its own .gf-card (Google Form style).
 --}}
 @php
     $fieldName = 'field_' . $field->formFieldID;
     $fieldID   = 'f_' . $field->formFieldID;
     $oldValue  = old($fieldName);
     $isError   = $errors->has($fieldName);
-    $classes   = 'form-control' . ($isError ? ' is-invalid' : '');
-
-    // Icon mapping for field type labels
-    $fieldIconMap = [
-        'short_text' => 'fa-font',
-        'long_text'  => 'fa-align-left',
-        'email'      => 'fa-envelope',
-        'number'     => 'fa-hashtag',
-        'phone'      => 'fa-phone',
-        'url'        => 'fa-link',
-        'date'       => 'fa-calendar',
-        'time'       => 'fa-clock',
-        'datetime'   => 'fa-calendar-alt',
-        'dropdown'   => 'fa-chevron-down',
-        'radio'      => 'fa-dot-circle',
-        'checkbox'   => 'fa-check-square',
-        'file'       => 'fa-file-upload',
-        'image'      => 'fa-image',
-    ];
-    $fieldIcon = $fieldIconMap[$field->fieldType] ?? null;
 @endphp
 
 @switch($field->fieldType)
 
 {{-- ===== SECTION BREAK ===== --}}
 @case('section_break')
-    <div class="form-field-wrap">
+    <div class="gf-section-card">
         @if($field->label)
-        <div class="section-break-title">
-            <i class="fas fa-grip-lines me-2" style="color:#00a79d;font-size:.85em;"></i>
-            {{ $field->label }}
-        </div>
+        <div class="gf-section-title">{{ $field->label }}</div>
         @endif
         @if($field->helpText)
-        <div class="section-break-desc">{{ $field->helpText }}</div>
+        <p class="gf-section-desc">{{ $field->helpText }}</p>
         @endif
     </div>
     @break
 
 {{-- ===== PARAGRAPH (display only) ===== --}}
 @case('paragraph')
-    <div class="form-field-wrap">
-        <p style="font-size:.9rem;color:var(--bs-body-color,#374151);margin-bottom:.5rem;">
-            {{ $field->label }}
-        </p>
+    <div class="gf-para-card">
+        <p class="gf-para-text">{{ $field->label }}</p>
         @if($field->helpText)
-        <p class="form-field-help">{{ $field->helpText }}</p>
+        <p class="gf-para-text" style="margin-top:.5rem;font-size:.875rem;opacity:.75;">{{ $field->helpText }}</p>
         @endif
     </div>
     @break
 
-{{-- ===== SHORT TEXT / PHONE / URL ===== --}}
+{{-- ===== SHORT TEXT ===== --}}
 @case('short_text')
-@case('phone')
-@case('url')
-    <div class="form-field-wrap auth-input-wrap">
-        <label class="form-field-label" for="{{ $fieldID }}">
-            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label" for="{{ $fieldID }}">
             {{ $field->label }}
-            @if($field->isRequired) <span class="form-field-required">*</span> @endif
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         <input
-            type="{{ $field->fieldType === 'phone' ? 'tel' : ($field->fieldType === 'url' ? 'url' : 'text') }}"
+            type="text"
             id="{{ $fieldID }}"
             name="{{ $fieldName }}"
-            class="{{ $classes }}"
-            placeholder="{{ $field->placeholder ?? '' }}"
+            class="gf-input {{ $isError ? 'is-invalid' : '' }}"
+            placeholder="{{ $field->placeholder ?? 'Jawaban Anda' }}"
             value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
             {{ $field->isRequired ? 'required' : '' }}
             maxlength="500"
         >
         @if($field->helpText)
-        <p class="form-field-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{{ $field->helpText }}</p>
         @endif
         @error($fieldName)
-        <div class="invalid-feedback">{{ $message }}</div>
+        <span class="gf-invalid">{{ $message }}</span>
         @enderror
     </div>
     @break
 
-{{-- ===== EMAIL (system field uses auth floating label; custom uses standard) ===== --}}
-@case('email')
-    <div class="form-field-wrap auth-input-wrap">
-        @if($field->isSystemField)
-            {{-- Auth-style floating label with icon --}}
-            <div class="form-floating">
-                <input
-                    type="email"
-                    class="form-control has-icon {{ $isError ? 'is-invalid' : '' }}"
-                    id="{{ $fieldID }}"
-                    name="{{ $fieldName }}"
-                    placeholder="name@example.com"
-                    value="{{ $oldValue ?? '' }}"
-                    required autocomplete="email"
-                >
-                <label for="{{ $fieldID }}" class="has-icon">
-                    {{ $field->label }}
-                    <span class="form-field-required">*</span>
-                </label>
-                <i class="fas fa-envelope auth-input-icon"></i>
-            </div>
-        @else
-            <label class="form-field-label" for="{{ $fieldID }}">
-                <i class="fas fa-envelope" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>
-                {{ $field->label }}
-                @if($field->isRequired) <span class="form-field-required">*</span> @endif
-            </label>
-            <input type="email" id="{{ $fieldID }}" name="{{ $fieldName }}"
-                   class="{{ $classes }}" placeholder="{{ $field->placeholder ?? 'name@example.com' }}"
-                   value="{{ $oldValue ?? '' }}"
-                   {{ $field->isRequired ? 'required' : '' }} maxlength="255">
+{{-- ===== PHONE ===== --}}
+@case('phone')
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label" for="{{ $fieldID }}">
+            {{ $field->label }}
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
+        </label>
+        <input
+            type="tel"
+            id="{{ $fieldID }}"
+            name="{{ $fieldName }}"
+            class="gf-input {{ $isError ? 'is-invalid' : '' }}"
+            placeholder="{{ $field->placeholder ?? 'Nomor telepon Anda' }}"
+            value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
+            {{ $field->isRequired ? 'required' : '' }}
+            maxlength="30"
+        >
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
         @endif
-
-        @if($field->helpText && !$field->isSystemField)
-        <p class="form-field-help">{{ $field->helpText }}</p>
-        @elseif($field->isSystemField)
-        <p class="form-field-help">A confirmation email will be sent to this address.</p>
-        @endif
-
         @error($fieldName)
-        <div class="invalid-feedback d-block">{{ $message }}</div>
+        <span class="gf-invalid">{{ $message }}</span>
+        @enderror
+    </div>
+    @break
+
+{{-- ===== URL ===== --}}
+@case('url')
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label" for="{{ $fieldID }}">
+            {{ $field->label }}
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
+        </label>
+        <input
+            type="url"
+            id="{{ $fieldID }}"
+            name="{{ $fieldName }}"
+            class="gf-input {{ $isError ? 'is-invalid' : '' }}"
+            placeholder="{{ $field->placeholder ?? 'https://' }}"
+            value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
+            {{ $field->isRequired ? 'required' : '' }}
+            maxlength="500"
+        >
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
+        @error($fieldName)
+        <span class="gf-invalid">{{ $message }}</span>
+        @enderror
+    </div>
+    @break
+
+{{-- ===== EMAIL ===== --}}
+@case('email')
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label" for="{{ $fieldID }}">
+            {{ $field->label }}
+            @if($field->isRequired || $field->isSystemField)<span class="gf-required">*</span>@endif
+        </label>
+        <input
+            type="email"
+            id="{{ $fieldID }}"
+            name="{{ $fieldName }}"
+            class="gf-input {{ $isError ? 'is-invalid' : '' }}"
+            placeholder="{{ $field->placeholder ?? 'contoh@email.com' }}"
+            value="{{ $oldValue ?? '' }}"
+            {{ ($field->isRequired || $field->isSystemField) ? 'required' : '' }}
+            autocomplete="email"
+            maxlength="255"
+        >
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @elseif($field->isSystemField)
+        <p class="gf-help">Email konfirmasi akan dikirimkan ke alamat ini.</p>
+        @endif
+        @error($fieldName)
+        <span class="gf-invalid">{{ $message }}</span>
         @enderror
     </div>
     @break
 
 {{-- ===== NUMBER ===== --}}
 @case('number')
-    <div class="form-field-wrap auth-input-wrap">
-        <label class="form-field-label" for="{{ $fieldID }}">
-            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label" for="{{ $fieldID }}">
             {{ $field->label }}
-            @if($field->isRequired) <span class="form-field-required">*</span> @endif
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         <input
             type="number"
             id="{{ $fieldID }}"
             name="{{ $fieldName }}"
-            class="{{ $classes }}"
-            placeholder="{{ $field->placeholder ?? '' }}"
+            class="gf-input {{ $isError ? 'is-invalid' : '' }}"
+            placeholder="{{ $field->placeholder ?? '0' }}"
             value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
             {{ $field->isRequired ? 'required' : '' }}
             @if(!empty($field->validation['min'])) min="{{ $field->validation['min'] }}" @endif
             @if(!empty($field->validation['max'])) max="{{ $field->validation['max'] }}" @endif
         >
-        @if($field->helpText) <p class="form-field-help">{{ $field->helpText }}</p> @endif
-        @error($fieldName) <div class="invalid-feedback">{{ $message }}</div> @enderror
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
+        @error($fieldName)
+        <span class="gf-invalid">{{ $message }}</span>
+        @enderror
     </div>
     @break
 
 {{-- ===== LONG TEXT ===== --}}
 @case('long_text')
-    <div class="form-field-wrap">
-        <label class="form-field-label" for="{{ $fieldID }}">
-            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label" for="{{ $fieldID }}">
             {{ $field->label }}
-            @if($field->isRequired) <span class="form-field-required">*</span> @endif
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         <textarea
             id="{{ $fieldID }}"
             name="{{ $fieldName }}"
-            class="{{ $classes }}"
+            class="gf-textarea {{ $isError ? 'is-invalid' : '' }}"
             rows="4"
-            placeholder="{{ $field->placeholder ?? '' }}"
+            placeholder="{{ $field->placeholder ?? 'Jawaban Anda' }}"
             {{ $field->isRequired ? 'required' : '' }}
         >{{ $oldValue ?? $field->defaultValue ?? '' }}</textarea>
-        @if($field->helpText) <p class="form-field-help">{{ $field->helpText }}</p> @endif
-        @error($fieldName) <div class="invalid-feedback">{{ $message }}</div> @enderror
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
+        @error($fieldName)
+        <span class="gf-invalid">{{ $message }}</span>
+        @enderror
     </div>
     @break
 
-{{-- ===== DATE / TIME / DATETIME ===== --}}
+{{-- ===== DATE ===== --}}
 @case('date')
-@case('time')
-@case('datetime')
-    <div class="form-field-wrap auth-input-wrap">
-        <label class="form-field-label" for="{{ $fieldID }}">
-            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label" for="{{ $fieldID }}">
             {{ $field->label }}
-            @if($field->isRequired) <span class="form-field-required">*</span> @endif
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
-        <input
-            type="{{ $field->fieldType === 'datetime' ? 'datetime-local' : $field->fieldType }}"
-            id="{{ $fieldID }}"
-            name="{{ $fieldName }}"
-            class="{{ $classes }}"
-            value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
-            {{ $field->isRequired ? 'required' : '' }}
-        >
-        @if($field->helpText) <p class="form-field-help">{{ $field->helpText }}</p> @endif
-        @error($fieldName) <div class="invalid-feedback">{{ $message }}</div> @enderror
+        <div class="gf-date-wrap">
+            <input
+                type="date"
+                id="{{ $fieldID }}"
+                name="{{ $fieldName }}"
+                class="gf-input {{ $isError ? 'is-invalid' : '' }}"
+                value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
+                {{ $field->isRequired ? 'required' : '' }}
+            >
+            <span class="gf-date-icon"><i class="fas fa-calendar-alt"></i></span>
+        </div>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
+        @error($fieldName)
+        <span class="gf-invalid">{{ $message }}</span>
+        @enderror
+    </div>
+    @break
+
+{{-- ===== TIME ===== --}}
+@case('time')
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label" for="{{ $fieldID }}">
+            {{ $field->label }}
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
+        </label>
+        <div class="gf-date-wrap">
+            <input
+                type="time"
+                id="{{ $fieldID }}"
+                name="{{ $fieldName }}"
+                class="gf-input {{ $isError ? 'is-invalid' : '' }}"
+                value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
+                {{ $field->isRequired ? 'required' : '' }}
+            >
+            <span class="gf-date-icon"><i class="fas fa-clock"></i></span>
+        </div>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
+        @error($fieldName)
+        <span class="gf-invalid">{{ $message }}</span>
+        @enderror
+    </div>
+    @break
+
+{{-- ===== DATETIME ===== --}}
+@case('datetime')
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label" for="{{ $fieldID }}">
+            {{ $field->label }}
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
+        </label>
+        <div class="gf-date-wrap">
+            <input
+                type="datetime-local"
+                id="{{ $fieldID }}"
+                name="{{ $fieldName }}"
+                class="gf-input {{ $isError ? 'is-invalid' : '' }}"
+                value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
+                {{ $field->isRequired ? 'required' : '' }}
+            >
+            <span class="gf-date-icon"><i class="fas fa-calendar-alt"></i></span>
+        </div>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
+        @error($fieldName)
+        <span class="gf-invalid">{{ $message }}</span>
+        @enderror
     </div>
     @break
 
 {{-- ===== DROPDOWN ===== --}}
 @case('dropdown')
-    <div class="form-field-wrap auth-input-wrap">
-        <label class="form-field-label" for="{{ $fieldID }}">
-            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label" for="{{ $fieldID }}">
             {{ $field->label }}
-            @if($field->isRequired) <span class="form-field-required">*</span> @endif
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
-        <select id="{{ $fieldID }}" name="{{ $fieldName }}"
-                class="form-select {{ $isError ? 'is-invalid' : '' }}"
-                {{ $field->isRequired ? 'required' : '' }}>
-            <option value="">-- Select --</option>
-            @foreach($field->options ?? [] as $option)
-            <option value="{{ $option['value'] }}"
-                    {{ $oldValue == $option['value'] ? 'selected' : '' }}>
-                {{ $option['label'] }}
-            </option>
-            @endforeach
-        </select>
-        @if($field->helpText) <p class="form-field-help">{{ $field->helpText }}</p> @endif
-        @error($fieldName) <div class="invalid-feedback">{{ $message }}</div> @enderror
+        <div class="gf-select-wrap">
+            <select
+                id="{{ $fieldID }}"
+                name="{{ $fieldName }}"
+                class="gf-select {{ $isError ? 'is-invalid' : '' }}"
+                {{ $field->isRequired ? 'required' : '' }}
+            >
+                <option value="">-- Pilih salah satu --</option>
+                @foreach($field->options ?? [] as $option)
+                <option value="{{ $option['value'] }}"
+                        {{ $oldValue == $option['value'] ? 'selected' : '' }}>
+                    {{ $option['label'] }}
+                </option>
+                @endforeach
+            </select>
+            <span class="gf-select-icon"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
+        @error($fieldName)
+        <span class="gf-invalid">{{ $message }}</span>
+        @enderror
     </div>
     @break
 
 {{-- ===== RADIO ===== --}}
 @case('radio')
-    <div class="form-field-wrap">
-        <fieldset>
-            <legend class="form-field-label">
-                @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <fieldset style="border:none;padding:0;margin:0;">
+            <legend class="gf-label">
                 {{ $field->label }}
-                @if($field->isRequired) <span class="form-field-required">*</span> @endif
+                @if($field->isRequired)<span class="gf-required">*</span>@endif
             </legend>
-            @foreach($field->options ?? [] as $i => $option)
-            <div class="form-check">
-                <input class="form-check-input {{ $isError ? 'is-invalid' : '' }}"
-                       type="radio" name="{{ $fieldName }}"
-                       id="{{ $fieldID }}_{{ $i }}"
-                       value="{{ $option['value'] }}"
-                       {{ $oldValue == $option['value'] ? 'checked' : '' }}
-                       {{ $field->isRequired ? 'required' : '' }}>
-                <label class="form-check-label" for="{{ $fieldID }}_{{ $i }}">
-                    {{ $option['label'] }}
+            <div class="gf-options">
+                @foreach($field->options ?? [] as $i => $option)
+                <label class="gf-option">
+                    <input
+                        class="gf-option-input"
+                        type="radio"
+                        name="{{ $fieldName }}"
+                        id="{{ $fieldID }}_{{ $i }}"
+                        value="{{ $option['value'] }}"
+                        {{ $oldValue == $option['value'] ? 'checked' : '' }}
+                        {{ $field->isRequired ? 'required' : '' }}
+                    >
+                    <span class="gf-option-label">{{ $option['label'] }}</span>
                 </label>
+                @endforeach
             </div>
-            @endforeach
-            @if($field->helpText) <p class="form-field-help">{{ $field->helpText }}</p> @endif
-            @error($fieldName) <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+            @if($field->helpText)
+            <p class="gf-help" style="margin-top:10px;">{{ $field->helpText }}</p>
+            @endif
+            @error($fieldName)
+            <span class="gf-invalid">{{ $message }}</span>
+            @enderror
         </fieldset>
     </div>
     @break
 
 {{-- ===== CHECKBOX ===== --}}
 @case('checkbox')
-    <div class="form-field-wrap">
-        <fieldset>
-            <legend class="form-field-label">
-                @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <fieldset style="border:none;padding:0;margin:0;">
+            <legend class="gf-label">
                 {{ $field->label }}
-                @if($field->isRequired) <span class="form-field-required">*</span> @endif
+                @if($field->isRequired)<span class="gf-required">*</span>@endif
             </legend>
-            @foreach($field->options ?? [] as $i => $option)
-            <div class="form-check">
-                <input class="form-check-input {{ $isError ? 'is-invalid' : '' }}"
-                       type="checkbox" name="{{ $fieldName }}[]"
-                       id="{{ $fieldID }}_{{ $i }}"
-                       value="{{ $option['value'] }}"
-                       {{ is_array($oldValue) && in_array($option['value'], $oldValue) ? 'checked' : '' }}>
-                <label class="form-check-label" for="{{ $fieldID }}_{{ $i }}">
-                    {{ $option['label'] }}
+            <div class="gf-options">
+                @foreach($field->options ?? [] as $i => $option)
+                <label class="gf-option">
+                    <input
+                        class="gf-option-input"
+                        type="checkbox"
+                        name="{{ $fieldName }}[]"
+                        id="{{ $fieldID }}_{{ $i }}"
+                        value="{{ $option['value'] }}"
+                        {{ is_array($oldValue) && in_array($option['value'], $oldValue) ? 'checked' : '' }}
+                    >
+                    <span class="gf-option-label">{{ $option['label'] }}</span>
                 </label>
+                @endforeach
             </div>
-            @endforeach
-            @if($field->helpText) <p class="form-field-help">{{ $field->helpText }}</p> @endif
-            @error($fieldName) <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+            @if($field->helpText)
+            <p class="gf-help" style="margin-top:10px;">{{ $field->helpText }}</p>
+            @endif
+            @error($fieldName)
+            <span class="gf-invalid">{{ $message }}</span>
+            @enderror
         </fieldset>
     </div>
     @break
@@ -282,48 +376,55 @@
 {{-- ===== FILE / IMAGE ===== --}}
 @case('file')
 @case('image')
-    <div class="form-field-wrap">
-        <label class="form-field-label">
-            @if($fieldIcon)<i class="fas {{ $fieldIcon }}" style="color:#00a79d;font-size:.8em;opacity:.9;margin-right:.3rem;"></i>@endif
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label">
             {{ $field->label }}
-            @if($field->isRequired) <span class="form-field-required">*</span> @endif
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
 
-        <div class="file-upload-area {{ $isError ? 'border-danger' : '' }}">
-            <input type="file" id="{{ $fieldID }}" name="{{ $fieldName }}"
-                   {{ $field->isRequired ? 'required' : '' }}
-                   @if($field->fieldType === 'image') accept="image/*" @endif
-                   @if(!empty($field->validation['acceptedTypes']))
-                       accept=".{{ implode(',.', (array) $field->validation['acceptedTypes']) }}"
-                   @endif>
-            <div>
-                <i class="fas fa-{{ $field->fieldType === 'image' ? 'image' : 'cloud-upload-alt' }} fa-2x mb-2"
-                   style="color:#00a79d;"></i>
+        <div class="gf-file-drop" id="drop_{{ $fieldID }}">
+            <input
+                type="file"
+                id="{{ $fieldID }}"
+                name="{{ $fieldName }}"
+                {{ $field->isRequired ? 'required' : '' }}
+                @if($field->fieldType === 'image') accept="image/*" @endif
+                @if(!empty($field->validation['acceptedTypes']))
+                    accept=".{{ implode(',.', (array) $field->validation['acceptedTypes']) }}"
+                @endif
+            >
+            <span class="gf-file-upload-icon">
+                <i class="fas fa-{{ $field->fieldType === 'image' ? 'image' : 'cloud-upload-alt' }}"></i>
+            </span>
+            <div class="gf-file-hint">Klik atau seret file ke sini</div>
+            <div class="gf-file-meta">
+                @if(!empty($field->validation['acceptedTypes']))
+                Format: {{ implode(', ', (array) $field->validation['acceptedTypes']) }}<br>
+                @endif
+                @if(!empty($field->validation['maxSizeKB']))
+                Maks: {{ number_format($field->validation['maxSizeKB'] / 1024, 1) }} MB
+                @endif
             </div>
-            <div style="font-size:.875rem;font-weight:600;color:var(--bs-body-color,#374151);">Click or drag file here</div>
-            @if(!empty($field->validation['acceptedTypes']))
-            <div style="font-size:.75rem;color:var(--bs-secondary-color,#9ca3af);margin-top:.25rem;">
-                Format: {{ implode(', ', (array) $field->validation['acceptedTypes']) }}
+            <div class="gf-file-badge">
+                <i class="fas fa-paperclip fa-xs"></i>
+                <span>Belum ada file dipilih</span>
             </div>
-            @endif
-            @if(!empty($field->validation['maxSizeKB']))
-            <div style="font-size:.75rem;color:var(--bs-secondary-color,#9ca3af);">
-                Max: {{ number_format($field->validation['maxSizeKB'] / 1024, 1) }} MB
-            </div>
-            @endif
-            <div class="file-upload-name">No file selected</div>
         </div>
 
-        @if($field->helpText) <p class="form-field-help">{{ $field->helpText }}</p> @endif
-        @error($fieldName) <div class="text-danger d-block" style="font-size:.8rem;margin-top:.25rem;">{{ $message }}</div> @enderror
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
+        @error($fieldName)
+        <span class="gf-invalid">{{ $message }}</span>
+        @enderror
     </div>
     @break
 
 {{-- ===== FALLBACK ===== --}}
 @default
-    <div class="form-field-wrap">
-        <label class="form-field-label">{{ $field->label }}</label>
-        <input type="text" name="{{ $fieldName }}" class="{{ $classes }}"
+    <div class="gf-card">
+        <label class="gf-label">{{ $field->label }}</label>
+        <input type="text" name="{{ $fieldName }}" class="gf-input"
                placeholder="{{ $field->placeholder ?? '' }}">
     </div>
 
