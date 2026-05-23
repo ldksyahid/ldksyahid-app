@@ -42,6 +42,22 @@ function openAddFieldModal(type, label) {
     document.getElementById('modalHelpText').value = '';
     document.getElementById('modalIsRequired').checked = false;
 
+    // Reset options list to 2 empty rows
+    const optionsList = document.querySelector('#optionsList .options-list');
+    optionsList.innerHTML = `
+        <div class="option-row">
+            <input type="text" class="form-control form-control-sm option-input" placeholder="Option 1" />
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeOption(this)">×</button>
+        </div>
+        <div class="option-row">
+            <input type="text" class="form-control form-control-sm option-input" placeholder="Option 2" />
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeOption(this)">×</button>
+        </div>`;
+
+    // Reset file validation fields
+    document.getElementById('modalMaxSizeKB').value = '';
+    document.getElementById('modalAcceptedTypes').value = '';
+
     document.getElementById('optionsSection').style.display = CHOICE_TYPES.includes(type) ? '' : 'none';
     document.getElementById('fileSection').style.display    = FILE_TYPES.includes(type)   ? '' : 'none';
 
