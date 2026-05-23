@@ -60,7 +60,7 @@
 
                         <!-- Name greeting -->
                         <p style="margin:0 0 12px;font-size:15px;color:#374151;font-weight:600;">
-                            {{ $respondentName ?: 'Saudaraku' }}
+                            {{ $respondentName ?: 'Sobat Syahid' }}
                         </p>
 
                         <p style="margin:0 0 8px;font-size:14px;color:#6b7280;line-height:1.7;">
@@ -90,7 +90,7 @@
                                                border-bottom:1px solid #e5e7eb;vertical-align:top;word-break:break-word;">
                                         @if (str_starts_with((string) $value, 'https://'))
                                             <a href="{{ $value }}" style="color:#00a79d;text-decoration:none;font-weight:600;">
-                                                Lihat File ↗
+                                                {{ $value }}
                                             </a>
                                         @elseif ($value !== null && $value !== '')
                                             {{ $value }}
@@ -103,7 +103,7 @@
                         </table>
 
                         <!-- Footer note -->
-                        <p style="margin:24px 0 0;font-size:13px;color:#6b7280;line-height:1.7;padding:16px;background:#f0fdf4;border-radius:8px;border-left:3px solid #00a79d;">
+                        <p style="margin:24px 0 0;font-size:13px;color:#6b7280;line-height:1.7;padding:16px;background:#f0fdf4;border-radius:8px;">
                             Jika Anda tidak merasa mengisi formulir ini, abaikan email ini.
                             Data Anda tersimpan dengan aman oleh tim LDK Syahid.
                         </p>
