@@ -4,10 +4,13 @@
 --}}
 <div class="field-card {{ $field->isSystemField ? 'is-system' : '' }}"
      data-field-id="{{ $field->formFieldID }}"
+     data-field-type="{{ $field->fieldType }}"
      data-label="{{ $field->label }}"
      data-placeholder="{{ $field->placeholder ?? '' }}"
      data-help-text="{{ $field->helpText ?? '' }}"
-     data-is-required="{{ $field->isRequired ? '1' : '0' }}">
+     data-is-required="{{ $field->isRequired ? '1' : '0' }}"
+     data-options="{{ json_encode($field->options ?? []) }}"
+     data-validation="{{ json_encode($field->validation ?? []) }}">
 
     {{-- Drag handle (hidden for system fields) --}}
     @if(!$field->isSystemField)

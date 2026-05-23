@@ -291,7 +291,7 @@
                         <label class="field-modal-label">Label <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="editLabel" maxlength="500">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="editPlaceholderWrap">
                         <label class="field-modal-label">Placeholder</label>
                         <input type="text" class="form-control" id="editPlaceholder" maxlength="255">
                     </div>
@@ -303,6 +303,30 @@
                         <div class="bm-required-toggle">
                             <input class="form-check-input" type="checkbox" id="editIsRequired">
                             <label for="editIsRequired">Mark as Required</label>
+                        </div>
+                    </div>
+
+                    {{-- Options section (dropdown / radio / checkbox) --}}
+                    <div class="col-12" id="editOptionsSection" style="display:none;">
+                        <label class="field-modal-label">Options <span class="text-danger">*</span></label>
+                        <div class="options-list" id="editOptionsListInner"></div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary mt-1" onclick="addEditOption()">
+                            <i class="fa fa-plus me-1"></i> Add Option
+                        </button>
+                    </div>
+
+                    {{-- File validation (file / image) --}}
+                    <div class="col-12" id="editFileSection" style="display:none;">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="field-modal-label">Max Size (KB)</label>
+                                <input type="number" class="form-control form-control-sm" id="editMaxSizeKB" placeholder="5120" min="1">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="field-modal-label">Accepted File Types</label>
+                                <input type="text" class="form-control form-control-sm" id="editAcceptedTypes" placeholder="pdf,doc,docx">
+                                <div class="form-text">Comma-separated, without dots.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
