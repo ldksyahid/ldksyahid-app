@@ -479,7 +479,8 @@ class AdminFormController extends Controller
             'defaultValue'  => 'nullable|string|max:1000',
         ]);
 
-        $labelChanged = $field->label !== $validated['label'];
+        $labelChanged      = $field->label !== $validated['label'];
+        $gdriveFolderID    = $field->fieldConfig['gdriveFolderID'] ?? null;
 
         $field->update([
             'label'        => $validated['label'],
@@ -494,9 +495,18 @@ class AdminFormController extends Controller
 
         $form->increment('version');
 
-        // Sync spreadsheet header column name if label changed
         if ($labelChanged) {
+            // Sync spreadsheet header column name
             $this->regenerateSpreadsheetHeaders($form);
+
+            // Rename GDrive attachment subfolder for file/image fields
+            if ($gdriveFolderID && $field->isFileUpload()) {
+                try {
+                    (new DynamicFormGDriveService())->renameFolder($gdriveFolderID, $validated['label']);
+                } catch (\Throwable $e) {
+                    Log::warning('[AdminFormController::updateField] GDrive folder rename failed: ' . $e->getMessage());
+                }
+            }
         }
 
         return response()->json(['success' => true, 'field' => $field->fresh()]);
@@ -606,32 +616,25 @@ class AdminFormController extends Controller
     }
 
     /**
-     * Create a GDrive subfolder for a file/image field and store its ID
-     * in the field's fieldConfig JSON.
+     * Create a GDrive subfolder for a file/image field inside the form's
+     * existing attachments/ folder and store its ID in the field's fieldConfig JSON.
      */
     private function createFieldGdriveFolder(MsForm $form, MsFormField $field): void
     {
         try {
-            $service = new DynamicFormGDriveService();
-
-            $result = $service->setupFormFolder(
-                formTitle:          $form->title,
-                creatorEmail:       auth()->user()->email,
-                collaborators:      [],
-                fileFieldLabels:    [$field->label],
-                spreadsheetHeaders: []
-            );
-
-            // The last entry in fieldFolders is the one we just created
-            $folderData = end($result['fieldFolders']);
-
-            if ($folderData) {
-                $config = $field->fieldConfig ?? [];
-                $config['gdriveFolderID']            = $folderData['gdriveFolderID'];
-                $config['gdriveAttachmentsFolderUrl'] = $folderData['gdriveAttachmentsFolderUrl'];
-
-                $field->update(['fieldConfig' => $config]);
+            if (empty($form->gdriveAttachmentsFolderID)) {
+                return;
             }
+
+            $result = (new DynamicFormGDriveService())
+                ->createFieldAttachmentFolder($form->gdriveAttachmentsFolderID, $field->label);
+
+            $config = $field->fieldConfig ?? [];
+            $config['gdriveFolderID']             = $result['gdriveFolderID'];
+            $config['gdriveAttachmentsFolderUrl'] = $result['gdriveAttachmentsFolderUrl'];
+
+            $field->update(['fieldConfig' => $config]);
+
         } catch (\Throwable $e) {
             Log::error('[AdminFormController::createFieldGdriveFolder] ' . $e->getMessage());
             // Non-fatal: field still saved, GDrive folder creation failure is logged
