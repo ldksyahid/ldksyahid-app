@@ -3000,6 +3000,7 @@ footer {
     color: #e2e8f0; box-shadow: 0 0 0 .25rem rgba(0,167,157,.22);
 }
 [data-theme="dark"] .form-control::placeholder { color: #64748b; }
+[data-theme="dark"] .form-floating .form-control::placeholder { color: transparent; }
 [data-theme="dark"] .form-label { color: #cbd5e0; }
 [data-theme="dark"] input[type="text"],
 [data-theme="dark"] input[type="email"],
