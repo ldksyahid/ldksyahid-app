@@ -458,6 +458,7 @@ class AdminFormController extends Controller
      */
     public function updateField(Request $request, int $formID, int $fieldID)
     {
+        $form  = MsForm::findOrFail($formID);
         $field = MsFormField::where('formID', $formID)
                             ->where('formFieldID', $fieldID)
                             ->where('flagActive', true)
@@ -474,6 +475,8 @@ class AdminFormController extends Controller
             'defaultValue'  => 'nullable|string|max:1000',
         ]);
 
+        $labelChanged = $field->label !== $validated['label'];
+
         $field->update([
             'label'        => $validated['label'],
             'placeholder'  => $validated['placeholder']  ?? null,
@@ -485,7 +488,12 @@ class AdminFormController extends Controller
             'editedDate'   => Carbon::now(),
         ]);
 
-        MsForm::where('formID', $formID)->increment('version');
+        $form->increment('version');
+
+        // Sync spreadsheet header column name if label changed
+        if ($labelChanged) {
+            $this->regenerateSpreadsheetHeaders($form);
+        }
 
         return response()->json(['success' => true, 'field' => $field->fresh()]);
     }
@@ -495,6 +503,7 @@ class AdminFormController extends Controller
      */
     public function removeField(int $formID, int $fieldID)
     {
+        $form  = MsForm::findOrFail($formID);
         $field = MsFormField::where('formID', $formID)
                             ->where('formFieldID', $fieldID)
                             ->where('flagActive', true)
@@ -503,6 +512,9 @@ class AdminFormController extends Controller
         if ($field->isSystemField) {
             return response()->json(['success' => false, 'message' => 'System fields cannot be deleted.'], 422);
         }
+
+        // Capture GDrive folder ID before soft-delete (file/image fields only)
+        $fieldGdriveFolderID = $field->fieldConfig['gdriveFolderID'] ?? null;
 
         $field->update([
             'flagActive' => false,
@@ -514,7 +526,18 @@ class AdminFormController extends Controller
             'label'   => $field->label,
         ]);
 
-        MsForm::where('formID', $formID)->increment('version');
+        $form->increment('version');
+
+        // Remove column from spreadsheet and delete field's GDrive folder if applicable
+        $this->regenerateSpreadsheetHeaders($form);
+
+        if ($fieldGdriveFolderID) {
+            try {
+                (new DynamicFormGDriveService())->deleteFormFolder($fieldGdriveFolderID);
+            } catch (\Throwable $e) {
+                Log::error('[AdminFormController::removeField] GDrive folder deletion failed: ' . $e->getMessage());
+            }
+        }
 
         return response()->json(['success' => true]);
     }

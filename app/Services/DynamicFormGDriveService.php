@@ -447,6 +447,13 @@ class DynamicFormGDriveService
             return;
         }
 
+        // Clear entire row 1 first so removed columns do not linger
+        $this->sheetsService->spreadsheets_values->clear(
+            $spreadsheetID,
+            'Sheet1!1:1',
+            new \Google_Service_Sheets_ClearValuesRequest()
+        );
+
         $body = new Google_Service_Sheets_ValueRange([
             'values' => [array_values($headers)],
         ]);
