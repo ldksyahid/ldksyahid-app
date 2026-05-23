@@ -121,6 +121,8 @@
     vertical-align: middle;
 }
 .copy-url-btn:hover { background: #00a79d; border-color: #00a79d; color: #fff; }
+.gdrive-link-disabled { opacity: .55; pointer-events: none; cursor: default; }
+.gdrive-link-disabled .gdrive-ext { color: #6b7280; }
 
 /* ===== DARK MODE — form-specific components only ===== */
 html.dark-mode .form-label.fw-bold { color: #c8cdd3; }
@@ -134,6 +136,7 @@ html.dark-mode .gdrive-link:hover { background: #1f3524; color: #86efac; }
 html.dark-mode .gdrive-link .gdrive-text small { color: #9ca3af; }
 html.dark-mode .copy-url-btn { border-color: #374151; color: #9ca3af; }
 html.dark-mode .copy-url-btn:hover { background: #00a79d; border-color: #00a79d; color: #fff; }
+html.dark-mode .gdrive-info-alert { background: #0f2233; border-color: #1e4060; color: #7ec8e3; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {

@@ -155,11 +155,85 @@
 .gdrive-link-row .glr-text strong { display: block; font-size: .82rem; }
 .gdrive-link-row .glr-text small { font-size: .72rem; color: #6b7280; font-weight: 400; }
 .glr-ext { font-size: .65rem; opacity: .45; }
+.gdrive-link-row-disabled { opacity: .55; pointer-events: none; cursor: default; }
+.gdrive-link-row-disabled .glr-ext { color: #6b7280; opacity: .6; }
 
-/* ===== MODAL ===== */
-.add-field-modal .modal-header { background: #f9fafb; border-bottom: 1px solid #e5e7eb; }
-.add-field-modal .modal-title { font-weight: 700; font-size: .95rem; }
-.field-modal-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; margin-bottom: .3rem; }
+/* ===== BUILDER CARD HEADER (breadcrumb separator) ===== */
+.builder-card-header {
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0f7f5;
+}
+
+/* ===== PREVIEW FORM BUTTON ===== */
+.btn-preview-form {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .45rem 1.1rem;
+    background: linear-gradient(135deg, #0ea5e9 0%, #00a79d 100%);
+    color: #fff !important; border: none; border-radius: 8px;
+    font-size: .82rem; font-weight: 600;
+    text-decoration: none !important;
+    transition: all .2s;
+    box-shadow: 0 2px 10px rgba(0,167,157,.28);
+    letter-spacing: .01em;
+}
+.btn-preview-form:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 18px rgba(0,167,157,.42);
+    background: linear-gradient(135deg, #0891b2 0%, #00958c 100%);
+    color: #fff !important;
+}
+.btn-preview-form:active { transform: translateY(0); box-shadow: none; }
+.btn-preview-ext { font-size: .6rem; opacity: .7; }
+
+/* ===== BUILDER BOTTOM BAR ===== */
+.builder-bottom-bar {
+    padding: 1rem 0 .5rem;
+    border-top: 1px solid #e5e7eb;
+    margin-top: .75rem;
+}
+
+/* ===== BUILDER MODAL ===== */
+.bm-card { border: none; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.15); }
+.bm-header {
+    display: flex; align-items: center; gap: .9rem;
+    padding: 1.1rem 1.3rem; border-bottom: none;
+}
+.bm-header--add { background: linear-gradient(135deg, #00a79d 0%, #00756e 100%); }
+.bm-header--edit { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+.bm-header-icon {
+    width: 44px; height: 44px; flex-shrink: 0; border-radius: 11px;
+    background: rgba(255,255,255,.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; color: #fff;
+}
+.bm-header-text { flex: 1; }
+.bm-header-title { font-size: .95rem; font-weight: 700; color: #fff; line-height: 1.2; }
+.bm-header-sub { font-size: .78rem; color: rgba(255,255,255,.8); margin-top: .1rem; font-weight: 500; }
+.bm-btn-close { filter: invert(1); opacity: .8; flex-shrink: 0; }
+.bm-btn-close:hover { opacity: 1; }
+.bm-body { padding: 1.4rem 1.5rem; background: #f8fafc; }
+.bm-footer {
+    display: flex; align-items: center; justify-content: flex-end; gap: .6rem;
+    padding: .9rem 1.3rem; background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+}
+.bm-required-toggle {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .65rem .85rem;
+    background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
+}
+.bm-required-toggle label { font-size: .85rem; font-weight: 500; color: #166534; margin: 0; cursor: pointer; }
+.bm-btn-submit {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem 1.15rem; border: none; border-radius: 8px;
+    font-size: .85rem; font-weight: 600; cursor: pointer;
+    transition: all .15s;
+}
+.bm-btn-submit--add { background: #00a79d; color: #fff; box-shadow: 0 2px 8px rgba(0,167,157,.3); }
+.bm-btn-submit--add:hover { background: #00958c; box-shadow: 0 4px 12px rgba(0,167,157,.4); }
+.bm-btn-submit--edit { background: #f59e0b; color: #fff; box-shadow: 0 2px 8px rgba(245,158,11,.3); }
+.bm-btn-submit--edit:hover { background: #d97706; box-shadow: 0 4px 12px rgba(245,158,11,.4); }
+.field-modal-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; margin-bottom: .3rem; display: block; }
 .options-list .option-row { display: flex; gap: .5rem; margin-bottom: .4rem; align-items: center; }
 .options-list .option-row input { flex: 1; }
 
@@ -187,22 +261,18 @@ html.dark-mode .drop-zone-empty { background: #22252d; border-color: #374151; co
 html.dark-mode .gdrive-link-row { color: #c8cdd3; border-bottom-color: #2d3139; }
 html.dark-mode .gdrive-link-row:hover { background: #22252d; color: #e4e6eb; }
 html.dark-mode .gdrive-link-row .glr-text small { color: #6b7280; }
+/* Dark mode — builder card */
+html.dark-mode .card { background: #1a1d23; border-color: #2d3139 !important; }
+html.dark-mode .builder-card-header { border-bottom-color: #2d4a30; }
+/* Dark mode — builder bottom bar */
+html.dark-mode .builder-bottom-bar { border-top-color: #2d3139; }
 /* Dark mode — modals */
-html.dark-mode .modal-content { background: #1a1d23; border-color: #2d3139; }
-html.dark-mode .add-field-modal .modal-header,
-html.dark-mode #editFieldModal .modal-header { background: #22252d; border-bottom-color: #2d3139; }
-html.dark-mode .modal-title { color: #e4e6eb; }
-html.dark-mode .add-field-modal .modal-body,
-html.dark-mode #editFieldModal .modal-body { background: #1a1d23; }
-html.dark-mode .add-field-modal .modal-footer,
-html.dark-mode #editFieldModal .modal-footer { background: #22252d; border-top-color: #2d3139; }
-html.dark-mode .add-field-modal .form-control,
-html.dark-mode #editFieldModal .form-control { background: #2d3139; color: #e4e6eb; border-color: #374151; }
-html.dark-mode .add-field-modal .form-control::placeholder,
-html.dark-mode #editFieldModal .form-control::placeholder { color: #6b7280; }
-html.dark-mode .add-field-modal .form-check-label,
-html.dark-mode #editFieldModal .form-check-label { color: #c8cdd3; }
-html.dark-mode .modal-content .btn-close { filter: invert(1); }
+html.dark-mode .bm-card { background: #1a1d23; }
+html.dark-mode .bm-body { background: #1a1d23; }
+html.dark-mode .bm-footer { background: #22252d; border-top-color: #2d3139; }
+html.dark-mode .bm-required-toggle { background: #1a2d1e; border-color: #2d4a30; }
+html.dark-mode .bm-required-toggle label { color: #86efac; }
+html.dark-mode .bm-card .form-control { background: #2d3139; color: #e4e6eb; border-color: #374151; }
+html.dark-mode .bm-card .form-control::placeholder { color: #6b7280; }
 html.dark-mode .field-modal-label { color: #9ca3af; }
-html.dark-mode #btnAddField { background-color: #00a79d !important; border-color: #00a79d !important; color: #fff !important; }
 </style>
