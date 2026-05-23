@@ -276,7 +276,7 @@
                         <i class="fa fa-arrow-left me-1"></i> Back
                     </a>
                     @if($canManage)
-                    <a href="{{ route('admin.forms.index') }}" class="btn btn-custom-primary">
+                    <a href="{{ route('admin.forms.edit', $form->formID) }}" class="btn btn-custom-primary">
                         <i class="fa fa-edit me-1"></i> Edit
                     </a>
                     @endif

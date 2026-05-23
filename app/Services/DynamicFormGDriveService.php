@@ -467,6 +467,74 @@ class DynamicFormGDriveService
     }
 
     // =========================================================================
+    // Reorder spreadsheet columns — rearranges ALL rows to match new field order
+    // =========================================================================
+
+    /**
+     * Reorder ALL columns in the spreadsheet (headers + every data row)
+     * to match the new field order after a drag-and-drop reorder in the builder.
+     *
+     * Algorithm:
+     *  1. Read the full sheet (all rows).
+     *  2. Build a mapping: new column index → old column index (by matching header labels).
+     *  3. Clear the sheet.
+     *  4. Write all rows back with columns in the new order.
+     *
+     * @param  string $spreadsheetID     Target spreadsheet
+     * @param  array  $newOrderedHeaders Desired header order (output of buildSpreadsheetHeaders)
+     */
+    public function reorderSpreadsheetColumns(string $spreadsheetID, array $newOrderedHeaders): void
+    {
+        if (empty($newOrderedHeaders)) {
+            return;
+        }
+
+        // 1. Read entire sheet
+        $response = $this->sheetsService->spreadsheets_values->get($spreadsheetID, 'Sheet1');
+        $rows     = $response->getValues() ?? [];
+
+        if (empty($rows)) {
+            // Sheet is empty — just write the new header row
+            $this->updateSpreadsheetHeaders($spreadsheetID, $newOrderedHeaders);
+            return;
+        }
+
+        $currentHeaders = $rows[0];
+
+        // 2. Build column map: new index → old index (null = column doesn't exist yet)
+        $columnMap = [];
+        foreach ($newOrderedHeaders as $newIdx => $header) {
+            $oldIdx = array_search($header, $currentHeaders, true);
+            $columnMap[$newIdx] = ($oldIdx !== false) ? (int) $oldIdx : null;
+        }
+
+        // 3. Reorder every row according to the map
+        $reorderedRows = [];
+        foreach ($rows as $row) {
+            $newRow = [];
+            foreach ($columnMap as $oldIdx) {
+                $newRow[] = ($oldIdx !== null) ? ($row[$oldIdx] ?? '') : '';
+            }
+            $reorderedRows[] = $newRow;
+        }
+
+        // 4. Clear the entire sheet and write reordered data back
+        $this->sheetsService->spreadsheets_values->clear(
+            $spreadsheetID,
+            'Sheet1',
+            new \Google_Service_Sheets_ClearValuesRequest()
+        );
+
+        $body = new Google_Service_Sheets_ValueRange(['values' => $reorderedRows]);
+        $this->sheetsService->spreadsheets_values->update(
+            $spreadsheetID,
+            'Sheet1!A1',
+            $body,
+            ['valueInputOption' => 'RAW']
+        );
+    }
+
+    // =========================================================================
     // Header builder — converts form fields into spreadsheet column headers
     // =========================================================================
 

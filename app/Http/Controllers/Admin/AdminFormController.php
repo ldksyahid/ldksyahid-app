@@ -544,6 +544,7 @@ class AdminFormController extends Controller
 
     /**
      * Reorder fields by accepting an ordered array of formFieldID values.
+     * Also reorders the Google Spreadsheet columns to match the new field order.
      */
     public function reorderFields(Request $request, int $formID)
     {
@@ -559,7 +560,20 @@ class AdminFormController extends Controller
                            ->update(['sortOrder' => $sortOrder]);
             }
 
-            MsForm::where('formID', $formID)->increment('version');
+            $form = MsForm::findOrFail($formID);
+            $form->increment('version');
+
+            // Reorder spreadsheet columns to match the new field order
+            if ($form->gdriveSpreadsheetID) {
+                try {
+                    $fields  = $form->activeFields()->get()->all();
+                    $headers = DynamicFormGDriveService::buildSpreadsheetHeaders($fields);
+                    (new DynamicFormGDriveService())->reorderSpreadsheetColumns($form->gdriveSpreadsheetID, $headers);
+                } catch (\Throwable $e) {
+                    Log::warning('[AdminFormController::reorderFields] Spreadsheet column reorder failed: ' . $e->getMessage());
+                    // Non-fatal — field order in DB is still saved correctly
+                }
+            }
 
             return response()->json(['success' => true]);
 
