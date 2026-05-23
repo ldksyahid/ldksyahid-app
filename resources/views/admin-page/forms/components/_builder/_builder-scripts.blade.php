@@ -15,6 +15,10 @@ Sortable.create(dropZone, {
     animation:   150,
     ghostClass:  'sortable-ghost',
     chosenClass: 'sortable-chosen',
+    onMove: function(evt) {
+        // Prevent any field from being dragged past a system field (locks its position)
+        if (evt.related.classList.contains('is-system')) return false;
+    },
     onEnd: function() { saveFieldOrder(); }
 });
 
