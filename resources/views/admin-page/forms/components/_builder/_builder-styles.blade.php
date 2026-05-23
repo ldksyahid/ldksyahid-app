@@ -178,6 +178,27 @@
 .options-list .option-row { display: flex; gap: .5rem; margin-bottom: .4rem; align-items: center; }
 .options-list .option-row input { flex: 1; }
 
+/* ===== FILE TYPE PICKER ===== */
+.file-type-picker { display: flex; flex-direction: column; gap: .5rem; }
+.file-type-picker-group { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; }
+.file-type-picker-cat {
+    font-size: .68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .05em; color: #9ca3af; min-width: 68px;
+}
+.file-type-pill {
+    display: inline-flex; align-items: center;
+    padding: .18rem .5rem; background: #f3f4f6; border: 1px solid #d1d5db;
+    border-radius: 20px; font-size: .72rem; cursor: pointer;
+    transition: all .15s; user-select: none; color: #374151;
+}
+.file-type-pill:hover { border-color: #00a79d; color: #00a79d; }
+.file-type-pill:has(input:checked) { background: #00a79d; border-color: #00a79d; color: #fff; }
+.file-type-pill input[type="checkbox"] { display: none; }
+html.dark-mode .file-type-picker-cat { color: #6b7280; }
+html.dark-mode .file-type-pill { background: #2d3139; border-color: #374151; color: #c8cdd3; }
+html.dark-mode .file-type-pill:hover { border-color: #2dd4bf; color: #2dd4bf; }
+html.dark-mode .file-type-pill:has(input:checked) { background: #00a79d; border-color: #00a79d; color: #fff; }
+
 /* ===== DELETING STATE ===== */
 .field-card--deleting {
     opacity: .45;

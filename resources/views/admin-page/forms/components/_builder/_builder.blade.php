@@ -246,17 +246,32 @@
 
                     {{-- File validation --}}
                     <div class="col-12" id="fileSection" style="display:none;">
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <label class="field-modal-label">Max Size (KB)</label>
-                                <input type="number" class="form-control form-control-sm" id="modalMaxSizeKB" placeholder="5120" min="1">
+                        <div class="mb-2">
+                            <label class="field-modal-label">Max Size (KB)</label>
+                            <input type="number" class="form-control form-control-sm" id="modalMaxSizeKB" placeholder="e.g. 5120" min="1" style="max-width:160px;">
+                        </div>
+                        <label class="field-modal-label">Accepted File Types</label>
+                        <div class="file-type-picker">
+                            <div class="file-type-picker-group">
+                                <span class="file-type-picker-cat">Images</span>
+                                @foreach(['jpg','jpeg','png','gif','webp','svg'] as $ext)
+                                <label class="file-type-pill"><input type="checkbox" class="modal-accept-check" value="{{ $ext }}"> {{ $ext }}</label>
+                                @endforeach
                             </div>
-                            <div class="col-md-6">
-                                <label class="field-modal-label">Accepted File Types</label>
-                                <input type="text" class="form-control form-control-sm" id="modalAcceptedTypes" placeholder="pdf,doc,docx">
-                                <div class="form-text">Comma-separated, without dots.</div>
+                            <div class="file-type-picker-group">
+                                <span class="file-type-picker-cat">Documents</span>
+                                @foreach(['pdf','doc','docx','xls','xlsx','ppt','pptx','txt','csv'] as $ext)
+                                <label class="file-type-pill"><input type="checkbox" class="modal-accept-check" value="{{ $ext }}"> {{ $ext }}</label>
+                                @endforeach
+                            </div>
+                            <div class="file-type-picker-group">
+                                <span class="file-type-picker-cat">Archives</span>
+                                @foreach(['zip','rar','7z'] as $ext)
+                                <label class="file-type-pill"><input type="checkbox" class="modal-accept-check" value="{{ $ext }}"> {{ $ext }}</label>
+                                @endforeach
                             </div>
                         </div>
+                        <div class="form-text mt-1">Leave all unchecked to allow any file type.</div>
                     </div>
                 </div>
             </div>
@@ -317,17 +332,32 @@
 
                     {{-- File validation (file / image) --}}
                     <div class="col-12" id="editFileSection" style="display:none;">
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <label class="field-modal-label">Max Size (KB)</label>
-                                <input type="number" class="form-control form-control-sm" id="editMaxSizeKB" placeholder="5120" min="1">
+                        <div class="mb-2">
+                            <label class="field-modal-label">Max Size (KB)</label>
+                            <input type="number" class="form-control form-control-sm" id="editMaxSizeKB" placeholder="e.g. 5120" min="1" style="max-width:160px;">
+                        </div>
+                        <label class="field-modal-label">Accepted File Types</label>
+                        <div class="file-type-picker">
+                            <div class="file-type-picker-group">
+                                <span class="file-type-picker-cat">Images</span>
+                                @foreach(['jpg','jpeg','png','gif','webp','svg'] as $ext)
+                                <label class="file-type-pill"><input type="checkbox" class="edit-accept-check" value="{{ $ext }}"> {{ $ext }}</label>
+                                @endforeach
                             </div>
-                            <div class="col-md-6">
-                                <label class="field-modal-label">Accepted File Types</label>
-                                <input type="text" class="form-control form-control-sm" id="editAcceptedTypes" placeholder="pdf,doc,docx">
-                                <div class="form-text">Comma-separated, without dots.</div>
+                            <div class="file-type-picker-group">
+                                <span class="file-type-picker-cat">Documents</span>
+                                @foreach(['pdf','doc','docx','xls','xlsx','ppt','pptx','txt','csv'] as $ext)
+                                <label class="file-type-pill"><input type="checkbox" class="edit-accept-check" value="{{ $ext }}"> {{ $ext }}</label>
+                                @endforeach
+                            </div>
+                            <div class="file-type-picker-group">
+                                <span class="file-type-picker-cat">Archives</span>
+                                @foreach(['zip','rar','7z'] as $ext)
+                                <label class="file-type-pill"><input type="checkbox" class="edit-accept-check" value="{{ $ext }}"> {{ $ext }}</label>
+                                @endforeach
                             </div>
                         </div>
+                        <div class="form-text mt-1">Leave all unchecked to allow any file type.</div>
                     </div>
                 </div>
             </div>

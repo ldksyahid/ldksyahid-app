@@ -56,7 +56,7 @@ function openAddFieldModal(type, label) {
 
     // Reset file validation fields
     document.getElementById('modalMaxSizeKB').value = '';
-    document.getElementById('modalAcceptedTypes').value = '';
+    document.querySelectorAll('.modal-accept-check').forEach(cb => cb.checked = false);
 
     document.getElementById('optionsSection').style.display = CHOICE_TYPES.includes(type) ? '' : 'none';
     document.getElementById('fileSection').style.display    = FILE_TYPES.includes(type)   ? '' : 'none';
@@ -88,10 +88,10 @@ function submitAddField() {
 
     if (FILE_TYPES.includes(type)) {
         const maxSizeKB     = parseInt(document.getElementById('modalMaxSizeKB').value);
-        const acceptedTypes = document.getElementById('modalAcceptedTypes').value.trim();
+        const acceptedTypes = Array.from(document.querySelectorAll('.modal-accept-check:checked')).map(cb => cb.value);
         body.validation = {};
-        if (maxSizeKB > 0)  body.validation.maxSizeKB     = maxSizeKB;
-        if (acceptedTypes)  body.validation.acceptedTypes = acceptedTypes.split(',').map(s => s.trim());
+        if (maxSizeKB > 0)          body.validation.maxSizeKB     = maxSizeKB;
+        if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
     }
 
     const btn = document.getElementById('btnAddField');
@@ -175,8 +175,11 @@ function openEditModal(btn) {
     const isFile = FILE_TYPES.includes(fieldType);
     document.getElementById('editFileSection').style.display = isFile ? '' : 'none';
     if (isFile) {
-        document.getElementById('editMaxSizeKB').value     = validation?.maxSizeKB ?? '';
-        document.getElementById('editAcceptedTypes').value = (validation?.acceptedTypes ?? []).join(',');
+        document.getElementById('editMaxSizeKB').value = validation?.maxSizeKB ?? '';
+        const savedTypes = validation?.acceptedTypes ?? [];
+        document.querySelectorAll('.edit-accept-check').forEach(cb => {
+            cb.checked = savedTypes.includes(cb.value);
+        });
     }
 
     new bootstrap.Modal(document.getElementById('editFieldModal')).show();
@@ -219,10 +222,10 @@ function submitEditField() {
 
     if (FILE_TYPES.includes(fieldType)) {
         const maxSizeKB     = parseInt(document.getElementById('editMaxSizeKB').value);
-        const acceptedTypes = document.getElementById('editAcceptedTypes').value.trim();
+        const acceptedTypes = Array.from(document.querySelectorAll('.edit-accept-check:checked')).map(cb => cb.value);
         body.validation = {};
-        if (maxSizeKB > 0) body.validation.maxSizeKB     = maxSizeKB;
-        if (acceptedTypes) body.validation.acceptedTypes = acceptedTypes.split(',').map(s => s.trim());
+        if (maxSizeKB > 0)          body.validation.maxSizeKB     = maxSizeKB;
+        if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
     }
 
     const btn = document.querySelector('#editFieldModal .bm-btn-submit--edit');
