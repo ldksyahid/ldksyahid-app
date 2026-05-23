@@ -422,6 +422,8 @@ class DynamicFormGDriveService
                 $headerRow,
                 ['valueInputOption' => 'RAW']
             );
+
+            $this->autoResizeColumns($spreadsheetID, count($headers));
         }
 
         return [
@@ -464,6 +466,8 @@ class DynamicFormGDriveService
             $body,
             ['valueInputOption' => 'RAW']
         );
+
+        $this->autoResizeColumns($spreadsheetID, count($headers));
     }
 
     // =========================================================================
@@ -571,6 +575,45 @@ class DynamicFormGDriveService
             $body,
             ['valueInputOption' => 'RAW']
         );
+
+        $this->autoResizeColumns($spreadsheetID, count($newOrderedHeaders));
+    }
+
+    // =========================================================================
+    // Auto-resize spreadsheet columns to fit content
+    // =========================================================================
+
+    /**
+     * Auto-resize all columns in Sheet1 to fit their content.
+     * Uses the Sheets batchUpdate AutoResizeDimensionsRequest.
+     * Non-fatal: logs warning on failure.
+     */
+    private function autoResizeColumns(string $spreadsheetID, int $columnCount): void
+    {
+        if ($columnCount <= 0) {
+            return;
+        }
+
+        try {
+            $request = new \Google_Service_Sheets_Request([
+                'autoResizeDimensions' => [
+                    'dimensions' => [
+                        'sheetId'    => 0,
+                        'dimension'  => 'COLUMNS',
+                        'startIndex' => 0,
+                        'endIndex'   => $columnCount,
+                    ],
+                ],
+            ]);
+
+            $batchBody = new \Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
+                'requests' => [$request],
+            ]);
+
+            $this->sheetsService->spreadsheets->batchUpdate($spreadsheetID, $batchBody);
+        } catch (\Throwable $e) {
+            Log::warning('[DynamicFormGDriveService] autoResizeColumns failed: ' . $e->getMessage());
+        }
     }
 
     // =========================================================================
