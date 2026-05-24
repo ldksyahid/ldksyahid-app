@@ -15,6 +15,7 @@
         "guzzlehttp/guzzle": "^7.5",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^8.75",
+        "laravel/socialite": "^5.2",
         "laravel/sanctum": "^2.11",
         "laravel/ui": "^3.4",
         "laravolt/avatar": "^4.1",
