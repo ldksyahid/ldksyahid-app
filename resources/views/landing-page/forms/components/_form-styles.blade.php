@@ -146,6 +146,13 @@
     border-bottom-color: var(--gf-danger) !important;
 }
 
+.gf-input-readonly {
+    background: transparent;
+    cursor: default;
+    color: var(--gf-text-muted);
+    opacity: .85;
+}
+
 .gf-input::placeholder,
 .gf-textarea::placeholder {
     color: #9aa0a6;

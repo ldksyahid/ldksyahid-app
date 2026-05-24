@@ -9,8 +9,17 @@
     <div class="container">
         <div class="gf-state-card">
 
+            @php
+                $needsLogin      = isset($needsLogin) && $needsLogin;
+                $alreadySubmitted = isset($alreadySubmitted) && $alreadySubmitted;
+            @endphp
+
             {{-- Icon --}}
-            @if(isset($alreadySubmitted) && $alreadySubmitted)
+            @if($needsLogin)
+            <div class="gf-state-icon-wrap" style="background:rgba(99,102,241,.1);color:#6366f1;">
+                <i class="fas fa-user-lock"></i>
+            </div>
+            @elseif($alreadySubmitted)
             <div class="gf-state-icon-wrap success">
                 <i class="fas fa-check-circle"></i>
             </div>
@@ -22,16 +31,21 @@
 
             {{-- Title --}}
             <h3 class="gf-state-title">
-                @if(isset($alreadySubmitted) && $alreadySubmitted)
+                @if($needsLogin)
+                    Login Diperlukan
+                @elseif($alreadySubmitted)
                     Anda Sudah Mengisi Formulir Ini
                 @else
                     Formulir Tidak Tersedia
                 @endif
             </h3>
 
-            {{-- Reason message --}}
+            {{-- Body message --}}
             <p class="gf-state-body">
-                @if(isset($alreadySubmitted) && $alreadySubmitted)
+                @if($needsLogin)
+                    Untuk mengisi formulir <strong>{{ $form->title }}</strong>,
+                    Anda harus login terlebih dahulu menggunakan akun Anda.
+                @elseif($alreadySubmitted)
                     Formulir <strong>{{ $form->title }}</strong> hanya dapat diisi satu kali.
                     Anda telah mengisi formulir ini sebelumnya.
                     Jazakumullahu Khairan atas partisipasi Anda.
@@ -61,11 +75,24 @@
 
             <div class="gf-divider"></div>
 
+            @if($needsLogin)
+            <a href="{{ route('login') }}" class="gf-home-btn"
+               style="background:#6366f1;box-shadow:0 2px 10px rgba(99,102,241,.3);">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Login Sekarang</span>
+            </a>
+            <div style="margin-top:.85rem;">
+                <a href="{{ url('/') }}" class="gf-again-link">
+                    <i class="fas fa-home"></i> Kembali ke Beranda
+                </a>
+            </div>
+            @else
             <a href="{{ url('/') }}" class="gf-home-btn"
                style="background:#6b7280;box-shadow:0 2px 10px rgba(107,114,128,.3);">
                 <i class="fas fa-home"></i>
                 <span>Kembali ke Beranda</span>
             </a>
+            @endif
 
         </div>
     </div>

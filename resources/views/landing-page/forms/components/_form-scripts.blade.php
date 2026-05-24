@@ -44,6 +44,10 @@
         }
     });
 
+    // ── Form config (injected from Blade) ───────────────────────────
+    var gfIsMultiple = {{ $form->isMultipleSubmit ? 'true' : 'false' }};
+    var gfFormSlug   = '{{ $form->slug }}';
+
     // ── AJAX form submission ────────────────────────────────────────
     var form = document.getElementById('publicFormSubmit');
     if (!form) return;
@@ -88,7 +92,7 @@
                 if (data.redirectUrl) {
                     window.location.href = data.redirectUrl;
                 } else {
-                    showSuccessCard(data.formTitle, data.confirmationMessage);
+                    showSuccessCard(data.formTitle, data.confirmationMessage, data.isMultipleSubmit, data.formSlug);
                 }
             } else if (status === 422 && data.errors) {
                 // ── Validation errors ────────────────────────────────
@@ -169,15 +173,27 @@
         if (firstCard) firstCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    function showSuccessCard(formTitle, confirmationMessage) {
+    function showSuccessCard(formTitle, confirmationMessage, isMultiple, formSlug) {
         var wrap = document.querySelector('.gf-wrap');
         if (!wrap) return;
+
+        // Fall back to Blade-injected values if server didn't return them
+        if (typeof isMultiple === 'undefined') isMultiple = gfIsMultiple;
+        if (typeof formSlug  === 'undefined') formSlug   = gfFormSlug;
 
         var bodyMsg = confirmationMessage
             ? escHtml(confirmationMessage)
             : 'Jazakumullahu Khairan atas partisipasi Anda dalam mengisi formulir <strong>' +
               escHtml(formTitle) +
               '</strong>. Respons Anda telah kami terima dan email konfirmasi akan segera dikirimkan.';
+
+        var againLink = isMultiple
+            ? '<div style="margin-top:.85rem;">' +
+                  '<a href="/form/' + escHtml(formSlug) + '" class="gf-again-link">' +
+                      '<i class="fas fa-redo"></i> Kirim jawaban lain' +
+                  '</a>' +
+              '</div>'
+            : '';
 
         wrap.innerHTML =
             '<div class="gf-state-card" style="max-width:100%;">' +
@@ -189,6 +205,7 @@
                     '<i class="fas fa-home me-2"></i>' +
                     '<span>Kembali ke Beranda</span>' +
                 '</a>' +
+                againLink +
             '</div>';
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
