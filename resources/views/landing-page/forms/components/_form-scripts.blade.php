@@ -94,8 +94,12 @@
                 // ── Validation errors ────────────────────────────────
                 showValidationErrors(data.errors);
                 restoreBtn(btn, span, icon);
+            } else if (status === 429) {
+                // ── Rate limit (throttle middleware or controller) ────
+                showGeneralError('Terlalu banyak percobaan pengiriman. Silakan tunggu beberapa saat dan coba lagi.');
+                restoreBtn(btn, span, icon);
             } else {
-                // ── Server / rate-limit / closed error ───────────────
+                // ── Server / closed error ─────────────────────────────
                 showGeneralError(data.message || 'Terjadi kesalahan. Silakan coba lagi.');
                 restoreBtn(btn, span, icon);
             }

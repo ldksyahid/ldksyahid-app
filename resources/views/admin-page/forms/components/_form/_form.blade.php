@@ -345,6 +345,19 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label d-block">Multiple Submissions</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                           id="isMultipleSubmit" name="isMultipleSubmit" value="1"
+                                           {{ old('isMultipleSubmit', $form?->isMultipleSubmit ?? false) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="isMultipleSubmit">
+                                        Allow respondents to submit more than once
+                                    </label>
+                                </div>
+                                <div class="form-text">Off = satu pengiriman per alamat email (memerlukan field email).</div>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="startDate" class="form-label">Start Date</label>
                                 <input type="text" class="form-control flatpickr-datetime" id="startDate" name="startDate"
                                        value="{{ old('startDate', $form?->startDate?->format('Y-m-d H:i')) }}"

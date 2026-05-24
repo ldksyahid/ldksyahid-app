@@ -10,16 +10,32 @@
         <div class="gf-state-card">
 
             {{-- Icon --}}
+            @if(isset($alreadySubmitted) && $alreadySubmitted)
+            <div class="gf-state-icon-wrap success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            @else
             <div class="gf-state-icon-wrap closed">
                 <i class="fas fa-lock"></i>
             </div>
+            @endif
 
             {{-- Title --}}
-            <h3 class="gf-state-title">Formulir Tidak Tersedia</h3>
+            <h3 class="gf-state-title">
+                @if(isset($alreadySubmitted) && $alreadySubmitted)
+                    Anda Sudah Mengisi Formulir Ini
+                @else
+                    Formulir Tidak Tersedia
+                @endif
+            </h3>
 
             {{-- Reason message --}}
             <p class="gf-state-body">
-                @if($form->status === 'closed')
+                @if(isset($alreadySubmitted) && $alreadySubmitted)
+                    Formulir <strong>{{ $form->title }}</strong> hanya dapat diisi satu kali.
+                    Anda telah mengisi formulir ini sebelumnya.
+                    Jazakumullahu Khairan atas partisipasi Anda.
+                @elseif($form->status === 'closed')
                     Formulir <strong>{{ $form->title }}</strong> telah ditutup
                     dan tidak lagi menerima tanggapan baru.
                 @elseif($form->status === 'draft')

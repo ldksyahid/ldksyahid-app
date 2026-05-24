@@ -107,10 +107,10 @@
 
 /* ─── Help text ────────────────────────────────────────────────── */
 .gf-help {
-    font-size: .8rem;
+    font-size: .72rem;
     color: var(--gf-text-muted);
-    margin-top: 6px;
-    margin-bottom: 0;
+    margin-top: 3px;
+    margin-bottom: 8px;
     line-height: 1.5;
 }
 

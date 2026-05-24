@@ -41,6 +41,9 @@
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
         <input
             type="text"
             id="{{ $fieldID }}"
@@ -51,12 +54,7 @@
             {{ $field->isRequired ? 'required' : '' }}
             maxlength="500"
         >
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 
@@ -67,6 +65,9 @@
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
         <input
             type="tel"
             id="{{ $fieldID }}"
@@ -77,12 +78,7 @@
             {{ $field->isRequired ? 'required' : '' }}
             maxlength="30"
         >
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 
@@ -93,6 +89,9 @@
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
         <input
             type="url"
             id="{{ $fieldID }}"
@@ -103,12 +102,7 @@
             {{ $field->isRequired ? 'required' : '' }}
             maxlength="500"
         >
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 
@@ -119,6 +113,11 @@
             {{ $field->label }}
             @if($field->isRequired || $field->isSystemField)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @elseif($field->isSystemField)
+        <p class="gf-help">Email konfirmasi akan dikirimkan ke alamat ini.</p>
+        @endif
         <input
             type="email"
             id="{{ $fieldID }}"
@@ -130,14 +129,7 @@
             autocomplete="email"
             maxlength="255"
         >
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @elseif($field->isSystemField)
-        <p class="gf-help">Email konfirmasi akan dikirimkan ke alamat ini.</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 
@@ -148,6 +140,9 @@
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
         <input
             type="number"
             id="{{ $fieldID }}"
@@ -159,12 +154,7 @@
             @if(!empty($field->validation['min'])) min="{{ $field->validation['min'] }}" @endif
             @if(!empty($field->validation['max'])) max="{{ $field->validation['max'] }}" @endif
         >
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 
@@ -175,6 +165,9 @@
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
         <textarea
             id="{{ $fieldID }}"
             name="{{ $fieldName }}"
@@ -183,12 +176,7 @@
             placeholder="{{ $field->placeholder ?? 'Jawaban Anda' }}"
             {{ $field->isRequired ? 'required' : '' }}
         >{{ $oldValue ?? $field->defaultValue ?? '' }}</textarea>
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 
@@ -199,6 +187,9 @@
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
         <div class="gf-date-wrap">
             <input
                 type="date"
@@ -210,12 +201,7 @@
             >
             <span class="gf-date-icon"><i class="fas fa-calendar-alt"></i></span>
         </div>
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 
@@ -226,6 +212,9 @@
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
         <div class="gf-date-wrap">
             <input
                 type="time"
@@ -237,12 +226,7 @@
             >
             <span class="gf-date-icon"><i class="fas fa-clock"></i></span>
         </div>
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 
@@ -253,6 +237,9 @@
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
         <div class="gf-date-wrap">
             <input
                 type="datetime-local"
@@ -264,12 +251,7 @@
             >
             <span class="gf-date-icon"><i class="fas fa-calendar-alt"></i></span>
         </div>
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 
@@ -280,6 +262,9 @@
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
         <div class="gf-select-wrap">
             <select
                 id="{{ $fieldID }}"
@@ -297,12 +282,7 @@
             </select>
             <span class="gf-select-icon"><i class="fas fa-chevron-down"></i></span>
         </div>
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 
@@ -314,6 +294,9 @@
                 {{ $field->label }}
                 @if($field->isRequired)<span class="gf-required">*</span>@endif
             </legend>
+            @if($field->helpText)
+            <p class="gf-help">{{ $field->helpText }}</p>
+            @endif
             <div class="gf-options">
                 @foreach($field->options ?? [] as $i => $option)
                 <label class="gf-option">
@@ -330,12 +313,7 @@
                 </label>
                 @endforeach
             </div>
-            @if($field->helpText)
-            <p class="gf-help" style="margin-top:10px;">{{ $field->helpText }}</p>
-            @endif
-            @error($fieldName)
-            <span class="gf-invalid">{{ $message }}</span>
-            @enderror
+            <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
         </fieldset>
     </div>
     @break
@@ -348,6 +326,9 @@
                 {{ $field->label }}
                 @if($field->isRequired)<span class="gf-required">*</span>@endif
             </legend>
+            @if($field->helpText)
+            <p class="gf-help">{{ $field->helpText }}</p>
+            @endif
             <div class="gf-options">
                 @foreach($field->options ?? [] as $i => $option)
                 <label class="gf-option">
@@ -363,12 +344,7 @@
                 </label>
                 @endforeach
             </div>
-            @if($field->helpText)
-            <p class="gf-help" style="margin-top:10px;">{{ $field->helpText }}</p>
-            @endif
-            @error($fieldName)
-            <span class="gf-invalid">{{ $message }}</span>
-            @enderror
+            <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
         </fieldset>
     </div>
     @break
@@ -381,6 +357,9 @@
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
 
         <div class="gf-file-drop" id="drop_{{ $fieldID }}">
             <input
@@ -411,12 +390,7 @@
             </div>
         </div>
 
-        @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
-        @endif
-        @error($fieldName)
-        <span class="gf-invalid">{{ $message }}</span>
-        @enderror
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
     @break
 

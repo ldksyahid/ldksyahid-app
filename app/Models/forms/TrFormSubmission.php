@@ -90,6 +90,20 @@ class TrFormSubmission extends Model
     }
 
     /**
+     * Check whether a given email has ever submitted this form.
+     * Used to enforce single-submission restriction (isMultipleSubmit = false).
+     * Returns false if email is empty (no email field on the form).
+     */
+    public static function hasSubmittedBefore(int $formID, string $email): bool
+    {
+        if (empty($email)) return false;
+
+        return self::where('formID', $formID)
+                   ->where('email', $email)
+                   ->exists();
+    }
+
+    /**
      * Check whether an IP has exceeded the rate limit for a given form.
      * Falls back to a 5/10-minute limit if form settings are not found.
      */

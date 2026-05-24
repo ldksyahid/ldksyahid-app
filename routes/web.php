@@ -561,13 +561,13 @@ Route::middleware(['auth', 'role:Superadmin|HelperAdmin'])
 
 // ======================================= DYNAMIC FORMS — PUBLIC =======================================
 
-// Public form submission — throttle to 5 per 10 minutes per IP
+// Public form submission — throttle to 15 per 10 minutes per IP
 Route::prefix('/form')
     ->name('forms.')
     ->group(function () {
         Route::get('/{slug}',          [PublicFormController::class, 'show'])     ->name('show');
         Route::post('/{slug}',         [PublicFormController::class, 'submit'])   ->name('submit')
-             ->middleware('throttle:5,10');
+             ->middleware('throttle:15,10');
         Route::get('/{slug}/terima-kasih', [PublicFormController::class, 'thankYou'])->name('thank-you');
     });
 
