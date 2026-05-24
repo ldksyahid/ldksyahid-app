@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\SendSingleMailJob;
 use App\Mail\FormSubmissionConfirmation;
 use App\Models\forms\MsForm;
-use App\Models\forms\MsFormField;
 use App\Models\forms\MsFormSetting;
-use App\Models\forms\TrFormAuditLog;
 use App\Models\forms\TrFormFile;
 use App\Models\forms\TrFormSubmission;
 use App\Services\DynamicFormGDriveService;
@@ -146,6 +144,17 @@ class PublicFormController extends Controller
         $emailField    = $activeFields->firstWhere('isSystemField', true);
         $emailFieldKey = $emailField ? 'field_' . $emailField->formFieldID : null;
         $respondentEmail = $emailFieldKey ? ($validated[$emailFieldKey] ?? '') : '';
+
+        // 5b. Single-submission restriction — check by email (after validation so email is known)
+        if (!$form->isMultipleSubmit && TrFormSubmission::hasSubmittedBefore($form->formID, $respondentEmail)) {
+            $msg = 'Email ' . $respondentEmail . ' sudah pernah digunakan untuk mengisi formulir ini.';
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return view('landing-page.forms.closed', compact('form'))
+                ->with('title', $form->title)
+                ->with('alreadySubmitted', true);
+        }
 
         // Guess respondent name from a field labelled "Nama" / "Name" if present
         $respondentName = '';
