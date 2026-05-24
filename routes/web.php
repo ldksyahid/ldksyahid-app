@@ -58,6 +58,12 @@ Route::middleware('throttle:5,10')->group(function () {
     Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('register');
 });
 
+// Google OAuth
+Route::middleware('throttle:10,1')->group(function () {
+    Route::get('/auth/google', [\App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+});
+
 // Route Template
 Route::get('/welcome', function () {
     return view('welcome');
