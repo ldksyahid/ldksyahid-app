@@ -99,7 +99,7 @@ class TrFormSubmission extends Model
         if (empty($email)) return false;
 
         return self::where('formID', $formID)
-                   ->where('email', $email)
+                   ->where('respondentEmail', $email)
                    ->exists();
     }
 

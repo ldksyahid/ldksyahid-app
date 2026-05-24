@@ -9,41 +9,27 @@
     <div class="container">
         <div class="gf-state-card">
 
-            {{-- Success icon --}}
-            <div class="gf-state-icon-wrap success">
-                <i class="fas fa-check"></i>
-            </div>
+            {{-- Form title as header --}}
+            <h2 class="gf-state-form-title">{{ $form->title }}</h2>
 
-            {{-- Title --}}
-            <h3 class="gf-state-title">Alhamdulillah, Formulir Berhasil Dikirim!</h3>
-
-            {{-- Body message --}}
+            {{-- Confirmation message --}}
             <p class="gf-state-body">
                 @if($form->confirmationMessage)
                     {{ $form->confirmationMessage }}
                 @else
-                    Jazakumullahu Khairan atas partisipasi Anda dalam mengisi formulir
-                    <strong>{{ $form->title }}</strong>.
-                    Respons Anda telah kami terima dan email konfirmasi akan segera dikirimkan.
+                    Alhamdulillah, jawaban Anda telah berhasil kami terima.
+                    Jazakumullahu Khairan atas partisipasi Anda, semoga Allah membalas kebaikan Anda
+                    dan memudahkan segala urusan Anda.
                 @endif
             </p>
 
-            <div class="gf-divider"></div>
-
-            {{-- Back to home --}}
-            <a href="{{ url('/') }}" class="gf-home-btn">
-                <i class="fas fa-home"></i>
-                <span>Kembali ke Beranda</span>
-            </a>
-
-            {{-- Fill again --}}
+            {{-- Links --}}
             @if($form->isMultipleSubmit)
-            <div style="margin-top:.85rem;">
-                <a href="{{ route('forms.show', $form->slug) }}" class="gf-again-link">
-                    <i class="fas fa-redo"></i> Isi formulir kembali
-                </a>
-            </div>
+            <a href="{{ route('forms.show', $form->slug) }}" class="gf-state-link">
+                Kirim jawaban lain
+            </a>
             @endif
+            <a href="{{ url('/') }}" class="gf-state-link">Kembali ke beranda</a>
 
         </div>
     </div>

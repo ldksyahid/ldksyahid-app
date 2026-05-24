@@ -183,29 +183,18 @@
 
         var bodyMsg = confirmationMessage
             ? escHtml(confirmationMessage)
-            : 'Jazakumullahu Khairan atas partisipasi Anda dalam mengisi formulir <strong>' +
-              escHtml(formTitle) +
-              '</strong>. Respons Anda telah kami terima dan email konfirmasi akan segera dikirimkan.';
+            : 'Alhamdulillah, jawaban Anda telah berhasil kami terima. Jazakumullahu Khairan atas partisipasi Anda, semoga Allah membalas kebaikan Anda dan memudahkan segala urusan Anda.';
 
         var againLink = isMultiple
-            ? '<div style="margin-top:.85rem;">' +
-                  '<a href="/form/' + escHtml(formSlug) + '" class="gf-again-link">' +
-                      '<i class="fas fa-redo"></i> Kirim jawaban lain' +
-                  '</a>' +
-              '</div>'
+            ? '<a href="/form/' + escHtml(formSlug) + '" class="gf-again-link">Kirim jawaban lain</a>'
             : '';
 
         wrap.innerHTML =
-            '<div class="gf-state-card" style="max-width:100%;">' +
-                '<div class="gf-state-icon-wrap success"><i class="fas fa-check"></i></div>' +
-                '<h3 class="gf-state-title">Alhamdulillah, Formulir Berhasil Dikirim!</h3>' +
+            '<div class="gf-state-card">' +
+                '<h2 class="gf-state-form-title">' + escHtml(formTitle) + '</h2>' +
                 '<p class="gf-state-body">' + bodyMsg + '</p>' +
-                '<div class="gf-divider"></div>' +
-                '<a href="/" class="gf-home-btn">' +
-                    '<i class="fas fa-home me-2"></i>' +
-                    '<span>Kembali ke Beranda</span>' +
-                '</a>' +
                 againLink +
+                '<a href="/" class="gf-again-link">Kembali ke beranda</a>' +
             '</div>';
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
