@@ -474,6 +474,18 @@
     margin: 0 auto;
 }
 
+.gf-state-icon {
+    font-size: 2.75rem;
+    margin: .25rem 0 1rem;
+    line-height: 1;
+}
+.gf-state-icon.c-success { color: #00a79d; }
+.gf-state-icon.c-indigo  { color: #6366f1; }
+.gf-state-icon.c-gray    { color: #6b7280; }
+.gf-state-icon.c-amber   { color: #f59e0b; }
+.gf-state-icon.c-red     { color: #ef4444; }
+.gf-state-icon.c-blue    { color: #3b82f6; }
+
 .gf-state-form-title {
     font-size: 1.75rem;
     font-weight: 400;

@@ -17,19 +17,21 @@
                 @if($form->confirmationMessage)
                     {{ $form->confirmationMessage }}
                 @else
-                    Alhamdulillah, jawaban Anda telah berhasil kami terima.
-                    Jazakumullahu Khairan atas partisipasi Anda, semoga Allah membalas kebaikan Anda
-                    dan memudahkan segala urusan Anda.
+                    Alhamdulillah, jawaban kamu telah berhasil kami terima.
+                    Jazakumullahu Khairan atas partisipasi kamu, semoga Allah membalas kebaikan kamu
+                    dan memudahkan segala urusan kamu.
                 @endif
             </p>
 
             {{-- Links --}}
             @if($form->isMultipleSubmit)
             <a href="{{ route('forms.show', $form->slug) }}" class="gf-state-link">
-                Kirim jawaban lain
+                <i class="fas fa-redo me-1"></i> Kirim jawaban lain
             </a>
             @endif
-            <a href="{{ url('/') }}" class="gf-state-link">Kembali ke beranda</a>
+            <a href="{{ url('/') }}" class="gf-state-link">
+                <i class="fas fa-home me-1"></i> Kembali ke beranda
+            </a>
 
         </div>
     </div>

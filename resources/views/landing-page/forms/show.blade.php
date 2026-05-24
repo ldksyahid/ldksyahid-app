@@ -52,7 +52,7 @@
         {{-- ── Meta footer ──────────────────────────────────────────── --}}
         <div class="gf-meta-footer">
             @if($form->endDate)
-            <span><i class="fas fa-calendar-times me-1"></i>Ditutup: {{ $form->endDate->timezone('Asia/Jakarta')->format('d F Y, H:i') }} WIB</span>
+            <span><i class="fas fa-calendar-times me-1"></i>Ditutup: {{ $form->endDate->locale('id')->translatedFormat('d F Y, H:i') }} WIB</span>
             @endif
             @if($form->maxSubmission)
             <span class="ms-2"><i class="fas fa-users me-1"></i>Sisa kuota: {{ max(0, $form->maxSubmission - $form->totalSubmission) }} responden</span>
