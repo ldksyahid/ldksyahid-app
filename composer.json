@@ -9,6 +9,7 @@
         "ashallendesign/short-url": "^5.2",
         "barryvdh/laravel-dompdf": "^2.0",
         "biscolab/laravel-recaptcha": "^6.0",
+        "doctrine/dbal": "^3.0",
         "dompdf/dompdf": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
         "google/apiclient": "^2.14",
