@@ -50,7 +50,7 @@
 
             {{-- Action links --}}
             @if($needsLogin)
-            <a href="{{ route('login') }}" class="gf-state-link">
+            <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="gf-state-link">
                 <i class="fas fa-sign-in-alt me-1"></i> Login sekarang
             </a>
             <a href="{{ url('/') }}" class="gf-state-link">
