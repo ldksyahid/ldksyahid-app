@@ -109,7 +109,7 @@
             }
         })
         .catch(function () {
-            showGeneralError('Terjadi kesalahan jaringan. Periksa koneksi Anda dan coba lagi.');
+            showGeneralError('Terjadi kesalahan jaringan. Periksa koneksi kamu dan coba lagi.');
             restoreBtn(btn, span, icon);
         });
     });
@@ -183,7 +183,7 @@
 
         var bodyMsg = confirmationMessage
             ? escHtml(confirmationMessage)
-            : 'Alhamdulillah, jawaban Anda telah berhasil kami terima. Jazakumullahu Khairan atas partisipasi Anda, semoga Allah membalas kebaikan Anda dan memudahkan segala urusan Anda.';
+            : 'Alhamdulillah, jawaban kamu telah berhasil kami terima. Jazakumullahu Khairan atas partisipasi kamu, semoga Allah membalas kebaikan kamu dan memudahkan segala urusan kamu.';
 
         var againLink = isMultiple
             ? '<a href="/form/' + escHtml(formSlug) + '" class="gf-again-link">Kirim jawaban lain</a>'
@@ -194,7 +194,7 @@
                 '<h2 class="gf-state-form-title">' + escHtml(formTitle) + '</h2>' +
                 '<p class="gf-state-body">' + bodyMsg + '</p>' +
                 againLink +
-                '<a href="/" class="gf-again-link">Kembali ke beranda</a>' +
+                '<a href="/" class="gf-again-link"><i class="fas fa-home" style="margin-right:.3rem;"></i>Kembali ke beranda</a>' +
             '</div>';
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
