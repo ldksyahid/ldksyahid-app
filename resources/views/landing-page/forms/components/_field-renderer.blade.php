@@ -108,6 +108,11 @@
 
 {{-- ===== EMAIL ===== --}}
 @case('email')
+    @php
+        $authEmail   = ($field->isSystemField && auth()->check()) ? auth()->user()->email : null;
+        $emailValue  = $oldValue ?? $authEmail ?? '';
+        $isReadonly  = $field->isSystemField && auth()->check();
+    @endphp
     <div class="gf-card {{ $isError ? 'has-error' : '' }}">
         <label class="gf-label" for="{{ $fieldID }}">
             {{ $field->label }}
@@ -122,10 +127,11 @@
             type="email"
             id="{{ $fieldID }}"
             name="{{ $fieldName }}"
-            class="gf-input {{ $isError ? 'is-invalid' : '' }}"
+            class="gf-input {{ $isError ? 'is-invalid' : '' }} {{ $isReadonly ? 'gf-input-readonly' : '' }}"
             placeholder="{{ $field->placeholder ?? 'contoh@email.com' }}"
-            value="{{ $oldValue ?? '' }}"
+            value="{{ $emailValue }}"
             {{ ($field->isRequired || $field->isSystemField) ? 'required' : '' }}
+            {{ $isReadonly ? 'readonly' : '' }}
             autocomplete="email"
             maxlength="255"
         >
