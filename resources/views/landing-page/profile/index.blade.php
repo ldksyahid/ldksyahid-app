@@ -15,11 +15,14 @@
             <div class="col-lg-4 wow fadeIn" data-wow-delay="0.1s">
                 <div class="prf-photo-wrap">
                     <div class="prf-photo-frame">
-                        @if (Auth::User()->profile->profilepicture == null)
-                            <img src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setShape('square')->setDimension(500)->setFontSize(250)->toBase64() }}"
+                        @if (Auth::User()->profile->profilepicture != null)
+                            <img src="https://lh3.googleusercontent.com/d/{{ Auth::User()->profile->gdrive_id }}"
+                                 alt="{{ Auth::user()->name }}">
+                        @elseif (Auth::User()->profile->googleAvatar)
+                            <img src="{{ Auth::User()->profile->googleAvatar }}"
                                  alt="{{ Auth::user()->name }}">
                         @else
-                            <img src="https://lh3.googleusercontent.com/d/{{ Auth::User()->profile->gdrive_id }}"
+                            <img src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setShape('square')->setDimension(500)->setFontSize(250)->toBase64() }}"
                                  alt="{{ Auth::user()->name }}">
                         @endif
                         {{-- Member Pill inside frame --}}
