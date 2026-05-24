@@ -99,6 +99,6 @@ class GoogleController extends Controller
             return redirect()->route('admin');
         }
 
-        return redirect('/');
+        return redirect()->intended('/');
     }
 }
