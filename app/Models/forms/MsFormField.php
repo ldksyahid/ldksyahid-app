@@ -51,7 +51,7 @@ class MsFormField extends Model
     public const TYPE_DATE_FIELDS    = ['date', 'time', 'datetime'];
     public const TYPE_CHOICE_FIELDS  = ['dropdown', 'radio', 'checkbox'];
     public const TYPE_FILE_FIELDS    = ['file'];
-    public const TYPE_DISPLAY_FIELDS = ['section_break', 'paragraph', 'image'];
+    public const TYPE_DISPLAY_FIELDS = ['section_break', 'paragraph', 'image', 'header_image'];
 
     // -------------------------------------------------------------------------
     // Relationships

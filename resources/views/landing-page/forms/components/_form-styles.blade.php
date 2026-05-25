@@ -35,6 +35,34 @@
     padding: 0 1rem;
 }
 
+/* ─── Header Banner Image ──────────────────────────────────────── */
+.gf-header-banner-wrap {
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--gf-radius) var(--gf-radius) 0 0;
+    margin-bottom: 0;
+    background: #000;
+    box-shadow: var(--gf-shadow);
+}
+.gf-header-banner {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    opacity: .95;
+}
+/* When banner is present, the header card below it should connect seamlessly */
+.gf-header-banner-wrap + .gf-header-card {
+    border-top: none;
+    border-radius: 0 0 var(--gf-radius) var(--gf-radius);
+    box-shadow: 0 2px 4px rgba(0,0,0,.07);
+}
+/* Same for progress wrap in multi-step */
+.gf-header-banner-wrap + .gf-progress-wrap {
+    border-radius: 0 0 var(--gf-radius) var(--gf-radius);
+    border-top: none;
+}
+
 /* ─── Header Card ──────────────────────────────────────────────── */
 .gf-header-card {
     background: var(--gf-card-bg);

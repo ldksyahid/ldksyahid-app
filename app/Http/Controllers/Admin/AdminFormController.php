@@ -438,8 +438,8 @@ class AdminFormController extends Controller
         }
 
         $validated = $request->validate([
-            'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph',
-            'label'                  => [\Illuminate\Validation\Rule::requiredIf($request->input('fieldType') !== 'image'), 'nullable', 'string', 'max:500'],
+            'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph,header_image',
+            'label'                  => [\Illuminate\Validation\Rule::requiredIf(!in_array($request->input('fieldType'), ['image', 'section_break', 'header_image'])), 'nullable', 'string', 'max:500'],
             'placeholder'            => 'nullable|string|max:255',
             'helpText'               => 'nullable|string|max:2000',
             'isRequired'             => 'nullable|boolean',
@@ -482,8 +482,8 @@ class AdminFormController extends Controller
                 $this->createFieldGdriveFolder($form, $field);
             }
 
-            // image field → upload the display image to assets/ and store public URL
-            if ($field->fieldType === 'image' && $request->hasFile('imageFile')) {
+            // image / header_image field → upload the display image to assets/ and store public URL
+            if (in_array($field->fieldType, ['image', 'header_image']) && $request->hasFile('imageFile')) {
                 try {
                     $service = new DynamicFormGDriveService();
 
@@ -556,7 +556,7 @@ class AdminFormController extends Controller
 
         // System fields can have their label updated but not removed or type-changed
         $validated = $request->validate([
-            'label'         => [\Illuminate\Validation\Rule::requiredIf($field->fieldType !== 'image'), 'nullable', 'string', 'max:500'],
+            'label'         => [\Illuminate\Validation\Rule::requiredIf(!in_array($field->fieldType, ['image', 'section_break', 'header_image'])), 'nullable', 'string', 'max:500'],
             'placeholder'   => 'nullable|string|max:255',
             'helpText'      => 'nullable|string|max:2000',
             'isRequired'    => 'nullable|boolean',
@@ -569,9 +569,9 @@ class AdminFormController extends Controller
         $labelChanged      = $field->label !== ($validated['label'] ?? '');
         $gdriveFolderID    = $field->fieldConfig['gdriveFolderID'] ?? null;
 
-        // For image display fields: if a new file is uploaded, replace the image in GDrive
+        // For image / header_image display fields: if a new file is uploaded, replace the image in GDrive
         $newHelpText = $validated['helpText'] ?? null;
-        if ($field->fieldType === 'image') {
+        if (in_array($field->fieldType, ['image', 'header_image'])) {
             if ($request->hasFile('imageFile')) {
                 try {
                     $service = new DynamicFormGDriveService();

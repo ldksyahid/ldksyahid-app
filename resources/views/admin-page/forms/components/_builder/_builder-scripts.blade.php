@@ -8,7 +8,8 @@ const FIELD_TYPES  = @json($fieldTypes);
 const CHOICE_TYPES        = ['dropdown', 'radio', 'checkbox'];
 const FILE_TYPES          = ['file'];
 const IMAGE_DISPLAY_TYPES = ['image'];
-const DISPLAY_ONLY_TYPES  = ['section_break', 'paragraph', 'image'];
+const HEADER_IMAGE_TYPES  = ['header_image'];
+const DISPLAY_ONLY_TYPES  = ['section_break', 'paragraph', 'image', 'header_image'];
 
 // ===== SORTABLE =====
 const dropZone = document.getElementById('fieldDropZone');
@@ -18,8 +19,10 @@ Sortable.create(dropZone, {
     ghostClass:  'sortable-ghost',
     chosenClass: 'sortable-chosen',
     onMove: function(evt) {
-        // Prevent any field from being dragged past a system field (locks its position)
+        // Prevent dragging past system fields or header image, and prevent header image from being dragged
         if (evt.related.classList.contains('is-system')) return false;
+        if (evt.related.classList.contains('field-card--header-image')) return false;
+        if (evt.dragged.classList.contains('field-card--header-image')) return false;
     },
     onEnd: function() { saveFieldOrder(); }
 });
@@ -190,14 +193,15 @@ function openEditModal(btn) {
     const isDisplay       = DISPLAY_ONLY_TYPES.includes(fieldType);
     const isImageDisplay  = IMAGE_DISPLAY_TYPES.includes(fieldType);
     const isSectionBreak  = fieldType === 'section_break';
+    const isHeaderImg     = HEADER_IMAGE_TYPES.includes(fieldType);
 
     document.getElementById('editFieldID').value      = card.dataset.fieldId;
     document.getElementById('editLabel').value        = label;
     document.getElementById('editPlaceholder').value  = placeholder;
     document.getElementById('editIsRequired').checked = isRequired;
 
-    // For image display type: show preview of current image, reset file input
-    if (isImageDisplay) {
+    // For image display type or header image: show preview of current image, reset file input
+    if (isImageDisplay || isHeaderImg) {
         document.getElementById('editHelpText').value = '';
         const editImgFile = document.getElementById('editImageFile');
         if (editImgFile) editImgFile.value = '';
@@ -216,18 +220,25 @@ function openEditModal(btn) {
         document.getElementById('editHelpText').value = helpText;
     }
 
-    // Hide placeholder/required for display-only types; also hide help text for section_break
-    document.getElementById('editPlaceholderWrap').style.display  = isDisplay                        ? 'none' : '';
-    document.getElementById('editRequiredWrap').style.display     = isDisplay                        ? 'none' : '';
-    document.getElementById('editHelpTextWrap').style.display     = (isImageDisplay || isSectionBreak) ? 'none' : '';
-    document.getElementById('editImageUrlSection').style.display  = isImageDisplay                   ? ''     : 'none';
+    // Hide placeholder/required for display-only types; also hide help text for section_break / header_image
+    document.getElementById('editPlaceholderWrap').style.display  = isDisplay                               ? 'none' : '';
+    document.getElementById('editRequiredWrap').style.display     = isDisplay                               ? 'none' : '';
+    document.getElementById('editHelpTextWrap').style.display     = (isImageDisplay || isSectionBreak || isHeaderImg) ? 'none' : '';
+    document.getElementById('editImageUrlSection').style.display  = (isImageDisplay || isHeaderImg)         ? ''     : 'none';
+
+    // Hide label completely for header_image (it has no label)
+    const editLabelWrap = document.getElementById('editLabelWrap');
+    if (editLabelWrap) editLabelWrap.style.display = isHeaderImg ? 'none' : '';
 
     // Adjust label text + modal header based on field type
     const editLabelRequired = document.getElementById('editLabelRequired');
     const editLabelText     = document.getElementById('editLabelText');
     const editModalTitle    = document.getElementById('editModalTitle');
     const editModalSub      = document.getElementById('editModalSub');
-    if (isImageDisplay) {
+    if (isHeaderImg) {
+        if (editModalTitle) editModalTitle.textContent = 'Edit Header Image';
+        if (editModalSub)   editModalSub.textContent   = 'Replace the banner image at the top of your form';
+    } else if (isImageDisplay) {
         if (editLabelRequired) editLabelRequired.style.display = 'none';
         if (editLabelText) editLabelText.childNodes[0].textContent = 'Caption ';
         document.getElementById('editLabel').placeholder = 'Optional caption shown below the image';
@@ -304,7 +315,7 @@ function submitEditField() {
     const helpText    = document.getElementById('editHelpText').value.trim();
     const isRequired  = document.getElementById('editIsRequired').checked;
 
-    const LABEL_OPTIONAL_TYPES = [...IMAGE_DISPLAY_TYPES, 'section_break'];
+    const LABEL_OPTIONAL_TYPES = [...IMAGE_DISPLAY_TYPES, ...HEADER_IMAGE_TYPES, 'section_break'];
     if (!label && !LABEL_OPTIONAL_TYPES.includes(fieldType)) {
         document.getElementById('editLabel').focus();
         return;
@@ -320,10 +331,10 @@ function submitEditField() {
 
     let fetchOptions;
 
-    if (IMAGE_DISPLAY_TYPES.includes(fieldType)) {
-        // Image field: multipart/form-data — may contain a new image file
+    if (IMAGE_DISPLAY_TYPES.includes(fieldType) || HEADER_IMAGE_TYPES.includes(fieldType)) {
+        // Image / header_image field: multipart/form-data — may contain a new image file
         const fd = new FormData();
-        fd.append('label', label);
+        if (!HEADER_IMAGE_TYPES.includes(fieldType)) fd.append('label', label);
         fd.append('_method', 'PUT');
         const imgFile = document.getElementById('editImageFile');
         if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
@@ -381,7 +392,27 @@ function submitEditField() {
                     if (body.validation !== undefined) currentEditCard.dataset.validation = JSON.stringify(body.validation);
                 }
 
-                if (fieldType === 'section_break') {
+                if (HEADER_IMAGE_TYPES.includes(fieldType)) {
+                    // Refresh header image thumbnail
+                    const newUrl = data.field?.helpText ?? currentEditCard.dataset.helpText;
+                    if (newUrl) {
+                        const thumb = currentEditCard.querySelector('.header-img-thumb');
+                        if (thumb) {
+                            thumb.src = newUrl;
+                        } else {
+                            // Was placeholder (no image) — replace with img
+                            const placeholder = currentEditCard.querySelector('.header-img-placeholder');
+                            if (placeholder) {
+                                const img = document.createElement('img');
+                                img.src = newUrl;
+                                img.alt = 'Header Image';
+                                img.className = 'header-img-thumb';
+                                placeholder.replaceWith(img);
+                            }
+                        }
+                        currentEditCard.dataset.helpText = newUrl;
+                    }
+                } else if (fieldType === 'section_break') {
                     // Refresh section title text
                     const sectionLabelEl = currentEditCard.querySelector('.section-break-label');
                     if (sectionLabelEl) {
@@ -410,7 +441,7 @@ function submitEditField() {
                 }
             }
             bootstrap.Modal.getInstance(document.getElementById('editFieldModal')).hide();
-            const successMsg = fieldType === 'section_break' ? 'Section updated successfully.' : 'Field updated successfully.';
+            const successMsg = HEADER_IMAGE_TYPES.includes(fieldType) ? 'Header image updated.' : (fieldType === 'section_break' ? 'Section updated successfully.' : 'Field updated successfully.');
             Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: successMsg, showConfirmButton: false, timer: 2500, timerProgressBar: true });
         } else {
             showAlert('danger', 'Failed to update field.');
@@ -510,6 +541,72 @@ function updateFieldCount(delta) {
     const badge   = document.getElementById('fieldCount');
     const current = parseInt(badge.textContent) + delta;
     badge.textContent = current + ' fields';
+}
+
+// ===== ADD HEADER IMAGE =====
+function addHeaderImage() {
+    if (dropZone.querySelector('.field-card--header-image')) {
+        Swal.fire({ icon: 'info', title: 'Already Added', text: 'This form already has a header image. Edit or remove the existing one first.', confirmButtonColor: '#00a79d' });
+        return;
+    }
+
+    Swal.fire({
+        title: 'Add Header Image',
+        html: `
+            <div class="text-start">
+                <label class="form-label fw-semibold" style="font-size:.85rem;">Choose Image <span class="text-danger">*</span></label>
+                <input type="file" id="headerImageInput" class="form-control" accept="image/*">
+                <div class="text-muted mt-2" style="font-size:.78rem;line-height:1.5;">
+                    <strong>Recommended:</strong> 1600 × 400 px (landscape banner).<br>
+                    Max file size: <strong>5 MB</strong>. Supported formats: JPG, PNG, WebP.<br>
+                    The image will be pinned to the very top of the form and cannot be reordered.
+                </div>
+            </div>`,
+        showCancelButton: true,
+        confirmButtonText: '<i class="fa fa-upload me-1"></i> Upload & Add',
+        confirmButtonColor: '#00a79d',
+        cancelButtonText: 'Cancel',
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        preConfirm: () => {
+            const fileInput = document.getElementById('headerImageInput');
+            if (!fileInput.files[0]) {
+                Swal.showValidationMessage('Please select an image file first.');
+                return false;
+            }
+            const fd = new FormData();
+            fd.append('fieldType', 'header_image');
+            fd.append('imageFile', fileInput.files[0]);
+            return fetch(`/admin/forms/${FORM_ID}/fields`, {
+                method : 'POST',
+                headers: { 'X-CSRF-TOKEN': CSRF_TOKEN },
+                body   : fd,
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) {
+                    Swal.showValidationMessage('Failed: ' + (data.message || 'Unknown error'));
+                    return false;
+                }
+                return data;
+            })
+            .catch(err => {
+                Swal.showValidationMessage('Error: ' + err.message);
+                return false;
+            });
+        }
+    }).then(result => {
+        if (!result.isConfirmed || !result.value) return;
+        const data = result.value;
+        const emptyZone = document.getElementById('emptyZone');
+        if (emptyZone) emptyZone.remove();
+        // Insert at the very TOP — header image is always first
+        dropZone.insertAdjacentHTML('afterbegin', data.html);
+        updateFieldCount(1);
+        // Persist the order so backend assigns sort_order = 0
+        saveFieldOrder();
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Header image added.', showConfirmButton: false, timer: 2500, timerProgressBar: true });
+    });
 }
 
 // ===== ADD SECTION =====

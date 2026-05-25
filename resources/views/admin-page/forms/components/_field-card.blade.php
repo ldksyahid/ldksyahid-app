@@ -2,9 +2,12 @@
     Reusable field card for the form builder drop zone.
     Variables: $field (MsFormField)
 --}}
-@php $isSectionBreak = $field->fieldType === 'section_break'; @endphp
+@php
+    $isSectionBreak = $field->fieldType === 'section_break';
+    $isHeaderImage  = $field->fieldType === 'header_image';
+@endphp
 
-<div class="field-card {{ $isSectionBreak ? 'field-card--section-break' : '' }} {{ $field->isSystemField ? 'is-system' : '' }}"
+<div class="field-card {{ $isHeaderImage ? 'field-card--header-image' : ($isSectionBreak ? 'field-card--section-break' : '') }} {{ $field->isSystemField ? 'is-system' : '' }}"
      data-field-id="{{ $field->formFieldID }}"
      data-field-type="{{ $field->fieldType }}"
      data-label="{{ $field->label }}"
@@ -14,7 +17,28 @@
      data-options="{{ json_encode($field->options ?? []) }}"
      data-validation="{{ json_encode($field->validation ?? []) }}">
 
-@if($isSectionBreak)
+@if($isHeaderImage)
+    {{-- ===== HEADER IMAGE: pinned banner card ===== --}}
+    <div class="header-img-card-inner">
+        @if($field->helpText)
+        <img src="{{ $field->helpText }}" alt="Header Image" class="header-img-thumb">
+        @else
+        <div class="header-img-placeholder"><i class="fa fa-image me-2"></i>No image uploaded yet</div>
+        @endif
+        <div class="header-img-badge">
+            <i class="fa fa-thumbtack me-1"></i>Header Banner · Pinned to top
+        </div>
+    </div>
+    <div class="field-card-actions">
+        <button type="button" title="Replace header image" onclick="openEditModal(this)">
+            <i class="fa fa-edit"></i>
+        </button>
+        <button type="button" class="btn-del" title="Remove header image" onclick="removeField(this)">
+            <i class="fa fa-trash"></i>
+        </button>
+    </div>
+
+@elseif($isSectionBreak)
     {{-- ===== SECTION BREAK: visual divider card ===== --}}
     @if(!$field->isSystemField)
     <span class="drag-handle" title="Drag to reorder">

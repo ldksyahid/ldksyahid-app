@@ -72,15 +72,20 @@
                 <div>
                     <div class="card border-0 shadow-sm">
                         <div class="card-body">
-                            <h5 class="section-title d-flex align-items-center justify-content-between">
-                                <span><i class="fa fa-list me-2"></i>Active Fields</span>
-                                <div class="d-flex align-items-center gap-2">
+                            <div class="section-title builder-fields-header">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="fw-semibold" style="font-size:1rem;"><i class="fa fa-list me-2"></i>Active Fields</span>
+                                    <span class="badge bg-light text-dark border" id="fieldCount">{{ $form->activeFields->count() }} fields</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <button type="button" class="btn-add-header-image" onclick="addHeaderImage()" title="Add a banner image pinned to the top of the form">
+                                        <i class="fa fa-image me-1"></i> Header Image
+                                    </button>
                                     <button type="button" class="btn-add-section" onclick="addSection()" title="Add a new section to split the form into pages">
                                         <i class="fa fa-columns me-1"></i> Add Section
                                     </button>
-                                    <span class="badge bg-light text-dark border" id="fieldCount">{{ $form->activeFields->count() }} fields</span>
                                 </div>
-                            </h5>
+                            </div>
 
                             @if($form->activeFields->isEmpty())
                             <div class="drop-zone-empty" id="emptyZone">
@@ -309,7 +314,7 @@
             <div class="modal-body bm-body">
                 <input type="hidden" id="editFieldID">
                 <div class="row g-3">
-                    <div class="col-12">
+                    <div class="col-12" id="editLabelWrap">
                         <label class="field-modal-label" id="editLabelText">Label <span class="text-danger" id="editLabelRequired">*</span></label>
                         <input type="text" class="form-control" id="editLabel" maxlength="500">
                     </div>
