@@ -15,7 +15,8 @@
      data-help-text="{{ $field->helpText ?? '' }}"
      data-is-required="{{ $field->isRequired ? '1' : '0' }}"
      data-options="{{ json_encode($field->options ?? []) }}"
-     data-validation="{{ json_encode($field->validation ?? []) }}">
+     data-validation="{{ json_encode($field->validation ?? []) }}"
+     data-field-config="{{ json_encode($field->fieldConfig ?? []) }}">
 
 @if($isHeaderImage)
     {{-- ===== HEADER IMAGE: pinned banner card ===== --}}
@@ -100,6 +101,7 @@
                     @case('file')          fa-file-upload @break
                     @case('image')         fa-image @break
                     @case('paragraph')     fa-paragraph @break
+                    @case('linear_scale')  fa-sliders-h @break
                     @default               fa-question-circle
                 @endswitch
                 me-1 text-muted"></i>

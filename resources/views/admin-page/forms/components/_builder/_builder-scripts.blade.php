@@ -6,6 +6,7 @@ const FORM_ID      = {{ $form->formID }};
 const CSRF_TOKEN   = document.querySelector('meta[name="csrf-token"]').content;
 const FIELD_TYPES  = @json($fieldTypes);
 const CHOICE_TYPES        = ['dropdown', 'radio', 'checkbox'];
+const LINEAR_SCALE_TYPES  = ['linear_scale'];
 const FILE_TYPES          = ['file'];
 const IMAGE_DISPLAY_TYPES = ['image'];
 const HEADER_IMAGE_TYPES  = ['header_image'];
@@ -67,9 +68,18 @@ function openAddFieldModal(type, label) {
     const modalImgFile = document.getElementById('modalImageFile');
     if (modalImgFile) modalImgFile.value = '';
 
-    document.getElementById('optionsSection').style.display    = CHOICE_TYPES.includes(type)        ? '' : 'none';
-    document.getElementById('fileSection').style.display       = FILE_TYPES.includes(type)           ? '' : 'none';
-    document.getElementById('imageUrlSection').style.display   = IMAGE_DISPLAY_TYPES.includes(type)  ? '' : 'none';
+    document.getElementById('optionsSection').style.display      = CHOICE_TYPES.includes(type)       ? '' : 'none';
+    document.getElementById('linearScaleSection').style.display  = LINEAR_SCALE_TYPES.includes(type) ? '' : 'none';
+    document.getElementById('fileSection').style.display         = FILE_TYPES.includes(type)          ? '' : 'none';
+    document.getElementById('imageUrlSection').style.display     = IMAGE_DISPLAY_TYPES.includes(type) ? '' : 'none';
+
+    // Reset linear scale defaults
+    if (LINEAR_SCALE_TYPES.includes(type)) {
+        document.getElementById('modalLinearScaleMin').value      = '1';
+        document.getElementById('modalLinearScaleMax').value      = '5';
+        document.getElementById('modalLinearScaleMinLabel').value = '';
+        document.getElementById('modalLinearScaleMaxLabel').value = '';
+    }
 
     const isDisplay  = DISPLAY_ONLY_TYPES.includes(type);
     const isImageDisp = IMAGE_DISPLAY_TYPES.includes(type);
@@ -141,6 +151,15 @@ function submitAddField() {
             body.validation = {};
             if (maxSizeKB > 0)            body.validation.maxSizeKB     = maxSizeKB;
             if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
+        }
+
+        if (LINEAR_SCALE_TYPES.includes(type)) {
+            body.fieldConfig = {
+                minValue : parseInt(document.getElementById('modalLinearScaleMin').value)      || 1,
+                maxValue : parseInt(document.getElementById('modalLinearScaleMax').value)      || 5,
+                minLabel : document.getElementById('modalLinearScaleMinLabel').value.trim(),
+                maxLabel : document.getElementById('modalLinearScaleMaxLabel').value.trim(),
+            };
         }
 
         fetchOptions = {
@@ -261,6 +280,17 @@ function openEditModal(btn) {
     // Show / hide options section
     const isChoice = CHOICE_TYPES.includes(fieldType);
     document.getElementById('editOptionsSection').style.display = isChoice ? '' : 'none';
+
+    // Show / hide linear scale section
+    const isLinearScale = LINEAR_SCALE_TYPES.includes(fieldType);
+    document.getElementById('editLinearScaleSection').style.display = isLinearScale ? '' : 'none';
+    if (isLinearScale) {
+        const fieldConfig = JSON.parse(card.dataset.fieldConfig || '{}');
+        document.getElementById('editLinearScaleMin').value      = fieldConfig.minValue ?? 1;
+        document.getElementById('editLinearScaleMax').value      = fieldConfig.maxValue ?? 5;
+        document.getElementById('editLinearScaleMinLabel').value = fieldConfig.minLabel ?? '';
+        document.getElementById('editLinearScaleMaxLabel').value = fieldConfig.maxLabel ?? '';
+    }
     if (isChoice) {
         const listEl = document.getElementById('editOptionsListInner');
         listEl.innerHTML = '';
@@ -360,6 +390,15 @@ function submitEditField() {
             if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
         }
 
+        if (LINEAR_SCALE_TYPES.includes(fieldType)) {
+            body.fieldConfig = {
+                minValue : parseInt(document.getElementById('editLinearScaleMin').value)      || 1,
+                maxValue : parseInt(document.getElementById('editLinearScaleMax').value)      || 5,
+                minLabel : document.getElementById('editLinearScaleMinLabel').value.trim(),
+                maxLabel : document.getElementById('editLinearScaleMaxLabel').value.trim(),
+            };
+        }
+
         fetchOptions = {
             method : 'PUT',
             headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
@@ -388,8 +427,9 @@ function submitEditField() {
                 currentEditCard.dataset.helpText     = savedHelpText;
                 currentEditCard.dataset.isRequired   = isRequired ? '1' : '0';
                 if (typeof body !== 'undefined') {
-                    if (body.options    !== undefined) currentEditCard.dataset.options    = JSON.stringify(body.options);
-                    if (body.validation !== undefined) currentEditCard.dataset.validation = JSON.stringify(body.validation);
+                    if (body.options     !== undefined) currentEditCard.dataset.options     = JSON.stringify(body.options);
+                    if (body.validation  !== undefined) currentEditCard.dataset.validation  = JSON.stringify(body.validation);
+                    if (body.fieldConfig !== undefined) currentEditCard.dataset.fieldConfig = JSON.stringify(body.fieldConfig);
                 }
 
                 if (HEADER_IMAGE_TYPES.includes(fieldType)) {
