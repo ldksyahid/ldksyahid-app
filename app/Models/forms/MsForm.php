@@ -233,7 +233,7 @@ class MsForm extends Model
             'idKey'        => 'formID',
             'emptyMessage' => 'No forms created yet.',
             'emptyIcon'    => 'fa-clipboard-list',
-            'colspan'      => 7,
+            'colspan'      => 8,
             'columns'      => [
                 ['key' => 'title',           'type' => 'text',  'label' => 'Form Title'],
                 ['key' => 'status',          'type' => 'badge', 'label' => 'Status',

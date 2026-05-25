@@ -357,6 +357,98 @@
     line-height: 1.45;
 }
 
+/* ─── Linear Scale ─────────────────────────────────────────────── */
+.gf-linear-scale {
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+.gf-scale-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: max-content;
+}
+.gf-scale-options {
+    display: flex;
+    gap: 6px;
+}
+.gf-scale-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    min-width: 36px;
+}
+.gf-scale-number {
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--gf-text-secondary);
+    line-height: 1;
+}
+.gf-scale-radio {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--gf-primary);
+    margin: 0;
+}
+.gf-scale-edge-label {
+    font-size: .78rem;
+    color: var(--gf-text-secondary);
+    white-space: nowrap;
+    font-weight: 500;
+    padding-top: 22px; /* align with radio row */
+}
+[data-theme="dark"] .gf-scale-number,
+[data-theme="dark"] .gf-scale-edge-label {
+    color: var(--gf-text-secondary);
+}
+
+/* ─── Rating (Star) ────────────────────────────────────────────── */
+.gf-rating-wrap {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.gf-rating-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+}
+.gf-rating-input {
+    display: none; /* hide native radio; selection tracked via JS */
+}
+.gf-rating-num {
+    font-size: .78rem;
+    font-weight: 500;
+    color: var(--gf-text-secondary);
+    line-height: 1;
+}
+.gf-star {
+    font-size: 1.6rem;
+    color: #d1d5db;
+    transition: color .12s, transform .1s;
+    line-height: 1;
+}
+.gf-rating-item:hover .gf-star,
+.gf-star.filled {
+    color: #f59e0b;
+}
+.gf-rating-item:active .gf-star {
+    transform: scale(.9);
+}
+[data-theme="dark"] .gf-star {
+    color: #4b5563;
+}
+[data-theme="dark"] .gf-rating-item:hover .gf-star,
+[data-theme="dark"] .gf-star.filled {
+    color: #fbbf24;
+}
+
 /* ─── File Upload ──────────────────────────────────────────────── */
 .gf-file-drop {
     border: 2px dashed var(--gf-border);
