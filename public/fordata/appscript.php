@@ -14,7 +14,7 @@
         CURLOPT_TIMEOUT        => 120,    // time-out on response
     ); 
 
-    $ch = curl_init("https://script.google.com/macros/s/AKfycbyuWr90VNr4VcA3qoA1t1lKyga8nlCqFmjifvEb4ItDpdBfvB6pMMCjbCOMKSH-pPAS/exec?callback=antiredir&nim=".$_GET['nim']."&ultah=".$_GET['ultah']."&exportnim=".urlencode($_GET['exportnim'])."&anakmana=".$_GET['anakmana']);
+    $ch = curl_init("https://script.google.com/macros/s/AKfycbwP170icSsellUP5Lghpk_8idMoXGFUO496kRzvaR9h9OO_xY8IA0RWJbSxLGgP0kvz/exec?callback=antiredir&nim=".$_GET['nim']."&ultah=".$_GET['ultah']."&exportnim=".urlencode($_GET['exportnim'])."&anakmana=".$_GET['anakmana']);
     
     curl_setopt_array($ch, $options);
 

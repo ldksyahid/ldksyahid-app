@@ -10,9 +10,9 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>FORDATA #1 2025</title>
+<title>FORDATA #1 2026</title>
 
-<link rel="icon" href="https://i.ibb.co/F8RStnM/Logo-LDK-Syahid.png">
+<link rel="icon" href="https://i.ibb.co.com/jZq9KsTf/header-gform-fordata-1.png">
 
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
@@ -164,7 +164,7 @@
 
       <!-- GAMBAR YG ADA KABINETNYA, JANLUP DIGANTI -->
 
-      <img src="https://i.ibb.co.com/nqrYsXzd/FORDATA.jpg" class="w3-image"
+      <img src="https://i.ibb.co.com/4nFGDCjj/website-fordata-1.png" class="w3-image"
 
            style="display:block;margin-left:auto;margin-right:auto;padding: 32px;padding-bottom:0px;" width="1008" height="auto">
 
@@ -684,85 +684,169 @@
 
 
 
-      function validateNIM(nim){
+      function validateNIM(nim) {
 
-        nim = nim.toString()
-        var vnim = '{' 
-        if(Number(nim.slice(1,2))>1){nim="0"+nim}
-        vnim += '"angkatan":"'+(Number(nim.slice(2,4))+2000)+'"' //ang
-        vnim += ',"ang_form":0'
-        var id_fak = Number(["01","02","03","04","05","06","07","08","09","10","11","13"].indexOf(nim.slice(4,6))) //id_fak
-        vnim += ',"id_fak":'+id_fak+''
-        vnim += ',"fakultas":"'+(["Fakultas Ilmu Tarbiyah dan Keguruan (FITK)","Fakultas Adab dan Humaniora (FAH)","Fakultas Ushuluddin (FU)","Fakultas Syariah dan Hukum (FSH)","Fakultas Dakwah dan Ilmu Komunikasi (FIDIKOM)","Fakultas Dirasat Islamiyah (FDI)","Fakultas Psikologi (FPSI)","Fakultas Ekonomi dan Bisnis (FEB)","Fakultas Sains dan Teknologi (FST)","Fakultas Ilmu Kesehatan (FIKES)","Fakultas Ilmu Sosial dan Ilmu Politik (FISIP)","Fakultas Kedokteran (FK)"][id_fak])+'"'
-        var temp_jur
-        if(Number(nim.slice(0,1))==0){
-          temp_jur = (["0101","0102","0103","0104","0105","0107","0108","0109","0106","0110","0111","0112","0201","0202","0203","0205","0204","0301","0302","0303","0304","0305","0401","0402","0405","0406","0403","0404","0501","0502","0503","0504","0505","0506","0601","0701","0801","0802","0803","0804","0805","0901","0902","0903","0904","0905","0906","0906","0907","1001","1002","1003","1101","1102","1103","1301"].indexOf(nim.slice(4,8))) //jur
-        }else{
-          temp_jur = (["0110","0120","0130","0140","0150","0161","0162","0163","0170","0182","0183","0184","0210","0220","0240","0251","0260","0321","0331","0340","0360","0380","0430","0440","0453","0454","0480","0490","0510","0511","0520","0530","0540","0541","0600","0700","0810","0820","0840","0850","0860","0910","0920","0930","0940","0950","0960","0970","0980","1010","1020","1040","1110","1120","1130","1330"].indexOf(nim.slice(4,8))) //jur
-        }
-        vnim += ',"jurusan":"'+["Pendidikan Agama Islam","Pendidikan Bahasa Arab","Pendidikan Bahasa dan Sastra Indonesia","Pendidikan Bahasa Inggris","Pendidikan Ilmu Pengetahuan Sosial","Pendidikan Biologi","Pendidikan Kimia","Pendidikan Fisika","Pendidikan Matematika","Manajemen Pendidikan","Pendidikan Guru Madrasah Ibtidaiyah","Pendidikan Islam Anak Usia Dini","Bahasa dan Sastra Arab","Sejarah dan Kebudayaan Islam","Tarjamah","Ilmu Perpustakaan","Bahasa dan Sastra Inggris","Studi Agama-Agama","Aqidah dan Filsafat Islam","Ilmu Al-Quran dan Tafsir","Ilmu Hadist","Ilmu Tasawuf","Perbandingan Mazhab dan Hukum","Hukum Keluarga Islam","Hukum Tatanegara","Hukum Pidana Islam","Ilmu hukum","Hukum Ekonomi Syariah","Komunikasi dan Penyiaran Islam","Jurnalistik","Bimbingan dan Penyuluhan Islam","Manajemen Dakwah","Pengembangan Masyarakat Islam","Kesejahteraan Sosial","Dirasat Islamiyah","Psikologi","Manajemen","Akuntansi","Studi pembangunan","Perbankan Syariah","Ekonomi Syariah","Teknik Informatika","Agribisnis","Sistem Informatika","Matematika","Biologi","Kimia","Fisika","Teknik Pertambangan","Kesehatan Masyarakat","Farmasi","Ilmu Keperawatan","Sosiologi","Ilmu Politik","Ilmu Hubungan Internasional","Kedokteran"][temp_jur]+'"'
-        if(Number(nim.slice(0,1))==0){nim=nim.slice(1,15)}
-        vnim += ',"nim":"'+nim+'"';
-        vnim += ',"status":1}';
-        vnim = JSON.parse(vnim)
-        vnim.ang_form = (43-(vnim.angkatan-2000)*2)
-        if(vnim.ang_form==1){vnim.ang_form+=' (Satu)'}else if(vnim.ang_form==3){vnim.ang_form+=' (Tiga)'}else if(vnim.ang_form==5){vnim.ang_form+=' (Lima)'}
-        if(vnim.angkatan<2018||2050<vnim.angkatan){vnim.status=0}
-        if(vnim.fakultas==undefined){vnim.status=0}
-        if(vnim.jurusan=="undefined"){vnim.status=0}
-        return vnim
+  nim = nim.toString()
+  var vnim = '{'
+  
+  // Format mapping untuk angkatan 2025+
+  const prodiMapping2025 = {
+    "01": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Agama Islam" },
+    "02": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Bahasa Arab" },
+    "03": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Bahasa dan Sastra Indonesia" },
+    "04": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Bahasa Inggris" },
+    "05": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Ilmu Pengetahuan Sosial" },
+    "06": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Matematika" },
+    "07": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Biologi" },
+    "08": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Kimia" },
+    "09": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Fisika" },
+    "10": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Manajemen Pendidikan" },
+    "11": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Guru Madrasah Ibtidaiyah" },
+    "12": { fakultas: "Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", prodi: "Pendidikan Islam Anak Usia Dini" },
+    "13": { fakultas: "Fakultas Adab dan Humaniora (FAH)", prodi: "Bahasa dan Sastra Arab" },
+    "14": { fakultas: "Fakultas Adab dan Humaniora (FAH)", prodi: "Sejarah Peradaban Islam" },
+    "15": { fakultas: "Fakultas Adab dan Humaniora (FAH)", prodi: "Tarjamah" },
+    "16": { fakultas: "Fakultas Adab dan Humaniora (FAH)", prodi: "Bahasa dan Sastra Inggris" },
+    "17": { fakultas: "Fakultas Adab dan Humaniora (FAH)", prodi: "Ilmu Perpustakaan" },
+    "18": { fakultas: "Fakultas Ushuluddin (FU)", prodi: "Studi Agama-Agama" },
+    "19": { fakultas: "Fakultas Ushuluddin (FU)", prodi: "Aqidah dan Filsafat Islam" },
+    "20": { fakultas: "Fakultas Ushuluddin (FU)", prodi: "Ilmu Al-Quran dan Tafsir" },
+    "21": { fakultas: "Fakultas Ushuluddin (FU)", prodi: "Ilmu Hadist" },
+    "22": { fakultas: "Fakultas Ushuluddin (FU)", prodi: "Ilmu Tasawuf" },
+    "23": { fakultas: "Fakultas Syariah dan Hukum (FSH)", prodi: "Perbandingan Mazhab dan Hukum" },
+    "24": { fakultas: "Fakultas Syariah dan Hukum (FSH)", prodi: "Hukum Keluarga Islam" },
+    "25": { fakultas: "Fakultas Syariah dan Hukum (FSH)", prodi: "Ilmu hukum" },
+    "26": { fakultas: "Fakultas Syariah dan Hukum (FSH)", prodi: "Hukum Ekonomi Syariah" },
+    "27": { fakultas: "Fakultas Syariah dan Hukum (FSH)", prodi: "Hukum Tatanegara" },
+    "28": { fakultas: "Fakultas Syariah dan Hukum (FSH)", prodi: "Hukum Pidana Islam" },
+    "29": { fakultas: "Fakultas Dakwah dan Ilmu Komunikasi (FIDIKOM)", prodi: "Komunikasi dan Penyiaran Islam" },
+    "30": { fakultas: "Fakultas Dakwah dan Ilmu Komunikasi (FIDIKOM)", prodi: "Jurnalistik" },
+    "31": { fakultas: "Fakultas Dakwah dan Ilmu Komunikasi (FIDIKOM)", prodi: "Bimbingan dan Penyuluhan Islam" },
+    "32": { fakultas: "Fakultas Dakwah dan Ilmu Komunikasi (FIDIKOM)", prodi: "Manajemen Dakwah" },
+    "33": { fakultas: "Fakultas Dakwah dan Ilmu Komunikasi (FIDIKOM)", prodi: "Pengembangan Masyarakat Islam" },
+    "34": { fakultas: "Fakultas Dakwah dan Ilmu Komunikasi (FIDIKOM)", prodi: "Kesejahteraan Sosial" },
+    "35": { fakultas: "Fakultas Dirasat Islamiyah (FDI)", prodi: "Dirasat Islamiyah" },
+    "36": { fakultas: "Fakultas Psikologi (FPSI)", prodi: "Psikologi" },
+    "37": { fakultas: "Fakultas Ekonomi dan Bisnis (FEB)", prodi: "Manajemen" },
+    "38": { fakultas: "Fakultas Ekonomi dan Bisnis (FEB)", prodi: "Akuntansi" },
+    "39": { fakultas: "Fakultas Ekonomi dan Bisnis (FEB)", prodi: "Ekonomi Pembangunan" },
+    "40": { fakultas: "Fakultas Ekonomi dan Bisnis (FEB)", prodi: "Perbankan Syariah" },
+    "41": { fakultas: "Fakultas Ekonomi dan Bisnis (FEB)", prodi: "Ekonomi Syariah" },
+    "42": { fakultas: "Fakultas Sains dan Teknologi (FST)", prodi: "Teknik Informatika" },
+    "43": { fakultas: "Fakultas Sains dan Teknologi (FST)", prodi: "Agribisnis" },
+    "44": { fakultas: "Fakultas Sains dan Teknologi (FST)", prodi: "Sistem Informatika" },
+    "45": { fakultas: "Fakultas Sains dan Teknologi (FST)", prodi: "Matematika" },
+    "47": { fakultas: "Fakultas Sains dan Teknologi (FST)", prodi: "Kimia" },
+    "50": { fakultas: "Fakultas Ilmu Kesehatan (FIKES)", prodi: "Kesehatan Masyarakat" },
+    "51": { fakultas: "Fakultas Ilmu Kesehatan (FIKES)", prodi: "Farmasi" },
+    "54": { fakultas: "Fakultas Ilmu Sosial dan Ilmu Politik (FISIP)", prodi: "Ilmu Politik" },
+    "55": { fakultas: "Fakultas Ilmu Sosial dan Ilmu Politik (FISIP)", prodi: "Ilmu Hubungan Internasional" }
+  }
 
-      }
+  // Deteksi format NIM berdasarkan panjang
+  if (nim.length === 10 && nim[0] === '1' && nim[3] === '1' && nim[6] === '0') {
+    // Format 2025+ : 1XX1XX0XXX
+    const angkatanCode = nim.slice(1, 3)
+    const prodiCode = nim.slice(4, 6)
+    const kodeUnik = nim.slice(7, 10)
+    const angkatan = 2000 + Number(angkatanCode)
+    
+    vnim += '"angkatan":"' + angkatan + '"'
+    vnim += ',"ang_form":0'
+    
+    // Cek apakah kode prodi valid
+    if (prodiMapping2025[prodiCode]) {
+      const prodiInfo = prodiMapping2025[prodiCode]
+      vnim += ',"id_fak":0'  // ID fak bisa disesuaikan jika perlu
+      vnim += ',"fakultas":"' + prodiInfo.fakultas + '"'
+      vnim += ',"jurusan":"' + prodiInfo.prodi + '"'
+      vnim += ',"kode_unik":"' + kodeUnik + '"'
+      vnim += ',"nim_format":"2025+"'
+    } else {
+      vnim += ',"status":0}';
+      vnim = JSON.parse(vnim)
+      return vnim
+    }
+  } else {
+    // Format lama 2018-2024 : 0HHPPJJJJJJJJJ (14 digit)
+    if (Number(nim.slice(1, 2)) > 1) { nim = "0" + nim }
+    vnim += '"angkatan":"' + (Number(nim.slice(2, 4)) + 2000) + '"' //ang
+    vnim += ',"ang_form":0'
+    vnim += ',"nim_format":"2018-2024"'
+    var id_fak = Number(["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "13"].indexOf(nim.slice(4, 6))) //id_fak
+    vnim += ',"id_fak":' + id_fak + ''
+    vnim += ',"fakultas":"' + (["Fakultas Ilmu Tarbiyah dan Keguruan (FITK)", "Fakultas Adab dan Humaniora (FAH)", "Fakultas Ushuluddin (FU)", "Fakultas Syariah dan Hukum (FSH)", "Fakultas Dakwah dan Ilmu Komunikasi (FIDIKOM)", "Fakultas Dirasat Islamiyah (FDI)", "Fakultas Psikologi (FPSI)", "Fakultas Ekonomi dan Bisnis (FEB)", "Fakultas Sains dan Teknologi (FST)", "Fakultas Ilmu Kesehatan (FIKES)", "Fakultas Ilmu Sosial dan Ilmu Politik (FISIP)", "Fakultas Kedokteran (FK)"][id_fak]) + '"'
+    var temp_jur
+    if (Number(nim.slice(0, 1)) == 0) {
+      temp_jur = (["0101", "0102", "0103", "0104", "0105", "0107", "0108", "0109", "0106", "0110", "0111", "0112", "0201", "0202", "0203", "0205", "0204", "0301", "0302", "0303", "0304", "0305", "0401", "0402", "0405", "0406", "0403", "0404", "0501", "0502", "0503", "0504", "0505", "0506", "0601", "0701", "0801", "0802", "0803", "0804", "0805", "0901", "0902", "0903", "0904", "0905", "0906", "0906", "0907", "1001", "1002", "1003", "1101", "1102", "1103", "1301"].indexOf(nim.slice(4, 8))) //jur
+    } else {
+      temp_jur = (["0110", "0120", "0130", "0140", "0150", "0161", "0162", "0163", "0170", "0182", "0183", "0184", "0210", "0220", "0240", "0251", "0260", "0321", "0331", "0340", "0360", "0380", "0430", "0440", "0453", "0454", "0480", "0490", "0510", "0511", "0520", "0530", "0540", "0541", "0600", "0700", "0810", "0820", "0840", "0850", "0860", "0910", "0920", "0930", "0940", "0950", "0960", "0970", "0980", "1010", "1020", "1040", "1110", "1120", "1130", "1330"].indexOf(nim.slice(4, 8))) //jur
+    }
+    vnim += ',"jurusan":"' + ["Pendidikan Agama Islam", "Pendidikan Bahasa Arab", "Pendidikan Bahasa dan Sastra Indonesia", "Pendidikan Bahasa Inggris", "Pendidikan Ilmu Pengetahuan Sosial", "Pendidikan Biologi", "Pendidikan Kimia", "Pendidikan Fisika", "Pendidikan Matematika", "Manajemen Pendidikan", "Pendidikan Guru Madrasah Ibtidaiyah", "Pendidikan Islam Anak Usia Dini", "Bahasa dan Sastra Arab", "Sejarah dan Kebudayaan Islam", "Tarjamah", "Ilmu Perpustakaan", "Bahasa dan Sastra Inggris", "Studi Agama-Agama", "Aqidah dan Filsafat Islam", "Ilmu Al-Quran dan Tafsir", "Ilmu Hadist", "Ilmu Tasawuf", "Perbandingan Mazhab dan Hukum", "Hukum Keluarga Islam", "Hukum Tatanegara", "Hukum Pidana Islam", "Ilmu hukum", "Hukum Ekonomi Syariah", "Komunikasi dan Penyiaran Islam", "Jurnalistik", "Bimbingan dan Penyuluhan Islam", "Manajemen Dakwah", "Pengembangan Masyarakat Islam", "Kesejahteraan Sosial", "Dirasat Islamiyah", "Psikologi", "Manajemen", "Akuntansi", "Studi pembangunan", "Perbankan Syariah", "Ekonomi Syariah", "Teknik Informatika", "Agribisnis", "Sistem Informatika", "Matematika", "Biologi", "Kimia", "Fisika", "Teknik Pertambangan", "Kesehatan Masyarakat", "Farmasi", "Ilmu Keperawatan", "Sosiologi", "Ilmu Politik", "Ilmu Hubungan Internasional", "Kedokteran"][temp_jur] + '"'
+    if (Number(nim.slice(0, 1)) == 0) { nim = nim.slice(1, 15) }
+  }
+  
+  vnim += ',"nim":"' + nim + '"';
+  vnim += ',"status":1}';
+  vnim = JSON.parse(vnim)
+  
+  // Validasi angkatan
+  if (vnim.angkatan < 2018 || 2050 < vnim.angkatan) { vnim.status = 0 }
+  if (vnim.fakultas == undefined) { vnim.status = 0 }
+  if (vnim.jurusan == "undefined") { vnim.status = 0 }
+  
+  // Hitung ang_form hanya untuk format lama
+  if (vnim.nim_format === "2018-2024") {
+    vnim.ang_form = (43 - (vnim.angkatan - 2000) * 2)
+    if (vnim.ang_form == 1) { vnim.ang_form += ' (Satu)' } else if (vnim.ang_form == 3) { vnim.ang_form += ' (Tiga)' } else if (vnim.ang_form == 5) { vnim.ang_form += ' (Lima)' }
+  }
+  
+  return vnim
+
+}
 
 
 
-      function cek(){
+function cek() {
 
-        var nnim = document.getElementById('nim').value
+  var nnim = document.getElementById('nim').value
 
-        if(!nnim){
+  if (!nnim) {
 
-          nnim = nim
+    nnim = nim
 
-        }
+  }
 
-        if(nnim.toString().length<14){
+  const nimLength = nnim.toString().length
+  
+  // Deteksi format: 2025+ (10 digit dengan pola 1XX1XX0XXX) atau lama (14 digit)
+  const isFormat2025Plus = nimLength === 10 && nnim[0] === '1' && nnim[3] === '1' && nnim[6] === '0'
+  const isFormatLama = nimLength === 14
 
-          document.getElementById('nnnim').innerHTML = 'Yak terusin dulu... Masih kurang angkanya'
+  if (nimLength < 10) {
+    document.getElementById('nnnim').innerHTML = 'Yak terusin dulu... Masih kurang angkanya'
+  } else if (isFormat2025Plus || isFormatLama) {
+    // ALLOW CLICK CEK
+    var datanim = validateNIM(nnim)
 
-        }else
+    if (datanim.status == 1) {
+      document.getElementById('nnnim').innerHTML = 'Angkatan ' + datanim.angkatan + '<br>' + datanim.fakultas + '<br>Jurusan ' + datanim.jurusan
 
-        if(nnim.toString().length==14){
+      bolehlanjut = 1
 
-          //ALLOW CLICK CEK
+      var ejur = ["&entry.1360851078=", "&entry.718342684=", "&entry.886150094=", "&entry.1106153282=", "&entry.3573348=", "&entry.1403196155=", "&entry.1870609775=", "&entry.193691470=", "&entry.2076898732=", "&entry.1467803691=", "&entry.681610042=", "&entry.1393829889="][datanim.id_fak]
 
-          var datanim = validateNIM(nnim)
+      exportnim = { "fakultas": datanim.fakultas, "angkatan": datanim.angkatan, "jurusan": datanim.jurusan, "nim": nnim }
 
-          if(datanim.status==1){
+      anak_mana = [datanim.fakultas, datanim.angkatan]
+    } else {
+      document.getElementById('nnnim').innerHTML = 'Ada yang salah, coba di cek lagi'
+    }
+  } else {
+    document.getElementById('nnnim').innerHTML = '...Cek format NIM Anda (10 atau 14 digit)'
+  }
 
-            document.getElementById('nnnim').innerHTML = 'Angkatan '+datanim.angkatan+'<br>'+datanim.fakultas+'<br>Jurusan '+datanim.jurusan
-
-            bolehlanjut = 1
-
-            var ejur = ["&entry.1360851078=","&entry.718342684=","&entry.886150094=","&entry.1106153282=","&entry.3573348=","&entry.1403196155=","&entry.1870609775=","&entry.193691470=","&entry.2076898732=","&entry.1467803691=","&entry.681610042=","&entry.1393829889="][datanim.id_fak]
-
-
-
-            exportnim = {"fakultas":datanim.fakultas,"angkatan":datanim.angkatan,"jurusan":datanim.jurusan, "nim":nnim}
-            
-            anak_mana = [datanim.fakultas, datanim.angkatan]
-
-        }else{
-
-          document.getElementById('nnnim').innerHTML = 'Ada yang salah, coba di cek lagi'
-
-        }}else{
-
-          document.getElementById('nnnim').innerHTML = '...Eh kelebihan angkanya'
-
-        }
-
-      }
+}
 
 
 
