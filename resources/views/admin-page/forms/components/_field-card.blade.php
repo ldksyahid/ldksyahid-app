@@ -102,6 +102,7 @@
                     @case('image')         fa-image @break
                     @case('paragraph')     fa-paragraph @break
                     @case('linear_scale')  fa-sliders-h @break
+                    @case('rating')        fa-star @break
                     @default               fa-question-circle
                 @endswitch
                 me-1 text-muted"></i>

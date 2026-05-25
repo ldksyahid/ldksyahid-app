@@ -408,6 +408,41 @@
     </div>
     @break
 
+{{-- ===== RATING ===== --}}
+@case('rating')
+    @php
+        $rtConfig = $field->fieldConfig ?? [];
+        $rtMax    = (int) ($rtConfig['maxRating'] ?? 5);
+    @endphp
+    <div class="gf-card {{ $isError ? 'has-error' : '' }}">
+        <label class="gf-label">
+            {{ $field->label }}
+            @if($field->isRequired)<span class="gf-required">*</span>@endif
+        </label>
+        @if($field->helpText)
+        <p class="gf-help">{{ $field->helpText }}</p>
+        @endif
+        <div class="gf-rating-wrap" data-field="{{ $fieldName }}">
+            @for($n = 1; $n <= $rtMax; $n++)
+            <label class="gf-rating-item">
+                <input
+                    type="radio"
+                    class="gf-rating-input"
+                    name="{{ $fieldName }}"
+                    id="{{ $fieldID }}_{{ $n }}"
+                    value="{{ $n }}"
+                    {{ (string)$oldValue === (string)$n ? 'checked' : '' }}
+                    {{ $field->isRequired ? 'required' : '' }}
+                >
+                <span class="gf-rating-num">{{ $n }}</span>
+                <i class="gf-star far fa-star"></i>
+            </label>
+            @endfor
+        </div>
+        <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
+    </div>
+    @break
+
 {{-- ===== IMAGE (display only — embedded image in form) ===== --}}
 @case('image')
     @if($field->helpText)

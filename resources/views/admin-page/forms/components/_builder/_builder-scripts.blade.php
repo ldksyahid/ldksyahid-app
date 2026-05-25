@@ -7,6 +7,7 @@ const CSRF_TOKEN   = document.querySelector('meta[name="csrf-token"]').content;
 const FIELD_TYPES  = @json($fieldTypes);
 const CHOICE_TYPES        = ['dropdown', 'radio', 'checkbox'];
 const LINEAR_SCALE_TYPES  = ['linear_scale'];
+const RATING_TYPES        = ['rating'];
 const FILE_TYPES          = ['file'];
 const IMAGE_DISPLAY_TYPES = ['image'];
 const HEADER_IMAGE_TYPES  = ['header_image'];
@@ -70,6 +71,7 @@ function openAddFieldModal(type, label) {
 
     document.getElementById('optionsSection').style.display      = CHOICE_TYPES.includes(type)       ? '' : 'none';
     document.getElementById('linearScaleSection').style.display  = LINEAR_SCALE_TYPES.includes(type) ? '' : 'none';
+    document.getElementById('ratingSection').style.display       = RATING_TYPES.includes(type)       ? '' : 'none';
     document.getElementById('fileSection').style.display         = FILE_TYPES.includes(type)          ? '' : 'none';
     document.getElementById('imageUrlSection').style.display     = IMAGE_DISPLAY_TYPES.includes(type) ? '' : 'none';
 
@@ -79,6 +81,13 @@ function openAddFieldModal(type, label) {
         document.getElementById('modalLinearScaleMax').value      = '5';
         document.getElementById('modalLinearScaleMinLabel').value = '';
         document.getElementById('modalLinearScaleMaxLabel').value = '';
+    }
+
+    // Reset rating defaults + live preview
+    if (RATING_TYPES.includes(type)) {
+        const sel = document.getElementById('modalRatingMax');
+        sel.value = '5';
+        updateRatingPreview('modalRatingPreview', 5);
     }
 
     const isDisplay  = DISPLAY_ONLY_TYPES.includes(type);
@@ -154,11 +163,19 @@ function submitAddField() {
         }
 
         if (LINEAR_SCALE_TYPES.includes(type)) {
+            const lsMin = parseInt(document.getElementById('modalLinearScaleMin').value);
+            const lsMax = parseInt(document.getElementById('modalLinearScaleMax').value);
             body.fieldConfig = {
-                minValue : parseInt(document.getElementById('modalLinearScaleMin').value)      || 1,
-                maxValue : parseInt(document.getElementById('modalLinearScaleMax').value)      || 5,
+                minValue : isNaN(lsMin) ? 0 : lsMin,
+                maxValue : isNaN(lsMax) ? 5 : lsMax,
                 minLabel : document.getElementById('modalLinearScaleMinLabel').value.trim(),
                 maxLabel : document.getElementById('modalLinearScaleMaxLabel').value.trim(),
+            };
+        }
+
+        if (RATING_TYPES.includes(type)) {
+            body.fieldConfig = {
+                maxRating: parseInt(document.getElementById('modalRatingMax').value) || 5,
             };
         }
 
@@ -291,6 +308,17 @@ function openEditModal(btn) {
         document.getElementById('editLinearScaleMinLabel').value = fieldConfig.minLabel ?? '';
         document.getElementById('editLinearScaleMaxLabel').value = fieldConfig.maxLabel ?? '';
     }
+
+    // Show / hide rating section
+    const isRating = RATING_TYPES.includes(fieldType);
+    document.getElementById('editRatingSection').style.display = isRating ? '' : 'none';
+    if (isRating) {
+        const fieldConfig = JSON.parse(card.dataset.fieldConfig || '{}');
+        const maxR = fieldConfig.maxRating ?? 5;
+        const sel  = document.getElementById('editRatingMax');
+        sel.value  = maxR;
+        updateRatingPreview('editRatingPreview', maxR);
+    }
     if (isChoice) {
         const listEl = document.getElementById('editOptionsListInner');
         listEl.innerHTML = '';
@@ -360,6 +388,7 @@ function submitEditField() {
     if (currentEditCard) currentEditCard.classList.add('field-card--saving');
 
     let fetchOptions;
+    let body = null;
 
     if (IMAGE_DISPLAY_TYPES.includes(fieldType) || HEADER_IMAGE_TYPES.includes(fieldType)) {
         // Image / header_image field: multipart/form-data — may contain a new image file
@@ -374,7 +403,7 @@ function submitEditField() {
             body   : fd,
         };
     } else {
-        const body = { label, placeholder, helpText, isRequired };
+        body = { label, placeholder, helpText, isRequired };
 
         if (CHOICE_TYPES.includes(fieldType)) {
             body.options = Array.from(document.querySelectorAll('.edit-option-input'))
@@ -391,11 +420,19 @@ function submitEditField() {
         }
 
         if (LINEAR_SCALE_TYPES.includes(fieldType)) {
+            const lsMin = parseInt(document.getElementById('editLinearScaleMin').value);
+            const lsMax = parseInt(document.getElementById('editLinearScaleMax').value);
             body.fieldConfig = {
-                minValue : parseInt(document.getElementById('editLinearScaleMin').value)      || 1,
-                maxValue : parseInt(document.getElementById('editLinearScaleMax').value)      || 5,
+                minValue : isNaN(lsMin) ? 0 : lsMin,
+                maxValue : isNaN(lsMax) ? 5 : lsMax,
                 minLabel : document.getElementById('editLinearScaleMinLabel').value.trim(),
                 maxLabel : document.getElementById('editLinearScaleMaxLabel').value.trim(),
+            };
+        }
+
+        if (RATING_TYPES.includes(fieldType)) {
+            body.fieldConfig = {
+                maxRating: parseInt(document.getElementById('editRatingMax').value) || 5,
             };
         }
 
@@ -426,7 +463,7 @@ function submitEditField() {
                 currentEditCard.dataset.placeholder  = placeholder;
                 currentEditCard.dataset.helpText     = savedHelpText;
                 currentEditCard.dataset.isRequired   = isRequired ? '1' : '0';
-                if (typeof body !== 'undefined') {
+                if (body) {
                     if (body.options     !== undefined) currentEditCard.dataset.options     = JSON.stringify(body.options);
                     if (body.validation  !== undefined) currentEditCard.dataset.validation  = JSON.stringify(body.validation);
                     if (body.fieldConfig !== undefined) currentEditCard.dataset.fieldConfig = JSON.stringify(body.fieldConfig);
@@ -699,6 +736,18 @@ function addSection() {
         updateFieldCount(1);
         Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `Section "${title}" added.`, showConfirmButton: false, timer: 2500, timerProgressBar: true });
     });
+}
+
+// ===== RATING PREVIEW =====
+function updateRatingPreview(containerId, max) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = '';
+    for (let i = 1; i <= max; i++) {
+        const icon = document.createElement('i');
+        icon.className = 'far fa-star';
+        el.appendChild(icon);
+    }
 }
 
 function showAlert(type, message) {

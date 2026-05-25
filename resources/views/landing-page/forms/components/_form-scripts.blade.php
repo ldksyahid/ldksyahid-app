@@ -17,6 +17,49 @@
         });
     });
 
+    // ── Star rating interactivity ───────────────────────────────────
+    document.querySelectorAll('.gf-rating-wrap').forEach(function(wrap) {
+        var items = Array.from(wrap.querySelectorAll('.gf-rating-item'));
+
+        function setFilled(upTo) {
+            items.forEach(function(item, idx) {
+                var star = item.querySelector('.gf-star');
+                if (!star) return;
+                if (idx <= upTo) {
+                    star.classList.replace('far', 'fas');
+                    star.classList.add('filled');
+                } else {
+                    star.classList.replace('fas', 'far');
+                    star.classList.remove('filled');
+                }
+            });
+        }
+
+        function getCurrentSelected() {
+            var checked = wrap.querySelector('.gf-rating-input:checked');
+            if (!checked) return -1;
+            return items.findIndex(function(it) { return it.querySelector('.gf-rating-input') === checked; });
+        }
+
+        // Restore persisted value on page load
+        var sel = getCurrentSelected();
+        if (sel >= 0) setFilled(sel);
+
+        items.forEach(function(item, idx) {
+            var input = item.querySelector('.gf-rating-input');
+
+            item.addEventListener('mouseenter', function() { setFilled(idx); });
+            item.addEventListener('mouseleave', function() {
+                var s = getCurrentSelected();
+                if (s >= 0) setFilled(s); else setFilled(-1);
+            });
+            item.addEventListener('click', function() {
+                if (input) input.checked = true;
+                setFilled(idx);
+            });
+        });
+    });
+
     // ── File upload drag & drop ─────────────────────────────────────
     document.querySelectorAll('.gf-file-drop').forEach(function (drop) {
         var input    = drop.querySelector('input[type="file"]');
