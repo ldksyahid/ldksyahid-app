@@ -256,6 +256,33 @@
                         </button>
                     </div>
 
+                    {{-- Linear Scale config --}}
+                    <div class="col-12" id="linearScaleSection" style="display:none;">
+                        <label class="field-modal-label">Scale Range <span class="text-danger">*</span></label>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <select class="form-select form-select-sm" id="modalLinearScaleMin" style="width:80px;">
+                                <option value="0">0</option>
+                                <option value="1" selected>1</option>
+                            </select>
+                            <span class="text-muted">to</span>
+                            <select class="form-select form-select-sm" id="modalLinearScaleMax" style="width:80px;">
+                                @foreach([2,3,4,5,6,7,8,9,10] as $v)
+                                <option value="{{ $v }}" {{ $v === 5 ? 'selected' : '' }}>{{ $v }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="field-modal-label text-muted" style="font-size:.78rem;">Minimum Label <small>(optional)</small></label>
+                                <input type="text" class="form-control form-control-sm" id="modalLinearScaleMinLabel" placeholder="e.g. Poor" maxlength="100">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="field-modal-label text-muted" style="font-size:.78rem;">Maximum Label <small>(optional)</small></label>
+                                <input type="text" class="form-control form-control-sm" id="modalLinearScaleMaxLabel" placeholder="e.g. Excellent" maxlength="100">
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- File validation --}}
                     <div class="col-12" id="fileSection" style="display:none;">
                         <div class="mb-2">
@@ -352,6 +379,33 @@
                         <button type="button" class="btn btn-sm btn-outline-secondary mt-1" onclick="addEditOption()">
                             <i class="fa fa-plus me-1"></i> Add Option
                         </button>
+                    </div>
+
+                    {{-- Linear Scale config (edit) --}}
+                    <div class="col-12" id="editLinearScaleSection" style="display:none;">
+                        <label class="field-modal-label">Scale Range <span class="text-danger">*</span></label>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <select class="form-select form-select-sm" id="editLinearScaleMin" style="width:80px;">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                            </select>
+                            <span class="text-muted">to</span>
+                            <select class="form-select form-select-sm" id="editLinearScaleMax" style="width:80px;">
+                                @foreach([2,3,4,5,6,7,8,9,10] as $v)
+                                <option value="{{ $v }}">{{ $v }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="field-modal-label text-muted" style="font-size:.78rem;">Minimum Label <small>(optional)</small></label>
+                                <input type="text" class="form-control form-control-sm" id="editLinearScaleMinLabel" placeholder="e.g. Poor" maxlength="100">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="field-modal-label text-muted" style="font-size:.78rem;">Maximum Label <small>(optional)</small></label>
+                                <input type="text" class="form-control form-control-sm" id="editLinearScaleMaxLabel" placeholder="e.g. Excellent" maxlength="100">
+                            </div>
+                        </div>
                     </div>
 
                     {{-- File validation (file / image) --}}

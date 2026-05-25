@@ -357,6 +357,54 @@
     line-height: 1.45;
 }
 
+/* ─── Linear Scale ─────────────────────────────────────────────── */
+.gf-linear-scale {
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+.gf-scale-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: max-content;
+}
+.gf-scale-options {
+    display: flex;
+    gap: 6px;
+}
+.gf-scale-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    min-width: 36px;
+}
+.gf-scale-number {
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--gf-text-secondary);
+    line-height: 1;
+}
+.gf-scale-radio {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--gf-primary);
+    margin: 0;
+}
+.gf-scale-edge-label {
+    font-size: .78rem;
+    color: var(--gf-text-secondary);
+    white-space: nowrap;
+    font-weight: 500;
+    padding-top: 22px; /* align with radio row */
+}
+[data-theme="dark"] .gf-scale-number,
+[data-theme="dark"] .gf-scale-edge-label {
+    color: var(--gf-text-secondary);
+}
+
 /* ─── File Upload ──────────────────────────────────────────────── */
 .gf-file-drop {
     border: 2px dashed var(--gf-border);

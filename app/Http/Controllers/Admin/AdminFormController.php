@@ -438,7 +438,7 @@ class AdminFormController extends Controller
         }
 
         $validated = $request->validate([
-            'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph,header_image',
+            'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph,header_image,linear_scale',
             'label'                  => [\Illuminate\Validation\Rule::requiredIf(!in_array($request->input('fieldType'), ['image', 'section_break', 'header_image'])), 'nullable', 'string', 'max:500'],
             'placeholder'            => 'nullable|string|max:255',
             'helpText'               => 'nullable|string|max:2000',
@@ -451,6 +451,11 @@ class AdminFormController extends Controller
             'validation.maxSizeKB'   => 'nullable|integer|min:1',
             'validation.acceptedTypes' => 'nullable|array',
             'imageFile'              => 'nullable|image|max:5120',
+            'fieldConfig'            => 'nullable|array',
+            'fieldConfig.minValue'   => 'nullable|integer|min:0',
+            'fieldConfig.maxValue'   => 'nullable|integer|min:1',
+            'fieldConfig.minLabel'   => 'nullable|string|max:100',
+            'fieldConfig.maxLabel'   => 'nullable|string|max:100',
         ]);
 
         try {
@@ -473,6 +478,7 @@ class AdminFormController extends Controller
                 'sortOrder'     => $maxOrder + 1,
                 'options'       => $validated['options']        ?? null,
                 'validation'    => $validated['validation']     ?? null,
+                'fieldConfig'   => $validated['fieldConfig']    ?? null,
                 'flagActive'    => true,
                 'createdDate'   => $now,
             ]);
@@ -564,6 +570,7 @@ class AdminFormController extends Controller
             'validation'    => 'nullable|array',
             'defaultValue'  => 'nullable|string|max:1000',
             'imageFile'     => 'nullable|image|max:5120',
+            'fieldConfig'   => 'nullable|array',
         ]);
 
         $labelChanged      = $field->label !== ($validated['label'] ?? '');
@@ -626,6 +633,9 @@ class AdminFormController extends Controller
             'options'      => $validated['options']       ?? null,
             'validation'   => $validated['validation']    ?? null,
             'defaultValue' => $validated['defaultValue']  ?? null,
+            'fieldConfig'  => array_key_exists('fieldConfig', $validated)
+                                ? ($validated['fieldConfig'] ?? null)
+                                : $field->fieldConfig,
             'editedDate'   => Carbon::now(),
         ]);
 
@@ -876,8 +886,9 @@ class AdminFormController extends Controller
             ['type' => 'time',         'label' => 'Time',           'icon' => 'fa-clock',              'group' => 'Date & Time'],
             ['type' => 'datetime',     'label' => 'Date & Time',    'icon' => 'fa-calendar-alt',       'group' => 'Date & Time'],
             ['type' => 'dropdown',     'label' => 'Dropdown',       'icon' => 'fa-chevron-circle-down','group' => 'Choice'],
-            ['type' => 'radio',        'label' => 'Multiple Choice', 'icon' => 'fa-dot-circle',        'group' => 'Choice'],
-            ['type' => 'checkbox',     'label' => 'Checkboxes',     'icon' => 'fa-check-square',       'group' => 'Choice'],
+            ['type' => 'radio',         'label' => 'Multiple Choice', 'icon' => 'fa-dot-circle',        'group' => 'Choice'],
+            ['type' => 'checkbox',      'label' => 'Checkboxes',     'icon' => 'fa-check-square',       'group' => 'Choice'],
+            ['type' => 'linear_scale',  'label' => 'Linear Scale',   'icon' => 'fa-sliders-h',          'group' => 'Choice'],
             ['type' => 'file',      'label' => 'File Upload',    'icon' => 'fa-file-upload', 'group' => 'Upload'],
             ['type' => 'paragraph', 'label' => 'Paragraph Text','icon' => 'fa-paragraph',   'group' => 'Layout'],
             ['type' => 'image',     'label' => 'Image',          'icon' => 'fa-image',       'group' => 'Layout'],
