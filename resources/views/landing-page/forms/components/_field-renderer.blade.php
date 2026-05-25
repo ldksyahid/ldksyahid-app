@@ -81,6 +81,8 @@
             value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
             {{ $field->isRequired ? 'required' : '' }}
             maxlength="30"
+            inputmode="tel"
+            data-gf-tel="1"
         >
         <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
@@ -209,7 +211,7 @@
                 value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
                 {{ $field->isRequired ? 'required' : '' }}
             >
-            <span class="gf-date-icon"><i class="fas fa-calendar-alt"></i></span>
+            <span class="gf-date-icon" onclick="gfOpenDatePicker(this)"><i class="fas fa-calendar-alt"></i></span>
         </div>
         <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
@@ -234,7 +236,7 @@
                 value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
                 {{ $field->isRequired ? 'required' : '' }}
             >
-            <span class="gf-date-icon"><i class="fas fa-clock"></i></span>
+            <span class="gf-date-icon" onclick="gfOpenDatePicker(this)"><i class="fas fa-clock"></i></span>
         </div>
         <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
@@ -259,7 +261,7 @@
                 value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
                 {{ $field->isRequired ? 'required' : '' }}
             >
-            <span class="gf-date-icon"><i class="fas fa-calendar-alt"></i></span>
+            <span class="gf-date-icon" onclick="gfOpenDatePicker(this)"><i class="fas fa-calendar-alt"></i></span>
         </div>
         <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>

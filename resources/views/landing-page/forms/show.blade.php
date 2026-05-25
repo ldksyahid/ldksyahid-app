@@ -41,6 +41,10 @@
     $sections[] = $currentSec;
     $isMultiStep   = count($sections) > 1;
     $totalSections = count($sections);
+    $jsSectionNames = [];
+    foreach ($sections as $i => $s) {
+        $jsSectionNames[] = $i === 0 ? '' : ($s['title'] ?? '');
+    }
 @endphp
 
 <div class="gf-page">
@@ -53,33 +57,29 @@
         </div>
         @endif
 
-        {{-- ── Header Card (shown for single-page forms only) ──────── --}}
-        @if(!$isMultiStep)
+        {{-- ── Header Card (always visible) ────────────────────────── --}}
         <div class="gf-header-card">
+            {{-- Section chip (multi-step only, sits inside card at top) --}}
+            @if($isMultiStep)
+            <div class="gf-section-chip" id="gfSectionIndicator">
+                <span id="gfSectionIndicatorText">Bagian 1 dari {{ $totalSections }}</span>
+            </div>
+            @endif
             <h1 class="gf-form-title">{{ $form->title }}</h1>
             @if($form->description)
             <p class="gf-form-desc">{{ $form->description }}</p>
             @endif
-        </div>
-        @endif
-
-        {{-- ── Progress bar (multi-step only) ─────────────────────── --}}
-        @if($isMultiStep)
-        <div class="gf-progress-wrap" id="gfProgressWrap">
-            <div class="gf-progress-header">
-                <span class="gf-form-title-small">{{ $form->title }}</span>
-                <span class="gf-progress-label" id="gfProgressLabel">Bagian 1 dari {{ $totalSections }}</span>
-            </div>
-            <div class="gf-progress-track">
+            @if($isMultiStep)
+            <div class="gf-progress-track gf-progress-track--hdr">
                 <div class="gf-progress-bar" id="gfProgressBar" style="width: {{ round(100 / $totalSections) }}%"></div>
             </div>
-            <div class="gf-progress-dots">
+            <div class="gf-progress-dots" style="margin-top:8px;">
                 @for($d = 0; $d < $totalSections; $d++)
                 <span class="gf-dot {{ $d === 0 ? 'active' : '' }}" data-dot="{{ $d }}"></span>
                 @endfor
             </div>
+            @endif
         </div>
-        @endif
 
         {{-- ── Form ─────────────────────────────────────────────────── --}}
         <form action="{{ route('forms.submit', $form->slug) }}" method="POST"
@@ -97,14 +97,6 @@
                 {{-- ── Multi-step sections ──────────────────────────── --}}
                 @foreach($sections as $secIndex => $section)
                 <div class="gf-form-section {{ $secIndex === 0 ? 'active' : '' }}" data-section="{{ $secIndex }}">
-
-                    {{-- Section header card --}}
-                    <div class="gf-section-header-card">
-                        <h2 class="gf-section-title">{{ $section['title'] }}</h2>
-                        @if($section['description'])
-                        <p class="gf-section-desc">{{ $section['description'] }}</p>
-                        @endif
-                    </div>
 
                     {{-- Fields in this section --}}
                     @foreach($section['fields'] as $field)
@@ -180,5 +172,5 @@
 @endsection
 
 @section('scripts')
-@include('landing-page.forms.components._form-scripts', ['isMultiStep' => $isMultiStep, 'totalSections' => $totalSections])
+@include('landing-page.forms.components._form-scripts', ['isMultiStep' => $isMultiStep, 'totalSections' => $totalSections, 'jsSectionNames' => $jsSectionNames ?? []])
 @endsection
