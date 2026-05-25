@@ -144,6 +144,8 @@ class AdminFormController extends Controller
                 'gdriveSpreadsheetUrl'       => $gdriveResult['gdriveSpreadsheetUrl'],
                 'gdriveAttachmentsFolderID'  => $gdriveResult['gdriveAttachmentsFolderID'],
                 'gdriveAttachmentsFolderUrl' => $gdriveResult['gdriveAttachmentsFolderUrl'],
+                'gdriveAssetsFolderID'       => $gdriveResult['gdriveAssetsFolderID'],
+                'gdriveAssetsFolderUrl'      => $gdriveResult['gdriveAssetsFolderUrl'],
             ]);
 
             // 6. Audit log
@@ -437,9 +439,9 @@ class AdminFormController extends Controller
 
         $validated = $request->validate([
             'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph',
-            'label'                  => 'required|string|max:500',
+            'label'                  => [\Illuminate\Validation\Rule::requiredIf($request->input('fieldType') !== 'image'), 'nullable', 'string', 'max:500'],
             'placeholder'            => 'nullable|string|max:255',
-            'helpText'               => 'nullable|string|max:500',
+            'helpText'               => 'nullable|string|max:2000',
             'isRequired'             => 'nullable|boolean',
             'formSectionID'          => 'nullable|integer|exists:ms_form_section,formSectionID',
             'options'                => 'nullable|array',
@@ -448,6 +450,7 @@ class AdminFormController extends Controller
             'validation'             => 'nullable|array',
             'validation.maxSizeKB'   => 'nullable|integer|min:1',
             'validation.acceptedTypes' => 'nullable|array',
+            'imageFile'              => 'nullable|image|max:5120',
         ]);
 
         try {
@@ -462,7 +465,7 @@ class AdminFormController extends Controller
                 'formID'        => $formID,
                 'formSectionID' => $validated['formSectionID']  ?? null,
                 'fieldType'     => $validated['fieldType'],
-                'label'         => $validated['label'],
+                'label'         => $validated['label'] ?? '',
                 'placeholder'   => $validated['placeholder']   ?? null,
                 'helpText'      => $validated['helpText']       ?? null,
                 'isRequired'    => (bool) ($validated['isRequired'] ?? false),
@@ -474,9 +477,42 @@ class AdminFormController extends Controller
                 'createdDate'   => $now,
             ]);
 
-            // If this is a file/image field, create its GDrive subfolder
+            // file field → create per-field subfolder in attachments/
             if ($field->isFileUpload() && $form->gdriveAttachmentsFolderID) {
                 $this->createFieldGdriveFolder($form, $field);
+            }
+
+            // image field → upload the display image to assets/ and store public URL
+            if ($field->fieldType === 'image' && $request->hasFile('imageFile')) {
+                try {
+                    $service = new DynamicFormGDriveService();
+
+                    // Lazily create assets/ folder for forms created before this feature
+                    if (empty($form->gdriveAssetsFolderID) && $form->gdriveFolderID) {
+                        $folderResult = $service->createAssetsFolder($form->gdriveFolderID);
+                        $form->update([
+                            'gdriveAssetsFolderID'  => $folderResult['gdriveAssetsFolderID'],
+                            'gdriveAssetsFolderUrl' => $folderResult['gdriveAssetsFolderUrl'],
+                        ]);
+                        $form->refresh();
+                    }
+
+                    if ($form->gdriveAssetsFolderID) {
+                        $result = $service->uploadImageToAssetsFolder(
+                            $form->gdriveAssetsFolderID,
+                            $request->file('imageFile'),
+                            $field->label ?? 'image'
+                        );
+                        $config = $field->fieldConfig ?? [];
+                        $config['gdriveFileID'] = $result['gdriveFileID'];
+                        $field->update([
+                            'helpText'    => $result['publicUrl'],
+                            'fieldConfig' => $config,
+                        ]);
+                    }
+                } catch (\Throwable $e) {
+                    Log::error('[AdminFormController::addField] Image GDrive upload failed: ' . $e->getMessage());
+                }
             }
 
             // Regenerate spreadsheet header row to include this new field
@@ -520,22 +556,72 @@ class AdminFormController extends Controller
 
         // System fields can have their label updated but not removed or type-changed
         $validated = $request->validate([
-            'label'         => 'required|string|max:500',
+            'label'         => [\Illuminate\Validation\Rule::requiredIf($field->fieldType !== 'image'), 'nullable', 'string', 'max:500'],
             'placeholder'   => 'nullable|string|max:255',
-            'helpText'      => 'nullable|string|max:500',
+            'helpText'      => 'nullable|string|max:2000',
             'isRequired'    => 'nullable|boolean',
             'options'       => 'nullable|array',
             'validation'    => 'nullable|array',
             'defaultValue'  => 'nullable|string|max:1000',
+            'imageFile'     => 'nullable|image|max:5120',
         ]);
 
-        $labelChanged      = $field->label !== $validated['label'];
+        $labelChanged      = $field->label !== ($validated['label'] ?? '');
         $gdriveFolderID    = $field->fieldConfig['gdriveFolderID'] ?? null;
 
+        // For image display fields: if a new file is uploaded, replace the image in GDrive
+        $newHelpText = $validated['helpText'] ?? null;
+        if ($field->fieldType === 'image') {
+            if ($request->hasFile('imageFile')) {
+                try {
+                    $service = new DynamicFormGDriveService();
+
+                    // Lazily create assets/ folder for forms created before this feature
+                    if (empty($form->gdriveAssetsFolderID) && $form->gdriveFolderID) {
+                        $folderResult = $service->createAssetsFolder($form->gdriveFolderID);
+                        $form->update([
+                            'gdriveAssetsFolderID'  => $folderResult['gdriveAssetsFolderID'],
+                            'gdriveAssetsFolderUrl' => $folderResult['gdriveAssetsFolderUrl'],
+                        ]);
+                        $form->refresh();
+                    }
+
+                    if ($form->gdriveAssetsFolderID) {
+                        // Delete old image file from GDrive before uploading new one
+                        $oldFileID = $field->fieldConfig['gdriveFileID'] ?? null;
+                        if ($oldFileID) {
+                            try {
+                                $service->deleteFormFolder($oldFileID);
+                            } catch (\Throwable $e) {
+                                Log::warning('[AdminFormController::updateField] Old image GDrive delete failed: ' . $e->getMessage());
+                            }
+                        }
+
+                        $result      = $service->uploadImageToAssetsFolder(
+                            $form->gdriveAssetsFolderID,
+                            $request->file('imageFile'),
+                            $validated['label'] ?? 'image'
+                        );
+                        $newHelpText = $result['publicUrl'];
+
+                        // Save new file ID to fieldConfig
+                        $newConfig                = $field->fieldConfig ?? [];
+                        $newConfig['gdriveFileID'] = $result['gdriveFileID'];
+                        $field->update(['fieldConfig' => $newConfig]);
+                    }
+                } catch (\Throwable $e) {
+                    Log::error('[AdminFormController::updateField] Image GDrive upload failed: ' . $e->getMessage());
+                }
+            } else {
+                // No new file — preserve existing GDrive URL
+                $newHelpText = $field->helpText;
+            }
+        }
+
         $field->update([
-            'label'        => $validated['label'],
+            'label'        => $validated['label']        ?? '',
             'placeholder'  => $validated['placeholder']  ?? null,
-            'helpText'     => $validated['helpText']      ?? null,
+            'helpText'     => $newHelpText,
             'isRequired'   => (bool) ($validated['isRequired'] ?? false),
             'options'      => $validated['options']       ?? null,
             'validation'   => $validated['validation']    ?? null,
@@ -552,7 +638,7 @@ class AdminFormController extends Controller
             // Rename GDrive attachment subfolder for file/image fields
             if ($gdriveFolderID && $field->isFileUpload()) {
                 try {
-                    (new DynamicFormGDriveService())->renameFolder($gdriveFolderID, $validated['label']);
+                    (new DynamicFormGDriveService())->renameFolder($gdriveFolderID, $validated['label'] ?? '');
                 } catch (\Throwable $e) {
                     Log::warning('[AdminFormController::updateField] GDrive folder rename failed: ' . $e->getMessage());
                 }
@@ -581,8 +667,9 @@ class AdminFormController extends Controller
             return response()->json(['success' => false, 'message' => 'System fields cannot be deleted.'], 422);
         }
 
-        // Capture GDrive folder ID before soft-delete (file/image fields only)
-        $fieldGdriveFolderID = $field->fieldConfig['gdriveFolderID'] ?? null;
+        // Capture GDrive IDs before soft-delete
+        $fieldGdriveFolderID = $field->fieldConfig['gdriveFolderID'] ?? null; // file upload fields
+        $fieldGdriveFileID   = $field->fieldConfig['gdriveFileID']   ?? null; // image display fields
 
         $field->update([
             'flagActive' => false,
@@ -596,14 +683,26 @@ class AdminFormController extends Controller
 
         $form->increment('version');
 
-        // Remove column from spreadsheet and delete field's GDrive folder if applicable
+        // Remove column from spreadsheet and delete field's GDrive asset if applicable
         $this->regenerateSpreadsheetHeaders($form);
 
+        $gdriveService = new DynamicFormGDriveService();
+
+        // file field: delete per-field attachment subfolder
         if ($fieldGdriveFolderID) {
             try {
-                (new DynamicFormGDriveService())->deleteFormFolder($fieldGdriveFolderID);
+                $gdriveService->deleteFormFolder($fieldGdriveFolderID);
             } catch (\Throwable $e) {
                 Log::error('[AdminFormController::removeField] GDrive folder deletion failed: ' . $e->getMessage());
+            }
+        }
+
+        // image display field: delete the uploaded image file from assets/
+        if ($fieldGdriveFileID) {
+            try {
+                $gdriveService->deleteFormFolder($fieldGdriveFileID);
+            } catch (\Throwable $e) {
+                Log::error('[AdminFormController::removeField] GDrive image file deletion failed: ' . $e->getMessage());
             }
         }
 
@@ -687,18 +786,18 @@ class AdminFormController extends Controller
     }
 
     /**
-     * Create a GDrive subfolder for a file/image field inside the form's
-     * existing attachments/ folder and store its ID in the field's fieldConfig JSON.
+     * Create a GDrive subfolder for a file upload field (file type only).
+     * Stores the resulting folder ID in the field's fieldConfig JSON.
      */
     private function createFieldGdriveFolder(MsForm $form, MsFormField $field): void
     {
         try {
+            $service = new DynamicFormGDriveService();
+
             if (empty($form->gdriveAttachmentsFolderID)) {
                 return;
             }
-
-            $result = (new DynamicFormGDriveService())
-                ->createFieldAttachmentFolder($form->gdriveAttachmentsFolderID, $field->label);
+            $result = $service->createFieldAttachmentFolder($form->gdriveAttachmentsFolderID, $field->label);
 
             $config = $field->fieldConfig ?? [];
             $config['gdriveFolderID']             = $result['gdriveFolderID'];
@@ -779,9 +878,10 @@ class AdminFormController extends Controller
             ['type' => 'dropdown',     'label' => 'Dropdown',       'icon' => 'fa-chevron-circle-down','group' => 'Choice'],
             ['type' => 'radio',        'label' => 'Multiple Choice', 'icon' => 'fa-dot-circle',        'group' => 'Choice'],
             ['type' => 'checkbox',     'label' => 'Checkboxes',     'icon' => 'fa-check-square',       'group' => 'Choice'],
-            ['type' => 'file',         'label' => 'File / Image Upload', 'icon' => 'fa-file-upload',   'group' => 'Upload'],
-            ['type' => 'section_break','label' => 'Section Break',  'icon' => 'fa-minus',              'group' => 'Layout'],
-            ['type' => 'paragraph',    'label' => 'Paragraph Text', 'icon' => 'fa-paragraph',          'group' => 'Layout'],
+            ['type' => 'file',         'label' => 'File Upload',    'icon' => 'fa-file-upload', 'group' => 'Upload'],
+            ['type' => 'section_break','label' => 'Section Break', 'icon' => 'fa-minus',       'group' => 'Layout'],
+            ['type' => 'paragraph',    'label' => 'Paragraph Text','icon' => 'fa-paragraph',   'group' => 'Layout'],
+            ['type' => 'image',        'label' => 'Image',         'icon' => 'fa-image',        'group' => 'Layout'],
         ];
     }
 }

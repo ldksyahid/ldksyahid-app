@@ -36,6 +36,8 @@ class MsForm extends Model
         'gdriveSpreadsheetUrl',
         'gdriveAttachmentsFolderID',
         'gdriveAttachmentsFolderUrl',
+        'gdriveAssetsFolderID',
+        'gdriveAssetsFolderUrl',
         'totalSubmission',
         'flagActive',
         'createdBy',

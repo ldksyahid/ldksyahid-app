@@ -71,33 +71,38 @@ class DynamicFormGDriveService
      *   dynamic_form/
      *   └── {Form Title}/               ← form folder
      *       ├── {Form Title} Responses  ← Google Spreadsheet
-     *       └── attachments/            ← file upload folder
-     *           ├── {field_label_1}/    ← per-field subfolder (for each file/image field)
-     *           └── {field_label_2}/
+     *       ├── attachments/            ← file upload folder (field type: file)
+     *       │   └── {file_field_label}/
+     *       └── assets/                 ← image upload folder (field type: image)
+     *           └── {image_field_label}/
      *
      * Also grants Editor access to:
      *   - The admin who created the form (creatorEmail)
      *   - Any additional collaborator emails
      *
-     * @param  string   $formTitle       Title of the form (used as folder name)
-     * @param  string   $creatorEmail    Email of the admin who created the form
-     * @param  array    $collaborators   Additional collaborator emails
-     * @param  array    $fileFieldLabels Labels of file/image fields (used for subfolder names)
+     * @param  string   $formTitle        Title of the form (used as folder name)
+     * @param  string   $creatorEmail     Email of the admin who created the form
+     * @param  array    $collaborators    Additional collaborator emails
+     * @param  array    $fileFieldLabels  Labels of file fields → subfolders in attachments/
+     * @param  array    $imageFieldLabels Labels of image fields → subfolders in assets/
      * @return array    {
      *     gdriveFolderID,
      *     gdriveSpreadsheetID,
      *     gdriveSpreadsheetUrl,
      *     gdriveAttachmentsFolderID,
      *     gdriveAttachmentsFolderUrl,
+     *     gdriveAssetsFolderID,
+     *     gdriveAssetsFolderUrl,
      *     fieldFolders: [{label, gdriveFolderID, gdriveAttachmentsFolderUrl}, ...]
      * }
      */
     public function setupFormFolder(
         string $formTitle,
         string $creatorEmail,
-        array  $collaborators   = [],
-        array  $fileFieldLabels = [],
-        array  $spreadsheetHeaders = []
+        array  $collaborators    = [],
+        array  $fileFieldLabels  = [],
+        array  $spreadsheetHeaders = [],
+        array  $imageFieldLabels = []
     ): array {
         // 0. Restrict the root folder first.
         //    The root folder's anyoneWithLink permission propagates to every child
@@ -118,12 +123,17 @@ class DynamicFormGDriveService
         );
         $this->restrictAccess($spreadsheet['id']);
 
-        // 3. Create the attachments folder
+        // 3. Create the attachments folder (for file fields)
         $attachmentsFolderID  = $this->createFolder('attachments', $formFolderID);
         $this->restrictAccess($attachmentsFolderID);
         $attachmentsFolderUrl = "https://drive.google.com/drive/folders/{$attachmentsFolderID}";
 
-        // 4. Create per-field subfolders inside attachments/
+        // 4. Create the assets folder (for image fields)
+        $assetsFolderID  = $this->createFolder('assets', $formFolderID);
+        $this->restrictAccess($assetsFolderID);
+        $assetsFolderUrl = "https://drive.google.com/drive/folders/{$assetsFolderID}";
+
+        // 5. Create per-field subfolders inside attachments/ (for file fields)
         $fieldFolders = [];
         foreach ($fileFieldLabels as $label) {
             $subFolderID  = $this->createFolder($label, $attachmentsFolderID);
@@ -131,13 +141,26 @@ class DynamicFormGDriveService
             $subFolderUrl = "https://drive.google.com/drive/folders/{$subFolderID}";
 
             $fieldFolders[] = [
-                'label'                     => $label,
-                'gdriveFolderID'            => $subFolderID,
+                'label'                      => $label,
+                'gdriveFolderID'             => $subFolderID,
                 'gdriveAttachmentsFolderUrl' => $subFolderUrl,
             ];
         }
 
-        // 5. Grant Editor (writer) access to: creator + collaborators
+        // 6. Create per-field subfolders inside assets/ (for image fields)
+        foreach ($imageFieldLabels as $label) {
+            $subFolderID  = $this->createFolder($label, $assetsFolderID);
+            $this->restrictAccess($subFolderID);
+            $subFolderUrl = "https://drive.google.com/drive/folders/{$subFolderID}";
+
+            $fieldFolders[] = [
+                'label'                      => $label,
+                'gdriveFolderID'             => $subFolderID,
+                'gdriveAttachmentsFolderUrl' => $subFolderUrl,
+            ];
+        }
+
+        // 7. Grant Editor (writer) access to: creator + collaborators
         $editorEmails = array_unique(array_filter(array_merge([$creatorEmail], $collaborators)));
         foreach ($editorEmails as $email) {
             $this->grantEditorAccess($formFolderID, $email);
@@ -149,6 +172,8 @@ class DynamicFormGDriveService
             'gdriveSpreadsheetUrl'       => $spreadsheet['url'],
             'gdriveAttachmentsFolderID'  => $attachmentsFolderID,
             'gdriveAttachmentsFolderUrl' => $attachmentsFolderUrl,
+            'gdriveAssetsFolderID'       => $assetsFolderID,
+            'gdriveAssetsFolderUrl'      => $assetsFolderUrl,
             'fieldFolders'               => $fieldFolders,
         ];
     }
@@ -500,6 +525,91 @@ class DynamicFormGDriveService
     public function createFieldAttachmentFolder(string $attachmentsFolderID, string $fieldLabel): array
     {
         $subFolderID  = $this->createFolder($fieldLabel, $attachmentsFolderID);
+        $this->restrictAccess($subFolderID);
+        $subFolderUrl = "https://drive.google.com/drive/folders/{$subFolderID}";
+
+        return [
+            'gdriveFolderID'             => $subFolderID,
+            'gdriveAttachmentsFolderUrl' => $subFolderUrl,
+        ];
+    }
+
+    /**
+     * Create the assets/ folder inside an existing form folder.
+     * Called lazily when an image display field is added to a form that was
+     * created before the assets folder feature was introduced.
+     *
+     * @param  string $formFolderID  ID of the form's root GDrive folder
+     * @return array  {gdriveAssetsFolderID, gdriveAssetsFolderUrl}
+     */
+    public function createAssetsFolder(string $formFolderID): array
+    {
+        $folderID  = $this->createFolder('assets', $formFolderID);
+        $this->restrictAccess($folderID);
+        $folderUrl = "https://drive.google.com/drive/folders/{$folderID}";
+
+        return [
+            'gdriveAssetsFolderID'  => $folderID,
+            'gdriveAssetsFolderUrl' => $folderUrl,
+        ];
+    }
+
+    /**
+     * Upload an image file to the form's assets/ folder for display embedding.
+     * The file is granted public read access so <img src="..."> works in the browser.
+     *
+     * @param  string       $assetsFolderID  ID of the form's assets/ folder
+     * @param  UploadedFile $file            The uploaded image file
+     * @param  string       $fieldLabel      Used as filename prefix
+     * @return array        {gdriveFileID, publicUrl}
+     */
+    public function uploadImageToAssetsFolder(
+        string       $assetsFolderID,
+        UploadedFile $file,
+        string       $fieldLabel
+    ): array {
+        $originalName = $file->getClientOriginalName();
+        $storedName   = $fieldLabel . '_' . time() . '_' . $originalName;
+        $mimeType     = $file->getMimeType() ?? 'image/jpeg';
+
+        $driveFile = new Google_Service_Drive_DriveFile([
+            'name'    => $storedName,
+            'parents' => [$assetsFolderID],
+        ]);
+
+        $content = file_get_contents($file->getRealPath());
+
+        $uploaded = $this->driveService->files->create(
+            $driveFile,
+            [
+                'data'       => $content,
+                'mimeType'   => $mimeType,
+                'uploadType' => 'multipart',
+                'fields'     => 'id,name',
+            ]
+        );
+
+        $fileID = $uploaded->getId();
+
+        // Grant public read access so the image can be embedded via <img src="...">
+        $permission = new Google_Service_Drive_Permission([
+            'type' => 'anyone',
+            'role' => 'reader',
+        ]);
+        $this->driveService->permissions->create($fileID, $permission);
+
+        return [
+            'gdriveFileID' => $fileID,
+            'publicUrl'    => "https://lh3.googleusercontent.com/d/{$fileID}",
+        ];
+    }
+
+    /**
+     * @deprecated image type is now a display field, no subfolder needed.
+     */
+    public function createFieldAssetsFolder(string $assetsFolderID, string $fieldLabel): array
+    {
+        $subFolderID  = $this->createFolder($fieldLabel, $assetsFolderID);
         $this->restrictAccess($subFolderID);
         $subFolderUrl = "https://drive.google.com/drive/folders/{$subFolderID}";
 
