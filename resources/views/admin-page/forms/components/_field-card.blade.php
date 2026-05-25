@@ -2,7 +2,9 @@
     Reusable field card for the form builder drop zone.
     Variables: $field (MsFormField)
 --}}
-<div class="field-card {{ $field->isSystemField ? 'is-system' : '' }}"
+@php $isSectionBreak = $field->fieldType === 'section_break'; @endphp
+
+<div class="field-card {{ $isSectionBreak ? 'field-card--section-break' : '' }} {{ $field->isSystemField ? 'is-system' : '' }}"
      data-field-id="{{ $field->formFieldID }}"
      data-field-type="{{ $field->fieldType }}"
      data-label="{{ $field->label }}"
@@ -12,9 +14,41 @@
      data-options="{{ json_encode($field->options ?? []) }}"
      data-validation="{{ json_encode($field->validation ?? []) }}">
 
+@if($isSectionBreak)
+    {{-- ===== SECTION BREAK: visual divider card ===== --}}
+    @if(!$field->isSystemField)
+    <span class="drag-handle" title="Drag to reorder">
+        <i class="fas fa-grip-vertical"></i>
+    </span>
+    @else
+    <span style="width:18px;"></span>
+    @endif
+
+    <div class="field-card-body section-break-body">
+        <div class="section-break-rule"></div>
+        <div class="section-break-label">
+            <i class="fa fa-columns me-2"></i>{{ $field->label ?: 'New Section' }}
+        </div>
+        <div class="section-break-rule"></div>
+    </div>
+
+    <div class="field-card-actions">
+        <button type="button" title="Edit section title" onclick="openEditModal(this)">
+            <i class="fa fa-edit"></i>
+        </button>
+        @if(!$field->isSystemField)
+        <button type="button" class="btn-del" title="Remove section" onclick="removeField(this)">
+            <i class="fa fa-trash"></i>
+        </button>
+        @endif
+    </div>
+
+@else
+    {{-- ===== REGULAR FIELD CARD ===== --}}
+
     {{-- Drag handle (hidden for system fields) --}}
     @if(!$field->isSystemField)
-    <span class="drag-handle" title="Drag untuk mengubah urutan">
+    <span class="drag-handle" title="Drag to reorder">
         <i class="fas fa-grip-vertical"></i>
     </span>
     @else
@@ -41,7 +75,6 @@
                     @case('checkbox')      fa-check-square @break
                     @case('file')          fa-file-upload @break
                     @case('image')         fa-image @break
-                    @case('section_break') fa-minus @break
                     @case('paragraph')     fa-paragraph @break
                     @default               fa-question-circle
                 @endswitch
@@ -75,11 +108,12 @@
         </button>
 
         @if(!$field->isSystemField)
-        <button type="button" class="btn-del" title="Hapus field"
-                onclick="removeField(this)">
+        <button type="button" class="btn-del" title="Remove field" onclick="removeField(this)">
             <i class="fa fa-trash"></i>
         </button>
         @endif
     </div>
+
+@endif
 
 </div>

@@ -74,7 +74,12 @@
                         <div class="card-body">
                             <h5 class="section-title d-flex align-items-center justify-content-between">
                                 <span><i class="fa fa-list me-2"></i>Active Fields</span>
-                                <span class="badge bg-light text-dark border" id="fieldCount">{{ $form->activeFields->count() }} fields</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="btn-add-section" onclick="addSection()" title="Add a new section to split the form into pages">
+                                        <i class="fa fa-columns me-1"></i> Add Section
+                                    </button>
+                                    <span class="badge bg-light text-dark border" id="fieldCount">{{ $form->activeFields->count() }} fields</span>
+                                </div>
                             </h5>
 
                             @if($form->activeFields->isEmpty())
@@ -296,8 +301,8 @@
             <div class="bm-header bm-header--edit">
                 <div class="bm-header-icon"><i class="fa fa-edit"></i></div>
                 <div class="bm-header-text">
-                    <div class="bm-header-title">Edit Field</div>
-                    <div class="bm-header-sub">Update label, placeholder, or help text</div>
+                    <div class="bm-header-title" id="editModalTitle">Edit Field</div>
+                    <div class="bm-header-sub" id="editModalSub">Update label, placeholder, or help text</div>
                 </div>
                 <button type="button" class="btn-close bm-btn-close" data-bs-dismiss="modal"></button>
             </div>

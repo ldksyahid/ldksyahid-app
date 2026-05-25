@@ -187,8 +187,9 @@ function openEditModal(btn) {
     const options     = JSON.parse(card.dataset.options  || '[]');
     const validation  = JSON.parse(card.dataset.validation || '{}');
 
-    const isDisplay = DISPLAY_ONLY_TYPES.includes(fieldType);
-    const isImageDisplay = IMAGE_DISPLAY_TYPES.includes(fieldType);
+    const isDisplay       = DISPLAY_ONLY_TYPES.includes(fieldType);
+    const isImageDisplay  = IMAGE_DISPLAY_TYPES.includes(fieldType);
+    const isSectionBreak  = fieldType === 'section_break';
 
     document.getElementById('editFieldID').value      = card.dataset.fieldId;
     document.getElementById('editLabel').value        = label;
@@ -215,21 +216,35 @@ function openEditModal(btn) {
         document.getElementById('editHelpText').value = helpText;
     }
 
-    // Hide placeholder/required for display-only types
-    document.getElementById('editPlaceholderWrap').style.display  = isDisplay      ? 'none' : '';
-    document.getElementById('editRequiredWrap').style.display     = isDisplay      ? 'none' : '';
-    document.getElementById('editHelpTextWrap').style.display     = isImageDisplay ? 'none' : '';
-    document.getElementById('editImageUrlSection').style.display  = isImageDisplay ? ''     : 'none';
+    // Hide placeholder/required for display-only types; also hide help text for section_break
+    document.getElementById('editPlaceholderWrap').style.display  = isDisplay                        ? 'none' : '';
+    document.getElementById('editRequiredWrap').style.display     = isDisplay                        ? 'none' : '';
+    document.getElementById('editHelpTextWrap').style.display     = (isImageDisplay || isSectionBreak) ? 'none' : '';
+    document.getElementById('editImageUrlSection').style.display  = isImageDisplay                   ? ''     : 'none';
 
-    // For image: label becomes an optional caption
+    // Adjust label text + modal header based on field type
     const editLabelRequired = document.getElementById('editLabelRequired');
     const editLabelText     = document.getElementById('editLabelText');
+    const editModalTitle    = document.getElementById('editModalTitle');
+    const editModalSub      = document.getElementById('editModalSub');
     if (isImageDisplay) {
         if (editLabelRequired) editLabelRequired.style.display = 'none';
         if (editLabelText) editLabelText.childNodes[0].textContent = 'Caption ';
+        document.getElementById('editLabel').placeholder = 'Optional caption shown below the image';
+        if (editModalTitle) editModalTitle.textContent = 'Edit Image';
+        if (editModalSub)   editModalSub.textContent   = 'Replace the image or update the caption';
+    } else if (isSectionBreak) {
+        if (editLabelRequired) editLabelRequired.style.display = 'none';
+        if (editLabelText) editLabelText.childNodes[0].textContent = 'Section Title ';
+        document.getElementById('editLabel').placeholder = 'e.g. Personal Information';
+        if (editModalTitle) editModalTitle.textContent = 'Edit Section';
+        if (editModalSub)   editModalSub.textContent   = 'Update the section title shown at the top of this page';
     } else {
         if (editLabelRequired) editLabelRequired.style.display = '';
         if (editLabelText) editLabelText.childNodes[0].textContent = 'Label ';
+        document.getElementById('editLabel').placeholder = 'e.g. Full Name';
+        if (editModalTitle) editModalTitle.textContent = 'Edit Field';
+        if (editModalSub)   editModalSub.textContent   = 'Update label, placeholder, or help text';
     }
 
     // Show / hide options section
@@ -289,7 +304,8 @@ function submitEditField() {
     const helpText    = document.getElementById('editHelpText').value.trim();
     const isRequired  = document.getElementById('editIsRequired').checked;
 
-    if (!label && !IMAGE_DISPLAY_TYPES.includes(fieldType)) {
+    const LABEL_OPTIONAL_TYPES = [...IMAGE_DISPLAY_TYPES, 'section_break'];
+    if (!label && !LABEL_OPTIONAL_TYPES.includes(fieldType)) {
         document.getElementById('editLabel').focus();
         return;
     }
@@ -365,25 +381,37 @@ function submitEditField() {
                     if (body.validation !== undefined) currentEditCard.dataset.validation = JSON.stringify(body.validation);
                 }
 
-                // Refresh visible label
-                const labelDiv = currentEditCard.querySelector('.field-card-label');
-                const icon     = labelDiv.querySelector('i');
-                const required = isRequired ? '<span class="field-card-required">*</span>' : '';
-                const badge    = labelDiv.querySelector('.field-card-system-badge')?.outerHTML ?? '';
-                labelDiv.innerHTML = (icon?.outerHTML ?? '') + ' ' + label + ' ' + required + badge;
+                if (fieldType === 'section_break') {
+                    // Refresh section title text
+                    const sectionLabelEl = currentEditCard.querySelector('.section-break-label');
+                    if (sectionLabelEl) {
+                        const icon = sectionLabelEl.querySelector('i');
+                        sectionLabelEl.innerHTML = (icon?.outerHTML ?? '') + (label || 'New Section');
+                    }
+                } else {
+                    // Refresh visible label
+                    const labelDiv = currentEditCard.querySelector('.field-card-label');
+                    if (labelDiv) {
+                        const icon     = labelDiv.querySelector('i');
+                        const required = isRequired ? '<span class="field-card-required">*</span>' : '';
+                        const badge    = labelDiv.querySelector('.field-card-system-badge')?.outerHTML ?? '';
+                        labelDiv.innerHTML = (icon?.outerHTML ?? '') + ' ' + label + ' ' + required + badge;
+                    }
 
-                // Refresh field type + help text subtitle
-                const typeDiv = currentEditCard.querySelector('.field-card-type');
-                if (typeDiv) {
-                    const rawType   = currentEditCard.dataset.fieldType ?? '';
-                    const typeLabel = rawType.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase());
-                    const disp      = savedHelpText ?? '';
-                    const truncated = disp.length > 50 ? disp.substring(0, 50) + '…' : disp;
-                    typeDiv.textContent = disp ? `${typeLabel} · ${truncated}` : typeLabel;
+                    // Refresh field type + help text subtitle
+                    const typeDiv = currentEditCard.querySelector('.field-card-type');
+                    if (typeDiv) {
+                        const rawType   = currentEditCard.dataset.fieldType ?? '';
+                        const typeLabel = rawType.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase());
+                        const disp      = savedHelpText ?? '';
+                        const truncated = disp.length > 50 ? disp.substring(0, 50) + '…' : disp;
+                        typeDiv.textContent = disp ? `${typeLabel} · ${truncated}` : typeLabel;
+                    }
                 }
             }
             bootstrap.Modal.getInstance(document.getElementById('editFieldModal')).hide();
-            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Field updated successfully.', showConfirmButton: false, timer: 2500, timerProgressBar: true });
+            const successMsg = fieldType === 'section_break' ? 'Section updated successfully.' : 'Field updated successfully.';
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: successMsg, showConfirmButton: false, timer: 2500, timerProgressBar: true });
         } else {
             showAlert('danger', 'Failed to update field.');
         }
@@ -399,13 +427,16 @@ function submitEditField() {
 
 // ===== REMOVE FIELD =====
 function removeField(btn) {
-    const card    = btn.closest('.field-card');
-    const fieldID = card.dataset.fieldId;
-    const label   = card.dataset.label;
+    const card      = btn.closest('.field-card');
+    const fieldID   = card.dataset.fieldId;
+    const label     = card.dataset.label;
+    const fieldType = card.dataset.fieldType;
+    const isSection = fieldType === 'section_break';
+    const itemName  = isSection ? (label || 'this section') : `"${label}"`;
 
     Swal.fire({
-        title: 'Remove this field?',
-        html: `Field <strong>"${label}"</strong> will be permanently removed from this form.`,
+        title: isSection ? 'Remove this section?' : 'Remove this field?',
+        html: `${isSection ? 'Section' : 'Field'} <strong>${itemName}</strong> will be permanently removed from this form.`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc3545',
@@ -432,7 +463,7 @@ function removeField(btn) {
             if (data.success) {
                 card.remove();
                 updateFieldCount(-1);
-                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `Field "${label}" removed.`, showConfirmButton: false, timer: 2500, timerProgressBar: true });
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `${isSection ? 'Section' : 'Field'} ${itemName} removed.`, showConfirmButton: false, timer: 2500, timerProgressBar: true });
             } else {
                 // Restore card on failure
                 card.classList.remove('field-card--deleting');
@@ -479,6 +510,58 @@ function updateFieldCount(delta) {
     const badge   = document.getElementById('fieldCount');
     const current = parseInt(badge.textContent) + delta;
     badge.textContent = current + ' fields';
+}
+
+// ===== ADD SECTION =====
+function addSection() {
+    Swal.fire({
+        title: 'Add Section',
+        html: `
+            <div class="text-start">
+                <label class="form-label fw-semibold" style="font-size:.85rem;">
+                    Section Title <span class="text-muted fw-normal">(optional)</span>
+                </label>
+                <input id="sectionTitleInput" class="form-control" placeholder="e.g. Personal Information" maxlength="500">
+                <div class="text-muted mt-2" style="font-size:.78rem;">
+                    Sections split your form into multiple pages. Respondents navigate with Previous / Next buttons.
+                </div>
+            </div>`,
+        showCancelButton: true,
+        confirmButtonText: '<i class="fa fa-plus me-1"></i> Add Section',
+        confirmButtonColor: '#00a79d',
+        cancelButtonText: 'Cancel',
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        preConfirm: () => {
+            const title = document.getElementById('sectionTitleInput').value.trim() || 'New Section';
+            return fetch(`/admin/forms/${FORM_ID}/fields`, {
+                method : 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
+                body   : JSON.stringify({ fieldType: 'section_break', label: title })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) {
+                    Swal.showValidationMessage('Failed: ' + (data.message || 'Unknown error'));
+                    return false;
+                }
+                return { title, data };
+            })
+            .catch(err => {
+                Swal.showValidationMessage('Error: ' + err.message);
+                return false;
+            });
+        }
+    }).then(result => {
+        if (!result.isConfirmed || !result.value) return;
+
+        const { title, data } = result.value;
+        const emptyZone = document.getElementById('emptyZone');
+        if (emptyZone) emptyZone.remove();
+        dropZone.insertAdjacentHTML('beforeend', data.html);
+        updateFieldCount(1);
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `Section "${title}" added.`, showConfirmButton: false, timer: 2500, timerProgressBar: true });
+    });
 }
 
 function showAlert(type, message) {
