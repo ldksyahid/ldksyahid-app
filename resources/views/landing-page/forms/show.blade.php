@@ -5,18 +5,65 @@
 @endsection
 
 @section('content')
-@php $formStartTs = time(); @endphp
+@php
+    $formStartTs = time();
+
+    // Group fields into sections separated by section_break fields.
+    // Each section_break becomes the header of a new section.
+    // Fields before the first section_break form the initial section.
+    $sections = [];
+    $currentSec = [
+        'title'       => $form->title,
+        'description' => $form->description ?? '',
+        'fields'      => [],
+    ];
+    foreach ($fields as $field) {
+        if ($field->fieldType === 'section_break') {
+            $sections[] = $currentSec;
+            $currentSec = [
+                'title'       => $field->label,
+                'description' => $field->helpText ?? '',
+                'fields'      => [],
+            ];
+        } else {
+            $currentSec['fields'][] = $field;
+        }
+    }
+    $sections[] = $currentSec;
+    $isMultiStep  = count($sections) > 1;
+    $totalSections = count($sections);
+@endphp
 
 <div class="gf-page">
     <div class="gf-wrap">
 
-        {{-- ── Header Card ──────────────────────────────────────────── --}}
+        {{-- ── Header Card (shown for single-page forms only) ──────── --}}
+        @if(!$isMultiStep)
         <div class="gf-header-card">
             <h1 class="gf-form-title">{{ $form->title }}</h1>
             @if($form->description)
             <p class="gf-form-desc">{{ $form->description }}</p>
             @endif
         </div>
+        @endif
+
+        {{-- ── Progress bar (multi-step only) ─────────────────────── --}}
+        @if($isMultiStep)
+        <div class="gf-progress-wrap" id="gfProgressWrap">
+            <div class="gf-progress-header">
+                <span class="gf-form-title-small">{{ $form->title }}</span>
+                <span class="gf-progress-label" id="gfProgressLabel">Bagian 1 dari {{ $totalSections }}</span>
+            </div>
+            <div class="gf-progress-track">
+                <div class="gf-progress-bar" id="gfProgressBar" style="width: {{ round(100 / $totalSections) }}%"></div>
+            </div>
+            <div class="gf-progress-dots">
+                @for($d = 0; $d < $totalSections; $d++)
+                <span class="gf-dot {{ $d === 0 ? 'active' : '' }}" data-dot="{{ $d }}"></span>
+                @endfor
+            </div>
+        </div>
+        @endif
 
         {{-- ── Form ─────────────────────────────────────────────────── --}}
         <form action="{{ route('forms.submit', $form->slug) }}" method="POST"
@@ -30,22 +77,74 @@
             </div>
             <input type="hidden" name="_form_ts" value="{{ $formStartTs }}">
 
-            {{-- Render each field — each field renders its own card --}}
-            @foreach($fields as $field)
-                @include('landing-page.forms.components._field-renderer', ['field' => $field])
-            @endforeach
+            @if($isMultiStep)
+                {{-- ── Multi-step sections ──────────────────────────── --}}
+                @foreach($sections as $secIndex => $section)
+                <div class="gf-form-section {{ $secIndex === 0 ? 'active' : '' }}" data-section="{{ $secIndex }}">
 
-            {{-- ── Submit area ──────────────────────────────────────── --}}
-            <div class="gf-submit-area">
-                <button type="submit" class="gf-submit-btn" id="gfSubmitBtn">
-                    <i class="fas fa-paper-plane"></i>
-                    <span>Kirimkan Formulir</span>
-                </button>
-                <p class="gf-privacy-note">
-                    <i class="fas fa-lock me-1"></i>
-                    Data Anda aman dan terlindungi.
-                </p>
-            </div>
+                    {{-- Section header card --}}
+                    <div class="gf-section-header-card">
+                        <h2 class="gf-section-title">{{ $section['title'] }}</h2>
+                        @if($section['description'])
+                        <p class="gf-section-desc">{{ $section['description'] }}</p>
+                        @endif
+                    </div>
+
+                    {{-- Fields in this section --}}
+                    @foreach($section['fields'] as $field)
+                        @include('landing-page.forms.components._field-renderer', ['field' => $field])
+                    @endforeach
+
+                    {{-- Section navigation --}}
+                    <div class="gf-section-nav">
+                        @if($secIndex > 0)
+                        <button type="button" class="gf-nav-btn gf-nav-prev" onclick="gfPrevSection()">
+                            <i class="fas fa-arrow-left me-1"></i> Sebelumnya
+                        </button>
+                        @else
+                        <span></span>
+                        @endif
+
+                        @if($secIndex < $totalSections - 1)
+                        <button type="button" class="gf-nav-btn gf-nav-next" onclick="gfNextSection()">
+                            Selanjutnya <i class="fas fa-arrow-right ms-1"></i>
+                        </button>
+                        @else
+                        {{-- Last section: show submit button here --}}
+                        <button type="submit" class="gf-submit-btn" id="gfSubmitBtn">
+                            <i class="fas fa-paper-plane me-1"></i>
+                            <span>Kirimkan Formulir</span>
+                        </button>
+                        @endif
+                    </div>
+                </div>
+                @endforeach
+
+            @else
+                {{-- ── Single-page form (no section_break) ─────────── --}}
+                @foreach($fields as $field)
+                    @include('landing-page.forms.components._field-renderer', ['field' => $field])
+                @endforeach
+
+                {{-- ── Submit area ──────────────────────────────────── --}}
+                <div class="gf-submit-area">
+                    <button type="submit" class="gf-submit-btn" id="gfSubmitBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Kirimkan Formulir</span>
+                    </button>
+                    <p class="gf-privacy-note">
+                        <i class="fas fa-lock me-1"></i>
+                        Data Anda aman dan terlindungi.
+                    </p>
+                </div>
+            @endif
+
+            @if($isMultiStep)
+            <p class="gf-privacy-note gf-privacy-note--multistep">
+                <i class="fas fa-lock me-1"></i>
+                Data Anda aman dan terlindungi.
+            </p>
+            @endif
 
         </form>
 
@@ -65,5 +164,5 @@
 @endsection
 
 @section('scripts')
-@include('landing-page.forms.components._form-scripts')
+@include('landing-page.forms.components._form-scripts', ['isMultiStep' => $isMultiStep, 'totalSections' => $totalSections])
 @endsection

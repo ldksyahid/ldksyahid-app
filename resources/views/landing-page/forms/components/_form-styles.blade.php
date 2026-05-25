@@ -382,6 +382,31 @@
     white-space: pre-line;
 }
 
+/* ─── Image Display Card ───────────────────────────────────────── */
+.gf-image-card {
+    background: var(--gf-card-bg);
+    border-radius: var(--gf-radius);
+    border: 1px solid var(--gf-border);
+    box-shadow: var(--gf-shadow);
+    padding: 16px 24px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.gf-embedded-image {
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: 6px;
+    object-fit: contain;
+}
+
+.gf-image-caption {
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-size: .875rem;
+    color: var(--gf-text-muted);
+}
+
 /* ─── Submit Area ──────────────────────────────────────────────── */
 .gf-submit-area {
     display: flex;
@@ -620,6 +645,199 @@
     border-color: #4b1c1c;
     border-left-color: var(--gf-danger);
     color: #f87171;
+}
+
+/* ─── Multi-step: Progress bar ─────────────────────────────────── */
+.gf-progress-wrap {
+    background: var(--gf-card-bg);
+    border-radius: var(--gf-radius);
+    box-shadow: var(--gf-shadow);
+    border: 1px solid var(--gf-border);
+    border-top: 8px solid var(--gf-primary);
+    padding: 20px 24px 16px;
+    margin-bottom: 12px;
+}
+
+.gf-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.gf-form-title-small {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gf-text);
+    line-height: 1.3;
+}
+
+.gf-progress-label {
+    font-size: .78rem;
+    color: var(--gf-text-muted);
+    white-space: nowrap;
+    margin-left: 8px;
+}
+
+.gf-progress-track {
+    height: 4px;
+    background: var(--gf-border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.gf-progress-bar {
+    height: 100%;
+    background: var(--gf-primary);
+    border-radius: 2px;
+    transition: width .3s ease;
+}
+
+.gf-progress-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.gf-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gf-border);
+    border: 2px solid var(--gf-border);
+    transition: background .2s, border-color .2s;
+    display: inline-block;
+}
+
+.gf-dot.done {
+    background: var(--gf-primary);
+    border-color: var(--gf-primary);
+}
+
+.gf-dot.active {
+    background: #fff;
+    border-color: var(--gf-primary);
+    box-shadow: 0 0 0 2px rgba(0,167,157,.25);
+}
+
+/* ─── Multi-step: Section wrapper ──────────────────────────────── */
+.gf-form-section {
+    display: none;
+}
+
+.gf-form-section.active {
+    display: block;
+}
+
+/* ─── Multi-step: Section header card ──────────────────────────── */
+.gf-section-header-card {
+    background: var(--gf-card-bg);
+    border-radius: var(--gf-radius);
+    box-shadow: var(--gf-shadow);
+    border: 1px solid var(--gf-border);
+    border-top: 4px solid var(--gf-primary);
+    padding: 20px 24px;
+    margin-bottom: 12px;
+}
+
+.gf-section-header-card .gf-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gf-text);
+    margin: 0 0 .35rem;
+}
+
+.gf-section-header-card .gf-section-desc {
+    font-size: .875rem;
+    color: var(--gf-text-muted);
+    margin: 0;
+    line-height: 1.65;
+    white-space: pre-line;
+}
+
+/* ─── Multi-step: Navigation buttons ───────────────────────────── */
+.gf-section-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    gap: 8px;
+}
+
+.gf-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 22px;
+    border-radius: 4px;
+    font-size: .9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: var(--gf-transition);
+}
+
+.gf-nav-prev {
+    background: transparent;
+    color: var(--gf-primary);
+    border: 1px solid var(--gf-primary);
+}
+
+.gf-nav-prev:hover {
+    background: var(--gf-primary-light);
+}
+
+.gf-nav-next {
+    background: var(--gf-primary);
+    color: #fff;
+    margin-left: auto;
+}
+
+.gf-nav-next:hover {
+    background: var(--gf-primary-dark);
+}
+
+/* privacy note for multi-step */
+.gf-privacy-note--multistep {
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+/* ─── Multi-step dark mode ──────────────────────────────────────── */
+[data-theme="dark"] .gf-progress-wrap,
+[data-theme="dark"] .gf-section-header-card {
+    background: #1e2028;
+    border-color: #374151;
+}
+
+[data-theme="dark"] .gf-form-title-small,
+[data-theme="dark"] .gf-section-header-card .gf-section-title {
+    color: #f3f4f6;
+}
+
+[data-theme="dark"] .gf-progress-track {
+    background: #374151;
+}
+
+[data-theme="dark"] .gf-dot {
+    background: #374151;
+    border-color: #374151;
+}
+
+[data-theme="dark"] .gf-dot.active {
+    background: #1e2028;
+    border-color: var(--gf-primary);
+}
+
+[data-theme="dark"] .gf-nav-prev {
+    color: var(--gf-primary);
+    border-color: var(--gf-primary);
+}
+
+[data-theme="dark"] .gf-nav-prev:hover {
+    background: rgba(0,167,157,.1);
 }
 </style>
 @endverbatim

@@ -96,6 +96,8 @@
                 }
             } else if (status === 422 && data.errors) {
                 // ── Validation errors ────────────────────────────────
+                // Notify multi-step navigator (if active) to go to error section first
+                document.dispatchEvent(new CustomEvent('gf:validationErrors', { detail: data.errors }));
                 showValidationErrors(data.errors);
                 restoreBtn(btn, span, icon);
             } else if (status === 429) {
@@ -210,3 +212,125 @@
 
 })();
 </script>
+
+@if($isMultiStep ?? false)
+<script>
+(function () {
+    'use strict';
+
+    // ── Multi-step section navigation ───────────────────────────────
+    var sections     = Array.from(document.querySelectorAll('.gf-form-section'));
+    var totalSecs    = sections.length;
+    var currentIndex = 0;
+
+    // Show the first section on load (already has class 'active' from Blade)
+
+    window.gfNextSection = function () {
+        if (!validateSection(currentIndex)) return;
+        goTo(currentIndex + 1);
+    };
+
+    window.gfPrevSection = function () {
+        goTo(currentIndex - 1);
+    };
+
+    function goTo(index) {
+        if (index < 0 || index >= totalSecs) return;
+        sections[currentIndex].classList.remove('active');
+        sections[index].classList.add('active');
+        currentIndex = index;
+        updateProgress();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateProgress() {
+        var label = document.getElementById('gfProgressLabel');
+        var bar   = document.getElementById('gfProgressBar');
+        var dots  = document.querySelectorAll('.gf-dot');
+
+        if (label) label.textContent = 'Bagian ' + (currentIndex + 1) + ' dari ' + totalSecs;
+        if (bar)   bar.style.width  = Math.round(((currentIndex + 1) / totalSecs) * 100) + '%';
+        dots.forEach(function (dot, i) {
+            dot.classList.toggle('active', i === currentIndex);
+            dot.classList.toggle('done',   i < currentIndex);
+        });
+    }
+
+    // Validate required fields in the current section before advancing
+    function validateSection(index) {
+        var section = sections[index];
+        var valid   = true;
+
+        // Clear previous section-level errors
+        section.querySelectorAll('.is-invalid').forEach(function (el) {
+            el.classList.remove('is-invalid');
+        });
+        section.querySelectorAll('.gf-invalid').forEach(function (el) {
+            el.textContent = '';
+        });
+        section.querySelectorAll('.gf-card.has-error').forEach(function (el) {
+            el.classList.remove('has-error');
+        });
+
+        var firstErrorCard = null;
+
+        section.querySelectorAll('[required]').forEach(function (input) {
+            var empty = false;
+
+            if (input.type === 'checkbox') {
+                var name    = input.name.replace('[]', '');
+                var checked = section.querySelectorAll('[name="' + input.name + '"]:checked, [name="' + name + '[]"]:checked');
+                if (!checked.length) empty = true;
+            } else if (input.type === 'radio') {
+                var radios  = section.querySelectorAll('[name="' + input.name + '"]:checked');
+                if (!radios.length) empty = true;
+            } else if (input.type === 'file') {
+                if (!input.files || !input.files.length) empty = true;
+            } else {
+                if (!input.value.trim()) empty = true;
+            }
+
+            if (empty) {
+                valid = false;
+                input.classList.add('is-invalid');
+                var card = input.closest('.gf-card');
+                if (card) {
+                    card.classList.add('has-error');
+                    var errEl = card.querySelector('.gf-invalid');
+                    if (errEl && !errEl.textContent) errEl.textContent = 'Kolom ini wajib diisi.';
+                    if (!firstErrorCard) firstErrorCard = card;
+                }
+            }
+        });
+
+        if (firstErrorCard) firstErrorCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return valid;
+    }
+
+    // After server-side validation error: navigate to the section containing the first error
+    // Override the form submission error handler's behaviour
+    var origShowValidation = window._gfShowValidationErrors;
+    document.addEventListener('gf:validationErrors', function (e) {
+        var errors = e.detail;
+        if (!errors) return;
+        var form = document.getElementById('publicFormSubmit');
+        if (!form) return;
+
+        var targetSection = null;
+        Object.keys(errors).forEach(function (key) {
+            if (targetSection !== null) return;
+            var input = form.querySelector('[name="' + key + '"]') ||
+                        form.querySelector('[name="' + key + '[]"]');
+            if (!input) return;
+            var sec = input.closest('.gf-form-section');
+            if (sec) targetSection = parseInt(sec.getAttribute('data-section'), 10);
+        });
+
+        if (targetSection !== null && targetSection !== currentIndex) {
+            goTo(targetSection);
+        }
+    });
+
+})();
+</script>
+@endif

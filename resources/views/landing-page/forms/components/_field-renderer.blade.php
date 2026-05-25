@@ -355,9 +355,20 @@
     </div>
     @break
 
-{{-- ===== FILE / IMAGE ===== --}}
-@case('file')
+{{-- ===== IMAGE (display only — embedded image in form) ===== --}}
 @case('image')
+    @if($field->helpText)
+    <div class="gf-image-card">
+        <img src="{{ $field->helpText }}" alt="{{ $field->label }}" class="gf-embedded-image">
+        @if($field->label)
+        <p class="gf-image-caption">{{ $field->label }}</p>
+        @endif
+    </div>
+    @endif
+    @break
+
+{{-- ===== FILE ===== --}}
+@case('file')
     <div class="gf-card {{ $isError ? 'has-error' : '' }}">
         <label class="gf-label">
             {{ $field->label }}

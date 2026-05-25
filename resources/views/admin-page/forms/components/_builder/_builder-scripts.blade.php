@@ -5,8 +5,10 @@
 const FORM_ID      = {{ $form->formID }};
 const CSRF_TOKEN   = document.querySelector('meta[name="csrf-token"]').content;
 const FIELD_TYPES  = @json($fieldTypes);
-const CHOICE_TYPES = ['dropdown', 'radio', 'checkbox'];
-const FILE_TYPES   = ['file', 'image'];
+const CHOICE_TYPES        = ['dropdown', 'radio', 'checkbox'];
+const FILE_TYPES          = ['file'];
+const IMAGE_DISPLAY_TYPES = ['image'];
+const DISPLAY_ONLY_TYPES  = ['section_break', 'paragraph', 'image'];
 
 // ===== SORTABLE =====
 const dropZone = document.getElementById('fieldDropZone');
@@ -58,8 +60,32 @@ function openAddFieldModal(type, label) {
     document.getElementById('modalMaxSizeKB').value = '';
     document.querySelectorAll('.modal-accept-check').forEach(cb => cb.checked = false);
 
-    document.getElementById('optionsSection').style.display = CHOICE_TYPES.includes(type) ? '' : 'none';
-    document.getElementById('fileSection').style.display    = FILE_TYPES.includes(type)   ? '' : 'none';
+    // Reset image file input
+    const modalImgFile = document.getElementById('modalImageFile');
+    if (modalImgFile) modalImgFile.value = '';
+
+    document.getElementById('optionsSection').style.display    = CHOICE_TYPES.includes(type)        ? '' : 'none';
+    document.getElementById('fileSection').style.display       = FILE_TYPES.includes(type)           ? '' : 'none';
+    document.getElementById('imageUrlSection').style.display   = IMAGE_DISPLAY_TYPES.includes(type)  ? '' : 'none';
+
+    const isDisplay  = DISPLAY_ONLY_TYPES.includes(type);
+    const isImageDisp = IMAGE_DISPLAY_TYPES.includes(type);
+    document.getElementById('modalPlaceholderWrap').style.display = isDisplay  ? 'none' : '';
+    document.getElementById('modalRequiredWrap').style.display    = isDisplay  ? 'none' : '';
+    document.getElementById('modalHelpTextWrap').style.display    = isImageDisp ? 'none' : '';
+
+    // For image: label becomes an optional caption, not a required question
+    const labelRequired = document.getElementById('modalLabelRequired');
+    const labelText     = document.getElementById('modalLabelText');
+    if (isImageDisp) {
+        document.getElementById('modalLabel').placeholder = 'Optional caption shown below the image';
+        if (labelRequired) labelRequired.style.display = 'none';
+        if (labelText) labelText.childNodes[0].textContent = 'Caption ';
+    } else {
+        document.getElementById('modalLabel').placeholder = 'e.g. Full Name';
+        if (labelRequired) labelRequired.style.display = '';
+        if (labelText) labelText.childNodes[0].textContent = 'Label / Question ';
+    }
 
     new bootstrap.Modal(document.getElementById('addFieldModal')).show();
 }
@@ -71,39 +97,57 @@ function submitAddField() {
     const helpText    = document.getElementById('modalHelpText').value.trim();
     const isRequired  = document.getElementById('modalIsRequired').checked;
 
-    if (!label) {
+    // For image display fields, label is an optional caption — don't block submission
+    if (!label && !IMAGE_DISPLAY_TYPES.includes(type)) {
         document.getElementById('modalLabel').focus();
         return;
     }
 
-    const body = { fieldType: type, label, placeholder, helpText, isRequired };
-
-    if (CHOICE_TYPES.includes(type)) {
-        const inputs = document.querySelectorAll('.option-input');
-        body.options = Array.from(inputs)
-            .map(i => i.value.trim())
-            .filter(v => v.length > 0)
-            .map(v => ({ label: v, value: v }));
-    }
-
-    if (FILE_TYPES.includes(type)) {
-        const maxSizeKB     = parseInt(document.getElementById('modalMaxSizeKB').value);
-        const acceptedTypes = Array.from(document.querySelectorAll('.modal-accept-check:checked')).map(cb => cb.value);
-        body.validation = {};
-        if (maxSizeKB > 0)          body.validation.maxSizeKB     = maxSizeKB;
-        if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
-    }
-
     const addModal = document.getElementById('addFieldModal');
-    const btn = document.getElementById('btnAddField');
+    const btn      = document.getElementById('btnAddField');
     setModalLock(addModal, true);
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Adding...';
+    btn.innerHTML  = '<span class="spinner-border spinner-border-sm me-1"></span>Adding...';
 
-    fetch(`/admin/forms/${FORM_ID}/fields`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
-        body: JSON.stringify(body)
-    })
+    let fetchOptions;
+
+    if (IMAGE_DISPLAY_TYPES.includes(type)) {
+        // Image field: multipart/form-data (file upload)
+        const fd = new FormData();
+        fd.append('fieldType', type);
+        if (label) fd.append('label', label);
+        const imgFile = document.getElementById('modalImageFile');
+        if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
+        fetchOptions = {
+            method : 'POST',
+            headers: { 'X-CSRF-TOKEN': CSRF_TOKEN },
+            body   : fd,
+        };
+    } else {
+        // All other fields: JSON
+        const body = { fieldType: type, label, placeholder, helpText, isRequired };
+
+        if (CHOICE_TYPES.includes(type)) {
+            body.options = Array.from(document.querySelectorAll('.option-input'))
+                .map(i => i.value.trim()).filter(v => v.length > 0)
+                .map(v => ({ label: v, value: v }));
+        }
+
+        if (FILE_TYPES.includes(type)) {
+            const maxSizeKB     = parseInt(document.getElementById('modalMaxSizeKB').value);
+            const acceptedTypes = Array.from(document.querySelectorAll('.modal-accept-check:checked')).map(cb => cb.value);
+            body.validation = {};
+            if (maxSizeKB > 0)            body.validation.maxSizeKB     = maxSizeKB;
+            if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
+        }
+
+        fetchOptions = {
+            method : 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
+            body   : JSON.stringify(body),
+        };
+    }
+
+    fetch(`/admin/forms/${FORM_ID}/fields`, fetchOptions)
     .then(r => r.json())
     .then(data => {
         setModalLock(addModal, false);
@@ -143,16 +187,50 @@ function openEditModal(btn) {
     const options     = JSON.parse(card.dataset.options  || '[]');
     const validation  = JSON.parse(card.dataset.validation || '{}');
 
-    const isDisplay = ['section_break', 'paragraph'].includes(fieldType);
+    const isDisplay = DISPLAY_ONLY_TYPES.includes(fieldType);
+    const isImageDisplay = IMAGE_DISPLAY_TYPES.includes(fieldType);
 
     document.getElementById('editFieldID').value      = card.dataset.fieldId;
     document.getElementById('editLabel').value        = label;
     document.getElementById('editPlaceholder').value  = placeholder;
-    document.getElementById('editHelpText').value     = helpText;
     document.getElementById('editIsRequired').checked = isRequired;
 
-    // Hide placeholder for display-only types (section_break, paragraph)
-    document.getElementById('editPlaceholderWrap').style.display = isDisplay ? 'none' : '';
+    // For image display type: show preview of current image, reset file input
+    if (isImageDisplay) {
+        document.getElementById('editHelpText').value = '';
+        const editImgFile = document.getElementById('editImageFile');
+        if (editImgFile) editImgFile.value = '';
+
+        const preview = document.getElementById('editCurrentImagePreview');
+        const thumb   = document.getElementById('editCurrentImageThumb');
+        if (preview && thumb) {
+            if (helpText) {
+                thumb.src              = helpText;
+                preview.style.display  = '';
+            } else {
+                preview.style.display  = 'none';
+            }
+        }
+    } else {
+        document.getElementById('editHelpText').value = helpText;
+    }
+
+    // Hide placeholder/required for display-only types
+    document.getElementById('editPlaceholderWrap').style.display  = isDisplay      ? 'none' : '';
+    document.getElementById('editRequiredWrap').style.display     = isDisplay      ? 'none' : '';
+    document.getElementById('editHelpTextWrap').style.display     = isImageDisplay ? 'none' : '';
+    document.getElementById('editImageUrlSection').style.display  = isImageDisplay ? ''     : 'none';
+
+    // For image: label becomes an optional caption
+    const editLabelRequired = document.getElementById('editLabelRequired');
+    const editLabelText     = document.getElementById('editLabelText');
+    if (isImageDisplay) {
+        if (editLabelRequired) editLabelRequired.style.display = 'none';
+        if (editLabelText) editLabelText.childNodes[0].textContent = 'Caption ';
+    } else {
+        if (editLabelRequired) editLabelRequired.style.display = '';
+        if (editLabelText) editLabelText.childNodes[0].textContent = 'Label ';
+    }
 
     // Show / hide options section
     const isChoice = CHOICE_TYPES.includes(fieldType);
@@ -211,37 +289,58 @@ function submitEditField() {
     const helpText    = document.getElementById('editHelpText').value.trim();
     const isRequired  = document.getElementById('editIsRequired').checked;
 
-    if (!label) { document.getElementById('editLabel').focus(); return; }
-
-    const body = { label, placeholder, helpText, isRequired };
-
-    if (CHOICE_TYPES.includes(fieldType)) {
-        body.options = Array.from(document.querySelectorAll('.edit-option-input'))
-            .map(i => i.value.trim()).filter(v => v.length > 0)
-            .map(v => ({ label: v, value: v }));
-    }
-
-    if (FILE_TYPES.includes(fieldType)) {
-        const maxSizeKB     = parseInt(document.getElementById('editMaxSizeKB').value);
-        const acceptedTypes = Array.from(document.querySelectorAll('.edit-accept-check:checked')).map(cb => cb.value);
-        body.validation = {};
-        if (maxSizeKB > 0)          body.validation.maxSizeKB     = maxSizeKB;
-        if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
+    if (!label && !IMAGE_DISPLAY_TYPES.includes(fieldType)) {
+        document.getElementById('editLabel').focus();
+        return;
     }
 
     const editModal = document.getElementById('editFieldModal');
-    const btn = document.querySelector('#editFieldModal .bm-btn-submit--edit');
-    const editBtn = currentEditCard?.querySelector('.field-card-actions button');
+    const btn       = document.querySelector('#editFieldModal .bm-btn-submit--edit');
+    const editBtn   = currentEditCard?.querySelector('.field-card-actions button');
     setModalLock(editModal, true);
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...';
     if (editBtn) { editBtn.disabled = true; editBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>'; }
     if (currentEditCard) currentEditCard.classList.add('field-card--saving');
 
-    fetch(`/admin/forms/${FORM_ID}/fields/${fieldID}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
-        body: JSON.stringify(body)
-    })
+    let fetchOptions;
+
+    if (IMAGE_DISPLAY_TYPES.includes(fieldType)) {
+        // Image field: multipart/form-data — may contain a new image file
+        const fd = new FormData();
+        fd.append('label', label);
+        fd.append('_method', 'PUT');
+        const imgFile = document.getElementById('editImageFile');
+        if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
+        fetchOptions = {
+            method : 'POST', // Laravel method spoofing via _method=PUT
+            headers: { 'X-CSRF-TOKEN': CSRF_TOKEN },
+            body   : fd,
+        };
+    } else {
+        const body = { label, placeholder, helpText, isRequired };
+
+        if (CHOICE_TYPES.includes(fieldType)) {
+            body.options = Array.from(document.querySelectorAll('.edit-option-input'))
+                .map(i => i.value.trim()).filter(v => v.length > 0)
+                .map(v => ({ label: v, value: v }));
+        }
+
+        if (FILE_TYPES.includes(fieldType)) {
+            const maxSizeKB     = parseInt(document.getElementById('editMaxSizeKB').value);
+            const acceptedTypes = Array.from(document.querySelectorAll('.edit-accept-check:checked')).map(cb => cb.value);
+            body.validation = {};
+            if (maxSizeKB > 0)            body.validation.maxSizeKB     = maxSizeKB;
+            if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
+        }
+
+        fetchOptions = {
+            method : 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
+            body   : JSON.stringify(body),
+        };
+    }
+
+    fetch(`/admin/forms/${FORM_ID}/fields/${fieldID}`, fetchOptions)
     .then(r => r.json())
     .then(data => {
         setModalLock(editModal, false);
@@ -251,13 +350,20 @@ function submitEditField() {
 
         if (data.success) {
             if (currentEditCard) {
+                // For image field, helpText (GDrive URL) may have been updated server-side
+                const savedHelpText = IMAGE_DISPLAY_TYPES.includes(fieldType)
+                    ? (data.field?.helpText ?? currentEditCard.dataset.helpText)
+                    : helpText;
+
                 // Sync data-* attributes for next open
-                currentEditCard.dataset.label      = label;
-                currentEditCard.dataset.placeholder = placeholder;
-                currentEditCard.dataset.helpText    = helpText;
-                currentEditCard.dataset.isRequired  = isRequired ? '1' : '0';
-                if (body.options !== undefined)    currentEditCard.dataset.options    = JSON.stringify(body.options);
-                if (body.validation !== undefined) currentEditCard.dataset.validation = JSON.stringify(body.validation);
+                currentEditCard.dataset.label       = label;
+                currentEditCard.dataset.placeholder  = placeholder;
+                currentEditCard.dataset.helpText     = savedHelpText;
+                currentEditCard.dataset.isRequired   = isRequired ? '1' : '0';
+                if (typeof body !== 'undefined') {
+                    if (body.options    !== undefined) currentEditCard.dataset.options    = JSON.stringify(body.options);
+                    if (body.validation !== undefined) currentEditCard.dataset.validation = JSON.stringify(body.validation);
+                }
 
                 // Refresh visible label
                 const labelDiv = currentEditCard.querySelector('.field-card-label');
@@ -271,8 +377,9 @@ function submitEditField() {
                 if (typeDiv) {
                     const rawType   = currentEditCard.dataset.fieldType ?? '';
                     const typeLabel = rawType.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase());
-                    const truncated = helpText.length > 50 ? helpText.substring(0, 50) + '…' : helpText;
-                    typeDiv.textContent = helpText ? `${typeLabel} · ${truncated}` : typeLabel;
+                    const disp      = savedHelpText ?? '';
+                    const truncated = disp.length > 50 ? disp.substring(0, 50) + '…' : disp;
+                    typeDiv.textContent = disp ? `${typeLabel} · ${truncated}` : typeLabel;
                 }
             }
             bootstrap.Modal.getInstance(document.getElementById('editFieldModal')).hide();

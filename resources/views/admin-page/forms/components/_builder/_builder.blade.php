@@ -100,7 +100,7 @@
                     <div class="card border-0 shadow-sm mb-3">
                         <div class="card-body">
                             <h5 class="section-title"><i class="fab fa-google-drive me-2"></i>Google Drive</h5>
-                            @if($form->gdriveSpreadsheetUrl || $form->gdriveAttachmentsFolderUrl)
+                            @if($form->gdriveSpreadsheetUrl || $form->gdriveAttachmentsFolderUrl || $form->gdriveAssetsFolderUrl)
                                 @php
                                     $currentUser     = auth()->user();
                                     $canAccessGdrive = ($isSuperadmin ?? false)
@@ -122,7 +122,17 @@
                                     <i class="fas fa-folder gdrive-icon text-warning"></i>
                                     <span class="gdrive-text">
                                         <strong>Attachments Folder</strong>
-                                        <small>Uploaded files from respondents are stored here.</small>
+                                        <small>Uploaded files (file fields) are stored here.</small>
+                                    </span>
+                                    <i class="fas fa-external-link-alt gdrive-ext"></i>
+                                </a>
+                                @endif
+                                @if($form->gdriveAssetsFolderUrl)
+                                <a href="{{ $form->gdriveAssetsFolderUrl }}" target="_blank" class="gdrive-link">
+                                    <i class="fas fa-images gdrive-icon text-info"></i>
+                                    <span class="gdrive-text">
+                                        <strong>Assets Folder</strong>
+                                        <small>Uploaded images (image fields) are stored here.</small>
                                     </span>
                                     <i class="fas fa-external-link-alt gdrive-ext"></i>
                                 </a>
@@ -191,18 +201,25 @@
 
                 <div class="row g-3">
                     <div class="col-12">
-                        <label class="field-modal-label">Label / Question <span class="text-danger">*</span></label>
+                        <label class="field-modal-label" id="modalLabelText">Label / Question <span class="text-danger" id="modalLabelRequired">*</span></label>
                         <input type="text" class="form-control" id="modalLabel" placeholder="e.g. Full Name" maxlength="500">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="modalPlaceholderWrap">
                         <label class="field-modal-label">Placeholder</label>
                         <input type="text" class="form-control" id="modalPlaceholder" placeholder="e.g. Enter your name" maxlength="255">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="modalHelpTextWrap">
                         <label class="field-modal-label">Help Text</label>
                         <input type="text" class="form-control" id="modalHelpText" placeholder="Optional — hint shown below the field" maxlength="500">
                     </div>
-                    <div class="col-12">
+
+                    {{-- Image file upload (shown only for image display field) --}}
+                    <div class="col-12" id="imageUrlSection" style="display:none;">
+                        <label class="field-modal-label">Upload Image</label>
+                        <input type="file" class="form-control" id="modalImageFile" accept="image/*">
+                        <div class="form-text">Max 5 MB. Image will be stored in Google Drive and displayed in the form.</div>
+                    </div>
+                    <div class="col-12" id="modalRequiredWrap">
                         <div class="bm-required-toggle">
                             <input class="form-check-input" type="checkbox" id="modalIsRequired">
                             <label for="modalIsRequired">Mark as Required</label>
@@ -288,18 +305,30 @@
                 <input type="hidden" id="editFieldID">
                 <div class="row g-3">
                     <div class="col-12">
-                        <label class="field-modal-label">Label <span class="text-danger">*</span></label>
+                        <label class="field-modal-label" id="editLabelText">Label <span class="text-danger" id="editLabelRequired">*</span></label>
                         <input type="text" class="form-control" id="editLabel" maxlength="500">
                     </div>
                     <div class="col-md-6" id="editPlaceholderWrap">
                         <label class="field-modal-label">Placeholder</label>
                         <input type="text" class="form-control" id="editPlaceholder" maxlength="255">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="editHelpTextWrap">
                         <label class="field-modal-label">Help Text</label>
                         <input type="text" class="form-control" id="editHelpText" maxlength="500">
                     </div>
-                    <div class="col-12">
+
+                    {{-- Image file upload (shown only for image display field) --}}
+                    <div class="col-12" id="editImageUrlSection" style="display:none;">
+                        <div id="editCurrentImagePreview" style="display:none; margin-bottom:10px;">
+                            <p class="field-modal-label mb-1">Current image:</p>
+                            <img id="editCurrentImageThumb" src="" alt="" style="max-height:120px; max-width:100%; border-radius:6px; object-fit:contain;">
+                        </div>
+                        <label class="field-modal-label">Replace Image <small class="text-muted">(optional)</small></label>
+                        <input type="file" class="form-control" id="editImageFile" accept="image/*">
+                        <div class="form-text">Leave blank to keep the current image. Max 5 MB.</div>
+                    </div>
+
+                    <div class="col-12" id="editRequiredWrap">
                         <div class="bm-required-toggle">
                             <input class="form-check-input" type="checkbox" id="editIsRequired">
                             <label for="editIsRequired">Mark as Required</label>
