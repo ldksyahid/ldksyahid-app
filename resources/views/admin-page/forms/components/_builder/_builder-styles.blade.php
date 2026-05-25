@@ -6,6 +6,7 @@
     gap: 1.25rem;
     align-items: start;
 }
+.builder-wrap > div { min-width: 0; }
 @media (max-width: 1199px) {
     .builder-wrap { grid-template-columns: 1fr; }
     .builder-sidebar-right { order: -1; }

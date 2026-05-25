@@ -72,7 +72,7 @@
                 <div>
                     <div class="card border-0 shadow-sm">
                         <div class="card-body">
-                            <div class="section-title builder-fields-header">
+                            <div class="builder-fields-header">
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <span class="fw-semibold" style="font-size:1rem;"><i class="fa fa-list me-2"></i>Active Fields</span>
                                     <span class="badge bg-light text-dark border" id="fieldCount">{{ $form->activeFields->count() }} fields</span>
