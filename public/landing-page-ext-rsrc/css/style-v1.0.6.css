@@ -3041,7 +3041,7 @@ footer {
 [data-theme="dark"] input[type="email"],
 [data-theme="dark"] input[type="password"],
 [data-theme="dark"] textarea {
-    background-color: #1e2433; border-color: #3d4a62; color: #e2e8f0;
+   border-color: #3d4a62; color: #e2e8f0;
 }
 
 /* ── Select2 ── */

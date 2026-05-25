@@ -39,8 +39,8 @@
 .gf-header-banner-wrap {
     width: 100%;
     overflow: hidden;
-    border-radius: var(--gf-radius) var(--gf-radius) 0 0;
-    margin-bottom: 0;
+    border-radius: var(--gf-radius);
+    margin-bottom: 12px;
     background: #000;
     box-shadow: var(--gf-shadow);
 }
@@ -50,17 +50,6 @@
     object-fit: cover;
     display: block;
     opacity: .95;
-}
-/* When banner is present, the header card below it should connect seamlessly */
-.gf-header-banner-wrap + .gf-header-card {
-    border-top: none;
-    border-radius: 0 0 var(--gf-radius) var(--gf-radius);
-    box-shadow: 0 2px 4px rgba(0,0,0,.07);
-}
-/* Same for progress wrap in multi-step */
-.gf-header-banner-wrap + .gf-progress-wrap {
-    border-radius: 0 0 var(--gf-radius) var(--gf-radius);
-    border-top: none;
 }
 
 /* ─── Header Card ──────────────────────────────────────────────── */
@@ -263,43 +252,100 @@
     color: var(--gf-text-muted);
     font-size: .85rem;
     padding: 0 4px 6px;
-    pointer-events: none;
+    pointer-events: auto;
     flex-shrink: 0;
+    cursor: pointer;
+}
+
+/* Hide native calendar/clock browser icon to avoid double icon */
+.gf-input[type="date"]::-webkit-calendar-picker-indicator,
+.gf-input[type="time"]::-webkit-calendar-picker-indicator,
+.gf-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    display: none;
 }
 
 /* ─── Radio / Checkbox ─────────────────────────────────────────── */
 .gf-options {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 3px;
     margin-top: 4px;
 }
 
 .gf-option {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 10px 8px;
-    border-radius: 6px;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background .15s;
+    transition: background .15s, border-color .15s;
     position: relative;
-    margin: 0 -8px;
+    margin: 0;
+    border: 1px solid transparent;
 }
 
 .gf-option:hover {
     background: rgba(0,167,157,.06);
+    border-color: rgba(0,167,157,.2);
 }
 
-/* Custom radio & checkbox using accent-color */
+/* Custom radio & checkbox — fully custom appearance */
 .gf-option-input[type="radio"],
 .gf-option-input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
     width: 20px;
     height: 20px;
     min-width: 20px;
     cursor: pointer;
-    accent-color: var(--gf-primary);
     margin: 0;
+    position: relative;
+    flex-shrink: 0;
+    transition: border-color .15s, background .15s, box-shadow .15s;
+}
+
+/* Radio: circle */
+.gf-option-input[type="radio"] {
+    border: 2px solid #b0b7bf;
+    border-radius: 50%;
+    background: #fff;
+}
+.gf-option-input[type="radio"]:checked {
+    border-color: var(--gf-primary);
+    background: var(--gf-primary);
+    box-shadow: inset 0 0 0 3px #fff;
+}
+.gf-option-input[type="radio"]:focus-visible {
+    outline: 2px solid var(--gf-primary);
+    outline-offset: 2px;
+}
+
+/* Checkbox: rounded square with checkmark */
+.gf-option-input[type="checkbox"] {
+    border: 2px solid #b0b7bf;
+    border-radius: 4px;
+    background: #fff;
+}
+.gf-option-input[type="checkbox"]:checked {
+    border-color: var(--gf-primary);
+    background: var(--gf-primary);
+}
+.gf-option-input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 6px;
+    height: 10px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+}
+.gf-option-input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--gf-primary);
+    outline-offset: 2px;
 }
 
 .gf-option-label {
@@ -601,6 +647,37 @@
     .gf-state-card { padding: 2rem 1.25rem; }
 }
 
+/* ─── Multi-step: Section chip (inside header card, Google Forms style) */
+.gf-section-chip {
+    display: inline-flex;
+    align-items: center;
+    background: var(--gf-primary);
+    color: #fff;
+    font-size: .72rem;
+    font-weight: 600;
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    letter-spacing: .03em;
+    line-height: 1.6;
+}
+
+/* Progress bar/dots when inside the header card */
+.gf-progress-track--hdr {
+    margin-top: 14px;
+    margin-bottom: 0;
+}
+
+/* ─── Autofill override (suppress browser blue/yellow tint) ─── */
+.gf-input:-webkit-autofill,
+.gf-input:-webkit-autofill:hover,
+.gf-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+    -webkit-text-fill-color: #202124 !important;
+    transition: background-color 5000s ease-in-out 0s;
+    caret-color: #202124;
+}
+
 /* ─── Dark Mode ────────────────────────────────────────────────── */
 [data-theme="dark"] {
     --gf-bg:         #111317;
@@ -615,6 +692,19 @@
     color: var(--gf-text);
     background: var(--gf-card-bg);
     border-bottom-color: #4b5563;
+}
+
+[data-theme="dark"] .gf-input:-webkit-autofill,
+[data-theme="dark"] .gf-input:-webkit-autofill:hover,
+[data-theme="dark"] .gf-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px #1e2025 inset !important;
+    -webkit-text-fill-color: #e4e6eb !important;
+    caret-color: #e4e6eb;
+}
+
+[data-theme="dark"] .gf-section-chip {
+    background: var(--gf-primary);
+    color: #fff;
 }
 
 [data-theme="dark"] .gf-input::placeholder,
@@ -653,8 +743,26 @@
     color: var(--gf-text);
 }
 
-[data-theme="dark"] .gf-option:hover { background: rgba(0,167,157,.08); }
+[data-theme="dark"] .gf-option:hover {
+    background: rgba(0,167,157,.08);
+    border-color: rgba(0,167,157,.28);
+}
 [data-theme="dark"] .gf-option-label { color: var(--gf-text); }
+
+/* Dark mode custom radio/checkbox */
+[data-theme="dark"] .gf-option-input[type="radio"] {
+    border-color: #4b5563;
+    background: #252830;
+}
+[data-theme="dark"] .gf-option-input[type="radio"]:checked {
+    border-color: var(--gf-primary);
+    background: var(--gf-primary);
+    box-shadow: inset 0 0 0 3px #1e2025;
+}
+[data-theme="dark"] .gf-option-input[type="checkbox"] {
+    border-color: #4b5563;
+    background: #252830;
+}
 
 [data-theme="dark"] .gf-file-drop {
     background: #252830;
@@ -838,6 +946,7 @@
 [data-theme="dark"] .gf-section-header-card {
     background: #1e2028;
     border-color: #374151;
+    border-top-color: var(--gf-primary);
 }
 
 [data-theme="dark"] .gf-form-title-small,

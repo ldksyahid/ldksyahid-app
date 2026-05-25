@@ -2,6 +2,21 @@
 (function () {
     'use strict';
 
+    // ── Open date/time picker via custom icon ──────────────────────
+    window.gfOpenDatePicker = function(icon) {
+        var input = icon.previousElementSibling;
+        if (!input) return;
+        try { input.showPicker(); } catch(e) { input.focus(); input.click(); }
+    };
+
+    // ── Phone input: allow only + and digits ───────────────────────
+    document.querySelectorAll('[data-gf-tel]').forEach(function(input) {
+        input.addEventListener('input', function() {
+            var filtered = this.value.replace(/[^\d+]/g, '');
+            if (this.value !== filtered) this.value = filtered;
+        });
+    });
+
     // ── File upload drag & drop ─────────────────────────────────────
     document.querySelectorAll('.gf-file-drop').forEach(function (drop) {
         var input    = drop.querySelector('input[type="file"]');
@@ -219,9 +234,10 @@
     'use strict';
 
     // ── Multi-step section navigation ───────────────────────────────
-    var sections     = Array.from(document.querySelectorAll('.gf-form-section'));
-    var totalSecs    = sections.length;
-    var currentIndex = 0;
+    var sections        = Array.from(document.querySelectorAll('.gf-form-section'));
+    var totalSecs       = sections.length;
+    var currentIndex    = 0;
+    var gfSectionNames  = @json($jsSectionNames ?? []);
 
     // Show the first section on load (already has class 'active' from Blade)
 
@@ -244,12 +260,17 @@
     }
 
     function updateProgress() {
-        var label = document.getElementById('gfProgressLabel');
-        var bar   = document.getElementById('gfProgressBar');
-        var dots  = document.querySelectorAll('.gf-dot');
+        var indicatorText = document.getElementById('gfSectionIndicatorText');
+        var bar           = document.getElementById('gfProgressBar');
+        var dots          = document.querySelectorAll('.gf-dot');
 
-        if (label) label.textContent = 'Bagian ' + (currentIndex + 1) + ' dari ' + totalSecs;
-        if (bar)   bar.style.width  = Math.round(((currentIndex + 1) / totalSecs) * 100) + '%';
+        // Update section indicator above header card
+        if (indicatorText) {
+            var name  = gfSectionNames[currentIndex] || '';
+            var label = 'Bagian ' + (currentIndex + 1) + ' dari ' + totalSecs;
+            indicatorText.textContent = name ? label + ' \u2014 ' + name : label;
+        }
+        if (bar) bar.style.width = Math.round(((currentIndex + 1) / totalSecs) * 100) + '%';
         dots.forEach(function (dot, i) {
             dot.classList.toggle('active', i === currentIndex);
             dot.classList.toggle('done',   i < currentIndex);
