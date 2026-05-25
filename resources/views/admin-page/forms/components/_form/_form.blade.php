@@ -354,7 +354,7 @@
                                         Allow respondents to submit more than once
                                     </label>
                                 </div>
-                                <div class="form-text">Off = satu pengiriman per alamat email (memerlukan field email).</div>
+                                <div class="form-text">Off = only one submission allowed per email address (requires an email field).</div>
                             </div>
 
                             <div class="mb-3">
