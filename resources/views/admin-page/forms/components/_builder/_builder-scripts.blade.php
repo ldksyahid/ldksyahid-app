@@ -6,6 +6,8 @@ const FORM_ID      = {{ $form->formID }};
 const CSRF_TOKEN   = document.querySelector('meta[name="csrf-token"]').content;
 const FIELD_TYPES  = @json($fieldTypes);
 const CHOICE_TYPES        = ['dropdown', 'radio', 'checkbox'];
+const LINEAR_SCALE_TYPES  = ['linear_scale'];
+const RATING_TYPES        = ['rating'];
 const FILE_TYPES          = ['file'];
 const IMAGE_DISPLAY_TYPES = ['image'];
 const HEADER_IMAGE_TYPES  = ['header_image'];
@@ -67,9 +69,26 @@ function openAddFieldModal(type, label) {
     const modalImgFile = document.getElementById('modalImageFile');
     if (modalImgFile) modalImgFile.value = '';
 
-    document.getElementById('optionsSection').style.display    = CHOICE_TYPES.includes(type)        ? '' : 'none';
-    document.getElementById('fileSection').style.display       = FILE_TYPES.includes(type)           ? '' : 'none';
-    document.getElementById('imageUrlSection').style.display   = IMAGE_DISPLAY_TYPES.includes(type)  ? '' : 'none';
+    document.getElementById('optionsSection').style.display      = CHOICE_TYPES.includes(type)       ? '' : 'none';
+    document.getElementById('linearScaleSection').style.display  = LINEAR_SCALE_TYPES.includes(type) ? '' : 'none';
+    document.getElementById('ratingSection').style.display       = RATING_TYPES.includes(type)       ? '' : 'none';
+    document.getElementById('fileSection').style.display         = FILE_TYPES.includes(type)          ? '' : 'none';
+    document.getElementById('imageUrlSection').style.display     = IMAGE_DISPLAY_TYPES.includes(type) ? '' : 'none';
+
+    // Reset linear scale defaults
+    if (LINEAR_SCALE_TYPES.includes(type)) {
+        document.getElementById('modalLinearScaleMin').value      = '1';
+        document.getElementById('modalLinearScaleMax').value      = '5';
+        document.getElementById('modalLinearScaleMinLabel').value = '';
+        document.getElementById('modalLinearScaleMaxLabel').value = '';
+    }
+
+    // Reset rating defaults + live preview
+    if (RATING_TYPES.includes(type)) {
+        const sel = document.getElementById('modalRatingMax');
+        sel.value = '5';
+        updateRatingPreview('modalRatingPreview', 5);
+    }
 
     const isDisplay  = DISPLAY_ONLY_TYPES.includes(type);
     const isImageDisp = IMAGE_DISPLAY_TYPES.includes(type);
@@ -141,6 +160,23 @@ function submitAddField() {
             body.validation = {};
             if (maxSizeKB > 0)            body.validation.maxSizeKB     = maxSizeKB;
             if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
+        }
+
+        if (LINEAR_SCALE_TYPES.includes(type)) {
+            const lsMin = parseInt(document.getElementById('modalLinearScaleMin').value);
+            const lsMax = parseInt(document.getElementById('modalLinearScaleMax').value);
+            body.fieldConfig = {
+                minValue : isNaN(lsMin) ? 0 : lsMin,
+                maxValue : isNaN(lsMax) ? 5 : lsMax,
+                minLabel : document.getElementById('modalLinearScaleMinLabel').value.trim(),
+                maxLabel : document.getElementById('modalLinearScaleMaxLabel').value.trim(),
+            };
+        }
+
+        if (RATING_TYPES.includes(type)) {
+            body.fieldConfig = {
+                maxRating: parseInt(document.getElementById('modalRatingMax').value) || 5,
+            };
         }
 
         fetchOptions = {
@@ -261,6 +297,28 @@ function openEditModal(btn) {
     // Show / hide options section
     const isChoice = CHOICE_TYPES.includes(fieldType);
     document.getElementById('editOptionsSection').style.display = isChoice ? '' : 'none';
+
+    // Show / hide linear scale section
+    const isLinearScale = LINEAR_SCALE_TYPES.includes(fieldType);
+    document.getElementById('editLinearScaleSection').style.display = isLinearScale ? '' : 'none';
+    if (isLinearScale) {
+        const fieldConfig = JSON.parse(card.dataset.fieldConfig || '{}');
+        document.getElementById('editLinearScaleMin').value      = fieldConfig.minValue ?? 1;
+        document.getElementById('editLinearScaleMax').value      = fieldConfig.maxValue ?? 5;
+        document.getElementById('editLinearScaleMinLabel').value = fieldConfig.minLabel ?? '';
+        document.getElementById('editLinearScaleMaxLabel').value = fieldConfig.maxLabel ?? '';
+    }
+
+    // Show / hide rating section
+    const isRating = RATING_TYPES.includes(fieldType);
+    document.getElementById('editRatingSection').style.display = isRating ? '' : 'none';
+    if (isRating) {
+        const fieldConfig = JSON.parse(card.dataset.fieldConfig || '{}');
+        const maxR = fieldConfig.maxRating ?? 5;
+        const sel  = document.getElementById('editRatingMax');
+        sel.value  = maxR;
+        updateRatingPreview('editRatingPreview', maxR);
+    }
     if (isChoice) {
         const listEl = document.getElementById('editOptionsListInner');
         listEl.innerHTML = '';
@@ -330,6 +388,7 @@ function submitEditField() {
     if (currentEditCard) currentEditCard.classList.add('field-card--saving');
 
     let fetchOptions;
+    let body = null;
 
     if (IMAGE_DISPLAY_TYPES.includes(fieldType) || HEADER_IMAGE_TYPES.includes(fieldType)) {
         // Image / header_image field: multipart/form-data — may contain a new image file
@@ -344,7 +403,7 @@ function submitEditField() {
             body   : fd,
         };
     } else {
-        const body = { label, placeholder, helpText, isRequired };
+        body = { label, placeholder, helpText, isRequired };
 
         if (CHOICE_TYPES.includes(fieldType)) {
             body.options = Array.from(document.querySelectorAll('.edit-option-input'))
@@ -358,6 +417,23 @@ function submitEditField() {
             body.validation = {};
             if (maxSizeKB > 0)            body.validation.maxSizeKB     = maxSizeKB;
             if (acceptedTypes.length > 0) body.validation.acceptedTypes = acceptedTypes;
+        }
+
+        if (LINEAR_SCALE_TYPES.includes(fieldType)) {
+            const lsMin = parseInt(document.getElementById('editLinearScaleMin').value);
+            const lsMax = parseInt(document.getElementById('editLinearScaleMax').value);
+            body.fieldConfig = {
+                minValue : isNaN(lsMin) ? 0 : lsMin,
+                maxValue : isNaN(lsMax) ? 5 : lsMax,
+                minLabel : document.getElementById('editLinearScaleMinLabel').value.trim(),
+                maxLabel : document.getElementById('editLinearScaleMaxLabel').value.trim(),
+            };
+        }
+
+        if (RATING_TYPES.includes(fieldType)) {
+            body.fieldConfig = {
+                maxRating: parseInt(document.getElementById('editRatingMax').value) || 5,
+            };
         }
 
         fetchOptions = {
@@ -387,9 +463,10 @@ function submitEditField() {
                 currentEditCard.dataset.placeholder  = placeholder;
                 currentEditCard.dataset.helpText     = savedHelpText;
                 currentEditCard.dataset.isRequired   = isRequired ? '1' : '0';
-                if (typeof body !== 'undefined') {
-                    if (body.options    !== undefined) currentEditCard.dataset.options    = JSON.stringify(body.options);
-                    if (body.validation !== undefined) currentEditCard.dataset.validation = JSON.stringify(body.validation);
+                if (body) {
+                    if (body.options     !== undefined) currentEditCard.dataset.options     = JSON.stringify(body.options);
+                    if (body.validation  !== undefined) currentEditCard.dataset.validation  = JSON.stringify(body.validation);
+                    if (body.fieldConfig !== undefined) currentEditCard.dataset.fieldConfig = JSON.stringify(body.fieldConfig);
                 }
 
                 if (HEADER_IMAGE_TYPES.includes(fieldType)) {
@@ -659,6 +736,18 @@ function addSection() {
         updateFieldCount(1);
         Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `Section "${title}" added.`, showConfirmButton: false, timer: 2500, timerProgressBar: true });
     });
+}
+
+// ===== RATING PREVIEW =====
+function updateRatingPreview(containerId, max) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = '';
+    for (let i = 1; i <= max; i++) {
+        const icon = document.createElement('i');
+        icon.className = 'far fa-star';
+        el.appendChild(icon);
+    }
 }
 
 function showAlert(type, message) {
