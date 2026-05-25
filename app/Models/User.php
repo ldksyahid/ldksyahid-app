@@ -36,7 +36,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
-        'password'
+        'password',
+        'googleID',
+        'email_verified_at',
     ];
 
     /**
@@ -86,7 +88,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 ],
                 [
                     'key' => 'email',
-                    'type' => 'text',
+                    'type' => 'email-with-google',
                     'class' => 'text-start',
                 ],
                 [

@@ -106,7 +106,6 @@
     /* File Card */
     .card.bg-light {
         border: 1px solid #dee2e6;
-        border-left: 4px solid #00a79d;
         background-color: #f8f9fa !important;
     }
 

@@ -184,13 +184,17 @@
             @else
                 <div class="dropdown">
                     <button class="btn-user-fun has-avatar" data-bs-toggle="dropdown">
-                        @if (Auth::User()->profile == null || Auth::User()->profile->profilepicture == null)
+                        @if (Auth::User()->profile != null && Auth::User()->profile->profilepicture != null)
                             <img class="user-avatar"
-                                 src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}"
+                                 src="https://lh3.googleusercontent.com/d/{{Auth::User()->profile->gdrive_id}}"
+                                 alt="">
+                        @elseif (Auth::User()->profile != null && Auth::User()->profile->googleAvatar)
+                            <img class="user-avatar"
+                                 src="{{ Auth::User()->profile->googleAvatar }}"
                                  alt="">
                         @else
                             <img class="user-avatar"
-                                 src="https://lh3.googleusercontent.com/d/{{Auth::User()->profile->gdrive_id}}"
+                                 src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}"
                                  alt="">
                         @endif
                         <span>{{ substr(Auth::user()->name, 0, 8) }}</span>
@@ -300,10 +304,12 @@
     <div class="mobile-menu-body">
         @auth
             <div class="mobile-user-card">
-                @if (Auth::User()->profile == null || Auth::User()->profile->profilepicture == null)
-                    <img src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}" alt="">
-                @else
+                @if (Auth::User()->profile != null && Auth::User()->profile->profilepicture != null)
                     <img src="https://lh3.googleusercontent.com/d/{{Auth::User()->profile->gdrive_id}}" alt="">
+                @elseif (Auth::User()->profile != null && Auth::User()->profile->googleAvatar)
+                    <img src="{{ Auth::User()->profile->googleAvatar }}" alt="">
+                @else
+                    <img src="{{ Avatar::create(Auth::user()->name)->setFontFamily('Comic Sans MS')->setDimension(600)->setFontSize(325)->toBase64() }}" alt="">
                 @endif
                 <div>
                     <span class="name">Marhaban, {{ Auth::user()->name }}! <span class="wave-emoji">👋</span></span>

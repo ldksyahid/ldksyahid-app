@@ -2775,6 +2775,41 @@ footer {
     text-decoration: underline;
 }
 
+/* ===== GOOGLE OAUTH BUTTON ===== */
+.auth-google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.75rem 1.2rem;
+    border: 1.5px solid #dadce0;
+    border-radius: 12px;
+    background: #fff;
+    color: #3c4043;
+    font-size: 0.93rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.18s, box-shadow 0.18s, border-color 0.18s;
+    margin-bottom: 0.5rem;
+}
+.auth-google-btn:hover {
+    background: #f8f9fa;
+    border-color: #bbb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    color: #1a1a2e;
+    text-decoration: none;
+}
+[data-theme="dark"] .auth-google-btn {
+    background: #1e2638;
+    border-color: #3a4560;
+    color: #e2e8f0;
+}
+[data-theme="dark"] .auth-google-btn:hover {
+    background: #252f45;
+    border-color: #4a5580;
+}
+
 /* ===== CENTERED AUTH CARD (password pages) ===== */
 .auth-center-section {
     position: relative;
@@ -3000,12 +3035,13 @@ footer {
     color: #e2e8f0; box-shadow: 0 0 0 .25rem rgba(0,167,157,.22);
 }
 [data-theme="dark"] .form-control::placeholder { color: #64748b; }
+[data-theme="dark"] .form-floating .form-control::placeholder { color: transparent; }
 [data-theme="dark"] .form-label { color: #cbd5e0; }
 [data-theme="dark"] input[type="text"],
 [data-theme="dark"] input[type="email"],
 [data-theme="dark"] input[type="password"],
 [data-theme="dark"] textarea {
-    background-color: #1e2433; border-color: #3d4a62; color: #e2e8f0;
+   border-color: #3d4a62; color: #e2e8f0;
 }
 
 /* ── Select2 ── */

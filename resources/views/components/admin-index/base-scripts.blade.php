@@ -292,6 +292,9 @@
             return;
         }
 
+        const bulkBtn        = $('#bulkDeleteBtn');
+        const bulkBtnOriginal = bulkBtn.html();
+
         Swal.fire({
             title: 'Are you sure?',
             text: `You are about to delete ${ids.length} item(s). This action cannot be undone!`,
@@ -302,16 +305,20 @@
             confirmButtonText: 'Yes, delete them!'
         }).then((result) => {
             if (result.isConfirmed) {
+                bulkBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Deleting...');
+
                 $.ajax({
                     type: "POST",
                     url: '{{ $bulkDeleteUrl }}',
                     data: { _token: AdminIndexConfig.csrfToken, ids: ids },
                     success: function(response) {
+                        bulkBtn.prop('disabled', false).html(bulkBtnOriginal);
                         Toast.fire({ icon: 'success', title: response.message || 'Selected items have been deleted!' });
                         loadData();
                         $('#selectAll').prop('checked', false);
                     },
                     error: function(xhr) {
+                        bulkBtn.prop('disabled', false).html(bulkBtnOriginal);
                         Swal.fire({ title: 'Error!', text: xhr.responseJSON?.message || 'Something went wrong.', icon: 'error' });
                     }
                 });
@@ -419,7 +426,9 @@
 
         @if($deleteUrl)
         $(document).on('click', '.delete-action-btn', function() {
-            const itemId = $(this).data('id');
+            const itemId     = $(this).data('id');
+            const btn        = $(this);
+            const btnOriginal = btn.html();
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -431,16 +440,20 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span>');
+
                     $.ajax({
                         type: "DELETE",
                         url: `{{ $deleteUrl }}/${itemId}`,
                         data: { _token: AdminIndexConfig.csrfToken },
                         success: function(data) {
+                            btn.prop('disabled', false).html(btnOriginal);
                             Toast.fire({ icon: 'success', title: data.message || 'Item has been deleted!' });
                             loadData();
                             $('#selectAll').prop('checked', false);
                         },
                         error: function(xhr) {
+                            btn.prop('disabled', false).html(btnOriginal);
                             Swal.fire({ title: 'Error!', text: xhr.responseJSON?.message || 'Something went wrong.', icon: 'error' });
                         }
                     });
