@@ -438,7 +438,7 @@ class AdminFormController extends Controller
         }
 
         $validated = $request->validate([
-            'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph,header_image,linear_scale',
+            'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph,header_image,linear_scale,rating',
             'label'                  => [\Illuminate\Validation\Rule::requiredIf(!in_array($request->input('fieldType'), ['image', 'section_break', 'header_image'])), 'nullable', 'string', 'max:500'],
             'placeholder'            => 'nullable|string|max:255',
             'helpText'               => 'nullable|string|max:2000',
@@ -456,6 +456,7 @@ class AdminFormController extends Controller
             'fieldConfig.maxValue'   => 'nullable|integer|min:1',
             'fieldConfig.minLabel'   => 'nullable|string|max:100',
             'fieldConfig.maxLabel'   => 'nullable|string|max:100',
+            'fieldConfig.maxRating'  => 'nullable|integer|min:1|max:10',
         ]);
 
         try {
@@ -889,6 +890,7 @@ class AdminFormController extends Controller
             ['type' => 'radio',         'label' => 'Multiple Choice', 'icon' => 'fa-dot-circle',        'group' => 'Choice'],
             ['type' => 'checkbox',      'label' => 'Checkboxes',     'icon' => 'fa-check-square',       'group' => 'Choice'],
             ['type' => 'linear_scale',  'label' => 'Linear Scale',   'icon' => 'fa-sliders-h',          'group' => 'Choice'],
+            ['type' => 'rating',        'label' => 'Rating',         'icon' => 'fa-star',               'group' => 'Choice'],
             ['type' => 'file',      'label' => 'File Upload',    'icon' => 'fa-file-upload', 'group' => 'Upload'],
             ['type' => 'paragraph', 'label' => 'Paragraph Text','icon' => 'fa-paragraph',   'group' => 'Layout'],
             ['type' => 'image',     'label' => 'Image',          'icon' => 'fa-image',       'group' => 'Layout'],
