@@ -8,16 +8,25 @@
 @php
     $formStartTs = time();
 
-    // Group fields into sections separated by section_break fields.
-    // Each section_break becomes the header of a new section.
-    // Fields before the first section_break form the initial section.
+    // Extract header_image field (always top banner, not part of sections)
+    $headerImageField = null;
+    $contentFields    = [];
+    foreach ($fields as $field) {
+        if ($field->fieldType === 'header_image') {
+            $headerImageField = $field;
+        } else {
+            $contentFields[] = $field;
+        }
+    }
+
+    // Group remaining fields into sections separated by section_break fields.
     $sections = [];
     $currentSec = [
         'title'       => $form->title,
         'description' => $form->description ?? '',
         'fields'      => [],
     ];
-    foreach ($fields as $field) {
+    foreach ($contentFields as $field) {
         if ($field->fieldType === 'section_break') {
             $sections[] = $currentSec;
             $currentSec = [
@@ -30,12 +39,19 @@
         }
     }
     $sections[] = $currentSec;
-    $isMultiStep  = count($sections) > 1;
+    $isMultiStep   = count($sections) > 1;
     $totalSections = count($sections);
 @endphp
 
 <div class="gf-page">
     <div class="gf-wrap">
+
+        {{-- ── Header Banner Image (pinned to very top when present) ── --}}
+        @if($headerImageField && $headerImageField->helpText)
+        <div class="gf-header-banner-wrap">
+            <img src="{{ $headerImageField->helpText }}" alt="Form Header" class="gf-header-banner">
+        </div>
+        @endif
 
         {{-- ── Header Card (shown for single-page forms only) ──────── --}}
         @if(!$isMultiStep)
@@ -122,7 +138,7 @@
 
             @else
                 {{-- ── Single-page form (no section_break) ─────────── --}}
-                @foreach($fields as $field)
+                @foreach($contentFields as $field)
                     @include('landing-page.forms.components._field-renderer', ['field' => $field])
                 @endforeach
 

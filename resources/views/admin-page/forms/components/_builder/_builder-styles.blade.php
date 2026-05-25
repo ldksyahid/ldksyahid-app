@@ -219,6 +219,33 @@ html.dark-mode .file-type-pill:has(input:checked) { background: #00a79d; border-
 .sortable-ghost { opacity: .4; background: #f0fdf4 !important; border: 2px dashed #86efac !important; }
 .sortable-chosen { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
 
+/* ===== ACTIVE FIELDS HEADER ===== */
+.builder-fields-header {
+    padding-bottom: .85rem;
+    border-bottom: 2px solid #e0f7f5;
+    margin-bottom: .75rem;
+}
+html.dark-mode .builder-fields-header { border-bottom-color: #2d3139; }
+
+/* ===== ADD HEADER IMAGE BUTTON ===== */
+.btn-add-header-image {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .3rem .75rem;
+    background: transparent;
+    border: 1.5px dashed #6366f1;
+    border-radius: 7px;
+    font-size: .78rem; font-weight: 600;
+    color: #6366f1;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+}
+.btn-add-header-image:hover {
+    background: #eef2ff;
+    border-style: solid;
+    box-shadow: 0 2px 8px rgba(99,102,241,.15);
+}
+
 /* ===== ADD SECTION BUTTON ===== */
 .btn-add-section {
     display: inline-flex; align-items: center; gap: .35rem;
@@ -236,6 +263,58 @@ html.dark-mode .file-type-pill:has(input:checked) { background: #00a79d; border-
     background: #f0fdf4;
     border-style: solid;
     box-shadow: 0 2px 8px rgba(0,167,157,.15);
+}
+
+/* ===== HEADER IMAGE CARD ===== */
+.field-card--header-image {
+    background: #f8f7ff;
+    border: 1.5px solid #c7d2fe;
+    border-radius: 10px;
+    padding: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    overflow: hidden;
+    cursor: default;
+}
+.field-card--header-image:hover { border-color: #6366f1; box-shadow: 0 2px 10px rgba(99,102,241,.12); }
+.header-img-card-inner {
+    position: relative;
+    width: 100%;
+}
+.header-img-thumb {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    display: block;
+}
+.header-img-placeholder {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e0e7ff;
+    color: #6366f1;
+    font-size: .82rem;
+    font-weight: 600;
+}
+.header-img-badge {
+    position: absolute;
+    bottom: 0; left: 0;
+    background: rgba(0,0,0,.52);
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 600;
+    padding: .2rem .55rem;
+    border-radius: 0 6px 0 0;
+    backdrop-filter: blur(2px);
+    letter-spacing: .02em;
+}
+.field-card--header-image .field-card-actions {
+    padding: .4rem .75rem;
+    justify-content: flex-end;
+    border-top: 1px solid #e0e7ff;
 }
 
 /* ===== SECTION BREAK CARD ===== */
@@ -297,6 +376,12 @@ html.dark-mode .field-card-actions button { color: #6b7280; }
 html.dark-mode .field-card-actions button:hover { color: #86efac; background: #1f3524; }
 html.dark-mode .field-card-actions button.btn-del:hover { color: #f87171; background: rgba(239,68,68,.15); }
 html.dark-mode .drop-zone-empty { background: #22252d; border-color: #374151; color: #6b7280; }
+html.dark-mode .btn-add-header-image { color: #a5b4fc; border-color: #a5b4fc; }
+html.dark-mode .btn-add-header-image:hover { background: #1e1e3a; border-color: #a5b4fc; }
+html.dark-mode .field-card--header-image { background: #1e1e2e; border-color: #3730a3; }
+html.dark-mode .field-card--header-image:hover { border-color: #a5b4fc; }
+html.dark-mode .header-img-placeholder { background: #2d2d5e; color: #a5b4fc; }
+html.dark-mode .field-card--header-image .field-card-actions { border-top-color: #3730a3; }
 html.dark-mode .btn-add-section { color: #2dd4bf; border-color: #2dd4bf; }
 html.dark-mode .btn-add-section:hover { background: #1a2d1e; border-color: #2dd4bf; }
 html.dark-mode .field-card--section-break { background: linear-gradient(135deg, #1a2d2a 0%, #1a2430 100%); border-color: #1e4a44; }

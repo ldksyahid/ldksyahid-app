@@ -12,6 +12,10 @@
 
 @switch($field->fieldType)
 
+{{-- ===== HEADER IMAGE (rendered as top banner in show.blade.php — nothing inline) ===== --}}
+@case('header_image')
+    @break
+
 {{-- ===== SECTION BREAK ===== --}}
 @case('section_break')
     <div class="gf-section-card">
