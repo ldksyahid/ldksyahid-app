@@ -878,10 +878,9 @@ class AdminFormController extends Controller
             ['type' => 'dropdown',     'label' => 'Dropdown',       'icon' => 'fa-chevron-circle-down','group' => 'Choice'],
             ['type' => 'radio',        'label' => 'Multiple Choice', 'icon' => 'fa-dot-circle',        'group' => 'Choice'],
             ['type' => 'checkbox',     'label' => 'Checkboxes',     'icon' => 'fa-check-square',       'group' => 'Choice'],
-            ['type' => 'file',         'label' => 'File Upload',    'icon' => 'fa-file-upload', 'group' => 'Upload'],
-            ['type' => 'section_break','label' => 'Section Break', 'icon' => 'fa-minus',       'group' => 'Layout'],
-            ['type' => 'paragraph',    'label' => 'Paragraph Text','icon' => 'fa-paragraph',   'group' => 'Layout'],
-            ['type' => 'image',        'label' => 'Image',         'icon' => 'fa-image',        'group' => 'Layout'],
+            ['type' => 'file',      'label' => 'File Upload',    'icon' => 'fa-file-upload', 'group' => 'Upload'],
+            ['type' => 'paragraph', 'label' => 'Paragraph Text','icon' => 'fa-paragraph',   'group' => 'Layout'],
+            ['type' => 'image',     'label' => 'Image',          'icon' => 'fa-image',       'group' => 'Layout'],
         ];
     }
 }

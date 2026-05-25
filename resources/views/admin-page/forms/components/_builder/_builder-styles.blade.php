@@ -219,6 +219,62 @@ html.dark-mode .file-type-pill:has(input:checked) { background: #00a79d; border-
 .sortable-ghost { opacity: .4; background: #f0fdf4 !important; border: 2px dashed #86efac !important; }
 .sortable-chosen { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
 
+/* ===== ADD SECTION BUTTON ===== */
+.btn-add-section {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .3rem .75rem;
+    background: transparent;
+    border: 1.5px dashed #00a79d;
+    border-radius: 7px;
+    font-size: .78rem; font-weight: 600;
+    color: #00a79d;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+}
+.btn-add-section:hover {
+    background: #f0fdf4;
+    border-style: solid;
+    box-shadow: 0 2px 8px rgba(0,167,157,.15);
+}
+
+/* ===== SECTION BREAK CARD ===== */
+.field-card--section-break {
+    background: linear-gradient(135deg, #f0fdf9 0%, #f0f9ff 100%);
+    border: 1.5px solid #a7f3e8;
+    border-radius: 10px;
+    padding: .6rem 1rem;
+    align-items: center;
+    gap: .75rem;
+}
+.field-card--section-break:hover {
+    border-color: #00a79d;
+    box-shadow: 0 2px 10px rgba(0,167,157,.12);
+}
+.section-break-body {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    flex: 1;
+    min-width: 0;
+}
+.section-break-rule {
+    flex: 1;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, #a7f3e8, transparent);
+    border-radius: 2px;
+}
+.section-break-label {
+    font-size: .8rem;
+    font-weight: 700;
+    color: #00756e;
+    letter-spacing: .03em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+.section-break-label i { color: #00a79d; }
+
 /* ===== DARK MODE ===== */
 /* card base — neutral dark, teal accent on section-title border only */
 html.dark-mode .card { background: #1a1d23; border-color: #2d3139 !important; }
@@ -241,6 +297,13 @@ html.dark-mode .field-card-actions button { color: #6b7280; }
 html.dark-mode .field-card-actions button:hover { color: #86efac; background: #1f3524; }
 html.dark-mode .field-card-actions button.btn-del:hover { color: #f87171; background: rgba(239,68,68,.15); }
 html.dark-mode .drop-zone-empty { background: #22252d; border-color: #374151; color: #6b7280; }
+html.dark-mode .btn-add-section { color: #2dd4bf; border-color: #2dd4bf; }
+html.dark-mode .btn-add-section:hover { background: #1a2d1e; border-color: #2dd4bf; }
+html.dark-mode .field-card--section-break { background: linear-gradient(135deg, #1a2d2a 0%, #1a2430 100%); border-color: #1e4a44; }
+html.dark-mode .field-card--section-break:hover { border-color: #2dd4bf; box-shadow: 0 2px 10px rgba(45,212,191,.12); }
+html.dark-mode .section-break-rule { background: linear-gradient(90deg, transparent, #1e4a44, transparent); }
+html.dark-mode .section-break-label { color: #2dd4bf; }
+html.dark-mode .section-break-label i { color: #2dd4bf; }
 /* modals */
 html.dark-mode .bm-card { background: #1a1d23; }
 html.dark-mode .bm-body { background: #22252d; }
