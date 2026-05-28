@@ -1,11 +1,11 @@
 {{-- ================================================================
-     WELCOME QURBAN POPUP
+     WELCOME MILAD KE-30 LDK SYAHID POPUP
      Appears once per browser — marked in localStorage.
-     Key: ldksyahid_welcome_popup_qurban
+     Key: ldksyahid_welcome_popup_milad_30
      ================================================================ --}}
 @include('components.welcome-revamp-popup.styles')
 
-<div id="wrp-backdrop" role="dialog" aria-modal="true" aria-label="Yuk Qurban Bareng!">
+<div id="wrp-backdrop" role="dialog" aria-modal="true" aria-label="Selamat Milad ke-30 LDK Syahid!">
     <div id="wrp-outer">
 
         <div id="wrp-card">
@@ -19,42 +19,35 @@
                 <span id="wrp-header-dot2"></span>
                 <div id="wrp-badge">
                     <i class="fas fa-star"></i>
-                    <span>Ibadah &bull; Qurban</span>
+                    <span>Milad &bull; 30 Tahun</span>
                 </div>
-                <h2>Bestie, yuk qurban bareng!<br>Jangan cuma rebahan doang 🐐</h2>
+                <h2>Selamat Milad ke-30<br>LDK Syahid! 🎉✨</h2>
             </div>
 
             {{-- Body — scrollable --}}
             <div id="wrp-body">
                 <p id="wrp-desc">
-                    Qurban itu ibadah paling W bestie — niatnya lillah, manfaatnya buat
-                    sesama, pahalanya? <em>No cap</em>, gak ada habisnya! 🙏✨
+                    Alhamdulillah, 30 tahun LDK Syahid hadir membersamai dakwah kampus tercinta! 🌿
+                    Setiap langkah hari ini, punya dampak untuk esok yang lebih baik. 🌍
                 </p>
 
                 <div id="wrp-features">
                     <div class="wrp-feat">
+                        <div class="wrp-feat-icon"><i class="fas fa-trophy"></i></div>
+                        <div class="wrp-feat-text"><strong>3 Dekade Dakwah Kampus!</strong> Dari 28 Mei 1996 hingga hari ini — ribuan kader, satu semangat yang terus menyala. 🔥</div>
+                    </div>
+                    <div class="wrp-feat">
+                        <div class="wrp-feat-icon"><i class="fas fa-sun"></i></div>
+                        <div class="wrp-feat-text"><strong>"Glimpse of Radiant Years"</strong> — Merawat Hangatnya Ukhuwah, Mengukir Gemilangnya Dakwah. ✨</div>
+                    </div>
+                    <div class="wrp-feat">
                         <div class="wrp-feat-icon"><i class="fas fa-heart"></i></div>
-                        <div class="wrp-feat-text">Qurban itu bentuk cinta ke Allah yang hits different — sunnah Nabi Ibrahim yang vibes-nya masih relevan sampe sekarang! 💜</div>
+                        <div class="wrp-feat-text">Dakwah ini dibangun bukan oleh satu generasi — tapi oleh hati-hati yang terus menjaga nyalanya hingga hari ini. 💙</div>
                     </div>
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-users"></i></div>
-                        <div class="wrp-feat-text">Daging qurban-mu nyebar ke seluruh penjuru — literally jadi berkah buat saudara kita yang butuh, no cap! 🌍</div>
+                        <div class="wrp-feat-icon"><i class="fas fa-camera"></i></div>
+                        <div class="wrp-feat-text">Yuk jadi bagian dari sejarah 30 tahun ini! Pasang <strong>twibbon</strong> Milad ke-30 dan tunjukkan semangat dakwahmu ke seluruh penjuru! ✊</div>
                     </div>
-                    <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-coins"></i></div>
-                        <div class="wrp-feat-text">Bisa patungan bareng squad! Sapi dibagi 7, kambing sendiri — investasi akhirat yang paling worth it fr fr 💰</div>
-                    </div>
-                    <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-calendar-check"></i></div>
-                        <div class="wrp-feat-text">Idul Adha udah deket gaes — jangan sampe kelewatan momen ibadah yang satu ini, yuk gas! 📅</div>
-                    </div>
-                </div>
-
-                {{-- Mini Game: Kambing Runner (Chrome Dino style) --}}
-                <div id="wrp-minigame">
-                    <div id="wrp-game-label">🐐 Kambing Runner — loncat hindari halangan!</div>
-                    <canvas id="wrp-dino-canvas"></canvas>
-                    <p id="wrp-game-hint">Tap kanvas atau tekan Spasi &bull; Double jump OK!</p>
                 </div>
 
             </div>{{-- /wrp-body --}}
@@ -63,7 +56,7 @@
             <div id="wrp-footer">
                 <button id="wrp-btn-explore">
                     <i class="fas fa-star"></i>
-                    <span>Gaspol Qurban Sekarang! 🐐🔥</span>
+                    <span>Pasang Twibbon Milad ke-30! 🎉</span>
                 </button>
                 <button id="wrp-btn-dismiss">
                     Jangan tampilkan lagi
