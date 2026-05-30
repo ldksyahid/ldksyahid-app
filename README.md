@@ -13,7 +13,7 @@
 
 <br>
 <div align="center">
-<img src="https://img.shields.io/badge/version-v2.0.0-blue" />
+<img src="https://img.shields.io/badge/version-v2.0.1-blue" />
 <img src="https://img.shields.io/badge/laravel-8.x-red" />
 <img src="https://img.shields.io/badge/php-%3E%3D7.4-777BB4" />
 <img src="https://img.shields.io/badge/license-LDK Syahid-green" />
@@ -227,7 +227,8 @@ Authenticated via Laravel Sanctum (`/api` prefix):
 
 | Version | Date | Changes |
 | :---: | :---: | --- |
-| `2.0.0` | `2026-05-30` | <ul><li>Dynamic Form Builder with visual drag-and-drop, multiple field types (rating, linear scale, etc.), and lifecycle management</li><li>Digital Library (Perpustakaan) with in-browser PDF reader</li><li>Finance Report module</li><li>Visitor analytics with GeoIP tracking, daily aggregation, and page stats</li><li>Job Queue monitoring and management in admin panel</li><li>Email generation system for custom admin emails</li><li>Newsletter subscription management</li><li>Zakat Calculator with real-time gold price API</li><li>Google Sheets integration for form submissions</li><li>Enhanced security headers and HTTPS enforcement</li><li>Revamped popup theme (Milad 30 LDK Syahid)</li></ul> |
+| `2.0.1` | `2026-05-30` | <ul><li>Migrate job-based email from Gmail SMTP to Brevo SMTP relay with deliverability validation (MX/DNS check)</li><li>Add daily sending limit hold mechanism — jobs are held and resume automatically when quota resets</li><li>Fix Pause state persistence in Job Queue Log monitor (survives page refresh)</li><li>Fix mobile share sheet (Salin URL & WhatsApp) producing relative paths instead of absolute URLs</li><li>Contact person Laporan Keuangan now dynamic via App Settings</li></ul> |
+| `2.0.0` | `2026-05-28` | <ul><li>Dynamic Form Builder with visual drag-and-drop, multiple field types (rating, linear scale, etc.), and lifecycle management</li><li>Digital Library (Perpustakaan) with in-browser PDF reader</li><li>Finance Report module</li><li>Visitor analytics with GeoIP tracking, daily aggregation, and page stats</li><li>Job Queue monitoring and management in admin panel</li><li>Email generation system for custom admin emails</li><li>Newsletter subscription management</li><li>Zakat Calculator with real-time gold price API</li><li>Google Sheets integration for form submissions</li><li>Enhanced security headers and HTTPS enforcement</li><li>Revamped popup theme (Milad 30 LDK Syahid)</li></ul> |
 | `1.1.0` | `2023-10-25` | <ul><li>Add KTA LDK Syahid Feature</li><li>New Mobile Responsive CMS Admin</li></ul> |
 | `1.0.3` | `2023-09-28` | <ul><li>Add Ekspresi Content and Develop Celsyahid Machine Learning</li></ul> |
 | `1.0.2` | `2023-07-22` | <ul><li>Update Notify Celengan Syahid</li></ul> |
