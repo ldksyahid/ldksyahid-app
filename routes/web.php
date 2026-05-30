@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JumbotronController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\VisitorAnalyticsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\EventController;
@@ -27,6 +28,12 @@ use App\Http\Controllers\MsKTALDKSyahidController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShortLinkController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\GenerateEmailController;
+use App\Http\Controllers\JobQueueLogController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\FonnteWebhookController;
+use App\Http\Controllers\Admin\AdminFormController;
+use App\Http\Controllers\PublicFormController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,13 +49,19 @@ Auth::routes(['verify' => true]);
 
 // Strict throttle for login: max 5 attempts per minute
 Route::middleware('throttle:5,1')->group(function () {
-    Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
-    Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail']);
+    Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login');
+    Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 });
 
 // Throttle for register: max 5 accounts per 10 minutes
 Route::middleware('throttle:5,10')->group(function () {
-    Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
+    Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('register');
+});
+
+// Google OAuth
+Route::middleware('throttle:10,1')->group(function () {
+    Route::get('/auth/google', [\App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 });
 
 // Route Template
@@ -72,6 +85,55 @@ Route::put('/profile/{profilepicture}/destroy', [ProfileController::class, 'dest
 Route::get('/kalkulatorkestari', function () {
     return view('landing-page.service.proker-counter.index', ["title" => "Layanan"]);
 });
+
+// Route LandingPage Layanan => Kalkulator Zakat
+Route::get('/kalkulator-zakat', function () {
+    return view('landing-page.service.zakat-calculator.index', ["title" => "Layanan"]);
+})->name('zakat-calculator');
+
+// API: Fetch Antam 1gr gold price via logam-mulia-api (Cloudflare Workers)
+// Source: https://github.com/iamutaki/logam-mulia-api
+// Cache: 1 hour
+Route::get('/api/harga-emas', function () {
+    if (request()->query('force') === '1') {
+        \Illuminate\Support\Facades\Cache::forget('antam_gold_price_1gr');
+    }
+
+    $data = \Illuminate\Support\Facades\Cache::remember('antam_gold_price_1gr', 3600, function () {
+        try {
+            $response = \Illuminate\Support\Facades\Http::timeout(10)
+                ->get('https://logam-mulia-api.iamutaki.workers.dev/api/prices/logammulia');
+
+            if (!$response->successful()) {
+                return ['success' => false, 'price' => null];
+            }
+
+            $items = $response->json()['data'] ?? [];
+
+            // Find sell price for standard Emas Batangan (gold bar) 1gr
+            foreach ($items as $item) {
+                if (
+                    ($item['material'] ?? '') === 'gold' &&
+                    ($item['materialType'] ?? '') === 'Emas Batangan' &&
+                    ($item['weight'] ?? 0) == 1 &&
+                    ($item['weightUnit'] ?? '') === 'gr'
+                ) {
+                    $price = (int) ($item['sellPrice'] ?? 0);
+                    if ($price > 0) {
+                        return ['success' => true, 'price' => $price];
+                    }
+                }
+            }
+
+            return ['success' => false, 'price' => null];
+        } catch (\Exception) {
+            return ['success' => false, 'price' => null];
+        }
+    });
+
+    return response()->json($data)
+        ->header('Access-Control-Allow-Origin', '*');
+})->name('api.harga-emas');
 
 // Route LandingPage Layanan
 Route::get('/service', function () {
@@ -115,6 +177,7 @@ Route::middleware('throttle:5,10')->group(function () {
     Route::post('/subscribers/store', [SubscriptionController::class, 'store'])->name('newsletter.store');
     Route::post('/subscribers/unsubscribe', [SubscriptionController::class, 'unsubscribe'])->name('subscribers.unsubscribe');
 });
+Route::get('/unsubscribe', [SubscriptionController::class, 'unsubscribePage'])->name('unsubscribe.page');
 
 // Route Article Comment
 Route::post('/articlecomment', [ArticleCommentController::class, 'addarticlecomment'])->name('articlecomment')->middleware('auth');
@@ -146,8 +209,20 @@ Route::get('/celengansyahid/yuk-donasi/{link}/status/{id}', [CelenganSyahidContr
 Route::get('/celengansyahid/payment/{id}', [CelenganSyahidController::class, 'openPaymentGateway'])->name('service.celengansyahid.detail.donateNow.gateway');
 Route::get('/celengansyahid/simpan-bukti/{link}/{id}', [CelenganSyahidController::class, 'savePaymentDonation'])->name('service.celengansyahid.savePayment');
 
-Route::post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
-Route::post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+// API: max 60 req/min per IP (Select2 + polling)
+Route::middleware('throttle:60,1')->group(function () {
+    Route::get('/celengansyahid/api/jobs', [CelenganSyahidController::class, 'getJobs'])->name('service.celengansyahid.api.jobs');
+    Route::get('/celengansyahid/api/check-payment/{id}', [CelenganSyahidController::class, 'checkPaymentStatus'])->name('service.celengansyahid.api.checkPayment');
+});
+
+// Donation store: max 10 submissions/minute per IP
+Route::middleware('throttle:10,1')->post('/celengansyahid/donation/store', [CelenganSyahidController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
+
+// Xendit webhook: max 120 callbacks/minute (Xendit retries are frequent)
+Route::middleware('throttle:120,1')->post('/celengansyahid/donation/callback', [CelenganSyahidController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+
+// Fonnte WhatsApp webhook
+Route::middleware('throttle:60,1')->post('/webhook/fonnte', [FonnteWebhookController::class, 'handle'])->name('webhook.fonnte');
 
 // Route LandingPage Catalog Books
 Route::get('/perpustakaan', [CatalogBooksController::class, 'index'])->name('catalog.books.index');
@@ -176,6 +251,24 @@ Route::get('/admin', [HomeController::class, 'adminHome'])->name('admin')->middl
 
 // Route AdminPage Dashboard
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter']);
+
+// Proxy: Motivational Quotes (avoids CORS from quotes.liupurnomo.com)
+Route::get('/admin/api/motivasi-quotes', function () {
+    try {
+        $response = \Illuminate\Support\Facades\Http::timeout(8)
+            ->get('https://quotes.liupurnomo.com/api/quotes/random');
+        if ($response->successful()) {
+            return response()->json($response->json());
+        }
+        return response()->json(['error' => true, 'message' => 'Upstream error'], 502);
+    } catch (\Exception) {
+        return response()->json(['error' => true, 'message' => 'Request failed'], 500);
+    }
+})->name('admin.api.motivasi-quotes')->middleware(['auth']);
+
+// Route AdminPage Visitor Analytics
+Route::get('/admin/api/visitor-stats', [VisitorAnalyticsController::class, 'apiStats'])->name('admin.api.visitor-stats')->middleware(['auth']);
+Route::get('/admin/api/visitor-top-pages', [VisitorAnalyticsController::class, 'topPagesAjax'])->name('admin.api.visitor-top-pages')->middleware(['auth']);
 
 // Route AdminPage User
 Route::get('/admin/user', [UserController::class, 'indexAdmin'])->name('admin.user.index')->middleware(['role:Superadmin']);
@@ -233,6 +326,47 @@ Route::put('/admin/article/{id}/update', [ArticleController::class, 'update'])->
 Route::delete('/admin/article/{id}', [ArticleController::class, 'destroy'])->name('admin.article.destroy')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
 Route::post('/admin/article/bulk-delete', [ArticleController::class, 'bulkDelete'])->name('admin.article.bulk-delete')->middleware(['role:Superadmin']);
 Route::get('/admin/article/{id}/preview', [ArticleController::class, 'showAdmin'])->name('admin.article.preview')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
+
+// Route AdminPage Subscription
+Route::middleware(['role:Superadmin'])
+    ->prefix('/admin/subscription')
+    ->name('admin.subscription.')
+    ->group(function () {
+        Route::get('/', [SubscriptionController::class, 'indexAdmin'])->name('index');
+        Route::get('/create', [SubscriptionController::class, 'create'])->name('create');
+        Route::post('/store', [SubscriptionController::class, 'adminStore'])->name('store');
+        Route::get('/{id}', [SubscriptionController::class, 'showAdmin'])->name('show');
+        Route::get('/{id}/edit', [SubscriptionController::class, 'edit'])->name('edit');
+        Route::put('/{id}/update', [SubscriptionController::class, 'update'])->name('update');
+        Route::delete('/{id}', [SubscriptionController::class, 'destroy'])->name('destroy');
+        Route::post('/bulk-delete', [SubscriptionController::class, 'bulkDelete'])->name('bulk-delete');
+    });
+
+// Route AdminPage Email Config - Generate Email
+Route::middleware(['role:Superadmin'])
+    ->prefix('/admin/email-config/generate')
+    ->name('admin.email-config.generate')
+    ->group(function () {
+        Route::get('/', [GenerateEmailController::class, 'index'])->name('');
+        Route::post('/send', [GenerateEmailController::class, 'send'])->name('.send');
+    });
+
+// Route AdminPage Email Config - Job Queue Log
+Route::middleware(['role:Superadmin'])
+    ->prefix('/admin/job-queue-log')
+    ->name('admin.job-queue-log')
+    ->group(function () {
+        Route::get('/', [JobQueueLogController::class, 'index'])->name('');
+        Route::get('/data', [JobQueueLogController::class, 'data'])->name('.data');
+        Route::delete('/{id}', [JobQueueLogController::class, 'destroy'])->name('.destroy');
+        Route::delete('/', [JobQueueLogController::class, 'destroyStuck'])->name('.destroy-stuck');
+
+        // Failed jobs (static routes before parameterized to avoid {id} capturing "all"/"retry-all")
+        Route::post('/failed/retry-all', [JobQueueLogController::class, 'retryAllFailed'])->name('.failed.retry-all');
+        Route::delete('/failed/all', [JobQueueLogController::class, 'destroyAllFailed'])->name('.failed.destroy-all');
+        Route::post('/failed/{id}/retry', [JobQueueLogController::class, 'retryFailed'])->name('.failed.retry');
+        Route::delete('/failed/{id}', [JobQueueLogController::class, 'destroyFailed'])->name('.failed.destroy');
+    });
 
 // Route AdminPage News
 Route::get('/admin/news', [NewsController::class, 'indexAdmin'])->name('admin.news.index')->middleware(['role:Superadmin|HelperCelsyahid|HelperMedia']);
@@ -391,6 +525,56 @@ Route::middleware(['role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|
         Route::put('/{financeReport}', [FinanceReportController::class, 'update'])->name('update');
         Route::delete('/{financeReport}', [FinanceReportController::class, 'destroy'])->name('destroy');
         Route::post('/bulk-delete', [FinanceReportController::class, 'bulkDelete'])->name('bulk-delete');
+    });
+
+Route::middleware(['role:Superadmin'])
+    ->prefix('/admin/setting')
+    ->name('admin.setting.')
+    ->group(function () {
+        Route::get('/', [SettingController::class, 'index'])->name('index');
+        Route::post('/update', [SettingController::class, 'update'])->name('update');
+    });
+
+// ======================================= DYNAMIC FORMS — ADMIN =======================================
+
+Route::middleware(['auth', 'role:Superadmin|HelperAdmin'])
+    ->prefix('/admin/forms')
+    ->name('admin.forms.')
+    ->group(function () {
+        // Form CRUD
+        Route::get('/',                [AdminFormController::class, 'index'])      ->name('index');
+        Route::get('/create',          [AdminFormController::class, 'create'])     ->name('create');
+        Route::post('/',               [AdminFormController::class, 'store'])      ->name('store');
+        Route::post('/bulk-delete',    [AdminFormController::class, 'bulkDelete']) ->name('bulk-delete');
+        Route::get('/{id}',            [AdminFormController::class, 'show'])       ->name('show');
+        Route::get('/{id}/edit',       [AdminFormController::class, 'edit'])    ->name('edit');
+        Route::put('/{id}',            [AdminFormController::class, 'update'])  ->name('update');
+        Route::delete('/{id}',         [AdminFormController::class, 'destroy']) ->name('destroy');
+
+        // Form lifecycle
+        Route::post('/{id}/publish',   [AdminFormController::class, 'publish']) ->name('publish');
+        Route::post('/{id}/close',     [AdminFormController::class, 'close'])   ->name('close');
+
+        // Form builder (visual drag-drop editor)
+        Route::get('/{id}/builder',    [AdminFormController::class, 'builder']) ->name('builder');
+
+        // Field management (AJAX — called from builder UI)
+        Route::post('/{id}/fields',              [AdminFormController::class, 'addField'])     ->name('fields.add');
+        Route::put('/{id}/fields/{fieldID}',     [AdminFormController::class, 'updateField'])  ->name('fields.update');
+        Route::delete('/{id}/fields/{fieldID}',  [AdminFormController::class, 'removeField'])  ->name('fields.remove');
+        Route::post('/{id}/fields/reorder',      [AdminFormController::class, 'reorderFields'])->name('fields.reorder');
+    });
+
+// ======================================= DYNAMIC FORMS — PUBLIC =======================================
+
+// Public form submission — throttle to 15 per 10 minutes per IP
+Route::prefix('/form')
+    ->name('forms.')
+    ->group(function () {
+        Route::get('/{slug}',          [PublicFormController::class, 'show'])     ->name('show');
+        Route::post('/{slug}',         [PublicFormController::class, 'submit'])   ->name('submit')
+             ->middleware('throttle:15,10');
+        Route::get('/{slug}/terima-kasih', [PublicFormController::class, 'thankYou'])->name('thank-you');
     });
 
 // ======================================= END ROUTE ADMIN PAGE =======================================

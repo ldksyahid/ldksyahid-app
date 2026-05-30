@@ -103,7 +103,7 @@
                                         <select class="form-select @error('tag') is-invalid @enderror" id="tag" name="tag" required>
                                             <option value="">Select Tag</option>
                                             <option value="Seminar" {{ old('tag', $event->tag ?? '') == 'Seminar' ? 'selected' : '' }}>Seminar</option>
-                                            <option value="Pelatihan" {{ old('tag', $event->tag ?? '') == 'Pelatihan' ? 'selected' : '' }}>Pelatihan</option>
+                                            <option value="Pelatihan" {{ old('tag', $event->tag ?? '') == 'Pelatihan' ? 'selected' : '' }}>Training</option>
                                         </select>
                                     @endif
                                     @error('tag')

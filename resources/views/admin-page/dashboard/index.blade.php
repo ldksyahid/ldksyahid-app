@@ -1,6 +1,7 @@
 @extends('admin-page.template.body')
 
 @section('styles')
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <style>
     .page-title {
         font-size: 1.65rem;
@@ -62,6 +63,7 @@
     .greeting-card .greeting-sub {
         font-size: 0.9rem;
         opacity: 0.85;
+        max-width: 560px;
     }
     .greeting-card .live-clock {
         font-size: 2rem;
@@ -274,6 +276,94 @@
         color: #b0b3b8 !important;
     }
 
+    /* ===== Admin Hadith / Quran Daily Widget ===== */
+    .adm-hq-arab {
+        font-size: 1.35rem;
+        line-height: 2.1;
+        text-align: right;
+        direction: rtl;
+        color: #2d2d2d;
+        margin-bottom: 0.5rem;
+    }
+    .adm-hq-text-wrapper {
+        max-height: 155px;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+        position: relative;
+    }
+    .adm-hq-text-wrapper.expanded { max-height: 2000px; }
+    .adm-hq-text-wrapper.adm-hq-no-overflow { max-height: none; }
+    .adm-hq-text-wrapper:not(.expanded):not(.adm-hq-no-overflow)::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 36px;
+        background: linear-gradient(to bottom, transparent, #fff);
+        pointer-events: none;
+    }
+    .adm-hq-text {
+        font-size: 0.9rem;
+        line-height: 1.8;
+        color: #495057;
+        font-style: italic;
+        margin-bottom: 0;
+    }
+    .adm-hq-fade {
+        transition: opacity 0.3s ease;
+    }
+    .adm-hq-fade.fade-out { opacity: 0; }
+    #adm-hq-toggle-icon {
+        transition: transform 0.3s ease;
+        display: inline-block;
+    }
+    /* Visitor Analytics range button */
+    .adm-va-range.active { background:#00a79d; border-color:#00a79d; color:#fff; }
+    @keyframes adm-va-sh { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .adm-va-sort-th:hover { color:#00a79d !important; }
+
+    /* Visitor Analytics stat cards */
+    .adm-va-stat-card { border-radius: 20px !important; }
+
+    /* Visitor Analytics skeleton (class-based for dark mode) */
+    .adm-va-skel-div {
+        height:12px; border-radius:3px;
+        background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%);
+        background-size:200% 100%;
+        animation: adm-va-sh 1.2s infinite;
+    }
+
+    /* Visitor Analytics pagination */
+    #adm-va-tp-pagination .pagination { margin-bottom:0; flex-wrap:wrap; gap:.25rem; }
+    #adm-va-tp-pagination .page-link { font-size:.8rem; padding:.3rem .55rem; color:#00a79d; border-radius:.375rem !important; min-width:2rem; text-align:center; }
+    #adm-va-tp-pagination .page-item.active .page-link { background:#00a79d; border-color:#00a79d; color:#fff; }
+    #adm-va-tp-pagination .page-link:focus { box-shadow:0 0 0 .15rem rgba(0,167,157,.25); }
+    @media (max-width:575.98px) {
+        #adm-va-tp-pagination .page-link { font-size:.75rem; padding:.25rem .45rem; min-width:1.8rem; }
+    }
+
+    html.dark-mode #adm-va-daterange { background-color:#2b2f33; border-color:#3a3e44; color:#dee2e6; }
+    html.dark-mode #adm-va-daterange::placeholder { color:#6c757d; }
+    html.dark-mode #adm-va-refresh { color:#00a79d; border-color:#00a79d; }
+    html.dark-mode .adm-va-skel-div {
+        background: linear-gradient(90deg, #2c2f33 25%, #3a3e44 50%, #2c2f33 75%);
+        background-size:200% 100%;
+    }
+    html.dark-mode #adm-va-tp-pagination .page-link { background-color:#2b2f33; border-color:#3a3e44; color:#00a79d; }
+    html.dark-mode #adm-va-tp-pagination .page-item.active .page-link { background:#00a79d; border-color:#00a79d; color:#fff; }
+    html.dark-mode #adm-va-tp-pagination .page-item.disabled .page-link { background-color:#2b2f33; border-color:#3a3e44; color:#6c757d; }
+    html.dark-mode #adm-va-tp-search { background-color:#2b2f33; border-color:#3a3e44; color:#dee2e6; }
+    html.dark-mode #adm-va-tp-search::placeholder { color:#6c757d; }
+    html.dark-mode #adm-va-tp-search:focus { background-color:#2b2f33; border-color:#00a79d; color:#dee2e6; box-shadow:0 0 0 .15rem rgba(0,167,157,.25); }
+    html.dark-mode #adm-va-tp-clear { color:#6c757d; }
+    html.dark-mode #adm-va-tp-clear:hover { color:#dee2e6; }
+
+    html.dark-mode .adm-hq-arab { color: #e4e6eb; }
+    html.dark-mode .adm-hq-text { color: #b0b3b8; }
+    html.dark-mode #adm-hq-source { color: #fff !important; }
+    html.dark-mode .adm-hq-text-wrapper:not(.expanded):not(.adm-hq-no-overflow)::after {
+        background: linear-gradient(to bottom, transparent, #2b2f33);
+    }
+
     @media (max-width: 768px) {
         .page-title { font-size: 1.35rem; }
         .section-title { font-size: 1rem; }
@@ -289,6 +379,56 @@
         .quick-action-btn { font-size: 0.75rem; padding: 0.5rem 0.6rem; gap: 0.4rem; }
         .quick-action-btn .qa-icon { width: 28px; height: 28px; font-size: 0.7rem; border-radius: 6px; }
     }
+    /* ── Deadline Alert ── */
+    .deadline-alert {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(220, 53, 69, 0.12);
+        padding: 1rem 1.25rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        overflow: hidden;
+        transition: opacity 0.35s ease, transform 0.35s ease, max-height 0.4s ease, padding 0.35s ease, margin 0.35s ease;
+        max-height: 200px;
+    }
+    .deadline-alert.dismissing {
+        opacity: 0;
+        transform: translateY(-8px);
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0 !important;
+    }
+    .deadline-alert .da-icon {
+        width: 42px; height: 42px; flex-shrink: 0;
+        background: rgba(220, 53, 69, 0.1);
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        color: #dc3545; font-size: 1.1rem;
+    }
+    .deadline-alert .da-title   { font-weight: 700; font-size: 0.95rem; color: #dc3545; margin-bottom: 0.15rem; }
+    .deadline-alert .da-sub     { font-size: 0.78rem; color: #6c757d; margin-bottom: 0.4rem; }
+    .deadline-alert .da-meta    { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: #495057; }
+    .deadline-alert .da-close {
+        margin-left: auto; flex-shrink: 0;
+        background: none; border: none; cursor: pointer;
+        color: #adb5bd; font-size: 1rem; padding: 0.2rem 0.4rem;
+        border-radius: 6px; line-height: 1; transition: color 0.2s, background 0.2s;
+    }
+    .deadline-alert .da-close:hover { color: #dc3545; background: rgba(220,53,69,0.08); }
+    /* Dark Mode */
+    html.dark-mode .deadline-alert {
+        background: #2b2f33;
+        border-left-color: #e05260;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    html.dark-mode .deadline-alert .da-icon  { background: rgba(220,53,69,0.18); color: #f07080; }
+    html.dark-mode .deadline-alert .da-title { color: #f07080; }
+    html.dark-mode .deadline-alert .da-sub   { color: #8a9099; }
+    html.dark-mode .deadline-alert .da-meta  { color: #c8cdd3; }
+    html.dark-mode .deadline-alert .da-close { color: #6c757d; }
+    html.dark-mode .deadline-alert .da-close:hover { color: #f07080; background: rgba(220,53,69,0.15); }
 </style>
 @endsection
 
@@ -302,12 +442,43 @@
                 <span class="highlighted-text ms-1">Dashboard</span>
             </h1>
 
+            {{-- Deadline Alerts --}}
+            @if($deadlineAlerts->isNotEmpty())
+                @foreach($deadlineAlerts as $alert)
+                <div class="col-md-12 mb-3 deadline-alert-wrap">
+                    <div class="deadline-alert">
+                        <div class="da-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="da-title">Deadline {{ $alert['label'] }}</div>
+                            <div class="da-sub">Please contact the Developer Team immediately.</div>
+                            <div class="da-meta">
+                                <span><i class="fas fa-calendar-alt me-1"></i>{{ $alert['date_formatted'] }}</span>
+                                @if($alert['cost'])
+                                    <span><i class="fas fa-tag me-1"></i>{{ $alert['cost'] }}</span>
+                                @endif
+                                @if($alert['is_overdue'])
+                                    <span class="badge bg-danger text-white">OVERDUE {{ abs($alert['days_remaining']) }} days</span>
+                                @else
+                                    <span class="badge bg-warning text-dark">{{ $alert['days_remaining'] }} days left</span>
+                                @endif
+                            </div>
+                        </div>
+                        <button type="button" class="da-close btn-dismiss-deadline" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                @endforeach
+            @endif
+
             <!-- Greeting Header + Live Clock -->
             <div class="col-md-12 mb-4">
                 <div class="greeting-card d-flex justify-content-between align-items-center flex-wrap">
                     <div>
-                        <div class="greeting-text" id="greetingText">Selamat Datang</div>
-                        <div class="greeting-sub" id="greetingSub">Semoga harimu produktif!</div>
+                        <div class="greeting-text" id="greetingText">Welcome</div>
+                        <div class="greeting-sub" id="greetingSub">Have a productive day!</div>
                     </div>
                     <div class="text-end mt-2 mt-md-0">
                         <div class="live-clock" id="liveClock">--:--:--</div>
@@ -316,28 +487,267 @@
                 </div>
             </div>
 
-            <!-- Prayer Times -->
+            <!-- Hadith / Quran Daily -->
             <div class="col-md-12 mb-4">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <h5 class="section-title mb-3"><i class="fas fa-mosque me-2"></i>Prayer Times - Jakarta</h5>
-                        <div class="row g-3">
-                            @php
-                                $prayers = ['Imsak', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
-                                $icons = ['fa-moon', 'fa-sun', 'fa-sun', 'fa-cloud-sun', 'fa-moon', 'fa-star'];
-                            @endphp
-                            @foreach ($prayers as $index => $name)
-                            <div class="col-6 col-md-4 col-lg-2">
-                                <div class="prayer-card text-center p-3">
-                                    <div class="prayer-icon mx-auto mb-2">
-                                        <i class="fa {{ $icons[$index] }}"></i>
-                                    </div>
-                                    <div class="prayer-name mb-1">{{ $name }}</div>
-                                    <div class="prayer-time">{{ $prayerTimes[strtolower($name)] ?? '-' }}</div>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                            <h5 class="section-title mb-0">
+                                <i class="fas fa-book-open me-2"></i>Daily Hadith &amp; Al-Qur'an
+                            </h5>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="text-muted small">
+                                    Next content in
+                                    <span class="fw-semibold" style="color:#00a79d;" id="adm-hq-countdown">60</span>
+                                    seconds
+                                </span>
+                                <button id="adm-hq-refresh"
+                                    style="background:transparent; color:#00a79d; border:1px solid #00a79d; border-radius:6px; padding:2px 9px; cursor:pointer; line-height:1.5;"
+                                    data-bs-toggle="tooltip" title="Refresh Now">
+                                    <i class="fas fa-sync-alt fa-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="adm-hq-fade" id="adm-hq-source"
+                                style="background:#00a79d; color:#fff; font-size:0.78rem; padding:3px 10px; border-radius:20px; white-space:nowrap;">
+                                Loading...
+                            </span>
+                            <span class="text-muted small adm-hq-fade" id="adm-hq-number"></span>
+                        </div>
+                        <div class="adm-hq-text-wrapper" id="adm-hq-wrapper">
+                            <p class="adm-hq-arab adm-hq-fade" id="adm-hq-arab"></p>
+                            <p class="adm-hq-text adm-hq-fade" id="adm-hq-text">Loading content...</p>
+                        </div>
+                        <button id="adm-hq-toggle"
+                            style="background:transparent; border:none; color:#00a79d; font-size:0.85rem; padding:0; margin-top:0.5rem; cursor:pointer; display:none;">
+                            <span id="adm-hq-toggle-text">Read More</span>
+                            <i class="fas fa-chevron-down fa-xs ms-1" id="adm-hq-toggle-icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visitor Analytics -->
+            <div class="col-md-12 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        {{-- Header --}}
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                            <div>
+                                <h5 class="section-title mb-0">
+                                    <i class="fas fa-chart-line me-2"></i>Visitor Analytics
+                                </h5>
+                                <p class="text-muted mb-0" style="font-size:.75rem;">Public page visitor statistics</p>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="text-muted small" style="white-space:nowrap;">
+                                    Auto-refresh in
+                                    <span id="adm-va-countdown" class="fw-semibold" style="color:#00a79d;">15</span>s
+                                </span>
+                                <button id="adm-va-refresh" type="button"
+                                    style="background:transparent;color:#00a79d;border:1px solid #00a79d;border-radius:6px;padding:2px 9px;cursor:pointer;line-height:1.5;"
+                                    data-bs-toggle="tooltip" title="Refresh now">
+                                    <i class="fas fa-sync-alt fa-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- Summary Cards: Human Visitors --}}
+                        <p class="mb-2" style="font-size:.75rem;font-weight:600;color:#00a79d;">
+                            <i class="fas fa-users fa-xs me-1"></i>Visitors
+                        </p>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(0,167,157,.08);">
+                                    <div class="fw-bold fs-4" style="color:#00a79d;" id="adm-va-stat-today">{{ number_format($visitorSummary['today']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-sun fa-xs me-1"></i>Today</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
                                 </div>
                             </div>
-                            @endforeach
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(99,102,241,.08);">
+                                    <div class="fw-bold fs-4" style="color:#6366f1;" id="adm-va-stat-month">{{ number_format($visitorSummary['month']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-calendar-alt fa-xs me-1"></i>This Month</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(234,179,8,.08);">
+                                    <div class="fw-bold fs-4" style="color:#ca8a04;" id="adm-va-stat-year">{{ number_format($visitorSummary['year']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-calendar fa-xs me-1"></i>This Year</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">visitors</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(245,158,11,.08);">
+                                    <div class="fw-bold fs-4" style="color:#f59e0b;" id="adm-va-stat-alltime">{{ number_format($visitorSummary['allTime']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-history fa-xs me-1"></i>All-Time</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">since first recorded</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(16,185,129,.08);"
+                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    title="Visitors (distinct IPs) who loaded a page within the last 30 minutes. Does not mean they are online right now.">
+                                    <div class="fw-bold fs-4" style="color:#10b981;" id="adm-va-stat-active">{{ number_format($visitorSummary['activeNow']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-circle fa-xs me-1" style="color:#10b981;"></i>Active Now</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">active in last 30 min</div>
+                                </div>
+                            </div>
                         </div>
+
+                        {{-- Summary Cards: Bot Traffic --}}
+                        <p class="mb-2" style="font-size:.75rem;font-weight:600;color:#ef4444;">
+                            <i class="fas fa-robot fa-xs me-1"></i>Bot
+                        </p>
+                        <div class="row g-3 mb-4">
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(239,68,68,.07);">
+                                    <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-today">{{ number_format($visitorSummary['botToday']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-sun fa-xs me-1"></i>Today</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(239,68,68,.07);">
+                                    <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-month">{{ number_format($visitorSummary['botMonth']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-calendar-alt fa-xs me-1"></i>This Month</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(239,68,68,.07);">
+                                    <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-year">{{ number_format($visitorSummary['botYear']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-calendar fa-xs me-1"></i>This Year</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">bot hits</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(239,68,68,.07);">
+                                    <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-alltime">{{ number_format($visitorSummary['botAllTime']) }}</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-history fa-xs me-1"></i>All-Time</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">since first recorded</div>
+                                </div>
+                            </div>
+                            @php
+                                $totalTraffic = $visitorSummary['allTime'] + $visitorSummary['botAllTime'];
+                                $botPct = $totalTraffic > 0 ? round($visitorSummary['botAllTime'] / $totalTraffic * 100) : 0;
+                            @endphp
+                            <div class="col-6 col-md"
+                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                title="Percentage of bot traffic out of total traffic (bots + visitors)">
+                                <div class="p-3 rounded-4 text-center adm-va-stat-card" style="background:rgba(239,68,68,.07);">
+                                    <div class="fw-bold fs-4" style="color:#ef4444;" id="adm-va-stat-bot-ratio">{{ $botPct }}%</div>
+                                    <div class="small text-muted mt-1"><i class="fas fa-percent fa-xs me-1"></i>Bot Ratio</div>
+                                    <div style="font-size:.68rem;color:#adb5bd;margin-top:2px;">of total traffic</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Date Range Bar --}}
+                        <div class="d-flex align-items-center gap-2 flex-wrap py-2 mb-3"
+                            style="border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);">
+                            <i class="fas fa-calendar-alt fa-xs text-muted"></i>
+                            <input type="text" id="adm-va-daterange" class="form-control form-control-sm"
+                                style="max-width:260px;flex:1;font-size:.8rem;cursor:pointer;"
+                                placeholder="Select date range" autocomplete="off">
+                        </div>
+
+                        {{-- Charts Row --}}
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-8">
+                                <p class="mb-1" style="font-size:.78rem;font-weight:600;color:#00a79d;">
+                                    <i class="fas fa-chart-area fa-xs me-1"></i>Daily Visitor Trend
+                                    <span class="text-muted fw-normal" style="font-size:.7rem;"> — visitors per day</span>
+                                </p>
+                                <div style="position:relative; height:220px; background:rgba(0,0,0,.03); border-radius:12px; padding:12px;">
+                                    <canvas id="adm-va-line-chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="mb-1" style="font-size:.78rem;font-weight:600;color:#00a79d;">
+                                    <i class="fas fa-mobile-alt fa-xs me-1"></i>Device Breakdown
+                                    <span class="text-muted fw-normal" style="font-size:.7rem;"> — mobile, desktop, tablet</span>
+                                </p>
+                                <div style="position:relative; height:220px; background:rgba(0,0,0,.03); border-radius:12px; padding:12px;">
+                                    <canvas id="adm-va-device-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Top Countries --}}
+                        <p class="mb-2" style="font-size:.78rem;font-weight:600;color:#00a79d;">
+                            <i class="fas fa-globe fa-xs me-1"></i>Top Countries
+                            <span class="text-muted fw-normal" style="font-size:.7rem;"> — visitors by country</span>
+                        </p>
+                        <div id="adm-va-countries-list" class="mb-4">
+                            <p class="text-muted small text-center py-2">Loading...</p>
+                        </div>
+
+                        {{-- Bot Traffic by Country --}}
+                        <p class="mb-2" style="font-size:.78rem;font-weight:600;color:#ef4444;">
+                            <i class="fas fa-robot fa-xs me-1"></i>Bot Traffic by Country
+                            <span class="text-muted fw-normal" style="font-size:.7rem;"> — countries where bot traffic originated</span>
+                        </p>
+                        <div id="adm-va-bot-countries-list" class="mb-4">
+                            <p class="text-muted small text-center py-2">Loading...</p>
+                        </div>
+
+                        {{-- Top Pages header --}}
+                        <p class="mb-2" style="font-size:.78rem;font-weight:600;color:#00a79d;">
+                            <i class="fas fa-file-alt fa-xs me-1"></i>Top Pages
+                            <span class="text-muted fw-normal" style="font-size:.7rem;"> — most visited pages in the selected period</span>
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                            <span class="text-muted small" id="adm-va-tp-info"></span>
+                            <div style="position:relative;">
+                                <i class="fas fa-search" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);color:#adb5bd;font-size:.7rem;pointer-events:none;"></i>
+                                <input type="text" id="adm-va-tp-search" class="form-control form-control-sm"
+                                    style="padding-left:26px;padding-right:26px;font-size:.8rem;min-width:170px;"
+                                    placeholder="Search path..." autocomplete="off">
+                                <button id="adm-va-tp-clear" type="button" class="d-none"
+                                    style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:#adb5bd;padding:0;cursor:pointer;line-height:1;">
+                                    <i class="fas fa-times fa-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- Top Pages table --}}
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover mb-0" style="font-size:.85rem;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-muted fw-normal" style="font-size:.75rem;width:32px;">#</th>
+                                        <th class="text-muted fw-normal" style="font-size:.75rem;">
+                                            PATH
+                                            <i class="fas fa-question-circle fa-xs ms-1 text-muted" style="cursor:default;"
+                                                data-bs-toggle="tooltip" title="The URL path of the visited page (e.g. /about, /news/5)"></i>
+                                        </th>
+                                        <th class="adm-va-sort-th text-end fw-normal" data-sort="hits"
+                                            style="font-size:.75rem;cursor:pointer;white-space:nowrap;">
+                                            HITS
+                                            <i class="fas fa-question-circle fa-xs ms-1 text-muted" style="cursor:default;"
+                                                data-bs-toggle="tooltip" title="Total page loads (hits). Repeat visits from the same person are counted separately."></i>
+                                            <span class="adm-va-sort-arrow" id="adm-va-arrow-hits" style="color:#00a79d;">↓</span>
+                                        </th>
+                                        <th class="adm-va-sort-th text-end fw-normal" data-sort="uniques"
+                                            style="font-size:.75rem;cursor:pointer;white-space:nowrap;">
+                                            Visitors
+                                            <i class="fas fa-question-circle fa-xs ms-1 text-muted" style="cursor:default;"
+                                                data-bs-toggle="tooltip" title="Number of distinct visitors (different people) who opened this page."></i>
+                                            <span class="adm-va-sort-arrow" id="adm-va-arrow-uniques" style="color:#adb5bd;"></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adm-va-top-pages">
+                                    <tr><td colspan="4" class="text-center text-muted py-2">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {{-- Pagination --}}
+                        <div class="d-flex justify-content-center mt-2" id="adm-va-tp-pagination"></div>
                     </div>
                 </div>
             </div>
@@ -368,6 +778,7 @@
                                 ['icon' => 'fa-id-card', 'title' => 'KTA LDK', 'count' => $idCardCount],
                                 ['icon' => 'fa-book', 'title' => 'Book Catalog', 'count' => $catalogBookCount],
                                 ['icon' => 'fa-file-alt', 'title' => 'Finance Report', 'count' => $financeReportCount],
+                                ['icon' => 'fa-rss', 'title' => 'Subscribers', 'count' => $subscriberCount],
                             ];
                         @endphp
                         <div class="row g-3" id="widgetSection">
@@ -410,6 +821,8 @@
                                 ['icon' => 'fa-book', 'label' => 'Add Book Catalog', 'route' => 'admin.catalog.books.create', 'roles' => ['Superadmin', 'HelperLetter', 'HelperMedia']],
                                 ['icon' => 'fa-file-alt', 'label' => 'Add Finance Report', 'route' => 'admin.finance-report.create', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter']],
                                 ['icon' => 'fa-link', 'label' => 'Add Shortlink', 'route' => 'admin.service.shortlink.index', 'roles' => ['Superadmin', 'HelperAdmin', 'HelperCelsyahid', 'HelperEventMart', 'HelperSPAM', 'HelperMedia', 'HelperLetter']],
+                                ['icon' => 'fa-paper-plane', 'label' => 'Generate Email', 'route' => 'admin.email-config.generate', 'roles' => ['Superadmin']],
+                                ['icon' => 'fa-envelope-open-text', 'label' => 'Add Subscriber', 'route' => 'admin.subscription.create', 'roles' => ['Superadmin']],
                             ];
                         @endphp
                         <div class="row g-2">
@@ -496,56 +909,72 @@ $(document).ready(function() {
         var seconds = String(now.getSeconds()).padStart(2, '0');
         $('#liveClock').text(hours + ':' + minutes + ':' + seconds);
 
-        var days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-        var months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
         $('#liveDate').text(days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear());
 
         var h = now.getHours();
-        var greeting = h < 11 ? 'Selamat Pagi' : h < 15 ? 'Selamat Siang' : h < 18 ? 'Selamat Sore' : 'Selamat Malam';
+        var greeting = h < 11 ? 'Good Morning' : h < 15 ? 'Good Afternoon' : h < 18 ? 'Good Evening' : 'Good Night';
         var icon = h < 11 ? '&#9728;' : h < 15 ? '&#9728;' : h < 18 ? '&#127749;' : '&#127769;';
         $('#greetingText').html(icon + ' ' + greeting + ', ' + userName);
     }
     updateClock();
     setInterval(updateClock, 1000);
 
-    // === Rotating Greeting Messages ===
-    var greetingMessages = [
-        'Semoga harimu produktif!',
-        'Tetap semangat dan istiqomah!',
-        'Jangan lupa istirahat ya!',
-        'Bismillah, semoga dimudahkan!',
-        'Keep up the great work!',
-        'Yuk, kelola data dengan rapi!',
-        'Semoga selalu dalam lindungan-Nya!',
-        'Senyum dulu, baru kerja~',
-        'Have a wonderful day!',
-        'Jaga kesehatan, jaga ibadah!',
-        'Awali dengan Bismillah, akhiri dengan Alhamdulillah!',
-        'Sedikit-sedikit, lama-lama jadi bukit!',
-        'Jangan lupa minum air putih ya!',
-        'Setiap langkah kecil tetap berarti!',
-        'Barakallahu fiikum, tetap produktif!',
-        'Ingat niat, ingat tujuan!',
-        'Kerja cerdas, bukan cuma kerja keras!',
-        'Jadilah bermanfaat untuk sesama!',
-        'Allah bersama orang-orang yang sabar!',
-        'Fokus, konsisten, dan tawakal!',
-    ];
-    function randomMsg() {
-        return greetingMessages[Math.floor(Math.random() * greetingMessages.length)];
+    // === Motivational Quotes from API (quotes.liupurnomo.com) ===
+    var greetingRetryCount = 0, GREETING_MAX_RETRY = 5, greetingRetryTimer = null;
+
+    function applyGreetingQuote($sub, html, animate) {
+        if (animate) {
+            $sub.animate({ opacity: 0 }, 400, function() {
+                $sub.html(html);
+                $sub.animate({ opacity: 1 }, 400);
+            });
+        } else {
+            $sub.html(html);
+        }
     }
 
-    // Random on page load
-    $('#greetingSub').html(randomMsg());
-
-    function rotateGreeting() {
+    function fetchMotivasiQuote(animate) {
         var $sub = $('#greetingSub');
-        $sub.animate({ opacity: 0 }, 400, function() {
-            $sub.html(randomMsg());
-            $sub.animate({ opacity: 1 }, 400);
+        $.ajax({
+            url: '{{ route("admin.api.motivasi-quotes") }}',
+            method: 'GET',
+            timeout: 10000,
+            success: function(json) {
+                if (json.data && json.data.text) {
+                    greetingRetryCount = 0;
+                    var text   = json.data.text;
+                    var author = json.data.author
+                        ? ' <span style="font-size:0.8em;opacity:0.75;font-style:normal;font-weight:400;">— ' + json.data.author + '</span>'
+                        : '';
+                    applyGreetingQuote($sub, '<em>' + text + '</em>' + author, animate);
+                } else {
+                    scheduleGreetingRetry(animate);
+                }
+            },
+            error: function() {
+                scheduleGreetingRetry(animate);
+            }
         });
     }
-    setInterval(rotateGreeting, 10000);
+
+    function scheduleGreetingRetry(animate) {
+        greetingRetryCount++;
+        if (greetingRetryCount <= GREETING_MAX_RETRY) {
+            greetingRetryTimer = setTimeout(function() {
+                fetchMotivasiQuote(animate);
+            }, 3000);
+        }
+        // If all retries exhausted, keep the previous text displayed
+    }
+
+    fetchMotivasiQuote(false);
+    setInterval(function() {
+        greetingRetryCount = 0;
+        if (greetingRetryTimer) clearTimeout(greetingRetryTimer);
+        fetchMotivasiQuote(true);
+    }, 10000);
 
     // === Animated Counter (Count-Up) ===
     var counterAnimated = false;
@@ -643,6 +1072,734 @@ $(document).ready(function() {
             }
         }
     });
+    // Deadline alert dismiss with animation
+    $(document).on('click', '.btn-dismiss-deadline', function () {
+        var $alert = $(this).closest('.deadline-alert');
+        var $wrap  = $(this).closest('.deadline-alert-wrap');
+        $alert.addClass('dismissing');
+        setTimeout(function () { $wrap.remove(); }, 420);
+    });
 });
+</script>
+<script>
+(function () {
+    /* ================================================================
+       ADMIN DASHBOARD — Hadith / Quran Daily Widget
+       Prefix: adm-hq-   (no conflict with hero-jumbotron hj-)
+       ================================================================ */
+
+    var contentType = (Math.random() < 0.5) ? 'hadith' : 'quran';
+    var timeLeft = 60, countdownInterval = null, isFetching = false;
+    var retryCount = 0, MAX_RETRY = 5, retryTimeout = null;
+
+    var books = [
+        { id: 'bukhari',    name: 'HR. Bukhari',    max: 6638 },
+        { id: 'muslim',     name: 'HR. Muslim',     max: 4930 },
+        { id: 'abu-daud',   name: 'HR. Abu Daud',   max: 4419 },
+        { id: 'tirmidzi',   name: 'HR. Tirmidzi',   max: 3625 },
+        { id: 'ibnu-majah', name: 'HR. Ibnu Majah', max: 4285 },
+        { id: 'nasai',      name: 'HR. Nasai',      max: 5364 },
+    ];
+
+    var surahMaxAyah = [
+        7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,
+        111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,
+        73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,
+        18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,
+        12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,
+        29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,
+        5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6
+    ];
+
+    function getEl(id) { return document.getElementById(id); }
+
+    function getFadeEls() {
+        return ['adm-hq-arab','adm-hq-text','adm-hq-source','adm-hq-number']
+            .map(function(id){ return getEl(id); })
+            .filter(function(el){ return el; });
+    }
+
+    function fadeOut(cb) {
+        var els = getFadeEls(), done = 0, total = els.length;
+        if (!total) { cb(); return; }
+        els.forEach(function(el){ el.classList.add('fade-out'); });
+        els.forEach(function(el){
+            var h = function(){
+                el.removeEventListener('transitionend', h);
+                if (++done === total) cb();
+            };
+            el.addEventListener('transitionend', h);
+            setTimeout(function(){
+                if (el.classList.contains('fade-out') && done < total) {
+                    el.removeEventListener('transitionend', h);
+                    if (++done === total) cb();
+                }
+            }, 400);
+        });
+    }
+
+    function fadeIn() {
+        getFadeEls().forEach(function(el){ el.classList.remove('fade-out'); });
+    }
+
+    function checkOverflow() {
+        var wrapper = getEl('adm-hq-wrapper');
+        var toggle  = getEl('adm-hq-toggle');
+        if (!wrapper || !toggle) return;
+        var overflow = wrapper.scrollHeight > wrapper.offsetHeight + 5;
+        toggle.style.display = overflow ? 'inline-block' : 'none';
+        wrapper.classList.toggle('adm-hq-no-overflow', !overflow);
+    }
+
+    function updateCountdown() {
+        var el = getEl('adm-hq-countdown');
+        if (el) el.textContent = timeLeft;
+    }
+
+    function resetCountdown() { timeLeft = 60; updateCountdown(); }
+
+    function startCountdown() {
+        if (countdownInterval) clearInterval(countdownInterval);
+        countdownInterval = setInterval(function(){
+            timeLeft--;
+            updateCountdown();
+            if (timeLeft <= 0) {
+                contentType = (contentType === 'hadith') ? 'quran' : 'hadith';
+                timeLeft = 60;
+                fetchContent();
+            }
+        }, 1000);
+    }
+
+    function applyContent(arabText, idText, sourceLabel, numberLabel) {
+        var wrapper  = getEl('adm-hq-wrapper');
+        var toggle   = getEl('adm-hq-toggle');
+        var toggleTxt = getEl('adm-hq-toggle-text');
+        var icon     = getEl('adm-hq-toggle-icon');
+        if (wrapper) wrapper.classList.remove('expanded');
+        if (toggle)  { toggle.classList.remove('expanded'); }
+        if (toggleTxt) toggleTxt.textContent = 'Read More';
+        if (icon)    icon.style.transform = '';
+        var arabEl = getEl('adm-hq-arab');
+        var textEl = getEl('adm-hq-text');
+        var srcEl  = getEl('adm-hq-source');
+        var numEl  = getEl('adm-hq-number');
+        if (arabEl) arabEl.textContent = arabText;
+        if (textEl) textEl.innerHTML   = '\u201c' + idText + '\u201d';
+        if (srcEl)  srcEl.textContent  = sourceLabel;
+        if (numEl)  numEl.textContent  = numberLabel;
+        fadeIn();
+        setTimeout(checkOverflow, 100);
+        resetCountdown();
+    }
+
+    function showError(msg) {
+        var textEl = getEl('adm-hq-text');
+        var srcEl  = getEl('adm-hq-source');
+        var arabEl = getEl('adm-hq-arab');
+        var numEl  = getEl('adm-hq-number');
+        var toggle = getEl('adm-hq-toggle');
+        if (textEl) textEl.innerHTML  = msg;
+        if (srcEl)  srcEl.textContent = (contentType === 'quran') ? 'Al-Quran' : 'Hadith';
+        if (arabEl) arabEl.textContent = '';
+        if (numEl)  numEl.textContent  = '';
+        if (toggle) toggle.style.display = 'none';
+    }
+
+    function scheduleRetry(delay) {
+        if (retryTimeout) clearTimeout(retryTimeout);
+        if (retryCount < MAX_RETRY) {
+            retryTimeout = setTimeout(fetchContent, delay || 3000);
+        } else {
+            showError('Failed to load content after ' + MAX_RETRY + ' attempts. Please refresh the page.');
+            retryCount = 0;
+        }
+    }
+
+    function fetchRandomHadith() {
+        var book   = books[Math.floor(Math.random() * books.length)];
+        var number = Math.floor(Math.random() * book.max) + 1;
+        var ctrl   = new AbortController();
+        var tId    = setTimeout(function(){ ctrl.abort(); }, 10000);
+        fetch('https://api.hadith.gading.dev/books/' + book.id + '/' + number, { signal: ctrl.signal })
+            .then(function(r){ clearTimeout(tId); return r.json(); })
+            .then(function(json){
+                if (json.code === 200 && json.data && json.data.contents) {
+                    retryCount = 0;
+                    var c = json.data.contents;
+                    fadeOut(function(){
+                        applyContent(c.arab, c.id, book.name, book.name + ' No. ' + c.number);
+                    });
+                } else { throw new Error('Invalid response'); }
+            })
+            .catch(function(e){
+                retryCount++;
+                var msg = e.name === 'AbortError'
+                    ? 'Hadith load timed out. Retrying... (' + retryCount + '/' + MAX_RETRY + ')'
+                    : (e.message === 'Failed to fetch'
+                        ? 'Connection lost. Retrying... (' + retryCount + '/' + MAX_RETRY + ')'
+                        : 'Failed to load hadith. Retrying... (' + retryCount + '/' + MAX_RETRY + ')');
+                fadeOut(function(){ showError(msg); fadeIn(); scheduleRetry(3000); });
+            })
+            .finally(function(){ isFetching = false; });
+    }
+
+    function fetchRandomAyah() {
+        var surahNo = Math.floor(Math.random() * 114) + 1;
+        var ayahNo  = Math.floor(Math.random() * surahMaxAyah[surahNo - 1]) + 1;
+        var ctrl    = new AbortController();
+        var tId     = setTimeout(function(){ ctrl.abort(); }, 10000);
+        fetch('https://quran-api-id.vercel.app/surah/' + surahNo + '/' + ayahNo, { signal: ctrl.signal })
+            .then(function(r){ clearTimeout(tId); return r.json(); })
+            .then(function(json){
+                if (json.code === 200 && json.data) {
+                    retryCount = 0;
+                    var d = json.data;
+                    var arabText  = d.text && d.text.arab ? d.text.arab : '';
+                    var idText    = d.translation && d.translation.id ? d.translation.id : '';
+                    var surahName = (d.surah && d.surah.name && d.surah.name.transliteration)
+                                  ? 'QS. ' + d.surah.name.transliteration.id
+                                  : 'QS. Surah ' + surahNo;
+                    var fullRef   = surahName + ': ' + ayahNo;
+                    fadeOut(function(){
+                        applyContent(arabText, idText, surahName, fullRef);
+                    });
+                } else { throw new Error('Invalid response'); }
+            })
+            .catch(function(e){
+                retryCount++;
+                var msg = e.name === 'AbortError'
+                    ? 'Verse load timed out. Retrying... (' + retryCount + '/' + MAX_RETRY + ')'
+                    : (e.message === 'Failed to fetch'
+                        ? 'Connection lost. Retrying... (' + retryCount + '/' + MAX_RETRY + ')'
+                        : 'Failed to load verse. Retrying... (' + retryCount + '/' + MAX_RETRY + ')');
+                fadeOut(function(){ showError(msg); fadeIn(); scheduleRetry(3000); });
+            })
+            .finally(function(){ isFetching = false; });
+    }
+
+    function fetchContent() {
+        if (isFetching) return;
+        isFetching = true;
+        if (contentType === 'quran') { fetchRandomAyah(); } else { fetchRandomHadith(); }
+    }
+
+    /* Toggle expand/collapse */
+    document.addEventListener('click', function(e){
+        if (e.target.closest('#adm-hq-toggle')) {
+            e.preventDefault();
+            var wrapper   = getEl('adm-hq-wrapper');
+            var toggleTxt = getEl('adm-hq-toggle-text');
+            var icon      = getEl('adm-hq-toggle-icon');
+            if (wrapper) {
+                var exp = wrapper.classList.toggle('expanded');
+                if (toggleTxt) toggleTxt.textContent = exp ? 'Show Less' : 'Read More';
+                if (icon)      icon.style.transform  = exp ? 'rotate(180deg)' : '';
+            }
+        }
+        /* Manual refresh button */
+        if (e.target.closest('#adm-hq-refresh')) {
+            e.preventDefault();
+            retryCount = 0;
+            if (retryTimeout) clearTimeout(retryTimeout);
+            contentType = (Math.random() < 0.5) ? 'hadith' : 'quran';
+            fetchContent();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+        fetchContent();
+        startCountdown();
+        window.addEventListener('resize', checkOverflow);
+    });
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script>
+// === Visitor Analytics Widget ===
+(function () {
+    'use strict';
+
+    // Init Bootstrap tooltips
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+        new bootstrap.Tooltip(el, { trigger: 'hover focus' });
+    });
+
+    var API_URL   = '{{ route("admin.api.visitor-stats") }}';
+    var TP_URL    = '{{ route("admin.api.visitor-top-pages") }}';
+    var lineChart = null;
+    var devChart  = null;
+
+    // Date range state (default: last 30 days)
+    var startDate = moment().subtract(29, 'days').format('YYYY-MM-DD');
+    var endDate   = moment().format('YYYY-MM-DD');
+
+    // Top pages state
+    var tp      = { search: '', sortBy: 'hits', sortOrder: 'desc', page: 1 };
+    var tpTimer = null;
+
+    // ── Countdown + auto-refresh ──────────────────────────────────────
+    var timeLeft          = 30;
+    var countdownInterval = null;
+
+    function updateCountdown() {
+        var el = document.getElementById('adm-va-countdown');
+        if (el) el.textContent = timeLeft;
+    }
+
+    function resetCountdown() { timeLeft = 30; updateCountdown(); }
+
+    function startCountdown() {
+        if (countdownInterval) clearInterval(countdownInterval);
+        countdownInterval = setInterval(function () {
+            timeLeft--;
+            updateCountdown();
+            if (timeLeft <= 0) {
+                loadStats();
+                loadTopPages();
+                timeLeft = 30;
+            }
+        }, 1000);
+    }
+
+    document.getElementById('adm-va-refresh').addEventListener('click', function () {
+        loadStats();
+        loadTopPages();
+        resetCountdown();
+    });
+
+    // ── Daterangepicker ───────────────────────────────────────────────
+    $('#adm-va-daterange').daterangepicker({
+        autoUpdateInput: true,
+        startDate: moment().subtract(29, 'days'),
+        endDate:   moment(),
+        locale: {
+            format: 'DD MMM YYYY',
+            separator: ' – ',
+            applyLabel: 'Apply',
+            cancelLabel: 'Clear',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: 'Custom',
+            daysOfWeek: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+            monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+            firstDay: 1,
+        },
+        ranges: {
+            'Today':       [moment(), moment()],
+            'Last 7 Days': [moment().subtract(6,  'days'), moment()],
+            'Last 30 Days':[moment().subtract(29, 'days'), moment()],
+            'Last 90 Days':[moment().subtract(89, 'days'), moment()],
+            'This Month':  [moment().startOf('month'), moment()],
+            'This Year':   [moment().startOf('year'),  moment()],
+        },
+        opens: 'right',
+    });
+
+    $('#adm-va-daterange').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD MMM YYYY') + ' – ' + picker.endDate.format('DD MMM YYYY'));
+        startDate = picker.startDate.format('YYYY-MM-DD');
+        endDate   = picker.endDate.format('YYYY-MM-DD');
+        tp.page   = 1;
+        loadStats(false);
+        loadTopPages();
+        resetCountdown();
+    });
+
+    $('#adm-va-daterange').on('cancel.daterangepicker', function () {
+        startDate = moment().subtract(29, 'days').format('YYYY-MM-DD');
+        endDate   = moment().format('YYYY-MM-DD');
+        $(this).val(moment().subtract(29,'days').format('DD MMM YYYY') + ' – ' + moment().format('DD MMM YYYY'));
+        tp.page = 1;
+        loadStats(false);
+        loadTopPages();
+        resetCountdown();
+    });
+
+    // ── Cached chart data (for theme re-render) ───────────────────────
+    var lastChartData = null, lastDeviceData = null;
+
+    // ── Render summary cards ──────────────────────────────────────────
+    function animateCount(el, newVal, suffix) {
+        if (!el) return;
+        suffix = suffix || '';
+        var start    = null;
+        var duration = 600;
+        function step(ts) {
+            if (!start) start = ts;
+            var progress = Math.min((ts - start) / duration, 1);
+            var eased    = 1 - Math.pow(1 - progress, 3);
+            var cur      = Math.round(newVal * eased);
+            el.textContent = cur.toLocaleString() + suffix;
+            if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+
+    function setCount(el, newVal, suffix) {
+        if (!el) return;
+        el.textContent = newVal.toLocaleString() + (suffix || '');
+    }
+
+    function renderSummary(s, animate) {
+        var fn = animate ? animateCount : setCount;
+        fn(document.getElementById('adm-va-stat-today'),      s.today);
+        fn(document.getElementById('adm-va-stat-month'),      s.month);
+        fn(document.getElementById('adm-va-stat-year'),       s.year);
+        fn(document.getElementById('adm-va-stat-alltime'),    s.allTime);
+        fn(document.getElementById('adm-va-stat-active'),     s.activeNow);
+        fn(document.getElementById('adm-va-stat-bot-today'),  s.botToday);
+        fn(document.getElementById('adm-va-stat-bot-month'),  s.botMonth);
+        fn(document.getElementById('adm-va-stat-bot-year'),   s.botYear);
+        fn(document.getElementById('adm-va-stat-bot-alltime'),s.botAllTime);
+        var el = document.getElementById('adm-va-stat-bot-ratio');
+        if (el) {
+            var total = s.allTime + s.botAllTime;
+            var pct   = total > 0 ? Math.round(s.botAllTime / total * 100) : 0;
+            fn(el, pct, '%');
+        }
+    }
+
+    // ── Fetch summary + charts ────────────────────────────────────────
+    function loadStats(animate) {
+        fetch(API_URL + '?start_date=' + startDate + '&end_date=' + endDate, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            lastChartData  = d.chart;
+            lastDeviceData = d.devices;
+            if (d.summary && animate !== false) renderSummary(d.summary, true);
+            renderLine(d.chart);
+            renderDevice(d.devices);
+            renderCountries(d.countries || []);
+            renderBotCountries(d.botCountries || []);
+        })
+        .catch(function () {});
+    }
+
+    // ── Top Pages ─────────────────────────────────────────────────────
+    function loadTopPages() {
+        var sk = '';
+        for (var i = 0; i < 15; i++) {
+            sk += '<tr>'
+                + '<td><div class="adm-va-skel-div" style="width:20px;"></div></td>'
+                + '<td><div class="adm-va-skel-div"></div></td>'
+                + '<td><div class="adm-va-skel-div" style="width:50px;margin-left:auto;"></div></td>'
+                + '<td><div class="adm-va-skel-div" style="width:50px;margin-left:auto;"></div></td>'
+                + '</tr>';
+        }
+        document.getElementById('adm-va-top-pages').innerHTML = sk;
+
+        $.ajax({
+            url: TP_URL,
+            data: { start_date: startDate, end_date: endDate, search: tp.search, sort_by: tp.sortBy, sort_order: tp.sortOrder, page: tp.page },
+            success: function (res) {
+                $('#adm-va-top-pages').html(res.html);
+                renderAdmPagination(res.current_page, res.last_page);
+                $('#adm-va-tp-info').text(res.total > 0 ? (res.from + '–' + res.to + ' / ' + res.total + ' paths') : '');
+                updateAdmSortArrows();
+                document.querySelectorAll('#adm-va-top-pages [data-bs-toggle="tooltip"]').forEach(function (el) {
+                    new bootstrap.Tooltip(el, { trigger: 'hover focus' });
+                });
+            },
+            error: function () {
+                $('#adm-va-top-pages').html('<tr><td colspan="4" class="text-center text-muted py-2 small">Failed to load data</td></tr>');
+            }
+        });
+    }
+
+    function updateAdmSortArrows() {
+        document.querySelectorAll('.adm-va-sort-arrow').forEach(function (el) { el.textContent = ''; el.style.color = '#adb5bd'; });
+        var a = document.getElementById('adm-va-arrow-' + tp.sortBy);
+        if (a) { a.textContent = tp.sortOrder === 'asc' ? '↑' : '↓'; a.style.color = '#00a79d'; }
+    }
+
+    // Sort headers
+    $(document).on('click', '.adm-va-sort-th', function () {
+        var col = $(this).data('sort');
+        if (tp.sortBy === col) { tp.sortOrder = tp.sortOrder === 'desc' ? 'asc' : 'desc'; }
+        else { tp.sortBy = col; tp.sortOrder = 'desc'; }
+        tp.page = 1;
+        loadTopPages();
+    });
+
+    // Search
+    document.getElementById('adm-va-tp-search').addEventListener('input', function () {
+        document.getElementById('adm-va-tp-clear').classList.toggle('d-none', this.value === '');
+        var val = this.value;
+        clearTimeout(tpTimer);
+        tpTimer = setTimeout(function () { tp.search = val; tp.page = 1; loadTopPages(); }, 350);
+    });
+    document.getElementById('adm-va-tp-clear').addEventListener('click', function () {
+        document.getElementById('adm-va-tp-search').value = '';
+        this.classList.add('d-none');
+        tp.search = ''; tp.page = 1; loadTopPages();
+    });
+
+    // Pagination renderer (smart ellipsis, mobile-friendly)
+    function renderAdmPagination(current, last) {
+        var $el = $('#adm-va-tp-pagination');
+        if (!last || last <= 1) { $el.html(''); return; }
+
+        var delta = window.innerWidth < 576 ? 1 : 2;
+        var pages = {};
+        pages[1] = true;
+        pages[last] = true;
+        for (var i = Math.max(1, current - delta); i <= Math.min(last, current + delta); i++) {
+            pages[i] = true;
+        }
+        var sorted = Object.keys(pages).map(Number).sort(function(a,b){return a-b;});
+        var items = [];
+        for (var k = 0; k < sorted.length; k++) {
+            if (k > 0 && sorted[k] - sorted[k-1] > 1) {
+                items.push('...');
+            }
+            items.push(sorted[k]);
+        }
+
+        var html = '<nav aria-label="Top pages pagination"><ul class="pagination pagination-sm justify-content-center mb-0 flex-wrap gap-1">';
+        html += '<li class="page-item' + (current <= 1 ? ' disabled' : '') + '">';
+        html += '<a class="page-link adm-va-pg-btn" data-page="' + (current - 1) + '" href="#" aria-label="Previous">‹</a></li>';
+        for (var j = 0; j < items.length; j++) {
+            var p = items[j];
+            if (p === '...') {
+                html += '<li class="page-item disabled"><span class="page-link px-2">…</span></li>';
+            } else {
+                html += '<li class="page-item' + (p === current ? ' active' : '') + '">';
+                html += '<a class="page-link adm-va-pg-btn" data-page="' + p + '" href="#">' + p + '</a></li>';
+            }
+        }
+        html += '<li class="page-item' + (current >= last ? ' disabled' : '') + '">';
+        html += '<a class="page-link adm-va-pg-btn" data-page="' + (current + 1) + '" href="#" aria-label="Next">›</a></li>';
+        html += '</ul></nav>';
+        $el.html(html);
+    }
+
+    // Pagination intercept
+    $(document).on('click', '#adm-va-tp-pagination .adm-va-pg-btn', function (e) {
+        e.preventDefault();
+        var page = parseInt($(this).data('page'));
+        if (!page || page < 1) return;
+        tp.page = page;
+        loadTopPages();
+    });
+
+    // ── Chart renderers ───────────────────────────────────────────────
+    function renderLine(chart) {
+        var ctx = document.getElementById('adm-va-line-chart');
+        if (!ctx) return;
+        var isDark    = document.documentElement.classList.contains('dark-mode');
+        var gridColor = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.05)';
+        var tickColor = isDark ? '#adb5bd' : '#6c757d';
+        if (lineChart) lineChart.destroy();
+        lineChart = new Chart(ctx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: chart.labels,
+                datasets: [
+                    {
+                        label: 'Visitors',
+                        data: chart.data,
+                        borderColor: '#00a79d',
+                        backgroundColor: 'rgba(0,167,157,.08)',
+                        borderWidth: 2,
+                        pointRadius: 2,
+                        fill: true,
+                        tension: 0.3,
+                        order: 1,
+                    },
+                    {
+                        label: 'Bots',
+                        data: chart.botData || [],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239,68,68,.05)',
+                        borderWidth: 1.5,
+                        pointRadius: 2,
+                        borderDash: [4, 3],
+                        fill: false,
+                        tension: 0.3,
+                        order: 2,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { font: { size: 10 }, color: tickColor, boxWidth: 20, padding: 10 }
+                    }
+                },
+                scales: {
+                    x: { ticks: { color: tickColor, maxTicksLimit: 8, font: { size: 10 } }, grid: { color: gridColor } },
+                    y: { beginAtZero: true, ticks: { color: tickColor, precision: 0, font: { size: 10 } }, grid: { color: gridColor } }
+                }
+            }
+        });
+    }
+
+    function renderDevice(d) {
+        var ctx = document.getElementById('adm-va-device-chart');
+        if (!ctx) return;
+        if (devChart) devChart.destroy();
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var legendColor = isDark ? '#dee2e6' : '#666';
+        devChart = new Chart(ctx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Desktop', 'Mobile', 'Tablet', 'Bot'],
+                datasets: [{ data: [d.desktop, d.mobile, d.tablet, d.bot], backgroundColor: ['#6366f1','#00a79d','#f59e0b','#ef4444'], borderWidth: 2 }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10, color: legendColor, usePointStyle: true, pointStyle: 'rectRounded' } } }
+            }
+        });
+    }
+
+    // ── Country breakdown ─────────────────────────────────────────────
+    var allCountries = [], countriesExpanded = false;
+    var COUNTRIES_LIMIT = 15;
+
+    function buildCountryRows(countries, max, barBg, valueKey, valueSuffix) {
+        var html = '';
+        var barColor = valueSuffix === ' hits' ? '#ef4444' : '#00a79d';
+        var numWidth = valueSuffix ? '52px' : '36px';
+        countries.forEach(function (c) {
+            var flag = c.countryCode
+                ? String.fromCodePoint.apply(null, c.countryCode.toUpperCase().split('').map(function(ch){ return 0x1F1E6 + ch.charCodeAt(0) - 65; }))
+                : '🌐';
+            var val = c[valueKey] || 0;
+            var pct = max > 0 ? Math.round((val / max) * 100) : 0;
+            html += '<div style="display:flex;align-items:center;gap:6px;">'
+                + '<span style="width:18px;font-size:.9rem;">' + flag + '</span>'
+                + '<span style="width:100px;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (c.country || c.countryCode) + '</span>'
+                + '<div style="flex:1;background:' + barBg + ';border-radius:3px;height:8px;overflow:hidden;">'
+                +   '<div class="adm-va-cnt-bar" data-pct="' + pct + '" style="width:0;background:' + barColor + ';border-radius:3px;height:8px;transition:width 0.6s ease-out;"></div>'
+                + '</div>'
+                + '<span class="adm-va-cnt-num" data-val="' + val + '" data-suffix="' + valueSuffix.trim() + '"'
+                + ' style="width:' + numWidth + ';text-align:right;font-size:.75rem;color:#6c757d;">0' + valueSuffix + '</span>'
+                + '</div>';
+        });
+        return html;
+    }
+
+    function animateCountryRows(container) {
+        if (!container) return;
+        container.querySelectorAll('.adm-va-cnt-num').forEach(function (span) {
+            var target = parseInt(span.dataset.val) || 0;
+            var suf    = span.dataset.suffix ? ' ' + span.dataset.suffix : '';
+            animateCount(span, target, suf);
+        });
+        requestAnimationFrame(function () {
+            container.querySelectorAll('.adm-va-cnt-bar').forEach(function (bar) {
+                bar.style.width = (bar.dataset.pct || 0) + '%';
+            });
+        });
+    }
+
+    function renderCountries(countries) {
+        var el = document.getElementById('adm-va-countries-list');
+        if (!el) return;
+        allCountries = countries || [];
+        countriesExpanded = false;
+        if (allCountries.length === 0) {
+            el.innerHTML = '<p class="text-muted small text-center py-2">No country data yet.</p>';
+            return;
+        }
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var barBg  = isDark ? 'rgba(0,167,157,.2)' : 'rgba(0,167,157,.12)';
+        var max    = allCountries[0].visitors;
+        var visible = allCountries.slice(0, COUNTRIES_LIMIT);
+        var html = '<div id="adm-va-countries-rows" style="display:flex;flex-direction:column;gap:5px;">'
+            + buildCountryRows(visible, max, barBg, 'visitors', '')
+            + '</div>';
+        if (allCountries.length > COUNTRIES_LIMIT) {
+            html += '<button id="adm-va-countries-toggle" style="background:transparent;border:none;color:#00a79d;font-size:.8rem;padding:6px 0 0;cursor:pointer;">'
+                + '<i class="fas fa-chevron-down fa-xs me-1"></i>Show More (' + (allCountries.length - COUNTRIES_LIMIT) + ' more)'
+                + '</button>';
+        }
+        el.innerHTML = html;
+        animateCountryRows(document.getElementById('adm-va-countries-rows'));
+    }
+
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('#adm-va-countries-toggle')) {
+            var btn    = document.getElementById('adm-va-countries-toggle');
+            var rows   = document.getElementById('adm-va-countries-rows');
+            var isDark = document.documentElement.classList.contains('dark-mode');
+            var barBg  = isDark ? 'rgba(0,167,157,.2)' : 'rgba(0,167,157,.12)';
+            var max    = allCountries[0].visitors;
+            countriesExpanded = !countriesExpanded;
+            var visible = countriesExpanded ? allCountries : allCountries.slice(0, COUNTRIES_LIMIT);
+            rows.innerHTML = buildCountryRows(visible, max, barBg, 'visitors', '');
+            animateCountryRows(rows);
+            btn.innerHTML = countriesExpanded
+                ? '<i class="fas fa-chevron-up fa-xs me-1"></i>Show Less'
+                : '<i class="fas fa-chevron-down fa-xs me-1"></i>Show More (' + (allCountries.length - COUNTRIES_LIMIT) + ' more)';
+        }
+    });
+
+    // ── Bot country breakdown ─────────────────────────────────────────
+    var allBotCountries = [], botCountriesExpanded = false;
+
+    function renderBotCountries(countries) {
+        var el = document.getElementById('adm-va-bot-countries-list');
+        if (!el) return;
+        allBotCountries = countries || [];
+        botCountriesExpanded = false;
+        if (allBotCountries.length === 0) {
+            el.innerHTML = '<p class="text-muted small text-center py-2">No bot traffic recorded in this period.</p>';
+            return;
+        }
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        var barBg  = isDark ? 'rgba(239,68,68,.2)' : 'rgba(239,68,68,.12)';
+        var max    = allBotCountries[0].hits;
+        var visible = allBotCountries.slice(0, COUNTRIES_LIMIT);
+        var html = '<div id="adm-va-bot-countries-rows" style="display:flex;flex-direction:column;gap:5px;">'
+            + buildCountryRows(visible, max, barBg, 'hits', ' hits')
+            + '</div>';
+        if (allBotCountries.length > COUNTRIES_LIMIT) {
+            html += '<button id="adm-va-bot-countries-toggle" style="background:transparent;border:none;color:#ef4444;font-size:.8rem;padding:6px 0 0;cursor:pointer;">'
+                + '<i class="fas fa-chevron-down fa-xs me-1"></i>Show More (' + (allBotCountries.length - COUNTRIES_LIMIT) + ' more)'
+                + '</button>';
+        }
+        el.innerHTML = html;
+        animateCountryRows(document.getElementById('adm-va-bot-countries-rows'));
+    }
+
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('#adm-va-bot-countries-toggle')) {
+            var btn    = document.getElementById('adm-va-bot-countries-toggle');
+            var rows   = document.getElementById('adm-va-bot-countries-rows');
+            var isDark = document.documentElement.classList.contains('dark-mode');
+            var barBg  = isDark ? 'rgba(239,68,68,.2)' : 'rgba(239,68,68,.12)';
+            var max    = allBotCountries[0].hits;
+            botCountriesExpanded = !botCountriesExpanded;
+            var visible = botCountriesExpanded ? allBotCountries : allBotCountries.slice(0, COUNTRIES_LIMIT);
+            rows.innerHTML = buildCountryRows(visible, max, barBg, 'hits', ' hits');
+            animateCountryRows(rows);
+            btn.innerHTML = botCountriesExpanded
+                ? '<i class="fas fa-chevron-up fa-xs me-1"></i>Show Less'
+                : '<i class="fas fa-chevron-down fa-xs me-1"></i>Show More (' + (allBotCountries.length - COUNTRIES_LIMIT) + ' more)';
+        }
+    });
+
+    // ── Re-render charts on dark/light mode toggle ────────────────────
+    new MutationObserver(function () {
+        if (lastChartData)  renderLine(lastChartData);
+        if (lastDeviceData) renderDevice(lastDeviceData);
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    // ── Init ──────────────────────────────────────────────────────────
+    loadStats();
+    loadTopPages();
+    startCountdown();
+})();
 </script>
 @endsection

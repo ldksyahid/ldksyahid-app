@@ -16,6 +16,23 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        // Visitor analytics: re-aggregate page stats every hour
+        $schedule->command('visitors:aggregate')->hourly();
+
+        // Queue worker: process all pending jobs every minute
+        $schedule->command('queue:work --stop-when-empty --tries=3 --timeout=120')
+                 ->everyMinute()
+                 ->withoutOverlapping();
+
+        // Dynamic forms: close forms whose endDate has passed (runs every 5 minutes)
+        // Skipped when QUEUE_CONNECTION=sync (development) because no forms have endDates set in dev
+        $schedule->command('forms:close-expired')
+                 ->everyFiveMinutes()
+                 ->withoutOverlapping();
+
+        // Auto-cleanup disabled — visitor data is kept indefinitely
+        // $schedule->command('visitors:cleanup')->dailyAt('02:00');
     }
 
     /**
@@ -32,5 +49,8 @@ class Kernel extends ConsoleKernel
 
     protected $commands = [
         Commands\RunDonationClassMachine::class,
+        Commands\CleanupVisitorLogs::class,
+        Commands\AggregateVisitorStats::class,
+        Commands\CloseExpiredForms::class,
     ];
 }

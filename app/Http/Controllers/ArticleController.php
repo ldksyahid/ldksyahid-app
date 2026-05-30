@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Jobs\SendArticleNewsletterJob;
 use App\Models\Article;
+use Illuminate\Support\Facades\Cache;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
 
@@ -136,6 +138,14 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        // Server-side guard: prevent duplicate submission within 30 seconds
+        $lockKey = 'article_store_lock_' . auth()->id();
+        if (Cache::has($lockKey)) {
+            Alert::warning('Warning', 'Article is already being processed. Please wait.');
+            return redirect()->route('admin.article.index');
+        }
+        Cache::put($lockKey, true, 30);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'theme' => 'required|string|max:255',
@@ -147,7 +157,8 @@ class ArticleController extends Controller
         ]);
 
         try {
-            Article::saveModel($request);
+            $article = Article::saveModel($request);
+            SendArticleNewsletterJob::dispatch($article->id)->delay(now()->addSeconds(5));
             Alert::success('Success', 'Article has been created!');
             return redirect()->route('admin.article.index');
         } catch (\Exception $e) {

@@ -41,13 +41,15 @@
         </div>
 
         {{-- ── Info Card (Ayat) ────────────────────────────────── --}}
-        <div class="cs-info-card wow fadeInUp mb-4" data-wow-delay="0.15s">
-            <p class="cs-info-verse">
-                "Dan berbuat-baiklah kepada kedua orang tua, karib-kerabat, anak-anak yatim, orang-orang miskin,
+        <div class="cs-ayat-wrap wow fadeInUp mb-5" data-wow-delay="0.15s">
+            <p class="cs-ayat-label">Landasan Kami</p>
+            <div class="cs-ayat-bar"></div>
+            <div class="cs-ayat-quote">
+                <p>"Dan berbuat-baiklah kepada kedua orang tua, karib-kerabat, anak-anak yatim, orang-orang miskin,
                 tetangga dekat dan tetangga jauh, teman sejawat, ibnu sabil dan hamba sahaya yang kamu miliki.
-                Sungguh, Allah tidak menyukai orang yang sombong dan membanggakan diri,"
-            </p>
-            <p class="cs-info-source">● QS. An-Nisa 4: Ayat 36</p>
+                Sungguh, Allah tidak menyukai orang yang sombong dan membanggakan diri,"</p>
+                <span>&#9679; QS. An-Nisa 4: Ayat 36</span>
+            </div>
         </div>
 
         {{-- ── Search + Filter Bar ─────────────────────────────── --}}
@@ -68,6 +70,16 @@
                 @foreach((array)request('category', []) as $val)
                     <span class="sfb-pill" data-select-id="cs-category-select" data-value="{{ $val }}">
                         <span>Kategori: {{ $val }}</span> <i class="fas fa-times"></i>
+                    </span>
+                @endforeach
+                @foreach((array)request('status', []) as $val)
+                    <span class="sfb-pill" data-select-id="cs-status-select" data-value="{{ $val }}">
+                        <span>Status: {{ $statuses[$val] ?? $val }}</span> <i class="fas fa-times"></i>
+                    </span>
+                @endforeach
+                @foreach((array)request('organizer', []) as $val)
+                    <span class="sfb-pill" data-select-id="cs-organizer-select" data-value="{{ $val }}">
+                        <span>Penyelenggara: {{ $organizers[$val] ?? $val }}</span> <i class="fas fa-times"></i>
                     </span>
                 @endforeach
             </x-search-filter-bar>
@@ -146,6 +158,38 @@
                 @foreach($categories as $val => $label)
                     <option value="{{ $val }}"
                         {{ in_array($val, (array)request('category')) ? 'selected' : '' }}>
+                        {{ $label }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="sfb-fm-field-wrap">
+            <div class="sfb-fm-field-label">
+                <div class="sfb-fm-field-icon"><i class="fas fa-toggle-on"></i></div>
+                <label for="cs-status-select" class="sfb-fm-label">Status Campaign</label>
+            </div>
+            <select id="cs-status-select" class="form-select" multiple>
+                @foreach($statuses as $val => $label)
+                    <option value="{{ $val }}"
+                        {{ in_array($val, (array)request('status')) ? 'selected' : '' }}>
+                        {{ $label }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="sfb-fm-field-wrap">
+            <div class="sfb-fm-field-label">
+                <div class="sfb-fm-field-icon"><i class="fas fa-building"></i></div>
+                <label for="cs-organizer-select" class="sfb-fm-label">Penyelenggara</label>
+            </div>
+            <select id="cs-organizer-select" class="form-select" multiple>
+                @foreach($organizers as $val => $label)
+                    <option value="{{ $val }}"
+                        {{ in_array($val, (array)request('organizer')) ? 'selected' : '' }}>
                         {{ $label }}
                     </option>
                 @endforeach

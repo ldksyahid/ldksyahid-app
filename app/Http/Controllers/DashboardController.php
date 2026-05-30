@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\SettingKey\Key1;
+use App\Models\MsSetting;
 use App\Models\User;
 use App\Models\News;
 use App\Models\Article;
@@ -21,8 +23,10 @@ use App\Models\MsShortlink;
 use App\Models\ReqShortlink;
 use App\Models\MsCatalogBook;
 use App\Models\MsFinanceReport;
+use App\Models\TrSubscription;
 use AshAllenDesign\ShortURL\Models\ShortURL;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\VisitorAnalyticsController;
 
 class DashboardController extends Controller
 {
@@ -49,6 +53,27 @@ class DashboardController extends Controller
         $reqShortlinkCount = ReqShortlink::count();
         $catalogBookCount = MsCatalogBook::count();
         $financeReportCount = MsFinanceReport::count();
+        $subscriberCount = TrSubscription::where('flagActive', true)->count();
+
+        // Deadline alerts: show when within 30 days of deadline or overdue
+        $deadlineAlerts = MsSetting::where('key1', Key1::DEADLINE)
+            ->get()
+            ->map(function ($row) {
+                $deadline     = \Carbon\Carbon::parse($row->value1);
+                $daysRemaining = (int) now()->diffInDays($deadline, false);
+                return [
+                    'label'          => $row->key2,
+                    'date_formatted' => $deadline->translatedFormat('d F Y'),
+                    'cost'           => $row->value2 ? 'Rp ' . number_format((int) $row->value2, 0, ',', '.') : null,
+                    'days_remaining' => $daysRemaining,
+                    'is_overdue'     => $daysRemaining < 0,
+                ];
+            })
+            ->filter(fn($item) => $item['days_remaining'] <= 30)
+            ->values();
+
+        // Visitor analytics summary
+        $visitorSummary = VisitorAnalyticsController::getSummary();
 
         // Fetch prayer times from Kemenag API
         $cityId = 1301; // City ID for Central Jakarta (change as needed)
@@ -81,6 +106,9 @@ class DashboardController extends Controller
             'reqShortlinkCount' => $reqShortlinkCount,
             'catalogBookCount' => $catalogBookCount,
             'financeReportCount' => $financeReportCount,
+            'subscriberCount' => $subscriberCount,
+            'visitorSummary'   => $visitorSummary,
+            'deadlineAlerts'   => $deadlineAlerts,
         ]);
     }
 }

@@ -50,18 +50,23 @@
         width: 100%;
         height: auto;
         display: block;
-        object-fit: cover;
+    }
+
+    /* Override global .carousel-item img rule (object-fit:cover; height:80vh)
+       yang menyebabkan image terpotong horizontal di viewport sempit */
+    .hero-carousel-card .hero-image {
+        height: auto;
+        object-fit: fill;
     }
 
     /* Desktop Image Height */
     @media (min-width: 992px) {
         .hero-slide {
-            height: 550px;
+            height: auto;
         }
 
         .hero-image {
-            height: 550px;
-            object-fit: cover;
+            height: auto;
         }
     }
 
@@ -828,8 +833,7 @@
         }
 
         .hero-image {
-            height: 220px;
-            object-fit: cover;
+            height: auto;
         }
 
         /* Dark nav buttons, scale only on click - no color change */

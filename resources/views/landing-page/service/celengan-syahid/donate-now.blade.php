@@ -7,8 +7,9 @@
     $logoSrc  = $data->gdrive_id_1
                     ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id_1
                     : 'https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1';
-    $orgName  = ($data->nama_pj && $data->link_pj) ? $data->nama_pj : 'UKM LDK Syahid';
-    $orgLink  = ($data->nama_pj && $data->link_pj) ? $data->link_pj : 'https://www.ldksyah.id/';
+    $orgName          = ($data->nama_pj && $data->link_pj) ? $data->nama_pj : 'UKM LDK Syahid';
+    $orgLink          = ($data->nama_pj && $data->link_pj) ? $data->link_pj : 'https://www.ldksyah.id/';
+    $isDeadlinePassed = $data->deadline && strtotime($data->deadline) < time();
 @endphp
 
 
@@ -28,11 +29,19 @@
 <section class="dn-page py-5 mt-5">
     <div class="container" style="max-width: 720px;">
 
-        {{-- ── Back Link ────────────────────────────────────────── --}}
-        <a href="{{ route('service.celengansyahid.detail', $data->link) }}" class="dn-back-link wow fadeIn" data-wow-delay="0.05s">
-            <i class="fas fa-arrow-left"></i>
-            <span>Kembali ke Detail Campaign</span>
-        </a>
+        {{-- ── Deadline Ended Notice ───────────────────────────── --}}
+        @if($isDeadlinePassed)
+        <div class="dn-ended-notice wow fadeInDown" data-wow-delay="0.05s">
+            <i class="fas fa-times-circle"></i>
+            <div>
+                <strong>Campaign Ini Telah Berakhir</strong>
+                <span>Donasi tidak dapat dilakukan karena kampanye sudah melewati batas waktu.</span>
+            </div>
+            <a href="{{ route('service.celengansyahid.detail', $data->link) }}" class="dn-ended-back">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+        </div>
+        @endif
 
         {{-- ── Campaign Context Header ─────────────────────────── --}}
         <div class="dn-context-wrap wow fadeInUp" data-wow-delay="0.1s">
@@ -194,9 +203,6 @@
                                     name="pekerjaan_donatur"
                                     required>
                                 <option value="">Pilih Pekerjaan</option>
-                                @foreach($jobs as $id => $name)
-                                    <option value="{{ $name }}">{{ $name }}</option>
-                                @endforeach
                             </select>
                         </div>
                         <div class="dn-invalid-msg">Pekerjaan wajib dipilih</div>
@@ -224,8 +230,10 @@
             </div>
 
             {{-- ── reCAPTCHA ──────────────────────────────────── --}}
-            <div class="wow fadeInUp" data-wow-delay="0.18s">
-                {!! htmlFormSnippet() !!}
+            <div class="dn-captcha-wrap wow fadeInUp" data-wow-delay="0.18s">
+                <div class="dn-captcha-inner">
+                    {!! htmlFormSnippet() !!}
+                </div>
             </div>
 
             {{-- ── Total + Submit ─────────────────────────────── --}}
@@ -234,9 +242,15 @@
                     <span class="dn-total-label"><i class="fas fa-receipt me-1"></i> Total Donasi</span>
                     <span class="dn-total-value" id="dn-total-value">Rp0</span>
                 </div>
-                <button type="submit" class="dn-submit-btn">
-                    <i class="fas fa-lock"></i> Lanjutkan Pembayaran
-                </button>
+                <div class="dn-action-row">
+                    <a href="{{ route('service.celengansyahid.detail', $data->link) }}" class="dn-back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Kembali</span>
+                    </a>
+                    <button type="submit" class="dn-submit-btn" {{ $isDeadlinePassed ? 'disabled' : '' }}>
+                        <i class="fas fa-lock"></i> Lanjutkan Pembayaran
+                    </button>
+                </div>
             </div>
 
         </form>

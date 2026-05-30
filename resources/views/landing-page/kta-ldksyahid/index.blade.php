@@ -28,11 +28,11 @@
                          src="https://lh3.googleusercontent.com/d/{{ $ktaData->gdrive_id }}"
                          alt="{{ $ktaData->fullName }}">
                 @elseif ($ktaData->gender !== 'Male')
-                    <img class="kta-photo"
+                    <img class="kta-photo kta-photo--default"
                          src="https://lh3.googleusercontent.com/d/15Q9hUkS-yvTBCtF4_KZUy9o725MZ9z6n"
                          alt="Foto Default">
                 @else
-                    <img class="kta-photo"
+                    <img class="kta-photo kta-photo--default"
                          src="https://lh3.googleusercontent.com/d/1CACDd_5vjzM82KTR08ND_nGbqtePHRsj"
                          alt="Foto Default">
                 @endif

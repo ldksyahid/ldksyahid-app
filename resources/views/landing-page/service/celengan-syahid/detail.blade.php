@@ -58,12 +58,6 @@
 <section class="cd-page py-5 mt-5">
     <div class="container cd-page-content">
 
-        {{-- ── Back Link ──────────────────────────────────────── --}}
-        <a href="{{ route('service.celengansyahid') }}" class="cd-back-link wow fadeIn" data-wow-delay="0.05s">
-            <i class="fas fa-arrow-left"></i>
-            <span>Kembali ke Celengan Syahid</span>
-        </a>
-
         {{-- ── Main Grid: Image + Info Panel ──────────────────── --}}
         <div class="row g-4 align-items-start wow fadeInUp" data-wow-delay="0.1s">
 
@@ -122,15 +116,21 @@
                             <span class="cd-days-badge ended">{{ $daysLeft }}</span>
                         @else
                             <span>Sisa waktu</span>
-                            <span class="cd-days-badge">{{ $daysLeft }}</span>
+                            <span class="cd-days-badge">{{ $daysLeft }} hari</span>
                         @endif
                     </div>
 
                     {{-- Actions — desktop only --}}
                     <div class="cd-action-row d-none d-lg-flex">
+                        @if($isDeadlinePassed)
+                        <span class="cd-btn-donate cd-btn-ended">
+                            <i class="fas fa-times-circle"></i> Campaign Berakhir
+                        </span>
+                        @else
                         <a href="{{ route('service.celengansyahid.detail.donatenow', $data->link) }}" class="cd-btn-donate">
                             <i class="fas fa-heart"></i> Donasi Sekarang
                         </a>
+                        @endif
                         <div class="cd-share-row">
                             <span class="cd-share-label">Bagikan:</span>
                             <button class="cd-share-btn cd-share-copy" onclick="cdCopyUrl(event)" title="Salin URL">
@@ -193,25 +193,33 @@
             <div id="cd-pane-donors" class="cd-tab-pane">
                 <div class="cd-tab-body">
                     @if($donorCount > 0)
-                        <div class="cd-donor-list">
-                            @foreach($data->donation as $donation)
-                                @if($donation->payment_status === 'PAID')
-                                <div class="cd-donor-item">
-                                    <div class="cd-donor-avatar">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div class="cd-donor-info">
-                                        <p class="cd-donor-name">{{ $donation->nama_donatur }}</p>
-                                        <span class="cd-donor-amount">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</span>
-                                        @if($donation->pesan_donatur)
-                                            <p class="cd-donor-msg">{{ $donation->pesan_donatur }}</p>
-                                        @endif
-                                    </div>
-                                    <span class="cd-donor-time">{{ $donation->created_at->diffForHumans() }}</span>
+                        @php $paidDonations = $data->donation->where('payment_status', 'PAID')->values(); @endphp
+                        <div class="cd-donor-list" id="cd-donor-list">
+                            @foreach($paidDonations as $i => $donation)
+                            <div class="cd-donor-item{{ $i >= 5 ? ' cd-donor-hidden' : '' }}" data-donor-idx="{{ $i }}">
+                                <div class="cd-donor-avatar">
+                                    <i class="fas fa-user"></i>
                                 </div>
-                                @endif
+                                <div class="cd-donor-info">
+                                    <p class="cd-donor-name">{{ $donation->nama_donatur }}</p>
+                                    <span class="cd-donor-amount">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</span>
+                                    @if($donation->pesan_donatur)
+                                        <p class="cd-donor-msg">{{ $donation->pesan_donatur }}</p>
+                                    @endif
+                                </div>
+                                <span class="cd-donor-time">{{ $donation->created_at->diffForHumans() }}</span>
+                            </div>
                             @endforeach
                         </div>
+                        @if($donorCount > 5)
+                        <div class="cd-donor-loadmore-wrap" id="cd-donor-loadmore-wrap">
+                            <button class="cd-donor-loadmore" id="cd-donor-loadmore" type="button">
+                                <i class="fas fa-chevron-down"></i>
+                                <span id="cd-donor-loadmore-text">Lihat Lebih Banyak</span>
+                                <span class="cd-donor-loadmore-count" id="cd-donor-loadmore-count">({{ $donorCount - 5 }} lagi)</span>
+                            </button>
+                        </div>
+                        @endif
                     @else
                         <div class="cd-no-donors">
                             <i class="fas fa-hand-holding-heart"></i>
@@ -223,15 +231,32 @@
 
         </div>{{-- /cd-tabs-wrap --}}
 
+        <div class="my-3 wow fadeInUp" data-wow-delay="0.15s">
+            {{-- ── Back Link ──────────────────────────────────────── --}}
+            <a href="{{ route('service.celengansyahid') }}" class="cd-back-link wow fadeIn" data-wow-delay="0.05s">
+                <span class="cd-back-icon"><i class="fas fa-arrow-left"></i></span>
+                <span>Kembali ke Celengan Syahid</span>
+            </a>
+        </div>
+
     </div>{{-- /container --}}
 </section>
 
 
 {{-- ── Mobile Sticky Donate Footer (d-lg-none) ──────────────────── --}}
 <div class="cd-mobile-footer d-lg-none">
+    <a href="{{ route('service.celengansyahid') }}" class="cd-mobile-back-btn" title="Kembali ke Celengan Syahid">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    @if($isDeadlinePassed)
+    <span class="cd-mobile-donate-btn cd-btn-ended">
+        <i class="fas fa-times-circle"></i> Campaign Berakhir
+    </span>
+    @else
     <a href="{{ route('service.celengansyahid.detail.donatenow', $data->link) }}" class="cd-mobile-donate-btn">
         <i class="fas fa-heart"></i> Donasi Sekarang
     </a>
+    @endif
 </div>
 
 @endsection

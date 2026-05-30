@@ -61,7 +61,7 @@ class LoginController extends Controller
             if (LFC::cekRoleAdmin(auth()->user())) {
                 return redirect()->route('admin');
             } else {
-                return redirect()->back();
+                return redirect()->intended('/');
             }
         } else {
             Alert::error('Tidak Berhasil Masuk', 'Coba Lagi, Email dan Password Belum Benar');
@@ -69,8 +69,12 @@ class LoginController extends Controller
         }
     }
 
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
+        if ($request->has('redirect')) {
+            session(['url.intended' => $request->redirect]);
+        }
+
         $title = 'Masuk';
 
         return view('auth.login.index', compact('title'));

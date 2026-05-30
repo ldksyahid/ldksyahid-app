@@ -32,11 +32,11 @@
                         return;
                     }
 
-                    // Check file size (5MB max)
-                    if (file.size > 5 * 1024 * 1024) {
+                    // Check file size (25MB max)
+                    if (file.size > 25 * 1024 * 1024) {
                         Swal.fire({
                             title: 'File Too Large!',
-                            text: 'PDF file must be less than 5MB.',
+                            text: 'PDF file must be less than 25MB.',
                             icon: 'error',
                             confirmButtonColor: '#00a79d'
                         });
@@ -75,7 +75,7 @@
                     icon: 'error',
                     confirmButtonColor: '#00a79d'
                 });
-                // Focus pada Select2
+                // Focus on Select2
                 $(ldkID).select2('open');
                 return;
             }
