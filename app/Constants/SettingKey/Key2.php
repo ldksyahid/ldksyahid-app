@@ -8,4 +8,6 @@ class Key2
     const HostingServer        = 'Hosting Server';
     const RentDomain           = 'Rent Domain';
     const CertificateWebsite   = 'Certificate Website';
+    const CpFinanceReportName  = 'Contact Person Name';
+    const CpFinanceReportPhone = 'Contact Person Phone';
 }

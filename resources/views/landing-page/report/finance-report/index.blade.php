@@ -222,14 +222,16 @@
                         <i class="fas fa-user-circle"></i>
                     </div>
                     <div class="fr-cp-info">
-                        <span class="fr-cp-name">Nazwa Maulida Noor</span>
-                        <a href="https://wa.me/6281389069943?text={{ urlencode('Halo Kestari LDK Syahid, saya ingin bertanya mengenai Laporan Keuangan.' . "\n" . url('/laporan-keuangan')) }}"
+                        <span class="fr-cp-name">{{ $cpName }}</span>
+                        @if($cpPhone)
+                        <a href="https://wa.me/{{ $cpPhone }}?text={{ urlencode('Halo Kestari LDK Syahid, saya ingin bertanya mengenai Laporan Keuangan.' . "\n" . url('/laporan-keuangan')) }}"
                            target="_blank"
                            rel="noopener"
                            class="fr-cp-wa">
                             <i class="fab fa-whatsapp"></i>
-                            081389069943
+                            0{{ ltrim(preg_replace('/^62/', '', $cpPhone), '0') }}
                         </a>
+                        @endif
                     </div>
                 </div>
             </div>

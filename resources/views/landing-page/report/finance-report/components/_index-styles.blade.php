@@ -299,10 +299,12 @@
 
 /* ── Contact Person ── */
 .fr-cp-card {
-    background: #e0f7f5;
-    border: 0.5px solid #b2ebe6;
-    border-radius: 16px;
-    padding: 1.25rem 1.5rem;
+    background: white;
+    border-radius: 20px;
+    border: 1.5px solid var(--fr-gray-200);
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    padding: 2rem;
+    position: relative; z-index: 1;
 }
 .fr-cp-header {
     display: flex;
@@ -369,7 +371,7 @@
 [data-theme="dark"] .fr-empty          { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .fr-empty-title    { color: #e2e8f0; }
 [data-theme="dark"] .fr-empty-sub      { color: #9ca3af; }
-[data-theme="dark"] .fr-cp-card   { background: rgba(0,167,157,.12); border-color: rgba(0,167,157,.25);}
+[data-theme="dark"] .fr-cp-card   { background: #1a1f2e; border-color: rgba(0,167,157,.2);}
 [data-theme="dark"] .fr-cp-header { color: #4dd9cf; }
 [data-theme="dark"] .fr-cp-avatar { background: #1a1f2e; }
 [data-theme="dark"] .fr-cp-avatar i { color: #4dd9cf; }
