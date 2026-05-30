@@ -369,7 +369,7 @@
 [data-theme="dark"] .fr-empty          { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .fr-empty-title    { color: #e2e8f0; }
 [data-theme="dark"] .fr-empty-sub      { color: #9ca3af; }
-[data-theme="dark"] .fr-cp-card   { background: rgba(0,167,157,.12); border-color: rgba(0,167,157,.25); }
+[data-theme="dark"] .fr-cp-card   { background: rgba(0,167,157,.12); border-color: rgba(0,167,157,.25);}
 [data-theme="dark"] .fr-cp-header { color: #4dd9cf; }
 [data-theme="dark"] .fr-cp-avatar { background: #1a1f2e; }
 [data-theme="dark"] .fr-cp-avatar i { color: #4dd9cf; }

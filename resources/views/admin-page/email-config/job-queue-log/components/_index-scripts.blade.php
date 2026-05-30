@@ -97,7 +97,9 @@ $(function () {
                 updateQueuesFilter(response.queues);
                 updateTable(response.jobs);
                 toggleFilterActions();
-                resetUpdateTimer();
+                // Keep the "Polling paused" text frozen when paused (the initial
+                // load still fetches once to populate the table).
+                if (!isPaused) resetUpdateTimer();
                 setLiveState(true);
             })
             .fail(function () {
@@ -342,7 +344,7 @@ $(function () {
         if (j.job_status === 'failed') {
             attemptNote = '  — permanently failed';
         } else if (j.job_status === 'daily_limit') {
-            attemptNote = '  — waiting for Gmail daily limit reset';
+            attemptNote = '  — waiting for mail daily limit reset';
         } else if (j.attempts >= STUCK_THRESHOLD) {
             attemptNote = '  ⚠ High — may be stuck';
         }
@@ -416,11 +418,27 @@ $(function () {
     // ── Helpers ────────────────────────────────────────────────────────────
     function setLiveState(live) {
         if (live) {
-            $('#live-indicator').removeClass('paused');
-            $('#live-label').text(isPaused ? 'PAUSED' : 'LIVE');
+            // Respect the paused state so a successful fetch (e.g. the initial
+            // load while paused) does not visually flip the indicator to live.
+            if (isPaused) {
+                $('#live-indicator').addClass('paused');
+                $('#live-label').text('PAUSED');
+            } else {
+                $('#live-indicator').removeClass('paused');
+                $('#live-label').text('LIVE');
+            }
         } else {
             $('#live-label').text('ERROR');
         }
+    }
+
+    // Apply the paused UI (button label, indicator, status text) without polling.
+    function applyPausedUi() {
+        clearInterval(updateTimer);
+        $('#btn-pause-resume').html('<i class="fas fa-play me-1"></i>Resume');
+        $('#live-indicator').addClass('paused');
+        $('#live-label').text('PAUSED');
+        $('#last-updated-text').text('Polling paused');
     }
 
     function escHtml(s) {
@@ -435,12 +453,11 @@ $(function () {
     // Pause / Resume
     $('#btn-pause-resume').on('click', function () {
         isPaused = !isPaused;
+        // Persist so the paused state survives a page refresh.
+        localStorage.setItem('jobQueuePaused', isPaused ? 'true' : 'false');
         if (isPaused) {
-            stopPolling(); clearInterval(updateTimer);
-            $(this).html('<i class="fas fa-play me-1"></i>Resume');
-            $('#live-indicator').addClass('paused');
-            $('#live-label').text('PAUSED');
-            $('#last-updated-text').text('Polling paused');
+            stopPolling();
+            applyPausedUi();
         } else {
             $(this).html('<i class="fas fa-pause me-1"></i>Pause');
             $('#live-indicator').removeClass('paused');
@@ -651,7 +668,14 @@ $(function () {
         dropdownAutoWidth: false,
     });
 
-    fetchData();
-    startPolling();
+    // Restore the paused state from a previous session before starting.
+    isPaused = localStorage.getItem('jobQueuePaused') === 'true';
+
+    fetchData(); // always load current data once, even when paused
+    if (isPaused) {
+        applyPausedUi();
+    } else {
+        startPolling();
+    }
 });
 </script>
