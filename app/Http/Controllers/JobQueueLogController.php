@@ -258,7 +258,8 @@ class JobQueueLogController extends Controller
 
     private function isGmailDailyLimitActive(): bool
     {
-        return Cache::has('gmail_daily_limit_exceeded');
+        // Cache key generalized from Gmail to any mail relay (Brevo).
+        return Cache::has('mail_daily_limit_exceeded');
     }
 
     private function extractMailInfo(array $payload): array

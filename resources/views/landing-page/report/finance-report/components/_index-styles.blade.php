@@ -297,6 +297,58 @@
     .fr-section-title { font-size: 1.4rem; }
 }
 
+/* ── Contact Person ── */
+.fr-cp-card {
+    background: white;
+    border-radius: 20px;
+    border: 1.5px solid var(--fr-gray-200);
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    padding: 2rem;
+    position: relative; z-index: 1;
+}
+.fr-cp-header {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 600;
+    font-size: .85rem;
+    color: #008f86;
+    margin-bottom: .75rem;
+}
+.fr-cp-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.fr-cp-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: white;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.fr-cp-avatar i {
+    font-size: 2.25rem;
+    color: #00a79d;
+}
+.fr-cp-name {
+    display: block;
+    font-weight: 600;
+    font-size: .95rem;
+    color: #282d30;
+}
+.fr-cp-wa {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin-top: .25rem;
+    color: #16a34a;
+    font-size: .875rem;
+    text-decoration: none;
+}
+.fr-cp-wa:hover { text-decoration: underline; }
+.fr-cp-wa .fa-whatsapp { font-size: 1rem; }
+
 /* ── Dark Mode ──────────────────────────────────────────── */
 [data-theme="dark"] .fr-section-badge  { background: rgba(0,167,157,.15); color: #4dd9cf; }
 [data-theme="dark"] .fr-section-title  { color: #e2e8f0; }
@@ -319,5 +371,11 @@
 [data-theme="dark"] .fr-empty          { background: #1a1f2e; border-color: rgba(0,167,157,.2); }
 [data-theme="dark"] .fr-empty-title    { color: #e2e8f0; }
 [data-theme="dark"] .fr-empty-sub      { color: #9ca3af; }
+[data-theme="dark"] .fr-cp-card   { background: #1a1f2e; border-color: rgba(0,167,157,.2);}
+[data-theme="dark"] .fr-cp-header { color: #4dd9cf; }
+[data-theme="dark"] .fr-cp-avatar { background: #1a1f2e; }
+[data-theme="dark"] .fr-cp-avatar i { color: #4dd9cf; }
+[data-theme="dark"] .fr-cp-name   { color: #e2e8f0; }
+[data-theme="dark"] .fr-cp-wa     { color: #4ade80; }
 </style>
 @endverbatim

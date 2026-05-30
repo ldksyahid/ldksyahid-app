@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
             return new TrJobQueueConnector($this->app['db']);
         });
 
-        // Batasi pengiriman email agar tidak kena rate-limit SMTP Gmail
+        // Throttle outgoing email to stay within the Brevo SMTP relay sending rate.
         RateLimiter::for('send-email', function (object $job) {
             return Limit::perMinute(10);
         });

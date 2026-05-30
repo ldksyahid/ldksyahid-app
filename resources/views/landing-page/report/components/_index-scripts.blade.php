@@ -114,25 +114,15 @@ document.addEventListener('DOMContentLoaded', function () {
         /* Wire share buttons */
         var bsCopyBtn = content.querySelector('.rp-bs-copy-btn');
         var bsWaBtn   = content.querySelector('.rp-bs-wa-btn');
+        // Reuse the shared share helpers so the mobile sheet behaves exactly
+        // like the desktop cards: "node" may be a relative path (e.g.
+        // "/laporan-keuangan"), and these helpers turn it into an absolute URL
+        // before copying / sharing.
         if (bsCopyBtn) bsCopyBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(node).then(
-                    function () { showCopyToast(true); }, function () { showCopyToast(false); }
-                );
-            } else {
-                try {
-                    var ta = document.createElement('textarea');
-                    ta.value = node; ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none;';
-                    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-                    document.body.removeChild(ta); showCopyToast(true);
-                } catch (err) { showCopyToast(false); }
-            }
+            window.rpCopyUrl(node, e);
         });
         if (bsWaBtn) bsWaBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var text = (title ? title + '\n' : '') + node;
-            window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+            window.rpShareWa(node, title, e);
         });
 
         document.getElementById('rp-bottom-sheet').scrollTop = 0;

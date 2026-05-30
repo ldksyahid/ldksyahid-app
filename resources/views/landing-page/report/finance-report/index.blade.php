@@ -210,6 +210,33 @@
 
         @endif
 
+        {{-- ── Contact Person (selalu tampil) ────────────────────── --}}
+        <div class="fr-cp-card wow fadeInUp mt-4" data-wow-delay="0.2s">
+            <div class="fr-cp-header">
+                <i class="fas fa-headset"></i>
+                <span>Narahubung Laporan Keuangan</span>
+            </div>
+            <div class="fr-cp-body">
+                <div class="fr-cp-item">
+                    <div class="fr-cp-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="fr-cp-info">
+                        <span class="fr-cp-name">{{ $cpName }}</span>
+                        @if($cpPhone)
+                        <a href="https://wa.me/{{ $cpPhone }}?text={{ urlencode('Halo Kestari LDK Syahid, saya ingin bertanya mengenai Laporan Keuangan.' . "\n" . url('/laporan-keuangan')) }}"
+                           target="_blank"
+                           rel="noopener"
+                           class="fr-cp-wa">
+                            <i class="fab fa-whatsapp"></i>
+                            0{{ ltrim(preg_replace('/^62/', '', $cpPhone), '0') }}
+                        </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>{{-- /container --}}
 </section>
 
