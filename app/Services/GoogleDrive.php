@@ -156,9 +156,11 @@ class GoogleDrive
     }
 
     /**
-     * Delete any file from Google Drive
+     * Delete any file from Google Drive using the Flysystem path.
+     * Prefer deleteById() when you have the Google Drive file ID — it is
+     * more reliable because it bypasses the adapter's virtual-path resolution.
      *
-     * @param string $fileID The ID of the file to delete
+     * @param string $fileID The filename (as stored in the DB profilepicture column)
      * @throws RuntimeException If the deletion fails
      */
     public function deleteFile(string $fileID): void
@@ -179,6 +181,28 @@ class GoogleDrive
             }
         } catch (Exception $e) {
             throw new RuntimeException('File deletion failed: ' . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Delete a file directly via the Google Drive API using the file's Drive ID.
+     * This bypasses the Flysystem adapter's virtual-path resolution which can
+     * fail when the folder is referenced by ID instead of display name.
+     *
+     * @param string $gdriveFileId The Google Drive file ID (gdrive_id column)
+     * @throws RuntimeException If the deletion fails
+     */
+    public function deleteById(string $gdriveFileId): void
+    {
+        try {
+            if (empty($gdriveFileId)) {
+                throw new InvalidArgumentException('Google Drive file ID cannot be empty');
+            }
+
+            $service = Storage::disk('google')->getAdapter()->getService();
+            $service->files->delete($gdriveFileId);
+        } catch (Exception $e) {
+            throw new RuntimeException('File deletion by ID failed: ' . $e->getMessage(), 0, $e);
         }
     }
 
