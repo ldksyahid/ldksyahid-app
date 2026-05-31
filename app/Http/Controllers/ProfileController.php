@@ -90,15 +90,15 @@ class ProfileController extends Controller
 
             $uploadResult = $gdriveService->uploadImage($request->file('profilepicture'), $fileName, $filePath);
 
-            $oldProfilePicture = $profileModel->profilepicture;
+            $oldGdriveId = $profileModel->gdrive_id;
 
-            if ($oldProfilePicture) {
+            if ($oldGdriveId) {
                 try {
-                    $gdriveService->deleteImage($oldProfilePicture);
+                    $gdriveService->deleteImage($oldGdriveId);
                 } catch (\Exception $e) {
                     Log::error('[ProfileController] update GDrive delete failed: ' . $e->getMessage(), [
-                        'profile_id'     => $id,
-                        'profilepicture' => $oldProfilePicture,
+                        'profile_id' => $id,
+                        'gdrive_id'  => $oldGdriveId,
                     ]);
                 }
             }
@@ -129,12 +129,12 @@ class ProfileController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        $profileModel = Profile::find($id);
+        $profileModel = Profile::where('user_id', $id)->first();
 
         if ($profileModel->gdrive_id) {
             try {
                 $gdriveService = new GoogleDrive($this->pathProfileGDrive);
-                $gdriveService->deleteById($profileModel->gdrive_id);
+                $gdriveService->deleteImage($profileModel->gdrive_id);
             } catch (\Exception $e) {
                 Log::error('[ProfileController] destroy GDrive delete failed: ' . $e->getMessage(), [
                     'profile_id' => $id,
