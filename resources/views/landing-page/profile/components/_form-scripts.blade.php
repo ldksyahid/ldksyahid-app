@@ -21,7 +21,8 @@
             if (this.files.length) {
                 fileName.textContent = this.files[0].name;
                 fileName.classList.remove('prf-file-name-display--set');
-                fileName.style.color = '#1f2937';
+                var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                fileName.style.color = isDark ? '#9ca3af' : '#1f2937';
             }
         });
     }
