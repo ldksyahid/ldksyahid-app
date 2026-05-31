@@ -39,8 +39,6 @@ class CloseExpiredForms extends Command
             $count = MsForm::closeExpiredForms();
 
             if ($count > 0) {
-                Log::info("[CloseExpiredForms] Closed {$count} expired form(s).");
-
                 // Record audit log for each closed form
                 TrFormAuditLog::record(
                     formID:    null, // bulk operation — no single formID

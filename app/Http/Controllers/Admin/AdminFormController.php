@@ -601,7 +601,7 @@ class AdminFormController extends Controller
                             try {
                                 $service->deleteFormFolder($oldFileID);
                             } catch (\Throwable $e) {
-                                Log::warning('[AdminFormController::updateField] Old image GDrive delete failed: ' . $e->getMessage());
+                                Log::error('[AdminFormController::updateField] Old image GDrive delete failed: ' . $e->getMessage());
                             }
                         }
 
@@ -651,7 +651,7 @@ class AdminFormController extends Controller
                 try {
                     (new DynamicFormGDriveService())->renameFolder($gdriveFolderID, $validated['label'] ?? '');
                 } catch (\Throwable $e) {
-                    Log::warning('[AdminFormController::updateField] GDrive folder rename failed: ' . $e->getMessage());
+                    Log::error('[AdminFormController::updateField] GDrive folder rename failed: ' . $e->getMessage());
                 }
             }
         }
@@ -753,7 +753,7 @@ class AdminFormController extends Controller
                     $headers = DynamicFormGDriveService::buildSpreadsheetHeaders($fields);
                     (new DynamicFormGDriveService())->reorderSpreadsheetColumns($form->gdriveSpreadsheetID, $headers);
                 } catch (\Throwable $e) {
-                    Log::warning('[AdminFormController::reorderFields] Spreadsheet column reorder failed: ' . $e->getMessage());
+                    Log::error('[AdminFormController::reorderFields] Spreadsheet column reorder failed: ' . $e->getMessage());
                     // Non-fatal — field order in DB is still saved correctly
                 }
             }

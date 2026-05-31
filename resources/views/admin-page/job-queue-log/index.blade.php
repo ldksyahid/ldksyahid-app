@@ -1,7 +1,7 @@
 @extends('admin-page.template.body')
 
 @section('styles')
-    @include('admin-page.email-config.job-queue-log.components._index-styles')
+    @include('admin-page.job-queue-log.components._index-styles')
 @endsection
 
 @section('content')
@@ -348,5 +348,5 @@
 @endsection
 
 @section('scripts')
-    @include('admin-page.email-config.job-queue-log.components._index-scripts')
+    @include('admin-page.job-queue-log.components._index-scripts')
 @endsection

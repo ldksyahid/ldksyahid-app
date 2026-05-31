@@ -8,7 +8,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -41,7 +40,6 @@ class CleanupStorageFilesJob implements ShouldQueue
         if ($resetAt) {
             $delaySeconds = max(60, $resetAt - now()->timestamp) + 1800; // after reset + 30 min buffer
             self::dispatch($this->paths)->delay(now()->addSeconds($delaySeconds));
-            Log::info("[CleanupStorageFilesJob] Mail daily limit active, rescheduled cleanup in {$delaySeconds}s.");
             return;
         }
 
@@ -54,6 +52,5 @@ class CleanupStorageFilesJob implements ShouldQueue
             }
         }
 
-        Log::info("[CleanupStorageFilesJob] Deleted {$deleted} attachment file(s).");
     }
 }

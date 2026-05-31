@@ -235,7 +235,7 @@ class CelenganSyahidController extends Controller
         // 1. Verify Xendit webhook token
         $webhookToken = config('services.xendit.webhook_token');
         if ($webhookToken && request()->header('x-callback-token') !== $webhookToken) {
-            Log::warning('Xendit callback: invalid token', [
+            Log::error('Xendit callback: invalid token', [
                 'ip' => request()->ip(),
             ]);
             return response()->json(['message' => 'Unauthorized'], 401);

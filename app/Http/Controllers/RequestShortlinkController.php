@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\ReqShortlink;
 use App\Services\Fonnte;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RequestShortlinkController extends Controller
@@ -151,6 +152,7 @@ class RequestShortlinkController extends Controller
             Alert::success('Success', 'Request Shortlink has been updated!');
             return redirect()->route('admin.reqservice.shortlink.index');
         } catch (\Exception $e) {
+            Log::error('[RequestShortlinkController] update failed: ' . $e->getMessage(), ['id' => $id]);
             Alert::error('Error', 'Failed to update Request Shortlink: ' . $e->getMessage());
             return redirect()->back()->withInput();
         }
@@ -170,6 +172,7 @@ class RequestShortlinkController extends Controller
                 'message' => 'Request Shortlink has been deleted!'
             ]);
         } catch (\Exception $e) {
+            Log::error('[RequestShortlinkController] destroy failed: ' . $e->getMessage(), ['id' => $id]);
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting Request Shortlink: ' . $e->getMessage()
@@ -199,6 +202,7 @@ class RequestShortlinkController extends Controller
                 'message' => "{$deleted} request shortlink(s) have been deleted!"
             ]);
         } catch (\Exception $e) {
+            Log::error('[RequestShortlinkController] bulkDelete failed: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting request shortlinks: ' . $e->getMessage()

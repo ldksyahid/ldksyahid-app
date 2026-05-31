@@ -36,7 +36,7 @@ class TrackVisitor
             $this->track($request);
         } catch (\Throwable $e) {
             // Never break the page due to tracking errors
-            \Log::warning('TrackVisitor error: ' . $e->getMessage());
+            \Log::error('TrackVisitor error: ' . $e->getMessage());
         }
 
         return $response;

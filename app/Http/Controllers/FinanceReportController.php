@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MsCatalogBook;
 use App\Models\LkLDK;
 use App\Models\MsFinanceReport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FinanceReportController extends Controller
 {
@@ -44,7 +44,7 @@ class FinanceReportController extends Controller
 
     public function store(Request $request)
     {
-        $validated = MsFinanceReport::validateRequest($request);
+        MsFinanceReport::validateRequest($request);
 
         try {
             MsFinanceReport::saveModel($request);
@@ -52,6 +52,7 @@ class FinanceReportController extends Controller
             return redirect()->route('admin.finance-report.index')
                 ->with('success', 'Finance report has been added successfully!');
         } catch (\Exception $e) {
+            Log::error('[FinanceReportController] store failed: ' . $e->getMessage());
             return redirect()->back()
                 ->withInput()
                 ->with('failed', true)
@@ -76,7 +77,7 @@ class FinanceReportController extends Controller
 
     public function update(Request $request, MsFinanceReport $financeReport)
     {
-        $validated = MsFinanceReport::validateRequest($request, $financeReport->financeReportID);
+        MsFinanceReport::validateRequest($request, $financeReport->financeReportID);
 
         try {
             $financeReport->updateModel($request);
@@ -84,6 +85,7 @@ class FinanceReportController extends Controller
             return redirect()->route('admin.finance-report.index')
                 ->with('success', 'Finance report has been updated successfully!');
         } catch (\Exception $e) {
+            Log::error('[FinanceReportController] update failed: ' . $e->getMessage());
             return redirect()->back()
                 ->withInput()
                 ->with('failed', true)
@@ -101,6 +103,7 @@ class FinanceReportController extends Controller
                 'message' => 'Finance report has been deleted successfully!'
             ]);
         } catch (\Exception $e) {
+            Log::error('[FinanceReportController] destroy failed: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting finance report: ' . $e->getMessage()
@@ -127,6 +130,7 @@ class FinanceReportController extends Controller
                 'message' => 'Selected finance reports have been deleted successfully!'
             ]);
         } catch (\Exception $e) {
+            Log::error('[FinanceReportController] bulkDelete failed: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting finance reports: ' . $e->getMessage()

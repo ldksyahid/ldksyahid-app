@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Dispatcher job: dispatches a SendSingleMailJob per email so each
@@ -38,12 +37,10 @@ class SendGeneratedEmailJob implements ShouldQueue
         $lockKey = 'generated_email_dispatched_' . md5($this->subject . count($this->emails) . json_encode($this->attachmentPaths));
 
         if (Cache::has($lockKey)) {
-            Log::info("[SendGeneratedEmailJob] Already dispatched for subject \"{$this->subject}\", skipping duplicate.");
             return;
         }
 
         if (empty($this->emails)) {
-            Log::info("[SendGeneratedEmailJob] No recipients, job finished.");
             return;
         }
 
@@ -57,8 +54,6 @@ class SendGeneratedEmailJob implements ShouldQueue
         }
 
         Cache::put($lockKey, true, now()->addHours(24));
-
-        Log::info("[SendGeneratedEmailJob] Dispatched " . count($this->emails) . " individual send jobs. Subject: \"{$this->subject}\".");
 
         if (!empty($this->attachmentPaths)) {
             CleanupStorageFilesJob::dispatch($this->attachmentPaths)

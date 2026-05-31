@@ -85,7 +85,6 @@ class SendSingleMailJob implements ShouldQueue
         // silently (no exception) so they are not retried.
         $reason = null;
         if (!EmailAddressValidator::isDeliverable($this->email, $reason)) {
-            Log::warning("[SendSingleMailJob] Skipped undeliverable address {$this->email} ({$reason}).");
             return;
         }
 

@@ -451,4 +451,14 @@ html.dark-mode .daily-limit-alert {
     background: linear-gradient(135deg, rgba(255,152,0,0.08) 0%, rgba(255,193,7,0.05) 100%);
     border-color: rgba(255,152,0,0.2); color: #ffb74d;
 }
+html.dark-mode .eta-card {
+    background: #2b2f33 !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+    border-left-color: #00a79d;
+}
+html.dark-mode .eta-main    { color: #e4e6eb; }
+html.dark-mode .eta-title   { color: #6b7280; }
+html.dark-mode .eta-meta    { color: #9ca3af; }
+html.dark-mode .eta-detail-label { color: #9ca3af; }
+html.dark-mode .eta-detail-val   { color: #e4e6eb; }
 </style>
