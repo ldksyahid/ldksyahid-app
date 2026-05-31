@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Services\GoogleDrive;
 
 class ProfileController extends Controller
@@ -95,7 +96,7 @@ class ProfileController extends Controller
                 try {
                     $gdriveService->deleteImage($oldProfilePicture);
                 } catch (\Exception $e) {
-                    \Log::error('[ProfileController] update GDrive delete failed: ' . $e->getMessage(), [
+                    Log::error('[ProfileController] update GDrive delete failed: ' . $e->getMessage(), [
                         'profile_id'     => $id,
                         'profilepicture' => $oldProfilePicture,
                     ]);
@@ -130,15 +131,14 @@ class ProfileController extends Controller
     {
         $profileModel = Profile::find($id);
 
-        if ($profileModel->profilepicture) {
+        if ($profileModel->gdrive_id) {
             try {
                 $gdriveService = new GoogleDrive($this->pathProfileGDrive);
-                $gdriveService->deleteImage($profileModel->profilepicture);
+                $gdriveService->deleteById($profileModel->gdrive_id);
             } catch (\Exception $e) {
-                \Log::error('[ProfileController] destroy GDrive delete failed: ' . $e->getMessage(), [
-                    'profile_id'   => $id,
-                    'profilepicture' => $profileModel->profilepicture,
-                    'gdrive_id'    => $profileModel->gdrive_id,
+                Log::error('[ProfileController] destroy GDrive delete failed: ' . $e->getMessage(), [
+                    'profile_id' => $id,
+                    'gdrive_id'  => $profileModel->gdrive_id,
                 ]);
             }
         }
