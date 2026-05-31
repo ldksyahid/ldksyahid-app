@@ -89,10 +89,17 @@ class ProfileController extends Controller
 
             $uploadResult = $gdriveService->uploadImage($request->file('profilepicture'), $fileName, $filePath);
 
-            $oldGdriveID = $profileModel->gdrive_id;
+            $oldProfilePicture = $profileModel->profilepicture;
 
-            if ($oldGdriveID) {
-                $gdriveService->deleteImage($oldGdriveID);
+            if ($oldProfilePicture) {
+                try {
+                    $gdriveService->deleteImage($oldProfilePicture);
+                } catch (\Exception $e) {
+                    \Log::error('[ProfileController] update GDrive delete failed: ' . $e->getMessage(), [
+                        'profile_id'     => $id,
+                        'profilepicture' => $oldProfilePicture,
+                    ]);
+                }
             }
 
             $profileModel->update([
@@ -121,19 +128,26 @@ class ProfileController extends Controller
 
     public function destroy(Request $request, $id)
     {
-
         $profileModel = Profile::find($id);
-        $gdriveService = new GoogleDrive($this->pathProfileGDrive);
 
-        if($profileModel->gdrive_id) {
-            $gdriveService->deleteImage($profileModel->gdrive_id);
+        if ($profileModel->profilepicture) {
+            try {
+                $gdriveService = new GoogleDrive($this->pathProfileGDrive);
+                $gdriveService->deleteImage($profileModel->profilepicture);
+            } catch (\Exception $e) {
+                \Log::error('[ProfileController] destroy GDrive delete failed: ' . $e->getMessage(), [
+                    'profile_id'   => $id,
+                    'profilepicture' => $profileModel->profilepicture,
+                    'gdrive_id'    => $profileModel->gdrive_id,
+                ]);
+            }
         }
 
-        $profileModel->where("user_id", $id)->update([
+        $profileModel->where('user_id', $id)->update([
             'profilepicture' => null,
+            'gdrive_id'      => null,
         ]);
 
         return redirect()->back();
-
     }
 }
