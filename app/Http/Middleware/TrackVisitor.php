@@ -62,32 +62,27 @@ class TrackVisitor
         $date   = now()->toDateString();
         $ipHash = hash('sha256', $ip . $date . config('app.key'));
 
-        // Check if this IP has already been counted today
-        $alreadyUnique = DB::table('tr_visitor_daily_unique')
-            ->where('ipHash', $ipHash)
-            ->where('visitDate', $date)
-            ->exists();
+        // insertOrIgnore is atomic — safe against concurrent requests from the
+        // same IP hitting the unique constraint simultaneously.
+        $firstPath = '/' . ltrim($request->path(), '/');
+        $inserted  = DB::table('tr_visitor_daily_unique')->insertOrIgnore([
+            'ipHash'      => $ipHash,
+            'visitDate'   => $date,
+            'visitCount'  => 1,
+            'firstPath'   => $firstPath,
+            'createdDate' => now(),
+            'updatedDate' => now(),
+        ]);
 
-        $isUniqueDaily = 0;
-
-        if (!$alreadyUnique) {
-            // First visit today — insert and mark as unique
-            DB::table('tr_visitor_daily_unique')->insert([
-                'ipHash'      => $ipHash,
-                'visitDate'   => $date,
-                'visitCount'  => 1,
-                'firstPath'   => '/' . ltrim($request->path(), '/'),
-                'createdDate' => now(),
-                'updatedDate' => now(),
-            ]);
-            $isUniqueDaily = 1;
-        } else {
-            // Returning visitor today — just increment
+        if (!$inserted) {
+            // Row already exists today — just increment the page-view count.
             DB::table('tr_visitor_daily_unique')
                 ->where('ipHash', $ipHash)
                 ->where('visitDate', $date)
                 ->increment('visitCount', 1, ['updatedDate' => now()]);
         }
+
+        $isUniqueDaily = $inserted ? 1 : 0;
 
         // Parse user agent
         $agent = new Agent();

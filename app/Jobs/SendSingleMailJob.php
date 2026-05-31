@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Jobs\Middleware\WaitForMailDailyReset;
+use App\Support\BrevoQuotaChecker;
 use App\Support\EmailAddressValidator;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -80,11 +81,16 @@ class SendSingleMailJob implements ShouldQueue
 
     public function handle(): void
     {
-        // Validate the recipient before sending: skip syntactically invalid
-        // addresses or domains that cannot receive mail. These jobs complete
-        // silently (no exception) so they are not retried.
-        $reason = null;
-        if (!EmailAddressValidator::isDeliverable($this->email, $reason)) {
+        // Skip syntactically invalid addresses or domains that cannot receive mail.
+        if (!EmailAddressValidator::isDeliverable($this->email)) {
+            return;
+        }
+
+        // Brevo free plan silently accepts SMTP but drops emails once the 300/day
+        // limit is hit — no exception thrown, so the job would complete "successfully"
+        // while the email is lost. Check the API quota first and hold if exhausted.
+        if (BrevoQuotaChecker::isLimitExceeded()) {
+            $this->holdUntilReset();
             return;
         }
 
@@ -92,18 +98,31 @@ class SendSingleMailJob implements ShouldQueue
             Mail::to($this->email)->send($this->mailable);
         } catch (\Swift_TransportException $e) {
             if ($this->isDailyLimitError($e)) {
-                // Set a 24-hour cache flag — middleware will hold other jobs.
-                $resetAt = now()->addHours(24);
-                Cache::put('mail_daily_limit_exceeded', $resetAt->timestamp, $resetAt);
-
-                // Release this job until the limit resets.
-                $this->release((int) $resetAt->diffInSeconds(now()));
+                // Fallback: SMTP error also signals the daily limit was hit.
+                BrevoQuotaChecker::forget();
+                $this->holdUntilReset();
                 return;
             }
 
             // Other SMTP errors (connection lost, etc.) — normal retry with backoff.
             throw $e;
         }
+    }
+
+    /**
+     * Mark the daily limit as active until midnight UTC (when Brevo resets)
+     * and release this job with the same delay so it is retried after reset.
+     */
+    private function holdUntilReset(): void
+    {
+        $delay   = BrevoQuotaChecker::secondsUntilReset();
+        $resetAt = now()->addSeconds($delay);
+
+        // Cache until midnight UTC — WaitForMailDailyReset middleware reads this
+        // and holds all subsequent jobs without re-checking the API.
+        Cache::put('mail_daily_limit_exceeded', $resetAt->timestamp, $delay);
+
+        $this->release($delay);
     }
 
     public function failed(\Throwable $exception): void
