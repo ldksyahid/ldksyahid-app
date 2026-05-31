@@ -82,7 +82,7 @@ class ProfileController extends Controller
     {
         $profileModel = Profile::find($id);
 
-        if ($request->file('profilepicture')) {
+        if (!empty($request->file('profilepicture'))) {
             $gdriveService = new GoogleDrive($this->pathProfileGDrive);
 
             $fileName = time() . '_profile_' . $request->file('profilepicture')->getClientOriginalName();
