@@ -14,7 +14,7 @@ class JobQueueLogController extends Controller
 {
     public function index()
     {
-        return view('admin-page.email-config.job-queue-log.index')
+        return view('admin-page.job-queue-log.index')
             ->with('title', 'Job Queue Log');
     }
 
