@@ -198,7 +198,8 @@
 
                     @case('email-with-google')
                         <div class="d-flex align-items-center gap-1" style="min-width:0;">
-                            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1;" title="{{ $value ?: $fallback }}">{{ $value ?: $fallback }}</span>
+                            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1;"
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $value ?: $fallback }}">{{ $value ?: $fallback }}</span>
                             @if(data_get($item, 'googleID'))
                                 <svg style="flex-shrink:0;" width="13" height="13" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" title="Google account linked">
                                     <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
