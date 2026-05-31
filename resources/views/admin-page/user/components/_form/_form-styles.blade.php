@@ -169,19 +169,47 @@
         font-weight: 600;
     }
 
+    /* Google info alert (replaces Bootstrap alert-info for dark mode compat) */
+    .google-info-alert {
+        background-color: #e8f4fd;
+        border: 1px solid #b8daf5;
+        border-radius: 8px;
+        color: #1a6fa8;
+        font-size: 0.9rem;
+    }
+
     /* Profile picture */
     .profile-picture-container {
-        width: 120px;
-        height: 120px;
+        position: relative;
+        width: 72px;
+        height: 72px;
         border-radius: 50%;
-        overflow: hidden;
-        border: 3px solid #00a79d;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        overflow: visible;
+        flex-shrink: 0;
     }
     .profile-picture-container img {
-        width: 100%;
-        height: 100%;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
         object-fit: cover;
+        border: 3px solid #00a79d;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        display: block;
+    }
+    /* Google badge overlay on avatar */
+    .google-avatar-badge {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-radius: 50%;
+        border: 1.5px solid #dee2e6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.15);
     }
 
     /* Role badge colors */
@@ -216,10 +244,19 @@
         border-color: #00a79d;
         background-color: #1a1d21;
     }
+    html.dark-mode .google-info-alert {
+        background-color: rgba(66, 133, 244, 0.1);
+        border-color: rgba(66, 133, 244, 0.3);
+        color: #93c5fd;
+    }
     html.dark-mode .info-card {
         border-color: #373b3e;
         background-color: #2b2f33 !important;
         color: #e4e6eb;
+    }
+    html.dark-mode .google-avatar-badge {
+        background: #2b2f33;
+        border-color: #4a4e52;
     }
     html.dark-mode .form-label.fw-bold {
         color: #e4e6eb;
