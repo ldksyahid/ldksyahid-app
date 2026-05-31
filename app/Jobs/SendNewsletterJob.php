@@ -34,21 +34,19 @@ class SendNewsletterJob implements ShouldQueue
         $lockKey = "newsletter_dispatched_{$this->newsId}";
 
         if (Cache::has($lockKey)) {
-            Log::info("[SendNewsletterJob] Already dispatched for news ID {$this->newsId}, skipping duplicate.");
             return;
         }
 
         $news = News::find($this->newsId);
 
         if (!$news) {
-            Log::warning("[SendNewsletterJob] News ID {$this->newsId} not found, job cancelled.");
+            Log::error("[SendNewsletterJob] News ID {$this->newsId} not found, job cancelled.");
             return;
         }
 
         $emails = TrSubscription::where('flagActive', true)->pluck('email');
 
         if ($emails->isEmpty()) {
-            Log::info("[SendNewsletterJob] No active subscribers, job finished.");
             return;
         }
 
@@ -59,9 +57,6 @@ class SendNewsletterJob implements ShouldQueue
                 ->delay(now()->addSeconds($delaySec));
         }
 
-        // Mark as dispatched — lock for 24h to prevent duplicate on accidental retry
         Cache::put($lockKey, true, now()->addHours(24));
-
-        Log::info("[SendNewsletterJob] Dispatched {$emails->count()} individual send jobs for news ID {$this->newsId}.");
     }
 }

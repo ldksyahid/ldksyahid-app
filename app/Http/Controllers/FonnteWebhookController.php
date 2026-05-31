@@ -45,7 +45,6 @@ class FonnteWebhookController extends Controller
         $requestId = Cache::get($cacheKey);
 
         if (!$requestId) {
-            Log::info('Fonnte webhook: no pending shortlink request', ['sender' => $sender]);
             return response()->json(['status' => 'no_pending'], 200);
         }
 
@@ -53,7 +52,7 @@ class FonnteWebhookController extends Controller
 
         if (!$reqShortlink) {
             Cache::forget($cacheKey);
-            Log::warning('Fonnte webhook: pending request not found in DB', ['id' => $requestId]);
+            Log::error('Fonnte webhook: pending request not found in DB', ['id' => $requestId]);
             return response()->json(['status' => 'not_found'], 200);
         }
 
@@ -82,7 +81,7 @@ class FonnteWebhookController extends Controller
         // Check if url_key already exists
         if (MsShortlink::where('url_key', $urlKey)->exists()) {
             Fonnte::send($this->getAdminPhone(), "⚠️ *URL key \"{$urlKey}\" sudah terpakai.* Silahkan proses manual via web panel.");
-            Log::warning('Fonnte webhook: url_key conflict', ['url_key' => $urlKey, 'req_id' => $req->id]);
+            Log::error('Fonnte webhook: url_key conflict', ['url_key' => $urlKey, 'req_id' => $req->id]);
             return;
         }
 
@@ -113,7 +112,6 @@ class FonnteWebhookController extends Controller
 
             Cache::forget($cacheKey);
 
-            Log::info('Fonnte webhook: shortlink approved', ['req_id' => $req->id, 'url_key' => $urlKey]);
             $this->notifyAdmin(
                 "✅ *SHORTLINK BERHASIL DIKIRIM*\n\n"
                 . "👤 {$req->name}\n"
@@ -143,8 +141,6 @@ class FonnteWebhookController extends Controller
         ]);
 
         Cache::forget($cacheKey);
-
-        Log::info('Fonnte webhook: shortlink rejected', ['req_id' => $req->id]);
 
         $this->notifyAdmin(
             "❌ *SHORTLINK DITOLAK & NOTIF TERKIRIM*\n\n"

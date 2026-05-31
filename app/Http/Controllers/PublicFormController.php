@@ -86,7 +86,7 @@ class PublicFormController extends Controller
         if ($startTime && is_numeric($startTime)) {
             $elapsed = time() - (int) $startTime;
             if ($elapsed < 3) {
-                Log::warning('[PublicFormController] Possible bot submission.', [
+                Log::error('[PublicFormController] Possible bot submission.', [
                     'ip'      => $request->ip(),
                     'form'    => $slug,
                     'elapsed' => $elapsed,

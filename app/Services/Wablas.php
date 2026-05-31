@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LibraryFunctionController as LFC;
 
 class Wablas
@@ -19,9 +20,22 @@ class Wablas
             'token' => self::$token
         ];
 
-        $response = Http::get(self::$urlSendSimpleText, $params);
-        $result = $response->json();
-        return $result;
+        try {
+            $response = Http::get(self::$urlSendSimpleText, $params);
+            if ($response->failed()) {
+                Log::error('[Wablas] sendInvoiceSimpleText HTTP error', [
+                    'phone'  => $data['donaturTelp'] ?? null,
+                    'status' => $response->status(),
+                    'body'   => $response->body(),
+                ]);
+            }
+            return $response->json();
+        } catch (\Throwable $e) {
+            Log::error('[Wablas] sendInvoiceSimpleText exception: ' . $e->getMessage(), [
+                'phone' => $data['donaturTelp'] ?? null,
+            ]);
+            return null;
+        }
     }
 
     public static function sendPaidSimpleText($data)
@@ -34,8 +48,21 @@ class Wablas
             'token' => self::$token
         ];
 
-        $response = Http::get(self::$urlSendSimpleText, $params);
-        $result = $response->json();
-        return $result;
+        try {
+            $response = Http::get(self::$urlSendSimpleText, $params);
+            if ($response->failed()) {
+                Log::error('[Wablas] sendPaidSimpleText HTTP error', [
+                    'phone'  => $data['donaturTelp'] ?? null,
+                    'status' => $response->status(),
+                    'body'   => $response->body(),
+                ]);
+            }
+            return $response->json();
+        } catch (\Throwable $e) {
+            Log::error('[Wablas] sendPaidSimpleText exception: ' . $e->getMessage(), [
+                'phone' => $data['donaturTelp'] ?? null,
+            ]);
+            return null;
+        }
     }
 }

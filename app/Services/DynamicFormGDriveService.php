@@ -331,7 +331,7 @@ class DynamicFormGDriveService
             );
         } catch (\Exception $e) {
             // Non-fatal: log and continue. A bad email should not stop form creation.
-            Log::warning("[DynamicFormGDriveService] Failed to grant access to {$email}: " . $e->getMessage());
+            Log::error("[DynamicFormGDriveService] Failed to grant access to {$email}: " . $e->getMessage());
         }
     }
 
@@ -356,7 +356,7 @@ class DynamicFormGDriveService
             $msg = $e->getMessage();
             // 404 = permission not found (file already private) — expected, not an error
             if (strpos($msg, '404') === false && strpos($msg, 'fileNotFound') === false) {
-                Log::warning("[DynamicFormGDriveService] Could not restrict access on {$fileID}: {$msg}");
+                Log::error("[DynamicFormGDriveService] Could not restrict access on {$fileID}: {$msg}");
             }
         }
     }
@@ -371,7 +371,7 @@ class DynamicFormGDriveService
         try {
             $this->driveService->files->delete($folderID);
         } catch (\Exception $e) {
-            Log::warning("[DynamicFormGDriveService] Failed to delete folder {$folderID}: " . $e->getMessage());
+            Log::error("[DynamicFormGDriveService] Failed to delete folder {$folderID}: " . $e->getMessage());
         }
     }
 
@@ -393,7 +393,7 @@ class DynamicFormGDriveService
                 }
             }
         } catch (\Exception $e) {
-            Log::warning("[DynamicFormGDriveService] Failed to revoke access for {$email}: " . $e->getMessage());
+            Log::error("[DynamicFormGDriveService] Failed to revoke access for {$email}: " . $e->getMessage());
         }
     }
 
@@ -722,7 +722,7 @@ class DynamicFormGDriveService
 
             $this->sheetsService->spreadsheets->batchUpdate($spreadsheetID, $batchBody);
         } catch (\Throwable $e) {
-            Log::warning('[DynamicFormGDriveService] autoResizeColumns failed: ' . $e->getMessage());
+            Log::error('[DynamicFormGDriveService] autoResizeColumns failed: ' . $e->getMessage());
         }
     }
 

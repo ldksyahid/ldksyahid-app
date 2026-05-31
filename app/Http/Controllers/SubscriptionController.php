@@ -175,6 +175,7 @@ class SubscriptionController extends Controller
             TrSubscription::findOrFail($id)->delete();
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
+            Log::error('[SubscriptionController] destroy failed: ' . $e->getMessage(), ['id' => $id]);
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
@@ -182,7 +183,12 @@ class SubscriptionController extends Controller
     public function bulkDelete(Request $request)
     {
         $request->validate(['ids' => 'required|array']);
-        TrSubscription::whereIn('subscriberID', $request->ids)->delete();
-        return response()->json(['success' => true]);
+        try {
+            TrSubscription::whereIn('subscriberID', $request->ids)->delete();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error('[SubscriptionController] bulkDelete failed: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }

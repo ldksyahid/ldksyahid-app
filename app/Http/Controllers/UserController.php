@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\LibraryFunctionController as LFC;
@@ -147,6 +148,7 @@ class UserController extends Controller
 
             return response()->json($result, $result['success'] ? 200 : 400);
         } catch (\Exception $e) {
+            Log::error('[UserController] destroy failed: ' . $e->getMessage(), ['id' => $id]);
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting user: ' . $e->getMessage()
@@ -173,6 +175,7 @@ class UserController extends Controller
 
             return response()->json($result, $result['success'] ? 200 : 400);
         } catch (\Exception $e) {
+            Log::error('[UserController] bulkDelete failed: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting users: ' . $e->getMessage()
