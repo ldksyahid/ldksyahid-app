@@ -88,7 +88,6 @@
     padding: 1rem 1.25rem;
     display: flex; align-items: center; gap: 1rem;
     flex-wrap: wrap;
-    border-left: 4px solid #00a79d;
 }
 .eta-icon {
     width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
