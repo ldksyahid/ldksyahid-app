@@ -81,6 +81,47 @@
 .stat-change.up   { color: #28a745; }
 .stat-change.down { color: #dc3545; }
 
+/* ── Estimated Completion Card ── */
+.eta-card {
+    background: #fff; border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    padding: 1rem 1.25rem;
+    display: flex; align-items: center; gap: 1rem;
+    flex-wrap: wrap;
+    border-left: 4px solid #00a79d;
+}
+.eta-icon {
+    width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+    background: rgba(0,167,157,0.12); color: #00a79d;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+}
+.eta-body { flex: 1; min-width: 160px; }
+.eta-title {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.05em; color: #adb5bd; margin-bottom: 2px;
+}
+.eta-main {
+    font-size: 1.15rem; font-weight: 700; color: #212529; line-height: 1.2;
+}
+.eta-meta { font-size: 0.75rem; color: #6c757d; margin-top: 2px; }
+.eta-detail {
+    display: flex; flex-direction: column; gap: 4px;
+    min-width: 160px;
+}
+.eta-detail-row {
+    display: flex; justify-content: space-between; gap: 8px;
+    font-size: 0.78rem;
+}
+.eta-detail-label { color: #6c757d; }
+.eta-detail-val   { font-weight: 600; color: #212529; }
+
+@media (max-width: 575.98px) {
+    .eta-card { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .eta-detail { width: 100%; }
+    .eta-main { font-size: 1rem; }
+}
+
 /* ── Filter Bar ── */
 .filter-bar {
     display: flex; align-items: center; gap: 0.5rem;

@@ -132,6 +132,61 @@ $(function () {
         } else {
             $('#daily-limit-banner').slideUp(200);
         }
+
+        updateEta(stats);
+    }
+
+    // ── Estimated Completion ───────────────────────────────────────────────
+    var BREVO_DAILY_LIMIT  = 300;   // free plan emails per day
+    var RATE_PER_MIN       = 10;    // RateLimiter setting in AppServiceProvider
+
+    function updateEta(stats) {
+        var pending = (stats.pending || 0) + (stats.daily_limit || 0);
+        if (pending <= 0) {
+            $('#eta-card-wrap').slideUp(200);
+            return;
+        }
+
+        // Days needed based on Brevo daily limit (bottleneck)
+        var daysNeeded  = Math.ceil(pending / BREVO_DAILY_LIMIT);
+        var hoursNeeded = Math.ceil(pending / RATE_PER_MIN / 60);
+
+        var etaMain, etaMeta;
+
+        if (daysNeeded <= 0) {
+            $('#eta-card-wrap').slideUp(200);
+            return;
+        } else if (daysNeeded === 1 && hoursNeeded <= 23) {
+            // Less than a day — show hours
+            var finishDate = new Date(Date.now() + serverOffset + hoursNeeded * 3600 * 1000);
+            etaMain = 'Today around ' + formatTime(finishDate);
+            etaMeta = 'Approximately ' + hoursNeeded + ' hour' + (hoursNeeded !== 1 ? 's' : '') + ' remaining';
+        } else {
+            var finishDate = new Date(Date.now() + serverOffset + daysNeeded * 86400 * 1000);
+            etaMain = formatDate(finishDate);
+            etaMeta = daysNeeded + ' day' + (daysNeeded !== 1 ? 's' : '') + ' remaining · ' + pending.toLocaleString() + ' jobs';
+        }
+
+        $('#eta-main').text(etaMain);
+        $('#eta-meta').text(etaMeta);
+        $('#eta-rate').text(RATE_PER_MIN + ' emails / min');
+        $('#eta-daily').text(BREVO_DAILY_LIMIT.toLocaleString() + ' / day (Brevo free)');
+        $('#eta-remaining').text(pending.toLocaleString() + ' jobs');
+        $('#eta-card-wrap').slideDown(200);
+    }
+
+    function formatTime(date) {
+        var h = date.getHours();
+        var m = date.getMinutes();
+        var ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        return h + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
+    }
+
+    function formatDate(date) {
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        return days[date.getDay()] + ', ' + months[date.getMonth()] + ' ' + date.getDate() + ' · ' + formatTime(date);
     }
 
     function setChange(key, diff) {

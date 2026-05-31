@@ -20,9 +20,11 @@ class Kernel extends ConsoleKernel
         // Visitor analytics: re-aggregate page stats every hour
         $schedule->command('visitors:aggregate')->hourly();
 
-        // Queue worker: process all pending jobs every minute
-        $schedule->command('queue:work --stop-when-empty --tries=3 --timeout=120')
-                 ->everyMinute()
+        // Queue worker: runs every 10 minutes (hosting cron minimum interval).
+        // --max-time=540 keeps the worker alive for 9 minutes so it fills the
+        // full cron window, then exits cleanly before the next cron fires.
+        $schedule->command('queue:work --max-time=540 --tries=3 --timeout=120')
+                 ->everyTenMinutes()
                  ->withoutOverlapping();
 
         // Dynamic forms: close forms whose endDate has passed (runs every 5 minutes)

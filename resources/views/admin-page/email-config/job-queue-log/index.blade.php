@@ -95,6 +95,34 @@
             </div>
         </div>
 
+        {{-- Estimated Completion Card --}}
+        <div class="col-12 mb-3" id="eta-card-wrap" style="display:none;">
+            <div class="eta-card">
+                <div class="eta-icon">
+                    <i class="fas fa-flag-checkered"></i>
+                </div>
+                <div class="eta-body">
+                    <div class="eta-title">Estimated Completion</div>
+                    <div class="eta-main" id="eta-main">—</div>
+                    <div class="eta-meta" id="eta-meta"></div>
+                </div>
+                <div class="eta-detail">
+                    <div class="eta-detail-row">
+                        <span class="eta-detail-label"><i class="fas fa-paper-plane me-1"></i>Rate</span>
+                        <span class="eta-detail-val" id="eta-rate">—</span>
+                    </div>
+                    <div class="eta-detail-row">
+                        <span class="eta-detail-label"><i class="fas fa-calendar-day me-1"></i>Daily limit</span>
+                        <span class="eta-detail-val" id="eta-daily">300 / day</span>
+                    </div>
+                    <div class="eta-detail-row">
+                        <span class="eta-detail-label"><i class="fas fa-envelope me-1"></i>Remaining</span>
+                        <span class="eta-detail-val" id="eta-remaining">—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- Gmail Daily Limit Banner --}}
         <div class="col-12 mb-3" id="daily-limit-banner" style="display:none;">
             <div class="daily-limit-alert">
