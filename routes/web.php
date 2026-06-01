@@ -150,6 +150,8 @@ Route::get('/api/comments', [CommentController::class, 'index'])->name('comment.
 Route::post('/api/comments', [CommentController::class, 'store'])->name('comment.store')->middleware('auth');
 Route::post('/api/comments/upload-media', [CommentController::class, 'uploadMedia'])->name('comment.upload-media')->middleware('auth');
 Route::post('/api/comments/{commentId}/react', [CommentController::class, 'react'])->name('comment.react')->middleware('auth');
+Route::put('/api/comments/{commentId}', [CommentController::class, 'update'])->name('comment.update')->middleware('auth');
+Route::delete('/api/comments/{commentId}', [CommentController::class, 'destroy'])->name('comment.destroy')->middleware('auth');
 Route::get('/api/gif-search', [CommentController::class, 'gifSearch'])->name('gif.search');
 Route::get('/api/gif-categories', [CommentController::class, 'gifCategories'])->name('gif.categories');
 
@@ -425,6 +427,12 @@ Route::put('/admin/reqservice/shortlink/{id}/update', [RequestShortlinkControlle
 Route::delete('/admin/reqservice/shortlink/{id}', [RequestShortlinkController::class, 'destroy'])->name('admin.reqservice.shortlink.destroy')->middleware(['role:Superadmin|HelperMedia']);
 Route::post('/admin/reqservice/shortlink/bulk-delete', [RequestShortlinkController::class, 'bulkDelete'])->name('admin.reqservice.shortlink.bulk-delete')->middleware(['role:Superadmin']);
 Route::get('/admin/reqservice/shortlink/{id}/preview', [RequestShortlinkController::class, 'showAdmin'])->name('admin.reqservice.shortlink.show')->middleware(['role:Superadmin|HelperMedia']);
+
+// Route AdminPage Comment Control Center (Superadmin only)
+Route::get('/admin/comments', [CommentController::class, 'indexAdmin'])->name('admin.comments.index')->middleware(['role:Superadmin']);
+Route::get('/admin/comments/{id}/preview', [CommentController::class, 'showAdmin'])->name('admin.comments.show')->middleware(['role:Superadmin']);
+Route::delete('/admin/comments/{id}', [CommentController::class, 'destroyAdmin'])->name('admin.comments.destroy')->middleware(['role:Superadmin']);
+Route::post('/admin/comments/bulk-delete', [CommentController::class, 'bulkDeleteAdmin'])->name('admin.comments.bulk-delete')->middleware(['role:Superadmin']);
 
 // Route AdminPage Service Call Kestari
 Route::middleware(['role:Superadmin|HelperLetter|HelperMedia'])

@@ -8,6 +8,7 @@ use App\Services\GoogleDrive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
@@ -262,6 +263,239 @@ class CommentController extends Controller
         }
     }
 
+    // ── Edit own comment (PUT) ───────────────────────────────────────
+    public function update(Request $request, $commentId)
+    {
+        $comment = Comment::findOrFail($commentId);
+
+        if ((int) $comment->userID !== (int) Auth::id()) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
+        $request->validate([
+            'commentText'   => 'nullable|string|max:2000',
+            'mediaUrl'      => 'nullable|string|max:2000',
+            'mediaType'     => 'nullable|in:image,gif,sticker',
+            'mediaGdriveId' => 'nullable|string|max:100',
+        ]);
+
+        if (empty($request->commentText) && empty($request->mediaUrl)) {
+            return response()->json(['message' => 'Komentar atau media wajib diisi.'], 422);
+        }
+
+        // Delete old GDrive image if replaced or removed
+        $oldGdriveId = $comment->mediaGdriveId;
+        $newGdriveId = $request->mediaGdriveId;
+        if ($oldGdriveId && $oldGdriveId !== $newGdriveId && $comment->mediaType === 'image') {
+            try {
+                (new GoogleDrive(self::GDRIVE_FOLDER))->deleteFile($oldGdriveId);
+            } catch (\Exception $ignored) {}
+        }
+
+        $comment->update([
+            'commentText'   => $request->commentText ?: '',
+            'mediaUrl'      => $request->mediaUrl,
+            'mediaType'     => $request->mediaType,
+            'mediaGdriveId' => $request->mediaGdriveId,
+        ]);
+
+        $comment->load(['user.profile']);
+        return response()->json($this->formatComment($comment));
+    }
+
+    // ── Delete own comment (DELETE) ──────────────────────────────────
+    public function destroy($commentId)
+    {
+        try {
+            $comment = Comment::with('replies.replies')->findOrFail($commentId);
+
+            if ((int) $comment->userID !== (int) Auth::id()) {
+                return response()->json(['message' => 'Forbidden.'], 403);
+            }
+
+            $allIds = $this->collectAllIds(collect([$comment]));
+            $this->deleteGdriveMedia($allIds);
+
+            CommentReaction::whereIn('commentID', $allIds)->delete();
+            Comment::whereIn('commentID', array_diff($allIds, [$comment->commentID]))->delete();
+            $comment->delete();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error('[CommentController] destroy: ' . $e->getMessage(), ['id' => $commentId]);
+            return response()->json(['success' => false, 'message' => 'Gagal menghapus komentar.'], 500);
+        }
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    //  ADMIN — Comment Control Center (Superadmin only)
+    // ════════════════════════════════════════════════════════════════
+
+    public function indexAdmin(Request $request)
+    {
+        $query = Comment::with(['user.profile'])
+            ->whereNull('parentID');
+
+        if ($request->filled('search')) {
+            $s = $request->search;
+            $query->where(function ($q) use ($s) {
+                $q->where('commentText', 'like', "%{$s}%")
+                  ->orWhereHas('user', function ($u) use ($s) {
+                      $u->where('name', 'like', "%{$s}%");
+                  });
+            });
+        }
+
+        if ($request->filled('contentType')) {
+            $query->where('contentType', $request->contentType);
+        }
+
+        if ($request->filled('mediaType')) {
+            if ($request->mediaType === 'none') {
+                $query->whereNull('mediaUrl');
+            } else {
+                $query->where('mediaType', $request->mediaType);
+            }
+        }
+
+        if ($request->filled('createdDate')) {
+            $parts = explode(' - ', $request->createdDate);
+            if (count($parts) === 2) {
+                $query->whereDate('createdDate', '>=', trim($parts[0]))
+                      ->whereDate('createdDate', '<=', trim($parts[1]));
+            }
+        }
+
+        $sortBy    = in_array($request->sort_by, ['createdDate', 'contentType', 'commentText']) ? $request->sort_by : 'createdDate';
+        $sortOrder = $request->sort_order === 'asc' ? 'asc' : 'desc';
+        $query->orderBy($sortBy, $sortOrder);
+
+        $items = $query->paginate(20)->appends($request->query());
+
+        $tableConfig = [
+            'idKey'        => 'commentID',
+            'emptyMessage' => 'No comments found.',
+            'emptyIcon'    => 'fa-comments',
+            'colspan'      => 7,
+            'columns'      => [
+                ['key' => 'user.name',    'type' => 'relation', 'relationKey' => 'user.name',    'class' => 'text-start', 'fallback' => '—'],
+                ['key' => 'contentType',  'type' => 'badge',    'class' => 'text-center',
+                    'badgeMap'     => ['article' => 'bg-primary', 'news' => 'bg-info text-dark', 'event' => 'bg-warning text-dark', 'catalogBook' => 'bg-success'],
+                    'badgeDefault' => 'bg-secondary'],
+                ['key' => 'commentText',  'type' => 'text',     'class' => 'text-start cmt-admin-truncate', 'fallback' => '—'],
+                ['key' => 'mediaType',    'type' => 'badge',    'class' => 'text-center',
+                    'badgeMap'     => ['image' => 'bg-primary', 'gif' => 'bg-warning text-dark', 'sticker' => 'bg-success'],
+                    'badgeDefault' => 'bg-secondary', 'fallback' => '—'],
+                ['key' => 'createdDate',  'type' => 'datetime', 'dateFormat' => 'DD MMM YYYY', 'class' => 'text-center'],
+            ],
+            'actions' => [
+                'view'   => ['enabled' => true, 'route' => 'admin.comments.show', 'routeKey' => 'commentID', 'class' => 'btn-custom-primary'],
+                'delete' => ['enabled' => true, 'class' => 'btn-custom-primary'],
+            ],
+        ];
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody'  => view('components.admin-index.index-table', compact('items', 'tableConfig'))->render(),
+                'pagination' => $items->appends($request->query())->links()->render(),
+                'total'      => $items->total(),
+                'from'       => $items->firstItem(),
+                'to'         => $items->lastItem(),
+            ]);
+        }
+
+        $contentTypeOptions = Comment::whereNull('parentID')
+            ->distinct()->pluck('contentType')
+            ->mapWithKeys(function ($t) { return [$t => ucfirst($t)]; })->toArray();
+
+        $mediaTypeOptions = ['image' => 'Image', 'gif' => 'GIF', 'sticker' => 'Sticker', 'none' => 'No Media'];
+
+        return view('admin-page.comment.index', compact('items', 'tableConfig', 'contentTypeOptions', 'mediaTypeOptions'))
+            ->with('title', 'Comment Control Center');
+    }
+
+    public function showAdmin($id)
+    {
+        $comment = Comment::with([
+            'user.profile',
+            'reactions',
+            'replies.user.profile',
+            'replies.reactions',
+            'replies.replies.user.profile',
+            'replies.replies.reactions',
+        ])->findOrFail($id);
+
+        return view('admin-page.comment.view', compact('comment'))
+            ->with('title', 'Comment Detail');
+    }
+
+    public function destroyAdmin($id)
+    {
+        try {
+            $comment = Comment::with('replies.replies')->findOrFail($id);
+
+            $allIds = $this->collectAllIds(collect([$comment]));
+
+            // Delete all GDrive media files (main comment + all nested replies)
+            $this->deleteGdriveMedia($allIds);
+
+            CommentReaction::whereIn('commentID', $allIds)->delete();
+            Comment::whereIn('commentID', array_diff($allIds, [$comment->commentID]))->delete();
+            $comment->delete();
+
+            return response()->json(['success' => true, 'message' => 'Comment deleted successfully.']);
+        } catch (\Exception $e) {
+            Log::error('[CommentController] destroyAdmin: ' . $e->getMessage(), ['id' => $id]);
+            return response()->json(['success' => false, 'message' => 'Failed to delete comment.'], 500);
+        }
+    }
+
+    public function bulkDeleteAdmin(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+            if (empty($ids)) {
+                return response()->json(['success' => false, 'message' => 'No comments selected.'], 400);
+            }
+
+            $comments = Comment::with('replies.replies')->whereIn('commentID', $ids)->get();
+            $allIds   = [];
+            foreach ($comments as $c) {
+                $allIds = array_merge($allIds, $this->collectAllIds(collect([$c])));
+            }
+            $allIds = array_unique($allIds);
+
+            // Delete all GDrive media files across the whole batch
+            $this->deleteGdriveMedia($allIds);
+
+            CommentReaction::whereIn('commentID', $allIds)->delete();
+            Comment::whereIn('commentID', $allIds)->delete();
+
+            return response()->json(['success' => true, 'message' => count($ids) . ' comment(s) deleted successfully.']);
+        } catch (\Exception $e) {
+            Log::error('[CommentController] bulkDeleteAdmin: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to bulk delete.'], 500);
+        }
+    }
+
+    // Delete GDrive files for any comments in $commentIds that have a stored image
+    private function deleteGdriveMedia(array $commentIds)
+    {
+        $mediaIds = Comment::whereIn('commentID', $commentIds)
+            ->whereNotNull('mediaGdriveId')
+            ->where('mediaType', 'image')
+            ->pluck('mediaGdriveId');
+
+        if ($mediaIds->isEmpty()) return;
+
+        $gdrive = new GoogleDrive(self::GDRIVE_FOLDER);
+        foreach ($mediaIds as $gdriveId) {
+            try {
+                $gdrive->deleteFile($gdriveId);
+            } catch (\Exception $ignored) {}
+        }
+    }
+
     // ── Format one comment for JSON output ───────────────────────────
     public function formatComment(Comment $comment, $reactionCounts = [], $userReactionMap = [])
     {
@@ -296,8 +530,10 @@ class CommentController extends Controller
             'commentText'   => $comment->commentText,
             'mediaUrl'      => $comment->mediaUrl,
             'mediaType'     => $comment->mediaType,
+            'mediaGdriveId' => $comment->mediaGdriveId,
             'createdAt'     => $comment->createdDate ? $comment->createdDate->diffForHumans() : '-',
             'parentID'      => $comment->parentID,
+            'isOwner'       => Auth::id() !== null && (int) $comment->userID === (int) Auth::id(),
             'reactions'     => ['counts' => $counts, 'userTypes' => $userTypes],
             'user'          => ['id' => $user->id, 'name' => $user->name, 'avatar' => $avatar],
             'replies'       => $replies,

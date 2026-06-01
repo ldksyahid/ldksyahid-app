@@ -99,6 +99,7 @@
                         <a href="/admin/reqservice/shortlink" class="dropdown-item {{ $isActive('admin/reqservice/shortlink') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Request Shortlink</a>
                     </div>
                 </div>
+                <a href="/admin/comments" class="nav-item nav-link {{ $isActive('admin/comments') ? 'active' : '' }}"><i class="fas fa-comments me-2"></i>Comments</a>
                 <a href="/admin/ktaldksyahid" class="nav-item nav-link {{ $isActive('admin/ktaldksyahid') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i>KTA LDK Syahid</a>
                 <a href="/admin/catalog/books" class="nav-item nav-link {{ $isActive('admin/catalog/books') ? 'active' : '' }}"><i class="fa fa-book me-2"></i>Book Catalog</a>
                 <a href="/admin/forms" class="nav-item nav-link {{ $isActive('admin/forms') ? 'active' : '' }}"><i class="fas fa-clipboard-list me-2"></i>Dynamic Forms</a>
