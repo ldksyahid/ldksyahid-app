@@ -16,6 +16,8 @@
     var UPLOAD_URL = section.dataset.uploadUrl;
     var GIF_URL    = section.dataset.gifUrl;
     var CAT_URL    = section.dataset.catUrl;
+    var UPDATE_URL = section.dataset.updateUrl;
+    var DELETE_URL = section.dataset.deleteUrl;
 
     // ── Reaction type definitions ────────────────────────────────────
     var REACTIONS = [
@@ -135,19 +137,59 @@
              + '</div>';
     }
 
+    // ── Build edit form for a comment ────────────────────────────────
+    function buildEditFormHtml(c) {
+        var t      = 'edit-' + c.id;
+        var hasM   = !!c.mediaUrl;
+        return '<div class="cmt-edit-form" id="cmt-edit-' + c.id + '" style="display:none">'
+             + '<textarea class="cmt-textarea cmt-edit-textarea" maxlength="2000">'
+             + esc(c.commentText || '') + '</textarea>'
+             + '<div class="cmt-edit-mpw" id="cmt-empw-' + c.id
+             + '" style="display:' + (hasM ? 'inline-block' : 'none') + '">'
+             + '<button type="button" class="cmt-media-remove" data-target="' + t + '">'
+             + '<i class="fas fa-times"></i></button>'
+             + '<img class="cmt-reply-media-thumb" src="' + esc(c.mediaUrl || '') + '" alt=""></div>'
+             + '<div class="cmt-edit-footer">'
+             + '<div class="cmt-media-toolbar">'
+             + '<button class="cmt-media-btn" data-action="img" data-target="' + t
+             + '" type="button" title="Tambah gambar"><i class="fas fa-image"></i></button>'
+             + '<button class="cmt-media-btn cmt-gif-open-btn" data-action="gif" data-target="' + t
+             + '" type="button" title="Tambah GIF">'
+             + '<span class="cmt-gif-icon-wrap"><span class="cmt-gif-icon-text">GIF</span></span>'
+             + '</button>'
+             + '</div>'
+             + '<div class="cmt-form-controls">'
+             + '<button class="cmt-btn-cancel-edit" data-id="' + c.id + '" type="button">Batal</button>'
+             + '<button class="cmt-btn-save-edit" data-id="' + c.id + '" type="button">'
+             + '<i class="fas fa-check"></i> Simpan</button>'
+             + '</div></div>'
+             + '</div>';
+    }
+
     // ── Build full comment item HTML ─────────────────────────────────
     // level: 0 = top-level, 1 = reply, 2 = reply-of-reply
     function buildHtml(c, level) {
         level = level || 0;
 
         var canReply = (level < 2) && IS_AUTH;
+        var isOwner  = c.isOwner && IS_AUTH;
 
         var replyBtn = canReply
             ? '<button class="cmt-reply-toggle" data-id="' + c.id + '" type="button">'
             + '<i class="fas fa-reply"></i> Balas</button>'
             : '';
 
+        var ownerBtns = isOwner
+            ? '<div class="cmt-owner-actions">'
+              + '<button class="cmt-edit-btn" data-id="' + c.id + '" type="button" title="Edit komentar">'
+              + '<i class="fas fa-pencil-alt"></i></button>'
+              + '<button class="cmt-delete-btn" data-id="' + c.id + '" type="button" title="Hapus komentar">'
+              + '<i class="fas fa-trash-alt"></i></button>'
+              + '</div>'
+            : '';
+
         var replyForm = canReply ? buildReplyFormHtml(c.id) : '';
+        var editForm  = isOwner  ? buildEditFormHtml(c) : '';
 
         // Collapsible replies section
         var repliesWrap = '';
@@ -171,12 +213,17 @@
 
         var rxInfo = c.reactions || {};
         return '<div class="cmt-item' + (level > 0 ? ' cmt-reply-item' : '')
-             + '" data-id="' + c.id + '" data-level="' + level + '">'
+             + '" data-id="' + c.id + '" data-level="' + level + '"'
+             + ' data-text="' + esc(c.commentText || '') + '"'
+             + ' data-media-url="' + esc(c.mediaUrl || '') + '"'
+             + ' data-media-type="' + esc(c.mediaType || '') + '"'
+             + ' data-media-gdrive-id="' + esc(c.mediaGdriveId || '') + '">'
              + '<div class="cmt-item-avatar">' + avatarHtml(c.user, level > 0) + '</div>'
              + '<div class="cmt-item-body">'
              + '<div class="cmt-item-header">'
              + '<span class="cmt-item-name">' + esc(c.user.name) + '</span>'
              + '<span class="cmt-item-time">' + esc(c.createdAt) + '</span>'
+             + ownerBtns
              + '</div>'
              + (c.commentText ? '<p class="cmt-item-text">' + esc(c.commentText) + '</p>' : '')
              + buildMediaHtml(c)
@@ -184,6 +231,7 @@
              + replyBtn
              + buildReactionsHtml(c.id, rxInfo.counts, rxInfo.userTypes)
              + '</div>'
+             + editForm
              + replyForm
              + repliesWrap
              + '</div></div>';
@@ -344,48 +392,35 @@
     var activeMediaTarget = null;
     var sharedFileInput   = document.getElementById('cmt-shared-file');
 
+    function getPreviewEl(target) {
+        if (target === 'main') return document.getElementById('cmt-media-preview-main');
+        if (target.indexOf('edit-') === 0) return document.getElementById('cmt-empw-' + target.slice(5));
+        return document.getElementById('cmt-rpw-' + target);
+    }
+
+    function getPreviewImg(target, wrap) {
+        if (target === 'main') return document.getElementById('cmt-media-img-main');
+        return wrap ? wrap.querySelector('.cmt-reply-media-thumb') : null;
+    }
+
     function setMedia(target, url, type, gdriveId) {
         mediaState[target] = { url: url, type: type, gdriveId: gdriveId || null };
-
-        var previewWrap, previewImg;
-        if (target === 'main') {
-            previewWrap = document.getElementById('cmt-media-preview-main');
-            previewImg  = document.getElementById('cmt-media-img-main');
-        } else {
-            previewWrap = document.getElementById('cmt-rpw-' + target);
-            previewImg  = previewWrap ? previewWrap.querySelector('.cmt-reply-media-thumb') : null;
-        }
-        if (previewWrap && previewImg) {
-            previewImg.src           = url;
-            previewWrap.style.display = 'inline-block';
-        }
+        var pw  = getPreviewEl(target);
+        var img = getPreviewImg(target, pw);
+        if (pw && img) { img.src = url; pw.style.display = 'inline-block'; }
     }
 
     function clearMedia(target) {
         delete mediaState[target];
-        var previewWrap;
-        if (target === 'main') {
-            previewWrap = document.getElementById('cmt-media-preview-main');
-            var img     = document.getElementById('cmt-media-img-main');
-            if (img) img.src = '';
-        } else {
-            previewWrap = document.getElementById('cmt-rpw-' + target);
-            if (previewWrap) {
-                var thumb = previewWrap.querySelector('.cmt-reply-media-thumb');
-                if (thumb) thumb.src = '';
-            }
-        }
-        if (previewWrap) previewWrap.style.display = 'none';
+        var pw  = getPreviewEl(target);
+        var img = getPreviewImg(target, pw);
+        if (img) img.src = '';
+        if (pw) pw.style.display = 'none';
     }
 
     function showUploadLoading(target) {
-        var pw = target === 'main'
-            ? document.getElementById('cmt-media-preview-main')
-            : document.getElementById('cmt-rpw-' + target);
-        if (pw) {
-            pw.classList.add('cmt-media-loading');
-            pw.style.display = 'inline-block';
-        }
+        var pw = getPreviewEl(target);
+        if (pw) { pw.classList.add('cmt-media-loading'); pw.style.display = 'inline-block'; }
     }
 
     // Upload file to Google Drive via server endpoint
@@ -402,16 +437,12 @@
                 return r.json();
             })
             .then(function (data) {
-                var pw = target === 'main'
-                    ? document.getElementById('cmt-media-preview-main')
-                    : document.getElementById('cmt-rpw-' + target);
+                var pw = getPreviewEl(target);
                 if (pw) pw.classList.remove('cmt-media-loading');
                 setMedia(target, data.url, data.type, data.gdriveId);
             })
             .catch(function () {
-                var pw = target === 'main'
-                    ? document.getElementById('cmt-media-preview-main')
-                    : document.getElementById('cmt-rpw-' + target);
+                var pw = getPreviewEl(target);
                 if (pw) { pw.classList.remove('cmt-media-loading'); pw.style.display = 'none'; }
                 showError('Gagal mengunggah gambar ke Google Drive. Pastikan ukuran file < 5 MB.');
             });
@@ -462,20 +493,20 @@
         activeMediaTarget = target;
         if (!gifModal) return;
 
-        // Desktop: position as dropdown below the anchor button
+        // Desktop: always position below the anchor button; shrink height if needed
         var dialog = gifModal.querySelector('.cmt-gif-dialog');
         if (dialog && anchorEl && window.innerWidth >= 576) {
-            var rect = anchorEl.getBoundingClientRect();
-            var dW   = Math.min(480, window.innerWidth - 20);
-            var dH   = Math.min(500, window.innerHeight * 0.8);
-            var left = rect.left;
-            var top  = rect.bottom + 6;
+            var rect  = anchorEl.getBoundingClientRect();
+            var dW    = Math.min(480, window.innerWidth - 20);
+            var left  = rect.left;
+            var top   = rect.bottom + 6;
             if (left + dW > window.innerWidth - 10) left = window.innerWidth - dW - 10;
             if (left < 10) left = 10;
-            if (top + dH > window.innerHeight - 10) top = rect.top - dH - 6;
-            if (top < 10) top = 10;
-            dialog.style.top  = top  + 'px';
-            dialog.style.left = left + 'px';
+            var availH = window.innerHeight - top - 10;
+            var dH     = Math.min(500, Math.max(220, availH));
+            dialog.style.top    = top  + 'px';
+            dialog.style.left   = left + 'px';
+            dialog.style.height = dH   + 'px';
         }
 
         gifModal.style.display = 'flex';
@@ -720,6 +751,212 @@
         var max     = parseInt(ta.getAttribute('maxlength') || '2000', 10);
         var counter = ta.parentElement.querySelector('.cmt-char, #cmt-char-count');
         if (counter) counter.textContent = ta.value.length + ' / ' + max;
+    });
+
+    // ════════════════════════════════════════════════════════════════
+    //  EDIT COMMENT (own comments only)
+    // ════════════════════════════════════════════════════════════════
+
+    function openEditForm(commentId) {
+        // Close all other open edit forms first
+        var allForms = section.querySelectorAll('.cmt-edit-form');
+        for (var fi = 0; fi < allForms.length; fi++) {
+            var fid = allForms[fi].id.replace('cmt-edit-', '');
+            if (fid !== String(commentId)) {
+                allForms[fi].style.display = 'none';
+                delete mediaState['edit-' + fid];
+                // Restore media preview to saved data-attr value
+                var prevElC = document.getElementById('cmt-empw-' + fid);
+                var origItemC = section.querySelector('.cmt-item[data-id="' + fid + '"]');
+                if (prevElC && origItemC) {
+                    var prevImgC = prevElC.querySelector('.cmt-reply-media-thumb');
+                    var origUrlC = origItemC.getAttribute('data-media-url') || '';
+                    if (prevImgC) prevImgC.src = origUrlC;
+                    prevElC.style.display = origUrlC ? 'inline-block' : 'none';
+                }
+            }
+        }
+
+        var editForm = document.getElementById('cmt-edit-' + commentId);
+        if (!editForm) return;
+        var item = section.querySelector('.cmt-item[data-id="' + commentId + '"]');
+        if (!item) return;
+
+        // Re-populate with current stored values
+        var ta = editForm.querySelector('textarea');
+        if (ta) ta.value = item.getAttribute('data-text') || '';
+
+        var mUrl    = item.getAttribute('data-media-url') || '';
+        var mType   = item.getAttribute('data-media-type') || '';
+        var mGdrive = item.getAttribute('data-media-gdrive-id') || '';
+        var prevEl  = document.getElementById('cmt-empw-' + commentId);
+        if (prevEl) {
+            var prevImg = prevEl.querySelector('.cmt-reply-media-thumb');
+            if (prevImg) prevImg.src = mUrl;
+            prevEl.style.display = mUrl ? 'inline-block' : 'none';
+        }
+        if (mUrl) {
+            mediaState['edit-' + commentId] = { url: mUrl, type: mType, gdriveId: mGdrive || null };
+        } else {
+            delete mediaState['edit-' + commentId];
+        }
+
+        editForm.style.display = 'block';
+        if (ta) ta.focus();
+    }
+
+    function submitEdit(commentId) {
+        var editForm = document.getElementById('cmt-edit-' + commentId);
+        if (!editForm) return;
+        var ta   = editForm.querySelector('textarea');
+        var text = ta ? ta.value.trim() : '';
+        var media = mediaState['edit-' + commentId] || null;
+
+        if (!text && !media) { showError('Komentar atau media wajib diisi.'); return; }
+
+        var saveBtn = editForm.querySelector('.cmt-btn-save-edit');
+        if (saveBtn) { saveBtn.disabled = true; saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
+
+        var payload = {
+            commentText:   text,
+            mediaUrl:      media ? media.url      : null,
+            mediaType:     media ? media.type     : null,
+            mediaGdriveId: media ? media.gdriveId : null,
+        };
+
+        fetch(UPDATE_URL.replace(':id', commentId), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
+            body: JSON.stringify(payload),
+        })
+        .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+        .then(function (updated) {
+            var item = section.querySelector('.cmt-item[data-id="' + commentId + '"]');
+            if (item) {
+                // Update data attributes
+                item.setAttribute('data-text',            updated.commentText   || '');
+                item.setAttribute('data-media-url',        updated.mediaUrl      || '');
+                item.setAttribute('data-media-type',       updated.mediaType     || '');
+                item.setAttribute('data-media-gdrive-id',  updated.mediaGdriveId || '');
+
+                var body      = item.querySelector('.cmt-item-body');
+                var actionsEl = item.querySelector('.cmt-item-actions');
+                var textEl    = item.querySelector('.cmt-item-text');
+                var mediaEl   = item.querySelector('.cmt-item-media');
+
+                // Update text
+                if (updated.commentText) {
+                    if (textEl) {
+                        textEl.textContent = updated.commentText;
+                    } else {
+                        var p = document.createElement('p');
+                        p.className   = 'cmt-item-text';
+                        p.textContent = updated.commentText;
+                        body.insertBefore(p, actionsEl);
+                    }
+                } else if (textEl) {
+                    textEl.parentNode.removeChild(textEl);
+                }
+
+                // Update media
+                if (updated.mediaUrl) {
+                    if (mediaEl) {
+                        var mImg = mediaEl.querySelector('.cmt-item-img');
+                        if (mImg) mImg.src = updated.mediaUrl;
+                    } else {
+                        var mDiv = document.createElement('div');
+                        mDiv.className = 'cmt-item-media';
+                        mDiv.innerHTML = '<img src="' + esc(updated.mediaUrl)
+                            + '" alt="media" class="cmt-item-img" loading="lazy"'
+                            + ' onclick="this.requestFullscreen&&this.requestFullscreen()">';
+                        body.insertBefore(mDiv, actionsEl);
+                    }
+                } else if (mediaEl) {
+                    mediaEl.parentNode.removeChild(mediaEl);
+                }
+            }
+
+            editForm.style.display = 'none';
+            delete mediaState['edit-' + commentId];
+            if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = '<i class="fas fa-check"></i> Simpan'; }
+        })
+        .catch(function () {
+            showError('Gagal menyimpan perubahan, silakan coba lagi.');
+            if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = '<i class="fas fa-check"></i> Simpan'; }
+        });
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    //  DELETE COMMENT (own comments only)
+    // ════════════════════════════════════════════════════════════════
+
+    function doDelete(commentId) {
+        fetch(DELETE_URL.replace(':id', commentId), {
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
+        })
+        .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+        .then(function () {
+            var item = section.querySelector('.cmt-item[data-id="' + commentId + '"]');
+            if (!item) return;
+            var level       = parseInt(item.getAttribute('data-level') || '0', 10);
+            var repliesWrap = item.closest ? item.closest('.cmt-replies') : null;
+            item.parentNode.removeChild(item);
+
+            if (level > 0 && repliesWrap) {
+                var wrap    = repliesWrap.closest ? repliesWrap.closest('.cmt-replies-wrap') : null;
+                var countEl = wrap ? wrap.querySelector('.cmt-replies-count-text') : null;
+                if (countEl) countEl.textContent = repliesWrap.children.length + ' Balasan';
+            }
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success',
+                    title: 'Komentar dihapus.', showConfirmButton: false, timer: 2500, timerProgressBar: true });
+            }
+        })
+        .catch(function () { showError('Gagal menghapus komentar, silakan coba lagi.'); });
+    }
+
+    function deleteComment(commentId) {
+        if (typeof Swal === 'undefined') {
+            if (confirm('Hapus komentar ini?')) doDelete(commentId);
+            return;
+        }
+        Swal.fire({
+            title: 'Hapus Komentar?',
+            text: 'Komentar dan seluruh balasannya akan dihapus permanen.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#94a3b8',
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal',
+        }).then(function (result) { if (result.isConfirmed) doDelete(commentId); });
+    }
+
+    // Owner action delegates
+    delegate(section, '.cmt-edit-btn', function (e, btn) {
+        openEditForm(btn.dataset.id);
+    });
+    delegate(section, '.cmt-delete-btn', function (e, btn) {
+        deleteComment(btn.dataset.id);
+    });
+    delegate(section, '.cmt-btn-cancel-edit', function (e, btn) {
+        var ef = document.getElementById('cmt-edit-' + btn.dataset.id);
+        if (ef) ef.style.display = 'none';
+        delete mediaState['edit-' + btn.dataset.id];
+        // Restore media preview
+        var prevEl   = document.getElementById('cmt-empw-' + btn.dataset.id);
+        var origItem = section.querySelector('.cmt-item[data-id="' + btn.dataset.id + '"]');
+        if (prevEl && origItem) {
+            var origUrl = origItem.getAttribute('data-media-url') || '';
+            var prevImg = prevEl.querySelector('.cmt-reply-media-thumb');
+            if (prevImg) prevImg.src = origUrl;
+            prevEl.style.display = origUrl ? 'inline-block' : 'none';
+        }
+    });
+    delegate(section, '.cmt-btn-save-edit', function (e, btn) {
+        submitEdit(btn.dataset.id);
     });
 
     // ── Main submit button ───────────────────────────────────────────

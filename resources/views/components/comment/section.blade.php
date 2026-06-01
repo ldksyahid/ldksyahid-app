@@ -26,7 +26,9 @@
      data-react-url="{{ route('comment.react', ':id') }}"
      data-upload-url="{{ route('comment.upload-media') }}"
      data-gif-url="{{ route('gif.search') }}"
-     data-cat-url="{{ route('gif.categories') }}">
+     data-cat-url="{{ route('gif.categories') }}"
+     data-update-url="{{ route('comment.update', ':id') }}"
+     data-delete-url="{{ route('comment.destroy', ':id') }}">
 
     {{-- Heading --}}
     <h3 class="cmt-title">

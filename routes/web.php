@@ -150,6 +150,8 @@ Route::get('/api/comments', [CommentController::class, 'index'])->name('comment.
 Route::post('/api/comments', [CommentController::class, 'store'])->name('comment.store')->middleware('auth');
 Route::post('/api/comments/upload-media', [CommentController::class, 'uploadMedia'])->name('comment.upload-media')->middleware('auth');
 Route::post('/api/comments/{commentId}/react', [CommentController::class, 'react'])->name('comment.react')->middleware('auth');
+Route::put('/api/comments/{commentId}', [CommentController::class, 'update'])->name('comment.update')->middleware('auth');
+Route::delete('/api/comments/{commentId}', [CommentController::class, 'destroy'])->name('comment.destroy')->middleware('auth');
 Route::get('/api/gif-search', [CommentController::class, 'gifSearch'])->name('gif.search');
 Route::get('/api/gif-categories', [CommentController::class, 'gifCategories'])->name('gif.categories');
 

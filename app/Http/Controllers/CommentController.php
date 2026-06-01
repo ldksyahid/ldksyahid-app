@@ -263,6 +263,70 @@ class CommentController extends Controller
         }
     }
 
+    // ── Edit own comment (PUT) ───────────────────────────────────────
+    public function update(Request $request, $commentId)
+    {
+        $comment = Comment::findOrFail($commentId);
+
+        if ((int) $comment->userID !== (int) Auth::id()) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
+        $request->validate([
+            'commentText'   => 'nullable|string|max:2000',
+            'mediaUrl'      => 'nullable|string|max:2000',
+            'mediaType'     => 'nullable|in:image,gif,sticker',
+            'mediaGdriveId' => 'nullable|string|max:100',
+        ]);
+
+        if (empty($request->commentText) && empty($request->mediaUrl)) {
+            return response()->json(['message' => 'Komentar atau media wajib diisi.'], 422);
+        }
+
+        // Delete old GDrive image if replaced or removed
+        $oldGdriveId = $comment->mediaGdriveId;
+        $newGdriveId = $request->mediaGdriveId;
+        if ($oldGdriveId && $oldGdriveId !== $newGdriveId && $comment->mediaType === 'image') {
+            try {
+                (new GoogleDrive(self::GDRIVE_FOLDER))->deleteFile($oldGdriveId);
+            } catch (\Exception $ignored) {}
+        }
+
+        $comment->update([
+            'commentText'   => $request->commentText ?: '',
+            'mediaUrl'      => $request->mediaUrl,
+            'mediaType'     => $request->mediaType,
+            'mediaGdriveId' => $request->mediaGdriveId,
+        ]);
+
+        $comment->load(['user.profile']);
+        return response()->json($this->formatComment($comment));
+    }
+
+    // ── Delete own comment (DELETE) ──────────────────────────────────
+    public function destroy($commentId)
+    {
+        try {
+            $comment = Comment::with('replies.replies')->findOrFail($commentId);
+
+            if ((int) $comment->userID !== (int) Auth::id()) {
+                return response()->json(['message' => 'Forbidden.'], 403);
+            }
+
+            $allIds = $this->collectAllIds(collect([$comment]));
+            $this->deleteGdriveMedia($allIds);
+
+            CommentReaction::whereIn('commentID', $allIds)->delete();
+            Comment::whereIn('commentID', array_diff($allIds, [$comment->commentID]))->delete();
+            $comment->delete();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error('[CommentController] destroy: ' . $e->getMessage(), ['id' => $commentId]);
+            return response()->json(['success' => false, 'message' => 'Gagal menghapus komentar.'], 500);
+        }
+    }
+
     // ════════════════════════════════════════════════════════════════
     //  ADMIN — Comment Control Center (Superadmin only)
     // ════════════════════════════════════════════════════════════════
@@ -466,8 +530,10 @@ class CommentController extends Controller
             'commentText'   => $comment->commentText,
             'mediaUrl'      => $comment->mediaUrl,
             'mediaType'     => $comment->mediaType,
+            'mediaGdriveId' => $comment->mediaGdriveId,
             'createdAt'     => $comment->createdDate ? $comment->createdDate->diffForHumans() : '-',
             'parentID'      => $comment->parentID,
+            'isOwner'       => Auth::id() !== null && (int) $comment->userID === (int) Auth::id(),
             'reactions'     => ['counts' => $counts, 'userTypes' => $userTypes],
             'user'          => ['id' => $user->id, 'name' => $user->name, 'avatar' => $avatar],
             'replies'       => $replies,

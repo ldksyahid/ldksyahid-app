@@ -449,6 +449,54 @@
     border-color: rgba(45,212,191,.15); border-top-color: #2dd4bf;
 }
 
+/* ── Owner action buttons (edit / delete) ───────────────────────── */
+.cmt-owner-actions {
+    display: inline-flex; align-items: center; gap: .15rem; margin-left: auto;
+}
+.cmt-edit-btn, .cmt-delete-btn {
+    background: none; border: none; border-radius: .375rem;
+    padding: .2rem .4rem; font-size: .72rem; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background .15s, color .15s; font-family: inherit;
+    color: #94a3b8; line-height: 1;
+}
+.cmt-edit-btn:hover   { background: rgba(0,167,157,.1); color: #00a79d; }
+.cmt-delete-btn:hover { background: rgba(239,68,68,.08); color: #ef4444; }
+[data-theme="dark"] .cmt-edit-btn   { color: #6b7280; }
+[data-theme="dark"] .cmt-delete-btn { color: #6b7280; }
+[data-theme="dark"] .cmt-edit-btn:hover   { background: rgba(0,167,157,.15); color: #2dd4bf; }
+[data-theme="dark"] .cmt-delete-btn:hover { background: rgba(239,68,68,.1);  color: #f87171; }
+
+/* ── Inline edit form ────────────────────────────────────────────── */
+.cmt-edit-form { margin-top: .65rem; }
+.cmt-edit-textarea { min-height: 60px; }
+.cmt-edit-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: .45rem; flex-wrap: wrap; gap: .4rem;
+}
+.cmt-edit-mpw {
+    position: relative; display: inline-block; margin-top: .5rem;
+    border-radius: .5rem; overflow: hidden;
+    border: 1.5px solid #e2e8f0; background: #f1f5f9;
+}
+[data-theme="dark"] .cmt-edit-mpw { border-color: rgba(255,255,255,.1); background: #1e2535; }
+.cmt-btn-save-edit {
+    background: #00a79d; color: #fff; border: none; border-radius: .5rem;
+    padding: .35rem .85rem; font-size: .82rem; font-weight: 600;
+    cursor: pointer; display: inline-flex; align-items: center; gap: .35rem;
+    transition: background .2s; font-family: inherit;
+}
+.cmt-btn-save-edit:hover:not(:disabled) { background: #008b82; }
+.cmt-btn-save-edit:disabled { opacity: .6; cursor: not-allowed; }
+.cmt-btn-cancel-edit {
+    background: none; border: 1px solid #cbd5e1; border-radius: .5rem;
+    color: #64748b; padding: .35rem .75rem; font-size: .82rem;
+    cursor: pointer; font-family: inherit; transition: background .15s;
+}
+.cmt-btn-cancel-edit:hover { background: #f1f5f9; }
+[data-theme="dark"] .cmt-btn-cancel-edit { border-color: rgba(255,255,255,.15); color: #9ca3af; }
+[data-theme="dark"] .cmt-btn-cancel-edit:hover { background: rgba(255,255,255,.05); }
+
 /* ── Mobile ─────────────────────────────────────────────────────── */
 @media (max-width: 575.98px) {
     .cmt-form-avatar,.cmt-item-avatar { display: none; }
