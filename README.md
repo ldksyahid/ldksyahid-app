@@ -13,7 +13,7 @@
 
 <br>
 <div align="center">
-<img src="https://img.shields.io/badge/version-v2.0.3-blue" />
+<img src="https://img.shields.io/badge/version-v2.1.0-blue" />
 <img src="https://img.shields.io/badge/laravel-8.x-red" />
 <img src="https://img.shields.io/badge/php-%3E%3D7.4-777BB4" />
 <img src="https://img.shields.io/badge/license-LDK Syahid-green" />
@@ -28,7 +28,7 @@ LDK Syahid Web App is a comprehensive web platform for **Lembaga Dakwah Kampus (
 
 ### Public Website
 - **Landing Page** — Hero jumbotron banners, testimonies, articles, events, and schedules
-- **Articles & News** — Content publishing with comment system
+- **Articles & News** — Content publishing with interactive comment system
 - **Events** — Event listing and detail pages
 - **Gallery** — Photo gallery of organizational activities
 - **Organization Structure** — Interactive org chart display
@@ -50,6 +50,7 @@ LDK Syahid Web App is a comprehensive web platform for **Lembaga Dakwah Kampus (
 - **Content Management** — Full CRUD for jumbotrons, articles, news, events, schedules, gallery, structure, and testimonies
 - **Service Management** — Manage Celengan Syahid campaigns & donations, shortlinks, Call Kestari, KTA, catalog books, and finance reports
 - **Dynamic Form Builder** — Visual drag-and-drop form builder with field reordering, section management, and Google Sheets integration
+- **Comment Control Center** — View and delete all user comments across all content types (Superadmin only)
 - **User Management** — User CRUD with role assignment, search, and filter (Superadmin only)
 - **Email System** — Compose and send custom emails, newsletter management
 - **Job Queue Monitor** — View, retry, and manage queued/failed jobs
@@ -227,6 +228,7 @@ Authenticated via Laravel Sanctum (`/api` prefix):
 
 | Version | Date | Changes |
 | :---: | :---: | --- |
+| `2.1.0` | `2026-06-01` | <ul><li>**Comment System** — Brand-new AJAX comment system replacing Disqus on all content pages (articles, news, events, book catalog); supports top-level comments and threaded replies up to 2 levels deep</li><li>**GIF & Sticker Picker** — Inline GIPHY-powered picker with tab switching (GIF / Sticker), keyword search, category chips, and uniform 3-column grid; popup always anchors directly below the GIF button with dynamic height to fit available viewport space</li><li>**Image Upload** — Upload images from comment and reply forms directly to Google Drive; shows loading spinner on preview area while uploading</li><li>**Reaction System** — 7 emoji reaction types (like, dislike, love, heart eyes, laughing, rage, slight smile) per comment/reply; multi-reaction per user, real-time toggle with pill display</li><li>**Edit & Delete (own comments)** — Authenticated users can edit or delete their own comments and replies inline; edit form supports text and media replacement; SweetAlert2 confirm dialog for delete</li><li>**GDrive cleanup** — When a comment image is replaced during edit or a comment is deleted, the old Google Drive file is automatically removed; cascades through all nested reply levels</li><li>**Admin Comment Control Center** — Superadmin-only menu under the admin sidebar; supports search, filter by content type / media type / date range, paginated table, single delete, and bulk delete with full GDrive cascade cleanup</li><li>**Admin Comment Detail View** — View page for individual comments showing author, content type, text, media, reactions, and all reply threads (including level-2 nested); reply count includes all levels</li></ul> |
 | `2.0.3` | `2026-05-31` | <ul><li>Fix Brevo silent email drop — check daily quota via Brevo REST API before sending so emails are not silently discarded when the free-plan 300/day limit is hit</li><li>Jobs hold until midnight UTC (Brevo reset time) and resume automatically</li><li>Fix TrackVisitor race condition — replace non-atomic check-then-insert with `insertOrIgnore` to eliminate duplicate-key errors under concurrent requests</li></ul> |
 | `2.0.2` | `2026-05-31` | <ul><li>Add Estimated Completion card to Job Queue Log — shows projected finish date/time based on pending jobs, rate limit (10/min), and Brevo daily quota (300/day)</li><li>Fix queue worker schedule for shared hosting with 10-minute cron minimum (`--max-time=540` instead of `--stop-when-empty`)</li><li>Rename daily-limit banner from Gmail to generic mail relay wording</li></ul> |
 | `2.0.1` | `2026-05-30` | <ul><li>Migrate job-based email from Gmail SMTP to Brevo SMTP relay with deliverability validation (MX/DNS check)</li><li>Add daily sending limit hold mechanism — jobs are held and resume automatically when quota resets</li><li>Fix Pause state persistence in Job Queue Log monitor (survives page refresh)</li><li>Fix mobile share sheet (Salin URL & WhatsApp) producing relative paths instead of absolute URLs</li><li>Contact person Laporan Keuangan now dynamic via App Settings</li></ul> |
