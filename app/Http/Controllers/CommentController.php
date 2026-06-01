@@ -376,7 +376,7 @@ class CommentController extends Controller
             'idKey'        => 'commentID',
             'emptyMessage' => 'No comments found.',
             'emptyIcon'    => 'fa-comments',
-            'colspan'      => 7,
+            'colspan'      => 8,
             'columns'      => [
                 ['key' => 'user.name',    'type' => 'relation', 'relationKey' => 'user.name',    'class' => 'text-start', 'fallback' => '—'],
                 ['key' => 'contentType',  'type' => 'badge',    'class' => 'text-center',
