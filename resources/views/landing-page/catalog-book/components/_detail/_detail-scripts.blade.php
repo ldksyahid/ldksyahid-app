@@ -347,36 +347,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     targetPane.classList.add('active');
                 }
 
-                // If comments tab is activated, initialize Disqus
-                if (targetTab === 'comments') {
-                    setTimeout(() => {
-                        initDisqusComments();
-                    }, 300);
-                }
+                // Comments are loaded automatically on page init
             });
         });
-    }
-
-    function initDisqusComments() {
-        // Check if Disqus is already loaded
-        if (window.DISQUS) {
-            return;
-        }
-
-        // Disqus configuration
-        var disqus_config = function () {
-            this.page.url = '{{ url()->current() }}';
-            this.page.identifier = 'book-{{ $book->bookID }}';
-            this.page.title = '{{ $book->titleBook }} - Diskusi Buku';
-        };
-
-        // Load Disqus script
-        (function() {
-            var d = document, s = d.createElement('script');
-            s.src = 'https://https-ldksyah-id-1.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
     }
 
     function initElegantHoverEffects() {
@@ -505,5 +478,4 @@ window.addEventListener('error', function(e) {
 })();
 </script>
 
-<!-- Disqus Fallback for No JavaScript -->
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+@include('components.comment.scripts')

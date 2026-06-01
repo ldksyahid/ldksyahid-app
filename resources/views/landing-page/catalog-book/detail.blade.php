@@ -271,9 +271,12 @@
                             <p class="comments-description">
                                 Bagikan pendapat, review, atau diskusikan buku ini dengan pembaca lainnya.
                             </p>
-                            <div class="disqus-container">
-                                <div id="disqus_thread"></div>
-                            </div>
+                            @include('components.comment.section', [
+                                    'cmtType'  => 'catalogBook',
+                                    'cmtId'    => $book->bookID,
+                                    'cmtTitle' => 'Diskusi Buku',
+                                    'cmtDesc'  => 'Bagikan ulasan atau diskusikan buku ini bersama pembaca lain.',
+                                ])
                         </div>
                     </div>
 
@@ -332,6 +335,7 @@
 
 @section('styles')
     @include('landing-page.catalog-book.components._detail._detail-styles')
+    @include('components.comment.styles')
 @endsection
 
 @section('scripts')

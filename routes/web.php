@@ -34,6 +34,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\FonnteWebhookController;
 use App\Http\Controllers\Admin\AdminFormController;
 use App\Http\Controllers\PublicFormController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -143,6 +144,14 @@ Route::get('/service', function () {
 // Route LandingPage Artikel
 Route::get('/articles', [ArticleController::class, 'index'])->name('article.index');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('article.show');
+
+// Comment System (AJAX)
+Route::get('/api/comments', [CommentController::class, 'index'])->name('comment.index');
+Route::post('/api/comments', [CommentController::class, 'store'])->name('comment.store')->middleware('auth');
+Route::post('/api/comments/upload-media', [CommentController::class, 'uploadMedia'])->name('comment.upload-media')->middleware('auth');
+Route::post('/api/comments/{commentId}/react', [CommentController::class, 'react'])->name('comment.react')->middleware('auth');
+Route::get('/api/gif-search', [CommentController::class, 'gifSearch'])->name('gif.search');
+Route::get('/api/gif-categories', [CommentController::class, 'gifCategories'])->name('gif.categories');
 
 // Route LandingPage Event
 Route::get('/events', [EventController::class, 'index'])->name('event.index');

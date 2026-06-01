@@ -22,6 +22,7 @@
      ══════════════════════════════════════════════════ --}}
 @section('styles')
 @include('landing-page.news.components._detail-styles')
+@include('components.comment.styles')
 @endsection
 
 
@@ -258,11 +259,12 @@
 
             {{-- Comments --}}
             <div class="nd-comments-section nd-enter">
-                <h3 class="nd-comments-title">
-                    <i class="far fa-comments" style="color:var(--nd-primary)"></i>
-                    Komentar
-                </h3>
-                <div id="disqus_thread"></div>
+                @include('components.comment.section', [
+                    'cmtType'  => 'news',
+                    'cmtId'    => $postnews->id,
+                    'cmtTitle' => 'Komentar',
+                    'cmtDesc'  => 'Bagikan pendapat Anda tentang berita ini.',
+                ])
             </div>
 
         </div>{{-- /nd-post-layout --}}
