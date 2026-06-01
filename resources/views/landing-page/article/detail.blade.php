@@ -15,6 +15,7 @@
 
 @section('styles')
 @include('landing-page.article.components._detail-styles')
+@include('components.comment.styles')
 @endsection
 
 @section('content')
@@ -176,9 +177,14 @@
         <span class="ad-section-divider-icon"><i class="fas fa-comments"></i></span>
     </div>
 
-    {{-- Disqus --}}
+    {{-- Komentar --}}
     <div class="ad-disqus-wrap wow fadeInUp" data-wow-delay="0.15s">
-        <div id="disqus_thread"></div>
+        @include('components.comment.section', [
+            'cmtType'  => 'article',
+            'cmtId'    => $postarticle->id,
+            'cmtTitle' => 'Komentar',
+            'cmtDesc'  => 'Bagikan pendapat atau diskusikan artikel ini.',
+        ])
     </div>
 
 </div>

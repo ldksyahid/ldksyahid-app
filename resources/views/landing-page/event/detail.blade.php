@@ -19,6 +19,7 @@
      ══════════════════════════════════════════════════ --}}
 @section('styles')
 @include('landing-page.event.components._detail-styles')
+@include('components.comment.styles')
 @endsection
 
 
@@ -161,14 +162,15 @@
                     </div>
                 </div>
 
-                {{-- ── Tab: Pembahasan (Disqus) ─────────────── --}}
+                {{-- ── Tab: Discussion ─────────────────────── --}}
                 <div class="ed-tab-pane" id="ed-tab-disc" role="tabpanel">
                     <div class="ed-comments-section">
-                        <h3 class="ed-comments-title">Pembahasan</h3>
-                        <p style="font-size:.88rem; color: var(--ed-gray); margin-bottom: 1.5rem;">
-                            Diskusikan dan tanyakan seputar kegiatan <em>{{ $postevent->title }}</em> di sini.
-                        </p>
-                        <div id="disqus_thread"></div>
+                        @include('components.comment.section', [
+                            'cmtType'  => 'event',
+                            'cmtId'    => $postevent->id,
+                            'cmtTitle' => 'Pembahasan',
+                            'cmtDesc'  => 'Diskusikan dan tanyakan seputar kegiatan "' . e($postevent->title) . '".',
+                        ])
                     </div>
                 </div>
 
