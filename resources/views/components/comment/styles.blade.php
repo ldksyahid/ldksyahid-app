@@ -134,7 +134,7 @@
 }
 .cmt-item-avatar { flex-shrink: 0; padding-top: .2rem; }
 .cmt-item-body {
-    flex: 1; min-width: 0; background: #f8fafc;
+    flex: 1; min-width: 0; background: #f8fafc; margin-top: 5px; margin-bottom: 5px;
     border-radius: .75rem; padding: .85rem 1rem; border: 1px solid #e2e8f0;
 }
 .cmt-item-header {
