@@ -378,11 +378,23 @@
         if (previewWrap) previewWrap.style.display = 'none';
     }
 
+    function showUploadLoading(target) {
+        var pw = target === 'main'
+            ? document.getElementById('cmt-media-preview-main')
+            : document.getElementById('cmt-rpw-' + target);
+        if (pw) {
+            pw.classList.add('cmt-media-loading');
+            pw.style.display = 'inline-block';
+        }
+    }
+
     // Upload file to Google Drive via server endpoint
     function uploadFile(file, target) {
         var fd = new FormData();
         fd.append('file', file);
         fd.append('_token', CSRF);
+
+        showUploadLoading(target);
 
         fetch(UPLOAD_URL, { method: 'POST', body: fd })
             .then(function (r) {
@@ -390,9 +402,17 @@
                 return r.json();
             })
             .then(function (data) {
+                var pw = target === 'main'
+                    ? document.getElementById('cmt-media-preview-main')
+                    : document.getElementById('cmt-rpw-' + target);
+                if (pw) pw.classList.remove('cmt-media-loading');
                 setMedia(target, data.url, data.type, data.gdriveId);
             })
             .catch(function () {
+                var pw = target === 'main'
+                    ? document.getElementById('cmt-media-preview-main')
+                    : document.getElementById('cmt-rpw-' + target);
+                if (pw) { pw.classList.remove('cmt-media-loading'); pw.style.display = 'none'; }
                 showError('Gagal mengunggah gambar ke Google Drive. Pastikan ukuran file < 5 MB.');
             });
     }
@@ -438,10 +458,27 @@
             .catch(function () {});
     }
 
-    function openGifModal(target) {
+    function openGifModal(target, anchorEl) {
         activeMediaTarget = target;
         if (!gifModal) return;
-        gifModal.style.display          = 'flex';
+
+        // Desktop: position as dropdown below the anchor button
+        var dialog = gifModal.querySelector('.cmt-gif-dialog');
+        if (dialog && anchorEl && window.innerWidth >= 576) {
+            var rect = anchorEl.getBoundingClientRect();
+            var dW   = Math.min(480, window.innerWidth - 20);
+            var dH   = Math.min(500, window.innerHeight * 0.8);
+            var left = rect.left;
+            var top  = rect.bottom + 6;
+            if (left + dW > window.innerWidth - 10) left = window.innerWidth - dW - 10;
+            if (left < 10) left = 10;
+            if (top + dH > window.innerHeight - 10) top = rect.top - dH - 6;
+            if (top < 10) top = 10;
+            dialog.style.top  = top  + 'px';
+            dialog.style.left = left + 'px';
+        }
+
+        gifModal.style.display = 'flex';
         gifModal.removeAttribute('aria-hidden');
         if (gifInput) { gifInput.value = ''; gifInput.focus(); }
         if (gifClearBtn) gifClearBtn.style.display = 'none';
@@ -580,7 +617,7 @@
         if (sharedFileInput) sharedFileInput.click();
     });
     delegate(section, '[data-action="gif"]', function (e, btn) {
-        openGifModal(btn.dataset.target);
+        openGifModal(btn.dataset.target, btn);
     });
     delegate(section, '.cmt-media-remove', function (e, btn) {
         clearMedia(btn.dataset.target);

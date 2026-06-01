@@ -266,9 +266,6 @@
     position: fixed; inset: 0; z-index: 9999;
     display: flex; align-items: flex-end; justify-content: center;
 }
-@media (min-width: 576px) {
-    .cmt-gif-modal { align-items: center; }
-}
 .cmt-gif-backdrop {
     position: absolute; inset: 0; background: rgba(0,0,0,.5);
     backdrop-filter: blur(2px);
@@ -279,8 +276,17 @@
     border-radius: 1rem 1rem 0 0; display: flex; flex-direction: column;
     overflow: hidden; box-shadow: 0 -4px 40px rgba(0,0,0,.2);
 }
+/* Desktop: dropdown anchored below the GIF button */
 @media (min-width: 576px) {
-    .cmt-gif-dialog { border-radius: 1rem; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+    .cmt-gif-modal  { align-items: flex-start; justify-content: flex-start; background: transparent; }
+    .cmt-gif-backdrop { background: transparent; backdrop-filter: none; }
+    .cmt-gif-dialog {
+        position: fixed;
+        width: min(480px, calc(100vw - 20px));
+        height: min(500px, 80vh);
+        border-radius: 1rem;
+        box-shadow: 0 8px 40px rgba(0,0,0,.25);
+    }
 }
 
 /* Header with tabs */
@@ -421,6 +427,27 @@
 [data-theme="dark"] .cmt-gif-item    { background: #252b3b; }
 [data-theme="dark"] .cmt-gif-hint,
 [data-theme="dark"] .cmt-gif-loading { color: #6b7280; }
+
+/* ── Upload loading indicator ───────────────────────────────────── */
+.cmt-media-preview-wrap.cmt-media-loading,
+.cmt-reply-mpw.cmt-media-loading {
+    min-width: 90px; min-height: 70px;
+    display: inline-block !important;
+}
+.cmt-media-loading::after {
+    content: ''; position: absolute;
+    top: 50%; left: 50%;
+    margin-top: -13px; margin-left: -13px;
+    width: 26px; height: 26px;
+    border: 3px solid rgba(0,167,157,.2);
+    border-top-color: #00a79d;
+    border-radius: 50%;
+    animation: cmtSpinUpload .7s linear infinite;
+}
+@keyframes cmtSpinUpload { to { transform: rotate(360deg); } }
+[data-theme="dark"] .cmt-media-loading::after {
+    border-color: rgba(45,212,191,.15); border-top-color: #2dd4bf;
+}
 
 /* ── Mobile ─────────────────────────────────────────────────────── */
 @media (max-width: 575.98px) {
