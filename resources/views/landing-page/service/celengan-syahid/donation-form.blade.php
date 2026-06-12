@@ -17,7 +17,7 @@
      STYLES
      ══════════════════════════════════════════════════ --}}
 @section('styles')
-@include('landing-page.service.celengan-syahid.components._donate-now._donate-now-styles')
+@include('landing-page.service.celengan-syahid.components._donation-form._donation-form-styles')
 @endsection
 
 
@@ -70,7 +70,7 @@
              FORM
              ══════════════════════════════════════════════════ --}}
         <form role="form"
-              action="{{ url('/celengansyahid/donation/store') }}"
+              action="{{ route('service.store.donation.campaign') }}"
               method="POST"
               enctype="multipart/form-data"
               class="dn-form"
@@ -209,10 +209,11 @@
                     </div>
                 </div>
 
-                {{-- Anonymous toggle --}}
+                {{-- Anonymous toggle (name still stored, only hidden from the public donor list) --}}
+                <input type="hidden" name="is_anonymous" id="dn-anon-input" value="0">
                 <label class="dn-anon-row" for="dn-anon-check">
                     <input type="checkbox" class="dn-anon-check" id="dn-anon-check">
-                    <span class="dn-anon-label">Tampilkan sebagai donatur anonim</span>
+                    <span class="dn-anon-label">Sembunyikan nama saya di daftar donatur publik</span>
                 </label>
             </div>
 
@@ -265,5 +266,5 @@
      SCRIPTS
      ══════════════════════════════════════════════════ --}}
 @section('scripts')
-@include('landing-page.service.celengan-syahid.components._donate-now._donate-now-scripts')
+@include('landing-page.service.celengan-syahid.components._donation-form._donation-form-scripts')
 @endsection

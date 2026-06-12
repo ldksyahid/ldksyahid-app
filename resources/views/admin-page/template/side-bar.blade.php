@@ -70,11 +70,14 @@
                 <a href="/admin/schedule" class="nav-item nav-link {{ $isActive('admin/schedule') ? 'active' : '' }}"><i class="fa fa-list-alt me-2"></i>Schedule</a>
                 <a href="/admin/news" class="nav-item nav-link {{ $isActive('admin/news') ? 'active' : '' }}"><i class="fa fa-newspaper me-2"></i>News</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/service/celengansyahid']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/celengan-syahid']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
-                        <a href="/admin/service/celengansyahid/dashboard" class="dropdown-item {{ $isActive('admin/service/celengansyahid/dashboard') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Dashboard</a>
-                        <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item {{ $isActive('admin/service/celengansyahid/campaigns') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Campaign</a>
-                        <a href="/admin/service/celengansyahid/donations" class="dropdown-item {{ $isActive('admin/service/celengansyahid/donations') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Donation</a>
+                        <a href="/admin/celengan-syahid/dashboard" class="dropdown-item {{ $isActive('admin/celengan-syahid/dashboard') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Dashboard</a>
+                        <a href="/admin/celengan-syahid/campaigns" class="dropdown-item {{ $isActive('admin/celengan-syahid/campaigns') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Campaign</a>
+                        <a href="/admin/celengan-syahid/donations" class="dropdown-item {{ $isActive('admin/celengan-syahid/donations') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Donation</a>
+                        @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
+                        <a href="/admin/celengan-syahid/audit-logs" class="dropdown-item {{ $isActive('admin/celengan-syahid/audit-logs') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Audit Log</a>
+                        @endif
                     </div>
                 </div>
                 <div class="nav-item dropdown">
@@ -161,11 +164,14 @@
                 <a href="/admin/news" class="nav-item nav-link {{ $isActive('admin/news') ? 'active' : '' }}"><i class="fa fa-newspaper me-2"></i>News</a>
                 <a href="/admin/event" class="nav-item nav-link {{ $isActive('admin/event') ? 'active' : '' }}"><i class="fas fa-calendar-check me-2"></i>Event</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/service/celengansyahid']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/celengan-syahid']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
-                        <a href="/admin/service/celengansyahid/dashboard" class="dropdown-item {{ $isActive('admin/service/celengansyahid/dashboard') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Dashboard</a>
-                        <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item {{ $isActive('admin/service/celengansyahid/campaigns') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Campaign</a>
-                        <a href="/admin/service/celengansyahid/donations" class="dropdown-item {{ $isActive('admin/service/celengansyahid/donations') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Donation</a>
+                        <a href="/admin/celengan-syahid/dashboard" class="dropdown-item {{ $isActive('admin/celengan-syahid/dashboard') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Dashboard</a>
+                        <a href="/admin/celengan-syahid/campaigns" class="dropdown-item {{ $isActive('admin/celengan-syahid/campaigns') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Campaign</a>
+                        <a href="/admin/celengan-syahid/donations" class="dropdown-item {{ $isActive('admin/celengan-syahid/donations') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Donation</a>
+                        @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
+                        <a href="/admin/celengan-syahid/audit-logs" class="dropdown-item {{ $isActive('admin/celengan-syahid/audit-logs') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Audit Log</a>
+                        @endif
                     </div>
                 </div>
                 <div class="nav-item dropdown">

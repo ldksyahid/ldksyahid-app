@@ -20,7 +20,7 @@
 
             $.ajax({
                 type: "post",
-                url: "{{ url('/admin/service/celengansyahid/campaign/get-city') }}",
+                url: "{{ url('/admin/celengan-syahid/campaign/get-city') }}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 data: { id: provinsi_id },
                 success: function(data) {

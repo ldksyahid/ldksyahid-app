@@ -183,9 +183,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<div class="cs-bs-btns">' +
                     (deadlinePassed
                         ? '<span class="cs-bs-btn-donate cs-btn-ended"><i class="fas fa-times-circle"></i><span>Campaign Berakhir</span></span>'
-                        : '<a href="' + escHtml(donateUrl) + '" class="cs-bs-btn-donate"><i class="fas fa-heart"></i><span>Donasi Sekarang</span></a>'
+                        : '<a href="' + escHtml(url) + '" class="cs-bs-btn-donate"><i class="fas fa-heart"></i><span>Selengkapnya</span></a>'
                     ) +
-                    '<a href="' + escHtml(url) + '" class="cs-bs-btn-detail"><i class="fas fa-info-circle"></i><span>Lihat Detail</span></a>' +
                 '</div>' +
                 '<div class="cs-bs-share-wrap">' +
                     '<span class="cs-bs-share-label">Bagikan</span>' +

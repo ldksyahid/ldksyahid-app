@@ -124,7 +124,7 @@
 
 
 {{-- Hidden config --}}
-<input type="hidden" id="cs-base-url"  value="{{ url('/celengansyahid') }}">
+<input type="hidden" id="cs-base-url"  value="{{ url('/celengan-syahid') }}">
 <input type="hidden" id="cs-sort-val"  value="{{ request('sort', 'newest') }}">
 
 @endsection

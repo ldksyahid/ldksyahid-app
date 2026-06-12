@@ -139,7 +139,7 @@
                                     Status Donasi
                                 </td>
                                 <td style="padding:11px 14px;">
-                                    <a href="{{ env('APP_URL') }}/celengansyahid/yuk-donasi/{{ $linkCampaign }}/status/{{ $donationID }}"
+                                    <a href="{{ route('service.celengansyahid.detail.donateNow.status', ['link' => $linkCampaign, 'id' => $donationID]) }}"
                                        target="_blank" rel="noopener"
                                        style="color:#00a79d;text-decoration:underline;font-size:13px;word-break:break-all;">
                                         Cek Status Donasi &rarr;

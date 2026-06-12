@@ -196,7 +196,7 @@
 }
 .cs-card-img {
     width: 100%; height: 100%;
-    object-fit: cover;
+    object-fit: cover; object-position: top center;
     transition: transform .45s ease;
 }
 .cs-campaign-card:hover .cs-card-img { transform: scale(1.06); }
@@ -302,6 +302,15 @@
     transition: width .6s ease;
     min-width: 2px;
 }
+.cs-progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: .45rem;
+    font-size: .72rem;
+}
+.cs-progress-pct    { color: var(--cs-primary); font-weight: 700; }
+.cs-progress-target { color: var(--cs-gray); font-weight: 500; }
 
 /* Stats */
 .cs-stats-row {
@@ -316,7 +325,8 @@
     display: flex; flex-direction: column; gap: .125rem;
     flex: 1;
 }
-.cs-stat-right { align-items: flex-end; }
+.cs-stat-right  { align-items: flex-end; }
+.cs-stat-center { align-items: center; }
 .cs-stat-sep {
     width: 1px; height: 2rem;
     background: var(--cs-gray-200);
@@ -493,7 +503,7 @@
 .cs-m-img-wrap {
     position: relative; overflow: hidden; aspect-ratio: 4/3;
 }
-.cs-m-img { width: 100%; height: 100%; object-fit: cover; }
+.cs-m-img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .cs-m-img-overlay {
     position: absolute; inset: 0;
     background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.5) 100%);

@@ -222,7 +222,6 @@ Authenticated via Laravel Sanctum (`/api` prefix):
 | `AggregateVisitorStats` | Rolls up visitor logs into daily unique/page stat tables |
 | `CleanupVisitorLogs` | Prunes old raw visitor logs |
 | `CloseExpiredForms` | Closes published forms past their end date |
-| `RunDonationClassMachine` | Processes donation state machine transitions |
 
 ## Version History
 

@@ -19,12 +19,13 @@ class StoreDonationRequest extends FormRequest
             'email_donatur'       => ['required', 'email', 'max:150'],
             'no_telp_donatur'     => ['required', 'string', 'regex:/^[0-9+\-\s]{7,20}$/'],
             'pesan_donatur'       => ['nullable', 'string', 'max:500'],
+            'is_anonymous'        => ['nullable', 'in:0,1'],
             'usia_donatur'        => ['nullable', 'string', 'max:50'],
             'domisili_donatur'    => ['nullable', 'string', 'max:100'],
             'pekerjaan_donatur'   => ['nullable', 'string', 'max:100'],
             'linkcampaign'        => ['required', 'string', 'max:255', 'exists:campaigns,link'],
             'postdonation'        => ['required', 'string', 'max:36', 'exists:campaigns,id'],
-            'g-recaptcha-response'=> ['required', 'string'],
+            'g-recaptcha-response'=> ['required', 'recaptcha'],
         ];
     }
 
@@ -42,6 +43,7 @@ class StoreDonationRequest extends FormRequest
             'postdonation.required'         => 'ID campaign wajib diisi.',
             'postdonation.exists'           => 'Campaign tidak valid.',
             'g-recaptcha-response.required' => 'Silakan verifikasi Captcha terlebih dahulu.',
+            'g-recaptcha-response.recaptcha' => 'Verifikasi Captcha gagal. Silakan coba lagi.',
         ];
     }
 }

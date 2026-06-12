@@ -57,20 +57,16 @@
         });
     });
 
-    /* ── Anonymous toggle ────────────────────────────────────── */
+    /* ── Anonymous toggle ──────────────────────────────────────
+       Keep the real name in the field (stored for admin/receipt);
+       only flip the hidden flag that masks the name on the public
+       donor list. ───────────────────────────────────────────── */
     var anonCheck = document.getElementById('dn-anon-check');
-    var nameInput = document.getElementById('dn-nama-donatur');
+    var anonInput = document.getElementById('dn-anon-input');
 
-    if (anonCheck && nameInput) {
+    if (anonCheck && anonInput) {
         anonCheck.addEventListener('change', function () {
-            if (this.checked) {
-                nameInput.dataset.realValue = nameInput.value;
-                nameInput.value    = 'Manusia Baik';
-                nameInput.readOnly = true;
-            } else {
-                nameInput.value    = nameInput.dataset.realValue || '';
-                nameInput.readOnly = false;
-            }
+            anonInput.value = this.checked ? '1' : '0';
         });
     }
 

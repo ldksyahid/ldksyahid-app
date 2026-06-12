@@ -17,6 +17,7 @@ class Donation extends Model
         'email_donatur',
         'no_telp_donatur',
         'pesan_donatur',
+        'is_anonymous',
         'captcha',
         'campaign_id',
         'payment_status',
@@ -28,6 +29,11 @@ class Donation extends Model
         'nama_merchant',
         'biaya_admin',
         'total_tagihan',
+        'gateway',
+        'qr_code',
+        'payment_code',
+        'status_id',
+        'expired_at',
     ];
 
     protected static array $allowedSorts = [
@@ -84,6 +90,11 @@ class Donation extends Model
                 ],
             ],
             'actions' => [
+                'view' => [
+                    'enabled'  => true,
+                    'route'    => 'admin.service.show.donation',
+                    'routeKey' => 'id',
+                ],
                 'delete' => [
                     'enabled' => true,
                     'btnClass' => 'delete-donation-btn',
@@ -110,10 +121,12 @@ class Donation extends Model
             ->toArray();
     }
 
-    public static function searchAdminDonations(Request $request)
+    /**
+     * Apply the admin list/export filters to a query builder.
+     * Shared by searchAdminDonations() (paginated list) and the CSV export.
+     */
+    public static function applyAdminFilters($query, Request $request)
     {
-        $query = self::query();
-
         if ($request->filled('nama_donatur')) {
             $query->where('nama_donatur', 'like', '%' . $request->nama_donatur . '%');
         }
@@ -143,6 +156,13 @@ class Donation extends Model
             }
         }
 
+        return $query;
+    }
+
+    public static function searchAdminDonations(Request $request)
+    {
+        $query = self::applyAdminFilters(self::query(), $request);
+
         $sortBy = $request->input('sort_by', 'created_at');
         $sortOrder = $request->input('sort_order', 'desc');
 
@@ -170,6 +190,7 @@ class Donation extends Model
             "email_donatur" => $request->input('email_donatur'),
             "no_telp_donatur" => $request->input('no_telp_donatur'),
             "pesan_donatur" => $pesan_donatur,
+            "is_anonymous" => $request->boolean('is_anonymous'),
             "captcha" => $request->input('g-recaptcha-response'),
             "campaign_id" => $request->input('postdonation'),
             'payment_status' => $payment_status,
@@ -179,6 +200,37 @@ class Donation extends Model
             'pekerjaan' => $request->input('pekerjaan_donatur'),
         ]);
         return $postDonation;
+    }
+
+    /**
+     * Create a donation backed by the BisaTopup (QRIS) gateway response.
+     */
+    public static function createDonationGateway(Request $request, $transactionId, $jumlah_donasi, $status, array $gatewayData, $expiredAt)
+    {
+        $pesan_donatur = $request->input('pesan_donatur') ?? "Bismillah Semoga Berkah yaaa ! tetap Semangat Semuanya !!";
+
+        return Donation::create([
+            'doc_no'            => $transactionId,
+            'jumlah_donasi'     => $jumlah_donasi,
+            'nama_donatur'      => $request->input('nama_donatur'),
+            'email_donatur'     => $request->input('email_donatur'),
+            'no_telp_donatur'   => $request->input('no_telp_donatur'),
+            'pesan_donatur'     => $pesan_donatur,
+            'is_anonymous'      => $request->boolean('is_anonymous'),
+            'captcha'           => $request->input('g-recaptcha-response'),
+            'campaign_id'       => $request->input('postdonation'),
+            'payment_status'    => $status,
+            'payment_link'      => $gatewayData['payment_links'] ?? null,
+            'usia'              => $request->input('usia_donatur'),
+            'domisili'          => $request->input('domisili_donatur'),
+            'pekerjaan'         => $request->input('pekerjaan_donatur'),
+            'gateway'           => 'bisatopup',
+            'metode_pembayaran' => 'QRIS',
+            'qr_code'           => $gatewayData['qr_code'] ?? null,
+            'payment_code'      => $gatewayData['payment_code'] ?? null,
+            'status_id'         => $gatewayData['status_id'] ?? null,
+            'expired_at'        => $expiredAt,
+        ]);
     }
 
     public static function getDonationById($id)
