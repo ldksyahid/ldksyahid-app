@@ -289,8 +289,11 @@ class PublicController extends Controller
         $transactionId = $payload['transaction_id'] ?? null;
         $statusId      = $payload['status_id'] ?? null;
 
+        // The BisaTopup dashboard "Test" button sends an empty/sample payload with no
+        // transaction_id. Acknowledge it with 200 (health-check) so the callback URL
+        // validates — real callbacks always carry transaction_id + status_id.
         if (!$transactionId || $statusId === null) {
-            return response()->json(['message' => 'Missing field'], 400);
+            return response()->json(['message' => 'OK'], 200);
         }
 
         // Signature check — lenient in DEV (so we can observe the real signature),

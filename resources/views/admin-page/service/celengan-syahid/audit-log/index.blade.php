@@ -2,6 +2,7 @@
 
 @section('styles')
     @include('admin-page.service.celengan-syahid.audit-log.components._index-styles')
+    @include('components.pagination-custom.styles')
 @endsection
 
 @section('content')
