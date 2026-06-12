@@ -2,13 +2,29 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class StoreDonationRequest extends FormRequest
 {
     public function authorize(): bool
     {
         return true;
+    }
+
+    /**
+     * Log which field(s) rejected the donation so "silently bounced back to the
+     * form" can be diagnosed (e.g. an empty/failed reCAPTCHA leaves no other trace).
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        Log::warning('StoreDonationRequest validation failed', [
+            'errors' => $validator->errors()->toArray(),
+            'ip'     => $this->ip(),
+        ]);
+
+        parent::failedValidation($validator);
     }
 
     public function rules(): array
