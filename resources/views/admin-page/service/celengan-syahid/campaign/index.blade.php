@@ -90,7 +90,7 @@
     :columnWidths="$columnWidths"
     ajaxUrl="{{ route('admin.service.index.celsyahid.dashboard') }}"
     csrfToken="{{ csrf_token() }}"
-    deleteUrl="{{ url('admin/service/celengansyahid/campaign') }}"
+    deleteUrl="{{ url('admin/celengan-syahid/campaign') }}"
     bulkDeleteUrl="{{ route('admin.service.campaign.bulk-delete') }}"
     :includeSelect2="true"
     defaultSortBy="created_at"

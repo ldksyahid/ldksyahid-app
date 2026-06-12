@@ -106,7 +106,7 @@
     :columnWidths="$columnWidths"
     ajaxUrl="{{ route('admin.service.index.donation') }}"
     csrfToken="{{ csrf_token() }}"
-    deleteUrl="{{ url('admin/service/celengansyahid/donation') }}"
+    deleteUrl="{{ url('admin/celengan-syahid/donation') }}"
     bulkDeleteUrl="{{ route('admin.service.donation.bulk-delete') }}"
     :includeSelect2="true"
     defaultSortBy="created_at"
@@ -117,5 +117,27 @@
     select2Field="campaign_id"
     select2Placeholder="All Campaigns"
     :isSuperadmin="$isSuperadmin"
-/>
+>
+    <x-slot name="leftButtons">
+        <a href="#" id="exportCsvBtn" class="btn btn-custom-primary" onclick="exportDonationsCsv(); return false;">
+            <i class="fa fa-file-csv me-1"></i> Export CSV
+        </a>
+    </x-slot>
+</x-admin-index.template>
 @endsection
+
+@push('scripts')
+<script>
+    // Export the donation list as CSV, carrying the active column filters.
+    function exportDonationsCsv() {
+        var base   = @json(route('admin.service.export.donation'));
+        var params = new URLSearchParams();
+        ['nama_donatur', 'jumlah_donasi', 'payment_status', 'campaign_id', 'created_at'].forEach(function (name) {
+            var el = document.querySelector('[name="' + name + '"]');
+            if (el && el.value) params.set(name, el.value);
+        });
+        var qs = params.toString();
+        window.location = base + (qs ? '?' + qs : '');
+    }
+</script>
+@endpush

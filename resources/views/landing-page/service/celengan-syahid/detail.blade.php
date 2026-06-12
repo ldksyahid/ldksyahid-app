@@ -24,7 +24,7 @@
     $orgName          = ($data->nama_pj && $data->link_pj) ? $data->nama_pj : 'UKM LDK Syahid';
     $orgLink          = ($data->nama_pj && $data->link_pj) ? $data->link_pj : 'https://www.ldksyah.id/';
     $waText           = urlencode(
-        "🚨 *[CELENGAN SYAHID]* 🚨\n\n_*{$data->judul}*_\n\n_" . url('/celengansyahid/' . $data->link) . "_\n\nYuk teman-teman kita bantu saudara kita 😇\n\n_\"Dan berbuat-baiklah kepada kedua orang tua, karib-kerabat, anak-anak yatim, orang-orang miskin, tetangga dekat dan tetangga jauh, teman sejawat, ibnu sabil dan hamba sahaya yang kamu miliki. Sungguh, Allah tidak menyukai orang yang sombong dan membanggakan diri,\" ● (QS. An-Nisa 4: Ayat 36)_\n\n#CelenganSyahid\n#{$data->link}\n#UKMLDKSyahid\n#KitaAdalahSaudara\n#Bismillah"
+        "🚨 *[CELENGAN SYAHID]* 🚨\n\n_*{$data->judul}*_\n\n_" . route('service.celengansyahid.detail', $data->link) . "_\n\nYuk teman-teman kita bantu saudara kita 😇\n\n_\"Dan berbuat-baiklah kepada kedua orang tua, karib-kerabat, anak-anak yatim, orang-orang miskin, tetangga dekat dan tetangga jauh, teman sejawat, ibnu sabil dan hamba sahaya yang kamu miliki. Sungguh, Allah tidak menyukai orang yang sombong dan membanggakan diri,\" ● (QS. An-Nisa 4: Ayat 36)_\n\n#CelenganSyahid\n#{$data->link}\n#UKMLDKSyahid\n#KitaAdalahSaudara\n#Bismillah"
     );
 @endphp
 
@@ -201,7 +201,7 @@
                                     <i class="fas fa-user"></i>
                                 </div>
                                 <div class="cd-donor-info">
-                                    <p class="cd-donor-name">{{ $donation->nama_donatur }}</p>
+                                    <p class="cd-donor-name">{{ $donation->is_anonymous ? 'Hamba Allah' : $donation->nama_donatur }}</p>
                                     <span class="cd-donor-amount">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</span>
                                     @if($donation->pesan_donatur)
                                         <p class="cd-donor-msg">{{ $donation->pesan_donatur }}</p>
