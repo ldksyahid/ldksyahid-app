@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class StoreDonationRequest extends FormRequest
@@ -41,7 +42,28 @@ class StoreDonationRequest extends FormRequest
             'pekerjaan_donatur'   => ['nullable', 'string', 'max:100'],
             'linkcampaign'        => ['required', 'string', 'max:255', 'exists:campaigns,link'],
             'postdonation'        => ['required', 'string', 'max:36', 'exists:campaigns,id'],
-            'g-recaptcha-response'=> ['required', 'recaptcha'],
+            'g-recaptcha-response'=> ['required', function ($attribute, $value, $fail) {
+                try {
+                    $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                        'secret'   => config('recaptcha.api_secret_key'),
+                        'response' => $value,
+                        'remoteip' => $this->ip(),
+                    ]);
+                    $result = $response->json() ?: [];
+                } catch (\Throwable $e) {
+                    Log::error('reCAPTCHA verify exception: ' . $e->getMessage());
+                    $result = [];
+                }
+
+                // Logs Google's full response (incl. error-codes) so the exact
+                // reject reason is visible: invalid-input-secret / hostname-mismatch /
+                // timeout-or-duplicate / etc.
+                Log::info('reCAPTCHA verify result', ['result' => $result]);
+
+                if (empty($result['success'])) {
+                    $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
+                }
+            }],
         ];
     }
 
