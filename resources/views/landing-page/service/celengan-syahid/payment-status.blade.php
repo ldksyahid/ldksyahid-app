@@ -136,11 +136,13 @@
 
             @elseif($isPending)
             <div id="ds-actions" class="ds-action-wrap">
+                @if($data->payment_link)
                 <a href="{{ route('service.celengansyahid.detail.donateNow.gateway', $data->id) }}"
                    target="_blank"
                    class="ds-btn ds-btn-primary">
                     <i class="fas fa-credit-card"></i> Bayar Sekarang
                 </a>
+                @endif
                 <button type="button" class="ds-btn ds-btn-gray" onclick="location.reload()">
                     <i class="fas fa-sync-alt"></i> Muat Ulang Halaman
                 </button>
@@ -148,10 +150,9 @@
 
             @else
             <div id="ds-actions" class="ds-action-wrap">
-                <a href="{{ route('service.celengansyahid.detail.donateNow.gateway', $data->id) }}"
-                   target="_blank"
+                <a href="{{ route('service.celengansyahid.detail.donatenow', $campaign->link) }}"
                    class="ds-btn ds-btn-primary">
-                    <i class="fas fa-credit-card"></i> Coba Bayar Lagi
+                    <i class="fas fa-redo"></i> Donasi Lagi
                 </a>
                 <button type="button" class="ds-btn ds-btn-gray" onclick="location.reload()">
                     <i class="fas fa-sync-alt"></i> Muat Ulang Halaman
@@ -203,7 +204,7 @@
 (function () {
     var CHECK_URL  = @json(route('service.celengansyahid.api.checkPayment', $data->id));
     var SAVE_URL   = @json(route('service.celengansyahid.savePayment', ['link' => $campaign->link, 'id' => $data->id]));
-    var PAY_URL    = @json(route('service.celengansyahid.detail.donateNow.gateway', $data->id));
+    var PAY_URL    = @json(route('service.celengansyahid.detail.donatenow', $campaign->link));
     var HOME_URL   = @json(route('service.celengansyahid'));
     var POLL_MS    = 5000;
     var active     = true;
@@ -267,8 +268,8 @@
 
             actions.className = 'ds-action-wrap';
             actions.innerHTML =
-                '<a href="' + PAY_URL + '" target="_blank" class="ds-btn ds-btn-primary">' +
-                    '<i class="fas fa-credit-card"></i> Coba Bayar Lagi' +
+                '<a href="' + PAY_URL + '" class="ds-btn ds-btn-primary">' +
+                    '<i class="fas fa-redo"></i> Donasi Lagi' +
                 '</a>' +
                 '<button type="button" class="ds-btn ds-btn-gray" onclick="location.reload()">' +
                     '<i class="fas fa-sync-alt"></i> Muat Ulang Halaman' +
