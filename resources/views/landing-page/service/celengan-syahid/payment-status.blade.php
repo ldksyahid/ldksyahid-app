@@ -31,13 +31,16 @@
 <style>
     .ds-qris-card { background:#fff; border:1px solid #e6eef0; border-radius:18px; padding:1.5rem; text-align:center; margin-bottom:1.25rem; box-shadow:0 6px 20px rgba(0,0,0,.06); }
     .ds-qris-title { font-weight:700; color:#00a79d; margin-bottom:1rem; }
-    .ds-qris-box { display:flex; align-items:center; justify-content:center; min-height:240px; }
-    .ds-qris-box img, .ds-qris-box canvas { width:240px; height:240px; max-width:100%; }
+    .ds-qris-box { display:inline-flex; align-items:center; justify-content:center; min-height:240px; background:#fff; padding:14px; border-radius:14px; }
+    .ds-qris-box img, .ds-qris-box canvas { width:240px; height:240px; max-width:100%; background:#fff; filter:none !important; image-rendering:pixelated; }
     .ds-qris-amount { font-size:1.4rem; font-weight:800; color:#00a79d; margin-top:1rem; }
     .ds-qris-hint { font-size:.85rem; color:#6c757d; margin:.5rem 0 0; }
     .ds-qris-expiry { font-size:.82rem; color:#6c757d; margin-top:.5rem; }
     [data-theme="dark"] .ds-qris-card { background:#1a1f2e; border-color:#252b3b; }
     [data-theme="dark"] .ds-qris-hint, [data-theme="dark"] .ds-qris-expiry { color:#9ca3af; }
+    /* QR tile stays white + un-inverted in every theme so scanners read it */
+    [data-theme="dark"] .ds-qris-box { background:#fff !important; }
+    [data-theme="dark"] .ds-qris-box img, [data-theme="dark"] .ds-qris-box canvas { filter:none !important; background:#fff !important; }
 </style>
 @endsection
 
