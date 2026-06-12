@@ -34,6 +34,11 @@ return [
         'api_key' => env('BREVO_API_KEY'),
     ],
 
+    // Toggle the donation-form reCAPTCHA server-side verification. Set to false
+    // only as a temporary measure (e.g. while migrating a deprecated Google key);
+    // keep true in production for bot protection.
+    'recaptcha_enabled' => env('RECAPTCHA_ENABLED', true),
+
     'xendit' => [
         'webhook_token' => env('XENDIT_WEBHOOK_TOKEN'),
     ],
