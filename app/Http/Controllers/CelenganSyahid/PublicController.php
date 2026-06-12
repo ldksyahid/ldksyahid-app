@@ -1,0 +1,407 @@
+<?php
+
+namespace App\Http\Controllers\CelenganSyahid;
+
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\LibraryFunctionController as LFC;
+use App\Http\Requests\StoreDonationRequest;
+use App\Mail\DonationInvoice;
+use App\Mail\DonationSuccess;
+use App\Models\Campaign;
+use App\Models\Donation;
+use App\Services\BisaTopup;
+use App\Services\Fonnte;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
+use Laravolt\Indonesia\Models\City;
+use RealRashid\SweetAlert\Facades\Alert;
+
+/**
+ * Public-facing Celengan Syahid pages and the donation/payment flow.
+ */
+class PublicController extends Controller
+{
+    /* ================================================================
+       LANDING PAGE
+       ================================================================ */
+
+    public function indexLanding(Request $request)
+    {
+        $query = Campaign::with(['donation' => function ($q) {
+            $q->where('payment_status', 'PAID');
+        }]);
+
+        if ($request->filled('search')) {
+            $query->where('judul', 'like', '%' . trim($request->search) . '%');
+        }
+
+        if ($request->filled('category')) {
+            $query->whereIn('kategori', (array) $request->category);
+        }
+
+        if ($request->filled('status')) {
+            $selectedStatuses = (array) $request->status;
+            $hasAktif    = in_array('aktif',    $selectedStatuses);
+            $hasBerakhir = in_array('berakhir', $selectedStatuses);
+            if ($hasAktif && !$hasBerakhir) {
+                $today = now()->toDateString();
+                $query->where(function ($q) use ($today) {
+                    $q->whereNull('deadline')->orWhere('deadline', '>=', $today);
+                });
+            } elseif ($hasBerakhir && !$hasAktif) {
+                $query->where('deadline', '<', now()->toDateString());
+            }
+        }
+
+        if ($request->filled('organizer')) {
+            $organizers = (array) $request->organizer;
+            $query->where(function ($q) use ($organizers) {
+                foreach ($organizers as $org) {
+                    if ($org === '__ldk__') {
+                        $q->orWhereNull('nama_pj');
+                    } else {
+                        $q->orWhere('nama_pj', $org);
+                    }
+                }
+            });
+        }
+
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'deadline') {
+            $query->orderBy('deadline', 'asc');
+        } elseif ($sort === 'title') {
+            $query->orderBy('judul', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $campaigns = $query->paginate(9)->appends($request->except('_token'));
+
+        if ($request->header('X-Requested-With') === 'XMLHttpRequest') {
+            $html = view('landing-page.service.celengan-syahid.components._index._campaign-cards', compact('campaigns'))->render();
+            return response()->json([
+                'html'  => $html,
+                'total' => $campaigns->total(),
+                'from'  => $campaigns->firstItem() ?? 0,
+                'to'    => $campaigns->lastItem() ?? 0,
+            ]);
+        }
+
+        $categories = Campaign::getCategoryOptions();
+        $statuses   = Campaign::getStatusOptions();
+        $organizers = Campaign::getOrganizerOptions();
+        return view('landing-page.service.celengan-syahid.index', compact('campaigns', 'categories', 'statuses', 'organizers'), ['title' => 'Layanan']);
+    }
+
+    public function showLanding($link)
+    {
+        $data = Campaign::getDataDonationCampaignByLink($link);
+
+        if (!$data) {
+            abort(404);
+        }
+
+        return view('landing-page.service.celengan-syahid.detail', [
+            'data'  => $data,
+            'title' => 'Layanan',
+        ]);
+    }
+
+    /* ================================================================
+       DONATE NOW
+       ================================================================ */
+
+    public function donateNow($link)
+    {
+        $data   = Campaign::where('link', $link)->firstOrFail();
+        $cities = City::pluck('name', 'id');
+
+        return view('landing-page.service.celengan-syahid.donation-form', [
+            'data'   => $data,
+            'title'  => 'Layanan',
+            'cities' => $cities,
+        ]);
+    }
+
+    /**
+     * API endpoint: return jobs list (used by Select2 AJAX).
+     */
+    public function getJobs(Request $request)
+    {
+        $jobs   = config('jobs.list', []);
+        $search = trim($request->input('q', ''));
+
+        if ($search !== '') {
+            $jobs = array_values(array_filter(
+                $jobs,
+                fn ($job) => mb_stripos($job, $search) !== false
+            ));
+        }
+
+        $results = array_map(fn ($job) => ['id' => $job, 'text' => $job], $jobs);
+
+        return response()->json(['results' => array_values($results)]);
+    }
+
+    public function storeDonationCampaign(StoreDonationRequest $request)
+    {
+        $jumlah_donasi = (int) LFC::replaceamount($request->input('jumlah_donasi'));
+
+        if ($jumlah_donasi < 10000) {
+            Alert::warning('Maaf!', 'Silahkan masukkan donasi minimal Rp10.000');
+            return Redirect::back();
+        }
+
+        $campaign = Campaign::where('link', $request->input('linkcampaign'))->first();
+        if (!$campaign) {
+            abort(404, 'Campaign tidak ditemukan');
+        }
+
+        try {
+            $gateway       = new BisaTopup();
+            $adminFee      = (int) config('services.bisatopup.admin_fee', 0);
+            $qrisPaymentId = (int) config('services.bisatopup.qris_payment_id', 33);
+            $transactionId = strtoupper(Str::random(12));
+            $total         = $jumlah_donasi + $adminFee;
+            $expiredAt     = now()->addDay();
+
+            $payload = [
+                'payment_id'        => $qrisPaymentId,
+                'username'          => config('services.bisatopup.username'),
+                'signature'         => $gateway->buildSignature($transactionId, $jumlah_donasi),
+                'expired_date'      => $expiredAt->format('Y-m-d H:i:s'),
+                'nominal'           => $jumlah_donasi,
+                'admin_fee'         => $adminFee,
+                'transaction_id'    => $transactionId,
+                'transaction_total' => $total,
+                'transaction_name'  => 'Donasi - ' . $campaign->judul,
+                'transaction_desc'  => Str::limit($request->input('pesan_donatur') ?: 'Donasi Celengan Syahid', 100, ''),
+                'customer_number'   => $request->input('no_telp_donatur'),
+                'customer_name'     => $request->input('nama_donatur'),
+                'customer_email'    => $request->input('email_donatur'),
+                'item_details'      => [[
+                    'item_id'          => $campaign->id,
+                    'item_name'        => Str::limit($campaign->judul, 50, ''),
+                    'item_price'       => $jumlah_donasi,
+                    'item_total_price' => $jumlah_donasi,
+                    'item_quantity'    => 1,
+                ]],
+            ];
+
+            $response = $gateway->createQrisTransaction($payload);
+
+            if (!$response || !empty($response['error'])) {
+                Log::error('storeDonationCampaign: BisaTopup create failed', ['response' => $response]);
+                Alert::error('Maaf!', 'Gagal membuat transaksi pembayaran. Silahkan coba lagi.');
+                return Redirect::back();
+            }
+
+            $gatewayData    = $response['data'] ?? [];
+            $statusInternal = BisaTopup::mapStatus($gatewayData['status_id'] ?? 1);
+
+            $postDonation = DB::transaction(function () use ($request, $transactionId, $jumlah_donasi, $statusInternal, $gatewayData, $expiredAt) {
+                return Donation::createDonationGateway(
+                    $request,
+                    $transactionId,
+                    $jumlah_donasi,
+                    $statusInternal,
+                    $gatewayData,
+                    $expiredAt
+                );
+            });
+
+            $carbonDate    = $expiredAt->copy()->setTimezone('Asia/Jakarta');
+            $formattedDate = $carbonDate->isoFormat('dddd, D MMMM YYYY') . ' Pukul ' . $carbonDate->isoFormat('HH:mm');
+            $statusUrl     = route('service.celengansyahid.detail.donateNow.status', [
+                'link' => $request->input('linkcampaign'),
+                'id'   => $postDonation->id,
+            ]);
+
+            $data = [
+                'donaturTelp'    => $request->input('no_telp_donatur'),
+                'campaignName'   => $campaign->judul,
+                'linkCampaign'   => $request->input('linkcampaign'),
+                'donaturName'    => $request->input('nama_donatur'),
+                'donaturMessage' => $request->input('pesan_donatur'),
+                'donationAmount' => $request->input('jumlah_donasi'),
+                'donationID'     => $postDonation->id,
+                'invoiceUrl'     => $statusUrl,
+                'merchantName'   => 'UKM LDK Syahid',
+                'logo'           => null,
+                'expiredDate'    => $formattedDate,
+            ];
+
+            try {
+                Fonnte::sendInvoiceSimpleText($data);
+            } catch (\Throwable $e) {
+                Log::error('storeDonationCampaign: Fonnte invoice failed: ' . $e->getMessage());
+            }
+            try {
+                Mail::to($request->input('email_donatur'))->send(new DonationInvoice($data));
+            } catch (\Throwable $e) {
+                Log::error('storeDonationCampaign: invoice email failed: ' . $e->getMessage());
+            }
+
+            return Redirect::route('service.celengansyahid.detail.donateNow.status', [
+                'link' => $request->input('linkcampaign'),
+                'id'   => $postDonation->id,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('storeDonationCampaign error: ' . $e->getMessage(), [
+                'linkcampaign' => $request->input('linkcampaign'),
+            ]);
+            Alert::error('Maaf!', 'Terjadi kesalahan. Silahkan coba lagi.');
+            return Redirect::back();
+        }
+    }
+
+    public function openPaymentGateway($id)
+    {
+        $data = Donation::getDonationById($id);
+
+        if (!$data || !$data->payment_link) {
+            abort(404);
+        }
+
+        return redirect()->away($data->payment_link);
+    }
+
+    /**
+     * BisaTopup payment gateway callback (webhook).
+     *
+     * IMPORTANT: This route must be excluded from CSRF in
+     * App\Http\Middleware\VerifyCsrfToken::$except.
+     */
+    public function callbackDonation()
+    {
+        $payload = request()->all();
+
+        // Log the raw callback (incl. their signature) so the exact signature
+        // formula can be confirmed/reverse-engineered during DEV testing.
+        Log::info('[BisaTopup] callback received', $payload);
+
+        $transactionId = $payload['transaction_id'] ?? null;
+        $statusId      = $payload['status_id'] ?? null;
+
+        if (!$transactionId || $statusId === null) {
+            return response()->json(['message' => 'Missing field'], 400);
+        }
+
+        // Signature check — lenient in DEV (so we can observe the real signature),
+        // enforced only when env=live AND the enforce flag is on.
+        $gateway = new BisaTopup();
+        if (!$gateway->verifyCallbackSignature($payload)) {
+            Log::warning('[BisaTopup] callback signature mismatch', [
+                'transaction_id'  => $transactionId,
+                'their_signature' => $payload['signature'] ?? null,
+            ]);
+            if (config('services.bisatopup.env') === 'live'
+                && config('services.bisatopup.enforce_callback_signature', false)) {
+                return response()->json(['message' => 'Invalid signature'], 401);
+            }
+        }
+
+        $statusInternal = BisaTopup::mapStatus($statusId);
+
+        try {
+            $donation = Donation::where('doc_no', $transactionId)->first();
+            if (!$donation) {
+                return response()->json(['message' => 'Not found'], 404);
+            }
+
+            // Idempotency: once finalized as PAID, just acknowledge.
+            if ($donation->payment_status === 'PAID') {
+                return response()->json(['message' => 'OK'], 200);
+            }
+
+            DB::transaction(function () use ($donation, $statusInternal, $statusId, $payload) {
+                $donation->update([
+                    'payment_status'    => $statusInternal,
+                    'status_id'         => $statusId,
+                    'total_tagihan'     => $payload['transaction_total'] ?? $donation->total_tagihan,
+                    'metode_pembayaran' => $payload['payment'] ?? $donation->metode_pembayaran,
+                ]);
+            });
+
+            if ($statusInternal === 'PAID') {
+                $donationData = Donation::with('campaign')->where('doc_no', $transactionId)->first();
+                if ($donationData) {
+                    try {
+                        Fonnte::sendPaidSimpleText([
+                            'donaturName'    => $donationData->nama_donatur,
+                            'donationAmount' => $donationData->jumlah_donasi,
+                            'donaturTelp'    => $donationData->no_telp_donatur,
+                        ]);
+                    } catch (\Throwable $e) {
+                        Log::error('callbackDonation: Fonnte paid failed: ' . $e->getMessage());
+                    }
+
+                    if ($donationData->email_donatur) {
+                        try {
+                            $pdf = Pdf::loadView('print-request.donation-proof', [
+                                'donation' => $donationData,
+                                'campaign' => $donationData->campaign,
+                            ])->setPaper('a4');
+
+                            Mail::to($donationData->email_donatur)
+                                ->send(new DonationSuccess($donationData, $pdf->output()));
+                        } catch (\Exception $mailEx) {
+                            Log::error('callbackDonation: email failed: ' . $mailEx->getMessage(), [
+                                'transaction_id' => $transactionId,
+                            ]);
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('callbackDonation error: ' . $e->getMessage(), [
+                'transaction_id' => $transactionId,
+            ]);
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
+
+        return response()->json(['message' => 'OK'], 200);
+    }
+
+    public function donationStatus($link, $id)
+    {
+        $donation = Donation::with('campaign')
+            ->where('id', $id)
+            ->whereHas('campaign', fn ($q) => $q->where('link', $link))
+            ->firstOrFail();
+
+        return view('landing-page.service.celengan-syahid.payment-status', [
+            'data'     => $donation,
+            'campaign' => $donation->campaign,
+            'title'    => 'Layanan',
+        ]);
+    }
+
+    public function checkPaymentStatus($id)
+    {
+        $donation = Donation::select('payment_status')->find($id);
+        if (!$donation) {
+            return response()->json(['status' => 'NOT_FOUND'], 404);
+        }
+        return response()->json(['status' => $donation->payment_status]);
+    }
+
+    public function savePaymentDonation($link, $id)
+    {
+        $donation = Donation::with('campaign')
+            ->where('id', $id)
+            ->whereHas('campaign', fn ($q) => $q->where('link', $link))
+            ->firstOrFail();
+
+        $campaign = $donation->campaign;
+
+        $pdf = Pdf::loadView('print-request.donation-proof', compact('donation', 'campaign'));
+        return $pdf->setPaper('a4')->stream('Bukti Pembayaran Donasi - ' . $donation->id . '.pdf');
+    }
+}

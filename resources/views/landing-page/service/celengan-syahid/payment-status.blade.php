@@ -27,7 +27,18 @@
      STYLES
      ══════════════════════════════════════════════════ --}}
 @section('styles')
-@include('landing-page.service.celengan-syahid.components._donation-status._donation-status-styles')
+@include('landing-page.service.celengan-syahid.components._payment-status._payment-status-styles')
+<style>
+    .ds-qris-card { background:#fff; border:1px solid #e6eef0; border-radius:18px; padding:1.5rem; text-align:center; margin-bottom:1.25rem; box-shadow:0 6px 20px rgba(0,0,0,.06); }
+    .ds-qris-title { font-weight:700; color:#00a79d; margin-bottom:1rem; }
+    .ds-qris-box { display:flex; align-items:center; justify-content:center; min-height:240px; }
+    .ds-qris-box img, .ds-qris-box canvas { width:240px; height:240px; max-width:100%; }
+    .ds-qris-amount { font-size:1.4rem; font-weight:800; color:#00a79d; margin-top:1rem; }
+    .ds-qris-hint { font-size:.85rem; color:#6c757d; margin:.5rem 0 0; }
+    .ds-qris-expiry { font-size:.82rem; color:#6c757d; margin-top:.5rem; }
+    [data-theme="dark"] .ds-qris-card { background:#1a1f2e; border-color:#252b3b; }
+    [data-theme="dark"] .ds-qris-hint, [data-theme="dark"] .ds-qris-expiry { color:#9ca3af; }
+</style>
 @endsection
 
 
@@ -53,6 +64,22 @@
             </div>
             @endif
         </div>
+
+        {{-- ── QRIS Payment (pending) ────────────────────────── --}}
+        @if($isPending && $data->qr_code)
+        <div id="ds-qris-card" class="ds-qris-card wow fadeInUp" data-wow-delay="0.08s">
+            <div class="ds-qris-title"><i class="fas fa-qrcode"></i> Scan QRIS untuk Membayar</div>
+            <div id="ds-qris" class="ds-qris-box" data-qr="{{ $data->qr_code }}"></div>
+            <div class="ds-qris-amount">{{ LFC::formatRupiah($data->jumlah_donasi) }}</div>
+            <p class="ds-qris-hint">Buka aplikasi e-wallet atau m-banking apa pun, lalu scan kode di atas.</p>
+            @if($data->expired_at)
+            <div class="ds-qris-expiry">
+                <i class="far fa-clock"></i> Berlaku sampai
+                <strong>{{ \Carbon\Carbon::parse($data->expired_at)->locale('id')->isoFormat('D MMM Y, HH:mm') }}</strong>
+            </div>
+            @endif
+        </div>
+        @endif
 
         {{-- ── Payment Detail Card ───────────────────────────── --}}
         <div class="ds-detail-card wow fadeInUp" data-wow-delay="0.1s">
@@ -94,7 +121,7 @@
 
             @if($isPaid)
             <div id="ds-actions" class="ds-action-wrap two-col">
-                <a href="{{ url('/celengansyahid/simpan-bukti/' . $campaign->link . '/' . $data->id) }}"
+                <a href="{{ route('service.celengansyahid.savePayment', ['link' => $campaign->link, 'id' => $data->id]) }}"
                    target="_blank"
                    class="ds-btn ds-btn-success">
                     <i class="fas fa-download"></i> Simpan Bukti
@@ -106,7 +133,7 @@
 
             @elseif($isPending)
             <div id="ds-actions" class="ds-action-wrap">
-                <a href="{{ url('/celengansyahid/payment/' . $data->id) }}"
+                <a href="{{ route('service.celengansyahid.detail.donateNow.gateway', $data->id) }}"
                    target="_blank"
                    class="ds-btn ds-btn-primary">
                     <i class="fas fa-credit-card"></i> Bayar Sekarang
@@ -118,7 +145,7 @@
 
             @else
             <div id="ds-actions" class="ds-action-wrap">
-                <a href="{{ url('/celengansyahid/payment/' . $data->id) }}"
+                <a href="{{ route('service.celengansyahid.detail.donateNow.gateway', $data->id) }}"
                    target="_blank"
                    class="ds-btn ds-btn-primary">
                     <i class="fas fa-credit-card"></i> Coba Bayar Lagi
@@ -145,11 +172,35 @@
      ══════════════════════════════════════════════════ --}}
 @section('scripts')
 @if($isPending)
+{{-- Render the QRIS code: image when the gateway returns a URL/data-uri,
+     otherwise generate it locally from the raw QRIS payload string. --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 (function () {
-    var CHECK_URL  = @json(url('/celengansyahid/api/check-payment/' . $data->id));
-    var SAVE_URL   = @json(url('/celengansyahid/simpan-bukti/' . $campaign->link . '/' . $data->id));
-    var PAY_URL    = @json(url('/celengansyahid/payment/' . $data->id));
+    var box = document.getElementById('ds-qris');
+    if (!box) return;
+    var raw = box.getAttribute('data-qr') || '';
+    if (!raw) return;
+
+    if (/^https?:\/\//i.test(raw) || /^data:image\//i.test(raw)) {
+        var img = document.createElement('img');
+        img.src = raw;
+        img.alt = 'QRIS';
+        box.appendChild(img);
+    } else {
+        try {
+            new QRCode(box, { text: raw, width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M });
+        } catch (e) {
+            box.innerHTML = '<div style="font-size:.75rem;color:#6c757d;word-break:break-all;">' + raw + '</div>';
+        }
+    }
+})();
+</script>
+<script>
+(function () {
+    var CHECK_URL  = @json(route('service.celengansyahid.api.checkPayment', $data->id));
+    var SAVE_URL   = @json(route('service.celengansyahid.savePayment', ['link' => $campaign->link, 'id' => $data->id]));
+    var PAY_URL    = @json(route('service.celengansyahid.detail.donateNow.gateway', $data->id));
     var HOME_URL   = @json(route('service.celengansyahid'));
     var POLL_MS    = 5000;
     var active     = true;
@@ -186,6 +237,8 @@
             banner.querySelector('.ds-status-sub').textContent   = 'Jazakallah khayran, donasi kamu sudah kami terima!';
             var indicator = document.getElementById('ds-polling');
             if (indicator) indicator.remove();
+            var qrCardPaid = document.getElementById('ds-qris-card');
+            if (qrCardPaid) qrCardPaid.style.display = 'none';
 
             actions.className   = 'ds-action-wrap two-col';
             actions.innerHTML   =
@@ -206,6 +259,8 @@
             banner.querySelector('.ds-status-sub').textContent   = 'Terjadi masalah, silakan coba lagi';
             var indicator = document.getElementById('ds-polling');
             if (indicator) indicator.remove();
+            var qrCardFailed = document.getElementById('ds-qris-card');
+            if (qrCardFailed) qrCardFailed.style.display = 'none';
 
             actions.className = 'ds-action-wrap';
             actions.innerHTML =

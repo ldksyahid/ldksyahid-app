@@ -50,7 +50,6 @@ class Kernel extends ConsoleKernel
     }
 
     protected $commands = [
-        Commands\RunDonationClassMachine::class,
         Commands\CleanupVisitorLogs::class,
         Commands\AggregateVisitorStats::class,
         Commands\CloseExpiredForms::class,

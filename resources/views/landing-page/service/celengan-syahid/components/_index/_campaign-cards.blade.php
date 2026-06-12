@@ -94,6 +94,10 @@
                         <div class="cs-progress-track">
                             <div class="cs-progress-fill" style="width: {{ min($percent, 100) }}%"></div>
                         </div>
+                        <div class="cs-progress-meta">
+                            <span class="cs-progress-pct">{{ number_format($percent, 0) }}% tercapai</span>
+                            <span class="cs-progress-target">Target {{ LFC::formatRupiah($campaign->target_biaya) }}</span>
+                        </div>
                     </div>
 
                     {{-- Stats --}}
@@ -101,6 +105,11 @@
                         <div class="cs-stat-item">
                             <span class="cs-stat-label">Terkumpul</span>
                             <span class="cs-stat-value cs-stat-primary">{{ LFC::formatRupiah($donationTotal) }}</span>
+                        </div>
+                        <div class="cs-stat-sep"></div>
+                        <div class="cs-stat-item cs-stat-center">
+                            <span class="cs-stat-label">Donatur</span>
+                            <span class="cs-stat-value">{{ $donorCount }}</span>
                         </div>
                         <div class="cs-stat-sep"></div>
                         <div class="cs-stat-item cs-stat-right">
@@ -118,8 +127,8 @@
                             <i class="fas fa-times-circle"></i><span>Campaign Berakhir</span>
                         </span>
                         @else
-                        <a href="{{ route('service.celengansyahid.detail.donatenow', $campaign->link) }}" class="cs-btn-donate">
-                            <i class="fas fa-heart"></i><span>Donasi Sekarang</span>
+                        <a href="{{ route('service.celengansyahid.detail', $campaign->link) }}" class="cs-btn-donate">
+                            <i class="fas fa-heart"></i><span>Selengkapnya</span>
                         </a>
                         @endif
                         <div class="cs-share-group">

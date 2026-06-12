@@ -38,6 +38,24 @@ return [
         'webhook_token' => env('XENDIT_WEBHOOK_TOKEN'),
     ],
 
+    // BisaTopup (mitra.bisatopup.co.id) — Payment Gateway for Celengan Syahid donations.
+    // base_url is the API host (confirm exact value from the API reference); the
+    // dashboard itself lives at mitra.bisatopup.co.id.
+    // BisaTopup (Bisabiller backend) — Payment Gateway for Celengan Syahid donations.
+    'bisatopup' => [
+        'username'        => env('BISATOPUP_USERNAME'),
+        'password_api'    => env('BISATOPUP_PASSWORD_API'),
+        'widget_key'      => env('BISATOPUP_WIDGET_KEY'),
+        'env'             => env('BISATOPUP_ENV', 'dev'), // 'dev' | 'live'
+        'base_url_live'   => env('BISATOPUP_BASE_URL_LIVE', 'https://api.bisabiller.com'),
+        'base_url_dev'    => env('BISATOPUP_BASE_URL_DEV', 'https://api-sandbox.bisabiller.com'),
+        'qris_payment_id' => env('BISATOPUP_QRIS_PAYMENT_ID', 33),
+        'admin_fee'       => env('BISATOPUP_ADMIN_FEE', 0),
+        // Enforce callback signature check (keep false in DEV until the exact
+        // signature formula is confirmed, then set true for production).
+        'enforce_callback_signature' => env('BISATOPUP_ENFORCE_CALLBACK_SIGNATURE', false),
+    ],
+
     'google' => [
         'client_id'     => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
