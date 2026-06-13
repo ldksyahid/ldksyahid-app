@@ -1,23 +1,33 @@
-@if(config('services.recaptcha_enabled', true) && config('recaptcha.api_site_key'))
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-@if($errors->has('g-recaptcha-response'))
-{{-- Reset widget jika ada error captcha supaya user dapat token baru --}}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        if (window.grecaptcha) {
-            grecaptcha.ready(function () { grecaptcha.reset(); });
-        } else {
-            // Tunggu api.js selesai load
-            var iv = setInterval(function () {
-                if (window.grecaptcha) {
-                    clearInterval(iv);
-                    grecaptcha.ready(function () { grecaptcha.reset(); });
+@php
+    $captchaEnabled = config('services.recaptcha_enabled', true) && config('recaptcha.api_site_key');
+    $captchaType    = config('services.recaptcha_type', 'score');   // "score" | "checkbox"
+    $siteKey        = config('recaptcha.api_site_key');
+@endphp
+
+@if($captchaEnabled)
+    @if($captchaType === 'checkbox')
+        {{-- Enterprise checkbox: visible widget, user must tick --}}
+        <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+        @if($errors->has('g-recaptcha-response'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (window.grecaptcha && window.grecaptcha.enterprise) {
+                    grecaptcha.enterprise.ready(function () { grecaptcha.enterprise.reset(); });
+                } else {
+                    var iv = setInterval(function () {
+                        if (window.grecaptcha && window.grecaptcha.enterprise) {
+                            clearInterval(iv);
+                            grecaptcha.enterprise.ready(function () { grecaptcha.enterprise.reset(); });
+                        }
+                    }, 300);
                 }
-            }, 300);
-        }
-    });
-</script>
-@endif
+            });
+        </script>
+        @endif
+    @else
+        {{-- Enterprise score-based: invisible, token injected by JS before submit --}}
+        <script src="https://www.google.com/recaptcha/enterprise.js?render={{ $siteKey }}"></script>
+    @endif
 @endif
 
 <script>
@@ -176,7 +186,26 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
             }
 
+            @if($captchaEnabled && $captchaType === 'score')
+            // Score-based: fetch Enterprise token async, then submit.
+            // Re-enable button if token fetch fails so user can retry.
+            grecaptcha.enterprise.ready(function () {
+                grecaptcha.enterprise.execute('{{ $siteKey }}', { action: 'submit_donation' })
+                    .then(function (token) {
+                        var tokenEl = document.getElementById('dn-recaptcha-token');
+                        if (tokenEl) tokenEl.value = token;
+                        form.submit();
+                    })
+                    .catch(function () {
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
+                        }
+                    });
+            });
+            @else
             form.submit();
+            @endif
         });
     });
 
