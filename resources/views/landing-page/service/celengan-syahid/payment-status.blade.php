@@ -84,7 +84,10 @@
                 <strong>{{ \Carbon\Carbon::parse($data->expired_at)->locale('id')->isoFormat('D MMM Y, HH:mm') }}</strong>
             </div>
             @endif
-            <button id="ds-qris-dl" type="button" class="ds-qris-dl-btn">
+            <button id="ds-qris-dl" type="button" class="ds-qris-dl-btn"
+                data-amount="{{ LFC::formatRupiah($data->jumlah_donasi) }}"
+                data-campaign="{{ $campaign->judul }}"
+                data-expiry="{{ $data->expired_at ? \Carbon\Carbon::parse($data->expired_at)->locale('id')->isoFormat('D MMM Y, HH:mm') : '' }}">
                 <i class="fas fa-download"></i> Download QR Code
             </button>
         </div>
