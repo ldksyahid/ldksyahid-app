@@ -101,8 +101,18 @@
             if (!form.checkValidity()) {
                 e.preventDefault();
                 e.stopPropagation();
+                form.classList.add('was-validated');
+                return;
             }
             form.classList.add('was-validated');
+
+            // Disable the submit button after first valid submit to prevent
+            // double-clicks sending two donations (and two WA/email invoices).
+            var btn = form.querySelector('[type="submit"]');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            }
         });
     });
 
