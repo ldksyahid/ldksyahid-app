@@ -36,6 +36,9 @@
     .ds-qris-amount { font-size:1.4rem; font-weight:800; color:#00a79d; margin-top:1rem; }
     .ds-qris-hint { font-size:.85rem; color:#6c757d; margin:.5rem 0 0; }
     .ds-qris-expiry { font-size:.82rem; color:#6c757d; margin-top:.5rem; }
+    .ds-qris-dl-btn { display:inline-flex; align-items:center; gap:.45rem; margin-top:1rem; padding:.6rem 1.4rem; background:#00a79d; color:#fff; border:none; border-radius:50px; font-size:.875rem; font-weight:600; cursor:pointer; text-decoration:none; transition:background .2s; }
+    .ds-qris-dl-btn:hover { background:#008f86; color:#fff; }
+    .ds-qris-dl-btn:active { background:#007a72; }
     [data-theme="dark"] .ds-qris-card { background:#1a1f2e; border-color:#252b3b; }
     [data-theme="dark"] .ds-qris-hint, [data-theme="dark"] .ds-qris-expiry { color:#9ca3af; }
     /* QR tile stays white + un-inverted in every theme so scanners read it */
@@ -81,6 +84,9 @@
                 <strong>{{ \Carbon\Carbon::parse($data->expired_at)->locale('id')->isoFormat('D MMM Y, HH:mm') }}</strong>
             </div>
             @endif
+            <button id="ds-qris-dl" type="button" class="ds-qris-dl-btn">
+                <i class="fas fa-download"></i> Download QR Code
+            </button>
         </div>
         @endif
 
@@ -136,13 +142,6 @@
 
             @elseif($isPending)
             <div id="ds-actions" class="ds-action-wrap">
-                @if($data->payment_link)
-                <a href="{{ route('service.celengansyahid.detail.donateNow.gateway', $data->id) }}"
-                   target="_blank"
-                   class="ds-btn ds-btn-primary">
-                    <i class="fas fa-credit-card"></i> Bayar Sekarang
-                </a>
-                @endif
                 <button type="button" class="ds-btn ds-btn-gray" onclick="location.reload()">
                     <i class="fas fa-sync-alt"></i> Muat Ulang Halaman
                 </button>

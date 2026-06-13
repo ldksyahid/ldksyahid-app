@@ -13,6 +13,7 @@
         var img = document.createElement('img');
         img.src = raw;
         img.alt = 'QRIS';
+        img.crossOrigin = 'anonymous';
         box.appendChild(img);
     } else {
         try {
@@ -23,6 +24,50 @@
     }
 })();
 </script>
+
+<script>
+(function () {
+    var dlBtn = document.getElementById('ds-qris-dl');
+    if (!dlBtn) return;
+
+    dlBtn.addEventListener('click', function () {
+        var box    = document.getElementById('ds-qris');
+        var canvas = box ? box.querySelector('canvas') : null;
+        var img    = box ? box.querySelector('img')    : null;
+        var fname  = 'qris-donasi.png';
+
+        if (canvas) {
+            triggerDownload(canvas.toDataURL('image/png'), fname);
+        } else if (img) {
+            if (/^data:image\//i.test(img.src)) {
+                triggerDownload(img.src, fname);
+            } else {
+                fetch(img.src)
+                    .then(function (r) { return r.blob(); })
+                    .then(function (blob) {
+                        var url = URL.createObjectURL(blob);
+                        triggerDownload(url, fname);
+                        setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
+                    })
+                    .catch(function () {
+                        window.open(img.src, '_blank');
+                    });
+            }
+        }
+    });
+
+    function triggerDownload(href, filename) {
+        var a = document.createElement('a');
+        a.href     = href;
+        a.download = filename;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+})();
+</script>
+
 <script>
 (function () {
     var CHECK_URL  = @json(route('service.celengansyahid.api.checkPayment', $data->id));
