@@ -132,20 +132,22 @@
                 }
             }
 
-            // Validate Select2 fields here — browsers skip hidden elements so
-            // checkValidity() alone misses them, causing premature button disable.
+            // Validate Select2 fields with native DOM — browsers skip hidden
+            // elements so checkValidity() misses them. Select2 keeps the
+            // underlying <select> value in sync, so native .value is reliable.
             var select2Valid = true;
-            [$('#dn-domisili'), $('#dn-pekerjaan')].forEach(function ($sel) {
-                var $wrap = $sel.closest('.dn-select-wrap');
-                var $msg  = $wrap.next('.dn-invalid-msg');
-                if (!$sel.val()) {
-                    $wrap.addClass('is-invalid');
-                    $msg.show();
-                    select2Valid = false;
-                } else {
-                    $wrap.removeClass('is-invalid');
-                    $msg.hide();
+            ['dn-domisili', 'dn-pekerjaan'].forEach(function (id) {
+                var el   = document.getElementById(id);
+                var wrap = el && el.closest('.dn-select-wrap');
+                var msg  = wrap && wrap.nextElementSibling;
+                var empty = !el || !el.value;
+                if (wrap) {
+                    wrap.classList[empty ? 'add' : 'remove']('is-invalid');
                 }
+                if (msg && msg.classList.contains('dn-invalid-msg')) {
+                    msg.style.display = empty ? '' : 'none';
+                }
+                if (empty) select2Valid = false;
             });
             if (!select2Valid) return;
 
