@@ -21,6 +21,22 @@
 /* ── Page wrapper ── */
 .dn-page { min-height: 100vh; position: relative; z-index: 1; }
 
+/* ── Hero image (full width, di luar container) ── */
+.dn-hero-wrap {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 0;
+    line-height: 0;
+}
+.dn-hero-img {
+    width: 100%; display: block;
+    max-height: 460px; object-fit: cover; object-position: top center;
+}
+@media (max-width: 575.98px) {
+    .dn-hero-img { max-height: 220px; }
+    [data-theme="dark"] .dn-hero-wrap { background: #1a1f2e; }
+}
+
 /* ================================================================
    CAMPAIGN CONTEXT HEADER
    ================================================================ */
@@ -30,19 +46,11 @@
     box-shadow: var(--dn-shadow);
     overflow: hidden;
     margin-bottom: 1.5rem;
-}
-.dn-context-img-col { padding: 0; }
-.dn-context-img-wrap {
-    height: 100%; min-height: 200px;
-    overflow: hidden;
-}
-.dn-context-img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
+    padding: 1.25rem 1.5rem;
 }
 .dn-context-info {
-    padding: 1.5rem 1.75rem;
     display: flex; flex-direction: column;
-    justify-content: center; gap: .875rem;
+    gap: .625rem;
 }
 .dn-context-label {
     font-size: .75rem; font-weight: 700;

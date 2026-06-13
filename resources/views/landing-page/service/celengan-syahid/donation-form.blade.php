@@ -26,12 +26,18 @@
      ══════════════════════════════════════════════════ --}}
 @section('content')
 
-<section class="dn-page py-5 mt-5">
-    <div class="container" style="max-width: 720px;">
+<section class="dn-page mt-5">
+
+    {{-- ── Campaign Hero Image (full width, di luar container) ── --}}
+    <div class="dn-hero-wrap wow fadeInUp" data-wow-delay="0.05s">
+        <img src="{{ $coverSrc }}" alt="{{ $data->judul }}" class="dn-hero-img">
+    </div>
+
+    <div class="container py-5" style="max-width: 720px;">
 
         {{-- ── Deadline Ended Notice ───────────────────────────── --}}
         @if($isDeadlinePassed)
-        <div class="dn-ended-notice wow fadeInDown" data-wow-delay="0.05s">
+        <div class="dn-ended-notice wow fadeInDown" data-wow-delay="0.08s">
             <i class="fas fa-times-circle"></i>
             <div>
                 <strong>Campaign Ini Telah Berakhir</strong>
@@ -45,23 +51,14 @@
 
         {{-- ── Campaign Context Header ─────────────────────────── --}}
         <div class="dn-context-wrap wow fadeInUp" data-wow-delay="0.1s">
-            <div class="row g-0">
-                <div class="col-4 col-md-3 dn-context-img-col">
-                    <div class="dn-context-img-wrap">
-                        <img src="{{ $coverSrc }}" alt="{{ $data->judul }}" class="dn-context-img">
-                    </div>
-                </div>
-                <div class="col-8 col-md-9">
-                    <div class="dn-context-info">
-                        <span class="dn-context-label">
-                            <i class="fas fa-heart me-1"></i> Donasi untuk
-                        </span>
-                        <h2 class="dn-context-title">{{ $data->judul }}</h2>
-                        <div class="dn-context-org">
-                            <img src="{{ $logoSrc }}" alt="{{ $orgName }}" class="dn-context-org-logo">
-                            <a href="{{ $orgLink }}" target="_blank" class="dn-context-org-name">{{ $orgName }}</a>
-                        </div>
-                    </div>
+            <div class="dn-context-info">
+                <span class="dn-context-label">
+                    <i class="fas fa-heart me-1"></i> Donasi untuk
+                </span>
+                <h2 class="dn-context-title">{{ $data->judul }}</h2>
+                <div class="dn-context-org">
+                    <img src="{{ $logoSrc }}" alt="{{ $orgName }}" class="dn-context-org-logo">
+                    <a href="{{ $orgLink }}" target="_blank" class="dn-context-org-name">{{ $orgName }}</a>
                 </div>
             </div>
         </div>
@@ -106,6 +103,9 @@
                 {{-- Preset buttons --}}
                 <label class="dn-label">Atau pilih nominal</label>
                 <div class="dn-presets">
+                    <button type="button" class="dn-preset-btn" data-value="1000">Rp1.000</button>
+                    <button type="button" class="dn-preset-btn" data-value="2000">Rp2.000</button>
+                    <button type="button" class="dn-preset-btn" data-value="5000">Rp5.000</button>
                     <button type="button" class="dn-preset-btn" data-value="10000">Rp10.000</button>
                     <button type="button" class="dn-preset-btn" data-value="20000">Rp20.000</button>
                     <button type="button" class="dn-preset-btn" data-value="50000">Rp50.000</button>
@@ -256,7 +256,7 @@
 
         </form>
 
-    </div>
+    </div>{{-- /container --}}
 </section>
 
 @endsection

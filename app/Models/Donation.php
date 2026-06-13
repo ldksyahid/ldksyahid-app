@@ -49,7 +49,7 @@ class Donation extends Model
             'idKey' => 'id',
             'emptyMessage' => 'No donations found',
             'emptyIcon' => 'fa-donate',
-            'colspan' => 9,
+            'colspan' => 10,
             'columns' => [
                 [
                     'key' => 'nama_donatur',
@@ -81,6 +81,12 @@ class Donation extends Model
                         'PAID' => 'bg-success',
                     ],
                     'badgeDefault' => 'bg-danger',
+                ],
+                [
+                    'key' => 'metode_pembayaran',
+                    'type' => 'text',
+                    'class' => 'text-center',
+                    'fallback' => '-',
                 ],
                 [
                     'key' => 'payment_link',
@@ -137,6 +143,10 @@ class Donation extends Model
 
         if ($request->filled('payment_status')) {
             $query->where('payment_status', $request->payment_status);
+        }
+
+        if ($request->filled('metode_pembayaran')) {
+            $query->where('metode_pembayaran', 'like', '%' . $request->metode_pembayaran . '%');
         }
 
         if ($request->filled('campaign_id')) {
