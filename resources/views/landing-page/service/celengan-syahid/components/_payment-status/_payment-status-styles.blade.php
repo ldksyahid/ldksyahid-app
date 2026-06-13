@@ -190,4 +190,5 @@
 /* Buttons */
 [data-theme="dark"] .ds-btn-outline { background: #1a1f2e; }
 [data-theme="dark"] .ds-btn-gray    { background: #252b3b; border-color: rgba(255,255,255,.1); color: #e2e8f0; }
+[data-theme="dark"] .ds-btn-gray:hover { background: #1a1f2e; border-color: rgba(255,255,255,.2); color: #e2e8f0; }
 </style>

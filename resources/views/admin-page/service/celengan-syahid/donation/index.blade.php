@@ -72,23 +72,32 @@
             'options' => $paymentStatusOptions ?? [],
         ],
         [
+            'key' => 'metode_pembayaran',
+            'label' => 'Payment Method',
+            'width' => '150px',
+            'sortable' => false,
+            'filter' => 'text',
+            'filterKey' => 'metode_pembayaran',
+        ],
+        [
             'key' => 'payment_link',
             'label' => 'Payment Link',
-            'width' => '200px',
+            'width' => '160px',
             'sortable' => false,
         ],
     ];
 
     $columnWidths = [
-        1 => '50px',
-        2 => '50px',
-        3 => '180px',
-        4 => '150px',
-        5 => '200px',
-        6 => '200px',
-        7 => '130px',
-        8 => '200px',
-        9 => '120px',
+        1  => '50px',
+        2  => '50px',
+        3  => '180px',
+        4  => '150px',
+        5  => '200px',
+        6  => '200px',
+        7  => '130px',
+        8  => '150px',
+        9  => '160px',
+        10 => '120px',
     ];
 @endphp
 
@@ -132,7 +141,7 @@
     function exportDonationsCsv() {
         var base   = @json(route('admin.service.export.donation'));
         var params = new URLSearchParams();
-        ['nama_donatur', 'jumlah_donasi', 'payment_status', 'campaign_id', 'created_at'].forEach(function (name) {
+        ['nama_donatur', 'jumlah_donasi', 'payment_status', 'metode_pembayaran', 'campaign_id', 'created_at'].forEach(function (name) {
             var el = document.querySelector('[name="' + name + '"]');
             if (el && el.value) params.set(name, el.value);
         });

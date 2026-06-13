@@ -84,14 +84,6 @@
                 </select>
                 <input type="text" name="search" id="audit-search" class="form-control form-control-sm filter-search"
                        placeholder="Search description..." value="{{ request('search') }}" autocomplete="off">
-                <div class="d-flex gap-1 ms-auto">
-                    <button type="submit" class="btn btn-sm btn-outline-primary btn-rounded">
-                        <i class="fas fa-filter me-1"></i>Filter
-                    </button>
-                    <a href="{{ route('admin.service.index.auditlog') }}" id="audit-clear" class="btn btn-sm btn-outline-secondary btn-rounded">
-                        <i class="fas fa-times me-1"></i>Clear
-                    </a>
-                </div>
             </form>
         </div>
 
@@ -178,21 +170,12 @@
         }
 
         $('#audit-refresh').on('click', function (e) { e.preventDefault(); load(); });
-        $('#audit-filter-form').on('submit', function (e) { e.preventDefault(); load(); });
         $('#audit-action, #audit-entity').on('change', function () { load(); });
 
         var searchTimer;
         $('#audit-search').on('input', function () {
             clearTimeout(searchTimer);
             searchTimer = setTimeout(load, 400);
-        });
-
-        $('#audit-clear').on('click', function (e) {
-            e.preventDefault();
-            $('#audit-action').val('').trigger('change.select2');
-            $('#audit-entity').val('').trigger('change.select2');
-            $('#audit-search').val('');
-            load();
         });
 
         // Pagination links (rendered inside #audit-pagination) → AJAX

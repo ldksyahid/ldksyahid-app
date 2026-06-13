@@ -14,36 +14,90 @@
 
 @section('styles')
 <style>
-    .dd-card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,.08); }
-    .dd-title { font-size: 1.5rem; font-weight: 700; color: #00a79d; }
-    .dd-section-title { font-size: 1rem; font-weight: 600; color: #00a79d; border-bottom: 2px solid #e0f7f5; padding-bottom: .5rem; margin-bottom: 1rem; }
-    .dd-row { display: flex; padding: .55rem 0; border-bottom: 1px solid #f1f1f1; }
-    .dd-label { flex: 0 0 180px; color: #6c757d; font-weight: 500; }
-    .dd-value { flex: 1; color: #212529; word-break: break-word; }
-    .dd-amount { font-size: 1.6rem; font-weight: 800; color: #00a79d; }
-    html.dark-mode .dd-card { background: #2b2f33; color: #e4e6eb; }
-    html.dark-mode .dd-value { color: #e4e6eb; }
-    html.dark-mode .dd-row { border-bottom-color: #373b3e; }
-    html.dark-mode .dd-section-title { border-bottom-color: #373b3e; }
+/* Page title — mirrors comment view */
+.page-title {
+    font-size: 1.65rem !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    color: #00a79d !important;
+    margin: .75rem 0 1.5rem !important;
+    position: relative;
+    display: inline-block;
+}
+.page-title .highlighted-text { color: #008b84; font-weight: 700; }
+.page-title::after {
+    content: '';
+    display: block;
+    height: 4px;
+    width: 120px;
+    margin: .35rem auto 0;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #00a79d 0%, #008b84 100%);
+}
+.page-title small {
+    color: #6c757d !important;
+    font-size: .9rem !important;
+    font-weight: 400 !important;
+    display: block !important;
+    margin-top: .4rem;
+}
+
+/* Section title — mirrors comment view */
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #00a79d;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid #e0f7f5;
+}
+html.dark-mode .section-title { color: #2dd4bf; border-bottom-color: rgba(45,212,191,.15); }
+
+/* Cards — mirrors comment view */
+.card { border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+
+/* Label/value rows */
+.form-label.fw-bold { color: #495057; font-weight: 600; }
+html.dark-mode .form-label.fw-bold { color: #9ca3af; }
+
+.form-control-plaintext {
+    padding: .375rem 0;
+    margin-bottom: 0;
+    line-height: 1.5;
+    background-color: transparent;
+    border: solid transparent;
+    border-width: 1px 0;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    word-break: break-word;
+}
+
+/* Amount highlight */
+.dd-amount { font-size: 1.6rem; font-weight: 800; color: #00a79d; }
+html.dark-mode .dd-amount { color: #2dd4bf; }
 </style>
 @endsection
 
 @section('content')
 <div class="container-fluid pt-4 px-4">
-    <div class="row p-2 bg-light rounded mx-0">
-        <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-            <h1 class="dd-title mb-0"><i class="fa fa-donate me-2"></i>Donation Detail</h1>
-            <a href="{{ route('admin.service.index.donation') }}" class="btn btn-custom-primary">
-                <i class="fa fa-arrow-left me-1"></i> Back to List
-            </a>
+    <div class="row p-2 bg-light rounded justify-content-center mx-0">
+
+        {{-- Page Title --}}
+        <div class="col-12 text-center">
+            <h1 class="page-title">
+                <i class="fas fa-donate me-2"></i>
+                <span>Detail</span>
+                <span class="highlighted-text ms-1">Donasi</span>
+                <small>#{{ $donation->id }} &mdash; {{ $donation->nama_donatur }}</small>
+            </h1>
         </div>
 
-        {{-- Amount + status --}}
-        <div class="col-12 mb-3">
-            <div class="card dd-card">
+        {{-- Amount + Status Card --}}
+        <div class="col-12 mb-4">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <div>
-                        <div class="text-muted small">Total Donation</div>
+                        <div class="text-muted small">Total Donasi</div>
                         <div class="dd-amount">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</div>
                     </div>
                     <span class="badge {{ $statusBadge }} fs-6 px-3 py-2">{{ $donation->payment_status }}</span>
@@ -51,69 +105,126 @@
             </div>
         </div>
 
-        {{-- Donor info --}}
-        <div class="col-lg-6 mb-3">
-            <div class="card dd-card h-100">
+        {{-- Donor Info --}}
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <h5 class="dd-section-title"><i class="fa fa-user me-2"></i>Donor</h5>
-                    <div class="dd-row">
-                        <span class="dd-label">Name</span>
-                        <span class="dd-value">
-                            {{ $donation->nama_donatur }}
-                            @if($donation->is_anonymous)
-                                <span class="badge bg-secondary ms-1">Anonymous (public)</span>
-                            @endif
-                        </span>
-                    </div>
-                    <div class="dd-row"><span class="dd-label">Email</span><span class="dd-value">{{ $donation->email_donatur ?: '-' }}</span></div>
-                    <div class="dd-row"><span class="dd-label">Phone</span><span class="dd-value">{{ $donation->no_telp_donatur ?: '-' }}</span></div>
-                    <div class="dd-row"><span class="dd-label">Age</span><span class="dd-value">{{ $donation->usia ?: '-' }}</span></div>
-                    <div class="dd-row"><span class="dd-label">Domicile</span><span class="dd-value">{{ $donation->domisili ?: '-' }}</span></div>
-                    <div class="dd-row"><span class="dd-label">Occupation</span><span class="dd-value">{{ $donation->pekerjaan ?: '-' }}</span></div>
-                    <div class="dd-row" style="border-bottom:none;">
-                        <span class="dd-label">Message</span>
-                        <span class="dd-value">{{ $donation->pesan_donatur ?: '-' }}</span>
+                    <h5 class="section-title mb-3">
+                        <i class="fas fa-user me-2"></i>Data Donatur
+                    </h5>
+
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-bold">Nama</label>
+                            <div class="form-control-plaintext">
+                                {{ $donation->nama_donatur }}
+                                @if($donation->is_anonymous)
+                                    <span class="badge bg-secondary ms-1">Anonymous (publik)</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <div class="form-control-plaintext">{{ $donation->email_donatur ?: '—' }}</div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="form-label fw-bold">No. Telepon</label>
+                            <div class="form-control-plaintext">{{ $donation->no_telp_donatur ?: '—' }}</div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="form-label fw-bold">Usia</label>
+                            <div class="form-control-plaintext">{{ $donation->usia ? $donation->usia . ' tahun' : '—' }}</div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="form-label fw-bold">Domisili</label>
+                            <div class="form-control-plaintext">{{ $donation->domisili ?: '—' }}</div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="form-label fw-bold">Pekerjaan</label>
+                            <div class="form-control-plaintext">{{ $donation->pekerjaan ?: '—' }}</div>
+                        </div>
+                        <div class="col-12 mb-0">
+                            <label class="form-label fw-bold">Pesan / Do'a</label>
+                            <div class="form-control-plaintext" style="align-items: flex-start; white-space: pre-wrap;">{{ $donation->pesan_donatur ?: '—' }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Payment info --}}
-        <div class="col-lg-6 mb-3">
-            <div class="card dd-card h-100">
+        {{-- Payment Info --}}
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <h5 class="dd-section-title"><i class="fa fa-receipt me-2"></i>Payment</h5>
-                    <div class="dd-row">
-                        <span class="dd-label">Campaign</span>
-                        <span class="dd-value">
-                            @if($campaign)
-                                <a href="{{ route('admin.service.preview.campaign', $campaign->id) }}">{{ $campaign->judul }}</a>
-                            @else
-                                -
-                            @endif
-                        </span>
-                    </div>
-                    <div class="dd-row"><span class="dd-label">Date</span><span class="dd-value">{{ optional($donation->created_at)->isoFormat('dddd, D MMMM YYYY HH:mm') }}</span></div>
-                    <div class="dd-row"><span class="dd-label">Payment Method</span><span class="dd-value">{{ $donation->metode_pembayaran ?: '-' }}</span></div>
-                    <div class="dd-row"><span class="dd-label">Merchant</span><span class="dd-value">{{ $donation->nama_merchant ?: '-' }}</span></div>
-                    <div class="dd-row"><span class="dd-label">Admin Fee</span><span class="dd-value">{{ $donation->biaya_admin ? LFC::formatRupiah($donation->biaya_admin) : '-' }}</span></div>
-                    <div class="dd-row"><span class="dd-label">Total Billed</span><span class="dd-value">{{ $donation->total_tagihan ? LFC::formatRupiah($donation->total_tagihan) : '-' }}</span></div>
-                    <div class="dd-row"><span class="dd-label">Doc No</span><span class="dd-value">{{ $donation->doc_no ?: '-' }}</span></div>
-                    <div class="dd-row" style="border-bottom:none;">
-                        <span class="dd-label">Payment Link</span>
-                        <span class="dd-value">
-                            @if($donation->payment_link)
-                                <a href="{{ $donation->payment_link }}" target="_blank" rel="noopener" class="btn btn-sm btn-custom-primary">
-                                    <i class="fa fa-external-link-alt me-1"></i> Open
-                                </a>
-                            @else
-                                -
-                            @endif
-                        </span>
+                    <h5 class="section-title mb-3">
+                        <i class="fas fa-receipt me-2"></i>Info Pembayaran
+                    </h5>
+
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-bold">Campaign</label>
+                            <div class="form-control-plaintext">
+                                @if($campaign)
+                                    <a href="{{ route('admin.service.preview.campaign', $campaign->id) }}">{{ $campaign->judul }}</a>
+                                @else
+                                    —
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-bold">Tanggal</label>
+                            <div class="form-control-plaintext">
+                                {{ optional($donation->created_at)->isoFormat('dddd, D MMMM YYYY HH:mm') ?: '—' }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="form-label fw-bold">Metode Pembayaran</label>
+                            <div class="form-control-plaintext">{{ $donation->metode_pembayaran ?: '—' }}</div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="form-label fw-bold">Merchant</label>
+                            <div class="form-control-plaintext">{{ $donation->nama_merchant ?: '—' }}</div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="form-label fw-bold">Biaya Admin</label>
+                            <div class="form-control-plaintext">
+                                {{ $donation->biaya_admin ? LFC::formatRupiah($donation->biaya_admin) : '—' }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="form-label fw-bold">Total Tagihan</label>
+                            <div class="form-control-plaintext">
+                                {{ $donation->total_tagihan ? LFC::formatRupiah($donation->total_tagihan) : '—' }}
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-bold">Doc No</label>
+                            <div class="form-control-plaintext">{{ $donation->doc_no ?: '—' }}</div>
+                        </div>
+                        <div class="col-12 mb-0">
+                            <label class="form-label fw-bold">Payment Link</label>
+                            <div class="form-control-plaintext">
+                                @if($donation->payment_link)
+                                    <a href="{{ $donation->payment_link }}" target="_blank" rel="noopener" class="btn btn-sm btn-custom-primary">
+                                        <i class="fa fa-external-link-alt me-1"></i> Buka Link
+                                    </a>
+                                @else
+                                    —
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        {{-- Back Button (di bawah, seperti comment view) --}}
+        <div class="col-12 d-flex justify-content-end mb-4">
+            <a href="{{ route('admin.service.index.donation') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back
+            </a>
+        </div>
+
     </div>
 </div>
 @endsection
