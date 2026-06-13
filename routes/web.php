@@ -490,6 +490,10 @@ Route::get('/admin/celengan-syahid/donations/export', [CelsyahidDonationControll
 Route::get('/admin/celengan-syahid/donation/{id}', [CelsyahidDonationController::class, 'showAdminDonation'])->name('admin.service.show.donation')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::delete('/admin/celengan-syahid/donation/{id}', [CelsyahidDonationController::class, 'destroyAdminDonation'])->name('admin.service.destroy.donation')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::post('/admin/celengan-syahid/donation/bulk-delete', [CelsyahidDonationController::class, 'bulkDeleteDonation'])->name('admin.service.donation.bulk-delete')->middleware(['role:Superadmin']);
+Route::get('/admin/celengan-syahid/donations/create', [CelsyahidDonationController::class, 'createAdminDonation'])->name('admin.service.donation.create')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::post('/admin/celengan-syahid/donations', [CelsyahidDonationController::class, 'storeAdminDonation'])->name('admin.service.donation.store')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::get('/admin/celengan-syahid/donation/{id}/edit', [CelsyahidDonationController::class, 'editAdminDonation'])->name('admin.service.donation.edit')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::put('/admin/celengan-syahid/donation/{id}', [CelsyahidDonationController::class, 'updateAdminDonation'])->name('admin.service.donation.update')->middleware(['role:Superadmin|HelperCelsyahid']);
 
 // Admin routes — Celengan Syahid audit log (Superadmin only)
 Route::get('/admin/celengan-syahid/audit-logs', [CelsyahidAuditLogController::class, 'indexAuditLog'])->name('admin.service.index.auditlog')->middleware(['role:Superadmin']);

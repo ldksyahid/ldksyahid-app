@@ -76,8 +76,10 @@
             'label' => 'Payment Method',
             'width' => '150px',
             'sortable' => false,
-            'filter' => 'text',
+            'filter' => 'select',
             'filterKey' => 'metode_pembayaran',
+            'placeholder' => 'All Methods',
+            'options' => $paymentMethodOptions ?? [],
         ],
         [
             'key' => 'payment_link',
@@ -128,6 +130,9 @@
     :isSuperadmin="$isSuperadmin"
 >
     <x-slot name="leftButtons">
+        <a href="{{ route('admin.service.donation.create') }}" class="btn btn-custom-primary">
+            <i class="fa fa-plus me-1"></i> Add Donation
+        </a>
         <a href="#" id="exportCsvBtn" class="btn btn-custom-primary" onclick="exportDonationsCsv(); return false;">
             <i class="fa fa-file-csv me-1"></i> Export CSV
         </a>
@@ -136,17 +141,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    // Export the donation list as CSV, carrying the active column filters.
-    function exportDonationsCsv() {
-        var base   = @json(route('admin.service.export.donation'));
-        var params = new URLSearchParams();
-        ['nama_donatur', 'jumlah_donasi', 'payment_status', 'metode_pembayaran', 'campaign_id', 'created_at'].forEach(function (name) {
-            var el = document.querySelector('[name="' + name + '"]');
-            if (el && el.value) params.set(name, el.value);
-        });
-        var qs = params.toString();
-        window.location = base + (qs ? '?' + qs : '');
-    }
-</script>
+@include('admin-page.service.celengan-syahid.donation.components._index-scripts')
 @endpush

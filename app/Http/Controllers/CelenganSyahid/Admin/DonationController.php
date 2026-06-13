@@ -9,6 +9,7 @@ use App\Models\CelsyahidAuditLog;
 use App\Models\Donation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class DonationController extends Controller
 {
@@ -25,6 +26,7 @@ class DonationController extends Controller
         });
 
         $paymentStatusOptions = Donation::getPaymentStatusOptions();
+        $paymentMethodOptions = Donation::getPaymentMethodOptions();
         $campaignOptions      = Donation::getCampaignOptions();
 
         if ($request->ajax()) {
@@ -38,7 +40,7 @@ class DonationController extends Controller
         }
 
         return view('admin-page.service.celengan-syahid.donation.index',
-            compact('items', 'tableConfig', 'paymentStatusOptions', 'campaignOptions'))
+            compact('items', 'tableConfig', 'paymentStatusOptions', 'paymentMethodOptions', 'campaignOptions'))
             ->with('title', 'Celengan Syahid');
     }
 
@@ -134,5 +136,83 @@ class DonationController extends Controller
             Log::error('bulkDeleteDonation: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Error deleting donations: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function createAdminDonation()
+    {
+        $campaigns = Campaign::orderBy('judul')->get(['id', 'judul']);
+        return view('admin-page.service.celengan-syahid.donation.create', [
+            'campaigns' => $campaigns,
+            'title'     => 'Celengan Syahid',
+        ]);
+    }
+
+    public function storeAdminDonation(Request $request)
+    {
+        $validated = $request->validate([
+            'campaign_id'       => ['required', 'exists:campaigns,id'],
+            'nama_donatur'      => ['required', 'string', 'max:100'],
+            'email_donatur'     => ['required', 'email', 'max:150'],
+            'no_telp_donatur'   => ['required', 'string', 'max:20'],
+            'usia'              => ['nullable', 'integer', 'min:1', 'max:120'],
+            'domisili'          => ['nullable', 'string', 'max:100'],
+            'pekerjaan'         => ['nullable', 'string', 'max:100'],
+            'jumlah_donasi'     => ['required', 'integer', 'min:1000'],
+            'metode_pembayaran' => ['required', 'string'],
+            'payment_status'    => ['required', 'string', 'in:PENDING,PAID,SETTLED,EXPIRED,FAILED'],
+            'pesan_donatur'     => ['nullable', 'string', 'max:500'],
+            'is_anonymous'      => ['nullable', 'boolean'],
+        ]);
+
+        $docNo = 'CASH-' . strtoupper(uniqid());
+        Donation::create(array_merge($validated, [
+            'doc_no'       => $docNo,
+            'is_anonymous' => $request->boolean('is_anonymous'),
+            'gateway'      => 'manual',
+        ]));
+
+        CelsyahidAuditLog::record('donation.create', 'donation', null, 'Admin created manual donation: ' . $validated['nama_donatur']);
+
+        Alert::success('Berhasil!', 'Donasi berhasil ditambahkan.');
+        return redirect()->route('admin.service.index.donation');
+    }
+
+    public function editAdminDonation($id)
+    {
+        $donation  = Donation::findOrFail($id);
+        $campaigns = Campaign::orderBy('judul')->get(['id', 'judul']);
+        return view('admin-page.service.celengan-syahid.donation.edit', [
+            'donation'  => $donation,
+            'campaigns' => $campaigns,
+            'title'     => 'Celengan Syahid',
+        ]);
+    }
+
+    public function updateAdminDonation(Request $request, $id)
+    {
+        $donation  = Donation::findOrFail($id);
+        $validated = $request->validate([
+            'campaign_id'       => ['required', 'exists:campaigns,id'],
+            'nama_donatur'      => ['required', 'string', 'max:100'],
+            'email_donatur'     => ['required', 'email', 'max:150'],
+            'no_telp_donatur'   => ['required', 'string', 'max:20'],
+            'usia'              => ['nullable', 'integer', 'min:1', 'max:120'],
+            'domisili'          => ['nullable', 'string', 'max:100'],
+            'pekerjaan'         => ['nullable', 'string', 'max:100'],
+            'jumlah_donasi'     => ['required', 'integer', 'min:1000'],
+            'metode_pembayaran' => ['required', 'string'],
+            'payment_status'    => ['required', 'string', 'in:PENDING,PAID,SETTLED,EXPIRED,FAILED'],
+            'pesan_donatur'     => ['nullable', 'string', 'max:500'],
+            'is_anonymous'      => ['nullable', 'boolean'],
+        ]);
+
+        $donation->update(array_merge($validated, [
+            'is_anonymous' => $request->boolean('is_anonymous'),
+        ]));
+
+        CelsyahidAuditLog::record('donation.update', 'donation', $id, 'Admin updated donation: ' . $validated['nama_donatur']);
+
+        Alert::success('Berhasil!', 'Donasi berhasil diperbarui.');
+        return redirect()->route('admin.service.index.donation');
     }
 }

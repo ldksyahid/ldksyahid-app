@@ -13,69 +13,7 @@
 @endphp
 
 @section('styles')
-<style>
-/* Page title — mirrors comment view */
-.page-title {
-    font-size: 1.65rem !important;
-    font-weight: 600 !important;
-    text-align: center !important;
-    color: #00a79d !important;
-    margin: .75rem 0 1.5rem !important;
-    position: relative;
-    display: inline-block;
-}
-.page-title .highlighted-text { color: #008b84; font-weight: 700; }
-.page-title::after {
-    content: '';
-    display: block;
-    height: 4px;
-    width: 120px;
-    margin: .35rem auto 0;
-    border-radius: 3px;
-    background: linear-gradient(90deg, #00a79d 0%, #008b84 100%);
-}
-.page-title small {
-    color: #6c757d !important;
-    font-size: .9rem !important;
-    font-weight: 400 !important;
-    display: block !important;
-    margin-top: .4rem;
-}
-
-/* Section title — mirrors comment view */
-.section-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #00a79d;
-    padding-bottom: .5rem;
-    border-bottom: 2px solid #e0f7f5;
-}
-html.dark-mode .section-title { color: #2dd4bf; border-bottom-color: rgba(45,212,191,.15); }
-
-/* Cards — mirrors comment view */
-.card { border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,.08); }
-
-/* Label/value rows */
-.form-label.fw-bold { color: #495057; font-weight: 600; }
-html.dark-mode .form-label.fw-bold { color: #9ca3af; }
-
-.form-control-plaintext {
-    padding: .375rem 0;
-    margin-bottom: 0;
-    line-height: 1.5;
-    background-color: transparent;
-    border: solid transparent;
-    border-width: 1px 0;
-    min-height: 38px;
-    display: flex;
-    align-items: center;
-    word-break: break-word;
-}
-
-/* Amount highlight */
-.dd-amount { font-size: 1.6rem; font-weight: 800; color: #00a79d; }
-html.dark-mode .dd-amount { color: #2dd4bf; }
-</style>
+@include('admin-page.service.celengan-syahid.donation.components._show-styles')
 @endsection
 
 @section('content')
@@ -87,7 +25,7 @@ html.dark-mode .dd-amount { color: #2dd4bf; }
             <h1 class="page-title">
                 <i class="fas fa-donate me-2"></i>
                 <span>Detail</span>
-                <span class="highlighted-text ms-1">Donasi</span>
+                <span class="highlighted-text ms-1">Donation</span>
                 <small>#{{ $donation->id }} &mdash; {{ $donation->nama_donatur }}</small>
             </h1>
         </div>
@@ -97,7 +35,7 @@ html.dark-mode .dd-amount { color: #2dd4bf; }
             <div class="card border-0 shadow-sm">
                 <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <div>
-                        <div class="text-muted small">Total Donasi</div>
+                        <div class="text-muted small">Total Donation</div>
                         <div class="dd-amount">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</div>
                     </div>
                     <span class="badge {{ $statusBadge }} fs-6 px-3 py-2">{{ $donation->payment_status }}</span>
@@ -110,16 +48,16 @@ html.dark-mode .dd-amount { color: #2dd4bf; }
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <h5 class="section-title mb-3">
-                        <i class="fas fa-user me-2"></i>Data Donatur
+                        <i class="fas fa-user me-2"></i>Donor Information
                     </h5>
 
                     <div class="row">
                         <div class="col-12 mb-3">
-                            <label class="form-label fw-bold">Nama</label>
+                            <label class="form-label fw-bold">Name</label>
                             <div class="form-control-plaintext">
                                 {{ $donation->nama_donatur }}
                                 @if($donation->is_anonymous)
-                                    <span class="badge bg-secondary ms-1">Anonymous (publik)</span>
+                                    <span class="badge bg-secondary ms-1">Anonymous (public)</span>
                                 @endif
                             </div>
                         </div>
@@ -128,23 +66,23 @@ html.dark-mode .dd-amount { color: #2dd4bf; }
                             <div class="form-control-plaintext">{{ $donation->email_donatur ?: '—' }}</div>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <label class="form-label fw-bold">No. Telepon</label>
+                            <label class="form-label fw-bold">Phone Number</label>
                             <div class="form-control-plaintext">{{ $donation->no_telp_donatur ?: '—' }}</div>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <label class="form-label fw-bold">Usia</label>
-                            <div class="form-control-plaintext">{{ $donation->usia ? $donation->usia . ' tahun' : '—' }}</div>
+                            <label class="form-label fw-bold">Age</label>
+                            <div class="form-control-plaintext">{{ $donation->usia ? $donation->usia . ' years old' : '—' }}</div>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <label class="form-label fw-bold">Domisili</label>
+                            <label class="form-label fw-bold">Domicile</label>
                             <div class="form-control-plaintext">{{ $donation->domisili ?: '—' }}</div>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <label class="form-label fw-bold">Pekerjaan</label>
+                            <label class="form-label fw-bold">Occupation</label>
                             <div class="form-control-plaintext">{{ $donation->pekerjaan ?: '—' }}</div>
                         </div>
                         <div class="col-12 mb-0">
-                            <label class="form-label fw-bold">Pesan / Do'a</label>
+                            <label class="form-label fw-bold">Message / Prayer</label>
                             <div class="form-control-plaintext" style="align-items: flex-start; white-space: pre-wrap;">{{ $donation->pesan_donatur ?: '—' }}</div>
                         </div>
                     </div>
@@ -157,7 +95,7 @@ html.dark-mode .dd-amount { color: #2dd4bf; }
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <h5 class="section-title mb-3">
-                        <i class="fas fa-receipt me-2"></i>Info Pembayaran
+                        <i class="fas fa-receipt me-2"></i>Payment Information
                     </h5>
 
                     <div class="row">
@@ -172,13 +110,13 @@ html.dark-mode .dd-amount { color: #2dd4bf; }
                             </div>
                         </div>
                         <div class="col-12 mb-3">
-                            <label class="form-label fw-bold">Tanggal</label>
+                            <label class="form-label fw-bold">Date</label>
                             <div class="form-control-plaintext">
                                 {{ optional($donation->created_at)->isoFormat('dddd, D MMMM YYYY HH:mm') ?: '—' }}
                             </div>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <label class="form-label fw-bold">Metode Pembayaran</label>
+                            <label class="form-label fw-bold">Payment Method</label>
                             <div class="form-control-plaintext">{{ $donation->metode_pembayaran ?: '—' }}</div>
                         </div>
                         <div class="col-sm-6 mb-3">
@@ -186,13 +124,13 @@ html.dark-mode .dd-amount { color: #2dd4bf; }
                             <div class="form-control-plaintext">{{ $donation->nama_merchant ?: '—' }}</div>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <label class="form-label fw-bold">Biaya Admin</label>
+                            <label class="form-label fw-bold">Admin Fee</label>
                             <div class="form-control-plaintext">
                                 {{ $donation->biaya_admin ? LFC::formatRupiah($donation->biaya_admin) : '—' }}
                             </div>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <label class="form-label fw-bold">Total Tagihan</label>
+                            <label class="form-label fw-bold">Total Billed</label>
                             <div class="form-control-plaintext">
                                 {{ $donation->total_tagihan ? LFC::formatRupiah($donation->total_tagihan) : '—' }}
                             </div>
@@ -203,13 +141,17 @@ html.dark-mode .dd-amount { color: #2dd4bf; }
                         </div>
                         <div class="col-12 mb-0">
                             <label class="form-label fw-bold">Payment Link</label>
-                            <div class="form-control-plaintext">
+                            <div style="padding: .375rem 0;">
                                 @if($donation->payment_link)
-                                    <a href="{{ $donation->payment_link }}" target="_blank" rel="noopener" class="btn btn-sm btn-custom-primary">
-                                        <i class="fa fa-external-link-alt me-1"></i> Buka Link
+                                    <a href="{{ $donation->payment_link }}" target="_blank" rel="noopener"
+                                       class="btn btn-custom-primary mb-2">
+                                        <i class="fa fa-external-link-alt me-2"></i> Open Payment Link
                                     </a>
+                                    <div class="payment-link-url" style="word-break: break-all; font-size: .75rem;">
+                                        {{ $donation->payment_link }}
+                                    </div>
                                 @else
-                                    —
+                                    <span class="text-muted">—</span>
                                 @endif
                             </div>
                         </div>
@@ -218,10 +160,13 @@ html.dark-mode .dd-amount { color: #2dd4bf; }
             </div>
         </div>
 
-        {{-- Back Button (di bawah, seperti comment view) --}}
-        <div class="col-12 d-flex justify-content-end mb-4">
+        {{-- Actions --}}
+        <div class="col-12 d-flex justify-content-end gap-2 mb-4">
             <a href="{{ route('admin.service.index.donation') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left me-1"></i> Back
+            </a>
+            <a href="{{ route('admin.service.donation.edit', $donation->id) }}" class="btn btn-custom-primary">
+                <i class="fa fa-edit me-1"></i> Edit
             </a>
         </div>
 

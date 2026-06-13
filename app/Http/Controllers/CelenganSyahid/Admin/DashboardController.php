@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function dashboardCelenganSyahid()
     {
-        return view('admin-page.service.celengan-syahid.dashboard', ['title' => 'Celengan Syahid']);
+        return view('admin-page.service.celengan-syahid.dashboard.index', ['title' => 'Celengan Syahid']);
     }
 
     /**

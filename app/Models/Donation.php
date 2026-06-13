@@ -101,6 +101,12 @@ class Donation extends Model
                     'route'    => 'admin.service.show.donation',
                     'routeKey' => 'id',
                 ],
+                'edit' => [
+                    'enabled'  => true,
+                    'type'     => 'link',
+                    'route'    => 'admin.service.donation.edit',
+                    'routeKey' => 'id',
+                ],
                 'delete' => [
                     'enabled' => true,
                     'btnClass' => 'delete-donation-btn',
@@ -115,6 +121,16 @@ class Donation extends Model
             ->distinct()
             ->orderBy('payment_status')
             ->pluck('payment_status', 'payment_status')
+            ->filter()
+            ->toArray();
+    }
+
+    public static function getPaymentMethodOptions(): array
+    {
+        return self::select('metode_pembayaran')
+            ->distinct()
+            ->orderBy('metode_pembayaran')
+            ->pluck('metode_pembayaran', 'metode_pembayaran')
             ->filter()
             ->toArray();
     }
