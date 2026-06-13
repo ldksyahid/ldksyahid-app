@@ -251,6 +251,13 @@ class PublicController extends Controller
                 Log::error('storeDonationCampaign: invoice email failed: ' . $e->getMessage());
             }
 
+            Log::info('storeDonationCampaign: reCAPTCHA passed, redirecting to payment status', [
+                'donation_id' => $postDonation->id,
+                'campaign'    => $request->input('linkcampaign'),
+                'email'       => $request->input('email_donatur'),
+                'ip'          => $request->ip(),
+            ]);
+
             return Redirect::route('service.celengansyahid.detail.donateNow.status', [
                 'link' => $request->input('linkcampaign'),
                 'id'   => $postDonation->id,
