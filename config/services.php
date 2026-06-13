@@ -45,8 +45,9 @@ return [
     'recaptcha_type'            => env('RECAPTCHA_TYPE', 'score'),
     'recaptcha_score_threshold' => (float) env('RECAPTCHA_SCORE_THRESHOLD', 0.5),
     'recaptcha_project_id'      => env('RECAPTCHA_PROJECT_ID', ''),
-    // Google Cloud API key (not a secret key) — used to authenticate Enterprise Assessment API calls.
-    'recaptcha_api_key'         => env('RECAPTCHA_API_KEY', ''),
+    // Google Cloud API key — used to authenticate Enterprise Assessment API calls.
+    // Reads RECAPTCHA_API_KEY first; falls back to legacy RECAPTCHA_SECRET_KEY name.
+    'recaptcha_api_key'         => env('RECAPTCHA_API_KEY', env('RECAPTCHA_SECRET_KEY', '')),
 
     'xendit' => [
         'webhook_token' => env('XENDIT_WEBHOOK_TOKEN'),
