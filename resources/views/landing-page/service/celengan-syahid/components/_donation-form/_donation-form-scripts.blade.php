@@ -1,5 +1,23 @@
 @if(config('services.recaptcha_enabled', true) && config('recaptcha.api_site_key'))
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+@if($errors->has('g-recaptcha-response'))
+{{-- Reset widget jika ada error captcha supaya user dapat token baru --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (window.grecaptcha) {
+            grecaptcha.ready(function () { grecaptcha.reset(); });
+        } else {
+            // Tunggu api.js selesai load
+            var iv = setInterval(function () {
+                if (window.grecaptcha) {
+                    clearInterval(iv);
+                    grecaptcha.ready(function () { grecaptcha.reset(); });
+                }
+            }, 300);
+        }
+    });
+</script>
+@endif
 @endif
 
 <script>

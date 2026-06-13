@@ -72,7 +72,12 @@ class StoreDonationRequest extends FormRequest
             Log::info('reCAPTCHA verify result', ['result' => $result]);
 
             if (empty($result['success'])) {
-                $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
+                $errorCodes = $result['error-codes'] ?? [];
+                if (in_array('timeout-or-duplicate', $errorCodes)) {
+                    $fail('Verifikasi Captcha kadaluarsa. Harap centang ulang kotak "I\'m not a robot" lalu coba lagi.');
+                } else {
+                    $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
+                }
             }
         }];
     }
