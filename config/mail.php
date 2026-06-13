@@ -45,6 +45,25 @@ return [
             'auth_mode' => null,
         ],
 
+        // Direct Gmail SMTP — used for transactional emails sent synchronously
+        // (donation invoice, donation success, subscribe/unsubscribe confirmation,
+        // form submission confirmation). Requires a Google App Password, not the
+        // account password. Enable at: myaccount.google.com/apppasswords.
+        'gmail' => [
+            'transport'  => 'smtp',
+            'host'       => env('GMAIL_HOST', 'smtp.gmail.com'),
+            'port'       => env('GMAIL_PORT', 587),
+            'encryption' => env('GMAIL_ENCRYPTION', 'tls'),
+            'username'   => env('GMAIL_USERNAME'),
+            'password'   => env('GMAIL_APP_PASSWORD'),
+            'timeout'    => null,
+            'auth_mode'  => null,
+            'from'       => [
+                'address' => env('GMAIL_FROM_ADDRESS', 'noreplyldksyahid@gmail.com'),
+                'name'    => env('GMAIL_FROM_NAME', 'LDK Syahid'),
+            ],
+        ],
+
         'ses' => [
             'transport' => 'ses',
         ],
