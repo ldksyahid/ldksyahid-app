@@ -223,6 +223,9 @@ class PublicController extends Controller
                 'id'   => $postDonation->id,
             ]);
 
+            // Simpan status URL sebagai payment_link untuk donasi QRIS
+            $postDonation->updateQuietly(['payment_link' => $statusUrl]);
+
             $data = [
                 'donaturTelp'    => $request->input('no_telp_donatur'),
                 'campaignName'   => $campaign->judul,
