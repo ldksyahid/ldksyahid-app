@@ -100,7 +100,7 @@
     width: 100%;
     padding: .875rem 1rem .875rem 3rem;
     font-size: 1.25rem; font-weight: 700; color: var(--dn-dark);
-    background: var(--dn-gray-100);
+    background: #ffffff;
     border: 2px solid var(--dn-gray-200);
     border-radius: var(--dn-radius);
     outline: none; transition: var(--dn-transition);
@@ -147,7 +147,7 @@
     width: 100%;
     padding: .75rem 1rem;
     font-size: .9rem; color: var(--dn-dark);
-    background: var(--dn-gray-100);
+    background: #ffffff;
     border: 2px solid var(--dn-gray-200);
     border-radius: var(--dn-radius);
     outline: none; transition: var(--dn-transition);
@@ -178,7 +178,7 @@
     width: 100%; min-height: 110px; resize: vertical;
     padding: .75rem 1rem;
     font-size: .9rem; color: var(--dn-dark);
-    background: var(--dn-gray-100);
+    background: #ffffff;
     border: 2px solid var(--dn-gray-200);
     border-radius: var(--dn-radius);
     outline: none; transition: var(--dn-transition);
@@ -198,7 +198,7 @@
 }
 .dn-anon-check {
     width: 18px; height: 18px; cursor: pointer;
-    accent-color: var(--dn-primary); flex-shrink: 0;
+    accent-color: #1a2332; flex-shrink: 0;
 }
 .dn-anon-label {
     font-size: .85rem; font-weight: 600; color: var(--dn-dark);
@@ -366,7 +366,7 @@
     height: auto;
     padding: .72rem 2.5rem .72rem 1rem;
     font-size: .9rem; color: var(--dn-dark);
-    background: var(--dn-gray-100);
+    background: #ffffff;
     border: 2px solid var(--dn-gray-200);
     border-radius: var(--dn-radius);
     outline: none; transition: var(--dn-transition);
@@ -488,6 +488,7 @@
 /* Anonymous toggle */
 [data-theme="dark"] .dn-anon-row      { background: #252b3b; }
 [data-theme="dark"] .dn-anon-label    { color: #e2e8f0; }
+[data-theme="dark"] .dn-anon-check    { accent-color: #ffffff; }
 /* Total */
 [data-theme="dark"] .dn-total-row     { background: rgba(0,167,157,.12); }
 [data-theme="dark"] .dn-total-label   { color: #4dd9cf; }
@@ -534,5 +535,15 @@
 }
 [data-theme="dark"] .select2-container--default .select2-results > .select2-results__options {
     scrollbar-color: rgba(0,167,157,.3) transparent;
+}
+
+@media (max-width: 575.98px) {
+    .dn-action-row {
+        flex-direction: column-reverse;
+    }
+    .dn-action-row .dn-submit-btn,
+    .dn-action-row .dn-back-btn {
+        width: 100%;
+    }
 }
 </style>

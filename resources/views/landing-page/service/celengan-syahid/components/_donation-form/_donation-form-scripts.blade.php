@@ -34,10 +34,15 @@
 (function () {
     'use strict';
 
-    // Reset submit button if browser restores page from bfcache (Back navigation).
-    // Without this, the button stays disabled after the user navigates back.
+    // Reset form state when browser restores page from bfcache (Back navigation).
+    // Clears the stale reCAPTCHA token so the next submit fetches a fresh one,
+    // preventing "DUPE" rejections from the Enterprise Assessment API.
+    var formAlreadySubmitted = false;
     window.addEventListener('pageshow', function (e) {
         if (e.persisted) {
+            formAlreadySubmitted = false;
+            var tokenEl = document.getElementById('dn-recaptcha-token');
+            if (tokenEl) tokenEl.value = '';
             document.querySelectorAll('.dn-form [type="submit"]').forEach(function (btn) {
                 btn.disabled = false;
                 btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
@@ -129,8 +134,11 @@
     forms.forEach(function (form) {
         form.addEventListener('submit', function (e) {
             e.preventDefault();
-            // Block any other submit listeners (plugins, etc.) from running.
             e.stopImmediatePropagation();
+
+            // Prevent double-submission (e.g. rapid double-click or bfcache replay).
+            if (formAlreadySubmitted) return;
+            formAlreadySubmitted = true;
 
             var valid = true;
             var firstInvalidEl = null;
@@ -173,6 +181,7 @@
 
             // Scroll to first invalid field so user knows what to fix.
             if (!valid) {
+                formAlreadySubmitted = false;
                 if (firstInvalidEl) {
                     firstInvalidEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
