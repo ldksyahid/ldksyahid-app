@@ -230,8 +230,8 @@ Route::middleware('throttle:60,1')->group(function () {
     Route::get('/celengan-syahid/api/check-payment/{id}', [CelsyahidPublicController::class, 'checkPaymentStatus'])->name('service.celengansyahid.api.checkPayment');
 });
 
-// Donation store: max 10 submissions/minute per IP
-Route::middleware('throttle:10,1')->post('/celengan-syahid/donasi', [CelsyahidPublicController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
+// Donation store: max 30 submissions/minute per IP
+Route::middleware('throttle:30,1')->post('/celengan-syahid/donasi', [CelsyahidPublicController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
 
 // Payment gateway webhook: max 120 callbacks/minute (gateway retries are frequent)
 Route::middleware('throttle:120,1')->post('/celengan-syahid/callback', [CelsyahidPublicController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
