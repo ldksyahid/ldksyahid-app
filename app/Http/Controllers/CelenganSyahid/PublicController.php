@@ -153,8 +153,8 @@ class PublicController extends Controller
     {
         $jumlah_donasi = (int) LFC::replaceamount($request->input('jumlah_donasi'));
 
-        if ($jumlah_donasi < 10000) {
-            Alert::warning('Maaf!', 'Silahkan masukkan donasi minimal Rp10.000');
+        if ($jumlah_donasi < 1000) {
+            Alert::warning('Maaf!', 'Silahkan masukkan donasi minimal Rp1.000');
             return Redirect::back();
         }
 

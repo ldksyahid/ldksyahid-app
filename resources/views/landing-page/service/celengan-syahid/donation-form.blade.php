@@ -225,12 +225,8 @@
                           rows="4"></textarea>
             </div>
 
-            {{-- ── reCAPTCHA ──────────────────────────────────── --}}
-            <div class="dn-captcha-wrap wow fadeInUp" data-wow-delay="0.18s">
-                <div class="dn-captcha-inner">
-                    {!! htmlFormSnippet() !!}
-                </div>
-            </div>
+            {{-- ── reCAPTCHA Enterprise (score-based, invisible) ── --}}
+            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
 
             {{-- ── Total + Submit ─────────────────────────────── --}}
             <div class="wow fadeInUp" data-wow-delay="0.2s" style="margin-top: 1.25rem;">

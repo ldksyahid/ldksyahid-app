@@ -1,6 +1,13 @@
+@if(config('services.recaptcha_enabled', true) && config('recaptcha.api_site_key'))
+<script src="https://www.google.com/recaptcha/enterprise.js?render={{ config('recaptcha.api_site_key') }}" async defer></script>
+@endif
+
 <script>
 (function () {
     'use strict';
+
+    var RECAPTCHA_SITE_KEY = '{{ config("recaptcha.api_site_key") }}';
+    var RECAPTCHA_ENABLED  = {{ config('services.recaptcha_enabled', true) ? 'true' : 'false' }};
 
     /* ── Rupiah formatter ────────────────────────────────────── */
     function formatRupiah(raw) {
@@ -81,37 +88,52 @@
         });
     });
 
-    /* ── Bootstrap form validation ───────────────────────────── */
+    /* ── Bootstrap form validation + reCAPTCHA Enterprise ───── */
     var forms = document.querySelectorAll('.dn-form');
     forms.forEach(function (form) {
         form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
             // Validate amount manually
             if (amountInput) {
                 var raw = amountInput.value.replace(/[^\d]/g, '');
                 if (!raw || parseInt(raw, 10) < 1000) {
                     amountInput.classList.add('is-invalid');
-                    e.preventDefault();
-                    e.stopPropagation();
                     amountInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     return;
                 } else {
                     amountInput.classList.remove('is-invalid');
                 }
             }
+
             if (!form.checkValidity()) {
-                e.preventDefault();
-                e.stopPropagation();
                 form.classList.add('was-validated');
                 return;
             }
             form.classList.add('was-validated');
 
-            // Disable the submit button after first valid submit to prevent
-            // double-clicks sending two donations (and two WA/email invoices).
+            // Disable submit button to prevent double-click
             var btn = form.querySelector('[type="submit"]');
             if (btn) {
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            }
+
+            // Generate reCAPTCHA Enterprise token, then submit
+            function doSubmit() { form.submit(); }
+
+            if (RECAPTCHA_ENABLED && RECAPTCHA_SITE_KEY && window.grecaptcha && grecaptcha.enterprise) {
+                grecaptcha.enterprise.ready(function () {
+                    grecaptcha.enterprise.execute(RECAPTCHA_SITE_KEY, { action: 'donation' })
+                        .then(function (token) {
+                            var inp = document.getElementById('g-recaptcha-response');
+                            if (inp) inp.value = token;
+                            doSubmit();
+                        })
+                        .catch(function () { doSubmit(); });
+                });
+            } else {
+                doSubmit();
             }
         });
     });

@@ -56,25 +56,32 @@ class StoreDonationRequest extends FormRequest
             return ['nullable'];
         }
 
-        return ['required', function ($attribute, $value, $fail) {
+        return ['required', function ($_attribute, $value, $fail) {
+            $projectId = config('services.recaptcha_project_id', 'ukm-ldk-syahid');
+            $siteKey   = config('recaptcha.api_site_key');
+            $apiKey    = config('recaptcha.api_secret_key'); // Google Cloud API Key
+
             try {
-                $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-                    'secret'   => config('recaptcha.api_secret_key'),
-                    'response' => $value,
-                    'remoteip' => $this->ip(),
-                ]);
+                $response = Http::withHeaders(['Content-Type' => 'application/json'])
+                    ->post("https://recaptchaenterprise.googleapis.com/v1/projects/{$projectId}/assessments?key={$apiKey}", [
+                        'event' => [
+                            'token'          => $value,
+                            'siteKey'        => $siteKey,
+                            'expectedAction' => 'donation',
+                        ],
+                    ]);
                 $result = $response->json() ?: [];
             } catch (\Throwable $e) {
-                Log::error('reCAPTCHA verify exception: ' . $e->getMessage());
+                Log::error('reCAPTCHA Enterprise verify exception: ' . $e->getMessage());
                 $result = [];
             }
 
-            // Logs Google's full response (incl. error-codes) so the exact
-            // reject reason is visible: invalid-input-secret / hostname-mismatch /
-            // timeout-or-duplicate / etc.
             Log::info('reCAPTCHA verify result', ['result' => $result]);
 
-            if (empty($result['success'])) {
+            $tokenValid = $result['tokenProperties']['valid'] ?? false;
+            $score      = $result['riskAnalysis']['score'] ?? 0;
+
+            if (!$tokenValid || $score < 0.3) {
                 $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
             }
         }];
