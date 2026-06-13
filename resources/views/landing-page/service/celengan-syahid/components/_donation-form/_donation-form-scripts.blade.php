@@ -114,57 +114,68 @@
         });
     });
 
-    /* ── Bootstrap form validation + reCAPTCHA Enterprise ───── */
+    /* ── Form validation + submit ────────────────────────────── */
     var forms = document.querySelectorAll('.dn-form');
     forms.forEach(function (form) {
         form.addEventListener('submit', function (e) {
             e.preventDefault();
+            // Block any other submit listeners (plugins, etc.) from running.
+            e.stopImmediatePropagation();
 
-            // Validate amount manually
-            if (amountInput) {
-                var raw = amountInput.value.replace(/[^\d]/g, '');
+            var valid = true;
+            var firstInvalidEl = null;
+
+            // 1. Amount — re-read from DOM each time so the reference is fresh.
+            var amtEl = document.getElementById('dn-amount-input');
+            if (amtEl) {
+                var raw = amtEl.value.replace(/[^\d]/g, '');
                 if (!raw || parseInt(raw, 10) < 1000) {
-                    amountInput.classList.add('is-invalid');
-                    amountInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    return;
+                    amtEl.classList.add('is-invalid');
+                    if (!firstInvalidEl) firstInvalidEl = amtEl;
+                    valid = false;
                 } else {
-                    amountInput.classList.remove('is-invalid');
+                    amtEl.classList.remove('is-invalid');
                 }
             }
 
-            // Validate Select2 fields with native DOM — browsers skip hidden
-            // elements so checkValidity() misses them. Select2 keeps the
-            // underlying <select> value in sync, so native .value is reliable.
-            var select2Valid = true;
+            // 2. Select2 fields — native .value stays in sync with Select2 selection.
+            // checkValidity() skips hidden elements, so we check these manually.
             ['dn-domisili', 'dn-pekerjaan'].forEach(function (id) {
                 var el   = document.getElementById(id);
                 var wrap = el && el.closest('.dn-select-wrap');
                 var msg  = wrap && wrap.nextElementSibling;
                 var empty = !el || !el.value;
-                if (wrap) {
-                    wrap.classList[empty ? 'add' : 'remove']('is-invalid');
-                }
+                if (wrap) wrap.classList[empty ? 'add' : 'remove']('is-invalid');
                 if (msg && msg.classList.contains('dn-invalid-msg')) {
                     msg.style.display = empty ? '' : 'none';
                 }
-                if (empty) select2Valid = false;
+                if (empty) {
+                    if (!firstInvalidEl) firstInvalidEl = wrap || el;
+                    valid = false;
+                }
             });
-            if (!select2Valid) return;
 
+            // 3. All other required fields (nama, email, telpon, usia, etc.)
             if (!form.checkValidity()) {
-                form.classList.add('was-validated');
-                return;
+                valid = false;
             }
             form.classList.add('was-validated');
 
-            // Disable submit button to prevent double-click
+            // Scroll to first invalid field so user knows what to fix.
+            if (!valid) {
+                if (firstInvalidEl) {
+                    firstInvalidEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+
+            // All validations passed — disable button ONLY now.
             var btn = form.querySelector('[type="submit"]');
             if (btn) {
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
             }
 
-            // Submit — token reCAPTCHA v2 sudah auto-terisi oleh checkbox widget
             form.submit();
         });
     });
