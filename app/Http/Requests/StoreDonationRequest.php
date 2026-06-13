@@ -49,6 +49,7 @@ class StoreDonationRequest extends FormRequest
     /**
      * reCAPTCHA validation rules. Verification can be toggled off via
      * RECAPTCHA_ENABLED=false (temporary, e.g. while migrating a deprecated key).
+     * RECAPTCHA_TYPE controls "score" (Enterprise invisible) vs "checkbox".
      */
     protected function recaptchaRules(): array
     {
@@ -57,29 +58,84 @@ class StoreDonationRequest extends FormRequest
         }
 
         return ['required', function ($_attribute, $value, $fail) {
-            try {
-                $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-                    'secret'   => config('recaptcha.api_secret_key'),
-                    'response' => $value,
-                    'remoteip' => $this->ip(),
-                ]);
-                $result = $response->json() ?: [];
-            } catch (\Throwable $e) {
-                Log::error('reCAPTCHA verify exception: ' . $e->getMessage());
-                $result = [];
-            }
+            $type = config('services.recaptcha_type', 'score');
 
-            Log::info('reCAPTCHA verify result', ['result' => $result]);
-
-            if (empty($result['success'])) {
-                $errorCodes = $result['error-codes'] ?? [];
-                if (in_array('timeout-or-duplicate', $errorCodes)) {
-                    $fail('Verifikasi Captcha kadaluarsa. Harap centang ulang kotak "I\'m not a robot" lalu coba lagi.');
-                } else {
-                    $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
-                }
+            if ($type === 'score') {
+                $this->verifyEnterpriseScore($value, $fail);
+            } else {
+                $this->verifyEnterpriseCheckbox($value, $fail);
             }
         }];
+    }
+
+    /**
+     * Verify via reCAPTCHA Enterprise Assessment API (score-based).
+     * Returns a risk score 0.0–1.0; scores >= threshold are considered human.
+     */
+    private function verifyEnterpriseScore(string $token, callable $fail): void
+    {
+        $projectId = config('services.recaptcha_project_id');
+        $apiKey    = config('services.recaptcha_api_key');
+        $siteKey   = config('recaptcha.api_site_key');
+        $threshold = config('services.recaptcha_score_threshold', 0.5);
+
+        try {
+            $response = Http::withHeaders(['Content-Type' => 'application/json'])
+                ->post("https://recaptchaenterprise.googleapis.com/v1/projects/{$projectId}/assessments?key={$apiKey}", [
+                    'event' => [
+                        'token'          => $token,
+                        'expectedAction' => 'submit_donation',
+                        'siteKey'        => $siteKey,
+                    ],
+                ]);
+            $result = $response->json() ?: [];
+        } catch (\Throwable $e) {
+            Log::error('reCAPTCHA Enterprise score verify exception: ' . $e->getMessage());
+            $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
+            return;
+        }
+
+        Log::info('reCAPTCHA Enterprise score result', ['result' => $result]);
+
+        $valid  = $result['tokenProperties']['valid']  ?? false;
+        $score  = $result['riskAnalysis']['score']     ?? 0.0;
+        $action = $result['tokenProperties']['action'] ?? '';
+
+        if (!$valid || $action !== 'submit_donation' || $score < $threshold) {
+            $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
+        }
+    }
+
+    /**
+     * Verify via reCAPTCHA Enterprise Assessment API (checkbox).
+     * Checkbox tokens are also verified through the Enterprise endpoint.
+     */
+    private function verifyEnterpriseCheckbox(string $token, callable $fail): void
+    {
+        $projectId = config('services.recaptcha_project_id');
+        $apiKey    = config('services.recaptcha_api_key');
+        $siteKey   = config('recaptcha.api_site_key');
+
+        try {
+            $response = Http::withHeaders(['Content-Type' => 'application/json'])
+                ->post("https://recaptchaenterprise.googleapis.com/v1/projects/{$projectId}/assessments?key={$apiKey}", [
+                    'event' => [
+                        'token'   => $token,
+                        'siteKey' => $siteKey,
+                    ],
+                ]);
+            $result = $response->json() ?: [];
+        } catch (\Throwable $e) {
+            Log::error('reCAPTCHA Enterprise checkbox verify exception: ' . $e->getMessage());
+            $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
+            return;
+        }
+
+        Log::info('reCAPTCHA Enterprise checkbox result', ['result' => $result]);
+
+        if (empty($result['tokenProperties']['valid'])) {
+            $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
+        }
     }
 
     public function messages(): array

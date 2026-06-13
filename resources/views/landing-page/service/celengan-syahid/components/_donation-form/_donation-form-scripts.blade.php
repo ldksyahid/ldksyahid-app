@@ -1,23 +1,33 @@
-@if(config('services.recaptcha_enabled', true) && config('recaptcha.api_site_key'))
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-@if($errors->has('g-recaptcha-response'))
-{{-- Reset widget jika ada error captcha supaya user dapat token baru --}}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        if (window.grecaptcha) {
-            grecaptcha.ready(function () { grecaptcha.reset(); });
-        } else {
-            // Tunggu api.js selesai load
-            var iv = setInterval(function () {
-                if (window.grecaptcha) {
-                    clearInterval(iv);
-                    grecaptcha.ready(function () { grecaptcha.reset(); });
+@php
+    $captchaEnabled = config('services.recaptcha_enabled', true) && config('recaptcha.api_site_key');
+    $captchaType    = config('services.recaptcha_type', 'score');   // "score" | "checkbox"
+    $siteKey        = config('recaptcha.api_site_key');
+@endphp
+
+@if($captchaEnabled)
+    @if($captchaType === 'checkbox')
+        {{-- Enterprise checkbox: visible widget, user must tick --}}
+        <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+        @if($errors->has('g-recaptcha-response'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (window.grecaptcha && window.grecaptcha.enterprise) {
+                    grecaptcha.enterprise.ready(function () { grecaptcha.enterprise.reset(); });
+                } else {
+                    var iv = setInterval(function () {
+                        if (window.grecaptcha && window.grecaptcha.enterprise) {
+                            clearInterval(iv);
+                            grecaptcha.enterprise.ready(function () { grecaptcha.enterprise.reset(); });
+                        }
+                    }, 300);
                 }
-            }, 300);
-        }
-    });
-</script>
-@endif
+            });
+        </script>
+        @endif
+    @else
+        {{-- Enterprise score-based: invisible, token injected by JS before submit --}}
+        <script src="https://www.google.com/recaptcha/enterprise.js?render={{ $siteKey }}"></script>
+    @endif
 @endif
 
 <script>
@@ -114,58 +124,88 @@
         });
     });
 
-    /* ── Bootstrap form validation + reCAPTCHA Enterprise ───── */
+    /* ── Form validation + submit ────────────────────────────── */
     var forms = document.querySelectorAll('.dn-form');
     forms.forEach(function (form) {
         form.addEventListener('submit', function (e) {
             e.preventDefault();
+            // Block any other submit listeners (plugins, etc.) from running.
+            e.stopImmediatePropagation();
 
-            // Validate amount manually
-            if (amountInput) {
-                var raw = amountInput.value.replace(/[^\d]/g, '');
+            var valid = true;
+            var firstInvalidEl = null;
+
+            // 1. Amount — re-read from DOM each time so the reference is fresh.
+            var amtEl = document.getElementById('dn-amount-input');
+            if (amtEl) {
+                var raw = amtEl.value.replace(/[^\d]/g, '');
                 if (!raw || parseInt(raw, 10) < 1000) {
-                    amountInput.classList.add('is-invalid');
-                    amountInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    return;
+                    amtEl.classList.add('is-invalid');
+                    if (!firstInvalidEl) firstInvalidEl = amtEl;
+                    valid = false;
                 } else {
-                    amountInput.classList.remove('is-invalid');
+                    amtEl.classList.remove('is-invalid');
                 }
             }
 
-            // Validate Select2 fields with native DOM — browsers skip hidden
-            // elements so checkValidity() misses them. Select2 keeps the
-            // underlying <select> value in sync, so native .value is reliable.
-            var select2Valid = true;
+            // 2. Select2 fields — native .value stays in sync with Select2 selection.
+            // checkValidity() skips hidden elements, so we check these manually.
             ['dn-domisili', 'dn-pekerjaan'].forEach(function (id) {
                 var el   = document.getElementById(id);
                 var wrap = el && el.closest('.dn-select-wrap');
                 var msg  = wrap && wrap.nextElementSibling;
                 var empty = !el || !el.value;
-                if (wrap) {
-                    wrap.classList[empty ? 'add' : 'remove']('is-invalid');
-                }
+                if (wrap) wrap.classList[empty ? 'add' : 'remove']('is-invalid');
                 if (msg && msg.classList.contains('dn-invalid-msg')) {
                     msg.style.display = empty ? '' : 'none';
                 }
-                if (empty) select2Valid = false;
+                if (empty) {
+                    if (!firstInvalidEl) firstInvalidEl = wrap || el;
+                    valid = false;
+                }
             });
-            if (!select2Valid) return;
 
+            // 3. All other required fields (nama, email, telpon, usia, etc.)
             if (!form.checkValidity()) {
-                form.classList.add('was-validated');
-                return;
+                valid = false;
             }
             form.classList.add('was-validated');
 
-            // Disable submit button to prevent double-click
+            // Scroll to first invalid field so user knows what to fix.
+            if (!valid) {
+                if (firstInvalidEl) {
+                    firstInvalidEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+
+            // All validations passed — disable button ONLY now.
             var btn = form.querySelector('[type="submit"]');
             if (btn) {
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
             }
 
-            // Submit — token reCAPTCHA v2 sudah auto-terisi oleh checkbox widget
+            @if($captchaEnabled && $captchaType === 'score')
+            // Score-based: fetch Enterprise token async, then submit.
+            // Re-enable button if token fetch fails so user can retry.
+            grecaptcha.enterprise.ready(function () {
+                grecaptcha.enterprise.execute('{{ $siteKey }}', { action: 'submit_donation' })
+                    .then(function (token) {
+                        var tokenEl = document.getElementById('dn-recaptcha-token');
+                        if (tokenEl) tokenEl.value = token;
+                        form.submit();
+                    })
+                    .catch(function () {
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
+                        }
+                    });
+            });
+            @else
             form.submit();
+            @endif
         });
     });
 

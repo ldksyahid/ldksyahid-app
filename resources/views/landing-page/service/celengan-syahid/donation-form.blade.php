@@ -240,18 +240,29 @@
                           rows="4"></textarea>
             </div>
 
-            {{-- ── reCAPTCHA v2 Checkbox ───────────────────────── --}}
+            {{-- ── reCAPTCHA ───────────────────────────────────── --}}
             @if(config('services.recaptcha_enabled', true))
-            <div class="dn-captcha-wrap wow fadeInUp" data-wow-delay="0.18s">
-                <div class="dn-captcha-inner">
-                    <div class="g-recaptcha" data-sitekey="{{ config('recaptcha.api_site_key') }}"></div>
+                @if(config('services.recaptcha_type', 'score') === 'checkbox')
+                {{-- v2 checkbox: visible widget, user must tick --}}
+                <div class="dn-captcha-wrap wow fadeInUp" data-wow-delay="0.18s">
+                    <div class="dn-captcha-inner">
+                        <div class="g-recaptcha" data-sitekey="{{ config('recaptcha.api_site_key') }}" data-enterprise="true"></div>
+                    </div>
+                    @error('g-recaptcha-response')
+                        <div style="color:#dc3545;font-size:.8rem;margin-top:.4rem;">
+                            <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                        </div>
+                    @enderror
                 </div>
+                @else
+                {{-- v3 score-based: invisible, token injected by JS before submit --}}
+                <input type="hidden" name="g-recaptcha-response" id="dn-recaptcha-token">
                 @error('g-recaptcha-response')
                     <div style="color:#dc3545;font-size:.8rem;margin-top:.4rem;">
                         <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
                     </div>
                 @enderror
-            </div>
+                @endif
             @endif
 
             {{-- ── Total + Submit ─────────────────────────────── --}}

@@ -39,6 +39,15 @@ return [
     // keep true in production for bot protection.
     'recaptcha_enabled' => env('RECAPTCHA_ENABLED', true),
 
+    // "checkbox" — reCAPTCHA v2 checkbox widget (visible, user must tick).
+    // "score"    — reCAPTCHA v3 invisible (no user interaction, risk score based).
+    // Each type requires its own site/secret key pair from console.recaptcha.google.com.
+    'recaptcha_type'            => env('RECAPTCHA_TYPE', 'score'),
+    'recaptcha_score_threshold' => (float) env('RECAPTCHA_SCORE_THRESHOLD', 0.5),
+    'recaptcha_project_id'      => env('RECAPTCHA_PROJECT_ID', ''),
+    // Google Cloud API key (not a secret key) — used to authenticate Enterprise Assessment API calls.
+    'recaptcha_api_key'         => env('RECAPTCHA_API_KEY', ''),
+
     'xendit' => [
         'webhook_token' => env('XENDIT_WEBHOOK_TOKEN'),
     ],
