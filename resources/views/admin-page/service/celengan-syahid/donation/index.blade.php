@@ -130,7 +130,7 @@
     :isSuperadmin="$isSuperadmin"
 >
     <x-slot name="leftButtons">
-        <a href="{{ route('admin.service.donation.create') }}" class="btn btn-custom-primary">
+        <a href="{{ route('admin.service.donation.create') }}" class="btn btn-custom-primary me-2">
             <i class="fa fa-plus me-1"></i> Add Donation
         </a>
         <a href="#" id="exportCsvBtn" class="btn btn-custom-primary" onclick="exportDonationsCsv(); return false;">
