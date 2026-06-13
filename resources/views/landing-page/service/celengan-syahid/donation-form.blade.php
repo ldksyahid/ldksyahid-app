@@ -58,6 +58,21 @@
             </div>
         </div>
 
+        {{-- ── Server-side validation errors ─────────────────── --}}
+        @if($errors->any())
+        <div class="dn-alert-error wow fadeInDown" data-wow-delay="0.05s">
+            <i class="fas fa-exclamation-circle"></i>
+            <div>
+                <strong>Terjadi kesalahan:</strong>
+                <ul class="mb-0 mt-1 ps-3">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        @endif
+
         {{-- ══════════════════════════════════════════════════
              FORM
              ══════════════════════════════════════════════════ --}}
@@ -225,8 +240,19 @@
                           rows="4"></textarea>
             </div>
 
-            {{-- ── reCAPTCHA Enterprise (score-based, invisible) ── --}}
-            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+            {{-- ── reCAPTCHA v2 Checkbox ───────────────────────── --}}
+            @if(config('services.recaptcha_enabled', true))
+            <div class="dn-captcha-wrap wow fadeInUp" data-wow-delay="0.18s">
+                <div class="dn-captcha-inner">
+                    <div class="g-recaptcha" data-sitekey="{{ config('recaptcha.api_site_key') }}"></div>
+                </div>
+                @error('g-recaptcha-response')
+                    <div style="color:#dc3545;font-size:.8rem;margin-top:.4rem;">
+                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                    </div>
+                @enderror
+            </div>
+            @endif
 
             {{-- ── Total + Submit ─────────────────────────────── --}}
             <div class="wow fadeInUp" data-wow-delay="0.2s" style="margin-top: 1.25rem;">

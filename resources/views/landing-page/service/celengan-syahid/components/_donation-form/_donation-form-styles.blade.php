@@ -277,6 +277,20 @@
 .dn-submit-btn:active { transform: translateY(0); }
 .dn-submit-btn:disabled { background: #e5e7eb; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; filter: none; }
 
+/* ── Server-side validation error alert ── */
+.dn-alert-error {
+    display: flex; align-items: flex-start; gap: 1rem;
+    background: #fff5f5; border: 1px solid #fecaca;
+    border-radius: 14px; padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem; color: #b91c1c;
+}
+.dn-alert-error i { font-size: 1.2rem; flex-shrink: 0; margin-top: .1rem; }
+.dn-alert-error strong { font-size: .9rem; }
+.dn-alert-error ul { font-size: .82rem; color: #ef4444; }
+[data-theme="dark"] .dn-alert-error {
+    background: rgba(220,38,38,.1); border-color: rgba(220,38,38,.3);
+}
+
 /* ── Deadline ended notice ── */
 .dn-ended-notice {
     display: flex; align-items: center; gap: 1rem;

@@ -57,31 +57,21 @@ class StoreDonationRequest extends FormRequest
         }
 
         return ['required', function ($_attribute, $value, $fail) {
-            $projectId = config('services.recaptcha_project_id', 'ukm-ldk-syahid');
-            $siteKey   = config('recaptcha.api_site_key');
-            $apiKey    = config('recaptcha.api_secret_key'); // Google Cloud API Key
-
             try {
-                $response = Http::withHeaders(['Content-Type' => 'application/json'])
-                    ->post("https://recaptchaenterprise.googleapis.com/v1/projects/{$projectId}/assessments?key={$apiKey}", [
-                        'event' => [
-                            'token'          => $value,
-                            'siteKey'        => $siteKey,
-                            'expectedAction' => 'donation',
-                        ],
-                    ]);
+                $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret'   => config('recaptcha.api_secret_key'),
+                    'response' => $value,
+                    'remoteip' => $this->ip(),
+                ]);
                 $result = $response->json() ?: [];
             } catch (\Throwable $e) {
-                Log::error('reCAPTCHA Enterprise verify exception: ' . $e->getMessage());
+                Log::error('reCAPTCHA verify exception: ' . $e->getMessage());
                 $result = [];
             }
 
             Log::info('reCAPTCHA verify result', ['result' => $result]);
 
-            $tokenValid = $result['tokenProperties']['valid'] ?? false;
-            $score      = $result['riskAnalysis']['score'] ?? 0;
-
-            if (!$tokenValid || $score < 0.3) {
+            if (empty($result['success'])) {
                 $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
             }
         }];
