@@ -265,7 +265,7 @@
                         <i class="fas fa-arrow-left"></i>
                         <span>Kembali</span>
                     </a>
-                    <button type="submit" class="dn-submit-btn" {{ $isDeadlinePassed ? 'disabled' : '' }}>
+                    <button type="submit" class="dn-submit-btn" data-original-text='<i class="fas fa-lock"></i> Lanjutkan Pembayaran' {{ $isDeadlinePassed ? 'disabled' : '' }}>
                         <i class="fas fa-lock"></i> Lanjutkan Pembayaran
                     </button>
                 </div>

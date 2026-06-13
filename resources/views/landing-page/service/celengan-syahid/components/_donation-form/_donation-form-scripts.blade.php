@@ -24,7 +24,16 @@
 (function () {
     'use strict';
 
-    var RECAPTCHA_ENABLED = {{ config('services.recaptcha_enabled', true) ? 'true' : 'false' }};
+    // Reset submit button if browser restores page from bfcache (Back navigation).
+    // Without this, the button stays disabled after the user navigates back.
+    window.addEventListener('pageshow', function (e) {
+        if (e.persisted) {
+            document.querySelectorAll('.dn-form [type="submit"]').forEach(function (btn) {
+                btn.disabled = false;
+                btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
+            });
+        }
+    });
 
     /* ── Rupiah formatter ────────────────────────────────────── */
     function formatRupiah(raw) {
@@ -123,6 +132,23 @@
                 }
             }
 
+            // Validate Select2 fields here — browsers skip hidden elements so
+            // checkValidity() alone misses them, causing premature button disable.
+            var select2Valid = true;
+            [$('#dn-domisili'), $('#dn-pekerjaan')].forEach(function ($sel) {
+                var $wrap = $sel.closest('.dn-select-wrap');
+                var $msg  = $wrap.next('.dn-invalid-msg');
+                if (!$sel.val()) {
+                    $wrap.addClass('is-invalid');
+                    $msg.show();
+                    select2Valid = false;
+                } else {
+                    $wrap.removeClass('is-invalid');
+                    $msg.hide();
+                }
+            });
+            if (!select2Valid) return;
+
             if (!form.checkValidity()) {
                 form.classList.add('was-validated');
                 return;
@@ -180,20 +206,5 @@ $(function () {
 
     $domisili.on('select2:select',  function () { clearSelectError($(this)); });
     $pekerjaan.on('select2:select', function () { clearSelectError($(this)); });
-
-    // Visual validation for Select2 fields on form submit
-    $('.dn-form').on('submit.dnS2', function () {
-        [$domisili, $pekerjaan].forEach(function ($sel) {
-            var $wrap = $sel.closest('.dn-select-wrap');
-            var $msg  = $wrap.next('.dn-invalid-msg');
-            if (!$sel.val()) {
-                $wrap.addClass('is-invalid');
-                $msg.show();
-            } else {
-                $wrap.removeClass('is-invalid');
-                $msg.hide();
-            }
-        });
-    });
 });
 </script>
