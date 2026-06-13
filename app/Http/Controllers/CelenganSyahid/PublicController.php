@@ -14,6 +14,7 @@ use App\Services\Fonnte;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -161,6 +162,36 @@ class PublicController extends Controller
         $campaign = Campaign::where('link', $request->input('linkcampaign'))->first();
         if (!$campaign) {
             abort(404, 'Campaign tidak ditemukan');
+        }
+
+        // Atomic idempotency guard — prevents double donation + double email/WA
+        // from duplicate POST (cached reCAPTCHA token, network retry, etc.).
+        // Cache::add() is atomic: returns false if key already exists.
+        $lockKey  = 'donation_submit_' . md5($request->input('email_donatur') . $campaign->id);
+        $acquired = Cache::add($lockKey, true, now()->addSeconds(30));
+
+        if (!$acquired) {
+            // Another request for the same email+campaign is in flight.
+            // Redirect to the most recent donation for this combination.
+            $recent = Donation::where('email_donatur', $request->input('email_donatur'))
+                ->where('campaign_id', $campaign->id)
+                ->where('created_at', '>=', now()->subSeconds(30))
+                ->latest()->first();
+
+            Log::info('storeDonationCampaign: duplicate submission blocked by cache lock', [
+                'donation_id' => $recent?->id,
+                'ip'          => $request->ip(),
+            ]);
+
+            if ($recent) {
+                return Redirect::route('service.celengansyahid.detail.donateNow.status', [
+                    'link' => $request->input('linkcampaign'),
+                    'id'   => $recent->id,
+                ]);
+            }
+
+            Alert::warning('Maaf!', 'Permintaan sedang diproses, harap tunggu sebentar.');
+            return Redirect::back();
         }
 
         try {

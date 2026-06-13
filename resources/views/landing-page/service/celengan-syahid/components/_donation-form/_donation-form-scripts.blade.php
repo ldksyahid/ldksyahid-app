@@ -197,15 +197,20 @@
 
             @if($captchaEnabled && $captchaType === 'score')
             // Score-based: fetch Enterprise token async, then submit.
-            // Re-enable button if token fetch fails so user can retry.
+            // tokenSubmitted guards against the .then() callback firing more
+            // than once (defensive — should not happen, but prevents double POST).
+            var tokenSubmitted = false;
             grecaptcha.enterprise.ready(function () {
                 grecaptcha.enterprise.execute('{{ $siteKey }}', { action: 'submit_donation' })
                     .then(function (token) {
+                        if (tokenSubmitted) return;
+                        tokenSubmitted = true;
                         var tokenEl = document.getElementById('dn-recaptcha-token');
                         if (tokenEl) tokenEl.value = token;
                         form.submit();
                     })
                     .catch(function () {
+                        formAlreadySubmitted = false;
                         if (btn) {
                             btn.disabled = false;
                             btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
