@@ -21,20 +21,13 @@
 /* ── Page wrapper ── */
 .dn-page { min-height: 100vh; position: relative; z-index: 1; }
 
-/* ── Hero image (full width, di luar container) ── */
-.dn-hero-wrap {
-    width: 100%;
-    overflow: hidden;
-    margin-bottom: 0;
-    line-height: 0;
-}
+/* ── Hero image (di dalam context card) ── */
 .dn-hero-img {
     width: 100%; display: block;
-    max-height: 460px; object-fit: cover; object-position: top center;
+    max-height: 340px; object-fit: cover; object-position: top center;
 }
 @media (max-width: 575.98px) {
-    .dn-hero-img { max-height: 220px; }
-    [data-theme="dark"] .dn-hero-wrap { background: #1a1f2e; }
+    .dn-hero-img { max-height: 200px; }
 }
 
 /* ================================================================
@@ -46,6 +39,8 @@
     box-shadow: var(--dn-shadow);
     overflow: hidden;
     margin-bottom: 1.5rem;
+}
+.dn-context-info {
     padding: 1.25rem 1.5rem;
 }
 .dn-context-info {

@@ -26,14 +26,8 @@
      ══════════════════════════════════════════════════ --}}
 @section('content')
 
-<section class="dn-page mt-5">
-
-    {{-- ── Campaign Hero Image (full width, di luar container) ── --}}
-    <div class="dn-hero-wrap wow fadeInUp" data-wow-delay="0.05s">
-        <img src="{{ $coverSrc }}" alt="{{ $data->judul }}" class="dn-hero-img">
-    </div>
-
-    <div class="container py-5" style="max-width: 720px;">
+<section class="dn-page py-5 mt-5">
+    <div class="container" style="max-width: 720px;">
 
         {{-- ── Deadline Ended Notice ───────────────────────────── --}}
         @if($isDeadlinePassed)
@@ -49,8 +43,9 @@
         </div>
         @endif
 
-        {{-- ── Campaign Context Header ─────────────────────────── --}}
-        <div class="dn-context-wrap wow fadeInUp" data-wow-delay="0.1s">
+        {{-- ── Campaign Hero Image + Context (satu card) ─────── --}}
+        <div class="dn-context-wrap wow fadeInUp" data-wow-delay="0.08s">
+            <img src="{{ $coverSrc }}" alt="{{ $data->judul }}" class="dn-hero-img">
             <div class="dn-context-info">
                 <span class="dn-context-label">
                     <i class="fas fa-heart me-1"></i> Donasi untuk
