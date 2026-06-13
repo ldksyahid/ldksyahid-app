@@ -17,7 +17,7 @@
 <section class="cs-page-section py-5 wow fadeIn mt-5" data-wow-delay="0.1s">
 
     {{-- ── Hero Jumbotron (Hadith type) ──────────────────────────── --}}
-    <x-hero-jumbotron type="quran">
+    <x-hero-jumbotron type="hadith">
         <div class="hero-slide">
             <img class="hero-image"
                  src="https://lh3.googleusercontent.com/d/13hUNUJ_oQhmBGMRx37dj380dOhlsKm7O"
