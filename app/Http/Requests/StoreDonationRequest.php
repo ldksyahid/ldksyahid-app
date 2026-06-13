@@ -97,9 +97,20 @@ class StoreDonationRequest extends FormRequest
 
         Log::info('reCAPTCHA Enterprise score result', ['result' => $result]);
 
-        $valid  = $result['tokenProperties']['valid']  ?? false;
-        $score  = $result['riskAnalysis']['score']     ?? 0.0;
-        $action = $result['tokenProperties']['action'] ?? '';
+        $valid         = $result['tokenProperties']['valid']         ?? false;
+        $invalidReason = $result['tokenProperties']['invalidReason'] ?? '';
+        $score         = $result['riskAnalysis']['score']            ?? 0.0;
+        $action        = $result['tokenProperties']['action']        ?? '';
+
+        // DUPE means the token was already used in a previous assessment that
+        // passed — the user is human. Allow it rather than blocking a retry
+        // caused by a server-side error on the first attempt.
+        if ($invalidReason === 'DUPE') {
+            Log::info('reCAPTCHA Enterprise: DUPE token accepted (prior assessment passed)', [
+                'ip' => $this->ip(),
+            ]);
+            return;
+        }
 
         if (!$valid || $action !== 'submit_donation' || $score < $threshold) {
             $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
