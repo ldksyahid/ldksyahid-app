@@ -1,13 +1,12 @@
 @if(config('services.recaptcha_enabled', true) && config('recaptcha.api_site_key'))
-<script src="https://www.google.com/recaptcha/enterprise.js?render={{ config('recaptcha.api_site_key') }}" async defer></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 @endif
 
 <script>
 (function () {
     'use strict';
 
-    var RECAPTCHA_SITE_KEY = '{{ config("recaptcha.api_site_key") }}';
-    var RECAPTCHA_ENABLED  = {{ config('services.recaptcha_enabled', true) ? 'true' : 'false' }};
+    var RECAPTCHA_ENABLED = {{ config('services.recaptcha_enabled', true) ? 'true' : 'false' }};
 
     /* ── Rupiah formatter ────────────────────────────────────── */
     function formatRupiah(raw) {
@@ -119,22 +118,8 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
             }
 
-            // Generate reCAPTCHA Enterprise token, then submit
-            function doSubmit() { form.submit(); }
-
-            if (RECAPTCHA_ENABLED && RECAPTCHA_SITE_KEY && window.grecaptcha && grecaptcha.enterprise) {
-                grecaptcha.enterprise.ready(function () {
-                    grecaptcha.enterprise.execute(RECAPTCHA_SITE_KEY, { action: 'donation' })
-                        .then(function (token) {
-                            var inp = document.getElementById('g-recaptcha-response');
-                            if (inp) inp.value = token;
-                            doSubmit();
-                        })
-                        .catch(function () { doSubmit(); });
-                });
-            } else {
-                doSubmit();
-            }
+            // Submit — token reCAPTCHA v2 sudah auto-terisi oleh checkbox widget
+            form.submit();
         });
     });
 
