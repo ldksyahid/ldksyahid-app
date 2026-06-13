@@ -246,7 +246,7 @@ class PublicController extends Controller
                 Log::error('storeDonationCampaign: Fonnte invoice failed: ' . $e->getMessage());
             }
             try {
-                Mail::to($request->input('email_donatur'))->send(new DonationInvoice($data));
+                Mail::mailer('gmail')->to($request->input('email_donatur'))->send(new DonationInvoice($data));
             } catch (\Throwable $e) {
                 Log::error('storeDonationCampaign: invoice email failed: ' . $e->getMessage());
             }
@@ -355,7 +355,8 @@ class PublicController extends Controller
                                 'campaign' => $donationData->campaign,
                             ])->setPaper('a4');
 
-                            Mail::to($donationData->email_donatur)
+                            Mail::mailer('gmail')
+                                ->to($donationData->email_donatur)
                                 ->send(new DonationSuccess($donationData, $pdf->output()));
                         } catch (\Exception $mailEx) {
                             Log::error('callbackDonation: email failed: ' . $mailEx->getMessage(), [

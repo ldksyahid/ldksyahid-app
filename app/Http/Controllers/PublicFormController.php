@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendSingleMailJob;
 use App\Mail\FormSubmissionConfirmation;
 use App\Models\forms\MsForm;
 use App\Models\forms\MsFormSetting;
@@ -12,6 +11,7 @@ use App\Services\DynamicFormGDriveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class PublicFormController extends Controller
 {
@@ -291,17 +291,24 @@ class PublicFormController extends Controller
             // 12. Increment form submission counter
             $form->incrementSubmissionCount();
 
-            // 13. Dispatch confirmation email
+            // 13. Send confirmation email directly via Gmail
             $sendConfirmEmail = (bool) $form->getSetting(MsFormSetting::KEY_SEND_CONFIRM_EMAIL, true);
             if ($sendConfirmEmail && !empty($respondentEmail)) {
-                $mailable = new FormSubmissionConfirmation(
-                    formTitle:      $form->title,
-                    respondentName: $respondentName,
-                    answers:        $answerMap,
-                    submittedAt:    $now->timezone('Asia/Jakarta')->format('d F Y, H:i') . ' WIB',
-                );
-
-                dispatch(new SendSingleMailJob($respondentEmail, $mailable));
+                try {
+                    Mail::mailer('gmail')
+                        ->to($respondentEmail)
+                        ->send(new FormSubmissionConfirmation(
+                            formTitle:      $form->title,
+                            respondentName: $respondentName,
+                            answers:        $answerMap,
+                            submittedAt:    $now->timezone('Asia/Jakarta')->format('d F Y, H:i') . ' WIB',
+                        ));
+                } catch (\Throwable $e) {
+                    Log::error('[PublicFormController] Failed to send confirmation email: ' . $e->getMessage(), [
+                        'form'  => $slug,
+                        'email' => $respondentEmail,
+                    ]);
+                }
             }
 
             return $this->successResponse($form, $request);

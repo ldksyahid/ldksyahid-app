@@ -30,10 +30,10 @@ class SubscriptionController extends Controller
             ], $result['status'] ?? 422);
         }
 
-        // Send subscribe confirmation email
+        // Send subscribe confirmation email via Gmail
         $isResubscribe = $result['is_resubscribe'] ?? false;
         try {
-            Mail::to($request->email)->send(new SubscribeConfirmation($request->email, $isResubscribe));
+            Mail::mailer('gmail')->to($request->email)->send(new SubscribeConfirmation($request->email, $isResubscribe));
         } catch (\Throwable $e) {
             Log::error('[SubscriptionController] Failed to send subscribe email', [
                 'email' => $request->email,
@@ -71,9 +71,9 @@ class SubscriptionController extends Controller
             ], $result['status'] ?? 422);
         }
 
-        // Send unsubscribe confirmation email
+        // Send unsubscribe confirmation email via Gmail
         try {
-            Mail::to($request->email)->send(new UnsubscribeConfirmation($request->email));
+            Mail::mailer('gmail')->to($request->email)->send(new UnsubscribeConfirmation($request->email));
         } catch (\Throwable $e) {
             Log::error('[SubscriptionController] Failed to send unsubscribe email', [
                 'email' => $request->email,
