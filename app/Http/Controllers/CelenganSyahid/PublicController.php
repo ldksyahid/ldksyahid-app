@@ -330,6 +330,12 @@ class PublicController extends Controller
     {
         $payload = request()->all();
 
+        Log::info('[Callback] received', [
+            'payload'      => $payload,
+            'content_type' => request()->header('Content-Type'),
+            'ip'           => request()->ip(),
+        ]);
+
         $transactionId = $payload['transaction_id'] ?? null;
         $statusId      = $payload['status_id'] ?? null;
 
@@ -337,16 +343,21 @@ class PublicController extends Controller
         // transaction_id. Acknowledge it with 200 (health-check) so the callback URL
         // validates — real callbacks always carry transaction_id + status_id.
         if (!$transactionId || $statusId === null) {
-            return response()->json(['message' => 'OK'], 200);
+            Log::info('[Callback] empty/test payload, acknowledging');
+            return response('1', 200)->header('Content-Type', 'text/plain');
         }
 
         // Signature check — lenient in DEV (so we can observe the real signature),
         // enforced only when env=live AND the enforce flag is on.
         $gateway = new BisaTopup();
         if (!$gateway->verifyCallbackSignature($payload)) {
+            Log::warning('[Callback] signature mismatch', [
+                'transaction_id' => $transactionId,
+                'received_sig'   => $payload['signature'] ?? null,
+            ]);
             if (config('services.bisatopup.env') === 'live'
                 && config('services.bisatopup.enforce_callback_signature', false)) {
-                return response()->json(['message' => 'Invalid signature'], 401);
+                return response('0', 401)->header('Content-Type', 'text/plain');
             }
         }
 
@@ -355,12 +366,14 @@ class PublicController extends Controller
         try {
             $donation = Donation::where('doc_no', $transactionId)->first();
             if (!$donation) {
-                return response()->json(['message' => 'Not found'], 404);
+                Log::warning('[Callback] donation not found', ['transaction_id' => $transactionId]);
+                return response('0', 404)->header('Content-Type', 'text/plain');
             }
 
             // Idempotency: once finalized as PAID, just acknowledge.
             if ($donation->payment_status === 'PAID') {
-                return response()->json(['message' => 'OK'], 200);
+                Log::info('[Callback] already PAID, idempotent ack', ['transaction_id' => $transactionId]);
+                return response('1', 200)->header('Content-Type', 'text/plain');
             }
 
             DB::transaction(function () use ($donation, $statusInternal, $statusId, $payload) {
@@ -371,6 +384,12 @@ class PublicController extends Controller
                     'metode_pembayaran' => $payload['payment'] ?? $donation->metode_pembayaran,
                 ]);
             });
+
+            Log::info('[Callback] status updated', [
+                'transaction_id' => $transactionId,
+                'status'         => $statusInternal,
+                'status_id'      => $statusId,
+            ]);
 
             if ($statusInternal === 'PAID') {
                 $donationData = Donation::with('campaign')->where('doc_no', $transactionId)->first();
@@ -404,13 +423,13 @@ class PublicController extends Controller
                 }
             }
         } catch (\Exception $e) {
-            Log::error('callbackDonation error: ' . $e->getMessage(), [
+            Log::error('[Callback] error: ' . $e->getMessage(), [
                 'transaction_id' => $transactionId,
             ]);
-            return response()->json(['message' => 'Internal Server Error'], 500);
+            return response('0', 500)->header('Content-Type', 'text/plain');
         }
 
-        return response()->json(['message' => 'OK'], 200);
+        return response('1', 200)->header('Content-Type', 'text/plain');
     }
 
     public function donationStatus($link, $id)
