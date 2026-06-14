@@ -172,11 +172,23 @@ class PublicController extends Controller
 
         if (!$acquired) {
             // Another request for the same email+campaign is in flight.
-            // Redirect to the most recent donation for this combination.
-            $recent = Donation::where('email_donatur', $request->input('email_donatur'))
-                ->where('campaign_id', $campaign->id)
-                ->where('created_at', '>=', now()->subSeconds(30))
-                ->latest()->first();
+            // The first request may still be writing to DB, so retry a few times
+            // before giving up — avoids the confusing warning when the donation IS
+            // being created but hasn't committed yet.
+            $recent = null;
+            for ($i = 0; $i < 4; $i++) {
+                $recent = Donation::where('email_donatur', $request->input('email_donatur'))
+                    ->where('campaign_id', $campaign->id)
+                    ->where('created_at', '>=', now()->subSeconds(30))
+                    ->latest()->first();
+                if ($recent) break;
+                usleep(250_000); // wait 250ms per retry (max ~1s total)
+            }
+
+            Log::info('storeDonationCampaign: duplicate submission blocked by cache lock', [
+                'donation_id' => $recent?->id,
+                'ip'          => $request->ip(),
+            ]);
 
             if ($recent) {
                 return Redirect::route('service.celengansyahid.detail.donateNow.status', [
@@ -185,8 +197,10 @@ class PublicController extends Controller
                 ]);
             }
 
-            Alert::warning('Maaf!', 'Permintaan sedang diproses, harap tunggu sebentar.');
-            return Redirect::back();
+            // Donation still not found after retries — redirect to campaign page
+            // (not the form) to prevent the user from submitting again.
+            Alert::warning('Maaf!', 'Donasi kamu sedang diproses. Silakan cek email atau whatsapp untuk status donasi.');
+            return Redirect::route('service.celengansyahid.detail', $request->input('linkcampaign'));
         }
 
         try {
@@ -248,6 +262,11 @@ class PublicController extends Controller
                 'link' => $request->input('linkcampaign'),
                 'id'   => $postDonation->id,
             ]);
+
+            // Strip /public/ prefix that appears on shared hosting where the web server
+            // root points to the project root instead of the Laravel public/ directory.
+            $appUrl    = rtrim(config('app.url'), '/');
+            $statusUrl = str_replace($appUrl . '/public/', $appUrl . '/', $statusUrl);
 
             // Simpan status URL sebagai payment_link untuk donasi QRIS
             $postDonation->updateQuietly(['payment_link' => $statusUrl]);

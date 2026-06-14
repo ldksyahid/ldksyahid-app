@@ -5,7 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -33,14 +32,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
-
-        // Force URL generator to use APP_URL as base, preventing /public/ prefix
-        // that appears when the web server root points to the project root instead
-        // of the Laravel public/ directory.
-        URL::forceRootUrl(config('app.url'));
-        if (str_starts_with(config('app.url'), 'https://')) {
-            URL::forceScheme('https');
-        }
 
         $this->app['queue']->addConnector('custom-database', function () {
             return new TrJobQueueConnector($this->app['db']);
