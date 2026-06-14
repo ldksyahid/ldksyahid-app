@@ -211,6 +211,8 @@ class PublicController extends Controller
             $total         = $jumlah_donasi + $adminFee;
             $expiredAt     = now()->addDay();
 
+            $callbackUrl = rtrim(config('app.url'), '/') . '/celengan-syahid/callback';
+
             $payload = [
                 'payment_id'        => $qrisPaymentId,
                 'username'          => config('services.bisatopup.username'),
@@ -225,6 +227,7 @@ class PublicController extends Controller
                 'customer_number'   => $request->input('no_telp_donatur'),
                 'customer_name'     => $request->input('nama_donatur'),
                 'customer_email'    => $request->input('email_donatur'),
+                'callback_url'      => $callbackUrl,
                 'item_details'      => [[
                     'item_id'          => $campaign->id,
                     'item_name'        => Str::limit($campaign->judul, 49, ''),
