@@ -489,25 +489,9 @@
             .catch(function () {});
     }
 
-    function openGifModal(target, anchorEl) {
+    function openGifModal(target) {
         activeMediaTarget = target;
         if (!gifModal) return;
-
-        // Desktop: always position below the anchor button; shrink height if needed
-        var dialog = gifModal.querySelector('.cmt-gif-dialog');
-        if (dialog && anchorEl && window.innerWidth >= 576) {
-            var rect  = anchorEl.getBoundingClientRect();
-            var dW    = Math.min(480, window.innerWidth - 20);
-            var left  = rect.left;
-            var top   = rect.bottom + 6;
-            if (left + dW > window.innerWidth - 10) left = window.innerWidth - dW - 10;
-            if (left < 10) left = 10;
-            var availH = window.innerHeight - top - 10;
-            var dH     = Math.min(500, Math.max(220, availH));
-            dialog.style.top    = top  + 'px';
-            dialog.style.left   = left + 'px';
-            dialog.style.height = dH   + 'px';
-        }
 
         gifModal.style.display = 'flex';
         gifModal.removeAttribute('aria-hidden');
@@ -648,7 +632,7 @@
         if (sharedFileInput) sharedFileInput.click();
     });
     delegate(section, '[data-action="gif"]', function (e, btn) {
-        openGifModal(btn.dataset.target, btn);
+        openGifModal(btn.dataset.target);
     });
     delegate(section, '.cmt-media-remove', function (e, btn) {
         clearMedia(btn.dataset.target);

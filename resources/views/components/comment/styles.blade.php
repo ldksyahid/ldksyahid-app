@@ -134,7 +134,7 @@
 }
 .cmt-item-avatar { flex-shrink: 0; padding-top: .2rem; }
 .cmt-item-body {
-    flex: 1; min-width: 0; background: #f8fafc; margin-top: 5px; margin-bottom: 5px;
+    flex: 1; min-width: 0; background: #fff; margin-top: 5px; margin-bottom: 5px;
     border-radius: .75rem; padding: .85rem 1rem; border: 1px solid #e2e8f0;
 }
 .cmt-item-header {
@@ -255,11 +255,11 @@
 }
 .cmt-reply-item .cmt-avatar-img,
 .cmt-reply-item .cmt-avatar-placeholder { width: 32px; height: 32px; font-size: .8rem; }
-.cmt-reply-item .cmt-item-body { background: #f1f5f9; }
+.cmt-reply-item .cmt-item-body { background: #f8fafc; }
 
 /* Level-2 replies */
 .cmt-replies .cmt-replies { padding-left: .5rem; border-left-color: rgba(0,167,157,.12); }
-.cmt-replies .cmt-replies .cmt-item-body { background: #eef2f7; }
+.cmt-replies .cmt-replies .cmt-item-body { background: #f1f5f9; }
 
 /* ── GIF Picker Modal ───────────────────────────────────────────── */
 .cmt-gif-modal {
@@ -276,16 +276,15 @@
     border-radius: 1rem 1rem 0 0; display: flex; flex-direction: column;
     overflow: hidden; box-shadow: 0 -4px 40px rgba(0,0,0,.2);
 }
-/* Desktop: dropdown anchored below the GIF button */
+/* Desktop: centered modal (fixed to viewport, doesn't follow scroll) */
 @media (min-width: 576px) {
-    .cmt-gif-modal  { align-items: flex-start; justify-content: flex-start; background: transparent; }
-    .cmt-gif-backdrop { background: transparent; backdrop-filter: none; }
+    .cmt-gif-modal  { align-items: center; justify-content: center; }
     .cmt-gif-dialog {
-        position: fixed;
-        width: min(480px, calc(100vw - 20px));
-        height: min(500px, 80vh);
+        position: relative; z-index: 1;
+        width: min(720px, calc(100vw - 40px));
+        height: min(580px, 85vh);
         border-radius: 1rem;
-        box-shadow: 0 8px 40px rgba(0,0,0,.25);
+        box-shadow: 0 8px 40px rgba(0,0,0,.3);
     }
 }
 
