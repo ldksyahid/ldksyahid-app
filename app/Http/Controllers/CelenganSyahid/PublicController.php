@@ -342,11 +342,17 @@ class PublicController extends Controller
         $transactionId = $payload['transaction_id'] ?? null;
         $statusId      = $payload['status_id'] ?? null;
 
-        // The BisaTopup dashboard "Test" button sends an empty/sample payload with no
-        // transaction_id. Acknowledge it with 200 (health-check) so the callback URL
-        // validates — real callbacks always carry transaction_id + status_id.
-        if (!$transactionId || $statusId === null) {
-            Log::info('[Callback] empty/test payload, acknowledging');
+        // BisaTopup "Test" button sends either:
+        //   (a) general callback: no transaction_id/status_id → empty payload
+        //   (b) payment gateway callback: transaction_id="TEST-XXX" + signature="testing"
+        // Both must return HTTP 200 / "1" so the dashboard shows green.
+        $isTest = !$transactionId
+            || $statusId === null
+            || str_starts_with((string) $transactionId, 'TEST-')
+            || ($payload['signature'] ?? '') === 'testing';
+
+        if ($isTest) {
+            Log::info('[Callback] test payload, acknowledging', ['transaction_id' => $transactionId]);
             return response('1', 200)->header('Content-Type', 'text/plain');
         }
 
