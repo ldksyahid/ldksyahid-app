@@ -5,6 +5,13 @@
     var section = document.getElementById('cmt-section');
     if (!section) return;
 
+    // Escape #photo stacking context (position:relative;z-index:1) so the backdrop
+    // can cover the navbar. Moving to body puts it in the root stacking context.
+    var gifModalEl = document.getElementById('cmt-gif-modal');
+    if (gifModalEl && gifModalEl.parentNode !== document.body) {
+        document.body.appendChild(gifModalEl);
+    }
+
     // ── Config from data attributes ──────────────────────────────────
     var TYPE       = section.dataset.type;
     var ID         = section.dataset.id;
