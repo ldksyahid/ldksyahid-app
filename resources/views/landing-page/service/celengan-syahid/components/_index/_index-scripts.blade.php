@@ -168,7 +168,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<div class="cs-bs-progress-wrap">' +
                     '<div class="cs-bs-progress-head">' +
                         '<span class="cs-bs-progress-pct">' + escHtml(percent) + '% tercapai</span>' +
-                        '<span class="cs-bs-progress-days' + (deadlinePassed ? ' ended' : '') + '">' + escHtml(days) + '</span>' +
+                        '<span class="cs-bs-progress-days' + (deadlinePassed ? ' ended' : '') + '">' +
+                            (!days || days === 'selesai'
+                                ? (deadlinePassed ? 'Berakhir' : 'Tanpa Batas')
+                                : (deadlinePassed ? 'Berakhir' : days + ' hari lagi')
+                            ) +
+                        '</span>' +
                     '</div>' +
                     '<div class="cs-bs-progress-track">' +
                         '<div class="cs-bs-progress-fill" style="width:' + Math.min(parseFloat(percent)||0, 100) + '%"></div>' +
