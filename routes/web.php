@@ -580,7 +580,7 @@ Route::middleware(['role:Superadmin'])
 
 // ======================================= DYNAMIC FORMS — ADMIN =======================================
 
-Route::middleware(['auth', 'role:Superadmin|HelperAdmin'])
+Route::middleware(['auth', 'role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEventMart|HelperSPAM|HelperMedia|HelperLetter'])
     ->prefix('/admin/forms')
     ->name('admin.forms.')
     ->group(function () {
