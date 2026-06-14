@@ -20,11 +20,6 @@ class StoreDonationRequest extends FormRequest
      */
     protected function failedValidation(Validator $validator)
     {
-        Log::warning('StoreDonationRequest validation failed', [
-            'errors' => $validator->errors()->toArray(),
-            'ip'     => $this->ip(),
-        ]);
-
         parent::failedValidation($validator);
     }
 
@@ -95,8 +90,6 @@ class StoreDonationRequest extends FormRequest
             return;
         }
 
-        Log::info('reCAPTCHA Enterprise score result', ['result' => $result]);
-
         $valid         = $result['tokenProperties']['valid']         ?? false;
         $invalidReason = $result['tokenProperties']['invalidReason'] ?? '';
         $score         = $result['riskAnalysis']['score']            ?? 0.0;
@@ -106,9 +99,6 @@ class StoreDonationRequest extends FormRequest
         // passed — the user is human. Allow it rather than blocking a retry
         // caused by a server-side error on the first attempt.
         if ($invalidReason === 'DUPE') {
-            Log::info('reCAPTCHA Enterprise: DUPE token accepted (prior assessment passed)', [
-                'ip' => $this->ip(),
-            ]);
             return;
         }
 
@@ -141,8 +131,6 @@ class StoreDonationRequest extends FormRequest
             $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
             return;
         }
-
-        Log::info('reCAPTCHA Enterprise checkbox result', ['result' => $result]);
 
         if (empty($result['tokenProperties']['valid'])) {
             $fail('Verifikasi Captcha gagal. Silakan coba lagi.');
