@@ -172,8 +172,9 @@
 
         {{-- Footer --}}
         <div class="cmt-gif-footer">
-            Powered by <img src="https://www.gstatic.com/images/branding/product/2x/giphy_40dp.png"
-                            alt="GIPHY" class="cmt-giphy-logo" height="16">
+            Powered by <img src="https://media.giphy.com/static/img/giphy_logo_mark_black.png"
+                            alt="GIPHY" class="cmt-giphy-logo" height="16"
+                            onerror="var s=document.createElement('strong');s.textContent='GIPHY';s.style.color='#00ff99';s.style.letterSpacing='.5px';this.replaceWith(s)">
         </div>
 
     </div>
