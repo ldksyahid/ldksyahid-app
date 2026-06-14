@@ -178,11 +178,6 @@ class PublicController extends Controller
                 ->where('created_at', '>=', now()->subSeconds(30))
                 ->latest()->first();
 
-            Log::info('storeDonationCampaign: duplicate submission blocked by cache lock', [
-                'donation_id' => $recent?->id,
-                'ip'          => $request->ip(),
-            ]);
-
             if ($recent) {
                 return Redirect::route('service.celengansyahid.detail.donateNow.status', [
                     'link' => $request->input('linkcampaign'),
@@ -282,13 +277,6 @@ class PublicController extends Controller
                 Log::error('storeDonationCampaign: invoice email failed: ' . $e->getMessage());
             }
 
-            Log::info('storeDonationCampaign: reCAPTCHA passed, redirecting to payment status', [
-                'donation_id' => $postDonation->id,
-                'campaign'    => $request->input('linkcampaign'),
-                'email'       => $request->input('email_donatur'),
-                'ip'          => $request->ip(),
-            ]);
-
             return Redirect::route('service.celengansyahid.detail.donateNow.status', [
                 'link' => $request->input('linkcampaign'),
                 'id'   => $postDonation->id,
@@ -323,10 +311,6 @@ class PublicController extends Controller
     {
         $payload = request()->all();
 
-        // Log the raw callback (incl. their signature) so the exact signature
-        // formula can be confirmed/reverse-engineered during DEV testing.
-        Log::info('[BisaTopup] callback received', $payload);
-
         $transactionId = $payload['transaction_id'] ?? null;
         $statusId      = $payload['status_id'] ?? null;
 
@@ -341,10 +325,6 @@ class PublicController extends Controller
         // enforced only when env=live AND the enforce flag is on.
         $gateway = new BisaTopup();
         if (!$gateway->verifyCallbackSignature($payload)) {
-            Log::warning('[BisaTopup] callback signature mismatch', [
-                'transaction_id'  => $transactionId,
-                'their_signature' => $payload['signature'] ?? null,
-            ]);
             if (config('services.bisatopup.env') === 'live'
                 && config('services.bisatopup.enforce_callback_signature', false)) {
                 return response()->json(['message' => 'Invalid signature'], 401);
