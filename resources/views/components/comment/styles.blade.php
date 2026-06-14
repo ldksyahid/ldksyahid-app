@@ -66,14 +66,17 @@
 .cmt-gif-open-btn:hover { background: rgba(0,167,157,.22) !important; }
 
 .cmt-gif-icon-wrap {
-    display: inline-flex; align-items: center; justify-content: center;
+    display: inline-flex; align-items: center; justify-content: center; gap: .2rem;
 }
 .cmt-gif-icon-text {
     font-size: .68rem; font-weight: 900; letter-spacing: .4px;
     color: #00a79d; font-family: inherit; line-height: 1;
 }
+.cmt-stk-text { font-weight: 700; opacity: .8; }
+.cmt-gif-sep { font-size: .65rem; color: #00a79d; opacity: .5; line-height: 1; }
 [data-theme="dark"] .cmt-gif-open-btn { background: rgba(0,167,157,.18) !important; }
 [data-theme="dark"] .cmt-gif-icon-text { color: #2dd4bf; }
+[data-theme="dark"] .cmt-gif-sep { color: #2dd4bf; }
 
 /* ── Media preview ──────────────────────────────────────────────── */
 .cmt-media-preview-wrap {

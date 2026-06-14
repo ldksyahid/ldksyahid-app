@@ -133,7 +133,7 @@
              + '" type="button" title="Tambah gambar"><i class="fas fa-image"></i></button>'
              + '<button class="cmt-media-btn cmt-gif-open-btn" data-action="gif" data-target="' + commentId
              + '" type="button" title="Tambah GIF / Stiker">'
-             + '<span class="cmt-gif-icon-wrap"><span class="cmt-gif-icon-text">GIF</span></span>'
+             + '<span class="cmt-gif-icon-wrap"><span class="cmt-gif-icon-text">GIF</span><span class="cmt-gif-sep">·</span><span class="cmt-gif-icon-text cmt-stk-text">Stiker</span></span>'
              + '</button>'
              + '</div>'
              + '<div class="cmt-form-controls">'
@@ -161,8 +161,8 @@
              + '<button class="cmt-media-btn" data-action="img" data-target="' + t
              + '" type="button" title="Tambah gambar"><i class="fas fa-image"></i></button>'
              + '<button class="cmt-media-btn cmt-gif-open-btn" data-action="gif" data-target="' + t
-             + '" type="button" title="Tambah GIF">'
-             + '<span class="cmt-gif-icon-wrap"><span class="cmt-gif-icon-text">GIF</span></span>'
+             + '" type="button" title="Tambah GIF / Stiker">'
+             + '<span class="cmt-gif-icon-wrap"><span class="cmt-gif-icon-text">GIF</span><span class="cmt-gif-sep">·</span><span class="cmt-gif-icon-text cmt-stk-text">Stiker</span></span>'
              + '</button>'
              + '</div>'
              + '<div class="cmt-form-controls">'
