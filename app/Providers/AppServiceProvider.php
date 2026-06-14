@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -32,6 +33,13 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
+
+        // Force URL generator to use APP_URL as root so Apache's internal rewrite
+        // of /*.* → public/*.* does not bleed /public/ into generated route URLs.
+        URL::forceRootUrl(config('app.url'));
+        if (str_starts_with(config('app.url'), 'https://')) {
+            URL::forceScheme('https');
+        }
 
         $this->app['queue']->addConnector('custom-database', function () {
             return new TrJobQueueConnector($this->app['db']);
