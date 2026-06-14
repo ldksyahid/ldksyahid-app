@@ -175,7 +175,7 @@
 
             ctx.fillStyle = '#9ca3af';
             ctx.font      = '11px Arial, sans-serif';
-            ctx.fillText('ldksyahid.ac.id  •  Celengan Syahid', W / 2, H - 22);
+            ctx.fillText('ldksyah.id  •  Celengan Syahid', W / 2, H - 22);
 
             callback(oc.toDataURL('image/png'));
         }
