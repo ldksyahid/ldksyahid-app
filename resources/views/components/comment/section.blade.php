@@ -84,6 +84,8 @@
                             data-target="main" type="button" title="Tambah GIF / Stiker">
                         <span class="cmt-gif-icon-wrap">
                             <span class="cmt-gif-icon-text">GIF</span>
+                            <span class="cmt-gif-sep">·</span>
+                            <span class="cmt-gif-icon-text cmt-stk-text">Stiker</span>
                         </span>
                     </button>
                 </div>
