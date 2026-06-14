@@ -134,7 +134,6 @@
             @if($isPaid)
             <div id="ds-actions" class="ds-action-wrap two-col">
                 <a href="{{ route('service.celengansyahid.savePayment', ['link' => $campaign->link, 'id' => $data->id]) }}"
-                   target="_blank"
                    class="ds-btn ds-btn-success">
                     <i class="fas fa-download"></i> Simpan Bukti
                 </a>

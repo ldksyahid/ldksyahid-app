@@ -299,7 +299,7 @@
 
             actions.className = 'ds-action-wrap two-col';
             actions.innerHTML =
-                '<a href="' + SAVE_URL + '" target="_blank" class="ds-btn ds-btn-success">' +
+                '<a href="' + SAVE_URL + '" class="ds-btn ds-btn-success">' +
                     '<i class="fas fa-download"></i> Simpan Bukti' +
                 '</a>' +
                 '<a href="' + HOME_URL + '" class="ds-btn ds-btn-outline">' +

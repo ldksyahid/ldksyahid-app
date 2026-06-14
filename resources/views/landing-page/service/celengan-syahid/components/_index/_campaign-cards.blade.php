@@ -231,7 +231,13 @@
                     </div>
                     <div class="cs-m-stats">
                         <span class="cs-m-collected">{{ LFC::formatRupiah($donationTotal) }}</span>
-                        <span class="cs-m-days {{ $isDeadlinePassed ? 'cs-m-ended' : '' }}">{{ $daysLeft }}</span>
+                        @if(!$campaign->deadline)
+                            <span class="cs-m-days">Tanpa Batas</span>
+                        @elseif($isDeadlinePassed)
+                            <span class="cs-m-days cs-m-ended">Berakhir</span>
+                        @else
+                            <span class="cs-m-days"><i class="far fa-clock" style="font-size:.65rem;margin-right:2px"></i>{{ $daysLeft }} hari lagi</span>
+                        @endif
                     </div>
                     <span class="cs-m-hint"><i class="fas fa-hand-pointer"></i> Lihat detail</span>
                 </div>

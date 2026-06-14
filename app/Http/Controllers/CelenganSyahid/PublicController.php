@@ -471,6 +471,6 @@ class PublicController extends Controller
         $campaign = $donation->campaign;
 
         $pdf = Pdf::loadView('print-request.donation-proof', compact('donation', 'campaign'));
-        return $pdf->setPaper('a4')->stream('Bukti Pembayaran Donasi - ' . $donation->id . '.pdf');
+        return $pdf->setPaper('a4')->download('Bukti Pembayaran Donasi - ' . $donation->id . '.pdf');
     }
 }
