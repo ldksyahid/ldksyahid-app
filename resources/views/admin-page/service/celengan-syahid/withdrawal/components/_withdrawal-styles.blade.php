@@ -228,21 +228,21 @@ html.dark-mode .form-control-plaintext { color: #e5e7eb; }
 html.dark-mode .form-control,
 html.dark-mode .form-select,
 html.dark-mode .input-group-text {
-    background-color: #374151;
-    border-color: #4b5563;
-    color: #e5e7eb;
+    background-color: #263244;
+    border-color: #334155;
+    color: #e2e8f0;
 }
-html.dark-mode .form-control::placeholder { color: #6b7280; }
+html.dark-mode .form-control::placeholder { color: #64748b; }
 html.dark-mode .form-control[readonly] {
-    background-color: #2d3748;
-    color: #9ca3af;
+    background-color: #1e2a3b;
+    color: #94a3b8;
 }
 html.dark-mode .form-control:focus,
 html.dark-mode .form-select:focus {
     border-color: #2dd4bf;
-    box-shadow: 0 0 0 .2rem rgba(45,212,191,.2);
-    background-color: #374151;
-    color: #e5e7eb;
+    box-shadow: 0 0 0 .2rem rgba(45,212,191,.15);
+    background-color: #263244;
+    color: #e2e8f0;
 }
 html.dark-mode .balance-highlight { color: #4ade80; }
 html.dark-mode .amount-net { color: #4ade80; }
@@ -302,28 +302,30 @@ html.dark-mode .card.border-0 { border: none !important; }
 
 /* Select2 dark mode */
 html.dark-mode .select2-container .select2-selection--single {
-    background-color: #374151;
-    border-color: #4b5563;
-    color: #e5e7eb;
+    background-color: #263244;
+    border-color: #334155;
+    color: #e2e8f0;
 }
 html.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
-    color: #e5e7eb !important;
+    color: #e2e8f0 !important;
 }
 html.dark-mode .select2-dropdown {
-    background-color: #1f2937;
-    border-color: #4b5563;
+    background-color: #1a2535;
+    border-color: #334155;
 }
 html.dark-mode .select2-container--default .select2-search--dropdown .select2-search__field {
-    background-color: #374151 !important;
-    border-color: #4b5563 !important;
-    color: #e5e7eb !important;
+    background-color: #263244 !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
 }
 html.dark-mode .select2-container--default .select2-results__option {
-    color: #e5e7eb;
-    border-bottom-color: rgba(255,255,255,.06);
+    color: #e2e8f0;
+    border-bottom-color: rgba(255,255,255,.05);
+    background-color: #1a2535;
 }
 html.dark-mode .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: #008b84 !important;
+    color: #fff !important;
 }
 html.dark-mode .select2-container--default .select2-results__option[aria-selected="true"] {
     background-color: rgba(0,167,157,.2) !important;

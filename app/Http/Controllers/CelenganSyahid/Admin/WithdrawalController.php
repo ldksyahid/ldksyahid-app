@@ -79,9 +79,14 @@ class WithdrawalController extends Controller
 
         $balance  = $campaign ? $campaign->getBalanceSummary() : null;
 
-        $bankList = Cache::remember('bisabiller_bank_list', 3600, function () {
-            return (new BisaTopup())->bankList();
-        });
+        // Do not persist an empty list — a failed API call should not block future attempts.
+        $bankList = Cache::get('bisabiller_bank_list', []);
+        if (empty($bankList)) {
+            $bankList = (new BisaTopup())->bankList();
+            if (!empty($bankList)) {
+                Cache::put('bisabiller_bank_list', $bankList, 3600);
+            }
+        }
 
         return view('admin-page.service.celengan-syahid.withdrawal.create', [
             'campaigns' => $campaigns,
