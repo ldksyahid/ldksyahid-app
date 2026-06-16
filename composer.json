@@ -7,6 +7,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "ashallendesign/short-url": "^5.2",
+        "bacon/bacon-qr-code": "^3.1",
         "barryvdh/laravel-dompdf": "^2.0",
         "biscolab/laravel-recaptcha": "^6.0",
         "dompdf/dompdf": "^2.0",
@@ -24,6 +25,7 @@
         "masbug/flysystem-google-drive-ext": "^1.0.0",
         "mydnic/laravel-subscribers": "^1.8",
         "nao-pon/flysystem-google-drive": "~1.1",
+        "pragmarx/google2fa": "^9.0",
         "realrashid/sweet-alert": "^5.1",
         "spatie/laravel-permission": "^5.9",
         "symfony/process": "^5.4",
