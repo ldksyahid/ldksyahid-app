@@ -27,6 +27,7 @@ use App\Http\Controllers\CelenganSyahid\Admin\DashboardController as CelsyahidDa
 use App\Http\Controllers\CelenganSyahid\Admin\CampaignController as CelsyahidCampaignController;
 use App\Http\Controllers\CelenganSyahid\Admin\DonationController as CelsyahidDonationController;
 use App\Http\Controllers\CelenganSyahid\Admin\AuditLogController as CelsyahidAuditLogController;
+use App\Http\Controllers\CelenganSyahid\Admin\WithdrawalController as CelsyahidWithdrawalController;
 use App\Http\Controllers\FinanceReportController;
 use App\Http\Controllers\MsKTALDKSyahidController;
 use App\Http\Controllers\ReportController;
@@ -235,6 +236,7 @@ Route::middleware('throttle:30,1')->post('/celengan-syahid/donasi', [CelsyahidPu
 
 // Payment gateway webhook: max 120 callbacks/minute (gateway retries are frequent)
 Route::middleware('throttle:120,1')->post('/celengan-syahid/callback', [CelsyahidPublicController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+Route::middleware('throttle:60,1')->post('/celengan-syahid/disbursement-callback', [CelsyahidWithdrawalController::class, 'callback'])->name('celsyahid.disbursement.callback');
 
 /* --- 301 redirects from old URLs (celengansyahid) to new URLs (celengan-syahid) --- */
 Route::permanentRedirect('/celengansyahid', '/celengan-syahid');
@@ -494,6 +496,21 @@ Route::get('/admin/celengan-syahid/donations/create', [CelsyahidDonationControll
 Route::post('/admin/celengan-syahid/donations', [CelsyahidDonationController::class, 'storeAdminDonation'])->name('admin.service.donation.store')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::get('/admin/celengan-syahid/donation/{id}/edit', [CelsyahidDonationController::class, 'editAdminDonation'])->name('admin.service.donation.edit')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::put('/admin/celengan-syahid/donation/{id}', [CelsyahidDonationController::class, 'updateAdminDonation'])->name('admin.service.donation.update')->middleware(['role:Superadmin|HelperCelsyahid']);
+
+// Admin routes — Celengan Syahid Finance (campaign finance page)
+Route::get('/admin/celengan-syahid/campaign/{id}/finance', [CelsyahidCampaignController::class, 'financeAdminCampaign'])->name('admin.celsyahid.campaign.finance')->middleware(['role:Superadmin|HelperCelsyahid']);
+
+// Admin routes — Celengan Syahid Withdrawal (read: both roles, write: Superadmin only)
+// Static paths first (before {id} wildcard)
+Route::get('/admin/celengan-syahid/withdrawals', [CelsyahidWithdrawalController::class, 'index'])->name('admin.celsyahid.withdrawal.index')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::get('/admin/celengan-syahid/withdrawal/balance', [CelsyahidWithdrawalController::class, 'balance'])->name('admin.celsyahid.withdrawal.balance')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::get('/admin/celengan-syahid/withdrawal/create', [CelsyahidWithdrawalController::class, 'create'])->name('admin.celsyahid.withdrawal.create')->middleware(['role:Superadmin']);
+Route::post('/admin/celengan-syahid/withdrawal/inquiry', [CelsyahidWithdrawalController::class, 'inquiry'])->name('admin.celsyahid.withdrawal.inquiry')->middleware(['role:Superadmin']);
+Route::post('/admin/celengan-syahid/withdrawal', [CelsyahidWithdrawalController::class, 'store'])->name('admin.celsyahid.withdrawal.store')->middleware(['role:Superadmin']);
+// Wildcard {id} after static paths
+Route::get('/admin/celengan-syahid/withdrawal/{id}', [CelsyahidWithdrawalController::class, 'show'])->name('admin.celsyahid.withdrawal.show')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::get('/admin/celengan-syahid/withdrawal/{id}/confirm', [CelsyahidWithdrawalController::class, 'confirm'])->name('admin.celsyahid.withdrawal.confirm')->middleware(['role:Superadmin']);
+Route::post('/admin/celengan-syahid/withdrawal/{id}/execute', [CelsyahidWithdrawalController::class, 'execute'])->name('admin.celsyahid.withdrawal.execute')->middleware(['role:Superadmin']);
 
 // Admin routes — Celengan Syahid audit log (Superadmin only)
 Route::get('/admin/celengan-syahid/audit-logs', [CelsyahidAuditLogController::class, 'indexAuditLog'])->name('admin.service.index.auditlog')->middleware(['role:Superadmin']);

@@ -124,6 +124,113 @@ class BisaTopup
     }
 
     /**
+     * Verify a bank account before disbursement.
+     * POST /api/transfer/inquiry → { data.account_holder, data.fee }
+     */
+    public function inquiryBank(string $bankCode, string $accountNumber): ?array
+    {
+        $token = $this->token();
+        if (!$token) return null;
+
+        try {
+            $res = Http::withToken($token)->acceptJson()
+                ->post($this->baseUrl() . '/api/transfer/inquiry', [
+                    'bank_code'      => $bankCode,
+                    'account_number' => $accountNumber,
+                ]);
+
+            Log::info('[BisaTopup] inquiryBank', [
+                'bank_code' => $bankCode,
+                'account'   => $accountNumber,
+                'status'    => $res->status(),
+                'body'      => $res->body(),
+            ]);
+
+            return $res->failed() ? null : $res->json();
+        } catch (\Throwable $e) {
+            Log::error('[BisaTopup] inquiryBank exception: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Execute a bank transfer / disbursement.
+     * POST /api/transfer/disburstment
+     */
+    public function disburse(array $payload): ?array
+    {
+        $token = $this->token();
+        if (!$token) return null;
+
+        try {
+            Log::info('[BisaTopup] disburse request', [
+                'reff_id'        => $payload['reff_id'] ?? null,
+                'bank_code'      => $payload['bank_code'] ?? null,
+                'account_number' => $payload['account_number'] ?? null,
+                'amount'         => $payload['amount'] ?? null,
+            ]);
+
+            $res = Http::withToken($token)->acceptJson()
+                ->post($this->baseUrl() . '/api/transfer/disburstment', $payload);
+
+            Log::info('[BisaTopup] disburse response', [
+                'reff_id' => $payload['reff_id'] ?? null,
+                'status'  => $res->status(),
+                'body'    => $res->body(),
+            ]);
+
+            return $res->failed() ? null : $res->json();
+        } catch (\Throwable $e) {
+            Log::error('[BisaTopup] disburse exception: ' . $e->getMessage(), [
+                'reff_id' => $payload['reff_id'] ?? null,
+            ]);
+            return null;
+        }
+    }
+
+    /**
+     * Get the current Bisabiller wallet balance.
+     * GET /api/account-info → data.wallet.jumlah
+     */
+    public function walletBalance(): ?int
+    {
+        $token = $this->token();
+        if (!$token) return null;
+
+        try {
+            $res = Http::withToken($token)->acceptJson()
+                ->get($this->baseUrl() . '/api/account-info');
+
+            return $res->ok()
+                ? (int) data_get($res->json(), 'data.wallet.jumlah')
+                : null;
+        } catch (\Throwable $e) {
+            Log::error('[BisaTopup] walletBalance exception: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Get bank list for disbursement (transfer).
+     * GET /api/transfer/bank-list
+     */
+    public function bankList(): array
+    {
+        $token = $this->token();
+        if (!$token) return [];
+
+        try {
+            $res = Http::withToken($token)->acceptJson()
+                ->get($this->baseUrl() . '/api/transfer/bank-list');
+
+            return $res->ok() ? ($res->json()['data'] ?? []) : [];
+        } catch (\Throwable $e) {
+            Log::error('[BisaTopup] bankList exception: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
      * Signature callback: sha256(username + transaction_id)
      */
     public function verifyCallbackSignature(array $data): bool

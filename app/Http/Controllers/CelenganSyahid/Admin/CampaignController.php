@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\LibraryFunctionController as LFC;
 use App\Models\Campaign;
 use App\Models\CelsyahidAuditLog;
+use App\Models\Withdrawal;
+use App\Services\BisaTopup;
 use App\Services\GoogleDrive;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Laravolt\Indonesia\Models\City;
@@ -157,6 +160,29 @@ class CampaignController extends Controller
             'data'     => $data,
             'title'    => 'Celengan Syahid',
             'province' => $province,
+        ]);
+    }
+
+    public function financeAdminCampaign(string $id)
+    {
+        $campaign = Campaign::findOrFail($id);
+        $balance  = $campaign->getBalanceSummary();
+
+        $withdrawals = Withdrawal::where('campaign_id', $id)
+            ->with('creator')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
+        $bisabillerBalance = Cache::remember('bisabiller_wallet_balance', 300, function () {
+            return (new BisaTopup())->walletBalance();
+        });
+
+        return view('admin-page.service.celengan-syahid.campaign.finance', [
+            'campaign'          => $campaign,
+            'balance'           => $balance,
+            'withdrawals'       => $withdrawals,
+            'bisabillerBalance' => $bisabillerBalance,
+            'title'             => 'Celengan Syahid',
         ]);
     }
 

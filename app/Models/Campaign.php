@@ -32,6 +32,41 @@ class Campaign extends Model
         return $this->hasMany(Donation::class, 'campaign_id');
     }
 
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class, 'campaign_id');
+    }
+
+    public function getBalanceSummary(): array
+    {
+        $qrisPaid = Donation::where('campaign_id', $this->id)
+            ->where('gateway', 'bisatopup')
+            ->where('payment_status', 'PAID')
+            ->sum('jumlah_donasi');
+
+        $manualPaid = Donation::where('campaign_id', $this->id)
+            ->where('gateway', 'manual')
+            ->where('payment_status', 'PAID')
+            ->sum('jumlah_donasi');
+
+        $totalWithdrawn = Withdrawal::where('campaign_id', $this->id)
+            ->where('status', 'COMPLETED')
+            ->sum('amount');
+
+        $pendingWithdrawal = Withdrawal::where('campaign_id', $this->id)
+            ->where('status', 'PENDING')
+            ->sum('amount');
+
+        return [
+            'qris_paid'          => (int) $qrisPaid,
+            'manual_paid'        => (int) $manualPaid,
+            'total_paid'         => (int) ($qrisPaid + $manualPaid),
+            'total_withdrawn'    => (int) $totalWithdrawn,
+            'pending_withdrawal' => (int) $pendingWithdrawal,
+            'available'          => (int) ($qrisPaid - $totalWithdrawn - $pendingWithdrawal),
+        ];
+    }
+
     /* ================================================================
        TABLE CONFIG & OPTIONS
        ================================================================ */
@@ -53,6 +88,17 @@ class Campaign extends Model
                 'view'   => ['enabled' => true, 'route' => 'admin.service.preview.campaign', 'routeKey' => 'id'],
                 'edit'   => ['enabled' => true, 'type' => 'link', 'route' => 'admin.service.edit.campaign', 'routeKey' => 'id'],
                 'delete' => ['enabled' => true, 'btnClass' => 'delete-campaign-btn'],
+                'custom' => [
+                    [
+                        'enabled'  => true,
+                        'type'     => 'link',
+                        'route'    => 'admin.celsyahid.campaign.finance',
+                        'routeKey' => 'id',
+                        'class'    => 'btn-custom-primary',
+                        'icon'     => 'fa-wallet',
+                        'title'    => 'Finance',
+                    ],
+                ],
             ],
         ];
     }
