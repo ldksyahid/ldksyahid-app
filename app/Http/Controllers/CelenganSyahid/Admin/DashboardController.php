@@ -3,14 +3,60 @@
 namespace App\Http\Controllers\CelenganSyahid\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Campaign;
 use App\Models\Donation;
+use App\Models\Withdrawal;
 use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
     public function dashboardCelenganSyahid()
     {
-        return view('admin-page.service.celengan-syahid.dashboard.index', ['title' => 'Celengan Syahid']);
+        $campaigns = Cache::remember('celsyahid_campaign_summary', 300, function () {
+            // Aggregate per-campaign totals in 3 queries (no N+1)
+            $paidByGateway = Donation::where('payment_status', 'PAID')
+                ->selectRaw('campaign_id, gateway, SUM(jumlah_donasi) as total')
+                ->groupBy('campaign_id', 'gateway')
+                ->get()
+                ->groupBy('campaign_id');
+
+            $withdrawnMap = Withdrawal::where('status', 'COMPLETED')
+                ->selectRaw('campaign_id, SUM(amount) as total')
+                ->groupBy('campaign_id')
+                ->pluck('total', 'campaign_id');
+
+            return Campaign::orderBy('created_at', 'desc')
+                ->get(['id', 'judul', 'kategori', 'target_biaya', 'deadline', 'status'])
+                ->map(function ($c) use ($paidByGateway, $withdrawnMap) {
+                    $rows      = $paidByGateway->get($c->id, collect());
+                    $qrisPaid  = (int) ($rows->firstWhere('gateway', 'bisatopup')->total ?? 0);
+                    $manualPaid= (int) ($rows->firstWhere('gateway', 'manual')->total ?? 0);
+                    $totalPaid = $qrisPaid + $manualPaid;
+                    $withdrawn = (int) ($withdrawnMap[$c->id] ?? 0);
+                    $target    = (int) $c->target_biaya;
+                    $pct       = $target > 0 ? min(100, round($totalPaid / $target * 100, 1)) : 0;
+
+                    return [
+                        'id'          => $c->id,
+                        'judul'       => $c->judul,
+                        'kategori'    => $c->kategori,
+                        'target'      => $target,
+                        'total_paid'  => $totalPaid,
+                        'qris_paid'   => $qrisPaid,
+                        'manual_paid' => $manualPaid,
+                        'withdrawn'   => $withdrawn,
+                        'available'   => $totalPaid - $withdrawn,
+                        'pct'         => $pct,
+                        'deadline'    => $c->deadline,
+                        'status'      => $c->status,
+                    ];
+                });
+        });
+
+        return view('admin-page.service.celengan-syahid.dashboard.index', [
+            'title'     => 'Celengan Syahid',
+            'campaigns' => $campaigns,
+        ]);
     }
 
     /**

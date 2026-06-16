@@ -87,7 +87,12 @@ class Campaign extends Model
             'actions' => [
                 'view'   => ['enabled' => true, 'route' => 'admin.service.preview.campaign', 'routeKey' => 'id'],
                 'edit'   => ['enabled' => true, 'type' => 'link', 'route' => 'admin.service.edit.campaign', 'routeKey' => 'id'],
-                'delete' => ['enabled' => true, 'btnClass' => 'delete-campaign-btn'],
+                'delete' => [
+                    'enabled'                => true,
+                    'btnClass'               => 'delete-campaign-btn',
+                    'disabledConditionField' => 'has_donations',
+                    'disabledConditionTitle' => 'Cannot delete: this campaign already has donations',
+                ],
                 'custom' => [
                     [
                         'enabled'  => true,
@@ -170,7 +175,11 @@ class Campaign extends Model
                         : 'created_at';
         $sortOrder = $request->input('sort_order', 'desc') === 'asc' ? 'asc' : 'desc';
 
-        return $query->orderBy($sortBy, $sortOrder)->paginate(15)->appends($request->query());
+        return $query
+            ->withCount('donation as donation_count')
+            ->orderBy($sortBy, $sortOrder)
+            ->paginate(15)
+            ->appends($request->query());
     }
 
     public static function getDataDonationCampaignByLink(string $link)

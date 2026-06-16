@@ -55,6 +55,7 @@
 
         {{-- Superadmin Sidebar --}}
         @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
+            @php $twoFaAllowed = in_array(auth()->user()->email ?? '', config('services.two_fa.allowed_users', [])); @endphp
             <div class="navbar-nav w-100">
                 <a href="/admin/dashboard" class="nav-item nav-link {{ $isActive('admin/dashboard') ? 'active' : '' }}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="/admin/user" class="nav-item nav-link {{ $isActive('admin/user') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>User</a>
@@ -122,6 +123,9 @@
                 </div>
                 <a href="/admin/job-queue-log" class="nav-item nav-link {{ $isActive('admin/job-queue-log') ? 'active' : '' }}"><i class="fas fa-stream me-2"></i>Job Queue Log</a>
                 <a href="/admin/setting" class="nav-item nav-link {{ $isActive('admin/setting') ? 'active' : '' }}"><i class="fas fa-cog me-2"></i>Setting</a>
+                @if($twoFaAllowed)
+                <a href="{{ route('admin.security.2fa') }}" class="nav-item nav-link {{ $isActive('admin/security/2fa*') ? 'active' : '' }}"><i class="fas fa-user-shield me-2"></i>2FA Security</a>
+                @endif
             </div>
 
         {{-- HelperAdmin Sidebar --}}

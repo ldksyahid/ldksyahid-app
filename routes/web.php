@@ -40,6 +40,7 @@ use App\Http\Controllers\FonnteWebhookController;
 use App\Http\Controllers\Admin\AdminFormController;
 use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\TwoFactorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -514,6 +515,19 @@ Route::post('/admin/celengan-syahid/withdrawal/{id}/execute', [CelsyahidWithdraw
 
 // Admin routes — Celengan Syahid audit log (Superadmin only)
 Route::get('/admin/celengan-syahid/audit-logs', [CelsyahidAuditLogController::class, 'indexAuditLog'])->name('admin.service.index.auditlog')->middleware(['role:Superadmin']);
+
+// Balance report (Superadmin + HelperCelsyahid)
+Route::get('/admin/celengan-syahid/balance-report', [CelsyahidWithdrawalController::class, 'balanceReport'])->name('admin.celsyahid.balance.report')->middleware(['role:Superadmin|HelperCelsyahid']);
+
+// 2FA Security — access guarded by TwoFaHelper::isAllowed() inside each method
+Route::middleware(['auth'])->prefix('/admin/security')->group(function () {
+    Route::get('/2fa', [TwoFactorController::class, 'showSetup'])->name('admin.security.2fa');
+    Route::post('/2fa/enable', [TwoFactorController::class, 'enable'])->name('admin.security.2fa.enable');
+    Route::post('/2fa/disable', [TwoFactorController::class, 'disable'])->name('admin.security.2fa.disable');
+    Route::post('/2fa/verify', [TwoFactorController::class, 'verify'])->name('admin.security.2fa.verify');
+    Route::get('/2fa/users', [TwoFactorController::class, 'listUsers'])->name('admin.security.2fa.users');
+    Route::post('/2fa/users/{id}/revoke', [TwoFactorController::class, 'forceRevoke'])->name('admin.security.2fa.revoke');
+});
 
 // 301 redirect from old admin URLs (admin/service/celengansyahid/*) to new URLs (admin/celengan-syahid/*)
 Route::get('/admin/service/celengansyahid/{path?}', fn ($path = null) => redirect('/admin/celengan-syahid' . ($path ? '/' . $path : ''), 301))

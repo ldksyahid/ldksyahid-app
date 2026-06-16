@@ -39,6 +39,33 @@
                             Auto-refreshed · Last updated: <span id="bisabiller-balance-refreshed">{{ now()->format('H:i') }}</span>
                         </div>
                     </div>
+                    @if($bisabillerBalance !== null)
+                    @php
+                        $dbExp = \App\Models\Donation::where('gateway','bisatopup')->where('payment_status','PAID')->sum('jumlah_donasi')
+                            - \App\Models\Donation::where('gateway','bisatopup')->where('payment_status','PAID')->sum('biaya_admin')
+                            - \App\Models\Withdrawal::where('status','COMPLETED')->sum('amount');
+                        $disc2 = $bisabillerBalance - $dbExp;
+                        $discT2 = config('services.two_fa.discrepancy_threshold', 50000);
+                    @endphp
+                    <div class="mt-2 d-flex align-items-center gap-2 flex-wrap">
+                        @if($disc2 < 0)
+                            <span class="badge bg-danger">
+                                <i class="fas fa-exclamation-circle me-1"></i>Deficit Rp {{ number_format(abs($disc2), 0, ',', '.') }}
+                            </span>
+                        @elseif(abs($disc2) <= $discT2)
+                            <span class="badge bg-success">
+                                <i class="fas fa-check-circle me-1"></i>Balance Normal
+                            </span>
+                        @else
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-exclamation-triangle me-1"></i>Gap Rp {{ number_format(abs($disc2), 0, ',', '.') }} — Needs Review
+                            </span>
+                        @endif
+                        <a href="{{ route('admin.celsyahid.balance.report') }}" class="btn-balance-report">
+                            <i class="fas fa-balance-scale me-1"></i> Balance Report
+                        </a>
+                    </div>
+                    @endif
                     <div class="mt-2">
                         <small class="text-muted">
                             <i class="fas fa-circle-info me-1"></i>

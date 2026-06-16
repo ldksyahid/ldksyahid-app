@@ -294,16 +294,22 @@
                 {{-- Delete Button --}}
                 @if(isset($actions['delete']) && $actions['delete']['enabled'])
                     @php
-                        $isDeleteProtected  = isset($actions['delete']['protectedId']) && $item->{$idKey} == $actions['delete']['protectedId'];
-                        $isSuperadminOnly   = ($actions['delete']['superadminOnly'] ?? false) && !$isSuperadmin;
-                        $isOwnerRestricted  = $deleteOwnerField && $currentUser && $item->{$deleteOwnerField} !== $currentUser->{$deleteOwnerCompareBy} && !$isSuperadmin;
-                        $deleteTitle        = $isDeleteProtected ? 'Protected' : ($isOwnerRestricted ? 'Only the creator can delete this' : 'Delete');
+                        $isDeleteProtected       = isset($actions['delete']['protectedId']) && $item->{$idKey} == $actions['delete']['protectedId'];
+                        $isSuperadminOnly        = ($actions['delete']['superadminOnly'] ?? false) && !$isSuperadmin;
+                        $isOwnerRestricted       = $deleteOwnerField && $currentUser && $item->{$deleteOwnerField} !== $currentUser->{$deleteOwnerCompareBy} && !$isSuperadmin;
+                        $disabledCondField       = $actions['delete']['disabledConditionField'] ?? null;
+                        $isConditionDisabled     = $disabledCondField && !empty($item->{$disabledCondField});
+                        $conditionDisabledTitle  = $actions['delete']['disabledConditionTitle'] ?? 'Cannot delete this item';
+                        $deleteTitle             = $isDeleteProtected ? 'Protected'
+                            : ($isOwnerRestricted ? 'Only the creator can delete this'
+                            : ($isConditionDisabled ? $conditionDisabledTitle : 'Delete'));
+                        $isDeleteDisabled        = $isDeleteProtected || $isSuperadminOnly || $isOwnerRestricted || $isConditionDisabled;
                     @endphp
                     <button type="button"
                         class="btn btn-sm {{ $actions['delete']['class'] ?? 'btn-custom-primary' }} {{ $actions['delete']['btnClass'] ?? 'delete-btn' }} delete-action-btn"
                         data-id="{{ $item->{$idKey} }}"
                         title="{{ $deleteTitle }}"
-                        {{ $isDeleteProtected || $isSuperadminOnly || $isOwnerRestricted ? 'disabled' : '' }}>
+                        {{ $isDeleteDisabled ? 'disabled' : '' }}>
                         <i class="fa fa-trash"></i>
                     </button>
                 @endif
