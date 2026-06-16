@@ -26,11 +26,34 @@
                         <i class="fas fa-building-columns me-2"></i>Amdigipay - Bisatopup Account Balance
                     </h5>
                     @if($bisabillerBalance !== null)
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="fs-4 fw-bold" class="text-brand">
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <div class="fs-4 fw-bold text-brand">
                             Rp {{ number_format($bisabillerBalance, 0, ',', '.') }}
                         </div>
                         <small class="text-muted">Total across all campaigns</small>
+                        @php
+                            $dbExpected = \App\Models\Donation::where('gateway','bisatopup')->where('payment_status','PAID')->sum('jumlah_donasi')
+                                - \App\Models\Donation::where('gateway','bisatopup')->where('payment_status','PAID')->sum('biaya_admin')
+                                - \App\Models\Withdrawal::where('status','COMPLETED')->sum('amount');
+                            $disc = $bisabillerBalance - $dbExpected;
+                            $discThreshold = config('services.two_fa.discrepancy_threshold', 50000);
+                        @endphp
+                        @if($disc < 0)
+                            <span class="badge bg-danger">
+                                <i class="fas fa-exclamation-circle me-1"></i>Deficit Rp {{ number_format(abs($disc), 0, ',', '.') }}
+                            </span>
+                        @elseif(abs($disc) <= $discThreshold)
+                            <span class="badge bg-success">
+                                <i class="fas fa-check-circle me-1"></i>Balance Normal
+                            </span>
+                        @else
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-exclamation-triangle me-1"></i>Gap Rp {{ number_format(abs($disc), 0, ',', '.') }} — Needs Review
+                            </span>
+                        @endif
+                        <a href="{{ route('admin.celsyahid.balance.report') }}" class="btn-balance-report">
+                            <i class="fas fa-balance-scale me-1"></i> Balance Report
+                        </a>
                     </div>
                     @else
                     <span class="text-muted">Unable to fetch balance from Amdigipay - Bisatopup.</span>

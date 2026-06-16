@@ -26,7 +26,8 @@ class CampaignController extends Controller
         $tableConfig = Campaign::getTableConfig();
 
         $items->getCollection()->transform(function ($campaign) {
-            $campaign->target_biaya = LFC::formatRupiah($campaign->target_biaya);
+            $campaign->target_biaya  = LFC::formatRupiah($campaign->target_biaya);
+            $campaign->has_donations = $campaign->donation_count > 0;
             return $campaign;
         });
 

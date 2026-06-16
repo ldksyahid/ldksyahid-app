@@ -78,6 +78,56 @@
 .inquiry-result { min-height: 40px; }
 .text-brand { color: #00a79d; }
 html.dark-mode .text-brand { color: #2dd4bf; }
+.btn-balance-report {
+    color: #fff;
+    background: linear-gradient(135deg, #00a79d, #008b84);
+    border: none;
+    border-radius: 6px;
+    font-size: .78rem;
+    font-weight: 600;
+    padding: .3rem .75rem;
+    letter-spacing: .02em;
+    box-shadow: 0 2px 6px rgba(0,167,157,.3);
+    transition: all .25s ease;
+    white-space: nowrap;
+}
+.btn-balance-report:hover {
+    background: linear-gradient(135deg, #008b84, #006f6a);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0,167,157,.4);
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+html.dark-mode .btn-balance-report {
+    background: linear-gradient(135deg, #008b84, #006f6a);
+    box-shadow: 0 2px 6px rgba(0,139,132,.4);
+}
+html.dark-mode .btn-balance-report:hover {
+    background: linear-gradient(135deg, #006f6a, #005a56);
+}
+.otp-code-input {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: .35em;
+    text-align: center;
+    max-width: 210px;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+}
+.otp-code-input:focus {
+    border-color: #00a79d;
+    box-shadow: 0 0 0 .2rem rgba(0,167,157,.25);
+}
+html.dark-mode .otp-code-input {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+html.dark-mode .otp-code-input:focus {
+    border-color: #2dd4bf;
+    box-shadow: 0 0 0 .2rem rgba(45,212,191,.2);
+    background-color: #374151;
+}
 
 .btn-verify-account {
     color: #fff;

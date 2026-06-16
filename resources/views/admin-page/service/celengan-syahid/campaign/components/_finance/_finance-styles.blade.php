@@ -82,6 +82,30 @@
 }
 .text-brand { color: #00a79d; }
 html.dark-mode .text-brand { color: #2dd4bf; }
+.btn-balance-report {
+    display: inline-flex;
+    align-items: center;
+    color: #fff;
+    background: linear-gradient(135deg, #00a79d, #008b84);
+    border: none;
+    border-radius: 6px;
+    font-size: .78rem;
+    font-weight: 600;
+    padding: .3rem .75rem;
+    box-shadow: 0 2px 6px rgba(0,167,157,.3);
+    transition: all .25s ease;
+    white-space: nowrap;
+    text-decoration: none;
+}
+.btn-balance-report:hover {
+    background: linear-gradient(135deg, #008b84, #006f6a);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0,167,157,.4);
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+html.dark-mode .btn-balance-report { background: linear-gradient(135deg, #008b84, #006f6a); }
+html.dark-mode .btn-balance-report:hover { background: linear-gradient(135deg, #006f6a, #005a56); }
 
 /* ── Finance boxes ──────────────────────────────────── */
 .finance-box-online {

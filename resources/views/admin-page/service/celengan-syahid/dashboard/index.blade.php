@@ -106,6 +106,117 @@
                 </div>
             </div>
 
+            <!-- Campaign Progress List -->
+            <div class="col-md-12 mb-4">
+                <div class="card cs-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="cs-section-title mb-0">
+                                <i class="fas fa-hand-holding-heart me-2"></i>Campaign Progress
+                            </h5>
+                            <a href="{{ route('admin.service.index.celsyahid.dashboard') }}" class="cs-btn-all">
+                                <i class="fas fa-list me-1"></i>All Campaigns
+                            </a>
+                        </div>
+
+                        @if($campaigns->isEmpty())
+                        <div class="text-center py-4 text-muted">
+                            <i class="fas fa-hand-holding-heart fa-2x mb-2 d-block"></i>
+                            No campaigns found.
+                        </div>
+                        @else
+                        <div class="table-responsive">
+                            <table class="table cs-campaign-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Campaign</th>
+                                        <th class="text-center">Category</th>
+                                        <th class="text-end">Target</th>
+                                        <th class="text-end">Collected</th>
+                                        <th style="min-width:140px;">Progress</th>
+                                        <th class="text-end">Available</th>
+                                        <th class="text-center">Deadline</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($campaigns as $i => $c)
+                                    @php
+                                        $pct        = $c['pct'];
+                                        $barClass   = $pct >= 100 ? 'cs-bar-full' : ($pct >= 60 ? 'cs-bar-good' : ($pct >= 30 ? 'cs-bar-mid' : 'cs-bar-low'));
+                                        $isExpired  = $c['deadline'] && \Carbon\Carbon::parse($c['deadline'])->isPast();
+                                    @endphp
+                                    <tr>
+                                        <td class="text-muted small">{{ $i + 1 }}</td>
+                                        <td>
+                                            <div class="cs-campaign-name" title="{{ $c['judul'] }}">{{ $c['judul'] }}</div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="cs-category-badge">{{ $c['kategori'] }}</span>
+                                        </td>
+                                        <td class="text-end small fw-semibold">
+                                            Rp {{ number_format($c['target'], 0, ',', '.') }}
+                                        </td>
+                                        <td class="text-end">
+                                            <span class="cs-amount-collected">Rp {{ number_format($c['total_paid'], 0, ',', '.') }}</span>
+                                        </td>
+                                        <td>
+                                            <div class="cs-progress-wrap">
+                                                <div class="cs-progress-bar-bg">
+                                                    <div class="cs-progress-bar-fill {{ $barClass }}" style="width: {{ $pct }}%;"></div>
+                                                </div>
+                                                <span class="cs-pct-label">{{ $pct }}%</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-end">
+                                            <span class="{{ $c['available'] > 0 ? 'cs-amount-available' : 'text-muted' }}">
+                                                Rp {{ number_format($c['available'], 0, ',', '.') }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center small {{ $isExpired ? 'text-danger' : 'text-muted' }}">
+                                            @if($c['deadline'])
+                                                {{ \Carbon\Carbon::parse($c['deadline'])->format('d M Y') }}
+                                                @if($isExpired) <span class="cs-expired-tag">Expired</span> @endif
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{ route('admin.celsyahid.campaign.finance', $c['id']) }}"
+                                               class="btn btn-sm cs-btn-finance" title="Finance">
+                                                <i class="fas fa-wallet"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="fw-bold text-end small pt-3">Total across all campaigns</td>
+                                        <td class="text-end fw-bold small pt-3">
+                                            Rp {{ number_format($campaigns->sum('target'), 0, ',', '.') }}
+                                        </td>
+                                        <td class="text-end pt-3">
+                                            <span class="cs-amount-collected fw-bold">
+                                                Rp {{ number_format($campaigns->sum('total_paid'), 0, ',', '.') }}
+                                            </span>
+                                        </td>
+                                        <td colspan="2" class="text-end pt-3">
+                                            <span class="cs-amount-available fw-bold">
+                                                Rp {{ number_format($campaigns->sum('available'), 0, ',', '.') }}
+                                            </span>
+                                        </td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

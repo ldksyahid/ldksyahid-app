@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\CelenganSyahid\Admin;
 
+use App\Helpers\TwoFaHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use App\Models\CelsyahidAuditLog;
+use App\Models\Donation;
 use App\Models\Withdrawal;
 use App\Services\BisaTopup;
 use Illuminate\Http\Request;
@@ -191,13 +193,31 @@ class WithdrawalController extends Controller
        EXECUTE — POST to Bisabiller disbursement API
        ================================================================ */
 
-    public function execute(string $id)
+    public function execute(Request $request, string $id)
     {
         $withdrawal = Withdrawal::with('campaign')->findOrFail($id);
 
         if ($withdrawal->status !== 'DRAFT') {
             Alert::warning('Info', 'This withdrawal has already been processed.');
             return redirect()->route('admin.celsyahid.withdrawal.show', $id);
+        }
+
+        // 2FA check — only for whitelisted users
+        $user = auth()->user();
+        if (TwoFaHelper::isAllowed($user)) {
+            if (!$user->google2fa_enabled) {
+                Alert::warning('2FA Required', 'Please enable Two-Factor Authentication before executing withdrawals.');
+                return redirect()->route('admin.security.2fa');
+            }
+
+            $code = $request->input('two_fa_code', '');
+            if (!TwoFaHelper::verify($user, $code)) {
+                CelsyahidAuditLog::record('2fa.verify_failed', 'withdrawal', $withdrawal->id, '2FA failed during execute from IP: ' . $request->ip());
+                Alert::error('Invalid Code', 'The authenticator code is incorrect or expired. Please try again.');
+                return redirect()->route('admin.celsyahid.withdrawal.confirm', $id);
+            }
+
+            CelsyahidAuditLog::record('2fa.verify_success', 'withdrawal', $withdrawal->id, '2FA verified for withdrawal execute from IP: ' . $request->ip());
         }
 
         $payload = [
@@ -256,6 +276,59 @@ class WithdrawalController extends Controller
         return view('admin-page.service.celengan-syahid.withdrawal.show', [
             'withdrawal' => $withdrawal,
             'title'      => 'Celengan Syahid',
+        ]);
+    }
+
+    /* ================================================================
+       BALANCE REPORT — discrepancy between Bisabiller wallet and DB
+       ================================================================ */
+
+    public function balanceReport()
+    {
+        // Total QRIS PAID per campaign
+        $perCampaign = Donation::where('gateway', 'bisatopup')
+            ->where('payment_status', 'PAID')
+            ->selectRaw('campaign_id, SUM(jumlah_donasi) as total_qris, SUM(biaya_admin) as total_fee, COUNT(*) as txn_count')
+            ->groupBy('campaign_id')
+            ->with('campaign:id,judul')
+            ->get();
+
+        // Total withdrawn per campaign (COMPLETED)
+        $withdrawnPerCampaign = Withdrawal::where('status', 'COMPLETED')
+            ->selectRaw('campaign_id, SUM(amount) as total_withdrawn')
+            ->groupBy('campaign_id')
+            ->pluck('total_withdrawn', 'campaign_id');
+
+        $rows = $perCampaign->map(function ($row) use ($withdrawnPerCampaign) {
+            $withdrawn = $withdrawnPerCampaign[$row->campaign_id] ?? 0;
+            return [
+                'campaign'        => $row->campaign->judul ?? '—',
+                'total_qris'      => (int) $row->total_qris,
+                'total_fee'       => (int) $row->total_fee,
+                'total_withdrawn' => (int) $withdrawn,
+                'net'             => (int) $row->total_qris - (int) $row->total_fee - (int) $withdrawn,
+                'txn_count'       => (int) $row->txn_count,
+            ];
+        });
+
+        $totalExpected = $rows->sum('net');
+
+        $actualBalance = Cache::remember('bisabiller_wallet_balance', 300, function () {
+            return (new BisaTopup())->walletBalance();
+        });
+
+        $discrepancy = ($actualBalance !== null) ? ($actualBalance - $totalExpected) : null;
+        $threshold   = config('services.two_fa.discrepancy_threshold', 50000);
+        $isNormal    = ($discrepancy !== null) && abs($discrepancy) <= $threshold;
+
+        return view('admin-page.service.celengan-syahid.withdrawal.balance-report', [
+            'rows'          => $rows,
+            'totalExpected' => $totalExpected,
+            'actualBalance' => $actualBalance,
+            'discrepancy'   => $discrepancy,
+            'isNormal'      => $isNormal,
+            'threshold'     => $threshold,
+            'title'         => 'Celengan Syahid',
         ]);
     }
 

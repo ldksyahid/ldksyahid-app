@@ -71,6 +71,12 @@ return [
         'enforce_callback_signature' => env('BISATOPUP_ENFORCE_CALLBACK_SIGNATURE', false),
     ],
 
+    'two_fa' => [
+        'allowed_users'          => array_filter(array_map('trim', explode(',', env('TWO_FA_ALLOWED_USERS', '')))),
+        'app_name'               => env('TWO_FA_APP_NAME', 'LDK Syahid Admin'),
+        'discrepancy_threshold'  => (int) env('TWO_FA_DISCREPANCY_THRESHOLD', 50000),
+    ],
+
     'google' => [
         'client_id'     => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
