@@ -100,34 +100,22 @@ class BisaTopup
     }
 
     /**
-     * ⚠️ BEST-GUESS signature — Bisabiller/BisaTopup/AMDigipay docs do NOT publish
-     * the exact formula. SHA-256 is confirmed (64-hex sample). If create-transaction
-     * is rejected with an "invalid signature" error in DEV, adjust the concatenation
-     * here (and keep verifyCallbackSignature() in sync once the real formula is known).
-     *
-     * Current guess: sha256(username + transaction_id + nominal + password_api)
+     * Signature create-transaction: sha256(username + transaction_id)
      */
-    public function buildSignature(string $transactionId, int $nominal): string
+    public function buildSignature(string $transactionId): string
     {
         $username = (string) ($this->config['username'] ?? '');
-        $secret   = (string) ($this->config['password_api'] ?? '');
 
-        return hash('sha256', $username . $transactionId . $nominal . $secret);
+        return hash('sha256', $username . $transactionId);
     }
 
     /**
-     * ⚠️ BEST-GUESS callback signature verification. The controller logs the raw
-     * callback (incl. their signature) so the real formula can be confirmed in DEV.
+     * Signature callback: sha256(username + transaction_id)
      */
     public function verifyCallbackSignature(array $data): bool
     {
-        $secret   = (string) ($this->config['password_api'] ?? '');
-        $expected = hash('sha256',
-            (string) ($data['transaction_id'] ?? '') .
-            (string) ($data['status_id'] ?? '') .
-            (string) ($data['transaction_total'] ?? '') .
-            $secret
-        );
+        $username = (string) ($this->config['username'] ?? '');
+        $expected = hash('sha256', $username . (string) ($data['transaction_id'] ?? ''));
 
         return hash_equals($expected, (string) ($data['signature'] ?? ''));
     }

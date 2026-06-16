@@ -214,7 +214,7 @@ class PublicController extends Controller
             $payload = [
                 'payment_id'        => $qrisPaymentId,
                 'username'          => config('services.bisatopup.username'),
-                'signature'         => $gateway->buildSignature($transactionId, $jumlah_donasi),
+                'signature'         => $gateway->buildSignature($transactionId),
                 'expired_date'      => $expiredAt->format('Y-m-d H:i:s'),
                 'nominal'           => $jumlah_donasi,
                 'admin_fee'         => $adminFee,
