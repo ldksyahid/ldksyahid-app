@@ -223,7 +223,32 @@ class BisaTopup
             $res = Http::withToken($token)->acceptJson()
                 ->get($this->baseUrl() . '/api/transfer/bank-list');
 
-            return $res->ok() ? ($res->json()['data'] ?? []) : [];
+            Log::info('[BisaTopup] bankList', [
+                'url'    => $this->baseUrl() . '/api/transfer/bank-list',
+                'status' => $res->status(),
+                'body'   => substr($res->body(), 0, 1000),
+            ]);
+
+            if (!$res->ok()) return [];
+
+            $json = $res->json();
+
+            // Try common response shapes from Bisabiller API
+            if (isset($json['data']) && is_array($json['data'])) {
+                // { data: [...] }  or  { data: { bank_list: [...] } }
+                $data = $json['data'];
+                if (isset($data[0])) return $data;                          // flat array
+                if (isset($data['bank_list'])) return $data['bank_list'];   // nested
+                if (isset($data['data'])) return $data['data'];             // double-wrapped
+            }
+
+            // Flat top-level array
+            if (isset($json[0])) return $json;
+
+            Log::warning('[BisaTopup] bankList: unrecognised response shape', [
+                'keys' => array_keys($json ?? []),
+            ]);
+            return [];
         } catch (\Throwable $e) {
             Log::error('[BisaTopup] bankList exception: ' . $e->getMessage());
             return [];
