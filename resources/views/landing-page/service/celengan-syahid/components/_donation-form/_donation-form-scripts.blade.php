@@ -34,12 +34,23 @@
 (function () {
     'use strict';
 
-    // Reset form state when browser restores page from bfcache (Back navigation).
-    // Clears the stale reCAPTCHA token so the next submit fetches a fresh one,
-    // preventing "DUPE" rejections from the Enterprise Assessment API.
     var formAlreadySubmitted = false;
+    var DN_SUBMIT_KEY = 'dn_submitting';
+
     window.addEventListener('pageshow', function (e) {
         if (e.persisted) {
+            // Page restored from bfcache (browser Back button).
+            // If a submission was in-flight, keep the form locked — don't allow
+            // the user to submit again while the first request is still running.
+            if (localStorage.getItem(DN_SUBMIT_KEY)) {
+                formAlreadySubmitted = true;
+                document.querySelectorAll('.dn-form [type="submit"]').forEach(function (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sedang diproses...';
+                });
+                return;
+            }
+            // No in-flight submission — normal reset (e.g. came back after a gateway error).
             formAlreadySubmitted = false;
             var tokenEl = document.getElementById('dn-recaptcha-token');
             if (tokenEl) tokenEl.value = '';
@@ -47,6 +58,9 @@
                 btn.disabled = false;
                 btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
             });
+        } else {
+            // Fresh page load (server redirect) — clear any stale in-flight flag.
+            localStorage.removeItem(DN_SUBMIT_KEY);
         }
     });
 
@@ -207,6 +221,7 @@
                         tokenSubmitted = true;
                         var tokenEl = document.getElementById('dn-recaptcha-token');
                         if (tokenEl) tokenEl.value = token;
+                        localStorage.setItem(DN_SUBMIT_KEY, '1');
                         form.submit();
                     })
                     .catch(function () {
@@ -218,6 +233,7 @@
                     });
             });
             @else
+            localStorage.setItem(DN_SUBMIT_KEY, '1');
             form.submit();
             @endif
         });
