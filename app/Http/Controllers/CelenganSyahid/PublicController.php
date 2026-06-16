@@ -175,14 +175,16 @@ class PublicController extends Controller
             // The first request may still be writing to DB, so retry a few times
             // before giving up — avoids the confusing warning when the donation IS
             // being created but hasn't committed yet.
+            // Poll up to ~10s so we catch donations that are still waiting on a slow
+            // gateway response (BisaTopup can take 5-7s). 20 × 500ms = 10 seconds.
             $recent = null;
-            for ($i = 0; $i < 4; $i++) {
+            for ($i = 0; $i < 20; $i++) {
                 $recent = Donation::where('email_donatur', $request->input('email_donatur'))
                     ->where('campaign_id', $campaign->id)
                     ->where('created_at', '>=', now()->subSeconds(30))
                     ->latest()->first();
                 if ($recent) break;
-                usleep(250_000); // wait 250ms per retry (max ~1s total)
+                usleep(500_000); // 500ms per retry
             }
 
             Log::info('storeDonationCampaign: duplicate submission blocked by cache lock', [
