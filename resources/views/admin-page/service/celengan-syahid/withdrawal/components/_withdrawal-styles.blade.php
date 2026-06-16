@@ -119,14 +119,11 @@ html.dark-mode .btn-balance-report:hover {
     box-shadow: 0 0 0 .2rem rgba(0,167,157,.25);
 }
 html.dark-mode .otp-code-input {
-    background-color: #374151;
-    border-color: #4b5563;
     color: #e5e7eb;
 }
 html.dark-mode .otp-code-input:focus {
     border-color: #2dd4bf;
     box-shadow: 0 0 0 .2rem rgba(45,212,191,.2);
-    background-color: #374151;
 }
 
 .btn-verify-account {
@@ -228,20 +225,16 @@ html.dark-mode .form-control-plaintext { color: #e5e7eb; }
 html.dark-mode .form-control,
 html.dark-mode .form-select,
 html.dark-mode .input-group-text {
-    background-color: #263244;
-    border-color: #334155;
     color: #e2e8f0;
 }
 html.dark-mode .form-control::placeholder { color: #64748b; }
 html.dark-mode .form-control[readonly] {
-    background-color: #1e2a3b;
     color: #94a3b8;
 }
 html.dark-mode .form-control:focus,
 html.dark-mode .form-select:focus {
     border-color: #2dd4bf;
     box-shadow: 0 0 0 .2rem rgba(45,212,191,.15);
-    background-color: #263244;
     color: #e2e8f0;
 }
 html.dark-mode .balance-highlight { color: #4ade80; }
@@ -267,12 +260,9 @@ html.dark-mode .btn-outline-secondary {
     border-color: #4b5563;
 }
 html.dark-mode .btn-outline-secondary:hover {
-    background-color: #374151;
     color: #e5e7eb;
 }
 html.dark-mode .btn-secondary {
-    background-color: #374151;
-    border-color: #4b5563;
     color: #e5e7eb;
 }
 html.dark-mode .table { color: #e5e7eb; }
@@ -302,8 +292,6 @@ html.dark-mode .card.border-0 { border: none !important; }
 
 /* Select2 dark mode */
 html.dark-mode .select2-container .select2-selection--single {
-    background-color: #263244;
-    border-color: #334155;
     color: #e2e8f0;
 }
 html.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -314,8 +302,6 @@ html.dark-mode .select2-dropdown {
     border-color: #334155;
 }
 html.dark-mode .select2-container--default .select2-search--dropdown .select2-search__field {
-    background-color: #263244 !important;
-    border-color: #334155 !important;
     color: #e2e8f0 !important;
 }
 html.dark-mode .select2-container--default .select2-results__option {
