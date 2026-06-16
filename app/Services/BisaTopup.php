@@ -77,12 +77,26 @@ class BisaTopup
         }
 
         try {
+            Log::info('[BisaTopup] createTransaction request', [
+                'transaction_id' => $payload['transaction_id'] ?? null,
+                'payment_id'     => $payload['payment_id'] ?? null,
+                'nominal'        => $payload['nominal'] ?? null,
+                'username'       => $payload['username'] ?? null,
+                'signature'      => $payload['signature'] ?? null,
+            ]);
+
             $res = Http::withToken($token)
                 ->acceptJson()
                 ->post($this->baseUrl() . '/api/payment/transaction', $payload);
 
+            Log::info('[BisaTopup] createTransaction response', [
+                'status'         => $res->status(),
+                'body'           => $res->body(),
+                'transaction_id' => $payload['transaction_id'] ?? null,
+            ]);
+
             if ($res->failed()) {
-                Log::error('[BisaTopup] createTransaction failed', [
+                Log::error('[BisaTopup] createTransaction HTTP error', [
                     'status'         => $res->status(),
                     'body'           => $res->body(),
                     'transaction_id' => $payload['transaction_id'] ?? null,

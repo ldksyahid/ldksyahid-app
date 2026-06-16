@@ -237,6 +237,7 @@ class PublicController extends Controller
             $response = $gateway->createQrisTransaction($payload);
 
             if (!$response || !empty($response['error'])) {
+                Cache::forget($lockKey);
                 Log::error('storeDonationCampaign: BisaTopup create failed', ['response' => $response]);
                 Alert::error('Maaf!', 'Gagal membuat transaksi pembayaran. Silahkan coba lagi.');
                 return Redirect::back();
@@ -301,6 +302,7 @@ class PublicController extends Controller
                 'id'   => $postDonation->id,
             ]);
         } catch (\Exception $e) {
+            Cache::forget($lockKey);
             Log::error('storeDonationCampaign error: ' . $e->getMessage(), [
                 'linkcampaign' => $request->input('linkcampaign'),
             ]);
