@@ -298,7 +298,6 @@ html.dark-mode .select2-container--default .select2-selection--single .select2-s
     color: #e2e8f0 !important;
 }
 html.dark-mode .select2-dropdown {
-    background-color: #1a2535;
     border-color: #334155;
 }
 html.dark-mode .select2-container--default .select2-search--dropdown .select2-search__field {
@@ -307,7 +306,6 @@ html.dark-mode .select2-container--default .select2-search--dropdown .select2-se
 html.dark-mode .select2-container--default .select2-results__option {
     color: #e2e8f0;
     border-bottom-color: rgba(255,255,255,.05);
-    background-color: #1a2535;
 }
 html.dark-mode .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: #008b84 !important;
