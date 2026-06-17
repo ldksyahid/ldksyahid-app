@@ -94,9 +94,10 @@
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/reqservice']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fa fa-bullhorn me-2"></i>Req Service</a>
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/reqservice', 'admin/persuratan']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fa fa-bullhorn me-2"></i>Req Service</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
                         <a href="/admin/reqservice/shortlink" class="dropdown-item {{ $isActive('admin/reqservice/shortlink') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Request Shortlink</a>
+                        <a href="/admin/persuratan" class="dropdown-item {{ $isActive('admin/persuratan') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Persuratan</a>
                     </div>
                 </div>
                 <a href="/admin/comments" class="nav-item nav-link {{ $isActive('admin/comments') ? 'active' : '' }}"><i class="fas fa-comments me-2"></i>Comments</a>
@@ -180,6 +181,12 @@
         @elseif (LFC::getRoleName(auth()->user()->getRoleNames()) == 'HelperLetter')
             <div class="navbar-nav w-100">
                 <a href="/admin/dashboard" class="nav-item nav-link {{ $isActive('admin/dashboard') ? 'active' : '' }}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/persuratan']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fa fa-bullhorn me-2"></i>Req Service</a>
+                    <div class="dropdown-menu bg-transparent border-0 ">
+                        <a href="/admin/persuratan" class="dropdown-item {{ $isActive('admin/persuratan') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Persuratan</a>
+                    </div>
+                </div>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/service/shortlink', 'admin/service/callkestari']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0 ">

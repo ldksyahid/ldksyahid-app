@@ -35,6 +35,8 @@ use App\Http\Controllers\FonnteWebhookController;
 use App\Http\Controllers\Admin\AdminFormController;
 use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PersuratingController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -594,4 +596,31 @@ Route::prefix('/form')
         Route::get('/{slug}/terima-kasih', [PublicFormController::class, 'thankYou'])->name('thank-you');
     });
 
+// ======================================= PERSURATAN =======================================
+// Landing — semua user login bisa akses
+Route::middleware(['auth'])
+    ->prefix('/layanan/persuratan')
+    ->name('service.persuratan.')
+    ->group(function () {
+        Route::get('/', [PersuratingController::class, 'index'])->name('index');
+        Route::post('/submit', [PersuratingController::class, 'submit'])->name('submit');
+        Route::get('/riwayat', [PersuratingController::class, 'riwayat'])->name('riwayat');
+        Route::get('/{suratLog}/download', [PersuratingController::class, 'download'])->name('download');
+    });
+
+// Verifikasi publik — tanpa login
+Route::get('/verifikasi-surat/{kode}', [PersuratingController::class, 'verifikasi'])->name('persuratan.verifikasi');
+
+// Admin — HelperLetter & Superadmin
+Route::middleware(['role:Superadmin|HelperLetter'])
+    ->prefix('/admin/persuratan')
+    ->name('admin.persuratan.')
+    ->group(function () {
+        Route::get('/', [PersuratingController::class, 'indexAdmin'])->name('index');
+        Route::get('/{suratLog}', [PersuratingController::class, 'showAdmin'])->name('show');
+        Route::post('/{suratLog}/approve', [PersuratingController::class, 'approve'])->name('approve');
+        Route::post('/{suratLog}/reject', [PersuratingController::class, 'reject'])->name('reject');
+        Route::get('/{suratLog}/download', [PersuratingController::class, 'downloadAdmin'])->name('download');
+        Route::delete('/{suratLog}', [PersuratingController::class, 'destroy'])->name('destroy')->middleware('role:Superadmin');
+    });
 // ======================================= END ROUTE ADMIN PAGE =======================================

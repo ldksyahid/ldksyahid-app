@@ -1,0 +1,259 @@
+@extends('admin-page.template.body')
+{{-- Path: resources/views/admin-page/service-request/persuratan/show.blade.php --}}
+
+@section('title', $title)
+
+@section('content')
+
+<div class="container-fluid py-4">
+
+    <div class="mb-4">
+        <a href="{{ route('admin.persuratan.index') }}" class="btn btn-sm btn-outline-secondary rounded-3">
+            <i class="fas fa-arrow-left me-1"></i> Kembali
+        </a>
+    </div>
+
+    @if (session('success'))
+        <div class="alert alert-success rounded-3 d-flex align-items-center gap-2 mb-4">
+            <i class="fas fa-check-circle"></i> {{ session('success') }}
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger rounded-3 mb-4">
+            <ul class="mb-0 ps-3">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <div class="row g-4">
+
+        {{-- Detail Pengajuan --}}
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fas fa-file-alt me-2 text-primary"></i>Detail Pengajuan
+                    </h5>
+                    <span class="badge rounded-pill bg-{{ $suratLog->statusBadgeClass() }} fs-6">
+                        {{ $suratLog->statusLabel() }}
+                    </span>
+                </div>
+
+                <table class="table table-borderless table-sm small">
+                    <tr>
+                        <td class="text-muted fw-semibold" style="width:160px">Jenis Surat</td>
+                        <td>: {{ $suratLog->label }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted fw-semibold">Nomor Surat</td>
+                        <td>: {{ $suratLog->nomor_surat !== '-' ? $suratLog->nomor_surat : '—' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted fw-semibold">Pengaju</td>
+                        <td>: {{ $suratLog->user?->name ?? '-' }} ({{ $suratLog->user?->email ?? '-' }})</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted fw-semibold">Tanggal Ajuan</td>
+                        <td>: {{ $suratLog->created_at->locale('id')->translatedFormat('d F Y, H:i') }}</td>
+                    </tr>
+                    @if ($suratLog->approved_at)
+                        <tr>
+                            <td class="text-muted fw-semibold">
+                                {{ $suratLog->isApproved() ? 'Disetujui' : 'Ditolak' }} Oleh
+                            </td>
+                            <td>: {{ $suratLog->approvedBy?->name ?? '-' }}
+                                &bull; {{ $suratLog->approved_at->locale('id')->translatedFormat('d F Y, H:i') }}
+                            </td>
+                        </tr>
+                    @endif
+                    @if ($suratLog->catatan_admin)
+                        <tr>
+                            <td class="text-muted fw-semibold">Catatan Admin</td>
+                            <td>: {{ $suratLog->catatan_admin }}</td>
+                        </tr>
+                    @endif
+                </table>
+
+                <hr class="my-3">
+
+                <h6 class="fw-bold mb-3">Data Isian</h6>
+                @php
+                    $fieldLabels = [
+                        'jenis_undangan'    => 'Jenis Undangan',
+                        'nama_acara'        => 'Nama Acara',
+                        'tema_acara'        => 'Tema Acara',
+                        'hari_tanggal'      => 'Tanggal Acara',
+                        'waktu'             => 'Waktu',
+                        'tempat'            => 'Tempat',
+                        'tempat_dipinjam'   => 'Tempat yang Dipinjam',
+                        'alamat_tempat'     => 'Alamat Tempat',
+                        'ditujukan_kepada'  => 'Ditujukan Kepada',
+                        'daftar_alat'       => 'Daftar Alat',
+                        'nama_program'      => 'Nama Program',
+                        'keperluan'         => 'Keperluan',
+                        'nama'              => 'Nama',
+                        'nim'               => 'NIM',
+                        'fakultas'          => 'Fakultas',
+                        'jurusan'           => 'Jurusan',
+                        'jabatan'           => 'Jabatan di LDK',
+                        'program_rekomendasi' => 'Program Rekomendasi',
+                        'pertimbangan'      => 'Pertimbangan',
+                    ];
+                @endphp
+                <table class="table table-borderless table-sm small">
+                    @foreach ($suratLog->data as $key => $value)
+                        @continue($key === 'jenis_surat')
+                        <tr>
+                            <td class="text-muted fw-semibold" style="width:160px">
+                                {{ $fieldLabels[$key] ?? ucwords(str_replace('_', ' ', $key)) }}
+                            </td>
+                            <td>: {!! nl2br(e($value)) !!}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
+        </div>
+
+        {{-- Panel Aksi --}}
+        <div class="col-lg-5">
+
+            {{-- Approve --}}
+            @if ($suratLog->isPending())
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-3">
+                    <h6 class="fw-bold text-success mb-3">
+                        <i class="fas fa-check-circle me-1"></i> Setujui Pengajuan
+                    </h6>
+                    <form action="{{ route('admin.persuratan.approve', $suratLog) }}" method="POST" id="form-approve">
+                        @csrf
+
+                        {{-- Pilihan sumber nomor surat --}}
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold d-block mb-2">Nomor Surat</label>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="nomor_mode"
+                                       id="nomor-mode-auto" value="auto" checked>
+                                <label class="form-check-label small" for="nomor-mode-auto">
+                                    Generate otomatis (urutan berikutnya bulan ini)
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="nomor_mode"
+                                       id="nomor-mode-manual" value="manual">
+                                <label class="form-check-label small" for="nomor-mode-manual">
+                                    Input manual
+                                </label>
+                            </div>
+
+                            <div id="nomor-manual-wrapper" class="d-none">
+                                <input type="text" name="nomor_surat_manual"
+                                       class="form-control form-control-sm rounded-3 @error('nomor_surat_manual') is-invalid @enderror"
+                                       placeholder="Contoh: 005/SR-e/LDK-SYAHID/VI/2026"
+                                       value="{{ old('nomor_surat_manual') }}">
+                                @error('nomor_surat_manual')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text" style="font-size:.72rem">
+                                    Format wajib: <code>XXX/PREFIX/LDK-SYAHID/BULAN-ROMAWI/TAHUN</code>.
+                                    Counter nomor otomatis akan disesuaikan ke urutan ini.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Catatan (opsional)</label>
+                            <textarea name="catatan_admin" class="form-control form-control-sm rounded-3"
+                                      rows="3" placeholder="Catatan untuk pengaju...">{{ old('catatan_admin') }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-success rounded-3 w-100 fw-semibold"
+                                onclick="return confirm('Setujui pengajuan ini? Nomor surat akan diterbitkan.')">
+                            <i class="fas fa-check me-2"></i> Setujui & Terbitkan Nomor Surat
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-3">
+                    <h6 class="fw-bold text-danger mb-3">
+                        <i class="fas fa-times-circle me-1"></i> Tolak Pengajuan
+                    </h6>
+                    <form action="{{ route('admin.persuratan.reject', $suratLog) }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">
+                                Alasan Penolakan <span class="text-danger">*</span>
+                            </label>
+                            <textarea name="catatan_admin" class="form-control form-control-sm rounded-3"
+                                      rows="3" placeholder="Jelaskan alasan penolakan..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-danger rounded-3 w-100 fw-semibold"
+                                onclick="return confirm('Tolak pengajuan ini?')">
+                            <i class="fas fa-times me-2"></i> Tolak Pengajuan
+                        </button>
+                    </form>
+                </div>
+            @endif
+
+            {{-- Download (approved) --}}
+            @if ($suratLog->isApproved())
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-3">
+                    <h6 class="fw-bold mb-3">
+                        <i class="fas fa-file-pdf me-1 text-danger"></i> Unduh PDF
+                    </h6>
+                    <a href="{{ route('admin.persuratan.download', $suratLog) }}"
+                       class="btn btn-success rounded-3 w-100 fw-semibold">
+                        <i class="fas fa-download me-2"></i> Download PDF Surat
+                    </a>
+                </div>
+            @endif
+
+            {{-- Kode Verifikasi --}}
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h6 class="fw-bold mb-3">
+                    <i class="fas fa-qrcode me-1 text-primary"></i> Kode Verifikasi
+                </h6>
+                <div class="bg-light rounded-3 p-2 text-center mb-2">
+                    <code class="small">{{ $suratLog->kode_verifikasi }}</code>
+                </div>
+                <a href="{{ route('persuratan.verifikasi', ['kode' => $suratLog->kode_verifikasi]) }}"
+                   target="_blank" class="btn btn-outline-primary btn-sm rounded-3 w-100">
+                    <i class="fas fa-external-link-alt me-1"></i> Buka Halaman Verifikasi
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    var radios  = document.querySelectorAll('input[name="nomor_mode"]');
+    var wrapper = document.getElementById('nomor-manual-wrapper');
+    var input   = wrapper ? wrapper.querySelector('input[name="nomor_surat_manual"]') : null;
+
+    if (!radios.length || !wrapper) return;
+
+    function sync() {
+        var manual = document.getElementById('nomor-mode-manual').checked;
+        wrapper.classList.toggle('d-none', !manual);
+        if (input) input.required = manual;
+        if (!manual && input) input.value = '';
+    }
+
+    radios.forEach(function (r) { r.addEventListener('change', sync); });
+
+    // Jika ada error validasi nomor_surat_manual, otomatis pilih mode manual
+    @error('nomor_surat_manual')
+        document.getElementById('nomor-mode-manual').checked = true;
+    @enderror
+
+    sync();
+}());
+</script>
+
+@endsection

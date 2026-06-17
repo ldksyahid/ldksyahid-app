@@ -23,6 +23,7 @@
 
         // Req Service submenus
         'admin/reqservice/shortlink' => ['parent' => 'Req Service', 'parentIcon' => 'fa-bullhorn', 'name' => 'Request Shortlink', 'icon' => 'fa-link'],
+        'admin/persuratan' => ['parent' => 'Req Service', 'parentIcon' => 'fa-bullhorn', 'name' => 'Persuratan', 'icon' => 'fa-file-signature'],
 
         // Reports submenus
         'admin/finance-report' => ['parent' => 'Reports', 'parentIcon' => 'fa-file-alt', 'name' => 'Finance Report', 'icon' => 'fa-file-invoice-dollar'],

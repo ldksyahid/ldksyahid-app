@@ -1,0 +1,141 @@
+<script>
+(function () {
+    var fieldMap = {
+        'izin-orang-tua': [
+            { name: 'nama_acara',  label: 'Nama Acara',  icon: 'fa-star',     placeholder: 'Contoh: Rihlah LDK Syahid 2025' },
+            { name: 'tema_acara',  label: 'Tema Acara',  icon: 'fa-tag',      placeholder: 'Contoh: Membangun Generasi Islami' },
+            { name: 'hari_tanggal',label: 'Tanggal',     icon: 'fa-calendar', type: 'date' },
+            { name: 'waktu',       label: 'Waktu',       icon: 'fa-clock',    placeholder: 'Contoh: 08.00 – 17.00 WIB' },
+            { name: 'tempat',      label: 'Tempat',      icon: 'fa-map-marker-alt', placeholder: 'Contoh: Aula Madya UIN Jakarta' },
+        ],
+        'peminjaman-alat-internal': [
+            { name: 'nama_acara',       label: 'Nama Acara',        icon: 'fa-star',         placeholder: 'Contoh: Seminar Nasional' },
+            { name: 'tema_acara',       label: 'Tema Acara',        icon: 'fa-tag',          placeholder: 'Contoh: Moderasi Beragama' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',  icon: 'fa-envelope',     placeholder: 'Contoh: Departemen Media LDK' },
+            { name: 'hari_tanggal',     label: 'Tanggal',           icon: 'fa-calendar',     type: 'date' },
+            { name: 'waktu',            label: 'Waktu',             icon: 'fa-clock',        placeholder: 'Contoh: 08.00 – 17.00 WIB' },
+            { name: 'tempat',           label: 'Tempat',            icon: 'fa-map-marker-alt', placeholder: 'Contoh: Aula Madya' },
+            { name: 'daftar_alat',      label: 'Daftar Alat',       icon: 'fa-list',         type: 'textarea', placeholder: 'Contoh:\n1. Proyektor\n2. Mic' },
+        ],
+        'peminjaman-alat-eksternal': [
+            { name: 'nama_acara',       label: 'Nama Acara',        icon: 'fa-star',         placeholder: 'Contoh: Pameran Buku' },
+            { name: 'tema_acara',       label: 'Tema Acara',        icon: 'fa-tag',          placeholder: 'Contoh: Literasi Islam' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',  icon: 'fa-envelope',     placeholder: 'Contoh: Perpustakaan UIN' },
+            { name: 'hari_tanggal',     label: 'Tanggal',           icon: 'fa-calendar',     type: 'date' },
+            { name: 'waktu',            label: 'Waktu',             icon: 'fa-clock',        placeholder: 'Contoh: 09.00 – 15.00 WIB' },
+            { name: 'tempat',           label: 'Tempat',            icon: 'fa-map-marker-alt', placeholder: 'Contoh: Lobby Utama' },
+            { name: 'daftar_alat',      label: 'Daftar Alat',       icon: 'fa-list',         type: 'textarea', placeholder: 'Contoh:\n1. Meja\n2. Kursi' },
+        ],
+        'peminjaman-tempat-kampus': [
+            { name: 'nama_acara',       label: 'Nama Acara',        icon: 'fa-star',         placeholder: 'Contoh: Rapat Koordinasi' },
+            { name: 'tema_acara',       label: 'Tema Acara',        icon: 'fa-tag',          placeholder: 'Contoh: Evaluasi Program Kerja' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',  icon: 'fa-envelope',     placeholder: 'Contoh: Dekan FIDKOM' },
+            { name: 'hari_tanggal',     label: 'Tanggal',           icon: 'fa-calendar',     type: 'date' },
+            { name: 'waktu',            label: 'Waktu',             icon: 'fa-clock',        placeholder: 'Contoh: 13.00 – 16.00 WIB' },
+            { name: 'tempat_dipinjam',  label: 'Tempat yang Dipinjam', icon: 'fa-building',  placeholder: 'Contoh: Aula Student Center Lt. 3' },
+        ],
+        'permohonan-bantuan-dana': [
+            { name: 'nama_program',     label: 'Nama Program',      icon: 'fa-project-diagram', placeholder: 'Contoh: Kajian Rutin Ramadan' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',  icon: 'fa-envelope',     placeholder: 'Contoh: Wakil Rektor III' },
+            { name: 'keperluan',        label: 'Keperluan',         icon: 'fa-file-alt',     type: 'textarea', placeholder: 'Jelaskan kebutuhan dana secara singkat...' },
+        ],
+        'permohonan-izin-luar-kampus': [
+            { name: 'nama_acara',   label: 'Nama Acara',    icon: 'fa-star',          placeholder: 'Contoh: Camping Dakwah' },
+            { name: 'tema_acara',   label: 'Tema Acara',    icon: 'fa-tag',           placeholder: 'Contoh: Merajut Ukhuwah' },
+            { name: 'hari_tanggal', label: 'Tanggal',       icon: 'fa-calendar',      type: 'date' },
+            { name: 'waktu',        label: 'Waktu',         icon: 'fa-clock',         placeholder: 'Contoh: 07.00 – selesai' },
+            { name: 'tempat',       label: 'Tempat',        icon: 'fa-map-marker-alt', placeholder: 'Contoh: Bumi Perkemahan Ragunan' },
+            { name: 'alamat_tempat',label: 'Alamat Lengkap',icon: 'fa-map-pin',       placeholder: 'Contoh: Jl. Ragunan No. 1, Jakarta Selatan' },
+        ],
+        'surat-rekomendasi': [
+            { name: 'nama',                label: 'Nama Lengkap',          icon: 'fa-user',      placeholder: 'Contoh: Ahmad Fakhri' },
+            { name: 'nim',                 label: 'NIM',                   icon: 'fa-id-card',   placeholder: 'Contoh: 11220910000001' },
+            { name: 'fakultas',            label: 'Fakultas',              icon: 'fa-university', placeholder: 'Contoh: Dakwah dan Ilmu Komunikasi' },
+            { name: 'jurusan',             label: 'Jurusan',               icon: 'fa-graduation-cap', placeholder: 'Contoh: Komunikasi dan Penyiaran Islam' },
+            { name: 'jabatan',             label: 'Jabatan di LDK',        icon: 'fa-briefcase', placeholder: 'Contoh: Ketua Departemen SPAM' },
+            { name: 'program_rekomendasi', label: 'Program yang Direkomendasikan', icon: 'fa-award', placeholder: 'Contoh: Beasiswa Aktivis Peneleh 3' },
+            { name: 'pertimbangan',        label: 'Pertimbangan',          icon: 'fa-list-ul',   type: 'textarea', placeholder: 'Tulis pertimbangan rekomendasi (tiap baris = 1 poin)...' },
+        ],
+        'surat-undangan': [
+            { name: 'jenis_undangan',  label: 'Jenis Undangan',  icon: 'fa-tag',          type: 'select',
+              options: [{value:'internal',label:'Internal (LDK Syahid)'},{value:'eksternal',label:'Eksternal'}] },
+            { name: 'nama_acara',      label: 'Nama Acara',      icon: 'fa-star',         placeholder: 'Contoh: Seminar Nasional' },
+            { name: 'tema_acara',      label: 'Tema Acara',      icon: 'fa-tag',          placeholder: 'Contoh: Islam Rahmatan Lil Alamin' },
+            { name: 'ditujukan_kepada',label: 'Ditujukan Kepada',icon: 'fa-envelope',     placeholder: 'Contoh: Seluruh Mahasiswa UIN Jakarta' },
+            { name: 'hari_tanggal',    label: 'Tanggal',         icon: 'fa-calendar',     type: 'date' },
+            { name: 'waktu',           label: 'Waktu',           icon: 'fa-clock',        placeholder: 'Contoh: 09.00 – 12.00 WIB' },
+            { name: 'tempat',          label: 'Tempat',          icon: 'fa-map-marker-alt', placeholder: 'Contoh: Auditorium Utama' },
+        ],
+    };
+
+    var oldValues = @json(old());
+
+    function buildField(f) {
+        var val = oldValues[f.name] || '';
+
+        if (f.type === 'select') {
+            var opts = f.options.map(function (o) {
+                return '<option value="' + o.value + '"' + (val === o.value ? ' selected' : '') + '>' + o.label + '</option>';
+            }).join('');
+            return (
+                '<div class="prs-field">' +
+                    '<label class="prs-label" for="' + f.name + '">' +
+                        '<i class="fas ' + f.icon + '"></i> ' + f.label +
+                    '</label>' +
+                    '<select name="' + f.name + '" id="' + f.name + '" class="prs-select" required>' +
+                        '<option value="" disabled' + (!val ? ' selected' : '') + '>-- Pilih --</option>' + opts +
+                    '</select>' +
+                '</div>'
+            );
+        }
+
+        if (f.type === 'textarea') {
+            return (
+                '<div class="prs-field">' +
+                    '<label class="prs-label" for="' + f.name + '">' +
+                        '<i class="fas ' + f.icon + '"></i> ' + f.label +
+                    '</label>' +
+                    '<textarea name="' + f.name + '" id="' + f.name + '" class="prs-textarea" ' +
+                        'placeholder="' + (f.placeholder || '') + '" required>' + val + '</textarea>' +
+                '</div>'
+            );
+        }
+
+        var type = f.type || 'text';
+        return (
+            '<div class="prs-field">' +
+                '<label class="prs-label" for="' + f.name + '">' +
+                    '<i class="fas ' + f.icon + '"></i> ' + f.label +
+                '</label>' +
+                '<input type="' + type + '" name="' + f.name + '" id="' + f.name + '" ' +
+                    'class="prs-input" ' +
+                    (f.placeholder ? 'placeholder="' + f.placeholder + '" ' : '') +
+                    (val ? 'value="' + val + '" ' : '') +
+                    'required>' +
+            '</div>'
+        );
+    }
+
+    function renderFields(jenis) {
+        var container  = document.getElementById('dynamic-fields');
+        var btnWrapper = document.getElementById('btn-submit-wrapper');
+        var fields     = fieldMap[jenis];
+
+        if (!fields) {
+            container.innerHTML = '';
+            btnWrapper.style.display = 'none';
+            return;
+        }
+
+        var html = '<hr class="prs-divider">' +
+            '<p class="prs-hint-text"><i class="fas fa-info-circle"></i> Isi semua field berikut dengan benar.</p>';
+        fields.forEach(function (f) { html += buildField(f); });
+        container.innerHTML = html;
+        btnWrapper.style.removeProperty('display');
+    }
+
+    var selectEl = document.getElementById('jenis_surat');
+    if (selectEl && selectEl.value) renderFields(selectEl.value);
+    if (selectEl) selectEl.addEventListener('change', function () { renderFields(this.value); });
+}());
+</script>

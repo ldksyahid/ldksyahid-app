@@ -189,6 +189,40 @@
                 </div>
             </div>
 
+            <div class="sv-card" style="--sv-accent: #0ea5e9;">
+    <div class="sv-card-img-wrap">
+        <img src="https://lh3.googleusercontent.com/d/GANTI_DENGAN_FILE_ID_GAMBAR"
+             alt="Layanan Persuratan" class="sv-card-img" loading="lazy"
+             onerror="this.src='https://via.placeholder.com/400x200/0ea5e9/ffffff?text=Layanan+Persuratan'">
+    </div>
+    <div class="sv-card-body">
+        <div class="sv-card-title-row">
+            <span class="sv-card-dot"></span>
+            <h5 class="sv-card-title">Layanan Persuratan</h5>
+        </div>
+        <p class="sv-card-desc">
+            Buat surat resmi LDK Syahid secara otomatis — Surat Izin Orang Tua, Peminjaman Alat/Tempat,
+            Permohonan Bantuan Dana, Rekomendasi, Undangan, dan lainnya. Nomor surat otomatis,
+            lengkap dengan QR code verifikasi keaslian dokumen.
+        </p>
+        <div class="sv-card-footer">
+            <div class="sv-card-share-row">
+                <button class="sv-card-share-btn sv-share-copy"
+                        onclick="svCopyUrl('{{ url('/layanan/persuratan') }}', event)">
+                    <i class="fas fa-link"></i><span>Salin URL</span>
+                </button>
+                <button class="sv-card-share-btn sv-share-wa"
+                        onclick="svShareWa('{{ url('/layanan/persuratan') }}', 'Layanan Persuratan', event)">
+                    <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+                </button>
+            </div>
+            <a href="{{ route('service.persuratan.index') }}" target="_blank" rel="noopener" class="sv-card-cta">
+                <i class="fas fa-arrow-right"></i><span>Mulai</span>
+            </a>
+        </div>
+    </div>
+</div>
+
         </div>{{-- /sv-grid --}}
 
 
@@ -220,6 +254,30 @@
                 </div>
                 <i class="fas fa-chevron-right sv-m-arrow"></i>
             </div>
+
+            <div class="sv-m-card"
+     style="--sv-accent: #0ea5e9;"
+     onclick="svOpenSheet(this)"
+     data-title="Layanan Persuratan"
+     data-desc="Buat surat resmi LDK Syahid secara otomatis — Surat Izin Orang Tua, Peminjaman Alat/Tempat, Permohonan Bantuan Dana, Rekomendasi, Undangan, dan lainnya. Nomor surat otomatis, lengkap dengan QR code verifikasi keaslian dokumen."
+     data-image="GANTI_DENGAN_FILE_ID_GAMBAR"
+     data-url="{{ route('service.persuratan.index') }}"
+     data-accent="#0ea5e9"
+     data-label="Mulai"
+     data-disabled="0">
+    <div class="sv-m-thumb">
+        <img src="https://lh3.googleusercontent.com/d/GANTI_DENGAN_FILE_ID_GAMBAR"
+             alt="Layanan Persuratan" loading="lazy"
+             onerror="this.src='https://via.placeholder.com/80x80/0ea5e9/ffffff?text=P'">
+    </div>
+    <div class="sv-m-info">
+        <h5 class="sv-m-title">Layanan Persuratan</h5>
+        <p class="sv-m-desc">Generate surat resmi LDK Syahid otomatis, lengkap dengan QR verifikasi</p>
+        <span class="sv-m-hint"><i class="fas fa-info-circle"></i> Ketuk untuk detail</span>
+    </div>
+    <i class="fas fa-chevron-right sv-m-arrow"></i>
+</div>
+
 
             {{-- ── Call Kestari ─────────────────────────────────── --}}
             <div class="sv-m-card"
