@@ -173,60 +173,95 @@
                 @endauth
             </div>
 
-            {{-- KOLOM KANAN (Sidebar Kontak / Call Kestari) --}}
-            <div class="col-lg-5 col-xl-4">
-                <div class="prs-card position-sticky" style="top: 100px;">
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <div class="prs-card-icon-wrap" style="width: 48px; height: 48px;">
-                            <div class="prs-card-icon shadow-none" style="width: 100%; height: 100%; background: transparent; color: var(--prs-accent-dark);">
-                                <i class="fas fa-headset fs-5"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <h5 class="prs-card-title mb-1" style="font-size: 1.1rem;">Butuh Bantuan?</h5>
-                            <p class="prs-card-sub mt-0">Hubungi narahubung Kestari</p>
-                        </div>
-                    </div>
+            {{-- KOLOM KANAN (Sidebar Logo, SLA, & Kontak) --}}
+<div class="col-lg-5 col-xl-4">
+    <div class="position-sticky" style="top: 100px; display: flex; flex-direction: column; gap: 1.25rem;">
 
-                    <div class="prs-history-list">
-                        <!-- 1. Admin Kestari -->
-                        <a href="https://wa.me/6285819353387" target="_blank" rel="noopener" class="prs-history-item text-decoration-none">
-                            <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 42px; height: 42px; background: rgba(37,211,102,.15); color: #1da851; flex-shrink: 0;">
-                                <i class="fab fa-whatsapp fs-5"></i>
-                            </div>
-                            <div class="prs-history-content">
-                                <div class="prs-history-title">M. Fiqhan Fajar</div>
-                                <div class="prs-history-meta">Admin Kestari</div>
-                            </div>
-                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.8rem; margin-left: auto;"></i>
-                        </a>
+        {{-- 1. CARD LOGO & IDENTITAS --}}
+        <div class="prs-card text-center p-4">
+            <img src="https://drive.google.com/uc?export=view&id=ID_FILE_GAMBAR_AA" alt="Logo LDK Syahid" class="img-fluid mb-3 d-none prs-logo-img">
+            
+            <div id="logo-placeholder" class="prs-sidebar-logo">
+                <i class="fas fa-image fa-2x"></i>
+            </div>
+            
+            <h5 class="fw-bold mb-1" style="color: var(--prs-dark);">Layanan Administrasi</h5>
+            <p class="text-muted small mb-0" style="color: var(--prs-gray);">LDK Syahid UIN Syarif Hidayatullah</p>
+        </div>
 
-                        <!-- 2. Sekjen LDK -->
-                        <a href="https://wa.me/6285776923137" target="_blank" rel="noopener" class="prs-history-item text-decoration-none">
-                            <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 42px; height: 42px; background: rgba(37,211,102,.15); color: #1da851; flex-shrink: 0;">
-                                <i class="fab fa-whatsapp fs-5"></i>
-                            </div>
-                            <div class="prs-history-content">
-                                <div class="prs-history-title">M. Zhaffar Rabbany</div>
-                                <div class="prs-history-meta">Sekjen LDK</div>
-                            </div>
-                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.8rem; margin-left: auto;"></i>
-                        </a>
-
-                        <!-- 3. Admin & Web Dev -->
-                        <a href="https://wa.me/6281317209305" target="_blank" rel="noopener" class="prs-history-item text-decoration-none">
-                            <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 42px; height: 42px; background: rgba(14,165,233,.15); color: var(--prs-accent-dark); flex-shrink: 0;">
-                                <i class="fas fa-code fs-5"></i>
-                            </div>
-                            <div class="prs-history-content">
-                                <div class="prs-history-title">M. Fakhri Alfarisi</div>
-                                <div class="prs-history-meta">Admin & Web Dev</div>
-                            </div>
-                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.8rem; margin-left: auto;"></i>
-                        </a>
+        {{-- 2. CARD INFORMASI LAYANAN / SLA --}}
+        <div class="prs-card p-4">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="prs-card-icon-wrap" style="width: 40px; height: 40px; padding: 0;">
+                    <div class="prs-card-icon shadow-none prs-info-icon-box">
+                        <i class="fas fa-info-circle fs-6"></i>
                     </div>
                 </div>
+                <h6 class="fw-bold mb-0" style="color: var(--prs-dark);">Informasi Layanan</h6>
             </div>
+            
+            <ul class="prs-sla-list">
+                <li class="prs-sla-item">
+                    <i class="fas fa-clock"></i>
+                    <span><strong>Waktu Proses:</strong> Maksimal 1x24 jam (hari kerja) setelah pengajuan dikirim.</span>
+                </li>
+                <li class="prs-sla-item">
+                    <i class="fas fa-file-pdf"></i>
+                    <span><strong>Output Dokumen:</strong> Surat akan di-generate dalam format PDF ber-QR Code yang sah.</span>
+                </li>
+                <li class="prs-sla-item">
+                    <i class="fas fa-bell"></i>
+                    <span><strong>Notifikasi:</strong> Cek menu <em>Riwayat Surat</em> secara berkala untuk melihat status persetujuan.</span>
+                </li>
+            </ul>
+        </div>
+
+        {{-- 3. CARD BUTUH BANTUAN (Call Kestari) --}}
+        <div class="prs-card p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="prs-card-icon-wrap" style="width: 48px; height: 48px; padding: 0; background: transparent;">
+                    <div class="prs-card-icon shadow-none prs-help-icon-box">
+                        <i class="fas fa-headset fs-5"></i>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-1" style="font-size: 1.1rem; color: var(--prs-dark);">Butuh Bantuan?</h5>
+                    <p class="mt-0 mb-0" style="font-size: 0.8rem; color: var(--prs-gray);">Hubungi narahubung Kestari</p>
+                </div>
+            </div>
+
+            <div class="prs-history-list">
+                <a href="https://wa.me/6285819353387" target="_blank" rel="noopener" class="prs-history-item text-decoration-none border shadow-none">
+                    <div class="prs-wa-icon"><i class="fab fa-whatsapp"></i></div>
+                    <div class="prs-history-content">
+                        <div class="prs-history-title">M. Fiqhan Fajar</div>
+                        <div class="prs-history-meta">Admin Kestari</div>
+                    </div>
+                    <i class="fas fa-chevron-right prs-chevron-icon"></i>
+                </a>
+
+                <a href="https://wa.me/6285776923137" target="_blank" rel="noopener" class="prs-history-item text-decoration-none border shadow-none">
+                    <div class="prs-wa-icon"><i class="fab fa-whatsapp"></i></div>
+                    <div class="prs-history-content">
+                        <div class="prs-history-title">M. Zhaffar Rabbany</div>
+                        <div class="prs-history-meta">Sekjen LDK</div>
+                    </div>
+                    <i class="fas fa-chevron-right prs-chevron-icon"></i>
+                </a>
+
+                <a href="https://wa.me/6281317209305" target="_blank" rel="noopener" class="prs-history-item text-decoration-none border shadow-none">
+                    <div class="prs-wa-icon"><i class="fab fa-whatsapp"></i></div>
+                    <div class="prs-history-content">
+                        <div class="prs-history-title">M. Fakhri Alfarisi</div>
+                        <div class="prs-history-meta">Admin & Web Dev</div>
+                    </div>
+                    <i class="fas fa-chevron-right prs-chevron-icon"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
 
         </div>
     </div>

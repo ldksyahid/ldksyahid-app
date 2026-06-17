@@ -151,7 +151,7 @@
                             </div>
 
                             <div id="nomor-manual-wrapper" class="d-none">
-                                <input type="text" name="nomor_surat_manual"
+                                <input type="text" name="nomor_surat_manual" id="input_nomor_manual"
                                        class="form-control form-control-sm rounded-3 @error('nomor_surat_manual') is-invalid @enderror"
                                        placeholder="Contoh: 005/SR-e/LDK-SYAHID/VI/2026"
                                        value="{{ old('nomor_surat_manual') }}">
@@ -171,7 +171,7 @@
                                       rows="3" placeholder="Catatan untuk pengaju...">{{ old('catatan_admin') }}</textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-success rounded-3 w-100 fw-semibold"
+                        <button type="submit" class="btn btn-success rounded-3 w-100 fw-semibold" id="btn-approve"
                                 onclick="return confirm('Setujui pengajuan ini? Nomor surat akan diterbitkan.')">
                             <i class="fas fa-check me-2"></i> Setujui & Terbitkan Nomor Surat
                         </button>
@@ -182,7 +182,7 @@
                     <h6 class="fw-bold text-danger mb-3">
                         <i class="fas fa-times-circle me-1"></i> Tolak Pengajuan
                     </h6>
-                    <form action="{{ route('admin.persuratan.reject', $suratLog) }}" method="POST">
+                    <form action="{{ route('admin.persuratan.reject', $suratLog) }}" method="POST" id="form-reject">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label small fw-semibold">
@@ -191,7 +191,7 @@
                             <textarea name="catatan_admin" class="form-control form-control-sm rounded-3"
                                       rows="3" placeholder="Jelaskan alasan penolakan..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-danger rounded-3 w-100 fw-semibold"
+                        <button type="submit" class="btn btn-danger rounded-3 w-100 fw-semibold" id="btn-reject"
                                 onclick="return confirm('Tolak pengajuan ini?')">
                             <i class="fas fa-times me-2"></i> Tolak Pengajuan
                         </button>
@@ -231,29 +231,61 @@
 </div>
 
 <script>
-(function () {
+document.addEventListener('DOMContentLoaded', function () {
+    // 1. Toggling Mode Nomor Surat
     var radios  = document.querySelectorAll('input[name="nomor_mode"]');
     var wrapper = document.getElementById('nomor-manual-wrapper');
-    var input   = wrapper ? wrapper.querySelector('input[name="nomor_surat_manual"]') : null;
+    var input   = document.getElementById('input_nomor_manual');
 
-    if (!radios.length || !wrapper) return;
+    if (radios.length && wrapper) {
+        function sync() {
+            var manual = document.getElementById('nomor-mode-manual').checked;
+            wrapper.classList.toggle('d-none', !manual);
+            if (input) input.required = manual;
+            if (!manual && input) input.value = '';
+        }
 
-    function sync() {
-        var manual = document.getElementById('nomor-mode-manual').checked;
-        wrapper.classList.toggle('d-none', !manual);
-        if (input) input.required = manual;
-        if (!manual && input) input.value = '';
+        radios.forEach(function (r) { r.addEventListener('change', sync); });
+
+        @error('nomor_surat_manual')
+            document.getElementById('nomor-mode-manual').checked = true;
+        @enderror
+
+        sync();
     }
 
-    radios.forEach(function (r) { r.addEventListener('change', sync); });
+    // 2. Prevent Double Submit: Approve
+    var formApprove = document.getElementById('form-approve');
+    var btnApprove  = document.getElementById('btn-approve');
+    if (formApprove && btnApprove) {
+        formApprove.addEventListener('submit', function (e) {
+            // Cek validity untuk memastikan required terisi jika mode manual
+            if (this.checkValidity()) {
+                // Beri jeda sangat singkat agar fungsi confirm(OK) selesai terekseskusi
+                setTimeout(function() {
+                    btnApprove.disabled = true;
+                    btnApprove.innerHTML = '<i class="fas fa-circle-notch fa-spin me-2"></i>Menyetujui...';
+                    btnApprove.style.cursor = 'not-allowed';
+                }, 10);
+            }
+        });
+    }
 
-    // Jika ada error validasi nomor_surat_manual, otomatis pilih mode manual
-    @error('nomor_surat_manual')
-        document.getElementById('nomor-mode-manual').checked = true;
-    @enderror
-
-    sync();
-}());
+    // 3. Prevent Double Submit: Reject
+    var formReject = document.getElementById('form-reject');
+    var btnReject  = document.getElementById('btn-reject');
+    if (formReject && btnReject) {
+        formReject.addEventListener('submit', function (e) {
+            if (this.checkValidity()) {
+                setTimeout(function() {
+                    btnReject.disabled = true;
+                    btnReject.innerHTML = '<i class="fas fa-circle-notch fa-spin me-2"></i>Menolak...';
+                    btnReject.style.cursor = 'not-allowed';
+                }, 10);
+            }
+        });
+    }
+});
 </script>
 
 @endsection

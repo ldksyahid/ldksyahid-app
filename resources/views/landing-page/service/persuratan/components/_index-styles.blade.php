@@ -331,5 +331,68 @@
 [data-theme="dark"] .prs-badge-danger  { background: rgba(239,68,68,.18); color: #fca5a5; }
 
 [data-theme="dark"] .prs-btn-download  { background: rgba(14,165,233,.15); color: #38bdf8; }
+
+/* ================================================================
+   SIDEBAR WIDGETS (LOGO, SLA, CONTACT)
+   ================================================================ */
+.prs-sidebar-logo {
+    width: 80px; height: 80px; margin: 0 auto 1rem;
+    background: rgba(var(--bs-primary-rgb), .1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--prs-primary);
+}
+.prs-logo-img { max-height: 90px; object-fit: contain; }
+
+/* Wrapper Icon Spesifik */
+.prs-info-icon-box {
+    width: 100%; height: 100%;
+    background: rgba(245, 158, 11, 0.15); color: #f59e0b;
+}
+.prs-help-icon-box {
+    width: 100%; height: 100%; 
+    background: rgba(var(--bs-primary-rgb), .15); color: var(--prs-primary);
+}
+
+/* SLA List */
+.prs-sla-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 1rem;
+}
+.prs-sla-item {
+    display: flex; align-items: flex-start; gap: .75rem;
+    font-size: .85rem; color: #6c757d; line-height: 1.5;
+}
+.prs-sla-item i { color: var(--prs-primary); margin-top: .2rem; }
+
+/* WhatsApp Icon Box */
+.prs-wa-icon {
+    display: flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px; border-radius: 12px;
+    background: rgba(37,211,102,.15); color: #1da851;
+    flex-shrink: 0; font-size: 1.25rem; transition: all 0.3s ease;
+}
+.prs-history-item:hover .prs-wa-icon {
+    background: #25d366; color: #fff; transform: scale(1.05);
+}
+
+/* Chevron Icon */
+.prs-chevron-icon { 
+    font-size: 0.8rem; margin-left: auto; color: #adb5bd; transition: color 0.3s; 
+}
+.prs-history-item:hover .prs-chevron-icon { color: var(--prs-primary); }
+
+/* ================================================================
+   DARK MODE OVERRIDES UNTUK SIDEBAR
+   ================================================================ */
+[data-theme="dark"] .prs-sidebar-logo { background: rgba(var(--bs-primary-rgb), .15); }
+[data-theme="dark"] .prs-info-icon-box { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
+[data-theme="dark"] .prs-help-icon-box { background: rgba(var(--bs-primary-rgb), .1); color: #4dd9cf; }
+[data-theme="dark"] .prs-sla-item { color: #9ca3af; }
+
+/* WhatsApp Dark Mode */
+[data-theme="dark"] .prs-wa-icon { background: rgba(37,211,102,.1); color: #25d366; }
+[data-theme="dark"] .prs-history-item:hover .prs-wa-icon { background: #25d366; color: #111827; }
+[data-theme="dark"] .prs-chevron-icon { color: #4b5563; }
 </style>
 @endverbatim

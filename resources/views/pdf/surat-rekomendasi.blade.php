@@ -154,7 +154,7 @@
 </head>
 <body>
 @php
-    $templatePath = public_path('assets/persuratan/surat-rekomendasi-header.png');
+    $templatePath = public_path('assets/persuratan/kop-ldk.png');
     $templateUri = file_exists($templatePath)
         ? 'data:image/png;base64,' . base64_encode(file_get_contents($templatePath))
         : null;
