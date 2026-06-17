@@ -70,15 +70,16 @@
 
     var oldValues = @json(old());
 
-    function buildField(f) {
+    function buildField(f, idx) {
         var val = oldValues[f.name] || '';
+        var delay = 'style="animation-delay:' + (idx * 0.05).toFixed(2) + 's"';
 
         if (f.type === 'select') {
             var opts = f.options.map(function (o) {
                 return '<option value="' + o.value + '"' + (val === o.value ? ' selected' : '') + '>' + o.label + '</option>';
             }).join('');
             return (
-                '<div class="prs-field">' +
+                '<div class="prs-field" ' + delay + '>' +
                     '<label class="prs-label" for="' + f.name + '">' +
                         '<i class="fas ' + f.icon + '"></i> ' + f.label +
                     '</label>' +
@@ -91,7 +92,7 @@
 
         if (f.type === 'textarea') {
             return (
-                '<div class="prs-field">' +
+                '<div class="prs-field" ' + delay + '>' +
                     '<label class="prs-label" for="' + f.name + '">' +
                         '<i class="fas ' + f.icon + '"></i> ' + f.label +
                     '</label>' +
@@ -103,7 +104,7 @@
 
         var type = f.type || 'text';
         return (
-            '<div class="prs-field">' +
+            '<div class="prs-field" ' + delay + '>' +
                 '<label class="prs-label" for="' + f.name + '">' +
                     '<i class="fas ' + f.icon + '"></i> ' + f.label +
                 '</label>' +
@@ -129,13 +130,45 @@
 
         var html = '<hr class="prs-divider">' +
             '<p class="prs-hint-text"><i class="fas fa-info-circle"></i> Isi semua field berikut dengan benar.</p>';
-        fields.forEach(function (f) { html += buildField(f); });
+        fields.forEach(function (f, idx) { html += buildField(f, idx); });
         container.innerHTML = html;
         btnWrapper.style.removeProperty('display');
+
+        // --- 1. MENCEGAH TANGGAL MASA LALU ---
+        // Dieksekusi setiap kali field di-render ulang
+        var dateInputs = container.querySelectorAll('input[type="date"]');
+        if (dateInputs.length > 0) {
+            var today = new Date().toISOString().split('T')[0];
+            dateInputs.forEach(function(input) {
+                input.setAttribute('min', today);
+            });
+        }
     }
 
+    // Eksekusi awal saat halam diload
     var selectEl = document.getElementById('jenis_surat');
     if (selectEl && selectEl.value) renderFields(selectEl.value);
     if (selectEl) selectEl.addEventListener('change', function () { renderFields(this.value); });
+
+    // --- 2. PENCEGAHAN DOUBLE SUBMIT ---
+    var formPersuratan = document.getElementById('form-persuratan');
+    var btnSubmit = document.getElementById('btn-submit');
+
+    if (formPersuratan && btnSubmit) {
+        formPersuratan.addEventListener('submit', function (e) {
+            // Cek validasi bawaan HTML5 (required)
+            if (this.checkValidity()) {
+                // Disable tombol
+                btnSubmit.disabled = true;
+                
+                // Ubah teks dan beri ikon loading spin
+                btnSubmit.innerHTML = '<i class="fas fa-circle-notch fa-spin me-2"></i>Memproses Pengajuan...';
+                
+                // Sedikit styling agar terlihat sedang tidak aktif
+                btnSubmit.style.cursor = 'not-allowed';
+                btnSubmit.style.opacity = '0.8';
+            }
+        });
+    }
 }());
 </script>

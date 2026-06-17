@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\SuratCounter;
@@ -107,13 +108,14 @@ class PersuratingController extends Controller
         $validated   = $request->validate($rules);
 
         SuratLog::create([
-            'user_id'     => auth()->id(),
-            'jenis_surat' => $jenis,
-            'label'       => $suratConfig['label'],
-            'nomor_surat' => '-',       // belum diberi nomor, menunggu approve
-            'data'        => $validated,
-            'filename'    => '',
-            'status'      => 'pending',
+            'user_id'         => auth()->id(),
+            'jenis_surat'     => $jenis,
+            'label'           => $suratConfig['label'],
+            'nomor_surat'     => '-',       // belum diberi nomor, menunggu approve
+            'data'            => $validated,
+            'filename'        => '',
+            'status'          => 'pending',
+            'kode_verifikasi' => Str::uuid()->toString(), // Generate UUID otomatis di sini
         ]);
 
         return back()->with('success', 'Pengajuan surat berhasil dikirim! Silakan tunggu konfirmasi dari admin.');
@@ -204,9 +206,9 @@ class PersuratingController extends Controller
      * Nomor surat bisa:
      * - Auto-generate (kosongkan field nomor_surat_manual), ATAU
      * - Diisi manual mengikuti format XXX/PREFIX/LDK-SYAHID/BULAN-ROMAWI/TAHUN.
-     *   Jika manual, counter di tabel surat_counters akan disinkronkan
-     *   ke periode (bulan/tahun) yang tertera pada nomor tersebut, agar
-     *   nomor auto berikutnya melanjutkan urutan dengan benar.
+     * Jika manual, counter di tabel surat_counters akan disinkronkan
+     * ke periode (bulan/tahun) yang tertera pada nomor tersebut, agar
+     * nomor auto berikutnya melanjutkan urutan dengan benar.
      */
     public function approve(Request $request, SuratLog $suratLog)
     {

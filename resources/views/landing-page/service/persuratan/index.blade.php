@@ -35,10 +35,11 @@
             </div>
         </div>
 
-        <div class="row justify-content-center g-4 mt-1">
-
-            {{-- ── Form Pengajuan ───────────────────────────────── --}}
-            <div class="col-lg-7">
+        {{-- ── Layout Form & Sidebar Kontak ─────────────────────── --}}
+        <div class="row g-4 mt-1">
+            
+            {{-- KOLOM KIRI (Form, Info, & Riwayat) --}}
+            <div class="col-lg-7 col-xl-8">
 
                 @if (session('success'))
                     <div class="prs-alert prs-alert-success">
@@ -60,9 +61,12 @@
                     </div>
                 @endif
 
+                {{-- Card Form Pengajuan --}}
                 <div class="prs-card">
                     <div class="prs-card-head">
-                        <div class="prs-card-icon"><i class="fas fa-pen-nib"></i></div>
+                        <div class="prs-card-icon-wrap">
+                            <div class="prs-card-icon"><i class="fas fa-pen-nib"></i></div>
+                        </div>
                         <div>
                             <h5 class="prs-card-title">Form Pengajuan Surat</h5>
                             <p class="prs-card-sub">Lengkapi data di bawah dengan teliti</p>
@@ -97,25 +101,25 @@
                                 <i class="fas fa-paper-plane"></i> Kirim Pengajuan Surat
                             </button>
                         </div>
-
                     </form>
                 </div>
 
-                <div class="prs-info-box">
+                {{-- Info Box Alur --}}
+                <div class="prs-info-box mt-4">
                     <div class="prs-info-icon"><i class="fas fa-route"></i></div>
                     <div class="prs-info-text">
                         <strong>Alur Pengajuan</strong>
                         <p>Kirim pengajuan &rarr; Admin mereview &amp; menerbitkan nomor surat &rarr; Kamu mendapat notifikasi &amp; bisa mengunduh PDF di riwayat surat.</p>
                     </div>
                 </div>
-            </div>
 
-            {{-- ── Riwayat Singkat ──────────────────────────────── --}}
-            @auth
-            <div class="col-lg-7">
-                <div class="prs-card">
+                {{-- Riwayat Singkat (Hanya Muncul Jika Login) --}}
+                @auth
+                <div class="prs-card mt-4">
                     <div class="prs-card-head">
-                        <div class="prs-card-icon"><i class="fas fa-history"></i></div>
+                        <div class="prs-card-icon-wrap">
+                            <div class="prs-card-icon"><i class="fas fa-history"></i></div>
+                        </div>
                         <div class="flex-grow-1">
                             <h5 class="prs-card-title">Riwayat Terakhir</h5>
                             <p class="prs-card-sub">5 pengajuan terbaru kamu</p>
@@ -127,13 +131,19 @@
 
                     @if ($riwayat->isEmpty())
                         <div class="prs-empty">
-                            <i class="fas fa-inbox"></i>
+                            <div class="prs-empty-visual">
+                                <div class="prs-empty-ring prs-empty-ring-1"></div>
+                                <div class="prs-empty-ring prs-empty-ring-2"></div>
+                                <div class="prs-empty-icon-wrap">
+                                    <i class="fas fa-inbox"></i>
+                                </div>
+                            </div>
                             <p>Belum ada pengajuan surat.</p>
                         </div>
                     @else
                         <div class="prs-history-list">
                             @foreach ($riwayat as $log)
-                                <div class="prs-history-item">
+                                <div class="prs-history-item" style="animation-delay: {{ number_format($loop->index * 0.06, 2) }}s">
                                     <div class="prs-history-dot prs-status-{{ $log->status }}"></div>
                                     <div class="prs-history-content">
                                         <div class="prs-history-title">{{ $log->label }}</div>
@@ -160,8 +170,63 @@
                         </div>
                     @endif
                 </div>
+                @endauth
             </div>
-            @endauth
+
+            {{-- KOLOM KANAN (Sidebar Kontak / Call Kestari) --}}
+            <div class="col-lg-5 col-xl-4">
+                <div class="prs-card position-sticky" style="top: 100px;">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="prs-card-icon-wrap" style="width: 48px; height: 48px;">
+                            <div class="prs-card-icon shadow-none" style="width: 100%; height: 100%; background: transparent; color: var(--prs-accent-dark);">
+                                <i class="fas fa-headset fs-5"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="prs-card-title mb-1" style="font-size: 1.1rem;">Butuh Bantuan?</h5>
+                            <p class="prs-card-sub mt-0">Hubungi narahubung Kestari</p>
+                        </div>
+                    </div>
+
+                    <div class="prs-history-list">
+                        <!-- 1. Admin Kestari -->
+                        <a href="https://wa.me/6285819353387" target="_blank" rel="noopener" class="prs-history-item text-decoration-none">
+                            <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 42px; height: 42px; background: rgba(37,211,102,.15); color: #1da851; flex-shrink: 0;">
+                                <i class="fab fa-whatsapp fs-5"></i>
+                            </div>
+                            <div class="prs-history-content">
+                                <div class="prs-history-title">M. Fiqhan Fajar</div>
+                                <div class="prs-history-meta">Admin Kestari</div>
+                            </div>
+                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.8rem; margin-left: auto;"></i>
+                        </a>
+
+                        <!-- 2. Sekjen LDK -->
+                        <a href="https://wa.me/6285776923137" target="_blank" rel="noopener" class="prs-history-item text-decoration-none">
+                            <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 42px; height: 42px; background: rgba(37,211,102,.15); color: #1da851; flex-shrink: 0;">
+                                <i class="fab fa-whatsapp fs-5"></i>
+                            </div>
+                            <div class="prs-history-content">
+                                <div class="prs-history-title">M. Zhaffar Rabbany</div>
+                                <div class="prs-history-meta">Sekjen LDK</div>
+                            </div>
+                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.8rem; margin-left: auto;"></i>
+                        </a>
+
+                        <!-- 3. Admin & Web Dev -->
+                        <a href="https://wa.me/6281317209305" target="_blank" rel="noopener" class="prs-history-item text-decoration-none">
+                            <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 42px; height: 42px; background: rgba(14,165,233,.15); color: var(--prs-accent-dark); flex-shrink: 0;">
+                                <i class="fas fa-code fs-5"></i>
+                            </div>
+                            <div class="prs-history-content">
+                                <div class="prs-history-title">M. Fakhri Alfarisi</div>
+                                <div class="prs-history-meta">Admin & Web Dev</div>
+                            </div>
+                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.8rem; margin-left: auto;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
