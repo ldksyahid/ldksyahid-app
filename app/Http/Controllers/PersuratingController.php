@@ -13,18 +13,18 @@ use App\Models\SuratLog;
 
 class PersuratingController extends Controller
 {
+    /**
+     * Daftar jenis surat yang dilayani.
+     * Sudah disesuaikan dengan SOP & Buku Pedoman Kestari.
+     */
     private array $suratTypes = [
         'izin-orang-tua' => [
             'label'  => 'Surat Izin Orang Tua',
             'fields' => ['nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat'],
         ],
-        'peminjaman-alat-internal' => [
-            'label'  => 'Surat Peminjaman Alat (Internal)',
-            'fields' => ['nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'daftar_alat'],
-        ],
-        'peminjaman-alat-eksternal' => [
-            'label'  => 'Surat Peminjaman Alat (Eksternal)',
-            'fields' => ['nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'daftar_alat'],
+        'peminjaman-alat' => [
+            'label'  => 'Surat Peminjaman Alat',
+            'fields' => ['jenis_peminjaman', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'daftar_alat'],
         ],
         'peminjaman-tempat-kampus' => [
             'label'  => 'Surat Peminjaman Tempat (Kampus)',
@@ -46,21 +46,40 @@ class PersuratingController extends Controller
             'label'  => 'Surat Undangan',
             'fields' => ['jenis_undangan', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat'],
         ],
+        'surat-aktif-organisasi' => [
+            'label'  => 'Surat Keterangan Aktif Organisasi',
+            'fields' => ['nama', 'ttl', 'nim', 'fakultas', 'jurusan', 'jabatan', 'keperluan', 'penyelenggara'],
+        ],
+        'permohonan-pemateri' => [
+            'label'  => 'Surat Permohonan Pemateri / Narasumber',
+            'fields' => ['nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'materi'],
+        ],
+        'kerja-sama-sponsorship' => [
+            'label'  => 'Surat Kerja Sama / Sponsorship',
+            'fields' => ['nama_acara', 'tema_acara', 'ditujukan_kepada', 'bentuk_kerjasama'],
+        ],
+        'surat-pemberitahuan' => [
+            'label'  => 'Surat Pemberitahuan',
+            'fields' => ['nama_kegiatan', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat'],
+        ],
     ];
 
     /**
-     * Mapping prefix nomor surat & bulan romawi — dipakai untuk generate
-     * maupun parsing nomor surat manual.
+     * Mapping prefix nomor surat — dipakai untuk generate & parsing.
+     * Beberapa memiliki akhiran -i (Internal) atau -e (Eksternal).
      */
     private array $prefixMap = [
         'izin-orang-tua'              => 'Ph-e',
-        'peminjaman-alat-internal'    => 'Ph-i',
-        'peminjaman-alat-eksternal'   => 'Ph-e',
+        'peminjaman-alat'             => 'Ph', // Di-generate dinamis
         'peminjaman-tempat-kampus'    => 'Ph-e',
         'permohonan-bantuan-dana'     => 'Ph-e',
         'permohonan-izin-luar-kampus' => 'Ph-e',
         'surat-rekomendasi'           => 'SR-e',
-        'surat-undangan'              => 'Und',
+        'surat-undangan'              => 'Und', // Di-generate dinamis
+        'surat-aktif-organisasi'      => 'S.Ket-i',
+        'permohonan-pemateri'         => 'Ph-e',
+        'kerja-sama-sponsorship'      => 'Ks-e',
+        'surat-pemberitahuan'         => 'Pb-e',
     ];
 
     private array $romanMonth = [
@@ -111,11 +130,11 @@ class PersuratingController extends Controller
             'user_id'         => auth()->id(),
             'jenis_surat'     => $jenis,
             'label'           => $suratConfig['label'],
-            'nomor_surat'     => '-',       // belum diberi nomor, menunggu approve
+            'nomor_surat'     => '-',
             'data'            => $validated,
             'filename'        => '',
             'status'          => 'pending',
-            'kode_verifikasi' => Str::uuid()->toString(), // Generate UUID otomatis di sini
+            'kode_verifikasi' => Str::uuid()->toString(), // Auto-generate UUID
         ]);
 
         return back()->with('success', 'Pengajuan surat berhasil dikirim! Silakan tunggu konfirmasi dari admin.');
@@ -194,7 +213,7 @@ class PersuratingController extends Controller
      */
     public function showAdmin(SuratLog $suratLog)
     {
-        // Cari nomor terakhir yang disetujui untuk jenis surat yang sama
+        // Cari nomor terakhir yang diterbitkan untuk jenis surat yang sama
         $lastSurat = SuratLog::where('jenis_surat', $suratLog->jenis_surat)
             ->where('status', 'approved')
             ->latest('approved_at')
@@ -205,9 +224,13 @@ class PersuratingController extends Controller
         return view('admin-page.service-request.persuratan.show', [
             'title'     => 'Detail Pengajuan Surat',
             'suratLog'  => $suratLog->load('user', 'approvedBy'),
-            'lastNomor' => $lastNomor, // <-- Kirim data ke view
+            'lastNomor' => $lastNomor,
         ]);
     }
+
+    /**
+     * Approve pengajuan — generate nomor otomatis/manual dan terbitkan surat.
+     */
     public function approve(Request $request, SuratLog $suratLog)
     {
         abort_if(!$suratLog->isPending(), 422, 'Surat sudah diproses sebelumnya.');
@@ -224,7 +247,7 @@ class PersuratingController extends Controller
 
             if (!$parsed) {
                 return back()
-                    ->withErrors(['nomor_surat_manual' => 'Format nomor surat tidak valid. Gunakan format: XXX/PREFIX/LDK-SYAHID/BULAN-ROMAWI/TAHUN, contoh: 005/SR-e/LDK-SYAHID/VI/2026'])
+                    ->withErrors(['nomor_surat_manual' => 'Format nomor surat tidak valid. Contoh: 005.1/SR-e/KST/LDK-SYAHID/VI/2026'])
                     ->withInput();
             }
         }
@@ -234,11 +257,9 @@ class PersuratingController extends Controller
                 $parsed     = $this->parseNomorSurat($nomorManual, $suratLog->jenis_surat);
                 $nomorSurat = $parsed['nomor_surat'];
 
-                // Sinkronkan counter ke periode yang tertera pada nomor manual,
-                // supaya generate auto berikutnya lanjut dari urutan ini.
                 $this->syncCounter($suratLog->jenis_surat, $parsed['periode'], $parsed['urutan']);
             } else {
-                $nomorSurat = $this->generateNomorSurat($suratLog->jenis_surat);
+                $nomorSurat = $this->generateNomorSurat($suratLog);
             }
 
             $filename = $suratLog->jenis_surat . '_' . now()->format('Ymd_His') . '.pdf';
@@ -292,7 +313,7 @@ class PersuratingController extends Controller
     }
 
     /**
-     * Hapus pengajuan surat (Superadmin only — dikontrol di route).
+     * Hapus pengajuan surat (Superadmin only).
      */
     public function destroy(SuratLog $suratLog)
     {
@@ -317,7 +338,10 @@ class PersuratingController extends Controller
             : now()->locale('id')->translatedFormat('d F Y');
 
         $verifikasiUrl = route('persuratan.verifikasi', ['kode' => $suratLog->kode_verifikasi]);
-        $qrCode        = QrCode::size(120)->generate($verifikasiUrl);
+        
+        // Trik QR Base64 SVG agar tidak error butuh ekstensi Imagick di Windows/XAMPP
+        $qrSvg  = QrCode::size(120)->margin(0)->generate($verifikasiUrl);
+        $qrCode = 'data:image/svg+xml;base64,' . base64_encode((string) $qrSvg);
 
         $pdfView = View::exists('pdf.' . $suratLog->jenis_surat)
             ? 'pdf.' . $suratLog->jenis_surat
@@ -331,24 +355,24 @@ class PersuratingController extends Controller
             'user'           => $suratLog->user,
             'kodeVerifikasi' => $suratLog->kode_verifikasi,
             'verifikasiUrl'  => $verifikasiUrl,
-            'qrCode'         => $qrCode,
+            'qrCode'         => $qrCode, // String SVG Base64 untuk tag <img>
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download($suratLog->filename ?: $suratLog->jenis_surat . '.pdf');
     }
 
     /**
-     * Build dynamic validation rules berdasarkan field config.
+     * Build dynamic validation rules.
      */
     private function buildValidationRules(string $jenis, array $fields): array
     {
         $dateFields     = ['hari_tanggal', 'tanggal_mulai', 'tanggal_selesai'];
-        $textareaFields = ['daftar_alat', 'keperluan', 'pertimbangan'];
+        $textareaFields = ['daftar_alat', 'keperluan', 'pertimbangan', 'bentuk_kerjasama', 'materi'];
 
         $rules = ['jenis_surat' => 'required|string'];
 
         foreach ($fields as $field) {
-            if ($field === 'jenis_undangan') {
+            if ($field === 'jenis_undangan' || $field === 'jenis_peminjaman') {
                 $rules[$field] = 'required|in:internal,eksternal';
             } elseif (in_array($field, $dateFields)) {
                 $rules[$field] = 'required|date';
@@ -363,22 +387,36 @@ class PersuratingController extends Controller
     }
 
     /**
-     * Generate nomor surat otomatis dengan counter persisten di DB,
-     * untuk periode bulan ini.
+     * Generate nomor otomatis sesuai Pedoman Kesekretariatan LDK Syahid.
      */
-    private function generateNomorSurat(string $jenis): string
+    private function generateNomorSurat(SuratLog $suratLog): string
     {
+        $jenis   = $suratLog->jenis_surat;
         $periode = now()->format('Ym');
         $counter = $this->incrementCounter($jenis, $periode);
 
-        $prefix   = $this->prefixMap[$jenis] ?? 'XX';
-        $nomor    = str_pad($counter, 3, '0', STR_PAD_LEFT);
-        $bulan    = $this->romanMonth[now()->month];
-        $tahun    = now()->year;
+        $prefix = $this->prefixMap[$jenis] ?? 'XX';
 
-        // Output default tanpa sub surat: 001/SR-e/LDK-SYAHID/VI/2026
-        return "{$nomor}/{$prefix}/LDK-SYAHID/{$bulan}/{$tahun}";
+        // Deteksi sifat Internal/Eksternal dari isian form untuk prefix dinamis
+        if ($jenis === 'surat-undangan') {
+            $isInternal = ($suratLog->data['jenis_undangan'] ?? 'eksternal') === 'internal';
+            $prefix     = $isInternal ? 'Und-i' : 'Und-e';
+        } elseif ($jenis === 'peminjaman-alat') {
+            $isInternal = ($suratLog->data['jenis_peminjaman'] ?? 'eksternal') === 'internal';
+            $prefix     = $isInternal ? 'Ph-i' : 'Ph-e';
+        }
+
+        $nomor = str_pad($counter, 3, '0', STR_PAD_LEFT);
+        $bulan = $this->romanMonth[now()->month];
+        $tahun = now()->year;
+
+        // Nomor/Prefix/Biro(KST)/Organisasi/Bulan/Tahun
+        return "{$nomor}/{$prefix}/KST/LDK-SYAHID/{$bulan}/{$tahun}";
     }
+
+    /**
+     * Increment & return counter terbaru.
+     */
     private function incrementCounter(string $jenis, string $periode): int
     {
         $counter = SuratCounter::where('jenis_surat', $jenis)
@@ -401,9 +439,7 @@ class PersuratingController extends Controller
     }
 
     /**
-     * Sinkronkan counter ke nilai tertentu untuk jenis surat + periode,
-     * hanya jika nilai baru lebih besar dari counter saat ini (agar tidak
-     * mundur dan menyebabkan duplikasi nomor pada generate auto berikutnya).
+     * Sinkronkan counter ke nilai tertentu.
      */
     private function syncCounter(string $jenis, string $periode, int $urutan): void
     {
@@ -427,37 +463,33 @@ class PersuratingController extends Controller
     }
 
     /**
-     * Parse & validasi nomor surat manual dengan format:
-     * XXX/PREFIX/LDK-SYAHID/BULAN-ROMAWI/TAHUN
-     *
-     * Memastikan prefix sesuai jenis surat dan bulan romawi valid.
-     * Mengembalikan null jika format tidak valid.
-     *
-     * @return array{nomor_surat: string, periode: string, urutan: int}|null
+     * Parse & validasi nomor surat manual.
+     * Mengizinkan keberadaan sub-surat (misal: 005.01)
+     * Mengizinkan kode biro KST sesuai pedoman.
      */
     private function parseNomorSurat(string $nomor, string $jenis): ?array
     {
         $expectedPrefix = $this->prefixMap[$jenis] ?? null;
-
-        if (!$expectedPrefix) {
-            return null;
+        
+        // Dinamis prefix untuk parse manual (Agar admin tidak dibatasi jika ada perubahan)
+        if ($jenis === 'surat-undangan' || $jenis === 'peminjaman-alat') {
+            $expectedPrefix = null; // Lewati pengecekan strict karena bisa Und-i/Und-e
         }
 
-        // Regex baru: Mengizinkan titik (.) opsional setelah nomor urut.
-        // Match: XXX/PREFIX/... atau XXX.YYY/PREFIX/...
-        $pattern = '/^(\d{1,4})(?:\.(\d{1,4}))?\/([A-Za-z\-]+)\/LDK-SYAHID\/([IVXLCDM]+)\/(\d{4})$/i';
+        // Match: XXX/PREFIX/KST/LDK-SYAHID/BULAN/TAHUN atau XXX.YYY/PREFIX/KST/...
+        $pattern = '/^(\d{1,4})(?:\.(\d{1,4}))?\/([A-Za-z\-]+)\/KST\/LDK-SYAHID\/([IVXLCDM]+)\/(\d{4})$/i';
 
         if (!preg_match($pattern, $nomor, $m)) {
             return null;
         }
 
         $urutanStr   = $m[1];
-        $subStr      = $m[2] ?? ''; // Bisa berisi sub surat atau string kosong
+        $subStr      = $m[2] ?? '';
         $prefix      = $m[3];
         $bulanRomawi = $m[4];
         $tahun       = $m[5];
 
-        if (strcasecmp($prefix, $expectedPrefix) !== 0) {
+        if ($expectedPrefix && strcasecmp($prefix, $expectedPrefix) !== 0) {
             return null;
         }
 
@@ -470,19 +502,19 @@ class PersuratingController extends Controller
         $urutan  = (int) $urutanStr;
         $periode = $tahun . str_pad((string) $bulanNumber, 2, '0', STR_PAD_LEFT);
 
-        // Rangkai ulang formatnya agar tetap standar
         $nomorNormalized = str_pad((string) $urutan, 3, '0', STR_PAD_LEFT);
         if ($subStr !== '') {
             $nomorNormalized .= '.' . $subStr;
         }
-        $nomorNormalized .= '/' . $expectedPrefix
-            . '/LDK-SYAHID/' . $this->romanMonth[$bulanNumber]
+        
+        $nomorNormalized .= '/' . strtoupper($prefix)
+            . '/KST/LDK-SYAHID/' . $this->romanMonth[$bulanNumber]
             . '/' . $tahun;
 
         return [
             'nomor_surat' => $nomorNormalized,
             'periode'     => $periode,
-            'urutan'      => $urutan, // Counter tetap disinkronkan pakai urutan utamanya
+            'urutan'      => $urutan,
         ];
     }
 }

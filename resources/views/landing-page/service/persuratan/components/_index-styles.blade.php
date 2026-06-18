@@ -332,15 +332,16 @@
 
 [data-theme="dark"] .prs-btn-download  { background: rgba(14,165,233,.15); color: #38bdf8; }
 
+
 /* ================================================================
-   SIDEBAR WIDGETS (LOGO, SLA, CONTACT)
+   SIDEBAR WIDGETS (LOGO, SLA, CONTACT, FAQ)
    ================================================================ */
 .prs-sidebar-logo {
     width: 80px; height: 80px; margin: 0 auto 1rem;
-    background: rgba(var(--bs-primary-rgb), .1);
+    background: rgba(14,165,233,.1);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    color: var(--prs-primary);
+    color: var(--prs-accent);
 }
 .prs-logo-img { max-height: 90px; object-fit: contain; }
 
@@ -351,7 +352,7 @@
 }
 .prs-help-icon-box {
     width: 100%; height: 100%; 
-    background: rgba(var(--bs-primary-rgb), .15); color: var(--prs-primary);
+    background: rgba(14,165,233,.15); color: var(--prs-accent);
 }
 
 /* SLA List */
@@ -363,7 +364,7 @@
     display: flex; align-items: flex-start; gap: .75rem;
     font-size: .85rem; color: #6c757d; line-height: 1.5;
 }
-.prs-sla-item i { color: var(--prs-primary); margin-top: .2rem; }
+.prs-sla-item i { color: var(--prs-accent); margin-top: .2rem; }
 
 /* WhatsApp Icon Box */
 .prs-wa-icon {
@@ -380,19 +381,166 @@
 .prs-chevron-icon { 
     font-size: 0.8rem; margin-left: auto; color: #adb5bd; transition: color 0.3s; 
 }
-.prs-history-item:hover .prs-chevron-icon { color: var(--prs-primary); }
+.prs-history-item:hover .prs-chevron-icon { color: var(--prs-accent); }
+
+
+/* ─── FAQ Accordion ────────────────────────────────────────────── */
+.prs-faq-list { display: flex; flex-direction: column; gap: .55rem; }
+
+.prs-faq-item {
+    border: 1.5px solid var(--prs-gray-200); border-radius: 14px;
+    overflow: hidden; transition: border-color .2s ease;
+}
+.prs-faq-item.prs-faq-open { border-color: rgba(14,165,233,.3); }
+
+.prs-faq-question {
+    display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+    width: 100%; background: none; border: none; text-align: left;
+    padding: .75rem .9rem; cursor: pointer;
+    font-size: .82rem; font-weight: 600; color: var(--prs-dark);
+    transition: background .2s ease;
+}
+.prs-faq-question:hover { background: rgba(14,165,233,.05); }
+.prs-faq-question i {
+    font-size: .72rem; color: var(--prs-accent); flex-shrink: 0;
+    transition: transform .25s ease;
+}
+.prs-faq-item.prs-faq-open .prs-faq-question i { transform: rotate(180deg); }
+
+.prs-faq-answer {
+    max-height: 0; overflow: hidden;
+    transition: max-height .3s ease;
+}
+.prs-faq-item.prs-faq-open .prs-faq-answer { max-height: 200px; }
+.prs-faq-answer-inner {
+    padding: 0 .9rem .85rem;
+    font-size: .79rem; color: var(--prs-gray); line-height: 1.6;
+}
+
 
 /* ================================================================
    DARK MODE OVERRIDES UNTUK SIDEBAR
    ================================================================ */
-[data-theme="dark"] .prs-sidebar-logo { background: rgba(var(--bs-primary-rgb), .15); }
+[data-theme="dark"] .prs-sidebar-logo { background: rgba(14,165,233,.15); }
 [data-theme="dark"] .prs-info-icon-box { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
-[data-theme="dark"] .prs-help-icon-box { background: rgba(var(--bs-primary-rgb), .1); color: #4dd9cf; }
+[data-theme="dark"] .prs-help-icon-box { background: rgba(14,165,233,.1); color: #4dd9cf; }
 [data-theme="dark"] .prs-sla-item { color: #9ca3af; }
 
 /* WhatsApp Dark Mode */
 [data-theme="dark"] .prs-wa-icon { background: rgba(37,211,102,.1); color: #25d366; }
 [data-theme="dark"] .prs-history-item:hover .prs-wa-icon { background: #25d366; color: #111827; }
 [data-theme="dark"] .prs-chevron-icon { color: #4b5563; }
+
+/* FAQ Dark Mode */
+[data-theme="dark"] .prs-faq-item { border-color: rgba(255,255,255,.12); }
+[data-theme="dark"] .prs-faq-item.prs-faq-open { border-color: rgba(14,165,233,.3); }
+[data-theme="dark"] .prs-faq-question { color: #e2e8f0; }
+[data-theme="dark"] .prs-faq-question:hover { background: rgba(14,165,233,.08); }
+[data-theme="dark"] .prs-faq-answer-inner { color: #9ca3af; }
+
+
+/* ================================================================
+   MOBILE: SIDEBAR → COMPACT TRIGGER + BOTTOM SHEET
+   ================================================================ */
+
+/* Desktop sidebar visible by default, hidden trigger */
+.prs-sidebar-desktop { display: block; }
+.prs-mobile-trigger   { display: none; }
+
+@media (max-width: 767.98px) {
+    .prs-sidebar-desktop { display: none; }
+    .prs-mobile-trigger  { display: block; }
+}
+
+/* Compact trigger button (mobile only) */
+.prs-mobile-trigger-btn {
+    display: flex; align-items: center; gap: .85rem;
+    width: 100%; background: white;
+    border: 1.5px solid var(--prs-gray-200); border-radius: 18px;
+    padding: .9rem 1.1rem; margin-top: 1rem;
+    cursor: pointer; text-align: left;
+    transition: border-color .2s ease, box-shadow .2s ease;
+    animation: prsCardIn .4s ease both;
+}
+.prs-mobile-trigger-btn:active {
+    transform: scale(.98);
+    box-shadow: 0 6px 20px rgba(14,165,233,.18);
+}
+.prs-mobile-trigger-icon {
+    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+    background: var(--prs-accent-light); color: var(--prs-accent-dark);
+    display: flex; align-items: center; justify-content: center; font-size: 1.05rem;
+}
+.prs-mobile-trigger-text { flex: 1; min-width: 0; }
+.prs-mobile-trigger-title { font-size: .92rem; font-weight: 700; color: var(--prs-dark); margin: 0; }
+.prs-mobile-trigger-sub   { font-size: .76rem; color: var(--prs-gray); margin: .1rem 0 0; }
+.prs-mobile-trigger-arrow { color: var(--prs-gray-200); font-size: .85rem; flex-shrink: 0; }
+
+[data-theme="dark"] .prs-mobile-trigger-btn  { background: #1a1f2e; border-color: rgba(14,165,233,.2); }
+[data-theme="dark"] .prs-mobile-trigger-icon { background: rgba(14,165,233,.12); color: #38bdf8; }
+[data-theme="dark"] .prs-mobile-trigger-title{ color: #e2e8f0; }
+[data-theme="dark"] .prs-mobile-trigger-sub  { color: #9ca3af; }
+[data-theme="dark"] .prs-mobile-trigger-arrow{ color: rgba(255,255,255,.15); }
+
+
+/* ─── Bottom Sheet ─────────────────────────────────────────────── */
+.prs-bs-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.45);
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    z-index: 1070; opacity: 0; visibility: hidden;
+    transition: opacity .3s ease, visibility .3s ease;
+}
+.prs-bs-backdrop.active { opacity: 1; visibility: visible; }
+
+.prs-bottom-sheet {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: white; border-radius: 24px 24px 0 0;
+    z-index: 1090; max-height: 88dvh;
+    overflow-y: auto; overscroll-behavior: contain;
+    transform: translateY(100%);
+    transition: transform .4s cubic-bezier(.4,0,.2,1);
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+.prs-bottom-sheet.active { transform: translateY(0); }
+
+.prs-bs-drag-handle {
+    position: sticky; top: 0; z-index: 2;
+    width: 40px; height: 4px; background: rgba(0,0,0,.12);
+    border-radius: 2px; margin: 12px auto 0;
+}
+
+.prs-bs-close {
+    position: absolute; top: .75rem; right: 1rem;
+    background: rgba(0,0,0,.06); border: none;
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--prs-accent-dark); font-size: .85rem;
+    transition: background .2s, color .2s; z-index: 5;
+}
+.prs-bs-close:hover { background: var(--prs-accent); color: white; }
+
+.prs-bs-content { padding: .5rem 1.25rem 1.5rem; }
+.prs-bs-content .prs-card {
+    box-shadow: none; border: none; padding: 1.1rem 0;
+    margin-bottom: 0; animation: none;
+}
+.prs-bs-content .prs-card:not(:last-child) {
+    border-bottom: 1px dashed var(--prs-gray-200);
+}
+
+/* Scroll lock */
+body.prs-sheet-open { overflow: hidden !important; touch-action: none; }
+
+/* Tablet: center sheet */
+@media (min-width: 768px) {
+    .prs-bottom-sheet { max-width: 480px; left: 50%; transform: translate(-50%, 100%); }
+    .prs-bottom-sheet.active { transform: translate(-50%, 0); }
+}
+
+[data-theme="dark"] .prs-bottom-sheet { background: #1a1f2e; }
+[data-theme="dark"] .prs-bs-drag-handle { background: rgba(255,255,255,.15); }
+[data-theme="dark"] .prs-bs-close { background: rgba(255,255,255,.08); color: #38bdf8; }
+[data-theme="dark"] .prs-bs-content .prs-card:not(:last-child) { border-bottom-color: rgba(255,255,255,.1); }
 </style>
 @endverbatim

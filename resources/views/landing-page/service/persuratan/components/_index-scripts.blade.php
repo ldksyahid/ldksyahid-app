@@ -8,23 +8,16 @@
             { name: 'waktu',       label: 'Waktu',       icon: 'fa-clock',    placeholder: 'Contoh: 08.00 – 17.00 WIB' },
             { name: 'tempat',      label: 'Tempat',      icon: 'fa-map-marker-alt', placeholder: 'Contoh: Aula Madya UIN Jakarta' },
         ],
-        'peminjaman-alat-internal': [
+        'peminjaman-alat': [
+            { name: 'jenis_peminjaman', label: 'Sifat Peminjaman', icon: 'fa-tag', type: 'select',
+              options: [{value:'internal',label:'Internal (LDK Syahid)'},{value:'eksternal',label:'Eksternal'}] },
             { name: 'nama_acara',       label: 'Nama Acara',        icon: 'fa-star',         placeholder: 'Contoh: Seminar Nasional' },
             { name: 'tema_acara',       label: 'Tema Acara',        icon: 'fa-tag',          placeholder: 'Contoh: Moderasi Beragama' },
-            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',  icon: 'fa-envelope',     placeholder: 'Contoh: Departemen Media LDK' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',  icon: 'fa-envelope',     placeholder: 'Contoh: Departemen Media LDK / Perpustakaan' },
             { name: 'hari_tanggal',     label: 'Tanggal',           icon: 'fa-calendar',     type: 'date' },
             { name: 'waktu',            label: 'Waktu',             icon: 'fa-clock',        placeholder: 'Contoh: 08.00 – 17.00 WIB' },
             { name: 'tempat',           label: 'Tempat',            icon: 'fa-map-marker-alt', placeholder: 'Contoh: Aula Madya' },
             { name: 'daftar_alat',      label: 'Daftar Alat',       icon: 'fa-list',         type: 'textarea', placeholder: 'Contoh:\n1. Proyektor\n2. Mic' },
-        ],
-        'peminjaman-alat-eksternal': [
-            { name: 'nama_acara',       label: 'Nama Acara',        icon: 'fa-star',         placeholder: 'Contoh: Pameran Buku' },
-            { name: 'tema_acara',       label: 'Tema Acara',        icon: 'fa-tag',          placeholder: 'Contoh: Literasi Islam' },
-            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',  icon: 'fa-envelope',     placeholder: 'Contoh: Perpustakaan UIN' },
-            { name: 'hari_tanggal',     label: 'Tanggal',           icon: 'fa-calendar',     type: 'date' },
-            { name: 'waktu',            label: 'Waktu',             icon: 'fa-clock',        placeholder: 'Contoh: 09.00 – 15.00 WIB' },
-            { name: 'tempat',           label: 'Tempat',            icon: 'fa-map-marker-alt', placeholder: 'Contoh: Lobby Utama' },
-            { name: 'daftar_alat',      label: 'Daftar Alat',       icon: 'fa-list',         type: 'textarea', placeholder: 'Contoh:\n1. Meja\n2. Kursi' },
         ],
         'peminjaman-tempat-kampus': [
             { name: 'nama_acara',       label: 'Nama Acara',        icon: 'fa-star',         placeholder: 'Contoh: Rapat Koordinasi' },
@@ -65,6 +58,38 @@
             { name: 'hari_tanggal',    label: 'Tanggal',         icon: 'fa-calendar',     type: 'date' },
             { name: 'waktu',           label: 'Waktu',           icon: 'fa-clock',        placeholder: 'Contoh: 09.00 – 12.00 WIB' },
             { name: 'tempat',          label: 'Tempat',          icon: 'fa-map-marker-alt', placeholder: 'Contoh: Auditorium Utama' },
+        ],
+        'surat-aktif-organisasi': [
+            { name: 'nama', label: 'Nama Lengkap', icon: 'fa-user', placeholder: 'Contoh: Ahmad Fakhri' },
+            { name: 'ttl', label: 'Tempat, Tanggal Lahir', icon: 'fa-calendar-alt', placeholder: 'Contoh: Jakarta, 17 Agustus 2005' },
+            { name: 'nim', label: 'NIM', icon: 'fa-id-card', placeholder: 'Contoh: 11220910000001' },
+            { name: 'fakultas', label: 'Fakultas', icon: 'fa-university', placeholder: 'Contoh: Sains dan Teknologi' },
+            { name: 'jurusan', label: 'Semester / Jurusan', icon: 'fa-graduation-cap', placeholder: 'Contoh: 5 / Teknik Informatika' },
+            { name: 'jabatan', label: 'Bidang / Jabatan', icon: 'fa-briefcase', placeholder: 'Contoh: Ketua Departemen PKPI' },
+            { name: 'keperluan', label: 'Keperluan', icon: 'fa-file-alt', type: 'textarea', placeholder: 'Contoh: Persyaratan Beasiswa...' },
+            { name: 'penyelenggara', label: 'Penyelenggara', icon: 'fa-building', placeholder: 'Contoh: BAZNAS' },
+        ],
+        'permohonan-pemateri': [
+            { name: 'nama_acara', label: 'Nama Acara', icon: 'fa-star' },
+            { name: 'tema_acara', label: 'Tema Acara', icon: 'fa-tag' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada', icon: 'fa-envelope', placeholder: 'Contoh: Ustadz Hanan Attaki' },
+            { name: 'materi', label: 'Tema Materi Khusus', icon: 'fa-book', placeholder: 'Contoh: Peran Pemuda di Era Digital' },
+            { name: 'hari_tanggal', label: 'Tanggal', icon: 'fa-calendar', type: 'date' },
+            { name: 'waktu', label: 'Waktu', icon: 'fa-clock' },
+            { name: 'tempat', label: 'Tempat', icon: 'fa-map-marker-alt' },
+        ],
+        'kerja-sama-sponsorship': [
+            { name: 'nama_acara', label: 'Nama Acara', icon: 'fa-star' },
+            { name: 'tema_acara', label: 'Tema Acara', icon: 'fa-tag' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada', icon: 'fa-envelope', placeholder: 'Contoh: Manager PT. Wardah Cosmetics' },
+            { name: 'bentuk_kerjasama', label: 'Bentuk Kerja Sama', icon: 'fa-handshake', type: 'textarea', placeholder: 'Jelaskan ringkasan penawaran sponsorship...' },
+        ],
+        'surat-pemberitahuan': [
+            { name: 'nama_kegiatan', label: 'Nama Kegiatan', icon: 'fa-star' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada', icon: 'fa-envelope', placeholder: 'Contoh: Satpam UIN Jakarta' },
+            { name: 'hari_tanggal', label: 'Tanggal', icon: 'fa-calendar', type: 'date' },
+            { name: 'waktu', label: 'Waktu', icon: 'fa-clock' },
+            { name: 'tempat', label: 'Tempat', icon: 'fa-map-marker-alt' },
         ],
     };
 
@@ -168,6 +193,23 @@
                 btnSubmit.style.cursor = 'not-allowed';
                 btnSubmit.style.opacity = '0.8';
             }
+        });
+    }
+
+    // --- 3. FAQ ACCORDION (Sidebar) ---
+    var faqList = document.getElementById('prs-faq-list');
+    if (faqList) {
+        faqList.addEventListener('click', function (e) {
+            var btn = e.target.closest('.prs-faq-question');
+            if (!btn) return;
+            var item = btn.closest('.prs-faq-item');
+            var wasOpen = item.classList.contains('prs-faq-open');
+
+            faqList.querySelectorAll('.prs-faq-item').forEach(function (el) {
+                el.classList.remove('prs-faq-open');
+            });
+
+            if (!wasOpen) item.classList.add('prs-faq-open');
         });
     }
 }());

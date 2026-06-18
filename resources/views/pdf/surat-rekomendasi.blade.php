@@ -30,10 +30,10 @@
             right: 25mm;
         }
 
-        .meta {
-            width: 164mm;
-            margin: 0 0 12px -4mm;
-            border-collapse: collapse;
+        .meta { 
+            width: 100%; 
+            margin: 0 0 12px 0; /* Sebelumnya: margin: 0 0 12px -4mm; */
+            border-collapse: collapse; 
         }
 
         .meta td {
@@ -49,8 +49,8 @@
             white-space: nowrap;
         }
 
-        .recipient {
-            margin: 12px 0 10px 19mm;
+        .recipient { 
+            margin: 5px 0 15px 0; /* Sebelumnya: margin: 12px 0 15px 19mm; */
         }
 
         .recipient p {

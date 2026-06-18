@@ -23,16 +23,19 @@
             left: 25mm; right: 25mm;
         }
 
-        .meta {
-            width: 164mm; margin: 0 0 12px -4mm;
-            border-collapse: collapse;
+        .meta { 
+            width: 100%; 
+            margin: 0 0 12px 0; /* Sebelumnya: margin: 0 0 12px -4mm; */
+            border-collapse: collapse; 
         }
         .meta td { padding: 0 0 2px 0; vertical-align: top; }
         .meta-label { width: 22mm; }
         .meta-sep { width: 4mm; }
         .date-cell { text-align: right; white-space: nowrap; }
 
-        .recipient { margin: 12px 0 15px 19mm; }
+        .recipient { 
+            margin: 5px 0 15px 0; /* Sebelumnya: margin: 12px 0 15px 19mm; */
+        }
         .recipient p { margin: 0; }
 
         p { margin: 0 0 6px 0; text-align: justify; }
