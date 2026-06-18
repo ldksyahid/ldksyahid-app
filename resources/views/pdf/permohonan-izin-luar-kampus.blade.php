@@ -25,7 +25,19 @@
         .signature-wrap { width: 66mm; margin: 10px 0 10px auto; page-break-inside: avoid; }
         .signature-box { width: 100%; border-collapse: collapse; }
         .signature-box td { text-align: center; border: none; padding: 0; }
-        .signature-space { height: 26mm; }
+        .signature-space { 
+            height: 26mm; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .signature-qr {
+            margin-top: 2mm;
+        }
+        .signature-qr img {
+            width: 18mm;   /* Sesuaikan ukurannya */
+            height: 18mm;
+        }
         .verification { width: 72mm; margin-top: 10px; border: .5px solid #36aaa1; border-collapse: collapse; color: #333; font-family: DejaVu Sans, sans-serif; font-size: 7px; page-break-inside: avoid; }
         .verification td { padding: 3px; vertical-align: middle; }
         .verification .qr-cell { width: 16mm; }
@@ -133,18 +145,6 @@
             </tr>
         </table>
     </div>
-
-    <table class="verification">
-        <tr>
-            <td class="qr-cell">{!! $qrCode !!}</td>
-            <td>
-                <p><strong>Verifikasi Keaslian Dokumen</strong></p>
-                <p>Pindai QR code atau kunjungi tautan berikut untuk memastikan surat ini tercatat di sistem LDK Syahid.</p>
-                <p class="verification-url">{{ $verifikasiUrl }}</p>
-                <p>Kode Verifikasi: <strong>{{ $kodeVerifikasi }}</strong></p>
-            </td>
-        </tr>
-    </table>
 </div>
 </body>
 </html>

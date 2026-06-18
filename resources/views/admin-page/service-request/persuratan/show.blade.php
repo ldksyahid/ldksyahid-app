@@ -1,5 +1,4 @@
 @extends('admin-page.template.body')
-{{-- Path: resources/views/admin-page/service-request/persuratan/show.blade.php --}}
 
 @section('title', $title)
 
@@ -134,6 +133,15 @@
                         <div class="mb-3">
                             <label class="form-label small fw-semibold d-block mb-2">Nomor Surat</label>
 
+                            {{-- BOX INFO NOMOR TERAKHIR --}}
+                            <div class="alert alert-info py-2 px-3 rounded-3 mb-3 border-0 bg-info bg-opacity-10 d-flex align-items-center gap-3">
+                                <div class="text-info fs-4"><i class="fas fa-info-circle"></i></div>
+                                <div>
+                                    <span class="d-block small text-muted" style="font-size: 0.75rem;">Nomor surat terakhir diterbitkan:</span>
+                                    <strong class="text-dark">{{ $lastNomor ?? 'null (Buat Baru)' }}</strong>
+                                </div>
+                            </div>
+
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="radio" name="nomor_mode"
                                        id="nomor-mode-auto" value="auto" checked>
@@ -150,17 +158,17 @@
                                 </label>
                             </div>
 
-                            <div id="nomor-manual-wrapper" class="d-none">
+                            <div id="nomor-manual-wrapper" class="d-none mt-2">
                                 <input type="text" name="nomor_surat_manual" id="input_nomor_manual"
                                        class="form-control form-control-sm rounded-3 @error('nomor_surat_manual') is-invalid @enderror"
-                                       placeholder="Contoh: 005/SR-e/LDK-SYAHID/VI/2026"
+                                       placeholder="Cth: 005/SR-e/... atau 005.1/SR-e/..."
                                        value="{{ old('nomor_surat_manual') }}">
                                 @error('nomor_surat_manual')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                                 <div class="form-text" style="font-size:.72rem">
-                                    Format wajib: <code>XXX/PREFIX/LDK-SYAHID/BULAN-ROMAWI/TAHUN</code>.
-                                    Counter nomor otomatis akan disesuaikan ke urutan ini.
+                                    Format: <code>XXX/PREFIX/LDK-SYAHID/BULAN/TAHUN</code>.<br>
+                                    Atau <code>XXX.SUB/PREFIX/LDK-SYAHID/BULAN/TAHUN</code> (jika ada sub surat).
                                 </div>
                             </div>
                         </div>

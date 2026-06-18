@@ -194,22 +194,20 @@ class PersuratingController extends Controller
      */
     public function showAdmin(SuratLog $suratLog)
     {
+        // Cari nomor terakhir yang disetujui untuk jenis surat yang sama
+        $lastSurat = SuratLog::where('jenis_surat', $suratLog->jenis_surat)
+            ->where('status', 'approved')
+            ->latest('approved_at')
+            ->first();
+
+        $lastNomor = $lastSurat ? $lastSurat->nomor_surat : null;
+
         return view('admin-page.service-request.persuratan.show', [
-            'title'    => 'Detail Pengajuan Surat',
-            'suratLog' => $suratLog->load('user', 'approvedBy'),
+            'title'     => 'Detail Pengajuan Surat',
+            'suratLog'  => $suratLog->load('user', 'approvedBy'),
+            'lastNomor' => $lastNomor, // <-- Kirim data ke view
         ]);
     }
-
-    /**
-     * Approve pengajuan — generate/terima nomor surat + simpan kode verifikasi.
-     *
-     * Nomor surat bisa:
-     * - Auto-generate (kosongkan field nomor_surat_manual), ATAU
-     * - Diisi manual mengikuti format XXX/PREFIX/LDK-SYAHID/BULAN-ROMAWI/TAHUN.
-     * Jika manual, counter di tabel surat_counters akan disinkronkan
-     * ke periode (bulan/tahun) yang tertera pada nomor tersebut, agar
-     * nomor auto berikutnya melanjutkan urutan dengan benar.
-     */
     public function approve(Request $request, SuratLog $suratLog)
     {
         abort_if(!$suratLog->isPending(), 422, 'Surat sudah diproses sebelumnya.');
@@ -373,18 +371,14 @@ class PersuratingController extends Controller
         $periode = now()->format('Ym');
         $counter = $this->incrementCounter($jenis, $periode);
 
-        $prefix = $this->prefixMap[$jenis] ?? 'XX';
-        $nomor  = str_pad($counter, 3, '0', STR_PAD_LEFT);
-        $bulan  = $this->romanMonth[now()->month];
-        $tahun  = now()->year;
+        $prefix   = $this->prefixMap[$jenis] ?? 'XX';
+        $nomor    = str_pad($counter, 3, '0', STR_PAD_LEFT);
+        $bulan    = $this->romanMonth[now()->month];
+        $tahun    = now()->year;
 
+        // Output default tanpa sub surat: 001/SR-e/LDK-SYAHID/VI/2026
         return "{$nomor}/{$prefix}/LDK-SYAHID/{$bulan}/{$tahun}";
     }
-
-    /**
-     * Increment & return counter terbaru untuk jenis surat + periode (format Ym),
-     * dengan lock untuk menghindari race condition.
-     */
     private function incrementCounter(string $jenis, string $periode): int
     {
         $counter = SuratCounter::where('jenis_surat', $jenis)
@@ -449,21 +443,24 @@ class PersuratingController extends Controller
             return null;
         }
 
-        // Format: 005/SR-e/LDK-SYAHID/VI/2026
-        $pattern = '/^(\d{1,4})\/([A-Za-z\-]+)\/LDK-SYAHID\/([IVXLCDM]+)\/(\d{4})$/i';
+        // Regex baru: Mengizinkan titik (.) opsional setelah nomor urut.
+        // Match: XXX/PREFIX/... atau XXX.YYY/PREFIX/...
+        $pattern = '/^(\d{1,4})(?:\.(\d{1,4}))?\/([A-Za-z\-]+)\/LDK-SYAHID\/([IVXLCDM]+)\/(\d{4})$/i';
 
         if (!preg_match($pattern, $nomor, $m)) {
             return null;
         }
 
-        [, $urutanStr, $prefix, $bulanRomawi, $tahun] = $m;
+        $urutanStr   = $m[1];
+        $subStr      = $m[2] ?? ''; // Bisa berisi sub surat atau string kosong
+        $prefix      = $m[3];
+        $bulanRomawi = $m[4];
+        $tahun       = $m[5];
 
-        // Prefix harus sesuai jenis surat (case-insensitive)
         if (strcasecmp($prefix, $expectedPrefix) !== 0) {
             return null;
         }
 
-        // Bulan romawi harus valid, cari nomor bulannya
         $bulanNumber = array_search(strtoupper($bulanRomawi), array_map('strtoupper', $this->romanMonth), true);
 
         if ($bulanNumber === false) {
@@ -471,18 +468,21 @@ class PersuratingController extends Controller
         }
 
         $urutan  = (int) $urutanStr;
-        $periode = $tahun . str_pad((string) $bulanNumber, 2, '0', STR_PAD_LEFT); // format Ym
+        $periode = $tahun . str_pad((string) $bulanNumber, 2, '0', STR_PAD_LEFT);
 
-        // Normalisasi format nomor surat (3 digit, prefix sesuai map asli, bulan romawi standar)
-        $nomorNormalized = str_pad((string) $urutan, 3, '0', STR_PAD_LEFT)
-            . '/' . $expectedPrefix
+        // Rangkai ulang formatnya agar tetap standar
+        $nomorNormalized = str_pad((string) $urutan, 3, '0', STR_PAD_LEFT);
+        if ($subStr !== '') {
+            $nomorNormalized .= '.' . $subStr;
+        }
+        $nomorNormalized .= '/' . $expectedPrefix
             . '/LDK-SYAHID/' . $this->romanMonth[$bulanNumber]
             . '/' . $tahun;
 
         return [
             'nomor_surat' => $nomorNormalized,
             'periode'     => $periode,
-            'urutan'      => $urutan,
+            'urutan'      => $urutan, // Counter tetap disinkronkan pakai urutan utamanya
         ];
     }
 }
