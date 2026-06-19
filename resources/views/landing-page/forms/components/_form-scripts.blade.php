@@ -9,6 +9,121 @@
         try { input.showPicker(); } catch(e) { input.focus(); input.click(); }
     };
 
+    // ── Custom Select Dropdown ──────────────────────────────────────
+    (function () {
+        document.querySelectorAll('.gf-csel-wrap').forEach(function (wrap) {
+            var native  = wrap.querySelector('.gf-csel-native');
+            var trigger = wrap.querySelector('.gf-csel-trigger');
+            var panel   = wrap.querySelector('.gf-csel-panel');
+            var current = wrap.querySelector('.gf-csel-current');
+            var opts    = Array.from(wrap.querySelectorAll('.gf-csel-option:not(.gf-csel-opt-placeholder)'));
+            var focIdx  = -1;
+
+            if (!native || !trigger || !panel) return;
+
+            function openPanel() {
+                document.querySelectorAll('.gf-csel-wrap').forEach(function (w) {
+                    if (w !== wrap && w._gfClose) w._gfClose();
+                });
+                panel.classList.add('open');
+                trigger.classList.add('open');
+                trigger.setAttribute('aria-expanded', 'true');
+                focIdx = opts.findIndex(function (o) { return o.classList.contains('selected'); });
+                if (focIdx >= 0) highlight(focIdx);
+            }
+
+            function closePanel() {
+                panel.classList.remove('open');
+                trigger.classList.remove('open');
+                trigger.setAttribute('aria-expanded', 'false');
+                opts.forEach(function (o) { o.classList.remove('focused'); });
+                focIdx = -1;
+            }
+
+            wrap._gfClose = closePanel;
+
+            function highlight(idx) {
+                opts.forEach(function (o) { o.classList.remove('focused'); });
+                if (idx >= 0 && idx < opts.length) {
+                    opts[idx].classList.add('focused');
+                    opts[idx].scrollIntoView({ block: 'nearest' });
+                    focIdx = idx;
+                }
+            }
+
+            function pickOpt(opt) {
+                var val   = opt.dataset.value;
+                var label = opt.textContent.trim();
+                native.value = val;
+                current.textContent = val ? label : '-- Pilih salah satu --';
+                current.classList.toggle('placeholder', !val);
+                opts.forEach(function (o) { o.classList.remove('selected'); });
+                if (val) opt.classList.add('selected');
+                closePanel();
+                trigger.focus();
+            }
+
+            // Stop wrap clicks reaching the document close handler
+            wrap.addEventListener('click', function (e) { e.stopPropagation(); });
+
+            trigger.addEventListener('click', function () {
+                panel.classList.contains('open') ? closePanel() : openPanel();
+            });
+
+            trigger.addEventListener('keydown', function (e) {
+                var isOpen = panel.classList.contains('open');
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (isOpen) { if (focIdx >= 0) pickOpt(opts[focIdx]); else closePanel(); }
+                    else openPanel();
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (!isOpen) openPanel();
+                    highlight(Math.min(focIdx + 1, opts.length - 1));
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (!isOpen) openPanel();
+                    highlight(Math.max(focIdx - 1, 0));
+                } else if (e.key === 'Escape') {
+                    closePanel();
+                }
+            });
+
+            panel.addEventListener('click', function (e) {
+                var opt = e.target.closest('.gf-csel-option');
+                if (!opt) return;
+                if (opt.classList.contains('gf-csel-opt-placeholder')) {
+                    native.value = '';
+                    current.textContent = '-- Pilih salah satu --';
+                    current.classList.add('placeholder');
+                    opts.forEach(function (o) { o.classList.remove('selected'); });
+                    closePanel(); trigger.focus();
+                    return;
+                }
+                pickOpt(opt);
+            });
+
+            panel.addEventListener('mousemove', function (e) {
+                var opt = e.target.closest('.gf-csel-option:not(.gf-csel-opt-placeholder)');
+                if (!opt) return;
+                var idx = opts.indexOf(opt);
+                if (idx >= 0 && idx !== focIdx) highlight(idx);
+            });
+
+            // Sync is-invalid from native select to wrapper (for validation error display)
+            new MutationObserver(function () {
+                wrap.classList.toggle('is-invalid', native.classList.contains('is-invalid'));
+            }).observe(native, { attributes: true, attributeFilter: ['class'] });
+        });
+
+        // Close all panels when clicking outside
+        document.addEventListener('click', function () {
+            document.querySelectorAll('.gf-csel-wrap').forEach(function (w) {
+                if (w._gfClose) w._gfClose();
+            });
+        });
+    })();
+
     // ── Phone input: allow only + and digits ───────────────────────
     document.querySelectorAll('[data-gf-tel]').forEach(function(input) {
         input.addEventListener('input', function() {

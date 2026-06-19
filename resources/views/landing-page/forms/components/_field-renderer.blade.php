@@ -269,6 +269,14 @@
 
 {{-- ===== DROPDOWN ===== --}}
 @case('dropdown')
+    @php
+        $selectedLabel = '';
+        if ($oldValue) {
+            foreach ($field->options ?? [] as $_opt) {
+                if ($_opt['value'] == $oldValue) { $selectedLabel = $_opt['label']; break; }
+            }
+        }
+    @endphp
     <div class="gf-card {{ $isError ? 'has-error' : '' }}">
         <label class="gf-label" for="{{ $fieldID }}">
             {{ $field->label }}
@@ -277,22 +285,39 @@
         @if($field->helpText)
         <p class="gf-help">{{ $field->helpText }}</p>
         @endif
-        <div class="gf-select-wrap">
-            <select
-                id="{{ $fieldID }}"
-                name="{{ $fieldName }}"
-                class="gf-select {{ $isError ? 'is-invalid' : '' }}"
-                {{ $field->isRequired ? 'required' : '' }}
-            >
+        <div class="gf-csel-wrap{{ $isError ? ' is-invalid' : '' }}">
+            {{-- Hidden native select (form submission only) --}}
+            <select id="{{ $fieldID }}" name="{{ $fieldName }}"
+                    class="gf-csel-native"
+                    {{ $field->isRequired ? 'required' : '' }}
+                    aria-hidden="true" tabindex="-1">
                 <option value="">-- Pilih salah satu --</option>
                 @foreach($field->options ?? [] as $option)
-                <option value="{{ $option['value'] }}"
-                        {{ $oldValue == $option['value'] ? 'selected' : '' }}>
+                <option value="{{ $option['value'] }}" {{ $oldValue == $option['value'] ? 'selected' : '' }}>
                     {{ $option['label'] }}
                 </option>
                 @endforeach
             </select>
-            <span class="gf-select-icon"><i class="fas fa-chevron-down"></i></span>
+            {{-- Custom visual trigger --}}
+            <div class="gf-csel-trigger" tabindex="0" role="combobox"
+                 aria-expanded="false" aria-haspopup="listbox">
+                <span class="gf-csel-current{{ !$selectedLabel ? ' placeholder' : '' }}">
+                    {{ $selectedLabel ?: '-- Pilih salah satu --' }}
+                </span>
+                <span class="gf-csel-arrow"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            {{-- Options panel --}}
+            <div class="gf-csel-panel" role="listbox">
+                <div class="gf-csel-option gf-csel-opt-placeholder" data-value="" role="option">
+                    -- Pilih salah satu --
+                </div>
+                @foreach($field->options ?? [] as $option)
+                <div class="gf-csel-option{{ $oldValue == $option['value'] ? ' selected' : '' }}"
+                     data-value="{{ $option['value'] }}" role="option">
+                    {{ $option['label'] }}
+                </div>
+                @endforeach
+            </div>
         </div>
         <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>
