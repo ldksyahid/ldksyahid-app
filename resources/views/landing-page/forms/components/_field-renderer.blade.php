@@ -250,24 +250,46 @@
 
 {{-- ===== TIME ===== --}}
 @case('time')
+    @php
+        $tpRaw = $oldValue ?? ($field->defaultValue ?? '');
+    @endphp
     <div class="gf-card {{ $isError ? 'has-error' : '' }}">
-        <label class="gf-label" for="{{ $fieldID }}">
+        <label class="gf-label">
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
         <p class="gf-help">{{ $field->helpText }}</p>
         @endif
-        <div class="gf-date-wrap">
-            <input
-                type="time"
-                id="{{ $fieldID }}"
-                name="{{ $fieldName }}"
-                class="gf-input {{ $isError ? 'is-invalid' : '' }}"
-                value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
-                {{ $field->isRequired ? 'required' : '' }}
-            >
-            <span class="gf-date-icon" onclick="gfOpenDatePicker(this)"><i class="fas fa-clock"></i></span>
+        <div class="gf-tp-wrap{{ $isError ? ' is-invalid' : '' }}">
+            <input type="time" id="{{ $fieldID }}" name="{{ $fieldName }}"
+                   class="gf-tp-native" value="{{ $tpRaw }}"
+                   {{ $field->isRequired ? 'required' : '' }}
+                   aria-hidden="true" tabindex="-1">
+            <div class="gf-tp-trigger" tabindex="0" role="button"
+                 aria-haspopup="dialog" aria-expanded="false" aria-label="{{ $field->label }}">
+                <span class="gf-tp-text{{ !$tpRaw ? ' placeholder' : '' }}">
+                    {{ $tpRaw ?: '--:--' }}
+                </span>
+                <span class="gf-tp-icon"><i class="fas fa-clock"></i></span>
+            </div>
+            <div class="gf-tp-panel" role="dialog" aria-modal="true">
+                <div class="gf-tp-cols">
+                    <div class="gf-tp-col-wrap">
+                        <div class="gf-tp-col-label">Jam</div>
+                        <div class="gf-tp-col" data-tp="hour"></div>
+                    </div>
+                    <div class="gf-tp-sep">:</div>
+                    <div class="gf-tp-col-wrap">
+                        <div class="gf-tp-col-label">Menit</div>
+                        <div class="gf-tp-col" data-tp="minute"></div>
+                    </div>
+                </div>
+                <div class="gf-tp-footer">
+                    <button type="button" class="gf-tp-btn gf-tp-clear">Hapus</button>
+                    <button type="button" class="gf-tp-btn gf-tp-now">Sekarang</button>
+                </div>
+            </div>
         </div>
         <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>

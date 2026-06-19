@@ -351,6 +351,163 @@
         });
     })();
 
+    // ── Custom Time Picker ─────────────────────────────────────────
+    (function () {
+        function parseTime(str) {
+            if (!str) return null;
+            var p = str.split(':');
+            if (p.length < 2) return null;
+            var h = parseInt(p[0]), m = parseInt(p[1]);
+            if (isNaN(h) || isNaN(m)) return null;
+            return { h: h, m: m };
+        }
+
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        document.querySelectorAll('.gf-tp-wrap').forEach(function (wrap) {
+            var native   = wrap.querySelector('.gf-tp-native');
+            var trigger  = wrap.querySelector('.gf-tp-trigger');
+            var dispText = wrap.querySelector('.gf-tp-text');
+            var panel    = wrap.querySelector('.gf-tp-panel');
+            var hourCol  = wrap.querySelector('[data-tp="hour"]');
+            var minCol   = wrap.querySelector('[data-tp="minute"]');
+            var btnClear = wrap.querySelector('.gf-tp-clear');
+            var btnNow   = wrap.querySelector('.gf-tp-now');
+
+            if (!native || !trigger || !panel) return;
+
+            var parsed = parseTime(native.value);
+            var selH   = parsed ? parsed.h : null;
+            var selM   = parsed ? parsed.m : null;
+
+            function buildCols() {
+                hourCol.innerHTML = '';
+                for (var h = 0; h <= 23; h++) {
+                    var el = document.createElement('div');
+                    el.className = 'gf-tp-item';
+                    el.textContent = pad(h);
+                    if (selH === h) el.classList.add('selected');
+                    el.addEventListener('click', (function (hh) {
+                        return function () { pickHour(hh); };
+                    })(h));
+                    hourCol.appendChild(el);
+                }
+
+                minCol.innerHTML = '';
+                for (var m = 0; m <= 59; m++) {
+                    var el2 = document.createElement('div');
+                    el2.className = 'gf-tp-item';
+                    el2.textContent = pad(m);
+                    if (selM === m) el2.classList.add('selected');
+                    el2.addEventListener('click', (function (mm) {
+                        return function () { pickMin(mm); };
+                    })(m));
+                    minCol.appendChild(el2);
+                }
+            }
+
+            function pickHour(h) {
+                selH = h;
+                hourCol.querySelectorAll('.gf-tp-item').forEach(function (el, idx) {
+                    el.classList.toggle('selected', idx === h);
+                });
+                syncNative();
+            }
+
+            function pickMin(m) {
+                selM = m;
+                minCol.querySelectorAll('.gf-tp-item').forEach(function (el, idx) {
+                    el.classList.toggle('selected', idx === m);
+                });
+                syncNative();
+                // Auto-close once both are picked
+                if (selH !== null) close();
+            }
+
+            function syncNative() {
+                if (selH === null || selM === null) return;
+                var val = pad(selH) + ':' + pad(selM);
+                native.value = val;
+                if (dispText) {
+                    dispText.textContent = val;
+                    dispText.classList.remove('placeholder');
+                }
+            }
+
+            function scrollToCurrent() {
+                if (selH !== null) {
+                    var hEl = hourCol.children[selH];
+                    if (hEl) hEl.scrollIntoView({ block: 'center' });
+                }
+                if (selM !== null) {
+                    var mEl = minCol.children[selM];
+                    if (mEl) mEl.scrollIntoView({ block: 'center' });
+                }
+            }
+
+            function open() {
+                document.querySelectorAll('.gf-csel-wrap,.gf-dp-wrap,.gf-tp-wrap').forEach(function (w) {
+                    if (w !== wrap && w._gfClose) w._gfClose();
+                });
+                buildCols();
+                panel.classList.add('open');
+                trigger.classList.add('open');
+                trigger.setAttribute('aria-expanded', 'true');
+                setTimeout(scrollToCurrent, 10);
+                var rect = wrap.getBoundingClientRect();
+                if (window.innerHeight - rect.bottom < 290) {
+                    panel.style.top = 'auto'; panel.style.bottom = 'calc(100% + 5px)';
+                } else {
+                    panel.style.top = 'calc(100% + 5px)'; panel.style.bottom = 'auto';
+                }
+            }
+
+            function close() {
+                panel.classList.remove('open');
+                trigger.classList.remove('open');
+                trigger.setAttribute('aria-expanded', 'false');
+            }
+
+            wrap._gfClose = close;
+            wrap.addEventListener('click', function (e) { e.stopPropagation(); });
+
+            trigger.addEventListener('click', function () {
+                panel.classList.contains('open') ? close() : open();
+            });
+
+            trigger.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    panel.classList.contains('open') ? close() : open();
+                } else if (e.key === 'Escape') {
+                    close();
+                }
+            });
+
+            btnClear && btnClear.addEventListener('click', function () {
+                selH = null; selM = null; native.value = '';
+                if (dispText) { dispText.textContent = '--:--'; dispText.classList.add('placeholder'); }
+                close(); trigger.focus();
+            });
+
+            btnNow && btnNow.addEventListener('click', function () {
+                var now = new Date();
+                selH = now.getHours(); selM = now.getMinutes();
+                syncNative(); close(); trigger.focus();
+            });
+
+            new MutationObserver(function () {
+                wrap.classList.toggle('is-invalid', native.classList.contains('is-invalid'));
+            }).observe(native, { attributes: true, attributeFilter: ['class'] });
+        });
+
+        document.addEventListener('click', function () {
+            document.querySelectorAll('.gf-tp-wrap').forEach(function (w) {
+                if (w._gfClose) w._gfClose();
+            });
+        });
+    })();
+
     // ── Phone input: allow only + and digits ───────────────────────
     document.querySelectorAll('[data-gf-tel]').forEach(function(input) {
         input.addEventListener('input', function() {
