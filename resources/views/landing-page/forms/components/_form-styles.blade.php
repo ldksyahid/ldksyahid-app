@@ -46,7 +46,8 @@
 }
 .gf-header-banner {
     width: 100%;
-    height: 200px;
+    height: auto;
+    aspect-ratio: 4 / 1;
     object-fit: cover;
     display: block;
     opacity: .95;

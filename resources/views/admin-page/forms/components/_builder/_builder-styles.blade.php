@@ -285,7 +285,8 @@ html.dark-mode .builder-fields-header { border-bottom-color: #2d3139; }
 }
 .header-img-thumb {
     width: 100%;
-    height: 110px;
+    height: auto;
+    aspect-ratio: 4 / 1;
     object-fit: cover;
     display: block;
 }
