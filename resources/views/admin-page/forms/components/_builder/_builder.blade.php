@@ -193,6 +193,7 @@
     </div>
 </div>
 
+
 {{-- ===== ADD FIELD MODAL ===== --}}
 <div class="modal fade add-field-modal" id="addFieldModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -205,7 +206,9 @@
                 </div>
                 <button type="button" class="btn-close bm-btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body bm-body">
+            <div class="modal-body bm-body p-0" style="overflow:hidden;">
+              <div class="d-flex" style="align-items:stretch;min-height:0;">
+                <div class="bmp-config-col">
                 <input type="hidden" id="modalFieldType">
                 <input type="hidden" id="modalFormID" value="{{ $form->formID }}">
 
@@ -328,8 +331,17 @@
                         </div>
                         <div class="form-text mt-1">Leave all unchecked to allow any file type.</div>
                     </div>
+                </div>{{-- end row g-3 --}}
+                </div>{{-- end bmp-config-col --}}
+
+                {{-- ── Live Preview Panel ───────────────── --}}
+                <div class="bmp-preview-col">
+                    <div class="bmp-preview-header"><i class="fas fa-eye me-1"></i>Live Preview</div>
+                    <div id="modalPreviewField" class="bmp-preview-field"></div>
                 </div>
-            </div>
+
+              </div>{{-- end d-flex --}}
+            </div>{{-- end bm-body --}}
             <div class="bm-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                     <i class="fa fa-times me-1"></i> Cancel

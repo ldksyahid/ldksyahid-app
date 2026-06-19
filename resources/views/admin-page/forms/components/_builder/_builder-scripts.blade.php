@@ -598,12 +598,14 @@ function addOption() {
         <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeOption(this)">×</button>
     `;
     list.appendChild(row);
+    window.refreshModalPreview && window.refreshModalPreview();
 }
 
 function removeOption(btn) {
     const rows = document.querySelectorAll('.option-row');
     if (rows.length <= 1) return;
     btn.closest('.option-row').remove();
+    window.refreshModalPreview && window.refreshModalPreview();
 }
 
 // ===== MODAL LOCK =====
@@ -760,4 +762,478 @@ function showAlert(type, message) {
     </div>`;
     setTimeout(() => { el.innerHTML = ''; wrap.style.display = 'none'; }, 4000);
 }
+
+// ===== MODAL LIVE PREVIEW =====
+(function () {
+    function esc(s) {
+        return String(s || '')
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function getOpts() {
+        return Array.from(document.querySelectorAll('#optionsList .option-input'))
+            .map(i => i.value.trim()).filter(Boolean);
+    }
+
+    const ANN = { label: () => '', help: () => '', ph: () => '', spc: () => '' };
+
+    function buildPreview(type, label, ph, help, req) {
+        const lbl = label || 'Field label';
+
+        // Row: badge + content
+        const row = (badge, content) =>
+            `<div class="bmp-row">${badge}${content}</div>`;
+
+        const labelRow = () => row(
+            ANN.label(),
+            `<div class="bmp-field-label">${esc(lbl)}${req ? '<span class="bmp-req">*</span>' : ''}</div>`
+        );
+
+        const helpRow = () => help
+            ? row(ANN.help(), `<div class="bmp-field-help">${esc(help)}</div>`)
+            : '';
+
+        const underlineRow = (dflt) => row(
+            ph ? ANN.ph() : ANN.spc(),
+            `<div class="bmp-field-input">${esc(ph || dflt || 'Your answer...')}</div>`
+        );
+
+        const triggerRow = (icon, text) =>
+            `<div class="bmp-field-trigger">
+                <i class="fas ${icon}"></i>
+                <span>${esc(text)}</span>
+            </div>`;
+
+        switch (type) {
+            case 'short_text':
+                return labelRow() + helpRow() + underlineRow('Short answer...');
+
+            case 'long_text':
+                return labelRow() + helpRow() + row(
+                    ph ? ANN.ph() : ANN.spc(),
+                    `<div class="bmp-field-textarea">${esc(ph || 'Long answer...')}</div>`
+                );
+
+            case 'email':
+                return labelRow() + helpRow() + underlineRow('contoh@email.com');
+
+            case 'number':
+                return labelRow() + helpRow() + underlineRow('0');
+
+            case 'phone':
+                return labelRow() + helpRow() + underlineRow('+62812...');
+
+            case 'url':
+                return labelRow() + helpRow() + underlineRow('https://');
+
+            case 'date': {
+                const now = new Date();
+                const y = now.getFullYear(), m = now.getMonth();
+                const MNAMES = ['January','February','March','April','May','June',
+                                'July','August','September','October','November','December'];
+                const WDAYS  = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+                const firstDay = new Date(y, m, 1).getDay();
+                const daysInMonth = new Date(y, m + 1, 0).getDate();
+                const today = now.getDate();
+                const sel   = today - 3 > 0 ? today - 3 : today;
+
+                let cells = '';
+                for (let i = 0; i < firstDay; i++) {
+                    const d = new Date(y, m, 0).getDate() - firstDay + 1 + i;
+                    cells += `<div class="bmp-cal-cell other">${d}</div>`;
+                }
+                for (let d = 1; d <= daysInMonth && cells.split('bmp-cal-cell').length <= 30; d++) {
+                    const cls = d === today ? 'today' : d === sel ? 'sel' : '';
+                    cells += `<div class="bmp-cal-cell ${cls}">${d}</div>`;
+                }
+
+                return labelRow() + helpRow() +
+                    `<div class="bmp-field-trigger"><i class="fas fa-calendar-alt"></i> <span>Select date</span></div>
+                    <div class="bmp-cal">
+                        <div class="bmp-cal-head">
+                            <div class="bmp-cal-nav"><i class="fas fa-chevron-left"></i></div>
+                            <span class="bmp-cal-month">${MNAMES[m]} ${y}</span>
+                            <div class="bmp-cal-nav"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                        <div class="bmp-cal-wd">${WDAYS.map(d=>`<span>${d}</span>`).join('')}</div>
+                        <div class="bmp-cal-grid">${cells}</div>
+                    </div>`;
+            }
+
+            case 'time': {
+                const hn = new Date().getHours();
+                const mn = new Date().getMinutes();
+                const hRows = [hn-1, hn, hn+1].map((h,i) =>
+                    `<div class="bmp-tp-item${i===1?' sel':i===0||i===2?' near':''}">${String((h+24)%24).padStart(2,'0')}</div>`
+                ).join('');
+                const mRows = [mn-1, mn, mn+1].map((mm,i) =>
+                    `<div class="bmp-tp-item${i===1?' sel':i===0||i===2?' near':''}">${String((mm+60)%60).padStart(2,'0')}</div>`
+                ).join('');
+
+                return labelRow() + helpRow() +
+                    `<div class="bmp-field-trigger"><i class="fas fa-clock"></i> <span>--:--</span></div>
+                    <div class="bmp-tp">
+                        <div class="bmp-tp-col-wrap">
+                            <div class="bmp-tp-lbl">Hour</div>
+                            <div class="bmp-tp-col">${hRows}</div>
+                        </div>
+                        <div class="bmp-tp-sep">:</div>
+                        <div class="bmp-tp-col-wrap">
+                            <div class="bmp-tp-lbl">Minute</div>
+                            <div class="bmp-tp-col">${mRows}</div>
+                        </div>
+                    </div>`;
+            }
+
+            case 'datetime': {
+                const now2  = new Date();
+                const y2 = now2.getFullYear(), m2 = now2.getMonth();
+                const MNAMES2 = ['January','February','March','April','May','June',
+                                 'July','August','September','October','November','December'];
+                const WDAYS2  = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+                const firstDay2 = new Date(y2, m2, 1).getDay();
+                const dim2 = new Date(y2, m2 + 1, 0).getDate();
+                const today2 = now2.getDate();
+                const sel2 = today2 - 2 > 0 ? today2 - 2 : today2;
+                let cells2 = '';
+                for (let i = 0; i < firstDay2; i++) {
+                    cells2 += `<div class="bmp-cal-cell other">${new Date(y2,m2,0).getDate()-firstDay2+1+i}</div>`;
+                }
+                for (let d = 1; d <= dim2 && cells2.split('bmp-cal-cell').length <= 30; d++) {
+                    cells2 += `<div class="bmp-cal-cell${d===today2?' today':d===sel2?' sel':''}">${d}</div>`;
+                }
+                const hn2 = now2.getHours(), mn2 = now2.getMinutes();
+                const hR2 = [hn2-1,hn2,hn2+1].map((h,i)=>
+                    `<div class="bmp-tp-item${i===1?' sel':i!==1?' near':''}">${String((h+24)%24).padStart(2,'0')}</div>`).join('');
+                const mR2 = [mn2-1,mn2,mn2+1].map((mm,i)=>
+                    `<div class="bmp-tp-item${i===1?' sel':i!==1?' near':''}">${String((mm+60)%60).padStart(2,'0')}</div>`).join('');
+
+                return labelRow() + helpRow() +
+                    `<div class="bmp-field-trigger"><i class="fas fa-calendar-alt"></i> <span>dd/mm/yyyy --:--</span></div>
+                    <div class="bmp-cal">
+                        <div class="bmp-cal-head">
+                            <div class="bmp-cal-nav"><i class="fas fa-chevron-left"></i></div>
+                            <span class="bmp-cal-month">${MNAMES2[m2]} ${y2}</span>
+                            <div class="bmp-cal-nav"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                        <div class="bmp-cal-wd">${WDAYS2.map(d=>`<span>${d}</span>`).join('')}</div>
+                        <div class="bmp-cal-grid">${cells2}</div>
+                    </div>
+                    <div class="bmp-tp" style="margin-top:5px;">
+                        <div class="bmp-tp-col-wrap">
+                            <div class="bmp-tp-lbl">Hour</div>
+                            <div class="bmp-tp-col">${hR2}</div>
+                        </div>
+                        <div class="bmp-tp-sep">:</div>
+                        <div class="bmp-tp-col-wrap">
+                            <div class="bmp-tp-lbl">Minute</div>
+                            <div class="bmp-tp-col">${mR2}</div>
+                        </div>
+                    </div>`;
+            }
+
+            case 'dropdown': {
+                const opts = getOpts();
+                let html = labelRow() + helpRow() +
+                    `<div class="bmp-field-trigger bmp-dd-trigger">
+                        <span>-- Select one --</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="bmp-dd-list">
+                        <div class="bmp-dd-opt bmp-dd-opt--ph">-- Select one --</div>`;
+                if (opts.length) {
+                    opts.slice(0, 6).forEach((o, i) => {
+                        html += `<div class="bmp-dd-opt${i===0?' bmp-dd-opt--sel':''}">
+                            ${i===0 ? '<i class="fas fa-check bmp-dd-check"></i>' : '<span class="bmp-dd-spc"></span>'}
+                            ${esc(o)}
+                        </div>`;
+                    });
+                    if (opts.length > 6) html += `<div class="bmp-dd-more">+${opts.length-6} opsi lainnya...</div>`;
+                } else {
+                    html += `<div class="bmp-dd-opt bmp-dd-opt--empty"><i class="fas fa-plus bmp-dd-check"></i> Add options on the left...</div>`;
+                }
+                html += `</div>`;
+                return html;
+            }
+
+            case 'radio': {
+                const opts = getOpts();
+                const rows = opts.length
+                    ? opts.map((o, i) => `
+                        <div class="bmp-opt-row${i===0?' bmp-opt-row--sel':''}">
+                            <div class="bmp-radio${i===0?' bmp-radio--on':''}"></div>
+                            <span>${esc(o)}</span>
+                        </div>`).join('')
+                    : `<div class="bmp-empty"><i class="fas fa-plus fa-xs me-1"></i>Add options on the left...</div>`;
+                return labelRow() + helpRow() + rows;
+            }
+
+            case 'checkbox': {
+                const opts = getOpts();
+                const rows = opts.length
+                    ? opts.map((o, i) => `
+                        <div class="bmp-opt-row${i<2?' bmp-opt-row--sel':''}">
+                            <div class="bmp-checkbox${i<2?' bmp-checkbox--on':''}"></div>
+                            <span>${esc(o)}</span>
+                        </div>`).join('')
+                    : `<div class="bmp-empty"><i class="fas fa-plus fa-xs me-1"></i>Add options on the left...</div>`;
+                return labelRow() + helpRow() + rows;
+            }
+
+            case 'linear_scale': {
+                const min = +(document.getElementById('modalLinearScaleMin')?.value || 1);
+                const max = +(document.getElementById('modalLinearScaleMax')?.value || 5);
+                const minL = document.getElementById('modalLinearScaleMinLabel')?.value || '';
+                const maxL = document.getElementById('modalLinearScaleMaxLabel')?.value || '';
+                const nums = [];
+                for (let n = min; n <= max; n++) nums.push(n);
+                const mid = Math.floor(nums.length / 2);
+                const dots = nums.map((n, i) => `
+                    <div class="bmp-scale-item">
+                        <span class="bmp-scale-n">${n}</span>
+                        <div class="bmp-scale-dot${i===mid?' bmp-scale-dot--on':''}"></div>
+                    </div>`).join('');
+                return labelRow() + helpRow() +
+                    `<div class="bmp-scale-row">
+                        ${minL ? `<span class="bmp-scale-edge">${esc(minL)}</span>` : ''}
+                        ${dots}
+                        ${maxL ? `<span class="bmp-scale-edge">${esc(maxL)}</span>` : ''}
+                    </div>`;
+            }
+
+            case 'rating': {
+                const max = +(document.getElementById('modalRatingMax')?.value || 5);
+                const half = Math.ceil(max / 2);
+                let stars = '';
+                for (let i = 0; i < max; i++)
+                    stars += `<i class="${i<half?'fas':'far'} fa-star bmp-star"></i>`;
+                return labelRow() + helpRow() + `<div class="bmp-stars">${stars}</div>`;
+            }
+
+            case 'file':
+                return labelRow() + helpRow() +
+                    `<div class="bmp-upload">
+                        <i class="fas fa-cloud-upload-alt bmp-upload-icon"></i>
+                        <div class="bmp-upload-text">Click or drag a file here</div>
+                        <div class="bmp-upload-hint">All file types accepted</div>
+                    </div>`;
+
+            case 'paragraph':
+                return row(ANN.label(), `<div class="bmp-para">${esc(lbl)}</div>`);
+
+            case 'image':
+                return `<div class="bmp-img-mock"><i class="fas fa-image"></i> Image</div>
+                    ${lbl !== 'Field label'
+                        ? row(ANN.spc(), `<div class="bmp-img-caption">${esc(lbl)}</div>`)
+                        : ''}`;
+
+            case 'section_break':
+                return `<div class="bmp-section">
+                    ${lbl !== 'Field label'
+                        ? `<div class="bmp-section-title">${esc(lbl)}</div>` : ''}
+                    ${help ? `<div class="bmp-section-desc">${esc(help)}</div>` : ''}
+                </div>`;
+
+            default:
+                return labelRow() + helpRow() + underlineRow('Your answer...');
+        }
+    }
+
+    function refresh() {
+        const el = document.getElementById('modalPreviewField');
+        if (!el) return;
+        const type = document.getElementById('modalFieldType')?.value || '';
+        const label = document.getElementById('modalLabel')?.value || '';
+        const ph    = document.getElementById('modalPlaceholder')?.value || '';
+        const help  = document.getElementById('modalHelpText')?.value || '';
+        const req   = document.getElementById('modalIsRequired')?.checked || false;
+        el.innerHTML = buildPreview(type, label, ph, help, req);
+    }
+
+    // Hook into existing openAddFieldModal
+    const _origOpen = window.openAddFieldModal;
+    window.openAddFieldModal = function (type, label) {
+        _origOpen && _origOpen(type, label);
+        setTimeout(refresh, 80);
+    };
+
+    // Live-update on input changes
+    document.addEventListener('input', function (e) {
+        const ids = ['modalLabel','modalPlaceholder','modalHelpText',
+                     'modalLinearScaleMin','modalLinearScaleMax',
+                     'modalLinearScaleMinLabel','modalLinearScaleMaxLabel'];
+        if (ids.includes(e.target.id) || e.target.classList.contains('option-input'))
+            refresh();
+    });
+
+    document.addEventListener('change', function (e) {
+        const ids = ['modalIsRequired','modalLinearScaleMin','modalLinearScaleMax',
+                     'modalLinearScaleMinLabel','modalLinearScaleMaxLabel','modalRatingMax'];
+        if (ids.includes(e.target.id)) refresh();
+    });
+
+    // Expose for manual call after option add/remove
+    window.refreshModalPreview = refresh;
+})();
+
+// ===== FIELD PREVIEW POPUP — REMOVED =====
+/* (function () {
+    const PREVIEWS = {
+        short_text: {
+            label: 'Short Text', desc: 'Single-line text input',
+            html: `<div class="fpp-name">Full Name <span class="fpp-req">*</span></div>
+                   <div class="fpp-hint">Short answer</div>
+                   <div class="fpp-underline">Your answer...</div>`
+        },
+        long_text: {
+            label: 'Long Text', desc: 'Multi-line text area',
+            html: `<div class="fpp-name">Tell us about yourself</div>
+                   <div class="fpp-underline-tall">Long answer...</div>`
+        },
+        email: {
+            label: 'Email', desc: 'Email address input',
+            html: `<div class="fpp-name">Email Address <span class="fpp-req">*</span></div>
+                   <div class="fpp-hint">Confirmation will be sent to this email</div>
+                   <div class="fpp-underline">example@email.com</div>`
+        },
+        number: {
+            label: 'Number', desc: 'Numeric input only',
+            html: `<div class="fpp-name">Age</div>
+                   <div class="fpp-underline">0</div>`
+        },
+        phone: {
+            label: 'Phone', desc: 'Phone number input',
+            html: `<div class="fpp-name">Phone Number <span class="fpp-req">*</span></div>
+                   <div class="fpp-hint">Use an active number</div>
+                   <div class="fpp-underline">+1234...</div>`
+        },
+        url: {
+            label: 'URL / Link', desc: 'Web address input',
+            html: `<div class="fpp-name">Website / Portfolio</div>
+                   <div class="fpp-underline">https://</div>`
+        },
+        date: {
+            label: 'Date', desc: 'Calendar date picker',
+            html: `<div class="fpp-name">Date of Birth <span class="fpp-req">*</span></div>
+                   <div class="fpp-box"><i class="fas fa-calendar-alt fpp-box-icon"></i> Select date</div>`
+        },
+        time: {
+            label: 'Time', desc: 'Clock time picker',
+            html: `<div class="fpp-name">Arrival Time <span class="fpp-req">*</span></div>
+                   <div class="fpp-box"><i class="fas fa-clock fpp-box-icon"></i> --:--</div>`
+        },
+        datetime: {
+            label: 'Date & Time', desc: 'Combined date + time picker',
+            html: `<div class="fpp-name">Event Date & Time <span class="fpp-req">*</span></div>
+                   <div class="fpp-box"><i class="fas fa-calendar-alt fpp-box-icon"></i> dd/mm/yyyy --:--</div>`
+        },
+        dropdown: {
+            label: 'Dropdown', desc: 'Single selection from a list',
+            html: `<div class="fpp-name">Gender</div>
+                   <div class="fpp-dd">-- Select one -- <i class="fas fa-chevron-down" style="font-size:.55rem;"></i></div>
+                   <div class="fpp-hint" style="margin-top:5px;">Male / Female / ...</div>`
+        },
+        radio: {
+            label: 'Multiple Choice', desc: 'Pick one option',
+            html: `<div class="fpp-name">Grade / Class <span class="fpp-req">*</span></div>
+                   <div class="fpp-opt"><div class="fpp-radio-dot on"></div> Grade 10</div>
+                   <div class="fpp-opt"><div class="fpp-radio-dot"></div> Grade 11</div>
+                   <div class="fpp-opt"><div class="fpp-radio-dot"></div> Grade 12</div>`
+        },
+        checkbox: {
+            label: 'Checkboxes', desc: 'Pick multiple options',
+            html: `<div class="fpp-name">Areas of Interest</div>
+                   <div class="fpp-opt"><div class="fpp-cb on"></div> Mathematics</div>
+                   <div class="fpp-opt"><div class="fpp-cb on"></div> Science</div>
+                   <div class="fpp-opt"><div class="fpp-cb"></div> Languages</div>`
+        },
+        linear_scale: {
+            label: 'Linear Scale', desc: 'Numbered rating scale',
+            html: `<div class="fpp-name">Satisfaction level</div>
+                   <div class="fpp-hint">1 = Not satisfied &nbsp; 5 = Very satisfied</div>
+                   <div class="fpp-scale-row">
+                       ${[1,2,3,4,5].map((n,i) => `<div class="fpp-scale-item"><div class="fpp-scale-num">${n}</div><div class="fpp-scale-dot${i===2?' on':''}"></div></div>`).join('')}
+                   </div>`
+        },
+        rating: {
+            label: 'Rating', desc: 'Star rating input',
+            html: `<div class="fpp-name">Event Rating</div>
+                   <div class="fpp-stars">★★★☆☆</div>
+                   <div class="fpp-hint">1 — 5 stars</div>`
+        },
+        file: {
+            label: 'File Upload', desc: 'Accept file attachments',
+            html: `<div class="fpp-name">Proof of Payment <span class="fpp-req">*</span></div>
+                   <div class="fpp-upload"><i class="fas fa-cloud-upload-alt fpp-upload-icon"></i>Click or drag a file here<br><span style="font-size:.62rem;">PDF · JPG · PNG · Max 5 MB</span></div>`
+        },
+        paragraph: {
+            label: 'Paragraph Text', desc: 'Static display text / instructions',
+            html: `<div class="fpp-para">Please read the following terms carefully before filling out this form...</div>`
+        },
+        image: {
+            label: 'Image Display', desc: 'Show an image inside the form',
+            html: `<div class="fpp-img-mock"><i class="fas fa-image"></i> Image displayed here</div>`
+        },
+        section_break: {
+            label: 'Section Break', desc: 'Splits form into multiple pages',
+            html: `<div class="fpp-section-divider"><i class="fas fa-columns"></i> New Section <div class="fpp-section-line"></div></div>
+                   <div class="fpp-hint" style="margin-top:4px;">Form is divided into multiple pages (steps).</div>`
+        },
+        header_image: {
+            label: 'Header Image', desc: 'Banner image pinned to form top',
+            html: `<div class="fpp-img-mock" style="height:50px; background:linear-gradient(135deg,#00a79d,#0ea5e9); color:#fff; border-radius:7px;"><i class="fas fa-image"></i> Banner 1600×400</div>`
+        }
+    };
+
+    const popup   = document.getElementById('fppWrap');
+    const fppLbl  = document.getElementById('fppLabel');
+    const fppDesc = document.getElementById('fppDesc');
+    const fppBody = document.getElementById('fppBody');
+    let hideTimer = null;
+
+    function show(btn) {
+        const type = btn.dataset.type;
+        const p    = PREVIEWS[type];
+        if (!p || !popup) return;
+
+        fppLbl.textContent  = p.label;
+        fppDesc.textContent = p.desc;
+        fppBody.innerHTML   = p.html;
+
+        // Position to the right of the button
+        popup.style.top  = '-9999px';
+        popup.style.left = '-9999px';
+        popup.classList.add('visible');
+
+        const rect = btn.getBoundingClientRect();
+        const ph   = popup.offsetHeight;
+        let top    = rect.top + rect.height / 2 - ph / 2;
+        const left = rect.right + 10;
+
+        // Clamp vertically
+        if (top + ph > window.innerHeight - 8) top = window.innerHeight - ph - 8;
+        if (top < 8) top = 8;
+
+        popup.style.top  = top + 'px';
+        popup.style.left = left + 'px';
+    }
+
+    function hide() { popup && popup.classList.remove('visible'); }
+
+    document.querySelectorAll('.field-type-btn').forEach(function (btn) {
+        btn.addEventListener('mouseenter', function () {
+            clearTimeout(hideTimer);
+            show(btn);
+        });
+        btn.addEventListener('mouseleave', function () {
+            hideTimer = setTimeout(hide, 100);
+        });
+    });
+
+    if (popup) {
+        popup.addEventListener('mouseenter', function () { clearTimeout(hideTimer); });
+        popup.addEventListener('mouseleave', function () { hideTimer = setTimeout(hide, 100); });
+    }
+}); */
 </script>
