@@ -194,24 +194,55 @@
 
 {{-- ===== DATE ===== --}}
 @case('date')
+    @php
+        $dpRaw = $oldValue ?? ($field->defaultValue ?? '');
+        $dpDisplay = '';
+        if ($dpRaw) {
+            $p = explode('-', $dpRaw);
+            if (count($p) === 3) $dpDisplay = $p[2] . '/' . $p[1] . '/' . $p[0];
+        }
+    @endphp
     <div class="gf-card {{ $isError ? 'has-error' : '' }}">
-        <label class="gf-label" for="{{ $fieldID }}">
+        <label class="gf-label">
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
         <p class="gf-help">{{ $field->helpText }}</p>
         @endif
-        <div class="gf-date-wrap">
-            <input
-                type="date"
-                id="{{ $fieldID }}"
-                name="{{ $fieldName }}"
-                class="gf-input {{ $isError ? 'is-invalid' : '' }}"
-                value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
-                {{ $field->isRequired ? 'required' : '' }}
-            >
-            <span class="gf-date-icon" onclick="gfOpenDatePicker(this)"><i class="fas fa-calendar-alt"></i></span>
+        <div class="gf-dp-wrap{{ $isError ? ' is-invalid' : '' }}">
+            <input type="date" id="{{ $fieldID }}" name="{{ $fieldName }}"
+                   class="gf-dp-native" value="{{ $dpRaw }}"
+                   {{ $field->isRequired ? 'required' : '' }}
+                   aria-hidden="true" tabindex="-1">
+            <div class="gf-dp-trigger" tabindex="0" role="button"
+                 aria-haspopup="dialog" aria-expanded="false" aria-label="{{ $field->label }}">
+                <span class="gf-dp-text{{ !$dpDisplay ? ' placeholder' : '' }}">
+                    {{ $dpDisplay ?: 'Pilih tanggal' }}
+                </span>
+                <span class="gf-dp-icon"><i class="fas fa-calendar-alt"></i></span>
+            </div>
+            <div class="gf-dp-panel" role="dialog" aria-modal="true">
+                <div class="gf-dp-header">
+                    <button type="button" class="gf-dp-nav" data-dp="prev"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" class="gf-dp-caption-btn">
+                        <span class="gf-dp-caption"></span>
+                        <i class="fas fa-chevron-down gf-dp-caption-arrow"></i>
+                    </button>
+                    <button type="button" class="gf-dp-nav" data-dp="next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="gf-dp-weekdays">
+                    <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span>
+                    <span>Kam</span><span>Jum</span><span>Sab</span>
+                </div>
+                <div class="gf-dp-grid"></div>
+                <div class="gf-dp-month-grid"></div>
+                <div class="gf-dp-year-grid"></div>
+                <div class="gf-dp-footer">
+                    <button type="button" class="gf-dp-btn gf-dp-btn-clear">Hapus</button>
+                    <button type="button" class="gf-dp-btn gf-dp-btn-today">Hari ini</button>
+                </div>
+            </div>
         </div>
         <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>

@@ -22,7 +22,7 @@
             if (!native || !trigger || !panel) return;
 
             function openPanel() {
-                document.querySelectorAll('.gf-csel-wrap').forEach(function (w) {
+                document.querySelectorAll('.gf-csel-wrap,.gf-dp-wrap').forEach(function (w) {
                     if (w !== wrap && w._gfClose) w._gfClose();
                 });
                 panel.classList.add('open');
@@ -119,6 +119,233 @@
         // Close all panels when clicking outside
         document.addEventListener('click', function () {
             document.querySelectorAll('.gf-csel-wrap').forEach(function (w) {
+                if (w._gfClose) w._gfClose();
+            });
+        });
+    })();
+
+    // ── Custom Date Picker (3-mode: day / month / year) ────────────
+    (function () {
+        var MONTHS       = ['Januari','Februari','Maret','April','Mei','Juni',
+                            'Juli','Agustus','September','Oktober','November','Desember'];
+        var MONTHS_SHORT = ['Jan','Feb','Mar','Apr','Mei','Jun',
+                            'Jul','Agu','Sep','Okt','Nov','Des'];
+
+        function parseRaw(str) {
+            if (!str) return null;
+            var p = str.split('-');
+            if (p.length !== 3) return null;
+            var d = new Date(+p[0], +p[1] - 1, +p[2]);
+            return isNaN(d.getTime()) ? null : d;
+        }
+
+        function toRaw(d) {
+            return d.getFullYear() + '-' +
+                   String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                   String(d.getDate()).padStart(2, '0');
+        }
+
+        function toDisplay(d) {
+            return String(d.getDate()).padStart(2, '0') + '/' +
+                   String(d.getMonth() + 1).padStart(2, '0') + '/' +
+                   d.getFullYear();
+        }
+
+        function sameDay(a, b) {
+            return a && b &&
+                a.getFullYear() === b.getFullYear() &&
+                a.getMonth()    === b.getMonth()    &&
+                a.getDate()     === b.getDate();
+        }
+
+        var today = new Date(); today.setHours(0,0,0,0);
+
+        document.querySelectorAll('.gf-dp-wrap').forEach(function (wrap) {
+            var native     = wrap.querySelector('.gf-dp-native');
+            var trigger    = wrap.querySelector('.gf-dp-trigger');
+            var dispText   = wrap.querySelector('.gf-dp-text');
+            var panel      = wrap.querySelector('.gf-dp-panel');
+            var captionEl  = wrap.querySelector('.gf-dp-caption');
+            var captionBtn = wrap.querySelector('.gf-dp-caption-btn');
+            var grid       = wrap.querySelector('.gf-dp-grid');
+            var monthGrid  = wrap.querySelector('.gf-dp-month-grid');
+            var yearGrid   = wrap.querySelector('.gf-dp-year-grid');
+            var btnPrev    = wrap.querySelector('[data-dp="prev"]');
+            var btnNext    = wrap.querySelector('[data-dp="next"]');
+            var btnClear   = wrap.querySelector('.gf-dp-btn-clear');
+            var btnToday   = wrap.querySelector('.gf-dp-btn-today');
+
+            if (!native || !trigger || !panel) return;
+
+            var selected = parseRaw(native.value);
+            var view     = new Date(selected || today); view.setDate(1);
+            var mode     = 'day';
+
+            function setMode(m) {
+                mode = m;
+                panel.setAttribute('data-mode', m);
+            }
+
+            /* ── Day grid ──────────────────────────────────────── */
+            function renderDay() {
+                setMode('day');
+                var y = view.getFullYear(), m = view.getMonth();
+                captionEl.textContent = MONTHS[m] + ' ' + y;
+                grid.innerHTML = '';
+                var firstDay    = new Date(y, m, 1).getDay();
+                var daysInMonth = new Date(y, m + 1, 0).getDate();
+                var daysInPrev  = new Date(y, m, 0).getDate();
+
+                for (var i = firstDay - 1; i >= 0; i--)
+                    grid.appendChild(dayCell(new Date(y, m - 1, daysInPrev - i), true));
+                for (var d = 1; d <= daysInMonth; d++)
+                    grid.appendChild(dayCell(new Date(y, m, d), false));
+                var total = firstDay + daysInMonth;
+                var trail = total % 7 === 0 ? 0 : 7 - (total % 7);
+                for (var t = 1; t <= trail; t++)
+                    grid.appendChild(dayCell(new Date(y, m + 1, t), true));
+            }
+
+            function dayCell(date, isOther) {
+                var el = document.createElement('div');
+                el.className = 'gf-dp-cell';
+                el.textContent = date.getDate();
+                if (isOther)                el.classList.add('other-month');
+                if (sameDay(date, today))   el.classList.add('today');
+                if (sameDay(date, selected)) el.classList.add('selected');
+                el.addEventListener('click', function () { pick(date); });
+                return el;
+            }
+
+            /* ── Month grid ────────────────────────────────────── */
+            function renderMonth() {
+                setMode('month');
+                captionEl.textContent = view.getFullYear();
+                monthGrid.innerHTML = '';
+                for (var i = 0; i < 12; i++) {
+                    var el = document.createElement('div');
+                    el.className = 'gf-dp-month-cell';
+                    el.textContent = MONTHS_SHORT[i];
+                    if (i === today.getMonth() && view.getFullYear() === today.getFullYear())
+                        el.classList.add('cur-month');
+                    if (selected && i === selected.getMonth() && view.getFullYear() === selected.getFullYear())
+                        el.classList.add('sel-month');
+                    el.addEventListener('click', (function (idx) {
+                        return function () { view.setMonth(idx); renderDay(); };
+                    })(i));
+                    monthGrid.appendChild(el);
+                }
+            }
+
+            /* ── Year grid (scrollable 1920 → current+1) ───────── */
+            function renderYear() {
+                setMode('year');
+                captionEl.textContent = 'Pilih Tahun';
+                yearGrid.innerHTML = '';
+                var endY = today.getFullYear() + 1;
+                for (var y = 1920; y <= endY; y++) {
+                    var el = document.createElement('div');
+                    el.className = 'gf-dp-year-cell';
+                    el.textContent = y;
+                    if (y === today.getFullYear()) el.classList.add('cur-year');
+                    if (selected && y === selected.getFullYear()) el.classList.add('sel-year');
+                    el.addEventListener('click', (function (yr) {
+                        return function () { view.setFullYear(yr); renderMonth(); };
+                    })(y));
+                    yearGrid.appendChild(el);
+                }
+                setTimeout(function () {
+                    var target = yearGrid.querySelector('.sel-year') || yearGrid.querySelector('.cur-year');
+                    if (target) target.scrollIntoView({ block: 'center' });
+                }, 10);
+            }
+
+            /* ── Pick a date ───────────────────────────────────── */
+            function pick(date) {
+                selected = new Date(date); selected.setHours(0,0,0,0);
+                native.value = toRaw(selected);
+                if (dispText) {
+                    dispText.textContent = toDisplay(selected);
+                    dispText.classList.remove('placeholder');
+                }
+                close();
+                trigger.focus();
+            }
+
+            /* ── Open / close ──────────────────────────────────── */
+            function open() {
+                document.querySelectorAll('.gf-csel-wrap,.gf-dp-wrap').forEach(function (w) {
+                    if (w !== wrap && w._gfClose) w._gfClose();
+                });
+                view = new Date(selected || today); view.setDate(1);
+                renderDay();
+                panel.classList.add('open');
+                trigger.classList.add('open');
+                trigger.setAttribute('aria-expanded', 'true');
+                var rect = wrap.getBoundingClientRect();
+                if (window.innerHeight - rect.bottom < 330) {
+                    panel.style.top = 'auto'; panel.style.bottom = 'calc(100% + 5px)';
+                } else {
+                    panel.style.top = 'calc(100% + 5px)'; panel.style.bottom = 'auto';
+                }
+            }
+
+            function close() {
+                panel.classList.remove('open');
+                trigger.classList.remove('open');
+                trigger.setAttribute('aria-expanded', 'false');
+            }
+
+            wrap._gfClose = close;
+
+            /* ── Events ────────────────────────────────────────── */
+            wrap.addEventListener('click', function (e) { e.stopPropagation(); });
+
+            trigger.addEventListener('click', function () {
+                panel.classList.contains('open') ? close() : open();
+            });
+
+            trigger.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    panel.classList.contains('open') ? close() : open();
+                } else if (e.key === 'Escape') {
+                    close();
+                }
+            });
+
+            // Caption: day/month → year, year → day
+            captionBtn && captionBtn.addEventListener('click', function () {
+                if (mode === 'day' || mode === 'month') renderYear();
+                else renderDay();
+            });
+
+            btnPrev && btnPrev.addEventListener('click', function () {
+                if (mode === 'day')   { view.setMonth(view.getMonth() - 1);      renderDay();   }
+                if (mode === 'month') { view.setFullYear(view.getFullYear() - 1); renderMonth(); }
+            });
+
+            btnNext && btnNext.addEventListener('click', function () {
+                if (mode === 'day')   { view.setMonth(view.getMonth() + 1);      renderDay();   }
+                if (mode === 'month') { view.setFullYear(view.getFullYear() + 1); renderMonth(); }
+            });
+
+            btnClear && btnClear.addEventListener('click', function () {
+                selected = null; native.value = '';
+                if (dispText) { dispText.textContent = 'Pilih tanggal'; dispText.classList.add('placeholder'); }
+                close(); trigger.focus();
+            });
+
+            btnToday && btnToday.addEventListener('click', function () { pick(today); });
+
+            /* ── Sync is-invalid ─────────────────────────────────── */
+            new MutationObserver(function () {
+                wrap.classList.toggle('is-invalid', native.classList.contains('is-invalid'));
+            }).observe(native, { attributes: true, attributeFilter: ['class'] });
+        });
+
+        document.addEventListener('click', function () {
+            document.querySelectorAll('.gf-dp-wrap').forEach(function (w) {
                 if (w._gfClose) w._gfClose();
             });
         });
@@ -426,7 +653,7 @@
         if (indicatorText) {
             var name  = gfSectionNames[currentIndex] || '';
             var label = 'Bagian ' + (currentIndex + 1) + ' dari ' + totalSecs;
-            indicatorText.textContent = name ? label + ' \u2014 ' + name : label;
+            indicatorText.textContent = name ? label + ' — ' + name : label;
         }
         if (bar) bar.style.width = Math.round(((currentIndex + 1) / totalSecs) * 100) + '%';
         dots.forEach(function (dot, i) {
