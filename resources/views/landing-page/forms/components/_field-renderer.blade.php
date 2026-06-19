@@ -297,24 +297,73 @@
 
 {{-- ===== DATETIME ===== --}}
 @case('datetime')
+    @php
+        $dtpRaw = $oldValue ?? ($field->defaultValue ?? '');
+        $dtpFull = '';
+        if ($dtpRaw) {
+            $dtpParts = explode('T', $dtpRaw);
+            if (count($dtpParts) === 2) {
+                $dd = explode('-', $dtpParts[0]);
+                if (count($dd) === 3)
+                    $dtpFull = $dd[2] . '/' . $dd[1] . '/' . $dd[0] . ' ' . $dtpParts[1];
+            }
+        }
+    @endphp
     <div class="gf-card {{ $isError ? 'has-error' : '' }}">
-        <label class="gf-label" for="{{ $fieldID }}">
+        <label class="gf-label">
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
         <p class="gf-help">{{ $field->helpText }}</p>
         @endif
-        <div class="gf-date-wrap">
-            <input
-                type="datetime-local"
-                id="{{ $fieldID }}"
-                name="{{ $fieldName }}"
-                class="gf-input {{ $isError ? 'is-invalid' : '' }}"
-                value="{{ $oldValue ?? $field->defaultValue ?? '' }}"
-                {{ $field->isRequired ? 'required' : '' }}
-            >
-            <span class="gf-date-icon" onclick="gfOpenDatePicker(this)"><i class="fas fa-calendar-alt"></i></span>
+        <div class="gf-dtp-wrap{{ $isError ? ' is-invalid' : '' }}">
+            <input type="datetime-local" id="{{ $fieldID }}" name="{{ $fieldName }}"
+                   class="gf-dtp-native" value="{{ $dtpRaw }}"
+                   {{ $field->isRequired ? 'required' : '' }}
+                   aria-hidden="true" tabindex="-1">
+            <div class="gf-dtp-trigger" tabindex="0" role="button"
+                 aria-haspopup="dialog" aria-expanded="false" aria-label="{{ $field->label }}">
+                <span class="gf-dtp-text{{ !$dtpFull ? ' placeholder' : '' }}">
+                    {{ $dtpFull ?: 'dd/mm/yyyy --:--' }}
+                </span>
+                <span class="gf-dtp-icon"><i class="fas fa-calendar-alt"></i></span>
+            </div>
+            <div class="gf-dtp-panel" role="dialog" aria-modal="true">
+                <div class="gf-dtp-cal-header">
+                    <button type="button" class="gf-dtp-nav" data-dtp="prev"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" class="gf-dtp-caption-btn">
+                        <span class="gf-dtp-caption"></span>
+                        <i class="fas fa-chevron-down gf-dtp-caption-arrow"></i>
+                    </button>
+                    <button type="button" class="gf-dtp-nav" data-dtp="next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="gf-dtp-weekdays">
+                    <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span>
+                    <span>Kam</span><span>Jum</span><span>Sab</span>
+                </div>
+                <div class="gf-dtp-grid"></div>
+                <div class="gf-dtp-month-grid"></div>
+                <div class="gf-dtp-year-grid"></div>
+                <div class="gf-dtp-time-section">
+                    <div class="gf-dtp-time-label">Waktu</div>
+                    <div class="gf-dtp-time-cols">
+                        <div class="gf-dtp-col-wrap">
+                            <div class="gf-dtp-col-label">Jam</div>
+                            <div class="gf-dtp-col" data-dtp="hour"></div>
+                        </div>
+                        <div class="gf-dtp-time-sep">:</div>
+                        <div class="gf-dtp-col-wrap">
+                            <div class="gf-dtp-col-label">Menit</div>
+                            <div class="gf-dtp-col" data-dtp="minute"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gf-dtp-footer">
+                    <button type="button" class="gf-dtp-btn gf-dtp-btn-clear">Hapus</button>
+                    <button type="button" class="gf-dtp-btn gf-dtp-btn-now">Sekarang</button>
+                </div>
+            </div>
         </div>
         <span class="gf-invalid">@error($fieldName){{ $message }}@enderror</span>
     </div>

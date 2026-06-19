@@ -508,6 +508,286 @@
         });
     })();
 
+    // ── Custom DateTime Picker ─────────────────────────────────────
+    (function () {
+        var MONTHS       = ['Januari','Februari','Maret','April','Mei','Juni',
+                            'Juli','Agustus','September','Oktober','November','Desember'];
+        var MONTHS_SHORT = ['Jan','Feb','Mar','Apr','Mei','Jun',
+                            'Jul','Agu','Sep','Okt','Nov','Des'];
+
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        function parseRaw(str) {
+            if (!str) return null;
+            var p = str.split('T');
+            if (p.length < 2) return null;
+            var dp = p[0].split('-'), tp = p[1].split(':');
+            if (dp.length !== 3) return null;
+            var d = new Date(+dp[0], +dp[1] - 1, +dp[2]);
+            return isNaN(d.getTime()) ? null : { date: d, h: +tp[0], m: +tp[1] };
+        }
+
+        function toRaw(date, h, m) {
+            return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()) +
+                   'T' + pad(h) + ':' + pad(m);
+        }
+
+        function toDisplay(date, h, m) {
+            return pad(date.getDate()) + '/' + pad(date.getMonth() + 1) + '/' + date.getFullYear() +
+                   ' ' + pad(h) + ':' + pad(m);
+        }
+
+        function sameDay(a, b) {
+            return a && b &&
+                a.getFullYear() === b.getFullYear() &&
+                a.getMonth()    === b.getMonth()    &&
+                a.getDate()     === b.getDate();
+        }
+
+        var today = new Date(); today.setHours(0,0,0,0);
+
+        document.querySelectorAll('.gf-dtp-wrap').forEach(function (wrap) {
+            var native     = wrap.querySelector('.gf-dtp-native');
+            var trigger    = wrap.querySelector('.gf-dtp-trigger');
+            var dispText   = wrap.querySelector('.gf-dtp-text');
+            var panel      = wrap.querySelector('.gf-dtp-panel');
+            var captionEl  = wrap.querySelector('.gf-dtp-caption');
+            var captionBtn = wrap.querySelector('.gf-dtp-caption-btn');
+            var calGrid    = wrap.querySelector('.gf-dtp-grid');
+            var monthGrid  = wrap.querySelector('.gf-dtp-month-grid');
+            var yearGrid   = wrap.querySelector('.gf-dtp-year-grid');
+            var hourCol    = wrap.querySelector('[data-dtp="hour"]');
+            var minCol     = wrap.querySelector('[data-dtp="minute"]');
+            var btnPrev    = wrap.querySelector('[data-dtp="prev"]');
+            var btnNext    = wrap.querySelector('[data-dtp="next"]');
+            var btnClear   = wrap.querySelector('.gf-dtp-btn-clear');
+            var btnNow     = wrap.querySelector('.gf-dtp-btn-now');
+
+            if (!native || !trigger || !panel) return;
+
+            var parsed  = parseRaw(native.value);
+            var selDate = parsed ? parsed.date : null;
+            var selH    = parsed ? parsed.h    : null;
+            var selM    = parsed ? parsed.m    : null;
+            var view    = new Date(selDate || today); view.setDate(1);
+            var mode    = 'day';
+
+            function setMode(m) { mode = m; panel.setAttribute('data-mode', m); }
+
+            /* ── Calendar ─────────────────────────────────────── */
+            function renderDay() {
+                setMode('day');
+                var y = view.getFullYear(), m = view.getMonth();
+                captionEl.textContent = MONTHS[m] + ' ' + y;
+                calGrid.innerHTML = '';
+                var firstDay    = new Date(y, m, 1).getDay();
+                var daysInMonth = new Date(y, m + 1, 0).getDate();
+                var daysInPrev  = new Date(y, m, 0).getDate();
+                for (var i = firstDay - 1; i >= 0; i--)
+                    calGrid.appendChild(dayCell(new Date(y, m - 1, daysInPrev - i), true));
+                for (var d = 1; d <= daysInMonth; d++)
+                    calGrid.appendChild(dayCell(new Date(y, m, d), false));
+                var total = firstDay + daysInMonth;
+                var trail = total % 7 === 0 ? 0 : 7 - (total % 7);
+                for (var t = 1; t <= trail; t++)
+                    calGrid.appendChild(dayCell(new Date(y, m + 1, t), true));
+            }
+
+            function dayCell(date, isOther) {
+                var el = document.createElement('div');
+                el.className = 'gf-dtp-cell';
+                el.textContent = date.getDate();
+                if (isOther)                el.classList.add('other-month');
+                if (sameDay(date, today))   el.classList.add('today');
+                if (sameDay(date, selDate)) el.classList.add('selected');
+                el.addEventListener('click', function () {
+                    selDate = new Date(date); selDate.setHours(0,0,0,0);
+                    renderDay(); syncNative();
+                });
+                return el;
+            }
+
+            function renderMonth() {
+                setMode('month');
+                captionEl.textContent = view.getFullYear();
+                monthGrid.innerHTML = '';
+                for (var i = 0; i < 12; i++) {
+                    var el = document.createElement('div');
+                    el.className = 'gf-dtp-month-cell';
+                    el.textContent = MONTHS_SHORT[i];
+                    if (i === today.getMonth() && view.getFullYear() === today.getFullYear())
+                        el.classList.add('cur-month');
+                    if (selDate && i === selDate.getMonth() && view.getFullYear() === selDate.getFullYear())
+                        el.classList.add('sel-month');
+                    el.addEventListener('click', (function (idx) {
+                        return function () { view.setMonth(idx); renderDay(); };
+                    })(i));
+                    monthGrid.appendChild(el);
+                }
+            }
+
+            function renderYear() {
+                setMode('year');
+                captionEl.textContent = 'Pilih Tahun';
+                yearGrid.innerHTML = '';
+                var endY = today.getFullYear() + 1;
+                for (var y = 1920; y <= endY; y++) {
+                    var el = document.createElement('div');
+                    el.className = 'gf-dtp-year-cell';
+                    el.textContent = y;
+                    if (y === today.getFullYear()) el.classList.add('cur-year');
+                    if (selDate && y === selDate.getFullYear()) el.classList.add('sel-year');
+                    el.addEventListener('click', (function (yr) {
+                        return function () { view.setFullYear(yr); renderMonth(); };
+                    })(y));
+                    yearGrid.appendChild(el);
+                }
+                setTimeout(function () {
+                    var t = yearGrid.querySelector('.sel-year') || yearGrid.querySelector('.cur-year');
+                    if (t) t.scrollIntoView({ block: 'center' });
+                }, 10);
+            }
+
+            /* ── Time columns ─────────────────────────────────── */
+            function buildTimeCols() {
+                hourCol.innerHTML = '';
+                for (var h = 0; h <= 23; h++) {
+                    var el = document.createElement('div');
+                    el.className = 'gf-dtp-time-item';
+                    el.textContent = pad(h);
+                    if (selH === h) el.classList.add('selected');
+                    el.addEventListener('click', (function (hh) {
+                        return function () {
+                            selH = hh;
+                            hourCol.querySelectorAll('.gf-dtp-time-item').forEach(function (e, idx) {
+                                e.classList.toggle('selected', idx === hh);
+                            });
+                            syncNative();
+                        };
+                    })(h));
+                    hourCol.appendChild(el);
+                }
+                minCol.innerHTML = '';
+                for (var m = 0; m <= 59; m++) {
+                    var el2 = document.createElement('div');
+                    el2.className = 'gf-dtp-time-item';
+                    el2.textContent = pad(m);
+                    if (selM === m) el2.classList.add('selected');
+                    el2.addEventListener('click', (function (mm) {
+                        return function () {
+                            selM = mm;
+                            minCol.querySelectorAll('.gf-dtp-time-item').forEach(function (e, idx) {
+                                e.classList.toggle('selected', idx === mm);
+                            });
+                            syncNative();
+                            if (selDate !== null && selH !== null) close();
+                        };
+                    })(m));
+                    minCol.appendChild(el2);
+                }
+            }
+
+            function scrollTimeCols() {
+                if (selH !== null && hourCol.children[selH])
+                    hourCol.children[selH].scrollIntoView({ block: 'center' });
+                if (selM !== null && minCol.children[selM])
+                    minCol.children[selM].scrollIntoView({ block: 'center' });
+            }
+
+            /* ── Sync ─────────────────────────────────────────── */
+            function syncNative() {
+                if (!selDate) return;
+                var h = selH !== null ? selH : 0;
+                var m = selM !== null ? selM : 0;
+                native.value = toRaw(selDate, h, m);
+                if (dispText) {
+                    dispText.textContent = toDisplay(selDate, h, m);
+                    dispText.classList.remove('placeholder');
+                }
+            }
+
+            /* ── Open / close ─────────────────────────────────── */
+            function open() {
+                document.querySelectorAll('.gf-csel-wrap,.gf-dp-wrap,.gf-tp-wrap,.gf-dtp-wrap').forEach(function (w) {
+                    if (w !== wrap && w._gfClose) w._gfClose();
+                });
+                view = new Date(selDate || today); view.setDate(1);
+                renderDay();
+                buildTimeCols();
+                panel.classList.add('open');
+                trigger.classList.add('open');
+                trigger.setAttribute('aria-expanded', 'true');
+                setTimeout(scrollTimeCols, 10);
+                var rect = wrap.getBoundingClientRect();
+                if (window.innerHeight - rect.bottom < 460) {
+                    panel.style.top = 'auto'; panel.style.bottom = 'calc(100% + 5px)';
+                } else {
+                    panel.style.top = 'calc(100% + 5px)'; panel.style.bottom = 'auto';
+                }
+            }
+
+            function close() {
+                panel.classList.remove('open');
+                trigger.classList.remove('open');
+                trigger.setAttribute('aria-expanded', 'false');
+            }
+
+            wrap._gfClose = close;
+
+            /* ── Events ───────────────────────────────────────── */
+            wrap.addEventListener('click', function (e) { e.stopPropagation(); });
+
+            trigger.addEventListener('click', function () {
+                panel.classList.contains('open') ? close() : open();
+            });
+
+            trigger.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    panel.classList.contains('open') ? close() : open();
+                } else if (e.key === 'Escape') { close(); }
+            });
+
+            captionBtn && captionBtn.addEventListener('click', function () {
+                if (mode === 'day' || mode === 'month') renderYear();
+                else renderDay();
+            });
+
+            btnPrev && btnPrev.addEventListener('click', function () {
+                if (mode === 'day')   { view.setMonth(view.getMonth() - 1);      renderDay();   }
+                if (mode === 'month') { view.setFullYear(view.getFullYear() - 1); renderMonth(); }
+            });
+
+            btnNext && btnNext.addEventListener('click', function () {
+                if (mode === 'day')   { view.setMonth(view.getMonth() + 1);      renderDay();   }
+                if (mode === 'month') { view.setFullYear(view.getFullYear() + 1); renderMonth(); }
+            });
+
+            btnClear && btnClear.addEventListener('click', function () {
+                selDate = null; selH = null; selM = null; native.value = '';
+                if (dispText) { dispText.textContent = 'dd/mm/yyyy --:--'; dispText.classList.add('placeholder'); }
+                close(); trigger.focus();
+            });
+
+            btnNow && btnNow.addEventListener('click', function () {
+                var now = new Date();
+                selDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                selH = now.getHours(); selM = now.getMinutes();
+                syncNative(); close(); trigger.focus();
+            });
+
+            new MutationObserver(function () {
+                wrap.classList.toggle('is-invalid', native.classList.contains('is-invalid'));
+            }).observe(native, { attributes: true, attributeFilter: ['class'] });
+        });
+
+        document.addEventListener('click', function () {
+            document.querySelectorAll('.gf-dtp-wrap').forEach(function (w) {
+                if (w._gfClose) w._gfClose();
+            });
+        });
+    })();
+
     // ── Phone input: allow only + and digits ───────────────────────
     document.querySelectorAll('[data-gf-tel]').forEach(function(input) {
         input.addEventListener('input', function() {
