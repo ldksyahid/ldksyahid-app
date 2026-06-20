@@ -859,6 +859,8 @@ html.dark-mode .bmp-tp-item.near { color: #c8cdd3; }
 .sr-arrow { color: #9ca3af; font-size: .7rem; flex-shrink: 0; }
 
 .sr-route-select { flex: 1; font-size: .75rem; min-width: 120px; }
+.sr-row .bm-csel { flex: 1; min-width: 120px; }
+.sr-row .bm-csel-btn { width: 100%; font-size: .75rem; height: 30px; padding: 0 8px; }
 
 html.dark-mode .sr-panel { border-color: #2d3139; }
 html.dark-mode .sr-panel-header { background: #1a2d2a; }

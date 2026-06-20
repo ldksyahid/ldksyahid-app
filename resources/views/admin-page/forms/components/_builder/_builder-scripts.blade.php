@@ -491,6 +491,7 @@ function buildRoutingRows(opts, existingRoutes) {
                 ${sections.map(s => `<option value="${_escHtml(s.id)}" ${selected(s.id)}>${_escHtml(s.label)}</option>`).join('')}
             </select>`;
         rowsEl.appendChild(row);
+        initCustomSelect(row.querySelector('.sr-route-select'));
     });
 }
 
@@ -1462,7 +1463,7 @@ function showAlert(type, message) {
         if (!native || native._bmCselDone) return;
         native._bmCselDone = true;
 
-        const width = native.style.width || 'auto';
+        const inlineWidth = native.style.width;
         native.style.display = 'none';
 
         const wrap = document.createElement('div');
@@ -1473,7 +1474,9 @@ function showAlert(type, message) {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'bm-csel-btn';
-        btn.style.width = width;
+        // Only set explicit width when the native had an inline width (e.g. "80px").
+        // When width comes from CSS flex/class (sr-route-select), leave it to CSS.
+        if (inlineWidth) btn.style.width = inlineWidth;
 
         // List mounted on body so modal overflow can't clip it
         const list = document.createElement('div');
@@ -1585,6 +1588,9 @@ function showAlert(type, message) {
         'modalLinearScaleMin', 'modalLinearScaleMax',
         'editLinearScaleMin',  'editLinearScaleMax',
     ];
+
+    // Expose to global scope so buildRoutingRows (outside IIFE) can call it
+    window.initCustomSelect = initCustomSelect;
 
     document.addEventListener('DOMContentLoaded', function () {
         SELECT_IDS.forEach(function (id) {
