@@ -177,6 +177,153 @@ class AdminFormController extends Controller
     }
 
     // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // Analytics
+    // -------------------------------------------------------------------------
+
+    public function analytics(int $id)
+    {
+        $form = MsForm::where('flagActive', true)->findOrFail($id);
+
+        if (!$this->canManageForm($form)) {
+            Alert::error('Access Denied', 'You do not have permission to view analytics for this form.');
+            return redirect()->route('admin.forms.index');
+        }
+
+        $submissions = \App\Models\forms\TrFormSubmission::where('formID', $id)
+            ->orderBy('submittedAt', 'asc')
+            ->get(['formSubmissionID', 'respondentName', 'respondentEmail', 'submittedAt', 'flagValid']);
+
+        // Submissions per day (last 30 days)
+        $cutoff = now()->subDays(30);
+        $perDay = $submissions
+            ->filter(function ($s) use ($cutoff) { return $s->submittedAt >= $cutoff; })
+            ->groupBy(function ($s) { return $s->submittedAt->format('Y-m-d'); })
+            ->map(function ($g) { return $g->count(); })
+            ->sortKeys();
+
+        // Fill all days in range with 0 if missing
+        $startDay = now()->subDays(29)->startOfDay();
+        $dailyLabels = [];
+        $dailyCounts = [];
+        for ($i = 0; $i < 30; $i++) {
+            $day = $startDay->copy()->addDays($i)->format('Y-m-d');
+            $dailyLabels[] = $startDay->copy()->addDays($i)->format('d M');
+            $dailyCounts[] = $perDay[$day] ?? 0;
+        }
+
+        // Valid vs invalid
+        $validCount   = $submissions->where('flagValid', true)->count();
+        $invalidCount = $submissions->where('flagValid', false)->count();
+
+        // Total files uploaded
+        $totalFiles = \App\Models\forms\TrFormFile::whereIn(
+            'formSubmissionID', $submissions->pluck('formSubmissionID')
+        )->count();
+
+        // Recent 10 submissions
+        $recent = $submissions->sortByDesc('submittedAt')->take(10)->values();
+
+        // Field-level answer analysis from Google Sheets
+        $fieldCharts = [];
+        $ANALYZABLE = [
+            'radio', 'dropdown', 'checkbox',
+            'linear_scale', 'rating',
+            'number', 'date', 'email', 'short_text',
+        ];
+
+        if ($form->gdriveSpreadsheetID) {
+            try {
+                $sheetRows = (new DynamicFormGDriveService())->readSpreadsheetRows($form->gdriveSpreadsheetID);
+                if (count($sheetRows) > 1) {
+                    $headers  = array_map('trim', $sheetRows[0]);
+                    $dataRows = array_slice($sheetRows, 1);
+
+                    // Build a lowercase → original-index map for case-insensitive matching
+                    $headerMapLower = [];
+                    foreach ($headers as $hi => $hdr) {
+                        $headerMapLower[strtolower($hdr)] = $hi;
+                    }
+
+                    $activeFields = $form->activeFields()->get();
+                    foreach ($activeFields as $field) {
+                        if (!in_array($field->fieldType, $ANALYZABLE)) continue;
+
+                        // Case-insensitive column matching
+                        $needle = strtolower(trim($field->label));
+                        $colIdx = $headerMapLower[$needle] ?? false;
+                        if ($colIdx === false) continue;
+
+                        $isNumericField = in_array($field->fieldType, ['linear_scale', 'rating', 'number']);
+                        $counts = [];
+                        foreach ($dataRows as $row) {
+                            $val = isset($row[$colIdx]) ? trim($row[$colIdx]) : '';
+                            if ($val === '') continue;
+
+                            // linear_scale, rating, number: only accept numeric values
+                            if ($isNumericField && !is_numeric($val)) continue;
+
+                            // email: extract domain only
+                            if ($field->fieldType === 'email') {
+                                $parts = explode('@', $val);
+                                $val   = isset($parts[1]) ? strtolower(trim($parts[1])) : $val;
+                            }
+
+                            // Checkbox: comma-separated values
+                            if ($field->fieldType === 'checkbox') {
+                                foreach (explode(',', $val) as $v) {
+                                    $v = trim($v);
+                                    if ($v !== '') $counts[$v] = ($counts[$v] ?? 0) + 1;
+                                }
+                            } else {
+                                $counts[$val] = ($counts[$val] ?? 0) + 1;
+                            }
+                        }
+
+                        if (empty($counts)) continue;
+
+                        // Sort: numeric fields by key; others by count desc
+                        if ($isNumericField) {
+                            ksort($counts, SORT_NUMERIC);
+                        } else {
+                            arsort($counts);
+                        }
+
+                        // short_text & email & date: limit to top 10 to keep chart readable
+                        if (in_array($field->fieldType, ['short_text', 'email', 'date'])) {
+                            $counts = array_slice($counts, 0, 10, true);
+                        }
+
+                        // Determine chart type
+                        if (in_array($field->fieldType, ['radio', 'dropdown'])) {
+                            $chartType = 'doughnut';
+                        } elseif (in_array($field->fieldType, ['email', 'short_text', 'date'])) {
+                            $chartType = 'bar-horizontal'; // horizontal bar for text-heavy labels
+                        } else {
+                            $chartType = 'bar';
+                        }
+
+                        $fieldCharts[] = [
+                            'label'     => $field->label,
+                            'type'      => $field->fieldType,
+                            'chartType' => $chartType,
+                            'labels'    => array_keys($counts),
+                            'data'      => array_values($counts),
+                        ];
+                    }
+                }
+            } catch (\Throwable $e) {
+                Log::warning('[AdminFormController::analytics] Could not read sheet data: ' . $e->getMessage());
+            }
+        }
+
+        return view('admin-page.forms.analytics', compact(
+            'form', 'submissions', 'dailyLabels', 'dailyCounts',
+            'validCount', 'invalidCount', 'totalFiles', 'recent', 'fieldCharts'
+        ))->with('title', 'Analytics — ' . $form->title);
+    }
+
+    // -------------------------------------------------------------------------
     // Form Builder (drag-drop field editor)
     // -------------------------------------------------------------------------
 
@@ -339,6 +486,59 @@ class AdminFormController extends Controller
     }
 
     // -------------------------------------------------------------------------
+    // Delete Responses
+    // -------------------------------------------------------------------------
+
+    public function deleteResponses(Request $request, int $id)
+    {
+        $form = MsForm::where('flagActive', true)->findOrFail($id);
+
+        if (!$this->canManageForm($form)) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        try {
+            $gdriveService = new DynamicFormGDriveService();
+
+            // 1. Delete uploaded files from GDrive
+            $files = \App\Models\forms\TrFormFile::whereHas('submission', function ($q) use ($id) {
+                $q->where('formID', $id);
+            })->get();
+
+            foreach ($files as $file) {
+                if ($file->gdriveFileID) {
+                    $gdriveService->deleteFile($file->gdriveFileID);
+                }
+            }
+
+            // 2. Clear spreadsheet response rows (keep header)
+            if ($form->gdriveSpreadsheetID) {
+                $gdriveService->clearSpreadsheetResponses($form->gdriveSpreadsheetID);
+            }
+
+            // 3. Delete DB records
+            $submissionIDs = \App\Models\forms\TrFormSubmission::where('formID', $id)
+                ->pluck('formSubmissionID');
+
+            \App\Models\forms\TrFormFile::whereIn('formSubmissionID', $submissionIDs)->delete();
+            \App\Models\forms\TrFormSubmission::where('formID', $id)->delete();
+
+            // 4. Reset submission counter
+            $form->update(['totalSubmission' => 0]);
+
+            TrFormAuditLog::recordAction($form->formID, TrFormAuditLog::ACTION_UPDATE, [
+                'action' => 'delete_responses',
+            ]);
+
+            return response()->json(['success' => true, 'message' => "All responses for \"{$form->title}\" have been deleted."]);
+
+        } catch (\Throwable $e) {
+            Log::error('[AdminFormController::deleteResponses] ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to delete responses: ' . $e->getMessage()], 500);
+        }
+    }
+
+    // -------------------------------------------------------------------------
     // Delete (soft delete via flagActive)
     // -------------------------------------------------------------------------
 
@@ -357,6 +557,14 @@ class AdminFormController extends Controller
         // Delete the GDrive folder (contains spreadsheet + attachments) — non-fatal
         if ($form->gdriveFolderID) {
             (new DynamicFormGDriveService())->deleteFormFolder($form->gdriveFolderID);
+        }
+
+        // Delete all submission DB records and their file records
+        $submissionIDs = \App\Models\forms\TrFormSubmission::where('formID', $id)
+            ->pluck('formSubmissionID');
+        if ($submissionIDs->isNotEmpty()) {
+            \App\Models\forms\TrFormFile::whereIn('formSubmissionID', $submissionIDs)->delete();
+            \App\Models\forms\TrFormSubmission::where('formID', $id)->delete();
         }
 
         $form->update([
@@ -397,6 +605,14 @@ class AdminFormController extends Controller
                 // Delete GDrive folder (non-fatal)
                 if ($form->gdriveFolderID) {
                     $gdriveService->deleteFormFolder($form->gdriveFolderID);
+                }
+
+                // Delete submission DB records and their file records
+                $submissionIDs = \App\Models\forms\TrFormSubmission::where('formID', $form->formID)
+                    ->pluck('formSubmissionID');
+                if ($submissionIDs->isNotEmpty()) {
+                    \App\Models\forms\TrFormFile::whereIn('formSubmissionID', $submissionIDs)->delete();
+                    \App\Models\forms\TrFormSubmission::where('formID', $form->formID)->delete();
                 }
 
                 $form->update([

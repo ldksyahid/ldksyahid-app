@@ -36,6 +36,44 @@
 }
 
 /* ─── Header Banner Image ──────────────────────────────────────── */
+/* ── Preview Banner ─────────────────────────────────────────────── */
+.gf-preview-banner {
+    background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+    border: 1px solid #f59e0b;
+    border-radius: var(--gf-radius);
+    color: #92400e;
+    font-size: .85rem;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    box-shadow: 0 1px 4px rgba(245,158,11,.15);
+    line-height: 1.5;
+}
+
+.gf-preview-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.gf-preview-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.gf-preview-text strong {
+    display: inline;
+}
+
+[data-theme="dark"] .gf-preview-banner {
+    background: linear-gradient(135deg, #3b2f00 0%, #2d2200 100%);
+    border-color: #b45309;
+    color: #fcd34d;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+
 .gf-header-banner-wrap {
     width: 100%;
     overflow: hidden;
@@ -1166,6 +1204,8 @@
     line-height: 1.7;
     white-space: pre-line;
 }
+.gf-para-title { font-weight: 700; margin-bottom: .4rem; }
+.gf-para-body  { font-size: .9rem; opacity: .85; }
 
 /* ─── Image Display Card ───────────────────────────────────────── */
 .gf-image-card {
@@ -1326,8 +1366,15 @@
     color: var(--gf-primary-dark);
 }
 
-.gf-state-link + .gf-state-link {
-    margin-left: 1.25rem;
+.gf-state-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem 1.5rem;
+    margin-top: .25rem;
+}
+
+.gf-state-links .gf-state-link {
+    margin-top: .5rem;
 }
 
 /* Keep legacy alias so JS-generated cards still work */
@@ -1589,7 +1636,6 @@
 [data-theme="dark"] .gf-error-card {
     background: #2a1a1a;
     border-color: #4b1c1c;
-    border-left-color: var(--gf-danger);
     color: #f87171;
 }
 

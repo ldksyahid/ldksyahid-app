@@ -76,12 +76,12 @@
     $columnWidths = [
         1 => '50px',   // Checkbox
         2 => '50px',   // No
-        3 => '220px',  // Form Title
-        4 => '120px',  // Status
-        5 => '100px',  // Submissions
-        6 => '150px',  // Created By
-        7 => '130px',  // Created Date
-        8 => '205px',  // Action (5 buttons: View, Edit, Delete, Builder, Publish/Close)
+        3 => '200px',  // Form Title
+        4 => '100px',  // Status
+        5 => '90px',   // Submissions
+        6 => '130px',  // Created By
+        7 => '120px',  // Created Date
+        8 => '260px',  // Action (7 buttons: View, Edit, Delete, Builder, Publish/Close, Analytics, Delete Responses)
     ];
 @endphp
 

@@ -122,11 +122,14 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Public URL</label>
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
                                     <code id="formPublicUrl">{{ url('/form/' . $form->slug) }}</code>
                                     <button class="copy-url-btn" onclick="copyFormUrl()" title="Copy URL">
                                         <i class="fa fa-copy"></i> Copy
                                     </button>
+                                    <a href="{{ url('/form/' . $form->slug) }}" target="_blank" class="copy-url-btn" title="Open in new tab">
+                                        <i class="fa fa-external-link-alt"></i> Open
+                                    </a>
                                 </div>
                             </div>
 

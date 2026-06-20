@@ -397,6 +397,49 @@ class DynamicFormGDriveService
         }
     }
 
+    /**
+     * Read all rows from the responses spreadsheet.
+     * Returns [headers[], row[], row[], ...] where row[i] corresponds to headers[i].
+     */
+    public function readSpreadsheetRows(string $spreadsheetID): array
+    {
+        try {
+            $response = $this->sheetsService->spreadsheets_values->get($spreadsheetID, 'Sheet1');
+            return $response->getValues() ?? [];
+        } catch (\Exception $e) {
+            Log::error("[DynamicFormGDriveService] Failed to read spreadsheet {$spreadsheetID}: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Delete a single file from Google Drive by its file ID.
+     */
+    public function deleteFile(string $fileID): void
+    {
+        try {
+            $this->driveService->files->delete($fileID);
+        } catch (\Exception $e) {
+            Log::error("[DynamicFormGDriveService] Failed to delete file {$fileID}: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Clear all data rows from the responses spreadsheet (keep header row).
+     * Uses batchClear on A2:ZZ to wipe data without touching the header.
+     */
+    public function clearSpreadsheetResponses(string $spreadsheetID): void
+    {
+        try {
+            $body = new \Google_Service_Sheets_BatchClearValuesRequest([
+                'ranges' => ['A2:ZZ'],
+            ]);
+            $this->sheetsService->spreadsheets_values->batchClear($spreadsheetID, $body);
+        } catch (\Exception $e) {
+            Log::error("[DynamicFormGDriveService] Failed to clear spreadsheet {$spreadsheetID}: " . $e->getMessage());
+        }
+    }
+
     // =========================================================================
     // Private helpers
     // =========================================================================

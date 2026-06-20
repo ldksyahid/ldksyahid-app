@@ -31,9 +31,11 @@
 {{-- ===== PARAGRAPH (display only) ===== --}}
 @case('paragraph')
     <div class="gf-para-card">
-        <p class="gf-para-text">{{ $field->label }}</p>
+        @if($field->label)
+        <p class="gf-para-text gf-para-title">{{ $field->label }}</p>
+        @endif
         @if($field->helpText)
-        <p class="gf-para-text" style="margin-top:.5rem;font-size:.875rem;opacity:.75;">{{ $field->helpText }}</p>
+        <div class="gf-para-text gf-para-body">{!! nl2br(e($field->helpText)) !!}</div>
         @endif
     </div>
     @break
@@ -607,6 +609,7 @@
     </div>
     @endif
     @break
+
 
 {{-- ===== FILE ===== --}}
 @case('file')

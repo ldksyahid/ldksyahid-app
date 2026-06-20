@@ -91,11 +91,32 @@ function openAddFieldModal(type, label) {
         updateRatingPreview('modalRatingPreview', 5);
     }
 
-    const isDisplay  = DISPLAY_ONLY_TYPES.includes(type);
-    const isImageDisp = IMAGE_DISPLAY_TYPES.includes(type);
-    document.getElementById('modalPlaceholderWrap').style.display = PLACEHOLDER_TYPES.includes(type) ? '' : 'none';
+    const isDisplay      = DISPLAY_ONLY_TYPES.includes(type);
+    const isImageDisp    = IMAGE_DISPLAY_TYPES.includes(type);
+    const isParagraph    = type === 'paragraph';
+    const hasPlaceholder = PLACEHOLDER_TYPES.includes(type);
+    document.getElementById('modalPlaceholderWrap').style.display = hasPlaceholder ? '' : 'none';
     document.getElementById('modalRequiredWrap').style.display    = isDisplay  ? 'none' : '';
     document.getElementById('modalHelpTextWrap').style.display    = isImageDisp ? 'none' : '';
+
+    // Help Text: col-md-6 when sharing row with Placeholder, col-12 when alone
+    const mHelpWrap = document.getElementById('modalHelpTextWrap');
+    if (mHelpWrap) {
+        mHelpWrap.className = hasPlaceholder ? 'col-md-6' : 'col-12';
+        mHelpWrap.id = 'modalHelpTextWrap';
+    }
+
+    // Paragraph: swap help text input for a full-width textarea
+    const mHelpInput = document.getElementById('modalHelpText');
+    const mHelpArea  = document.getElementById('modalHelpTextArea');
+    const mHelpLabel = document.getElementById('modalHelpTextLabel');
+    if (mHelpInput && mHelpArea) {
+        mHelpInput.style.display = isParagraph ? 'none' : '';
+        mHelpArea.style.display  = isParagraph ? ''     : 'none';
+        mHelpArea.value = '';
+        mHelpInput.value = '';
+        if (mHelpLabel) mHelpLabel.textContent = isParagraph ? 'Text Content' : 'Help Text';
+    }
 
     // For image: label becomes an optional caption, not a required question
     const labelRequired = document.getElementById('modalLabelRequired');
@@ -117,7 +138,9 @@ function submitAddField() {
     const type        = document.getElementById('modalFieldType').value;
     const label       = document.getElementById('modalLabel').value.trim();
     const placeholder = document.getElementById('modalPlaceholder').value.trim();
-    const helpText    = document.getElementById('modalHelpText').value.trim();
+    const helpText    = type === 'paragraph'
+        ? (document.getElementById('modalHelpTextArea')?.value ?? '')
+        : document.getElementById('modalHelpText').value.trim();
     const isRequired  = document.getElementById('modalIsRequired').checked;
 
     // For image display fields, label is an optional caption — don't block submission
@@ -254,14 +277,33 @@ function openEditModal(btn) {
             }
         }
     } else {
-        document.getElementById('editHelpText').value = helpText;
+        const isParaEdit = fieldType === 'paragraph';
+        const eHelpIn  = document.getElementById('editHelpText');
+        const eHelpTA  = document.getElementById('editHelpTextArea');
+        const eHelpLbl = document.getElementById('editHelpTextLabel');
+        if (eHelpIn && eHelpTA) {
+            eHelpIn.style.display = isParaEdit ? 'none' : '';
+            eHelpTA.style.display = isParaEdit ? ''     : 'none';
+            if (isParaEdit) { eHelpTA.value = helpText; } else { eHelpIn.value = helpText; }
+            if (eHelpLbl) eHelpLbl.textContent = isParaEdit ? 'Text Content' : 'Help Text';
+        } else {
+            if (eHelpIn) eHelpIn.value = helpText;
+        }
     }
 
     // Hide placeholder/required for display-only types; also hide help text for section_break / header_image
-    document.getElementById('editPlaceholderWrap').style.display  = PLACEHOLDER_TYPES.includes(fieldType)   ? ''     : 'none';
+    const editHasPlaceholder = PLACEHOLDER_TYPES.includes(fieldType);
+    document.getElementById('editPlaceholderWrap').style.display  = editHasPlaceholder                       ? ''     : 'none';
     document.getElementById('editRequiredWrap').style.display     = isDisplay                               ? 'none' : '';
     document.getElementById('editHelpTextWrap').style.display     = (isImageDisplay || isSectionBreak || isHeaderImg) ? 'none' : '';
     document.getElementById('editImageUrlSection').style.display  = (isImageDisplay || isHeaderImg)         ? ''     : 'none';
+
+    // Help Text: col-md-6 when sharing row with Placeholder, col-12 when alone
+    const eHelpWrapEl = document.getElementById('editHelpTextWrap');
+    if (eHelpWrapEl) {
+        eHelpWrapEl.className = editHasPlaceholder ? 'col-md-6' : 'col-12';
+        eHelpWrapEl.id = 'editHelpTextWrap';
+    }
 
     // Hide label completely for header_image (it has no label)
     const editLabelWrap = document.getElementById('editLabelWrap');
@@ -447,7 +489,9 @@ function submitEditField() {
     const fieldType   = currentEditCard?.dataset.fieldType ?? '';
     const label       = document.getElementById('editLabel').value.trim();
     const placeholder = document.getElementById('editPlaceholder').value.trim();
-    const helpText    = document.getElementById('editHelpText').value.trim();
+    const helpText    = fieldType === 'paragraph'
+        ? (document.getElementById('editHelpTextArea')?.value ?? '')
+        : document.getElementById('editHelpText').value.trim();
     const isRequired  = document.getElementById('editIsRequired').checked;
 
     const LABEL_OPTIONAL_TYPES = [...IMAGE_DISPLAY_TYPES, ...HEADER_IMAGE_TYPES, 'section_break'];
@@ -1119,8 +1163,16 @@ function showAlert(type, message) {
                         <div class="bmp-upload-hint">All file types accepted</div>
                     </div>`;
 
-            case 'paragraph':
-                return row(ANN.label(), `<div class="bmp-para">${esc(lbl)}</div>`);
+            case 'paragraph': {
+                const paraBody = esc(help).replace(/\n/g, '<br>');
+                const paraTitle = lbl || 'Field label';
+                return `<div class="bmp-para-preview">
+                    <div class="bmp-para-title${lbl ? '' : ' bmp-para-placeholder'}">${esc(paraTitle)}</div>
+                    ${paraBody
+                        ? `<div class="bmp-para-body">${paraBody}</div>`
+                        : `<div class="bmp-para-body bmp-para-placeholder">Write paragraph text here...</div>`}
+                </div>`;
+            }
 
             case 'image':
                 return `<div class="bmp-img-mock"><i class="fas fa-image"></i> Image</div>
@@ -1147,7 +1199,9 @@ function showAlert(type, message) {
         const type = document.getElementById('modalFieldType')?.value || '';
         const label = document.getElementById('modalLabel')?.value || '';
         const ph    = document.getElementById('modalPlaceholder')?.value || '';
-        const help  = document.getElementById('modalHelpText')?.value || '';
+        const help  = type === 'paragraph'
+            ? (document.getElementById('modalHelpTextArea')?.value || '')
+            : (document.getElementById('modalHelpText')?.value || '');
         const req   = document.getElementById('modalIsRequired')?.checked || false;
         const html  = buildPreview(type, label, ph, help, req);
         el.innerHTML = html;
@@ -1201,6 +1255,9 @@ function showAlert(type, message) {
                      'modalLinearScaleMinLabel','modalLinearScaleMaxLabel','modalRatingMax'];
         if (ids.includes(e.target.id)) refresh();
     });
+
+    // Paragraph textarea also triggers live preview
+    document.getElementById('modalHelpTextArea')?.addEventListener('input', refresh);
 
     // Expose for manual call after option add/remove
     window.refreshModalPreview = refresh;
