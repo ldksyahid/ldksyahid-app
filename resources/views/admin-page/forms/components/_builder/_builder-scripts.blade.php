@@ -258,7 +258,7 @@ function openEditModal(btn) {
     }
 
     // Hide placeholder/required for display-only types; also hide help text for section_break / header_image
-    document.getElementById('editPlaceholderWrap').style.display  = PLACEHOLDER_TYPES.includes(type)        ? ''     : 'none';
+    document.getElementById('editPlaceholderWrap').style.display  = PLACEHOLDER_TYPES.includes(fieldType)   ? ''     : 'none';
     document.getElementById('editRequiredWrap').style.display     = isDisplay                               ? 'none' : '';
     document.getElementById('editHelpTextWrap').style.display     = (isImageDisplay || isSectionBreak || isHeaderImg) ? 'none' : '';
     document.getElementById('editImageUrlSection').style.display  = (isImageDisplay || isHeaderImg)         ? ''     : 'none';
@@ -346,6 +346,20 @@ function openEditModal(btn) {
         });
     }
 
+    // Section Routing (radio + dropdown — single-answer choice types)
+    const routingWrap    = document.getElementById('editSectionRoutingWrap');
+    const isSingleChoice = ['radio', 'dropdown'].includes(fieldType);
+    if (routingWrap) routingWrap.style.display = isSingleChoice ? '' : 'none';
+    if (isSingleChoice) {
+        const fc       = JSON.parse(card.dataset.fieldConfig || '{}');
+        const routing  = fc.sectionRouting || { enabled: false, routes: [] };
+        const enableCb = document.getElementById('editRoutingEnabled');
+        const body     = document.getElementById('editRoutingBody');
+        enableCb.checked      = !!routing.enabled;
+        body.style.display    = routing.enabled ? '' : 'none';
+        buildRoutingRows(options, routing.routes || []);
+    }
+
     new bootstrap.Modal(document.getElementById('editFieldModal')).show();
 }
 
@@ -364,6 +378,64 @@ function removeEditOption(btn) {
     const rows = document.querySelectorAll('#editOptionsListInner .option-row');
     if (rows.length <= 1) return;
     btn.closest('.option-row').remove();
+}
+
+// ===== SECTION ROUTING HELPERS =====
+function _escHtml(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function _getSectionCards() {
+    return Array.from(dropZone.querySelectorAll('.field-card--section-break')).map(c => ({
+        id   : c.dataset.fieldId,
+        label: c.dataset.label || 'Untitled Section',
+    }));
+}
+
+function buildRoutingRows(opts, existingRoutes) {
+    const rowsEl = document.getElementById('editRoutingRows');
+    if (!rowsEl) return;
+    const sections = _getSectionCards();
+    if (!sections.length) {
+        rowsEl.innerHTML = '<div class="sr-no-sections">No sections found. Add sections to the form first.</div>';
+        return;
+    }
+    const secOpts = sections.map(s =>
+        `<option value="${_escHtml(s.id)}">${_escHtml(s.label)}</option>`
+    ).join('');
+
+    rowsEl.innerHTML = '';
+    const labels = opts.map(o => (o.label || o.value || '')).filter(Boolean);
+    if (!labels.length) {
+        rowsEl.innerHTML = '<div class="sr-no-sections">Add options first to configure routing.</div>';
+        return;
+    }
+    labels.forEach(optVal => {
+        const existing  = existingRoutes.find(r => r.optionValue === optVal);
+        const targetID  = existing ? (existing.targetSectionFieldID ?? '') : '';
+        const selected  = id => id == targetID ? 'selected' : '';
+        const row = document.createElement('div');
+        row.className = 'sr-row';
+        row.innerHTML = `
+            <span class="sr-row-label" title="${_escHtml(optVal)}">${_escHtml(optVal)}</span>
+            <i class="fas fa-arrow-right sr-arrow"></i>
+            <select class="form-select form-select-sm sr-route-select"
+                    data-option-value="${_escHtml(optVal)}">
+                <option value="">Next section (default)</option>
+                ${sections.map(s => `<option value="${_escHtml(s.id)}" ${selected(s.id)}>${_escHtml(s.label)}</option>`).join('')}
+            </select>`;
+        rowsEl.appendChild(row);
+    });
+}
+
+function onRoutingToggle(cb) {
+    const body = document.getElementById('editRoutingBody');
+    body.style.display = cb.checked ? '' : 'none';
+    if (cb.checked) {
+        const opts = Array.from(document.querySelectorAll('.edit-option-input'))
+            .map(i => ({ label: i.value.trim(), value: i.value.trim() }));
+        buildRoutingRows(opts, []);
+    }
 }
 
 function submitEditField() {
@@ -437,6 +509,19 @@ function submitEditField() {
             };
         }
 
+        if (['radio', 'dropdown'].includes(fieldType)) {
+            const routingEnabled = document.getElementById('editRoutingEnabled')?.checked || false;
+            const routes = routingEnabled
+                ? Array.from(document.querySelectorAll('.sr-route-select')).map(sel => ({
+                    optionValue         : sel.dataset.optionValue,
+                    targetSectionFieldID: sel.value ? parseInt(sel.value) : null,
+                }))
+                : [];
+            body.fieldConfig = Object.assign(body.fieldConfig || {}, {
+                sectionRouting: { enabled: routingEnabled, routes },
+            });
+        }
+
         fetchOptions = {
             method : 'PUT',
             headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
@@ -504,7 +589,13 @@ function submitEditField() {
                         const icon     = labelDiv.querySelector('i');
                         const required = isRequired ? '<span class="field-card-required">*</span>' : '';
                         const badge    = labelDiv.querySelector('.field-card-system-badge')?.outerHTML ?? '';
-                        labelDiv.innerHTML = (icon?.outerHTML ?? '') + ' ' + label + ' ' + required + badge;
+                        // Routing badge (radio only)
+                        const fc             = JSON.parse(currentEditCard.dataset.fieldConfig || '{}');
+                        const hasRouting     = fieldType === 'radio' && (fc.sectionRouting?.enabled ?? false);
+                        const routingBadge   = hasRouting
+                            ? '<span class="field-card-routing-badge"><i class="fas fa-code-branch fa-xs me-1"></i>Routing</span>'
+                            : '';
+                        labelDiv.innerHTML = (icon?.outerHTML ?? '') + ' ' + label + ' ' + required + badge + routingBadge;
                     }
 
                     // Refresh field type + help text subtitle

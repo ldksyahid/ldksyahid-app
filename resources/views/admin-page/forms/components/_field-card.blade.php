@@ -5,6 +5,8 @@
 @php
     $isSectionBreak = $field->fieldType === 'section_break';
     $isHeaderImage  = $field->fieldType === 'header_image';
+    $hasRouting     = in_array($field->fieldType, ['radio', 'dropdown']) &&
+                      ($field->fieldConfig['sectionRouting']['enabled'] ?? false);
 @endphp
 
 <div class="field-card {{ $isHeaderImage ? 'field-card--header-image' : ($isSectionBreak ? 'field-card--section-break' : '') }} {{ $field->isSystemField ? 'is-system' : '' }}"
@@ -116,6 +118,12 @@
             @if($field->isSystemField)
             <span class="field-card-system-badge">
                 <i class="fa fa-lock fa-xs me-1"></i>System
+            </span>
+            @endif
+
+            @if($hasRouting)
+            <span class="field-card-routing-badge">
+                <i class="fas fa-code-branch fa-xs me-1"></i>Routing
             </span>
             @endif
         </div>

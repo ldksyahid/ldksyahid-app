@@ -372,10 +372,21 @@
 {{-- ===== DROPDOWN ===== --}}
 @case('dropdown')
     @php
-        $selectedLabel = '';
+        $selectedLabel  = '';
         if ($oldValue) {
             foreach ($field->options ?? [] as $_opt) {
                 if ($_opt['value'] == $oldValue) { $selectedLabel = $_opt['label']; break; }
+            }
+        }
+        $ddRoutingCfg = $field->fieldConfig['sectionRouting'] ?? null;
+        $ddRouteMap   = []; // optionValue => secIndex
+        if ($ddRoutingCfg && ($ddRoutingCfg['enabled'] ?? false)) {
+            $sbMap = $sectionBreakToIndex ?? [];
+            foreach ($ddRoutingCfg['routes'] ?? [] as $r) {
+                $tid = $r['targetSectionFieldID'] ?? null;
+                if ($tid && isset($sbMap[$tid])) {
+                    $ddRouteMap[$r['optionValue']] = $sbMap[$tid];
+                }
             }
         }
     @endphp
@@ -392,6 +403,7 @@
             <select id="{{ $fieldID }}" name="{{ $fieldName }}"
                     class="gf-csel-native"
                     {{ $field->isRequired ? 'required' : '' }}
+                    @if(!empty($ddRouteMap)) data-section-routing="{{ json_encode($ddRouteMap) }}" @endif
                     aria-hidden="true" tabindex="-1">
                 <option value="">-- Pilih salah satu --</option>
                 @foreach($field->options ?? [] as $option)
@@ -427,6 +439,19 @@
 
 {{-- ===== RADIO ===== --}}
 @case('radio')
+    @php
+        $routingCfg  = $field->fieldConfig['sectionRouting'] ?? null;
+        $routeMap    = []; // optionValue => secIndex (only for explicitly routed options)
+        if ($routingCfg && ($routingCfg['enabled'] ?? false)) {
+            $sbMap = $sectionBreakToIndex ?? [];
+            foreach ($routingCfg['routes'] ?? [] as $r) {
+                $tid = $r['targetSectionFieldID'] ?? null;
+                if ($tid && isset($sbMap[$tid])) {
+                    $routeMap[$r['optionValue']] = $sbMap[$tid];
+                }
+            }
+        }
+    @endphp
     <div class="gf-card {{ $isError ? 'has-error' : '' }}">
         <fieldset style="border:none;padding:0;margin:0;">
             <legend class="gf-label">
@@ -447,6 +472,7 @@
                         value="{{ $option['value'] }}"
                         {{ $oldValue == $option['value'] ? 'checked' : '' }}
                         {{ $field->isRequired ? 'required' : '' }}
+                        @if(isset($routeMap[$option['value']])) data-go-to-section="{{ $routeMap[$option['value']] }}" @endif
                     >
                     <span class="gf-option-label">{{ $option['label'] }}</span>
                 </label>
