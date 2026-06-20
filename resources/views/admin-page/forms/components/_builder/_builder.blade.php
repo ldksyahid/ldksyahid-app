@@ -227,11 +227,18 @@
                         <textarea class="form-control" id="modalHelpTextArea" rows="6" placeholder="Write paragraph text here. Press Enter for a new line." maxlength="2000" style="display:none; resize:vertical; min-height:120px;"></textarea>
                     </div>
 
-                    {{-- Image file upload (shown only for image display field) --}}
+                    {{-- Image file upload --}}
                     <div class="col-12" id="imageUrlSection" style="display:none;">
                         <label class="field-modal-label">Upload Image</label>
                         <input type="file" class="form-control" id="modalImageFile" accept="image/*">
-                        <div class="form-text">Max 5 MB. Image will be stored in Google Drive and displayed in the form.</div>
+                        <div class="form-text">Max 5 MB. Stored in Google Drive.</div>
+                    </div>
+
+                    {{-- Video file upload --}}
+                    <div class="col-12" id="videoUrlSection" style="display:none;">
+                        <label class="field-modal-label">Upload Video</label>
+                        <input type="file" class="form-control" id="modalVideoFile" accept="video/mp4,video/webm,video/quicktime">
+                        <div class="form-text">Max 300 MB. Supported: MP4, WebM, MOV. Stored in Google Drive — plays directly in the form.</div>
                     </div>
 
                     <div class="col-12" id="modalRequiredWrap">
@@ -404,6 +411,18 @@
                         <label class="field-modal-label" id="editHelpTextLabel">Help Text</label>
                         <input type="text" class="form-control" id="editHelpText" maxlength="2000" style="display:none;">
                         <textarea class="form-control" id="editHelpTextArea" rows="6" placeholder="Write paragraph text here. Press Enter for a new line." maxlength="2000" style="display:none; resize:vertical; min-height:120px;"></textarea>
+                    </div>
+
+                    {{-- Video file upload (edit) --}}
+                    <div class="col-12" id="editVideoUrlSection" style="display:none;">
+                        <div id="editCurrentVideoPreview" style="display:none; margin-bottom:10px;">
+                            <a id="editCurrentVideoLink" href="#" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-play-circle me-1"></i> Preview current video
+                            </a>
+                        </div>
+                        <label class="field-modal-label">Replace Video <small class="text-muted">(optional)</small></label>
+                        <input type="file" class="form-control" id="editVideoFile" accept="video/mp4,video/webm,video/quicktime">
+                        <div class="form-text">Leave blank to keep the current video. Max 300 MB.</div>
                     </div>
 
                     {{-- Image file upload (shown only for image display field) --}}

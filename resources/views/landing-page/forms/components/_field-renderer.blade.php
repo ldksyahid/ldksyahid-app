@@ -610,6 +610,27 @@
     @endif
     @break
 
+{{-- ===== VIDEO (display only — embedded GDrive player in form) ===== --}}
+@case('video')
+    @if($field->helpText)
+    <div class="gf-video-card">
+        @if($field->label)
+        <p class="gf-video-label">{{ $field->label }}</p>
+        @endif
+        <div class="gf-video-wrapper">
+            <iframe
+                src="{{ $field->helpText }}"
+                class="gf-embedded-video"
+                allow="autoplay"
+                allowfullscreen
+                loading="lazy"
+                frameborder="0"
+            ></iframe>
+        </div>
+    </div>
+    @endif
+    @break
+
 
 {{-- ===== FILE ===== --}}
 @case('file')

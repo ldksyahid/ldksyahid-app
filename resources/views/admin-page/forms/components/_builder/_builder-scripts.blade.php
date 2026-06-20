@@ -10,8 +10,9 @@ const LINEAR_SCALE_TYPES  = ['linear_scale'];
 const RATING_TYPES        = ['rating'];
 const FILE_TYPES          = ['file'];
 const IMAGE_DISPLAY_TYPES = ['image'];
+const VIDEO_DISPLAY_TYPES = ['video'];
 const HEADER_IMAGE_TYPES  = ['header_image'];
-const DISPLAY_ONLY_TYPES  = ['section_break', 'paragraph', 'image', 'header_image'];
+const DISPLAY_ONLY_TYPES  = ['section_break', 'paragraph', 'image', 'header_image', 'video'];
 const PLACEHOLDER_TYPES   = ['short_text', 'long_text', 'email', 'number', 'phone', 'url'];
 
 // ===== SORTABLE =====
@@ -75,6 +76,9 @@ function openAddFieldModal(type, label) {
     document.getElementById('ratingSection').style.display       = RATING_TYPES.includes(type)       ? '' : 'none';
     document.getElementById('fileSection').style.display         = FILE_TYPES.includes(type)          ? '' : 'none';
     document.getElementById('imageUrlSection').style.display     = IMAGE_DISPLAY_TYPES.includes(type) ? '' : 'none';
+    document.getElementById('videoUrlSection').style.display     = VIDEO_DISPLAY_TYPES.includes(type) ? '' : 'none';
+    const _mVid = document.getElementById('modalVideoFile');
+    if (_mVid) _mVid.value = '';
 
     // Reset linear scale defaults
     if (LINEAR_SCALE_TYPES.includes(type)) {
@@ -93,11 +97,12 @@ function openAddFieldModal(type, label) {
 
     const isDisplay      = DISPLAY_ONLY_TYPES.includes(type);
     const isImageDisp    = IMAGE_DISPLAY_TYPES.includes(type);
+    const isVideoDisp    = VIDEO_DISPLAY_TYPES.includes(type);
     const isParagraph    = type === 'paragraph';
     const hasPlaceholder = PLACEHOLDER_TYPES.includes(type);
     document.getElementById('modalPlaceholderWrap').style.display = hasPlaceholder ? '' : 'none';
     document.getElementById('modalRequiredWrap').style.display    = isDisplay  ? 'none' : '';
-    document.getElementById('modalHelpTextWrap').style.display    = isImageDisp ? 'none' : '';
+    document.getElementById('modalHelpTextWrap').style.display    = (isImageDisp || isVideoDisp) ? 'none' : '';
 
     // Help Text: col-md-6 when sharing row with Placeholder, col-12 when alone
     const mHelpWrap = document.getElementById('modalHelpTextWrap');
@@ -156,18 +161,18 @@ function submitAddField() {
 
     let fetchOptions;
 
-    if (IMAGE_DISPLAY_TYPES.includes(type)) {
-        // Image field: multipart/form-data (file upload)
+    if (IMAGE_DISPLAY_TYPES.includes(type) || VIDEO_DISPLAY_TYPES.includes(type)) {
         const fd = new FormData();
         fd.append('fieldType', type);
         if (label) fd.append('label', label);
-        const imgFile = document.getElementById('modalImageFile');
-        if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
-        fetchOptions = {
-            method : 'POST',
-            headers: { 'X-CSRF-TOKEN': CSRF_TOKEN },
-            body   : fd,
-        };
+        if (IMAGE_DISPLAY_TYPES.includes(type)) {
+            const imgFile = document.getElementById('modalImageFile');
+            if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
+        } else {
+            const vidFile = document.getElementById('modalVideoFile');
+            if (vidFile && vidFile.files[0]) fd.append('videoFile', vidFile.files[0]);
+        }
+        fetchOptions = { method: 'POST', headers: { 'X-CSRF-TOKEN': CSRF_TOKEN }, body: fd };
     } else {
         // All other fields: JSON
         const body = { fieldType: type, label, placeholder, helpText, isRequired };
@@ -252,8 +257,25 @@ function openEditModal(btn) {
 
     const isDisplay       = DISPLAY_ONLY_TYPES.includes(fieldType);
     const isImageDisplay  = IMAGE_DISPLAY_TYPES.includes(fieldType);
+    const isVideoDisplay  = VIDEO_DISPLAY_TYPES.includes(fieldType);
     const isSectionBreak  = fieldType === 'section_break';
     const isHeaderImg     = HEADER_IMAGE_TYPES.includes(fieldType);
+
+    // Video section toggle
+    const _eVidSec = document.getElementById('editVideoUrlSection');
+    if (_eVidSec) {
+        _eVidSec.style.display = isVideoDisplay ? '' : 'none';
+        if (isVideoDisplay) {
+            const _eVidFile = document.getElementById('editVideoFile');
+            if (_eVidFile) _eVidFile.value = '';
+            const _eVidPrev = document.getElementById('editCurrentVideoPreview');
+            const _eVidLink = document.getElementById('editCurrentVideoLink');
+            if (_eVidPrev && _eVidLink) {
+                _eVidLink.href = helpText || '#';
+                _eVidPrev.style.display = helpText ? '' : 'none';
+            }
+        }
+    }
 
     document.getElementById('editFieldID').value      = card.dataset.fieldId;
     document.getElementById('editLabel').value        = label;
@@ -276,6 +298,8 @@ function openEditModal(btn) {
                 preview.style.display  = 'none';
             }
         }
+    } else if (isVideoDisplay) {
+        // helpText (embedUrl) is managed by the video section above — do nothing here
     } else {
         const isParaEdit = fieldType === 'paragraph';
         const eHelpIn  = document.getElementById('editHelpText');
@@ -295,7 +319,7 @@ function openEditModal(btn) {
     const editHasPlaceholder = PLACEHOLDER_TYPES.includes(fieldType);
     document.getElementById('editPlaceholderWrap').style.display  = editHasPlaceholder                       ? ''     : 'none';
     document.getElementById('editRequiredWrap').style.display     = isDisplay                               ? 'none' : '';
-    document.getElementById('editHelpTextWrap').style.display     = (isImageDisplay || isSectionBreak || isHeaderImg) ? 'none' : '';
+    document.getElementById('editHelpTextWrap').style.display     = (isImageDisplay || isVideoDisplay || isSectionBreak || isHeaderImg) ? 'none' : '';
     document.getElementById('editImageUrlSection').style.display  = (isImageDisplay || isHeaderImg)         ? ''     : 'none';
 
     // Help Text: col-md-6 when sharing row with Placeholder, col-12 when alone
@@ -494,7 +518,7 @@ function submitEditField() {
         : document.getElementById('editHelpText').value.trim();
     const isRequired  = document.getElementById('editIsRequired').checked;
 
-    const LABEL_OPTIONAL_TYPES = [...IMAGE_DISPLAY_TYPES, ...HEADER_IMAGE_TYPES, 'section_break'];
+    const LABEL_OPTIONAL_TYPES = [...IMAGE_DISPLAY_TYPES, ...VIDEO_DISPLAY_TYPES, ...HEADER_IMAGE_TYPES, 'section_break'];
     if (!label && !LABEL_OPTIONAL_TYPES.includes(fieldType)) {
         document.getElementById('editLabel').focus();
         return;
@@ -511,18 +535,18 @@ function submitEditField() {
     let fetchOptions;
     let body = null;
 
-    if (IMAGE_DISPLAY_TYPES.includes(fieldType) || HEADER_IMAGE_TYPES.includes(fieldType)) {
-        // Image / header_image field: multipart/form-data — may contain a new image file
+    if (IMAGE_DISPLAY_TYPES.includes(fieldType) || HEADER_IMAGE_TYPES.includes(fieldType) || VIDEO_DISPLAY_TYPES.includes(fieldType)) {
         const fd = new FormData();
         if (!HEADER_IMAGE_TYPES.includes(fieldType)) fd.append('label', label);
         fd.append('_method', 'PUT');
-        const imgFile = document.getElementById('editImageFile');
-        if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
-        fetchOptions = {
-            method : 'POST', // Laravel method spoofing via _method=PUT
-            headers: { 'X-CSRF-TOKEN': CSRF_TOKEN },
-            body   : fd,
-        };
+        if (VIDEO_DISPLAY_TYPES.includes(fieldType)) {
+            const vidFile = document.getElementById('editVideoFile');
+            if (vidFile && vidFile.files[0]) fd.append('videoFile', vidFile.files[0]);
+        } else {
+            const imgFile = document.getElementById('editImageFile');
+            if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
+        }
+        fetchOptions = { method: 'POST', headers: { 'X-CSRF-TOKEN': CSRF_TOKEN }, body: fd };
     } else {
         body = { label, placeholder, helpText, isRequired };
 
@@ -1174,6 +1198,15 @@ function showAlert(type, message) {
                 </div>`;
             }
 
+            case 'video':
+                return `<div class="bmp-video-mock">
+                    <i class="fas fa-play-circle bmp-video-icon"></i>
+                    <div class="bmp-video-hint">MP4 / WebM / MOV — max 300 MB</div>
+                </div>
+                ${lbl !== 'Field label'
+                    ? row(ANN.spc(), `<div class="bmp-img-caption">${esc(lbl)}</div>`)
+                    : ''}`;
+
             case 'image':
                 return `<div class="bmp-img-mock"><i class="fas fa-image"></i> Image</div>
                     ${lbl !== 'Field label'
@@ -1422,4 +1455,142 @@ function showAlert(type, message) {
         popup.addEventListener('mouseleave', function () { hideTimer = setTimeout(hide, 100); });
     }
 }); */
+
+// ===== CUSTOM SELECT =====
+(function () {
+    function initCustomSelect(native) {
+        if (!native || native._bmCselDone) return;
+        native._bmCselDone = true;
+
+        const width = native.style.width || 'auto';
+        native.style.display = 'none';
+
+        const wrap = document.createElement('div');
+        wrap.className = 'bm-csel';
+        native.parentNode.insertBefore(wrap, native);
+        wrap.appendChild(native);
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'bm-csel-btn';
+        btn.style.width = width;
+
+        // List mounted on body so modal overflow can't clip it
+        const list = document.createElement('div');
+        list.className = 'bm-csel-list';
+        document.body.appendChild(list);
+
+        function buildList() {
+            list.innerHTML = '';
+            Array.from(native.options).forEach(function (opt) {
+                const item = document.createElement('div');
+                item.className = 'bm-csel-opt' + (opt.selected ? ' is-active' : '');
+                item.textContent = opt.text;
+                item.dataset.value = opt.value;
+                item.addEventListener('mousedown', function (e) {
+                    // mousedown before blur so close() from document click fires after
+                    e.preventDefault();
+                    native.value = opt.value;
+                    native.dispatchEvent(new Event('change', { bubbles: true }));
+                    syncActive();
+                    updateBtn();
+                    close();
+                });
+                list.appendChild(item);
+            });
+        }
+
+        function syncActive() {
+            list.querySelectorAll('.bm-csel-opt').forEach(function (item) {
+                item.classList.toggle('is-active', item.dataset.value === native.value);
+            });
+        }
+
+        function updateBtn() {
+            const sel = native.options[native.selectedIndex];
+            btn.innerHTML = '<span>' + (sel ? sel.text : '') + '</span><i class="fas fa-chevron-down bm-csel-arrow"></i>';
+        }
+
+        function positionList() {
+            const rect = btn.getBoundingClientRect();
+            const listH = list.offsetHeight;
+            const spaceBelow = window.innerHeight - rect.bottom - 6;
+            const spaceAbove = rect.top - 6;
+            const openAbove = spaceBelow < listH && spaceAbove > spaceBelow;
+            list.style.width = rect.width + 'px';
+            list.style.left  = rect.left + 'px';
+            if (openAbove) {
+                list.style.top    = '';
+                list.style.bottom = (window.innerHeight - rect.top + 5) + 'px';
+            } else {
+                list.style.bottom = '';
+                list.style.top    = (rect.bottom + 5) + 'px';
+            }
+        }
+
+        function open() {
+            // Close any other open custom selects
+            document.querySelectorAll('.bm-csel-list.is-open').forEach(function (el) {
+                el.classList.remove('is-open');
+            });
+            document.querySelectorAll('.bm-csel-btn.is-open').forEach(function (el) {
+                el.classList.remove('is-open');
+            });
+            list.classList.add('is-open');
+            btn.classList.add('is-open');
+            positionList();
+            var active = list.querySelector('.is-active');
+            if (active) active.scrollIntoView({ block: 'nearest' });
+        }
+
+        function close() {
+            list.classList.remove('is-open');
+            btn.classList.remove('is-open');
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            list.classList.contains('is-open') ? close() : open();
+        });
+
+        document.addEventListener('click', close);
+        window.addEventListener('resize', function () { if (list.classList.contains('is-open')) positionList(); });
+
+        native.addEventListener('_bmRefresh', function () {
+            syncActive();
+            updateBtn();
+        });
+
+        buildList();
+        updateBtn();
+        wrap.insertBefore(btn, native);
+    }
+
+    // Patch native value setter so external assignments (native.value = x) stay in sync
+    function patchValueSetter(native) {
+        var proto = Object.getPrototypeOf(native);
+        var desc  = Object.getOwnPropertyDescriptor(proto, 'value');
+        if (!desc) return;
+        Object.defineProperty(native, 'value', {
+            get: function () { return desc.get.call(this); },
+            set: function (v) {
+                desc.set.call(this, v);
+                this.dispatchEvent(new Event('_bmRefresh'));
+            },
+        });
+    }
+
+    var SELECT_IDS = [
+        'modalRatingMax', 'editRatingMax',
+        'modalLinearScaleMin', 'modalLinearScaleMax',
+        'editLinearScaleMin',  'editLinearScaleMax',
+    ];
+
+    document.addEventListener('DOMContentLoaded', function () {
+        SELECT_IDS.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) { patchValueSetter(el); initCustomSelect(el); }
+        });
+    });
+})();
 </script>
