@@ -432,9 +432,13 @@ function onRoutingToggle(cb) {
     const body = document.getElementById('editRoutingBody');
     body.style.display = cb.checked ? '' : 'none';
     if (cb.checked) {
-        const opts = Array.from(document.querySelectorAll('.edit-option-input'))
-            .map(i => ({ label: i.value.trim(), value: i.value.trim() }));
-        buildRoutingRows(opts, []);
+        // Only rebuild rows if none exist yet (preserve selections if user toggled off then back on)
+        const existingRows = document.querySelectorAll('.sr-route-select');
+        if (!existingRows.length) {
+            const opts = Array.from(document.querySelectorAll('.edit-option-input'))
+                .map(i => ({ label: i.value.trim(), value: i.value.trim() }));
+            buildRoutingRows(opts, []);
+        }
     }
 }
 
@@ -589,9 +593,9 @@ function submitEditField() {
                         const icon     = labelDiv.querySelector('i');
                         const required = isRequired ? '<span class="field-card-required">*</span>' : '';
                         const badge    = labelDiv.querySelector('.field-card-system-badge')?.outerHTML ?? '';
-                        // Routing badge (radio only)
+                        // Routing badge (radio + dropdown)
                         const fc             = JSON.parse(currentEditCard.dataset.fieldConfig || '{}');
-                        const hasRouting     = fieldType === 'radio' && (fc.sectionRouting?.enabled ?? false);
+                        const hasRouting     = ['radio','dropdown'].includes(fieldType) && (fc.sectionRouting?.enabled ?? false);
                         const routingBadge   = hasRouting
                             ? '<span class="field-card-routing-badge"><i class="fas fa-code-branch fa-xs me-1"></i>Routing</span>'
                             : '';

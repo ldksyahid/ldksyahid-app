@@ -135,7 +135,7 @@
             @else
                 {{-- ── Single-page form (no section_break) ─────────── --}}
                 @foreach($contentFields as $field)
-                    @include('landing-page.forms.components._field-renderer', ['field' => $field])
+                    @include('landing-page.forms.components._field-renderer', ['field' => $field, 'sectionBreakToIndex' => $sectionBreakToIndex])
                 @endforeach
 
                 {{-- ── Submit area ──────────────────────────────────── --}}
