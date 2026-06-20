@@ -1127,6 +1127,7 @@
         sections[prev].classList.add('active');
         currentIndex = prev;
         updateProgress();
+        updateNavForCurrentSection();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -1137,7 +1138,38 @@
         sections[index].classList.add('active');
         currentIndex = index;
         updateProgress();
+        updateNavForCurrentSection();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Show Submit (instead of Next) if all remaining sections are skipped.
+    // Restore Next button when going back and there are still unvisited sections.
+    function updateNavForCurrentSection() {
+        var sec     = sections[currentIndex];
+        var nextBtn = sec.querySelector('.gf-nav-next');
+        if (!nextBtn) return; // already a static submit section
+
+        var hasUnvisited = false;
+        for (var i = currentIndex + 1; i < totalSecs; i++) {
+            if (sections[i].dataset.skipped !== '1') { hasUnvisited = true; break; }
+        }
+
+        var dynSubmit = sec.querySelector('.gf-submit-btn--routing');
+
+        if (!hasUnvisited) {
+            nextBtn.style.display = 'none';
+            if (!dynSubmit) {
+                dynSubmit = document.createElement('button');
+                dynSubmit.type      = 'submit';
+                dynSubmit.className = 'gf-submit-btn gf-submit-btn--routing';
+                dynSubmit.innerHTML = '<i class="fas fa-paper-plane me-1"></i><span>Kirimkan Formulir</span>';
+                nextBtn.parentNode.appendChild(dynSubmit);
+            }
+            dynSubmit.style.display = '';
+        } else {
+            nextBtn.style.display = '';
+            if (dynSubmit) dynSubmit.style.display = 'none';
+        }
     }
 
     function updateProgress() {

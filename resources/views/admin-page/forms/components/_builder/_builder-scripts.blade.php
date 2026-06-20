@@ -631,12 +631,16 @@ function removeField(btn) {
     const fieldID   = card.dataset.fieldId;
     const label     = card.dataset.label;
     const fieldType = card.dataset.fieldType;
-    const isSection = fieldType === 'section_break';
-    const itemName  = isSection ? (label || 'this section') : `"${label}"`;
+    const isSection    = fieldType === 'section_break';
+    const isHeaderImg  = fieldType === 'header_image';
+    const itemName     = isSection   ? (label || 'this section')
+                       : isHeaderImg ? 'the header banner'
+                       : label       ? `"${label}"`
+                                     : 'this field';
 
     Swal.fire({
-        title: isSection ? 'Remove this section?' : 'Remove this field?',
-        html: `${isSection ? 'Section' : 'Field'} <strong>${itemName}</strong> will be permanently removed from this form.`,
+        title: isSection ? 'Remove this section?' : isHeaderImg ? 'Remove header banner?' : 'Remove this field?',
+        html: `${isSection ? 'Section' : isHeaderImg ? 'Banner' : 'Field'} <strong>${itemName}</strong> will be permanently removed from this form.`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc3545',
