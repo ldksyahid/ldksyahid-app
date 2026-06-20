@@ -12,6 +12,7 @@ const FILE_TYPES          = ['file'];
 const IMAGE_DISPLAY_TYPES = ['image'];
 const HEADER_IMAGE_TYPES  = ['header_image'];
 const DISPLAY_ONLY_TYPES  = ['section_break', 'paragraph', 'image', 'header_image'];
+const PLACEHOLDER_TYPES   = ['short_text', 'long_text', 'email', 'number', 'phone', 'url'];
 
 // ===== SORTABLE =====
 const dropZone = document.getElementById('fieldDropZone');
@@ -92,7 +93,7 @@ function openAddFieldModal(type, label) {
 
     const isDisplay  = DISPLAY_ONLY_TYPES.includes(type);
     const isImageDisp = IMAGE_DISPLAY_TYPES.includes(type);
-    document.getElementById('modalPlaceholderWrap').style.display = isDisplay  ? 'none' : '';
+    document.getElementById('modalPlaceholderWrap').style.display = PLACEHOLDER_TYPES.includes(type) ? '' : 'none';
     document.getElementById('modalRequiredWrap').style.display    = isDisplay  ? 'none' : '';
     document.getElementById('modalHelpTextWrap').style.display    = isImageDisp ? 'none' : '';
 
@@ -257,7 +258,7 @@ function openEditModal(btn) {
     }
 
     // Hide placeholder/required for display-only types; also hide help text for section_break / header_image
-    document.getElementById('editPlaceholderWrap').style.display  = isDisplay                               ? 'none' : '';
+    document.getElementById('editPlaceholderWrap').style.display  = PLACEHOLDER_TYPES.includes(type)        ? ''     : 'none';
     document.getElementById('editRequiredWrap').style.display     = isDisplay                               ? 'none' : '';
     document.getElementById('editHelpTextWrap').style.display     = (isImageDisplay || isSectionBreak || isHeaderImg) ? 'none' : '';
     document.getElementById('editImageUrlSection').style.display  = (isImageDisplay || isHeaderImg)         ? ''     : 'none';
@@ -1041,20 +1042,49 @@ function showAlert(type, message) {
     }
 
     function refresh() {
-        const el = document.getElementById('modalPreviewField');
+        const el  = document.getElementById('modalPreviewField');
+        const elM = document.getElementById('modalPreviewFieldMobile');
         if (!el) return;
         const type = document.getElementById('modalFieldType')?.value || '';
         const label = document.getElementById('modalLabel')?.value || '';
         const ph    = document.getElementById('modalPlaceholder')?.value || '';
         const help  = document.getElementById('modalHelpText')?.value || '';
         const req   = document.getElementById('modalIsRequired')?.checked || false;
-        el.innerHTML = buildPreview(type, label, ph, help, req);
+        const html  = buildPreview(type, label, ph, help, req);
+        el.innerHTML = html;
+        if (elM) elM.innerHTML = html;
     }
+
+    // Tab switching: Desktop / Mobile
+    document.addEventListener('click', function (e) {
+        const tab = e.target.closest('.bmp-preview-tab');
+        if (!tab) return;
+        const view = tab.dataset.view;
+        document.querySelectorAll('.bmp-preview-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.bmp-preview-view').forEach(v => v.style.display = 'none');
+        const target = document.querySelector(`.bmp-preview-view--${view}`);
+        if (target) target.style.display = '';
+    });
+
+    // Auto-switch preview tab based on screen width
+    function syncPreviewTab() {
+        const isMobile = window.innerWidth < 768;
+        const targetView = isMobile ? 'mobile' : 'desktop';
+        document.querySelectorAll('.bmp-preview-tab').forEach(t => {
+            t.classList.toggle('active', t.dataset.view === targetView);
+        });
+        document.querySelectorAll('.bmp-preview-view').forEach(v => {
+            v.style.display = v.classList.contains('bmp-preview-view--' + targetView) ? '' : 'none';
+        });
+    }
+    window.addEventListener('resize', syncPreviewTab);
 
     // Hook into existing openAddFieldModal
     const _origOpen = window.openAddFieldModal;
     window.openAddFieldModal = function (type, label) {
         _origOpen && _origOpen(type, label);
+        syncPreviewTab();
         setTimeout(refresh, 80);
     };
 

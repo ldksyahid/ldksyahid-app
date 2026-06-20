@@ -336,8 +336,29 @@
 
                 {{-- ── Live Preview Panel ───────────────── --}}
                 <div class="bmp-preview-col">
-                    <div class="bmp-preview-header"><i class="fas fa-eye me-1"></i>Live Preview</div>
-                    <div id="modalPreviewField" class="bmp-preview-field"></div>
+                    <div class="bmp-preview-header">
+                        <div class="bmp-preview-header-left"><i class="fas fa-eye me-1"></i>Live Preview</div>
+                        <div class="bmp-preview-tabs">
+                            <button class="bmp-preview-tab active" data-view="desktop" title="Desktop">
+                                <i class="fas fa-desktop"></i>
+                            </button>
+                            <button class="bmp-preview-tab" data-view="mobile" title="Mobile">
+                                <i class="fas fa-mobile-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bmp-preview-view bmp-preview-view--desktop">
+                        <div id="modalPreviewField" class="bmp-preview-field"></div>
+                    </div>
+                    <div class="bmp-preview-view bmp-preview-view--mobile" style="display:none;">
+                        <div class="bmp-phone-frame">
+                            <div class="bmp-phone-notch"></div>
+                            <div class="bmp-phone-screen">
+                                <div id="modalPreviewFieldMobile" class="bmp-preview-field bmp-preview-field--phone"></div>
+                            </div>
+                            <div class="bmp-phone-home"></div>
+                        </div>
+                    </div>
                 </div>
 
               </div>{{-- end d-flex --}}
