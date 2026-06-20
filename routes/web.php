@@ -626,8 +626,10 @@ Route::middleware(['auth', 'role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEv
         Route::delete('/{id}',         [AdminFormController::class, 'destroy']) ->name('destroy');
 
         // Form lifecycle
-        Route::post('/{id}/publish',   [AdminFormController::class, 'publish']) ->name('publish');
-        Route::post('/{id}/close',     [AdminFormController::class, 'close'])   ->name('close');
+        Route::post('/{id}/publish',           [AdminFormController::class, 'publish'])          ->name('publish');
+        Route::post('/{id}/close',             [AdminFormController::class, 'close'])            ->name('close');
+        Route::delete('/{id}/responses',       [AdminFormController::class, 'deleteResponses'])  ->name('responses.delete');
+        Route::get('/{id}/analytics',          [AdminFormController::class, 'analytics'])        ->name('analytics');
 
         // Form builder (visual drag-drop editor)
         Route::get('/{id}/builder',    [AdminFormController::class, 'builder']) ->name('builder');

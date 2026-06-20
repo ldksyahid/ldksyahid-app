@@ -195,7 +195,7 @@
 
 
 {{-- ===== ADD FIELD MODAL ===== --}}
-<div class="modal fade add-field-modal" id="addFieldModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade add-field-modal" id="addFieldModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content bm-card">
             <div class="bm-header bm-header--add">
@@ -221,9 +221,10 @@
                         <label class="field-modal-label">Placeholder</label>
                         <input type="text" class="form-control" id="modalPlaceholder" placeholder="e.g. Enter your name" maxlength="255">
                     </div>
-                    <div class="col-md-6" id="modalHelpTextWrap">
-                        <label class="field-modal-label">Help Text</label>
-                        <input type="text" class="form-control" id="modalHelpText" placeholder="Optional — hint shown below the field" maxlength="500">
+                    <div class="col-12" id="modalHelpTextWrap">
+                        <label class="field-modal-label" id="modalHelpTextLabel">Help Text</label>
+                        <input type="text" class="form-control" id="modalHelpText" placeholder="Optional — hint shown below the field" maxlength="2000" style="display:none;">
+                        <textarea class="form-control" id="modalHelpTextArea" rows="6" placeholder="Write paragraph text here. Press Enter for a new line." maxlength="2000" style="display:none; resize:vertical; min-height:120px;"></textarea>
                     </div>
 
                     {{-- Image file upload (shown only for image display field) --}}
@@ -232,6 +233,7 @@
                         <input type="file" class="form-control" id="modalImageFile" accept="image/*">
                         <div class="form-text">Max 5 MB. Image will be stored in Google Drive and displayed in the form.</div>
                     </div>
+
                     <div class="col-12" id="modalRequiredWrap">
                         <div class="bm-required-toggle">
                             <input class="form-check-input" type="checkbox" id="modalIsRequired">
@@ -376,7 +378,7 @@
 </div>
 
 {{-- ===== EDIT FIELD MODAL ===== --}}
-<div class="modal fade" id="editFieldModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="editFieldModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content bm-card">
             <div class="bm-header bm-header--edit">
@@ -398,9 +400,10 @@
                         <label class="field-modal-label">Placeholder</label>
                         <input type="text" class="form-control" id="editPlaceholder" maxlength="255">
                     </div>
-                    <div class="col-md-6" id="editHelpTextWrap">
-                        <label class="field-modal-label">Help Text</label>
-                        <input type="text" class="form-control" id="editHelpText" maxlength="500">
+                    <div class="col-12" id="editHelpTextWrap">
+                        <label class="field-modal-label" id="editHelpTextLabel">Help Text</label>
+                        <input type="text" class="form-control" id="editHelpText" maxlength="2000" style="display:none;">
+                        <textarea class="form-control" id="editHelpTextArea" rows="6" placeholder="Write paragraph text here. Press Enter for a new line." maxlength="2000" style="display:none; resize:vertical; min-height:120px;"></textarea>
                     </div>
 
                     {{-- Image file upload (shown only for image display field) --}}

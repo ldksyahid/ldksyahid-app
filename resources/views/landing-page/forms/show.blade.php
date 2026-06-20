@@ -54,6 +54,17 @@
 <div class="gf-page">
     <div class="gf-wrap">
 
+        {{-- ── Preview mode notice (shown to superadmin/creator when form is closed/draft) ── --}}
+        @if(!empty($isPreviewMode))
+        <div class="gf-preview-banner">
+            <i class="fas fa-eye gf-preview-icon"></i>
+            <div class="gf-preview-text">
+                <strong>Mode Pratinjau</strong>
+                <span> — Formulir ini belum aktif. Hanya Anda (admin/pembuat/kolabolator) yang dapat melihat pratinjau ini.</span>
+            </div>
+        </div>
+        @endif
+
         {{-- ── Header Banner Image (pinned to very top when present) ── --}}
         @if($headerImageField && $headerImageField->helpText)
         <div class="gf-header-banner-wrap">

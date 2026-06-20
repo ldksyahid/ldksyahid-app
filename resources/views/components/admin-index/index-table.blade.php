@@ -382,6 +382,32 @@
                                     @endif
                                 @endif
 
+                            @elseif($customType === 'ajax-delete')
+                                {{-- AJAX DELETE with SweetAlert confirm --}}
+                                @if($isCustomOwnerRestricted)
+                                    <button type="button"
+                                            class="btn btn-sm {{ $customAction['class'] ?? 'btn-danger' }}"
+                                            title="Only the creator can perform this action"
+                                            disabled>
+                                        <i class="fa {{ $customAction['icon'] ?? 'fa-trash' }}" style="color:white;"></i>
+                                    </button>
+                                @else
+                                    <button type="button"
+                                            class="btn btn-sm {{ $customAction['class'] ?? 'btn-danger' }}"
+                                            title="{{ $customAction['title'] ?? 'Delete' }}"
+                                            data-url="{{ route($customAction['routeName'], $item->{$customAction['routeKey'] ?? $idKey}) }}"
+                                            data-method="{{ $customAction['method'] ?? 'DELETE' }}"
+                                            data-token="{{ csrf_token() }}"
+                                            data-confirm-title="{{ $customAction['confirm']['title'] ?? 'Are you sure?' }}"
+                                            data-confirm-text="{{ $customAction['confirm']['text'] ?? 'This action cannot be undone.' }}"
+                                            data-confirm-btn="{{ $customAction['confirm']['confirmButtonText'] ?? 'Yes, Delete' }}"
+                                            data-confirm-color="{{ $customAction['confirm']['confirmButtonColor'] ?? '#dc3545' }}"
+                                            data-success-msg="{{ $customAction['successMsg'] ?? 'Deleted successfully.' }}"
+                                            onclick="confirmAjaxDelete(this)">
+                                        <i class="fa {{ $customAction['icon'] ?? 'fa-trash' }}" style="color:white;"></i>
+                                    </button>
+                                @endif
+
                             @else
                                 {{-- Default: anchor link --}}
                                 @php
@@ -478,6 +504,66 @@ function confirmStatusToggle(btn) {
             btn.disabled  = false;
             btn.innerHTML = originalHtml;
 
+            if (data.success !== false) {
+                if (window.Toast) {
+                    window.Toast.fire({ icon: 'success', title: successMsg });
+                }
+                if (typeof window.loadData === 'function') {
+                    window.loadData();
+                } else {
+                    location.reload();
+                }
+            } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Something went wrong.' });
+            }
+        })
+        .catch(err => {
+            btn.disabled  = false;
+            btn.innerHTML = originalHtml;
+            Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+        });
+    });
+}
+
+// Used by ajax-delete type (AJAX DELETE, stays on page)
+function confirmAjaxDelete(btn) {
+    const url        = btn.dataset.url;
+    const method     = btn.dataset.method || 'DELETE';
+    const token      = btn.dataset.token;
+    const title      = btn.dataset.confirmTitle;
+    const text       = btn.dataset.confirmText;
+    const confirmBtn = btn.dataset.confirmBtn;
+    const confirmColor = btn.dataset.confirmColor || '#dc3545';
+    const successMsg = btn.dataset.successMsg;
+
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: confirmColor,
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: confirmBtn,
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+
+        const originalHtml = btn.innerHTML;
+        btn.disabled  = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+        fetch(url, {
+            method: method,
+            headers: {
+                'X-CSRF-TOKEN':     token,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept':           'application/json'
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            btn.disabled  = false;
+            btn.innerHTML = originalHtml;
             if (data.success !== false) {
                 if (window.Toast) {
                     window.Toast.fire({ icon: 'success', title: successMsg });
