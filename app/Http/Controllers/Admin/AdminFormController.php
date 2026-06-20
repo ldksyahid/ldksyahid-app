@@ -667,6 +667,7 @@ class AdminFormController extends Controller
             'validation.maxSizeKB'   => 'nullable|integer|min:1',
             'validation.acceptedTypes' => 'nullable|array',
             'imageFile'              => 'nullable|image|max:5120',
+            'videoFile'              => 'nullable|file|mimes:mp4,webm,mov|max:307200',
             'fieldConfig'            => 'nullable|array',
             'fieldConfig.minValue'   => 'nullable|integer|min:0',
             'fieldConfig.maxValue'   => 'nullable|integer|min:1',
@@ -738,6 +739,26 @@ class AdminFormController extends Controller
                 }
             }
 
+            // video field → upload to assets/ and store GDrive embed URL
+            if ($field->fieldType === 'video' && $request->hasFile('videoFile')) {
+                try {
+                    $service = new DynamicFormGDriveService();
+                    if (empty($form->gdriveAssetsFolderID) && $form->gdriveFolderID) {
+                        $folderResult = $service->createAssetsFolder($form->gdriveFolderID);
+                        $form->update(['gdriveAssetsFolderID' => $folderResult['gdriveAssetsFolderID'], 'gdriveAssetsFolderUrl' => $folderResult['gdriveAssetsFolderUrl']]);
+                        $form->refresh();
+                    }
+                    if ($form->gdriveAssetsFolderID) {
+                        $result = $service->uploadVideoToAssetsFolder($form->gdriveAssetsFolderID, $request->file('videoFile'), $field->label ?? 'video');
+                        $config = $field->fieldConfig ?? [];
+                        $config['gdriveFileID'] = $result['gdriveFileID'];
+                        $field->update(['helpText' => $result['embedUrl'], 'fieldConfig' => $config]);
+                    }
+                } catch (\Throwable $e) {
+                    Log::error('[AdminFormController::addField] Video GDrive upload failed: ' . $e->getMessage());
+                }
+            }
+
             // Regenerate spreadsheet header row to include this new field
             $this->regenerateSpreadsheetHeaders($form);
 
@@ -787,6 +808,7 @@ class AdminFormController extends Controller
             'validation'    => 'nullable|array',
             'defaultValue'  => 'nullable|string|max:1000',
             'imageFile'     => 'nullable|image|max:5120',
+            'videoFile'     => 'nullable|file|mimes:mp4,webm,mov|max:307200',
             'fieldConfig'   => 'nullable|array',
         ]);
 
@@ -838,6 +860,33 @@ class AdminFormController extends Controller
                 }
             } else {
                 // No new file — preserve existing GDrive URL
+                $newHelpText = $field->helpText;
+            }
+        }
+
+        // video field — replace video in GDrive if new file uploaded
+        if ($field->fieldType === 'video') {
+            if ($request->hasFile('videoFile')) {
+                try {
+                    $service = new DynamicFormGDriveService();
+                    if (empty($form->gdriveAssetsFolderID) && $form->gdriveFolderID) {
+                        $folderResult = $service->createAssetsFolder($form->gdriveFolderID);
+                        $form->update(['gdriveAssetsFolderID' => $folderResult['gdriveAssetsFolderID'], 'gdriveAssetsFolderUrl' => $folderResult['gdriveAssetsFolderUrl']]);
+                        $form->refresh();
+                    }
+                    if ($form->gdriveAssetsFolderID) {
+                        $oldFileID = $field->fieldConfig['gdriveFileID'] ?? null;
+                        if ($oldFileID) { try { $service->deleteFile($oldFileID); } catch (\Throwable $e) {} }
+                        $result = $service->uploadVideoToAssetsFolder($form->gdriveAssetsFolderID, $request->file('videoFile'), $validated['label'] ?? 'video');
+                        $newHelpText = $result['embedUrl'];
+                        $newConfig = $field->fieldConfig ?? [];
+                        $newConfig['gdriveFileID'] = $result['gdriveFileID'];
+                        $field->update(['fieldConfig' => $newConfig]);
+                    }
+                } catch (\Throwable $e) {
+                    Log::error('[AdminFormController::updateField] Video GDrive upload failed: ' . $e->getMessage());
+                }
+            } else {
                 $newHelpText = $field->helpText;
             }
         }
@@ -1110,6 +1159,7 @@ class AdminFormController extends Controller
             ['type' => 'file',      'label' => 'File Upload',    'icon' => 'fa-file-upload', 'group' => 'Upload'],
             ['type' => 'paragraph', 'label' => 'Paragraph Text','icon' => 'fa-paragraph',   'group' => 'Layout'],
             ['type' => 'image',     'label' => 'Image',          'icon' => 'fa-image',       'group' => 'Layout'],
+            ['type' => 'video',     'label' => 'Video',          'icon' => 'fa-play-circle', 'group' => 'Layout'],
         ];
     }
 }

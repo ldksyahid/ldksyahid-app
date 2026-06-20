@@ -648,6 +648,43 @@ class DynamicFormGDriveService
     }
 
     /**
+     * Upload a video file to the form's assets/ folder.
+     * Returns an embed URL (GDrive preview — supports play/pause) and the file ID.
+     *
+     * @return array {gdriveFileID, embedUrl}
+     */
+    public function uploadVideoToAssetsFolder(
+        string       $assetsFolderID,
+        UploadedFile $file,
+        string       $fieldLabel
+    ): array {
+        $storedName = $fieldLabel . '_' . time() . '_' . $file->getClientOriginalName();
+        $mimeType   = $file->getMimeType() ?? 'video/mp4';
+
+        $driveFile = new Google_Service_Drive_DriveFile([
+            'name'    => $storedName,
+            'parents' => [$assetsFolderID],
+        ]);
+
+        $uploaded = $this->driveService->files->create($driveFile, [
+            'data'       => file_get_contents($file->getRealPath()),
+            'mimeType'   => $mimeType,
+            'uploadType' => 'multipart',
+            'fields'     => 'id,name',
+        ]);
+
+        $fileID = $uploaded->getId();
+
+        $permission = new Google_Service_Drive_Permission(['type' => 'anyone', 'role' => 'reader']);
+        $this->driveService->permissions->create($fileID, $permission);
+
+        return [
+            'gdriveFileID' => $fileID,
+            'embedUrl'     => "https://drive.google.com/file/d/{$fileID}/preview",
+        ];
+    }
+
+    /**
      * @deprecated image type is now a display field, no subfolder needed.
      */
     public function createFieldAssetsFolder(string $assetsFolderID, string $fieldLabel): array

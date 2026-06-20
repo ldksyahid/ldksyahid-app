@@ -1232,6 +1232,34 @@
     color: var(--gf-text-muted);
 }
 
+.gf-video-card {
+    background: var(--gf-card-bg);
+    border-radius: var(--gf-radius);
+    border: 1px solid var(--gf-border);
+    box-shadow: var(--gf-shadow);
+    padding: 16px 24px;
+    margin-bottom: 12px;
+}
+.gf-video-label {
+    margin-bottom: 10px;
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--gf-text);
+}
+.gf-video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 */
+}
+.gf-embedded-video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    border: none;
+}
+
 /* ─── Submit Area ──────────────────────────────────────────────── */
 .gf-submit-area {
     display: flex;
