@@ -430,6 +430,25 @@
                         </button>
                     </div>
 
+                    {{-- Section Routing (radio only) --}}
+                    <div class="col-12" id="editSectionRoutingWrap" style="display:none;">
+                        <div class="sr-panel">
+                            <div class="sr-panel-header">
+                                <div class="sr-panel-title">
+                                    <i class="fas fa-code-branch me-1"></i>Section Routing
+                                </div>
+                                <label class="sr-toggle-label">
+                                    <input type="checkbox" id="editRoutingEnabled" onchange="onRoutingToggle(this)">
+                                    <span class="sr-toggle-track"><span class="sr-toggle-thumb"></span></span>
+                                </label>
+                            </div>
+                            <div id="editRoutingBody" style="display:none;">
+                                <p class="sr-hint">Choose which section respondents jump to based on their answer.</p>
+                                <div id="editRoutingRows"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- Linear Scale config (edit) --}}
                     <div class="col-12" id="editLinearScaleSection" style="display:none;">
                         <label class="field-modal-label">Scale Range <span class="text-danger">*</span></label>

@@ -20,7 +20,9 @@
     }
 
     // Group remaining fields into sections separated by section_break fields.
-    $sections = [];
+    // Also build a map: section_break formFieldID → section index (for routing).
+    $sections            = [];
+    $sectionBreakToIndex = []; // formFieldID => secIndex
     $currentSec = [
         'title'       => $form->title,
         'description' => $form->description ?? '',
@@ -28,6 +30,8 @@
     ];
     foreach ($contentFields as $field) {
         if ($field->fieldType === 'section_break') {
+            $newSecIdx                             = count($sections) + 1;
+            $sectionBreakToIndex[$field->formFieldID] = $newSecIdx;
             $sections[] = $currentSec;
             $currentSec = [
                 'title'       => $field->label,
@@ -100,7 +104,7 @@
 
                     {{-- Fields in this section --}}
                     @foreach($section['fields'] as $field)
-                        @include('landing-page.forms.components._field-renderer', ['field' => $field])
+                        @include('landing-page.forms.components._field-renderer', ['field' => $field, 'sectionBreakToIndex' => $sectionBreakToIndex])
                     @endforeach
 
                     {{-- Section navigation --}}
@@ -131,7 +135,7 @@
             @else
                 {{-- ── Single-page form (no section_break) ─────────── --}}
                 @foreach($contentFields as $field)
-                    @include('landing-page.forms.components._field-renderer', ['field' => $field])
+                    @include('landing-page.forms.components._field-renderer', ['field' => $field, 'sectionBreakToIndex' => $sectionBreakToIndex])
                 @endforeach
 
                 {{-- ── Submit area ──────────────────────────────────── --}}

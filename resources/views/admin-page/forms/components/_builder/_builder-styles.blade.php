@@ -90,6 +90,12 @@
     border: 1px solid #fde68a; border-radius: 4px; padding: 1px 6px;
     vertical-align: middle; margin-left: .35rem;
 }
+
+.field-card-routing-badge {
+    font-size: .62rem; background: #ede9fe; color: #6d28d9;
+    border: 1px solid #c4b5fd; border-radius: 4px; padding: 1px 6px;
+    vertical-align: middle; margin-left: .35rem; white-space: nowrap;
+}
 .field-card-actions { display: flex; gap: .3rem; }
 .field-card-actions button {
     border: none; background: none; cursor: pointer;
@@ -775,6 +781,79 @@ html.dark-mode .bmp-cal-cell.other { color: #4b5563; }
 html.dark-mode .bmp-tp { border-color: #2d3139; }
 html.dark-mode .bmp-tp-lbl { background: #22252d; border-bottom-color: #2d3139; }
 html.dark-mode .bmp-tp-item.near { color: #c8cdd3; }
+
+/* ─── Section Routing Panel ────────────────────────────── */
+.sr-panel {
+    border: 1px solid #e0f7f5; border-radius: 8px;
+    overflow: hidden;
+}
+
+.sr-panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 12px;
+    background: linear-gradient(135deg, #f0fdfb 0%, #f8fafc 100%);
+    border-bottom: 1px solid transparent;
+    cursor: default;
+}
+
+.sr-panel-title {
+    font-size: .78rem; font-weight: 700; color: #00857c;
+    display: flex; align-items: center; gap: 5px;
+}
+
+/* Custom toggle switch */
+.sr-toggle-label { display: flex; align-items: center; cursor: pointer; margin: 0; }
+.sr-toggle-label input { display: none; }
+.sr-toggle-track {
+    width: 32px; height: 18px; border-radius: 9px;
+    background: #d1d5db; position: relative; transition: background .2s;
+    display: flex; align-items: center;
+}
+.sr-toggle-label input:checked ~ .sr-toggle-track { background: #00a79d; }
+.sr-toggle-thumb {
+    width: 12px; height: 12px; border-radius: 50%; background: #fff;
+    position: absolute; left: 3px; transition: left .2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.sr-toggle-label input:checked ~ .sr-toggle-track .sr-toggle-thumb { left: 17px; }
+
+.sr-panel-header:has(input:checked) { border-bottom-color: #e0f7f5; }
+
+#editRoutingBody { padding: 10px 12px; background: #fafcfb; }
+
+.sr-hint {
+    font-size: .72rem; color: #6b7280; margin-bottom: 10px; line-height: 1.4;
+}
+
+.sr-no-sections {
+    font-size: .75rem; color: #9ca3af; text-align: center; padding: 8px 0;
+    font-style: italic;
+}
+
+.sr-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 7px; flex-wrap: wrap;
+}
+.sr-row:last-child { margin-bottom: 0; }
+
+.sr-row-label {
+    font-size: .75rem; color: #374151; font-weight: 600;
+    min-width: 80px; max-width: 120px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0;
+}
+
+.sr-arrow { color: #9ca3af; font-size: .7rem; flex-shrink: 0; }
+
+.sr-route-select { flex: 1; font-size: .75rem; min-width: 120px; }
+
+html.dark-mode .sr-panel { border-color: #2d3139; }
+html.dark-mode .sr-panel-header { background: #1a2d2a; }
+html.dark-mode .sr-panel-title { color: #2dd4bf; }
+html.dark-mode .sr-toggle-track { background: #374151; }
+html.dark-mode #editRoutingBody { background: #1e2229; }
+html.dark-mode .sr-hint { color: #9ca3af; }
+html.dark-mode .sr-row-label { color: #c8cdd3; }
+html.dark-mode .sr-route-select { background: #22252d; border-color: #374151; color: #c8cdd3; }
 
 /* Responsive */
 @media (max-width: 767px) {

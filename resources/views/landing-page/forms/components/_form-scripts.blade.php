@@ -1060,25 +1060,116 @@
     var totalSecs       = sections.length;
     var currentIndex    = 0;
     var gfSectionNames  = @json($jsSectionNames ?? []);
+    var sectionHistory  = []; // back-navigation stack
 
     // Show the first section on load (already has class 'active' from Blade)
 
+    function setSkipped(idx, skipped) {
+        if (idx < 0 || idx >= totalSecs) return;
+        var sec = sections[idx];
+        sec.dataset.skipped = skipped ? '1' : '0';
+        sec.querySelectorAll('input, select, textarea').forEach(function (el) {
+            el.disabled = skipped;
+        });
+    }
+
     window.gfNextSection = function () {
         if (!validateSection(currentIndex)) return;
-        goTo(currentIndex + 1);
+
+        // Reset any previously skipped sections after current (user may have changed answer)
+        for (var i = currentIndex + 1; i < totalSecs; i++) {
+            if (sections[i].dataset.skipped === '1') setSkipped(i, false);
+        }
+
+        // Check section routing: radio (data-go-to-section on checked input)
+        // or dropdown (data-section-routing JSON on select element)
+        var nextIndex = currentIndex + 1;
+        var routedTarget = null;
+
+        // 1. Radio routing
+        var checkedRouted = sections[currentIndex].querySelector('[data-go-to-section]:checked');
+        if (checkedRouted) {
+            var t = parseInt(checkedRouted.getAttribute('data-go-to-section'));
+            if (!isNaN(t) && t > currentIndex && t < totalSecs) routedTarget = t;
+        }
+
+        // 2. Dropdown routing
+        if (routedTarget === null) {
+            var routedSels = sections[currentIndex].querySelectorAll('select[data-section-routing]');
+            routedSels.forEach(function (sel) {
+                if (routedTarget !== null || !sel.value) return;
+                try {
+                    var map = JSON.parse(sel.getAttribute('data-section-routing'));
+                    if (map[sel.value] !== undefined) {
+                        var t2 = parseInt(map[sel.value]);
+                        if (!isNaN(t2) && t2 > currentIndex && t2 < totalSecs) routedTarget = t2;
+                    }
+                } catch (e) {}
+            });
+        }
+
+        if (routedTarget !== null) {
+            nextIndex = routedTarget;
+            for (var j = currentIndex + 1; j < nextIndex; j++) {
+                setSkipped(j, true);
+            }
+        }
+
+        goTo(nextIndex);
     };
 
     window.gfPrevSection = function () {
-        goTo(currentIndex - 1);
+        if (sectionHistory.length === 0) return;
+        var prev = sectionHistory.pop();
+        // Un-skip the section we're returning to (in case it was skipped from a prior route)
+        if (sections[prev].dataset.skipped === '1') setSkipped(prev, false);
+        sections[currentIndex].classList.remove('active');
+        sections[prev].classList.add('active');
+        currentIndex = prev;
+        updateProgress();
+        updateNavForCurrentSection();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     function goTo(index) {
         if (index < 0 || index >= totalSecs) return;
+        sectionHistory.push(currentIndex);
         sections[currentIndex].classList.remove('active');
         sections[index].classList.add('active');
         currentIndex = index;
         updateProgress();
+        updateNavForCurrentSection();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Show Submit (instead of Next) if all remaining sections are skipped.
+    // Restore Next button when going back and there are still unvisited sections.
+    function updateNavForCurrentSection() {
+        var sec     = sections[currentIndex];
+        var nextBtn = sec.querySelector('.gf-nav-next');
+        if (!nextBtn) return; // already a static submit section
+
+        var hasUnvisited = false;
+        for (var i = currentIndex + 1; i < totalSecs; i++) {
+            if (sections[i].dataset.skipped !== '1') { hasUnvisited = true; break; }
+        }
+
+        var dynSubmit = sec.querySelector('.gf-submit-btn--routing');
+
+        if (!hasUnvisited) {
+            nextBtn.style.display = 'none';
+            if (!dynSubmit) {
+                dynSubmit = document.createElement('button');
+                dynSubmit.type      = 'submit';
+                dynSubmit.className = 'gf-submit-btn gf-submit-btn--routing';
+                dynSubmit.innerHTML = '<i class="fas fa-paper-plane me-1"></i><span>Kirimkan Formulir</span>';
+                nextBtn.parentNode.appendChild(dynSubmit);
+            }
+            dynSubmit.style.display = '';
+        } else {
+            nextBtn.style.display = '';
+            if (dynSubmit) dynSubmit.style.display = 'none';
+        }
     }
 
     function updateProgress() {
