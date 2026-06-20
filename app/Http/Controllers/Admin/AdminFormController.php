@@ -654,7 +654,7 @@ class AdminFormController extends Controller
         }
 
         $validated = $request->validate([
-            'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,section_break,paragraph,header_image,linear_scale,rating',
+            'fieldType'              => 'required|string|in:short_text,long_text,email,number,phone,url,date,time,datetime,dropdown,radio,checkbox,file,image,video,section_break,paragraph,header_image,linear_scale,rating',
             'label'                  => [\Illuminate\Validation\Rule::requiredIf(!in_array($request->input('fieldType'), ['image', 'section_break', 'header_image'])), 'nullable', 'string', 'max:500'],
             'placeholder'            => 'nullable|string|max:255',
             'helpText'               => 'nullable|string|max:2000',
