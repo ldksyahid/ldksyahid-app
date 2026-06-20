@@ -1221,12 +1221,12 @@ $(document).ready(function() {
         var number = Math.floor(Math.random() * book.max) + 1;
         var ctrl   = new AbortController();
         var tId    = setTimeout(function(){ ctrl.abort(); }, 10000);
-        fetch('https://api.hadith.gading.dev/books/' + book.id + '/' + number, { signal: ctrl.signal })
+        fetch('https://hadith-api-go.vercel.app/api/v1/hadis/' + book.id + '/' + number, { signal: ctrl.signal })
             .then(function(r){ clearTimeout(tId); return r.json(); })
             .then(function(json){
-                if (json.code === 200 && json.data && json.data.contents) {
+                if (json.status === 'success' && json.data) {
                     retryCount = 0;
-                    var c = json.data.contents;
+                    var c = json.data;
                     fadeOut(function(){
                         applyContent(c.arab, c.id, book.name, book.name + ' No. ' + c.number);
                     });
