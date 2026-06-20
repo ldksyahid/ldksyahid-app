@@ -86,10 +86,10 @@
                             <h5 class="section-title mb-3 d-flex align-items-center justify-content-between">
                                 <span><i class="fas fa-info-circle me-2"></i>Basic Information</span>
                                 <span class="badge status-badge-lg
-                                    @if($form->status === 'published') bg-success
-                                    @elseif($form->status === 'draft') bg-secondary
-                                    @elseif($form->status === 'closed') bg-warning text-dark
-                                    @else bg-dark @endif">
+                                    @if($form->status === 'published') badge-status-published
+                                    @elseif($form->status === 'draft') badge-status-draft
+                                    @elseif($form->status === 'closed') badge-status-closed
+                                    @else badge-status-archived @endif">
                                     {{ ucfirst($form->status) }}
                                 </span>
                             </h5>

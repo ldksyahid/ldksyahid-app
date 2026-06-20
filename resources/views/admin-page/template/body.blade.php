@@ -443,6 +443,17 @@
             background-color: rgba(0,167,157,0.15) !important;
             color: #00a79d !important;
         }
+
+        /* ── Status badges ──────────────────────────────────────── */
+        .badge-status-published { background-color: #198754; color: #fff; }
+        .badge-status-draft     { background-color: #6c757d; color: #fff; }
+        .badge-status-closed    { background-color: #ffc107; color: #212529; }
+        .badge-status-archived  { background-color: #343a40; color: #fff; }
+
+        html.dark-mode .badge-status-published { background-color: #14532d !important; color: #86efac; }
+        html.dark-mode .badge-status-draft     { background-color: #1e293b !important; color: #94a3b8; }
+        html.dark-mode .badge-status-closed    { background-color: #451a03 !important; color: #fcd34d; }
+        html.dark-mode .badge-status-archived  { background-color: #111827 !important; color: #6b7280; box-shadow: inset 0 0 0 1px #374151; }
     </style>
 
     <script>

@@ -27,7 +27,7 @@
                             <a href="{{ route('admin.forms.show', $form->formID) }}">{{ Str::limit($form->title, 40) }}</a>
                             &nbsp;·&nbsp; v{{ $form->version }}
                             &nbsp;·&nbsp;
-                            <span class="badge @if($form->status==='published') bg-success @elseif($form->status==='draft') bg-secondary @else bg-warning text-dark @endif">
+                            <span class="badge @if($form->status==='published') badge-status-published @elseif($form->status==='draft') badge-status-draft @elseif($form->status==='closed') badge-status-closed @else badge-status-archived @endif">
                                 {{ ucfirst($form->status) }}
                             </span>
                         </p>
