@@ -147,6 +147,65 @@
 .prs-select.is-invalid, .prs-input.is-invalid { border-color: #e24b4a; }
 .prs-error-text { color: #b91c1c; font-size: .78rem; margin-top: .4rem; }
 
+.prs-date-wrap {
+    position: relative;
+}
+.prs-date-input {
+    padding-right: 2.75rem;
+    color-scheme: light;
+}
+.prs-date-icon {
+    position: absolute;
+    right: .9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--prs-accent);
+    pointer-events: none;
+    font-size: .9rem;
+}
+.prs-time-range {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+    align-items: end;
+    gap: .65rem;
+    padding: .7rem;
+    border: 1.5px solid var(--prs-gray-200);
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(14,165,233,.06), rgba(255,255,255,.9));
+}
+.prs-time-box {
+    min-width: 0;
+}
+.prs-time-caption {
+    display: block;
+    margin-bottom: .35rem;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    color: var(--prs-accent-dark);
+}
+.prs-time-input {
+    min-height: 42px;
+    border-radius: 12px;
+    background: white;
+}
+.prs-time-separator,
+.prs-time-zone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    color: var(--prs-gray);
+    font-size: .78rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+.prs-time-zone {
+    padding: 0 .25rem;
+    color: var(--prs-accent-dark);
+}
+
 .prs-divider {
     border: none; border-top: 1.5px dashed var(--prs-gray-200);
     margin: 1.1rem 0;
@@ -273,6 +332,16 @@
     .prs-card { padding: 1.3rem 1.2rem; border-radius: 20px; }
     .prs-card-head { flex-wrap: wrap; }
     .prs-link-all { width: 100%; justify-content: flex-end; margin-top: .25rem; margin-left: 0; }
+    .prs-time-range {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+    .prs-time-separator,
+    .prs-time-zone {
+        min-height: auto;
+        justify-content: flex-start;
+        padding-left: .1rem;
+    }
 }
 @media (max-width: 575.98px) {
     .prs-hero-title { font-size: 1.4rem; }
@@ -306,6 +375,15 @@
 [data-theme="dark"] .prs-textarea {
     background: #111827; border-color: rgba(255,255,255,.12); color: #e5e7eb;
 }
+[data-theme="dark"] .prs-date-input { color-scheme: dark; }
+[data-theme="dark"] .prs-date-icon { color: #38bdf8; }
+[data-theme="dark"] .prs-time-range {
+    background: linear-gradient(135deg, rgba(14,165,233,.1), rgba(17,24,39,.9));
+    border-color: rgba(255,255,255,.12);
+}
+[data-theme="dark"] .prs-time-caption,
+[data-theme="dark"] .prs-time-zone { color: #38bdf8; }
+[data-theme="dark"] .prs-time-separator { color: #9ca3af; }
 [data-theme="dark"] .prs-select:focus,
 [data-theme="dark"] .prs-input:focus,
 [data-theme="dark"] .prs-textarea:focus {

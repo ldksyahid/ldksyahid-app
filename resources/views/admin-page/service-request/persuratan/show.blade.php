@@ -56,6 +56,16 @@
                         <td>: {{ $suratLog->user?->name ?? '-' }} ({{ $suratLog->user?->email ?? '-' }})</td>
                     </tr>
                     <tr>
+                        <td class="text-muted fw-semibold">Asal Bidang / LDKSF</td>
+                        <td>
+                            :
+                            @if ($suratLog->kodeBidangPengaju())
+                                <span class="badge bg-light text-secondary border me-1">{{ $suratLog->kodeBidangPengaju() }}</span>
+                            @endif
+                            {{ $suratLog->labelBidangPengaju() }}
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="text-muted fw-semibold">Tanggal Ajuan</td>
                         <td>: {{ $suratLog->created_at->locale('id')->translatedFormat('d F Y, H:i') }}</td>
                     </tr>
@@ -82,9 +92,12 @@
                 <h6 class="fw-bold mb-3">Data Isian</h6>
                 @php
                     $fieldLabels = [
+                        'kode_bidang'       => 'Asal Bidang / LDKSF',
                         'jenis_undangan'    => 'Jenis Undangan',
                         'nama_acara'        => 'Nama Acara',
                         'tema_acara'        => 'Tema Acara',
+                        'nama_ketua_pelaksana' => 'Nama Ketua Pelaksana',
+                        'nim_ketua_pelaksana'  => 'NIM Ketua Pelaksana',
                         'hari_tanggal'      => 'Tanggal Acara',
                         'waktu'             => 'Waktu',
                         'tempat'            => 'Tempat',
@@ -105,7 +118,7 @@
                 @endphp
                 <table class="table table-borderless table-sm small">
                     @foreach ($suratLog->data as $key => $value)
-                        @continue($key === 'jenis_surat')
+                        @continue(in_array($key, ['jenis_surat', 'kode_bidang']))
                         <tr>
                             <td class="text-muted fw-semibold" style="width:160px">
                                 {{ $fieldLabels[$key] ?? ucwords(str_replace('_', ' ', $key)) }}
@@ -129,11 +142,9 @@
                     <form action="{{ route('admin.persuratan.approve', $suratLog) }}" method="POST" id="form-approve">
                         @csrf
 
-                        {{-- Pilihan sumber nomor surat --}}
                         <div class="mb-3">
                             <label class="form-label small fw-semibold d-block mb-2">Nomor Surat</label>
 
-                            {{-- BOX INFO NOMOR TERAKHIR --}}
                             <div class="alert alert-info py-2 px-3 rounded-3 mb-3 border-0 bg-info bg-opacity-10 d-flex align-items-center gap-3">
                                 <div class="text-info fs-4"><i class="fas fa-info-circle"></i></div>
                                 <div>
@@ -159,17 +170,48 @@
                             </div>
 
                             <div id="nomor-manual-wrapper" class="d-none mt-2">
-                                <input type="text" name="nomor_surat_manual" id="input_nomor_manual"
-                                       class="form-control form-control-sm rounded-3 @error('nomor_surat_manual') is-invalid @enderror"
-                                       placeholder="Cth: 005/SR-e/... atau 005.1/SR-e/..."
-                                       value="{{ old('nomor_surat_manual') }}">
+                                <div class="input-group input-group-sm mb-1">
+                                    <input type="text" name="nomor_surat_manual" id="input_nomor_manual"
+                                           class="form-control rounded-start-3 @error('nomor_surat_manual') is-invalid @enderror"
+                                           placeholder="Cth: 047 atau 047.01"
+                                           value="{{ old('nomor_surat_manual') }}">
+                                    <span class="input-group-text bg-light text-muted rounded-end-3" style="font-size: 0.75rem;">
+                                        / PREFIX / KODE / LDK SYAHID / ...
+                                    </span>
+                                </div>
                                 @error('nomor_surat_manual')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                                 <div class="form-text" style="font-size:.72rem">
-                                    Format: <code>XXX/PREFIX/LDK-SYAHID/BULAN/TAHUN</code>.<br>
-                                    Atau <code>XXX.SUB/PREFIX/LDK-SYAHID/BULAN/TAHUN</code> (jika ada sub surat).
+                                    Cukup masukkan <strong>nomor urutnya saja</strong> (cth: <code>047</code> atau <code>047.01</code>).<br>
+                                    Sistem akan otomatis merangkai sisa formatnya menjadi: <br>
+                                    <span class="text-primary mt-1 d-inline-block">
+                                        <em>Contoh: 047/Ph-e/KST/LDK SYAHID/6/2026</em>
+                                    </span>
                                 </div>
+                            </div>
+
+                        {{-- REFAKTOR: dropdown kode bidang sekarang loop dari $kodeBidangGroups
+                             (single source of truth dari SuratLog::getKodeBidangGroups()),
+                             tidak ada lagi daftar hardcoded duplikat di sini. --}}
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">
+                                Kode Bidang / LDKSF <span class="text-danger">*</span>
+                            </label>
+                            <select name="kode_bidang" class="form-select form-select-sm rounded-3" required>
+                                <option value="">-- Pilih Kode Pengaju --</option>
+                                @foreach ($kodeBidangGroups as $groupLabel => $options)
+                                    <optgroup label="{{ $groupLabel }}">
+                                        @foreach ($options as $value => $optionLabel)
+                                            <option value="{{ $value }}" {{ old('kode_bidang', $suratLog->kodeBidangPengaju()) === $value ? 'selected' : '' }}>
+                                                {{ $optionLabel }}
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                            <div class="form-text" style="font-size:.72rem">
+                                Wajib diisi untuk menyusun struktur penomoran surat.
                             </div>
                         </div>
 
@@ -240,7 +282,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // 1. Toggling Mode Nomor Surat
     var radios  = document.querySelectorAll('input[name="nomor_mode"]');
     var wrapper = document.getElementById('nomor-manual-wrapper');
     var input   = document.getElementById('input_nomor_manual');
@@ -262,14 +303,11 @@ document.addEventListener('DOMContentLoaded', function () {
         sync();
     }
 
-    // 2. Prevent Double Submit: Approve
     var formApprove = document.getElementById('form-approve');
     var btnApprove  = document.getElementById('btn-approve');
     if (formApprove && btnApprove) {
         formApprove.addEventListener('submit', function (e) {
-            // Cek validity untuk memastikan required terisi jika mode manual
             if (this.checkValidity()) {
-                // Beri jeda sangat singkat agar fungsi confirm(OK) selesai terekseskusi
                 setTimeout(function() {
                     btnApprove.disabled = true;
                     btnApprove.innerHTML = '<i class="fas fa-circle-notch fa-spin me-2"></i>Menyetujui...';
@@ -279,7 +317,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 3. Prevent Double Submit: Reject
     var formReject = document.getElementById('form-reject');
     var btnReject  = document.getElementById('btn-reject');
     if (formReject && btnReject) {

@@ -241,35 +241,28 @@
                         </div>
 
                         <div class="prs-history-list">
-                            <a href="https://wa.me/6285819353387" target="_blank" rel="noopener" class="prs-history-item text-decoration-none border shadow-none">
+                            <!-- Kontak 1: Sekjen -->
+                            <a href="https://wa.me/{{ $waSekjen }}" target="_blank" rel="noopener" class="prs-history-item text-decoration-none border shadow-none">
                                 <div class="prs-wa-icon"><i class="fab fa-whatsapp"></i></div>
                                 <div class="prs-history-content">
-                                    <div class="prs-history-title">M. Fiqhan Fajar</div>
-                                    <div class="prs-history-meta">Admin Kestari</div>
+                                    <div class="prs-history-title">{{ $namaSekjen }}</div>
+                                    <div class="prs-history-meta">Sekretaris Jenderal</div>
                                 </div>
                                 <i class="fas fa-chevron-right prs-chevron-icon"></i>
                             </a>
 
-                            <a href="https://wa.me/6285776923137" target="_blank" rel="noopener" class="prs-history-item text-decoration-none border shadow-none">
+                            <!-- Kontak 2: Sub Koor Administrasi Kestari -->
+                            <a href="https://wa.me/{{ $waKestari }}" target="_blank" rel="noopener" class="prs-history-item text-decoration-none border shadow-none">
                                 <div class="prs-wa-icon"><i class="fab fa-whatsapp"></i></div>
                                 <div class="prs-history-content">
-                                    <div class="prs-history-title">M. Zhaffar Rabbany</div>
-                                    <div class="prs-history-meta">Sekjen LDK</div>
-                                </div>
-                                <i class="fas fa-chevron-right prs-chevron-icon"></i>
-                            </a>
-
-                            <a href="https://wa.me/6281317209305" target="_blank" rel="noopener" class="prs-history-item text-decoration-none border shadow-none">
-                                <div class="prs-wa-icon"><i class="fab fa-whatsapp"></i></div>
-                                <div class="prs-history-content">
-                                    <div class="prs-history-title">M. Fakhri Alfarisi</div>
-                                    <div class="prs-history-meta">Admin & Web Dev</div>
+                                    <div class="prs-history-title">{{ $namaKestari }}</div>
+                                    <div class="prs-history-meta">Sub Koor Administrasi Kestari</div>
                                 </div>
                                 <i class="fas fa-chevron-right prs-chevron-icon"></i>
                             </a>
                         </div>
                     </div>
-
+                    
                     {{-- 4. CARD FAQ --}}
                     <div class="prs-card p-4">
                         <div class="d-flex align-items-center gap-3 mb-3">

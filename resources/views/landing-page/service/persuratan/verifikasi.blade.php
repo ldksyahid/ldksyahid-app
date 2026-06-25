@@ -9,7 +9,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 text-center">
 
-                @if ($suratLog && $suratLog->isApproved())
+                @if ($suratLog && $suratLog->status === 'approved')
 
                     <div class="card border-0 shadow-sm rounded-4 p-5">
                         <div class="mb-4">
@@ -46,7 +46,28 @@
                         </table>
                     </div>
 
-                @elseif ($suratLog && !$suratLog->isApproved())
+                @elseif ($suratLog && $suratLog->status === 'rejected')
+
+                    <div class="card border-0 shadow-sm rounded-4 p-5">
+                        <div class="mb-4">
+                            <span class="d-inline-flex align-items-center justify-content-center
+                                         bg-danger-subtle rounded-circle"
+                                  style="width:72px;height:72px">
+                                <i class="fas fa-times-circle fa-2x text-danger"></i>
+                            </span>
+                        </div>
+                        <h4 class="fw-bold text-danger mb-2">Surat Ditolak / Tidak Valid</h4>
+                        <p class="text-muted mb-3">Dokumen dengan kode ini <strong>BUKAN</strong> surat resmi dari LDK Syahid atau pengajuannya telah ditolak.</p>
+                        
+                        @if($suratLog->catatan_admin)
+                            <div class="alert alert-danger text-start small mb-0 rounded-3">
+                                <i class="fas fa-info-circle me-1"></i> <strong>Alasan Penolakan:</strong> <br>
+                                {{ $suratLog->catatan_admin }}
+                            </div>
+                        @endif
+                    </div>
+
+                @elseif ($suratLog && $suratLog->status === 'pending')
 
                     <div class="card border-0 shadow-sm rounded-4 p-5">
                         <div class="mb-4">
@@ -57,7 +78,7 @@
                             </span>
                         </div>
                         <h4 class="fw-bold text-warning mb-2">Surat Belum Aktif</h4>
-                        <p class="text-muted mb-0">Surat dengan kode ini ditemukan, namun belum mendapatkan persetujuan resmi dari admin LDK Syahid.</p>
+                        <p class="text-muted mb-0">Surat dengan kode ini ditemukan, namun sedang dalam peninjauan ulang atau belum mendapatkan persetujuan resmi dari admin LDK Syahid.</p>
                     </div>
 
                 @else

@@ -73,11 +73,18 @@
                 </thead>
                 <tbody>
                     @forelse ($suratLogs as $log)
+                        @php
+                            $kodeBidang = $log->kodeBidangPengaju();
+                        @endphp
                         <tr>
                             <td class="ps-4 text-muted small">{{ $suratLogs->firstItem() + $loop->index }}</td>
                             <td>
                                 <div class="fw-semibold small">{{ $log->user?->name ?? '-' }}</div>
-                                <div class="text-muted" style="font-size:.7rem">{{ $log->user?->email ?? '-' }}</div>
+                                <div class="text-muted mb-1" style="font-size:.7rem">{{ $log->user?->email ?? '-' }}</div>
+                                <span class="badge bg-light text-secondary border" style="font-size: 0.65rem;">
+                                    <i class="fas fa-users me-1"></i>
+                                    {{ $kodeBidang ? $kodeBidang . ' - ' : '' }}{{ $log->labelBidangPengaju() }}
+                                </span>
                             </td>
                             <td class="small">{{ $log->label }}</td>
                             <td class="small text-muted">
