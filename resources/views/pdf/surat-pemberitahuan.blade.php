@@ -5,35 +5,14 @@
     <meta charset="utf-8">
     <title>{{ $label }}</title>
     @include('pdf.components._index-styles')
-    <style>
-        /* Tabel field generik */
-        .field-table { width: 100%; margin: 8pt 0 12pt 0; border-collapse: collapse; }
-        .field-table td { padding: 2.5pt 0; vertical-align: top; line-height: 1.15; }
-        .field-table .label { width: 44mm; }
-        .field-table .sep   { width:  5mm; }
-    </style>
 </head>
 <body>
 @php
     $templatePath = public_path('assets/persuratan/kop-ldk.png');
     $templateUri  = file_exists($templatePath)
         ? 'data:image/png;base64,' . base64_encode(file_get_contents($templatePath)) : null;
-    $skipKeys     = ['jenis_surat', 'kode_bidang'];
-    $labelMap     = [
-        'nama_acara'       => 'Nama Acara',
-        'tema_acara'       => 'Tema Acara',
-        'hari_tanggal'     => 'Tanggal',
-        'waktu'            => 'Waktu',
-        'tempat'           => 'Tempat',
-        'ditujukan_kepada' => 'Ditujukan Kepada',
-    ];
-    $formatValue = function ($key, $value) {
-        if ($key === 'hari_tanggal' && !empty($value)) {
-            try { return \Carbon\Carbon::parse($value)->locale('id')->translatedFormat('d F Y'); }
-            catch (\Exception $e) { return $value; }
-        }
-        return $value;
-    };
+    $hariTanggal  = !empty($data['hari_tanggal'])
+        ? \Carbon\Carbon::parse($data['hari_tanggal'])->locale('id')->translatedFormat('l, d F Y') : '-';
 @endphp
 @if ($templateUri)<img class="page-bg" src="{{ $templateUri }}" alt="">@endif
 <div class="content">
@@ -42,24 +21,31 @@
             <td class="meta-label">Nomor</td><td class="meta-sep">:</td>
             <td>{{ $nomorSurat }}</td><td class="date-cell">Jakarta, {{ $tanggalSurat }}</td>
         </tr>
-        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>{{ $label }}</strong></td></tr>
+        <tr><td>Lampiran</td><td>:</td><td colspan="2">-</td></tr>
+        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>Pemberitahuan Kegiatan</strong></td></tr>
     </table>
     <div class="body-surat">
+        <div class="recipient">
+            <p>Yth.</p>
+            <p><strong>{{ $data['ditujukan_kepada'] ?? 'Bapak/Ibu/Saudara/i' }}</strong></p>
+            <p>di Tempat</p>
+        </div>
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
-        <p class="indent">Dengan hormat, melalui surat ini LDK Syahid UIN Syarif Hidayatullah Jakarta
-            menyampaikan dokumen resmi dengan rincian sebagai berikut:</p>
-        <table class="field-table">
-            @foreach ($data as $key => $value)
-                @continue(in_array($key, $skipKeys))
-                <tr>
-                    <td class="label">{{ $labelMap[$key] ?? ucwords(str_replace('_', ' ', $key)) }}</td>
-                    <td class="sep">:</td>
-                    <td>{!! nl2br(e($formatValue($key, $value))) !!}</td>
-                </tr>
-            @endforeach
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu/Saudara/i dalam keadaan sehat
+            wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
+        <p class="indent">Melalui surat ini, kami memberitahukan bahwa UKM Lembaga Dakwah Kampus
+            (LDK) Syahid UIN Syarif Hidayatullah Jakarta akan melaksanakan kegiatan
+            <strong>{{ $data['nama_kegiatan'] ?? '-' }}</strong>.
+            Adapun agenda tersebut InsyaAllah akan diselenggarakan pada:</p>
+        <table class="identity">
+            <tr><td class="identity-label">Hari, Tanggal</td><td class="identity-sep">:</td><td>{{ $hariTanggal }}</td></tr>
+            <tr><td class="identity-label">Waktu</td><td class="identity-sep">:</td><td>{{ $data['waktu'] ?? '-' }}</td></tr>
+            <tr><td class="identity-label">Tempat</td><td class="identity-sep">:</td><td>{{ $data['tempat'] ?? '-' }}</td></tr>
         </table>
-        <p class="indent">Demikian surat ini kami sampaikan untuk dipergunakan sebagaimana mestinya.
-            Atas perhatian dan kerja sama yang baik, kami ucapkan terima kasih.</p>
+        <p class="indent">Sehubungan dengan hal tersebut, kami mohon maklum dan memberitahukan kepada
+            pihak-pihak terkait demi kelancaran dan ketertiban berlangsungnya acara.</p>
+        <p class="indent">Demikian surat pemberitahuan ini kami sampaikan. Atas perhatian dan
+            kerjasamanya, kami ucapkan jazakumullah khairan katsiran.</p>
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
         <table class="signature-table">
             <tr>

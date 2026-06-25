@@ -6,11 +6,8 @@
     <title>{{ $label }}</title>
     @include('pdf.components._index-styles')
     <style>
-        /* Tabel field generik */
-        .field-table { width: 100%; margin: 8pt 0 12pt 0; border-collapse: collapse; }
-        .field-table td { padding: 2.5pt 0; vertical-align: top; line-height: 1.15; }
-        .field-table .label { width: 44mm; }
-        .field-table .sep   { width:  5mm; }
+        /* "Tempat, Tanggal Lahir" & "Fakultas / Jurusan" butuh lebih lebar */
+        .identity-label { width: 46mm; }
     </style>
 </head>
 <body>
@@ -18,22 +15,6 @@
     $templatePath = public_path('assets/persuratan/kop-ldk.png');
     $templateUri  = file_exists($templatePath)
         ? 'data:image/png;base64,' . base64_encode(file_get_contents($templatePath)) : null;
-    $skipKeys     = ['jenis_surat', 'kode_bidang'];
-    $labelMap     = [
-        'nama_acara'       => 'Nama Acara',
-        'tema_acara'       => 'Tema Acara',
-        'hari_tanggal'     => 'Tanggal',
-        'waktu'            => 'Waktu',
-        'tempat'           => 'Tempat',
-        'ditujukan_kepada' => 'Ditujukan Kepada',
-    ];
-    $formatValue = function ($key, $value) {
-        if ($key === 'hari_tanggal' && !empty($value)) {
-            try { return \Carbon\Carbon::parse($value)->locale('id')->translatedFormat('d F Y'); }
-            catch (\Exception $e) { return $value; }
-        }
-        return $value;
-    };
 @endphp
 @if ($templateUri)<img class="page-bg" src="{{ $templateUri }}" alt="">@endif
 <div class="content">
@@ -42,24 +23,33 @@
             <td class="meta-label">Nomor</td><td class="meta-sep">:</td>
             <td>{{ $nomorSurat }}</td><td class="date-cell">Jakarta, {{ $tanggalSurat }}</td>
         </tr>
-        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>{{ $label }}</strong></td></tr>
+        <tr><td>Lampiran</td><td>:</td><td colspan="2">-</td></tr>
+        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>Keterangan Aktif Organisasi</strong></td></tr>
     </table>
     <div class="body-surat">
+        <div class="recipient">
+            <p>Yth.</p>
+            <p><strong>{{ $data['penyelenggara'] ?? 'Pihak Terkait' }}</strong></p>
+            <p>di Tempat</p>
+        </div>
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
-        <p class="indent">Dengan hormat, melalui surat ini LDK Syahid UIN Syarif Hidayatullah Jakarta
-            menyampaikan dokumen resmi dengan rincian sebagai berikut:</p>
-        <table class="field-table">
-            @foreach ($data as $key => $value)
-                @continue(in_array($key, $skipKeys))
-                <tr>
-                    <td class="label">{{ $labelMap[$key] ?? ucwords(str_replace('_', ' ', $key)) }}</td>
-                    <td class="sep">:</td>
-                    <td>{!! nl2br(e($formatValue($key, $value))) !!}</td>
-                </tr>
-            @endforeach
+        <p class="indent">Puji syukur senantiasa kita panjatkan ke hadirat Allah SWT. Shalawat serta
+            salam semoga selalu tercurah kepada Nabi Muhammad SAW beserta keluarga dan para
+            pengikutnya.</p>
+        <p class="indent">Yang bertanda tangan di bawah ini, Pengurus UKM Lembaga Dakwah Kampus (LDK)
+            Syahid UIN Syarif Hidayatullah Jakarta menerangkan bahwa:</p>
+        <table class="identity">
+            <tr><td class="identity-label">Nama Lengkap</td><td class="identity-sep">:</td><td><strong>{{ $data['nama'] ?? '-' }}</strong></td></tr>
+            <tr><td class="identity-label">Tempat, Tanggal Lahir</td><td class="identity-sep">:</td><td>{{ $data['ttl'] ?? '-' }}</td></tr>
+            <tr><td class="identity-label">NIM</td><td class="identity-sep">:</td><td>{{ $data['nim'] ?? '-' }}</td></tr>
+            <tr><td class="identity-label">Fakultas / Jurusan</td><td class="identity-sep">:</td><td>{{ $data['fakultas'] ?? '-' }} / {{ $data['jurusan'] ?? '-' }}</td></tr>
+            <tr><td class="identity-label">Jabatan di LDK</td><td class="identity-sep">:</td><td>{{ $data['jabatan'] ?? '-' }}</td></tr>
         </table>
-        <p class="indent">Demikian surat ini kami sampaikan untuk dipergunakan sebagaimana mestinya.
-            Atas perhatian dan kerja sama yang baik, kami ucapkan terima kasih.</p>
+        <p class="indent">Merupakan mahasiswa/i UIN Syarif Hidayatullah Jakarta yang
+            <strong>benar-benar aktif</strong> sebagai pengurus LDK Syahid.
+            Surat keterangan ini dibuat untuk keperluan {{ $data['keperluan'] ?? '-' }}.</p>
+        <p class="indent">Demikian surat keterangan ini kami buat agar dapat dipergunakan sebagaimana
+            mestinya. Atas perhatiannya, kami ucapkan jazakumullah khairan katsiran.</p>
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
         <table class="signature-table">
             <tr>

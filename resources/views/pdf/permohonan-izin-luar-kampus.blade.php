@@ -3,150 +3,116 @@
 <head>
     <meta charset="utf-8">
     <title>{{ $label }}</title>
+    @include('pdf.components._index-styles')
     <style>
-        @page { margin: 0; }
-        body { margin: 0; color: #000; font-family: "Times New Roman", DejaVu Serif, serif; font-size: 12px; line-height: 1.25; }
-        .page-bg { position: fixed; top: 0; left: 0; width: 210mm; height: 297mm; z-index: -1; }
-        .content { position: absolute; top: 53mm; left: 25mm; right: 25mm; }
-        .meta { 
-            width: 100%; 
-            margin: 0 0 12px 0; /* Sebelumnya: margin: 0 0 12px -4mm; */
-            border-collapse: collapse; 
-        }
-        .meta td { padding: 0 0 2px 0; vertical-align: top; }
-        .meta-label { width: 22mm; }
-        .meta-sep { width: 4mm; }
-        .date-cell { text-align: right; white-space: nowrap; }
-        .recipient { 
-            margin: 5px 0 15px 0; /* Sebelumnya: margin: 12px 0 15px 19mm; */
-        }
-        .recipient p { margin: 0; }
-        p { margin: 0 0 6px 0; text-align: justify; }
-        .salam { font-weight: bold; font-style: italic; }
-        .indent { text-indent: 9mm; }
-        .identity { width: 140mm; margin: 5px auto 10px auto; border-collapse: collapse; }
-        .identity td { padding: 2px 0; vertical-align: top; }
-        .identity-label { width: 35mm; }
-        .identity-sep { width: 4mm; }
-        .signature-wrap { width: 66mm; margin: 10px 0 10px auto; page-break-inside: avoid; }
-        .signature-box { width: 100%; border-collapse: collapse; }
-        .signature-box td { text-align: center; border: none; padding: 0; }
-        .signature-space { 
-            height: 26mm; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .signature-qr {
-            margin-top: 2mm;
-        }
-        .signature-qr img {
-            width: 18mm;   /* Sesuaikan ukurannya */
-            height: 18mm;
-        }
-        .verification { width: 72mm; margin-top: 10px; border: .5px solid #36aaa1; border-collapse: collapse; color: #333; font-family: DejaVu Sans, sans-serif; font-size: 7px; page-break-inside: avoid; }
-        .verification td { padding: 3px; vertical-align: middle; }
-        .verification .qr-cell { width: 16mm; }
-        .verification svg { width: 15mm; height: 15mm; }
-        .verification p { margin: 0 0 2px; line-height: 1.25; text-align: left; }
-        .verification-url { word-break: break-all; }
+        /* Label lebih panjang: "Alamat Lengkap" */
+        .identity-label { width: 36mm; }
     </style>
 </head>
 <body>
 @php
     $templatePath = public_path('assets/persuratan/kop-ldk.png');
-    $templateUri = file_exists($templatePath)
+    $templateUri  = file_exists($templatePath)
         ? 'data:image/png;base64,' . base64_encode(file_get_contents($templatePath))
         : null;
-
-    $hariTanggal = !empty($data['hari_tanggal'])
+    $hariTanggal  = !empty($data['hari_tanggal'])
         ? \Carbon\Carbon::parse($data['hari_tanggal'])->locale('id')->translatedFormat('l, d F Y')
         : '-';
 @endphp
-
-@if ($templateUri)
-    <img class="page-bg" src="{{ $templateUri }}" alt="">
-@endif
+@if ($templateUri)<img class="page-bg" src="{{ $templateUri }}" alt="">@endif
 
 <div class="content">
     <table class="meta">
         <tr>
-            <td class="meta-label">Nomor</td>
-            <td class="meta-sep">:</td>
+            <td class="meta-label">Nomor</td><td class="meta-sep">:</td>
             <td>{{ $nomorSurat }}</td>
             <td class="date-cell">Jakarta, {{ $tanggalSurat }}</td>
         </tr>
-        <tr>
-            <td>Lampiran</td>
-            <td>:</td>
-            <td colspan="2">-</td>
-        </tr>
-        <tr>
-            <td>Hal</td>
-            <td>:</td>
-            <td colspan="2"><strong>Permohonan Izin Kegiatan di Luar Kampus</strong></td>
-        </tr>
+        <tr><td>Lampiran</td><td>:</td><td colspan="2">-</td></tr>
+        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>Permohonan Izin Kegiatan di Luar Kampus</strong></td></tr>
     </table>
 
-    <div class="recipient">
-        <p>Yth.</p>
-        <p><strong>Wakil Rektor Bidang Kemahasiswaan</strong></p>
-        <p>UIN Syarif Hidayatullah Jakarta</p>
-    </div>
+    <div class="body-surat">
+        <div class="recipient">
+            <p>Yth.</p>
+            <p><strong>Wakil Rektor Bidang Kemahasiswaan</strong></p>
+            <p>UIN Syarif Hidayatullah Jakarta</p>
+        </div>
 
-    <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
+        <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
 
-    <p class="indent">
-        Puji syukur senantiasa kita panjatkan ke hadirat Allah SWT. Shalawat serta salam semoga selalu
-        tercurah kepada Nabi Muhammad SAW beserta keluarga, sahabat, dan umatnya.
-    </p>
+        <p class="indent">Puji syukur senantiasa kita panjatkan ke hadirat Allah SWT. Shalawat serta
+            salam semoga selalu tercurah kepada Nabi Muhammad SAW beserta keluarga, sahabat,
+            dan umatnya.</p>
 
-    <p class="indent">
-        Sehubungan dengan program kerja pengurus UKM Lembaga Dakwah Kampus (LDK) Syahid, kami bermaksud akan menyelenggarakan kegiatan <strong>{{ $data['nama_acara'] ?? '-' }}</strong> dengan tema
-        &ldquo;{{ $data['tema_acara'] ?? '-' }}&rdquo;, yang mana kegiatan ini berlokasi di luar area kampus. InsyaAllah kegiatan ini akan diselenggarakan pada:
-    </p>
+        <p class="indent">Sehubungan dengan program kerja pengurus UKM Lembaga Dakwah Kampus (LDK)
+            Syahid, kami bermaksud akan menyelenggarakan kegiatan
+            <strong>{{ $data['nama_acara'] ?? '-' }}</strong>
+            dengan tema <strong><em>&ldquo;{{ $data['tema_acara'] ?? '-' }}&rdquo;</em></strong>,
+            yang mana kegiatan ini berlokasi di luar area kampus. InsyaAllah kegiatan ini akan
+            diselenggarakan pada:</p>
 
-    <table class="identity">
-        <tr>
-            <td class="identity-label">Hari, Tanggal</td>
-            <td class="identity-sep">:</td>
-            <td>{{ $hariTanggal }}</td>
-        </tr>
-        <tr>
-            <td>Waktu</td>
-            <td>:</td>
-            <td>{{ $data['waktu'] ?? '-' }}</td>
-        </tr>
-        <tr>
-            <td>Nama Tempat</td>
-            <td>:</td>
-            <td>{{ $data['tempat'] ?? '-' }}</td>
-        </tr>
-        <tr>
-            <td>Alamat Lengkap</td>
-            <td>:</td>
-            <td>{{ $data['alamat_tempat'] ?? '-' }}</td>
-        </tr>
-    </table>
-
-    <p class="indent">
-        Oleh karena itu, kami memohon izin dan persetujuan dari Bapak/Ibu agar kegiatan mahasiswa yang berlokasi di luar kampus tersebut dapat berjalan dengan lancar dan resmi.
-    </p>
-
-    <p class="indent">
-        Demikian surat permohonan izin ini kami sampaikan. Atas perhatian dan izin yang diberikan, kami ucapkan jazakumullah khairan katsiran.
-    </p>
-
-    <p class="salam">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
-
-    <div class="signature-wrap">
-        <table class="signature-box">
+        <table class="identity">
             <tr>
+                <td class="identity-label">Hari, Tanggal</td>
+                <td class="identity-sep">:</td>
+                <td>{{ $hariTanggal }}</td>
+            </tr>
+            <tr>
+                <td class="identity-label">Waktu</td>
+                <td class="identity-sep">:</td>
+                <td>{{ $data['waktu'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="identity-label">Nama Tempat</td>
+                <td class="identity-sep">:</td>
+                <td>{{ $data['tempat'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="identity-label">Alamat Lengkap</td>
+                <td class="identity-sep">:</td>
+                <td>{{ $data['alamat_tempat'] ?? '-' }}</td>
+            </tr>
+        </table>
+
+        <p class="indent">Oleh karena itu, kami memohon izin dan persetujuan dari Bapak/Ibu agar
+            kegiatan mahasiswa yang berlokasi di luar kampus tersebut dapat berjalan dengan
+            lancar dan resmi.</p>
+
+        <p class="indent">Demikian surat permohonan izin ini kami sampaikan. Atas perhatian dan izin
+            yang diberikan, kami ucapkan jazakumullah khairan katsiran.</p>
+
+        <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
+
+        <table class="signature-table">
+            <tr>
+                <td class="ttd-cell"><strong>Ketua Umum LDK Syahid</strong></td>
+                <td class="ttd-cell"><strong>Sekretaris Jenderal</strong></td>
+            </tr>
+            <tr>
+                <td class="ttd-cell">
+                    <div class="ttd-space"><img src="{!! $qrCode !!}" alt="QR Verifikasi"></div>
+                </td>
+                <td class="ttd-cell"><div class="ttd-space"></div></td>
+            </tr>
+            <tr>
+                <td class="ttd-cell"><strong>Muhammad Syauqi Mubarak</strong></td>
+                <td class="ttd-cell"><strong>Muhammad Zhaffar Rabbani</strong></td>
+            </tr>
+            <tr>
+                <td class="ttd-cell">NIM. 11230600000067</td>
+                <td class="ttd-cell">NIM. 11230340000016</td>
+            </tr>
+        </table>
+
+        <table class="verification">
+            <tr>
+                <td class="qr-cell"><img src="{!! $qrCode !!}" alt="QR Verifikasi"></td>
                 <td>
-                    <strong>Ketua Umum LDK Syahid</strong>
-                    <div class="signature-space"></div>
-                    <strong>Muhammad Syauqi Mubarak</strong><br>
-                    NIM. 11230600000067
+                    <p><strong>Verifikasi Keaslian Dokumen</strong></p>
+                    <p>Pindai QR atau buka tautan berikut untuk memastikan surat tercatat di sistem LDK Syahid.</p>
+                    <p class="verification-url">{{ $verifikasiUrl }}</p>
+                    <p>Kode Verifikasi: <strong>{{ $kodeVerifikasi }}</strong></p>
                 </td>
             </tr>
         </table>

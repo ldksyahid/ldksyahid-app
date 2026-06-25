@@ -11,14 +11,6 @@
     $templateUri  = file_exists($templatePath)
         ? 'data:image/png;base64,' . base64_encode(file_get_contents($templatePath))
         : null;
-    $hariTanggal  = !empty($data['hari_tanggal'])
-        ? \Carbon\Carbon::parse($data['hari_tanggal'])->locale('id')->translatedFormat('l, d F Y')
-        : '-';
-    $daftarAlat   = preg_split('/\r\n|\r|\n/', trim($data['daftar_alat'] ?? ''));
-    $daftarAlat   = array_values(array_filter(array_map(
-        fn($item) => trim(preg_replace('/^\d+[\.\)]\s*/', '', $item)),
-        $daftarAlat
-    )));
 @endphp
 @if ($templateUri)<img class="page-bg" src="{{ $templateUri }}" alt="">@endif
 
@@ -29,58 +21,43 @@
             <td>{{ $nomorSurat }}</td>
             <td class="date-cell">Jakarta, {{ $tanggalSurat }}</td>
         </tr>
-        <tr><td>Lampiran</td><td>:</td><td colspan="2">-</td></tr>
-        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>Permohonan Peminjaman Alat</strong></td></tr>
+        <tr><td>Lampiran</td><td>:</td><td colspan="2">1 (satu) Berkas Proposal</td></tr>
+        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>Permohonan Kerja Sama / Sponsorship</strong></td></tr>
     </table>
 
     <div class="body-surat">
         <div class="recipient">
             <p>Yth.</p>
-            <p><strong>{{ $data['ditujukan_kepada'] ?? 'Pihak Terkait' }}</strong></p>
+            <p><strong>{{ $data['ditujukan_kepada'] ?? 'Bapak/Ibu Pimpinan' }}</strong></p>
             <p>di Tempat</p>
         </div>
 
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
 
-        <p class="indent">Segala puji bagi Allah SWT yang senantiasa melimpahkan rahmat dan hidayah-Nya.
-            Shalawat dan salam selalu tercurah kepada Rasulullah Muhammad SAW.</p>
+        <p class="indent">Puji syukur senantiasa kita panjatkan ke hadirat Allah SWT atas segala
+            nikmat-Nya. Shalawat dan salam senantiasa tercurah kepada Nabi Muhammad SAW beserta
+            keluarga dan para pengikutnya.</p>
 
-        <p class="indent">Sehubungan dengan akan dilaksanakannya agenda
-            <strong>{{ $data['nama_acara'] ?? '-' }}</strong>
-            dengan tema <strong><em>&ldquo;{{ $data['tema_acara'] ?? '-' }}&rdquo;</em></strong>,
-            yang InsyaAllah akan diselenggarakan pada:</p>
+        <p class="indent">Melalui surat ini, kami dari pengurus UKM Lembaga Dakwah Kampus (LDK) Syahid
+            UIN Syarif Hidayatullah Jakarta bermaksud mengajukan permohonan dukungan kerja
+            sama/sponsorship untuk menyukseskan program kami:</p>
 
-        <table class="identity">
-            <tr>
-                <td class="identity-label">Hari, Tanggal</td>
-                <td class="identity-sep">:</td>
-                <td>{{ $hariTanggal }}</td>
-            </tr>
-            <tr>
-                <td class="identity-label">Waktu</td>
-                <td class="identity-sep">:</td>
-                <td>{{ $data['waktu'] ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td class="identity-label">Tempat</td>
-                <td class="identity-sep">:</td>
-                <td>{{ $data['tempat'] ?? '-' }}</td>
-            </tr>
-        </table>
+        <p style="text-align:center; margin:10pt 0;">
+            <strong><em>&ldquo;{{ $data['nama_acara'] ?? '-' }} : {{ $data['tema_acara'] ?? '-' }}&rdquo;</em></strong>
+        </p>
 
-        <p class="indent">Maka demi kelancaran agenda tersebut, kami dari LDK Syahid bermaksud meminjam
-            beberapa perlengkapan/alat, dengan rincian sebagai berikut:</p>
+        <p class="indent">Adapun bentuk kerja sama yang kami tawarkan secara ringkas adalah sebagai berikut:</p>
 
-        <ol>
-            @forelse ($daftarAlat as $alat)
-                <li>{{ $alat }}</li>
-            @empty
-                <li><em>(Tidak ada rincian alat)</em></li>
-            @endforelse
-        </ol>
+        <div style="margin: 4pt 0 10pt 9mm; line-height:1.5;">
+            {!! nl2br(e($data['bentuk_kerjasama'] ?? '-')) !!}
+        </div>
 
-        <p class="indent">Demikian surat permohonan peminjaman alat ini kami sampaikan. Atas perhatian
-            dan izin yang diberikan, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Rincian lebih lanjut mengenai paket sponsorship dan penawaran timbal balik
+            (benefit) telah kami lampirkan dalam proposal bersama surat ini. Besar harapan kami agar
+            Bapak/Ibu berkenan menjalin kerja sama demi kesuksesan program tersebut.</p>
+
+        <p class="indent">Demikian surat permohonan ini kami sampaikan. Atas perhatian, dukungan,
+            dan kerja sama yang diberikan, kami ucapkan jazakumullah khairan katsiran.</p>
 
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
 

@@ -4,6 +4,10 @@
     <meta charset="utf-8">
     <title>{{ $label }}</title>
     @include('pdf.components._index-styles')
+    <style>
+        /* "Tema Materi Khusus" butuh sedikit lebih lebar */
+        .identity-label { width: 42mm; }
+    </style>
 </head>
 <body>
 @php
@@ -14,11 +18,6 @@
     $hariTanggal  = !empty($data['hari_tanggal'])
         ? \Carbon\Carbon::parse($data['hari_tanggal'])->locale('id')->translatedFormat('l, d F Y')
         : '-';
-    $daftarAlat   = preg_split('/\r\n|\r|\n/', trim($data['daftar_alat'] ?? ''));
-    $daftarAlat   = array_values(array_filter(array_map(
-        fn($item) => trim(preg_replace('/^\d+[\.\)]\s*/', '', $item)),
-        $daftarAlat
-    )));
 @endphp
 @if ($templateUri)<img class="page-bg" src="{{ $templateUri }}" alt="">@endif
 
@@ -30,25 +29,27 @@
             <td class="date-cell">Jakarta, {{ $tanggalSurat }}</td>
         </tr>
         <tr><td>Lampiran</td><td>:</td><td colspan="2">-</td></tr>
-        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>Permohonan Peminjaman Alat</strong></td></tr>
+        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>Permohonan Menjadi Pemateri</strong></td></tr>
     </table>
 
     <div class="body-surat">
         <div class="recipient">
             <p>Yth.</p>
-            <p><strong>{{ $data['ditujukan_kepada'] ?? 'Pihak Terkait' }}</strong></p>
+            <p><strong>{{ $data['ditujukan_kepada'] ?? 'Bapak/Ibu/Ustadz/ah' }}</strong></p>
             <p>di Tempat</p>
         </div>
 
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
 
-        <p class="indent">Segala puji bagi Allah SWT yang senantiasa melimpahkan rahmat dan hidayah-Nya.
-            Shalawat dan salam selalu tercurah kepada Rasulullah Muhammad SAW.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu senantiasa dalam keadaan sehat
+            wal 'afiat serta selalu berada dalam lindungan Allah SWT.</p>
 
-        <p class="indent">Sehubungan dengan akan dilaksanakannya agenda
+        <p class="indent">Sehubungan dengan akan diadakannya agenda
             <strong>{{ $data['nama_acara'] ?? '-' }}</strong>
-            dengan tema <strong><em>&ldquo;{{ $data['tema_acara'] ?? '-' }}&rdquo;</em></strong>,
-            yang InsyaAllah akan diselenggarakan pada:</p>
+            yang mengusung tema <strong><em>&ldquo;{{ $data['tema_acara'] ?? '-' }}&rdquo;</em></strong>,
+            kami bermaksud mengundang Bapak/Ibu untuk berkenan menjadi
+            <strong>Pemateri/Narasumber</strong> pada agenda tersebut.
+            Adapun kegiatan ini akan dilaksanakan pada:</p>
 
         <table class="identity">
             <tr>
@@ -66,21 +67,16 @@
                 <td class="identity-sep">:</td>
                 <td>{{ $data['tempat'] ?? '-' }}</td>
             </tr>
+            <tr>
+                <td class="identity-label">Tema Materi Khusus</td>
+                <td class="identity-sep">:</td>
+                <td><strong><em>&ldquo;{{ $data['materi'] ?? '-' }}&rdquo;</em></strong></td>
+            </tr>
         </table>
 
-        <p class="indent">Maka demi kelancaran agenda tersebut, kami dari LDK Syahid bermaksud meminjam
-            beberapa perlengkapan/alat, dengan rincian sebagai berikut:</p>
-
-        <ol>
-            @forelse ($daftarAlat as $alat)
-                <li>{{ $alat }}</li>
-            @empty
-                <li><em>(Tidak ada rincian alat)</em></li>
-            @endforelse
-        </ol>
-
-        <p class="indent">Demikian surat permohonan peminjaman alat ini kami sampaikan. Atas perhatian
-            dan izin yang diberikan, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Besar harapan kami agar Bapak/Ibu berkenan hadir dan memberikan ilmu serta
+            motivasi kepada para peserta kegiatan. Demikian surat permohonan ini kami sampaikan,
+            atas perhatian dan kesediaannya kami ucapkan jazakumullah khairan katsiran.</p>
 
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
 
