@@ -74,7 +74,7 @@
                     </div>
 
                     {{-- Form kirim pesan --}}
-                    <form id="wrp-msg-form" novalidate>
+                    <form id="wrp-msg-form" novalidate data-no-global-loading>
                         @csrf
                         <div id="wrp-msg-form-fields">
                             <input  id="wrp-msg-name"    type="text"     maxlength="80"  placeholder="Namamu siapa? 😊" autocomplete="off" />

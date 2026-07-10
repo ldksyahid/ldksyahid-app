@@ -184,7 +184,7 @@
                 return;
             }
 
-            if (msgSubmit) msgSubmit.disabled = true;
+            setSubmitLoading(true);
             setFeedback('', '');
 
             fetch('/api/gemilang-messages', {
@@ -217,9 +217,17 @@
                 setFeedback(msg, 'error');
             })
             .finally(function () {
-                if (msgSubmit) msgSubmit.disabled = false;
+                setSubmitLoading(false);
             });
         });
+    }
+
+    function setSubmitLoading(loading) {
+        if (!msgSubmit) return;
+        msgSubmit.disabled = loading;
+        msgSubmit.innerHTML = loading
+            ? '<i class="fas fa-spinner fa-spin"></i> Sebentar...'
+            : '<i class="fas fa-paper-plane"></i> Titip!';
     }
 
     function setFeedback(text, type) {
