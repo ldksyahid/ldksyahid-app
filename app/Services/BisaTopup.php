@@ -45,23 +45,48 @@ class BisaTopup
         }
 
         try {
-            $res = Http::asForm()->post($this->baseUrl() . '/api/login', [
+            $loginUrl = $this->baseUrl() . '/api/login';
+
+            Log::debug('[BisaTopup] login attempt', [
+                'env'      => $this->config['env'] ?? 'dev',
+                'url'      => $loginUrl,
+                'username' => $this->config['username'] ?? '(empty)',
+            ]);
+
+            $res = Http::timeout(15)->asForm()->post($loginUrl, [
                 'username' => $this->config['username'],
                 'password' => $this->config['password_api'],
             ]);
 
+            Log::debug('[BisaTopup] login response', [
+                'status' => $res->status(),
+                'body'   => $res->body(),
+            ]);
+
             if ($res->failed()) {
-                Log::error('[BisaTopup] login failed', ['status' => $res->status(), 'body' => $res->body()]);
+                Log::error('[BisaTopup] login failed', [
+                    'status' => $res->status(),
+                    'body'   => $res->body(),
+                ]);
                 return null;
             }
 
             $token = data_get($res->json(), 'data.access_token');
+
+            Log::debug('[BisaTopup] login token', [
+                'token_found' => !empty($token),
+            ]);
+
             if ($token) {
                 Cache::put('bisatopup_token', $token, now()->addMinutes(50));
             }
             return $token;
         } catch (\Throwable $e) {
-            Log::error('[BisaTopup] login exception: ' . $e->getMessage());
+            Log::error('[BisaTopup] login exception', [
+                'message' => $e->getMessage(),
+                'env'     => $this->config['env'] ?? 'dev',
+                'url'     => $this->baseUrl() . '/api/login',
+            ]);
             return null;
         }
     }
