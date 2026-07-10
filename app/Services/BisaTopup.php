@@ -53,10 +53,13 @@ class BisaTopup
                 'username' => $this->config['username'] ?? '(empty)',
             ]);
 
-            $res = Http::timeout(15)->asForm()->post($loginUrl, [
-                'username' => $this->config['username'],
-                'password' => $this->config['password_api'],
-            ]);
+            $res = Http::timeout(15)
+                ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
+                ->asForm()
+                ->post($loginUrl, [
+                    'username' => $this->config['username'],
+                    'password' => $this->config['password_api'],
+                ]);
 
             Log::debug('[BisaTopup] login response', [
                 'status' => $res->status(),
@@ -111,6 +114,7 @@ class BisaTopup
             ]);
 
             $res = Http::withToken($token)
+                ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
                 ->acceptJson()
                 ->post($this->baseUrl() . '/api/payment/transaction', $payload);
 
@@ -158,7 +162,9 @@ class BisaTopup
         if (!$token) return null;
 
         try {
-            $res = Http::withToken($token)->acceptJson()
+            $res = Http::withToken($token)
+                ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
+                ->acceptJson()
                 ->post($this->baseUrl() . '/api/transfer/inquiry', [
                     'bank_code'      => $bankCode,
                     'account_number' => $accountNumber,
@@ -195,7 +201,9 @@ class BisaTopup
                 'amount'         => $payload['amount'] ?? null,
             ]);
 
-            $res = Http::withToken($token)->acceptJson()
+            $res = Http::withToken($token)
+                ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
+                ->acceptJson()
                 ->post($this->baseUrl() . '/api/transfer/disburstment', $payload);
 
             Log::info('[BisaTopup] disburse response', [
@@ -223,7 +231,9 @@ class BisaTopup
         if (!$token) return null;
 
         try {
-            $res = Http::withToken($token)->acceptJson()
+            $res = Http::withToken($token)
+                ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
+                ->acceptJson()
                 ->get($this->baseUrl() . '/api/account-info');
 
             return $res->ok()
@@ -245,7 +255,9 @@ class BisaTopup
         if (!$token) return [];
 
         try {
-            $res = Http::withToken($token)->acceptJson()
+            $res = Http::withToken($token)
+                ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
+                ->acceptJson()
                 ->get($this->baseUrl() . '/api/transfer/bank-list');
 
             Log::info('[BisaTopup] bankList', [
