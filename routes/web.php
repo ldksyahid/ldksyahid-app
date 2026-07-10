@@ -41,6 +41,7 @@ use App\Http\Controllers\Admin\AdminFormController;
 use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TwoFactorController;
+use App\Http\Controllers\PopupMessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -150,6 +151,10 @@ Route::get('/service', function () {
 // Route LandingPage Artikel
 Route::get('/articles', [ArticleController::class, 'index'])->name('article.index');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('article.show');
+
+// Gemilang Popup — Messages (public, throttled)
+Route::get('/api/gemilang-messages', [PopupMessageController::class, 'index'])->name('gemilang-message.index');
+Route::middleware('throttle:10,1')->post('/api/gemilang-messages', [PopupMessageController::class, 'store'])->name('gemilang-message.store');
 
 // Comment System (AJAX)
 Route::get('/api/comments', [CommentController::class, 'index'])->name('comment.index');

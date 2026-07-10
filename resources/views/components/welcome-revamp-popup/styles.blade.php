@@ -197,6 +197,129 @@
 }
 #wrp-btn-dismiss:hover { color: #92400e; }
 
+/* ── Pesan Section ── */
+#wrp-msg-section {
+    margin-top: .9rem;
+    border-top: 1px solid rgba(217, 119, 6, .16);
+    padding-top: .85rem;
+}
+
+#wrp-msg-heading {
+    display: flex; align-items: center; gap: .4rem;
+    font-size: .68rem; font-weight: 700; color: #b45309;
+    text-transform: uppercase; letter-spacing: .07em;
+    margin-bottom: .55rem;
+}
+#wrp-msg-heading i { font-size: .62rem; }
+
+#wrp-msg-list { display: flex; flex-direction: column; gap: .38rem; margin-bottom: .45rem; }
+
+#wrp-msg-empty {
+    font-size: .75rem; color: #c4a060; text-align: center;
+    padding: .6rem 0; font-style: italic;
+}
+
+.wrp-msg-item {
+    background: #fef9e7;
+    border: 1px solid rgba(217, 119, 6, .14);
+    border-radius: 9px;
+    padding: .45rem .6rem;
+    animation: wrp-fadein .3s ease;
+}
+@keyframes wrp-fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.wrp-msg-item-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: .18rem;
+}
+.wrp-msg-item-name {
+    font-size: .7rem; font-weight: 700; color: #92400e;
+}
+.wrp-msg-item-date {
+    font-size: .6rem; color: #d4a560;
+}
+.wrp-msg-item-text {
+    font-size: .76rem; color: #78350f; line-height: 1.45;
+    word-break: break-word;
+}
+
+#wrp-msg-load-more {
+    width: 100%; background: none;
+    border: 1px dashed rgba(217, 119, 6, .35);
+    border-radius: 8px; padding: .38rem;
+    font-size: .7rem; color: #b45309; font-weight: 600;
+    cursor: pointer; margin-bottom: .6rem;
+    transition: background .18s, color .18s;
+}
+#wrp-msg-load-more:hover { background: #fef3c7; color: #92400e; }
+#wrp-msg-load-more i { margin-left: .3rem; font-size: .6rem; }
+
+/* ── Divider ── */
+#wrp-msg-divider {
+    display: flex; align-items: center; gap: .55rem;
+    margin: .65rem 0 .55rem;
+}
+#wrp-msg-divider::before,
+#wrp-msg-divider::after {
+    content: ''; flex: 1;
+    height: 1px; background: rgba(217, 119, 6, .22);
+}
+#wrp-msg-divider span {
+    font-size: .65rem; font-weight: 700; color: #b45309;
+    text-transform: uppercase; letter-spacing: .07em;
+    white-space: nowrap;
+}
+#wrp-msg-divider i { font-size: .6rem; }
+
+/* ── Form Pesan ── */
+#wrp-msg-form { display: flex; flex-direction: column; gap: .3rem; }
+
+#wrp-msg-form-fields { display: flex; flex-direction: column; gap: .3rem; }
+
+#wrp-msg-name,
+#wrp-msg-text {
+    width: 100%; box-sizing: border-box;
+    background: #fff;
+    border: 1px solid rgba(217, 119, 6, .28);
+    border-radius: 8px;
+    padding: .48rem .65rem;
+    font-size: .78rem; color: #78350f;
+    font-family: inherit;
+    transition: border-color .18s, box-shadow .18s;
+    outline: none; resize: none;
+}
+#wrp-msg-name::placeholder,
+#wrp-msg-text::placeholder { color: #d4a560; }
+#wrp-msg-name:focus,
+#wrp-msg-text:focus {
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, .15);
+}
+
+#wrp-msg-form-footer {
+    display: flex; justify-content: space-between; align-items: center;
+}
+#wrp-msg-char { font-size: .62rem; color: #d4a560; }
+
+#wrp-msg-submit {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    color: #fff; border: none;
+    font-size: .76rem; font-weight: 700;
+    padding: .38rem .9rem; border-radius: 50px;
+    cursor: pointer;
+    transition: filter .18s, transform .12s;
+}
+#wrp-msg-submit:hover { filter: brightness(1.08); }
+#wrp-msg-submit:active { transform: scale(.96); }
+#wrp-msg-submit:disabled { opacity: .55; cursor: not-allowed; }
+
+#wrp-msg-feedback {
+    font-size: .7rem; min-height: 1rem; text-align: center;
+    transition: color .2s;
+}
+#wrp-msg-feedback.success { color: #16a34a; }
+#wrp-msg-feedback.error   { color: #dc2626; }
+
 /* ── Responsive ── */
 @media (max-width: 480px) {
     #wrp-card { border-radius: 20px; }
@@ -209,11 +332,41 @@
 
 /* ── Dark Mode ── */
 [data-theme="dark"] #wrp-card { background: #1c0e02; }
+[data-theme="dark"] #wrp-body { background: #1c0e02; }
 [data-theme="dark"] #wrp-desc { color: #d4aa60; }
 [data-theme="dark"] .wrp-feat { background: #2d1a04; border-color: rgba(217, 119, 6, .2); }
 [data-theme="dark"] .wrp-feat:hover { background: #3d2305; }
 [data-theme="dark"] .wrp-feat-text { color: #e8c070; }
 [data-theme="dark"] .wrp-feat-text strong { color: #f0d080; }
+[data-theme="dark"] .wrp-lyric { color: #e8a840; border-left-color: rgba(245, 158, 11, .4); }
+
+/* dark — message section */
+[data-theme="dark"] #wrp-msg-section { border-top-color: rgba(217, 119, 6, .18); }
+[data-theme="dark"] #wrp-msg-heading { color: #e8a840; }
+[data-theme="dark"] #wrp-msg-empty { color: #a07838; }
+[data-theme="dark"] .wrp-msg-item { background: #2d1a04; border-color: rgba(217, 119, 6, .18); }
+[data-theme="dark"] .wrp-msg-item-name { color: #f0c060; }
+[data-theme="dark"] .wrp-msg-item-date { color: #a07838; }
+[data-theme="dark"] .wrp-msg-item-text { color: #d4aa60; }
+[data-theme="dark"] #wrp-msg-load-more { color: #e8a840; border-color: rgba(217, 119, 6, .3); }
+[data-theme="dark"] #wrp-msg-load-more:hover { background: #2d1a04; color: #f0c060; }
+[data-theme="dark"] #wrp-msg-divider::before,
+[data-theme="dark"] #wrp-msg-divider::after { background: rgba(217, 119, 6, .2); }
+[data-theme="dark"] #wrp-msg-divider span { color: #e8a840; }
+[data-theme="dark"] #wrp-msg-name,
+[data-theme="dark"] #wrp-msg-text {
+    background: #2a1608;
+    border-color: rgba(217, 119, 6, .3);
+    color: #e8c070;
+}
+[data-theme="dark"] #wrp-msg-name::placeholder,
+[data-theme="dark"] #wrp-msg-text::placeholder { color: #8a5a28; }
+[data-theme="dark"] #wrp-msg-name:focus,
+[data-theme="dark"] #wrp-msg-text:focus { border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245, 158, 11, .12); }
+[data-theme="dark"] #wrp-msg-char { color: #a07838; }
+
+/* dark — footer */
+[data-theme="dark"] #wrp-footer { background: #1c0e02; border-top-color: rgba(217, 119, 6, .12); }
 [data-theme="dark"] #wrp-btn-dismiss { color: #8a5a20; }
 [data-theme="dark"] #wrp-btn-dismiss:hover { color: #d4a550; }
 [data-theme="dark"] #wrp-share-fallback { color: #c4903a; }
