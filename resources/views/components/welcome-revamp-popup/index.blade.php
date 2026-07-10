@@ -28,9 +28,8 @@
             {{-- Body --}}
             <div id="wrp-body">
                 <p id="wrp-desc">
-                    Pernah ngerasa terjilat panas? Lelah tapi gak bisa berhenti?
-                    Gaes, itu bukan tanda kamu lemah — itu tanda kamu lagi dalam proses <strong>gemilang</strong>.
-                    Allah Maha Melihat setiap tetes peluhmu. 🌟
+                    Kayak lirik Perunggu — <em>"terjilat matahari timur yang kejam, sengat melekat di bahuku"</em> — tapi kamu tetep nerjang gaes.
+                    Itu bukan lemah, itu <strong>gemilang</strong>. Dan Allah liat semua usahamu. 🌟
                 </p>
 
                 <div id="wrp-features">
