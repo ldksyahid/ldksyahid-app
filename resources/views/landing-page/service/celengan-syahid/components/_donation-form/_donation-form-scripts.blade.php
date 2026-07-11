@@ -87,10 +87,13 @@
     var totalInput  = document.getElementById('dn-total-input');
     var presetBtns  = document.querySelectorAll('.dn-preset-btn');
 
+    var qrisMdrRate = {{ config('services.bisatopup.qris_mdr_percent', 1) / 100 }};
+
     function syncTotal(val) {
         var amount   = val ? parseInt(val.toString().replace(/[^\d]/g, ''), 10) : 0;
-        var adminFee = Math.round(amount * 0.01);
-        var total    = amount + adminFee;
+        // total = round(amount / (1 - mdrRate)) ensures wallet receives exactly `amount` after Bisabiller MDR.
+        var total    = amount > 0 ? Math.round(amount / (1 - qrisMdrRate)) : 0;
+        var adminFee = total - amount;
 
         var display = total ? formatRupiah(total) : 'Rp0';
         if (totalValue) totalValue.textContent = display;

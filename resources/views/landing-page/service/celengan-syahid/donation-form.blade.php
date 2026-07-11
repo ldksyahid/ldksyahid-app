@@ -287,7 +287,7 @@
                         <span id="dn-breakdown-donasi">Rp0</span>
                     </div>
                     <div class="dn-fee-breakdown-row">
-                        <span><i class="fas fa-info-circle me-1 dn-fee-icon"></i>Biaya Admin (1%)</span>
+                        <span><i class="fas fa-info-circle me-1 dn-fee-icon"></i>Biaya Layanan QRIS</span>
                         <span id="dn-breakdown-admin">Rp0</span>
                     </div>
                 </div>

@@ -316,15 +316,25 @@ class WithdrawalController extends Controller
 
     public function balanceReport()
     {
-        // Total QRIS PAID per campaign
+        // Bisabiller charges 1% MDR (QRIS) per transaction, rounded per-transaction.
+        // wallet_credit = SUM(total_tagihan - ROUND(total_tagihan * 0.01))
+        // We calculate rounding per-row in SQL so it matches Bisabiller's per-transaction MDR.
+        $mdrRate = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+
         $perCampaign = Donation::where('gateway', 'bisatopup')
             ->where('payment_status', 'PAID')
-            ->selectRaw('campaign_id, SUM(jumlah_donasi) as total_qris, SUM(biaya_admin) as total_fee, COUNT(*) as txn_count')
+            ->selectRaw(
+                'campaign_id,
+                 SUM(jumlah_donasi) as total_qris,
+                 COUNT(*) as txn_count,
+                 SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - ROUND(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?, 0)) as wallet_credit',
+                [$mdrRate]
+            )
             ->groupBy('campaign_id')
             ->with('campaign:id,judul')
             ->get();
 
-        // Total withdrawn per campaign (COMPLETED)
+        // Total withdrawn per campaign (COMPLETED) — each withdrawal deducts `amount` (gross) from wallet
         $withdrawnPerCampaign = Withdrawal::where('status', 'COMPLETED')
             ->selectRaw('campaign_id, SUM(amount) as total_withdrawn')
             ->groupBy('campaign_id')
@@ -335,8 +345,9 @@ class WithdrawalController extends Controller
             return [
                 'campaign'        => $row->campaign->judul ?? '—',
                 'total_qris'      => (int) $row->total_qris,
+                'wallet_credit'   => (int) $row->wallet_credit,
                 'total_withdrawn' => (int) $withdrawn,
-                'net'             => (int) $row->total_qris - (int) $withdrawn,
+                'net'             => (int) $row->wallet_credit - (int) $withdrawn,
                 'txn_count'       => (int) $row->txn_count,
             ];
         });

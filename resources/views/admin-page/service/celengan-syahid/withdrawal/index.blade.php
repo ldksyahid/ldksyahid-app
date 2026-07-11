@@ -33,7 +33,6 @@
                         <small class="text-muted">Total across all campaigns</small>
                         @php
                             $dbExpected = \App\Models\Donation::where('gateway','bisatopup')->where('payment_status','PAID')->sum('jumlah_donasi')
-                                - \App\Models\Donation::where('gateway','bisatopup')->where('payment_status','PAID')->sum('biaya_admin')
                                 - \App\Models\Withdrawal::where('status','COMPLETED')->sum('amount');
                             $disc = $bisabillerBalance - $dbExpected;
                             $discThreshold = config('services.two_fa.discrepancy_threshold', 50000);

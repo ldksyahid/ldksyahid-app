@@ -67,9 +67,10 @@ return [
         'qris_payment_id'  => env('BISATOPUP_QRIS_PAYMENT_ID', 33),
         // Admin fee as a percentage of the donation amount (e.g. 1 = 1%, 0.5 = 0.5%).
         // Change BISATOPUP_ADMIN_FEE_PERCENT in .env to adjust without touching code.
-        'admin_fee_percent' => (float) env('BISATOPUP_ADMIN_FEE_PERCENT', 1),
-        // Enforce callback signature check (keep false in DEV until the exact
-        // signature formula is confirmed, then set true for production).
+        'admin_fee_percent'          => (float) env('BISATOPUP_ADMIN_FEE_PERCENT', 1),
+        // Bisabiller QRIS MDR charged per-transaction on total_tagihan (used in balance report).
+        'qris_mdr_percent'           => (float) env('BISATOPUP_QRIS_MDR_PERCENT', 1),
+        // Enforce callback signature check (keep false in DEV, set true for production).
         'enforce_callback_signature' => env('BISATOPUP_ENFORCE_CALLBACK_SIGNATURE', false),
     ],
 
