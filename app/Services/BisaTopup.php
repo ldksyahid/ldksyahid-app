@@ -270,13 +270,17 @@ class BisaTopup
 
             $json = $res->json();
 
-            // Try common response shapes from Bisabiller API
+            // { result: [...] } — shape returned by /api/transfer/bank-lists
+            if (isset($json['result']) && is_array($json['result'])) {
+                return $json['result'];
+            }
+
+            // { data: [...] } or { data: { bank_list: [...] } }
             if (isset($json['data']) && is_array($json['data'])) {
-                // { data: [...] }  or  { data: { bank_list: [...] } }
                 $data = $json['data'];
-                if (isset($data[0])) return $data;                          // flat array
-                if (isset($data['bank_list'])) return $data['bank_list'];   // nested
-                if (isset($data['data'])) return $data['data'];             // double-wrapped
+                if (isset($data[0])) return $data;
+                if (isset($data['bank_list'])) return $data['bank_list'];
+                if (isset($data['data'])) return $data['data'];
             }
 
             // Flat top-level array
