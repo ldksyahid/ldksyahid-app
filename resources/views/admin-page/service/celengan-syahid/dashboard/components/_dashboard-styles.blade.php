@@ -104,10 +104,17 @@
         color: #00a79d;
         border-bottom: 2px solid #e0f7f5;
         white-space: nowrap;
-        padding: .6rem .75rem;
+        padding: .7rem .75rem;
+        background: rgba(0,167,157,.04);
     }
-    .cs-campaign-table tbody td { padding: .65rem .75rem; vertical-align: middle; }
-    .cs-campaign-table tfoot td { border-top: 2px solid #e0f7f5; }
+    .cs-campaign-table tbody td { padding: .75rem .75rem; vertical-align: middle; }
+    .cs-campaign-table tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .15s; }
+    .cs-campaign-table tbody tr:hover { background: rgba(0,167,157,.04); }
+    .cs-campaign-table tbody tr:last-child { border-bottom: none; }
+    .cs-campaign-table tfoot td { border-top: 2px solid #e0f7f5; padding-top: .85rem; }
+    .cs-row-expired { opacity: .75; }
+
+    /* Campaign name + status dot */
     .cs-campaign-name {
         font-weight: 600;
         max-width: 220px;
@@ -115,52 +122,84 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+    .cs-status-dot {
+        flex-shrink: 0;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+    .cs-dot-active  { background: #22c55e; box-shadow: 0 0 0 2px rgba(34,197,94,.2); }
+    .cs-dot-expired { background: #dc3545; box-shadow: 0 0 0 2px rgba(220,53,69,.2); }
+
+    /* Category badges — color per type */
     .cs-category-badge {
         display: inline-block;
-        font-size: .72rem;
-        font-weight: 600;
-        padding: .2em .65em;
+        font-size: .7rem;
+        font-weight: 700;
+        padding: .2em .7em;
         border-radius: 50px;
-        background: #e0f7f5;
-        color: #008b84;
         white-space: nowrap;
+        letter-spacing: .01em;
     }
-    .cs-amount-collected { font-weight: 700; color: #00a79d; }
-    .cs-amount-available { font-weight: 700; color: #198754; }
-    .cs-progress-wrap { display: flex; align-items: center; gap: .5rem; }
+    .cs-cat-edu     { background: #eff6ff; color: #2563eb; }
+    .cs-cat-hum     { background: #fff7ed; color: #c2410c; }
+    .cs-cat-env     { background: #f0fdf4; color: #16a34a; }
+    .cs-cat-hlt     { background: #fff1f2; color: #e11d48; }
+    .cs-cat-default { background: #e0f7f5; color: #008b84; }
+
+    /* Collected / available */
+    .cs-amount-collected { font-weight: 700; color: #00a79d; font-size: .9rem; }
+    .cs-avail-badge {
+        display: inline-block;
+        background: rgba(25,135,84,.1);
+        color: #198754;
+        font-weight: 700;
+        font-size: .82rem;
+        padding: .2em .6em;
+        border-radius: 6px;
+        border: 1px solid rgba(25,135,84,.2);
+    }
+
+    /* Progress bar */
+    .cs-progress-wrap { display: flex; align-items: center; }
     .cs-progress-bar-bg {
         flex: 1;
-        height: 8px;
-        border-radius: 4px;
+        height: 10px;
+        border-radius: 5px;
         background: #e9ecef;
         overflow: hidden;
     }
     .cs-progress-bar-fill {
         height: 100%;
-        border-radius: 4px;
-        transition: width .4s ease;
+        border-radius: 5px;
+        transition: width .5s ease;
     }
     .cs-bar-full  { background: linear-gradient(90deg, #00a79d, #198754); }
     .cs-bar-good  { background: linear-gradient(90deg, #00c9bd, #00a79d); }
     .cs-bar-mid   { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
     .cs-bar-low   { background: linear-gradient(90deg, #f87171, #ef4444); }
-    .cs-pct-label { font-size: .75rem; font-weight: 700; color: #6c757d; white-space: nowrap; min-width: 38px; }
-    .cs-expired-tag {
+    .cs-pct-label { font-size: .78rem; font-weight: 700; color: #6c757d; }
+
+    /* Tags */
+    .cs-expired-tag, .cs-tag-goal, .cs-tag-soon {
         display: inline-block;
         font-size: .65rem;
         font-weight: 700;
-        padding: .1em .4em;
+        padding: .15em .5em;
         border-radius: 4px;
-        background: #dc3545;
-        color: #fff;
         vertical-align: middle;
-        margin-left: .2rem;
     }
+    .cs-expired-tag { background: #dc3545; color: #fff; }
+    .cs-tag-goal    { background: #198754; color: #fff; margin-left: .3rem; }
+    .cs-tag-soon    { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+
+    /* Buttons */
     .cs-btn-finance {
         color: #fff;
         background-color: #00a79d;
         border-color: #00a79d;
-        padding: .2rem .5rem;
+        padding: .25rem .55rem;
+        border-radius: 6px;
     }
     .cs-btn-finance:hover { background-color: #008b84; border-color: #008b84; color: #fff; }
     .cs-btn-all {
@@ -196,15 +235,25 @@
         border-top-color: #00a79d;
     }
 
-    html.dark-mode .cs-campaign-table thead th { color: #2dd4bf; border-bottom-color: rgba(45,212,191,.15); }
-    html.dark-mode .cs-campaign-table tbody tr:hover td { background-color: rgba(255,255,255,.04); }
+    html.dark-mode .cs-campaign-table thead th { color: #2dd4bf; border-bottom-color: rgba(45,212,191,.15); background: rgba(45,212,191,.04); }
+    html.dark-mode .cs-campaign-table tbody tr { border-bottom-color: rgba(255,255,255,.06); }
+    html.dark-mode .cs-campaign-table tbody tr:hover { background: rgba(45,212,191,.06) !important; }
     html.dark-mode .cs-campaign-table tfoot td { border-top-color: rgba(45,212,191,.15); }
     html.dark-mode .cs-campaign-name { color: #e5e7eb; }
-    html.dark-mode .cs-category-badge { background: rgba(0,167,157,.15); color: #2dd4bf; }
     html.dark-mode .cs-amount-collected { color: #2dd4bf; }
-    html.dark-mode .cs-amount-available { color: #4ade80; }
     html.dark-mode .cs-pct-label { color: #9ca3af; }
     html.dark-mode .cs-progress-bar-bg { background: rgba(255,255,255,.1); }
+
+    html.dark-mode .cs-avail-badge { background: rgba(74,222,128,.1); color: #4ade80; border-color: rgba(74,222,128,.2); }
+
+    html.dark-mode .cs-cat-edu     { background: rgba(37,99,235,.15); color: #93c5fd; }
+    html.dark-mode .cs-cat-hum     { background: rgba(194,65,12,.15); color: #fdba74; }
+    html.dark-mode .cs-cat-env     { background: rgba(22,163,74,.15); color: #86efac; }
+    html.dark-mode .cs-cat-hlt     { background: rgba(225,29,72,.15); color: #fda4af; }
+    html.dark-mode .cs-cat-default { background: rgba(0,167,157,.15); color: #2dd4bf; }
+
+    html.dark-mode .cs-tag-soon    { background: rgba(234,179,8,.1); color: #fde68a; border-color: rgba(234,179,8,.2); }
+
     html.dark-mode .cs-btn-finance { background-color: #00a79d; border-color: #00a79d; }
     html.dark-mode .cs-btn-finance:hover { background-color: #008b84; border-color: #008b84; }
     html.dark-mode .cs-btn-all { color: #2dd4bf; border-color: #2dd4bf; }
@@ -216,15 +265,25 @@
         .cs-section-title { font-size: 1rem; }
         .cs-chart-container { min-height: 300px; }
         .cs-info-icon { width: 40px; height: 40px; font-size: 1rem; }
-        .cs-info-card {
-            min-height: 0;
-        }
-        .cs-info-card .fw-semibold {
-            font-size: 0.75rem;
-            word-break: break-word;
-        }
-        .cs-info-card .fw-bold {
-            font-size: 0.7rem;
-        }
+        .cs-info-card { min-height: 0; }
+        .cs-info-card .fw-semibold { font-size: 0.75rem; word-break: break-word; }
+        .cs-info-card .fw-bold { font-size: 0.7rem; }
+    }
+
+    /* ── Mobile: Campaign Table ──────────────────────────────────── */
+    @media (max-width: 767.98px) {
+        /* Table scrolls horizontally — hide less critical columns */
+        .cs-campaign-table { font-size: .8rem; min-width: 520px; }
+        .cs-campaign-table thead th,
+        .cs-campaign-table tbody td { padding: .55rem .5rem; }
+
+        /* Hide "of Rp target" sub-text and deadline countdown on small screens */
+        .cs-campaign-table .text-muted[style*="font-size:.72rem"],
+        .cs-campaign-table .text-muted[style*="font-size:.7rem"] { display: none; }
+
+        .cs-campaign-name { max-width: 130px; font-size: .8rem; }
+        .cs-progress-bar-bg { height: 8px; }
+        .cs-avail-badge { font-size: .75rem; padding: .15em .45em; }
+        .cs-category-badge { font-size: .65rem; padding: .15em .5em; }
     }
 </style>
