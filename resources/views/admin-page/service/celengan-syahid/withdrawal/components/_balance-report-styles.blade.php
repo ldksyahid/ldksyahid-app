@@ -116,7 +116,7 @@ html.dark-mode .br-page-title { color: #2dd4bf; }
 html.dark-mode .br-page-title::after { background: linear-gradient(90deg, #2dd4bf, #0d9488); }
 html.dark-mode .br-stat-card,
 html.dark-mode .br-explain-card,
-html.dark-mode .wi-table-card { background: #1f2937; box-shadow: 0 2px 10px rgba(0,0,0,.35); }
+html.dark-mode .wi-table-card { background: #2b2f33 !important; box-shadow: 0 2px 10px rgba(0,0,0,.3) !important; }
 html.dark-mode .br-stat-label { color: #6b7280; }
 html.dark-mode .br-stat-value { color: #f9fafb; }
 html.dark-mode .br-stat-sub   { color: #6b7280; }
