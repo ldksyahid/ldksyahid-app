@@ -3,6 +3,11 @@
 @section('styles')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
 @include('admin-page.service.celengan-syahid.withdrawal.components._withdrawal-styles')
+<style>
+    #amount::-webkit-inner-spin-button,
+    #amount::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    #amount { -moz-appearance: textfield; }
+</style>
 @endsection
 
 @section('content')
