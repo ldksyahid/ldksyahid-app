@@ -153,9 +153,9 @@ html.dark-mode .wd-hero-draft     { background: linear-gradient(135deg, #374151,
     };
     $statusIcon = match($withdrawal->status) {
         'PENDING'   => 'fa-clock',
-        'COMPLETED' => 'fa-circle-check',
-        'FAILED'    => 'fa-circle-xmark',
-        default     => 'fa-file-pen',
+        'COMPLETED' => 'fa-check-circle',
+        'FAILED'    => 'fa-times-circle',
+        default     => 'fa-file-alt',
     };
     $isPending = $withdrawal->status === 'PENDING';
 @endphp
@@ -290,7 +290,7 @@ html.dark-mode .wd-hero-draft     { background: linear-gradient(135deg, #374151,
                     <ul class="wd-timeline">
                         {{-- Step 1: Draft Created --}}
                         <li class="wd-tl-item">
-                            <div class="wd-tl-dot done"><i class="fas fa-file-pen"></i></div>
+                            <div class="wd-tl-dot done"><i class="fas fa-file-alt"></i></div>
                             <div class="wd-tl-body">
                                 <div class="wd-tl-title">Draft Created</div>
                                 <div class="wd-tl-time">
@@ -319,7 +319,7 @@ html.dark-mode .wd-hero-draft     { background: linear-gradient(135deg, #374151,
                             $isFailed  = $withdrawal->status === 'FAILED';
                             $isDone    = $withdrawal->status === 'COMPLETED';
                             $dotClass  = $isDone ? 'done' : ($isFailed ? 'failed' : ($isPending ? 'active' : 'pending'));
-                            $stepIcon  = $isDone ? 'fa-circle-check' : ($isFailed ? 'fa-circle-xmark' : 'fa-circle-notch');
+                            $stepIcon  = $isDone ? 'fa-check-circle' : ($isFailed ? 'fa-times-circle' : 'fa-circle-notch');
                             $stepTitle = $isDone ? 'Transfer Completed' : ($isFailed ? 'Transfer Failed' : 'Awaiting Confirmation');
                         @endphp
                         <li class="wd-tl-item">
@@ -378,12 +378,12 @@ html.dark-mode .wd-hero-draft     { background: linear-gradient(135deg, #374151,
 
     const heroMap = {
         PENDING:   { hero: 'wd-hero-pending',   icon: 'fa-clock',        text: 'PENDING'   },
-        COMPLETED: { hero: 'wd-hero-completed',  icon: 'fa-circle-check', text: 'COMPLETED' },
-        FAILED:    { hero: 'wd-hero-failed',     icon: 'fa-circle-xmark', text: 'FAILED'    },
+        COMPLETED: { hero: 'wd-hero-completed',  icon: 'fa-check-circle',  text: 'COMPLETED' },
+        FAILED:    { hero: 'wd-hero-failed',     icon: 'fa-times-circle',  text: 'FAILED'    },
     };
     const tlFinalMap = {
-        COMPLETED: { dot: 'done',   icon: 'fa-circle-check', title: 'Transfer Completed' },
-        FAILED:    { dot: 'failed', icon: 'fa-circle-xmark', title: 'Transfer Failed'    },
+        COMPLETED: { dot: 'done',   icon: 'fa-check-circle',  title: 'Transfer Completed' },
+        FAILED:    { dot: 'failed', icon: 'fa-times-circle',  title: 'Transfer Failed'    },
     };
 
     function applyStatus(data) {
