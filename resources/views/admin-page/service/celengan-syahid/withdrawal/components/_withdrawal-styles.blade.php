@@ -316,6 +316,29 @@ html.dark-mode .select2-container--default .select2-results__option[aria-selecte
     color: #2dd4bf !important;
 }
 
+/* ── Alert dark mode refinements ────────────────────────── */
+
+/* X button: Bootstrap uses a black SVG by default — invert to white in dark mode */
+html.dark-mode .alert .btn-close {
+    filter: invert(1) brightness(1.8);
+    opacity: .7;
+}
+html.dark-mode .alert .btn-close:hover { opacity: 1; }
+
+/* Inquiry success card inner text */
+html.dark-mode .alert-success .text-muted,
+html.dark-mode .alert-success small.text-muted { color: #6ee7b7 !important; }
+html.dark-mode .alert-success .fw-semibold { color: #d1fae5; }
+
+/* Inquiry error card inner text */
+html.dark-mode .alert-danger .text-muted,
+html.dark-mode .alert-danger small.text-muted  { color: #fca5a5 !important; }
+html.dark-mode .alert-danger .fw-semibold  { color: #fee2e2; }
+html.dark-mode .alert-danger .text-danger  { color: #f87171 !important; }
+
+/* Warning alert inner text */
+html.dark-mode .alert-warning .fw-semibold { color: #fef08a; }
+
 @media (max-width: 768px) {
     .page-title { font-size: 1.35rem; }
     .d-flex.justify-content-end.gap-2 { flex-direction: column; }
