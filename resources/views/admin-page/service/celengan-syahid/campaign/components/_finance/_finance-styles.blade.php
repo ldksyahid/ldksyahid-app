@@ -120,6 +120,55 @@ html.dark-mode .btn-balance-report:hover { background: linear-gradient(135deg, #
 .finance-box-offline-title { color: #6c757d; }
 .balance-divider-muted { border-top-color: #dee2e6; }
 
+/* ── Withdrawal History Table ───────────────────────── */
+.wd-table { font-size: .875rem; }
+.wd-table thead th {
+    font-weight: 600;
+    color: #00a79d;
+    border-bottom: 2px solid #e0f7f5;
+    white-space: nowrap;
+    padding: .7rem .75rem;
+    background: rgba(0,167,157,.04);
+    border-top: none;
+}
+.wd-table tbody td { padding: .75rem .75rem; vertical-align: middle; }
+.wd-table tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .15s; }
+.wd-table tbody tr:hover { background: rgba(0,167,157,.04); }
+.wd-table tbody tr:last-child { border-bottom: none; }
+.wd-table tbody tr.wd-row-failed { opacity: .8; }
+.wd-amount {
+    font-weight: 700;
+    color: #00a79d;
+    font-size: .9rem;
+}
+.wd-bank-chip {
+    display: inline-block;
+    background: #e0f7f5;
+    color: #008b84;
+    font-size: .7rem;
+    font-weight: 700;
+    padding: .2em .65em;
+    border-radius: 50px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+.wd-account { font-size: .82rem; color: #495057; }
+.wd-status-COMPLETED { background: rgba(25,135,84,.12) !important; color: #146c43 !important; border: 1px solid rgba(25,135,84,.25) !important; }
+.wd-status-PENDING   { background: rgba(255,193,7,.15) !important; color: #856404 !important; border: 1px solid rgba(255,193,7,.3) !important; }
+.wd-status-FAILED    { background: rgba(220,53,69,.12) !important; color: #b02a37 !important; border: 1px solid rgba(220,53,69,.25) !important; }
+.wd-status-default   { background: rgba(108,117,125,.12) !important; color: #495057 !important; border: 1px solid rgba(108,117,125,.2) !important; }
+.wd-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .3em;
+    font-size: .75rem;
+    font-weight: 700;
+    padding: .3em .7em;
+    border-radius: 50px;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+}
+
 /* ── Dark mode ──────────────────────────────────────── */
 html.dark-mode .page-title { color: #2dd4bf; }
 html.dark-mode .page-title .highlighted-text { color: #14b8a6; }
@@ -169,6 +218,16 @@ html.dark-mode .table-hover tbody tr:hover { background-color: rgba(255,255,255,
 html.dark-mode .badge.bg-secondary { background-color: #4b5563 !important; }
 html.dark-mode small.text-muted, html.dark-mode .text-muted { color: #9ca3af !important; }
 html.dark-mode .withdrawal-badge { opacity: .9; }
+html.dark-mode .wd-table thead th { background: rgba(45,212,191,.06); color: #2dd4bf; border-bottom-color: rgba(45,212,191,.2); }
+html.dark-mode .wd-table tbody tr { border-bottom-color: rgba(255,255,255,.06); }
+html.dark-mode .wd-table tbody tr:hover { background: rgba(45,212,191,.06); }
+html.dark-mode .wd-amount { color: #2dd4bf; }
+html.dark-mode .wd-bank-chip { background: rgba(45,212,191,.15); color: #2dd4bf; }
+html.dark-mode .wd-account { color: #9ca3af; }
+html.dark-mode .wd-status-COMPLETED { background: rgba(34,197,94,.15) !important; color: #4ade80 !important; border-color: rgba(34,197,94,.3) !important; }
+html.dark-mode .wd-status-PENDING   { background: rgba(251,191,36,.15) !important; color: #fbbf24 !important; border-color: rgba(251,191,36,.3) !important; }
+html.dark-mode .wd-status-FAILED    { background: rgba(239,68,68,.15) !important; color: #f87171 !important; border-color: rgba(239,68,68,.3) !important; }
+html.dark-mode .wd-status-default   { background: rgba(156,163,175,.1) !important; color: #9ca3af !important; border-color: rgba(156,163,175,.2) !important; }
 
 @media (max-width: 768px) {
     .page-title { font-size: 1.35rem; }
