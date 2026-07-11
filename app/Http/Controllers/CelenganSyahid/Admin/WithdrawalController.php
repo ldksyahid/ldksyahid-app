@@ -316,9 +316,10 @@ class WithdrawalController extends Controller
 
     public function balanceReport()
     {
-        // Bisabiller charges 1% MDR (QRIS) per transaction, rounded per-transaction.
-        // wallet_credit = SUM(total_tagihan - ROUND(total_tagihan * 0.01))
-        // We calculate rounding per-row in SQL so it matches Bisabiller's per-transaction MDR.
+        // Bisabiller charges 1% MDR (QRIS) per transaction, rounded UP per-transaction.
+        // Use CEIL (not ROUND) to avoid MySQL floating-point issues at exactly .5 boundaries
+        // (e.g. 25250 * 0.01 = 252.4999... in float → ROUND gives 252, CEIL gives 253).
+        // CEIL also matches Bisabiller's actual behaviour (252.5 → 253 from live data).
         $mdrRate = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
 
         $perCampaign = Donation::where('gateway', 'bisatopup')
@@ -327,7 +328,7 @@ class WithdrawalController extends Controller
                 'campaign_id,
                  SUM(jumlah_donasi) as total_qris,
                  COUNT(*) as txn_count,
-                 SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - ROUND(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?, 0)) as wallet_credit',
+                 SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wallet_credit',
                 [$mdrRate]
             )
             ->groupBy('campaign_id')

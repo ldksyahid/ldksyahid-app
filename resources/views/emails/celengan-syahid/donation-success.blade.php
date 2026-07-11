@@ -99,7 +99,7 @@
                             @if(!empty($donation->biaya_admin) && (int) $donation->biaya_admin > 0)
                             <tr style="background:#f7fafc;">
                                 <td style="padding:11px 14px;color:#718096;font-size:13px;border-bottom:1px solid #e2e8f0;">
-                                    Biaya Layanan QRIS
+                                    Biaya Layanan QRIS ({{ config('services.bisatopup.qris_mdr_percent', 1) }}%)
                                 </td>
                                 <td style="padding:11px 14px;color:#1a202c;font-weight:500;border-bottom:1px solid #e2e8f0;">
                                     {{ \App\Http\Controllers\LibraryFunctionController::formatRupiah($donation->biaya_admin) }}
