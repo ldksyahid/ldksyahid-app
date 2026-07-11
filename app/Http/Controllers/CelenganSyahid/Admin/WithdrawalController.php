@@ -115,14 +115,20 @@ class WithdrawalController extends Controller
 
         if (!$result || !empty($result['error'])) {
             return response()->json([
-                'error'   => true,
-                'message' => 'Account not found or verification failed.',
+                'error'          => true,
+                'message'        => data_get($result, 'message', 'Account not found or verification failed.'),
+                'status'         => data_get($result, 'data.status'),
+                'bank_name'      => data_get($result, 'data.name'),
+                'account_number' => data_get($result, 'data.account_number'),
             ], 422);
         }
 
         return response()->json([
             'error'          => false,
             'account_holder' => data_get($result, 'data.account_holder'),
+            'account_number' => data_get($result, 'data.account_number'),
+            'bank_name'      => data_get($result, 'data.name'),
+            'status'         => data_get($result, 'data.status'),
             'fee'            => (int) data_get($result, 'data.fee', 0),
         ]);
     }

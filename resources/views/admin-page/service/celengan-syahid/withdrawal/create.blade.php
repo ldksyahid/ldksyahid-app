@@ -155,11 +155,11 @@
                                 <label class="form-label fw-bold">Withdrawal Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">Rp</span>
-                                    <input type="number" name="amount" id="amount"
+                                    <input type="text" inputmode="numeric" name="amount" id="amount"
                                            class="form-control @error('amount') is-invalid @enderror"
-                                           value="{{ old('amount') }}"
-                                           min="10000" max="{{ $balance['available'] }}"
-                                           placeholder="Min. 10,000" required>
+                                           value="{{ old('amount') ? number_format((int) old('amount'), 0, ',', '.') : '' }}"
+                                           data-max="{{ $balance['available'] }}"
+                                           placeholder="Min. 10.000" required autocomplete="off">
                                     @error('amount')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
                                 <small class="text-muted">Maximum: Rp {{ number_format($balance['available'], 0, ',', '.') }}</small>
@@ -242,10 +242,29 @@ $(function () {
     var feeHidden    = document.getElementById('fee');
     var feeDisplay   = document.getElementById('fee-display');
     var inquiryMsg   = document.getElementById('inquiry-msg');
+    var amountEl     = document.getElementById('amount');
     var btnSubmit    = document.getElementById('btn-submit');
+
+    /* ── Amount: format with dots, strip before submit ─────── */
+    function formatRibu(val) {
+        var digits = val.replace(/[^\d]/g, '');
+        return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    if (amountEl) {
+        amountEl.addEventListener('input', function () {
+            var raw    = this.value.replace(/[^\d]/g, '');
+            var cursor = this.selectionStart;
+            var oldLen = this.value.length;
+            this.value = raw ? formatRibu(raw) : '';
+            var newLen = this.value.length;
+            this.setSelectionRange(cursor + (newLen - oldLen), cursor + (newLen - oldLen));
+        });
+    }
 
     if (!btnVerify) return;
 
+    /* ── Inquiry / Verify ───────────────────────────────────── */
     btnVerify.addEventListener('click', function () {
         var bankCode  = bankCodeEl ? bankCodeEl.value : '';
         var accountNo = accountNoEl ? accountNoEl.value.trim() : '';
@@ -261,26 +280,75 @@ $(function () {
 
         fetch('{{ route("admin.celsyahid.withdrawal.inquiry") }}', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
             body: JSON.stringify({ bank_code: bankCode, account_number: accountNo })
         })
         .then(function (r) { return r.json(); })
         .then(function (data) {
             if (data.error) {
-                inquiryMsg.innerHTML = '<div class="alert alert-danger py-2">Account not found or verification failed. Please check the bank and account number.</div>';
-                holderInput.value = '';
+                holderInput.value  = '';
                 holderHidden.value = '';
-                feeHidden.value = '0';
+                feeHidden.value    = '0';
                 feeDisplay.innerHTML = '<span class="text-muted">—</span>';
+
+                var errBankName   = data.bank_name || (bankCodeEl.options[bankCodeEl.selectedIndex] ? bankCodeEl.options[bankCodeEl.selectedIndex].text : bankCode);
+                var errAccountNum = data.account_number || accountNo;
+                var errStatus     = data.status ? data.status.replace(/_/g, ' ') : 'FAILED';
+                var errMessage    = data.message || 'Account not found or verification failed.';
+
+                inquiryMsg.innerHTML =
+                    '<div class="alert alert-danger py-0 pt-2 pb-3">' +
+                        '<div class="mb-2"><i class="fas fa-times-circle me-1"></i><strong>Verification Failed</strong></div>' +
+                        '<div class="row g-2" style="font-size:.85rem">' +
+                            '<div class="col-sm-4">' +
+                                '<div class="text-muted small">Bank</div>' +
+                                '<div class="fw-semibold">' + errBankName + '</div>' +
+                            '</div>' +
+                            '<div class="col-sm-4">' +
+                                '<div class="text-muted small">Account Number</div>' +
+                                '<div class="fw-semibold">' + errAccountNum + '</div>' +
+                            '</div>' +
+                            '<div class="col-sm-4">' +
+                                '<div class="text-muted small">Status</div>' +
+                                '<div class="fw-semibold text-danger">' + errStatus + '</div>' +
+                            '</div>' +
+                            '<div class="col-12 mt-1">' +
+                                '<div class="text-muted small">Reason</div>' +
+                                '<div class="fw-semibold">' + errMessage + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
             } else {
                 holderInput.value  = data.account_holder;
                 holderHidden.value = data.account_holder;
                 feeHidden.value    = data.fee;
                 feeDisplay.innerHTML = '<span class="fw-semibold">Rp ' + parseInt(data.fee).toLocaleString('id-ID') + '</span>';
-                inquiryMsg.innerHTML = '<div class="alert alert-success py-2"><i class="fas fa-check-circle me-1"></i>Account verified: <strong>' + data.account_holder + '</strong></div>';
+
+                var bankName   = data.bank_name || (bankCodeEl.options[bankCodeEl.selectedIndex] ? bankCodeEl.options[bankCodeEl.selectedIndex].text : bankCode);
+                var accountNum = data.account_number || accountNo;
+
+                inquiryMsg.innerHTML =
+                    '<div class="alert alert-success py-0 pt-2 pb-3">' +
+                        '<div class="mb-2"><i class="fas fa-check-circle me-1"></i><strong>Account Verified Successfully</strong></div>' +
+                        '<div class="row g-2" style="font-size:.85rem">' +
+                            '<div class="col-sm-4">' +
+                                '<div class="text-muted small">Bank</div>' +
+                                '<div class="fw-semibold">' + bankName + '</div>' +
+                            '</div>' +
+                            '<div class="col-sm-4">' +
+                                '<div class="text-muted small">Account Number</div>' +
+                                '<div class="fw-semibold">' + accountNum + '</div>' +
+                            '</div>' +
+                            '<div class="col-sm-4">' +
+                                '<div class="text-muted small">Account Holder</div>' +
+                                '<div class="fw-semibold">' + data.account_holder + '</div>' +
+                            '</div>' +
+                            '<div class="col-sm-4 mt-1">' +
+                                '<div class="text-muted small">Transfer Fee</div>' +
+                                '<div class="fw-semibold">Rp ' + parseInt(data.fee).toLocaleString('id-ID') + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
             }
         })
         .catch(function () {
@@ -292,16 +360,18 @@ $(function () {
         });
     });
 
-    // Prevent submit if account not verified
-    if (btnSubmit) {
-        document.getElementById('withdrawal-form').addEventListener('submit', function (e) {
-            if (!holderHidden.value) {
-                e.preventDefault();
-                inquiryMsg.innerHTML = '<div class="alert alert-warning py-2">Please verify the destination account before continuing.</div>';
-                accountNoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        });
-    }
+    /* ── Submit: strip dots from amount before POST ─────────── */
+    document.getElementById('withdrawal-form').addEventListener('submit', function (e) {
+        if (!holderHidden.value) {
+            e.preventDefault();
+            inquiryMsg.innerHTML = '<div class="alert alert-warning py-2">Please verify the destination account before continuing.</div>';
+            accountNoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+        if (amountEl) {
+            amountEl.value = amountEl.value.replace(/\./g, '');
+        }
+    });
 })();
 </script>
 @endsection
