@@ -517,6 +517,7 @@ Route::post('/admin/celengan-syahid/withdrawal', [CelsyahidWithdrawalController:
 Route::get('/admin/celengan-syahid/withdrawal/{id}', [CelsyahidWithdrawalController::class, 'show'])->name('admin.celsyahid.withdrawal.show')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::get('/admin/celengan-syahid/withdrawal/{id}/confirm', [CelsyahidWithdrawalController::class, 'confirm'])->name('admin.celsyahid.withdrawal.confirm')->middleware(['role:Superadmin']);
 Route::post('/admin/celengan-syahid/withdrawal/{id}/execute', [CelsyahidWithdrawalController::class, 'execute'])->name('admin.celsyahid.withdrawal.execute')->middleware(['role:Superadmin']);
+Route::get('/admin/celengan-syahid/withdrawal/{id}/check-status', [CelsyahidWithdrawalController::class, 'checkStatus'])->name('admin.celsyahid.withdrawal.checkStatus')->middleware(['role:Superadmin|HelperCelsyahid']);
 
 // Admin routes — Celengan Syahid audit log (Superadmin only)
 Route::get('/admin/celengan-syahid/audit-logs', [CelsyahidAuditLogController::class, 'indexAuditLog'])->name('admin.service.index.auditlog')->middleware(['role:Superadmin']);

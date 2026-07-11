@@ -65,6 +65,18 @@
     color: #fff;
     box-shadow: 0 0 0 .2rem rgba(0,167,157,.25);
 }
+.wd-bank-chip {
+    display: inline-block;
+    background: #e0f7f5;
+    color: #008b84;
+    font-size: .7rem;
+    font-weight: 700;
+    padding: .2em .65em;
+    border-radius: 50px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+html.dark-mode .wd-bank-chip { background: rgba(45,212,191,.15); color: #2dd4bf; }
 .balance-highlight {
     font-size: 1.4rem;
     font-weight: 700;

@@ -139,7 +139,7 @@
                                         <th class="text-center" style="width:60px">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="cs-campaign-tbody">
                                     @foreach($campaigns as $i => $c)
                                     @php
                                         $pct       = $c['pct'];
@@ -248,6 +248,12 @@
                                     </tr>
                                 </tfoot>
                             </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2" id="cs-pagination-bar" style="display:none!important">
+                            <div class="small text-muted" id="cs-page-info"></div>
+                            <nav aria-label="Campaign pagination">
+                                <ul class="pagination pagination-sm mb-0 cs-pagination" id="cs-pagination"></ul>
+                            </nav>
                         </div>
                         @endif
                     </div>
