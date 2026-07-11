@@ -317,7 +317,8 @@ class WithdrawalController extends Controller
                 'total_qris'      => (int) $row->total_qris,
                 'total_fee'       => (int) $row->total_fee,
                 'total_withdrawn' => (int) $withdrawn,
-                'net'             => (int) $row->total_qris - (int) $row->total_fee - (int) $withdrawn,
+                // net = jumlah_donasi + biaya_admin (total wallet received) - withdrawn
+                'net'             => (int) $row->total_qris + (int) $row->total_fee - (int) $withdrawn,
                 'txn_count'       => (int) $row->txn_count,
             ];
         });

@@ -4,21 +4,32 @@
     use App\Http\Controllers\LibraryFunctionController as LFC;
     use Carbon\Carbon;
 
-    $isPaid    = $data->payment_status === 'PAID';
-    $isPending = $data->payment_status === 'PENDING';
-    $isExpired = $data->payment_status === 'EXPIRED';
-    $isFailed  = !$isPaid && !$isPending && !$isExpired;
+    $isPaid      = $data->payment_status === 'PAID';
+    $isPending   = $data->payment_status === 'PENDING';
+    $isExpired   = $data->payment_status === 'EXPIRED';
+    $isCancelled = $data->payment_status === 'CANCELLED';
+    $isFailed    = !$isPaid && !$isPending && !$isExpired && !$isCancelled;
 
     $statusClass = $isPaid ? 'paid' : ($isPending ? 'pending' : 'failed');
-    $statusIcon  = $isPaid ? 'fas fa-check-circle' : ($isPending ? 'fas fa-clock' : ($isExpired ? 'fas fa-hourglass-end' : 'fas fa-times-circle'));
-    $statusTitle = $isPaid ? 'Pembayaran Berhasil' : ($isPending ? 'Menunggu Pembayaran' : ($isExpired ? 'QRIS Kadaluarsa' : 'Pembayaran Gagal'));
+    $statusIcon  = $isPaid      ? 'fas fa-check-circle'
+                 : ($isPending  ? 'fas fa-clock'
+                 : ($isExpired  ? 'fas fa-hourglass-end'
+                 : ($isCancelled? 'fas fa-ban'
+                 : 'fas fa-times-circle')));
+    $statusTitle = $isPaid      ? 'Pembayaran Berhasil'
+                 : ($isPending  ? 'Menunggu Pembayaran'
+                 : ($isExpired  ? 'QRIS Kadaluarsa'
+                 : ($isCancelled? 'Pembayaran Dibatalkan'
+                 : 'Pembayaran Gagal')));
     $statusSub   = $isPaid
                     ? 'Jazakallah khayran, donasi kamu sudah kami terima!'
                     : ($isPending
                         ? 'Silakan selesaikan proses pembayaranmu'
                         : ($isExpired
                             ? 'Waktu pembayaran telah habis. Silakan donasi kembali.'
-                            : 'Terjadi masalah, silakan coba lagi'));
+                            : ($isCancelled
+                                ? 'Pembayaran dibatalkan. Silakan donasi kembali jika berkenan.'
+                                : 'Terjadi masalah, silakan coba lagi')));
 
     $paymentTime = Carbon::parse($data->created_at)
                         ->locale('id')
