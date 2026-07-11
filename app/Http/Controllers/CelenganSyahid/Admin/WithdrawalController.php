@@ -155,7 +155,19 @@ class WithdrawalController extends Controller
 
         if ((int) $validated['amount'] > $balance['available']) {
             return back()
-                ->withErrors(['amount' => 'Amount exceeds available balance (Rp ' . number_format($balance['available'], 0, ',', '.') . ')'])
+                ->withErrors(['amount' => 'Amount exceeds available balance (Rp ' . number_format($balance['available'], 0, ',', '.') . ').'])
+                ->withInput();
+        }
+
+        $net = (int) $validated['amount'] - (int) $validated['fee'];
+        if ($net <= 0) {
+            return back()
+                ->withErrors(['amount' => 'Amount must be greater than the transfer fee (Rp ' . number_format($validated['fee'], 0, ',', '.') . ').'])
+                ->withInput();
+        }
+        if ($net < 10000) {
+            return back()
+                ->withErrors(['amount' => 'Recipient amount (Rp ' . number_format($net, 0, ',', '.') . ') is below the minimum transfer of Rp 10.000.'])
                 ->withInput();
         }
 
@@ -231,10 +243,14 @@ class WithdrawalController extends Controller
             CelsyahidAuditLog::record('2fa.verify_success', 'withdrawal', $withdrawal->id, '2FA verified for withdrawal execute from IP: ' . $request->ip());
         }
 
+        // Bisabiller API: `amount` = what the recipient receives.
+        // Fee is charged additionally from the wallet (total_amount = amount + fee).
+        // We send amount_net (gross - fee) so the wallet deduction equals the
+        // `amount` the admin entered (gross), keeping campaign balance accounting correct.
         $payload = [
             'bank_code'      => $withdrawal->bank_code,
             'account_number' => $withdrawal->account_number,
-            'amount'         => $withdrawal->amount,
+            'amount'         => $withdrawal->amount_net,
             'remark'         => $withdrawal->remark ?: ('Fund withdrawal - ' . $withdrawal->campaign->judul),
             'reff_id'        => $withdrawal->reff_id,
         ];
@@ -258,9 +274,13 @@ class WithdrawalController extends Controller
             return redirect()->route('admin.celsyahid.withdrawal.index');
         }
 
+        // Use actual fee from disburse response — may differ from inquiry fee.
+        $actualFee = (int) data_get($response, 'data.fee', $withdrawal->fee);
+
         $withdrawal->update([
             'status'                => 'PENDING',
             'bisabiller_status_id'  => data_get($response, 'data.id_status'),
+            'fee'                   => $actualFee,
             'disbursement_response' => $response,
             'executed_at'           => now(),
         ]);

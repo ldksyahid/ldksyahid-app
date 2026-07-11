@@ -339,6 +339,22 @@ html.dark-mode .alert-danger .text-danger  { color: #f87171 !important; }
 /* Warning alert inner text */
 html.dark-mode .alert-warning .fw-semibold { color: #fef08a; }
 
+/* ── Net breakdown box ──────────────────────────────── */
+.net-breakdown-box {
+    background: rgba(0,167,157,.06);
+    border: 1px solid rgba(0,167,157,.2);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    font-size: .875rem;
+}
+.net-breakdown-box hr { border-color: rgba(0,167,157,.2); }
+html.dark-mode .net-breakdown-box {
+    background: rgba(0,167,157,.08);
+    border-color: rgba(0,167,157,.25);
+    color: #d1d5db;
+}
+html.dark-mode .net-breakdown-box hr { border-color: rgba(0,167,157,.2); }
+
 @media (max-width: 768px) {
     .page-title { font-size: 1.35rem; }
     .d-flex.justify-content-end.gap-2 { flex-direction: column; }

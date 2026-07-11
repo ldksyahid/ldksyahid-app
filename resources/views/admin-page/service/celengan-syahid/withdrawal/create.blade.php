@@ -162,13 +162,37 @@
                                            placeholder="Min. 10.000" required autocomplete="off">
                                     @error('amount')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
-                                <small class="text-muted">Maximum: Rp {{ number_format($balance['available'], 0, ',', '.') }}</small>
+                                <small class="text-muted">
+                                    Maximum: Rp {{ number_format($balance['available'], 0, ',', '.') }} &mdash;
+                                    transfer fee will be deducted from this amount.
+                                </small>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Transfer Fee</label>
                                 <div class="form-control-plaintext" id="fee-display">
                                     <span class="text-muted">— Verify account to see fee —</span>
                                 </div>
+                            </div>
+                            {{-- Net breakdown (shown after inquiry + amount entered) --}}
+                            <div id="net-breakdown" class="col-12 mb-2" style="display:none">
+                                <div class="net-breakdown-box">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="text-muted">Campaign Deduction</span>
+                                        <span class="fw-semibold" id="bd-gross">Rp 0</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="text-danger">Transfer Fee</span>
+                                        <span class="fw-semibold text-danger" id="bd-fee-line">− Rp 0</span>
+                                    </div>
+                                    <hr class="my-1">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="fw-bold">Recipient Receives</span>
+                                        <span class="fw-bold fs-6 text-brand" id="bd-net">Rp 0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="amount-warning" class="col-12 mb-2" style="display:none">
+                                <div class="alert alert-warning py-2 mb-0" id="amount-warning-msg"></div>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label class="form-label fw-bold">Remark <small class="text-muted fw-normal">(optional — appears on recipient's bank statement)</small></label>
@@ -243,12 +267,59 @@ $(function () {
     var feeDisplay   = document.getElementById('fee-display');
     var inquiryMsg   = document.getElementById('inquiry-msg');
     var amountEl     = document.getElementById('amount');
-    var btnSubmit    = document.getElementById('btn-submit');
+    var currentFee   = 0;
+    var available    = {{ $balance['available'] ?? 0 }};
 
-    /* ── Amount: format with dots, strip before submit ─────── */
+    /* ── Amount: format with dots ───────────────────────────── */
     function formatRibu(val) {
         var digits = val.replace(/[^\d]/g, '');
         return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    /* ── Net breakdown (shown when fee known + amount entered) ─ */
+    function updateBreakdown() {
+        var netBox    = document.getElementById('net-breakdown');
+        var warnBox   = document.getElementById('amount-warning');
+        var warnMsg   = document.getElementById('amount-warning-msg');
+        var bdGross   = document.getElementById('bd-gross');
+        var bdFeeLine = document.getElementById('bd-fee-line');
+        var bdNetEl   = document.getElementById('bd-net');
+        if (!netBox || !bdGross) return;
+
+        var raw   = amountEl ? amountEl.value.replace(/\./g, '') : '';
+        var gross = parseInt(raw) || 0;
+
+        if (!currentFee || !gross) {
+            netBox.style.display = 'none';
+            if (warnBox) warnBox.style.display = 'none';
+            return;
+        }
+
+        var net = gross - currentFee;
+        var fmt = function (n) { return 'Rp ' + Math.abs(n).toLocaleString('id-ID'); };
+
+        bdGross.textContent   = fmt(gross);
+        bdFeeLine.textContent = '− ' + fmt(currentFee);
+        bdNetEl.textContent   = net > 0 ? fmt(net) : 'Rp 0';
+        netBox.style.display  = 'block';
+
+        var warning = '';
+        if (gross > available) {
+            warning = '<i class="fas fa-exclamation-triangle me-1"></i>Amount exceeds available balance (Rp ' + available.toLocaleString('id-ID') + ').';
+        } else if (net <= 0) {
+            warning = '<i class="fas fa-exclamation-triangle me-1"></i>Amount must be greater than the transfer fee (Rp ' + currentFee.toLocaleString('id-ID') + ').';
+        } else if (net < 10000) {
+            warning = '<i class="fas fa-exclamation-triangle me-1"></i>Recipient amount (Rp ' + net.toLocaleString('id-ID') + ') is below the minimum transfer of Rp 10.000.';
+        }
+
+        if (warning) {
+            warnMsg.innerHTML     = warning;
+            warnBox.style.display = 'block';
+            bdNetEl.className     = 'fw-bold fs-6 text-danger';
+        } else {
+            if (warnBox) warnBox.style.display = 'none';
+            bdNetEl.className = 'fw-bold fs-6 text-brand';
+        }
     }
 
     if (amountEl) {
@@ -259,6 +330,7 @@ $(function () {
             this.value = raw ? formatRibu(raw) : '';
             var newLen = this.value.length;
             this.setSelectionRange(cursor + (newLen - oldLen), cursor + (newLen - oldLen));
+            updateBreakdown();
         });
     }
 
@@ -286,10 +358,12 @@ $(function () {
         .then(function (r) { return r.json(); })
         .then(function (data) {
             if (data.error) {
-                holderInput.value  = '';
-                holderHidden.value = '';
-                feeHidden.value    = '0';
+                holderInput.value    = '';
+                holderHidden.value   = '';
+                feeHidden.value      = '0';
                 feeDisplay.innerHTML = '<span class="text-muted">—</span>';
+                currentFee = 0;
+                updateBreakdown();
 
                 var errBankName   = data.bank_name || (bankCodeEl.options[bankCodeEl.selectedIndex] ? bankCodeEl.options[bankCodeEl.selectedIndex].text : bankCode);
                 var errAccountNum = data.account_number || accountNo;
@@ -300,29 +374,19 @@ $(function () {
                     '<div class="alert alert-danger py-0 pt-2 pb-3">' +
                         '<div class="mb-2"><i class="fas fa-times-circle me-1"></i><strong>Verification Failed</strong></div>' +
                         '<div class="row g-2" style="font-size:.85rem">' +
-                            '<div class="col-sm-4">' +
-                                '<div class="text-muted small">Bank</div>' +
-                                '<div class="fw-semibold">' + errBankName + '</div>' +
-                            '</div>' +
-                            '<div class="col-sm-4">' +
-                                '<div class="text-muted small">Account Number</div>' +
-                                '<div class="fw-semibold">' + errAccountNum + '</div>' +
-                            '</div>' +
-                            '<div class="col-sm-4">' +
-                                '<div class="text-muted small">Status</div>' +
-                                '<div class="fw-semibold text-danger">' + errStatus + '</div>' +
-                            '</div>' +
-                            '<div class="col-12 mt-1">' +
-                                '<div class="text-muted small">Reason</div>' +
-                                '<div class="fw-semibold">' + errMessage + '</div>' +
-                            '</div>' +
+                            '<div class="col-sm-4"><div class="text-muted small">Bank</div><div class="fw-semibold">' + errBankName + '</div></div>' +
+                            '<div class="col-sm-4"><div class="text-muted small">Account Number</div><div class="fw-semibold">' + errAccountNum + '</div></div>' +
+                            '<div class="col-sm-4"><div class="text-muted small">Status</div><div class="fw-semibold text-danger">' + errStatus + '</div></div>' +
+                            '<div class="col-12 mt-1"><div class="text-muted small">Reason</div><div class="fw-semibold">' + errMessage + '</div></div>' +
                         '</div>' +
                     '</div>';
             } else {
-                holderInput.value  = data.account_holder;
-                holderHidden.value = data.account_holder;
-                feeHidden.value    = data.fee;
+                holderInput.value    = data.account_holder;
+                holderHidden.value   = data.account_holder;
+                feeHidden.value      = data.fee;
                 feeDisplay.innerHTML = '<span class="fw-semibold">Rp ' + parseInt(data.fee).toLocaleString('id-ID') + '</span>';
+                currentFee = parseInt(data.fee) || 0;
+                updateBreakdown();
 
                 var bankName   = data.bank_name || (bankCodeEl.options[bankCodeEl.selectedIndex] ? bankCodeEl.options[bankCodeEl.selectedIndex].text : bankCode);
                 var accountNum = data.account_number || accountNo;
@@ -331,22 +395,10 @@ $(function () {
                     '<div class="alert alert-success py-0 pt-2 pb-3">' +
                         '<div class="mb-2"><i class="fas fa-check-circle me-1"></i><strong>Account Verified Successfully</strong></div>' +
                         '<div class="row g-2" style="font-size:.85rem">' +
-                            '<div class="col-sm-4">' +
-                                '<div class="text-muted small">Bank</div>' +
-                                '<div class="fw-semibold">' + bankName + '</div>' +
-                            '</div>' +
-                            '<div class="col-sm-4">' +
-                                '<div class="text-muted small">Account Number</div>' +
-                                '<div class="fw-semibold">' + accountNum + '</div>' +
-                            '</div>' +
-                            '<div class="col-sm-4">' +
-                                '<div class="text-muted small">Account Holder</div>' +
-                                '<div class="fw-semibold">' + data.account_holder + '</div>' +
-                            '</div>' +
-                            '<div class="col-sm-4 mt-1">' +
-                                '<div class="text-muted small">Transfer Fee</div>' +
-                                '<div class="fw-semibold">Rp ' + parseInt(data.fee).toLocaleString('id-ID') + '</div>' +
-                            '</div>' +
+                            '<div class="col-sm-4"><div class="text-muted small">Bank</div><div class="fw-semibold">' + bankName + '</div></div>' +
+                            '<div class="col-sm-4"><div class="text-muted small">Account Number</div><div class="fw-semibold">' + accountNum + '</div></div>' +
+                            '<div class="col-sm-4"><div class="text-muted small">Account Holder</div><div class="fw-semibold">' + data.account_holder + '</div></div>' +
+                            '<div class="col-sm-4 mt-1"><div class="text-muted small">Transfer Fee</div><div class="fw-semibold">Rp ' + parseInt(data.fee).toLocaleString('id-ID') + '</div></div>' +
                         '</div>' +
                     '</div>';
             }
@@ -356,11 +408,11 @@ $(function () {
         })
         .finally(function () {
             btnVerify.disabled = false;
-            btnVerify.innerHTML = '<i class="fas fa-search me-1"></i> Verify';
+            btnVerify.innerHTML = '<i class="fas fa-circle-check me-1"></i> Verify';
         });
     });
 
-    /* ── Submit: strip dots from amount before POST ─────────── */
+    /* ── Submit: validate + strip dots ─────────────────────── */
     document.getElementById('withdrawal-form').addEventListener('submit', function (e) {
         if (!holderHidden.value) {
             e.preventDefault();
@@ -368,9 +420,43 @@ $(function () {
             accountNoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
-        if (amountEl) {
-            amountEl.value = amountEl.value.replace(/\./g, '');
+
+        var rawAmt  = amountEl ? parseInt(amountEl.value.replace(/\./g, '')) || 0 : 0;
+        var net     = rawAmt - currentFee;
+        var warnBox = document.getElementById('amount-warning');
+        var warnMsg = document.getElementById('amount-warning-msg');
+
+        if (rawAmt > available) {
+            e.preventDefault();
+            if (warnBox && warnMsg) {
+                warnMsg.innerHTML     = '<i class="fas fa-exclamation-triangle me-1"></i>Amount exceeds available balance (Rp ' + available.toLocaleString('id-ID') + ').';
+                warnBox.style.display = 'block';
+            }
+            if (amountEl) amountEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
         }
+
+        if (currentFee > 0 && net <= 0) {
+            e.preventDefault();
+            if (warnBox && warnMsg) {
+                warnMsg.innerHTML     = '<i class="fas fa-exclamation-triangle me-1"></i>Amount must be greater than the transfer fee (Rp ' + currentFee.toLocaleString('id-ID') + ').';
+                warnBox.style.display = 'block';
+            }
+            if (amountEl) amountEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        if (currentFee > 0 && net < 10000) {
+            e.preventDefault();
+            if (warnBox && warnMsg) {
+                warnMsg.innerHTML     = '<i class="fas fa-exclamation-triangle me-1"></i>Recipient amount (Rp ' + net.toLocaleString('id-ID') + ') is below the minimum transfer of Rp 10.000.';
+                warnBox.style.display = 'block';
+            }
+            if (amountEl) amountEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        if (amountEl) amountEl.value = amountEl.value.replace(/\./g, '');
     });
 })();
 </script>
