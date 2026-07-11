@@ -214,13 +214,16 @@ class PublicController extends Controller
             $total         = $jumlah_donasi + $adminFee;
             $expiredAt     = now()->addDay();
 
+            // Our admin fee is embedded into the nominal sent to BisaTopup.
+            // BisaTopup's admin_fee field is their platform fee (must be 0 for QRIS).
+            // We keep the breakdown internally in biaya_admin + total_tagihan columns.
             $payload = [
                 'payment_id'        => $qrisPaymentId,
                 'username'          => config('services.bisatopup.username'),
                 'signature'         => $gateway->buildSignature($transactionId),
                 'expired_date'      => $expiredAt->format('Y-m-d H:i:s'),
-                'nominal'           => $jumlah_donasi,
-                'admin_fee'         => $adminFee,
+                'nominal'           => $total,
+                'admin_fee'         => 0,
                 'transaction_id'    => $transactionId,
                 'transaction_total' => $total,
                 'transaction_name'  => Str::limit('Donasi ' . $campaign->judul, 49, ''),
@@ -231,8 +234,8 @@ class PublicController extends Controller
                 'item_details'      => [[
                     'item_id'          => $campaign->id,
                     'item_name'        => Str::limit($campaign->judul, 49, ''),
-                    'item_price'       => $jumlah_donasi,
-                    'item_total_price' => $jumlah_donasi,
+                    'item_price'       => $total,
+                    'item_total_price' => $total,
                     'item_quantity'    => 1,
                 ]],
             ];
