@@ -37,11 +37,16 @@ class AuditLogController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'tableBody'  => view('admin-page.service.celengan-syahid.audit-log.components._table-rows', compact('logs'))->render(),
-                'pagination' => $logs->hasPages()
-                    ? view('components.pagination-custom.index', ['paginator' => $logs, 'itemLabel' => 'log'])->render()
-                    : '',
-                'stats'      => $stats,
+                'tableBody' => view('admin-page.service.celengan-syahid.audit-log.components._table-rows', compact('logs'))->render(),
+                'pagination' => [
+                    'from'         => $logs->firstItem() ?? 0,
+                    'to'           => $logs->lastItem() ?? 0,
+                    'total'        => $logs->total(),
+                    'current_page' => $logs->currentPage(),
+                    'last_page'    => $logs->lastPage(),
+                    'base_url'     => $logs->url(1),
+                ],
+                'stats' => $stats,
             ]);
         }
 

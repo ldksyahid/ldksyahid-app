@@ -249,11 +249,9 @@
                                 </tfoot>
                             </table>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2" id="cs-pagination-bar" style="display:none!important">
-                            <div class="small text-muted" id="cs-page-info"></div>
-                            <nav aria-label="Campaign pagination">
-                                <ul class="pagination pagination-sm mb-0 cs-pagination" id="cs-pagination"></ul>
-                            </nav>
+                        <div class="cs-table-pagination" id="cs-pagination-bar" style="display:none">
+                            <span class="text-muted small" id="cs-page-info"></span>
+                            <div class="d-flex align-items-center gap-2" id="cs-pg-controls"></div>
                         </div>
                         @endif
                     </div>

@@ -1,6 +1,6 @@
 @if($items->count() > 0)
 <div class="table-responsive">
-    <table class="table wi-table align-middle mb-0">
+    <table class="table table-hover wi-table align-middle mb-0">
         <thead>
             <tr>
                 <th style="width:36px">#</th>

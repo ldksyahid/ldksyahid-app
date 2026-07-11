@@ -107,10 +107,25 @@
 #audit-table tbody td { padding: 0.6rem 0.9rem; vertical-align: middle; }
 #audit-table tbody tr { transition: background 0.15s ease; }
 
-/* ── Pagination inside card ── */
+/* ── Flat pagination bar (job-queue-log style) ── */
 .table-pagination {
-    padding: 0.65rem 1rem; border-top: 1px solid #e9ecef; background: #fff;
+    padding: 0.65rem 1rem;
+    border-top: 1px solid #e9ecef;
+    background: #fff;
 }
+.audit-pg-btn { font-size: .78rem !important; padding: .25rem .75rem !important; border-radius: 8px !important; }
+.audit-pg-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: .78rem;
+    font-weight: 600;
+    color: #495057;
+    background: #f3f4f6;
+    border-radius: 6px;
+    padding: .2rem .65rem;
+    white-space: nowrap;
+}
+html.dark-mode .audit-pg-badge { background: #374151; color: #d1d5db; }
 
 /* ── Badges ── */
 .badge-status {

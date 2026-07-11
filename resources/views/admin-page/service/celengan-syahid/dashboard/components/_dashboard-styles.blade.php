@@ -260,27 +260,30 @@
     html.dark-mode .cs-btn-all:hover { background: #008b84; border-color: #008b84; color: #fff; }
     html.dark-mode .text-muted { color: #9ca3af !important; }
 
-    /* ── Campaign Progress Pagination ───────────────────── */
-    .cs-pagination .page-link {
-        color: #00a79d;
-        border-color: #e0f7f5;
-        border-radius: 6px !important;
-        margin: 0 2px;
+    /* ── Campaign Progress flat pagination (job-queue-log style) */
+    .cs-table-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: .5rem;
+        padding: .6rem .75rem;
+        border-top: 1px solid #e9ecef;
+        margin-top: .5rem;
+    }
+    html.dark-mode .cs-table-pagination { border-top-color: rgba(255,255,255,.08); }
+    .cs-pg-btn { font-size: .78rem !important; padding: .25rem .75rem !important; border-radius: 8px !important; }
+    .cs-pg-badge {
+        display: inline-flex;
+        align-items: center;
         font-size: .78rem;
         font-weight: 600;
-        padding: .3rem .6rem;
+        color: #495057;
+        background: #f3f4f6;
+        border-radius: 6px;
+        padding: .2rem .65rem;
     }
-    .cs-pagination .page-link:hover { background: #e0f7f5; border-color: #00a79d; }
-    .cs-pagination .page-item.active .page-link {
-        background: #00a79d;
-        border-color: #00a79d;
-        color: #fff;
-    }
-    .cs-pagination .page-item.disabled .page-link { color: #adb5bd; border-color: #e9ecef; }
-    html.dark-mode .cs-pagination .page-link { color: #2dd4bf; border-color: rgba(45,212,191,.2); background: transparent; }
-    html.dark-mode .cs-pagination .page-link:hover { background: rgba(45,212,191,.1); border-color: #2dd4bf; }
-    html.dark-mode .cs-pagination .page-item.active .page-link { background: #008b84; border-color: #008b84; color: #fff; }
-    html.dark-mode .cs-pagination .page-item.disabled .page-link { color: #4b5563; border-color: rgba(255,255,255,.08); }
+    html.dark-mode .cs-pg-badge { background: #374151; color: #d1d5db; }
 
     @media (max-width: 768px) {
         .cs-page-title { font-size: 1.35rem; }

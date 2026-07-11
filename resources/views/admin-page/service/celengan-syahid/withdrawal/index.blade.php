@@ -38,17 +38,11 @@
                         </div>
                         <small class="text-muted">Total across all campaigns</small>
                         @if($disc < 0)
-                            <span class="badge bg-danger">
-                                <i class="fas fa-exclamation-circle me-1"></i>Deficit Rp {{ number_format(abs($disc), 0, ',', '.') }}
-                            </span>
+                            <span class="badge bg-danger"><i class="fas fa-exclamation-circle me-1"></i>Deficit Rp {{ number_format(abs($disc), 0, ',', '.') }}</span>
                         @elseif(abs($disc) <= $discThreshold)
-                            <span class="badge bg-success">
-                                <i class="fas fa-check-circle me-1"></i>Balance Normal
-                            </span>
+                            <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Balance Normal</span>
                         @else
-                            <span class="badge bg-warning text-dark">
-                                <i class="fas fa-exclamation-triangle me-1"></i>Gap Rp {{ number_format(abs($disc), 0, ',', '.') }} — Needs Review
-                            </span>
+                            <span class="badge bg-warning text-dark"><i class="fas fa-exclamation-triangle me-1"></i>Gap Rp {{ number_format(abs($disc), 0, ',', '.') }} — Needs Review</span>
                         @endif
                         <a href="{{ route('admin.celsyahid.balance.report') }}" class="btn-balance-report">
                             <i class="fas fa-balance-scale me-1"></i> Balance Report
@@ -61,63 +55,55 @@
             </div>
         </div>
 
-        {{-- Filters --}}
-        <div class="col-12 mb-4">
-            <div class="card border-0 shadow-sm wi-filter-card">
-                <div class="card-body py-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-                        <span class="fw-semibold" style="color:#00a79d; font-size:.9rem">
-                            <i class="fas fa-filter me-1"></i>Filters
-                        </span>
-                        <button id="btn-clear-filter" class="wi-clear-btn" title="Clear all filters">
-                            <i class="fas fa-times"></i> Clear filters
-                        </button>
-                    </div>
-                    <div class="row g-2 align-items-end">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold mb-1" style="font-size:.78rem; color:#6b7280; text-transform:uppercase; letter-spacing:.04em">Campaign</label>
-                            <select id="filter-campaign" class="form-select form-select-sm">
-                                <option value="">All Campaigns</option>
-                                @foreach($campaigns as $id => $judul)
-                                <option value="{{ $id }}">{{ $judul }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold mb-1" style="font-size:.78rem; color:#6b7280; text-transform:uppercase; letter-spacing:.04em">Status</label>
-                            <select id="filter-status" class="form-select form-select-sm">
-                                <option value="">All Status</option>
-                                @foreach(['DRAFT','PENDING','COMPLETED','FAILED'] as $s)
-                                <option value="{{ $s }}">{{ $s }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-3 d-flex align-items-end">
-                            <div id="active-filter-chips" class="d-flex gap-1 flex-wrap pb-1"></div>
-                        </div>
-                    </div>
+        {{-- Flat Filter Bar --}}
+        <div class="col-12 mb-3">
+            <div class="wi-flat-filter">
+                <div style="min-width:220px; flex:1">
+                    <select id="filter-campaign" class="form-select form-select-sm">
+                        <option value="">All Campaigns</option>
+                        @foreach($campaigns as $id => $judul)
+                        <option value="{{ $id }}">{{ $judul }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div style="min-width:150px">
+                    <select id="filter-status" class="form-select form-select-sm">
+                        <option value="">All Status</option>
+                        @foreach(['DRAFT','PENDING','COMPLETED','FAILED'] as $s)
+                        <option value="{{ $s }}">{{ $s }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div id="active-filter-chips" class="d-flex gap-1 flex-wrap"></div>
+                <div class="ms-auto">
+                    <button id="btn-clear-filter" class="wi-clear-btn" title="Clear all filters">
+                        <i class="fas fa-times"></i> Clear
+                    </button>
                 </div>
             </div>
         </div>
 
-        {{-- Withdrawal List --}}
+        {{-- Table Card --}}
         <div class="col-12 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                        <h5 class="section-title mb-0">
-                            <i class="fas fa-list-ul me-2"></i>Withdrawal List
-                        </h5>
-                        <small class="text-muted" id="filter-result-info"></small>
-                    </div>
+            <div class="wi-table-card">
+                <div class="d-flex justify-content-between align-items-center px-3 pt-3 pb-2 flex-wrap gap-2">
+                    <span class="fw-semibold" style="color:#495057; font-size:.9rem">
+                        <i class="fas fa-list-ul me-1 text-muted"></i>Withdrawal List
+                    </span>
+                    <small class="text-muted" id="wi-result-info"></small>
+                </div>
 
-                    <div id="withdrawal-table-wrap">
-                        @include('admin-page.service.celengan-syahid.withdrawal.components._table', compact('items'))
-                    </div>
+                <div id="withdrawal-table-wrap">
+                    @include('admin-page.service.celengan-syahid.withdrawal.components._table', compact('items'))
+                </div>
 
-                    <div id="withdrawal-pagination" class="mt-3">
-                        {{ $items->links() }}
-                    </div>
+                <div class="wi-table-pagination" id="wi-pagination-bar">
+                    <span class="text-muted small" id="wi-pg-info">
+                        @if($items->total() > 0)
+                            Showing {{ $items->firstItem() }}–{{ $items->lastItem() }} of {{ $items->total() }} records
+                        @endif
+                    </span>
+                    <div class="d-flex align-items-center gap-2" id="wi-pg-controls"></div>
                 </div>
             </div>
         </div>
@@ -139,74 +125,77 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 $(function () {
-    var AJAX_URL = '{{ route("admin.celsyahid.withdrawal.index") }}';
+    var AJAX_URL   = '{{ route("admin.celsyahid.withdrawal.index") }}';
+    var curPage    = {{ $items->currentPage() }};
+    var lastPage   = {{ $items->lastPage() }};
 
-    // Select2 init
+    // Select2
     $('#filter-campaign').select2({ placeholder: 'All Campaigns', allowClear: true, width: '100%', dropdownParent: $('body') });
     $('#filter-status').select2({
-        placeholder: 'All Status',
-        allowClear: true,
-        width: '100%',
-        dropdownParent: $('body'),
+        placeholder: 'All Status', allowClear: true, width: '100%', dropdownParent: $('body'),
         templateResult: function (s) {
             if (!s.id) return s.text;
-            var colors = { COMPLETED: '#198754', PENDING: '#856404', FAILED: '#b02a37', DRAFT: '#495057' };
-            var col = colors[s.id] || '#495057';
-            return $('<span style="color:' + col + '; font-weight:700">' + s.text + '</span>');
+            var cols = { COMPLETED: '#198754', PENDING: '#856404', FAILED: '#b02a37', DRAFT: '#495057' };
+            return $('<span style="color:' + (cols[s.id] || '#495057') + '; font-weight:700">' + s.text + '</span>');
         }
     });
 
     function updateChips() {
-        var chips   = $('#active-filter-chips');
-        var camp    = $('#filter-campaign').find('option:selected').text();
-        var status  = $('#filter-status').val();
-        chips.empty();
+        var $chips = $('#active-filter-chips').empty();
+        var campVal = $('#filter-campaign').val();
+        var statVal = $('#filter-status').val();
+        if (campVal) {
+            var campText = $('#filter-campaign option:selected').text();
+            $chips.append('<span class="wi-filter-chip"><i class="fas fa-flag"></i>' + campText + '</span>');
+        }
+        if (statVal) {
+            $chips.append('<span class="wi-filter-chip"><i class="fas fa-circle-half-stroke"></i>' + statVal + '</span>');
+        }
+    }
 
-        if ($('#filter-campaign').val()) {
-            chips.append('<span class="wi-filter-chip"><i class="fas fa-flag"></i>' + camp + '</span>');
+    function renderPagination(meta) {
+        $('#wi-pg-info').text(
+            meta.total > 0
+                ? 'Showing ' + meta.from + '–' + meta.to + ' of ' + meta.total + ' records'
+                : 'No records found'
+        );
+        var $ctrl = $('#wi-pg-controls').empty();
+        curPage  = meta.current_page;
+        lastPage = meta.last_page;
+
+        var $prev = $('<button class="btn btn-sm btn-outline-secondary wi-pg-btn"><i class="fas fa-chevron-left me-1"></i>Prev</button>');
+        if (curPage <= 1) $prev.prop('disabled', true);
+        else $prev.on('click', function () { loadTable(curPage - 1); });
+        $ctrl.append($prev);
+
+        if (meta.last_page > 1) {
+            $ctrl.append('<span class="wi-pg-page-badge">Page ' + curPage + ' / ' + meta.last_page + '</span>');
         }
-        if (status) {
-            chips.append('<span class="wi-filter-chip"><i class="fas fa-circle-half-stroke"></i>' + status + '</span>');
-        }
+
+        var $next = $('<button class="btn btn-sm btn-outline-secondary wi-pg-btn">Next <i class="fas fa-chevron-right ms-1"></i></button>');
+        if (curPage >= lastPage) $next.prop('disabled', true);
+        else $next.on('click', function () { loadTable(curPage + 1); });
+        $ctrl.append($next);
     }
 
     function loadTable(page) {
         var params = {
             campaign_id: $('#filter-campaign').val() || '',
-            status:      $('#filter-status').val() || '',
+            status:      $('#filter-status').val()   || '',
             page:        page || 1,
         };
-
-        var $wrap = $('#withdrawal-table-wrap');
-        $wrap.addClass('wi-loading');
+        $('#withdrawal-table-wrap').addClass('wi-loading');
 
         $.ajax({
-            url: AJAX_URL,
-            data: params,
+            url: AJAX_URL, data: params,
             success: function (res) {
-                $wrap.html(res.tableHtml).removeClass('wi-loading');
-                $('#withdrawal-pagination').html(res.paginationHtml);
-
-                $('#filter-result-info').text(
-                    res.total > 0 ? res.total + ' record(s) found' : ''
-                );
-
+                $('#withdrawal-table-wrap').html(res.tableHtml).removeClass('wi-loading');
+                $('#wi-result-info').text(res.total > 0 ? res.total + ' record(s)' : '');
                 updateChips();
-                bindPagination();
+                renderPagination(res);
+                $('html, body').animate({ scrollTop: $('#withdrawal-table-wrap').offset().top - 100 }, 200);
             },
-            error: function () {
-                $wrap.removeClass('wi-loading');
-            }
-        });
-    }
-
-    function bindPagination() {
-        $('#withdrawal-pagination a').off('click').on('click', function (e) {
-            e.preventDefault();
-            var url  = $(this).attr('href');
-            var page = new URL(url).searchParams.get('page') || 1;
-            loadTable(page);
-            $('html, body').animate({ scrollTop: $('#withdrawal-table-wrap').offset().top - 100 }, 200);
+            error: function () { $('#withdrawal-table-wrap').removeClass('wi-loading'); }
         });
     }
 
@@ -216,12 +205,17 @@ $(function () {
         loadTable(1);
     });
 
-    // Auto-apply on change
     $('#filter-campaign, #filter-status').on('change', function () { loadTable(1); });
 
-    // Initial state
+    // Init
     updateChips();
-    bindPagination();
+    renderPagination({
+        from:         {{ $items->firstItem() ?? 0 }},
+        to:           {{ $items->lastItem() ?? 0 }},
+        total:        {{ $items->total() }},
+        current_page: {{ $items->currentPage() }},
+        last_page:    {{ $items->lastPage() }},
+    });
 });
 </script>
 @endsection

@@ -369,25 +369,160 @@ html.dark-mode .net-breakdown-box {
 }
 html.dark-mode .net-breakdown-box hr { border-color: rgba(0,167,157,.2); }
 
-/* ── Withdrawal Index Table ─────────────────────────── */
-.wi-table { font-size: .875rem; }
-.wi-table thead th {
+/* ── Flat filter bar (like job-queue-log) ───────────── */
+.wi-flat-filter {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 12px;
+    padding: .65rem 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+}
+html.dark-mode .wi-flat-filter { background: #2b2f33; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+
+.wi-flat-filter .form-select {
+    border-radius: 8px !important;
+    border-color: #dee2e6;
+    font-size: .875rem;
+    height: 33px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.wi-flat-filter .form-select:focus {
+    border-color: #00a79d !important;
+    box-shadow: 0 0 0 .2rem rgba(0,167,157,.25) !important;
+}
+html.dark-mode .wi-flat-filter .form-select {
+    background-color: #1a1d21;
+    border-color: #373b3e;
+    color: #e4e6eb;
+}
+
+/* Select2 inside flat filter */
+.wi-flat-filter .select2-container .select2-selection--single {
+    height: 33px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px !important;
+    background-color: #fff;
+    font-size: .875rem;
+    transition: border-color .15s, box-shadow .15s;
+}
+.wi-flat-filter .select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 31px;
+    padding-left: 14px;
+    padding-right: 28px;
+    font-size: .875rem;
+    color: #495057;
+}
+.wi-flat-filter .select2-container .select2-selection--single .select2-selection__arrow { height: 31px; right: 10px; }
+.wi-flat-filter .select2-container--open .select2-selection--single,
+.wi-flat-filter .select2-container--focus .select2-selection--single {
+    border-color: #00a79d !important;
+    box-shadow: 0 0 0 .2rem rgba(0,167,157,.25) !important;
+}
+html.dark-mode .wi-flat-filter .select2-container .select2-selection--single {
+    background-color: #1a1d21 !important;
+    border-color: #373b3e !important;
+}
+html.dark-mode .wi-flat-filter .select2-container .select2-selection--single .select2-selection__rendered { color: #e4e6eb !important; }
+html.dark-mode .wi-flat-filter .select2-container--open .select2-selection--single,
+html.dark-mode .wi-flat-filter .select2-container--focus .select2-selection--single {
+    border-color: #00a79d !important;
+}
+
+/* Clear btn inside filter bar */
+.wi-clear-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .3em;
+    font-size: .78rem;
     font-weight: 600;
-    color: #00a79d;
-    border-bottom: 2px solid #e0f7f5;
+    color: #6b7280;
+    background: none;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: .28rem .75rem;
+    cursor: pointer;
+    transition: all .2s;
     white-space: nowrap;
-    padding: .7rem .75rem;
-    background: rgba(0,167,157,.04);
+    height: 33px;
+}
+.wi-clear-btn:hover { color: #ef4444; border-color: #ef4444; background: rgba(239,68,68,.05); }
+html.dark-mode .wi-clear-btn { color: #9ca3af; border-color: #374151; }
+html.dark-mode .wi-clear-btn:hover { color: #f87171; border-color: #f87171; background: rgba(248,113,113,.08); }
+
+/* Active filter chips */
+.wi-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .35em;
+    font-size: .72rem;
+    font-weight: 700;
+    background: rgba(0,167,157,.1);
+    color: #008b84;
+    border: 1px solid rgba(0,167,157,.25);
+    border-radius: 50px;
+    padding: .18em .65em;
+}
+html.dark-mode .wi-filter-chip { background: rgba(45,212,191,.12); color: #2dd4bf; border-color: rgba(45,212,191,.25); }
+
+/* ── Table card (like job-queue-log .table-card) ────── */
+.wi-table-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.07);
+    overflow: hidden;
+}
+html.dark-mode .wi-table-card { background: #2b2f33; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+
+/* ── Withdrawal Index table (gray header) ───────────── */
+.wi-table { font-size: .875rem; margin-bottom: 0; }
+.wi-table thead th {
+    font-size: .8rem;
+    font-weight: 600;
+    color: #6c757d;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    white-space: nowrap;
+    padding: .65rem .75rem;
     border-top: none;
 }
-.wi-table tbody td { padding: .75rem .75rem; vertical-align: middle; }
-.wi-table tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .15s; }
-.wi-table tbody tr:hover { background: rgba(0,167,157,.04); }
-.wi-table tbody tr:last-child { border-bottom: none; }
+.wi-table thead th:first-child { font-weight: 700; color: #495057; }
+.wi-table tbody td { padding: .6rem .75rem; vertical-align: middle; }
+.wi-table tbody tr { transition: background .15s; }
+.wi-table tbody tr:hover > td { background: rgba(0,0,0,.025); }
 
-html.dark-mode .wi-table thead th { background: rgba(45,212,191,.06); color: #2dd4bf; border-bottom-color: rgba(45,212,191,.2); }
-html.dark-mode .wi-table tbody tr { border-bottom-color: rgba(255,255,255,.06); }
-html.dark-mode .wi-table tbody tr:hover { background: rgba(45,212,191,.06); }
+html.dark-mode .wi-table thead th { background: #1a1d21; color: #9ca3af; border-bottom-color: #373b3e; }
+html.dark-mode .wi-table thead th:first-child { color: #d1d5db; }
+html.dark-mode .wi-table tbody td { color: #e4e6eb; }
+html.dark-mode .wi-table tbody tr:hover > td { background: rgba(255,255,255,.04); }
+
+/* ── Flat pagination bar (inside wi-table-card) ─────── */
+.wi-table-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    border-top: 1px solid #e9ecef;
+    background: #fff;
+}
+html.dark-mode .wi-table-pagination { background: #2b2f33; border-top-color: #373b3e; }
+.wi-pg-btn { font-size: .78rem !important; padding: .25rem .75rem !important; border-radius: 8px !important; }
+.wi-pg-page-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: .78rem;
+    font-weight: 600;
+    color: #495057;
+    background: #f3f4f6;
+    border-radius: 6px;
+    padding: .2rem .65rem;
+}
+html.dark-mode .wi-pg-page-badge { background: #374151; color: #d1d5db; }
 
 /* ── Campaign link in table ─────────────────────────── */
 .wi-campaign-link {
@@ -405,91 +540,24 @@ html.dark-mode .wi-table tbody tr:hover { background: rgba(45,212,191,.06); }
 html.dark-mode .wi-campaign-link { color: #2dd4bf; }
 html.dark-mode .wi-campaign-link:hover { color: #5eead4; }
 
-/* ── Filter card ────────────────────────────────────── */
-.wi-filter-card {
-    background: rgba(0,167,157,.03);
-    border: 1px solid rgba(0,167,157,.12) !important;
-}
-html.dark-mode .wi-filter-card {
-    background: rgba(45,212,191,.04);
-    border-color: rgba(45,212,191,.12) !important;
-}
-.wi-clear-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: .3em;
-    font-size: .78rem;
-    font-weight: 600;
-    color: #6b7280;
-    background: none;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: .28rem .65rem;
-    cursor: pointer;
-    transition: all .2s;
-    text-decoration: none;
-    white-space: nowrap;
-}
-.wi-clear-btn:hover { color: #ef4444; border-color: #ef4444; background: rgba(239,68,68,.05); }
-html.dark-mode .wi-clear-btn { color: #9ca3af; border-color: #374151; }
-html.dark-mode .wi-clear-btn:hover { color: #f87171; border-color: #f87171; background: rgba(248,113,113,.08); }
-
-/* ── Active filter chip ─────────────────────────────── */
-.wi-filter-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: .35em;
-    font-size: .72rem;
-    font-weight: 700;
-    background: rgba(0,167,157,.1);
-    color: #008b84;
-    border: 1px solid rgba(0,167,157,.25);
-    border-radius: 50px;
-    padding: .2em .65em;
-}
-html.dark-mode .wi-filter-chip { background: rgba(45,212,191,.12); color: #2dd4bf; border-color: rgba(45,212,191,.25); }
-
-/* ── Pagination teal theme ──────────────────────────── */
-#withdrawal-pagination .pagination .page-link {
-    color: #00a79d;
-    border-color: #e0f7f5;
-    border-radius: 6px !important;
-    margin: 0 2px;
-    font-size: .8rem;
-    font-weight: 600;
-    padding: .35rem .65rem;
-    transition: all .15s;
-}
-#withdrawal-pagination .pagination .page-link:hover { background: #e0f7f5; border-color: #00a79d; }
-#withdrawal-pagination .pagination .page-item.active .page-link {
-    background: #00a79d;
-    border-color: #00a79d;
-    color: #fff;
-}
-#withdrawal-pagination .pagination .page-item.disabled .page-link { color: #adb5bd; border-color: #e9ecef; }
-html.dark-mode #withdrawal-pagination .pagination .page-link { color: #2dd4bf; border-color: rgba(45,212,191,.2); background: transparent; }
-html.dark-mode #withdrawal-pagination .pagination .page-link:hover { background: rgba(45,212,191,.1); border-color: #2dd4bf; }
-html.dark-mode #withdrawal-pagination .pagination .page-item.active .page-link { background: #008b84; border-color: #008b84; color: #fff; }
-html.dark-mode #withdrawal-pagination .pagination .page-item.disabled .page-link { color: #4b5563; border-color: rgba(255,255,255,.08); }
-
 /* ── Loading overlay ────────────────────────────────── */
-.wi-loading {
-    position: relative;
-    min-height: 80px;
-}
+.wi-loading { position: relative; min-height: 80px; }
 .wi-loading::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(255,255,255,.7);
-    border-radius: 8px;
+    background: rgba(255,255,255,.65);
     z-index: 5;
 }
-html.dark-mode .wi-loading::after { background: rgba(17,24,39,.7); }
+html.dark-mode .wi-loading::after { background: rgba(26,29,33,.65); }
 
 @media (max-width: 768px) {
     .page-title { font-size: 1.35rem; }
     .wi-campaign-link { max-width: 130px; }
+    .wi-flat-filter { flex-direction: column; align-items: stretch; gap: .4rem; }
+    .wi-flat-filter .select2-container { width: 100% !important; }
+    .wi-flat-filter .form-select { width: 100%; }
+    .wi-clear-btn { width: 100%; justify-content: center; }
     .d-flex.justify-content-end.gap-2 { flex-direction: column; }
     .d-flex.justify-content-end.gap-2 .btn { width: 100%; }
 }

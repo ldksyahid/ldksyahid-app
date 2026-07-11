@@ -46,9 +46,12 @@ class WithdrawalController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'tableHtml'      => view('admin-page.service.celengan-syahid.withdrawal.components._table', compact('items'))->render(),
-                'paginationHtml' => $items->appends($request->query())->links()->render(),
-                'total'          => $items->total(),
+                'tableHtml'    => view('admin-page.service.celengan-syahid.withdrawal.components._table', compact('items'))->render(),
+                'total'        => $items->total(),
+                'from'         => $items->firstItem() ?? 0,
+                'to'           => $items->lastItem() ?? 0,
+                'current_page' => $items->currentPage(),
+                'last_page'    => $items->lastPage(),
             ]);
         }
 
