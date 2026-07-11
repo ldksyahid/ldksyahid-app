@@ -160,16 +160,30 @@
 
                     {{-- No. Telepon --}}
                     <div class="col-12 col-sm-6 dn-field mb-0">
-                        <label class="dn-label" for="dn-telpon">No. Telepon <span class="text-danger">*</span></label>
-                        <input type="text"
-                               class="dn-input dn-num-only"
-                               id="dn-telpon"
-                               name="no_telp_donatur"
-                               placeholder="08xxxxxxxxxx"
-                               required
-                               maxlength="15"
-                               autocomplete="tel"
-                               inputmode="numeric">
+                        <label class="dn-label" for="dn-telpon-local">No. Telepon <span class="text-danger">*</span></label>
+                        @php $phoneCodes = config('phone_codes', []); @endphp
+                        <div class="dn-phone-group">
+                            <select class="dn-phone-code" id="dn-phone-code" autocomplete="tel-country-code">
+                                @foreach($phoneCodes as $pc)
+                                <option value="{{ $pc['code'] }}"
+                                        data-placeholder="{{ $pc['placeholder'] }}"
+                                        data-flag="{{ $pc['flag'] }}"
+                                        data-name="{{ $pc['name'] }}"
+                                        {{ !empty($pc['default']) ? 'selected' : '' }}>
+                                    {{ $pc['flag'] }} +{{ $pc['code'] }} {{ $pc['name'] }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <input type="text"
+                                   class="dn-phone-local dn-num-only"
+                                   id="dn-telpon-local"
+                                   placeholder="8xxxxxxxxxx"
+                                   required
+                                   maxlength="13"
+                                   autocomplete="tel-national"
+                                   inputmode="numeric">
+                        </div>
+                        <input type="hidden" name="no_telp_donatur" id="dn-telpon-full">
                         <div class="dn-invalid-msg">No. telepon wajib diisi</div>
                     </div>
 
