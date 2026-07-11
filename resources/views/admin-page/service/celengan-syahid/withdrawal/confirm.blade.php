@@ -2,154 +2,324 @@
 
 @section('styles')
 @include('admin-page.service.celengan-syahid.withdrawal.components._withdrawal-styles')
+<style>
+/* ── Confirm page extras ────────────────────────────── */
+.cf-hero {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border-radius: 16px;
+    padding: 1.4rem 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.cf-hero::before {
+    content: '';
+    position: absolute;
+    right: -30px; top: -30px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.08);
+}
+.cf-hero::after {
+    content: '';
+    position: absolute;
+    right: 50px; bottom: -40px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.05);
+}
+.cf-hero-left { position: relative; z-index: 1; }
+.cf-hero-label { font-size: .75rem; font-weight: 700; opacity: .8; text-transform: uppercase; letter-spacing: .08em; }
+.cf-hero-amount { font-size: 2.2rem; font-weight: 800; line-height: 1.1; margin-top: .15rem; }
+.cf-hero-ref { font-size: .72rem; opacity: .7; margin-top: .3rem; font-family: monospace; }
+.cf-hero-right { position: relative; z-index: 1; }
+.cf-hero-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(255,255,255,.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+}
+html.dark-mode .cf-hero { background: linear-gradient(135deg, #b45309, #92400e); }
+
+/* ── Info rows ──────────────────────────────────────── */
+.cf-info-row {
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+    padding: .55rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+.cf-info-row:last-child { border-bottom: none; }
+html.dark-mode .cf-info-row { border-bottom-color: rgba(255,255,255,.06); }
+.cf-info-label {
+    font-size: .75rem; font-weight: 700; color: #6b7280;
+    min-width: 130px; text-transform: uppercase; letter-spacing: .04em; flex-shrink: 0;
+}
+.cf-info-value { font-size: .9rem; color: #111827; flex: 1; }
+html.dark-mode .cf-info-label { color: #9ca3af; }
+html.dark-mode .cf-info-value { color: #e5e7eb; }
+
+/* ── Amount breakdown ───────────────────────────────── */
+.cf-breakdown {
+    background: rgba(0,167,157,.05);
+    border: 1px solid rgba(0,167,157,.15);
+    border-radius: 10px;
+    padding: .85rem 1rem;
+}
+html.dark-mode .cf-breakdown { background: rgba(0,167,157,.08); border-color: rgba(0,167,157,.2); }
+.cf-breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: .3rem 0; font-size: .875rem; }
+.cf-breakdown-row.total {
+    border-top: 2px dashed rgba(0,167,157,.25);
+    margin-top: .35rem;
+    padding-top: .55rem;
+    font-weight: 700;
+}
+.cf-net { font-size: 1.4rem; font-weight: 800; color: #059669; }
+html.dark-mode .cf-net { color: #4ade80; }
+
+/* ── Warning box ────────────────────────────────────── */
+.cf-warning {
+    border-radius: 12px;
+    border: 1px solid #fbbf24;
+    background: linear-gradient(135deg, rgba(251,191,36,.08) 0%, rgba(245,158,11,.05) 100%);
+    overflow: hidden;
+}
+.cf-warning-header {
+    background: rgba(251,191,36,.15);
+    border-bottom: 1px solid rgba(251,191,36,.2);
+    padding: .65rem 1rem;
+    font-weight: 700;
+    font-size: .88rem;
+    color: #92400e;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.cf-warning-body { padding: 1rem; }
+.cf-warning-dest {
+    background: rgba(0,0,0,.04);
+    border-radius: 8px;
+    padding: .65rem .85rem;
+    margin-bottom: .75rem;
+    font-size: .875rem;
+}
+html.dark-mode .cf-warning { border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.06); }
+html.dark-mode .cf-warning-header { background: rgba(251,191,36,.1); border-color: rgba(251,191,36,.15); color: #fbbf24; }
+html.dark-mode .cf-warning-dest { background: rgba(255,255,255,.04); }
+
+/* ── Cannot undo banner ─────────────────────────────── */
+.cf-danger-banner {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    background: rgba(220,53,69,.08);
+    border: 1px solid rgba(220,53,69,.25);
+    border-radius: 8px;
+    padding: .6rem .85rem;
+    font-size: .82rem;
+    font-weight: 700;
+    color: #b91c1c;
+}
+html.dark-mode .cf-danger-banner { background: rgba(248,113,113,.1); border-color: rgba(248,113,113,.3); color: #f87171; }
+
+/* ── 2FA card ───────────────────────────────────────── */
+.cf-2fa-card {
+    background: linear-gradient(135deg, rgba(0,167,157,.04) 0%, rgba(0,139,132,.02) 100%);
+    border: 1px solid rgba(0,167,157,.15);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+html.dark-mode .cf-2fa-card { background: rgba(0,167,157,.06); border-color: rgba(0,167,157,.2); }
+
+/* ── Execute button ─────────────────────────────────── */
+.btn-execute {
+    background: linear-gradient(135deg, #059669, #047857);
+    border: none;
+    color: #fff;
+    padding: .6rem 1.75rem;
+    font-weight: 700;
+    border-radius: 8px;
+    font-size: .95rem;
+    transition: all .25s;
+    box-shadow: 0 4px 12px rgba(5,150,105,.35);
+}
+.btn-execute:hover {
+    background: linear-gradient(135deg, #047857, #065f46);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(5,150,105,.45);
+    transform: translateY(-1px);
+}
+.btn-execute:disabled {
+    background: #9ca3af; box-shadow: none; transform: none; cursor: not-allowed;
+}
+html.dark-mode .btn-execute { background: linear-gradient(135deg, #047857, #065f46); }
+</style>
 @endsection
+
+@php $requires2fa = \App\Helpers\TwoFaHelper::isAllowed(auth()->user()); @endphp
 
 @section('content')
 <div class="container-fluid pt-4 px-4">
     <div class="row p-2 bg-light rounded justify-content-center mx-0">
 
         {{-- Page Title --}}
-        <div class="col-12 text-center">
+        <div class="col-12 text-center mb-4">
             <h1 class="page-title">
-                <i class="fas fa-circle-check me-2"></i>
+                <i class="fas fa-check-circle me-2"></i>
                 <span>Confirm</span>
                 <span class="highlighted-text ms-1">Withdrawal</span>
-                <small>Review carefully before executing</small>
+                <small>Review all details carefully before executing</small>
             </h1>
         </div>
 
-        {{-- Card 1: Withdrawal Summary --}}
-        <div class="col-md-8 mb-4">
-            <div class="card border-0 shadow-sm">
+        {{-- Hero Amount Banner --}}
+        <div class="col-12 mb-4">
+            <div class="cf-hero">
+                <div class="cf-hero-left">
+                    <div class="cf-hero-label">Withdrawal Amount</div>
+                    <div class="cf-hero-amount">Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}</div>
+                    <div class="cf-hero-ref"><i class="fas fa-tag me-1 opacity-75"></i>{{ $withdrawal->reff_id }}</div>
+                </div>
+                <div class="cf-hero-right">
+                    <div class="cf-hero-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Left: Summary + Breakdown --}}
+        <div class="col-md-7 mb-4">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <h5 class="section-title mb-3">
                         <i class="fas fa-file-invoice-dollar me-2"></i>Withdrawal Summary
                     </h5>
 
-                    <div class="row">
-                        <div class="col-sm-4 mb-3">
-                            <label class="form-label fw-bold">Campaign</label>
-                            <div class="form-control-plaintext">{{ $withdrawal->campaign->judul ?? '—' }}</div>
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <label class="form-label fw-bold">Reference ID</label>
-                            <div class="form-control-plaintext">
-                                <code class="small">{{ $withdrawal->reff_id }}</code>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <label class="form-label fw-bold">Created By</label>
-                            <div class="form-control-plaintext">{{ auth()->user()->name }}</div>
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <label class="form-label fw-bold">Destination Bank</label>
-                            <div class="form-control-plaintext fw-semibold">{{ strtoupper($withdrawal->bank_code) }}</div>
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <label class="form-label fw-bold">Account Number</label>
-                            <div class="form-control-plaintext">{{ $withdrawal->account_number }}</div>
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <label class="form-label fw-bold">Account Holder</label>
-                            <div class="form-control-plaintext fw-semibold">{{ $withdrawal->account_holder ?: '—' }}</div>
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <label class="form-label fw-bold">Withdrawal Amount</label>
-                            <div class="form-control-plaintext fs-5 fw-bold" class="text-brand">
-                                Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <label class="form-label fw-bold">Transfer Fee</label>
-                            <div class="form-control-plaintext text-muted">
-                                Rp {{ number_format($withdrawal->fee, 0, ',', '.') }}
-                            </div>
-                        </div>
-                        <div class="col-sm-4 mb-3">
-                            <label class="form-label fw-bold">Amount Received</label>
-                            <div class="amount-net">
-                                Rp {{ number_format($withdrawal->amount_net, 0, ',', '.') }}
-                            </div>
-                        </div>
-                        @if($withdrawal->remark)
-                        <div class="col-12 mb-3">
-                            <label class="form-label fw-bold">Remark</label>
-                            <div class="form-control-plaintext">{{ $withdrawal->remark }}</div>
-                        </div>
-                        @endif
+                    {{-- Info rows --}}
+                    <div class="cf-info-row">
+                        <span class="cf-info-label">Campaign</span>
+                        <span class="cf-info-value fw-semibold">{{ $withdrawal->campaign->judul ?? '—' }}</span>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Card 2: Warning --}}
-        <div class="col-md-4 mb-4">
-            <div class="card border-0 shadow-sm border-warning h-100">
-                <div class="card-body">
-                    <h5 class="section-title danger mb-3">
-                        <i class="fas fa-triangle-exclamation me-2"></i>Warning
-                    </h5>
-                    <div class="alert alert-warning mb-0">
-                        <p class="mb-2 fw-semibold">
-                            <strong>Rp {{ number_format($withdrawal->amount_net, 0, ',', '.') }}</strong>
-                            will be sent to the recipient's bank account:
-                        </p>
-                        <p class="mb-2">
-                            <strong>{{ strtoupper($withdrawal->bank_code) }}</strong>
-                            {{ $withdrawal->account_number }}
-                            <br>
-                            <em>{{ $withdrawal->account_holder }}</em>
-                        </p>
-                        <p class="mb-2 small text-muted">
-                            Campaign balance will be reduced by
-                            <strong>Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}</strong>
-                            (includes transfer fee of Rp {{ number_format($withdrawal->fee, 0, ',', '.') }}).
-                        </p>
-                        <p class="mb-0 text-danger fw-semibold">
-                            <i class="fas fa-circle-xmark me-1"></i>
-                            This action cannot be undone once executed.
-                        </p>
+                    <div class="cf-info-row">
+                        <span class="cf-info-label">Destination</span>
+                        <span class="cf-info-value d-flex align-items-center gap-2 flex-wrap">
+                            <span class="wd-bank-chip">{{ strtoupper($withdrawal->bank_code) }}</span>
+                            <span class="fw-semibold">{{ $withdrawal->account_number }}</span>
+                        </span>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        @php $requires2fa = \App\Helpers\TwoFaHelper::isAllowed(auth()->user()); @endphp
-
-        @if($requires2fa)
-        {{-- Card 3: 2FA Verification --}}
-        <div class="col-md-8 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h5 class="section-title mb-3">
-                        <i class="fas fa-shield-halved me-2"></i>Two-Factor Authentication
-                    </h5>
-                    @if(auth()->user()->google2fa_enabled)
-                        <p class="text-muted mb-3">Enter the 6-digit code from your authenticator app to proceed.</p>
-                        <div class="mb-0" id="twofa-field">
-                            <label class="form-label fw-bold">Authenticator Code</label>
-                            <input type="text" id="two-fa-code-input" name="two_fa_code_display"
-                                   class="form-control otp-code-input"
-                                   inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000">
-                            <small class="text-muted">Code changes every 30 seconds.</small>
-                        </div>
-                    @else
-                        <div class="alert alert-warning mb-0">
-                            <i class="fas fa-triangle-exclamation me-2"></i>
-                            You must <a href="{{ route('admin.security.2fa') }}" class="fw-bold">enable Two-Factor Authentication</a>
-                            before you can execute withdrawals.
-                        </div>
+                    <div class="cf-info-row">
+                        <span class="cf-info-label">Account Holder</span>
+                        <span class="cf-info-value fw-semibold">{{ $withdrawal->account_holder ?: '—' }}</span>
+                    </div>
+                    <div class="cf-info-row">
+                        <span class="cf-info-label">Created By</span>
+                        <span class="cf-info-value">{{ auth()->user()->name }}</span>
+                    </div>
+                    @if($withdrawal->remark)
+                    <div class="cf-info-row">
+                        <span class="cf-info-label">Remark</span>
+                        <span class="cf-info-value text-muted">{{ $withdrawal->remark }}</span>
+                    </div>
                     @endif
+
+                    {{-- Amount Breakdown --}}
+                    <div class="mt-4">
+                        <div class="cf-breakdown">
+                            <div class="cf-breakdown-row">
+                                <span class="text-muted">Withdrawal Amount</span>
+                                <span class="fw-semibold">Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="cf-breakdown-row">
+                                <span class="text-muted">Transfer Fee</span>
+                                <span class="text-danger fw-semibold">− Rp {{ number_format($withdrawal->fee, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="cf-breakdown-row total">
+                                <span>Amount Received by Recipient</span>
+                                <span class="cf-net">Rp {{ number_format($withdrawal->amount_net, 0, ',', '.') }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        {{-- Right: Warning --}}
+        <div class="col-md-5 mb-4">
+            <div class="cf-warning h-100">
+                <div class="cf-warning-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Before You Execute
+                </div>
+                <div class="cf-warning-body">
+                    <p class="small text-muted mb-2">The following amount will be sent immediately:</p>
+
+                    <div class="cf-warning-dest">
+                        <div class="fw-bold fs-5 mb-1" style="color:#92400e">
+                            Rp {{ number_format($withdrawal->amount_net, 0, ',', '.') }}
+                        </div>
+                        <div class="small">
+                            <span class="wd-bank-chip me-1">{{ strtoupper($withdrawal->bank_code) }}</span>
+                            <strong>{{ $withdrawal->account_number }}</strong>
+                        </div>
+                        <div class="small text-muted mt-1 fst-italic">{{ $withdrawal->account_holder }}</div>
+                    </div>
+
+                    <p class="small text-muted mb-3">
+                        Campaign balance will be reduced by
+                        <strong>Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}</strong>
+                        (includes transfer fee of Rp {{ number_format($withdrawal->fee, 0, ',', '.') }}).
+                    </p>
+
+                    <div class="cf-danger-banner">
+                        <i class="fas fa-times-circle flex-shrink-0"></i>
+                        <span>This action cannot be undone once executed.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- 2FA Card --}}
+        @if($requires2fa)
+        <div class="col-md-7 mb-4">
+            @if(auth()->user()->google2fa_enabled)
+            <div class="cf-2fa-card">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <div style="width:36px;height:36px;border-radius:8px;background:rgba(0,167,157,.12);display:flex;align-items:center;justify-content:center;color:#00a79d;font-size:1rem;flex-shrink:0">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold" style="font-size:.9rem;color:#00a79d">Two-Factor Authentication Required</div>
+                        <div class="small text-muted">Enter the 6-digit code from your authenticator app</div>
+                    </div>
+                </div>
+                <div id="twofa-field">
+                    <input type="text" id="two-fa-code-input" name="two_fa_code_display"
+                           class="form-control otp-code-input"
+                           inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000 000">
+                    <small class="text-muted mt-1 d-block"><i class="fas fa-clock me-1"></i>Code refreshes every 30 seconds.</small>
+                </div>
+            </div>
+            @else
+            <div class="alert alert-warning mb-0">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                You must <a href="{{ route('admin.security.2fa') }}" class="fw-bold">enable Two-Factor Authentication</a>
+                before you can execute withdrawals.
+            </div>
+            @endif
         </div>
         @endif
 
         {{-- Action bar --}}
-        <div class="col-12 d-flex justify-content-end gap-2 mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center gap-2 mb-4 flex-wrap">
             <a href="{{ route('admin.celsyahid.campaign.finance', $withdrawal->campaign_id) }}"
-               class="btn btn-danger">
-                <i class="fas fa-times me-1"></i> Cancel
+               class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Cancel
             </a>
             <form action="{{ route('admin.celsyahid.withdrawal.execute', $withdrawal->id) }}" method="POST" id="execute-form">
                 @csrf
@@ -157,12 +327,12 @@
                     <input type="hidden" name="two_fa_code" id="two-fa-code-hidden">
                 @endif
                 @if($requires2fa && !auth()->user()->google2fa_enabled)
-                    <button type="button" class="btn btn-custom-primary" disabled>
+                    <button type="button" class="btn-execute" disabled>
                         <i class="fas fa-lock me-1"></i> 2FA Required
                     </button>
                 @else
-                    <button type="submit" class="btn btn-custom-primary" id="btn-execute">
-                        <i class="fas fa-check me-1"></i> Yes, Execute Now
+                    <button type="submit" class="btn-execute" id="btn-execute">
+                        <i class="fas fa-paper-plane me-1"></i> Execute Withdrawal
                     </button>
                 @endif
             </form>
@@ -176,16 +346,16 @@
 <script>
 document.getElementById('execute-form').addEventListener('submit', function (e) {
     @if($requires2fa && auth()->user()->google2fa_enabled)
-    // Copy visible OTP input value to hidden field
     var codeInput  = document.getElementById('two-fa-code-input');
     var codeHidden = document.getElementById('two-fa-code-hidden');
     if (codeInput && codeHidden) {
-        codeHidden.value = codeInput.value.trim();
+        codeHidden.value = codeInput.value.replace(/\s/g, '').trim();
         if (codeHidden.value.length !== 6) {
             e.preventDefault();
             codeInput.focus();
             codeInput.classList.add('is-invalid');
-            if (!document.getElementById('twofa-error')) {
+            var existing = document.getElementById('twofa-error');
+            if (!existing) {
                 var err = document.createElement('div');
                 err.id = 'twofa-error';
                 err.className = 'invalid-feedback d-block';
@@ -195,6 +365,8 @@ document.getElementById('execute-form').addEventListener('submit', function (e) 
             return;
         }
         codeInput.classList.remove('is-invalid');
+        var errEl = document.getElementById('twofa-error');
+        if (errEl) errEl.remove();
     }
     @endif
 
@@ -204,5 +376,12 @@ document.getElementById('execute-form').addEventListener('submit', function (e) 
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Processing...';
     }
 });
+
+@if($requires2fa && auth()->user()->google2fa_enabled)
+// Auto-strip spaces from OTP input
+document.getElementById('two-fa-code-input').addEventListener('input', function () {
+    this.value = this.value.replace(/\D/g, '').slice(0, 6);
+});
+@endif
 </script>
 @endsection
