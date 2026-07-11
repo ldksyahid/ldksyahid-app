@@ -129,62 +129,104 @@
                             <table class="table cs-campaign-table align-middle mb-0">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
+                                        <th style="width:36px">#</th>
                                         <th>Campaign</th>
                                         <th class="text-center">Category</th>
-                                        <th class="text-end">Target</th>
-                                        <th class="text-end">Collected</th>
-                                        <th style="min-width:140px;">Progress</th>
-                                        <th class="text-end">Available</th>
-                                        <th class="text-center">Deadline</th>
-                                        <th class="text-center">Action</th>
+                                        <th class="text-end" style="min-width:130px">Collected / Target</th>
+                                        <th style="min-width:160px">Progress</th>
+                                        <th class="text-end" style="min-width:110px">Available</th>
+                                        <th class="text-center" style="min-width:110px">Deadline</th>
+                                        <th class="text-center" style="width:60px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($campaigns as $i => $c)
                                     @php
-                                        $pct        = $c['pct'];
-                                        $barClass   = $pct >= 100 ? 'cs-bar-full' : ($pct >= 60 ? 'cs-bar-good' : ($pct >= 30 ? 'cs-bar-mid' : 'cs-bar-low'));
-                                        $isExpired  = $c['deadline'] && \Carbon\Carbon::parse($c['deadline'])->isPast();
+                                        $pct       = $c['pct'];
+                                        $barClass  = $pct >= 100 ? 'cs-bar-full' : ($pct >= 60 ? 'cs-bar-good' : ($pct >= 30 ? 'cs-bar-mid' : 'cs-bar-low'));
+                                        $isExpired = $c['deadline'] && \Carbon\Carbon::parse($c['deadline'])->isPast();
+                                        $dl        = $c['deadline'] ? \Carbon\Carbon::parse($c['deadline']) : null;
+                                        $daysLeft  = $dl ? now()->diffInDays($dl, false) : null;
+                                        $katMap    = [
+                                            'Education'    => 'cs-cat-edu',
+                                            'Pendidikan'   => 'cs-cat-edu',
+                                            'Kemanusiaan'  => 'cs-cat-hum',
+                                            'Lingkungan'   => 'cs-cat-env',
+                                            'Kesehatan'    => 'cs-cat-hlt',
+                                        ];
+                                        $catClass  = $katMap[$c['kategori']] ?? 'cs-cat-default';
                                     @endphp
-                                    <tr>
+                                    <tr class="{{ $isExpired ? 'cs-row-expired' : '' }}">
                                         <td class="text-muted small">{{ $i + 1 }}</td>
+
+                                        {{-- Campaign name + status dot --}}
                                         <td>
-                                            <div class="cs-campaign-name" title="{{ $c['judul'] }}">{{ $c['judul'] }}</div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="cs-status-dot {{ $isExpired ? 'cs-dot-expired' : 'cs-dot-active' }}"
+                                                      title="{{ $isExpired ? 'Expired' : 'Active' }}"></span>
+                                                <div class="cs-campaign-name" title="{{ $c['judul'] }}">{{ $c['judul'] }}</div>
+                                            </div>
                                         </td>
+
+                                        {{-- Category badge --}}
                                         <td class="text-center">
-                                            <span class="cs-category-badge">{{ $c['kategori'] }}</span>
+                                            <span class="cs-category-badge {{ $catClass }}">{{ $c['kategori'] }}</span>
                                         </td>
-                                        <td class="text-end small fw-semibold">
-                                            Rp {{ number_format($c['target'], 0, ',', '.') }}
-                                        </td>
+
+                                        {{-- Collected / Target --}}
                                         <td class="text-end">
-                                            <span class="cs-amount-collected">Rp {{ number_format($c['total_paid'], 0, ',', '.') }}</span>
+                                            <div class="cs-amount-collected">Rp {{ number_format($c['total_paid'], 0, ',', '.') }}</div>
+                                            <div class="text-muted" style="font-size:.72rem">
+                                                of Rp {{ number_format($c['target'], 0, ',', '.') }}
+                                            </div>
                                         </td>
+
+                                        {{-- Progress bar --}}
                                         <td>
                                             <div class="cs-progress-wrap">
                                                 <div class="cs-progress-bar-bg">
-                                                    <div class="cs-progress-bar-fill {{ $barClass }}" style="width: {{ $pct }}%;"></div>
+                                                    <div class="cs-progress-bar-fill {{ $barClass }}" style="width: {{ min($pct,100) }}%;"></div>
                                                 </div>
-                                                <span class="cs-pct-label">{{ $pct }}%</span>
+                                            </div>
+                                            <div class="cs-pct-label mt-1">
+                                                <span class="{{ $barClass === 'cs-bar-full' ? 'text-success' : ($barClass === 'cs-bar-low' ? 'text-danger' : '') }}">{{ $pct }}%</span>
+                                                @if($pct >= 100) <span class="cs-tag-goal">Goal!</span> @endif
                                             </div>
                                         </td>
+
+                                        {{-- Available --}}
                                         <td class="text-end">
-                                            <span class="{{ $c['available'] > 0 ? 'cs-amount-available' : 'text-muted' }}">
-                                                Rp {{ number_format($c['available'], 0, ',', '.') }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center small {{ $isExpired ? 'text-danger' : 'text-muted' }}">
-                                            @if($c['deadline'])
-                                                {{ \Carbon\Carbon::parse($c['deadline'])->format('d M Y') }}
-                                                @if($isExpired) <span class="cs-expired-tag">Expired</span> @endif
+                                            @if($c['available'] > 0)
+                                                <span class="cs-avail-badge">Rp {{ number_format($c['available'], 0, ',', '.') }}</span>
                                             @else
-                                                —
+                                                <span class="text-muted small">—</span>
                                             @endif
                                         </td>
+
+                                        {{-- Deadline --}}
+                                        <td class="text-center">
+                                            @if($dl)
+                                                <div class="small {{ $isExpired ? 'text-danger fw-semibold' : 'text-muted' }}">
+                                                    {{ $dl->format('d M Y') }}
+                                                </div>
+                                                @if($isExpired)
+                                                    <span class="cs-expired-tag">Expired</span>
+                                                @elseif($daysLeft !== null && $daysLeft <= 30)
+                                                    <span class="cs-tag-soon">{{ $daysLeft }}d left</span>
+                                                @else
+                                                    <div class="text-muted" style="font-size:.7rem">
+                                                        in {{ $dl->diffForHumans(null, true, true, 1) }}
+                                                    </div>
+                                                @endif
+                                            @else
+                                                <span class="text-muted small">—</span>
+                                            @endif
+                                        </td>
+
+                                        {{-- Action --}}
                                         <td class="text-center">
                                             <a href="{{ route('admin.celsyahid.campaign.finance', $c['id']) }}"
-                                               class="btn btn-sm cs-btn-finance" title="Finance">
+                                               class="btn btn-sm cs-btn-finance" title="Campaign Finance">
                                                 <i class="fas fa-wallet"></i>
                                             </a>
                                         </td>
@@ -194,18 +236,13 @@
                                 <tfoot>
                                     <tr>
                                         <td colspan="3" class="fw-bold text-end small pt-3">Total across all campaigns</td>
-                                        <td class="text-end fw-bold small pt-3">
-                                            Rp {{ number_format($campaigns->sum('target'), 0, ',', '.') }}
-                                        </td>
                                         <td class="text-end pt-3">
-                                            <span class="cs-amount-collected fw-bold">
-                                                Rp {{ number_format($campaigns->sum('total_paid'), 0, ',', '.') }}
-                                            </span>
+                                            <div class="cs-amount-collected fw-bold">Rp {{ number_format($campaigns->sum('total_paid'), 0, ',', '.') }}</div>
+                                            <div class="text-muted" style="font-size:.72rem">of Rp {{ number_format($campaigns->sum('target'), 0, ',', '.') }}</div>
                                         </td>
-                                        <td colspan="2" class="text-end pt-3">
-                                            <span class="cs-amount-available fw-bold">
-                                                Rp {{ number_format($campaigns->sum('available'), 0, ',', '.') }}
-                                            </span>
+                                        <td class="pt-3"></td>
+                                        <td class="text-end pt-3">
+                                            <span class="cs-avail-badge fw-bold">Rp {{ number_format($campaigns->sum('available'), 0, ',', '.') }}</span>
                                         </td>
                                         <td colspan="2"></td>
                                     </tr>
