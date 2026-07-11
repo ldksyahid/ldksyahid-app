@@ -121,7 +121,6 @@
                                     <th class="ps-4">#</th>
                                     <th>Campaign</th>
                                     <th class="text-end">QRIS PAID</th>
-                                    <th class="text-end">Admin Fee (1%)</th>
                                     <th class="text-center">Txn</th>
                                     <th class="text-end">Withdrawn</th>
                                     <th class="text-end">Net Balance</th>
@@ -133,13 +132,6 @@
                                     <td class="ps-4 text-muted">{{ $i + 1 }}</td>
                                     <td class="fw-semibold">{{ $row['campaign'] }}</td>
                                     <td class="text-end">Rp {{ number_format($row['total_qris'], 0, ',', '.') }}</td>
-                                    <td class="text-end text-success small">
-                                        @if($row['total_fee'] > 0)
-                                            + Rp {{ number_format($row['total_fee'], 0, ',', '.') }}
-                                        @else
-                                            —
-                                        @endif
-                                    </td>
                                     <td class="text-center text-muted small">{{ $row['txn_count'] }}</td>
                                     <td class="text-end text-warning fw-semibold">
                                         @if($row['total_withdrawn'] > 0)
@@ -154,13 +146,13 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="7" class="text-center py-4 text-muted">No QRIS transactions found.</td>
+                                    <td colspan="6" class="text-center py-4 text-muted">No QRIS transactions found.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
                             <tfoot class="table-light">
                                 <tr>
-                                    <td colspan="6" class="ps-4 fw-bold text-end">Total Expected</td>
+                                    <td colspan="5" class="ps-4 fw-bold text-end">Total Expected</td>
                                     <td class="text-end fw-bold fs-6 text-brand">
                                         Rp {{ number_format($totalExpected, 0, ',', '.') }}
                                     </td>
