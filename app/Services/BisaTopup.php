@@ -258,7 +258,7 @@ class BisaTopup
             $res = Http::withToken($token)
                 ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
                 ->acceptJson()
-                ->get($this->baseUrl() . '/api/transfer/bank-list');
+                ->get($this->baseUrl() . '/api/transfer/bank-lists');
 
             Log::info('[BisaTopup] bankList', [
                 'url'    => $this->baseUrl() . '/api/transfer/bank-list',
