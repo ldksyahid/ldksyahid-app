@@ -413,16 +413,13 @@ $(function () {
     });
 
     /* ── Submit: validate + strip dots ─────────────────────── */
-    var btnSubmit     = document.getElementById('btn-submit');
-    var btnSubmitOrig = btnSubmit ? btnSubmit.innerHTML : '';
+    var btnSubmit = document.getElementById('btn-submit');
 
     function rejectSubmit(e, message, scrollTarget) {
         e.preventDefault();
-        // Restore button — a global handler may have already set it to "Saving..."
-        if (btnSubmit) {
-            btnSubmit.disabled = false;
-            btnSubmit.innerHTML = btnSubmitOrig;
-        }
+        // stopPropagation prevents the document-level jQuery handler in body.blade.php
+        // from changing the button to "Saving..." (it listens via event bubbling).
+        e.stopPropagation();
         var warnBox = document.getElementById('amount-warning');
         var warnMsg = document.getElementById('amount-warning-msg');
         if (warnBox && warnMsg && message) {
@@ -435,7 +432,7 @@ $(function () {
     document.getElementById('withdrawal-form').addEventListener('submit', function (e) {
         if (!holderHidden.value) {
             e.preventDefault();
-            if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = btnSubmitOrig; }
+            e.stopPropagation();
             inquiryMsg.innerHTML = '<div class="alert alert-warning py-2">Please verify the destination account before continuing.</div>';
             accountNoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
