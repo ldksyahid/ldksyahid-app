@@ -34,7 +34,7 @@
                 {{-- Actual Balance --}}
                 <div class="col-md-4">
                     <div class="br-stat-card">
-                        <div class="br-stat-icon br-icon-actual"><i class="fas fa-building-columns"></i></div>
+                        <div class="br-stat-icon br-icon-actual"><i class="fas fa-wallet"></i></div>
                         <div class="br-stat-info">
                             <div class="br-stat-label">Actual Balance</div>
                             <div class="br-stat-value">
@@ -65,7 +65,7 @@
                 <div class="col-md-4">
                     <div class="br-stat-card">
                         <div class="br-stat-icon {{ $discrepancy === null ? 'br-icon-neutral' : ($discrepancy < 0 ? 'br-icon-deficit' : ($isNormal ? 'br-icon-normal' : 'br-icon-warning')) }}">
-                            <i class="fas {{ $discrepancy === null ? 'fa-question' : ($discrepancy < 0 ? 'fa-exclamation-circle' : ($isNormal ? 'fa-check-circle' : 'fa-exclamation-triangle')) }}"></i>
+                            <i class="fas {{ $discrepancy === null ? 'fa-question-circle' : ($discrepancy < 0 ? 'fa-exclamation-circle' : ($isNormal ? 'fa-check-circle' : 'fa-exclamation-triangle')) }}"></i>
                         </div>
                         <div class="br-stat-info">
                             <div class="br-stat-label">Discrepancy</div>
