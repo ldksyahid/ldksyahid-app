@@ -343,10 +343,7 @@
 [data-theme="dark"] .dn-phone-group .select2-selection--single .select2-selection__rendered {
     color: #e2e8f0;
 }
-[data-theme="dark"] .dn-phone-group .select2-container--default.select2-container--open .select2-selection--single,
-[data-theme="dark"] .dn-phone-group .select2-container--default.select2-container--focus .select2-selection--single {
-    background: #1a2a2a;
-}
+
 [data-theme="dark"] .dn-phone-dropdown.select2-dropdown {
     border-color: var(--dn-primary);
     box-shadow: 0 8px 30px rgba(0,0,0,.4);
@@ -365,8 +362,6 @@
     border-color: #2e3650;
     color: #e2e8f0;
 }
-[data-theme="dark"] .dn-phone-local:focus { background: #1a2a2a; }
-
 
 /* ── reCAPTCHA wrapper ── */
 .dn-captcha-wrap {
