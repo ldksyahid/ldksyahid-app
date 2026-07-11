@@ -16,12 +16,17 @@ class Fonnte
     {
         $token = env('FONNTE_TOKEN');
 
+        // Normalize: strip non-digits, replace leading 0 with 62 (fallback for old local-format numbers).
+        $normalized = preg_replace('/[^\d]/', '', $target);
+        if (substr($normalized, 0, 1) === '0') {
+            $normalized = '62' . substr($normalized, 1);
+        }
+
         $response = Http::withHeaders([
             'Authorization' => $token,
         ])->post('https://api.fonnte.com/send', [
-            'target'      => $target,
-            'message'     => $message,
-            'countryCode' => '62',
+            'target'  => $normalized,
+            'message' => $message,
         ]);
 
         $result = $response->json();

@@ -154,6 +154,30 @@
         });
     });
 
+    /* ── Phone country code: update placeholder dynamically ─── */
+    var phoneCodeEl  = document.getElementById('dn-phone-code');
+    var phoneLocalEl = document.getElementById('dn-telpon-local');
+
+    function updatePhonePlaceholder() {
+        if (!phoneCodeEl || !phoneLocalEl) return;
+        var selected = phoneCodeEl.options[phoneCodeEl.selectedIndex];
+        phoneLocalEl.placeholder = selected.getAttribute('data-placeholder') || 'xxxxxxxxxx';
+    }
+
+    if (phoneCodeEl) {
+        phoneCodeEl.addEventListener('change', updatePhonePlaceholder);
+        updatePhonePlaceholder();
+    }
+
+    /* Combine country code + local number into the hidden field. */
+    function buildFullPhone() {
+        if (!phoneCodeEl || !phoneLocalEl) return;
+        var code  = phoneCodeEl.value;
+        var local = phoneLocalEl.value.replace(/[^\d]/g, '').replace(/^0+/, '');
+        var fullEl = document.getElementById('dn-telpon-full');
+        if (fullEl) fullEl.value = local ? code + local : '';
+    }
+
     /* ── Form validation + submit ────────────────────────────── */
     var forms = document.querySelectorAll('.dn-form');
     forms.forEach(function (form) {
@@ -213,7 +237,9 @@
                 return;
             }
 
-            // All validations passed — disable button ONLY now.
+            // All validations passed — build combined phone then disable button.
+            buildFullPhone();
+
             var btn = form.querySelector('[type="submit"]');
             if (btn) {
                 btn.disabled = true;
@@ -289,5 +315,31 @@ $(function () {
 
     $domisili.on('select2:select',  function () { clearSelectError($(this)); });
     $pekerjaan.on('select2:select', function () { clearSelectError($(this)); });
+
+    /* ── Phone code Select2 ────────────────────────────────── */
+    $('#dn-phone-code').select2({
+        dropdownParent: $('body'),
+        dropdownCssClass: 'dn-phone-dropdown',
+        width: 'auto',
+        minimumResultsForSearch: 0,
+        templateResult: function (opt) {
+            if (!opt.id) return opt.text;
+            var el = opt.element;
+            return $('<span class="d-flex align-items-center gap-2">' +
+                '<span class="pc-flag">'  + ($(el).data('flag') || '') + '</span>' +
+                '<span class="pc-code">+' + opt.id + '</span>' +
+                '<span class="pc-name">'  + ($(el).data('name') || '') + '</span>' +
+            '</span>');
+        },
+        templateSelection: function (opt) {
+            if (!opt.id) return opt.text;
+            var el = opt.element;
+            return $('<span>' + ($(el).data('flag') || '') + ' <strong>+' + opt.id + '</strong></span>');
+        },
+    });
+
+    $('#dn-phone-code').on('select2:select', function () {
+        updatePhonePlaceholder();
+    });
 });
 </script>
