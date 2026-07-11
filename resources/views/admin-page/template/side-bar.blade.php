@@ -76,7 +76,8 @@
                         <a href="/admin/celengan-syahid/dashboard" class="dropdown-item {{ $isActive('admin/celengan-syahid/dashboard') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Dashboard</a>
                         <a href="/admin/celengan-syahid/campaigns" class="dropdown-item {{ ($isActive('admin/celengan-syahid/campaigns') || $isActive('admin/celengan-syahid/campaign')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Campaign</a>
                         <a href="/admin/celengan-syahid/donations" class="dropdown-item {{ ($isActive('admin/celengan-syahid/donations') || $isActive('admin/celengan-syahid/donation')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Donation</a>
-                        <a href="/admin/celengan-syahid/withdrawals" class="dropdown-item {{ $isActive('admin/celengan-syahid/withdrawal*') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Withdrawal</a>
+                        <a href="/admin/celengan-syahid/withdrawals" class="dropdown-item {{ ($isActive('admin/celengan-syahid/withdrawal*') || $isActive('admin/celengan-syahid/balance-report')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Withdrawal</a>
+                        <a href="/admin/celengan-syahid/balance-report" class="dropdown-item {{ $isActive('admin/celengan-syahid/balance-report') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Balance Report</a>
                         @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
                         <a href="/admin/celengan-syahid/audit-logs" class="dropdown-item {{ $isActive('admin/celengan-syahid/audit-logs') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Audit Log</a>
                         @endif
@@ -174,7 +175,8 @@
                         <a href="/admin/celengan-syahid/dashboard" class="dropdown-item {{ $isActive('admin/celengan-syahid/dashboard') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Dashboard</a>
                         <a href="/admin/celengan-syahid/campaigns" class="dropdown-item {{ ($isActive('admin/celengan-syahid/campaigns') || $isActive('admin/celengan-syahid/campaign')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Campaign</a>
                         <a href="/admin/celengan-syahid/donations" class="dropdown-item {{ ($isActive('admin/celengan-syahid/donations') || $isActive('admin/celengan-syahid/donation')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Donation</a>
-                        <a href="/admin/celengan-syahid/withdrawals" class="dropdown-item {{ $isActive('admin/celengan-syahid/withdrawal*') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Withdrawal</a>
+                        <a href="/admin/celengan-syahid/withdrawals" class="dropdown-item {{ ($isActive('admin/celengan-syahid/withdrawal*') || $isActive('admin/celengan-syahid/balance-report')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Withdrawal</a>
+                        <a href="/admin/celengan-syahid/balance-report" class="dropdown-item {{ $isActive('admin/celengan-syahid/balance-report') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Balance Report</a>
                         @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
                         <a href="/admin/celengan-syahid/audit-logs" class="dropdown-item {{ $isActive('admin/celengan-syahid/audit-logs') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Audit Log</a>
                         @endif

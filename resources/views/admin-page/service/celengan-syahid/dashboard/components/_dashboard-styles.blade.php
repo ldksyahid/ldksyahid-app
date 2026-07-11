@@ -272,18 +272,15 @@
         margin-top: .5rem;
     }
     html.dark-mode .cs-table-pagination { border-top-color: rgba(255,255,255,.08); }
-    .cs-pg-btn { font-size: .78rem !important; padding: .25rem .75rem !important; border-radius: 8px !important; }
-    .cs-pg-badge {
-        display: inline-flex;
-        align-items: center;
-        font-size: .78rem;
-        font-weight: 600;
-        color: #495057;
-        background: #f3f4f6;
-        border-radius: 6px;
-        padding: .2rem .65rem;
+    .cs-pg-btn { font-size: .78rem !important; padding: .22rem .6rem !important; border-radius: 6px !important; min-width: 32px; }
+    .cs-pg-btn.active {
+        background: #00a79d !important;
+        border-color: #00a79d !important;
+        color: #fff !important;
+        font-weight: 700;
     }
-    html.dark-mode .cs-pg-badge { background: #374151; color: #d1d5db; }
+    .cs-pg-ellipsis { display: inline-flex; align-items: center; padding: 0 .3rem; color: #9ca3af; font-size: .82rem; }
+    html.dark-mode .cs-pg-btn.active { background: #008b84 !important; border-color: #008b84 !important; }
 
     @media (max-width: 768px) {
         .cs-page-title { font-size: 1.35rem; }

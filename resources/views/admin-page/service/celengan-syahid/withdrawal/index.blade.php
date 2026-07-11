@@ -153,26 +153,47 @@ $(function () {
         }
     }
 
+    function pageWindows(cur, last) {
+        var show = {}, arr = [];
+        [1, last].forEach(function (p) { if (p >= 1 && p <= last) show[p] = true; });
+        for (var p = Math.max(1, cur - 2); p <= Math.min(last, cur + 2); p++) show[p] = true;
+        var prev = 0;
+        Object.keys(show).map(Number).sort(function (a, b) { return a - b; }).forEach(function (p) {
+            if (prev && p - prev > 1) arr.push(null);
+            arr.push(p);
+            prev = p;
+        });
+        return arr;
+    }
+
     function renderPagination(meta) {
         $('#wi-pg-info').text(
             meta.total > 0
                 ? 'Showing ' + meta.from + '–' + meta.to + ' of ' + meta.total + ' records'
                 : 'No records found'
         );
-        var $ctrl = $('#wi-pg-controls').empty();
         curPage  = meta.current_page;
         lastPage = meta.last_page;
 
-        var $prev = $('<button class="btn btn-sm btn-outline-secondary wi-pg-btn"><i class="fas fa-chevron-left me-1"></i>Prev</button>');
+        var $ctrl = $('#wi-pg-controls').empty();
+        if (lastPage <= 1) return;
+
+        var $prev = $('<button class="btn btn-sm btn-outline-secondary wi-pg-btn"><i class="fas fa-chevron-left"></i></button>');
         if (curPage <= 1) $prev.prop('disabled', true);
         else $prev.on('click', function () { loadTable(curPage - 1); });
         $ctrl.append($prev);
 
-        if (meta.last_page > 1) {
-            $ctrl.append('<span class="wi-pg-page-badge">Page ' + curPage + ' / ' + meta.last_page + '</span>');
-        }
+        pageWindows(curPage, lastPage).forEach(function (p) {
+            if (p === null) {
+                $ctrl.append('<span class="wi-pg-ellipsis">…</span>');
+            } else {
+                var $btn = $('<button class="btn btn-sm btn-outline-secondary wi-pg-btn' + (p === curPage ? ' active' : '') + '">' + p + '</button>');
+                if (p !== curPage) { var pg = p; $btn.on('click', function () { loadTable(pg); }); }
+                $ctrl.append($btn);
+            }
+        });
 
-        var $next = $('<button class="btn btn-sm btn-outline-secondary wi-pg-btn">Next <i class="fas fa-chevron-right ms-1"></i></button>');
+        var $next = $('<button class="btn btn-sm btn-outline-secondary wi-pg-btn"><i class="fas fa-chevron-right"></i></button>');
         if (curPage >= lastPage) $next.prop('disabled', true);
         else $next.on('click', function () { loadTable(curPage + 1); });
         $ctrl.append($next);
