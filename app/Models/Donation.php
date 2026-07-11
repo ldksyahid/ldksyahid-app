@@ -231,13 +231,15 @@ class Donation extends Model
     /**
      * Create a donation backed by the BisaTopup (QRIS) gateway response.
      */
-    public static function createDonationGateway(Request $request, $transactionId, $jumlah_donasi, $status, array $gatewayData, $expiredAt)
+    public static function createDonationGateway(Request $request, $transactionId, $jumlah_donasi, $adminFee, $total, $status, array $gatewayData, $expiredAt)
     {
         $pesan_donatur = $request->input('pesan_donatur') ?? "Bismillah Semoga Berkah yaaa ! tetap Semangat Semuanya !!";
 
         return Donation::create([
             'doc_no'            => $transactionId,
             'jumlah_donasi'     => $jumlah_donasi,
+            'biaya_admin'       => $adminFee,
+            'total_tagihan'     => $total,
             'nama_donatur'      => $request->input('nama_donatur'),
             'email_donatur'     => $request->input('email_donatur'),
             'no_telp_donatur'   => $request->input('no_telp_donatur'),

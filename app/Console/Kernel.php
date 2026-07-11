@@ -33,6 +33,11 @@ class Kernel extends ConsoleKernel
                  ->everyFiveMinutes()
                  ->withoutOverlapping();
 
+        // Celengan Syahid: mark QRIS donations as EXPIRED when expired_at has passed
+        $schedule->command('donations:expire-qris')
+                 ->everyTenMinutes()
+                 ->withoutOverlapping();
+
         // Auto-cleanup disabled — visitor data is kept indefinitely
         // $schedule->command('visitors:cleanup')->dailyAt('02:00');
     }
@@ -53,5 +58,6 @@ class Kernel extends ConsoleKernel
         Commands\CleanupVisitorLogs::class,
         Commands\AggregateVisitorStats::class,
         Commands\CloseExpiredForms::class,
+        Commands\ExpireStaleQrisDonations::class,
     ];
 }

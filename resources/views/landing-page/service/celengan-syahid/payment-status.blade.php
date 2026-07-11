@@ -6,16 +6,19 @@
 
     $isPaid    = $data->payment_status === 'PAID';
     $isPending = $data->payment_status === 'PENDING';
-    $isFailed  = !$isPaid && !$isPending;
+    $isExpired = $data->payment_status === 'EXPIRED';
+    $isFailed  = !$isPaid && !$isPending && !$isExpired;
 
     $statusClass = $isPaid ? 'paid' : ($isPending ? 'pending' : 'failed');
-    $statusIcon  = $isPaid ? 'fas fa-check-circle' : ($isPending ? 'fas fa-clock' : 'fas fa-times-circle');
-    $statusTitle = $isPaid ? 'Pembayaran Berhasil' : ($isPending ? 'Menunggu Pembayaran' : 'Pembayaran Gagal');
+    $statusIcon  = $isPaid ? 'fas fa-check-circle' : ($isPending ? 'fas fa-clock' : ($isExpired ? 'fas fa-hourglass-end' : 'fas fa-times-circle'));
+    $statusTitle = $isPaid ? 'Pembayaran Berhasil' : ($isPending ? 'Menunggu Pembayaran' : ($isExpired ? 'QRIS Kadaluarsa' : 'Pembayaran Gagal'));
     $statusSub   = $isPaid
                     ? 'Jazakallah khayran, donasi kamu sudah kami terima!'
                     : ($isPending
                         ? 'Silakan selesaikan proses pembayaranmu'
-                        : 'Terjadi masalah, silakan coba lagi');
+                        : ($isExpired
+                            ? 'Waktu pembayaran telah habis. Silakan donasi kembali.'
+                            : 'Terjadi masalah, silakan coba lagi'));
 
     $paymentTime = Carbon::parse($data->created_at)
                         ->locale('id')
@@ -72,11 +75,11 @@
         </div>
 
         {{-- ── QRIS Payment (pending) ────────────────────────── --}}
-        @if($isPending && $data->qr_code)
+        @if($isPending && !$isExpired && $data->qr_code)
         <div id="ds-qris-card" class="ds-qris-card wow fadeInUp" data-wow-delay="0.08s">
             <div class="ds-qris-title"><i class="fas fa-qrcode"></i> Scan QRIS untuk Membayar</div>
             <div id="ds-qris" class="ds-qris-box" data-qr="{{ $data->qr_code }}"></div>
-            <div class="ds-qris-amount">{{ LFC::formatRupiah($data->jumlah_donasi) }}</div>
+            <div class="ds-qris-amount">{{ LFC::formatRupiah($data->total_tagihan ?: $data->jumlah_donasi) }}</div>
             <p class="ds-qris-hint">Buka aplikasi e-wallet atau m-banking apa pun, lalu scan kode di atas.</p>
             @if($data->expired_at)
             <div class="ds-qris-expiry">
@@ -85,7 +88,7 @@
             </div>
             @endif
             <button id="ds-qris-dl" type="button" class="ds-qris-dl-btn"
-                data-amount="{{ LFC::formatRupiah($data->jumlah_donasi) }}"
+                data-amount="{{ LFC::formatRupiah($data->total_tagihan ?: $data->jumlah_donasi) }}"
                 data-campaign="{{ $campaign->judul }}"
                 data-expiry="{{ $data->expired_at ? \Carbon\Carbon::parse($data->expired_at)->locale('id')->isoFormat('D MMM Y, HH:mm') : '' }}">
                 <i class="fas fa-download"></i> Download QR Code
@@ -121,9 +124,15 @@
                     <span class="ds-detail-key">Jumlah Donasi</span>
                     <span class="ds-detail-val amount">{{ LFC::formatRupiah($data->jumlah_donasi) }}</span>
                 </div>
+                @if(!empty($data->biaya_admin) && (int)$data->biaya_admin > 0)
+                <div class="ds-detail-row">
+                    <span class="ds-detail-key">Biaya Admin (1%)</span>
+                    <span class="ds-detail-val">{{ LFC::formatRupiah($data->biaya_admin) }}</span>
+                </div>
+                @endif
                 <div class="ds-detail-row">
                     <span class="ds-detail-key">Total Pembayaran</span>
-                    <span class="ds-detail-val amount">{{ LFC::formatRupiah($data->jumlah_donasi) }}</span>
+                    <span class="ds-detail-val amount">{{ LFC::formatRupiah($data->total_tagihan ?: $data->jumlah_donasi) }}</span>
                 </div>
             </div>
         </div>
