@@ -260,6 +260,28 @@
     html.dark-mode .cs-btn-all:hover { background: #008b84; border-color: #008b84; color: #fff; }
     html.dark-mode .text-muted { color: #9ca3af !important; }
 
+    /* ── Campaign Progress Pagination ───────────────────── */
+    .cs-pagination .page-link {
+        color: #00a79d;
+        border-color: #e0f7f5;
+        border-radius: 6px !important;
+        margin: 0 2px;
+        font-size: .78rem;
+        font-weight: 600;
+        padding: .3rem .6rem;
+    }
+    .cs-pagination .page-link:hover { background: #e0f7f5; border-color: #00a79d; }
+    .cs-pagination .page-item.active .page-link {
+        background: #00a79d;
+        border-color: #00a79d;
+        color: #fff;
+    }
+    .cs-pagination .page-item.disabled .page-link { color: #adb5bd; border-color: #e9ecef; }
+    html.dark-mode .cs-pagination .page-link { color: #2dd4bf; border-color: rgba(45,212,191,.2); background: transparent; }
+    html.dark-mode .cs-pagination .page-link:hover { background: rgba(45,212,191,.1); border-color: #2dd4bf; }
+    html.dark-mode .cs-pagination .page-item.active .page-link { background: #008b84; border-color: #008b84; color: #fff; }
+    html.dark-mode .cs-pagination .page-item.disabled .page-link { color: #4b5563; border-color: rgba(255,255,255,.08); }
+
     @media (max-width: 768px) {
         .cs-page-title { font-size: 1.35rem; }
         .cs-section-title { font-size: 1rem; }

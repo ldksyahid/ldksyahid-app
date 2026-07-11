@@ -138,5 +138,97 @@ $(document).ready(function() {
         if (cachedData.pie)  renderPie(cachedData.pie);
         if (cachedData.bar2) renderBar2(cachedData.bar2);
     });
+
+    // ── Campaign Progress client-side pagination ──────────────
+    (function () {
+        var PER_PAGE = 5;
+        var tbody    = document.getElementById('cs-campaign-tbody');
+        if (!tbody) return;
+
+        var allRows  = Array.from(tbody.querySelectorAll('tr'));
+        var total    = allRows.length;
+        if (total <= PER_PAGE) return; // no need for pagination
+
+        var totalPages = Math.ceil(total / PER_PAGE);
+        var curPage    = 1;
+
+        var bar        = document.getElementById('cs-pagination-bar');
+        var info       = document.getElementById('cs-page-info');
+        var pgList     = document.getElementById('cs-pagination');
+
+        function render(page) {
+            curPage = page;
+            var start = (page - 1) * PER_PAGE;
+            var end   = start + PER_PAGE;
+
+            allRows.forEach(function (tr, idx) {
+                tr.style.display = (idx >= start && idx < end) ? '' : 'none';
+                // update the # cell (first td) to show global sequential number
+                var numCell = tr.querySelector('td:first-child');
+                if (numCell) numCell.textContent = idx + 1;
+            });
+
+            // Info text
+            var from = start + 1;
+            var to   = Math.min(end, total);
+            info.textContent = 'Showing ' + from + '–' + to + ' of ' + total + ' campaigns';
+
+            // Rebuild pagination buttons
+            pgList.innerHTML = '';
+
+            // Prev
+            pgList.appendChild(makeItem('&laquo;', page - 1, page === 1));
+
+            // Page numbers — show at most 5 around current
+            var winStart = Math.max(1, page - 2);
+            var winEnd   = Math.min(totalPages, winStart + 4);
+            if (winEnd - winStart < 4) winStart = Math.max(1, winEnd - 4);
+
+            if (winStart > 1) {
+                pgList.appendChild(makeItem('1', 1, false));
+                if (winStart > 2) pgList.appendChild(makeEllipsis());
+            }
+            for (var p = winStart; p <= winEnd; p++) {
+                pgList.appendChild(makeItem(p, p, false, p === page));
+            }
+            if (winEnd < totalPages) {
+                if (winEnd < totalPages - 1) pgList.appendChild(makeEllipsis());
+                pgList.appendChild(makeItem(totalPages, totalPages, false));
+            }
+
+            // Next
+            pgList.appendChild(makeItem('&raquo;', page + 1, page === totalPages));
+        }
+
+        function makeItem(label, targetPage, disabled, active) {
+            var li = document.createElement('li');
+            li.className = 'page-item' + (disabled ? ' disabled' : '') + (active ? ' active' : '');
+            var a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = '#cs-campaign-tbody';
+            a.innerHTML = label;
+            if (!disabled && !active) {
+                a.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    render(targetPage);
+                });
+            } else {
+                a.addEventListener('click', function (e) { e.preventDefault(); });
+            }
+            li.appendChild(a);
+            return li;
+        }
+
+        function makeEllipsis() {
+            var li = document.createElement('li');
+            li.className = 'page-item disabled';
+            li.innerHTML = '<span class="page-link">…</span>';
+            return li;
+        }
+
+        // Show pagination bar (was hidden via inline style)
+        bar.style.removeProperty('display');
+        render(1);
+    })();
 });
 </script>

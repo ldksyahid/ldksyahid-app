@@ -311,6 +311,22 @@ class WithdrawalController extends Controller
     }
 
     /* ================================================================
+       CHECK STATUS — AJAX polling for real-time status on show page
+       ================================================================ */
+
+    public function checkStatus(string $id)
+    {
+        $w = Withdrawal::findOrFail($id);
+
+        return response()->json([
+            'status'       => $w->status,
+            'executed_at'  => optional($w->executed_at)->isoFormat('D MMM YYYY, HH:mm'),
+            'completed_at' => optional($w->completed_at)->isoFormat('D MMM YYYY, HH:mm'),
+            'receipt_url'  => $w->receipt_url,
+        ]);
+    }
+
+    /* ================================================================
        BALANCE REPORT — discrepancy between Bisabiller wallet and DB
        ================================================================ */
 
