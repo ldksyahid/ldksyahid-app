@@ -169,28 +169,50 @@
 
                     @if($withdrawals->count() > 0)
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead class="table-light">
+                        <table class="table wd-table align-middle mb-0">
+                            <thead>
                                 <tr>
+                                    <th style="width:36px">#</th>
                                     <th>Date</th>
                                     <th>Bank</th>
                                     <th>Account No.</th>
                                     <th>Recipient</th>
-                                    <th class="text-end">Amount</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center">Action</th>
+                                    <th class="text-end" style="min-width:120px">Amount</th>
+                                    <th class="text-center" style="min-width:110px">Status</th>
+                                    <th class="text-center" style="width:60px">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($withdrawals as $wd)
-                                <tr>
-                                    <td>{{ optional($wd->created_at)->format('d M Y') }}</td>
-                                    <td>{{ strtoupper($wd->bank_code) }}</td>
-                                    <td>{{ $wd->account_number }}</td>
-                                    <td>{{ $wd->account_holder ?: '—' }}</td>
-                                    <td class="text-end fw-semibold">Rp {{ number_format($wd->amount, 0, ',', '.') }}</td>
+                                @foreach($withdrawals as $i => $wd)
+                                @php
+                                    $statusClass = match($wd->status) {
+                                        'COMPLETED' => 'wd-status-COMPLETED',
+                                        'PENDING'   => 'wd-status-PENDING',
+                                        'FAILED'    => 'wd-status-FAILED',
+                                        default     => 'wd-status-default',
+                                    };
+                                    $statusIcon = match($wd->status) {
+                                        'COMPLETED' => 'fa-check-circle',
+                                        'PENDING'   => 'fa-clock',
+                                        'FAILED'    => 'fa-times-circle',
+                                        default     => 'fa-circle',
+                                    };
+                                @endphp
+                                <tr class="{{ $wd->status === 'FAILED' ? 'wd-row-failed' : '' }}">
+                                    <td class="text-muted small">{{ $i + 1 }}</td>
+                                    <td>
+                                        <div class="fw-semibold small">{{ optional($wd->created_at)->format('d M Y') }}</div>
+                                        <div class="text-muted" style="font-size:.72rem">{{ optional($wd->created_at)->format('H:i') }}</div>
+                                    </td>
+                                    <td><span class="wd-bank-chip">{{ strtoupper($wd->bank_code) }}</span></td>
+                                    <td><span class="wd-account">{{ $wd->account_number }}</span></td>
+                                    <td class="fw-semibold small">{{ $wd->account_holder ?: '—' }}</td>
+                                    <td class="text-end">
+                                        <span class="wd-amount">Rp {{ number_format($wd->amount, 0, ',', '.') }}</span>
+                                    </td>
                                     <td class="text-center">
-                                        <span class="badge withdrawal-badge {{ \App\Models\Withdrawal::statusBadgeClass($wd->status) }}">
+                                        <span class="wd-badge {{ $statusClass }}">
+                                            <i class="fas {{ $statusIcon }}"></i>
                                             {{ $wd->status }}
                                         </span>
                                     </td>
@@ -205,11 +227,11 @@
                             </tbody>
                         </table>
                     </div>
-                    {{ $withdrawals->links() }}
+                    <div class="mt-3">{{ $withdrawals->links() }}</div>
                     @else
-                    <div class="text-center py-4 text-muted">
-                        <i class="fas fa-money-bill-transfer fa-2x mb-2 d-block"></i>
-                        No withdrawals found for this campaign.
+                    <div class="text-center py-5 text-muted">
+                        <i class="fas fa-money-bill-transfer fa-2x mb-2 d-block opacity-50"></i>
+                        <div>No withdrawals found for this campaign.</div>
                     </div>
                     @endif
                 </div>
