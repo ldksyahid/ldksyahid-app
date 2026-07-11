@@ -267,8 +267,18 @@
 
             {{-- ── Total + Submit ─────────────────────────────── --}}
             <div class="wow fadeInUp" data-wow-delay="0.2s" style="margin-top: 1.25rem;">
+                <div id="dn-fee-breakdown" style="display:none; background:#f0fdfc; border:1px solid #b2f0eb; border-radius:12px; padding:.85rem 1.1rem; margin-bottom:.75rem; font-size:.875rem;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:.4rem; color:#374151;">
+                        <span>Jumlah Donasi</span>
+                        <span id="dn-breakdown-donasi" style="font-weight:600;">Rp0</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; color:#374151;">
+                        <span><i class="fas fa-info-circle me-1" style="color:#00a79d;font-size:.8rem;"></i>Biaya Admin (1%)</span>
+                        <span id="dn-breakdown-admin" style="font-weight:600;">Rp0</span>
+                    </div>
+                </div>
                 <div class="dn-total-row">
-                    <span class="dn-total-label"><i class="fas fa-receipt me-1"></i> Total Donasi</span>
+                    <span class="dn-total-label"><i class="fas fa-receipt me-1"></i> Total Tagihan</span>
                     <span class="dn-total-value" id="dn-total-value">Rp0</span>
                 </div>
                 <div class="dn-action-row">

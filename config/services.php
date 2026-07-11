@@ -64,8 +64,10 @@ return [
         'env'             => env('BISATOPUP_ENV', 'dev'), // 'dev' | 'live'
         'base_url_live'   => env('BISATOPUP_BASE_URL_LIVE', 'https://api.bisabiller.com'),
         'base_url_dev'    => env('BISATOPUP_BASE_URL_DEV', 'https://api-sandbox.bisabiller.com'),
-        'qris_payment_id' => env('BISATOPUP_QRIS_PAYMENT_ID', 33),
-        'admin_fee'       => env('BISATOPUP_ADMIN_FEE', 0),
+        'qris_payment_id'  => env('BISATOPUP_QRIS_PAYMENT_ID', 33),
+        // Admin fee as a percentage of the donation amount (e.g. 1 = 1%, 0.5 = 0.5%).
+        // Change BISATOPUP_ADMIN_FEE_PERCENT in .env to adjust without touching code.
+        'admin_fee_percent' => (float) env('BISATOPUP_ADMIN_FEE_PERCENT', 1),
         // Enforce callback signature check (keep false in DEV until the exact
         // signature formula is confirmed, then set true for production).
         'enforce_callback_signature' => env('BISATOPUP_ENFORCE_CALLBACK_SIGNATURE', false),

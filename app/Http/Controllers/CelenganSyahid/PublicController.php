@@ -206,8 +206,9 @@ class PublicController extends Controller
         }
 
         try {
-            $gateway       = new BisaTopup();
-            $adminFee      = (int) config('services.bisatopup.admin_fee', 0);
+            $gateway          = new BisaTopup();
+            $adminFeePercent  = (float) config('services.bisatopup.admin_fee_percent', 1);
+            $adminFee         = (int) round($jumlah_donasi * $adminFeePercent / 100);
             $qrisPaymentId = (int) config('services.bisatopup.qris_payment_id', 33);
             $transactionId = strtoupper(Str::random(12));
             $total         = $jumlah_donasi + $adminFee;
@@ -248,11 +249,13 @@ class PublicController extends Controller
             $gatewayData    = $response['data'] ?? [];
             $statusInternal = BisaTopup::mapStatus($gatewayData['status_id'] ?? 1);
 
-            $postDonation = DB::transaction(function () use ($request, $transactionId, $jumlah_donasi, $statusInternal, $gatewayData, $expiredAt) {
+            $postDonation = DB::transaction(function () use ($request, $transactionId, $jumlah_donasi, $adminFee, $total, $statusInternal, $gatewayData, $expiredAt) {
                 return Donation::createDonationGateway(
                     $request,
                     $transactionId,
                     $jumlah_donasi,
+                    $adminFee,
+                    $total,
                     $statusInternal,
                     $gatewayData,
                     $expiredAt

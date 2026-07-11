@@ -88,9 +88,20 @@
     var presetBtns  = document.querySelectorAll('.dn-preset-btn');
 
     function syncTotal(val) {
-        var display = val ? formatRupiah(val) : 'Rp0';
+        var amount   = val ? parseInt(val.toString().replace(/[^\d]/g, ''), 10) : 0;
+        var adminFee = Math.round(amount * 0.01);
+        var total    = amount + adminFee;
+
+        var display = total ? formatRupiah(total) : 'Rp0';
         if (totalValue) totalValue.textContent = display;
         if (totalInput) totalInput.value = display;
+
+        var breakdownEl = document.getElementById('dn-fee-breakdown');
+        var donasiEl    = document.getElementById('dn-breakdown-donasi');
+        var adminEl     = document.getElementById('dn-breakdown-admin');
+        if (breakdownEl) breakdownEl.style.display = amount > 0 ? '' : 'none';
+        if (donasiEl)    donasiEl.textContent    = amount   ? formatRupiah(amount)   : 'Rp0';
+        if (adminEl)     adminEl.textContent     = adminFee ? formatRupiah(adminFee) : 'Rp0';
     }
 
     if (amountInput) {
