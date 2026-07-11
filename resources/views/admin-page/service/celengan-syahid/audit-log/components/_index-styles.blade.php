@@ -113,19 +113,15 @@
     border-top: 1px solid #e9ecef;
     background: #fff;
 }
-.audit-pg-btn { font-size: .78rem !important; padding: .25rem .75rem !important; border-radius: 8px !important; }
-.audit-pg-badge {
-    display: inline-flex;
-    align-items: center;
-    font-size: .78rem;
-    font-weight: 600;
-    color: #495057;
-    background: #f3f4f6;
-    border-radius: 6px;
-    padding: .2rem .65rem;
-    white-space: nowrap;
+.audit-pg-btn { font-size: .78rem !important; padding: .22rem .6rem !important; border-radius: 6px !important; min-width: 32px; }
+.audit-pg-btn.active {
+    background: #00a79d !important;
+    border-color: #00a79d !important;
+    color: #fff !important;
+    font-weight: 700;
 }
-html.dark-mode .audit-pg-badge { background: #374151; color: #d1d5db; }
+.audit-pg-ellipsis { display: inline-flex; align-items: center; padding: 0 .3rem; color: #9ca3af; font-size: .82rem; }
+html.dark-mode .audit-pg-btn.active { background: #008b84 !important; border-color: #008b84 !important; }
 
 /* ── Badges ── */
 .badge-status {

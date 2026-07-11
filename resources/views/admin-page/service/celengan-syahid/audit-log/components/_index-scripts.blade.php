@@ -19,6 +19,18 @@ $(function () {
         };
     }
 
+    function pageWindows(cur, last) {
+        var show = {}, arr = [];
+        [1, last].forEach(function (p) { if (p >= 1 && p <= last) show[p] = true; });
+        for (var p = Math.max(1, cur - 2); p <= Math.min(last, cur + 2); p++) show[p] = true;
+        var prev = 0;
+        Object.keys(show).map(Number).sort(function (a, b) { return a - b; }).forEach(function (p) {
+            if (prev && p - prev > 1) arr.push(null);
+            arr.push(p); prev = p;
+        });
+        return arr;
+    }
+
     function renderPagination(meta) {
         if (!meta) return;
         curPage  = meta.current_page;
@@ -31,18 +43,24 @@ $(function () {
         );
 
         var $ctrl = $('#audit-pg-controls').empty();
+        if (lastPage <= 1) return;
 
-        var $prev = $('<button class="btn btn-sm btn-outline-secondary audit-pg-btn"><i class="fas fa-chevron-left me-1"></i>Prev</button>');
+        var $prev = $('<button class="btn btn-sm btn-outline-secondary audit-pg-btn"><i class="fas fa-chevron-left"></i></button>');
         if (curPage <= 1) $prev.prop('disabled', true);
         else $prev.on('click', function () { load(null, curPage - 1); });
         $ctrl.append($prev);
 
-        if (lastPage > 1) {
-            var $badge = $('<span class="audit-pg-badge"></span>').text('Page ' + curPage + ' / ' + lastPage);
-            $ctrl.append($badge);
-        }
+        pageWindows(curPage, lastPage).forEach(function (p) {
+            if (p === null) {
+                $ctrl.append('<span class="audit-pg-ellipsis">…</span>');
+            } else {
+                var $btn = $('<button class="btn btn-sm btn-outline-secondary audit-pg-btn' + (p === curPage ? ' active' : '') + '">' + p + '</button>');
+                if (p !== curPage) { (function(pg){ $btn.on('click', function(){ load(null, pg); }); })(p); }
+                $ctrl.append($btn);
+            }
+        });
 
-        var $next = $('<button class="btn btn-sm btn-outline-secondary audit-pg-btn">Next <i class="fas fa-chevron-right ms-1"></i></button>');
+        var $next = $('<button class="btn btn-sm btn-outline-secondary audit-pg-btn"><i class="fas fa-chevron-right"></i></button>');
         if (curPage >= lastPage) $next.prop('disabled', true);
         else $next.on('click', function () { load(null, curPage + 1); });
         $ctrl.append($next);

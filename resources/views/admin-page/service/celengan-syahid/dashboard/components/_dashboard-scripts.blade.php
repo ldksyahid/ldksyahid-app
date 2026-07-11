@@ -139,7 +139,7 @@ $(document).ready(function() {
         if (cachedData.bar2) renderBar2(cachedData.bar2);
     });
 
-    // ── Campaign Progress client-side pagination (job-queue-log style) ──
+    // ── Campaign Progress client-side pagination ──────────────────────
     (function () {
         var PER_PAGE   = 5;
         var tbody      = document.getElementById('cs-campaign-tbody');
@@ -155,10 +155,22 @@ $(document).ready(function() {
         var info       = document.getElementById('cs-page-info');
         var ctrl       = document.getElementById('cs-pg-controls');
 
+        function pageWindows(cur, last) {
+            var show = {}, arr = [];
+            [1, last].forEach(function (p) { if (p >= 1 && p <= last) show[p] = true; });
+            for (var p = Math.max(1, cur - 2); p <= Math.min(last, cur + 2); p++) show[p] = true;
+            var prev = 0;
+            Object.keys(show).map(Number).sort(function (a, b) { return a - b; }).forEach(function (p) {
+                if (prev && p - prev > 1) arr.push(null);
+                arr.push(p); prev = p;
+            });
+            return arr;
+        }
+
         function render(page) {
-            curPage    = page;
-            var start  = (page - 1) * PER_PAGE;
-            var end    = start + PER_PAGE;
+            curPage   = page;
+            var start = (page - 1) * PER_PAGE;
+            var end   = start + PER_PAGE;
 
             allRows.forEach(function (tr, idx) {
                 tr.style.display = (idx >= start && idx < end) ? '' : 'none';
@@ -166,31 +178,38 @@ $(document).ready(function() {
                 if (numCell) numCell.textContent = idx + 1;
             });
 
-            var from = start + 1;
-            var to   = Math.min(end, total);
-            info.textContent = 'Showing ' + from + '–' + to + ' of ' + total + ' campaigns';
-
+            info.textContent = 'Showing ' + (start + 1) + '–' + Math.min(end, total) + ' of ' + total + ' campaigns';
             ctrl.innerHTML = '';
 
+            // Prev
             var prev = document.createElement('button');
             prev.className = 'btn btn-sm btn-outline-secondary cs-pg-btn';
-            prev.innerHTML = '<i class="fas fa-chevron-left me-1"></i>Prev';
+            prev.innerHTML = '<i class="fas fa-chevron-left"></i>';
             if (page <= 1) prev.disabled = true;
-            else prev.addEventListener('click', function () { render(curPage - 1); });
+            else { (function(pg){ prev.addEventListener('click', function(){ render(pg); }); })(page - 1); }
             ctrl.appendChild(prev);
 
-            if (totalPages > 1) {
-                var badge = document.createElement('span');
-                badge.className = 'cs-pg-badge';
-                badge.textContent = 'Page ' + page + ' / ' + totalPages;
-                ctrl.appendChild(badge);
-            }
+            // Numbered pages
+            pageWindows(page, totalPages).forEach(function (p) {
+                if (p === null) {
+                    var ell = document.createElement('span');
+                    ell.className = 'cs-pg-ellipsis'; ell.textContent = '…';
+                    ctrl.appendChild(ell);
+                } else {
+                    var btn = document.createElement('button');
+                    btn.className = 'btn btn-sm btn-outline-secondary cs-pg-btn' + (p === page ? ' active' : '');
+                    btn.textContent = p;
+                    if (p !== page) { (function(pg){ btn.addEventListener('click', function(){ render(pg); }); })(p); }
+                    ctrl.appendChild(btn);
+                }
+            });
 
+            // Next
             var next = document.createElement('button');
             next.className = 'btn btn-sm btn-outline-secondary cs-pg-btn';
-            next.innerHTML = 'Next <i class="fas fa-chevron-right ms-1"></i>';
+            next.innerHTML = '<i class="fas fa-chevron-right"></i>';
             if (page >= totalPages) next.disabled = true;
-            else next.addEventListener('click', function () { render(curPage + 1); });
+            else { (function(pg){ next.addEventListener('click', function(){ render(pg); }); })(page + 1); }
             ctrl.appendChild(next);
         }
 

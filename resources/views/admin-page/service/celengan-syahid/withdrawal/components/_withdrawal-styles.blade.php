@@ -79,6 +79,28 @@
 html.dark-mode .wd-bank-chip { background: rgba(45,212,191,.15); color: #2dd4bf; }
 .wd-account { font-size: .78rem; color: #6b7280; }
 html.dark-mode .wd-account { color: #9ca3af; }
+.wd-amount { font-weight: 700; color: #00a79d; font-size: .9rem; }
+html.dark-mode .wd-amount { color: #2dd4bf; }
+.wd-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .3em;
+    font-size: .73rem;
+    font-weight: 700;
+    padding: .28em .7em;
+    border-radius: 50px;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.wd-status-COMPLETED { background: rgba(25,135,84,.12);   color: #146c43; border: 1px solid rgba(25,135,84,.25); }
+.wd-status-PENDING   { background: rgba(255,193,7,.15);   color: #856404; border: 1px solid rgba(255,193,7,.3); }
+.wd-status-FAILED    { background: rgba(220,53,69,.12);   color: #b02a37; border: 1px solid rgba(220,53,69,.25); }
+.wd-status-default   { background: rgba(108,117,125,.12); color: #495057; border: 1px solid rgba(108,117,125,.2); }
+html.dark-mode .wd-status-COMPLETED { background: rgba(34,197,94,.15);   color: #4ade80; border-color: rgba(34,197,94,.3); }
+html.dark-mode .wd-status-PENDING   { background: rgba(251,191,36,.15);  color: #fbbf24; border-color: rgba(251,191,36,.3); }
+html.dark-mode .wd-status-FAILED    { background: rgba(239,68,68,.15);   color: #f87171; border-color: rgba(239,68,68,.3); }
+html.dark-mode .wd-status-default   { background: rgba(156,163,175,.1);  color: #9ca3af; border-color: rgba(156,163,175,.2); }
 .balance-highlight {
     font-size: 1.4rem;
     font-weight: 700;
@@ -511,18 +533,15 @@ html.dark-mode .wi-table tbody tr:hover > td { background: rgba(255,255,255,.04)
     background: #fff;
 }
 html.dark-mode .wi-table-pagination { background: #2b2f33; border-top-color: #373b3e; }
-.wi-pg-btn { font-size: .78rem !important; padding: .25rem .75rem !important; border-radius: 8px !important; }
-.wi-pg-page-badge {
-    display: inline-flex;
-    align-items: center;
-    font-size: .78rem;
-    font-weight: 600;
-    color: #495057;
-    background: #f3f4f6;
-    border-radius: 6px;
-    padding: .2rem .65rem;
+.wi-pg-btn { font-size: .78rem !important; padding: .22rem .6rem !important; border-radius: 6px !important; min-width: 32px; }
+.wi-pg-btn.active {
+    background: #00a79d !important;
+    border-color: #00a79d !important;
+    color: #fff !important;
+    font-weight: 700;
 }
-html.dark-mode .wi-pg-page-badge { background: #374151; color: #d1d5db; }
+.wi-pg-ellipsis { display: inline-flex; align-items: center; padding: 0 .3rem; color: #9ca3af; font-size: .82rem; }
+html.dark-mode .wi-pg-btn.active { background: #008b84 !important; border-color: #008b84 !important; }
 
 /* ── Campaign link in table ─────────────────────────── */
 .wi-campaign-link {
