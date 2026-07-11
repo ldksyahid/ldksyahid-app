@@ -2,7 +2,6 @@
 
 @section('styles')
     @include('admin-page.service.celengan-syahid.audit-log.components._index-styles')
-    @include('components.pagination-custom.styles')
 @endsection
 
 @section('content')
@@ -94,12 +93,13 @@
                     <table class="table table-hover table-sm align-middle mb-0" id="audit-table">
                         <thead>
                             <tr>
-                                <th>Time</th>
-                                <th>Admin</th>
-                                <th>Action</th>
-                                <th>Entity</th>
+                                <th class="text-center" style="width:36px">#</th>
+                                <th style="min-width:110px">Time</th>
+                                <th style="min-width:100px">Admin</th>
+                                <th style="min-width:160px">Action</th>
+                                <th style="min-width:90px">Entity</th>
                                 <th>Description</th>
-                                <th>IP</th>
+                                <th style="min-width:100px">IP</th>
                             </tr>
                         </thead>
                         <tbody id="audit-tbody">
@@ -108,13 +108,13 @@
                     </table>
                 </div>
 
-                <div class="table-pagination" id="audit-pagination">
-                    @if($logs->hasPages())
-                        @include('components.pagination-custom.index', [
-                            'paginator' => $logs,
-                            'itemLabel' => 'log',
-                        ])
-                    @endif
+                <div class="table-pagination d-flex align-items-center justify-content-between flex-wrap gap-2" id="audit-pagination">
+                    <span class="text-muted small" id="audit-pg-info">
+                        @if($logs->total() > 0)
+                            Showing {{ $logs->firstItem() }}–{{ $logs->lastItem() }} of {{ $logs->total() }} records
+                        @endif
+                    </span>
+                    <div class="d-flex align-items-center gap-2" id="audit-pg-controls"></div>
                 </div>
             </div>
         </div>

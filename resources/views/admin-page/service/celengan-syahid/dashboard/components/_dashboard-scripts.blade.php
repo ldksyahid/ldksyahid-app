@@ -139,95 +139,62 @@ $(document).ready(function() {
         if (cachedData.bar2) renderBar2(cachedData.bar2);
     });
 
-    // ── Campaign Progress client-side pagination ──────────────
+    // ── Campaign Progress client-side pagination (job-queue-log style) ──
     (function () {
-        var PER_PAGE = 5;
-        var tbody    = document.getElementById('cs-campaign-tbody');
+        var PER_PAGE   = 5;
+        var tbody      = document.getElementById('cs-campaign-tbody');
         if (!tbody) return;
 
-        var allRows  = Array.from(tbody.querySelectorAll('tr'));
-        var total    = allRows.length;
-        if (total <= PER_PAGE) return; // no need for pagination
+        var allRows    = Array.from(tbody.querySelectorAll('tr'));
+        var total      = allRows.length;
+        if (total <= PER_PAGE) return;
 
         var totalPages = Math.ceil(total / PER_PAGE);
         var curPage    = 1;
-
         var bar        = document.getElementById('cs-pagination-bar');
         var info       = document.getElementById('cs-page-info');
-        var pgList     = document.getElementById('cs-pagination');
+        var ctrl       = document.getElementById('cs-pg-controls');
 
         function render(page) {
-            curPage = page;
-            var start = (page - 1) * PER_PAGE;
-            var end   = start + PER_PAGE;
+            curPage    = page;
+            var start  = (page - 1) * PER_PAGE;
+            var end    = start + PER_PAGE;
 
             allRows.forEach(function (tr, idx) {
                 tr.style.display = (idx >= start && idx < end) ? '' : 'none';
-                // update the # cell (first td) to show global sequential number
                 var numCell = tr.querySelector('td:first-child');
                 if (numCell) numCell.textContent = idx + 1;
             });
 
-            // Info text
             var from = start + 1;
             var to   = Math.min(end, total);
             info.textContent = 'Showing ' + from + '–' + to + ' of ' + total + ' campaigns';
 
-            // Rebuild pagination buttons
-            pgList.innerHTML = '';
+            ctrl.innerHTML = '';
 
-            // Prev
-            pgList.appendChild(makeItem('&laquo;', page - 1, page === 1));
+            var prev = document.createElement('button');
+            prev.className = 'btn btn-sm btn-outline-secondary cs-pg-btn';
+            prev.innerHTML = '<i class="fas fa-chevron-left me-1"></i>Prev';
+            if (page <= 1) prev.disabled = true;
+            else prev.addEventListener('click', function () { render(curPage - 1); });
+            ctrl.appendChild(prev);
 
-            // Page numbers — show at most 5 around current
-            var winStart = Math.max(1, page - 2);
-            var winEnd   = Math.min(totalPages, winStart + 4);
-            if (winEnd - winStart < 4) winStart = Math.max(1, winEnd - 4);
-
-            if (winStart > 1) {
-                pgList.appendChild(makeItem('1', 1, false));
-                if (winStart > 2) pgList.appendChild(makeEllipsis());
-            }
-            for (var p = winStart; p <= winEnd; p++) {
-                pgList.appendChild(makeItem(p, p, false, p === page));
-            }
-            if (winEnd < totalPages) {
-                if (winEnd < totalPages - 1) pgList.appendChild(makeEllipsis());
-                pgList.appendChild(makeItem(totalPages, totalPages, false));
+            if (totalPages > 1) {
+                var badge = document.createElement('span');
+                badge.className = 'cs-pg-badge';
+                badge.textContent = 'Page ' + page + ' / ' + totalPages;
+                ctrl.appendChild(badge);
             }
 
-            // Next
-            pgList.appendChild(makeItem('&raquo;', page + 1, page === totalPages));
+            var next = document.createElement('button');
+            next.className = 'btn btn-sm btn-outline-secondary cs-pg-btn';
+            next.innerHTML = 'Next <i class="fas fa-chevron-right ms-1"></i>';
+            if (page >= totalPages) next.disabled = true;
+            else next.addEventListener('click', function () { render(curPage + 1); });
+            ctrl.appendChild(next);
         }
 
-        function makeItem(label, targetPage, disabled, active) {
-            var li = document.createElement('li');
-            li.className = 'page-item' + (disabled ? ' disabled' : '') + (active ? ' active' : '');
-            var a = document.createElement('a');
-            a.className = 'page-link';
-            a.href = '#cs-campaign-tbody';
-            a.innerHTML = label;
-            if (!disabled && !active) {
-                a.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    render(targetPage);
-                });
-            } else {
-                a.addEventListener('click', function (e) { e.preventDefault(); });
-            }
-            li.appendChild(a);
-            return li;
-        }
-
-        function makeEllipsis() {
-            var li = document.createElement('li');
-            li.className = 'page-item disabled';
-            li.innerHTML = '<span class="page-link">…</span>';
-            return li;
-        }
-
-        // Show pagination bar (was hidden via inline style)
-        bar.style.removeProperty('display');
+        bar.style.display = '';
         render(1);
     })();
 });
