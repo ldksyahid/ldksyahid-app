@@ -77,6 +77,8 @@
     text-transform: uppercase;
 }
 html.dark-mode .wd-bank-chip { background: rgba(45,212,191,.15); color: #2dd4bf; }
+.wd-account { font-size: .78rem; color: #6b7280; }
+html.dark-mode .wd-account { color: #9ca3af; }
 .balance-highlight {
     font-size: 1.4rem;
     font-weight: 700;
@@ -367,8 +369,127 @@ html.dark-mode .net-breakdown-box {
 }
 html.dark-mode .net-breakdown-box hr { border-color: rgba(0,167,157,.2); }
 
+/* ── Withdrawal Index Table ─────────────────────────── */
+.wi-table { font-size: .875rem; }
+.wi-table thead th {
+    font-weight: 600;
+    color: #00a79d;
+    border-bottom: 2px solid #e0f7f5;
+    white-space: nowrap;
+    padding: .7rem .75rem;
+    background: rgba(0,167,157,.04);
+    border-top: none;
+}
+.wi-table tbody td { padding: .75rem .75rem; vertical-align: middle; }
+.wi-table tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .15s; }
+.wi-table tbody tr:hover { background: rgba(0,167,157,.04); }
+.wi-table tbody tr:last-child { border-bottom: none; }
+
+html.dark-mode .wi-table thead th { background: rgba(45,212,191,.06); color: #2dd4bf; border-bottom-color: rgba(45,212,191,.2); }
+html.dark-mode .wi-table tbody tr { border-bottom-color: rgba(255,255,255,.06); }
+html.dark-mode .wi-table tbody tr:hover { background: rgba(45,212,191,.06); }
+
+/* ── Campaign link in table ─────────────────────────── */
+.wi-campaign-link {
+    font-weight: 600;
+    font-size: .85rem;
+    color: #00a79d;
+    max-width: 200px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+.wi-campaign-link:hover { color: #008b84; text-decoration: underline; }
+html.dark-mode .wi-campaign-link { color: #2dd4bf; }
+html.dark-mode .wi-campaign-link:hover { color: #5eead4; }
+
+/* ── Filter card ────────────────────────────────────── */
+.wi-filter-card {
+    background: rgba(0,167,157,.03);
+    border: 1px solid rgba(0,167,157,.12) !important;
+}
+html.dark-mode .wi-filter-card {
+    background: rgba(45,212,191,.04);
+    border-color: rgba(45,212,191,.12) !important;
+}
+.wi-clear-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .3em;
+    font-size: .78rem;
+    font-weight: 600;
+    color: #6b7280;
+    background: none;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: .28rem .65rem;
+    cursor: pointer;
+    transition: all .2s;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.wi-clear-btn:hover { color: #ef4444; border-color: #ef4444; background: rgba(239,68,68,.05); }
+html.dark-mode .wi-clear-btn { color: #9ca3af; border-color: #374151; }
+html.dark-mode .wi-clear-btn:hover { color: #f87171; border-color: #f87171; background: rgba(248,113,113,.08); }
+
+/* ── Active filter chip ─────────────────────────────── */
+.wi-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .35em;
+    font-size: .72rem;
+    font-weight: 700;
+    background: rgba(0,167,157,.1);
+    color: #008b84;
+    border: 1px solid rgba(0,167,157,.25);
+    border-radius: 50px;
+    padding: .2em .65em;
+}
+html.dark-mode .wi-filter-chip { background: rgba(45,212,191,.12); color: #2dd4bf; border-color: rgba(45,212,191,.25); }
+
+/* ── Pagination teal theme ──────────────────────────── */
+#withdrawal-pagination .pagination .page-link {
+    color: #00a79d;
+    border-color: #e0f7f5;
+    border-radius: 6px !important;
+    margin: 0 2px;
+    font-size: .8rem;
+    font-weight: 600;
+    padding: .35rem .65rem;
+    transition: all .15s;
+}
+#withdrawal-pagination .pagination .page-link:hover { background: #e0f7f5; border-color: #00a79d; }
+#withdrawal-pagination .pagination .page-item.active .page-link {
+    background: #00a79d;
+    border-color: #00a79d;
+    color: #fff;
+}
+#withdrawal-pagination .pagination .page-item.disabled .page-link { color: #adb5bd; border-color: #e9ecef; }
+html.dark-mode #withdrawal-pagination .pagination .page-link { color: #2dd4bf; border-color: rgba(45,212,191,.2); background: transparent; }
+html.dark-mode #withdrawal-pagination .pagination .page-link:hover { background: rgba(45,212,191,.1); border-color: #2dd4bf; }
+html.dark-mode #withdrawal-pagination .pagination .page-item.active .page-link { background: #008b84; border-color: #008b84; color: #fff; }
+html.dark-mode #withdrawal-pagination .pagination .page-item.disabled .page-link { color: #4b5563; border-color: rgba(255,255,255,.08); }
+
+/* ── Loading overlay ────────────────────────────────── */
+.wi-loading {
+    position: relative;
+    min-height: 80px;
+}
+.wi-loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,.7);
+    border-radius: 8px;
+    z-index: 5;
+}
+html.dark-mode .wi-loading::after { background: rgba(17,24,39,.7); }
+
 @media (max-width: 768px) {
     .page-title { font-size: 1.35rem; }
+    .wi-campaign-link { max-width: 130px; }
     .d-flex.justify-content-end.gap-2 { flex-direction: column; }
     .d-flex.justify-content-end.gap-2 .btn { width: 100%; }
 }
