@@ -413,46 +413,47 @@ $(function () {
     });
 
     /* ── Submit: validate + strip dots ─────────────────────── */
+    var btnSubmit     = document.getElementById('btn-submit');
+    var btnSubmitOrig = btnSubmit ? btnSubmit.innerHTML : '';
+
+    function rejectSubmit(e, message, scrollTarget) {
+        e.preventDefault();
+        // Restore button — a global handler may have already set it to "Saving..."
+        if (btnSubmit) {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = btnSubmitOrig;
+        }
+        var warnBox = document.getElementById('amount-warning');
+        var warnMsg = document.getElementById('amount-warning-msg');
+        if (warnBox && warnMsg && message) {
+            warnMsg.innerHTML     = '<i class="fas fa-exclamation-triangle me-1"></i>' + message;
+            warnBox.style.display = 'block';
+        }
+        if (scrollTarget) scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     document.getElementById('withdrawal-form').addEventListener('submit', function (e) {
         if (!holderHidden.value) {
             e.preventDefault();
+            if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = btnSubmitOrig; }
             inquiryMsg.innerHTML = '<div class="alert alert-warning py-2">Please verify the destination account before continuing.</div>';
             accountNoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
 
-        var rawAmt  = amountEl ? parseInt(amountEl.value.replace(/\./g, '')) || 0 : 0;
-        var net     = rawAmt - currentFee;
-        var warnBox = document.getElementById('amount-warning');
-        var warnMsg = document.getElementById('amount-warning-msg');
+        var rawAmt = amountEl ? parseInt(amountEl.value.replace(/\./g, '')) || 0 : 0;
+        var net    = rawAmt - currentFee;
 
         if (rawAmt > available) {
-            e.preventDefault();
-            if (warnBox && warnMsg) {
-                warnMsg.innerHTML     = '<i class="fas fa-exclamation-triangle me-1"></i>Amount exceeds available balance (Rp ' + available.toLocaleString('id-ID') + ').';
-                warnBox.style.display = 'block';
-            }
-            if (amountEl) amountEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            rejectSubmit(e, 'Amount exceeds available balance (Rp ' + available.toLocaleString('id-ID') + ').', amountEl);
             return;
         }
-
         if (currentFee > 0 && net <= 0) {
-            e.preventDefault();
-            if (warnBox && warnMsg) {
-                warnMsg.innerHTML     = '<i class="fas fa-exclamation-triangle me-1"></i>Amount must be greater than the transfer fee (Rp ' + currentFee.toLocaleString('id-ID') + ').';
-                warnBox.style.display = 'block';
-            }
-            if (amountEl) amountEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            rejectSubmit(e, 'Amount must be greater than the transfer fee (Rp ' + currentFee.toLocaleString('id-ID') + ').', amountEl);
             return;
         }
-
         if (currentFee > 0 && net < 10000) {
-            e.preventDefault();
-            if (warnBox && warnMsg) {
-                warnMsg.innerHTML     = '<i class="fas fa-exclamation-triangle me-1"></i>Recipient amount (Rp ' + net.toLocaleString('id-ID') + ') is below the minimum transfer of Rp 10.000.';
-                warnBox.style.display = 'block';
-            }
-            if (amountEl) amountEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            rejectSubmit(e, 'Recipient amount (Rp ' + net.toLocaleString('id-ID') + ') is below the minimum transfer of Rp 10.000.', amountEl);
             return;
         }
 
