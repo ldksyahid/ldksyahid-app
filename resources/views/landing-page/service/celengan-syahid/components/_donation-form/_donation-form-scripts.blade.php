@@ -339,7 +339,12 @@ $(function () {
     });
 
     $('#dn-phone-code').on('select2:select', function () {
-        updatePhonePlaceholder();
+        // updatePhonePlaceholder lives in the IIFE scope — replicate inline here.
+        var localEl  = document.getElementById('dn-telpon-local');
+        var selected = this.options[this.selectedIndex];
+        if (localEl && selected) {
+            localEl.placeholder = selected.getAttribute('data-placeholder') || 'xxxxxxxxxx';
+        }
     });
 });
 </script>
