@@ -267,14 +267,14 @@
 
             {{-- ── Total + Submit ─────────────────────────────── --}}
             <div class="wow fadeInUp" data-wow-delay="0.2s" style="margin-top: 1.25rem;">
-                <div id="dn-fee-breakdown" style="display:none; background:#f0fdfc; border:1px solid #b2f0eb; border-radius:12px; padding:.85rem 1.1rem; margin-bottom:.75rem; font-size:.875rem;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:.4rem; color:#374151;">
+                <div id="dn-fee-breakdown" class="dn-fee-breakdown" style="display:none;">
+                    <div class="dn-fee-breakdown-row">
                         <span>Jumlah Donasi</span>
-                        <span id="dn-breakdown-donasi" style="font-weight:600;">Rp0</span>
+                        <span id="dn-breakdown-donasi">Rp0</span>
                     </div>
-                    <div style="display:flex; justify-content:space-between; color:#374151;">
-                        <span><i class="fas fa-info-circle me-1" style="color:#00a79d;font-size:.8rem;"></i>Biaya Admin (1%)</span>
-                        <span id="dn-breakdown-admin" style="font-weight:600;">Rp0</span>
+                    <div class="dn-fee-breakdown-row">
+                        <span><i class="fas fa-info-circle me-1 dn-fee-icon"></i>Biaya Admin (1%)</span>
+                        <span id="dn-breakdown-admin">Rp0</span>
                     </div>
                 </div>
                 <div class="dn-total-row">

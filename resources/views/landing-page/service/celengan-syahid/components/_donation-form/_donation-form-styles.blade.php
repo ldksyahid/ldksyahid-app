@@ -246,6 +246,33 @@
 }
 
 
+/* ── Fee breakdown ── */
+.dn-fee-breakdown {
+    background: #f0fdfc;
+    border: 1px solid #b2f0eb;
+    border-radius: 12px;
+    padding: .85rem 1.1rem;
+    margin-bottom: .75rem;
+    font-size: .875rem;
+    color: #374151;
+}
+.dn-fee-breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.dn-fee-breakdown-row + .dn-fee-breakdown-row { margin-top: .4rem; }
+.dn-fee-breakdown-row span:last-child { font-weight: 600; }
+.dn-fee-icon { color: #00a79d; font-size: .8rem; }
+
+[data-theme="dark"] .dn-fee-breakdown {
+    background: rgba(0,167,157,.08);
+    border-color: rgba(0,167,157,.25);
+    color: #d1d5db;
+}
+[data-theme="dark"] .dn-fee-icon { color: #4dd9d0; }
+
+
 /* ── Total row ── */
 .dn-total-row {
     display: flex; align-items: center; gap: .75rem;
