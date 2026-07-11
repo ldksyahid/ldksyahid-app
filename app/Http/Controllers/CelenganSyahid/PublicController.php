@@ -164,6 +164,11 @@ class PublicController extends Controller
             abort(404, 'Campaign tidak ditemukan');
         }
 
+        if ($campaign->deadline && now()->toDateString() > $campaign->deadline) {
+            Alert::warning('Maaf!', 'Campaign ini sudah berakhir pada ' . \Carbon\Carbon::parse($campaign->deadline)->locale('id')->isoFormat('D MMMM Y') . '.');
+            return Redirect::back();
+        }
+
         // Atomic idempotency guard — prevents double donation + double email/WA
         // from duplicate POST (cached reCAPTCHA token, network retry, etc.).
         // Cache::add() is atomic: returns false if key already exists.

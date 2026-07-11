@@ -121,7 +121,7 @@
                                     <th class="ps-4">#</th>
                                     <th>Campaign</th>
                                     <th class="text-end">QRIS PAID</th>
-                                    <th class="text-end">Fee Bisatopup</th>
+                                    <th class="text-end">Admin Fee (1%)</th>
                                     <th class="text-center">Txn</th>
                                     <th class="text-end">Withdrawn</th>
                                     <th class="text-end">Net Balance</th>
@@ -133,9 +133,9 @@
                                     <td class="ps-4 text-muted">{{ $i + 1 }}</td>
                                     <td class="fw-semibold">{{ $row['campaign'] }}</td>
                                     <td class="text-end">Rp {{ number_format($row['total_qris'], 0, ',', '.') }}</td>
-                                    <td class="text-end text-muted small">
+                                    <td class="text-end text-success small">
                                         @if($row['total_fee'] > 0)
-                                            − Rp {{ number_format($row['total_fee'], 0, ',', '.') }}
+                                            + Rp {{ number_format($row['total_fee'], 0, ',', '.') }}
                                         @else
                                             —
                                         @endif

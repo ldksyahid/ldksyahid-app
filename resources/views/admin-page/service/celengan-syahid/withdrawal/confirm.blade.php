@@ -91,14 +91,19 @@
                     </h5>
                     <div class="alert alert-warning mb-0">
                         <p class="mb-2 fw-semibold">
-                            An amount of <strong>Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}</strong>
-                            will be transferred to:
+                            <strong>Rp {{ number_format($withdrawal->amount_net, 0, ',', '.') }}</strong>
+                            will be sent to the recipient's bank account:
                         </p>
                         <p class="mb-2">
                             <strong>{{ strtoupper($withdrawal->bank_code) }}</strong>
                             {{ $withdrawal->account_number }}
                             <br>
                             <em>{{ $withdrawal->account_holder }}</em>
+                        </p>
+                        <p class="mb-2 small text-muted">
+                            Campaign balance will be reduced by
+                            <strong>Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}</strong>
+                            (includes transfer fee of Rp {{ number_format($withdrawal->fee, 0, ',', '.') }}).
                         </p>
                         <p class="mb-0 text-danger fw-semibold">
                             <i class="fas fa-circle-xmark me-1"></i>
