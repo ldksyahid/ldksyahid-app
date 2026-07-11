@@ -211,12 +211,14 @@ class PublicController extends Controller
         }
 
         try {
-            $gateway          = new BisaTopup();
-            $adminFeePercent  = (float) config('services.bisatopup.admin_fee_percent', 1);
-            $adminFee         = (int) round($jumlah_donasi * $adminFeePercent / 100);
+            $gateway    = new BisaTopup();
+            $mdrRate    = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+            // Compute total so that after Bisabiller deducts MDR, wallet receives exactly jumlah_donasi.
+            // Formula: total = round(jumlah_donasi / (1 - mdrRate))
+            $total      = (int) round($jumlah_donasi / (1 - $mdrRate));
+            $adminFee   = $total - $jumlah_donasi;
             $qrisPaymentId = (int) config('services.bisatopup.qris_payment_id', 33);
             $transactionId = strtoupper(Str::random(12));
-            $total         = $jumlah_donasi + $adminFee;
             $expiredAt     = now()->addDay();
 
             // Our admin fee is embedded into the nominal sent to BisaTopup.

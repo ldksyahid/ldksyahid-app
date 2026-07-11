@@ -137,7 +137,7 @@
                 </div>
                 @if(!empty($data->biaya_admin) && (int)$data->biaya_admin > 0)
                 <div class="ds-detail-row">
-                    <span class="ds-detail-key">Biaya Admin (1%)</span>
+                    <span class="ds-detail-key">Biaya Layanan QRIS</span>
                     <span class="ds-detail-val">{{ LFC::formatRupiah($data->biaya_admin) }}</span>
                 </div>
                 @endif

@@ -42,7 +42,6 @@
                     @if($bisabillerBalance !== null)
                     @php
                         $dbExp = \App\Models\Donation::where('gateway','bisatopup')->where('payment_status','PAID')->sum('jumlah_donasi')
-                            - \App\Models\Donation::where('gateway','bisatopup')->where('payment_status','PAID')->sum('biaya_admin')
                             - \App\Models\Withdrawal::where('status','COMPLETED')->sum('amount');
                         $disc2 = $bisabillerBalance - $dbExp;
                         $discT2 = config('services.two_fa.discrepancy_threshold', 50000);

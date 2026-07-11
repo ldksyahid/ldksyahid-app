@@ -367,7 +367,7 @@
             @if($hasBiayaAdmin)
             <tr>
                 <td>
-                    <div class="pay-lbl">Biaya Admin</div>
+                    <div class="pay-lbl">Biaya Layanan QRIS</div>
                     @if($paymentMethod)<div class="pay-sub">{{ $paymentMethod }}</div>@endif
                 </td>
                 <td class="pay-val">{{ LFC::formatRupiah($donation->biaya_admin) }}</td>
