@@ -17,6 +17,13 @@ class TwoFaHelper
         return in_array($user->email, $allowed);
     }
 
+    public static function isPrimaryAdmin(?User $user): bool
+    {
+        if (!$user) return false;
+        $allowed = config('services.two_fa.allowed_users', []);
+        return !empty($allowed) && $user->email === $allowed[0];
+    }
+
     public static function generateSecret(): string
     {
         return (new Google2FA())->generateSecretKey();

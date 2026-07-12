@@ -40,13 +40,19 @@
     </td>
     <td class="text-center">
         @if($u->google2fa_enabled && $u->id !== auth()->id())
-            <button type="button"
-                class="btn btn-sm btn-outline-danger btn-revoke-2fa"
-                style="border-radius:6px;font-size:.75rem"
-                data-url="{{ route('admin.security.2fa.revoke', $u->id) }}"
-                data-name="{{ $u->name }}">
-                <i class="fas fa-lock-open me-1"></i>Revoke
-            </button>
+            @if(\App\Helpers\TwoFaHelper::isPrimaryAdmin($u))
+                <span class="tfa-badge-protected" title="Primary administrator — 2FA cannot be revoked">
+                    <i class="fas fa-shield-alt"></i> Protected
+                </span>
+            @else
+                <button type="button"
+                    class="btn btn-sm btn-outline-danger btn-revoke-2fa"
+                    style="border-radius:6px;font-size:.75rem"
+                    data-url="{{ route('admin.security.2fa.revoke', $u->id) }}"
+                    data-name="{{ $u->name }}">
+                    <i class="fas fa-lock-open me-1"></i>Revoke
+                </button>
+            @endif
         @else
             <span class="text-muted small">—</span>
         @endif

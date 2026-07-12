@@ -16,10 +16,16 @@ class TwoFactorController extends Controller
        SETUP — GET /admin/security/2fa
        ================================================================ */
 
+    private function denyAccess()
+    {
+        Alert::error('Access Denied', 'You do not have permission to access this feature.');
+        return redirect()->route('admin.dashboard');
+    }
+
     public function showSetup()
     {
         if (!TwoFaHelper::isAllowed(auth()->user())) {
-            abort(403);
+            return $this->denyAccess();
         }
 
         $user = auth()->user();
@@ -58,7 +64,7 @@ class TwoFactorController extends Controller
     public function enable(Request $request)
     {
         if (!TwoFaHelper::isAllowed(auth()->user())) {
-            abort(403);
+            return $this->denyAccess();
         }
 
         $request->validate(['code' => 'required|digits:6']);
@@ -101,7 +107,7 @@ class TwoFactorController extends Controller
     public function disable(Request $request)
     {
         if (!TwoFaHelper::isAllowed(auth()->user())) {
-            abort(403);
+            return $this->denyAccess();
         }
 
         $request->validate(['code' => 'required|digits:6']);
@@ -160,7 +166,10 @@ class TwoFactorController extends Controller
     public function listUsers(\Illuminate\Http\Request $request)
     {
         if (!TwoFaHelper::isAllowed(auth()->user())) {
-            abort(403);
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Access denied.'], 403);
+            }
+            return $this->denyAccess();
         }
 
         $activeCount   = User::where('google2fa_enabled', true)->count();
@@ -212,12 +221,23 @@ class TwoFactorController extends Controller
     {
         if (!TwoFaHelper::isAllowed(auth()->user())) {
             if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'Forbidden'], 403);
+                return response()->json(['success' => false, 'message' => 'Access denied.'], 403);
             }
-            abort(403);
+            return $this->denyAccess();
         }
 
         $target = User::findOrFail($id);
+
+        if (TwoFaHelper::isPrimaryAdmin($target)) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The primary administrator\'s 2FA cannot be revoked.',
+                ], 403);
+            }
+            Alert::error('Not Allowed', 'The primary administrator\'s 2FA cannot be revoked.');
+            return redirect()->route('admin.security.2fa.users');
+        }
 
         $target->update([
             'google2fa_secret'  => null,
