@@ -18,7 +18,7 @@
                     <p class="text-muted mb-0 mt-1 small">Manage Two-Factor Authentication status for all users</p>
                 </div>
                 <a href="{{ route('admin.security.2fa') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px">
-                    <i class="fas fa-arrow-left me-1"></i> My 2FA Setup
+                    <i class="fas fa-wrench me-1"></i> My 2FA Setup
                 </a>
             </div>
         </div>
