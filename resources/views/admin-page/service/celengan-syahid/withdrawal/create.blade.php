@@ -49,7 +49,7 @@ html.dark-mode .cw-bal-value-pend { color: #fbbf24; }
     border: 1px solid rgba(0,167,157,.2);
     border-radius: 50px;
     padding: .18em .7em;
-    margin-bottom: .4rem;
+    margin-bottom: .75rem;
 }
 html.dark-mode .cw-step-badge { background: rgba(45,212,191,.1); color: #2dd4bf; border-color: rgba(45,212,191,.2); }
 
