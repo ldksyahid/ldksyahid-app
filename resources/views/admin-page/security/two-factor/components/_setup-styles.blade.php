@@ -175,6 +175,109 @@ html.dark-mode .status-badge-active {
 }
 html.dark-mode .step-list li { color: #9ca3af; }
 
+/* ── 2FA stat mini-cards ─────────────────────────────────────────── */
+.tfa-stat-card {
+    background: #fff; border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.07);
+    padding: 1rem 1.1rem;
+    display: flex; align-items: center; gap: 1rem;
+    transition: box-shadow .2s;
+}
+.tfa-stat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.12); }
+.tfa-stat-icon {
+    width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+}
+.tfa-icon-active  { background: rgba(5,150,105,.12);  color: #059669; }
+.tfa-icon-total   { background: rgba(0,167,157,.12);  color: #00a79d; }
+.tfa-icon-pending { background: rgba(107,114,128,.1); color: #6b7280; }
+.tfa-stat-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #9ca3af; margin-bottom: 2px; }
+.tfa-stat-value { font-size: 1.6rem; font-weight: 700; line-height: 1; color: #111827; }
+.tfa-stat-sub   { font-size: .72rem; color: #9ca3af; margin-top: 2px; }
+html.dark-mode .tfa-stat-card { background: #2b2f33; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+html.dark-mode .tfa-stat-value { color: #e4e6eb; }
+html.dark-mode .tfa-icon-active  { background: rgba(74,222,128,.1); color: #4ade80; }
+html.dark-mode .tfa-icon-total   { background: rgba(45,212,191,.1); color: #2dd4bf; }
+html.dark-mode .tfa-icon-pending { background: rgba(156,163,175,.08); color: #9ca3af; }
+
+/* ── Table card (audit log style) ──────────────────────────────── */
+.tfa-table-card {
+    background: #fff; border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.07); overflow: hidden;
+}
+html.dark-mode .tfa-table-card { background: #2b2f33; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+
+.tfa-table { font-size: .875rem; margin-bottom: 0; }
+.tfa-table thead th {
+    font-size: .8rem; font-weight: 600; color: #6c757d;
+    background: #f8f9fa; border-bottom: 2px solid #e9ecef;
+    white-space: nowrap; padding: .65rem .85rem; border-top: none;
+}
+.tfa-table thead th:first-child { font-weight: 700; color: #495057; }
+.tfa-table tbody td { padding: .65rem .85rem; vertical-align: middle; }
+.tfa-table tbody tr { transition: background .15s; }
+.tfa-table tbody tr:hover > td { background: rgba(0,0,0,.025); }
+html.dark-mode .tfa-table thead th { background: #1a1d21; color: #9ca3af; border-bottom-color: #373b3e; }
+html.dark-mode .tfa-table thead th:first-child { color: #d1d5db; }
+html.dark-mode .tfa-table tbody td { color: #e5e7eb; }
+html.dark-mode .tfa-table tbody tr:hover > td { background: rgba(255,255,255,.04); }
+
+/* ── Flat pagination ────────────────────────────────────────────── */
+.tfa-table-pagination {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: .5rem;
+    padding: .65rem 1rem; border-top: 1px solid #e9ecef; background: #fff;
+}
+html.dark-mode .tfa-table-pagination { background: #2b2f33; border-top-color: #373b3e; }
+.tfa-pg-btn { font-size: .78rem !important; padding: .22rem .6rem !important; border-radius: 6px !important; min-width: 32px; }
+.tfa-pg-btn.active { background: #00a79d !important; border-color: #00a79d !important; color: #fff !important; font-weight: 700; }
+.tfa-pg-ellipsis { display: inline-flex; align-items: center; padding: 0 .3rem; color: #9ca3af; font-size: .82rem; }
+html.dark-mode .tfa-pg-btn.active { background: #008b84 !important; border-color: #008b84 !important; }
+
+/* ── 2FA status badges ──────────────────────────────────────────── */
+.tfa-badge-active {
+    display: inline-flex; align-items: center; gap: .35em;
+    font-size: .73rem; font-weight: 700; padding: .28em .7em;
+    border-radius: 50px; white-space: nowrap;
+    background: rgba(5,150,105,.12); color: #059669; border: 1px solid rgba(5,150,105,.25);
+}
+.tfa-badge-inactive {
+    display: inline-flex; align-items: center; gap: .35em;
+    font-size: .73rem; font-weight: 700; padding: .28em .7em;
+    border-radius: 50px; white-space: nowrap;
+    background: rgba(107,114,128,.1); color: #6b7280; border: 1px solid rgba(107,114,128,.2);
+}
+html.dark-mode .tfa-badge-active   { background: rgba(74,222,128,.1); color: #4ade80; border-color: rgba(74,222,128,.25); }
+html.dark-mode .tfa-badge-inactive { background: rgba(156,163,175,.08); color: #9ca3af; border-color: rgba(156,163,175,.15); }
+
+/* ── Info rows (setup page) ─────────────────────────────────────── */
+.tfa-info-row {
+    display: flex; align-items: baseline; gap: .5rem;
+    padding: .5rem 0; border-bottom: 1px solid #f3f4f6;
+}
+.tfa-info-row:last-child { border-bottom: none; }
+.tfa-info-label { font-size: .75rem; font-weight: 700; color: #9ca3af; min-width: 120px; text-transform: uppercase; letter-spacing: .04em; flex-shrink: 0; }
+.tfa-info-value { font-size: .875rem; color: #111827; }
+html.dark-mode .tfa-info-row { border-bottom-color: rgba(255,255,255,.06); }
+html.dark-mode .tfa-info-value { color: #e5e7eb; }
+
+/* ── Disable card ───────────────────────────────────────────────── */
+.tfa-disable-card {
+    border: 1px solid rgba(220,53,69,.2);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.tfa-disable-header {
+    background: rgba(220,53,69,.06);
+    border-bottom: 1px solid rgba(220,53,69,.15);
+    padding: .6rem 1rem;
+    font-weight: 700; font-size: .88rem; color: #dc2626;
+    display: flex; align-items: center; gap: .4rem;
+}
+.tfa-disable-body { padding: 1rem; }
+html.dark-mode .tfa-disable-card { border-color: rgba(248,113,113,.2); }
+html.dark-mode .tfa-disable-header { background: rgba(248,113,113,.06); border-color: rgba(248,113,113,.15); color: #f87171; }
+
 @media (max-width: 768px) {
     .page-title { font-size: 1.35rem; }
     .otp-input { font-size: 1.2rem; letter-spacing: .25em; max-width: 100%; }

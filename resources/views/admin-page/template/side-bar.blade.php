@@ -123,10 +123,10 @@
                     </div>
                 </div>
                 <a href="/admin/job-queue-log" class="nav-item nav-link {{ $isActive('admin/job-queue-log') ? 'active' : '' }}"><i class="fas fa-stream me-2"></i>Job Queue Log</a>
-                <a href="/admin/setting" class="nav-item nav-link {{ $isActive('admin/setting') ? 'active' : '' }}"><i class="fas fa-cog me-2"></i>Setting</a>
                 @if($twoFaAllowed)
                 <a href="{{ route('admin.security.2fa') }}" class="nav-item nav-link {{ $isActive('admin/security/2fa*') ? 'active' : '' }}"><i class="fas fa-user-shield me-2"></i>2FA Security</a>
                 @endif
+                <a href="/admin/setting" class="nav-item nav-link {{ $isActive('admin/setting') ? 'active' : '' }}"><i class="fas fa-cog me-2"></i>Setting</a>
             </div>
 
         {{-- HelperAdmin Sidebar --}}

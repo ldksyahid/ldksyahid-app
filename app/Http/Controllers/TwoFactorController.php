@@ -164,7 +164,9 @@ class TwoFactorController extends Controller
         }
 
         $users = User::select('id', 'name', 'email', 'google2fa_enabled', 'two_fa_enabled_at', 'two_fa_last_used_at', 'two_fa_last_used_ip')
-            ->get();
+            ->orderByDesc('google2fa_enabled')
+            ->orderBy('name')
+            ->paginate(15);
 
         return view('admin-page.security.two-factor.users', [
             'users' => $users,
