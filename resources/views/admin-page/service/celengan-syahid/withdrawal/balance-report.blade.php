@@ -209,17 +209,23 @@
         <div class="col-12 mb-4">
             <div class="wi-table-card">
                 {{-- Card header --}}
-                <div class="d-flex justify-content-between align-items-center px-4 pt-4 pb-0 flex-wrap gap-2">
+                <div class="d-flex justify-content-between align-items-start px-4 pt-4 pb-3 flex-wrap gap-3">
                     <div class="d-flex align-items-center" style="gap:.75rem">
                         <span class="fw-semibold" style="font-size:.95rem; color:#495057">
                             <i class="fas fa-history me-2 text-muted"></i>Balance History
                         </span>
                         <span class="br-qris-badge">From DB</span>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="bh-pill-credit" id="bh-pill-credit" style="display:none!important"></span>
-                        <span class="bh-pill-debit"  id="bh-pill-debit"  style="display:none!important"></span>
-                        <small class="text-muted" id="bh-found-count">—</small>
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <div class="bh-summary-pill-wrap" id="bh-wrap-credit" style="display:none">
+                            <div class="bh-summary-label">Total Credit (in)</div>
+                            <span class="bh-pill-credit" id="bh-pill-credit"></span>
+                        </div>
+                        <div class="bh-summary-pill-wrap" id="bh-wrap-debit" style="display:none">
+                            <div class="bh-summary-label">Total Debit (out)</div>
+                            <span class="bh-pill-debit" id="bh-pill-debit"></span>
+                        </div>
+                        <small class="text-muted align-self-end" id="bh-found-count">—</small>
                     </div>
                 </div>
 
@@ -335,8 +341,9 @@ $(function () {
 
         function fmtRp(n) { return 'Rp ' + Number(n||0).toLocaleString('id-ID'); }
         if (meta.total_credit !== undefined) {
-            $('#bh-pill-credit').text('+ ' + fmtRp(meta.total_credit)).css('display', '');
-            $('#bh-pill-debit').text('− ' + fmtRp(meta.total_debit)).css('display', '');
+            $('#bh-pill-credit').text('+ ' + fmtRp(meta.total_credit));
+            $('#bh-pill-debit').text('− ' + fmtRp(meta.total_debit));
+            $('#bh-wrap-credit, #bh-wrap-debit').css('display', '');
         }
 
         var $ctrl = $('#bh-pg-controls').empty();
