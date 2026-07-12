@@ -164,15 +164,27 @@ class CampaignController extends Controller
         ]);
     }
 
-    public function financeAdminCampaign(string $id)
+    public function financeAdminCampaign(\Illuminate\Http\Request $request, string $id)
     {
         $campaign = Campaign::findOrFail($id);
-        $balance  = $campaign->getBalanceSummary();
 
         $withdrawals = Withdrawal::where('campaign_id', $id)
             ->with('creator')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody'    => view('admin-page.service.celengan-syahid.campaign.components._finance._withdrawal-rows', compact('withdrawals'))->render(),
+                'total'        => $withdrawals->total(),
+                'from'         => $withdrawals->firstItem() ?? 0,
+                'to'           => $withdrawals->lastItem() ?? 0,
+                'current_page' => $withdrawals->currentPage(),
+                'last_page'    => $withdrawals->lastPage(),
+            ]);
+        }
+
+        $balance  = $campaign->getBalanceSummary();
 
         $bisabillerBalance = Cache::remember('bisabiller_wallet_balance', 300, function () {
             return (new BisaTopup())->walletBalance();

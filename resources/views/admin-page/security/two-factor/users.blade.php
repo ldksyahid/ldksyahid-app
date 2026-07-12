@@ -23,11 +23,6 @@
             </div>
         </div>
 
-        {{-- Stat cards --}}
-        @php
-            $activeUsers   = $users->getCollection()->where('google2fa_enabled', true)->count();
-            $inactiveUsers = $users->getCollection()->where('google2fa_enabled', false)->count();
-        @endphp
         <div class="col-12 mb-4">
             <div class="row g-3">
                 <div class="col-md-4">
@@ -45,8 +40,8 @@
                         <div class="tfa-stat-icon tfa-icon-active"><i class="fas fa-shield-alt"></i></div>
                         <div>
                             <div class="tfa-stat-label">2FA Active</div>
-                            <div class="tfa-stat-value" id="stat-active">{{ $activeUsers }}</div>
-                            <div class="tfa-stat-sub">this page</div>
+                            <div class="tfa-stat-value" id="stat-active">{{ $activeCount }}</div>
+                            <div class="tfa-stat-sub">all users</div>
                         </div>
                     </div>
                 </div>
@@ -55,8 +50,8 @@
                         <div class="tfa-stat-icon tfa-icon-pending"><i class="fas fa-user-times"></i></div>
                         <div>
                             <div class="tfa-stat-label">2FA Inactive</div>
-                            <div class="tfa-stat-value" id="stat-inactive">{{ $inactiveUsers }}</div>
-                            <div class="tfa-stat-sub">this page</div>
+                            <div class="tfa-stat-value" id="stat-inactive">{{ $inactiveCount }}</div>
+                            <div class="tfa-stat-sub">all users</div>
                         </div>
                     </div>
                 </div>
