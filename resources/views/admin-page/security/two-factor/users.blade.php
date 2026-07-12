@@ -78,11 +78,24 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <select id="tfa-status-filter" class="tfa-filter-select" style="width:auto;flex-shrink:0">
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
+                    <input type="hidden" id="tfa-status-filter" value="">
+                    <div class="tfa-custom-select" id="tfa-status-dropdown">
+                        <button type="button" class="tfa-custom-select-btn" id="tfa-status-btn">
+                            <span class="tfa-select-label" id="tfa-status-label">All Status</span>
+                            <i class="fas fa-chevron-down tfa-select-arrow"></i>
+                        </button>
+                        <div class="tfa-custom-select-menu" id="tfa-status-menu">
+                            <div class="tfa-custom-select-item selected" data-value="">
+                                <span class="tfa-status-dot all"></span>All Status
+                            </div>
+                            <div class="tfa-custom-select-item" data-value="active">
+                                <span class="tfa-status-dot active"></span>Active
+                            </div>
+                            <div class="tfa-custom-select-item" data-value="inactive">
+                                <span class="tfa-status-dot inactive"></span>Inactive
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="table-responsive">
@@ -285,9 +298,31 @@ $(function () {
         loadPage(1);
     });
 
-    // Status filter
-    $('#tfa-status-filter').on('change', function () {
+    // Custom status dropdown
+    var $statusDropdown = $('#tfa-status-dropdown');
+    var $statusFilter   = $('#tfa-status-filter');
+
+    $('#tfa-status-btn').on('click', function (e) {
+        e.stopPropagation();
+        $statusDropdown.toggleClass('open');
+    });
+
+    $(document).on('click', '.tfa-custom-select-item', function () {
+        var val   = $(this).data('value');
+        var label = $(this).text().trim();
+        $('.tfa-custom-select-item').removeClass('selected');
+        $(this).addClass('selected');
+        $('#tfa-status-label').text(label);
+        $statusFilter.val(val);
+        $statusDropdown.removeClass('open');
         loadPage(1);
+    });
+
+    // Close dropdown on outside click
+    $(document).on('click', function (e) {
+        if (!$statusDropdown.is(e.target) && $statusDropdown.has(e.target).length === 0) {
+            $statusDropdown.removeClass('open');
+        }
     });
 
     // Revoke 2FA via AJAX with SweetAlert2 confirmation
