@@ -250,18 +250,58 @@ html.dark-mode .tfa-pg-btn.active { background: #008b84 !important; border-color
 html.dark-mode .tfa-badge-active   { background: rgba(74,222,128,.1); color: #4ade80; border-color: rgba(74,222,128,.25); }
 html.dark-mode .tfa-badge-inactive { background: rgba(156,163,175,.08); color: #9ca3af; border-color: rgba(156,163,175,.15); }
 
-/* ── Protected badge ────────────────────────────────────────────── */
-.tfa-badge-protected {
-    display: inline-flex; align-items: center; gap: .35em;
-    font-size: .72rem; font-weight: 700; padding: .28em .7em;
+/* ── Primary Admin badge ─────────────────────────────────────────── */
+.tfa-primary-badge {
+    display: inline-flex; align-items: center; gap: .4em;
+    font-size: .72rem; font-weight: 700; padding: .3em .75em;
     border-radius: 50px; white-space: nowrap; cursor: default;
-    background: rgba(0,167,157,.1); color: #00a79d;
-    border: 1px solid rgba(0,167,157,.25);
+    background: rgba(245,158,11,.1);
+    color: #b45309;
+    border: 1px solid rgba(245,158,11,.3);
+    position: relative;
 }
-html.dark-mode .tfa-badge-protected {
-    background: rgba(45,212,191,.1); color: #2dd4bf;
-    border-color: rgba(45,212,191,.25);
+.tfa-primary-badge .tfa-primary-icon {
+    font-size: .65rem;
+    opacity: .85;
 }
+/* Tooltip */
+.tfa-primary-badge::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    background: #1f2937; color: #f3f4f6;
+    font-size: .72rem; font-weight: 500;
+    padding: .3rem .65rem; border-radius: 6px;
+    white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity .15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,.25);
+    z-index: 10;
+}
+.tfa-primary-badge::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 1px);
+    left: 50%; transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1f2937;
+    pointer-events: none;
+    opacity: 0; transition: opacity .15s;
+    z-index: 10;
+}
+.tfa-primary-badge:hover::after,
+.tfa-primary-badge:hover::before { opacity: 1; }
+
+html.dark-mode .tfa-primary-badge {
+    background: rgba(251,191,36,.08);
+    color: #fbbf24;
+    border-color: rgba(251,191,36,.25);
+}
+html.dark-mode .tfa-primary-badge::after {
+    background: #374151; color: #f9fafb;
+    box-shadow: 0 4px 12px rgba(0,0,0,.5);
+}
+html.dark-mode .tfa-primary-badge::before { border-top-color: #374151; }
 
 /* ── Info rows (setup page) ─────────────────────────────────────── */
 .tfa-info-row {

@@ -41,8 +41,8 @@
     <td class="text-center">
         @if($u->google2fa_enabled && $u->id !== auth()->id())
             @if(\App\Helpers\TwoFaHelper::isPrimaryAdmin($u))
-                <span class="tfa-badge-protected" title="Primary administrator — 2FA cannot be revoked">
-                    <i class="fas fa-shield-alt"></i> Protected
+                <span class="tfa-primary-badge" data-tip="Primary admin — cannot be revoked">
+                    <i class="fas fa-lock tfa-primary-icon"></i> Protected
                 </span>
             @else
                 <button type="button"
