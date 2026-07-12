@@ -19,7 +19,7 @@
                 </div>
                 <div class="d-flex gap-2">
                     <a href="{{ route('admin.celsyahid.withdrawal.index') }}" class="btn btn-sm btn-outline-secondary btn-rounded">
-                        <i class="fas fa-arrow-left me-1"></i>Withdrawals
+                        <i class="fas fa-money-bill-wave me-1"></i>Withdrawals
                     </a>
                     <button type="button" id="br-refresh-btn" class="btn btn-sm btn-outline-secondary btn-rounded">
                         <i class="fas fa-sync-alt me-1" id="br-refresh-icon"></i>Refresh
