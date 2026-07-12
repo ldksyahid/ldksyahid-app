@@ -273,9 +273,27 @@ html.dark-mode .bh-reference     { color: #6b7280; }
     background: rgba(217,119,6,.1); color: #b45309;
     border: 1px solid rgba(217,119,6,.25);
 }
-.bh-amount { font-size: .875rem; font-weight: 700; }
-.bh-amount-credit { color: #00a79d; }
-.bh-amount-debit  { color: #d97706; }
+.bh-amount-pill {
+    display: inline-flex; align-items: center;
+    font-size: .78rem; font-weight: 700;
+    padding: .28em .75em; border-radius: 50px; white-space: nowrap;
+}
+.bh-pill-amount-credit {
+    background: rgba(0,167,157,.12); color: #007a72;
+    border: 1px solid rgba(0,167,157,.3);
+}
+.bh-pill-amount-debit {
+    background: rgba(220,38,38,.1); color: #b91c1c;
+    border: 1px solid rgba(220,38,38,.25);
+}
+html.dark-mode .bh-pill-amount-credit {
+    background: rgba(45,212,191,.12); color: #2dd4bf;
+    border-color: rgba(45,212,191,.3);
+}
+html.dark-mode .bh-pill-amount-debit {
+    background: rgba(248,113,113,.12); color: #f87171;
+    border-color: rgba(248,113,113,.3);
+}
 .bh-balance-after { font-size: .875rem; font-weight: 600; color: #374151; }
 
 /* ── Balance History Pagination ───────────────────────────── */

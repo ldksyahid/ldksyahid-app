@@ -26,7 +26,7 @@
         <div class="bh-reference">{{ $entry['reference'] }}</div>
     </td>
     <td class="text-end">
-        <span class="bh-amount {{ $isCredit ? 'bh-amount-credit' : 'bh-amount-debit' }}">
+        <span class="bh-amount-pill {{ $isCredit ? 'bh-pill-amount-credit' : 'bh-pill-amount-debit' }}">
             {{ $isCredit ? '+' : '−' }} Rp {{ number_format($absAmount, 0, ',', '.') }}
         </span>
     </td>
