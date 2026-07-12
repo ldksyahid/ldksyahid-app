@@ -69,20 +69,16 @@
                 </div>
 
                 {{-- Search & Filter Bar --}}
-                <div class="d-flex align-items-center gap-2 px-4 pb-3 flex-wrap">
-                    <div class="input-group" style="max-width:320px">
-                        <span class="input-group-text" style="background:transparent;border-right:0">
-                            <i class="fas fa-search text-muted" style="font-size:.8rem"></i>
-                        </span>
-                        <input type="text" id="tfa-search" class="form-control"
-                               placeholder="Search name or email…"
-                               style="border-left:0;font-size:.85rem">
-                        <button class="btn btn-outline-secondary" type="button" id="tfa-search-clear"
-                                style="display:none;font-size:.8rem" title="Clear">
+                <div class="tfa-search-bar d-flex align-items-center gap-2 flex-wrap">
+                    <div class="tfa-search-group" style="max-width:300px;flex:1 1 200px">
+                        <span class="tfa-search-icon"><i class="fas fa-search"></i></span>
+                        <input type="text" id="tfa-search" class="tfa-search-input"
+                               placeholder="Search name or email…">
+                        <button type="button" id="tfa-search-clear" class="tfa-search-clear" style="display:none" title="Clear">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <select id="tfa-status-filter" class="form-select" style="max-width:150px;font-size:.85rem">
+                    <select id="tfa-status-filter" class="tfa-filter-select" style="width:auto;flex-shrink:0">
                         <option value="">All Status</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
