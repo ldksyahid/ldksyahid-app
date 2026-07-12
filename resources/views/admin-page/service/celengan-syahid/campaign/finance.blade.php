@@ -167,7 +167,6 @@
                         <small class="text-muted fw-normal fs-6 ms-2">(This Campaign)</small>
                     </h5>
 
-                    @if($withdrawals->count() > 0)
                     <div class="table-responsive">
                         <table class="table wd-table align-middle mb-0">
                             <thead>
@@ -182,58 +181,21 @@
                                     <th class="text-center" style="width:60px">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach($withdrawals as $i => $wd)
-                                @php
-                                    $statusClass = match($wd->status) {
-                                        'COMPLETED' => 'wd-status-COMPLETED',
-                                        'PENDING'   => 'wd-status-PENDING',
-                                        'FAILED'    => 'wd-status-FAILED',
-                                        default     => 'wd-status-default',
-                                    };
-                                    $statusIcon = match($wd->status) {
-                                        'COMPLETED' => 'fa-check-circle',
-                                        'PENDING'   => 'fa-clock',
-                                        'FAILED'    => 'fa-times-circle',
-                                        default     => 'fa-circle',
-                                    };
-                                @endphp
-                                <tr class="{{ $wd->status === 'FAILED' ? 'wd-row-failed' : '' }}">
-                                    <td class="text-muted small">{{ $i + 1 }}</td>
-                                    <td>
-                                        <div class="fw-semibold small">{{ optional($wd->created_at)->format('d M Y') }}</div>
-                                        <div class="text-muted" style="font-size:.72rem">{{ optional($wd->created_at)->format('H:i') }}</div>
-                                    </td>
-                                    <td><span class="wd-bank-chip">{{ strtoupper($wd->bank_code) }}</span></td>
-                                    <td><span class="wd-account">{{ $wd->account_number }}</span></td>
-                                    <td class="fw-semibold small">{{ $wd->account_holder ?: '—' }}</td>
-                                    <td class="text-end">
-                                        <span class="wd-amount">Rp {{ number_format($wd->amount, 0, ',', '.') }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <span class="wd-badge {{ $statusClass }}">
-                                            <i class="fas {{ $statusIcon }}"></i>
-                                            {{ $wd->status }}
-                                        </span>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ route('admin.celsyahid.withdrawal.show', $wd->id) }}"
-                                           class="btn btn-sm btn-custom-primary" title="View Detail">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                @endforeach
+                            <tbody id="finance-wd-tbody">
+                                @include('admin-page.service.celengan-syahid.campaign.components._finance._withdrawal-rows', compact('withdrawals'))
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-3">{{ $withdrawals->links() }}</div>
-                    @else
-                    <div class="text-center py-5 text-muted">
-                        <i class="fas fa-money-bill-transfer fa-2x mb-2 d-block opacity-50"></i>
-                        <div>No withdrawals found for this campaign.</div>
+
+                    {{-- Flat AJAX pagination --}}
+                    <div class="wi-table-pagination mt-0 border-top" id="finance-wd-pagination" style="border-radius:0">
+                        <span class="text-muted small" id="finance-wd-pg-info">
+                            @if($withdrawals->total() > 0)
+                                Showing {{ $withdrawals->firstItem() }}–{{ $withdrawals->lastItem() }} of {{ $withdrawals->total() }} records
+                            @endif
+                        </span>
+                        <div class="d-flex align-items-center gap-1" id="finance-wd-pg-controls"></div>
                     </div>
-                    @endif
                 </div>
             </div>
         </div>

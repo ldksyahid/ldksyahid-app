@@ -235,8 +235,8 @@
 </div>
 @endsection
 
-@if($enabled)
 @section('scripts')
+@if($enabled)
 <script>
 document.getElementById('btn-disable-2fa').addEventListener('click', function () {
     Swal.fire({
@@ -258,5 +258,5 @@ document.getElementById('btn-disable-2fa').addEventListener('click', function ()
     });
 });
 </script>
-@endsection
 @endif
+@endsection
