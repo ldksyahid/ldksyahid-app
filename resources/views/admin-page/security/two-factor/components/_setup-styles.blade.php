@@ -250,6 +250,19 @@ html.dark-mode .tfa-pg-btn.active { background: #008b84 !important; border-color
 html.dark-mode .tfa-badge-active   { background: rgba(74,222,128,.1); color: #4ade80; border-color: rgba(74,222,128,.25); }
 html.dark-mode .tfa-badge-inactive { background: rgba(156,163,175,.08); color: #9ca3af; border-color: rgba(156,163,175,.15); }
 
+/* ── Protected badge ────────────────────────────────────────────── */
+.tfa-badge-protected {
+    display: inline-flex; align-items: center; gap: .35em;
+    font-size: .72rem; font-weight: 700; padding: .28em .7em;
+    border-radius: 50px; white-space: nowrap; cursor: default;
+    background: rgba(0,167,157,.1); color: #00a79d;
+    border: 1px solid rgba(0,167,157,.25);
+}
+html.dark-mode .tfa-badge-protected {
+    background: rgba(45,212,191,.1); color: #2dd4bf;
+    border-color: rgba(45,212,191,.25);
+}
+
 /* ── Info rows (setup page) ─────────────────────────────────────── */
 .tfa-info-row {
     display: flex; align-items: baseline; gap: .5rem;
