@@ -103,9 +103,9 @@
                 </div>
                 <div class="br-explain-body">
                     <ul class="mb-3">
-                        <li>Bisatopup transaction fee (~Rp 10/txn) deducted and recorded in the <code>biaya_admin</code> column.</li>
-                        <li>Donations with <code>PAID</code> status but not yet settled to the wallet (T+1 / T+2).</li>
-                        <li>Minor rounding differences from the Bisatopup system.</li>
+                        <li>Bisatopup deducts MDR (1%) using <strong>ceiling rounding</strong> per transaction — e.g. 1% of Rp 20.202 = Rp 202.02 → charged as Rp 203. Expected balance here is calculated with the same CEIL formula.</li>
+                        <li>Donations with <code>PAID</code> status but not yet settled to the Bisatopup wallet (T+1 / T+2 settlement delay).</li>
+                        <li>DRAFT / PENDING / FAILED withdrawals are excluded — only <code>COMPLETED</code> withdrawals are counted as debits.</li>
                     </ul>
                     <div class="d-flex gap-2 flex-wrap">
                         <span class="discrepancy-badge discrepancy-normal">
@@ -210,11 +210,16 @@
             <div class="wi-table-card">
                 {{-- Card header --}}
                 <div class="d-flex justify-content-between align-items-center px-4 pt-4 pb-0 flex-wrap gap-2">
-                    <span class="fw-semibold" style="font-size:.95rem; color:#495057">
-                        <i class="fas fa-history me-2 text-muted"></i>Balance History
-                        <span class="br-qris-badge ms-2">From DB</span>
+                    <span class="fw-semibold d-flex align-items-center gap-2" style="font-size:.95rem; color:#495057">
+                        <i class="fas fa-history text-muted"></i>
+                        Balance History
+                        <span class="br-qris-badge">From DB</span>
                     </span>
-                    <small class="text-muted" id="bh-found-count">—</small>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="bh-pill-credit" id="bh-pill-credit" style="display:none!important"></span>
+                        <span class="bh-pill-debit"  id="bh-pill-debit"  style="display:none!important"></span>
+                        <small class="text-muted" id="bh-found-count">—</small>
+                    </div>
                 </div>
 
                 {{-- Search & Filter --}}
@@ -227,11 +232,24 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <select id="bh-type-filter" class="bh-filter-select">
-                        <option value="">All Types</option>
-                        <option value="PAYMENT">Payment (Credit)</option>
-                        <option value="DISBURSEMENT">Transfer (Debit)</option>
-                    </select>
+                    <input type="hidden" id="bh-type-filter" value="">
+                    <div class="bh-custom-select" id="bh-type-dropdown">
+                        <button type="button" class="bh-custom-select-btn" id="bh-type-btn">
+                            <span class="bh-select-label" id="bh-type-label">All Types</span>
+                            <i class="fas fa-chevron-down bh-select-arrow"></i>
+                        </button>
+                        <div class="bh-custom-select-menu" id="bh-type-menu">
+                            <div class="bh-select-item selected" data-value="">
+                                <span class="bh-select-dot bh-dot-all"></span>All Types
+                            </div>
+                            <div class="bh-select-item" data-value="PAYMENT">
+                                <span class="bh-select-dot bh-dot-credit"></span>Payment (Credit)
+                            </div>
+                            <div class="bh-select-item" data-value="DISBURSEMENT">
+                                <span class="bh-select-dot bh-dot-debit"></span>Transfer (Debit)
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="table-responsive">
@@ -313,6 +331,13 @@ $(function () {
         lastPage = meta.last_page;
         $('#bh-pg-info').text(meta.total > 0 ? 'Showing ' + meta.from + '–' + meta.to + ' of ' + meta.total + ' records' : 'No records found');
         $('#bh-found-count').text(meta.total + ' record(s)');
+
+        function fmtRp(n) { return 'Rp ' + Number(n||0).toLocaleString('id-ID'); }
+        if (meta.total_credit !== undefined) {
+            $('#bh-pill-credit').text('+ ' + fmtRp(meta.total_credit)).css('display', '');
+            $('#bh-pill-debit').text('− ' + fmtRp(meta.total_debit)).css('display', '');
+        }
+
         var $ctrl = $('#bh-pg-controls').empty();
         if (lastPage <= 1) return;
 
@@ -352,7 +377,26 @@ $(function () {
         searchTimer = setTimeout(function () { load(1); }, 350);
     });
     $('#bh-search-clear').on('click', function () { $('#bh-search').val(''); $(this).hide(); load(1); });
-    $('#bh-type-filter').on('change', function () { load(1); });
+    // Custom type dropdown
+    $('#bh-type-btn').on('click', function (e) {
+        e.stopPropagation();
+        $('#bh-type-dropdown').toggleClass('open');
+    });
+    $(document).on('click', '.bh-select-item', function () {
+        var val   = $(this).data('value');
+        var label = $(this).text().trim();
+        $('.bh-select-item').removeClass('selected');
+        $(this).addClass('selected');
+        $('#bh-type-label').text(label);
+        $('#bh-type-filter').val(val);
+        $('#bh-type-dropdown').removeClass('open');
+        load(1);
+    });
+    $(document).on('click', function (e) {
+        if (!$('#bh-type-dropdown').is(e.target) && $('#bh-type-dropdown').has(e.target).length === 0) {
+            $('#bh-type-dropdown').removeClass('open');
+        }
+    });
 
     $(document).on('click', '.bh-view-btn', function () {
         var type   = $(this).data('type');

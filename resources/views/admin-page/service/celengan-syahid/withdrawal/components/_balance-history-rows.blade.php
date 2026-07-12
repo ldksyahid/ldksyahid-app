@@ -22,8 +22,8 @@
         </div>
     </td>
     <td class="small">
-        <div class="fw-semibold" style="font-size:.82rem;color:#374151">{{ $entry['campaign'] }}</div>
-        <div class="text-muted" style="font-size:.72rem">{{ $entry['reference'] }}</div>
+        <div class="bh-campaign-name">{{ $entry['campaign'] }}</div>
+        <div class="bh-reference">{{ $entry['reference'] }}</div>
     </td>
     <td class="text-end">
         <span class="bh-amount {{ $isCredit ? 'bh-amount-credit' : 'bh-amount-debit' }}">

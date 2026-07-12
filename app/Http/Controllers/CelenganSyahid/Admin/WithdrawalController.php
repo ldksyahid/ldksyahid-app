@@ -525,6 +525,9 @@ class WithdrawalController extends Controller
         $items    = $desc->slice($offset, $perPage)->values();
         $lastPage = max(1, (int) ceil($total / $perPage));
 
+        $totalCredit = $all->filter(fn($e) => $e['amount'] > 0)->sum('amount');
+        $totalDebit  = abs($all->filter(fn($e) => $e['amount'] < 0)->sum('amount'));
+
         return response()->json([
             'html'         => view('admin-page.service.celengan-syahid.withdrawal.components._balance-history-rows', compact('items'))->render(),
             'total'        => $total,
@@ -532,6 +535,8 @@ class WithdrawalController extends Controller
             'to'           => min($offset + $perPage, $total),
             'current_page' => $page,
             'last_page'    => $lastPage,
+            'total_credit' => $totalCredit,
+            'total_debit'  => $totalDebit,
         ]);
     }
 
