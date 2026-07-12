@@ -238,40 +238,27 @@
 @section('scripts')
 <script>
 $(function () {
-    // Capture Swal reference at DOM-ready time so it's available in closures
-    // even when browser extensions wrap event handlers in a different scope.
-    var _Swal = window.Swal || null;
-
-    // Numeric-only OTP inputs on this page
+    // Numeric-only OTP inputs
     $(document).on('input', 'input[name="code"]', function () {
         this.value = this.value.replace(/\D/g, '').slice(0, 6);
     });
 
     @if($enabled)
-    $(document).on('click', '#btn-disable-2fa', function (e) {
+    $('#btn-disable-2fa').on('click', function (e) {
         e.preventDefault();
-
-        var doSubmit = function () { document.getElementById('disable-2fa-form').submit(); };
-
-        if (_Swal) {
-            _Swal.fire({
-                title: 'Disable 2FA?',
-                html: 'You will <strong>not be able to perform protected actions</strong> until you set up 2FA again.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, Disable',
-                cancelButtonText:  'Cancel',
-                confirmButtonColor: '#dc2626',
-                cancelButtonColor:  '#6b7280',
-            }).then(function (result) {
-                if (result.isConfirmed) doSubmit();
-            });
-        } else {
-            // Fallback to native confirm if SweetAlert2 is not loaded
-            if (confirm('Disable 2FA? You will not be able to perform protected actions until you set up 2FA again.')) {
-                doSubmit();
+        Swal.fire({
+            title: 'Are you sure?',
+            text:  'You will not be able to perform protected actions until you set up 2FA again.',
+            icon:  'warning',
+            showCancelButton:   true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor:  '#d33',
+            confirmButtonText:  'Yes, Disable!',
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                document.getElementById('disable-2fa-form').submit();
             }
-        }
+        });
     });
     @endif
 });
