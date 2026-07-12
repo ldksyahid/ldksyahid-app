@@ -524,6 +524,7 @@ Route::get('/admin/celengan-syahid/audit-logs', [CelsyahidAuditLogController::cl
 
 // Balance report (Superadmin + HelperCelsyahid)
 Route::get('/admin/celengan-syahid/balance-report', [CelsyahidWithdrawalController::class, 'balanceReport'])->name('admin.celsyahid.balance.report')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::get('/admin/celengan-syahid/balance-history', [CelsyahidWithdrawalController::class, 'balanceHistory'])->name('admin.celsyahid.balance.history')->middleware(['role:Superadmin|HelperCelsyahid']);
 
 // 2FA Security — access guarded by TwoFaHelper::isAllowed() inside each method
 Route::middleware(['auth'])->prefix('/admin/security')->group(function () {

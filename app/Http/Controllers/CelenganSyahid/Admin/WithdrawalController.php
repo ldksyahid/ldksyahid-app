@@ -424,6 +424,118 @@ class WithdrawalController extends Controller
     }
 
     /* ================================================================
+       BALANCE HISTORY — AJAX: unified payment + disbursement log
+       ================================================================ */
+
+    public function balanceHistory(\Illuminate\Http\Request $request)
+    {
+        $mdrRate = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+        $search  = trim($request->input('search', ''));
+        $type    = $request->input('type', '');
+        $perPage = 20;
+
+        // ── CREDIT entries: PAID bisatopup donations ──────────────
+        $donQ = Donation::where('gateway', 'bisatopup')
+            ->where('payment_status', 'PAID')
+            ->with('campaign:id,judul');
+
+        if ($search) {
+            $donQ->where(function ($q) use ($search) {
+                $q->where('doc_no', 'like', "%{$search}%")
+                  ->orWhere('nama_donatur', 'like', "%{$search}%")
+                  ->orWhereHas('campaign', fn($q) => $q->where('judul', 'like', "%{$search}%"));
+            });
+        }
+
+        $credits = $donQ->get()->map(function ($d) use ($mdrRate) {
+            $gross  = (int) ($d->total_tagihan ?? ($d->jumlah_donasi + (int) $d->biaya_admin));
+            $mdr    = (int) ceil($gross * $mdrRate);
+            $credit = $gross - $mdr;
+            return [
+                'type'      => 'PAYMENT',
+                'date'      => $d->updated_at,
+                'reference' => $d->doc_no,
+                'campaign'  => $d->campaign->judul ?? '—',
+                'amount'    => $credit,
+                'details'   => [
+                    'donor'         => $d->nama_donatur,
+                    'email'         => $d->email_donatur,
+                    'jumlah_donasi' => $d->jumlah_donasi,
+                    'total_tagihan' => $gross,
+                    'mdr'           => $mdr,
+                    'doc_no'        => $d->doc_no,
+                    'campaign'      => $d->campaign->judul ?? '—',
+                    'date'          => $d->updated_at ? $d->updated_at->format('d M Y, H:i') : '—',
+                ],
+            ];
+        });
+
+        // ── DEBIT entries: COMPLETED withdrawals ──────────────────
+        $wdQ = Withdrawal::where('status', 'COMPLETED')->with('campaign:id,judul');
+
+        if ($search) {
+            $wdQ->where(function ($q) use ($search) {
+                $q->where('reff_id', 'like', "%{$search}%")
+                  ->orWhere('account_holder', 'like', "%{$search}%")
+                  ->orWhere('bank_code', 'like', "%{$search}%")
+                  ->orWhereHas('campaign', fn($q) => $q->where('judul', 'like', "%{$search}%"));
+            });
+        }
+
+        $debits = $wdQ->get()->map(function ($w) {
+            return [
+                'type'      => 'DISBURSEMENT',
+                'date'      => $w->completed_at ?? $w->executed_at,
+                'reference' => $w->reff_id,
+                'campaign'  => $w->campaign->judul ?? '—',
+                'amount'    => -((int) $w->amount),
+                'details'   => [
+                    'bank_code'      => strtoupper($w->bank_code),
+                    'account_number' => $w->account_number,
+                    'account_holder' => $w->account_holder,
+                    'amount'         => $w->amount,
+                    'fee'            => $w->fee,
+                    'reff_id'        => $w->reff_id,
+                    'campaign'       => $w->campaign->judul ?? '—',
+                    'executed_at'    => optional($w->executed_at)->format('d M Y, H:i') ?? '—',
+                    'completed_at'   => optional($w->completed_at)->format('d M Y, H:i') ?? '—',
+                ],
+            ];
+        });
+
+        // ── Merge + type filter ───────────────────────────────────
+        $all = $credits->merge($debits);
+        if ($type === 'PAYMENT')      { $all = $all->filter(fn($e) => $e['type'] === 'PAYMENT'); }
+        if ($type === 'DISBURSEMENT') { $all = $all->filter(fn($e) => $e['type'] === 'DISBURSEMENT'); }
+
+        // ── Running balance (ASC order → cumulative sum) ──────────
+        $asc     = $all->sortBy('date')->values();
+        $running = 0;
+        $asc     = $asc->map(function ($e) use (&$running) {
+            $running            += $e['amount'];
+            $e['balance_after']  = $running;
+            return $e;
+        });
+
+        // ── Paginate descending (newest first) ────────────────────
+        $desc     = $asc->reverse()->values();
+        $total    = $desc->count();
+        $page     = max(1, (int) $request->input('page', 1));
+        $offset   = ($page - 1) * $perPage;
+        $items    = $desc->slice($offset, $perPage)->values();
+        $lastPage = max(1, (int) ceil($total / $perPage));
+
+        return response()->json([
+            'html'         => view('admin-page.service.celengan-syahid.withdrawal.components._balance-history-rows', compact('items'))->render(),
+            'total'        => $total,
+            'from'         => $total > 0 ? $offset + 1 : 0,
+            'to'           => min($offset + $perPage, $total),
+            'current_page' => $page,
+            'last_page'    => $lastPage,
+        ]);
+    }
+
+    /* ================================================================
        CALLBACK — webhook from Bisabiller for disbursement status
        POST /celengan-syahid/disbursement-callback (no auth, no CSRF)
        ================================================================ */
