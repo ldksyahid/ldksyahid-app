@@ -39,10 +39,18 @@ class Campaign extends Model
 
     public function getBalanceSummary(): array
     {
-        $qrisPaid = Donation::where('campaign_id', $this->id)
+        // Use CEIL MDR formula — same as balanceReport() — to match Bisatopup's
+        // actual wallet credit (they CEIL the 1% fee per transaction).
+        // Using raw jumlah_donasi overestimates by Rp 1 when fee has .xx fraction.
+        $mdrRate  = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+        $qrisPaid = (int) Donation::where('campaign_id', $this->id)
             ->where('gateway', 'bisatopup')
             ->where('payment_status', 'PAID')
-            ->sum('jumlah_donasi');
+            ->selectRaw(
+                'SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wallet_credit',
+                [$mdrRate]
+            )
+            ->value('wallet_credit');
 
         $manualPaid = Donation::where('campaign_id', $this->id)
             ->where('gateway', 'manual')
