@@ -109,7 +109,7 @@
                                 <th class="text-center" style="min-width:130px">Enabled Since</th>
                                 <th class="text-center" style="min-width:150px">Last Verified</th>
                                 <th class="text-center" style="min-width:120px">Last IP</th>
-                                <th class="text-center" style="width:80px">Action</th>
+                                <th class="text-center" style="width:90px">Action</th>
                             </tr>
                         </thead>
                         <tbody id="tfa-tbody">
