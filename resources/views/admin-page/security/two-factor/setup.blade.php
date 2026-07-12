@@ -236,27 +236,33 @@
 @endsection
 
 @section('scripts')
-@if($enabled)
 <script>
-document.getElementById('btn-disable-2fa').addEventListener('click', function () {
-    Swal.fire({
-        title: 'Disable 2FA?',
-        html:  'You will <strong>not be able to execute withdrawals</strong> until you set up 2FA again.',
-        icon:  'warning',
-        iconColor: '#dc2626',
-        showCancelButton: true,
-        confirmButtonText: '<i class="fas fa-lock-open me-1"></i> Yes, Disable',
-        cancelButtonText:  '<i class="fas fa-times me-1"></i> Cancel',
-        confirmButtonColor: '#dc2626',
-        cancelButtonColor:  '#6b7280',
-        reverseButtons: true,
-        focusCancel: true,
-    }).then(function (result) {
-        if (result.isConfirmed) {
-            document.getElementById('disable-2fa-form').submit();
-        }
+$(function () {
+    @if($enabled)
+    // Numeric-only OTP input
+    $(document).on('input', 'input[name="code"]', function () {
+        this.value = this.value.replace(/\D/g, '').slice(0, 6);
     });
+
+    // SweetAlert confirmation for Disable 2FA
+    $(document).on('click', '#btn-disable-2fa', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Disable 2FA?',
+            html: 'You will <strong>not be able to execute withdrawals</strong> until you set up 2FA again.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Disable',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                $('#disable-2fa-form').submit();
+            }
+        });
+    });
+    @endif
 });
 </script>
-@endif
 @endsection
