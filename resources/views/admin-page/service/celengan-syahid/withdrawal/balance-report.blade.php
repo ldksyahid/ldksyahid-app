@@ -205,6 +205,205 @@
             </div>
         </div>
 
+        {{-- Balance History Table --}}
+        <div class="col-12 mb-4">
+            <div class="wi-table-card">
+                {{-- Card header --}}
+                <div class="d-flex justify-content-between align-items-center px-4 pt-4 pb-0 flex-wrap gap-2">
+                    <span class="fw-semibold" style="font-size:.95rem; color:#495057">
+                        <i class="fas fa-history me-2 text-muted"></i>Balance History
+                        <span class="br-qris-badge ms-2">From DB</span>
+                    </span>
+                    <small class="text-muted" id="bh-found-count">—</small>
+                </div>
+
+                {{-- Search & Filter --}}
+                <div class="bh-filter-bar">
+                    <div class="bh-search-group">
+                        <span class="bh-search-icon"><i class="fas fa-search"></i></span>
+                        <input type="text" id="bh-search" class="bh-search-input"
+                               placeholder="Search reference, donor, campaign…">
+                        <button type="button" id="bh-search-clear" class="bh-search-clear" style="display:none">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <select id="bh-type-filter" class="bh-filter-select">
+                        <option value="">All Types</option>
+                        <option value="PAYMENT">Payment (Credit)</option>
+                        <option value="DISBURSEMENT">Transfer (Debit)</option>
+                    </select>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover wi-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-3" style="min-width:120px">Type</th>
+                                <th style="min-width:110px">Date</th>
+                                <th style="min-width:200px">Campaign / Ref</th>
+                                <th class="text-end" style="min-width:130px">Amount</th>
+                                <th class="text-end" style="min-width:130px">Balance After</th>
+                                <th class="text-center pe-3" style="width:60px">View</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bh-tbody">
+                            <tr><td colspan="6"><div class="text-center py-5 text-muted"><i class="fas fa-spinner fa-spin fa-lg"></i></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Pagination --}}
+                <div class="bh-pagination-bar">
+                    <span class="text-muted small" id="bh-pg-info"></span>
+                    <div class="d-flex gap-1" id="bh-pg-controls"></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
+
+{{-- Detail Popup Modal --}}
+<div class="modal fade" id="bh-detail-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:480px">
+        <div class="modal-content bh-modal-content">
+            <div class="bh-modal-header" id="bh-modal-header">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bh-modal-icon" id="bh-modal-icon"><i class="fas fa-circle-info"></i></div>
+                    <div>
+                        <div class="bh-modal-title" id="bh-modal-title">Transaction Detail</div>
+                        <div class="bh-modal-sub" id="bh-modal-sub"></div>
+                    </div>
+                </div>
+                <button type="button" class="bh-modal-close" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="bh-modal-body" id="bh-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('scripts')
+<script>
+$(function () {
+    var AJAX_URL = '{{ route("admin.celsyahid.balance.history") }}';
+    var curPage  = 1, lastPage = 1, searchTimer;
+
+    function getFilters() {
+        return { search: $.trim($('#bh-search').val()), type: $('#bh-type-filter').val() };
+    }
+
+    function pageWindows(cur, last) {
+        var show = {}, arr = [];
+        [1, last].forEach(function (p) { if (p >= 1 && p <= last) show[p] = true; });
+        for (var p = Math.max(1, cur - 2); p <= Math.min(last, cur + 2); p++) show[p] = true;
+        var prev = 0;
+        Object.keys(show).map(Number).sort(function (a, b) { return a - b; }).forEach(function (p) {
+            if (prev && p - prev > 1) arr.push(null);
+            arr.push(p); prev = p;
+        });
+        return arr;
+    }
+
+    function renderPagination(meta) {
+        curPage  = meta.current_page;
+        lastPage = meta.last_page;
+        $('#bh-pg-info').text(meta.total > 0 ? 'Showing ' + meta.from + '–' + meta.to + ' of ' + meta.total + ' records' : 'No records found');
+        $('#bh-found-count').text(meta.total + ' record(s)');
+        var $ctrl = $('#bh-pg-controls').empty();
+        if (lastPage <= 1) return;
+
+        var $prev = $('<button class="btn btn-sm btn-outline-secondary bh-pg-btn"><i class="fas fa-chevron-left"></i></button>');
+        if (curPage <= 1) $prev.prop('disabled', true);
+        else $prev.on('click', function () { load(curPage - 1); });
+        $ctrl.append($prev);
+
+        pageWindows(curPage, lastPage).forEach(function (p) {
+            if (p === null) { $ctrl.append('<span class="bh-pg-ellipsis">…</span>'); return; }
+            var $btn = $('<button class="btn btn-sm btn-outline-secondary bh-pg-btn' + (p === curPage ? ' active' : '') + '">' + p + '</button>');
+            if (p !== curPage) { (function(pg){ $btn.on('click', function(){ load(pg); }); })(p); }
+            $ctrl.append($btn);
+        });
+
+        var $next = $('<button class="btn btn-sm btn-outline-secondary bh-pg-btn"><i class="fas fa-chevron-right"></i></button>');
+        if (curPage >= lastPage) $next.prop('disabled', true);
+        else $next.on('click', function () { load(curPage + 1); });
+        $ctrl.append($next);
+    }
+
+    function load(page) {
+        $('#bh-tbody').css('opacity', .45);
+        $.ajax({
+            url: AJAX_URL, data: $.extend({ page: page || 1 }, getFilters()),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }, dataType: 'json',
+        }).done(function (res) {
+            $('#bh-tbody').html(res.html).css('opacity', 1);
+            renderPagination(res);
+        }).fail(function () { $('#bh-tbody').css('opacity', 1); });
+    }
+
+    $('#bh-search').on('input', function () {
+        var v = $(this).val();
+        $('#bh-search-clear').toggle(v.length > 0);
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function () { load(1); }, 350);
+    });
+    $('#bh-search-clear').on('click', function () { $('#bh-search').val(''); $(this).hide(); load(1); });
+    $('#bh-type-filter').on('change', function () { load(1); });
+
+    $(document).on('click', '.bh-view-btn', function () {
+        var type   = $(this).data('type');
+        var detail = $(this).data('detail');
+        if (typeof detail === 'string') { try { detail = JSON.parse(detail); } catch(e) {} }
+
+        var isCredit = (type === 'PAYMENT');
+        var icon  = isCredit ? 'fa-arrow-circle-down' : 'fa-arrow-circle-up';
+        var color = isCredit ? '#00a79d' : '#d97706';
+
+        $('#bh-modal-icon').html('<i class="fas ' + icon + '" style="font-size:1.4rem;color:' + color + '"></i>');
+        $('#bh-modal-title').text(isCredit ? 'Payment Credit' : 'Transfer Debit');
+        $('#bh-modal-sub').text(detail.doc_no || detail.reff_id || '');
+        $('#bh-modal-header').css('border-bottom-color', isCredit ? 'rgba(0,167,157,.15)' : 'rgba(217,119,6,.15)');
+
+        var rows = '';
+        if (isCredit) {
+            rows += bhRow('Campaign', detail.campaign);
+            rows += bhRow('Date', detail.date);
+            rows += bhRow('Reference', detail.doc_no);
+            rows += bhRow('Donor', detail.donor);
+            rows += bhRow('Email', detail.email);
+            rows += bhRowAmt('Gross Amount', detail.total_tagihan);
+            rows += bhRowAmt('MDR Fee (1%)', detail.mdr, false, '#d97706');
+            rows += bhRowAmt('Wallet Credit', detail.total_tagihan - detail.mdr, true, '#00a79d');
+        } else {
+            rows += bhRow('Campaign', detail.campaign);
+            rows += bhRow('Executed', detail.executed_at);
+            rows += bhRow('Completed', detail.completed_at);
+            rows += bhRow('Ref ID', detail.reff_id);
+            rows += bhRow('Bank', detail.bank_code);
+            rows += bhRow('Account', detail.account_number);
+            rows += bhRow('Recipient', detail.account_holder);
+            rows += bhRowAmt('Amount', detail.amount, true, '#d97706');
+            rows += bhRowAmt('Transfer Fee', detail.fee);
+        }
+
+        $('#bh-modal-body').html('<div class="bh-detail-grid">' + rows + '</div>');
+        new bootstrap.Modal(document.getElementById('bh-detail-modal')).show();
+    });
+
+    function bhRow(label, value) {
+        return '<div class="bh-detail-row"><span class="bh-detail-label">' + label + '</span><span class="bh-detail-value">' + (value || '—') + '</span></div>';
+    }
+    function bhRowAmt(label, amount, bold, color) {
+        var style = (bold ? 'font-weight:700;' : '') + (color ? 'color:' + color + ';' : '');
+        var fmt = 'Rp ' + Number(amount || 0).toLocaleString('id-ID');
+        return '<div class="bh-detail-row"><span class="bh-detail-label">' + label + '</span><span class="bh-detail-value" style="' + style + '">' + fmt + '</span></div>';
+    }
+
+    load(1);
+});
+</script>
 @endsection
