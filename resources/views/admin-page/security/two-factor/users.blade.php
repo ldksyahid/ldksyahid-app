@@ -25,8 +25,8 @@
 
         {{-- Stat cards --}}
         @php
-            $totalUsers  = $users->total();
-            $activeUsers = $users->getCollection()->where('google2fa_enabled', true)->count();
+            $activeUsers   = $users->getCollection()->where('google2fa_enabled', true)->count();
+            $inactiveUsers = $users->getCollection()->where('google2fa_enabled', false)->count();
         @endphp
         <div class="col-12 mb-4">
             <div class="row g-3">
@@ -35,8 +35,8 @@
                         <div class="tfa-stat-icon tfa-icon-total"><i class="fas fa-users"></i></div>
                         <div>
                             <div class="tfa-stat-label">Total Users</div>
-                            <div class="tfa-stat-value">{{ $users->total() }}</div>
-                            <div class="tfa-stat-sub">in this page & beyond</div>
+                            <div class="tfa-stat-value" id="stat-total">{{ $users->total() }}</div>
+                            <div class="tfa-stat-sub">registered</div>
                         </div>
                     </div>
                 </div>
@@ -45,8 +45,8 @@
                         <div class="tfa-stat-icon tfa-icon-active"><i class="fas fa-shield-alt"></i></div>
                         <div>
                             <div class="tfa-stat-label">2FA Active</div>
-                            <div class="tfa-stat-value">{{ $activeUsers }}</div>
-                            <div class="tfa-stat-sub">on this page</div>
+                            <div class="tfa-stat-value" id="stat-active">{{ $activeUsers }}</div>
+                            <div class="tfa-stat-sub">this page</div>
                         </div>
                     </div>
                 </div>
@@ -55,8 +55,8 @@
                         <div class="tfa-stat-icon tfa-icon-pending"><i class="fas fa-user-times"></i></div>
                         <div>
                             <div class="tfa-stat-label">2FA Inactive</div>
-                            <div class="tfa-stat-value">{{ $users->count() - $activeUsers }}</div>
-                            <div class="tfa-stat-sub">on this page</div>
+                            <div class="tfa-stat-value" id="stat-inactive">{{ $inactiveUsers }}</div>
+                            <div class="tfa-stat-sub">this page</div>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                                 <th class="text-center" style="width:80px">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tfa-tbody">
                             @forelse($users as $i => $u)
                             <tr>
                                 <td class="ps-4 text-muted small">{{ $users->firstItem() + $i }}</td>
@@ -178,10 +178,10 @@
 
 @section('scripts')
 <script>
-(function () {
+$(function () {
+    var AJAX_URL = '{{ route("admin.security.2fa.users") }}';
     var curPage  = {{ $users->currentPage() }};
     var lastPage = {{ $users->lastPage() }};
-    var baseUrl  = '{{ route("admin.security.2fa.users") }}';
 
     function pageWindows(cur, last) {
         var show = {}, arr = [];
@@ -195,40 +195,67 @@
         return arr;
     }
 
-    function renderPagination() {
-        var $ctrl = document.getElementById('tfa-pg-controls');
-        if (!$ctrl || lastPage <= 1) return;
-        $ctrl.innerHTML = '';
+    function renderPagination(meta) {
+        curPage  = meta.current_page;
+        lastPage = meta.last_page;
 
-        function makeBtn(label, href, disabled, active, isIcon) {
-            var el = document.createElement(href ? 'a' : 'button');
-            el.className = 'btn btn-sm btn-outline-secondary tfa-pg-btn' + (active ? ' active' : '');
-            if (href && !disabled) el.href = href;
-            if (disabled) el.disabled = true;
-            el.innerHTML = label;
-            return el;
-        }
+        $('#tfa-pg-info').text(
+            meta.total > 0
+                ? 'Showing ' + meta.from + '–' + meta.to + ' of ' + meta.total + ' users'
+                : 'No users found'
+        );
 
-        $ctrl.appendChild(makeBtn('<i class="fas fa-chevron-left"></i>',
-            curPage > 1 ? baseUrl + '?page=' + (curPage - 1) : null,
-            curPage <= 1, false, true));
+        var $ctrl = $('#tfa-pg-controls').empty();
+        if (lastPage <= 1) return;
+
+        var $prev = $('<button class="btn btn-sm btn-outline-secondary tfa-pg-btn"><i class="fas fa-chevron-left"></i></button>');
+        if (curPage <= 1) $prev.prop('disabled', true);
+        else $prev.on('click', function () { loadPage(curPage - 1); });
+        $ctrl.append($prev);
 
         pageWindows(curPage, lastPage).forEach(function (p) {
             if (p === null) {
-                var ell = document.createElement('span');
-                ell.className = 'tfa-pg-ellipsis'; ell.textContent = '…';
-                $ctrl.appendChild(ell);
+                $ctrl.append('<span class="tfa-pg-ellipsis">…</span>');
             } else {
-                $ctrl.appendChild(makeBtn(p, p !== curPage ? baseUrl + '?page=' + p : null, false, p === curPage));
+                var $btn = $('<button class="btn btn-sm btn-outline-secondary tfa-pg-btn' + (p === curPage ? ' active' : '') + '">' + p + '</button>');
+                if (p !== curPage) { (function(pg){ $btn.on('click', function(){ loadPage(pg); }); })(p); }
+                $ctrl.append($btn);
             }
         });
 
-        $ctrl.appendChild(makeBtn('<i class="fas fa-chevron-right"></i>',
-            curPage < lastPage ? baseUrl + '?page=' + (curPage + 1) : null,
-            curPage >= lastPage, false, true));
+        var $next = $('<button class="btn btn-sm btn-outline-secondary tfa-pg-btn"><i class="fas fa-chevron-right"></i></button>');
+        if (curPage >= lastPage) $next.prop('disabled', true);
+        else $next.on('click', function () { loadPage(curPage + 1); });
+        $ctrl.append($next);
     }
 
-    renderPagination();
-})();
+    function loadPage(page) {
+        $('#tfa-tbody').css('opacity', .45);
+
+        $.ajax({
+            url:     AJAX_URL,
+            data:    { page: page },
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            dataType: 'json',
+        }).done(function (res) {
+            $('#tfa-tbody').html(res.tableBody).css('opacity', 1);
+            $('#stat-active').text(res.active_count);
+            $('#stat-inactive').text(res.inactive_count);
+            renderPagination(res);
+            $('html,body').animate({ scrollTop: $('#tfa-tbody').closest('.tfa-table-card').offset().top - 100 }, 200);
+        }).fail(function () {
+            $('#tfa-tbody').css('opacity', 1);
+        });
+    }
+
+    // Init pagination on page load
+    renderPagination({
+        from:         {{ $users->firstItem() ?? 0 }},
+        to:           {{ $users->lastItem() ?? 0 }},
+        total:        {{ $users->total() }},
+        current_page: {{ $users->currentPage() }},
+        last_page:    {{ $users->lastPage() }},
+    });
+});
 </script>
 @endsection

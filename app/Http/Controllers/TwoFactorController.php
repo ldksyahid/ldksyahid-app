@@ -157,7 +157,7 @@ class TwoFactorController extends Controller
        LIST USERS — GET /admin/security/2fa/users
        ================================================================ */
 
-    public function listUsers()
+    public function listUsers(\Illuminate\Http\Request $request)
     {
         if (!TwoFaHelper::isAllowed(auth()->user())) {
             abort(403);
@@ -167,6 +167,19 @@ class TwoFactorController extends Controller
             ->orderByDesc('google2fa_enabled')
             ->orderBy('name')
             ->paginate(15);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody'    => view('admin-page.security.two-factor.components._users-table', compact('users'))->render(),
+                'total'        => $users->total(),
+                'from'         => $users->firstItem() ?? 0,
+                'to'           => $users->lastItem() ?? 0,
+                'current_page' => $users->currentPage(),
+                'last_page'    => $users->lastPage(),
+                'active_count' => $users->getCollection()->where('google2fa_enabled', true)->count(),
+                'inactive_count' => $users->getCollection()->where('google2fa_enabled', false)->count(),
+            ]);
+        }
 
         return view('admin-page.security.two-factor.users', [
             'users' => $users,

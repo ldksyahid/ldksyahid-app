@@ -134,7 +134,7 @@
                         Enter your current authenticator code to disable 2FA.
                         You will need to set it up again to execute withdrawals.
                     </p>
-                    <form action="{{ route('admin.security.2fa.disable') }}" method="POST">
+                    <form action="{{ route('admin.security.2fa.disable') }}" method="POST" id="disable-2fa-form">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label fw-bold">Current 6-Digit Code</label>
@@ -149,9 +149,9 @@
                                 <i class="fas fa-clock me-1"></i>Code changes every 30 seconds.
                             </small>
                         </div>
-                        <button type="submit" class="btn btn-danger w-100"
+                        <button type="button" class="btn btn-danger w-100"
                             style="border-radius:8px;font-weight:700"
-                            onclick="return confirm('Disable 2FA? You will not be able to execute withdrawals until you set it up again.')">
+                            id="btn-disable-2fa">
                             <i class="fas fa-lock-open me-1"></i> Disable 2FA
                         </button>
                     </form>
@@ -234,3 +234,29 @@
     </div>
 </div>
 @endsection
+
+@if($enabled)
+@section('scripts')
+<script>
+document.getElementById('btn-disable-2fa').addEventListener('click', function () {
+    Swal.fire({
+        title: 'Disable 2FA?',
+        html:  'You will <strong>not be able to execute withdrawals</strong> until you set up 2FA again.',
+        icon:  'warning',
+        iconColor: '#dc2626',
+        showCancelButton: true,
+        confirmButtonText: '<i class="fas fa-lock-open me-1"></i> Yes, Disable',
+        cancelButtonText:  '<i class="fas fa-times me-1"></i> Cancel',
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor:  '#6b7280',
+        reverseButtons: true,
+        focusCancel: true,
+    }).then(function (result) {
+        if (result.isConfirmed) {
+            document.getElementById('disable-2fa-form').submit();
+        }
+    });
+});
+</script>
+@endsection
+@endif
