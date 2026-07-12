@@ -149,6 +149,76 @@ html.dark-mode .bg-light { background: #111827 !important; }
 html.dark-mode .btn-outline-secondary { color: #9ca3af; border-color: #374151; }
 html.dark-mode .btn-outline-secondary:hover { background: #374151; color: #e5e7eb; }
 
+/* ── Balance History Pills ────────────────────────────────── */
+.bh-pill-credit, .bh-pill-debit {
+    display: inline-flex; align-items: center;
+    font-size: .75rem; font-weight: 700;
+    padding: .22em .75em; border-radius: 50px; white-space: nowrap;
+}
+.bh-pill-credit { background: rgba(0,167,157,.12); color: #00a79d; border: 1px solid rgba(0,167,157,.25); }
+.bh-pill-debit  { background: rgba(217,119,6,.1);  color: #b45309; border: 1px solid rgba(217,119,6,.25); }
+html.dark-mode .bh-pill-credit { background: rgba(45,212,191,.1); color: #2dd4bf; border-color: rgba(45,212,191,.2); }
+html.dark-mode .bh-pill-debit  { background: rgba(251,191,36,.08); color: #fbbf24; border-color: rgba(251,191,36,.2); }
+
+/* ── Balance History Custom Dropdown ──────────────────────── */
+.bh-custom-select { position: relative; flex-shrink: 0; }
+.bh-custom-select-btn {
+    display: inline-flex; align-items: center; gap: .55rem;
+    background: #fff; border: 1.5px solid #dee2e6; border-radius: 8px;
+    padding: .42rem .75rem; font-size: .82rem; color: #374151;
+    cursor: pointer; white-space: nowrap; min-width: 160px;
+    justify-content: space-between; user-select: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+.bh-custom-select-btn:focus { outline: none; }
+.bh-custom-select.open .bh-custom-select-btn,
+.bh-custom-select-btn:focus { border-color: #00a79d; box-shadow: 0 0 0 .18rem rgba(0,167,157,.18); }
+.bh-select-label { flex: 1; text-align: left; }
+.bh-select-arrow { font-size: .68rem; color: #9ca3af; transition: transform .2s ease; }
+.bh-custom-select.open .bh-select-arrow { transform: rotate(180deg); }
+
+.bh-custom-select-menu {
+    position: absolute; top: calc(100% + 5px); right: 0;
+    background: #fff; border: 1.5px solid #e2e8f0;
+    border-radius: 10px; min-width: 170px; z-index: 200; overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,.11), 0 2px 6px rgba(0,0,0,.06);
+    opacity: 0; transform: translateY(-5px); pointer-events: none;
+    transition: opacity .15s ease, transform .15s ease;
+}
+.bh-custom-select.open .bh-custom-select-menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+.bh-select-item {
+    display: flex; align-items: center; gap: .55rem;
+    padding: .48rem .85rem; font-size: .82rem; color: #374151;
+    cursor: pointer; transition: background .12s;
+}
+.bh-select-item:first-child { padding-top: .6rem; }
+.bh-select-item:last-child  { padding-bottom: .6rem; }
+.bh-select-item:hover  { background: #f0fffe; color: #00a79d; }
+.bh-select-item.selected { color: #00a79d; font-weight: 600; background: rgba(0,167,157,.06); }
+
+.bh-select-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.bh-dot-all    { background: #9ca3af; }
+.bh-dot-credit { background: #00a79d; }
+.bh-dot-debit  { background: #d97706; }
+
+html.dark-mode .bh-custom-select-btn { background: transparent; border-color: #4b5563; color: #e5e7eb; }
+html.dark-mode .bh-custom-select.open .bh-custom-select-btn { border-color: #2dd4bf; box-shadow: 0 0 0 .18rem rgba(45,212,191,.15); }
+html.dark-mode .bh-select-arrow { color: #6b7280; }
+html.dark-mode .bh-custom-select-menu { background: #2b2f33; border-color: #4b5563; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+html.dark-mode .bh-select-item { color: #e5e7eb; }
+html.dark-mode .bh-select-item:hover  { background: rgba(45,212,191,.08); color: #2dd4bf; }
+html.dark-mode .bh-select-item.selected { color: #2dd4bf; background: rgba(45,212,191,.08); }
+html.dark-mode .bh-dot-all    { background: #6b7280; }
+html.dark-mode .bh-dot-credit { background: #2dd4bf; }
+html.dark-mode .bh-dot-debit  { background: #fbbf24; }
+
+/* ── Balance History Table Text Colors ────────────────────── */
+.bh-campaign-name { font-size: .82rem; font-weight: 600; color: #374151; }
+.bh-reference     { font-size: .72rem; color: #9ca3af; font-family: monospace; }
+html.dark-mode .bh-campaign-name { color: #e5e7eb; }
+html.dark-mode .bh-reference     { color: #6b7280; }
+
 /* ── Balance History Filter Bar ───────────────────────────── */
 .bh-filter-bar {
     display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
