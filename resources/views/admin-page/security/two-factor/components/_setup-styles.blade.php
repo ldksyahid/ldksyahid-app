@@ -252,46 +252,33 @@ html.dark-mode .tfa-badge-inactive { background: rgba(156,163,175,.08); color: #
 
 /* ── Primary Admin badge ─────────────────────────────────────────── */
 .tfa-primary-badge {
-    display: inline-flex; align-items: center; gap: .4em;
-    font-size: .72rem; font-weight: 700; padding: .3em .75em;
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: .3em;
+    font-size: .7rem; font-weight: 700;
+    padding: .25em .6em;
     border-radius: 50px; white-space: nowrap; cursor: default;
     background: rgba(245,158,11,.1);
     color: #b45309;
     border: 1px solid rgba(245,158,11,.3);
     position: relative;
+    max-width: 90px;
 }
-.tfa-primary-badge .tfa-primary-icon {
-    font-size: .65rem;
-    opacity: .85;
-}
+.tfa-primary-badge .tfa-primary-icon { font-size: .6rem; flex-shrink: 0; }
 /* Tooltip */
 .tfa-primary-badge::after {
     content: attr(data-tip);
     position: absolute;
     bottom: calc(100% + 6px);
-    left: 50%; transform: translateX(-50%);
+    right: 0; left: auto; transform: none;
     background: #1f2937; color: #f3f4f6;
     font-size: .72rem; font-weight: 500;
     padding: .3rem .65rem; border-radius: 6px;
     white-space: nowrap; pointer-events: none;
     opacity: 0; transition: opacity .15s;
     box-shadow: 0 4px 12px rgba(0,0,0,.25);
-    z-index: 10;
+    z-index: 200;
 }
-.tfa-primary-badge::before {
-    content: '';
-    position: absolute;
-    bottom: calc(100% + 1px);
-    left: 50%; transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-top-color: #1f2937;
-    pointer-events: none;
-    opacity: 0; transition: opacity .15s;
-    z-index: 10;
-}
-.tfa-primary-badge:hover::after,
-.tfa-primary-badge:hover::before { opacity: 1; }
-
+.tfa-primary-badge:hover::after { opacity: 1; }
 html.dark-mode .tfa-primary-badge {
     background: rgba(251,191,36,.08);
     color: #fbbf24;
@@ -301,7 +288,6 @@ html.dark-mode .tfa-primary-badge::after {
     background: #374151; color: #f9fafb;
     box-shadow: 0 4px 12px rgba(0,0,0,.5);
 }
-html.dark-mode .tfa-primary-badge::before { border-top-color: #374151; }
 
 /* ── Info rows (setup page) ─────────────────────────────────────── */
 .tfa-info-row {
