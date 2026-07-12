@@ -149,6 +149,25 @@ html.dark-mode .bg-light { background: #111827 !important; }
 html.dark-mode .btn-outline-secondary { color: #9ca3af; border-color: #374151; }
 html.dark-mode .btn-outline-secondary:hover { background: #374151; color: #e5e7eb; }
 
+/* ── Balance History Scope Pills (subtitle) ───────────────── */
+.bh-scope-pill {
+    display: inline-flex; align-items: center; gap: .3em;
+    font-size: .68rem; font-weight: 600;
+    padding: .18em .6em; border-radius: 4px; white-space: nowrap;
+}
+.bh-scope-credit {
+    background: rgba(0,167,157,.08); color: #00a79d;
+    border: 1px solid rgba(0,167,157,.2);
+}
+.bh-scope-debit {
+    background: rgba(220,38,38,.07); color: #b91c1c;
+    border: 1px solid rgba(220,38,38,.2);
+}
+.bh-scope-sep { font-size: .72rem; color: #9ca3af; font-weight: 700; }
+html.dark-mode .bh-scope-credit { background: rgba(45,212,191,.08); color: #2dd4bf; border-color: rgba(45,212,191,.2); }
+html.dark-mode .bh-scope-debit  { background: rgba(248,113,113,.08); color: #f87171; border-color: rgba(248,113,113,.2); }
+html.dark-mode .bh-scope-sep    { color: #6b7280; }
+
 /* ── Balance History Summary Pills ────────────────────────── */
 .bh-summary-pill-wrap {
     display: flex; flex-direction: column; align-items: flex-start; gap: .2rem;
