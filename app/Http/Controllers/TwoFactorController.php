@@ -166,10 +166,22 @@ class TwoFactorController extends Controller
         $activeCount   = User::where('google2fa_enabled', true)->count();
         $inactiveCount = User::where('google2fa_enabled', false)->count();
 
-        $users = User::select('id', 'name', 'email', 'google2fa_enabled', 'two_fa_enabled_at', 'two_fa_last_used_at', 'two_fa_last_used_ip')
+        $query = User::select('id', 'name', 'email', 'google2fa_enabled', 'two_fa_enabled_at', 'two_fa_last_used_at', 'two_fa_last_used_ip')
             ->orderByDesc('google2fa_enabled')
-            ->orderBy('name')
-            ->paginate(15);
+            ->orderBy('name');
+
+        if ($search = trim($request->input('search', ''))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($status = $request->input('status')) {
+            $query->where('google2fa_enabled', $status === 'active');
+        }
+
+        $users = $query->paginate(15)->withQueryString();
 
         if ($request->ajax()) {
             return response()->json([
@@ -196,9 +208,12 @@ class TwoFactorController extends Controller
        FORCE REVOKE — POST /admin/security/2fa/users/{id}/revoke
        ================================================================ */
 
-    public function forceRevoke(string $id)
+    public function forceRevoke(\Illuminate\Http\Request $request, string $id)
     {
         if (!TwoFaHelper::isAllowed(auth()->user())) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Forbidden'], 403);
+            }
             abort(403);
         }
 
@@ -216,6 +231,13 @@ class TwoFactorController extends Controller
             $target->id,
             'Superadmin ' . auth()->user()->name . ' force-revoked 2FA for: ' . $target->email
         );
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => '2FA has been revoked for ' . $target->name . '. They must set up 2FA again.',
+            ]);
+        }
 
         Alert::success('Done', '2FA has been revoked for ' . $target->name . '. They must set up 2FA again.');
         return redirect()->route('admin.security.2fa.users');

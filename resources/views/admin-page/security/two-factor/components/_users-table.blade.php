@@ -40,13 +40,13 @@
     </td>
     <td class="text-center">
         @if($u->google2fa_enabled && $u->id !== auth()->id())
-            <form action="{{ route('admin.security.2fa.revoke', $u->id) }}" method="POST"
-                  onsubmit="return confirm('Force-revoke 2FA for {{ addslashes($u->name) }}?')">
-                @csrf
-                <button type="submit" class="btn btn-sm btn-outline-danger" style="border-radius:6px;font-size:.75rem">
-                    <i class="fas fa-lock-open me-1"></i>Revoke
-                </button>
-            </form>
+            <button type="button"
+                class="btn btn-sm btn-outline-danger btn-revoke-2fa"
+                style="border-radius:6px;font-size:.75rem"
+                data-url="{{ route('admin.security.2fa.revoke', $u->id) }}"
+                data-name="{{ $u->name }}">
+                <i class="fas fa-lock-open me-1"></i>Revoke
+            </button>
         @else
             <span class="text-muted small">—</span>
         @endif

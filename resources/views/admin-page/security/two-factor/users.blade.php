@@ -65,7 +65,28 @@
                     <span class="fw-semibold" style="font-size:.9rem; color:#495057">
                         <i class="fas fa-list me-1 text-muted"></i>User List
                     </span>
-                    <small class="text-muted">{{ $users->total() }} user(s) found</small>
+                    <small class="text-muted" id="tfa-found-count">{{ $users->total() }} user(s) found</small>
+                </div>
+
+                {{-- Search & Filter Bar --}}
+                <div class="d-flex align-items-center gap-2 px-4 pb-3 flex-wrap">
+                    <div class="input-group" style="max-width:320px">
+                        <span class="input-group-text" style="background:transparent;border-right:0">
+                            <i class="fas fa-search text-muted" style="font-size:.8rem"></i>
+                        </span>
+                        <input type="text" id="tfa-search" class="form-control"
+                               placeholder="Search name or email…"
+                               style="border-left:0;font-size:.85rem">
+                        <button class="btn btn-outline-secondary" type="button" id="tfa-search-clear"
+                                style="display:none;font-size:.8rem" title="Clear">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <select id="tfa-status-filter" class="form-select" style="max-width:150px;font-size:.85rem">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
                 </div>
 
                 <div class="table-responsive">
@@ -174,9 +195,18 @@
 @section('scripts')
 <script>
 $(function () {
-    var AJAX_URL = '{{ route("admin.security.2fa.users") }}';
-    var curPage  = {{ $users->currentPage() }};
-    var lastPage = {{ $users->lastPage() }};
+    var AJAX_URL  = '{{ route("admin.security.2fa.users") }}';
+    var CSRF      = '{{ csrf_token() }}';
+    var curPage   = {{ $users->currentPage() }};
+    var lastPage  = {{ $users->lastPage() }};
+    var searchTimer;
+
+    function getFilters() {
+        return {
+            search: $.trim($('#tfa-search').val()),
+            status: $('#tfa-status-filter').val(),
+        };
+    }
 
     function pageWindows(cur, last) {
         var show = {}, arr = [];
@@ -199,6 +229,7 @@ $(function () {
                 ? 'Showing ' + meta.from + '–' + meta.to + ' of ' + meta.total + ' users'
                 : 'No users found'
         );
+        $('#tfa-found-count').text(meta.total + ' user(s) found');
 
         var $ctrl = $('#tfa-pg-controls').empty();
         if (lastPage <= 1) return;
@@ -228,9 +259,9 @@ $(function () {
         $('#tfa-tbody').css('opacity', .45);
 
         $.ajax({
-            url:     AJAX_URL,
-            data:    { page: page },
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            url:      AJAX_URL,
+            data:     $.extend({ page: page }, getFilters()),
+            headers:  { 'X-Requested-With': 'XMLHttpRequest' },
             dataType: 'json',
         }).done(function (res) {
             $('#tfa-tbody').html(res.tableBody).css('opacity', 1);
@@ -242,6 +273,69 @@ $(function () {
             $('#tfa-tbody').css('opacity', 1);
         });
     }
+
+    // Search with 350ms debounce
+    $('#tfa-search').on('input', function () {
+        var val = $(this).val();
+        $('#tfa-search-clear').toggle(val.length > 0);
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function () { loadPage(1); }, 350);
+    });
+
+    // Clear button
+    $('#tfa-search-clear').on('click', function () {
+        $('#tfa-search').val('');
+        $(this).hide();
+        loadPage(1);
+    });
+
+    // Status filter
+    $('#tfa-status-filter').on('change', function () {
+        loadPage(1);
+    });
+
+    // Revoke 2FA via AJAX with SweetAlert2 confirmation
+    $(document).on('click', '.btn-revoke-2fa', function () {
+        var url  = $(this).data('url');
+        var name = $(this).data('name');
+
+        Swal.fire({
+            title: 'Force Revoke 2FA?',
+            html:  'This will disable 2FA for <strong>' + name + '</strong>.<br>They will need to set it up again.',
+            icon:  'warning',
+            showCancelButton:   true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor:  '#6c757d',
+            confirmButtonText:  '<i class="fas fa-lock-open me-1"></i> Yes, Revoke!',
+            cancelButtonText:   'Cancel',
+        }).then(function (result) {
+            if (!result.isConfirmed) return;
+
+            $.ajax({
+                url:      url,
+                type:     'POST',
+                data:     { _token: CSRF },
+                headers:  { 'X-Requested-With': 'XMLHttpRequest' },
+                dataType: 'json',
+            }).done(function (res) {
+                Swal.fire({
+                    icon:              'success',
+                    title:             'Revoked!',
+                    text:              res.message,
+                    timer:             2000,
+                    showConfirmButton: false,
+                }).then(function () {
+                    loadPage(curPage);
+                });
+            }).fail(function () {
+                Swal.fire({
+                    icon:  'error',
+                    title: 'Error',
+                    text:  'Something went wrong. Please try again.',
+                });
+            });
+        });
+    });
 
     // Init pagination on page load
     renderPagination({
