@@ -27,8 +27,12 @@
                     </h5>
                     @if($bisabillerBalance !== null)
                     @php
-                        $dbExpected    = \App\Models\Donation::where('gateway','bisatopup')->where('payment_status','PAID')->sum('jumlah_donasi')
-                                       - \App\Models\Withdrawal::where('status','COMPLETED')->sum('amount');
+                        $mdrRIdx       = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+                        $dbExpected    = (int) \App\Models\Donation::where('gateway','bisatopup')
+                                            ->where('payment_status','PAID')
+                                            ->selectRaw('SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wc', [$mdrRIdx])
+                                            ->value('wc')
+                                       - (int) \App\Models\Withdrawal::where('status','COMPLETED')->sum('amount');
                         $disc          = $bisabillerBalance - $dbExpected;
                         $discThreshold = config('services.two_fa.discrepancy_threshold', 50000);
                     @endphp
