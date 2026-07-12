@@ -149,16 +149,24 @@ html.dark-mode .bg-light { background: #111827 !important; }
 html.dark-mode .btn-outline-secondary { color: #9ca3af; border-color: #374151; }
 html.dark-mode .btn-outline-secondary:hover { background: #374151; color: #e5e7eb; }
 
-/* ── Balance History Pills ────────────────────────────────── */
+/* ── Balance History Summary Pills ────────────────────────── */
+.bh-summary-pill-wrap {
+    display: flex; flex-direction: column; align-items: flex-start; gap: .2rem;
+}
+.bh-summary-label {
+    font-size: .68rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .04em; color: #9ca3af;
+}
 .bh-pill-credit, .bh-pill-debit {
     display: inline-flex; align-items: center;
-    font-size: .75rem; font-weight: 700;
-    padding: .22em .75em; border-radius: 50px; white-space: nowrap;
+    font-size: .8rem; font-weight: 700;
+    padding: .25em .85em; border-radius: 50px; white-space: nowrap;
 }
-.bh-pill-credit { background: rgba(0,167,157,.12); color: #00a79d; border: 1px solid rgba(0,167,157,.25); }
-.bh-pill-debit  { background: rgba(217,119,6,.1);  color: #b45309; border: 1px solid rgba(217,119,6,.25); }
-html.dark-mode .bh-pill-credit { background: rgba(45,212,191,.1); color: #2dd4bf; border-color: rgba(45,212,191,.2); }
-html.dark-mode .bh-pill-debit  { background: rgba(251,191,36,.08); color: #fbbf24; border-color: rgba(251,191,36,.2); }
+.bh-pill-credit { background: rgba(0,167,157,.12); color: #007a72; border: 1px solid rgba(0,167,157,.3); }
+.bh-pill-debit  { background: rgba(220,38,38,.1);  color: #b91c1c; border: 1px solid rgba(220,38,38,.25); }
+html.dark-mode .bh-summary-label { color: #6b7280; }
+html.dark-mode .bh-pill-credit { background: rgba(45,212,191,.1); color: #2dd4bf; border-color: rgba(45,212,191,.25); }
+html.dark-mode .bh-pill-debit  { background: rgba(248,113,113,.1); color: #f87171; border-color: rgba(248,113,113,.25); }
 
 /* ── Balance History Custom Dropdown ──────────────────────── */
 .bh-custom-select { position: relative; flex-shrink: 0; }
