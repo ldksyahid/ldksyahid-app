@@ -21,9 +21,9 @@
                     <a href="{{ route('admin.celsyahid.withdrawal.index') }}" class="btn btn-sm btn-outline-secondary btn-rounded">
                         <i class="fas fa-arrow-left me-1"></i>Withdrawals
                     </a>
-                    <a href="{{ route('admin.celsyahid.balance.report') }}" class="btn btn-sm btn-outline-secondary btn-rounded">
-                        <i class="fas fa-sync-alt me-1"></i>Refresh
-                    </a>
+                    <button type="button" id="br-refresh-btn" class="btn btn-sm btn-outline-secondary btn-rounded">
+                        <i class="fas fa-sync-alt me-1" id="br-refresh-icon"></i>Refresh
+                    </button>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                         <div class="br-stat-icon br-icon-actual"><i class="fas fa-wallet"></i></div>
                         <div class="br-stat-info">
                             <div class="br-stat-label">Actual Balance</div>
-                            <div class="br-stat-value">
+                            <div class="br-stat-value" id="br-actual-value">
                                 @if($actualBalance !== null)
                                     Rp {{ number_format($actualBalance, 0, ',', '.') }}
                                 @else
@@ -55,7 +55,7 @@
                         <div class="br-stat-icon br-icon-expected"><i class="fas fa-database"></i></div>
                         <div class="br-stat-info">
                             <div class="br-stat-label">Expected Balance</div>
-                            <div class="br-stat-value">Rp {{ number_format($totalExpected, 0, ',', '.') }}</div>
+                            <div class="br-stat-value" id="br-expected-value">Rp {{ number_format($totalExpected, 0, ',', '.') }}</div>
                             <div class="br-stat-sub">Calculated from DB</div>
                         </div>
                     </div>
@@ -64,12 +64,12 @@
                 {{-- Discrepancy --}}
                 <div class="col-md-4">
                     <div class="br-stat-card">
-                        <div class="br-stat-icon {{ $discrepancy === null ? 'br-icon-neutral' : ($discrepancy < 0 ? 'br-icon-deficit' : ($isNormal ? 'br-icon-normal' : 'br-icon-warning')) }}">
+                        <div class="br-stat-icon {{ $discrepancy === null ? 'br-icon-neutral' : ($discrepancy < 0 ? 'br-icon-deficit' : ($isNormal ? 'br-icon-normal' : 'br-icon-warning')) }}" id="br-disc-icon">
                             <i class="fas {{ $discrepancy === null ? 'fa-question-circle' : ($discrepancy < 0 ? 'fa-exclamation-circle' : ($isNormal ? 'fa-check-circle' : 'fa-exclamation-triangle')) }}"></i>
                         </div>
                         <div class="br-stat-info">
                             <div class="br-stat-label">Discrepancy</div>
-                            <div class="br-stat-value">
+                            <div class="br-stat-value" id="br-disc-value">
                                 @if($discrepancy !== null)
                                     @if($discrepancy < 0)
                                         <span class="text-danger">− Rp {{ number_format(abs($discrepancy), 0, ',', '.') }}</span>
@@ -82,7 +82,7 @@
                                     <span class="text-muted small fw-normal">N/A</span>
                                 @endif
                             </div>
-                            <div class="br-stat-sub">
+                            <div class="br-stat-sub" id="br-disc-sub">
                                 @if($discrepancy === null) —
                                 @elseif($discrepancy < 0) Deficit
                                 @elseif($isNormal) Normal (≤ Rp {{ number_format($threshold, 0, ',', '.') }})
@@ -131,7 +131,7 @@
                         <i class="fas fa-table me-2 text-muted"></i>Breakdown per Campaign
                         <span class="br-qris-badge ms-2">QRIS only</span>
                     </span>
-                    <small class="text-muted">Last updated: {{ now()->format('d M Y, H:i') }}</small>
+                    <small class="text-muted" id="br-updated-at">Last updated: {{ now()->format('d M Y, H:i') }}</small>
                 </div>
 
                 <div class="table-responsive">
@@ -147,51 +147,17 @@
                                 <th class="text-end" style="min-width:130px">Net Balance</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @forelse($rows as $i => $row)
-                            @php $netPositive = $row['net'] >= 0; @endphp
-                            <tr>
-                                <td class="ps-4 text-muted small">{{ $i + 1 }}</td>
-                                <td>
-                                    <span class="fw-semibold" style="font-size:.875rem">{{ $row['campaign'] }}</span>
-                                </td>
-                                <td class="text-end text-muted small">Rp {{ number_format($row['total_qris'], 0, ',', '.') }}</td>
-                                <td class="text-end small">Rp {{ number_format($row['wallet_credit'], 0, ',', '.') }}</td>
-                                <td class="text-center">
-                                    <span class="br-txn-badge">{{ $row['txn_count'] }}</span>
-                                </td>
-                                <td class="text-end">
-                                    @if($row['total_withdrawn'] > 0)
-                                        <span class="br-withdrawn">Rp {{ number_format($row['total_withdrawn'], 0, ',', '.') }}</span>
-                                    @else
-                                        <span class="text-muted">—</span>
-                                    @endif
-                                </td>
-                                <td class="text-end">
-                                    <span class="br-net {{ $netPositive ? 'br-net-positive' : 'br-net-negative' }}">
-                                        Rp {{ number_format($row['net'], 0, ',', '.') }}
-                                    </span>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="7">
-                                    <div class="text-center py-5 text-muted">
-                                        <i class="fas fa-inbox fa-2x mb-2 d-block opacity-50"></i>
-                                        No QRIS transactions found.
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforelse
+                        <tbody id="br-breakdown-tbody">
+                            @include('admin-page.service.celengan-syahid.withdrawal.components._breakdown-rows')
                         </tbody>
-                        @if($rows->count() > 0)
-                        <tfoot>
+                        <tfoot id="br-breakdown-tfoot">
+                            @if($rows->count() > 0)
                             <tr>
                                 <td colspan="6" class="ps-4 text-end br-tfoot-label">Total Expected Balance</td>
                                 <td class="text-end br-tfoot-value">Rp {{ number_format($totalExpected, 0, ',', '.') }}</td>
                             </tr>
+                            @endif
                         </tfoot>
-                        @endif
                     </table>
                 </div>
 
@@ -325,7 +291,82 @@
 @section('scripts')
 <script>
 $(function () {
+    var BR_URL   = '{{ route("admin.celsyahid.balance.report") }}';
     var AJAX_URL = '{{ route("admin.celsyahid.balance.history") }}';
+
+    /* ── AJAX Refresh all sections ─────────────────────────── */
+    function fmtRp(n) { return 'Rp ' + Number(n || 0).toLocaleString('id-ID'); }
+
+    function refreshAll() {
+        var $btn  = $('#br-refresh-btn');
+        var $icon = $('#br-refresh-icon');
+        $btn.prop('disabled', true);
+        $icon.addClass('fa-spin');
+
+        $.ajax({
+            url:      BR_URL,
+            headers:  { 'X-Requested-With': 'XMLHttpRequest' },
+            dataType: 'json',
+        }).done(function (res) {
+            // Actual Balance
+            if (res.actualBalance !== null) {
+                $('#br-actual-value').text(fmtRp(res.actualBalance));
+            } else {
+                $('#br-actual-value').html('<span class="text-muted small fw-normal">Unable to fetch</span>');
+            }
+
+            // Expected Balance
+            $('#br-expected-value').text(fmtRp(res.totalExpected));
+
+            // Discrepancy icon + value + sub
+            var disc = res.discrepancy;
+            var $icon2 = $('#br-disc-icon');
+            $icon2.removeClass('br-icon-neutral br-icon-deficit br-icon-normal br-icon-warning');
+            var iconEl = '';
+            if (disc === null) {
+                $icon2.addClass('br-icon-neutral');
+                iconEl = '<i class="fas fa-question-circle"></i>';
+                $('#br-disc-value').html('<span class="text-muted small fw-normal">N/A</span>');
+                $('#br-disc-sub').text('—');
+            } else if (disc < 0) {
+                $icon2.addClass('br-icon-deficit');
+                iconEl = '<i class="fas fa-exclamation-circle"></i>';
+                $('#br-disc-value').html('<span class="text-danger">− ' + fmtRp(Math.abs(disc)) + '</span>');
+                $('#br-disc-sub').text('Deficit');
+            } else if (res.isNormal) {
+                $icon2.addClass('br-icon-normal');
+                iconEl = '<i class="fas fa-check-circle"></i>';
+                $('#br-disc-value').html('<span class="text-success">+ ' + fmtRp(disc) + '</span>');
+                $('#br-disc-sub').text('Normal (≤ ' + fmtRp(res.threshold) + ')');
+            } else {
+                $icon2.addClass('br-icon-warning');
+                iconEl = '<i class="fas fa-exclamation-triangle"></i>';
+                $('#br-disc-value').html('<span class="text-warning">+ ' + fmtRp(disc) + '</span>');
+                $('#br-disc-sub').text('Needs Review');
+            }
+            $icon2.html(iconEl);
+
+            // Breakdown table
+            $('#br-breakdown-tbody').html(res.breakdownHtml);
+            $('#br-breakdown-tfoot').html(res.tfootHtml);
+
+            // Last updated
+            $('#br-updated-at').text('Last updated: ' + res.updatedAt);
+
+            // Reload balance history table (page 1)
+            load(1);
+        }).fail(function () {
+            Swal.fire({ icon: 'error', title: 'Refresh Failed', text: 'Could not fetch updated data. Please try again.', timer: 3000, showConfirmButton: false });
+        }).always(function () {
+            $btn.prop('disabled', false);
+            $icon.removeClass('fa-spin');
+        });
+    }
+
+    $('#br-refresh-btn').on('click', refreshAll);
+    /* ────────────────────────────────────────────────────────── */
+
+    var curPage  = 1, lastPage = 1, searchTimer;
     var curPage  = 1, lastPage = 1, searchTimer;
 
     function getFilters() {

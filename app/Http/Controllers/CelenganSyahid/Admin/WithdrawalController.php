@@ -363,7 +363,7 @@ class WithdrawalController extends Controller
        BALANCE REPORT — discrepancy between Bisabiller wallet and DB
        ================================================================ */
 
-    public function balanceReport()
+    public function balanceReport(\Illuminate\Http\Request $request)
     {
         // Bisabiller charges 1% MDR (QRIS) per transaction, rounded UP per-transaction.
         // Use CEIL (not ROUND) to avoid MySQL floating-point issues at exactly .5 boundaries
@@ -411,6 +411,27 @@ class WithdrawalController extends Controller
         $discrepancy = ($actualBalance !== null) ? ($actualBalance - $totalExpected) : null;
         $threshold   = config('services.two_fa.discrepancy_threshold', 50000);
         $isNormal    = ($discrepancy !== null) && abs($discrepancy) <= $threshold;
+
+        if ($request->ajax()) {
+            // Force-fresh balance from API (bypass cache on manual refresh)
+            Cache::forget('bisabiller_wallet_balance');
+            $actualBalance = (new BisaTopup())->walletBalance();
+            $discrepancy   = ($actualBalance !== null) ? ($actualBalance - $totalExpected) : null;
+            $isNormal      = ($discrepancy !== null) && abs($discrepancy) <= $threshold;
+
+            return response()->json([
+                'actualBalance'    => $actualBalance,
+                'totalExpected'    => $totalExpected,
+                'discrepancy'      => $discrepancy,
+                'isNormal'         => $isNormal,
+                'threshold'        => $threshold,
+                'breakdownHtml'    => view('admin-page.service.celengan-syahid.withdrawal.components._breakdown-rows', compact('rows'))->render(),
+                'tfootHtml'        => $rows->count() > 0
+                    ? '<tr><td colspan="6" class="ps-4 text-end br-tfoot-label">Total Expected Balance</td><td class="text-end br-tfoot-value">Rp ' . number_format($totalExpected, 0, ',', '.') . '</td></tr>'
+                    : '',
+                'updatedAt'        => now()->format('d M Y, H:i'),
+            ]);
+        }
 
         return view('admin-page.service.celengan-syahid.withdrawal.balance-report', [
             'rows'          => $rows,
