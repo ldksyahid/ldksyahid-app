@@ -124,7 +124,13 @@
                 </div>
                 <a href="/admin/job-queue-log" class="nav-item nav-link {{ $isActive('admin/job-queue-log') ? 'active' : '' }}"><i class="fas fa-stream me-2"></i>Job Queue Log</a>
                 @if($twoFaAllowed)
-                <a href="{{ route('admin.security.2fa') }}" class="nav-item nav-link {{ $isActive('admin/security/2fa*') ? 'active' : '' }}"><i class="fas fa-user-shield me-2"></i>2FA Security</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/security/2fa']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-user-shield me-2"></i>2FA Security</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="{{ route('admin.security.2fa') }}" class="dropdown-item {{ ($isActive('admin/security/2fa') && !$isActive('admin/security/2fa/users')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Setup</a>
+                        <a href="{{ route('admin.security.2fa.users') }}" class="dropdown-item {{ $isActive('admin/security/2fa/users') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Users</a>
+                    </div>
+                </div>
                 @endif
                 <a href="/admin/setting" class="nav-item nav-link {{ $isActive('admin/setting') ? 'active' : '' }}"><i class="fas fa-cog me-2"></i>Setting</a>
             </div>

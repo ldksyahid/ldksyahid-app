@@ -15,7 +15,7 @@
                     <h1 class="page-title mb-0">
                         <i class="fas fa-user-shield me-2"></i>2FA Security
                     </h1>
-                    <p class="text-muted mb-0 mt-1 small">Two-Factor Authentication for withdrawal execution</p>
+                    <p class="text-muted mb-0 mt-1 small">Two-Factor Authentication for sensitive admin actions</p>
                 </div>
                 <a href="{{ route('admin.security.2fa.users') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px">
                     <i class="fas fa-users me-1"></i> View All 2FA Users
@@ -117,7 +117,7 @@
                     <div class="mt-4 p-3 rounded" style="background:rgba(0,167,157,.05);border:1px solid rgba(0,167,157,.15)">
                         <p class="small text-muted mb-0">
                             <i class="fas fa-info-circle me-1" style="color:#00a79d"></i>
-                            Your authenticator app is required each time you execute a withdrawal. Keep it accessible.
+                            Your authenticator app is required each time you perform a sensitive action. Keep it accessible.
                         </p>
                     </div>
                 </div>
@@ -132,7 +132,7 @@
                 <div class="tfa-disable-body">
                     <p class="small text-muted mb-3">
                         Enter your current authenticator code to disable 2FA.
-                        You will need to set it up again to execute withdrawals.
+                        You will need to set it up again to perform protected actions.
                     </p>
                     <form action="{{ route('admin.security.2fa.disable') }}" method="POST" id="disable-2fa-form">
                         @csrf
@@ -210,19 +210,19 @@
                         <i class="fas fa-info-circle me-2"></i>Why Set Up 2FA?
                     </h5>
                     <p class="text-muted small mb-3">
-                        Two-Factor Authentication adds a second layer of security before executing fund withdrawals.
-                        Even if your password is compromised, funds cannot be transferred without your authenticator app.
+                        Two-Factor Authentication adds a second layer of security before performing sensitive admin actions.
+                        Even if your password is compromised, protected actions cannot be executed without your authenticator app.
                     </p>
                     <ul class="step-list mb-4">
                         <li>Works offline — no internet needed after setup</li>
                         <li>Code changes every 30 seconds</li>
-                        <li>Required for every withdrawal execution</li>
+                        <li>Required for every protected admin action</li>
                     </ul>
 
                     <div class="p-3 rounded" style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2)">
                         <p class="small mb-0" style="color:#92400e">
                             <i class="fas fa-exclamation-triangle me-1"></i>
-                            <strong>You cannot execute withdrawals</strong> until 2FA is enabled for your account.
+                            <strong>You cannot perform protected actions</strong> until 2FA is enabled for your account.
                         </p>
                     </div>
                 </div>
@@ -238,29 +238,40 @@
 @section('scripts')
 <script>
 $(function () {
-    @if($enabled)
-    // Numeric-only OTP input
+    // Capture Swal reference at DOM-ready time so it's available in closures
+    // even when browser extensions wrap event handlers in a different scope.
+    var _Swal = window.Swal || null;
+
+    // Numeric-only OTP inputs on this page
     $(document).on('input', 'input[name="code"]', function () {
         this.value = this.value.replace(/\D/g, '').slice(0, 6);
     });
 
-    // SweetAlert confirmation for Disable 2FA
+    @if($enabled)
     $(document).on('click', '#btn-disable-2fa', function (e) {
         e.preventDefault();
-        Swal.fire({
-            title: 'Disable 2FA?',
-            html: 'You will <strong>not be able to execute withdrawals</strong> until you set up 2FA again.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, Disable',
-            cancelButtonText: 'Cancel',
-            confirmButtonColor: '#dc2626',
-            cancelButtonColor: '#6b7280',
-        }).then(function (result) {
-            if (result.isConfirmed) {
-                $('#disable-2fa-form').submit();
+
+        var doSubmit = function () { document.getElementById('disable-2fa-form').submit(); };
+
+        if (_Swal) {
+            _Swal.fire({
+                title: 'Disable 2FA?',
+                html: 'You will <strong>not be able to perform protected actions</strong> until you set up 2FA again.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Disable',
+                cancelButtonText:  'Cancel',
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor:  '#6b7280',
+            }).then(function (result) {
+                if (result.isConfirmed) doSubmit();
+            });
+        } else {
+            // Fallback to native confirm if SweetAlert2 is not loaded
+            if (confirm('Disable 2FA? You will not be able to perform protected actions until you set up 2FA again.')) {
+                doSubmit();
             }
-        });
+        }
     });
     @endif
 });
