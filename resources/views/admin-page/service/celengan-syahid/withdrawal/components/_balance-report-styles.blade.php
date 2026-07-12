@@ -130,7 +130,7 @@ html.dark-mode .br-explain-body { color: #9ca3af; }
 html.dark-mode .discrepancy-normal  { background: rgba(74,222,128,.1);  border-color: rgba(74,222,128,.25);  color: #4ade80; }
 html.dark-mode .discrepancy-warning { background: rgba(251,191,36,.1);  border-color: rgba(251,191,36,.25);  color: #fbbf24; }
 html.dark-mode .discrepancy-deficit { background: rgba(248,113,113,.15); border-color: rgba(248,113,113,.35); color: #fca5a5; }
-html.dark-mode .wi-table thead th { background: #111827; color: #9ca3af; border-bottom-color: #374151; }
+html.dark-mode .wi-table thead th { background: #1a1d21; color: #9ca3af; border-bottom-color: #373b3e; }
 html.dark-mode .wi-table thead th:first-child { color: #d1d5db; }
 html.dark-mode .wi-table tbody td { color: #e5e7eb; }
 html.dark-mode .wi-table tbody tr:hover > td { background: rgba(255,255,255,.04); }
@@ -138,11 +138,11 @@ html.dark-mode .wi-table tfoot tr { border-top-color: rgba(45,212,191,.2); }
 html.dark-mode .br-tfoot-label { color: #9ca3af; }
 html.dark-mode .br-tfoot-value { color: #2dd4bf; }
 html.dark-mode .br-qris-badge { background: rgba(45,212,191,.1); color: #2dd4bf; border-color: rgba(45,212,191,.2); }
-html.dark-mode .br-txn-badge  { background: #374151; color: #d1d5db; }
+html.dark-mode .br-txn-badge  { background: #2b2f33; color: #d1d5db; }
 html.dark-mode .br-withdrawn  { color: #fbbf24; }
 html.dark-mode .br-net-positive { color: #2dd4bf; }
 html.dark-mode .br-net-negative { color: #f87171; }
-html.dark-mode .br-table-footer { background: #111827; border-color: #1f2937; }
+html.dark-mode .br-table-footer { background: #1a1d21; border-color: #373b3e; }
 html.dark-mode .text-muted { color: #6b7280 !important; }
 html.dark-mode code { color: #2dd4bf; background: rgba(45,212,191,.1); padding: 0 4px; border-radius: 3px; }
 html.dark-mode .bg-light { background: #111827 !important; }
