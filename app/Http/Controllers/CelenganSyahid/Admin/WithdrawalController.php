@@ -16,6 +16,33 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class WithdrawalController extends Controller
 {
+    /* ----------------------------------------------------------------
+       Shared guard: only TWO_FA_ALLOWED_USERS with 2FA enabled may
+       create / confirm / execute withdrawals.
+       ---------------------------------------------------------------- */
+    private function requireWithdrawalAccess(bool $isAjax = false)
+    {
+        $user = auth()->user();
+
+        if (!TwoFaHelper::isAllowed($user)) {
+            if ($isAjax) {
+                return response()->json(['error' => true, 'message' => 'Access denied. You are not authorized to process withdrawals.'], 403);
+            }
+            Alert::error('Access Denied', 'You are not authorized to process withdrawals.');
+            return redirect()->route('admin.celsyahid.withdrawal.index');
+        }
+
+        if (!$user->google2fa_enabled) {
+            if ($isAjax) {
+                return response()->json(['error' => true, 'message' => '2FA is required to process withdrawals. Please enable it first.'], 403);
+            }
+            Alert::warning('2FA Required', 'You must enable Two-Factor Authentication before processing withdrawals.');
+            return redirect()->route('admin.security.2fa');
+        }
+
+        return null;
+    }
+
     /* ================================================================
        BALANCE — AJAX: get real-time Bisabiller wallet balance
        ================================================================ */
@@ -75,6 +102,8 @@ class WithdrawalController extends Controller
 
     public function create(Request $request)
     {
+        if ($deny = $this->requireWithdrawalAccess()) return $deny;
+
         $campaigns = Campaign::orderBy('judul')->get(['id', 'judul']);
         $campaign  = $request->filled('campaign_id')
             ? Campaign::find($request->campaign_id)
@@ -106,6 +135,8 @@ class WithdrawalController extends Controller
 
     public function inquiry(Request $request)
     {
+        if ($deny = $this->requireWithdrawalAccess(true)) return $deny;
+
         $request->validate([
             'bank_code'      => 'required|string',
             'account_number' => 'required|string',
@@ -142,6 +173,8 @@ class WithdrawalController extends Controller
 
     public function store(Request $request)
     {
+        if ($deny = $this->requireWithdrawalAccess()) return $deny;
+
         $validated = $request->validate([
             'campaign_id'         => 'required|exists:campaigns,id',
             'bank_code'           => 'required|string|max:20',
@@ -202,6 +235,8 @@ class WithdrawalController extends Controller
 
     public function confirm(string $id)
     {
+        if ($deny = $this->requireWithdrawalAccess()) return $deny;
+
         $withdrawal = Withdrawal::with('campaign')->findOrFail($id);
 
         if ($withdrawal->status !== 'DRAFT') {
@@ -221,6 +256,8 @@ class WithdrawalController extends Controller
 
     public function execute(Request $request, string $id)
     {
+        if ($deny = $this->requireWithdrawalAccess()) return $deny;
+
         $withdrawal = Withdrawal::with('campaign')->findOrFail($id);
 
         if ($withdrawal->status !== 'DRAFT') {
@@ -228,23 +265,16 @@ class WithdrawalController extends Controller
             return redirect()->route('admin.celsyahid.withdrawal.show', $id);
         }
 
-        // 2FA check — only for whitelisted users
+        // 2FA verification — always required (requireWithdrawalAccess already ensures enabled)
         $user = auth()->user();
-        if (TwoFaHelper::isAllowed($user)) {
-            if (!$user->google2fa_enabled) {
-                Alert::warning('2FA Required', 'Please enable Two-Factor Authentication before executing withdrawals.');
-                return redirect()->route('admin.security.2fa');
-            }
-
-            $code = $request->input('two_fa_code', '');
-            if (!TwoFaHelper::verify($user, $code)) {
-                CelsyahidAuditLog::record('2fa.verify_failed', 'withdrawal', $withdrawal->id, '2FA failed during execute from IP: ' . $request->ip());
-                Alert::error('Invalid Code', 'The authenticator code is incorrect or expired. Please try again.');
-                return redirect()->route('admin.celsyahid.withdrawal.confirm', $id);
-            }
-
-            CelsyahidAuditLog::record('2fa.verify_success', 'withdrawal', $withdrawal->id, '2FA verified for withdrawal execute from IP: ' . $request->ip());
+        $code = $request->input('two_fa_code', '');
+        if (!TwoFaHelper::verify($user, $code)) {
+            CelsyahidAuditLog::record('2fa.verify_failed', 'withdrawal', $withdrawal->id, '2FA failed during execute from IP: ' . $request->ip());
+            Alert::error('Invalid Code', 'The authenticator code is incorrect or expired. Please try again.');
+            return redirect()->route('admin.celsyahid.withdrawal.confirm', $id);
         }
+
+        CelsyahidAuditLog::record('2fa.verify_success', 'withdrawal', $withdrawal->id, '2FA verified for withdrawal execute from IP: ' . $request->ip());
 
         // Bisabiller API: `amount` = what the recipient receives.
         // Fee is charged additionally from the wallet (total_amount = amount + fee).

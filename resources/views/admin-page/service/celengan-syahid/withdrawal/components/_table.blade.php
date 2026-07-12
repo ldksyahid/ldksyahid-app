@@ -64,10 +64,18 @@
                     </span>
                 </td>
                 <td class="text-center">
-                    <a href="{{ route('admin.celsyahid.withdrawal.show', $wd->id) }}"
-                       class="btn btn-sm btn-custom-primary" title="View Detail">
-                        <i class="fas fa-eye"></i>
-                    </a>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a href="{{ route('admin.celsyahid.withdrawal.show', $wd->id) }}"
+                           class="btn btn-custom-primary" title="View Detail">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        @if($wd->status === 'DRAFT' && \App\Helpers\TwoFaHelper::isAllowed(auth()->user()))
+                        <a href="{{ route('admin.celsyahid.withdrawal.confirm', $wd->id) }}"
+                           class="btn btn-custom-primary" title="Continue to Confirm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        @endif
+                    </div>
                 </td>
             </tr>
             @endforeach
