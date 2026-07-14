@@ -147,9 +147,9 @@
                 </div>
                 <div class="br-explain-body">
                     <ul class="mb-3">
-                        <li>Bisatopup deducts MDR (1%) using <strong>ceiling rounding</strong> per transaction — e.g. 1% of Rp 20.202 = Rp 202.02 → charged as Rp 203. Expected balance here is calculated with the same CEIL formula.</li>
-                        <li>Donations with <code>PAID</code> status but not yet settled to the Bisatopup wallet (T+1 / T+2 settlement delay).</li>
-                        <li>DRAFT / PENDING / FAILED withdrawals are excluded — only <code>COMPLETED</code> withdrawals are counted as debits.</li>
+                        <li>Bisatopup deducts MDR (1%) using <strong>ceiling rounding</strong> per transaction — e.g. 1% of Rp 20.203 = Rp 202.03 → charged as Rp 203. Our donation form uses the same CEIL formula so the wallet receives exactly the intended donation amount.</li>
+                        <li>Recent QRIS payments with <code>PAID</code> status may take up to ~5 minutes to appear in Bisatopup's wallet (settlement delay). These are automatically detected and <strong>excluded from the Expected Balance</strong> — see the <em>Settlement Pending</em> banner above when applicable.</li>
+                        <li><code>PENDING</code> withdrawals (sent to Bisatopup, awaiting callback) <strong>are counted as debits</strong> because the wallet is already deducted. Only <code>DRAFT</code> and <code>FAILED</code> withdrawals are excluded.</li>
                     </ul>
                     <div class="d-flex gap-2 flex-wrap">
                         <span class="discrepancy-badge discrepancy-normal">

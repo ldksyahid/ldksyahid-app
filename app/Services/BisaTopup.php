@@ -143,6 +143,39 @@ class BisaTopup
     }
 
     /**
+     * Fetch detail of a payment gateway transaction by Bisabiller's internal numeric ID.
+     * The internal ID is returned as `data.id` in the createQrisTransaction() response.
+     * GET /api/payment/detail-transaction/{id}
+     *
+     * Returns the decoded JSON body (or null on error).
+     * Useful response fields: transaction_total, status_id, qr_code, payment_links.
+     */
+    public function transactionDetail(int $bisabillerTxnId): ?array
+    {
+        $token = $this->token();
+        if (!$token) return null;
+
+        try {
+            $res = Http::withToken($token)
+                ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
+                ->acceptJson()
+                ->get($this->baseUrl() . '/api/payment/detail-transaction/' . $bisabillerTxnId);
+
+            Log::debug('[BisaTopup] transactionDetail', [
+                'bisabiller_id' => $bisabillerTxnId,
+                'status'        => $res->status(),
+            ]);
+
+            return $res->ok() ? $res->json() : null;
+        } catch (\Throwable $e) {
+            Log::error('[BisaTopup] transactionDetail exception: ' . $e->getMessage(), [
+                'bisabiller_id' => $bisabillerTxnId,
+            ]);
+            return null;
+        }
+    }
+
+    /**
      * Signature create-transaction: sha256(username + transaction_id)
      */
     public function buildSignature(string $transactionId): string
