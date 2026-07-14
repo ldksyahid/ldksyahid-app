@@ -70,8 +70,17 @@ return [
         'admin_fee_percent'          => (float) env('BISATOPUP_ADMIN_FEE_PERCENT', 1),
         // Bisabiller QRIS MDR charged per-transaction on total_tagihan (used in balance report).
         'qris_mdr_percent'           => (float) env('BISATOPUP_QRIS_MDR_PERCENT', 1),
-        // Enforce callback signature check (keep false in DEV, set true for production).
+        // Enforce callback signature check — ignored on live (always enforced); only
+        // relevant for dev/staging where you may want to temporarily disable it.
         'enforce_callback_signature' => env('BISATOPUP_ENFORCE_CALLBACK_SIGNATURE', false),
+        // URL secret appended to the disbursement callback URL registered in the
+        // Bisabiller dashboard, e.g. ?_sec=XXXX. Bisabiller's Transfer callback
+        // does not include a signature field, so a URL secret is the primary guard.
+        // Set a random 32-char string here and update the Bisabiller dashboard URL.
+        'callback_disbursement_secret' => env('BISATOPUP_CALLBACK_DISBURSEMENT_SECRET'),
+        // Comma-separated list of Bisabiller server IPs to allowlist on webhook routes.
+        // Leave empty to skip IP filtering (still protected by URL secret + throttle).
+        'allowed_ips'                  => array_filter(array_map('trim', explode(',', env('BISATOPUP_ALLOWED_IPS', '')))),
         // Minutes after a QRIS PAID event before the credit appears in Bisatopup's wallet.
         // Donations settled within this window are excluded from the discrepancy calculation
         // to prevent false "Deficit" alerts during the settlement delay (~5 min in practice).

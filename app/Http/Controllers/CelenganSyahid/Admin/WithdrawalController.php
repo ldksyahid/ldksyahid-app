@@ -290,27 +290,52 @@ class WithdrawalController extends Controller
 
         CelsyahidAuditLog::record('2fa.verify_success', 'withdrawal', $withdrawal->id, '2FA verified for withdrawal execute from IP: ' . $request->ip());
 
-        // ── Balance guard (race condition: double-draft) ────────────────
-        // Re-check campaign balance at execute time, not just at store() time.
-        // Uses qrisPaid − COMPLETED − other PENDING (not DRAFT, not self) to get
-        // the true available at this moment, catching the case where two drafts were
-        // created from the same balance and the first one was already executed.
-        $balanceNow      = $withdrawal->campaign->getBalanceSummary();
-        $otherPending    = Withdrawal::where('campaign_id', $withdrawal->campaign_id)
+        // ── Atomic race-condition guard ─────────────────────────────────
+        // Flip DRAFT → PENDING in a single WHERE+UPDATE. Only ONE concurrent
+        // request can win this (DB guarantees atomicity). The loser gets 0
+        // rows affected and is redirected before calling the external API.
+        // This prevents two admins from simultaneously executing the same
+        // or sibling DRAFT withdrawals against the same campaign balance.
+        $flipped = \Illuminate\Support\Facades\DB::table('withdrawals')
+            ->where('id', $id)
+            ->where('status', 'DRAFT')
+            ->update(['status' => 'PENDING']);
+
+        if (!$flipped) {
+            Alert::warning('Already Processing', 'This withdrawal is being processed by another request. Please wait and refresh.');
+            return redirect()->route('admin.celsyahid.withdrawal.show', $id);
+        }
+
+        // Re-fetch after flip so the model reflects the new status.
+        $withdrawal = $withdrawal->fresh('campaign');
+
+        // ── Balance guard — runs AFTER our atomic flip ─────────────────
+        // Since we are now PENDING, getBalanceSummary()['available'] already
+        // deducts us. We compute effectiveAvail as: qrisPaid − COMPLETED −
+        // OTHER pending (excluding ourselves) to get "available before us".
+        // If another concurrent withdrawal already consumed the funds, this
+        // will detect it and roll us back to DRAFT before touching the API.
+        $balanceNow     = $withdrawal->campaign->getBalanceSummary();
+        $otherPending   = Withdrawal::where('campaign_id', $withdrawal->campaign_id)
             ->where('status', 'PENDING')
             ->where('id', '!=', $withdrawal->id)
             ->sum('amount');
-        $effectiveAvail  = $balanceNow['qris_paid'] - $balanceNow['total_withdrawn'] - $otherPending;
+        $effectiveAvail = $balanceNow['qris_paid'] - $balanceNow['total_withdrawn'] - $otherPending;
 
         if ($withdrawal->amount > $effectiveAvail) {
-            Log::warning('[Withdrawal] execute blocked — insufficient balance', [
-                'withdrawal_id'      => $withdrawal->id,
-                'amount'             => $withdrawal->amount,
-                'effective_available'=> $effectiveAvail,
+            // Rollback: restore to DRAFT so admin can review.
+            \Illuminate\Support\Facades\DB::table('withdrawals')
+                ->where('id', $id)
+                ->update(['status' => 'DRAFT']);
+
+            Log::warning('[Withdrawal] execute rolled back — insufficient balance', [
+                'withdrawal_id'       => $withdrawal->id,
+                'amount'              => $withdrawal->amount,
+                'effective_available' => $effectiveAvail,
             ]);
             CelsyahidAuditLog::record(
                 'withdrawal.balance_check_failed', 'withdrawal', $withdrawal->id,
-                'Execute blocked: amount Rp ' . number_format($withdrawal->amount, 0, ',', '.') .
+                'Execute rolled back: amount Rp ' . number_format($withdrawal->amount, 0, ',', '.') .
                 ' exceeds effective available Rp ' . number_format($effectiveAvail, 0, ',', '.')
             );
             Alert::error(
@@ -733,8 +758,24 @@ class WithdrawalController extends Controller
 
     public function callback(Request $request)
     {
+        // ── URL secret guard ────────────────────────────────────────────
+        // Bisabiller's Transfer callback contains no signature field (unlike
+        // the Payment Gateway callback). We guard the endpoint with a shared
+        // secret appended to the callback URL registered in the Bisabiller
+        // dashboard: e.g. ?_sec=XXXXXXXX. Any request without the correct
+        // secret is rejected immediately — before touching the database.
+        $secret = config('services.bisatopup.callback_disbursement_secret');
+        if ($secret && !hash_equals((string) $secret, (string) $request->query('_sec', ''))) {
+            Log::warning('[Withdrawal Callback] invalid URL secret — possible spoofed request', [
+                'ip'      => $request->ip(),
+                'reff_id' => $request->input('reff_id'),
+            ]);
+            return response()->json(['status' => 'unauthorized'], 401);
+        }
+        // ────────────────────────────────────────────────────────────────
+
         $payload = $request->all();
-        Log::info('[Withdrawal Callback] received', ['payload' => $payload]);
+        Log::info('[Withdrawal Callback] received', ['payload' => $payload, 'ip' => $request->ip()]);
 
         $reffId = $payload['reff_id'] ?? null;
         if (!$reffId) {
