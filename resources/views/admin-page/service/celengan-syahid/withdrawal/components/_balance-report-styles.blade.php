@@ -423,6 +423,49 @@ html.dark-mode .br-pending-banner-title { color: #fde68a; }
 html.dark-mode .br-pending-banner-desc { color: #d97706; }
 html.dark-mode .br-pending-amount { color: #fbbf24; background: rgba(251,191,36,.12); }
 
+/* ── Pending Transfer Banner (withdrawal sent, awaiting callback) ─ */
+.br-transfer-banner {
+    display: flex; align-items: flex-start; gap: .9rem;
+    background: linear-gradient(135deg, rgba(99,102,241,.08), rgba(99,102,241,.04));
+    border: 1.5px solid rgba(99,102,241,.3);
+    border-radius: 12px; padding: .9rem 1.1rem;
+}
+.br-transfer-banner-icon {
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+    background: rgba(99,102,241,.12); color: #6366f1;
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+}
+.br-transfer-banner-title {
+    font-size: .82rem; font-weight: 700; color: #312e81; margin-bottom: .2rem;
+}
+.br-transfer-banner-desc {
+    font-size: .78rem; color: #4338ca; line-height: 1.45;
+}
+.br-transfer-amount {
+    font-size: .85rem; font-weight: 800; color: #4338ca;
+    background: rgba(99,102,241,.12); padding: .1em .5em; border-radius: 5px;
+}
+html.dark-mode .br-transfer-banner {
+    background: linear-gradient(135deg, rgba(129,140,248,.07), rgba(129,140,248,.03));
+    border-color: rgba(129,140,248,.3);
+}
+html.dark-mode .br-transfer-banner-icon { background: rgba(129,140,248,.12); color: #818cf8; }
+html.dark-mode .br-transfer-banner-title { color: #c7d2fe; }
+html.dark-mode .br-transfer-banner-desc  { color: #a5b4fc; }
+html.dark-mode .br-transfer-amount { color: #a5b4fc; background: rgba(129,140,248,.12); }
+
+/* ── Transfer pending inline badge in breakdown rows ──────── */
+.br-transfer-pending-inline {
+    display: inline-flex; align-items: center; gap: .3em;
+    font-size: .68rem; font-weight: 600; padding: .15em .55em;
+    border-radius: 50px; white-space: nowrap;
+    background: rgba(99,102,241,.1); color: #4338ca;
+    border: 1px solid rgba(99,102,241,.25);
+}
+html.dark-mode .br-transfer-pending-inline {
+    background: rgba(129,140,248,.1); color: #a5b4fc; border-color: rgba(129,140,248,.25);
+}
+
 /* ── Settling inline badge in breakdown rows ─────────────── */
 .br-settling-inline {
     display: inline-flex; align-items: center; gap: .3em;

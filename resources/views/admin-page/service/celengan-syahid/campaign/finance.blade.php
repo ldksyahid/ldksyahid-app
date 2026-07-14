@@ -44,12 +44,13 @@
                         $mdrR2       = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
                         $settlMins2  = (int) config('services.bisatopup.settlement_minutes', 15);
                         $cutoff2     = now()->subMinutes($settlMins2);
-                        // Gap-based: expectedAll uses ALL paid donations
+                        // Gap-based: expectedAll uses ALL paid donations minus all sent withdrawals.
+                        // Include PENDING withdrawals — already deducted from Bisabiller wallet.
                         $allPaidExp  = (int) \App\Models\Donation::where('gateway','bisatopup')
                                          ->where('payment_status','PAID')
                                          ->selectRaw('SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wc', [$mdrR2])
                                          ->value('wc')
-                                     - (int) \App\Models\Withdrawal::where('status','COMPLETED')->sum('amount');
+                                     - (int) \App\Models\Withdrawal::whereIn('status', ['COMPLETED', 'PENDING'])->sum('amount');
                         $recentPaid2 = (int) \App\Models\Donation::where('gateway','bisatopup')
                                          ->where('payment_status','PAID')
                                          ->where('updated_at', '>=', $cutoff2)

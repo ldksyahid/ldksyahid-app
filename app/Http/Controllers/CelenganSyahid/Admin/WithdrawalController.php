@@ -413,7 +413,6 @@ class WithdrawalController extends Controller
     public function balanceReport(\Illuminate\Http\Request $request)
     {
         // Bisabiller charges 1% MDR (QRIS) per transaction, rounded UP per-transaction.
-        // Use CEIL (not ROUND) to avoid MySQL floating-point issues at exactly .5 boundaries.
         $mdrRate           = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
         $settlementMinutes = (int) config('services.bisatopup.settlement_minutes', 15);
         $cutoff            = now()->subMinutes($settlementMinutes);
@@ -432,7 +431,7 @@ class WithdrawalController extends Controller
             ->get()
             ->keyBy('campaign_id');
 
-        // RECENT payments (within settlement window) — candidates for "in-transit" attribution
+        // RECENT payments (within settlement window) — QRIS in-transit candidates
         $recentByCampaign = Donation::where('gateway', 'bisatopup')
             ->where('payment_status', 'PAID')
             ->where('updated_at', '>=', $cutoff)
@@ -442,78 +441,95 @@ class WithdrawalController extends Controller
             ->get()
             ->keyBy('campaign_id');
 
-        // Total withdrawn per campaign (COMPLETED only)
-        $withdrawnPerCampaign = Withdrawal::where('status', 'COMPLETED')
-            ->selectRaw('campaign_id, SUM(amount) as total_withdrawn')
+        // COMPLETED withdrawals per campaign (confirmed by callback)
+        $completedByCampaign = Withdrawal::where('status', 'COMPLETED')
+            ->selectRaw('campaign_id, SUM(amount) as total')
             ->groupBy('campaign_id')
-            ->pluck('total_withdrawn', 'campaign_id');
+            ->pluck('total', 'campaign_id');
 
-        // expectedAll = everything we expect in Bisatopup wallet (no time filter)
-        $totalExpectedAll  = (int) $allPaidByCampaign->sum('wallet_credit')
-                           - (int) $withdrawnPerCampaign->sum();
-        $recentPaidTotal   = (int) $recentByCampaign->sum('wallet_credit');
-        $recentCountTotal  = (int) $recentByCampaign->sum('txn_count');
+        // PENDING withdrawals per campaign — sent to Bisabiller, wallet ALREADY deducted,
+        // awaiting COMPLETED/FAILED callback. Must be included in expected balance.
+        $pendingWdByCampaign = Withdrawal::where('status', 'PENDING')
+            ->selectRaw('campaign_id, SUM(amount) as total, COUNT(*) as cnt')
+            ->groupBy('campaign_id')
+            ->get()
+            ->keyBy('campaign_id');
+
+        $recentPaidTotal      = (int) $recentByCampaign->sum('wallet_credit');
+        $recentCountTotal     = (int) $recentByCampaign->sum('txn_count');
+        $pendingTransferTotal = (int) $pendingWdByCampaign->sum('total');
+        $pendingTransferCount = (int) $pendingWdByCampaign->sum('cnt');
+
+        // expectedAll: total wallet credit minus everything already sent out of wallet.
+        // PENDING withdrawals have already been deducted by Bisabiller, so they count here.
+        $totalExpectedAll = (int) $allPaidByCampaign->sum('wallet_credit')
+                          - (int) $completedByCampaign->sum()
+                          - $pendingTransferTotal;
+
+        $recentPaidTotal  = (int) $recentByCampaign->sum('wallet_credit');
+        $recentCountTotal = (int) $recentByCampaign->sum('txn_count');
 
         $actualBalance = Cache::remember('bisabiller_wallet_balance', 300, function () {
             return (new BisaTopup())->walletBalance();
         });
 
-        // ── Gap-based pending settlement ──────────────────────────────────
-        // rawGap = how much is missing from Bisatopup wallet relative to our DB.
-        // If rawGap > 0: some amount hasn't settled yet.
-        // If rawGap ≤ 0: actual ≥ expected — everything settled (or there's a surplus).
-        // We only attribute pending settlement up to min(rawGap, recentPaid):
-        //   - Can't attribute more than what recent payments explain.
-        //   - If payment settled faster, actualBalance is already higher → rawGap shrinks → pending shrinks.
-        //   - If rawGap > recentPaid: real discrepancy exists beyond normal settlement delay.
+        // Gap-based: rawGap after accounting for pending withdrawals reflects only QRIS settlement delay
         $rawGap                 = ($actualBalance !== null) ? ($totalExpectedAll - $actualBalance) : 0;
         $pendingSettlementTotal = ($rawGap > 0) ? min($rawGap, $recentPaidTotal) : 0;
         $pendingSettlementCount = ($pendingSettlementTotal > 0) ? $recentCountTotal : 0;
 
-        // totalExpected for discrepancy = expectedAll minus what we've attributed to settlement
-        // discrepancy = actualBalance - totalExpected
-        //   → 0 when all gap is from settlement
-        //   → negative (Deficit) when rawGap > recentPaid (real problem)
-        //   → positive (surplus) when actualBalance > expectedAll
         $totalExpected = $totalExpectedAll - $pendingSettlementTotal;
         $threshold     = config('services.two_fa.discrepancy_threshold', 50000);
         $discrepancy   = ($actualBalance !== null) ? ($actualBalance - $totalExpected) : null;
         $isNormal      = ($discrepancy !== null) && abs($discrepancy) <= $threshold;
 
-        // Build breakdown rows — one per campaign, pending_wallet driven by rawGap
-        $allCampaignIds = $allPaidByCampaign->keys()->union($recentByCampaign->keys());
+        // Build breakdown rows — closure avoids duplication between page load and AJAX refresh
+        $buildRows = function (int $rawGap) use (
+            $allPaidByCampaign, $recentByCampaign, $completedByCampaign, $pendingWdByCampaign
+        ) {
+            $allCampaignIds = $allPaidByCampaign->keys()
+                ->union($recentByCampaign->keys())
+                ->union($completedByCampaign->keys())
+                ->union($pendingWdByCampaign->keys());
 
-        $rows = collect();
-        foreach ($allCampaignIds as $campaignId) {
-            $all    = $allPaidByCampaign->get($campaignId);
-            $recent = $recentByCampaign->get($campaignId);
+            $rows = collect();
+            foreach ($allCampaignIds as $campaignId) {
+                $all    = $allPaidByCampaign->get($campaignId);
+                $recent = $recentByCampaign->get($campaignId);
+                $pendWd = $pendingWdByCampaign->get($campaignId);
 
-            $allWalletCredit    = $all    ? (int) $all->wallet_credit    : 0;
-            $recentWalletCredit = $recent ? (int) $recent->wallet_credit : 0;
-            $recentTxnCount     = $recent ? (int) $recent->txn_count     : 0;
+                $allWalletCredit    = $all    ? (int) $all->wallet_credit    : 0;
+                $recentWalletCredit = $recent ? (int) $recent->wallet_credit : 0;
+                $recentTxnCount     = $recent ? (int) $recent->txn_count     : 0;
 
-            // Only show per-campaign pending if there's a real global gap to attribute
-            $campaignPending      = ($rawGap > 0) ? $recentWalletCredit : 0;
-            $campaignPendingCount = ($rawGap > 0) ? $recentTxnCount     : 0;
+                $campaignQrisPending      = ($rawGap > 0) ? $recentWalletCredit : 0;
+                $campaignQrisPendingCount = ($rawGap > 0) ? $recentTxnCount     : 0;
 
-            $settledCredit = $allWalletCredit - $campaignPending;
-            $withdrawn     = (int) ($withdrawnPerCampaign[$campaignId] ?? 0);
-            $campaignName  = ($all ?? $recent)?->campaign?->judul ?? '—';
+                $settledCredit = $allWalletCredit - $campaignQrisPending;
+                $completedWd   = (int) ($completedByCampaign[$campaignId] ?? 0);
+                $pendingWd     = $pendWd ? (int) $pendWd->total : 0;
+                $pendingWdCnt  = $pendWd ? (int) $pendWd->cnt  : 0;
+                $campaignName  = ($all ?? $recent ?? $pendWd)?->campaign?->judul ?? '—';
 
-            $rows->push([
-                'campaign'        => $campaignName,
-                'total_qris'      => (int) (($all ?? $recent)?->total_qris ?? 0),
-                'wallet_credit'   => $settledCredit,
-                'total_withdrawn' => $withdrawn,
-                'net'             => $settledCredit - $withdrawn,
-                'txn_count'       => $all ? ((int) $all->txn_count - $campaignPendingCount) : 0,
-                'pending_wallet'  => $campaignPending,
-                'pending_count'   => $campaignPendingCount,
-            ]);
-        }
+                $rows->push([
+                    'campaign'         => $campaignName,
+                    'total_qris'       => (int) (($all ?? $recent)?->total_qris ?? 0),
+                    'wallet_credit'    => $settledCredit,
+                    'total_withdrawn'  => $completedWd,
+                    'net'              => $settledCredit - $completedWd - $pendingWd,
+                    'txn_count'        => $all ? ((int) $all->txn_count - $campaignQrisPendingCount) : 0,
+                    'pending_wallet'   => $campaignQrisPending,
+                    'pending_count'    => $campaignQrisPendingCount,
+                    'pending_wd'       => $pendingWd,
+                    'pending_wd_count' => $pendingWdCnt,
+                ]);
+            }
+            return $rows;
+        };
+
+        $rows = $buildRows($rawGap);
 
         if ($request->ajax()) {
-            // Force-fresh balance from API (bypass cache on manual refresh)
             Cache::forget('bisabiller_wallet_balance');
             $actualBalance          = (new BisaTopup())->walletBalance();
             $rawGap                 = ($actualBalance !== null) ? ($totalExpectedAll - $actualBalance) : 0;
@@ -522,63 +538,40 @@ class WithdrawalController extends Controller
             $totalExpected          = $totalExpectedAll - $pendingSettlementTotal;
             $discrepancy            = ($actualBalance !== null) ? ($actualBalance - $totalExpected) : null;
             $isNormal               = ($discrepancy !== null) && abs($discrepancy) <= $threshold;
-
-            // Rebuild rows with updated rawGap
-            $rows = collect();
-            foreach ($allCampaignIds as $campaignId) {
-                $all    = $allPaidByCampaign->get($campaignId);
-                $recent = $recentByCampaign->get($campaignId);
-
-                $allWalletCredit    = $all    ? (int) $all->wallet_credit    : 0;
-                $recentWalletCredit = $recent ? (int) $recent->wallet_credit : 0;
-                $recentTxnCount     = $recent ? (int) $recent->txn_count     : 0;
-
-                $campaignPending      = ($rawGap > 0) ? $recentWalletCredit : 0;
-                $campaignPendingCount = ($rawGap > 0) ? $recentTxnCount     : 0;
-                $settledCredit        = $allWalletCredit - $campaignPending;
-                $withdrawn            = (int) ($withdrawnPerCampaign[$campaignId] ?? 0);
-                $campaignName         = ($all ?? $recent)?->campaign?->judul ?? '—';
-
-                $rows->push([
-                    'campaign'        => $campaignName,
-                    'total_qris'      => (int) (($all ?? $recent)?->total_qris ?? 0),
-                    'wallet_credit'   => $settledCredit,
-                    'total_withdrawn' => $withdrawn,
-                    'net'             => $settledCredit - $withdrawn,
-                    'txn_count'       => $all ? ((int) $all->txn_count - $campaignPendingCount) : 0,
-                    'pending_wallet'  => $campaignPending,
-                    'pending_count'   => $campaignPendingCount,
-                ]);
-            }
+            $rows                   = $buildRows($rawGap);
 
             return response()->json([
-                'actualBalance'            => $actualBalance,
-                'totalExpected'            => $totalExpected,
-                'discrepancy'              => $discrepancy,
-                'isNormal'                 => $isNormal,
-                'threshold'                => $threshold,
-                'pendingSettlementTotal'   => $pendingSettlementTotal,
-                'pendingSettlementCount'   => $pendingSettlementCount,
-                'settlementMinutes'        => $settlementMinutes,
-                'breakdownHtml'            => view('admin-page.service.celengan-syahid.withdrawal.components._breakdown-rows', compact('rows'))->render(),
-                'tfootHtml'                => $rows->count() > 0
+                'actualBalance'           => $actualBalance,
+                'totalExpected'           => $totalExpected,
+                'discrepancy'             => $discrepancy,
+                'isNormal'                => $isNormal,
+                'threshold'               => $threshold,
+                'pendingSettlementTotal'  => $pendingSettlementTotal,
+                'pendingSettlementCount'  => $pendingSettlementCount,
+                'pendingTransferTotal'    => $pendingTransferTotal,
+                'pendingTransferCount'    => $pendingTransferCount,
+                'settlementMinutes'       => $settlementMinutes,
+                'breakdownHtml'           => view('admin-page.service.celengan-syahid.withdrawal.components._breakdown-rows', compact('rows'))->render(),
+                'tfootHtml'               => $rows->count() > 0
                     ? '<tr><td colspan="6" class="ps-4 text-end br-tfoot-label">Total Expected Balance (settled)</td><td class="text-end br-tfoot-value">Rp ' . number_format($totalExpected, 0, ',', '.') . '</td></tr>'
                     : '',
-                'updatedAt'                => now()->format('d M Y, H:i'),
+                'updatedAt'               => now()->format('d M Y, H:i'),
             ]);
         }
 
         return view('admin-page.service.celengan-syahid.withdrawal.balance-report', [
-            'rows'                    => $rows,
-            'totalExpected'           => $totalExpected,
-            'pendingSettlementTotal'  => $pendingSettlementTotal,
-            'pendingSettlementCount'  => $pendingSettlementCount,
-            'settlementMinutes'       => $settlementMinutes,
-            'actualBalance'           => $actualBalance,
-            'discrepancy'             => $discrepancy,
-            'isNormal'                => $isNormal,
-            'threshold'               => $threshold,
-            'title'                   => 'Celengan Syahid',
+            'rows'                   => $rows,
+            'totalExpected'          => $totalExpected,
+            'pendingSettlementTotal' => $pendingSettlementTotal,
+            'pendingSettlementCount' => $pendingSettlementCount,
+            'pendingTransferTotal'   => $pendingTransferTotal,
+            'pendingTransferCount'   => $pendingTransferCount,
+            'settlementMinutes'      => $settlementMinutes,
+            'actualBalance'          => $actualBalance,
+            'discrepancy'            => $discrepancy,
+            'isNormal'               => $isNormal,
+            'threshold'              => $threshold,
+            'title'                  => 'Celengan Syahid',
         ]);
     }
 
@@ -607,7 +600,8 @@ class WithdrawalController extends Controller
                                     'SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wc',
                                     [$mdrRateLocal]
                                 )->value('wc');
-        $allWithdrawn      = (int) Withdrawal::where('status', 'COMPLETED')->sum('amount');
+        // Include PENDING withdrawals — they've already been deducted from Bisabiller wallet
+        $allWithdrawn      = (int) Withdrawal::whereIn('status', ['COMPLETED', 'PENDING'])->sum('amount');
         $totalExpectedAll  = $allPaidCredit - $allWithdrawn;
         // rawGap > 0 means wallet hasn't fully reflected all PAID donations yet
         $rawGap            = ($cachedBalance !== null) ? ($totalExpectedAll - $cachedBalance) : 1;

@@ -95,6 +95,28 @@
             </div>
         </div>
 
+        {{-- Pending Transfer Banner (withdrawal sent to Bisabiller, wallet deducted, awaiting callback) --}}
+        <div class="col-12 mb-3" id="br-transfer-wrap" style="{{ $pendingTransferTotal > 0 ? '' : 'display:none' }}">
+            <div class="br-transfer-banner">
+                <div class="br-transfer-banner-icon"><i class="fas fa-paper-plane"></i></div>
+                <div class="br-transfer-banner-body" style="flex:1;min-width:0">
+                    <div class="br-transfer-banner-title">
+                        <i class="fas fa-hourglass-half me-1"></i>Pending Transfer
+                        <span class="br-transfer-amount ms-2" id="br-transfer-amount">Rp {{ number_format($pendingTransferTotal, 0, ',', '.') }}</span>
+                        <span class="text-muted fw-normal" style="font-size:.75rem" id="br-transfer-count">
+                            — {{ $pendingTransferCount }} withdrawal{{ $pendingTransferCount === 1 ? '' : 's' }}
+                        </span>
+                    </div>
+                    <div class="br-transfer-banner-desc">
+                        {{ $pendingTransferCount }} withdrawal{{ $pendingTransferCount === 1 ? '' : 's' }} ha{{ $pendingTransferCount === 1 ? 's' : 've' }}
+                        been sent to Bisabiller and the wallet has already been deducted.
+                        They are <strong>included in the Expected Balance</strong> above (counted as debits).
+                        Status will update automatically once Bisabiller sends a callback (COMPLETED or FAILED).
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- Pending Settlement Banner (shown only when there are recent QRIS payments in transit) --}}
         <div class="col-12 mb-4" id="br-pending-wrap" style="{{ $pendingSettlementTotal > 0 ? '' : 'display:none' }}">
             <div class="br-pending-banner">
@@ -367,6 +389,17 @@ $(function () {
                 $('#br-disc-sub').text('Needs Review');
             }
             $icon2.html(iconEl);
+
+            // Pending transfer banner (PENDING withdrawals)
+            var transferTotal = res.pendingTransferTotal || 0;
+            var transferCount = res.pendingTransferCount || 0;
+            if (transferTotal > 0) {
+                $('#br-transfer-amount').text(fmtRp(transferTotal));
+                $('#br-transfer-count').text('— ' + transferCount + ' withdrawal' + (transferCount === 1 ? '' : 's'));
+                $('#br-transfer-wrap').show();
+            } else {
+                $('#br-transfer-wrap').hide();
+            }
 
             // Pending settlement banner
             var pendingTotal = res.pendingSettlementTotal || 0;
