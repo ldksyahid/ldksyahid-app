@@ -47,12 +47,6 @@ class BisaTopup
         try {
             $loginUrl = $this->baseUrl() . '/api/login';
 
-            Log::debug('[BisaTopup] login attempt', [
-                'env'      => $this->config['env'] ?? 'dev',
-                'url'      => $loginUrl,
-                'username' => $this->config['username'] ?? '(empty)',
-            ]);
-
             $res = Http::timeout(15)
                 ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
                 ->asForm()
@@ -61,13 +55,10 @@ class BisaTopup
                     'password' => $this->config['password_api'],
                 ]);
 
-            Log::debug('[BisaTopup] login response', [
-                'status'      => $res->status(),
-                'token_found' => !empty(data_get($res->json(), 'data.access_token')),
-            ]);
-
             if ($res->failed()) {
                 Log::error('[BisaTopup] login failed', [
+                    'env'    => $this->config['env'] ?? 'dev',
+                    'url'    => $loginUrl,
                     'status' => $res->status(),
                     'body'   => $res->body(),
                 ]);
@@ -76,10 +67,6 @@ class BisaTopup
 
             $token = data_get($res->json(), 'data.access_token');
 
-            Log::debug('[BisaTopup] login token', [
-                'token_found' => !empty($token),
-            ]);
-
             if ($token) {
                 Cache::put('bisatopup_token', $token, now()->addMinutes(50));
             }
@@ -87,6 +74,7 @@ class BisaTopup
         } catch (\Throwable $e) {
             Log::error('[BisaTopup] login exception', [
                 'message' => $e->getMessage(),
+                'class'   => get_class($e),
                 'env'     => $this->config['env'] ?? 'dev',
                 'url'     => $this->baseUrl() . '/api/login',
             ]);
@@ -129,14 +117,20 @@ class BisaTopup
                     'status'         => $res->status(),
                     'body'           => $res->body(),
                     'transaction_id' => $payload['transaction_id'] ?? null,
+                    'nominal'        => $payload['nominal'] ?? null,
+                    'url'            => $this->baseUrl() . '/api/payment/transaction',
                 ]);
                 return null;
             }
 
             return $res->json();
         } catch (\Throwable $e) {
-            Log::error('[BisaTopup] createTransaction exception: ' . $e->getMessage(), [
+            Log::error('[BisaTopup] createTransaction exception', [
+                'message'        => $e->getMessage(),
+                'class'          => get_class($e),
                 'transaction_id' => $payload['transaction_id'] ?? null,
+                'nominal'        => $payload['nominal'] ?? null,
+                'url'            => $this->baseUrl() . '/api/payment/transaction',
             ]);
             return null;
         }
@@ -161,15 +155,13 @@ class BisaTopup
                 ->acceptJson()
                 ->get($this->baseUrl() . '/api/payment/detail-transaction/' . $bisabillerTxnId);
 
-            Log::debug('[BisaTopup] transactionDetail', [
-                'bisabiller_id' => $bisabillerTxnId,
-                'status'        => $res->status(),
-            ]);
-
             return $res->ok() ? $res->json() : null;
         } catch (\Throwable $e) {
-            Log::error('[BisaTopup] transactionDetail exception: ' . $e->getMessage(), [
+            Log::error('[BisaTopup] transactionDetail exception', [
+                'message'       => $e->getMessage(),
+                'class'         => get_class($e),
                 'bisabiller_id' => $bisabillerTxnId,
+                'url'           => $this->baseUrl() . '/api/payment/detail-transaction/' . $bisabillerTxnId,
             ]);
             return null;
         }
@@ -212,7 +204,13 @@ class BisaTopup
 
             return $res->failed() ? null : $res->json();
         } catch (\Throwable $e) {
-            Log::error('[BisaTopup] inquiryBank exception: ' . $e->getMessage());
+            Log::error('[BisaTopup] inquiryBank exception', [
+                'message'    => $e->getMessage(),
+                'class'      => get_class($e),
+                'bank_code'  => $bankCode,
+                'account'    => $accountNumber,
+                'url'        => $this->baseUrl() . '/api/transfer/inquiry',
+            ]);
             return null;
         }
     }
@@ -247,8 +245,14 @@ class BisaTopup
 
             return $res->failed() ? null : $res->json();
         } catch (\Throwable $e) {
-            Log::error('[BisaTopup] disburse exception: ' . $e->getMessage(), [
-                'reff_id' => $payload['reff_id'] ?? null,
+            Log::error('[BisaTopup] disburse exception', [
+                'message'        => $e->getMessage(),
+                'class'          => get_class($e),
+                'reff_id'        => $payload['reff_id'] ?? null,
+                'bank_code'      => $payload['bank_code'] ?? null,
+                'account_number' => $payload['account_number'] ?? null,
+                'amount'         => $payload['amount'] ?? null,
+                'url'            => $this->baseUrl() . '/api/transfer/disburstment',
             ]);
             return null;
         }
@@ -273,7 +277,11 @@ class BisaTopup
                 ? (int) data_get($res->json(), 'data.wallet.jumlah')
                 : null;
         } catch (\Throwable $e) {
-            Log::error('[BisaTopup] walletBalance exception: ' . $e->getMessage());
+            Log::error('[BisaTopup] walletBalance exception', [
+                'message' => $e->getMessage(),
+                'class'   => get_class($e),
+                'url'     => $this->baseUrl() . '/api/account-info',
+            ]);
             return null;
         }
     }
@@ -324,7 +332,11 @@ class BisaTopup
             ]);
             return [];
         } catch (\Throwable $e) {
-            Log::error('[BisaTopup] bankList exception: ' . $e->getMessage());
+            Log::error('[BisaTopup] bankList exception', [
+                'message' => $e->getMessage(),
+                'class'   => get_class($e),
+                'url'     => $this->baseUrl() . '/api/transfer/bank-lists',
+            ]);
             return [];
         }
     }
