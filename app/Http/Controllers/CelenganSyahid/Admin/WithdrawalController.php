@@ -244,9 +244,23 @@ class WithdrawalController extends Controller
             return redirect()->route('admin.celsyahid.withdrawal.show', $id);
         }
 
+        // Compute effective available balance at confirm time.
+        // Uses qrisPaid − COMPLETED − other PENDING (not DRAFT, not the current one).
+        // This lets the confirm page warn the admin if balance has changed since the draft was created.
+        $balance         = $withdrawal->campaign->getBalanceSummary();
+        $otherPending    = Withdrawal::where('campaign_id', $withdrawal->campaign_id)
+            ->where('status', 'PENDING')
+            ->where('id', '!=', $withdrawal->id)
+            ->sum('amount');
+        $effectiveAvailable = $balance['qris_paid'] - $balance['total_withdrawn'] - $otherPending;
+        $canProceed         = $withdrawal->amount <= $effectiveAvailable;
+
         return view('admin-page.service.celengan-syahid.withdrawal.confirm', [
-            'withdrawal' => $withdrawal,
-            'title'      => 'Celengan Syahid',
+            'withdrawal'         => $withdrawal,
+            'balance'            => $balance,
+            'effectiveAvailable' => (int) $effectiveAvailable,
+            'canProceed'         => $canProceed,
+            'title'              => 'Celengan Syahid',
         ]);
     }
 
@@ -275,6 +289,39 @@ class WithdrawalController extends Controller
         }
 
         CelsyahidAuditLog::record('2fa.verify_success', 'withdrawal', $withdrawal->id, '2FA verified for withdrawal execute from IP: ' . $request->ip());
+
+        // ── Balance guard (race condition: double-draft) ────────────────
+        // Re-check campaign balance at execute time, not just at store() time.
+        // Uses qrisPaid − COMPLETED − other PENDING (not DRAFT, not self) to get
+        // the true available at this moment, catching the case where two drafts were
+        // created from the same balance and the first one was already executed.
+        $balanceNow      = $withdrawal->campaign->getBalanceSummary();
+        $otherPending    = Withdrawal::where('campaign_id', $withdrawal->campaign_id)
+            ->where('status', 'PENDING')
+            ->where('id', '!=', $withdrawal->id)
+            ->sum('amount');
+        $effectiveAvail  = $balanceNow['qris_paid'] - $balanceNow['total_withdrawn'] - $otherPending;
+
+        if ($withdrawal->amount > $effectiveAvail) {
+            Log::warning('[Withdrawal] execute blocked — insufficient balance', [
+                'withdrawal_id'      => $withdrawal->id,
+                'amount'             => $withdrawal->amount,
+                'effective_available'=> $effectiveAvail,
+            ]);
+            CelsyahidAuditLog::record(
+                'withdrawal.balance_check_failed', 'withdrawal', $withdrawal->id,
+                'Execute blocked: amount Rp ' . number_format($withdrawal->amount, 0, ',', '.') .
+                ' exceeds effective available Rp ' . number_format($effectiveAvail, 0, ',', '.')
+            );
+            Alert::error(
+                'Insufficient Balance',
+                'Available balance is Rp ' . number_format($effectiveAvail, 0, ',', '.') .
+                ', but this withdrawal requires Rp ' . number_format($withdrawal->amount, 0, ',', '.') .
+                '. Another withdrawal may have already used these funds.'
+            );
+            return redirect()->route('admin.celsyahid.withdrawal.confirm', $id);
+        }
+        // ────────────────────────────────────────────────────────────────
 
         // Bisabiller API: `amount` = what the recipient receives.
         // Fee is charged additionally from the wallet (total_amount = amount + fee).

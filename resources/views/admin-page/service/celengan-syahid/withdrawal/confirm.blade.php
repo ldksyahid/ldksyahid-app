@@ -112,6 +112,23 @@ html.dark-mode .cf-warning { border-color: rgba(251,191,36,.3); background: rgba
 html.dark-mode .cf-warning-header { background: rgba(251,191,36,.1); border-color: rgba(251,191,36,.15); color: #fbbf24; }
 html.dark-mode .cf-warning-dest { background: rgba(255,255,255,.04); }
 
+/* ── Balance check panel ────────────────────────────── */
+.cf-balance-panel {
+    border-radius: 10px; padding: .75rem 1rem; font-size: .875rem;
+    margin-bottom: .75rem;
+}
+.cf-balance-ok      { background: rgba(5,150,105,.07); border: 1px solid rgba(5,150,105,.2); }
+.cf-balance-warn    { background: rgba(220,38,38,.07); border: 1px solid rgba(220,38,38,.25); }
+.cf-balance-row     { display: flex; justify-content: space-between; align-items: center; padding: .2rem 0; }
+.cf-balance-label   { font-size: .75rem; color: #6b7280; font-weight: 600; }
+.cf-balance-value   { font-size: .875rem; font-weight: 700; color: #111827; }
+.cf-balance-divider { border-top: 1px dashed rgba(0,0,0,.1); margin: .4rem 0; }
+html.dark-mode .cf-balance-ok   { background: rgba(74,222,128,.06); border-color: rgba(74,222,128,.2); }
+html.dark-mode .cf-balance-warn { background: rgba(248,113,113,.07); border-color: rgba(248,113,113,.25); }
+html.dark-mode .cf-balance-label { color: #9ca3af; }
+html.dark-mode .cf-balance-value { color: #e5e7eb; }
+html.dark-mode .cf-balance-divider { border-color: rgba(255,255,255,.08); }
+
 /* ── Cannot undo banner ─────────────────────────────── */
 .cf-danger-banner {
     display: flex;
@@ -270,11 +287,55 @@ html.dark-mode .btn-execute { background: linear-gradient(135deg, #047857, #065f
                         <div class="small text-muted mt-1 fst-italic">{{ $withdrawal->account_holder }}</div>
                     </div>
 
-                    <p class="small text-muted mb-3">
+                    <p class="small text-muted mb-2">
                         Campaign balance will be reduced by
                         <strong>Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}</strong>
                         (includes transfer fee of Rp {{ number_format($withdrawal->fee, 0, ',', '.') }}).
                     </p>
+
+                    {{-- Live balance check --}}
+                    <div class="cf-balance-panel {{ $canProceed ? 'cf-balance-ok' : 'cf-balance-warn' }} mb-3">
+                        <div class="cf-balance-row">
+                            <span class="cf-balance-label">QRIS Collected (after MDR)</span>
+                            <span class="cf-balance-value">Rp {{ number_format($balance['qris_paid'], 0, ',', '.') }}</span>
+                        </div>
+                        <div class="cf-balance-row">
+                            <span class="cf-balance-label">Already Withdrawn</span>
+                            <span class="cf-balance-value text-muted">− Rp {{ number_format($balance['total_withdrawn'], 0, ',', '.') }}</span>
+                        </div>
+                        @php $otherPending = $balance['qris_paid'] - $balance['total_withdrawn'] - $effectiveAvailable; @endphp
+                        @if($otherPending > 0)
+                        <div class="cf-balance-row">
+                            <span class="cf-balance-label">Other Pending Withdrawal(s)</span>
+                            <span class="cf-balance-value text-warning">− Rp {{ number_format($otherPending, 0, ',', '.') }}</span>
+                        </div>
+                        @endif
+                        <div class="cf-balance-divider"></div>
+                        <div class="cf-balance-row">
+                            <span class="cf-balance-label fw-bold">Effective Available Now</span>
+                            <span class="cf-balance-value {{ $canProceed ? 'text-success' : 'text-danger' }} fs-6">
+                                Rp {{ number_format($effectiveAvailable, 0, ',', '.') }}
+                            </span>
+                        </div>
+                        <div class="cf-balance-row mt-1">
+                            <span class="cf-balance-label">This Withdrawal</span>
+                            <span class="cf-balance-value {{ $canProceed ? '' : 'text-danger fw-bold' }}">
+                                Rp {{ number_format($withdrawal->amount, 0, ',', '.') }}
+                                @if(!$canProceed)
+                                    <i class="fas fa-exclamation-circle ms-1 text-danger"></i>
+                                @else
+                                    <i class="fas fa-check-circle ms-1 text-success"></i>
+                                @endif
+                            </span>
+                        </div>
+                        @if(!$canProceed)
+                        <div class="mt-2 small fw-bold text-danger">
+                            <i class="fas fa-times-circle me-1"></i>
+                            Insufficient balance. Rp {{ number_format($withdrawal->amount - $effectiveAvailable, 0, ',', '.') }} short.
+                            This may be caused by another withdrawal already executed.
+                        </div>
+                        @endif
+                    </div>
 
                     <div class="cf-danger-banner">
                         <i class="fas fa-times-circle flex-shrink-0"></i>
@@ -330,6 +391,11 @@ html.dark-mode .btn-execute { background: linear-gradient(135deg, #047857, #065f
                     <button type="button" class="btn-execute" disabled>
                         <i class="fas fa-lock me-1"></i> 2FA Required
                     </button>
+                @elseif(!$canProceed)
+                    <button type="button" class="btn-execute" disabled
+                        title="Insufficient balance — Rp {{ number_format($withdrawal->amount - $effectiveAvailable, 0, ',', '.') }} short">
+                        <i class="fas fa-ban me-1"></i> Insufficient Balance
+                    </button>
                 @else
                     <button type="submit" class="btn-execute" id="btn-execute">
                         <i class="fas fa-paper-plane me-1"></i> Execute Withdrawal
@@ -370,10 +436,11 @@ document.getElementById('execute-form').addEventListener('submit', function (e) 
     }
     @endif
 
+    // All checks passed — disable to prevent double submission
     var btn = document.getElementById('btn-execute');
     if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Processing...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Processing…';
     }
 });
 
