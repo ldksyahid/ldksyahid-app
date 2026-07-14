@@ -28,6 +28,15 @@
         <span class="br-net {{ $netPositive ? 'br-net-positive' : 'br-net-negative' }}">
             Rp {{ number_format($row['net'], 0, ',', '.') }}
         </span>
+        @if(($row['pending_wd'] ?? 0) > 0)
+            <div class="mt-1">
+                <span class="br-transfer-pending-inline">
+                    <i class="fas fa-paper-plane"></i>
+                    −Rp {{ number_format($row['pending_wd'], 0, ',', '.') }}
+                    ({{ $row['pending_wd_count'] }} pending)
+                </span>
+            </div>
+        @endif
     </td>
 </tr>
 @empty
