@@ -531,7 +531,12 @@ class WithdrawalController extends Controller
 
         if ($request->ajax()) {
             Cache::forget('bisabiller_wallet_balance');
-            $actualBalance          = (new BisaTopup())->walletBalance();
+            $actualBalance = (new BisaTopup())->walletBalance();
+            // Re-cache the fresh balance so balanceHistory() (called right after by JS)
+            // gets rawGap = 0 and does not show stale "Settling…" badges.
+            if ($actualBalance !== null) {
+                Cache::put('bisabiller_wallet_balance', $actualBalance, 300);
+            }
             $rawGap                 = ($actualBalance !== null) ? ($totalExpectedAll - $actualBalance) : 0;
             $pendingSettlementTotal = ($rawGap > 0) ? min($rawGap, $recentPaidTotal) : 0;
             $pendingSettlementCount = ($pendingSettlementTotal > 0) ? $recentCountTotal : 0;
@@ -592,6 +597,8 @@ class WithdrawalController extends Controller
         // Determine rawGap using cached balance — is_settling only true when there is an
         // actual gap to attribute. If payment already settled, rawGap shrinks to 0 and
         // the badge disappears immediately, even within the 15-minute time window.
+        // Fallback is 0 (not 1): when cache is null we err on the side of NOT showing
+        // stale "Settling…" badges rather than showing them incorrectly.
         $cachedBalance     = Cache::get('bisabiller_wallet_balance');
         $mdrRateLocal      = $mdrRate; // alias for closure
         $allPaidCredit     = (int) Donation::where('gateway', 'bisatopup')
@@ -604,7 +611,7 @@ class WithdrawalController extends Controller
         $allWithdrawn      = (int) Withdrawal::whereIn('status', ['COMPLETED', 'PENDING'])->sum('amount');
         $totalExpectedAll  = $allPaidCredit - $allWithdrawn;
         // rawGap > 0 means wallet hasn't fully reflected all PAID donations yet
-        $rawGap            = ($cachedBalance !== null) ? ($totalExpectedAll - $cachedBalance) : 1;
+        $rawGap            = ($cachedBalance !== null) ? ($totalExpectedAll - $cachedBalance) : 0;
 
         // ── CREDIT entries: PAID bisatopup donations ──────────────
         $donQ = Donation::where('gateway', 'bisatopup')
