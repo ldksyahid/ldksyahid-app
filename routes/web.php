@@ -240,9 +240,9 @@ Route::middleware('throttle:60,1')->group(function () {
 // Donation store: max 30 submissions/minute per IP
 Route::middleware('throttle:30,1')->post('/celengan-syahid/donasi', [CelsyahidPublicController::class, 'storeDonationCampaign'])->name('service.store.donation.campaign');
 
-// Payment gateway webhook: max 120 callbacks/minute (gateway retries are frequent)
-Route::middleware('throttle:120,1')->post('/celengan-syahid/callback', [CelsyahidPublicController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
-Route::middleware('throttle:60,1')->post('/celengan-syahid/disbursement-callback', [CelsyahidWithdrawalController::class, 'callback'])->name('celsyahid.disbursement.callback');
+// Payment gateway webhooks — IP allowlist (if configured) + throttle.
+Route::middleware(['bisabiller.ip', 'throttle:120,1'])->post('/celengan-syahid/callback', [CelsyahidPublicController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
+Route::middleware(['bisabiller.ip', 'throttle:60,1'])->post('/celengan-syahid/disbursement-callback', [CelsyahidWithdrawalController::class, 'callback'])->name('celsyahid.disbursement.callback');
 
 /* --- 301 redirects from old URLs (celengansyahid) to new URLs (celengan-syahid) --- */
 Route::permanentRedirect('/celengansyahid', '/celengan-syahid');

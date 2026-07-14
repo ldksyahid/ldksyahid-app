@@ -62,8 +62,8 @@ class BisaTopup
                 ]);
 
             Log::debug('[BisaTopup] login response', [
-                'status' => $res->status(),
-                'body'   => $res->body(),
+                'status'      => $res->status(),
+                'token_found' => !empty(data_get($res->json(), 'data.access_token')),
             ]);
 
             if ($res->failed()) {

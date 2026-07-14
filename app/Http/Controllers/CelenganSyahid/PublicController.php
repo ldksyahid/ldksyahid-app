@@ -380,16 +380,19 @@ class PublicController extends Controller
             return response('1', 200)->header('Content-Type', 'text/plain');
         }
 
-        // Signature check — lenient in DEV (so we can observe the real signature),
-        // enforced only when env=live AND the enforce flag is on.
+        // Signature check — always enforced on live env. The flag
+        // enforce_callback_signature only allows temporarily disabling it on
+        // dev/staging; in production a bad signature always means rejection.
         $gateway = new BisaTopup();
         if (!$gateway->verifyCallbackSignature($payload)) {
             Log::warning('[Callback] signature mismatch', [
                 'transaction_id' => $transactionId,
                 'received_sig'   => $payload['signature'] ?? null,
+                'ip'             => request()->ip(),
             ]);
-            if (config('services.bisatopup.env') === 'live'
-                && config('services.bisatopup.enforce_callback_signature', false)) {
+            $isLive = config('services.bisatopup.env') === 'live';
+            $enforceOnDev = config('services.bisatopup.enforce_callback_signature', false);
+            if ($isLive || $enforceOnDev) {
                 return response('0', 401)->header('Content-Type', 'text/plain');
             }
         }
