@@ -213,10 +213,12 @@ class PublicController extends Controller
         try {
             $gateway    = new BisaTopup();
             $mdrRate    = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
-            // Compute total so that after Bisabiller deducts MDR, wallet receives exactly jumlah_donasi.
-            // Formula: total = round(jumlah_donasi / (1 - mdrRate))
-            $total      = (int) round($jumlah_donasi / (1 - $mdrRate));
-            $adminFee   = $total - $jumlah_donasi;
+            // CEIL ensures wallet receives exactly jumlah_donasi after Bisabiller's CEIL MDR.
+            // round() caused a Rp 1 shortfall: e.g. round(20000/0.99)=20202,
+            //   Bisabiller charges CEIL(20202×0.01)=203 → wallet gets 19999 (not 20000).
+            // ceil() fixes this:  ceil(20000/0.99)=20203,
+            //   Bisabiller charges CEIL(20203×0.01)=203 → wallet gets 20000 ✓
+            $total = (int) ceil($jumlah_donasi / (1 - $mdrRate));
             $qrisPaymentId = (int) config('services.bisatopup.qris_payment_id', 33);
             $transactionId = strtoupper(Str::random(12));
             $expiredAt     = now()->addDay();
@@ -259,13 +261,21 @@ class PublicController extends Controller
             $gatewayData    = $response['data'] ?? [];
             $statusInternal = BisaTopup::mapStatus($gatewayData['status_id'] ?? 1);
 
-            $postDonation = DB::transaction(function () use ($request, $transactionId, $jumlah_donasi, $adminFee, $total, $statusInternal, $gatewayData, $expiredAt) {
+            // Use the actual transaction_total returned by Bisabiller as the canonical total.
+            // This guarantees our DB matches Bisabiller's record exactly.
+            // Bisabiller returns what we sent, but if there's ever a discrepancy, we trust them.
+            $confirmedTotal    = isset($gatewayData['transaction_total'])
+                ? (int) $gatewayData['transaction_total']
+                : $total;
+            $confirmedAdminFee = (int) ceil($confirmedTotal * $mdrRate);
+
+            $postDonation = DB::transaction(function () use ($request, $transactionId, $jumlah_donasi, $confirmedAdminFee, $confirmedTotal, $statusInternal, $gatewayData, $expiredAt) {
                 return Donation::createDonationGateway(
                     $request,
                     $transactionId,
                     $jumlah_donasi,
-                    $adminFee,
-                    $total,
+                    $confirmedAdminFee,
+                    $confirmedTotal,
                     $statusInternal,
                     $gatewayData,
                     $expiredAt
@@ -399,11 +409,21 @@ class PublicController extends Controller
                 return response('1', 200)->header('Content-Type', 'text/plain');
             }
 
-            DB::transaction(function () use ($donation, $statusInternal, $statusId, $payload) {
+            // Use the actual transaction_total from Bisabiller as the canonical total_tagihan.
+            // Recalculate biaya_admin via CEIL MDR so it matches Bisabiller's wallet deduction exactly.
+            // This also fixes any pre-existing Rp 1 rounding errors from the old round() formula.
+            $mdrRateCb       = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+            $actualTotal     = isset($payload['transaction_total'])
+                ? (int) $payload['transaction_total']
+                : $donation->total_tagihan;
+            $actualBiayaAdmin = (int) ceil($actualTotal * $mdrRateCb);
+
+            DB::transaction(function () use ($donation, $statusInternal, $statusId, $payload, $actualTotal, $actualBiayaAdmin) {
                 $donation->update([
                     'payment_status'    => $statusInternal,
                     'status_id'         => $statusId,
-                    'total_tagihan'     => $payload['transaction_total'] ?? $donation->total_tagihan,
+                    'total_tagihan'     => $actualTotal,
+                    'biaya_admin'       => $actualBiayaAdmin,
                     'metode_pembayaran' => $payload['payment'] ?? $donation->metode_pembayaran,
                 ]);
             });

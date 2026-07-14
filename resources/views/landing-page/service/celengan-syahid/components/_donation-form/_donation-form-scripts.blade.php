@@ -91,8 +91,10 @@
 
     function syncTotal(val) {
         var amount   = val ? parseInt(val.toString().replace(/[^\d]/g, ''), 10) : 0;
-        // total = round(amount / (1 - mdrRate)) ensures wallet receives exactly `amount` after Bisabiller MDR.
-        var total    = amount > 0 ? Math.round(amount / (1 - qrisMdrRate)) : 0;
+        // ceil() ensures wallet receives exactly `amount` after Bisabiller's CEIL MDR.
+        // Math.round() caused Rp 1 shortfall (e.g. round(20000/0.99)=20202, MDR=203, wallet=19999).
+        // Math.ceil()  fixes this          (e.g.  ceil(20000/0.99)=20203, MDR=203, wallet=20000 ✓).
+        var total    = amount > 0 ? Math.ceil(amount / (1 - qrisMdrRate)) : 0;
         var adminFee = total - amount;
 
         var display = total ? formatRupiah(total) : 'Rp0';
