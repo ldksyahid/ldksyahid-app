@@ -225,11 +225,11 @@ Route::get('/kta/{link}', [MsKTALDKSyahidController::class, 'show'])->name('kta.
 
 // Public landing page routes — Celengan Syahid service
 Route::get('/celengan-syahid', [CelsyahidPublicController::class, 'indexLanding'])->name('service.celengansyahid');
-Route::get('/celengan-syahid/pembayaran/{id}', [CelsyahidPublicController::class, 'openPaymentGateway'])->name('service.celengansyahid.detail.donateNow.gateway');
+Route::middleware('throttle:30,1')->get('/celengan-syahid/pembayaran/{id}', [CelsyahidPublicController::class, 'openPaymentGateway'])->name('service.celengansyahid.detail.donateNow.gateway');
 Route::get('/celengan-syahid/{link}', [CelsyahidPublicController::class, 'showLanding'])->name('service.celengansyahid.detail');
 Route::get('/celengan-syahid/{link}/donasi', [CelsyahidPublicController::class, 'donateNow'])->name('service.celengansyahid.detail.donatenow');
-Route::get('/celengan-syahid/{link}/donasi/{id}/status', [CelsyahidPublicController::class, 'donationStatus'])->name('service.celengansyahid.detail.donateNow.status');
-Route::get('/celengan-syahid/{link}/donasi/{id}/bukti', [CelsyahidPublicController::class, 'savePaymentDonation'])->name('service.celengansyahid.savePayment');
+Route::middleware('throttle:60,1')->get('/celengan-syahid/{link}/donasi/{id}/status', [CelsyahidPublicController::class, 'donationStatus'])->name('service.celengansyahid.detail.donateNow.status');
+Route::middleware('throttle:10,1')->get('/celengan-syahid/{link}/donasi/{id}/bukti', [CelsyahidPublicController::class, 'savePaymentDonation'])->name('service.celengansyahid.savePayment');
 
 // API: max 60 req/min per IP (Select2 + polling)
 Route::middleware('throttle:60,1')->group(function () {
@@ -516,7 +516,7 @@ Route::post('/admin/celengan-syahid/withdrawal', [CelsyahidWithdrawalController:
 // Wildcard {id} after static paths
 Route::get('/admin/celengan-syahid/withdrawal/{id}', [CelsyahidWithdrawalController::class, 'show'])->name('admin.celsyahid.withdrawal.show')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::get('/admin/celengan-syahid/withdrawal/{id}/confirm', [CelsyahidWithdrawalController::class, 'confirm'])->name('admin.celsyahid.withdrawal.confirm')->middleware(['role:Superadmin']);
-Route::post('/admin/celengan-syahid/withdrawal/{id}/execute', [CelsyahidWithdrawalController::class, 'execute'])->name('admin.celsyahid.withdrawal.execute')->middleware(['role:Superadmin']);
+Route::post('/admin/celengan-syahid/withdrawal/{id}/execute', [CelsyahidWithdrawalController::class, 'execute'])->name('admin.celsyahid.withdrawal.execute')->middleware(['role:Superadmin', 'throttle:5,1']);
 Route::get('/admin/celengan-syahid/withdrawal/{id}/check-status', [CelsyahidWithdrawalController::class, 'checkStatus'])->name('admin.celsyahid.withdrawal.checkStatus')->middleware(['role:Superadmin|HelperCelsyahid']);
 
 // Admin routes — Celengan Syahid audit log (Superadmin only)
