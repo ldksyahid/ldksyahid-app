@@ -116,7 +116,7 @@ class DonationController extends Controller
             return response()->json(['success' => true, 'message' => 'Donation has been deleted!']);
         } catch (\Exception $e) {
             Log::error('destroyAdminDonation: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Error deleting donation: ' . $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Failed to delete donation. Please try again.'], 500);
         }
     }
 
@@ -134,7 +134,7 @@ class DonationController extends Controller
             return response()->json(['success' => true, 'message' => "{$deleted} donation(s) have been deleted!"]);
         } catch (\Exception $e) {
             Log::error('bulkDeleteDonation: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Error deleting donations: ' . $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Failed to delete donations. Please try again.'], 500);
         }
     }
 

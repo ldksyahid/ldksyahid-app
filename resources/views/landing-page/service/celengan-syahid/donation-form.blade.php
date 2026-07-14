@@ -8,7 +8,9 @@
                     ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id_1
                     : 'https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1';
     $orgName          = ($data->nama_pj && $data->link_pj) ? $data->nama_pj : 'UKM LDK Syahid';
-    $orgLink          = ($data->nama_pj && $data->link_pj) ? $data->link_pj : 'https://www.ldksyah.id/';
+    $rawLink          = ($data->nama_pj && $data->link_pj) ? $data->link_pj : 'https://www.ldksyah.id/';
+    // Only allow http/https — block javascript: and other unsafe schemes
+    $orgLink          = preg_match('/^https?:\/\//i', $rawLink) ? $rawLink : 'https://www.ldksyah.id/';
     $isDeadlinePassed = $data->deadline && strtotime($data->deadline) < time();
 @endphp
 
