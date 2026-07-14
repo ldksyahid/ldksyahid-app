@@ -562,7 +562,7 @@ class WithdrawalController extends Controller
                 'settlementMinutes'        => $settlementMinutes,
                 'breakdownHtml'            => view('admin-page.service.celengan-syahid.withdrawal.components._breakdown-rows', compact('rows'))->render(),
                 'tfootHtml'                => $rows->count() > 0
-                    ? '<tr><td colspan="7" class="ps-4 text-end br-tfoot-label">Total Expected Balance (settled)</td><td class="text-end br-tfoot-value">Rp ' . number_format($totalExpected, 0, ',', '.') . '</td></tr>'
+                    ? '<tr><td colspan="6" class="ps-4 text-end br-tfoot-label">Total Expected Balance (settled)</td><td class="text-end br-tfoot-value">Rp ' . number_format($totalExpected, 0, ',', '.') . '</td></tr>'
                     : '',
                 'updatedAt'                => now()->format('d M Y, H:i'),
             ]);

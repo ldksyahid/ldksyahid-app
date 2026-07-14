@@ -175,6 +175,10 @@ html.dark-mode .cf-2fa-card { background: rgba(0,167,157,.06); border-color: rgb
     background: #9ca3af; box-shadow: none; transform: none; cursor: not-allowed;
 }
 html.dark-mode .btn-execute { background: linear-gradient(135deg, #047857, #065f46); }
+
+/* ── Dark mode overrides local to confirm page ── */
+/* cf-net overrides Bootstrap's text-success on .cf-net element */
+html.dark-mode .cf-net { color: #4ade80 !important; }
 </style>
 @endsection
 

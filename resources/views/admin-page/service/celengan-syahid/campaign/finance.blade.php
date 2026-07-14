@@ -80,10 +80,10 @@
                         </a>
                     </div>
                     @if($pendingFin > 0)
-                    <div class="mt-2 small" style="color:#92400e;background:rgba(234,179,8,.09);border:1px solid rgba(234,179,8,.25);border-radius:7px;padding:.4rem .7rem;display:inline-block">
-                        <i class="fas fa-clock me-1"></i>
-                        <strong>Rp {{ number_format($pendingFin, 0, ',', '.') }}</strong>
-                        from recent QRIS payment(s) is settling in Bisatopup wallet (~5 min).
+                    <div class="cs-pending-note">
+                        <i class="fas fa-clock"></i>
+                        <span><strong>Rp {{ number_format($pendingFin, 0, ',', '.') }}</strong>
+                        from recent QRIS payment(s) is settling in Bisatopup wallet (~5 min).</span>
                     </div>
                     @endif
                     @endif
