@@ -41,14 +41,25 @@
                     </div>
                     @if($bisabillerBalance !== null)
                     @php
-                        $mdrR2  = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
-                        $dbExp  = (int) \App\Models\Donation::where('gateway','bisatopup')
-                                    ->where('payment_status','PAID')
-                                    ->selectRaw('SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wc', [$mdrR2])
-                                    ->value('wc')
-                                - (int) \App\Models\Withdrawal::where('status','COMPLETED')->sum('amount');
-                        $disc2  = $bisabillerBalance - $dbExp;
-                        $discT2 = config('services.two_fa.discrepancy_threshold', 50000);
+                        $mdrR2       = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+                        $settlMins2  = (int) config('services.bisatopup.settlement_minutes', 15);
+                        $cutoff2     = now()->subMinutes($settlMins2);
+                        // Gap-based: expectedAll uses ALL paid donations
+                        $allPaidExp  = (int) \App\Models\Donation::where('gateway','bisatopup')
+                                         ->where('payment_status','PAID')
+                                         ->selectRaw('SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wc', [$mdrR2])
+                                         ->value('wc')
+                                     - (int) \App\Models\Withdrawal::where('status','COMPLETED')->sum('amount');
+                        $recentPaid2 = (int) \App\Models\Donation::where('gateway','bisatopup')
+                                         ->where('payment_status','PAID')
+                                         ->where('updated_at', '>=', $cutoff2)
+                                         ->selectRaw('SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wc', [$mdrR2])
+                                         ->value('wc');
+                        $rawGap2     = $allPaidExp - $bisabillerBalance;
+                        $pendingFin  = ($rawGap2 > 0) ? min($rawGap2, $recentPaid2) : 0;
+                        $dbExp       = $allPaidExp - $pendingFin;
+                        $disc2       = $bisabillerBalance - $dbExp;
+                        $discT2      = config('services.two_fa.discrepancy_threshold', 50000);
                     @endphp
                     <div class="mt-2 d-flex align-items-center gap-2 flex-wrap">
                         @if($disc2 < 0)
@@ -68,6 +79,13 @@
                             <i class="fas fa-balance-scale me-1"></i> Balance Report
                         </a>
                     </div>
+                    @if($pendingFin > 0)
+                    <div class="mt-2 small" style="color:#92400e;background:rgba(234,179,8,.09);border:1px solid rgba(234,179,8,.25);border-radius:7px;padding:.4rem .7rem;display:inline-block">
+                        <i class="fas fa-clock me-1"></i>
+                        <strong>Rp {{ number_format($pendingFin, 0, ',', '.') }}</strong>
+                        from recent QRIS payment(s) is settling in Bisatopup wallet (~5 min).
+                    </div>
+                    @endif
                     @endif
                     <div class="mt-2">
                         <small class="text-muted">

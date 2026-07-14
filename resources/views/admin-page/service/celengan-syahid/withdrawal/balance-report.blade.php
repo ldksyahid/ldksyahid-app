@@ -95,6 +95,28 @@
             </div>
         </div>
 
+        {{-- Pending Settlement Banner (shown only when there are recent QRIS payments in transit) --}}
+        <div class="col-12 mb-4" id="br-pending-wrap" style="{{ $pendingSettlementTotal > 0 ? '' : 'display:none' }}">
+            <div class="br-pending-banner">
+                <div class="br-pending-banner-icon"><i class="fas fa-clock"></i></div>
+                <div class="br-pending-banner-body">
+                    <div class="br-pending-banner-title">
+                        <i class="fas fa-hourglass-half me-1"></i>Settlement Pending
+                        <span class="br-pending-amount ms-2" id="br-pending-amount">Rp {{ number_format($pendingSettlementTotal, 0, ',', '.') }}</span>
+                        <span class="text-muted fw-normal" style="font-size:.75rem" id="br-pending-count">
+                            — {{ $pendingSettlementCount }} transaction{{ $pendingSettlementCount === 1 ? '' : 's' }}
+                        </span>
+                    </div>
+                    <div class="br-pending-banner-desc" id="br-pending-desc">
+                        {{ $pendingSettlementCount }} QRIS payment{{ $pendingSettlementCount === 1 ? '' : 's' }} received in the last {{ $settlementMinutes }} minutes
+                        are still in-transit to Bisatopup's wallet (usually ~5 min).
+                        They are <strong>excluded from the Expected Balance</strong> above to prevent false Deficit alerts.
+                        The Actual Balance will update automatically once settlement completes.
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- Discrepancy Explanation --}}
         <div class="col-12 mb-4">
             <div class="br-explain-card">
@@ -153,7 +175,7 @@
                         <tfoot id="br-breakdown-tfoot">
                             @if($rows->count() > 0)
                             <tr>
-                                <td colspan="6" class="ps-4 text-end br-tfoot-label">Total Expected Balance</td>
+                                <td colspan="7" class="ps-4 text-end br-tfoot-label">Total Expected Balance (settled)</td>
                                 <td class="text-end br-tfoot-value">Rp {{ number_format($totalExpected, 0, ',', '.') }}</td>
                             </tr>
                             @endif
@@ -345,6 +367,24 @@ $(function () {
                 $('#br-disc-sub').text('Needs Review');
             }
             $icon2.html(iconEl);
+
+            // Pending settlement banner
+            var pendingTotal = res.pendingSettlementTotal || 0;
+            var pendingCount = res.pendingSettlementCount || 0;
+            var settleMins   = res.settlementMinutes || 15;
+            if (pendingTotal > 0) {
+                $('#br-pending-amount').text(fmtRp(pendingTotal));
+                $('#br-pending-count').text('— ' + pendingCount + ' transaction' + (pendingCount === 1 ? '' : 's'));
+                $('#br-pending-desc').html(
+                    pendingCount + ' QRIS payment' + (pendingCount === 1 ? '' : 's') +
+                    ' received in the last ' + settleMins + ' minutes are still in-transit to Bisatopup\'s wallet (usually ~5 min). ' +
+                    'They are <strong>excluded from the Expected Balance</strong> above to prevent false Deficit alerts. ' +
+                    'The Actual Balance will update automatically once settlement completes.'
+                );
+                $('#br-pending-wrap').show();
+            } else {
+                $('#br-pending-wrap').hide();
+            }
 
             // Breakdown table
             $('#br-breakdown-tbody').html(res.breakdownHtml);
