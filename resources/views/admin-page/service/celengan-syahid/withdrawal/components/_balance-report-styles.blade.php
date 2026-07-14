@@ -391,6 +391,76 @@ html.dark-mode .bh-detail-row { border-bottom-color: #373b3e; }
 html.dark-mode .bh-detail-label { color: #9ca3af; }
 html.dark-mode .bh-detail-value { color: #e5e7eb; }
 
+/* ── Settlement Pending Banner ────────────────────────────── */
+.br-pending-banner {
+    display: flex; align-items: flex-start; gap: .9rem;
+    background: linear-gradient(135deg, rgba(234,179,8,.08), rgba(234,179,8,.04));
+    border: 1.5px solid rgba(234,179,8,.35);
+    border-radius: 12px; padding: .9rem 1.1rem;
+}
+.br-pending-banner-icon {
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+    background: rgba(234,179,8,.15); color: #ca8a04;
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+}
+.br-pending-banner-body { flex: 1; min-width: 0; }
+.br-pending-banner-title {
+    font-size: .82rem; font-weight: 700; color: #92400e; margin-bottom: .2rem;
+}
+.br-pending-banner-desc {
+    font-size: .78rem; color: #78350f; line-height: 1.45;
+}
+.br-pending-amount {
+    font-size: .85rem; font-weight: 800; color: #b45309;
+    background: rgba(234,179,8,.15); padding: .1em .5em; border-radius: 5px;
+}
+html.dark-mode .br-pending-banner {
+    background: linear-gradient(135deg, rgba(251,191,36,.07), rgba(251,191,36,.03));
+    border-color: rgba(251,191,36,.3);
+}
+html.dark-mode .br-pending-banner-icon { background: rgba(251,191,36,.12); color: #fbbf24; }
+html.dark-mode .br-pending-banner-title { color: #fde68a; }
+html.dark-mode .br-pending-banner-desc { color: #d97706; }
+html.dark-mode .br-pending-amount { color: #fbbf24; background: rgba(251,191,36,.12); }
+
+/* ── Settling inline badge in breakdown rows ─────────────── */
+.br-settling-inline {
+    display: inline-flex; align-items: center; gap: .3em;
+    font-size: .68rem; font-weight: 600; padding: .15em .55em;
+    border-radius: 50px; white-space: nowrap;
+    background: rgba(234,179,8,.1); color: #92400e;
+    border: 1px solid rgba(234,179,8,.3);
+}
+html.dark-mode .br-settling-inline {
+    background: rgba(251,191,36,.08); color: #fbbf24; border-color: rgba(251,191,36,.25);
+}
+
+/* ── Settling badge in balance history rows ───────────────── */
+.bh-settling-badge {
+    display: inline-flex; align-items: center; gap: .3em;
+    font-size: .65rem; font-weight: 700; padding: .12em .5em;
+    border-radius: 50px; white-space: nowrap; animation: bh-pulse 2s infinite;
+    background: rgba(234,179,8,.12); color: #92400e;
+    border: 1px solid rgba(234,179,8,.3);
+}
+@keyframes bh-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .6; }
+}
+.bh-settling-note {
+    font-size: .65rem; color: #92400e; font-style: italic; margin-top: 1px;
+}
+.bh-row-settling { background: rgba(234,179,8,.03) !important; }
+.bh-row-settling:hover > td { background: rgba(234,179,8,.06) !important; }
+.bh-balance-settling { color: #9ca3af !important; font-style: italic; }
+html.dark-mode .bh-settling-badge {
+    background: rgba(251,191,36,.1); color: #fbbf24; border-color: rgba(251,191,36,.25);
+}
+html.dark-mode .bh-settling-note { color: #d97706; }
+html.dark-mode .bh-row-settling { background: rgba(251,191,36,.03) !important; }
+html.dark-mode .bh-row-settling:hover > td { background: rgba(251,191,36,.06) !important; }
+html.dark-mode .bh-balance-settling { color: #6b7280 !important; }
+
 @media (max-width: 767px) {
     .br-stat-card { padding: .75rem; gap: .65rem; }
     .br-stat-icon { width: 40px; height: 40px; border-radius: 10px; font-size: 1rem; }

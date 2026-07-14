@@ -72,6 +72,10 @@ return [
         'qris_mdr_percent'           => (float) env('BISATOPUP_QRIS_MDR_PERCENT', 1),
         // Enforce callback signature check (keep false in DEV, set true for production).
         'enforce_callback_signature' => env('BISATOPUP_ENFORCE_CALLBACK_SIGNATURE', false),
+        // Minutes after a QRIS PAID event before the credit appears in Bisatopup's wallet.
+        // Donations settled within this window are excluded from the discrepancy calculation
+        // to prevent false "Deficit" alerts during the settlement delay (~5 min in practice).
+        'settlement_minutes'         => (int) env('BISATOPUP_SETTLEMENT_MINUTES', 15),
     ],
 
     'two_fa' => [

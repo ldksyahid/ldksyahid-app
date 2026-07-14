@@ -41,15 +41,24 @@ class Campaign extends Model
     {
         // Use CEIL MDR formula — same as balanceReport() — to match Bisatopup's
         // actual wallet credit (they CEIL the 1% fee per transaction).
-        // Using raw jumlah_donasi overestimates by Rp 1 when fee has .xx fraction.
-        $mdrRate  = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+        $mdrRate           = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+        $settlementMinutes = (int) config('services.bisatopup.settlement_minutes', 15);
+        $cutoff            = now()->subMinutes($settlementMinutes);
+
+        $creditSelect = 'SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wallet_credit';
+
         $qrisPaid = (int) Donation::where('campaign_id', $this->id)
             ->where('gateway', 'bisatopup')
             ->where('payment_status', 'PAID')
-            ->selectRaw(
-                'SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wallet_credit',
-                [$mdrRate]
-            )
+            ->selectRaw($creditSelect, [$mdrRate])
+            ->value('wallet_credit');
+
+        // Amount paid within settlement window — in-transit, not yet in Bisatopup wallet
+        $pendingSettlementWallet = (int) Donation::where('campaign_id', $this->id)
+            ->where('gateway', 'bisatopup')
+            ->where('payment_status', 'PAID')
+            ->where('updated_at', '>=', $cutoff)
+            ->selectRaw($creditSelect, [$mdrRate])
             ->value('wallet_credit');
 
         $manualPaid = Donation::where('campaign_id', $this->id)
@@ -66,12 +75,13 @@ class Campaign extends Model
             ->sum('amount');
 
         return [
-            'qris_paid'          => (int) $qrisPaid,
-            'manual_paid'        => (int) $manualPaid,
-            'total_paid'         => (int) ($qrisPaid + $manualPaid),
-            'total_withdrawn'    => (int) $totalWithdrawn,
-            'pending_withdrawal' => (int) $pendingWithdrawal,
-            'available'          => (int) ($qrisPaid - $totalWithdrawn - $pendingWithdrawal),
+            'qris_paid'               => (int) $qrisPaid,
+            'manual_paid'             => (int) $manualPaid,
+            'total_paid'              => (int) ($qrisPaid + $manualPaid),
+            'total_withdrawn'         => (int) $totalWithdrawn,
+            'pending_withdrawal'      => (int) $pendingWithdrawal,
+            'pending_settlement_wallet' => $pendingSettlementWallet,
+            'available'               => (int) ($qrisPaid - $totalWithdrawn - $pendingWithdrawal),
         ];
     }
 

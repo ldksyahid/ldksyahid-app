@@ -27,13 +27,24 @@
                     </h5>
                     @if($bisabillerBalance !== null)
                     @php
-                        $mdrRIdx       = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
-                        $dbExpected    = (int) \App\Models\Donation::where('gateway','bisatopup')
+                        $mdrRIdx      = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+                        $settlMinsIdx = (int) config('services.bisatopup.settlement_minutes', 15);
+                        $cutoffIdx    = now()->subMinutes($settlMinsIdx);
+                        // Gap-based: calculate expected using ALL paid donations
+                        $allPaidIdx   = (int) \App\Models\Donation::where('gateway','bisatopup')
                                             ->where('payment_status','PAID')
                                             ->selectRaw('SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wc', [$mdrRIdx])
                                             ->value('wc')
                                        - (int) \App\Models\Withdrawal::where('status','COMPLETED')->sum('amount');
-                        $disc          = $bisabillerBalance - $dbExpected;
+                        $recentIdx    = (int) \App\Models\Donation::where('gateway','bisatopup')
+                                            ->where('payment_status','PAID')
+                                            ->where('updated_at', '>=', $cutoffIdx)
+                                            ->selectRaw('SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wc', [$mdrRIdx])
+                                            ->value('wc');
+                        $rawGapIdx    = $allPaidIdx - $bisabillerBalance;
+                        $pendingIdx   = ($rawGapIdx > 0) ? min($rawGapIdx, $recentIdx) : 0;
+                        $dbExpected   = $allPaidIdx - $pendingIdx;
+                        $disc         = $bisabillerBalance - $dbExpected;
                         $discThreshold = config('services.two_fa.discrepancy_threshold', 50000);
                     @endphp
                     <div class="d-flex align-items-center gap-3 flex-wrap">
@@ -52,6 +63,13 @@
                             <i class="fas fa-balance-scale me-1"></i> Balance Report
                         </a>
                     </div>
+                    @if($pendingIdx > 0)
+                    <div class="mt-2 small" style="color:#92400e;background:rgba(234,179,8,.09);border:1px solid rgba(234,179,8,.25);border-radius:7px;padding:.4rem .7rem;display:inline-block">
+                        <i class="fas fa-clock me-1"></i>
+                        <strong>Rp {{ number_format($pendingIdx, 0, ',', '.') }}</strong>
+                        from recent QRIS payment(s) is settling in Bisatopup wallet (~5 min) — excluded from balance comparison above.
+                    </div>
+                    @endif
                     @else
                     <span class="text-muted"><i class="fas fa-circle-exclamation me-1"></i>Unable to fetch balance from Amdigipay - Bisatopup.</span>
                     @endif
