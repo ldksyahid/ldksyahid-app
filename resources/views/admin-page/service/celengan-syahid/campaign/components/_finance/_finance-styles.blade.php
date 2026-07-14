@@ -236,4 +236,24 @@ html.dark-mode .wd-status-default   { background: rgba(156,163,175,.1) !importan
     .d-flex.justify-content-end.gap-2 { flex-direction: column; }
     .d-flex.justify-content-end.gap-2 .btn { width: 100%; }
 }
+
+/* ── Settlement pending note ─────────────────────────────────── */
+.cs-pending-note {
+    display: inline-flex; align-items: flex-start; gap: .45rem;
+    font-size: .8rem; font-weight: 500; line-height: 1.4;
+    color: #92400e;
+    background: rgba(234,179,8,.1);
+    border: 1px solid rgba(234,179,8,.3);
+    border-radius: 7px;
+    padding: .4rem .75rem;
+    margin-top: .5rem;
+}
+.cs-pending-note i { flex-shrink: 0; margin-top: .1rem; color: #d97706; }
+.cs-pending-note strong { font-weight: 700; }
+html.dark-mode .cs-pending-note {
+    color: #fde68a;
+    background: rgba(251,191,36,.1);
+    border-color: rgba(251,191,36,.3);
+}
+html.dark-mode .cs-pending-note i { color: #fbbf24; }
 </style>

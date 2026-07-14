@@ -562,6 +562,13 @@ $(function () {
         if (currentFee > 0 && net < 10000) { rejectSubmit(e, 'Recipient amount (' + fmt(net) + ') is below the minimum transfer of Rp 10.000.', amountEl); return; }
 
         if (amountEl) amountEl.value = amountEl.value.replace(/\./g, '');
+
+        // All validations passed — disable button to prevent double submission
+        var submitBtn = document.getElementById('btn-submit');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Processing…';
+        }
     });
 })();
 </script>

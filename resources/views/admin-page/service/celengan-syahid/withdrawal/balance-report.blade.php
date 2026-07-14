@@ -175,7 +175,7 @@
                         <tfoot id="br-breakdown-tfoot">
                             @if($rows->count() > 0)
                             <tr>
-                                <td colspan="7" class="ps-4 text-end br-tfoot-label">Total Expected Balance (settled)</td>
+                                <td colspan="6" class="ps-4 text-end br-tfoot-label">Total Expected Balance (settled)</td>
                                 <td class="text-end br-tfoot-value">Rp {{ number_format($totalExpected, 0, ',', '.') }}</td>
                             </tr>
                             @endif
