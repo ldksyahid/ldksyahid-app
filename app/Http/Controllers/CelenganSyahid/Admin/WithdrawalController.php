@@ -756,16 +756,17 @@ class WithdrawalController extends Controller
        POST /celengan-syahid/disbursement-callback (no auth, no CSRF)
        ================================================================ */
 
-    public function callback(Request $request)
+    public function callback(Request $request, string $secret = '')
     {
-        // ── URL secret guard ────────────────────────────────────────────
-        // Bisabiller's Transfer callback contains no signature field (unlike
-        // the Payment Gateway callback). We guard the endpoint with a shared
-        // secret appended to the callback URL registered in the Bisabiller
-        // dashboard: e.g. ?_sec=XXXXXXXX. Any request without the correct
-        // secret is rejected immediately — before touching the database.
-        $secret = config('services.bisatopup.callback_disbursement_secret');
-        if ($secret && !hash_equals((string) $secret, (string) $request->query('_sec', ''))) {
+        // ── URL path secret guard ───────────────────────────────────────
+        // Bisabiller's Transfer callback has no signature field. We guard
+        // the endpoint by embedding the secret as a path segment registered
+        // in the Bisabiller dashboard, e.g.:
+        //   /celengan-syahid/disbursement-callback/{BISATOPUP_CALLBACK_DISBURSEMENT_SECRET}
+        // Bisabiller rejects query strings (?_sec=...) in their URL validator,
+        // so a path segment is the only viable approach.
+        $expected = config('services.bisatopup.callback_disbursement_secret');
+        if ($expected && !hash_equals((string) $expected, $secret)) {
             Log::warning('[Withdrawal Callback] invalid URL secret — possible spoofed request', [
                 'ip'      => $request->ip(),
                 'reff_id' => $request->input('reff_id'),
