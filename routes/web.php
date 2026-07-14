@@ -242,7 +242,7 @@ Route::middleware('throttle:30,1')->post('/celengan-syahid/donasi', [CelsyahidPu
 
 // Payment gateway webhooks — IP allowlist (if configured) + throttle.
 Route::middleware(['bisabiller.ip', 'throttle:120,1'])->post('/celengan-syahid/callback', [CelsyahidPublicController::class, 'callbackDonation'])->name('service.callback.donation.campaign');
-Route::middleware(['bisabiller.ip', 'throttle:60,1'])->post('/celengan-syahid/disbursement-callback', [CelsyahidWithdrawalController::class, 'callback'])->name('celsyahid.disbursement.callback');
+Route::middleware(['bisabiller.ip', 'throttle:60,1'])->post('/celengan-syahid/disbursement-callback/{secret}', [CelsyahidWithdrawalController::class, 'callback'])->name('celsyahid.disbursement.callback');
 
 /* --- 301 redirects from old URLs (celengansyahid) to new URLs (celengan-syahid) --- */
 Route::permanentRedirect('/celengansyahid', '/celengan-syahid');
