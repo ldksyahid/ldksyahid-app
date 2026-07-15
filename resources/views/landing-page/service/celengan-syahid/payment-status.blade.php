@@ -92,6 +92,10 @@
             <div id="ds-qris" class="ds-qris-box" data-qr="{{ $data->qr_code }}"></div>
             <div class="ds-qris-amount">{{ LFC::formatRupiah($data->total_tagihan ?: $data->jumlah_donasi) }}</div>
             <p class="ds-qris-hint">Buka aplikasi e-wallet atau m-banking apa pun, lalu scan kode di atas.</p>
+            <p class="ds-qris-hint">Dapat dibayar melalui semua e-wallet & m-banking yang terhubung dengan QRIS
+                <em>(GoPay, OVO, Dana, ShopeePay, LinkAja, BCA, BRI, BNI, Mandiri, BSI, dan lainnya)</em>
+                — <strong class="text-danger">kecuali SeaBank</strong>.
+            </p>
             @if($data->expired_at)
             <div class="ds-qris-expiry">
                 <i class="far fa-clock"></i> Berlaku sampai
