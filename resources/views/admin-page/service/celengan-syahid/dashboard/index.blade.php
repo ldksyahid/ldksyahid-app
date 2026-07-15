@@ -134,7 +134,6 @@
                                         <th class="text-center">Category</th>
                                         <th class="text-end" style="min-width:130px">Collected / Target</th>
                                         <th style="min-width:160px">Progress</th>
-                                        <th class="text-end" style="min-width:110px">Available</th>
                                         <th class="text-center" style="min-width:110px">Deadline</th>
                                         <th class="text-center" style="width:60px">Action</th>
                                     </tr>
@@ -194,15 +193,6 @@
                                             </div>
                                         </td>
 
-                                        {{-- Available --}}
-                                        <td class="text-end">
-                                            @if($c['available'] > 0)
-                                                <span class="cs-avail-badge">Rp {{ number_format($c['available'], 0, ',', '.') }}</span>
-                                            @else
-                                                <span class="text-muted small">—</span>
-                                            @endif
-                                        </td>
-
                                         {{-- Deadline --}}
                                         <td class="text-center">
                                             @if($dl)
@@ -240,11 +230,7 @@
                                             <div class="cs-amount-collected fw-bold">Rp {{ number_format($campaigns->sum('total_paid'), 0, ',', '.') }}</div>
                                             <div class="text-muted" style="font-size:.72rem">of Rp {{ number_format($campaigns->sum('target'), 0, ',', '.') }}</div>
                                         </td>
-                                        <td class="pt-3"></td>
-                                        <td class="text-end pt-3">
-                                            <span class="cs-avail-badge fw-bold">Rp {{ number_format($campaigns->sum('available'), 0, ',', '.') }}</span>
-                                        </td>
-                                        <td colspan="2"></td>
+                                        <td colspan="3"></td>
                                     </tr>
                                 </tfoot>
                             </table>
