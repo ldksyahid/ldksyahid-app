@@ -651,35 +651,46 @@ class WithdrawalController extends Controller
             });
         }
 
-        $credits = $donQ->get()->map(function ($d) use ($mdrRate, $cutoff, $rawGap) {
-            $gross  = (int) ($d->total_tagihan ?? ($d->jumlah_donasi + (int) $d->biaya_admin));
-            $mdr    = (int) ceil($gross * $mdrRate);
-            $credit = $gross - $mdr;
-            // Only show the "Settling…" badge when:
-            //  1. The payment is recent (within settlement window), AND
-            //  2. There is a real gap between expectedAll and actualBalance.
-            // If the payment already settled (actualBalance increased), rawGap shrinks
-            // and is_settling becomes false immediately — no stale badge.
-            $isSettling = $rawGap > 0 && $d->updated_at && $d->updated_at->gte($cutoff);
-            return [
-                'type'        => 'PAYMENT',
-                'date'        => $d->updated_at,
-                'reference'   => $d->doc_no,
-                'campaign'    => $d->campaign->judul ?? '—',
-                'amount'      => $credit,
-                'is_settling' => $isSettling,
-                'details'     => [
-                    'donor'         => $d->nama_donatur,
-                    'email'         => $d->email_donatur,
-                    'jumlah_donasi' => $d->jumlah_donasi,
-                    'total_tagihan' => $gross,
-                    'mdr'           => $mdr,
-                    'doc_no'        => $d->doc_no,
-                    'campaign'      => $d->campaign->judul ?? '—',
-                    'date'          => $d->updated_at ? $d->updated_at->format('d M Y, H:i') : '—',
-                ],
-            ];
-        });
+        // Sort newest-first so we attribute the gap to the most recent payments.
+        // When multiple payments are within the settlement window but only the
+        // newest ones are still in-transit, we accumulate their amounts against
+        // rawGap and stop marking once we've accounted for the full gap.
+        // This prevents older (already-settled) payments from showing "Settling…"
+        // just because a newer sibling payment hasn't landed in the wallet yet.
+        $settlingRemaining = max(0, $rawGap);
+        $credits = $donQ->get()
+            ->sortByDesc('updated_at')
+            ->values()
+            ->map(function ($d) use ($mdrRate, $cutoff, &$settlingRemaining) {
+                $gross  = (int) ($d->total_tagihan ?? ($d->jumlah_donasi + (int) $d->biaya_admin));
+                $mdr    = (int) ceil($gross * $mdrRate);
+                $credit = $gross - $mdr;
+
+                $isSettling = false;
+                if ($settlingRemaining > 0 && $d->updated_at && $d->updated_at->gte($cutoff)) {
+                    $isSettling         = true;
+                    $settlingRemaining -= $credit;
+                }
+
+                return [
+                    'type'        => 'PAYMENT',
+                    'date'        => $d->updated_at,
+                    'reference'   => $d->doc_no,
+                    'campaign'    => $d->campaign->judul ?? '—',
+                    'amount'      => $credit,
+                    'is_settling' => $isSettling,
+                    'details'     => [
+                        'donor'         => $d->nama_donatur,
+                        'email'         => $d->email_donatur,
+                        'jumlah_donasi' => $d->jumlah_donasi,
+                        'total_tagihan' => $gross,
+                        'mdr'           => $mdr,
+                        'doc_no'        => $d->doc_no,
+                        'campaign'      => $d->campaign->judul ?? '—',
+                        'date'          => $d->updated_at ? $d->updated_at->format('d M Y, H:i') : '—',
+                    ],
+                ];
+            });
 
         // ── DEBIT entries: COMPLETED withdrawals ──────────────────
         $wdQ = Withdrawal::where('status', 'COMPLETED')->with('campaign:id,judul');
