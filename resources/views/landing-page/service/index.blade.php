@@ -167,8 +167,8 @@
                 </div>
             </div>
 
-            {{-- ── Celengan Syahid (disabled) ───────────────────── --}}
-            <div class="sv-card sv-card-disabled" style="--sv-accent: #10b981;">
+            {{-- ── Celengan Syahid ──────────────────────────────── --}}
+            <div class="sv-card" style="--sv-accent: #10b981;">
                 <div class="sv-card-img-wrap">
                     <img src="https://lh3.googleusercontent.com/d/1CynJ5fKVEumKQLxLxncZC99ALkEmf_4t"
                          alt="Celengan Syahid" class="sv-card-img" loading="lazy">
@@ -177,14 +177,22 @@
                     <div class="sv-card-title-row">
                         <span class="sv-card-dot"></span>
                         <h5 class="sv-card-title">Celengan Syahid</h5>
-                        <span class="sv-badge-coming"><i class="fas fa-clock"></i>Segera Hadir</span>
                     </div>
                     <p class="sv-card-desc">Celengan Syahid adalah sebuah layanan Donasi Crowdfunding secara online untuk membantu orang yang membutuhkan. Melalui Celengan Syahid, kita dapat berdonasi untuk berbagai keperluan seperti kemanusiaan, pendidikan, dan kebutuhan dasar lainnya.</p>
                     <div class="sv-card-footer">
-                        <div class="sv-card-share-row"></div>
-                        <button class="sv-card-cta sv-card-cta-disabled" disabled>
-                            <i class="fas fa-clock"></i><span>Segera Hadir</span>
-                        </button>
+                        <div class="sv-card-share-row">
+                            <button class="sv-card-share-btn sv-share-copy"
+                                    onclick="svCopyUrl('{{ url('/celengan-syahid') }}', event)">
+                                <i class="fas fa-link"></i><span>Salin URL</span>
+                            </button>
+                            <button class="sv-card-share-btn sv-share-wa"
+                                    onclick="svShareWa('{{ url('/celengan-syahid') }}', 'Celengan Syahid', event)">
+                                <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
+                            </button>
+                        </div>
+                        <a href="{{ route('service.celengansyahid') }}" target="_blank" rel="noopener" class="sv-card-cta">
+                            <i class="fas fa-arrow-right"></i><span>Mulai</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -290,8 +298,17 @@
                 <i class="fas fa-chevron-right sv-m-arrow"></i>
             </div>
 
-            {{-- ── Celengan Syahid (disabled) ───────────────────── --}}
-            <div class="sv-m-card sv-m-card-disabled" style="--sv-accent: #10b981;">
+            {{-- ── Celengan Syahid ──────────────────────────────── --}}
+            <div class="sv-m-card"
+                 style="--sv-accent: #10b981;"
+                 onclick="svOpenSheet(this)"
+                 data-title="Celengan Syahid"
+                 data-desc="Celengan Syahid adalah sebuah layanan Donasi Crowdfunding secara online untuk membantu orang yang membutuhkan. Melalui Celengan Syahid, kita dapat berdonasi untuk berbagai keperluan seperti kemanusiaan, pendidikan, dan kebutuhan dasar lainnya."
+                 data-image="1CynJ5fKVEumKQLxLxncZC99ALkEmf_4t"
+                 data-url="{{ route('service.celengansyahid') }}"
+                 data-accent="#10b981"
+                 data-label="Mulai"
+                 data-disabled="0">
                 <div class="sv-m-thumb">
                     <img src="https://lh3.googleusercontent.com/d/1CynJ5fKVEumKQLxLxncZC99ALkEmf_4t"
                          alt="Celengan Syahid" loading="lazy">
@@ -299,7 +316,7 @@
                 <div class="sv-m-info">
                     <h5 class="sv-m-title">Celengan Syahid</h5>
                     <p class="sv-m-desc">Layanan donasi crowdfunding untuk berbagai keperluan kemanusiaan dan pendidikan</p>
-                    <span class="sv-m-hint sv-m-hint-disabled"><i class="fas fa-clock"></i> Segera Hadir</span>
+                    <span class="sv-m-hint"><i class="fas fa-info-circle"></i> Ketuk untuk detail</span>
                 </div>
                 <i class="fas fa-chevron-right sv-m-arrow"></i>
             </div>
