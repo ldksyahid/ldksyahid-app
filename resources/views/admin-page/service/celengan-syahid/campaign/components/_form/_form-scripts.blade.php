@@ -135,10 +135,16 @@
             });
         }
 
-        // Form submit loading
+        // Form submit loading — guard against double-submission
         const form = document.querySelector('form');
         if (form) {
+            let formSubmitting = false;
             form.addEventListener('submit', function(e) {
+                if (formSubmitting) {
+                    e.preventDefault();
+                    return;
+                }
+                formSubmitting = true;
                 const submitBtn = $(form).find('button[type="submit"]');
                 if (submitBtn.length) {
                     submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin me-1"></i> Processing...');

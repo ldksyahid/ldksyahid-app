@@ -208,6 +208,30 @@
         padding: 15px;
     }
 
+    /* Dark mode overrides */
+    [data-theme="dark"] .alert-danger {
+        background-color: rgba(220, 53, 69, 0.15);
+        border-color: rgba(220, 53, 69, 0.4);
+        color: #f1aeb5;
+    }
+    [data-theme="dark"] .alert-danger .btn-close {
+        filter: invert(1) grayscale(1) brightness(2);
+    }
+    [data-theme="dark"] .alert-danger strong {
+        color: #ea868f;
+    }
+    [data-theme="dark"] .invalid-feedback {
+        color: #ea868f;
+    }
+    [data-theme="dark"] .form-control.is-invalid,
+    [data-theme="dark"] .form-select.is-invalid {
+        border-color: #ea868f;
+    }
+    [data-theme="dark"] .form-control.is-invalid:focus,
+    [data-theme="dark"] .form-select.is-invalid:focus {
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
     @media (max-width: 768px) {
         .page-title { font-size: 1.35rem; }
         .card-body { padding: 1rem; }
