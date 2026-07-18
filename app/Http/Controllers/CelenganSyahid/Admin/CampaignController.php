@@ -57,6 +57,20 @@ class CampaignController extends Controller
 
     public function storeAdminCampaign(Request $request)
     {
+        $request->validate([
+            'judul'        => 'required|string|max:255',
+            'link'         => 'required|string|max:255|unique:campaigns,link',
+            'kategori'     => 'required|string',
+            'target_biaya' => 'required',
+            'cerita'       => 'required',
+            'tujuan'       => 'required',
+            'deadline'     => 'required|date',
+            'telp_pj'      => 'required|string',
+            'poster'       => 'required|file|mimes:jpg,jpeg,png|max:5120',
+        ], [
+            'link.unique' => 'This campaign link is already taken. Please choose a different link.',
+        ]);
+
         try {
             $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
 
@@ -84,7 +98,7 @@ class CampaignController extends Controller
             Alert::success('Success', 'Campaign has been uploaded!');
         } catch (\Exception $e) {
             Log::error('storeAdminCampaign: ' . $e->getMessage());
-            Alert::error('Error', 'Gagal menyimpan campaign: ' . $e->getMessage());
+            Alert::error('Error', 'Failed to save campaign. Please try again or contact the administrator.');
         }
 
         return redirect('/admin/celengan-syahid/campaigns');
@@ -100,6 +114,16 @@ class CampaignController extends Controller
 
     public function updateAdminCampaign(Request $request, $id)
     {
+        $request->validate([
+            'judul'    => 'required|string|max:255',
+            'link'     => 'required|string|max:255|unique:campaigns,link,' . $id,
+            'kategori' => 'required|string',
+            'deadline' => 'nullable|date',
+            'poster'   => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
+        ], [
+            'link.unique' => 'This campaign link is already taken. Please choose a different link.',
+        ]);
+
         try {
             $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
             $campaign      = Campaign::findOrFail($id);
@@ -147,7 +171,7 @@ class CampaignController extends Controller
             toast('Campaign has been updated!', 'success')->autoClose(1500)->width('400px');
         } catch (\Exception $e) {
             Log::error('updateAdminCampaign: ' . $e->getMessage());
-            Alert::error('Error', 'Gagal memperbarui campaign: ' . $e->getMessage());
+            Alert::error('Error', 'Failed to update campaign. Please try again or contact the administrator.');
         }
 
         return redirect('/admin/celengan-syahid/campaigns');

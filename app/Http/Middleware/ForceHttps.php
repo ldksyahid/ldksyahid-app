@@ -11,7 +11,8 @@ class ForceHttps
     {
         // Only active in production and when the request is not already HTTPS
         if (app()->environment('production') && !$request->secure()) {
-            return redirect()->secure($request->getRequestUri(), 301);
+            // 308 preserves the HTTP method (POST stays POST); 301 would convert POST to GET
+            return redirect()->secure($request->getRequestUri(), 308);
         }
 
         return $next($request);
