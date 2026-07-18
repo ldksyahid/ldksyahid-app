@@ -60,6 +60,18 @@ class CampaignController extends Controller
         $reqId = strtoupper(substr(uniqid('CAMP-'), 0, 12));
         Log::info("[{$reqId}] storeAdminCampaign START — link={$request->input('link')} ip={$request->ip()} user=" . optional(auth()->user())->email);
 
+        // Idempotency guard: if this link was successfully created in the last 5 minutes
+        // (by any user), treat as a duplicate submission and redirect as success.
+        $recentCampaign = Campaign::where('link', $request->input('link'))
+            ->where('created_at', '>=', now()->subMinutes(5))
+            ->first();
+
+        if ($recentCampaign) {
+            Log::info("[{$reqId}] Idempotency: link={$request->input('link')} already created at {$recentCampaign->created_at}, treating as success");
+            Alert::success('Success', 'Campaign has been uploaded!');
+            return redirect('/admin/celengan-syahid/campaigns');
+        }
+
         $request->validate([
             'judul'        => 'required|string|max:255',
             'link'         => 'required|string|max:255|unique:campaigns,link',
