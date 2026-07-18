@@ -57,17 +57,13 @@ class CampaignController extends Controller
 
     public function storeAdminCampaign(Request $request)
     {
-        $reqId = strtoupper(substr(uniqid('CAMP-'), 0, 12));
-        Log::info("[{$reqId}] storeAdminCampaign START — link={$request->input('link')} ip={$request->ip()} user=" . optional(auth()->user())->email);
-
-        // Idempotency guard: if this link was successfully created in the last 5 minutes
-        // (by any user), treat as a duplicate submission and redirect as success.
+        // Idempotency guard: Chrome queues and replays POST requests during slow GDrive uploads.
+        // If this link was created in the last 5 minutes, treat it as the same submission.
         $recentCampaign = Campaign::where('link', $request->input('link'))
             ->where('created_at', '>=', now()->subMinutes(5))
             ->first();
 
         if ($recentCampaign) {
-            Log::info("[{$reqId}] Idempotency: link={$request->input('link')} already created at {$recentCampaign->created_at}, treating as success");
             Alert::success('Success', 'Campaign has been uploaded!');
             return redirect('/admin/celengan-syahid/campaigns');
         }
@@ -86,42 +82,33 @@ class CampaignController extends Controller
             'link.unique' => 'This campaign link is already taken. Please choose a different link.',
         ]);
 
-        Log::info("[{$reqId}] Validation passed");
-
         try {
             $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
 
-            Log::info("[{$reqId}] GDrive poster upload START");
             $fileNamePoster = time() . '_poster_' . $request->file('poster')->getClientOriginalName();
             $uploadResultPoster = $gdriveService->uploadImage(
                 $request->file('poster'),
                 $fileNamePoster,
                 $this->pathCampaignsGDrive . '/' . $fileNamePoster
             );
-            Log::info("[{$reqId}] GDrive poster upload DONE — gdriveID=" . ($uploadResultPoster['gdriveID'] ?? 'null'));
 
             $uploadResultLogoPic = [];
             if ($request->hasFile('logo_pj')) {
-                Log::info("[{$reqId}] GDrive logo upload START");
                 $fileNameLogo = time() . '_logo-pic_' . $request->file('logo_pj')->getClientOriginalName();
                 $uploadResultLogoPic = $gdriveService->uploadImage(
                     $request->file('logo_pj'),
                     $fileNameLogo,
                     $this->pathCampaignsGDrive . '/' . $fileNameLogo
                 );
-                Log::info("[{$reqId}] GDrive logo upload DONE");
             }
 
-            Log::info("[{$reqId}] DB insert START");
             $campaign = Campaign::createCampaign($request->all(), $uploadResultPoster, $uploadResultLogoPic);
-            Log::info("[{$reqId}] DB insert DONE — campaign_id={$campaign->id}");
 
             CelsyahidAuditLog::record('campaign.create', 'campaign', $campaign->id, 'Created campaign: ' . $request->input('judul'));
 
             Alert::success('Success', 'Campaign has been uploaded!');
-            Log::info("[{$reqId}] storeAdminCampaign SUCCESS");
         } catch (\Exception $e) {
-            Log::error("[{$reqId}] storeAdminCampaign FAILED — " . $e->getMessage());
+            Log::error('storeAdminCampaign: ' . $e->getMessage());
             Alert::error('Error', 'Failed to save campaign. Please try again or contact the administrator.');
         }
 
@@ -138,6 +125,18 @@ class CampaignController extends Controller
 
     public function updateAdminCampaign(Request $request, $id)
     {
+        // Idempotency guard: prevent Chrome's HTTP/2 duplicate request from re-uploading to GDrive.
+        // If this campaign was updated in the last 5 minutes with the same link, treat as success.
+        $recentUpdate = Campaign::where('id', $id)
+            ->where('updated_at', '>=', now()->subMinutes(5))
+            ->where('link', $request->input('link'))
+            ->exists();
+
+        if ($recentUpdate && !$request->hasFile('poster') && !$request->hasFile('logo_pj')) {
+            toast('Campaign has been updated!', 'success')->autoClose(1500)->width('400px');
+            return redirect('/admin/celengan-syahid/campaigns');
+        }
+
         $request->validate([
             'judul'    => 'required|string|max:255',
             'link'     => 'required|string|max:255|unique:campaigns,link,' . $id,
