@@ -237,15 +237,96 @@ class CampaignController extends Controller
     public function destroyAdminCampaign($id)
     {
         try {
-            $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
-            $campaign      = Campaign::findOrFail($id);
+            $campaign = Campaign::findOrFail($id);
 
-            if ($campaign->gdrive_id) {
-                $gdriveService->deleteImage($campaign->gdrive_id);
+            // 1. Check PAID donations, but allow if the balance has been fully withdrawn
+            $paidCount = \App\Models\Donation::where('campaign_id', $id)
+                ->where('payment_status', 'PAID')
+                ->count();
+
+            if ($paidCount > 0) {
+                // Block if there is a withdrawal still in PENDING state
+                $hasPendingWithdrawal = \App\Models\Withdrawal::where('campaign_id', $id)
+                    ->where('status', 'PENDING')
+                    ->exists();
+
+                if ($hasPendingWithdrawal) {
+                    return response()->json([
+                        'success' => false,
+                        'blocked' => true,
+                        'message' => 'Cannot delete: there is a withdrawal currently in progress for this campaign. Wait until it completes.',
+                    ], 422);
+                }
+
+                // Block if available balance > 0 (paid donations not yet withdrawn)
+                $balance = $campaign->getBalanceSummary();
+                if (($balance['available'] ?? 0) > 0) {
+                    return response()->json([
+                        'success' => false,
+                        'blocked' => true,
+                        'message' => "Cannot delete: this campaign has {$paidCount} confirmed donation(s) with an unwithdrawn balance of Rp" . number_format($balance['available'], 0, ',', '.') . ". Please complete the withdrawal first.",
+                    ], 422);
+                }
+
+                // PAID donations exist but balance is 0 — all withdrawn, allow proceed
             }
-            if ($campaign->gdrive_id_1) {
-                $gdriveService->deleteImage($campaign->gdrive_id_1);
+
+            // 2. Block if there are active PENDING BisaTopup QRIS transactions (not yet expired)
+            $pendingQris = \App\Models\Donation::where('campaign_id', $id)
+                ->where('payment_status', 'PENDING')
+                ->where('gateway', 'bisatopup')
+                ->where(function ($q) {
+                    $q->whereNull('expired_at')->orWhere('expired_at', '>', now());
+                })
+                ->get(['doc_no', 'expired_at']);
+
+            if ($pendingQris->isNotEmpty()) {
+                // Cross-check against Bisabiller API: the pending donations in our DB
+                // may have been paid without callback reaching us.
+                $bisaTopup   = new BisaTopup();
+                $liveResults = $bisaTopup->listTransactionsByDocNos(
+                    $pendingQris->pluck('doc_no')->all()
+                );
+
+                foreach ($liveResults as $txn) {
+                    $liveStatus = BisaTopup::mapStatus($txn['status_id'] ?? 1);
+                    if ($liveStatus === 'PAID') {
+                        // Update our DB silently so next time the count check catches it
+                        \App\Models\Donation::where('doc_no', $txn['transaction_id'])
+                            ->update(['payment_status' => 'PAID', 'status_id' => $txn['status_id']]);
+
+                        return response()->json([
+                            'success' => false,
+                            'blocked' => true,
+                            'message' => 'Cannot delete: a pending QRIS payment has been confirmed as PAID on BisaTopup. Campaign balance must be settled first.',
+                        ], 422);
+                    }
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'blocked' => true,
+                    'message' => "Cannot delete: there are {$pendingQris->count()} active QRIS payment(s) still pending on this campaign. Wait until they expire or are confirmed.",
+                ], 422);
             }
+
+            // 3. Block if any other PENDING donation exists (manual, Xendit, etc.)
+            $pendingOther = \App\Models\Donation::where('campaign_id', $id)
+                ->where('payment_status', 'PENDING')
+                ->count();
+
+            if ($pendingOther > 0) {
+                return response()->json([
+                    'success' => false,
+                    'blocked' => true,
+                    'message' => "Cannot delete: there are {$pendingOther} pending donation(s) on this campaign.",
+                ], 422);
+            }
+
+            // Safe to delete
+            $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
+            if ($campaign->gdrive_id)   $gdriveService->deleteImage($campaign->gdrive_id);
+            if ($campaign->gdrive_id_1) $gdriveService->deleteImage($campaign->gdrive_id_1);
 
             Campaign::deleteCampaign($id);
 
@@ -254,7 +335,7 @@ class CampaignController extends Controller
             return response()->json(['success' => true, 'message' => 'Campaign has been deleted!']);
         } catch (\Exception $e) {
             Log::error('destroyAdminCampaign: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Error deleting campaign: ' . $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Error deleting campaign.'], 500);
         }
     }
 

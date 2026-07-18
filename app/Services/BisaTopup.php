@@ -342,6 +342,57 @@ class BisaTopup
     }
 
     /**
+     * Fetch the list of QRIS payment transactions from Bisabiller and return
+     * only the ones whose transaction_id matches any of the given doc_nos.
+     *
+     * GET /api/payment/list-transaction
+     * Returns: { data: [ { id, transaction_id, status_id, ... }, ... ] }
+     *
+     * @param  string[]  $docNos  Our internal doc_no values (= transaction_id sent to Bisabiller)
+     * @return array  Matching transaction rows, keyed by transaction_id
+     */
+    public function listTransactionsByDocNos(array $docNos): array
+    {
+        if (empty($docNos)) {
+            return [];
+        }
+
+        $token = $this->token();
+        if (!$token) {
+            return [];
+        }
+
+        try {
+            $res = Http::withToken($token)
+                ->withOptions(['curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4]])
+                ->acceptJson()
+                ->get($this->baseUrl() . '/api/payment/list-transaction');
+
+            if (!$res->ok()) {
+                return [];
+            }
+
+            $rows = data_get($res->json(), 'data', []);
+
+            if (!is_array($rows)) {
+                return [];
+            }
+
+            $docNosFlipped = array_flip($docNos);
+
+            return array_filter($rows, function ($txn) use ($docNosFlipped) {
+                return isset($docNosFlipped[$txn['transaction_id'] ?? '']);
+            });
+        } catch (\Throwable $e) {
+            Log::error('[BisaTopup] listTransactionsByDocNos exception', [
+                'message' => $e->getMessage(),
+                'class'   => get_class($e),
+            ]);
+            return [];
+        }
+    }
+
+    /**
      * Signature callback: sha256(username + transaction_id)
      */
     public function verifyCallbackSignature(array $data): bool
