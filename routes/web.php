@@ -491,6 +491,7 @@ Route::get('/admin/celengan-syahid/campaign/{id}/preview', [CelsyahidCampaignCon
 Route::delete('/admin/celengan-syahid/campaign/{id}', [CelsyahidCampaignController::class, 'destroyAdminCampaign'])->name('admin.service.destroy.campaign')->middleware(['role:Superadmin|HelperCelsyahid']);
 Route::post('/admin/celengan-syahid/campaign/bulk-delete', [CelsyahidCampaignController::class, 'bulkDeleteCampaign'])->name('admin.service.campaign.bulk-delete')->middleware(['role:Superadmin']);
 Route::post('/admin/celengan-syahid/campaign/get-city', [CelsyahidCampaignController::class, 'storeCity'])->name('dependent-dropdown.store.city')->middleware(['role:Superadmin|HelperCelsyahid']);
+Route::get('/admin/celengan-syahid/campaign/check-link', [CelsyahidCampaignController::class, 'checkLink'])->name('admin.service.campaign.check-link')->middleware(['role:Superadmin|HelperCelsyahid']);
 
 // Admin routes — Celengan Syahid donation
 Route::get('/admin/celengan-syahid/donations', [CelsyahidDonationController::class, 'indexAdminDonation'])->name('admin.service.index.donation')->middleware(['role:Superadmin|HelperCelsyahid']);

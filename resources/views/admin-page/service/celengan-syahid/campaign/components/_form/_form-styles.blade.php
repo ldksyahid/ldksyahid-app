@@ -231,6 +231,13 @@
     [data-theme="dark"] .form-select.is-invalid:focus {
         box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
     }
+    [data-theme="dark"] .form-control.is-valid,
+    [data-theme="dark"] .form-select.is-valid {
+        border-color: #75b798;
+    }
+    [data-theme="dark"] .link-availability-feedback {
+        font-size: 0.82rem;
+    }
 
     @media (max-width: 768px) {
         .page-title { font-size: 1.35rem; }

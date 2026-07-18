@@ -265,6 +265,28 @@ class CampaignController extends Controller
         }
     }
 
+    public function checkLink(Request $request)
+    {
+        $link      = strtolower(trim($request->input('link', '')));
+        $excludeId = $request->input('exclude_id'); // for edit: ignore current campaign's own link
+
+        if (empty($link)) {
+            return response()->json(['available' => false, 'message' => 'Link cannot be empty.']);
+        }
+
+        $query = Campaign::where('link', $link);
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        $exists = $query->exists();
+
+        return response()->json([
+            'available' => !$exists,
+            'message'   => $exists ? 'This link is already taken.' : 'Link is available.',
+        ]);
+    }
+
     public function storeCity(Request $request)
     {
         $dataProvince = Province::where('name', $request->input('id'))->first();
