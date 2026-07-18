@@ -125,18 +125,6 @@ class CampaignController extends Controller
 
     public function updateAdminCampaign(Request $request, $id)
     {
-        // Idempotency guard: prevent Chrome's HTTP/2 duplicate request from re-uploading to GDrive.
-        // If this campaign was updated in the last 5 minutes with the same link, treat as success.
-        $recentUpdate = Campaign::where('id', $id)
-            ->where('updated_at', '>=', now()->subMinutes(5))
-            ->where('link', $request->input('link'))
-            ->exists();
-
-        if ($recentUpdate && !$request->hasFile('poster') && !$request->hasFile('logo_pj')) {
-            toast('Campaign has been updated!', 'success')->autoClose(1500)->width('400px');
-            return redirect('/admin/celengan-syahid/campaigns');
-        }
-
         $request->validate([
             'judul'    => 'required|string|max:255',
             'link'     => 'required|string|max:255|unique:campaigns,link,' . $id,
