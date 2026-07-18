@@ -57,6 +57,9 @@ class CampaignController extends Controller
 
     public function storeAdminCampaign(Request $request)
     {
+        $reqId = strtoupper(substr(uniqid('CAMP-'), 0, 12));
+        Log::info("[{$reqId}] storeAdminCampaign START — link={$request->input('link')} ip={$request->ip()} user=" . optional(auth()->user())->email);
+
         $request->validate([
             'judul'        => 'required|string|max:255',
             'link'         => 'required|string|max:255|unique:campaigns,link',
@@ -71,33 +74,42 @@ class CampaignController extends Controller
             'link.unique' => 'This campaign link is already taken. Please choose a different link.',
         ]);
 
+        Log::info("[{$reqId}] Validation passed");
+
         try {
             $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
 
+            Log::info("[{$reqId}] GDrive poster upload START");
             $fileNamePoster = time() . '_poster_' . $request->file('poster')->getClientOriginalName();
             $uploadResultPoster = $gdriveService->uploadImage(
                 $request->file('poster'),
                 $fileNamePoster,
                 $this->pathCampaignsGDrive . '/' . $fileNamePoster
             );
+            Log::info("[{$reqId}] GDrive poster upload DONE — gdriveID=" . ($uploadResultPoster['gdriveID'] ?? 'null'));
 
             $uploadResultLogoPic = [];
             if ($request->hasFile('logo_pj')) {
+                Log::info("[{$reqId}] GDrive logo upload START");
                 $fileNameLogo = time() . '_logo-pic_' . $request->file('logo_pj')->getClientOriginalName();
                 $uploadResultLogoPic = $gdriveService->uploadImage(
                     $request->file('logo_pj'),
                     $fileNameLogo,
                     $this->pathCampaignsGDrive . '/' . $fileNameLogo
                 );
+                Log::info("[{$reqId}] GDrive logo upload DONE");
             }
 
+            Log::info("[{$reqId}] DB insert START");
             $campaign = Campaign::createCampaign($request->all(), $uploadResultPoster, $uploadResultLogoPic);
+            Log::info("[{$reqId}] DB insert DONE — campaign_id={$campaign->id}");
 
             CelsyahidAuditLog::record('campaign.create', 'campaign', $campaign->id, 'Created campaign: ' . $request->input('judul'));
 
             Alert::success('Success', 'Campaign has been uploaded!');
+            Log::info("[{$reqId}] storeAdminCampaign SUCCESS");
         } catch (\Exception $e) {
-            Log::error('storeAdminCampaign: ' . $e->getMessage());
+            Log::error("[{$reqId}] storeAdminCampaign FAILED — " . $e->getMessage());
             Alert::error('Error', 'Failed to save campaign. Please try again or contact the administrator.');
         }
 
@@ -263,6 +275,28 @@ class CampaignController extends Controller
             Log::error('bulkDeleteCampaign: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Error deleting campaigns: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function checkLink(Request $request)
+    {
+        $link      = strtolower(trim($request->input('link', '')));
+        $excludeId = $request->input('exclude_id'); // for edit: ignore current campaign's own link
+
+        if (empty($link)) {
+            return response()->json(['available' => false, 'message' => 'Link cannot be empty.']);
+        }
+
+        $query = Campaign::where('link', $link);
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        $exists = $query->exists();
+
+        return response()->json([
+            'available' => !$exists,
+            'message'   => $exists ? 'This link is already taken.' : 'Link is available.',
+        ]);
     }
 
     public function storeCity(Request $request)

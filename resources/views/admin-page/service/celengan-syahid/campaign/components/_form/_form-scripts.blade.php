@@ -125,13 +125,59 @@
             });
         }
 
-        // Link input: prevent special characters
+        // Link input: prevent special characters + real-time availability check
         const linkInput = document.querySelector('#inputLink');
         if (linkInput) {
             linkInput.addEventListener('keydown', function(e) {
                 if (e.which === 188 || e.which === 32 || e.which === 186 || e.which === 187 || e.which === 190 || e.which === 191 || e.which === 192 || e.which === 219 || e.which === 220 || e.which === 221 || e.which === 222) {
                     e.preventDefault();
                 }
+            });
+
+            let linkCheckTimer = null;
+            const linkFeedback = document.createElement('div');
+            linkFeedback.className = 'link-availability-feedback small mt-1';
+            linkInput.parentNode.appendChild(linkFeedback);
+
+            const excludeId = '{{ $data->id ?? "" }}';
+
+            linkInput.addEventListener('input', function() {
+                clearTimeout(linkCheckTimer);
+                const val = this.value.trim();
+
+                linkFeedback.textContent = '';
+                linkFeedback.className = 'link-availability-feedback small mt-1';
+                linkInput.classList.remove('is-invalid', 'is-valid');
+
+                if (!val) return;
+
+                linkFeedback.textContent = 'Checking...';
+                linkFeedback.style.color = '#6c757d';
+
+                linkCheckTimer = setTimeout(function() {
+                    $.ajax({
+                        url: '{{ route("admin.service.campaign.check-link") }}',
+                        method: 'GET',
+                        data: { link: val, exclude_id: excludeId },
+                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                        success: function(res) {
+                            if (res.available) {
+                                linkInput.classList.remove('is-invalid');
+                                linkInput.classList.add('is-valid');
+                                linkFeedback.textContent = '✓ Link is available.';
+                                linkFeedback.style.color = '#198754';
+                            } else {
+                                linkInput.classList.remove('is-valid');
+                                linkInput.classList.add('is-invalid');
+                                linkFeedback.textContent = '✗ This link is already taken. Please choose a different one.';
+                                linkFeedback.style.color = '#dc3545';
+                            }
+                        },
+                        error: function() {
+                            linkFeedback.textContent = '';
+                        }
+                    });
+                }, 500);
             });
         }
 
