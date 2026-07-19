@@ -268,7 +268,46 @@ class CampaignController extends Controller
                     ], 422);
                 }
 
-                // PAID donations exist but balance is 0 — all withdrawn, allow proceed
+                // PAID donations exist but balance is 0 — all withdrawn.
+                // Before allowing, verify global DB vs Bisabiller wallet balance is reconciled.
+                // Reuses the same formula as balanceReport() so behaviour is consistent.
+                $mdrRate           = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+                $settlementMinutes = (int) config('services.bisatopup.settlement_minutes', 15);
+                $cutoff            = now()->subMinutes($settlementMinutes);
+                $creditSelect      = 'SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wallet_credit';
+
+                $totalExpectedAll = (int) \App\Models\Donation::where('gateway', 'bisatopup')
+                    ->where('payment_status', 'PAID')
+                    ->selectRaw($creditSelect, [$mdrRate])
+                    ->value('wallet_credit')
+                    - (int) \App\Models\Withdrawal::where('status', 'COMPLETED')->sum('amount')
+                    - (int) \App\Models\Withdrawal::where('status', 'PENDING')->sum('amount');
+
+                $actualBalance = (new BisaTopup())->walletBalance();
+
+                if ($actualBalance !== null) {
+                    $recentCredit = (int) \App\Models\Donation::where('gateway', 'bisatopup')
+                        ->where('payment_status', 'PAID')
+                        ->where('updated_at', '>=', $cutoff)
+                        ->selectRaw($creditSelect, [$mdrRate])
+                        ->value('wallet_credit');
+
+                    $rawGap            = $totalExpectedAll - $actualBalance;
+                    $pendingSettlement = $rawGap > 0 ? min($rawGap, $recentCredit) : 0;
+                    $totalExpected     = $totalExpectedAll - $pendingSettlement;
+                    $discrepancy       = abs($actualBalance - $totalExpected);
+                    $threshold         = (int) config('services.two_fa.discrepancy_threshold', 50000);
+
+                    if ($discrepancy > $threshold) {
+                        return response()->json([
+                            'success' => false,
+                            'blocked' => true,
+                            'message' => 'Cannot delete: balance discrepancy of Rp' . number_format($discrepancy, 0, ',', '.') . ' detected between DB and BisaTopup wallet. Please reconcile the Balance Report before deleting.',
+                        ], 422);
+                    }
+                }
+
+                // Global balance is reconciled — allow proceed
             }
 
             // 2. Block if there are active PENDING BisaTopup QRIS transactions (not yet expired)
