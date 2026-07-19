@@ -111,6 +111,15 @@ class DonationController extends Controller
     public function destroyAdminDonation($id)
     {
         try {
+            $donation = Donation::findOrFail($id);
+
+            if ($donation->gateway === 'bisatopup') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot delete: this donation was made via BisaTopup QRIS and is part of the financial record. QRIS donations cannot be deleted.',
+                ], 422);
+            }
+
             Donation::deleteDonation($id);
             CelsyahidAuditLog::record('donation.delete', 'donation', $id, 'Deleted donation');
             return response()->json(['success' => true, 'message' => 'Donation has been deleted!']);
@@ -126,6 +135,19 @@ class DonationController extends Controller
 
         if (empty($ids)) {
             return response()->json(['success' => false, 'message' => 'No donations selected for deletion'], 400);
+        }
+
+        $bisatopupIds = Donation::whereIn('id', $ids)
+            ->where('gateway', 'bisatopup')
+            ->pluck('id')
+            ->all();
+
+        if (!empty($bisatopupIds)) {
+            $count = count($bisatopupIds);
+            return response()->json([
+                'success' => false,
+                'message' => "Cannot delete: {$count} of the selected donation(s) were made via BisaTopup QRIS and cannot be deleted. Please deselect them and try again.",
+            ], 422);
         }
 
         try {
