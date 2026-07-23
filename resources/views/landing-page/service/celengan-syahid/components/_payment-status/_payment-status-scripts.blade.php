@@ -47,7 +47,7 @@
         buildQrisImage(rawQr, { amount: amount, campaign: campaign, expiry: expiry }, function (dataUrl) {
             var a = document.createElement('a');
             a.href     = dataUrl;
-            a.download = 'qris-donasi-ldksyahid.png';
+            a.download = 'qris-donasi-ldksyahid-' + timestampForFilename() + '.png';
             a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
@@ -212,6 +212,13 @@
     }
 
     /* ── Helpers ─────────────────────────────────────────────────── */
+    function timestampForFilename() {
+        var d  = new Date();
+        var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+        return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate())
+             + '-' + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
+    }
+
     function fillRR(ctx, x, y, w, h, r) {
         ctx.beginPath();
         ctx.moveTo(x + r, y);

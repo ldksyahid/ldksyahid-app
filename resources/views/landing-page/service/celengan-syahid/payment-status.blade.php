@@ -53,8 +53,13 @@
     .ds-qris-dl-btn { display:inline-flex; align-items:center; gap:.45rem; margin-top:1rem; padding:.6rem 1.4rem; background:#00a79d; color:#fff; border:none; border-radius:50px; font-size:.875rem; font-weight:600; cursor:pointer; text-decoration:none; transition:background .2s; }
     .ds-qris-dl-btn:hover { background:#008f86; color:#fff; }
     .ds-qris-dl-btn:active { background:#007a72; }
+    .ds-qris-provider { display:inline-flex; align-items:center; gap:.4rem; margin-bottom:1rem; padding:.35rem .85rem; background:#f4f7f8; border:1px solid #e6eef0; border-radius:30px; font-size:.72rem; color:#6c757d; }
+    .ds-qris-provider img { height:15px; width:auto; display:block; }
+    .ds-qris-provider strong { color:#374151; }
     [data-theme="dark"] .ds-qris-card { background:#1a1f2e; border-color:#252b3b; }
     [data-theme="dark"] .ds-qris-hint, [data-theme="dark"] .ds-qris-expiry { color:#9ca3af; }
+    [data-theme="dark"] .ds-qris-provider { background:#252b3b; border-color:#2f3648; color:#9ca3af; }
+    [data-theme="dark"] .ds-qris-provider strong { color:#e2e8f0; }
     /* QR tile stays white + un-inverted in every theme so scanners read it */
     [data-theme="dark"] .ds-qris-box { background:#fff !important; }
     [data-theme="dark"] .ds-qris-box img, [data-theme="dark"] .ds-qris-box canvas { filter:none !important; background:#fff !important; }
@@ -89,6 +94,11 @@
         @if($isPending && !$isExpired && $data->qr_code)
         <div id="ds-qris-card" class="ds-qris-card wow fadeInUp" data-wow-delay="0.08s">
             <div class="ds-qris-title"><i class="fas fa-qrcode"></i> Scan QRIS untuk Membayar</div>
+            <div class="ds-qris-provider">
+                <img src="{{ asset('landing-page-ext-rsrc/img/amdigipay-logo.svg') }}" alt="Amdigipay">
+                Disediakan oleh <strong>Amdigipay</strong>
+            </div>
+            <br>
             <div id="ds-qris" class="ds-qris-box" data-qr="{{ $data->qr_code }}"></div>
             <div class="ds-qris-amount">{{ LFC::formatRupiah($data->total_tagihan ?: $data->jumlah_donasi) }}</div>
             <p class="ds-qris-hint">Buka aplikasi e-wallet atau m-banking apa pun, lalu scan kode di atas.</p>
