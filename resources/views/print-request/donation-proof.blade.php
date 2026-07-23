@@ -84,37 +84,37 @@
             padding: 0;
         }
         .hdr table { width: 100%; border-collapse: collapse; }
-        .hdr-left  { padding: 20px 24px; vertical-align: middle; }
-        .hdr-right { padding: 20px 24px; vertical-align: middle; text-align: right; }
+        .hdr-left  { padding: 17px 21px; vertical-align: middle; }
+        .hdr-right { padding: 17px 21px; vertical-align: middle; text-align: right; }
 
         .hdr-logo-wrap {
-            width: 46px; height: 46px; vertical-align: middle;
-            background-color: #ffffff; border-radius: 10px;
-            padding: 5px; text-align: center;
+            width: 45px; height: 45px; vertical-align: middle;
+            background-color: #ffffff; border-radius: 9px;
+            padding: 4px; text-align: center;
         }
         .hdr-logo { width: 36px; height: 36px; vertical-align: middle; }
-        .hdr-org       { vertical-align: middle; padding-left: 13px; }
+        .hdr-org       { vertical-align: middle; padding-left: 12px; }
         .hdr-org-name  { font-size: 13px; font-weight: 600; color: #ffffff; letter-spacing: .3px; }
-        .hdr-org-sub   { font-size: 8px; color: #d6f6f2; margin-top: 4px; }
+        .hdr-org-sub   { font-size: 8px; color: #d6f6f2; margin-top: 3px; }
 
         .hdr-tag {
             display: block;
             font-size: 6.5px; font-weight: 600; color: rgba(255,255,255,0.85);
             letter-spacing: 2px; text-transform: uppercase;
             border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 20px; padding: 3px 11px;
-            margin-bottom: 7px;
+            border-radius: 20px; padding: 2px 10px;
+            margin-bottom: 6px;
         }
-        .hdr-title { font-size: 22px; font-weight: bold; color: #ffffff; line-height: 1.15; }
-        .hdr-sub   { font-size: 8px; color: #d6f6f2; margin-top: 3px; letter-spacing: .4px; }
+        .hdr-title { font-size: 21px; font-weight: bold; color: #ffffff; line-height: 1.15; }
+        .hdr-sub   { font-size: 8px; color: #d6f6f2; margin-top: 2px; letter-spacing: .4px; }
 
         /* ════════ META STRIP ════════ */
         .meta { background-color: #e9f7f5; }
         .meta table { width: 100%; border-collapse: collapse; }
-        .meta td { padding: 12px 18px; border-right: 1px solid #cfeeea; vertical-align: top; }
+        .meta td { padding: 10px 17px; border-right: 1px solid #cfeeea; vertical-align: top; }
         .meta td:last-child { border-right: none; }
         .meta-lbl { font-size: 6.5px; font-weight: 600; color: #7ba39c; text-transform: uppercase; letter-spacing: 1px; }
-        .meta-val { font-size: 9.5px; font-weight: 600; color: #384252; margin-top: 3px; }
+        .meta-val { font-size: 9.5px; font-weight: 600; color: #384252; margin-top: 2px; }
         .pill {
             font-size: 8px; font-weight: 600;
             padding: 2px 9px; border: 1px solid;
@@ -122,11 +122,11 @@
         }
 
         /* ════════ BODY ════════ */
-        .body-pad { padding: 20px 24px 8px; }
+        .body-pad { padding: 17px 21px 5px; }
 
         /* Section label — soft minimal, rounded dot marker instead of a hard bar */
         .sec { font-size: 7.5px; font-weight: 600; color: #00877d; text-transform: uppercase;
-               letter-spacing: 1.5px; margin: 18px 0 9px; }
+               letter-spacing: 1.5px; margin: 13px 0 6px; }
         .sec.first { margin-top: 0; }
         .sec-dot {
             display: inline-block; width: 6px; height: 6px; margin-right: 7px;
@@ -137,65 +137,65 @@
         .card {
             background-color: #eef9f7;
             border: 1px solid #cdeae6;
-            border-radius: 13px;
+            border-radius: 12px;
             overflow: hidden;
         }
 
         /* Campaign */
-        .campaign-box { padding: 14px 17px; }
-        .campaign-name { font-size: 14px; font-weight: bold; color: #2d3748; margin-bottom: 9px; line-height: 1.4; }
+        .campaign-box { padding: 12px 15px; }
+        .campaign-name { font-size: 13.5px; font-weight: bold; color: #2d3748; margin-bottom: 7px; line-height: 1.35; }
         .tag { font-size: 7.5px; font-weight: 600; color: #00877d; background-color: #ddf3f0;
-               border: 1px solid #b9e5e0; border-radius: 20px; padding: 3px 10px; margin-right: 5px;
-               margin-bottom: 4px; white-space: nowrap; display: inline-block; }
+               border: 1px solid #b9e5e0; border-radius: 20px; padding: 2px 9px; margin-right: 5px;
+               margin-bottom: 3px; white-space: nowrap; display: inline-block; }
 
         /* Grid card (donor info) */
         .grid-tbl { width: 100%; border-collapse: collapse; }
-        .grid-tbl td { padding: 10px 17px; vertical-align: top; border-bottom: 1px solid #d9f0ec; width: 50%; }
+        .grid-tbl td { padding: 7px 14px; vertical-align: top; border-bottom: 1px solid #d9f0ec; width: 50%; }
         .grid-tbl tr:last-child td { border-bottom: none; }
         .grid-tbl td.solo { width: 100%; }
-        .g-lbl { font-size: 6.5px; font-weight: 600; color: #7ba39c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+        .g-lbl { font-size: 6.5px; font-weight: 600; color: #7ba39c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
         .g-val { font-size: 10.5px; font-weight: 600; color: #2d3748; }
 
         /* Message */
         .msg-box {
             background-color: #fdfaf2;
             border: 1px solid #f3e6bf;
-            border-radius: 11px;
-            padding: 13px 17px;
+            border-radius: 10px;
+            padding: 10px 14px;
             font-size: 10px; color: #4a5568;
-            line-height: 1.75; font-style: italic;
+            line-height: 1.65; font-style: italic;
         }
 
         /* Payment table */
         .pay-tbl { width: 100%; border-collapse: collapse; }
-        .pay-tbl td { padding: 11px 17px; border-bottom: 1px solid #eef6f5; vertical-align: middle; }
+        .pay-tbl td { padding: 8px 14px; border-bottom: 1px solid #eef6f5; vertical-align: middle; }
         .pay-tbl tr:last-child td { border-bottom: none; }
-        .pay-tbl tr.total td { background-color: #e6f7f5; border-top: 2px solid #00a79d; padding: 14px 17px; }
+        .pay-tbl tr.total td { background-color: #e6f7f5; border-top: 2px solid #00a79d; padding: 11px 14px; }
         .pay-lbl   { font-size: 10.5px; color: #4a5568; }
-        .pay-sub   { font-size: 8px; color: #94a3b8; margin-top: 2px; }
+        .pay-sub   { font-size: 8px; color: #94a3b8; margin-top: 1px; }
         .pay-val   { font-size: 10.5px; font-weight: 600; color: #2d3748; text-align: right; }
         .pay-lbl-t { font-size: 8.5px; font-weight: 600; color: #00877d; text-transform: uppercase; letter-spacing: 1.1px; }
-        .pay-val-t { font-size: 18px; font-weight: bold; color: #00695f; text-align: right; }
+        .pay-val-t { font-size: 17px; font-weight: bold; color: #00695f; text-align: right; }
 
         /* ════════ FOOTER ════════ */
         .footer {
             background-color: #f9fefd;
             border-top: 1px solid #e0f4f2;
-            padding: 16px 24px 18px;
+            padding: 11px 19px 13px;
         }
         .footer table { width: 100%; border-collapse: collapse; }
         .footer td { vertical-align: top; width: 50%; }
-        .f-lbl  { font-size: 6.5px; font-weight: 600; color: #00a79d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-        .f-text { font-size: 8.5px; color: #4a5568; line-height: 1.85; }
-        .disclaimer { font-size: 7.5px; color: #94a3b8; line-height: 1.7; font-style: italic; margin-top: 13px; border-top: 1px dashed #e0f4f2; padding-top: 11px; }
-        .print-info { font-size: 7px; color: #b3c0cc; margin-top: 6px; }
+        .f-lbl  { font-size: 6.5px; font-weight: 600; color: #00a79d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .f-text { font-size: 8.5px; color: #4a5568; line-height: 1.7; }
+        .disclaimer { font-size: 7.5px; color: #94a3b8; line-height: 1.65; font-style: italic; margin-top: 8px; border-top: 1px dashed #e0f4f2; padding-top: 8px; }
+        .print-info { font-size: 7px; color: #b3c0cc; margin-top: 4px; }
 
         /* ════════ PRINT ════════ */
         @media print {
             body { background-color: #ffffff; }
             .wrap { border: none; box-shadow: none; }
         }
-        @page { size: A4; margin: 12mm 10mm; }
+        @page { size: A4; margin: 9mm 9mm; }
     </style>
 </head>
 <body>
