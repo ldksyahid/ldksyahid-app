@@ -84,53 +84,58 @@
             padding: 0;
         }
         .hdr table { width: 100%; border-collapse: collapse; }
-        .hdr-left  { padding: 17px 21px; vertical-align: middle; }
-        .hdr-right { padding: 17px 21px; vertical-align: middle; text-align: right; }
+        .hdr-left  { padding: 19px 24px; vertical-align: middle; }
+        .hdr-right { padding: 19px 24px; vertical-align: middle; text-align: right; }
 
         .hdr-logo-wrap {
-            width: 45px; height: 45px; vertical-align: middle;
-            background-color: #ffffff; border-radius: 9px;
-            padding: 4px; text-align: center;
+            width: 48px; height: 48px; vertical-align: middle;
+            background-color: #ffffff; border-radius: 10px;
+            padding: 5px; text-align: center;
         }
-        .hdr-logo { width: 36px; height: 36px; vertical-align: middle; }
-        .hdr-org       { vertical-align: middle; padding-left: 12px; }
-        .hdr-org-name  { font-size: 13px; font-weight: 600; color: #ffffff; letter-spacing: .3px; }
-        .hdr-org-sub   { font-size: 8px; color: #d6f6f2; margin-top: 3px; }
+        .hdr-logo { width: 38px; height: 38px; vertical-align: middle; }
+        .hdr-org       { vertical-align: middle; padding-left: 14px; }
+        .hdr-org-name  { font-size: 13.5px; font-weight: 600; color: #ffffff; letter-spacing: .3px; }
+        .hdr-org-sub   { font-size: 8px; color: #d6f6f2; margin-top: 4px; }
 
         .hdr-tag {
-            display: block;
+            display: inline-block;
             font-size: 6.5px; font-weight: 600; color: rgba(255,255,255,0.85);
             letter-spacing: 2px; text-transform: uppercase;
             border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 20px; padding: 2px 10px;
-            margin-bottom: 6px;
+            border-radius: 20px; padding: 3px 11px;
+            line-height: 1;
+            margin-bottom: 8px;
         }
-        .hdr-title { font-size: 21px; font-weight: bold; color: #ffffff; line-height: 1.15; }
-        .hdr-sub   { font-size: 8px; color: #d6f6f2; margin-top: 2px; letter-spacing: .4px; }
+        .hdr-title { font-size: 23px; font-weight: bold; color: #ffffff; line-height: 1.15; }
+        .hdr-sub   { font-size: 8px; color: #d6f6f2; margin-top: 3px; letter-spacing: .4px; }
 
         /* ════════ META STRIP ════════ */
         .meta { background-color: #e9f7f5; }
         .meta table { width: 100%; border-collapse: collapse; }
-        .meta td { padding: 10px 17px; border-right: 1px solid #cfeeea; vertical-align: top; }
+        .meta td { padding: 14px 19px; border-right: 1px solid #cfeeea; vertical-align: top; }
         .meta td:last-child { border-right: none; }
         .meta-lbl { font-size: 6.5px; font-weight: 600; color: #7ba39c; text-transform: uppercase; letter-spacing: 1px; }
-        .meta-val { font-size: 9.5px; font-weight: 600; color: #384252; margin-top: 2px; }
+        .meta-val { font-size: 9.5px; font-weight: 600; color: #384252; margin-top: 3px; }
         .pill {
-            font-size: 8px; font-weight: 600;
-            padding: 2px 9px; border: 1px solid;
+            font-size: 8px; font-weight: 600; line-height: 1;
+            padding: 3px 9px 2px; border: 1px solid;
             border-radius: 20px;
         }
 
         /* ════════ BODY ════════ */
-        .body-pad { padding: 17px 21px 5px; }
+        .body-pad { padding: 19px 24px 7px; }
 
         /* Section label — soft minimal, rounded dot marker instead of a hard bar */
-        .sec { font-size: 7.5px; font-weight: 600; color: #00877d; text-transform: uppercase;
-               letter-spacing: 1.5px; margin: 13px 0 6px; }
-        .sec.first { margin-top: 0; }
+        .sec-tbl { width: 100%; border-collapse: collapse; margin: 17px 0 8px; }
+        .sec-tbl.sec-first { margin-top: 0; }
+        .sec-dot-cell { width: 13px; vertical-align: middle; padding: 0; }
         .sec-dot {
-            display: inline-block; width: 6px; height: 6px; margin-right: 7px;
-            background-color: #00a79d; border-radius: 6px; vertical-align: middle;
+            display: inline-block; width: 6px; height: 6px;
+            background-color: #00a79d; border-radius: 6px;
+        }
+        .sec-text-cell {
+            font-size: 7.5px; font-weight: 600; color: #00877d; text-transform: uppercase;
+            letter-spacing: 1.5px; line-height: 1; vertical-align: middle; padding: 0;
         }
 
         /* Soft card base */
@@ -142,18 +147,18 @@
         }
 
         /* Campaign */
-        .campaign-box { padding: 12px 15px; }
-        .campaign-name { font-size: 13.5px; font-weight: bold; color: #2d3748; margin-bottom: 7px; line-height: 1.35; }
+        .campaign-box { padding: 14px 18px; }
+        .campaign-name { font-size: 14.5px; font-weight: bold; color: #2d3748; margin-bottom: 10px; line-height: 1.28; }
         .tag { font-size: 7.5px; font-weight: 600; color: #00877d; background-color: #ddf3f0;
-               border: 1px solid #b9e5e0; border-radius: 20px; padding: 2px 9px; margin-right: 5px;
-               margin-bottom: 3px; white-space: nowrap; display: inline-block; }
+               border: 1px solid #b9e5e0; border-radius: 20px; padding: 4px 11px 3px; margin-right: 6px;
+               margin-bottom: 4px; line-height: 1; white-space: nowrap; display: inline-block; }
 
         /* Grid card (donor info) */
         .grid-tbl { width: 100%; border-collapse: collapse; }
-        .grid-tbl td { padding: 7px 14px; vertical-align: top; border-bottom: 1px solid #d9f0ec; width: 50%; }
+        .grid-tbl td { padding: 10px 17px; vertical-align: top; border-bottom: 1px solid #d9f0ec; width: 50%; }
         .grid-tbl tr:last-child td { border-bottom: none; }
         .grid-tbl td.solo { width: 100%; }
-        .g-lbl { font-size: 6.5px; font-weight: 600; color: #7ba39c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+        .g-lbl { font-size: 6.5px; font-weight: 600; color: #7ba39c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
         .g-val { font-size: 10.5px; font-weight: 600; color: #2d3748; }
 
         /* Message */
@@ -161,34 +166,38 @@
             background-color: #fdfaf2;
             border: 1px solid #f3e6bf;
             border-radius: 10px;
-            padding: 10px 14px;
+            padding: 12px 17px;
             font-size: 10px; color: #4a5568;
-            line-height: 1.65; font-style: italic;
+            line-height: 1.42; font-style: italic;
         }
 
         /* Payment table */
         .pay-tbl { width: 100%; border-collapse: collapse; }
-        .pay-tbl td { padding: 8px 14px; border-bottom: 1px solid #eef6f5; vertical-align: middle; }
+        .pay-tbl td { padding: 11px 17px; border-bottom: 1px solid #cdeae6; vertical-align: middle; }
         .pay-tbl tr:last-child td { border-bottom: none; }
-        .pay-tbl tr.total td { background-color: #e6f7f5; border-top: 2px solid #00a79d; padding: 11px 14px; }
+        .pay-tbl tr.total td { background-color: #e6f7f5; border-top: 2px solid #00a79d; padding: 14px 17px; }
         .pay-lbl   { font-size: 10.5px; color: #4a5568; }
-        .pay-sub   { font-size: 8px; color: #94a3b8; margin-top: 1px; }
+        .pay-sub   { font-size: 8px; color: #94a3b8; margin-top: 2px; }
         .pay-val   { font-size: 10.5px; font-weight: 600; color: #2d3748; text-align: right; }
         .pay-lbl-t { font-size: 8.5px; font-weight: 600; color: #00877d; text-transform: uppercase; letter-spacing: 1.1px; }
-        .pay-val-t { font-size: 17px; font-weight: bold; color: #00695f; text-align: right; }
+        .pay-val-t { font-size: 19px; font-weight: bold; color: #00695f; text-align: right; }
 
         /* ════════ FOOTER ════════ */
         .footer {
             background-color: #f9fefd;
             border-top: 1px solid #e0f4f2;
-            padding: 11px 19px 13px;
+            padding: 14px 23px 13px;
         }
         .footer table { width: 100%; border-collapse: collapse; }
         .footer td { vertical-align: top; width: 50%; }
-        .f-lbl  { font-size: 6.5px; font-weight: 600; color: #00a79d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .f-text { font-size: 8.5px; color: #4a5568; line-height: 1.7; }
-        .disclaimer { font-size: 7.5px; color: #94a3b8; line-height: 1.65; font-style: italic; margin-top: 8px; border-top: 1px dashed #e0f4f2; padding-top: 8px; }
-        .print-info { font-size: 7px; color: #b3c0cc; margin-top: 4px; }
+        .f-lbl  { font-size: 6.5px; font-weight: 600; color: #00a79d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .f-text { font-size: 8.5px; color: #4a5568; line-height: 1.8; }
+        .disclaimer {
+            font-size: 7.5px; color: #94a3b8; line-height: 1.55; font-style: italic;
+            margin-top: 8px; border-top: 1px dashed #e0f4f2; padding-top: 8px;
+            padding-left: 9px; text-indent: -9px;
+        }
+        .print-info { font-size: 7px; color: #b3c0cc; margin-top: 3px; }
 
         /* ════════ PRINT ════════ */
         @media print {
@@ -260,7 +269,7 @@
     <div class="body-pad">
 
         {{-- Campaign --}}
-        <div class="sec first"><span class="sec-dot"></span>Informasi Campaign</div>
+        <table class="sec-tbl sec-first"><tr><td class="sec-dot-cell"><span class="sec-dot"></span></td><td class="sec-text-cell">Informasi Campaign</td></tr></table>
         <div class="card campaign-box">
             <div class="campaign-name">{{ $campaign->judul }}</div>
             <div>
@@ -272,7 +281,7 @@
         </div>
 
         {{-- Donor Info --}}
-        <div class="sec"><span class="sec-dot"></span>Informasi Donatur</div>
+        <table class="sec-tbl"><tr><td class="sec-dot-cell"><span class="sec-dot"></span></td><td class="sec-text-cell">Informasi Donatur</td></tr></table>
         <div class="card">
             <table class="grid-tbl">
                 <tr>
@@ -312,12 +321,12 @@
 
         {{-- Pesan --}}
         @if($donation->pesan_donatur)
-        <div class="sec"><span class="sec-dot"></span>Pesan Donatur</div>
+        <table class="sec-tbl"><tr><td class="sec-dot-cell"><span class="sec-dot"></span></td><td class="sec-text-cell">Pesan Donatur</td></tr></table>
         <div class="msg-box">&ldquo;{{ $donation->pesan_donatur }}&rdquo;</div>
         @endif
 
         {{-- Payment --}}
-        <div class="sec"><span class="sec-dot"></span>Rincian Pembayaran</div>
+        <table class="sec-tbl"><tr><td class="sec-dot-cell"><span class="sec-dot"></span></td><td class="sec-text-cell">Rincian Pembayaran</td></tr></table>
         <div class="card">
         <table class="pay-tbl">
             <tr>
