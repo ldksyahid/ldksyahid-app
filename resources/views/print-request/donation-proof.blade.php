@@ -4,9 +4,9 @@
     $isPaid      = $donation->payment_status === 'PAID';
     $isPending   = $donation->payment_status === 'PENDING';
     $statusLabel = $isPaid ? 'LUNAS' : ($isPending ? 'TERTUNDA' : 'GAGAL');
-    $statusColor = $isPaid ? '#16a34a' : ($isPending ? '#d97706' : '#dc2626');
-    $statusBg    = $isPaid ? '#dcfce7' : ($isPending ? '#fef3c7' : '#fee2e2');
-    $statusBdr   = $isPaid ? '#bbf7d0' : ($isPending ? '#fde68a' : '#fecaca');
+    $statusColor = $isPaid ? '#15803d' : ($isPending ? '#b45309' : '#b91c1c');
+    $statusBg    = $isPaid ? '#eafbf1' : ($isPending ? '#fff8ec' : '#fdf1f1');
+    $statusBdr   = $isPaid ? '#c8ecd7' : ($isPending ? '#fbe6bf' : '#f3caca');
 
     $donationDate = \Carbon\Carbon::parse($donation->created_at)->locale('id')->isoFormat('dddd, D MMMM Y');
     $donationTime = \Carbon\Carbon::parse($donation->created_at)->format('H:i') . ' WIB';
@@ -31,167 +31,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Bukti Donasi #{{ $donation->id }}</title>
     <style>
+        * { box-sizing: border-box; }
         body {
             font-family: 'DejaVu Sans', Arial, sans-serif;
-            font-size: 12px;
-            color: #1a2332;
+            font-size: 11px;
+            color: #384252;
             background-color: #ffffff;
             margin: 0; padding: 0;
         }
 
         /* ── Outer wrapper ── */
         .wrap {
-            width: 700px;
-            margin: 0 auto;
-            border: 1px solid #b2e8e4;
-            border-radius: 14px;
+            width: 100%;
+            border: 1px solid #dceeec;
+            border-radius: 16px;
             overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 130, 120, 0.06);
         }
 
         /* ════════ HEADER ════════ */
-        .hdr { background-color: #00a79d; padding: 0; }
+        .hdr {
+            background: linear-gradient(120deg, #00a79d 0%, #00877d 100%);
+            padding: 0;
+        }
         .hdr table { width: 100%; border-collapse: collapse; }
-        .hdr-left  { padding: 18px 22px; vertical-align: middle; }
-        .hdr-right { padding: 18px 22px; vertical-align: middle; text-align: right; }
+        .hdr-left  { padding: 16px 20px; vertical-align: middle; }
+        .hdr-right { padding: 16px 20px; vertical-align: middle; text-align: right; }
 
         .hdr-logo {
-            width: 52px; height: 52px; vertical-align: middle;
-            background-color: #ffffff; border-radius: 12px;
+            width: 44px; height: 44px; vertical-align: middle;
+            background-color: #ffffff; border-radius: 11px;
             padding: 4px;
         }
-        .hdr-org       { vertical-align: middle; padding-left: 12px; }
-        .hdr-org-name  { font-size: 15px; font-weight: bold; color: #ffffff; letter-spacing: .3px; }
-        .hdr-org-sub   { font-size: 9px; color: #c8f5f1; margin-top: 3px; }
+        .hdr-org       { vertical-align: middle; padding-left: 11px; }
+        .hdr-org-name  { font-size: 13px; font-weight: bold; color: #ffffff; letter-spacing: .3px; }
+        .hdr-org-sub   { font-size: 8px; color: #d6f6f2; margin-top: 3px; }
 
         .hdr-tag {
             display: block;
-            font-size: 7px; font-weight: bold; color: rgba(255,255,255,0.8);
-            letter-spacing: 2.5px; text-transform: uppercase;
-            border: 1px solid rgba(255,255,255,0.35);
-            border-radius: 20px; padding: 2px 10px;
-            margin-bottom: 6px;
+            font-size: 6.5px; font-weight: bold; color: rgba(255,255,255,0.85);
+            letter-spacing: 2px; text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 20px; padding: 2px 9px;
+            margin-bottom: 5px;
         }
-        .hdr-title { font-size: 26px; font-weight: bold; color: #ffffff; line-height: 1.1; }
-        .hdr-sub   { font-size: 9px; color: #c8f5f1; margin-top: 3px; letter-spacing: .5px; }
+        .hdr-title { font-size: 21px; font-weight: bold; color: #ffffff; line-height: 1.15; }
+        .hdr-sub   { font-size: 8px; color: #d6f6f2; margin-top: 2px; letter-spacing: .4px; }
 
         /* ════════ META STRIP ════════ */
-        .meta { background-color: #e8faf8; }
+        .meta { background-color: #f3fbfa; }
         .meta table { width: 100%; border-collapse: collapse; }
-        .meta td { padding: 10px 16px; border-right: 1px solid #b2f0eb; vertical-align: top; }
+        .meta td { padding: 8px 16px; border-right: 1px solid #e0f4f2; vertical-align: top; }
         .meta td:last-child { border-right: none; }
-        .meta-lbl { font-size: 7px; font-weight: bold; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; }
-        .meta-val { font-size: 10px; font-weight: bold; color: #1a2332; margin-top: 3px; }
+        .meta-lbl { font-size: 6.5px; font-weight: bold; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .meta-val { font-size: 9.5px; font-weight: bold; color: #384252; margin-top: 2px; }
         .pill {
-            font-size: 9px; font-weight: bold;
-            padding: 3px 10px; border: 1px solid;
+            font-size: 8px; font-weight: bold;
+            padding: 2px 9px; border: 1px solid;
             border-radius: 20px;
         }
 
         /* ════════ BODY ════════ */
-        .body-pad { padding: 18px 22px 14px; }
+        .body-pad { padding: 16px 20px 4px; }
 
-        /* Section heading */
-        .sec-hdr { margin-bottom: 10px; margin-top: 18px; }
-        .sec-hdr:first-child { margin-top: 0; }
-        .sec-hdr table { width: 100%; border-collapse: collapse; }
-        .sec-hdr td { vertical-align: middle; padding: 0; }
-        .sec-icon {
-            width: 24px; height: 24px;
-            background-color: #006b65;
-            border-radius: 7px;
-            color: #ffffff; font-size: 8px; font-weight: bold;
-            text-align: center; vertical-align: middle;
-            padding-top: 6px;
+        /* Section label — soft minimal, no icon block */
+        .sec { font-size: 7.5px; font-weight: bold; color: #00877d; text-transform: uppercase;
+               letter-spacing: 1.5px; padding-left: 9px; border-left: 3px solid #00a79d;
+               margin: 14px 0 7px; }
+        .sec.first { margin-top: 0; }
+
+        /* Soft card base */
+        .card {
+            background-color: #f9fefd;
+            border: 1px solid #e0f4f2;
+            border-radius: 10px;
+            overflow: hidden;
         }
-        .sec-lbl {
-            font-size: 8px; font-weight: bold; color: #006b65;
-            text-transform: uppercase; letter-spacing: 2px;
-            padding-left: 8px; white-space: nowrap;
-        }
-        .sec-line td { border-bottom: 1.5px solid #b2f0eb; }
 
         /* Campaign */
-        .campaign-box {
-            background-color: #e8faf8;
-            border: 1px solid #99ddd9;
-            border-radius: 10px;
-            padding: 12px 14px;
-        }
-        .campaign-name { font-size: 14px; font-weight: bold; color: #1a2332; margin-bottom: 8px; line-height: 1.35; }
-        .tag-wrap { margin-top: 2px; }
-        .tag {
-            font-size: 8px; font-weight: bold;
-            color: #006b65; background-color: #c8f0ec;
-            border: 1px solid #8ed8d3;
-            border-radius: 20px;
-            padding: 2px 9px; margin-right: 5px;
-            white-space: nowrap; display: inline-block;
-        }
+        .campaign-box { padding: 11px 14px; }
+        .campaign-name { font-size: 13px; font-weight: bold; color: #2d3748; margin-bottom: 7px; line-height: 1.35; }
+        .tag { font-size: 7.5px; font-weight: bold; color: #00877d; background-color: #e6f7f5;
+               border: 1px solid #bfe9e4; border-radius: 20px; padding: 2px 8px; margin-right: 4px;
+               white-space: nowrap; display: inline-block; }
 
-        /* Fields */
-        .fields { width: 100%; border-collapse: collapse; }
-        .fields td { vertical-align: top; padding: 3px; }
-        .field-box {
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 8px 11px;
-        }
-        .field-lbl { font-size: 7px; font-weight: bold; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
-        .field-val { font-size: 11px; font-weight: bold; color: #1a2332; }
-
-        /* Payment table */
-        .pay-wrap { border: 1px solid #b2f0eb; border-radius: 10px; overflow: hidden; }
-        .pay-tbl { width: 100%; border-collapse: collapse; }
-        .pay-tbl td { padding: 10px 16px; border-bottom: 1px solid #e0f7f5; vertical-align: middle; }
-        .pay-tbl tr:last-child td { border-bottom: none; }
-        .pay-tbl tr.alt td { background-color: #f0fdfc; }
-        .pay-tbl tr.total td { background-color: #006b65; padding: 14px 16px; }
-        .pay-lbl   { font-size: 12px; color: #374151; }
-        .pay-sub   { font-size: 9px; color: #9ca3af; margin-top: 2px; }
-        .pay-val   { font-size: 12px; font-weight: bold; color: #1a2332; text-align: right; }
-        .pay-lbl-t { font-size: 9px; font-weight: bold; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 1.2px; }
-        .pay-val-t { font-size: 20px; font-weight: bold; color: #ffffff; text-align: right; }
+        /* Grid card (donor info) */
+        .grid-tbl { width: 100%; border-collapse: collapse; }
+        .grid-tbl td { padding: 7px 14px; vertical-align: top; border-bottom: 1px solid #eef6f5; width: 50%; }
+        .grid-tbl tr:last-child td { border-bottom: none; }
+        .grid-tbl td.solo { width: 100%; }
+        .grid-tbl td + td { border-left: 1px solid #eef6f5; }
+        .g-lbl { font-size: 6.5px; font-weight: bold; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+        .g-val { font-size: 10.5px; font-weight: bold; color: #2d3748; }
 
         /* Message */
         .msg-box {
-            background-color: #fffbeb;
-            border: 1px solid #fde68a;
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-size: 11px; color: #374151;
-            line-height: 1.7; font-style: italic;
+            background-color: #fdfaf2;
+            border: 1px solid #f3e6bf;
+            border-radius: 10px;
+            padding: 9px 13px;
+            font-size: 10px; color: #4a5568;
+            line-height: 1.6; font-style: italic;
         }
 
-        /* Org info */
-        .org-box {
-            background-color: #f8fffe;
-            border: 1px solid #d0eeec;
-            border-radius: 10px;
-            padding: 12px 14px;
-        }
-        .org-tbl { width: 100%; border-collapse: collapse; }
-        .org-tbl td { vertical-align: top; padding-right: 14px; width: 50%; }
-        .org-tbl td:last-child { padding-right: 0; padding-left: 14px; }
-        .org-lbl  { font-size: 7px; font-weight: bold; color: #00a79d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-        .org-text { font-size: 10px; color: #374151; line-height: 1.9; }
+        /* Payment table */
+        .pay-tbl { width: 100%; border-collapse: collapse; }
+        .pay-tbl td { padding: 8px 14px; border-bottom: 1px solid #eef6f5; vertical-align: middle; }
+        .pay-tbl tr:last-child td { border-bottom: none; }
+        .pay-tbl tr.total td { background-color: #e6f7f5; border-top: 2px solid #00a79d; padding: 11px 14px; }
+        .pay-lbl   { font-size: 10.5px; color: #4a5568; }
+        .pay-sub   { font-size: 8px; color: #94a3b8; margin-top: 1px; }
+        .pay-val   { font-size: 10.5px; font-weight: bold; color: #2d3748; text-align: right; }
+        .pay-lbl-t { font-size: 8.5px; font-weight: bold; color: #00877d; text-transform: uppercase; letter-spacing: 1.1px; }
+        .pay-val-t { font-size: 17px; font-weight: bold; color: #00695f; text-align: right; }
 
         /* ════════ FOOTER ════════ */
         .footer {
-            background-color: #f0fdfc;
-            border-top: 1px solid #b2f0eb;
-            padding: 12px 22px 16px;
+            background-color: #f9fefd;
+            border-top: 1px solid #e0f4f2;
+            padding: 12px 20px 14px;
         }
         .footer table { width: 100%; border-collapse: collapse; }
-        .footer td { vertical-align: bottom; }
-        .footer td:last-child { text-align: center; width: 155px; }
-        .disclaimer  { font-size: 8px; color: #6b7280; line-height: 1.8; font-style: italic; }
-        .print-info  { font-size: 7px; color: #a0aec0; margin-top: 5px; }
+        .footer td { vertical-align: top; width: 50%; }
+        .f-lbl  { font-size: 6.5px; font-weight: bold; color: #00a79d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .f-text { font-size: 8.5px; color: #4a5568; line-height: 1.75; }
+        .disclaimer { font-size: 7.5px; color: #94a3b8; line-height: 1.7; font-style: italic; margin-top: 9px; border-top: 1px dashed #e0f4f2; padding-top: 8px; }
+        .print-info { font-size: 7px; color: #b3c0cc; margin-top: 4px; }
 
         /* ════════ PRINT ════════ */
         @media print {
             body { background-color: #ffffff; }
-            .wrap { border: none; width: 100%; margin: 0; }
+            .wrap { border: none; box-shadow: none; }
         }
         @page { size: A4; margin: 12mm 10mm; }
     </style>
@@ -231,11 +201,11 @@
             <tr>
                 <td>
                     <div class="meta-lbl">No. Donasi</div>
-                    <div class="meta-val" style="font-size:8px; word-break:break-all">{{ $donation->id }}</div>
+                    <div class="meta-val" style="font-size:7.5px; word-break:break-all">{{ $donation->id }}</div>
                 </td>
                 <td>
                     <div class="meta-lbl">Tanggal Donasi</div>
-                    <div class="meta-val" style="font-size:9px">{{ $donationDate }}</div>
+                    <div class="meta-val" style="font-size:8.5px">{{ $donationDate }}</div>
                 </td>
                 <td>
                     <div class="meta-lbl">Waktu</div>
@@ -258,109 +228,67 @@
     <div class="body-pad">
 
         {{-- Campaign --}}
-        <div class="sec-hdr">
-            <table>
-                <tr>
-                    <td style="width:22px"><div class="sec-icon">C</div></td>
-                    <td style="width:1px"><span class="sec-lbl">Informasi Campaign</span></td>
-                    <td class="sec-line"><table width="100%"><tr><td></td></tr></table></td>
-                </tr>
-            </table>
-        </div>
-        <div class="campaign-box">
+        <div class="sec first">Informasi Campaign</div>
+        <div class="card campaign-box">
             <div class="campaign-name">{{ $campaign->judul }}</div>
-            <div class="tag-wrap">
-                @if($campaign->kategori)<span class="tag">Kategori: {{ $campaign->kategori }}</span>@endif
-                @if($location)<span class="tag">Lokasi: {{ $location }}</span>@endif
-                @if($campaign->target_biaya)<span class="tag">Target: {{ LFC::formatRupiah($campaign->target_biaya) }}</span>@endif
-                @if($deadlineStr)<span class="tag">Deadline: {{ $deadlineStr }}</span>@endif
+            <div>
+                @if($campaign->kategori)<span class="tag">{{ $campaign->kategori }}</span>@endif
+                @if($location)<span class="tag">{{ $location }}</span>@endif
+                @if($campaign->target_biaya)<span class="tag">Target {{ LFC::formatRupiah($campaign->target_biaya) }}</span>@endif
+                @if($deadlineStr)<span class="tag">s.d. {{ $deadlineStr }}</span>@endif
             </div>
         </div>
 
         {{-- Donor Info --}}
-        <div class="sec-hdr">
-            <table>
+        <div class="sec">Informasi Donatur</div>
+        <div class="card">
+            <table class="grid-tbl">
                 <tr>
-                    <td style="width:22px"><div class="sec-icon">D</div></td>
-                    <td style="width:1px"><span class="sec-lbl">Informasi Donatur</span></td>
-                    <td class="sec-line"><table width="100%"><tr><td></td></tr></table></td>
+                    <td class="solo" colspan="2">
+                        <div class="g-lbl">Nama Lengkap</div>
+                        <div class="g-val">{{ $donation->nama_donatur }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="g-lbl">Email</div>
+                        <div class="g-val">{{ $donation->email_donatur ?: '—' }}</div>
+                    </td>
+                    <td>
+                        <div class="g-lbl">Nomor Kontak</div>
+                        <div class="g-val">{{ $donation->no_telp_donatur ?: '—' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="g-lbl">Usia</div>
+                        <div class="g-val">{{ $donation->usia ? $donation->usia . ' tahun' : '—' }}</div>
+                    </td>
+                    <td>
+                        <div class="g-lbl">Domisili</div>
+                        <div class="g-val">{{ $donation->domisili ?: '—' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="solo" colspan="2">
+                        <div class="g-lbl">Pekerjaan</div>
+                        <div class="g-val">{{ $donation->pekerjaan ?: '—' }}</div>
+                    </td>
                 </tr>
             </table>
         </div>
-        <table class="fields">
-            <tr>
-                <td colspan="2">
-                    <div class="field-box">
-                        <div class="field-lbl">Nama Lengkap</div>
-                        <div class="field-val">{{ $donation->nama_donatur }}</div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td style="width:50%">
-                    <div class="field-box">
-                        <div class="field-lbl">Email</div>
-                        <div class="field-val">{{ $donation->email_donatur ?: '—' }}</div>
-                    </div>
-                </td>
-                <td style="width:50%">
-                    <div class="field-box">
-                        <div class="field-lbl">Nomor Kontak</div>
-                        <div class="field-val">{{ $donation->no_telp_donatur ?: '—' }}</div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td style="width:50%">
-                    <div class="field-box">
-                        <div class="field-lbl">Usia</div>
-                        <div class="field-val">{{ $donation->usia ? $donation->usia . ' tahun' : '—' }}</div>
-                    </div>
-                </td>
-                <td style="width:50%">
-                    <div class="field-box">
-                        <div class="field-lbl">Domisili</div>
-                        <div class="field-val">{{ $donation->domisili ?: '—' }}</div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="field-box">
-                        <div class="field-lbl">Pekerjaan</div>
-                        <div class="field-val">{{ $donation->pekerjaan ?: '—' }}</div>
-                    </div>
-                </td>
-            </tr>
-        </table>
 
         {{-- Pesan --}}
         @if($donation->pesan_donatur)
-        <div class="sec-hdr" style="margin-top:14px">
-            <table>
-                <tr>
-                    <td style="width:22px"><div class="sec-icon">P</div></td>
-                    <td style="width:1px"><span class="sec-lbl">Pesan Donatur</span></td>
-                    <td class="sec-line"><table width="100%"><tr><td></td></tr></table></td>
-                </tr>
-            </table>
-        </div>
+        <div class="sec">Pesan Donatur</div>
         <div class="msg-box">&ldquo;{{ $donation->pesan_donatur }}&rdquo;</div>
         @endif
 
         {{-- Payment --}}
-        <div class="sec-hdr">
-            <table>
-                <tr>
-                    <td style="width:22px"><div class="sec-icon">Rp</div></td>
-                    <td style="width:1px"><span class="sec-lbl">Rincian Pembayaran</span></td>
-                    <td class="sec-line"><table width="100%"><tr><td></td></tr></table></td>
-                </tr>
-            </table>
-        </div>
-        <div class="pay-wrap">
+        <div class="sec">Rincian Pembayaran</div>
+        <div class="card">
         <table class="pay-tbl">
-            <tr class="alt">
+            <tr>
                 <td class="pay-lbl">Jumlah Donasi</td>
                 <td class="pay-val">{{ LFC::formatRupiah($donation->jumlah_donasi) }}</td>
             </tr>
@@ -375,7 +303,7 @@
             @else
             <tr>
                 <td class="pay-lbl">Metode Pembayaran</td>
-                <td class="pay-val" style="font-size:11px; font-weight:normal; color:#374151">
+                <td class="pay-val" style="font-size:10px; font-weight:normal; color:#4a5568">
                     {{ $paymentMethod ?: '—' }}
                 </td>
             </tr>
@@ -387,39 +315,6 @@
         </table>
         </div>
 
-        {{-- Org --}}
-        <div class="sec-hdr">
-            <table>
-                <tr>
-                    <td style="width:22px"><div class="sec-icon">O</div></td>
-                    <td style="width:1px"><span class="sec-lbl">Penyelenggara</span></td>
-                    <td class="sec-line"><table width="100%"><tr><td></td></tr></table></td>
-                </tr>
-            </table>
-        </div>
-        <div class="org-box">
-        <table class="org-tbl">
-            <tr>
-                <td>
-                    <div class="org-lbl">Alamat</div>
-                    <div class="org-text">
-                        Gedung Student Center Lantai 3<br>
-                        Ruang LDK Syahid<br>
-                        UIN Syarif Hidayatullah Jakarta
-                    </div>
-                </td>
-                <td>
-                    <div class="org-lbl">Kontak Resmi</div>
-                    <div class="org-text">
-                        UKM LDK Syahid<br>
-                        ldk.ormawa@apps.uinjkt.ac.id<br>
-                        www.ldksyah.id
-                    </div>
-                </td>
-            </tr>
-        </table>
-        </div>
-
     </div>{{-- /body --}}
 
     {{-- FOOTER --}}
@@ -427,17 +322,26 @@
         <table>
             <tr>
                 <td>
-                    <div class="disclaimer">
-                        * Bukti pembayaran yang sah yang dikeluarkan oleh UKM LDK Syahid<br>
-                        UIN Syarif Hidayatullah Jakarta. Dokumen ini berlaku sebagai bukti<br>
-                        penerimaan donasi resmi dari program Celengan Syahid.
+                    <div class="f-lbl">Alamat Penyelenggara</div>
+                    <div class="f-text">
+                        Gedung Student Center Lantai 3, Ruang LDK Syahid<br>
+                        UIN Syarif Hidayatullah Jakarta
                     </div>
-                    <div class="print-info">Dicetak pada: {{ $printDate }}</div>
                 </td>
                 <td>
+                    <div class="f-lbl">Kontak Resmi</div>
+                    <div class="f-text">
+                        UKM LDK Syahid<br>
+                        ldk.ormawa@apps.uinjkt.ac.id &middot; www.ldksyah.id
+                    </div>
                 </td>
             </tr>
         </table>
+        <div class="disclaimer">
+            * Bukti pembayaran yang sah yang dikeluarkan oleh UKM LDK Syahid UIN Syarif Hidayatullah Jakarta.
+            Dokumen ini berlaku sebagai bukti penerimaan donasi resmi dari program Celengan Syahid.
+        </div>
+        <div class="print-info">Dicetak pada: {{ $printDate }}</div>
     </div>
 
 </div>{{-- /wrap --}}
