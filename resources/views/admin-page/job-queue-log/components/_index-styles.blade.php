@@ -158,15 +158,30 @@
     .eta-main { font-size: 1rem; }
 }
 
-/* ── Filter Bar ── */
+/* ── Filter Bar — now nested inside .table-card, not a standalone card ── */
 .filter-bar {
     display: flex; align-items: center; gap: 0.5rem;
-    flex-wrap: wrap; background: #fff;
-    border-radius: 12px; padding: 0.65rem 1rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    flex-wrap: wrap; padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid #e9ecef;
 }
 .filter-control { max-width: 200px; }
-.filter-search { max-width: 200px; }
+
+/* Search box — wrapped so a magnifying-glass icon can sit inside it
+   without needing extra JS; wide enough for the full placeholder text
+   instead of truncating it. */
+.search-input-wrap {
+    position: relative;
+    flex: 1 1 260px;
+    max-width: 320px;
+}
+.search-input-wrap .search-input-icon {
+    position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+    color: #adb5bd; font-size: 0.78rem; pointer-events: none;
+}
+.filter-search {
+    width: 100%;
+    padding-left: 28px !important;
+}
 
 /* Search input */
 .filter-bar .form-control {
@@ -368,7 +383,8 @@
     }
     .filter-bar .select2-container { width: 100% !important; }
     .filter-bar .form-control,
-    .filter-bar .filter-search { max-width: 100% !important; width: 100% !important; }
+    .filter-bar .filter-search,
+    .filter-bar .search-input-wrap { max-width: 100% !important; width: 100% !important; }
     .filter-bar #btn-delete-stuck { margin-left: 0 !important; width: 100%; }
     .filter-bar .filter-actions { width: 100%; display: flex; flex-direction: column; gap: 0.35rem; }
     .filter-bar .filter-actions .btn { width: 100%; margin-left: 0 !important; }
@@ -408,7 +424,6 @@
 
 /* ── Dark Mode ── */
 html.dark-mode .stat-card,
-html.dark-mode .filter-bar,
 html.dark-mode .table-card,
 html.dark-mode .table-pagination,
 html.dark-mode .modal-content {
@@ -416,6 +431,7 @@ html.dark-mode .modal-content {
     box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
 }
 html.dark-mode .jql-modal-content { background: #2b2f33 !important; }
+html.dark-mode .filter-bar { border-bottom-color: #373b3e; }
 html.dark-mode .table-pagination { border-top-color: #373b3e !important; }
 
 /* Dark mode: close button (X) in modal */

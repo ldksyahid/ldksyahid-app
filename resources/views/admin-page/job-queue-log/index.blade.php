@@ -180,40 +180,40 @@
             </div>
         </div>
 
-        {{-- Filter Bar --}}
-        <div class="col-12 mb-3">
-            <div class="filter-bar">
-                <select id="filter-status">
-                    <option value="all">All Statuses</option>
-                    <option value="pending">Pending</option>
-                    <option value="processing">Processing</option>
-                    <option value="delayed">Delayed</option>
-                    <option value="daily_limit">Daily Limit</option>
-                    <option value="stuck">Stuck</option>
-                    <option value="failed">Failed</option>
-                </select>
-                <select id="filter-queue">
-                    <option value="all">All Queues</option>
-                </select>
-                <input type="text" class="form-control form-control-sm filter-search" id="filter-search"
-                    placeholder="Search job type...">
-                <div class="d-flex gap-1 ms-auto filter-actions">
-                    <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-stuck">
-                        <i class="fas fa-trash-alt me-1"></i>Delete Stuck
-                    </button>
-                    <button class="btn btn-sm btn-outline-success btn-rounded" id="btn-retry-all-failed" style="display:none;">
-                        <i class="fas fa-redo me-1"></i>Retry All
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-all-failed" style="display:none;">
-                        <i class="fas fa-trash-alt me-1"></i>Delete All Failed
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        {{-- Table --}}
+        {{-- Filter Bar + Table --}}
         <div class="col-12 mb-3">
             <div class="table-card">
+                <div class="filter-bar">
+                    <select id="filter-status">
+                        <option value="all">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="delayed">Delayed</option>
+                        <option value="daily_limit">Daily Limit</option>
+                        <option value="stuck">Stuck</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                    <select id="filter-queue">
+                        <option value="all">All Queues</option>
+                    </select>
+                    <div class="search-input-wrap">
+                        <i class="fas fa-search search-input-icon"></i>
+                        <input type="text" class="form-control form-control-sm filter-search" id="filter-search"
+                            placeholder="Search job type or payload content..."
+                            title="Matches the job's class name (e.g. SendSingleMailJob) or anything else inside its raw payload, such as an email address or phone number">
+                    </div>
+                    <div class="d-flex gap-1 ms-auto filter-actions">
+                        <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-stuck">
+                            <i class="fas fa-trash-alt me-1"></i>Delete Stuck
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-rounded" id="btn-retry-all-failed" style="display:none;">
+                            <i class="fas fa-redo me-1"></i>Retry All
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-all-failed" style="display:none;">
+                            <i class="fas fa-trash-alt me-1"></i>Delete All Failed
+                        </button>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-sm align-middle mb-0" id="jobs-table">
                         <thead>
