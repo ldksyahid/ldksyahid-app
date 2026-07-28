@@ -88,7 +88,7 @@ $(function () {
                 syncServerTime(response.server_time);
                 if (!countdownStarted) { startWorkerCountdown(); countdownStarted = true; }
                 updateFonnteDeviceStatus(response.fonnte_device_status);
-                updateStats(response.stats, response.gmail_daily_limit, response.whatsapp_rate_per_minute);
+                updateStats(response.stats, response.whatsapp_rate_per_minute);
                 updateQueuesFilter(response.queues);
                 updateTable(response.jobs);
                 toggleFilterActions();
@@ -125,7 +125,7 @@ $(function () {
     }
 
     // ── Stats ──────────────────────────────────────────────────────────────
-    function updateStats(stats, gmailDailyLimit, whatsappRatePerMinute) {
+    function updateStats(stats, whatsappRatePerMinute) {
         $('#stat-total').text(Number(stats.total).toLocaleString());
         $('#stat-pending').text(Number(stats.pending).toLocaleString());
         $('#stat-processing').text(Number(stats.processing).toLocaleString());
@@ -141,8 +141,10 @@ $(function () {
         }
         previousStats = stats;
 
-        // Gmail daily limit banner
-        if (gmailDailyLimit && stats.daily_limit > 0) {
+        // Gmail daily limit banner — daily_limit is now derived purely from
+        // each job's own recorded delay (see dailyLimitThreshold() backend
+        // comment), not a live cache flag, so this count alone is reliable.
+        if (stats.daily_limit > 0) {
             $('#daily-limit-job-count').text(stats.daily_limit);
             $('#daily-limit-banner').slideDown(200);
         } else {
