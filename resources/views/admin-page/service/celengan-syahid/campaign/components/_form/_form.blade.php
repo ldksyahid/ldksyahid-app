@@ -158,10 +158,13 @@
                                     @if ($operation === 'view')
                                         <div class="form-control-plaintext">{{ $data->provinsi ?? '-' }}</div>
                                     @else
+                                        @php
+                                            $rawProvince = old('provinsi', $data->provinsi ?? '');
+                                        @endphp
                                         <select class="form-select" name="provinsi" id="inputProvinsiCampaign" data-placeholder="-- Choose Province --">
                                             <option value="">-- Choose Province --</option>
                                             @foreach ($provinces as $id => $name)
-                                                <option value="{{ $name }}" {{ old('provinsi', $data->provinsi ?? '') == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                                <option value="{{ $name }}" {{ strcasecmp($rawProvince, $name) === 0 ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                         </select>
                                     @endif
