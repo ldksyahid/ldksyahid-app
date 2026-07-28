@@ -55,6 +55,15 @@ class SendSingleMailJob implements ShouldQueue
     {
         $this->email    = $email;
         $this->mailable = $mailable;
+
+        // Explicit queue name (was implicitly 'default', inherited from
+        // Queueable's own $queue property) — assigned here rather than
+        // redeclared as a class property, since redeclaring it with a
+        // different default value than Queueable's causes a fatal
+        // "incompatible property definition" error. SendNewsletterJob,
+        // SendArticleNewsletterJob and SendGeneratedEmailJob all dispatch
+        // this job directly, so they automatically inherit this queue too.
+        $this->queue = 'email';
     }
 
     /**

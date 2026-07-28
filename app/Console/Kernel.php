@@ -23,7 +23,14 @@ class Kernel extends ConsoleKernel
         // Queue worker: runs every 10 minutes (hosting cron minimum interval).
         // --max-time=540 keeps the worker alive for 9 minutes so it fills the
         // full cron window, then exits cleanly before the next cron fires.
-        $schedule->command('queue:work --max-time=540 --tries=3 --timeout=120')
+        //
+        // --queue=whatsapp,email,default: queues are drained in this order
+        // every pass, so WhatsApp jobs are never stuck behind an email
+        // backlog. 'default' stays listed as a transition-safety net for any
+        // job still labeled 'default' (see migration
+        // 2026_07_28_000001_relabel_default_queue_to_email) — safe to drop
+        // once /admin/job-queue-log confirms none remain.
+        $schedule->command('queue:work --queue=whatsapp,email,default --max-time=540 --tries=3 --timeout=120')
                  ->everyTenMinutes()
                  ->withoutOverlapping();
 
@@ -35,6 +42,15 @@ class Kernel extends ConsoleKernel
 
         // Celengan Syahid: mark QRIS donations as EXPIRED when expired_at has passed
         $schedule->command('donations:expire-qris')
+                 ->everyTenMinutes()
+                 ->withoutOverlapping();
+
+        // WhatsApp (Fonnte): poll device connect/disconnect status for the
+        // Job Queue Log dashboard badge. Same 10-minute floor as above (OS
+        // cron minimum interval) — queue:work runs first in this schedule
+        // and isn't backgrounded, so this typically executes in the last
+        // ~1 minute of each cycle, same as donations:expire-qris above.
+        $schedule->command('fonnte:check-device-status')
                  ->everyTenMinutes()
                  ->withoutOverlapping();
 
@@ -59,5 +75,6 @@ class Kernel extends ConsoleKernel
         Commands\AggregateVisitorStats::class,
         Commands\CloseExpiredForms::class,
         Commands\ExpireStaleQrisDonations::class,
+        Commands\CheckFonnteDeviceStatus::class,
     ];
 }
