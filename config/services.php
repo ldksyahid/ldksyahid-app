@@ -87,6 +87,16 @@ return [
         'settlement_minutes'         => (int) env('BISATOPUP_SETTLEMENT_MINUTES', 15),
     ],
 
+    // Fonnte (unofficial WhatsApp Web gateway) — used for all outbound
+    // WhatsApp messages via App\Services\Fonnte.
+    'fonnte' => [
+        'token'    => env('FONNTE_TOKEN'),
+        // Root domain only (NOT the /send endpoint) — Fonnte::deliver()
+        // appends '/send', CheckFonnteDeviceStatus appends '/device'. Both
+        // share this same domain, so it must stay a reusable base.
+        'base_url' => env('FONNTE_BASE_URL', 'https://api.fonnte.com'),
+    ],
+
     'two_fa' => [
         'allowed_users'          => array_filter(array_map('trim', explode(',', env('TWO_FA_ALLOWED_USERS', '')))),
         'app_name'               => env('TWO_FA_APP_NAME', 'LDK Syahid Admin'),

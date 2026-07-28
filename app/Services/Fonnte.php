@@ -2,19 +2,51 @@
 
 namespace App\Services;
 
+use App\Jobs\SendSingleWhatsAppJob;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LibraryFunctionController as LFC;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Donation;
 use App\Models\MsSetting;
 use App\Constants\SettingKey\Key1;
 use App\Constants\SettingKey\Key2;
 
 class Fonnte
 {
-    public static function send(string $target, string $message): ?array
+    /**
+     * Send a single WhatsApp message. This no longer calls the Fonnte API
+     * directly — it only dispatches a queued job, so every message stays
+     * behind the `send-whatsapp` rate limiter instead of flooding the
+     * account with unthrottled, back-to-back sends.
+     *
+     * BEHAVIOR CHANGE: this is now void (fire-and-forget), not a direct
+     * API response — the response is only available later when the job is
+     * processed by the queue worker. No current caller uses the return
+     * value, so this is safe.
+     */
+    public static function send(string $target, string $message): void
     {
-        $token = env('FONNTE_TOKEN');
+        // Random 0-8s jitter so messages dispatched at nearly the same
+        // instant (e.g. notifyAdmin + sendShortlinkApproved in the same
+        // request) don't fire in the exact same second.
+        //
+        // ->onQueue('whatsapp'): a separate queue from 'default'/'email'
+        // (used by SendSingleMailJob) — so WhatsApp jobs are never stuck
+        // behind an email backlog.
+        SendSingleWhatsAppJob::dispatch($target, $message)
+            ->onQueue('whatsapp')
+            ->delay(now()->addSeconds(rand(0, 8)));
+    }
+
+    /**
+     * The actual HTTP call to the Fonnte API. ONLY called from
+     * SendSingleWhatsAppJob::handle() inside the queue worker — never call
+     * this directly from application code, to stay behind the rate limiter.
+     */
+    public static function deliver(string $target, string $message): array
+    {
+        $token = config('services.fonnte.token');
 
         // Normalize: strip non-digits, replace leading 0 with 62 (fallback for old local-format numbers).
         $normalized = preg_replace('/[^\d]/', '', $target);
@@ -24,7 +56,7 @@ class Fonnte
 
         $response = Http::withHeaders([
             'Authorization' => $token,
-        ])->post('https://api.fonnte.com/send', [
+        ])->post(config('services.fonnte.base_url') . '/send', [
             'target'  => $normalized,
             'message' => $message,
         ]);
@@ -36,6 +68,10 @@ class Fonnte
                 'target'   => $target,
                 'response' => $result,
             ]);
+
+            // Throw so the job actually retries (backoff) and the failure is
+            // visible in /admin/job-queue-log, instead of silently vanishing.
+            throw new \RuntimeException('Fonnte API returned HTTP ' . $response->status());
         }
 
         return $result;
@@ -138,5 +174,51 @@ class Fonnte
             . "#UINJakarta";
 
         return self::send($data['whatsapp'], $message);
+    }
+
+    /**
+     * Notify the campaign's PIC (Campaign.telp_pj) whenever a donation is
+     * marked PAID. Skips silently (logs info) if the campaign has no PIC
+     * phone number on file.
+     */
+    public static function sendCampaignPicPaidNotification(Donation $donation): ?array
+    {
+        $campaign = $donation->campaign;
+
+        if (!$campaign || blank($campaign->telp_pj)) {
+            Log::info('[Fonnte] Skipped PIC paid notification: campaign has no telp_pj', [
+                'donation_id' => $donation->id ?? null,
+                'campaign_id' => $campaign->id ?? null,
+            ]);
+            return null;
+        }
+
+        $summary = $campaign->getBalanceSummary();
+
+        // telp_pj stores the full number including its country code
+        // (e.g. "62877..."), set via the PIC Contact country dropdown —
+        // only strip stray non-digit characters, no country-code prefixing needed.
+        $picTarget = preg_replace('/[^\d]/', '', $campaign->telp_pj);
+
+        $paidAt = now()->format('d M Y, H:i') . ' WIB';
+
+        // Anonymous donations hide the donor's name from the PIC too — same
+        // "Hamba Allah" placeholder used on the public donor list.
+        $donorName = $donation->is_anonymous ? 'Hamba Allah' : $donation->nama_donatur;
+
+        $message = "🔔 *[DONASI MASUK]* 🔔\n\n"
+            . "Assalammu'alaikum, {$campaign->nama_pj}\n\n"
+            . "Alhamdulillah, campaign *{$campaign->judul}* baru saja menerima donasi:\n\n"
+            . "👤 *Donatur:* {$donorName}\n"
+            . "📱 *Kontak:* " . ($donation->no_telp_donatur ?: '-') . "\n"
+            . "📧 *Email:* " . ($donation->email_donatur ?: '-') . "\n"
+            . "💰 *Jumlah Donasi:* " . LFC::formatRupiah($donation->jumlah_donasi) . "\n"
+            . "💬 *Pesan:* " . ($donation->pesan_donatur ?: '-') . "\n"
+            . "🕐 *Waktu:* {$paidAt}\n\n"
+            . "📊 *Total Dana Terkumpul (PAID):* " . LFC::formatRupiah($summary['total_paid']) . "\n"
+            . "💵 *Saldo Tersedia Saat Ini:* " . LFC::formatRupiah($summary['available']) . "\n\n"
+            . "#LDKSyahid\n#CelenganSyahid";
+
+        return self::send($picTarget, $message);
     }
 }

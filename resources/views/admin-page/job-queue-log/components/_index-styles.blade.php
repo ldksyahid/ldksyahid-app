@@ -23,21 +23,42 @@
     background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.3);
     border-radius: 20px; padding: 4px 12px;
 }
-.live-indicator.paused {
-    background: rgba(108,117,125,0.1); border-color: rgba(108,117,125,0.3);
-}
 .live-dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: #00c853; display: inline-block;
     animation: livePulse 1.5s ease-in-out infinite;
 }
-.live-indicator.paused .live-dot { background: #6c757d; animation: none; }
 .live-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: #00c853; }
-.live-indicator.paused .live-label { color: #6c757d; }
 @keyframes livePulse {
     0%, 100% { opacity: 1; transform: scale(1); }
     50%       { opacity: 0.5; transform: scale(0.85); }
 }
+
+/* ── WhatsApp (Fonnte) Device Status Badge ── */
+.wa-device-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em;
+}
+.wa-device-badge i { font-size: 0.8rem; }
+.wa-device-connect {
+    background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.3); color: #00a344;
+}
+.wa-device-disconnect {
+    background: rgba(220,53,69,0.1); border: 1px solid rgba(220,53,69,0.3); color: #b02a37;
+}
+.wa-device-unknown {
+    background: rgba(108,117,125,0.1); border: 1px solid rgba(108,117,125,0.3); color: #6c757d;
+}
+
+/* ── WhatsApp Disconnected Alert Banner ── */
+.wa-disconnect-alert {
+    background: linear-gradient(135deg, rgba(220,53,69,0.1) 0%, rgba(220,53,69,0.06) 100%);
+    border: 1px solid rgba(220,53,69,0.3);
+    border-radius: 10px; padding: 0.85rem 1.1rem;
+    color: #b02a37; font-size: 0.88rem;
+}
+.wa-disconnect-alert i { font-size: 1.2rem; color: #dc3545; }
 
 /* ── Worker Countdown ── */
 .worker-countdown {
@@ -61,6 +82,10 @@
     padding: 1rem 1.1rem; display: flex; align-items: center;
     gap: 1rem; position: relative; overflow: hidden;
     transition: box-shadow 0.2s ease;
+    /* Fills the Bootstrap column's stretched height so every card matches
+       the row's tallest one, regardless of sub-label text wrapping
+       (e.g. "permanently failed" wrapping to 2 lines on the Failed card). */
+    height: 100%;
 }
 .stat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
 .stat-icon {
@@ -86,6 +111,9 @@
     background: #fff; border-radius: 14px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.07);
     padding: 1rem 1.25rem;
+    display: flex; flex-direction: column; gap: 0.85rem;
+}
+.eta-main-row {
     display: flex; align-items: center; gap: 1rem;
     flex-wrap: wrap;
 }
@@ -95,7 +123,14 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 1.3rem;
 }
+/* WhatsApp ETA card — same layout, green accent instead of teal */
+.eta-icon-wa { background: rgba(37,211,102,0.12); color: #25d366; }
 .eta-body { flex: 1; min-width: 160px; }
+.eta-title-row {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 6px; margin-bottom: 2px;
+}
+.eta-title-row .eta-title { margin-bottom: 0; }
 .eta-title {
     font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.05em; color: #adb5bd; margin-bottom: 2px;
@@ -104,6 +139,8 @@
     font-size: 1.15rem; font-weight: 700; color: #212529; line-height: 1.2;
 }
 .eta-meta { font-size: 0.75rem; color: #6c757d; margin-top: 2px; }
+/* Warning/alert banners nested inside an ETA card instead of standing alone */
+.eta-inline-alert { margin: 0; }
 .eta-detail {
     display: flex; flex-direction: column; gap: 4px;
     min-width: 160px;
@@ -116,7 +153,7 @@
 .eta-detail-val   { font-weight: 600; color: #212529; }
 
 @media (max-width: 575.98px) {
-    .eta-card { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .eta-main-row { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
     .eta-detail { width: 100%; }
     .eta-main { font-size: 1rem; }
 }
@@ -361,6 +398,7 @@
     .live-label { font-size: 0.68rem; }
     .live-dot { width: 6px; height: 6px; }
     .worker-countdown { padding: 3px 8px; font-size: 0.68rem; }
+    .wa-device-badge { padding: 3px 8px; font-size: 0.68rem; }
 
     /* Modal */
     .jql-modal-content { border-radius: 10px; }
@@ -450,6 +488,19 @@ html.dark-mode .badge-light { background: #374151 !important; color: #e4e6eb !im
 html.dark-mode .daily-limit-alert {
     background: linear-gradient(135deg, rgba(255,152,0,0.08) 0%, rgba(255,193,7,0.05) 100%);
     border-color: rgba(255,152,0,0.2); color: #ffb74d;
+}
+html.dark-mode .wa-device-connect {
+    background: rgba(0,200,83,0.08); border-color: rgba(0,200,83,0.2); color: #4ade80;
+}
+html.dark-mode .wa-device-disconnect {
+    background: rgba(220,53,69,0.1); border-color: rgba(220,53,69,0.2); color: #ea868f;
+}
+html.dark-mode .wa-device-unknown {
+    background: rgba(108,117,125,0.12); border-color: rgba(108,117,125,0.25); color: #9ca3af;
+}
+html.dark-mode .wa-disconnect-alert {
+    background: linear-gradient(135deg, rgba(220,53,69,0.08) 0%, rgba(220,53,69,0.05) 100%);
+    border-color: rgba(220,53,69,0.2); color: #ea868f;
 }
 html.dark-mode .eta-card {
     background: #2b2f33 !important;
