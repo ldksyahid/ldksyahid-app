@@ -259,35 +259,18 @@ class JobQueueLogController extends Controller
             // which would wrongly blend the email (Brevo daily-limit) and
             // WhatsApp (rate-limit-only, no daily cap) bottlenecks into one
             // misleading number if used for ETA math.
-            'email_pending'     => $this->emailPendingCount($now, $dailyLimitActive),
+            //
+            // Deliberately just "not yet reserved", with no availableDate or
+            // $dailyLimitActive condition — $dailyLimitActive is a transient
+            // cache flag that only gets refreshed while the worker is
+            // actively touching these jobs. A held-for-reset job whose
+            // availableDate is far in the future won't be touched again
+            // until then, so the flag can read false in between even though
+            // the backlog is very much still there — undercounting it to 0
+            // ("Queue is clear") if this were conditioned on that flag.
+            'email_pending'     => TrJobQueue::where('queue', 'email')->whereNull('reservedDate')->count(),
             'whatsapp_pending'  => TrJobQueue::where('queue', 'whatsapp')->whereNull('reservedDate')->count(),
         ];
-    }
-
-    /**
-     * Pending count for the Email ETA card only (queue='email'): jobs ready
-     * to send now, plus (when the Brevo/Gmail daily limit is active) jobs
-     * held until the limit resets — mirrors the same two buckets 'pending'
-     * and 'daily_limit' represent globally, but scoped to just this queue.
-     */
-    private function emailPendingCount(string $now, bool $dailyLimitActive): int
-    {
-        $readyNow = TrJobQueue::where('queue', 'email')
-            ->whereNull('reservedDate')
-            ->where('availableDate', '<=', $now)
-            ->count();
-
-        if (!$dailyLimitActive) {
-            return $readyNow;
-        }
-
-        $heldForReset = TrJobQueue::where('queue', 'email')
-            ->whereNull('reservedDate')
-            ->where('availableDate', '>', $now)
-            ->where('attempts', '>', 0)
-            ->count();
-
-        return $readyNow + $heldForReset;
     }
 
     private function parseJobType(array $payload): string
