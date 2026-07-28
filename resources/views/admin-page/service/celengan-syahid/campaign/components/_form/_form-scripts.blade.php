@@ -13,6 +13,47 @@
             });
         });
 
+        // PIC Contact phone: country code select2 + combine into hidden telp_pj
+        var picCodeEl  = document.getElementById('inputTelpPJCode');
+        var picLocalEl = document.getElementById('inputTelpPJLocal');
+        var picFullEl  = document.getElementById('inputTelpPJFull');
+
+        function updatePicPhonePlaceholder() {
+            if (!picCodeEl || !picLocalEl) return;
+            var selected = picCodeEl.options[picCodeEl.selectedIndex];
+            picLocalEl.placeholder = (selected && selected.getAttribute('data-placeholder')) || '8xxxxxxxxxx';
+        }
+
+        function buildPicFullPhone() {
+            if (!picCodeEl || !picLocalEl || !picFullEl) return;
+            var code  = picCodeEl.value;
+            var local = picLocalEl.value.replace(/[^\d]/g, '').replace(/^0+/, '');
+            picFullEl.value = local ? code + local : '';
+        }
+
+        if (picCodeEl && picLocalEl) {
+            $(picCodeEl).select2({
+                width: '92px',
+                minimumResultsForSearch: 0,
+                templateResult: function (opt) {
+                    if (!opt.id) return opt.text;
+                    var el = opt.element;
+                    return $('<span>' + ($(el).data('flag') || '') + ' <strong>+' + opt.id + '</strong></span>');
+                },
+                templateSelection: function (opt) {
+                    if (!opt.id) return opt.text;
+                    var el = opt.element;
+                    return $('<span>' + ($(el).data('flag') || '') + ' <strong>+' + opt.id + '</strong></span>');
+                }
+            });
+            updatePicPhonePlaceholder();
+            picLocalEl.addEventListener('input', buildPicFullPhone);
+            $(picCodeEl).on('change', function () {
+                updatePicPhonePlaceholder();
+                buildPicFullPhone();
+            });
+        }
+
         // Province change -> load cities via AJAX
         $('#inputProvinsiCampaign').on('change', function() {
             var provinsi_id = $(this).val();

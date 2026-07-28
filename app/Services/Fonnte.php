@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LibraryFunctionController as LFC;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Donation;
 use App\Models\MsSetting;
 use App\Constants\SettingKey\Key1;
 use App\Constants\SettingKey\Key2;
@@ -138,5 +139,51 @@ class Fonnte
             . "#UINJakarta";
 
         return self::send($data['whatsapp'], $message);
+    }
+
+    /**
+     * Notify the campaign's PIC (Campaign.telp_pj) whenever a donation is
+     * marked PAID. Skips silently (logs info) if the campaign has no PIC
+     * phone number on file.
+     */
+    public static function sendCampaignPicPaidNotification(Donation $donation): ?array
+    {
+        $campaign = $donation->campaign;
+
+        if (!$campaign || blank($campaign->telp_pj)) {
+            Log::info('[Fonnte] Skipped PIC paid notification: campaign has no telp_pj', [
+                'donation_id' => $donation->id ?? null,
+                'campaign_id' => $campaign->id ?? null,
+            ]);
+            return null;
+        }
+
+        $summary = $campaign->getBalanceSummary();
+
+        // telp_pj stores the full number including its country code
+        // (e.g. "62877..."), set via the PIC Contact country dropdown —
+        // only strip stray non-digit characters, no country-code prefixing needed.
+        $picTarget = preg_replace('/[^\d]/', '', $campaign->telp_pj);
+
+        $paidAt = now()->format('d M Y, H:i') . ' WIB';
+
+        // Anonymous donations hide the donor's name from the PIC too — same
+        // "Hamba Allah" placeholder used on the public donor list.
+        $donorName = $donation->is_anonymous ? 'Hamba Allah' : $donation->nama_donatur;
+
+        $message = "🔔 *[DONASI MASUK]* 🔔\n\n"
+            . "Assalammu'alaikum, {$campaign->nama_pj}\n\n"
+            . "Alhamdulillah, campaign *{$campaign->judul}* baru saja menerima donasi:\n\n"
+            . "👤 *Donatur:* {$donorName}\n"
+            . "📱 *Kontak:* " . ($donation->no_telp_donatur ?: '-') . "\n"
+            . "📧 *Email:* " . ($donation->email_donatur ?: '-') . "\n"
+            . "💰 *Jumlah Donasi:* " . LFC::formatRupiah($donation->jumlah_donasi) . "\n"
+            . "💬 *Pesan:* " . ($donation->pesan_donatur ?: '-') . "\n"
+            . "🕐 *Waktu:* {$paidAt}\n\n"
+            . "📊 *Total Dana Terkumpul (PAID):* " . LFC::formatRupiah($summary['total_paid']) . "\n"
+            . "💵 *Saldo Tersedia Saat Ini:* " . LFC::formatRupiah($summary['available']) . "\n\n"
+            . "#LDKSyahid\n#CelenganSyahid";
+
+        return self::send($picTarget, $message);
     }
 }

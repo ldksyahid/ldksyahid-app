@@ -450,6 +450,12 @@ class PublicController extends Controller
                         Log::error('callbackDonation: Fonnte paid failed: ' . $e->getMessage());
                     }
 
+                    try {
+                        Fonnte::sendCampaignPicPaidNotification($donationData);
+                    } catch (\Throwable $e) {
+                        Log::error('callbackDonation: Fonnte PIC paid notification failed: ' . $e->getMessage());
+                    }
+
                     if ($donationData->email_donatur) {
                         try {
                             $pdf = Pdf::loadView('print-request.donation-proof', [

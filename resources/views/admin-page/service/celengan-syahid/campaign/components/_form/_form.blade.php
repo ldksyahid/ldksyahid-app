@@ -9,6 +9,42 @@
     $currentLogo = ($data && $data->gdrive_id_1) ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id_1 : null;
 
     $hasOrganization = $data && ($data->nama_pj != null || $data->link_pj != null);
+
+    // PIC Contact phone: telp_pj is stored as a full number including its
+    // country code (e.g. "62812xxxxxxx"), no leading "+". Split it back into
+    // {code, local} so the country dropdown + local-number input can be
+    // pre-filled when editing an existing campaign.
+    //
+    // "62" is checked first, before scanning the rest of the code list.
+    // This matters because Indonesian mobile prefixes (811-813, 821-823,
+    // 851-859, 877-878, 881-889, 895-899...) collide with real calling codes
+    // (+81 Japan, +82 Korea, +855 Cambodia, etc.) — relying purely on
+    // longest-prefix-match would misdetect a bare Indonesian number lacking
+    // its "62" prefix as one of those countries instead. The generic scan
+    // below is only safe to run at all because the
+    // backfill_country_code_campaigns_telp_pj migration guarantees every
+    // pre-existing row already starts with "62"; anything that legitimately
+    // doesn't was entered through this same dropdown with its real code.
+    $phoneCodes = config('phone_codes', []);
+    $rawPicPhone = old('telp_pj', $data->telp_pj ?? '');
+    $picPhoneCode = '62';
+    $picPhoneLocal = $rawPicPhone;
+    if ($rawPicPhone !== '') {
+        if (str_starts_with($rawPicPhone, '62')) {
+            $picPhoneLocal = substr($rawPicPhone, 2);
+        } else {
+            $otherPhoneCodes = collect($phoneCodes)
+                ->reject(fn($pc) => $pc['code'] === '62')
+                ->sortByDesc(fn($pc) => strlen($pc['code']));
+            foreach ($otherPhoneCodes as $pc) {
+                if (str_starts_with($rawPicPhone, $pc['code'])) {
+                    $picPhoneCode = $pc['code'];
+                    $picPhoneLocal = substr($rawPicPhone, strlen($pc['code']));
+                    break;
+                }
+            }
+        }
+    }
 @endphp
 
 <div class="container-fluid pt-4 px-4">
@@ -260,18 +296,30 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="inputTelpPJ" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                    <label for="inputTelpPJLocal" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
                                         PIC Contact @if($operation !== 'view') <span class="text-danger">*</span> @endif
                                     </label>
                                     @if ($operation === 'view')
-                                        <div class="form-control-plaintext">+62{{ $data->telp_pj ?? '-' }}</div>
+                                        <div class="form-control-plaintext">{{ $data->telp_pj ? '+' . $data->telp_pj : '-' }}</div>
                                     @else
-                                        <div class="input-group">
-                                            <span class="input-group-text">+62</span>
-                                            <input type="text" class="form-control @error('telp_pj') is-invalid @enderror" id="inputTelpPJ" name="telp_pj"
-                                                value="{{ old('telp_pj', $data->telp_pj ?? '') }}" {{ $operation === 'create' ? 'required' : '' }}>
-                                            @error('telp_pj') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                        <div class="pic-phone-group @error('telp_pj') is-invalid @enderror">
+                                            <select class="form-select" id="inputTelpPJCode" autocomplete="tel-country-code">
+                                                @foreach($phoneCodes as $pc)
+                                                <option value="{{ $pc['code'] }}"
+                                                        data-placeholder="{{ $pc['placeholder'] }}"
+                                                        data-flag="{{ $pc['flag'] }}"
+                                                        {{ $picPhoneCode === $pc['code'] ? 'selected' : '' }}>
+                                                    {{ $pc['flag'] }} +{{ $pc['code'] }} {{ $pc['name'] }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                            <input type="text" class="form-control @error('telp_pj') is-invalid @enderror" id="inputTelpPJLocal"
+                                                value="{{ $picPhoneLocal }}" placeholder="8xxxxxxxxxx" inputmode="numeric"
+                                                {{ $operation === 'create' ? 'required' : '' }}>
                                         </div>
+                                        <input type="hidden" name="telp_pj" id="inputTelpPJFull" value="{{ $rawPicPhone }}">
+                                        @error('telp_pj') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                        <div class="form-text">This number will receive a WhatsApp message whenever a donation comes in.</div>
                                     @endif
                                 </div>
                             </div>
