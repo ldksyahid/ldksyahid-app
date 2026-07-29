@@ -93,12 +93,15 @@ class WhatsApp
             . $adminUrl . "\n\n"
             . "#LDKSyahid\n#LayananShortlink";
 
+        // Order must match the 'request_shortlink' template's {{1}}..{{5}}
+        // — requestId first since it's the first variable to appear in the
+        // template body (Meta requires ascending first-use order).
         return self::send($data['cpPhone'], $message, 'request_shortlink', [
+            $data['requestId'],
             $data['name'],
             $data['email'],
             $data['whatsapp'],
             $data['customLink'],
-            $data['requestId'],
         ]);
     }
 

@@ -42,12 +42,16 @@ class SyncKirimdevTemplates extends Command
                         'type' => 'BODY',
                         // Meta rejects a template whose body ends with a variable
                         // ("A variable cannot be at the end of the body") — the
-                        // trailing "Terima kasih." after {{5}} is required, not
-                        // just cosmetic.
-                        'text' => "Assalamu'alaikum, {{1}}. Terima kasih atas niat baik Anda berdonasi untuk campaign {{2}} sebesar {{3}}. Segera selesaikan pembayaran sebelum {{4}} melalui link berikut: {{5}}. Terima kasih.",
+                        // trailing "Terima kasih 😇" after {{5}} is required, not
+                        // just cosmetic. Emoji/spacing restored to match the
+                        // original Fonnte-era message tone (main branch); the
+                        // multi-hashtag + social-media footer block was dropped
+                        // on purpose — that combination is what most looks like
+                        // marketing content riding on a UTILITY category.
+                        'text' => "🚨 *Invoice Donasi* 🚨\n\nAssalamu'alaikum, {{1}} 😊\n\nJazakallah Khairan Katsiiran, kamu berniat berdonasi untuk campaign *{{2}}* sebesar *{{3}}*. Segera selesaikan pembayaran sebelum *{{4}} WIB* melalui link berikut:\n{{5}}\n\nInfo lengkap ada di email kamu ya 😃\n\nTerima kasih telah menjadi bagian dari Manusia Baik 😇",
                         'example' => [
                             'body_text' => [[
-                                'Budi', 'Bantu Palestina', 'Rp100.000', '31 Des 2026 23:59 WIB', 'https://ldksyah.id/inv/ABC123',
+                                'Budi', 'Bantu Palestina', 'Rp100.000', '31 Des 2026 23:59', 'https://ldksyah.id/inv/ABC123',
                             ]],
                         ],
                     ],
@@ -60,7 +64,7 @@ class SyncKirimdevTemplates extends Command
                 'components' => [
                     [
                         'type' => 'BODY',
-                        'text' => "Assalamu'alaikum, {{1}}. Alhamdulillah, donasi Anda sebesar {{2}} telah berhasil kami terima. Silakan cek email Anda untuk invoice donasi. Terima kasih telah menjadi bagian dari Manusia Baik.",
+                        'text' => "🎉 *Donasi Berhasil* 🎉\n\nAssalamu'alaikum, {{1}} 😊\n\nAlhamdulillah, donasi kamu sebesar *{{2}}* telah berhasil kami terima. Cek email kamu untuk invoice & status donasinya ya 😁\n\nTerima kasih telah menjadi bagian dari Manusia Baik 😇",
                         'example' => [
                             'body_text' => [['Budi', 'Rp100.000']],
                         ],
@@ -85,7 +89,7 @@ class SyncKirimdevTemplates extends Command
                         // templates). Retry via `kirimdev:templates:sync --submit`
                         // once the account has aged; revisit this text/variable
                         // count only if it still fails after that.
-                        'text' => "Assalamu'alaikum, {{1}}. Campaign {{2}} baru saja menerima donasi dari {{3}} sebesar {{4}} pada {{5}}. Update saldo: {{6}}.",
+                        'text' => "🔔 *Donasi Masuk* 🔔\n\nAssalamu'alaikum, {{1}}\n\nAlhamdulillah, campaign *{{2}}* baru saja menerima donasi:\n\n👤 Donatur: {{3}}\n💰 Jumlah: {{4}}\n🕐 Waktu: {{5}}\n\n📊 {{6}}.\n\nJazakallah Khairan Katsiiran 🙏",
                         'example' => [
                             'body_text' => [[
                                 'Andi', 'Bantu Palestina', 'Budi', 'Rp100.000', '01 Jan 2026, 10:00 WIB', 'Total terkumpul Rp5.000.000, saldo tersedia Rp4.500.000',
@@ -101,10 +105,16 @@ class SyncKirimdevTemplates extends Command
                 'components' => [
                     [
                         'type' => 'BODY',
-                        'text' => "Ada permintaan shortlink baru dari {{1}} ({{2}}, {{3}}). Custom link yang diminta: {{4}}. Nomor permintaan #{{5}}. Silakan cek panel admin untuk detail dan proses.",
+                        // {{1}} (requestId) is renumbered to appear FIRST since
+                        // it's the first variable in reading order — Meta
+                        // requires variables to appear in ascending numeric
+                        // order of first use. Keep WhatsApp::
+                        // sendShortlinkRequestNotification()'s param order
+                        // (requestId, name, email, whatsapp, customLink) in sync.
+                        'text' => "📩 *Request Shortlink #{{1}}* 📩\n\nAda permintaan shortlink baru!\n\n👤 Nama: {{2}}\n📧 Email: {{3}}\n📱 WhatsApp: {{4}}\n✂️ Custom link diminta: {{5}}\n\nBalas *YES* untuk approve atau *NO* untuk tolak permintaan ini.",
                         'example' => [
                             'body_text' => [[
-                                'Budi', 'budi@mail.com', '628123456789', 'ldksyah.id/event2026', '42',
+                                '42', 'Budi', 'budi@mail.com', '628123456789', 'ldksyah.id/event2026',
                             ]],
                         ],
                     ],
@@ -117,7 +127,10 @@ class SyncKirimdevTemplates extends Command
                 'components' => [
                     [
                         'type' => 'BODY',
-                        'text' => "Halo {{1}}, link custom Anda sudah jadi: {{2}}. Terima kasih telah menggunakan layanan kami.",
+                        // Meta rejects reused variable numbers ("Variable {{1}}
+                        // is used more than once. Variables must be unique and
+                        // sequential.") — each {{n}} may only appear once.
+                        'text' => "✅ *Kustom URL Kamu Sudah Jadi* ✅\n\nHalo {{1}} 😀\n\nBerikut hasil link yang telah kami kustom:\n🔗 {{2}}\n\nLink tersebut wajib digunakan sebagaimana mestinya ya. Terima kasih telah menggunakan layanan kami 😉",
                         'example' => [
                             'body_text' => [['Budi', 'https://ldksyah.id/event2026']],
                         ],
@@ -131,7 +144,7 @@ class SyncKirimdevTemplates extends Command
                 'components' => [
                     [
                         'type' => 'BODY',
-                        'text' => "Halo {{1}}, mohon maaf permintaan custom link {{2}} belum dapat kami proses saat ini. Silakan hubungi admin untuk info lebih lanjut.",
+                        'text' => "❌ *Kustom URL Belum Bisa Diproses* ❌\n\nHalo {{1}} 🙏\n\n✂️ Custom link: {{2}}\n\nMohon maaf, permintaan tersebut belum dapat kami proses saat ini. Silakan hubungi admin untuk info lebih lanjut ya 🙏",
                         'example' => [
                             'body_text' => [['Budi', 'event2026']],
                         ],
