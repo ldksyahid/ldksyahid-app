@@ -21,7 +21,7 @@ use Illuminate\Console\Command;
  */
 class SyncKirimdevTemplates extends Command
 {
-    protected $signature = 'kirimdev:templates:sync {--submit : Submit any templates below that don\'t exist yet on Kirimdev}';
+    protected $signature = 'kirimdev:templates:sync {--submit : Submit any templates below that don\'t exist yet on Kirimdev} {--only= : Only process the template with this exact name}';
 
     protected $description = 'Submit/check the 6 WhatsApp message templates used by this app against Kirimdev/Meta.';
 
@@ -144,8 +144,18 @@ class SyncKirimdevTemplates extends Command
     public function handle(): int
     {
         $submit = (bool) $this->option('submit');
+        $only   = $this->option('only');
 
-        foreach (self::templates() as $template) {
+        $templates = self::templates();
+        if ($only !== null) {
+            $templates = array_filter($templates, fn ($t) => $t['name'] === $only);
+            if (empty($templates)) {
+                $this->error("No template named '{$only}' in the catalog.");
+                return self::FAILURE;
+            }
+        }
+
+        foreach ($templates as $template) {
             $status = null;
 
             try {
