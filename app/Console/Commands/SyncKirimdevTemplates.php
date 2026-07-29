@@ -34,7 +34,7 @@ class SyncKirimdevTemplates extends Command
     {
         return [
             [
-                'name'     => 'invoice_donasi',
+                'name'     => 'invoice_donasi_v2',
                 'category' => 'UTILITY',
                 'language' => 'id',
                 'components' => [
@@ -58,7 +58,7 @@ class SyncKirimdevTemplates extends Command
                 ],
             ],
             [
-                'name'     => 'donasi_berhasil',
+                'name'     => 'donasi_berhasil_v2',
                 'category' => 'UTILITY',
                 'language' => 'id',
                 'components' => [
@@ -72,7 +72,7 @@ class SyncKirimdevTemplates extends Command
                 ],
             ],
             [
-                'name'     => 'notifikasi_pic_donasi',
+                'name'     => 'notifikasi_pic_donasi_v2',
                 'category' => 'UTILITY',
                 'language' => 'id',
                 'components' => [
@@ -99,7 +99,7 @@ class SyncKirimdevTemplates extends Command
                 ],
             ],
             [
-                'name'     => 'request_shortlink',
+                'name'     => 'request_shortlink_v2',
                 'category' => 'UTILITY',
                 'language' => 'id',
                 'components' => [
@@ -121,7 +121,7 @@ class SyncKirimdevTemplates extends Command
                 ],
             ],
             [
-                'name'     => 'shortlink_disetujui',
+                'name'     => 'shortlink_disetujui_v2',
                 'category' => 'UTILITY',
                 'language' => 'id',
                 'components' => [
@@ -138,7 +138,7 @@ class SyncKirimdevTemplates extends Command
                 ],
             ],
             [
-                'name'     => 'shortlink_ditolak',
+                'name'     => 'shortlink_ditolak_v2',
                 'category' => 'UTILITY',
                 'language' => 'id',
                 'components' => [

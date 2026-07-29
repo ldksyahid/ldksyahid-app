@@ -51,7 +51,7 @@ class WhatsApp
     {
         $message = "🚨 *[INVOICE DONASI]* 🚨\n\n_Assalammualaikum, ".$data['donaturName']."_ 😊\n\nJazakallah Khairan Katsiiran karena kamu telah ingin melakukan donasi untuk campaign *" .$data['campaignName']. "* dengan jumlah donasi  _*".$data['donationAmount']."*_ . Yuk segera transfer donasimu pada link dibawah ini sebelum jatuh tempo pada  _" .$data['expiredDate']. " WIB_\n\n" .$data['invoiceUrl']. "\n\n_*Informasi Lengkap silahkan cek email kamu yaaa_ 😃\n\nTerimakasih telah menjadi bagian dari Manusia Baik\n\n_Wassalammu'alaikum_ 😇\n\n#LDKSyahid\n#KitaAdalahSaudara\n#FSLDKBanten\n#UINJakarta\n#CelenganSyahid\n➖➖➖➖➖➖➖➖➖\nMedia Sosial LDK Syahid\nldksyah.id/Medsos";
 
-        return self::send($data['donaturTelp'], $message, 'invoice_donasi', [
+        return self::send($data['donaturTelp'], $message, 'invoice_donasi_v2', [
             $data['donaturName'],
             $data['campaignName'],
             $data['donationAmount'],
@@ -64,7 +64,7 @@ class WhatsApp
     {
         $message = "🚨 *[DONASI BERHASIL]* 🚨\n\n_Assalammualaikum, ".$data['donaturName']."_ 😊\n\nAlhamdulillah Jazakallah Khairan Katsiiran telah berdonasi sebesar  _*".LFC::formatRupiah($data['donationAmount'])."*_\n\nSegera cek email *Invoice Donasimu* kembali yaaa untuk melihat _Status Donasimu_ dan jangan lupa untuk menyimpan bukti donasi nyaaa 😁\n\nTerimakasih telah menjadi bagian dari Manusia Baik\n\n_Wassalammu'alaikum_ 😇\n\n#LDKSyahid\n#KitaAdalahSaudara\n#FSLDKBanten\n#UINJakarta\n#CelenganSyahid\n➖➖➖➖➖➖➖➖➖\nMedia Sosial LDK Syahid\nldksyah.id/Medsos";
 
-        return self::send($data['donaturTelp'], $message, 'donasi_berhasil', [
+        return self::send($data['donaturTelp'], $message, 'donasi_berhasil_v2', [
             $data['donaturName'],
             LFC::formatRupiah($data['donationAmount']),
         ]);
@@ -93,10 +93,10 @@ class WhatsApp
             . $adminUrl . "\n\n"
             . "#LDKSyahid\n#LayananShortlink";
 
-        // Order must match the 'request_shortlink' template's {{1}}..{{5}}
+        // Order must match the 'request_shortlink_v2' template's {{1}}..{{5}}
         // — requestId first since it's the first variable to appear in the
         // template body (Meta requires ascending first-use order).
-        return self::send($data['cpPhone'], $message, 'request_shortlink', [
+        return self::send($data['cpPhone'], $message, 'request_shortlink_v2', [
             $data['requestId'],
             $data['name'],
             $data['email'],
@@ -131,7 +131,7 @@ class WhatsApp
             . "#{$angkatan}\n"
             . "#UINJakarta";
 
-        return self::send($data['whatsapp'], $message, 'shortlink_disetujui', [
+        return self::send($data['whatsapp'], $message, 'shortlink_disetujui_v2', [
             $data['name'],
             $data['shortlinkUrl'],
         ]);
@@ -162,7 +162,7 @@ class WhatsApp
             . "#{$angkatan}\n"
             . "#UINJakarta";
 
-        return self::send($data['whatsapp'], $message, 'shortlink_ditolak', [
+        return self::send($data['whatsapp'], $message, 'shortlink_ditolak_v2', [
             $data['name'],
             $data['customLink'],
         ]);
@@ -211,7 +211,7 @@ class WhatsApp
             . "💵 *Saldo Tersedia Saat Ini:* " . LFC::formatRupiah($summary['available']) . "\n\n"
             . "#LDKSyahid\n#CelenganSyahid";
 
-        self::send($picTarget, $message, 'notifikasi_pic_donasi', [
+        self::send($picTarget, $message, 'notifikasi_pic_donasi_v2', [
             $campaign->nama_pj,
             $campaign->judul,
             $donorName,
