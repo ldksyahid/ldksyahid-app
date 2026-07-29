@@ -87,14 +87,21 @@ return [
         'settlement_minutes'         => (int) env('BISATOPUP_SETTLEMENT_MINUTES', 15),
     ],
 
-    // Fonnte (unofficial WhatsApp Web gateway) — used for all outbound
-    // WhatsApp messages via App\Services\Fonnte.
-    'fonnte' => [
-        'token'    => env('FONNTE_TOKEN'),
-        // Root domain only (NOT the /send endpoint) — Fonnte::deliver()
-        // appends '/send', CheckFonnteDeviceStatus appends '/device'. Both
-        // share this same domain, so it must stay a reusable base.
-        'base_url' => env('FONNTE_BASE_URL', 'https://api.fonnte.com'),
+    // Kirimdev (api.kirimdev.com) — official Meta WhatsApp Business Cloud
+    // API passthrough, used for all outbound WhatsApp messages via
+    // App\Services\WhatsApp. Sending only works per-message-type once that
+    // message's Template is APPROVED by Meta (see
+    // `php artisan kirimdev:templates:sync`).
+    'kirimdev' => [
+        'api_key'         => env('KIRIMDEV_API_KEY'),
+        'phone_number_id' => env('KIRIMDEV_PHONE_NUMBER_ID'),
+        'base_url'        => env('KIRIMDEV_BASE_URL', 'https://api.kirimdev.com/v1'),
+        'template_language' => env('KIRIMDEV_TEMPLATE_LANGUAGE', 'id'),
+        // Comma-separated webhook signing secrets. Kirimdev signs every
+        // delivery with BOTH the old and new secret during a rotation
+        // window, so a delivery is accepted if ANY configured secret
+        // verifies — list both during rotation, drop the old one after.
+        'webhook_secrets' => array_filter(array_map('trim', explode(',', env('KIRIMDEV_WEBHOOK_SECRETS', '')))),
     ],
 
     'two_fa' => [

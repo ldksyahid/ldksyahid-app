@@ -1,65 +1,59 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services;
 
 use App\Constants\SettingKey\Key1;
 use App\Constants\SettingKey\Key2;
 use App\Models\MsSetting;
 use App\Models\MsShortlink;
 use App\Models\ReqShortlink;
-use App\Services\Fonnte;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
-class FonnteWebhookController extends Controller
+/**
+ * Inbound-WhatsApp-reply business logic (the admin's YES/NO reply to a
+ * shortlink request notification) — used by KirimdevWebhookController.
+ * Kept as its own service (rather than inline in the controller) since the
+ * approve/reject flow is genuine business logic, not payload parsing.
+ */
+class WhatsAppInboundHandler
 {
-    private function notifyAdmin(string $message)
-    {
-        Fonnte::send($this->getAdminPhone(), $message);
-    }
-
     /**
-     * Handle incoming Fonnte webhook (WhatsApp message received).
+     * @param string $sender  Raw sender phone number, any format (digits get normalized).
+     * @param string $message Raw message body.
+     * @return string One of: 'ignored', 'no_pending', 'not_found', 'already_processed', 'ok'.
      */
-    public function handle(Request $request)
+    public function handleReply(string $sender, string $message): string
     {
-        $sender  = $request->input('sender', '');
-        $message = strtolower(trim($request->input('message', '')));
-
-        // Normalize sender phone: strip non-digits
         $normalizedSender = preg_replace('/[^0-9]/', '', $sender);
+        $message          = strtolower(trim($message));
 
-        // Only process if sender is the admin CP phone
         if (!$this->isAdminCp($normalizedSender)) {
-            return response()->json(['status' => 'ignored'], 200);
+            return 'ignored';
         }
 
-        // Only process YES or NO replies
         if (!in_array($message, ['yes', 'no'], true)) {
-            return response()->json(['status' => 'ignored'], 200);
+            return 'ignored';
         }
 
-        // Look up pending request for this admin
-        $cacheKey = "fonnte_pending_shortlink:{$normalizedSender}";
+        $cacheKey  = "whatsapp_pending_shortlink:{$normalizedSender}";
         $requestId = Cache::get($cacheKey);
 
         if (!$requestId) {
-            return response()->json(['status' => 'no_pending'], 200);
+            return 'no_pending';
         }
 
         $reqShortlink = ReqShortlink::find($requestId);
 
         if (!$reqShortlink) {
             Cache::forget($cacheKey);
-            Log::error('Fonnte webhook: pending request not found in DB', ['id' => $requestId]);
-            return response()->json(['status' => 'not_found'], 200);
+            Log::error('WhatsApp inbound: pending request not found in DB', ['id' => $requestId]);
+            return 'not_found';
         }
 
-        // Already processed
         if (!empty($reqShortlink->fixCustomLink)) {
             Cache::forget($cacheKey);
-            return response()->json(['status' => 'already_processed'], 200);
+            return 'already_processed';
         }
 
         if ($message === 'yes') {
@@ -68,25 +62,25 @@ class FonnteWebhookController extends Controller
             $this->rejectRequest($reqShortlink, $cacheKey);
         }
 
-        return response()->json(['status' => 'ok'], 200);
+        return 'ok';
     }
 
-    /**
-     * Approve shortlink request: create shortlink and notify requester.
-     */
+    private function notifyAdmin(string $message): void
+    {
+        WhatsApp::send($this->getAdminPhone(), $message);
+    }
+
     private function approveRequest(ReqShortlink $req, string $cacheKey): void
     {
         $urlKey = $this->extractUrlKey($req->customLink);
 
-        // Check if url_key already exists
         if (MsShortlink::where('url_key', $urlKey)->exists()) {
-            Fonnte::send($this->getAdminPhone(), "⚠️ *URL key \"{$urlKey}\" sudah terpakai.* Silahkan proses manual via web panel.");
-            Log::error('Fonnte webhook: url_key conflict', ['url_key' => $urlKey, 'req_id' => $req->id]);
+            $this->notifyAdmin("⚠️ *URL key \"{$urlKey}\" sudah terpakai.* Silahkan proses manual via web panel.");
+            Log::error('WhatsApp inbound: url_key conflict', ['url_key' => $urlKey, 'req_id' => $req->id]);
             return;
         }
 
         try {
-            // Create shortlink directly (bypass Builder to avoid Auth::user() dependency)
             $shortlinkUrl = config('app.url') . '/' . $urlKey;
 
             MsShortlink::create([
@@ -96,14 +90,12 @@ class FonnteWebhookController extends Controller
                 'single_use'           => false,
                 'track_visits'         => true,
                 'redirect_status_code' => 301,
-                'created_by'           => 'Fonnte Webhook',
+                'created_by'           => 'WhatsApp Webhook',
             ]);
 
-            // Update request record
             $req->update(['fixCustomLink' => $shortlinkUrl]);
 
-            // Notify requester
-            Fonnte::sendShortlinkApproved([
+            WhatsApp::sendShortlinkApproved([
                 'name'         => $req->name,
                 'whatsapp'     => $req->whatsapp,
                 'shortlinkUrl' => $shortlinkUrl,
@@ -124,16 +116,13 @@ class FonnteWebhookController extends Controller
                 "⚠️ *Gagal buat shortlink:* " . $e->getMessage() . "\nSilahkan proses manual via web panel."
             );
 
-            Log::error('Fonnte webhook: shortlink creation failed', ['req_id' => $req->id, 'error' => $e->getMessage()]);
+            Log::error('WhatsApp inbound: shortlink creation failed', ['req_id' => $req->id, 'error' => $e->getMessage()]);
         }
     }
 
-    /**
-     * Reject shortlink request and notify requester.
-     */
     private function rejectRequest(ReqShortlink $req, string $cacheKey): void
     {
-        Fonnte::sendShortlinkRejected([
+        WhatsApp::sendShortlinkRejected([
             'name'        => $req->name,
             'whatsapp'    => $req->whatsapp,
             'customLink'  => $req->customLink,
@@ -152,8 +141,8 @@ class FonnteWebhookController extends Controller
     }
 
     /**
-     * Extract url_key from customLink input.
-     * Handles both full URL ("https://ldksyah.id/event2024") and plain key ("event2024").
+     * Handles both a full URL ("https://ldksyah.id/event2024") and a plain
+     * key ("event2024").
      */
     private function extractUrlKey(string $customLink): string
     {
@@ -166,25 +155,18 @@ class FonnteWebhookController extends Controller
             }
         }
 
-        // Fallback: treat entire input as url_key
         return trim($customLink, '/ ');
     }
 
-    /**
-     * Check if sender is the admin CP phone number.
-     */
     private function isAdminCp(string $normalizedSender): bool
     {
-        $cpPhone = MsSetting::getSettingValue1(Key1::LAYANAN, Key2::CpShortlink);
-        $cpPhone = !empty($cpPhone) ? $cpPhone : '+62895394755672';
+        $cpPhone      = MsSetting::getSettingValue1(Key1::LAYANAN, Key2::CpShortlink);
+        $cpPhone      = !empty($cpPhone) ? $cpPhone : '+62895394755672';
         $normalizedCp = preg_replace('/[^0-9]/', '', $cpPhone);
 
         return $normalizedSender === $normalizedCp;
     }
 
-    /**
-     * Get admin CP phone for error notifications.
-     */
     private function getAdminPhone(): string
     {
         $cpPhone = MsSetting::getSettingValue1(Key1::LAYANAN, Key2::CpShortlink);

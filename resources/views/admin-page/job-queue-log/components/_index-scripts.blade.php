@@ -87,7 +87,7 @@ $(function () {
                 isFailedView = !!response.is_failed_view;
                 syncServerTime(response.server_time);
                 if (!countdownStarted) { startWorkerCountdown(); countdownStarted = true; }
-                updateFonnteDeviceStatus(response.fonnte_device_status);
+                updateKirimdevAccountStatus(response.kirimdev_account_status, response.stats.whatsapp_pending);
                 updateStats(response.stats, response.whatsapp_rate_per_minute);
                 updateQueuesFilter(response.queues);
                 updateTable(response.jobs);
@@ -101,26 +101,53 @@ $(function () {
             });
     }
 
-    // ── WhatsApp (Fonnte) Device Status ─────────────────────────────────────
-    function updateFonnteDeviceStatus(status) {
+    // ── WhatsApp (Kirimdev) Account Status ──────────────────────────────────
+    // Meta's own phone-number health, not a WhatsApp-Web QR-pairing session
+    // (that concept doesn't exist on the official Cloud API) — statuses are
+    // connected/disconnected/degraded/onboarding, or null if not cached yet.
+    function updateKirimdevAccountStatus(status, waPending) {
         var $badge = $('#wa-device-badge');
         var $label = $('#wa-device-label');
+        var $banner = $('#wa-disconnect-banner');
 
-        $badge.removeClass('wa-device-connect wa-device-disconnect wa-device-unknown');
+        $badge.removeClass('wa-device-connect wa-device-disconnect wa-device-degraded wa-device-onboarding wa-device-unknown');
 
-        if (status === 'connect') {
+        if (status === 'connected') {
             $badge.addClass('wa-device-connect');
             $label.text('Connected');
-            $('#wa-disconnect-banner').slideUp(200);
-        } else if (status === 'disconnect') {
+            $banner.slideUp(200);
+        } else if (status === 'disconnected') {
             $badge.addClass('wa-device-disconnect');
             $label.text('Disconnected');
-            $('#wa-disconnect-banner').slideDown(200);
+            $('#wa-disconnect-title').text('Kirimdev WhatsApp Number Disconnected');
+            $('#wa-disconnect-text').html(
+                '<span id="wa-disconnect-job-count" class="fw-semibold"></span> WhatsApp job(s) on hold ' +
+                'until this is fixed. Check this phone number\'s status in the Kirimdev dashboard (or ' +
+                'Meta Business Manager) to reconnect it.'
+            );
+            $('#wa-disconnect-job-count').text(waPending || 0);
+            $banner.removeClass('wa-disconnect-alert-warning').addClass('wa-disconnect-alert');
+            $banner.slideDown(200);
+        } else if (status === 'degraded') {
+            $badge.addClass('wa-device-degraded');
+            $label.text('Degraded');
+            $('#wa-disconnect-title').text('Kirimdev WhatsApp Number Quality Degraded');
+            $('#wa-disconnect-text').html(
+                'Meta has flagged this number\'s quality as degraded — messages still send, but the number ' +
+                'risks further restriction. Review recent sends in the Kirimdev dashboard.'
+            );
+            $banner.removeClass('wa-disconnect-alert').addClass('wa-disconnect-alert-warning');
+            $banner.slideDown(200);
+        } else if (status === 'onboarding') {
+            $badge.addClass('wa-device-onboarding');
+            $label.text('Onboarding');
+            $banner.slideUp(200);
         } else {
-            // null/undefined — cache never populated yet (e.g. right after deploy)
+            // null/undefined — cache never populated yet (e.g. right after
+            // deploy) or Kirimdev isn't configured yet.
             $badge.addClass('wa-device-unknown');
             $label.text('Unknown');
-            $('#wa-disconnect-banner').slideUp(200);
+            $banner.slideUp(200);
         }
     }
 
@@ -150,10 +177,6 @@ $(function () {
         } else {
             $('#daily-limit-banner').slideUp(200);
         }
-
-        // WhatsApp disconnect banner job count (visibility itself is toggled
-        // by updateFonnteDeviceStatus() based on connect/disconnect status)
-        $('#wa-disconnect-job-count').text(stats.whatsapp_pending || 0);
 
         updateEta(stats);
         updateWaEta(stats, whatsappRatePerMinute);
@@ -203,7 +226,7 @@ $(function () {
     }
 
     // ── Estimated Completion — WhatsApp ──────────────────────────────────────
-    // No daily cap (unlike Brevo) — Fonnte doesn't publish one, so the only
+    // No daily cap — Kirimdev/Meta doesn't publish one, so the only
     // bottleneck is the configured rate itself (WHATSAPP_RATE_PER_MINUTE).
     function updateWaEta(stats, ratePerMinute) {
         var pending = stats.whatsapp_pending || 0;

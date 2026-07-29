@@ -51,10 +51,10 @@ class JobQueueLogController extends Controller
                 // Email-only concept (Brevo/Gmail daily cap). Distinguished
                 // from a normal short retry/rate-limit delay (never more than
                 // ~60s for this job type) by the delay being well past
-                // $threshold — only Fonnte::holdUntilReset()-style holds
-                // (until the next midnight reset) push availableDate that
-                // far out. See dailyLimitThreshold() for why this doesn't
-                // use the mail_daily_limit_exceeded cache flag.
+                // $threshold — only SendSingleMailJob::holdUntilReset()-style
+                // holds (until the next midnight reset) push availableDate
+                // that far out. See dailyLimitThreshold() for why this
+                // doesn't use the mail_daily_limit_exceeded cache flag.
                 $query->where('queue', 'email')
                       ->whereNull('reservedDate')->where('attempts', '>', 0)
                       ->where('availableDate', '>', $threshold);
@@ -101,7 +101,7 @@ class JobQueueLogController extends Controller
             'queues'                    => TrJobQueue::distinct()->pluck('queue'),
             'server_time'               => $now,
             'is_failed_view'            => false,
-            'fonnte_device_status'      => $this->fonnteDeviceStatus(),
+            'kirimdev_account_status'   => $this->kirimdevAccountStatus(),
             'whatsapp_rate_per_minute'  => (int) env('WHATSAPP_RATE_PER_MINUTE', 8),
         ]);
     }
@@ -144,7 +144,7 @@ class JobQueueLogController extends Controller
             'queues'                    => TrJobQueue::distinct()->pluck('queue'),
             'server_time'               => $now,
             'is_failed_view'            => true,
-            'fonnte_device_status'      => $this->fonnteDeviceStatus(),
+            'kirimdev_account_status'   => $this->kirimdevAccountStatus(),
             'whatsapp_rate_per_minute'  => (int) env('WHATSAPP_RATE_PER_MINUTE', 8),
         ]);
     }
@@ -326,14 +326,14 @@ class JobQueueLogController extends Controller
     }
 
     /**
-     * WhatsApp (Fonnte) device connect/disconnect status, populated by the
-     * fonnte:check-device-status scheduled command. Null means the cache
-     * has never been populated (e.g. right after deploy) — the frontend
-     * renders that as "Unknown", not an error.
+     * WhatsApp (Kirimdev) phone number status, populated by the
+     * kirimdev:check-account-status scheduled command. Null means the cache
+     * has never been populated (e.g. right after deploy, or Kirimdev isn't
+     * configured yet) — the frontend renders that as "Unknown", not an error.
      */
-    private function fonnteDeviceStatus(): ?string
+    private function kirimdevAccountStatus(): ?string
     {
-        return Cache::get('fonnte_device_status');
+        return Cache::get('kirimdev_account_status');
     }
 
     private function extractMailInfo(array $payload): array

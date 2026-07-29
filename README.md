@@ -35,7 +35,7 @@ LDK Syahid Web App is a comprehensive web platform for **Lembaga Dakwah Kampus (
 - **EKSPRESI** — Creative expression section
 
 ### Services
-- **Celengan Syahid** — Crowdfunding donation platform with BisaTopup QRIS and Xendit payment gateways, withdrawal/disbursement module, 2FA-protected fund management, and WhatsApp notifications via Fonnte
+- **Celengan Syahid** — Crowdfunding donation platform with BisaTopup QRIS and Xendit payment gateways, withdrawal/disbursement module, 2FA-protected fund management, and WhatsApp notifications via Kirimdev
 - **Dynamic Forms** — Visual form builder with multiple field types (text, email, number, dropdown, radio, checkbox, file upload, rating, linear scale, etc.) and lifecycle management (draft → published → closed → archived)
 - **Short URL** — URL shortener with public request and admin approval workflow
 - **KTA LDK Syahid** — Digital member ID card (Kartu Tanda Anggota) generation
@@ -81,7 +81,7 @@ LDK Syahid Web App is a comprehensive web platform for **Lembaga Dakwah Kampus (
 | File Storage | Google Drive (flysystem-google-drive-ext) |
 | Payment | BisaTopup/Bisabiller (QRIS), Xendit |
 | 2FA | pragmarx/google2fa (TOTP) |
-| WhatsApp API | Fonnte |
+| WhatsApp API | Kirimdev (official Meta Cloud API) |
 | PDF Generation | barryvdh/laravel-dompdf |
 | DataTables | yajra/laravel-datatables |
 | Short URLs | ashallendesign/short-url |

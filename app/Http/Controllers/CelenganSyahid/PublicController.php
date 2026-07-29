@@ -10,7 +10,7 @@ use App\Mail\DonationSuccess;
 use App\Models\Campaign;
 use App\Models\Donation;
 use App\Services\BisaTopup;
-use App\Services\Fonnte;
+use App\Services\WhatsApp;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -312,9 +312,9 @@ class PublicController extends Controller
             ];
 
             try {
-                Fonnte::sendInvoiceSimpleText($data);
+                WhatsApp::sendInvoiceSimpleText($data);
             } catch (\Throwable $e) {
-                Log::error('storeDonationCampaign: Fonnte invoice failed: ' . $e->getMessage());
+                Log::error('storeDonationCampaign: WhatsApp invoice failed: ' . $e->getMessage());
             }
             try {
                 Mail::mailer('gmail')->to($request->input('email_donatur'))->send(new DonationInvoice($data));
@@ -441,19 +441,19 @@ class PublicController extends Controller
                 $donationData = Donation::with('campaign')->where('doc_no', $transactionId)->first();
                 if ($donationData) {
                     try {
-                        Fonnte::sendPaidSimpleText([
+                        WhatsApp::sendPaidSimpleText([
                             'donaturName'    => $donationData->nama_donatur,
                             'donationAmount' => $donationData->jumlah_donasi,
                             'donaturTelp'    => $donationData->no_telp_donatur,
                         ]);
                     } catch (\Throwable $e) {
-                        Log::error('callbackDonation: Fonnte paid failed: ' . $e->getMessage());
+                        Log::error('callbackDonation: WhatsApp paid notification failed: ' . $e->getMessage());
                     }
 
                     try {
-                        Fonnte::sendCampaignPicPaidNotification($donationData);
+                        WhatsApp::sendCampaignPicPaidNotification($donationData);
                     } catch (\Throwable $e) {
-                        Log::error('callbackDonation: Fonnte PIC paid notification failed: ' . $e->getMessage());
+                        Log::error('callbackDonation: WhatsApp PIC paid notification failed: ' . $e->getMessage());
                     }
 
                     if ($donationData->email_donatur) {

@@ -34,7 +34,7 @@
     50%       { opacity: 0.5; transform: scale(0.85); }
 }
 
-/* ── WhatsApp (Fonnte) Device Status Badge ── */
+/* ── WhatsApp (Kirimdev) Account Status Badge ── */
 .wa-device-badge {
     display: inline-flex; align-items: center; gap: 6px;
     border-radius: 20px; padding: 4px 12px;
@@ -47,11 +47,17 @@
 .wa-device-disconnect {
     background: rgba(220,53,69,0.1); border: 1px solid rgba(220,53,69,0.3); color: #b02a37;
 }
+.wa-device-degraded {
+    background: rgba(255,152,0,0.1); border: 1px solid rgba(255,152,0,0.3); color: #b06d00;
+}
+.wa-device-onboarding {
+    background: rgba(0,123,255,0.08); border: 1px solid rgba(0,123,255,0.2); color: #0063cc;
+}
 .wa-device-unknown {
     background: rgba(108,117,125,0.1); border: 1px solid rgba(108,117,125,0.3); color: #6c757d;
 }
 
-/* ── WhatsApp Disconnected Alert Banner ── */
+/* ── WhatsApp Number Disconnected/Degraded Alert Banner ── */
 .wa-disconnect-alert {
     background: linear-gradient(135deg, rgba(220,53,69,0.1) 0%, rgba(220,53,69,0.06) 100%);
     border: 1px solid rgba(220,53,69,0.3);
@@ -59,6 +65,13 @@
     color: #b02a37; font-size: 0.88rem;
 }
 .wa-disconnect-alert i { font-size: 1.2rem; color: #dc3545; }
+.wa-disconnect-alert-warning {
+    background: linear-gradient(135deg, rgba(255,152,0,0.1) 0%, rgba(255,193,7,0.06) 100%);
+    border: 1px solid rgba(255,152,0,0.3);
+    border-radius: 10px; padding: 0.85rem 1.1rem;
+    color: #b06d00; font-size: 0.88rem;
+}
+.wa-disconnect-alert-warning i { font-size: 1.2rem; color: #ff9800; }
 
 /* ── Worker Countdown ── */
 .worker-countdown {
@@ -511,12 +524,22 @@ html.dark-mode .wa-device-connect {
 html.dark-mode .wa-device-disconnect {
     background: rgba(220,53,69,0.1); border-color: rgba(220,53,69,0.2); color: #ea868f;
 }
+html.dark-mode .wa-device-degraded {
+    background: rgba(255,152,0,0.08); border-color: rgba(255,152,0,0.2); color: #ffb74d;
+}
+html.dark-mode .wa-device-onboarding {
+    background: rgba(0,123,255,0.08); border-color: rgba(0,123,255,0.2); color: #6ea8fe;
+}
 html.dark-mode .wa-device-unknown {
     background: rgba(108,117,125,0.12); border-color: rgba(108,117,125,0.25); color: #9ca3af;
 }
 html.dark-mode .wa-disconnect-alert {
     background: linear-gradient(135deg, rgba(220,53,69,0.08) 0%, rgba(220,53,69,0.05) 100%);
     border-color: rgba(220,53,69,0.2); color: #ea868f;
+}
+html.dark-mode .wa-disconnect-alert-warning {
+    background: linear-gradient(135deg, rgba(255,152,0,0.08) 0%, rgba(255,193,7,0.05) 100%);
+    border-color: rgba(255,152,0,0.2); color: #ffb74d;
 }
 html.dark-mode .eta-card {
     background: #2b2f33 !important;

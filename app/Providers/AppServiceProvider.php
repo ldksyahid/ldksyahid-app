@@ -50,10 +50,8 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(10);
         });
 
-        // Throttle outgoing WhatsApp (Fonnte) so the account doesn't get
-        // flagged/restricted for automated bulk sending. No official rate
-        // limit is published for unofficial WhatsApp Web sessions — this is
-        // a conservative starting point, adjustable via .env without a deploy.
+        // Throttle outgoing WhatsApp (Kirimdev/Meta Cloud API) sends —
+        // conservative starting point, adjustable via .env without a deploy.
         RateLimiter::for('send-whatsapp', function (object $job) {
             return Limit::perMinute((int) env('WHATSAPP_RATE_PER_MINUTE', 8));
         });

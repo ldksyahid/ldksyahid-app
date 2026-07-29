@@ -28,7 +28,7 @@ Context file for Claude Code. Read this before making any changes.
 | 2FA | pragmarx/google2fa (TOTP) |
 | File Storage | Google Drive (flysystem-google-drive-ext) |
 | Email | Brevo SMTP relay (with daily quota guard) |
-| WhatsApp | Fonnte API |
+| WhatsApp | Kirimdev (official Meta WhatsApp Business Cloud API) |
 | PDF | barryvdh/laravel-dompdf |
 | GeoIP | geoip2/geoip2 |
 | reCAPTCHA | Google Cloud reCAPTCHA Enterprise (score-based v3) |
@@ -65,7 +65,8 @@ app/
     CelsyahidAuditLog.php   ← Audit trail for financial operations
   Services/
     BisaTopup.php           ← Bisabiller API client (QRIS + disbursement)
-    Fonnte.php              ← WhatsApp notifications
+    WhatsApp.php            ← WhatsApp message builders (dispatches via queue)
+    Kirimdev.php            ← Kirimdev API client (Meta Cloud API passthrough)
     GoogleDrive.php         ← File storage
   Helpers/
     TwoFaHelper.php         ← TOTP 2FA verification with rate limiting

@@ -145,7 +145,7 @@
                     <div class="eta-body">
                         <div class="eta-title-row">
                             <div class="eta-title">WhatsApp — Estimated Completion</div>
-                            <div class="wa-device-badge wa-device-unknown" id="wa-device-badge" title="Fonnte WhatsApp device connection status">
+                            <div class="wa-device-badge wa-device-unknown" id="wa-device-badge" title="Kirimdev WhatsApp phone number status">
                                 <i class="fab fa-whatsapp"></i>
                                 <span id="wa-device-label">Unknown</span>
                             </div>
@@ -168,11 +168,11 @@
                     <div class="d-flex align-items-center gap-2">
                         <i class="fas fa-exclamation-triangle"></i>
                         <div>
-                            <strong>Fonnte WhatsApp Device Disconnected</strong>
-                            <div class="small mt-1">
+                            <strong id="wa-disconnect-title">Kirimdev WhatsApp Number Disconnected</strong>
+                            <div class="small mt-1" id="wa-disconnect-text">
                                 <span id="wa-disconnect-job-count" class="fw-semibold"></span> WhatsApp job(s) on hold
-                                until this is fixed. There is no automatic reconnect — someone needs to re-scan the
-                                QR code in the <strong>Fonnte dashboard</strong> to bring the device back online.
+                                until this is fixed. Check this phone number's status in the Kirimdev dashboard (or
+                                Meta Business Manager) to reconnect it.
                             </div>
                         </div>
                     </div>
