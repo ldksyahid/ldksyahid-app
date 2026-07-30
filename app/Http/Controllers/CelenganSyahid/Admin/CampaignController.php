@@ -131,6 +131,7 @@ class CampaignController extends Controller
             'link'     => 'required|string|max:255|unique:campaigns,link,' . $id,
             'kategori' => 'required|string',
             'deadline' => 'nullable|date',
+            'nama_pj'  => 'required|string|max:255',
             'poster'   => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
         ], [
             'link.unique' => 'This campaign link is already taken. Please choose a different link.',

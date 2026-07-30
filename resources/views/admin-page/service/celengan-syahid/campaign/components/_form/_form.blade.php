@@ -264,28 +264,6 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="poster" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
-                                        Poster @if($operation !== 'view') <span class="small text-muted">(1920 x 1080 Pixel)</span> @endif
-                                    </label>
-                                    <div class="text-center mb-3">
-                                        <div class="image-preview-container {{ ($data && $data->gdrive_id) ? 'has-image' : '' }}">
-                                            @if($currentPoster)
-                                                <img id="framePoster" src="{{ $currentPoster }}" alt="Poster Preview">
-                                            @else
-                                                <img id="framePoster" src="" alt="Poster Preview" style="display:none;">
-                                                <x-svg-placeholder />
-                                            @endif
-                                        </div>
-                                    </div>
-                                    @if ($operation !== 'view')
-                                        <input type="file" class="form-control @error('poster') is-invalid @enderror" id="poster" name="poster"
-                                            accept="image/jpeg,image/png,image/jpg" {{ $operation === 'create' ? 'required' : '' }}>
-                                        @error('poster') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
                                     <label for="inputDeadlineCampaign" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
                                         Deadline @if($operation !== 'view') <span class="text-danger">*</span> @endif
                                     </label>
@@ -309,8 +287,7 @@
                                         <div class="form-control-plaintext">{{ $data->nama_pj ?: '-' }}</div>
                                     @else
                                         <input type="text" class="form-control @error('nama_pj') is-invalid @enderror" id="inputNamaPJ"
-                                            name="nama_pj" value="{{ old('nama_pj', $data->nama_pj ?? '') }}"
-                                            {{ $operation === 'create' ? 'required' : '' }}>
+                                            name="nama_pj" value="{{ old('nama_pj', $data->nama_pj ?? '') }}" required>
                                         @error('nama_pj') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         <div class="form-text">Used to greet the PIC by name in the WhatsApp notification.</div>
                                     @endif
@@ -342,6 +319,28 @@
                                         <input type="hidden" name="telp_pj" id="inputTelpPJFull" value="{{ $rawPicPhone }}">
                                         @error('telp_pj') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                         <div class="form-text">This number will receive a WhatsApp message whenever a donation comes in.</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6 offset-md-3">
+                                <div class="mb-3">
+                                    <label for="poster" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Poster @if($operation !== 'view') <span class="small text-muted">(1920 x 1080 Pixel)</span> @endif
+                                    </label>
+                                    <div class="text-center mb-3">
+                                        <div class="image-preview-container {{ ($data && $data->gdrive_id) ? 'has-image' : '' }}">
+                                            @if($currentPoster)
+                                                <img id="framePoster" src="{{ $currentPoster }}" alt="Poster Preview">
+                                            @else
+                                                <img id="framePoster" src="" alt="Poster Preview" style="display:none;">
+                                                <x-svg-placeholder />
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @if ($operation !== 'view')
+                                        <input type="file" class="form-control @error('poster') is-invalid @enderror" id="poster" name="poster"
+                                            accept="image/jpeg,image/png,image/jpg" {{ $operation === 'create' ? 'required' : '' }}>
+                                        @error('poster') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                     @endif
                                 </div>
                             </div>
