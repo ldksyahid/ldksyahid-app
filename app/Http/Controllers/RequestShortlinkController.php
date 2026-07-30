@@ -7,7 +7,7 @@ use App\Constants\SettingKey\Key2;
 use App\Models\MsSetting;
 use Illuminate\Http\Request;
 use App\Models\ReqShortlink;
-use App\Services\Fonnte;
+use App\Services\WhatsApp;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -57,7 +57,7 @@ class RequestShortlinkController extends Controller
         $getCpShortlink = MsSetting::getSettingValue1(Key1::LAYANAN, Key2::CpShortlink);
         $cpPhone = !empty($getCpShortlink) ? $getCpShortlink : '+6281317209305';
 
-        Fonnte::sendShortlinkRequestNotification([
+        WhatsApp::sendShortlinkRequestNotification([
             'requestId'   => $reqShortlink->id,
             'name'        => $request->name,
             'email'       => $request->email,
@@ -70,7 +70,7 @@ class RequestShortlinkController extends Controller
 
         // Store pending state for WhatsApp approval flow
         $normalizedPhone = preg_replace('/[^0-9]/', '', $cpPhone);
-        Cache::put("fonnte_pending_shortlink:{$normalizedPhone}", $reqShortlink->id, now()->addDays(7));
+        Cache::put("whatsapp_pending_shortlink:{$normalizedPhone}", $reqShortlink->id, now()->addDays(7));
 
         if ($request->ajax()) {
             return response()->json(['success' => true]);

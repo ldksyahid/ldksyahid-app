@@ -31,6 +31,17 @@
             picFullEl.value = local ? code + local : '';
         }
 
+        // Strip any non-digit character as it's typed/pasted, so the visible
+        // input can never actually contain letters/symbols — not just the
+        // hidden telp_pj field silently dropping them on submit.
+        function sanitizePicLocalInput() {
+            if (!picLocalEl) return;
+            var digitsOnly = picLocalEl.value.replace(/[^\d]/g, '');
+            if (digitsOnly !== picLocalEl.value) {
+                picLocalEl.value = digitsOnly;
+            }
+        }
+
         if (picCodeEl && picLocalEl) {
             $(picCodeEl).select2({
                 width: '92px',
@@ -47,7 +58,10 @@
                 }
             });
             updatePicPhonePlaceholder();
-            picLocalEl.addEventListener('input', buildPicFullPhone);
+            picLocalEl.addEventListener('input', function () {
+                sanitizePicLocalInput();
+                buildPicFullPhone();
+            });
             $(picCodeEl).on('change', function () {
                 updatePicPhonePlaceholder();
                 buildPicFullPhone();

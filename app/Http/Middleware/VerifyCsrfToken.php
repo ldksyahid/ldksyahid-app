@@ -14,6 +14,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/celengan-syahid/callback',
         '/celengan-syahid/disbursement-callback/*',
-        '/webhook/fonnte',
+        '/webhook/kirimdev',
     ];
 }

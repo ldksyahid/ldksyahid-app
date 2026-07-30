@@ -36,7 +36,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\GenerateEmailController;
 use App\Http\Controllers\JobQueueLogController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\FonnteWebhookController;
+use App\Http\Controllers\KirimdevWebhookController;
 use App\Http\Controllers\Admin\AdminFormController;
 use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\CommentController;
@@ -252,8 +252,10 @@ Route::get('/celengansyahid/payment/{id}', fn ($id) => redirect("/celengan-syahi
 Route::get('/celengansyahid/simpan-bukti/{link}/{id}', fn ($link, $id) => redirect("/celengan-syahid/{$link}/donasi/{$id}/bukti", 301));
 Route::get('/celengansyahid/{link}', fn ($link) => redirect("/celengan-syahid/{$link}", 301));
 
-// Fonnte WhatsApp webhook
-Route::middleware('throttle:60,1')->post('/webhook/fonnte', [FonnteWebhookController::class, 'handle'])->name('webhook.fonnte');
+// Kirimdev WhatsApp webhook (official Meta WhatsApp Business Cloud API).
+// Signature verified inside the controller; no IP allowlist since Kirimdev
+// doesn't publish sending IPs.
+Route::middleware('throttle:60,1')->post('/webhook/kirimdev', [KirimdevWebhookController::class, 'handle'])->name('webhook.kirimdev');
 
 // Route LandingPage Catalog Books
 Route::get('/perpustakaan', [CatalogBooksController::class, 'index'])->name('catalog.books.index');

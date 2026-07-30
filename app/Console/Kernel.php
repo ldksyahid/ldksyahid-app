@@ -45,12 +45,12 @@ class Kernel extends ConsoleKernel
                  ->everyTenMinutes()
                  ->withoutOverlapping();
 
-        // WhatsApp (Fonnte): poll device connect/disconnect status for the
+        // WhatsApp (Kirimdev): poll this app's phone number status for the
         // Job Queue Log dashboard badge. Same 10-minute floor as above (OS
         // cron minimum interval) — queue:work runs first in this schedule
         // and isn't backgrounded, so this typically executes in the last
         // ~1 minute of each cycle, same as donations:expire-qris above.
-        $schedule->command('fonnte:check-device-status')
+        $schedule->command('kirimdev:check-account-status')
                  ->everyTenMinutes()
                  ->withoutOverlapping();
 
@@ -75,6 +75,8 @@ class Kernel extends ConsoleKernel
         Commands\AggregateVisitorStats::class,
         Commands\CloseExpiredForms::class,
         Commands\ExpireStaleQrisDonations::class,
-        Commands\CheckFonnteDeviceStatus::class,
+        Commands\CheckKirimdevAccountStatus::class,
+        Commands\SyncKirimdevTemplates::class,
+        Commands\RegisterKirimdevWebhook::class,
     ];
 }

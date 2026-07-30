@@ -3,29 +3,37 @@
 namespace App\Services;
 
 use App\Jobs\SendSingleWhatsAppJob;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LibraryFunctionController as LFC;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Donation;
 use App\Models\MsSetting;
 use App\Constants\SettingKey\Key1;
 use App\Constants\SettingKey\Key2;
 
-class Fonnte
+class WhatsApp
 {
     /**
-     * Send a single WhatsApp message. This no longer calls the Fonnte API
-     * directly — it only dispatches a queued job, so every message stays
-     * behind the `send-whatsapp` rate limiter instead of flooding the
-     * account with unthrottled, back-to-back sends.
+     * Send a single WhatsApp message. Only dispatches a queued job — every
+     * message stays behind the `send-whatsapp` rate limiter instead of
+     * flooding the account with unthrottled, back-to-back sends. Actual
+     * delivery happens in SendSingleWhatsAppJob::handle() via
+     * App\Services\Kirimdev.
      *
-     * BEHAVIOR CHANGE: this is now void (fire-and-forget), not a direct
-     * API response — the response is only available later when the job is
-     * processed by the queue worker. No current caller uses the return
-     * value, so this is safe.
+     * $templateName/$templateParams are carried alongside $message so the
+     * job can send via Kirimdev's approved Message Template (positional
+     * {{1}}, {{2}}... parameters, in the same order as $templateParams).
+     * Keep $templateParams in the exact order the corresponding template's
+     * placeholders expect — see App\Console\Commands\SyncKirimdevTemplates
+     * for each template's body.
+     *
+     * $templateName is left null for ad-hoc admin notices (e.g.
+     * WhatsAppInboundHandler's YES/NO reply confirmations) that have no
+     * fixed template — those are always a business reply within an active
+     * 24h session (the admin just messaged in), which Meta allows as
+     * freeform text, so Kirimdev sends them as a plain text message instead
+     * of a template.
      */
-    public static function send(string $target, string $message): void
+    public static function send(string $target, string $message, ?string $templateName = null, array $templateParams = []): void
     {
         // Random 0-8s jitter so messages dispatched at nearly the same
         // instant (e.g. notifyAdmin + sendShortlinkApproved in the same
@@ -34,61 +42,32 @@ class Fonnte
         // ->onQueue('whatsapp'): a separate queue from 'default'/'email'
         // (used by SendSingleMailJob) — so WhatsApp jobs are never stuck
         // behind an email backlog.
-        SendSingleWhatsAppJob::dispatch($target, $message)
+        SendSingleWhatsAppJob::dispatch($target, $message, $templateName, $templateParams)
             ->onQueue('whatsapp')
             ->delay(now()->addSeconds(rand(0, 8)));
-    }
-
-    /**
-     * The actual HTTP call to the Fonnte API. ONLY called from
-     * SendSingleWhatsAppJob::handle() inside the queue worker — never call
-     * this directly from application code, to stay behind the rate limiter.
-     */
-    public static function deliver(string $target, string $message): array
-    {
-        $token = config('services.fonnte.token');
-
-        // Normalize: strip non-digits, replace leading 0 with 62 (fallback for old local-format numbers).
-        $normalized = preg_replace('/[^\d]/', '', $target);
-        if (substr($normalized, 0, 1) === '0') {
-            $normalized = '62' . substr($normalized, 1);
-        }
-
-        $response = Http::withHeaders([
-            'Authorization' => $token,
-        ])->post(config('services.fonnte.base_url') . '/send', [
-            'target'  => $normalized,
-            'message' => $message,
-        ]);
-
-        $result = $response->json();
-
-        if (!$response->successful()) {
-            Log::error('Fonnte send failed', [
-                'target'   => $target,
-                'response' => $result,
-            ]);
-
-            // Throw so the job actually retries (backoff) and the failure is
-            // visible in /admin/job-queue-log, instead of silently vanishing.
-            throw new \RuntimeException('Fonnte API returned HTTP ' . $response->status());
-        }
-
-        return $result;
     }
 
     public static function sendInvoiceSimpleText($data)
     {
         $message = "🚨 *[INVOICE DONASI]* 🚨\n\n_Assalammualaikum, ".$data['donaturName']."_ 😊\n\nJazakallah Khairan Katsiiran karena kamu telah ingin melakukan donasi untuk campaign *" .$data['campaignName']. "* dengan jumlah donasi  _*".$data['donationAmount']."*_ . Yuk segera transfer donasimu pada link dibawah ini sebelum jatuh tempo pada  _" .$data['expiredDate']. " WIB_\n\n" .$data['invoiceUrl']. "\n\n_*Informasi Lengkap silahkan cek email kamu yaaa_ 😃\n\nTerimakasih telah menjadi bagian dari Manusia Baik\n\n_Wassalammu'alaikum_ 😇\n\n#LDKSyahid\n#KitaAdalahSaudara\n#FSLDKBanten\n#UINJakarta\n#CelenganSyahid\n➖➖➖➖➖➖➖➖➖\nMedia Sosial LDK Syahid\nldksyah.id/Medsos";
 
-        return self::send($data['donaturTelp'], $message);
+        return self::send($data['donaturTelp'], $message, 'invoice_donasi_v2', [
+            $data['donaturName'],
+            $data['campaignName'],
+            $data['donationAmount'],
+            $data['expiredDate'],
+            $data['invoiceUrl'],
+        ]);
     }
 
     public static function sendPaidSimpleText($data)
     {
         $message = "🚨 *[DONASI BERHASIL]* 🚨\n\n_Assalammualaikum, ".$data['donaturName']."_ 😊\n\nAlhamdulillah Jazakallah Khairan Katsiiran telah berdonasi sebesar  _*".LFC::formatRupiah($data['donationAmount'])."*_\n\nSegera cek email *Invoice Donasimu* kembali yaaa untuk melihat _Status Donasimu_ dan jangan lupa untuk menyimpan bukti donasi nyaaa 😁\n\nTerimakasih telah menjadi bagian dari Manusia Baik\n\n_Wassalammu'alaikum_ 😇\n\n#LDKSyahid\n#KitaAdalahSaudara\n#FSLDKBanten\n#UINJakarta\n#CelenganSyahid\n➖➖➖➖➖➖➖➖➖\nMedia Sosial LDK Syahid\nldksyah.id/Medsos";
 
-        return self::send($data['donaturTelp'], $message);
+        return self::send($data['donaturTelp'], $message, 'donasi_berhasil_v2', [
+            $data['donaturName'],
+            LFC::formatRupiah($data['donationAmount']),
+        ]);
     }
 
     public static function sendShortlinkRequestNotification($data)
@@ -114,7 +93,16 @@ class Fonnte
             . $adminUrl . "\n\n"
             . "#LDKSyahid\n#LayananShortlink";
 
-        return self::send($data['cpPhone'], $message);
+        // Order must match the 'request_shortlink_v2' template's {{1}}..{{5}}
+        // — requestId first since it's the first variable to appear in the
+        // template body (Meta requires ascending first-use order).
+        return self::send($data['cpPhone'], $message, 'request_shortlink_v2', [
+            $data['requestId'],
+            $data['name'],
+            $data['email'],
+            $data['whatsapp'],
+            $data['customLink'],
+        ]);
     }
 
     public static function sendShortlinkApproved($data)
@@ -133,7 +121,6 @@ class Fonnte
 
             . "*Link tersebut wajib digunakan dengan sebagaimana mestinya*\n\n"
 
-            // ✅ tambah nama admin
             . "Jika ada kendala, hubungi admin ({$namePerson}):\n"
             . "📱 {$cp}\n\n"
 
@@ -144,7 +131,10 @@ class Fonnte
             . "#{$angkatan}\n"
             . "#UINJakarta";
 
-        return self::send($data['whatsapp'], $message);
+        return self::send($data['whatsapp'], $message, 'shortlink_disetujui_v2', [
+            $data['name'],
+            $data['shortlinkUrl'],
+        ]);
     }
 
     public static function sendShortlinkRejected($data)
@@ -162,7 +152,6 @@ class Fonnte
 
             . "Mohon maaf, permintaan tersebut belum dapat kami proses saat ini.\n\n"
 
-            // ✅ tambah nama admin
             . "Silakan hubungi admin ({$namePerson}) untuk informasi lebih lanjut:\n"
             . "📱 {$cp}\n\n"
 
@@ -173,7 +162,10 @@ class Fonnte
             . "#{$angkatan}\n"
             . "#UINJakarta";
 
-        return self::send($data['whatsapp'], $message);
+        return self::send($data['whatsapp'], $message, 'shortlink_ditolak_v2', [
+            $data['name'],
+            $data['customLink'],
+        ]);
     }
 
     /**
@@ -186,7 +178,7 @@ class Fonnte
         $campaign = $donation->campaign;
 
         if (!$campaign || blank($campaign->telp_pj)) {
-            Log::info('[Fonnte] Skipped PIC paid notification: campaign has no telp_pj', [
+            Log::info('[WhatsApp] Skipped PIC paid notification: campaign has no telp_pj', [
                 'donation_id' => $donation->id ?? null,
                 'campaign_id' => $campaign->id ?? null,
             ]);
@@ -219,6 +211,15 @@ class Fonnte
             . "💵 *Saldo Tersedia Saat Ini:* " . LFC::formatRupiah($summary['available']) . "\n\n"
             . "#LDKSyahid\n#CelenganSyahid";
 
-        return self::send($picTarget, $message);
+        self::send($picTarget, $message, 'notifikasi_pic_donasi_v2', [
+            $campaign->nama_pj,
+            $campaign->judul,
+            $donorName,
+            LFC::formatRupiah($donation->jumlah_donasi),
+            $paidAt,
+            'Total terkumpul ' . LFC::formatRupiah($summary['total_paid']) . ', saldo tersedia ' . LFC::formatRupiah($summary['available']),
+        ]);
+
+        return null;
     }
 }

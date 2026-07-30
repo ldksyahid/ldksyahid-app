@@ -10,4 +10,5 @@ class Key2
     const CertificateWebsite   = 'Certificate Website';
     const CpFinanceReportName  = 'Contact Person Name';
     const CpFinanceReportPhone = 'Contact Person Phone';
+    const WhatsappIntegration  = 'Whatsapp Integration';
 }

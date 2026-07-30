@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Services\Fonnte;
+use App\Services\Kirimdev;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Send a single WhatsApp message via Fonnte.
- * Dispatched from Fonnte::send() — never dispatch this directly from a
+ * Send a single WhatsApp message via Kirimdev.
+ * Dispatched from WhatsApp::send() — never dispatch this directly from a
  * controller, so every WhatsApp message (regardless of type) stays behind
  * the same rate limiter.
  */
@@ -39,12 +39,22 @@ class SendSingleWhatsAppJob implements ShouldQueue
     public string $target;
     public string $message;
 
+    // Name of the Kirimdev/Meta Message Template matching this message, and
+    // the ordered values for its {{1}}, {{2}}... placeholders. See
+    // App\Services\WhatsApp's sendXxx() methods for how each template's
+    // params are built. Null for ad-hoc admin notices with no fixed
+    // template (see WhatsApp::send()) — sent as freeform text instead.
+    public ?string $templateName;
+    public array $templateParams;
+
     // Plain constructor (no property promotion) — stays compatible with
     // PHP 7.4 on production, matching SendSingleMailJob's convention.
-    public function __construct(string $target, string $message)
+    public function __construct(string $target, string $message, ?string $templateName = null, array $templateParams = [])
     {
-        $this->target  = $target;
-        $this->message = $message;
+        $this->target         = $target;
+        $this->message        = $message;
+        $this->templateName   = $templateName;
+        $this->templateParams = $templateParams;
     }
 
     public function middleware(): array
@@ -59,17 +69,21 @@ class SendSingleWhatsAppJob implements ShouldQueue
 
     public function handle(): void
     {
-        // Fonnte device is disconnected (checked by CheckFonnteDeviceStatus) —
-        // hold this job instead of forcing a guaranteed failure. This is a
-        // soft release, NOT an exception, so it doesn't consume $maxExceptions
-        // and doesn't clutter failed_jobs with failures that aren't really
-        // about this message.
-        if (Cache::get('fonnte_device_status') === 'disconnect') {
+        // Kirimdev account is disconnected (checked by
+        // kirimdev:check-account-status) — hold this job instead of forcing
+        // a guaranteed failure. This is a soft release, NOT an exception, so
+        // it doesn't consume $maxExceptions and doesn't clutter failed_jobs
+        // with failures that aren't really about this message.
+        if (Cache::get('kirimdev_account_status') === 'disconnected') {
             $this->release(600); // retry in ~10 minutes, matching the status-check interval
             return;
         }
 
-        Fonnte::deliver($this->target, $this->message);
+        if ($this->templateName === null) {
+            Kirimdev::deliverText($this->target, $this->message);
+        } else {
+            Kirimdev::deliver($this->target, $this->templateName, $this->templateParams);
+        }
     }
 
     public function failed(\Throwable $exception): void
