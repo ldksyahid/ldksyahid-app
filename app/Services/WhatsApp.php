@@ -198,8 +198,18 @@ class WhatsApp
         // "Hamba Allah" placeholder used on the public donor list.
         $donorName = $donation->is_anonymous ? 'Hamba Allah' : $donation->nama_donatur;
 
+        // Meta rejects the entire template send if ANY parameter value is
+        // empty ("Required parameter is missing", error 131008) — nama_pj is
+        // nullable on Campaign (see Campaign::getDistinctPicNames()'s
+        // "nama_pj IS NULL" handling), so an empty PIC name here has caused
+        // real production sends to silently fail. New campaigns require this
+        // field now (see the campaign form), but older existing campaigns
+        // may still have it blank — fall back to "PIC {campaign title}"
+        // instead of a generic placeholder.
+        $picName = $campaign->nama_pj ?: ('PIC ' . $campaign->judul);
+
         $message = "🔔 *[DONASI MASUK]* 🔔\n\n"
-            . "Assalammu'alaikum, {$campaign->nama_pj}\n\n"
+            . "Assalammu'alaikum, {$picName}\n\n"
             . "Alhamdulillah, campaign *{$campaign->judul}* baru saja menerima donasi:\n\n"
             . "👤 *Donatur:* {$donorName}\n"
             . "📱 *Kontak:* " . ($donation->no_telp_donatur ?: '-') . "\n"
@@ -212,7 +222,7 @@ class WhatsApp
             . "#LDKSyahid\n#CelenganSyahid";
 
         self::send($picTarget, $message, 'notifikasi_pic_donasi_v2', [
-            $campaign->nama_pj,
+            $picName,
             $campaign->judul,
             $donorName,
             LFC::formatRupiah($donation->jumlah_donasi),

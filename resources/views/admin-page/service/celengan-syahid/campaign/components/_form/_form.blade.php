@@ -8,7 +8,10 @@
     $currentPoster = ($data && $data->gdrive_id) ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id : null;
     $currentLogo = ($data && $data->gdrive_id_1) ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id_1 : null;
 
-    $hasOrganization = $data && ($data->nama_pj != null || $data->link_pj != null);
+    // nama_pj is now always set (required PIC Name field, see Media &
+    // Contact below) — it's no longer a signal that this campaign belongs
+    // to an external organization, so only link_pj/gdrive_id_1 (logo) count.
+    $hasOrganization = $data && ($data->link_pj != null || $data->gdrive_id_1 != null);
 
     // PIC Contact phone: telp_pj is stored as a full number including its
     // country code (e.g. "62812xxxxxxx"), no leading "+". Split it back into
@@ -299,6 +302,22 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
+                                    <label for="inputNamaPJ" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        PIC Name @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $data->nama_pj ?: '-' }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('nama_pj') is-invalid @enderror" id="inputNamaPJ"
+                                            name="nama_pj" value="{{ old('nama_pj', $data->nama_pj ?? '') }}"
+                                            {{ $operation === 'create' ? 'required' : '' }}>
+                                        @error('nama_pj') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                        <div class="form-text">Used to greet the PIC by name in the WhatsApp notification.</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
                                     <label for="inputTelpPJLocal" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
                                         PIC Contact @if($operation !== 'view') <span class="text-danger">*</span> @endif
                                     </label>
@@ -347,7 +366,7 @@
                                 <div class="form-control-plaintext text-muted">No external organization</div>
                             @else
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="logoPj" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Organization Logo</label>
                                             <div class="text-center mb-3">
@@ -366,18 +385,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="inputNamaPJ" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Organization Name</label>
-                                            @if ($operation === 'view')
-                                                <div class="form-control-plaintext">{{ $data->nama_pj ?: '-' }}</div>
-                                            @else
-                                                <input type="text" class="form-control" id="inputNamaPJ" name="nama_pj"
-                                                    value="{{ old('nama_pj', $data->nama_pj ?? '') }}">
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="inputLinkPJ" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Organization Profile Links</label>
                                             @if ($operation === 'view')

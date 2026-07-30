@@ -76,6 +76,7 @@ class CampaignController extends Controller
             'cerita'       => 'required',
             'tujuan'       => 'required',
             'deadline'     => 'required|date',
+            'nama_pj'      => 'required|string|max:255',
             'telp_pj'      => 'required|string',
             'poster'       => 'required|file|mimes:jpg,jpeg,png|max:5120',
         ], [
