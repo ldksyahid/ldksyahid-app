@@ -47,14 +47,19 @@ class SendSingleWhatsAppJob implements ShouldQueue
     public ?string $templateName;
     public array $templateParams;
 
+    // Ordered payload strings for the template's quick-reply BUTTONS
+    // component (empty = template has no buttons). See Kirimdev::deliver().
+    public array $buttonPayloads;
+
     // Plain constructor (no property promotion) — stays compatible with
     // PHP 7.4 on production, matching SendSingleMailJob's convention.
-    public function __construct(string $target, string $message, ?string $templateName = null, array $templateParams = [])
+    public function __construct(string $target, string $message, ?string $templateName = null, array $templateParams = [], array $buttonPayloads = [])
     {
         $this->target         = $target;
         $this->message        = $message;
         $this->templateName   = $templateName;
         $this->templateParams = $templateParams;
+        $this->buttonPayloads = $buttonPayloads;
     }
 
     public function middleware(): array
@@ -82,7 +87,7 @@ class SendSingleWhatsAppJob implements ShouldQueue
         if ($this->templateName === null) {
             Kirimdev::deliverText($this->target, $this->message);
         } else {
-            Kirimdev::deliver($this->target, $this->templateName, $this->templateParams);
+            Kirimdev::deliver($this->target, $this->templateName, $this->templateParams, $this->buttonPayloads);
         }
     }
 

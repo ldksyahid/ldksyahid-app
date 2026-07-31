@@ -32,8 +32,12 @@ class WhatsApp
      * 24h session (the admin just messaged in), which Meta allows as
      * freeform text, so Kirimdev sends them as a plain text message instead
      * of a template.
+     *
+     * $buttonPayloads: ordered payload strings for the template's
+     * quick-reply BUTTONS component, if it has one (see
+     * Kirimdev::deliver()) — leave empty for templates with no buttons.
      */
-    public static function send(string $target, string $message, ?string $templateName = null, array $templateParams = []): void
+    public static function send(string $target, string $message, ?string $templateName = null, array $templateParams = [], array $buttonPayloads = []): void
     {
         // Random 0-8s jitter so messages dispatched at nearly the same
         // instant (e.g. notifyAdmin + sendShortlinkApproved in the same
@@ -42,7 +46,7 @@ class WhatsApp
         // ->onQueue('whatsapp'): a separate queue from 'default'/'email'
         // (used by SendSingleMailJob) — so WhatsApp jobs are never stuck
         // behind an email backlog.
-        SendSingleWhatsAppJob::dispatch($target, $message, $templateName, $templateParams)
+        SendSingleWhatsAppJob::dispatch($target, $message, $templateName, $templateParams, $buttonPayloads)
             ->onQueue('whatsapp')
             ->delay(now()->addSeconds(rand(0, 8)));
     }
@@ -93,16 +97,23 @@ class WhatsApp
             . $adminUrl . "\n\n"
             . "#LDKSyahid\n#LayananShortlink";
 
-        // Order must match the 'request_shortlink_v2' template's {{1}}..{{5}}
+        // Order must match the 'request_shortlink_v5' template's {{1}}..{{6}}
         // — requestId first since it's the first variable to appear in the
-        // template body (Meta requires ascending first-use order).
-        return self::send($data['cpPhone'], $message, 'request_shortlink_v2', [
+        // template body (Meta requires ascending first-use order). Switched
+        // from v2 (text-only, no note field) before v5 showed
+        // status=approved — per explicit user instruction — so sends will
+        // fail/retry via the queue's backoff until Meta approves it.
+        // Button payloads must match WhatsAppInboundHandler::
+        // handleButtonReply()'s expected 'approve'/'reject' strings, in the
+        // same order as the template's Approve/Reject buttons.
+        return self::send($data['cpPhone'], $message, 'request_shortlink_v5', [
             $data['requestId'],
             $data['name'],
             $data['email'],
             $data['whatsapp'],
             $data['customLink'],
-        ]);
+            $data['note'],
+        ], ['approve', 'reject']);
     }
 
     public static function sendShortlinkApproved($data)

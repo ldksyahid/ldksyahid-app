@@ -15,16 +15,32 @@ class Kirimdev
 {
     /**
      * ONLY called from SendSingleWhatsAppJob::handle() inside the queue
-     * worker (when WHATSAPP_PROVIDER=kirimdev) — never call this directly
-     * from application code, to stay behind the rate limiter.
+     * worker — never call this directly from application code, to stay
+     * behind the rate limiter.
+     *
+     * $buttonPayloads is an ordered list of payload strings for the
+     * template's quick-reply BUTTONS component (empty = template has no
+     * buttons, or use its static defaults) — index in the array matches the
+     * button's position in the approved template (0-based). The value
+     * chosen here is exactly what comes back in the inbound webhook's
+     * `button.payload` field when that button is tapped.
      */
-    public static function deliver(string $target, string $templateName, array $params): array
+    public static function deliver(string $target, string $templateName, array $params, array $buttonPayloads = []): array
     {
         $components = [];
         if (!empty($params)) {
             $components[] = [
                 'type'       => 'body',
                 'parameters' => array_map(fn ($value) => ['type' => 'text', 'text' => (string) $value], $params),
+            ];
+        }
+
+        foreach ($buttonPayloads as $index => $payload) {
+            $components[] = [
+                'type'       => 'button',
+                'sub_type'   => 'quick_reply',
+                'index'      => $index,
+                'parameters' => [['type' => 'payload', 'payload' => (string) $payload]],
             ];
         }
 

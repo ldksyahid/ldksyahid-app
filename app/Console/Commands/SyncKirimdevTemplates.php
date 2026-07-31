@@ -121,6 +121,43 @@ class SyncKirimdevTemplates extends Command
                 ],
             ],
             [
+                // Button-based replacement for request_shortlink_v2's typed
+                // "YES"/"NO" reply — real WhatsApp quick-reply buttons instead
+                // of free-text parsing. NOT yet wired into
+                // WhatsApp::sendShortlinkRequestNotification() (still on v2)
+                // — switch over only after this shows status=approved, so
+                // the currently-working v2 flow isn't broken while this is
+                // in review. See Kirimdev::deliver()'s $buttonPayloads param.
+                // v3/v4 (this template's earlier names) were submitted then
+                // abandoned/renamed — v3 for a straight rename, v4 because it
+                // was missing {{6}} (the requester's "Catatan/Keterangan"
+                // note, present on the public request form but dropped
+                // during the original v2 simplification). Both sit unused on
+                // Meta (no delete endpoint via Kirimdev — see
+                // kirimdev-whatsapp-migration memory).
+                'name'     => 'request_shortlink_v5',
+                'category' => 'UTILITY',
+                'language' => 'id',
+                'components' => [
+                    [
+                        'type' => 'BODY',
+                        'text' => "📩 *Request Shortlink #{{1}}* 📩\n\nAda permintaan shortlink baru!\n\n👤 Nama: {{2}}\n📧 Email: {{3}}\n📱 WhatsApp: {{4}}\n✂️ Custom link diminta: {{5}}\n📝 Catatan: {{6}}\n\nGunakan tombol di bawah untuk approve atau tolak permintaan ini.",
+                        'example' => [
+                            'body_text' => [[
+                                '42', 'Budi', 'budi@mail.com', '628123456789', 'ldksyah.id/event2026', 'Untuk campaign donasi bulan ini',
+                            ]],
+                        ],
+                    ],
+                    [
+                        'type' => 'BUTTONS',
+                        'buttons' => [
+                            ['type' => 'QUICK_REPLY', 'text' => 'Approve'],
+                            ['type' => 'QUICK_REPLY', 'text' => 'Reject'],
+                        ],
+                    ],
+                ],
+            ],
+            [
                 'name'     => 'shortlink_disetujui_v2',
                 'category' => 'UTILITY',
                 'language' => 'id',

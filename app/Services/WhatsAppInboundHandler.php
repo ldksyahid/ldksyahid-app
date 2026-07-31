@@ -25,14 +25,42 @@ class WhatsAppInboundHandler
      */
     public function handleReply(string $sender, string $message): string
     {
-        $normalizedSender = preg_replace('/[^0-9]/', '', $sender);
-        $message          = strtolower(trim($message));
+        $message = strtolower(trim($message));
 
-        if (!$this->isAdminCp($normalizedSender)) {
+        if (!in_array($message, ['yes', 'no'], true)) {
             return 'ignored';
         }
 
-        if (!in_array($message, ['yes', 'no'], true)) {
+        return $this->resolveDecision($sender, $message === 'yes');
+    }
+
+    /**
+     * Quick-reply button tap equivalent of handleReply() — for
+     * request_shortlink_v5's Approve/Reject buttons (see
+     * KirimdevWebhookController, Kirimdev::deliver()'s $buttonPayloads).
+     * $payload is whatever string was set when sending, NOT the button's
+     * display text — this app sends lowercase 'approve'/'reject'.
+     *
+     * @param string $sender  Raw sender phone number, any format (digits get normalized).
+     * @param string $payload The tapped button's payload value.
+     * @return string One of: 'ignored', 'no_pending', 'not_found', 'already_processed', 'ok'.
+     */
+    public function handleButtonReply(string $sender, string $payload): string
+    {
+        $payload = strtolower(trim($payload));
+
+        if (!in_array($payload, ['approve', 'reject'], true)) {
+            return 'ignored';
+        }
+
+        return $this->resolveDecision($sender, $payload === 'approve');
+    }
+
+    private function resolveDecision(string $sender, bool $approved): string
+    {
+        $normalizedSender = preg_replace('/[^0-9]/', '', $sender);
+
+        if (!$this->isAdminCp($normalizedSender)) {
             return 'ignored';
         }
 
@@ -56,7 +84,7 @@ class WhatsAppInboundHandler
             return 'already_processed';
         }
 
-        if ($message === 'yes') {
+        if ($approved) {
             $this->approveRequest($reqShortlink, $cacheKey);
         } else {
             $this->rejectRequest($reqShortlink, $cacheKey);
