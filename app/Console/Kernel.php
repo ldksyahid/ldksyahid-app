@@ -30,20 +30,29 @@ class Kernel extends ConsoleKernel
         // job still labeled 'default' (see migration
         // 2026_07_28_000001_relabel_default_queue_to_email) — safe to drop
         // once /admin/job-queue-log confirms none remain.
+        // withoutOverlapping(15): 15-minute lock, NOT the 24h default you get
+        // from calling withoutOverlapping() bare. With the bare default, a
+        // worker that gets killed abnormally (hosting resource limit, OOM,
+        // etc.) without releasing its lock silently blocks every subsequent
+        // run of this command for up to 24h — this happened in production
+        // (queue sat completely untouched for ~11h). 15 minutes safely
+        // exceeds --max-time=540 (9 min) so a healthy run is never mistaken
+        // for overlap, while a stuck lock clears itself quickly instead of
+        // blocking for most of a day.
         $schedule->command('queue:work --queue=whatsapp,email,default --max-time=540 --tries=3 --timeout=120')
                  ->everyTenMinutes()
-                 ->withoutOverlapping();
+                 ->withoutOverlapping(15);
 
         // Dynamic forms: close forms whose endDate has passed (runs every 5 minutes)
         // Skipped when QUEUE_CONNECTION=sync (development) because no forms have endDates set in dev
         $schedule->command('forms:close-expired')
                  ->everyFiveMinutes()
-                 ->withoutOverlapping();
+                 ->withoutOverlapping(10);
 
         // Celengan Syahid: mark QRIS donations as EXPIRED when expired_at has passed
         $schedule->command('donations:expire-qris')
                  ->everyTenMinutes()
-                 ->withoutOverlapping();
+                 ->withoutOverlapping(15);
 
         // WhatsApp (Kirimdev): poll this app's phone number status for the
         // Job Queue Log dashboard badge. Same 10-minute floor as above (OS
@@ -52,7 +61,7 @@ class Kernel extends ConsoleKernel
         // ~1 minute of each cycle, same as donations:expire-qris above.
         $schedule->command('kirimdev:check-account-status')
                  ->everyTenMinutes()
-                 ->withoutOverlapping();
+                 ->withoutOverlapping(15);
 
         // Auto-cleanup disabled — visitor data is kept indefinitely
         // $schedule->command('visitors:cleanup')->dailyAt('02:00');
