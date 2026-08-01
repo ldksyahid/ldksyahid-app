@@ -123,28 +123,29 @@ class SyncKirimdevTemplates extends Command
             [
                 // Button-based replacement for request_shortlink_v2's typed
                 // "YES"/"NO" reply — real WhatsApp quick-reply buttons instead
-                // of free-text parsing. NOT yet wired into
-                // WhatsApp::sendShortlinkRequestNotification() (still on v2)
-                // — switch over only after this shows status=approved, so
-                // the currently-working v2 flow isn't broken while this is
-                // in review. See Kirimdev::deliver()'s $buttonPayloads param.
-                // v3/v4 (this template's earlier names) were submitted then
-                // abandoned/renamed — v3 for a straight rename, v4 because it
-                // was missing {{6}} (the requester's "Catatan/Keterangan"
-                // note, present on the public request form but dropped
-                // during the original v2 simplification). Both sit unused on
-                // Meta (no delete endpoint via Kirimdev — see
-                // kirimdev-whatsapp-migration memory).
-                'name'     => 'request_shortlink_v5',
+                // of free-text parsing. Wired into
+                // WhatsApp::sendShortlinkRequestNotification() ahead of Meta
+                // approval, per explicit user instruction — sends fail/retry
+                // via queue backoff until this shows status=approved.
+                // v3/v4/v5 (this template's earlier names) were submitted
+                // then abandoned/renamed — v3 for a straight rename, v4
+                // because it was missing the requester's "Catatan/Keterangan"
+                // note (present on the public request form but dropped
+                // during the original v2 simplification), v5 because it was
+                // missing the original destination link ("Link Asli") the
+                // requester wants shortened. All three sit unused on Meta (no
+                // delete endpoint via Kirimdev — see kirimdev-whatsapp-migration
+                // memory).
+                'name'     => 'request_shortlink_v6',
                 'category' => 'UTILITY',
                 'language' => 'id',
                 'components' => [
                     [
                         'type' => 'BODY',
-                        'text' => "📩 *Request Shortlink #{{1}}* 📩\n\nAda permintaan shortlink baru!\n\n👤 Nama: {{2}}\n📧 Email: {{3}}\n📱 WhatsApp: {{4}}\n✂️ Custom link diminta: {{5}}\n📝 Catatan: {{6}}\n\nGunakan tombol di bawah untuk approve atau tolak permintaan ini.",
+                        'text' => "📩 *Request Shortlink #{{1}}* 📩\n\nAda permintaan shortlink baru!\n\n👤 Nama: {{2}}\n📧 Email: {{3}}\n📱 WhatsApp: {{4}}\n🔗 Link asli: {{5}}\n✂️ Custom link diminta: {{6}}\n📝 Catatan: {{7}}\n\nGunakan tombol di bawah untuk approve atau tolak permintaan ini.",
                         'example' => [
                             'body_text' => [[
-                                '42', 'Budi', 'budi@mail.com', '628123456789', 'ldksyah.id/event2026', 'Untuk campaign donasi bulan ini',
+                                '42', 'Budi', 'budi@mail.com', '628123456789', 'https://contoh.com/halaman-panjang', 'ldksyah.id/event2026', 'Untuk campaign donasi bulan ini',
                             ]],
                         ],
                     ],

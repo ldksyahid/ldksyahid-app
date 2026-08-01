@@ -97,20 +97,20 @@ class WhatsApp
             . $adminUrl . "\n\n"
             . "#LDKSyahid\n#LayananShortlink";
 
-        // Order must match the 'request_shortlink_v5' template's {{1}}..{{6}}
+        // Order must match the 'request_shortlink_v6' template's {{1}}..{{7}}
         // — requestId first since it's the first variable to appear in the
         // template body (Meta requires ascending first-use order). Switched
-        // from v2 (text-only, no note field) before v5 showed
-        // status=approved — per explicit user instruction — so sends will
-        // fail/retry via the queue's backoff until Meta approves it.
+        // ahead of Meta approval — per explicit user instruction — so sends
+        // will fail/retry via the queue's backoff until Meta approves it.
         // Button payloads must match WhatsAppInboundHandler::
         // handleButtonReply()'s expected 'approve'/'reject' strings, in the
         // same order as the template's Approve/Reject buttons.
-        return self::send($data['cpPhone'], $message, 'request_shortlink_v5', [
+        return self::send($data['cpPhone'], $message, 'request_shortlink_v6', [
             $data['requestId'],
             $data['name'],
             $data['email'],
             $data['whatsapp'],
+            $data['defaultLink'],
             $data['customLink'],
             $data['note'],
         ], ['approve', 'reject']);

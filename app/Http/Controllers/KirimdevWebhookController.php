@@ -44,7 +44,7 @@ class KirimdevWebhookController extends Controller
                     $status = $handler->handleReply($message['from'] ?? '', data_get($message, 'text.body', ''));
                     Log::info('[Kirimdev Webhook] inbound text reply processed', ['status' => $status]);
                 } elseif ($type === 'button') {
-                    // Quick-reply button tap (see request_shortlink_v5 /
+                    // Quick-reply button tap (see request_shortlink_v6 /
                     // Kirimdev::deliver()'s $buttonPayloads) — payload is
                     // whatever string we set when sending, not the button's
                     // display text.

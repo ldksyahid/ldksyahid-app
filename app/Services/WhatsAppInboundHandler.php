@@ -36,7 +36,7 @@ class WhatsAppInboundHandler
 
     /**
      * Quick-reply button tap equivalent of handleReply() — for
-     * request_shortlink_v5's Approve/Reject buttons (see
+     * request_shortlink_v6's Approve/Reject buttons (see
      * KirimdevWebhookController, Kirimdev::deliver()'s $buttonPayloads).
      * $payload is whatever string was set when sending, NOT the button's
      * display text — this app sends lowercase 'approve'/'reject'.
