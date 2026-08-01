@@ -551,6 +551,7 @@
     margin-bottom: .4rem;
 }
 .cs-m-collected { font-size: .78rem; font-weight: 700; color: var(--cs-primary); }
+.cs-m-target    { font-size: .68rem; font-weight: 500; color: var(--cs-gray); }
 .cs-m-days      { font-size: .72rem; color: var(--cs-gray); font-weight: 600; }
 .cs-m-ended     { color: #ef4444; }
 .cs-m-hint {
@@ -683,13 +684,14 @@
 }
 
 .cs-bs-stats {
-    display: grid; grid-template-columns: 1fr 1px 1fr;
+    display: grid; grid-template-columns: 1fr 1px 1fr 1px 1fr;
     gap: .5rem; align-items: center;
     background: var(--cs-gray-100);
     border-radius: var(--cs-radius); padding: .875rem 1rem;
     margin-bottom: 1rem;
 }
 .cs-bs-stat { display: flex; flex-direction: column; gap: .125rem; }
+.cs-bs-stat:nth-child(3) { align-items: center; }
 .cs-bs-stat:last-child { align-items: flex-end; }
 .cs-bs-stat-label { font-size: .7rem; color: var(--cs-gray); font-weight: 500; }
 .cs-bs-stat-val { font-size: .88rem; font-weight: 700; color: var(--cs-dark); }

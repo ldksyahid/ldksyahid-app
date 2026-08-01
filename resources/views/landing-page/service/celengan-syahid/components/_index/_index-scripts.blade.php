@@ -138,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var category    = el.dataset.category     || '';
         var percent     = el.dataset.percent      || '0';
         var collected   = el.dataset.collected    || 'Rp0';
+        var target      = el.dataset.target       || 'Rp0';
         var days        = el.dataset.days         || '';
         var deadlinePassed = el.dataset.deadlinePassed === '1';
         var donors      = el.dataset.donors       || '0';
@@ -183,6 +184,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     '<div class="cs-bs-stat"><span class="cs-bs-stat-label">Terkumpul</span><span class="cs-bs-stat-val primary">' + escHtml(collected) + '</span></div>' +
                     '<div class="cs-bs-stat-sep"></div>' +
                     '<div class="cs-bs-stat"><span class="cs-bs-stat-label">Donatur</span><span class="cs-bs-stat-val">' + escHtml(donors) + ' orang</span></div>' +
+                    '<div class="cs-bs-stat-sep"></div>' +
+                    '<div class="cs-bs-stat"><span class="cs-bs-stat-label">Target</span><span class="cs-bs-stat-val">' + escHtml(target) + '</span></div>' +
                 '</div>' +
                 (excerpt ? '<p class="cs-bs-excerpt">' + escHtml(excerpt) + '</p>' : '') +
                 '<div class="cs-bs-btns">' +

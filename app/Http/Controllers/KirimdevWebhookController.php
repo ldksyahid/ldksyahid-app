@@ -38,12 +38,19 @@ class KirimdevWebhookController extends Controller
         $messages = data_get($payload, 'entry.0.changes.0.value.messages', []);
         if (!empty($messages)) {
             foreach ($messages as $message) {
-                if (($message['type'] ?? null) !== 'text') {
-                    continue;
-                }
+                $type = $message['type'] ?? null;
 
-                $status = $handler->handleReply($message['from'] ?? '', data_get($message, 'text.body', ''));
-                Log::info('[Kirimdev Webhook] inbound reply processed', ['status' => $status]);
+                if ($type === 'text') {
+                    $status = $handler->handleReply($message['from'] ?? '', data_get($message, 'text.body', ''));
+                    Log::info('[Kirimdev Webhook] inbound text reply processed', ['status' => $status]);
+                } elseif ($type === 'button') {
+                    // Quick-reply button tap (see request_shortlink_v6 /
+                    // Kirimdev::deliver()'s $buttonPayloads) — payload is
+                    // whatever string we set when sending, not the button's
+                    // display text.
+                    $status = $handler->handleButtonReply($message['from'] ?? '', data_get($message, 'button.payload', ''));
+                    Log::info('[Kirimdev Webhook] inbound button reply processed', ['status' => $status]);
+                }
             }
 
             return response()->json(['status' => 'ok']);
