@@ -205,6 +205,7 @@
                  data-category="{{ e($campaign->kategori) }}"
                  data-percent="{{ number_format($percent, 0) }}"
                  data-collected="{{ LFC::formatRupiah($donationTotal) }}"
+                 data-target="{{ LFC::formatRupiah($campaign->target_biaya) }}"
                  data-days="{{ $daysLeft }}"
                  data-deadline-passed="{{ $isDeadlinePassed ? '1' : '0' }}"
                  data-donors="{{ $donorCount }}"
@@ -230,7 +231,7 @@
                         <div class="cs-m-progress-fill" style="width: {{ min($percent, 100) }}%"></div>
                     </div>
                     <div class="cs-m-stats">
-                        <span class="cs-m-collected">{{ LFC::formatRupiah($donationTotal) }}</span>
+                        <span class="cs-m-collected">{{ LFC::formatRupiah($donationTotal) }} <span class="cs-m-target">/ {{ LFC::formatRupiah($campaign->target_biaya) }}</span></span>
                         @if(!$campaign->deadline)
                             <span class="cs-m-days">Tanpa Batas</span>
                         @elseif($isDeadlinePassed)
