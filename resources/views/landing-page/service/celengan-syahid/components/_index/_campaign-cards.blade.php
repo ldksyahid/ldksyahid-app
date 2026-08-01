@@ -138,7 +138,7 @@
                                 <i class="fas fa-link"></i>
                             </button>
                             <button class="cs-share-btn cs-share-wa"
-                                    onclick="csShareWa('{{ route('service.celengansyahid.detail', $campaign->link) }}', '{{ e($campaign->judul) }}', event)"
+                                    onclick="csShareWa('{{ route('service.celengansyahid.detail', $campaign->link) }}', '{{ $campaign->judul }}', event)"
                                     title="Bagikan via WhatsApp">
                                 <i class="fab fa-whatsapp"></i>
                             </button>
@@ -197,19 +197,19 @@
             @endphp
             <div class="cs-mobile-card"
                  style="--cs-cat: {{ $catColor }}"
-                 data-title="{{ e($campaign->judul) }}"
+                 data-title="{{ $campaign->judul }}"
                  data-cover="{{ $cover }}"
-                 data-org="{{ e($orgName) }}"
+                 data-org="{{ $orgName }}"
                  data-org-logo="{{ $logoSrc }}"
-                 data-org-link="{{ e($orgLink) }}"
-                 data-category="{{ e($campaign->kategori) }}"
+                 data-org-link="{{ $orgLink }}"
+                 data-category="{{ $campaign->kategori }}"
                  data-percent="{{ number_format($percent, 0) }}"
                  data-collected="{{ LFC::formatRupiah($donationTotal) }}"
                  data-target="{{ LFC::formatRupiah($campaign->target_biaya) }}"
                  data-days="{{ $daysLeft }}"
                  data-deadline-passed="{{ $isDeadlinePassed ? '1' : '0' }}"
                  data-donors="{{ $donorCount }}"
-                 data-excerpt="{{ e(Str::limit(strip_tags($campaign->cerita), 160)) }}"
+                 data-excerpt="{{ Str::limit(strip_tags($campaign->cerita), 160) }}"
                  data-url="{{ route('service.celengansyahid.detail', $campaign->link) }}"
                  data-donate-url="{{ route('service.celengansyahid.detail.donatenow', $campaign->link) }}"
                  onclick="csOpenBottomSheet(this)">
