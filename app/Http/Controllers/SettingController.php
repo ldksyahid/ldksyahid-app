@@ -17,13 +17,23 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-        MsSetting::updateByKey(
+        $affected = MsSetting::updateByKey(
             $request->input('key1', ''),
             $request->input('key2', ''),
             $request->input('value1', ''),
             $request->input('value2', '')
         );
 
-        return response()->json(['success' => true, 'message' => 'Setting updated.']);
+        if ($affected === 0) {
+            return response()->json([
+                'success' => false, 
+                'message' => 'Gagal memperbarui setting: Key tidak ditemukan atau data tidak berubah.'
+            ], 400);
+        }
+
+        return response()->json([
+            'success' => true, 
+            'message' => 'Setting updated.'
+        ]);
     }
 }
