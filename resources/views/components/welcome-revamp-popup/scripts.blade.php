@@ -1,5 +1,5 @@
 <script>
-/* ── Welcome Muharram 1448 H — Popup Logic + Mini Game ──────────────── */
+/* ── Welcome 17 Agustus / HUT RI ke-81 — Popup Logic + Mini Game ──────────────── */
 (function () {
     /* ── localStorage keys ── */
     var LS_KEYS_OLD = [
@@ -10,8 +10,9 @@
         'ldksyahid_welcome_popup_self_reward',
         'ldksyahid_welcome_popup_qurban',
         'ldksyahid_welcome_popup_milad_30',
+        'ldksyahid_welcome_popup_muharram_1448',
     ];
-    var LS_KEY   = 'ldksyahid_welcome_popup_muharram_1448';
+    var LS_KEY   = 'ldksyahid_welcome_popup_17agustus_2026';
     var backdrop = document.getElementById('wrp-backdrop');
 
     LS_KEYS_OLD.forEach(function (k) { localStorage.removeItem(k); });
@@ -45,8 +46,8 @@
     /* ── Share button — Web Share API + fallback ── */
     if (btnShare) {
         var shareData = {
-            title : 'Selamat Tahun Baru Hijriyah 1448 H',
-            text  : 'Selamat Tahun Baru Hijriyah 1448 H! Semoga tahun ini penuh keberkahan dan hijrah yang lebih baik. — LDK Syahid UIN Jakarta 🌙✨',
+            title : 'Dirgahayu Republik Indonesia ke-81',
+            text  : 'Dirgahayu Republik Indonesia ke-81! Merdeka! Semoga semangat kemerdekaan terus membakar karya dan dakwah kita. — LDK Syahid UIN Jakarta 🇮🇩✨',
             url   : 'https://ldksyahid.com',
         };
         btnShare.addEventListener('click', function () {
@@ -71,9 +72,9 @@
     });
 
     /* ════════════════════════════════════════════════
-       MOON CANVAS — dekoratif di header
+       FLAG + FIREWORKS CANVAS — dekoratif di header
     ════════════════════════════════════════════════ */
-    (function drawMoon() {
+    (function drawHeaderArt() {
         var mc = document.getElementById('wrp-moon-canvas');
         if (!mc) return;
         var dpr = window.devicePixelRatio || 1;
@@ -83,37 +84,60 @@
         mx.scale(dpr, dpr);
         var mw = mc.offsetWidth, mh = 90;
 
-        /* bintang latar */
-        for (var j = 0; j < 55; j++) {
+        /* bintang latar (percikan jauh) */
+        for (var j = 0; j < 40; j++) {
             var sx = Math.random() * mw, sy = Math.random() * mh, sr = Math.random() * .5 + .1;
             mx.beginPath(); mx.arc(sx, sy, sr, 0, Math.PI * 2);
-            mx.fillStyle = 'rgba(255,255,255,' + (Math.random() * .55 + .15) + ')';
+            mx.fillStyle = 'rgba(255,255,255,' + (Math.random() * .5 + .15) + ')';
             mx.fill();
         }
 
-        /* bulan sabit */
-        var cx = mw / 2, cy = 46, rm = 32;
-        mx.beginPath(); mx.arc(cx, cy, rm, 0, Math.PI * 2);
-        mx.fillStyle = '#c08a10'; mx.fill();
-        mx.beginPath(); mx.arc(cx + 13, cy - 5, rm * .76, 0, Math.PI * 2);
-        mx.fillStyle = '#08122e'; mx.fill();
+        /* bendera merah putih bergelombang di tengah */
+        var flagW = 84, flagH = 56, fx = mw / 2 - flagW / 2, fy = mh / 2 - flagH / 2;
+        var wave = 5;
 
-        /* bintang kecil di sekitar bulan */
-        function drawStar5(c, x, y, r1, r2) {
-            c.beginPath();
-            for (var p = 0; p < 10; p++) {
-                var a = Math.PI / 5 * p - Math.PI / 2, r = p % 2 === 0 ? r1 : r2;
-                c.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r);
+        function drawFlagStripe(colorTop, colorBottom, x, y, w, h) {
+            mx.save();
+            mx.beginPath();
+            mx.moveTo(x, y + Math.sin(0) * wave);
+            for (var i = 0; i <= w; i += 4) {
+                mx.lineTo(x + i, y + Math.sin(i / 14) * wave);
             }
-            c.closePath(); c.fillStyle = '#d4a830'; c.fill();
+            mx.lineTo(x + w, y + h);
+            mx.lineTo(x, y + h);
+            mx.closePath();
+            mx.fillStyle = colorTop;
+            mx.fill();
+            mx.restore();
         }
-        drawStar5(mx, cx + 44, cy - 16, 6, 2.5);
-        drawStar5(mx, cx + 58, cy + 8,  3.5, 1.5);
-        drawStar5(mx, cx - 42, cy - 10, 4,   1.8);
+        drawFlagStripe('#e02929', '#e02929', fx, fy, flagW, flagH / 2);
+        drawFlagStripe('#ffffff', '#ffffff', fx, fy + flagH / 2, flagW, flagH / 2);
+
+        /* tiang bendera */
+        mx.fillStyle = 'rgba(255,255,255,.55)';
+        mx.fillRect(fx - 3, fy - 6, 3, flagH + 12);
+
+        /* percikan kembang api */
+        function drawBurst(cx, cy, color, size) {
+            for (var p = 0; p < 8; p++) {
+                var a = (Math.PI * 2 / 8) * p;
+                mx.beginPath();
+                mx.moveTo(cx, cy);
+                mx.lineTo(cx + Math.cos(a) * size, cy + Math.sin(a) * size);
+                mx.strokeStyle = color;
+                mx.lineWidth = 1.4;
+                mx.stroke();
+            }
+            mx.beginPath(); mx.arc(cx, cy, 2, 0, Math.PI * 2);
+            mx.fillStyle = color; mx.fill();
+        }
+        drawBurst(fx + flagW + 26, fy + 6, '#ffd43b', 12);
+        drawBurst(fx - 22, fy + 20, '#ff6b6b', 10);
+        drawBurst(fx + flagW + 8, fy + flagH + 4, '#ffffff', 8);
     }());
 
     /* ════════════════════════════════════════════════
-       MINI GAME — Tangkap Bintang Harapan
+       MINI GAME — Nyalakan Kembang Api Kemerdekaan
     ════════════════════════════════════════════════ */
     (function initGame() {
         var cv      = document.getElementById('wrp-canvas');
@@ -143,7 +167,7 @@
                 speed : rnd(.9, 2.4),
                 rot   : 0,
                 rs    : rnd(-.05, .05),
-                color : Math.random() > .25 ? '#d4a830' : (Math.random() > .5 ? '#8ec8ff' : '#ff9d5c'),
+                color : Math.random() > .4 ? '#ff4444' : (Math.random() > .5 ? '#ffffff' : '#ffd43b'),
             });
         }
 
@@ -168,7 +192,7 @@
         }
 
         function drawBg() {
-            ctx.fillStyle = '#04081a'; ctx.fillRect(0, 0, cW, cH);
+            ctx.fillStyle = '#0d0303'; ctx.fillRect(0, 0, cW, cH);
             ctx.fillStyle = 'rgba(255,255,255,0.03)';
             for (var gx = 0; gx < cW; gx += 18)
                 for (var gy = 0; gy < cH; gy += 18)
@@ -197,10 +221,10 @@
                 ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2); ctx.fill(); ctx.restore();
             });
             if (!running) {
-                ctx.fillStyle = 'rgba(4,8,26,0.78)'; ctx.fillRect(0, 0, cW, cH);
-                ctx.fillStyle = '#d4a830'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center';
-                ctx.fillText('Selesai! ' + score + ' bintang tertangkap', cW / 2, cH / 2 - 8);
-                ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.font = '10px sans-serif';
+                ctx.fillStyle = 'rgba(13,3,3,0.8)'; ctx.fillRect(0, 0, cW, cH);
+                ctx.fillStyle = '#ff5c5c'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center';
+                ctx.fillText('Selesai! ' + score + ' percikan tertangkap', cW / 2, cH / 2 - 8);
+                ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.font = '10px sans-serif';
                 ctx.fillText('Klik untuk main lagi', cW / 2, cH / 2 + 10);
             }
         }
@@ -222,12 +246,12 @@
                     var msgs = [
                         'Jangan menyerah, coba lagi! 💪',
                         'Hampir! Coba sekali lagi ✨',
-                        'Mulai bagus! Coba lagi! 🌙',
-                        'MasyaAllah! Semangat dakwahmu menyala! 🔥',
+                        'Mulai bagus! Coba lagi! 🇮🇩',
+                        'MERDEKA! Semangat juangmu membara! 🔥',
                     ];
                     var idx = score >= 5 ? 3 : score >= 2 ? 2 : score >= 1 ? 1 : 0;
                     if (msgEl) {
-                        msgEl.style.color = score >= 5 ? '#d4a830' : '#6b7280';
+                        msgEl.style.color = score >= 5 ? '#ff5c5c' : '#6b5252';
                         msgEl.textContent = msgs[idx];
                     }
                 }
@@ -241,7 +265,7 @@
             if (scoreEl) scoreEl.textContent = '0';
             if (timerEl) timerEl.textContent = '15';
             if (timerWrap) timerWrap.style.color = 'rgba(255,255,255,0.35)';
-            if (msgEl) { msgEl.style.color = '#4b5563'; msgEl.textContent = 'Klik bintang yang jatuh secepat mungkin!'; }
+            if (msgEl) { msgEl.style.color = '#6b5252'; msgEl.textContent = 'Klik percikan kembang api yang jatuh secepat mungkin!'; }
             startTimer();
         }
 
@@ -261,8 +285,8 @@
                 return true;
             });
             if (hit && msgEl) {
-                var m = ['Yaa! +1 ✨', 'Harapanmu tercatat! ⭐', 'Allahumma ameen! 🌙', 'Terus semangat! 💫', 'Barakallah! 🌟'];
-                msgEl.style.color = '#c9a030';
+                var m = ['Yaa! +1 ✨', 'Semangat merdeka! ⭐', 'MERDEKA! 🇮🇩', 'Terus semangat! 💫', 'Mantap! 🎇'];
+                msgEl.style.color = '#ff8080';
                 msgEl.textContent = m[Math.floor(Math.random() * m.length)];
             }
         });
