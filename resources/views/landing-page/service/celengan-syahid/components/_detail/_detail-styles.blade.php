@@ -34,7 +34,7 @@
 }
 .cd-hero-img {
     width: 100%; height: 100%;
-    object-fit: cover; display: block;
+    object-fit: cover; object-position: center; display: block;
 }
 
 /* ── Info Panel ── */
@@ -380,7 +380,21 @@
     .cd-tabs-nav { padding: 0 1rem; overflow-x: auto; scrollbar-width: none; }
     .cd-tabs-nav::-webkit-scrollbar { display: none; }
     .cd-tab-body { padding: 1.25rem 1rem; }
+
+    /* Show full poster on mobile (no cropping), with a soft fill to keep it tidy */
+    .cd-hero-img-wrap {
+        aspect-ratio: auto;
+        max-height: none;
+        background: #eef2f6;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .cd-hero-img {
+        width: 100%; height: auto;
+        max-height: 80vh;
+        object-fit: contain;
+    }
 }
+[data-theme="dark"] .cd-hero-img-wrap { background: #1a1f2e; }
 
 /* ── SweetAlert toast below navbar ── */
 .swal2-container.swal2-top-end,

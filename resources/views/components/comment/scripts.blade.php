@@ -5,6 +5,13 @@
     var section = document.getElementById('cmt-section');
     if (!section) return;
 
+    // Escape #photo stacking context (position:relative;z-index:1) so the backdrop
+    // can cover the navbar. Moving to body puts it in the root stacking context.
+    var gifModalEl = document.getElementById('cmt-gif-modal');
+    if (gifModalEl && gifModalEl.parentNode !== document.body) {
+        document.body.appendChild(gifModalEl);
+    }
+
     // ── Config from data attributes ──────────────────────────────────
     var TYPE       = section.dataset.type;
     var ID         = section.dataset.id;
@@ -126,7 +133,7 @@
              + '" type="button" title="Tambah gambar"><i class="fas fa-image"></i></button>'
              + '<button class="cmt-media-btn cmt-gif-open-btn" data-action="gif" data-target="' + commentId
              + '" type="button" title="Tambah GIF / Stiker">'
-             + '<span class="cmt-gif-icon-wrap"><span class="cmt-gif-icon-text">GIF</span></span>'
+             + '<span class="cmt-gif-icon-wrap"><span class="cmt-gif-icon-text">GIF</span><span class="cmt-gif-sep">·</span><span class="cmt-gif-icon-text cmt-stk-text">Stiker</span></span>'
              + '</button>'
              + '</div>'
              + '<div class="cmt-form-controls">'
@@ -154,8 +161,8 @@
              + '<button class="cmt-media-btn" data-action="img" data-target="' + t
              + '" type="button" title="Tambah gambar"><i class="fas fa-image"></i></button>'
              + '<button class="cmt-media-btn cmt-gif-open-btn" data-action="gif" data-target="' + t
-             + '" type="button" title="Tambah GIF">'
-             + '<span class="cmt-gif-icon-wrap"><span class="cmt-gif-icon-text">GIF</span></span>'
+             + '" type="button" title="Tambah GIF / Stiker">'
+             + '<span class="cmt-gif-icon-wrap"><span class="cmt-gif-icon-text">GIF</span><span class="cmt-gif-sep">·</span><span class="cmt-gif-icon-text cmt-stk-text">Stiker</span></span>'
              + '</button>'
              + '</div>'
              + '<div class="cmt-form-controls">'
@@ -489,25 +496,9 @@
             .catch(function () {});
     }
 
-    function openGifModal(target, anchorEl) {
+    function openGifModal(target) {
         activeMediaTarget = target;
         if (!gifModal) return;
-
-        // Desktop: always position below the anchor button; shrink height if needed
-        var dialog = gifModal.querySelector('.cmt-gif-dialog');
-        if (dialog && anchorEl && window.innerWidth >= 576) {
-            var rect  = anchorEl.getBoundingClientRect();
-            var dW    = Math.min(480, window.innerWidth - 20);
-            var left  = rect.left;
-            var top   = rect.bottom + 6;
-            if (left + dW > window.innerWidth - 10) left = window.innerWidth - dW - 10;
-            if (left < 10) left = 10;
-            var availH = window.innerHeight - top - 10;
-            var dH     = Math.min(500, Math.max(220, availH));
-            dialog.style.top    = top  + 'px';
-            dialog.style.left   = left + 'px';
-            dialog.style.height = dH   + 'px';
-        }
 
         gifModal.style.display = 'flex';
         gifModal.removeAttribute('aria-hidden');
@@ -648,7 +639,7 @@
         if (sharedFileInput) sharedFileInput.click();
     });
     delegate(section, '[data-action="gif"]', function (e, btn) {
-        openGifModal(btn.dataset.target, btn);
+        openGifModal(btn.dataset.target);
     });
     delegate(section, '.cmt-media-remove', function (e, btn) {
         clearMedia(btn.dataset.target);

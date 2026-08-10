@@ -52,6 +52,71 @@
         box-shadow: 0 0 0 0.2rem rgba(0, 167, 157, 0.25);
     }
     .form-text { font-size: 0.8rem; color: #6c757d; }
+
+    /* PIC Contact: merge the country-code select2 + local number input into
+       a single bordered control, matching the donation form's phone field. */
+    .pic-phone-group {
+        display: flex;
+        align-items: stretch;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        overflow: hidden; /* clips children to the shared rounded corners */
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+    .pic-phone-group:focus-within {
+        border-color: #00a79d;
+        box-shadow: 0 0 0 0.2rem rgba(0, 167, 157, 0.25);
+    }
+    .pic-phone-group.is-invalid { border-color: #dc3545; }
+    .pic-phone-group .select2-container {
+        flex: 0 0 92px;
+        min-width: 0; /* flex items default to min-width:auto — without this the box grows to fit content instead of clipping it */
+    }
+    .pic-phone-group .select2-container--default .select2-selection--single {
+        height: 100%;
+        min-height: 38px;
+        display: flex;
+        align-items: center;
+        /* Kill the generic Select2 rule's 0.75rem right padding (it stacks
+           with .select2-selection__rendered's own padding-right below,
+           doubling the reserved space) — the arrow is absolutely positioned
+           and doesn't need this box to reserve room for it too. */
+        padding: 0 0 0 0.6rem;
+        border: none;
+        border-right: 1px solid #ced4da;
+        border-radius: 0;
+        background: #f8f9fa;
+    }
+    /* Override the generic Select2 rule below (padding-right: 40px), which
+       reserves room for the wide Province/City/Category selects' clear button
+       — this chip only shows "flag +code" so it needs far less room. */
+    .pic-phone-group .select2-selection--single .select2-selection__rendered {
+        line-height: 1;
+        padding-left: 0;
+        padding-right: 18px !important;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .pic-phone-group .select2-selection--single .select2-selection__arrow {
+        right: 2px;
+    }
+    .pic-phone-group input.form-control {
+        flex: 1 1 auto;
+        min-width: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none !important;
+    }
+
+    /* Dark mode: this app toggles via the "dark-mode" class on <html>
+       (see admin-page/template/body.blade.php), not [data-theme]. The base
+       .form-control/.select2-selection dark colors are already handled
+       globally there — only this component's own wrapper border needs it. */
+    html.dark-mode .pic-phone-group { border-color: #373b3e; }
+    html.dark-mode .pic-phone-group.is-invalid { border-color: #ea868f; }
+    html.dark-mode .pic-phone-group:focus-within { border-color: #00a79d; }
     .invalid-feedback { font-size: 0.85rem; }
     .form-control-plaintext {
         padding: 0.375rem 0;
@@ -206,6 +271,37 @@
     }
     .note-editor.note-frame .note-editing-area .note-editable {
         padding: 15px;
+    }
+
+    /* Dark mode overrides */
+    [data-theme="dark"] .alert-danger {
+        background-color: rgba(220, 53, 69, 0.15);
+        border-color: rgba(220, 53, 69, 0.4);
+        color: #f1aeb5;
+    }
+    [data-theme="dark"] .alert-danger .btn-close {
+        filter: invert(1) grayscale(1) brightness(2);
+    }
+    [data-theme="dark"] .alert-danger strong {
+        color: #ea868f;
+    }
+    [data-theme="dark"] .invalid-feedback {
+        color: #ea868f;
+    }
+    [data-theme="dark"] .form-control.is-invalid,
+    [data-theme="dark"] .form-select.is-invalid {
+        border-color: #ea868f;
+    }
+    [data-theme="dark"] .form-control.is-invalid:focus,
+    [data-theme="dark"] .form-select.is-invalid:focus {
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+    [data-theme="dark"] .form-control.is-valid,
+    [data-theme="dark"] .form-select.is-valid {
+        border-color: #75b798;
+    }
+    [data-theme="dark"] .link-availability-feedback {
+        font-size: 0.82rem;
     }
 
     @media (max-width: 768px) {

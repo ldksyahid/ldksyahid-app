@@ -284,15 +284,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-            const res = await fetch(`https://api.hadith.gading.dev/books/${book.id}/${number}`, {
+            const res = await fetch(`https://hadith-api-go.vercel.app/api/v1/hadis/${book.id}/${number}`, {
                 signal: controller.signal
             }).finally(() => clearTimeout(timeoutId));
 
             const json = await res.json();
 
-            if (json.code === 200 && json.data && json.data.contents) {
+            if (json.status === 'success' && json.data) {
                 retryCount = 0;
-                const contents = json.data.contents;
+                const contents = json.data;
 
                 const desktopWrapper = document.getElementById('hadith-desktop-wrapper');
                 const mobileWrapper = document.getElementById('hadith-mobile-wrapper');

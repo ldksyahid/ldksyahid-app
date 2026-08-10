@@ -13,6 +13,61 @@
             });
         });
 
+        // PIC Contact phone: country code select2 + combine into hidden telp_pj
+        var picCodeEl  = document.getElementById('inputTelpPJCode');
+        var picLocalEl = document.getElementById('inputTelpPJLocal');
+        var picFullEl  = document.getElementById('inputTelpPJFull');
+
+        function updatePicPhonePlaceholder() {
+            if (!picCodeEl || !picLocalEl) return;
+            var selected = picCodeEl.options[picCodeEl.selectedIndex];
+            picLocalEl.placeholder = (selected && selected.getAttribute('data-placeholder')) || '8xxxxxxxxxx';
+        }
+
+        function buildPicFullPhone() {
+            if (!picCodeEl || !picLocalEl || !picFullEl) return;
+            var code  = picCodeEl.value;
+            var local = picLocalEl.value.replace(/[^\d]/g, '').replace(/^0+/, '');
+            picFullEl.value = local ? code + local : '';
+        }
+
+        // Strip any non-digit character as it's typed/pasted, so the visible
+        // input can never actually contain letters/symbols — not just the
+        // hidden telp_pj field silently dropping them on submit.
+        function sanitizePicLocalInput() {
+            if (!picLocalEl) return;
+            var digitsOnly = picLocalEl.value.replace(/[^\d]/g, '');
+            if (digitsOnly !== picLocalEl.value) {
+                picLocalEl.value = digitsOnly;
+            }
+        }
+
+        if (picCodeEl && picLocalEl) {
+            $(picCodeEl).select2({
+                width: '92px',
+                minimumResultsForSearch: 0,
+                templateResult: function (opt) {
+                    if (!opt.id) return opt.text;
+                    var el = opt.element;
+                    return $('<span>' + ($(el).data('flag') || '') + ' <strong>+' + opt.id + '</strong></span>');
+                },
+                templateSelection: function (opt) {
+                    if (!opt.id) return opt.text;
+                    var el = opt.element;
+                    return $('<span>' + ($(el).data('flag') || '') + ' <strong>+' + opt.id + '</strong></span>');
+                }
+            });
+            updatePicPhonePlaceholder();
+            picLocalEl.addEventListener('input', function () {
+                sanitizePicLocalInput();
+                buildPicFullPhone();
+            });
+            $(picCodeEl).on('change', function () {
+                updatePicPhonePlaceholder();
+                buildPicFullPhone();
+            });
+        }
+
         // Province change -> load cities via AJAX
         $('#inputProvinsiCampaign').on('change', function() {
             var provinsi_id = $(this).val();
@@ -20,7 +75,7 @@
 
             $.ajax({
                 type: "post",
-                url: "{{ url('/admin/service/celengansyahid/campaign/get-city') }}",
+                url: "{{ url('/admin/celengan-syahid/campaign/get-city') }}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 data: { id: provinsi_id },
                 success: function(data) {
@@ -125,7 +180,7 @@
             });
         }
 
-        // Link input: prevent special characters
+        // Link input: prevent special characters + real-time availability check
         const linkInput = document.querySelector('#inputLink');
         if (linkInput) {
             linkInput.addEventListener('keydown', function(e) {
@@ -133,12 +188,64 @@
                     e.preventDefault();
                 }
             });
+
+            let linkCheckTimer = null;
+            const linkFeedback = document.createElement('div');
+            linkFeedback.className = 'link-availability-feedback small mt-1';
+            linkInput.parentNode.appendChild(linkFeedback);
+
+            const excludeId = '{{ $data->id ?? "" }}';
+
+            linkInput.addEventListener('input', function() {
+                clearTimeout(linkCheckTimer);
+                const val = this.value.trim();
+
+                linkFeedback.textContent = '';
+                linkFeedback.className = 'link-availability-feedback small mt-1';
+                linkInput.classList.remove('is-invalid', 'is-valid');
+
+                if (!val) return;
+
+                linkFeedback.textContent = 'Checking...';
+                linkFeedback.style.color = '#6c757d';
+
+                linkCheckTimer = setTimeout(function() {
+                    $.ajax({
+                        url: '{{ route("admin.service.campaign.check-link") }}',
+                        method: 'GET',
+                        data: { link: val, exclude_id: excludeId },
+                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                        success: function(res) {
+                            if (res.available) {
+                                linkInput.classList.remove('is-invalid');
+                                linkInput.classList.add('is-valid');
+                                linkFeedback.textContent = '✓ Link is available.';
+                                linkFeedback.style.color = '#198754';
+                            } else {
+                                linkInput.classList.remove('is-valid');
+                                linkInput.classList.add('is-invalid');
+                                linkFeedback.textContent = '✗ This link is already taken. Please choose a different one.';
+                                linkFeedback.style.color = '#dc3545';
+                            }
+                        },
+                        error: function() {
+                            linkFeedback.textContent = '';
+                        }
+                    });
+                }, 500);
+            });
         }
 
-        // Form submit loading
+        // Form submit loading — guard against double-submission
         const form = document.querySelector('form');
         if (form) {
+            let formSubmitting = false;
             form.addEventListener('submit', function(e) {
+                if (formSubmitting) {
+                    e.preventDefault();
+                    return;
+                }
+                formSubmitting = true;
                 const submitBtn = $(form).find('button[type="submit"]');
                 if (submitBtn.length) {
                     submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin me-1"></i> Processing...');

@@ -367,21 +367,19 @@ $(document).ready(function() {
         }, plotConfig);
     }
 
-    // === Load & render charts ===
-    fetch('/machine-learning/output/bar_plot_donation_class.json')
+    // === Load & render charts (single aggregated endpoint) ===
+    fetch(@json(route('admin.service.dashboard.data')), { headers: { 'Accept': 'application/json' } })
         .then(r => r.json())
-        .then(data => { cachedData.bar1 = data; renderBar1(data); hideLoading('barLoading'); })
-        .catch(() => showError('bar-plot', 'barLoading'));
-
-    fetch('/machine-learning/output/pie_chart_age_category_counts.json')
-        .then(r => r.json())
-        .then(data => { cachedData.pie = data; renderPie(data); hideLoading('pieLoading'); })
-        .catch(() => showError('age-pie-chart', 'pieLoading'));
-
-    fetch('/machine-learning/output/bar_plot_count_age_donation.json')
-        .then(r => r.json())
-        .then(data => { cachedData.bar2 = data; renderBar2(data); hideLoading('bar2Loading'); })
-        .catch(() => showError('bar-plot-2', 'bar2Loading'));
+        .then(data => {
+            cachedData.bar1 = data.donation_class; renderBar1(data.donation_class); hideLoading('barLoading');
+            cachedData.pie  = data.age_category;   renderPie(data.age_category);    hideLoading('pieLoading');
+            cachedData.bar2 = data.age_donation;   renderBar2(data.age_donation);   hideLoading('bar2Loading');
+        })
+        .catch(() => {
+            showError('bar-plot', 'barLoading');
+            showError('age-pie-chart', 'pieLoading');
+            showError('bar-plot-2', 'bar2Loading');
+        });
 
     // Re-render charts on dark mode toggle
     $(document).on('darkModeChange', function() {

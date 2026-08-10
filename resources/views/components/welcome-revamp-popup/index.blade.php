@@ -1,11 +1,12 @@
 {{-- ================================================================
-     WELCOME MUHARRAM 1448 H POPUP
+     WELCOME GEMILANG POPUP
+     Concept: "Gemilang" (Perunggu) — Istiqomah, Doa Orang Tua, Masa Terang
      Appears once per browser — marked in localStorage.
-     Key: ldksyahid_welcome_popup_muharram_1448
+     Key: ldksyahid_welcome_popup_gemilang_2026
      ================================================================ --}}
 @include('components.welcome-revamp-popup.styles')
 
-<div id="wrp-backdrop" role="dialog" aria-modal="true" aria-label="Selamat Tahun Baru Hijriyah 1448 H">
+<div id="wrp-backdrop" role="dialog" aria-modal="true" aria-label="Tentang Masa Terang Milikmu">
     <div id="wrp-outer">
         <div id="wrp-card">
 
@@ -14,59 +15,94 @@
 
             {{-- Header --}}
             <div id="wrp-header">
-                <canvas id="wrp-moon-canvas"></canvas>
+                <span id="wrp-header-dot1"></span>
+                <span id="wrp-header-dot2"></span>
                 <div id="wrp-badge">
-                    <i class="fas fa-moon"></i>
-                    <span>1 Muharram &bull; 1448 H</span>
+                    <i class="fas fa-music"></i>
+                    <span>Perunggu &bull; Gemilang</span>
                 </div>
-                <h2>Selamat Tahun Baru<br>Hijriyah 1448 H 🌙✨</h2>
-                <p>Semoga tahun ini membawa hijrah yang lebih baik,<br>ilmu yang lebih dalam, dan dakwah yang terus menyala.</p>
+                <h2>Tentang Masa Terang<br>Milikmu, Gaes! ✨</h2>
+                <p id="wrp-header-sub">seperti lagu Gemilang — <em>kebul jalan kuterjang</em></p>
             </div>
 
             {{-- Body --}}
             <div id="wrp-body">
+                <p id="wrp-desc">
+                    Kayak lirik Perunggu — <em>"terjilat matahari timur yang kejam, sengat melekat di bahuku"</em> — tapi kamu tetep nerjang gaes.
+                    Itu bukan lemah, itu <strong>gemilang</strong>. Dan Allah liat semua usahamu. 🌟
+                </p>
 
-                {{-- Mini Game --}}
-                <div id="wrp-game-area">
-                    <div id="wrp-game-label">
-                        <i class="fas fa-star"></i> Tangkap Bintang Harapan!
-                    </div>
-                    <canvas id="wrp-canvas" aria-label="Mini game tangkap bintang jatuh"></canvas>
-                    <div id="wrp-score-row">
-                        <span id="wrp-score"><i class="fas fa-star"></i> <span id="wrp-score-val">0</span> bintang</span>
-                        <span id="wrp-timer"><i class="fas fa-clock"></i> <span id="wrp-timer-val">15</span>s</span>
-                    </div>
-                    <div id="wrp-game-msg">Klik bintang yang jatuh secepat mungkin!</div>
-                </div>
-
-                {{-- Feature Cards --}}
                 <div id="wrp-features">
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-moon"></i></div>
-                        <div class="wrp-feat-text"><strong>Muharram</strong> adalah bulan Allah yang dimuliakan — momentum terbaik untuk niat dan langkah baru.</div>
+                        <div class="wrp-feat-icon"><i class="fas fa-fire"></i></div>
+                        <div class="wrp-feat-text"><strong>Kepala Batu itu Berkah lho!</strong> <span class="wrp-lyric">"Karena ini yang kumau, berkah kepala yang batu"</span> Teguh di jalan kebaikan? That's literally azimah — sunnah banget, no cap! 💪</div>
                     </div>
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-tint"></i></div>
-                        <div class="wrp-feat-text">Jangan lupa <strong>puasa Asyura</strong> (10 Muharram) — menghapus dosa setahun yang lalu. 🤲</div>
+                        <div class="wrp-feat-icon"><i class="fas fa-hands"></i></div>
+                        <div class="wrp-feat-text"><strong>Doa Mereka di Setiap Malammu!</strong> <span class="wrp-lyric">"Tertulis jelas namamu, di setiap harap malammu"</span> Orang tuamu nyebut namamu tiap malam gaes — itu bahan bakar yang paling W! 🤲</div>
                     </div>
                     <div class="wrp-feat">
-                        <div class="wrp-feat-icon"><i class="fas fa-users"></i></div>
-                        <div class="wrp-feat-text">LDK Syahid bersama seluruh kader mengucapkan — <strong>Kull 'am wa antum bikhair.</strong> 💙</div>
+                        <div class="wrp-feat-icon"><i class="fas fa-book-open"></i></div>
+                        <div class="wrp-feat-text"><strong>Tinggalkan Sesuatu yang Nyata!</strong> <span class="wrp-lyric">"Warisan akal budi gemilang"</span> Bukan follower atau views yang dikenang — tapi ilmu yang bermanfaat &amp; akhlak yang baik. Real legacy! 📚</div>
+                    </div>
+                    <div class="wrp-feat">
+                        <div class="wrp-feat-icon"><i class="fas fa-sun"></i></div>
+                        <div class="wrp-feat-text"><strong>Pelan-Pelan, Pasti Sampai!</strong> <span class="wrp-lyric">"Pelan pasti ku kabulkan segala catatan harapmu"</span> Jalan kamu mungkin belum selesai, tapi arah kamu udah bener gaes. Keep going! ☀️</div>
                     </div>
                 </div>
+
+                {{-- Pesan dari Sesama ──────────────────────────── --}}
+                <div id="wrp-msg-section">
+
+                    <div id="wrp-msg-heading">
+                        <i class="fas fa-comment-dots"></i>
+                        <span>Ada Titipan Semangat Buatmu 💛</span>
+                    </div>
+
+                    {{-- Daftar pesan --}}
+                    <div id="wrp-msg-list">
+                        <div id="wrp-msg-empty">Belum ada yang nitip semangat nih — kamu duluan dong! 🌟</div>
+                    </div>
+
+                    <button id="wrp-msg-load-more" style="display:none">
+                        Lihat semangat lainnya <i class="fas fa-chevron-down"></i>
+                    </button>
+
+                    {{-- Divider --}}
+                    <div id="wrp-msg-divider">
+                        <span><i class="fas fa-pen-nib"></i> Giliran Kamu Nitip ✨</span>
+                    </div>
+
+                    {{-- Form kirim pesan --}}
+                    <form id="wrp-msg-form" novalidate data-no-global-loading>
+                        @csrf
+                        <div id="wrp-msg-form-fields">
+                            <input  id="wrp-msg-name"    type="text"     maxlength="80"  placeholder="Namamu siapa? 😊" autocomplete="off" />
+                            <textarea id="wrp-msg-text"  maxlength="300" placeholder="Titip kata semangat buat temanmu... 🌟" rows="2"></textarea>
+                        </div>
+                        <div id="wrp-msg-form-footer">
+                            <span id="wrp-msg-char">0/300</span>
+                            <button type="submit" id="wrp-msg-submit">
+                                <i class="fas fa-paper-plane"></i> Titip!
+                            </button>
+                        </div>
+                        <div id="wrp-msg-feedback"></div>
+                    </form>
+
+                </div>{{-- /wrp-msg-section --}}
 
             </div>{{-- /wrp-body --}}
 
             {{-- Footer --}}
             <div id="wrp-footer">
-                <button id="wrp-btn-share">
+                <button id="wrp-btn-explore">
                     <i class="fas fa-share-alt"></i>
-                    <span>Bagikan Semangat Muharram!</span>
+                    <span>Bagikan Semangat ke Squad! ✊</span>
                 </button>
                 <div id="wrp-share-fallback">
                     Salin link ini:
-                    <a href="https://ldksyahid.com" target="_blank" rel="noopener noreferrer">ldksyahid.com</a>
-                    lalu bagikan ke Story atau WA kamu! 🌙
+                    <a href="https://ldksyah.id/" target="_blank" rel="noopener noreferrer">ldksyah.id</a>
+                    lalu bagikan ke Story atau WA squad kamu!
                 </div>
                 <button id="wrp-btn-dismiss">Jangan tampilkan lagi</button>
             </div>

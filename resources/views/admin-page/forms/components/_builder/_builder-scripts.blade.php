@@ -10,8 +10,10 @@ const LINEAR_SCALE_TYPES  = ['linear_scale'];
 const RATING_TYPES        = ['rating'];
 const FILE_TYPES          = ['file'];
 const IMAGE_DISPLAY_TYPES = ['image'];
+const VIDEO_DISPLAY_TYPES = ['video'];
 const HEADER_IMAGE_TYPES  = ['header_image'];
-const DISPLAY_ONLY_TYPES  = ['section_break', 'paragraph', 'image', 'header_image'];
+const DISPLAY_ONLY_TYPES  = ['section_break', 'paragraph', 'image', 'header_image', 'video'];
+const PLACEHOLDER_TYPES   = ['short_text', 'long_text', 'email', 'number', 'phone', 'url'];
 
 // ===== SORTABLE =====
 const dropZone = document.getElementById('fieldDropZone');
@@ -74,6 +76,9 @@ function openAddFieldModal(type, label) {
     document.getElementById('ratingSection').style.display       = RATING_TYPES.includes(type)       ? '' : 'none';
     document.getElementById('fileSection').style.display         = FILE_TYPES.includes(type)          ? '' : 'none';
     document.getElementById('imageUrlSection').style.display     = IMAGE_DISPLAY_TYPES.includes(type) ? '' : 'none';
+    document.getElementById('videoUrlSection').style.display     = VIDEO_DISPLAY_TYPES.includes(type) ? '' : 'none';
+    const _mVid = document.getElementById('modalVideoFile');
+    if (_mVid) _mVid.value = '';
 
     // Reset linear scale defaults
     if (LINEAR_SCALE_TYPES.includes(type)) {
@@ -90,11 +95,33 @@ function openAddFieldModal(type, label) {
         updateRatingPreview('modalRatingPreview', 5);
     }
 
-    const isDisplay  = DISPLAY_ONLY_TYPES.includes(type);
-    const isImageDisp = IMAGE_DISPLAY_TYPES.includes(type);
-    document.getElementById('modalPlaceholderWrap').style.display = isDisplay  ? 'none' : '';
+    const isDisplay      = DISPLAY_ONLY_TYPES.includes(type);
+    const isImageDisp    = IMAGE_DISPLAY_TYPES.includes(type);
+    const isVideoDisp    = VIDEO_DISPLAY_TYPES.includes(type);
+    const isParagraph    = type === 'paragraph';
+    const hasPlaceholder = PLACEHOLDER_TYPES.includes(type);
+    document.getElementById('modalPlaceholderWrap').style.display = hasPlaceholder ? '' : 'none';
     document.getElementById('modalRequiredWrap').style.display    = isDisplay  ? 'none' : '';
-    document.getElementById('modalHelpTextWrap').style.display    = isImageDisp ? 'none' : '';
+    document.getElementById('modalHelpTextWrap').style.display    = (isImageDisp || isVideoDisp) ? 'none' : '';
+
+    // Help Text: col-md-6 when sharing row with Placeholder, col-12 when alone
+    const mHelpWrap = document.getElementById('modalHelpTextWrap');
+    if (mHelpWrap) {
+        mHelpWrap.className = hasPlaceholder ? 'col-md-6' : 'col-12';
+        mHelpWrap.id = 'modalHelpTextWrap';
+    }
+
+    // Paragraph: swap help text input for a full-width textarea
+    const mHelpInput = document.getElementById('modalHelpText');
+    const mHelpArea  = document.getElementById('modalHelpTextArea');
+    const mHelpLabel = document.getElementById('modalHelpTextLabel');
+    if (mHelpInput && mHelpArea) {
+        mHelpInput.style.display = isParagraph ? 'none' : '';
+        mHelpArea.style.display  = isParagraph ? ''     : 'none';
+        mHelpArea.value = '';
+        mHelpInput.value = '';
+        if (mHelpLabel) mHelpLabel.textContent = isParagraph ? 'Text Content' : 'Help Text';
+    }
 
     // For image: label becomes an optional caption, not a required question
     const labelRequired = document.getElementById('modalLabelRequired');
@@ -116,7 +143,9 @@ function submitAddField() {
     const type        = document.getElementById('modalFieldType').value;
     const label       = document.getElementById('modalLabel').value.trim();
     const placeholder = document.getElementById('modalPlaceholder').value.trim();
-    const helpText    = document.getElementById('modalHelpText').value.trim();
+    const helpText    = type === 'paragraph'
+        ? (document.getElementById('modalHelpTextArea')?.value ?? '')
+        : document.getElementById('modalHelpText').value.trim();
     const isRequired  = document.getElementById('modalIsRequired').checked;
 
     // For image display fields, label is an optional caption — don't block submission
@@ -132,18 +161,18 @@ function submitAddField() {
 
     let fetchOptions;
 
-    if (IMAGE_DISPLAY_TYPES.includes(type)) {
-        // Image field: multipart/form-data (file upload)
+    if (IMAGE_DISPLAY_TYPES.includes(type) || VIDEO_DISPLAY_TYPES.includes(type)) {
         const fd = new FormData();
         fd.append('fieldType', type);
         if (label) fd.append('label', label);
-        const imgFile = document.getElementById('modalImageFile');
-        if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
-        fetchOptions = {
-            method : 'POST',
-            headers: { 'X-CSRF-TOKEN': CSRF_TOKEN },
-            body   : fd,
-        };
+        if (IMAGE_DISPLAY_TYPES.includes(type)) {
+            const imgFile = document.getElementById('modalImageFile');
+            if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
+        } else {
+            const vidFile = document.getElementById('modalVideoFile');
+            if (vidFile && vidFile.files[0]) fd.append('videoFile', vidFile.files[0]);
+        }
+        fetchOptions = { method: 'POST', headers: { 'X-CSRF-TOKEN': CSRF_TOKEN }, body: fd };
     } else {
         // All other fields: JSON
         const body = { fieldType: type, label, placeholder, helpText, isRequired };
@@ -228,8 +257,25 @@ function openEditModal(btn) {
 
     const isDisplay       = DISPLAY_ONLY_TYPES.includes(fieldType);
     const isImageDisplay  = IMAGE_DISPLAY_TYPES.includes(fieldType);
+    const isVideoDisplay  = VIDEO_DISPLAY_TYPES.includes(fieldType);
     const isSectionBreak  = fieldType === 'section_break';
     const isHeaderImg     = HEADER_IMAGE_TYPES.includes(fieldType);
+
+    // Video section toggle
+    const _eVidSec = document.getElementById('editVideoUrlSection');
+    if (_eVidSec) {
+        _eVidSec.style.display = isVideoDisplay ? '' : 'none';
+        if (isVideoDisplay) {
+            const _eVidFile = document.getElementById('editVideoFile');
+            if (_eVidFile) _eVidFile.value = '';
+            const _eVidPrev = document.getElementById('editCurrentVideoPreview');
+            const _eVidLink = document.getElementById('editCurrentVideoLink');
+            if (_eVidPrev && _eVidLink) {
+                _eVidLink.href = helpText || '#';
+                _eVidPrev.style.display = helpText ? '' : 'none';
+            }
+        }
+    }
 
     document.getElementById('editFieldID').value      = card.dataset.fieldId;
     document.getElementById('editLabel').value        = label;
@@ -252,15 +298,36 @@ function openEditModal(btn) {
                 preview.style.display  = 'none';
             }
         }
+    } else if (isVideoDisplay) {
+        // helpText (embedUrl) is managed by the video section above — do nothing here
     } else {
-        document.getElementById('editHelpText').value = helpText;
+        const isParaEdit = fieldType === 'paragraph';
+        const eHelpIn  = document.getElementById('editHelpText');
+        const eHelpTA  = document.getElementById('editHelpTextArea');
+        const eHelpLbl = document.getElementById('editHelpTextLabel');
+        if (eHelpIn && eHelpTA) {
+            eHelpIn.style.display = isParaEdit ? 'none' : '';
+            eHelpTA.style.display = isParaEdit ? ''     : 'none';
+            if (isParaEdit) { eHelpTA.value = helpText; } else { eHelpIn.value = helpText; }
+            if (eHelpLbl) eHelpLbl.textContent = isParaEdit ? 'Text Content' : 'Help Text';
+        } else {
+            if (eHelpIn) eHelpIn.value = helpText;
+        }
     }
 
     // Hide placeholder/required for display-only types; also hide help text for section_break / header_image
-    document.getElementById('editPlaceholderWrap').style.display  = isDisplay                               ? 'none' : '';
+    const editHasPlaceholder = PLACEHOLDER_TYPES.includes(fieldType);
+    document.getElementById('editPlaceholderWrap').style.display  = editHasPlaceholder                       ? ''     : 'none';
     document.getElementById('editRequiredWrap').style.display     = isDisplay                               ? 'none' : '';
-    document.getElementById('editHelpTextWrap').style.display     = (isImageDisplay || isSectionBreak || isHeaderImg) ? 'none' : '';
+    document.getElementById('editHelpTextWrap').style.display     = (isImageDisplay || isVideoDisplay || isSectionBreak || isHeaderImg) ? 'none' : '';
     document.getElementById('editImageUrlSection').style.display  = (isImageDisplay || isHeaderImg)         ? ''     : 'none';
+
+    // Help Text: col-md-6 when sharing row with Placeholder, col-12 when alone
+    const eHelpWrapEl = document.getElementById('editHelpTextWrap');
+    if (eHelpWrapEl) {
+        eHelpWrapEl.className = editHasPlaceholder ? 'col-md-6' : 'col-12';
+        eHelpWrapEl.id = 'editHelpTextWrap';
+    }
 
     // Hide label completely for header_image (it has no label)
     const editLabelWrap = document.getElementById('editLabelWrap');
@@ -345,6 +412,20 @@ function openEditModal(btn) {
         });
     }
 
+    // Section Routing (radio + dropdown — single-answer choice types)
+    const routingWrap    = document.getElementById('editSectionRoutingWrap');
+    const isSingleChoice = ['radio', 'dropdown'].includes(fieldType);
+    if (routingWrap) routingWrap.style.display = isSingleChoice ? '' : 'none';
+    if (isSingleChoice) {
+        const fc       = JSON.parse(card.dataset.fieldConfig || '{}');
+        const routing  = fc.sectionRouting || { enabled: false, routes: [] };
+        const enableCb = document.getElementById('editRoutingEnabled');
+        const body     = document.getElementById('editRoutingBody');
+        enableCb.checked      = !!routing.enabled;
+        body.style.display    = routing.enabled ? '' : 'none';
+        buildRoutingRows(options, routing.routes || []);
+    }
+
     new bootstrap.Modal(document.getElementById('editFieldModal')).show();
 }
 
@@ -365,15 +446,80 @@ function removeEditOption(btn) {
     btn.closest('.option-row').remove();
 }
 
+// ===== SECTION ROUTING HELPERS =====
+function _escHtml(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function _getSectionCards() {
+    return Array.from(dropZone.querySelectorAll('.field-card--section-break')).map(c => ({
+        id   : c.dataset.fieldId,
+        label: c.dataset.label || 'Untitled Section',
+    }));
+}
+
+function buildRoutingRows(opts, existingRoutes) {
+    const rowsEl = document.getElementById('editRoutingRows');
+    if (!rowsEl) return;
+    const sections = _getSectionCards();
+    if (!sections.length) {
+        rowsEl.innerHTML = '<div class="sr-no-sections">No sections found. Add sections to the form first.</div>';
+        return;
+    }
+    const secOpts = sections.map(s =>
+        `<option value="${_escHtml(s.id)}">${_escHtml(s.label)}</option>`
+    ).join('');
+
+    rowsEl.innerHTML = '';
+    const labels = opts.map(o => (o.label || o.value || '')).filter(Boolean);
+    if (!labels.length) {
+        rowsEl.innerHTML = '<div class="sr-no-sections">Add options first to configure routing.</div>';
+        return;
+    }
+    labels.forEach(optVal => {
+        const existing  = existingRoutes.find(r => r.optionValue === optVal);
+        const targetID  = existing ? (existing.targetSectionFieldID ?? '') : '';
+        const selected  = id => id == targetID ? 'selected' : '';
+        const row = document.createElement('div');
+        row.className = 'sr-row';
+        row.innerHTML = `
+            <span class="sr-row-label" title="${_escHtml(optVal)}">${_escHtml(optVal)}</span>
+            <i class="fas fa-arrow-right sr-arrow"></i>
+            <select class="form-select form-select-sm sr-route-select"
+                    data-option-value="${_escHtml(optVal)}">
+                <option value="">Next section (default)</option>
+                ${sections.map(s => `<option value="${_escHtml(s.id)}" ${selected(s.id)}>${_escHtml(s.label)}</option>`).join('')}
+            </select>`;
+        rowsEl.appendChild(row);
+        initCustomSelect(row.querySelector('.sr-route-select'));
+    });
+}
+
+function onRoutingToggle(cb) {
+    const body = document.getElementById('editRoutingBody');
+    body.style.display = cb.checked ? '' : 'none';
+    if (cb.checked) {
+        // Only rebuild rows if none exist yet (preserve selections if user toggled off then back on)
+        const existingRows = document.querySelectorAll('.sr-route-select');
+        if (!existingRows.length) {
+            const opts = Array.from(document.querySelectorAll('.edit-option-input'))
+                .map(i => ({ label: i.value.trim(), value: i.value.trim() }));
+            buildRoutingRows(opts, []);
+        }
+    }
+}
+
 function submitEditField() {
     const fieldID     = document.getElementById('editFieldID').value;
     const fieldType   = currentEditCard?.dataset.fieldType ?? '';
     const label       = document.getElementById('editLabel').value.trim();
     const placeholder = document.getElementById('editPlaceholder').value.trim();
-    const helpText    = document.getElementById('editHelpText').value.trim();
+    const helpText    = fieldType === 'paragraph'
+        ? (document.getElementById('editHelpTextArea')?.value ?? '')
+        : document.getElementById('editHelpText').value.trim();
     const isRequired  = document.getElementById('editIsRequired').checked;
 
-    const LABEL_OPTIONAL_TYPES = [...IMAGE_DISPLAY_TYPES, ...HEADER_IMAGE_TYPES, 'section_break'];
+    const LABEL_OPTIONAL_TYPES = [...IMAGE_DISPLAY_TYPES, ...VIDEO_DISPLAY_TYPES, ...HEADER_IMAGE_TYPES, 'section_break'];
     if (!label && !LABEL_OPTIONAL_TYPES.includes(fieldType)) {
         document.getElementById('editLabel').focus();
         return;
@@ -390,18 +536,18 @@ function submitEditField() {
     let fetchOptions;
     let body = null;
 
-    if (IMAGE_DISPLAY_TYPES.includes(fieldType) || HEADER_IMAGE_TYPES.includes(fieldType)) {
-        // Image / header_image field: multipart/form-data — may contain a new image file
+    if (IMAGE_DISPLAY_TYPES.includes(fieldType) || HEADER_IMAGE_TYPES.includes(fieldType) || VIDEO_DISPLAY_TYPES.includes(fieldType)) {
         const fd = new FormData();
         if (!HEADER_IMAGE_TYPES.includes(fieldType)) fd.append('label', label);
         fd.append('_method', 'PUT');
-        const imgFile = document.getElementById('editImageFile');
-        if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
-        fetchOptions = {
-            method : 'POST', // Laravel method spoofing via _method=PUT
-            headers: { 'X-CSRF-TOKEN': CSRF_TOKEN },
-            body   : fd,
-        };
+        if (VIDEO_DISPLAY_TYPES.includes(fieldType)) {
+            const vidFile = document.getElementById('editVideoFile');
+            if (vidFile && vidFile.files[0]) fd.append('videoFile', vidFile.files[0]);
+        } else {
+            const imgFile = document.getElementById('editImageFile');
+            if (imgFile && imgFile.files[0]) fd.append('imageFile', imgFile.files[0]);
+        }
+        fetchOptions = { method: 'POST', headers: { 'X-CSRF-TOKEN': CSRF_TOKEN }, body: fd };
     } else {
         body = { label, placeholder, helpText, isRequired };
 
@@ -434,6 +580,19 @@ function submitEditField() {
             body.fieldConfig = {
                 maxRating: parseInt(document.getElementById('editRatingMax').value) || 5,
             };
+        }
+
+        if (['radio', 'dropdown'].includes(fieldType)) {
+            const routingEnabled = document.getElementById('editRoutingEnabled')?.checked || false;
+            const routes = routingEnabled
+                ? Array.from(document.querySelectorAll('.sr-route-select')).map(sel => ({
+                    optionValue         : sel.dataset.optionValue,
+                    targetSectionFieldID: sel.value ? parseInt(sel.value) : null,
+                }))
+                : [];
+            body.fieldConfig = Object.assign(body.fieldConfig || {}, {
+                sectionRouting: { enabled: routingEnabled, routes },
+            });
         }
 
         fetchOptions = {
@@ -503,7 +662,13 @@ function submitEditField() {
                         const icon     = labelDiv.querySelector('i');
                         const required = isRequired ? '<span class="field-card-required">*</span>' : '';
                         const badge    = labelDiv.querySelector('.field-card-system-badge')?.outerHTML ?? '';
-                        labelDiv.innerHTML = (icon?.outerHTML ?? '') + ' ' + label + ' ' + required + badge;
+                        // Routing badge (radio + dropdown)
+                        const fc             = JSON.parse(currentEditCard.dataset.fieldConfig || '{}');
+                        const hasRouting     = ['radio','dropdown'].includes(fieldType) && (fc.sectionRouting?.enabled ?? false);
+                        const routingBadge   = hasRouting
+                            ? '<span class="field-card-routing-badge"><i class="fas fa-code-branch fa-xs me-1"></i>Routing</span>'
+                            : '';
+                        labelDiv.innerHTML = (icon?.outerHTML ?? '') + ' ' + label + ' ' + required + badge + routingBadge;
                     }
 
                     // Refresh field type + help text subtitle
@@ -539,12 +704,16 @@ function removeField(btn) {
     const fieldID   = card.dataset.fieldId;
     const label     = card.dataset.label;
     const fieldType = card.dataset.fieldType;
-    const isSection = fieldType === 'section_break';
-    const itemName  = isSection ? (label || 'this section') : `"${label}"`;
+    const isSection    = fieldType === 'section_break';
+    const isHeaderImg  = fieldType === 'header_image';
+    const itemName     = isSection   ? (label || 'this section')
+                       : isHeaderImg ? 'the header banner'
+                       : label       ? `"${label}"`
+                                     : 'this field';
 
     Swal.fire({
-        title: isSection ? 'Remove this section?' : 'Remove this field?',
-        html: `${isSection ? 'Section' : 'Field'} <strong>${itemName}</strong> will be permanently removed from this form.`,
+        title: isSection ? 'Remove this section?' : isHeaderImg ? 'Remove header banner?' : 'Remove this field?',
+        html: `${isSection ? 'Section' : isHeaderImg ? 'Banner' : 'Field'} <strong>${itemName}</strong> will be permanently removed from this form.`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc3545',
@@ -598,12 +767,14 @@ function addOption() {
         <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeOption(this)">×</button>
     `;
     list.appendChild(row);
+    window.refreshModalPreview && window.refreshModalPreview();
 }
 
 function removeOption(btn) {
     const rows = document.querySelectorAll('.option-row');
     if (rows.length <= 1) return;
     btn.closest('.option-row').remove();
+    window.refreshModalPreview && window.refreshModalPreview();
 }
 
 // ===== MODAL LOCK =====
@@ -760,4 +931,672 @@ function showAlert(type, message) {
     </div>`;
     setTimeout(() => { el.innerHTML = ''; wrap.style.display = 'none'; }, 4000);
 }
+
+// ===== MODAL LIVE PREVIEW =====
+(function () {
+    function esc(s) {
+        return String(s || '')
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function getOpts() {
+        return Array.from(document.querySelectorAll('#optionsList .option-input'))
+            .map(i => i.value.trim()).filter(Boolean);
+    }
+
+    const ANN = { label: () => '', help: () => '', ph: () => '', spc: () => '' };
+
+    function buildPreview(type, label, ph, help, req) {
+        const lbl = label || 'Field label';
+
+        // Row: badge + content
+        const row = (badge, content) =>
+            `<div class="bmp-row">${badge}${content}</div>`;
+
+        const labelRow = () => row(
+            ANN.label(),
+            `<div class="bmp-field-label">${esc(lbl)}${req ? '<span class="bmp-req">*</span>' : ''}</div>`
+        );
+
+        const helpRow = () => help
+            ? row(ANN.help(), `<div class="bmp-field-help">${esc(help)}</div>`)
+            : '';
+
+        const underlineRow = (dflt) => row(
+            ph ? ANN.ph() : ANN.spc(),
+            `<div class="bmp-field-input">${esc(ph || dflt || 'Your answer...')}</div>`
+        );
+
+        const triggerRow = (icon, text) =>
+            `<div class="bmp-field-trigger">
+                <i class="fas ${icon}"></i>
+                <span>${esc(text)}</span>
+            </div>`;
+
+        switch (type) {
+            case 'short_text':
+                return labelRow() + helpRow() + underlineRow('Short answer...');
+
+            case 'long_text':
+                return labelRow() + helpRow() + row(
+                    ph ? ANN.ph() : ANN.spc(),
+                    `<div class="bmp-field-textarea">${esc(ph || 'Long answer...')}</div>`
+                );
+
+            case 'email':
+                return labelRow() + helpRow() + underlineRow('contoh@email.com');
+
+            case 'number':
+                return labelRow() + helpRow() + underlineRow('0');
+
+            case 'phone':
+                return labelRow() + helpRow() + underlineRow('+62812...');
+
+            case 'url':
+                return labelRow() + helpRow() + underlineRow('https://');
+
+            case 'date': {
+                const now = new Date();
+                const y = now.getFullYear(), m = now.getMonth();
+                const MNAMES = ['January','February','March','April','May','June',
+                                'July','August','September','October','November','December'];
+                const WDAYS  = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+                const firstDay = new Date(y, m, 1).getDay();
+                const daysInMonth = new Date(y, m + 1, 0).getDate();
+                const today = now.getDate();
+                const sel   = today - 3 > 0 ? today - 3 : today;
+
+                let cells = '';
+                for (let i = 0; i < firstDay; i++) {
+                    const d = new Date(y, m, 0).getDate() - firstDay + 1 + i;
+                    cells += `<div class="bmp-cal-cell other">${d}</div>`;
+                }
+                for (let d = 1; d <= daysInMonth && cells.split('bmp-cal-cell').length <= 30; d++) {
+                    const cls = d === today ? 'today' : d === sel ? 'sel' : '';
+                    cells += `<div class="bmp-cal-cell ${cls}">${d}</div>`;
+                }
+
+                return labelRow() + helpRow() +
+                    `<div class="bmp-field-trigger"><i class="fas fa-calendar-alt"></i> <span>Select date</span></div>
+                    <div class="bmp-cal">
+                        <div class="bmp-cal-head">
+                            <div class="bmp-cal-nav"><i class="fas fa-chevron-left"></i></div>
+                            <span class="bmp-cal-month">${MNAMES[m]} ${y}</span>
+                            <div class="bmp-cal-nav"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                        <div class="bmp-cal-wd">${WDAYS.map(d=>`<span>${d}</span>`).join('')}</div>
+                        <div class="bmp-cal-grid">${cells}</div>
+                    </div>`;
+            }
+
+            case 'time': {
+                const hn = new Date().getHours();
+                const mn = new Date().getMinutes();
+                const hRows = [hn-1, hn, hn+1].map((h,i) =>
+                    `<div class="bmp-tp-item${i===1?' sel':i===0||i===2?' near':''}">${String((h+24)%24).padStart(2,'0')}</div>`
+                ).join('');
+                const mRows = [mn-1, mn, mn+1].map((mm,i) =>
+                    `<div class="bmp-tp-item${i===1?' sel':i===0||i===2?' near':''}">${String((mm+60)%60).padStart(2,'0')}</div>`
+                ).join('');
+
+                return labelRow() + helpRow() +
+                    `<div class="bmp-field-trigger"><i class="fas fa-clock"></i> <span>--:--</span></div>
+                    <div class="bmp-tp">
+                        <div class="bmp-tp-col-wrap">
+                            <div class="bmp-tp-lbl">Hour</div>
+                            <div class="bmp-tp-col">${hRows}</div>
+                        </div>
+                        <div class="bmp-tp-sep">:</div>
+                        <div class="bmp-tp-col-wrap">
+                            <div class="bmp-tp-lbl">Minute</div>
+                            <div class="bmp-tp-col">${mRows}</div>
+                        </div>
+                    </div>`;
+            }
+
+            case 'datetime': {
+                const now2  = new Date();
+                const y2 = now2.getFullYear(), m2 = now2.getMonth();
+                const MNAMES2 = ['January','February','March','April','May','June',
+                                 'July','August','September','October','November','December'];
+                const WDAYS2  = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+                const firstDay2 = new Date(y2, m2, 1).getDay();
+                const dim2 = new Date(y2, m2 + 1, 0).getDate();
+                const today2 = now2.getDate();
+                const sel2 = today2 - 2 > 0 ? today2 - 2 : today2;
+                let cells2 = '';
+                for (let i = 0; i < firstDay2; i++) {
+                    cells2 += `<div class="bmp-cal-cell other">${new Date(y2,m2,0).getDate()-firstDay2+1+i}</div>`;
+                }
+                for (let d = 1; d <= dim2 && cells2.split('bmp-cal-cell').length <= 30; d++) {
+                    cells2 += `<div class="bmp-cal-cell${d===today2?' today':d===sel2?' sel':''}">${d}</div>`;
+                }
+                const hn2 = now2.getHours(), mn2 = now2.getMinutes();
+                const hR2 = [hn2-1,hn2,hn2+1].map((h,i)=>
+                    `<div class="bmp-tp-item${i===1?' sel':i!==1?' near':''}">${String((h+24)%24).padStart(2,'0')}</div>`).join('');
+                const mR2 = [mn2-1,mn2,mn2+1].map((mm,i)=>
+                    `<div class="bmp-tp-item${i===1?' sel':i!==1?' near':''}">${String((mm+60)%60).padStart(2,'0')}</div>`).join('');
+
+                return labelRow() + helpRow() +
+                    `<div class="bmp-field-trigger"><i class="fas fa-calendar-alt"></i> <span>dd/mm/yyyy --:--</span></div>
+                    <div class="bmp-cal">
+                        <div class="bmp-cal-head">
+                            <div class="bmp-cal-nav"><i class="fas fa-chevron-left"></i></div>
+                            <span class="bmp-cal-month">${MNAMES2[m2]} ${y2}</span>
+                            <div class="bmp-cal-nav"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                        <div class="bmp-cal-wd">${WDAYS2.map(d=>`<span>${d}</span>`).join('')}</div>
+                        <div class="bmp-cal-grid">${cells2}</div>
+                    </div>
+                    <div class="bmp-tp" style="margin-top:5px;">
+                        <div class="bmp-tp-col-wrap">
+                            <div class="bmp-tp-lbl">Hour</div>
+                            <div class="bmp-tp-col">${hR2}</div>
+                        </div>
+                        <div class="bmp-tp-sep">:</div>
+                        <div class="bmp-tp-col-wrap">
+                            <div class="bmp-tp-lbl">Minute</div>
+                            <div class="bmp-tp-col">${mR2}</div>
+                        </div>
+                    </div>`;
+            }
+
+            case 'dropdown': {
+                const opts = getOpts();
+                let html = labelRow() + helpRow() +
+                    `<div class="bmp-field-trigger bmp-dd-trigger">
+                        <span>-- Select one --</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="bmp-dd-list">
+                        <div class="bmp-dd-opt bmp-dd-opt--ph">-- Select one --</div>`;
+                if (opts.length) {
+                    opts.slice(0, 6).forEach((o, i) => {
+                        html += `<div class="bmp-dd-opt${i===0?' bmp-dd-opt--sel':''}">
+                            ${i===0 ? '<i class="fas fa-check bmp-dd-check"></i>' : '<span class="bmp-dd-spc"></span>'}
+                            ${esc(o)}
+                        </div>`;
+                    });
+                    if (opts.length > 6) html += `<div class="bmp-dd-more">+${opts.length-6} opsi lainnya...</div>`;
+                } else {
+                    html += `<div class="bmp-dd-opt bmp-dd-opt--empty"><i class="fas fa-plus bmp-dd-check"></i> Add options on the left...</div>`;
+                }
+                html += `</div>`;
+                return html;
+            }
+
+            case 'radio': {
+                const opts = getOpts();
+                const rows = opts.length
+                    ? opts.map((o, i) => `
+                        <div class="bmp-opt-row${i===0?' bmp-opt-row--sel':''}">
+                            <div class="bmp-radio${i===0?' bmp-radio--on':''}"></div>
+                            <span>${esc(o)}</span>
+                        </div>`).join('')
+                    : `<div class="bmp-empty"><i class="fas fa-plus fa-xs me-1"></i>Add options on the left...</div>`;
+                return labelRow() + helpRow() + rows;
+            }
+
+            case 'checkbox': {
+                const opts = getOpts();
+                const rows = opts.length
+                    ? opts.map((o, i) => `
+                        <div class="bmp-opt-row${i<2?' bmp-opt-row--sel':''}">
+                            <div class="bmp-checkbox${i<2?' bmp-checkbox--on':''}"></div>
+                            <span>${esc(o)}</span>
+                        </div>`).join('')
+                    : `<div class="bmp-empty"><i class="fas fa-plus fa-xs me-1"></i>Add options on the left...</div>`;
+                return labelRow() + helpRow() + rows;
+            }
+
+            case 'linear_scale': {
+                const min = +(document.getElementById('modalLinearScaleMin')?.value || 1);
+                const max = +(document.getElementById('modalLinearScaleMax')?.value || 5);
+                const minL = document.getElementById('modalLinearScaleMinLabel')?.value || '';
+                const maxL = document.getElementById('modalLinearScaleMaxLabel')?.value || '';
+                const nums = [];
+                for (let n = min; n <= max; n++) nums.push(n);
+                const mid = Math.floor(nums.length / 2);
+                const dots = nums.map((n, i) => `
+                    <div class="bmp-scale-item">
+                        <span class="bmp-scale-n">${n}</span>
+                        <div class="bmp-scale-dot${i===mid?' bmp-scale-dot--on':''}"></div>
+                    </div>`).join('');
+                return labelRow() + helpRow() +
+                    `<div class="bmp-scale-row">
+                        ${minL ? `<span class="bmp-scale-edge">${esc(minL)}</span>` : ''}
+                        ${dots}
+                        ${maxL ? `<span class="bmp-scale-edge">${esc(maxL)}</span>` : ''}
+                    </div>`;
+            }
+
+            case 'rating': {
+                const max = +(document.getElementById('modalRatingMax')?.value || 5);
+                const half = Math.ceil(max / 2);
+                let stars = '';
+                for (let i = 0; i < max; i++)
+                    stars += `<i class="${i<half?'fas':'far'} fa-star bmp-star"></i>`;
+                return labelRow() + helpRow() + `<div class="bmp-stars">${stars}</div>`;
+            }
+
+            case 'file':
+                return labelRow() + helpRow() +
+                    `<div class="bmp-upload">
+                        <i class="fas fa-cloud-upload-alt bmp-upload-icon"></i>
+                        <div class="bmp-upload-text">Click or drag a file here</div>
+                        <div class="bmp-upload-hint">All file types accepted</div>
+                    </div>`;
+
+            case 'paragraph': {
+                const paraBody = esc(help).replace(/\n/g, '<br>');
+                const paraTitle = lbl || 'Field label';
+                return `<div class="bmp-para-preview">
+                    <div class="bmp-para-title${lbl ? '' : ' bmp-para-placeholder'}">${esc(paraTitle)}</div>
+                    ${paraBody
+                        ? `<div class="bmp-para-body">${paraBody}</div>`
+                        : `<div class="bmp-para-body bmp-para-placeholder">Write paragraph text here...</div>`}
+                </div>`;
+            }
+
+            case 'video':
+                return `<div class="bmp-video-mock">
+                    <i class="fas fa-play-circle bmp-video-icon"></i>
+                    <div class="bmp-video-hint">MP4 / WebM / MOV — max 300 MB</div>
+                </div>
+                ${lbl !== 'Field label'
+                    ? row(ANN.spc(), `<div class="bmp-img-caption">${esc(lbl)}</div>`)
+                    : ''}`;
+
+            case 'image':
+                return `<div class="bmp-img-mock"><i class="fas fa-image"></i> Image</div>
+                    ${lbl !== 'Field label'
+                        ? row(ANN.spc(), `<div class="bmp-img-caption">${esc(lbl)}</div>`)
+                        : ''}`;
+
+            case 'section_break':
+                return `<div class="bmp-section">
+                    ${lbl !== 'Field label'
+                        ? `<div class="bmp-section-title">${esc(lbl)}</div>` : ''}
+                    ${help ? `<div class="bmp-section-desc">${esc(help)}</div>` : ''}
+                </div>`;
+
+            default:
+                return labelRow() + helpRow() + underlineRow('Your answer...');
+        }
+    }
+
+    function refresh() {
+        const el  = document.getElementById('modalPreviewField');
+        const elM = document.getElementById('modalPreviewFieldMobile');
+        if (!el) return;
+        const type = document.getElementById('modalFieldType')?.value || '';
+        const label = document.getElementById('modalLabel')?.value || '';
+        const ph    = document.getElementById('modalPlaceholder')?.value || '';
+        const help  = type === 'paragraph'
+            ? (document.getElementById('modalHelpTextArea')?.value || '')
+            : (document.getElementById('modalHelpText')?.value || '');
+        const req   = document.getElementById('modalIsRequired')?.checked || false;
+        const html  = buildPreview(type, label, ph, help, req);
+        el.innerHTML = html;
+        if (elM) elM.innerHTML = html;
+    }
+
+    // Tab switching: Desktop / Mobile
+    document.addEventListener('click', function (e) {
+        const tab = e.target.closest('.bmp-preview-tab');
+        if (!tab) return;
+        const view = tab.dataset.view;
+        document.querySelectorAll('.bmp-preview-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.bmp-preview-view').forEach(v => v.style.display = 'none');
+        const target = document.querySelector(`.bmp-preview-view--${view}`);
+        if (target) target.style.display = '';
+    });
+
+    // Auto-switch preview tab based on screen width
+    function syncPreviewTab() {
+        const isMobile = window.innerWidth < 768;
+        const targetView = isMobile ? 'mobile' : 'desktop';
+        document.querySelectorAll('.bmp-preview-tab').forEach(t => {
+            t.classList.toggle('active', t.dataset.view === targetView);
+        });
+        document.querySelectorAll('.bmp-preview-view').forEach(v => {
+            v.style.display = v.classList.contains('bmp-preview-view--' + targetView) ? '' : 'none';
+        });
+    }
+    window.addEventListener('resize', syncPreviewTab);
+
+    // Hook into existing openAddFieldModal
+    const _origOpen = window.openAddFieldModal;
+    window.openAddFieldModal = function (type, label) {
+        _origOpen && _origOpen(type, label);
+        syncPreviewTab();
+        setTimeout(refresh, 80);
+    };
+
+    // Live-update on input changes
+    document.addEventListener('input', function (e) {
+        const ids = ['modalLabel','modalPlaceholder','modalHelpText',
+                     'modalLinearScaleMin','modalLinearScaleMax',
+                     'modalLinearScaleMinLabel','modalLinearScaleMaxLabel'];
+        if (ids.includes(e.target.id) || e.target.classList.contains('option-input'))
+            refresh();
+    });
+
+    document.addEventListener('change', function (e) {
+        const ids = ['modalIsRequired','modalLinearScaleMin','modalLinearScaleMax',
+                     'modalLinearScaleMinLabel','modalLinearScaleMaxLabel','modalRatingMax'];
+        if (ids.includes(e.target.id)) refresh();
+    });
+
+    // Paragraph textarea also triggers live preview
+    document.getElementById('modalHelpTextArea')?.addEventListener('input', refresh);
+
+    // Expose for manual call after option add/remove
+    window.refreshModalPreview = refresh;
+})();
+
+// ===== FIELD PREVIEW POPUP — REMOVED =====
+/* (function () {
+    const PREVIEWS = {
+        short_text: {
+            label: 'Short Text', desc: 'Single-line text input',
+            html: `<div class="fpp-name">Full Name <span class="fpp-req">*</span></div>
+                   <div class="fpp-hint">Short answer</div>
+                   <div class="fpp-underline">Your answer...</div>`
+        },
+        long_text: {
+            label: 'Long Text', desc: 'Multi-line text area',
+            html: `<div class="fpp-name">Tell us about yourself</div>
+                   <div class="fpp-underline-tall">Long answer...</div>`
+        },
+        email: {
+            label: 'Email', desc: 'Email address input',
+            html: `<div class="fpp-name">Email Address <span class="fpp-req">*</span></div>
+                   <div class="fpp-hint">Confirmation will be sent to this email</div>
+                   <div class="fpp-underline">example@email.com</div>`
+        },
+        number: {
+            label: 'Number', desc: 'Numeric input only',
+            html: `<div class="fpp-name">Age</div>
+                   <div class="fpp-underline">0</div>`
+        },
+        phone: {
+            label: 'Phone', desc: 'Phone number input',
+            html: `<div class="fpp-name">Phone Number <span class="fpp-req">*</span></div>
+                   <div class="fpp-hint">Use an active number</div>
+                   <div class="fpp-underline">+1234...</div>`
+        },
+        url: {
+            label: 'URL / Link', desc: 'Web address input',
+            html: `<div class="fpp-name">Website / Portfolio</div>
+                   <div class="fpp-underline">https://</div>`
+        },
+        date: {
+            label: 'Date', desc: 'Calendar date picker',
+            html: `<div class="fpp-name">Date of Birth <span class="fpp-req">*</span></div>
+                   <div class="fpp-box"><i class="fas fa-calendar-alt fpp-box-icon"></i> Select date</div>`
+        },
+        time: {
+            label: 'Time', desc: 'Clock time picker',
+            html: `<div class="fpp-name">Arrival Time <span class="fpp-req">*</span></div>
+                   <div class="fpp-box"><i class="fas fa-clock fpp-box-icon"></i> --:--</div>`
+        },
+        datetime: {
+            label: 'Date & Time', desc: 'Combined date + time picker',
+            html: `<div class="fpp-name">Event Date & Time <span class="fpp-req">*</span></div>
+                   <div class="fpp-box"><i class="fas fa-calendar-alt fpp-box-icon"></i> dd/mm/yyyy --:--</div>`
+        },
+        dropdown: {
+            label: 'Dropdown', desc: 'Single selection from a list',
+            html: `<div class="fpp-name">Gender</div>
+                   <div class="fpp-dd">-- Select one -- <i class="fas fa-chevron-down" style="font-size:.55rem;"></i></div>
+                   <div class="fpp-hint" style="margin-top:5px;">Male / Female / ...</div>`
+        },
+        radio: {
+            label: 'Multiple Choice', desc: 'Pick one option',
+            html: `<div class="fpp-name">Grade / Class <span class="fpp-req">*</span></div>
+                   <div class="fpp-opt"><div class="fpp-radio-dot on"></div> Grade 10</div>
+                   <div class="fpp-opt"><div class="fpp-radio-dot"></div> Grade 11</div>
+                   <div class="fpp-opt"><div class="fpp-radio-dot"></div> Grade 12</div>`
+        },
+        checkbox: {
+            label: 'Checkboxes', desc: 'Pick multiple options',
+            html: `<div class="fpp-name">Areas of Interest</div>
+                   <div class="fpp-opt"><div class="fpp-cb on"></div> Mathematics</div>
+                   <div class="fpp-opt"><div class="fpp-cb on"></div> Science</div>
+                   <div class="fpp-opt"><div class="fpp-cb"></div> Languages</div>`
+        },
+        linear_scale: {
+            label: 'Linear Scale', desc: 'Numbered rating scale',
+            html: `<div class="fpp-name">Satisfaction level</div>
+                   <div class="fpp-hint">1 = Not satisfied &nbsp; 5 = Very satisfied</div>
+                   <div class="fpp-scale-row">
+                       ${[1,2,3,4,5].map((n,i) => `<div class="fpp-scale-item"><div class="fpp-scale-num">${n}</div><div class="fpp-scale-dot${i===2?' on':''}"></div></div>`).join('')}
+                   </div>`
+        },
+        rating: {
+            label: 'Rating', desc: 'Star rating input',
+            html: `<div class="fpp-name">Event Rating</div>
+                   <div class="fpp-stars">★★★☆☆</div>
+                   <div class="fpp-hint">1 — 5 stars</div>`
+        },
+        file: {
+            label: 'File Upload', desc: 'Accept file attachments',
+            html: `<div class="fpp-name">Proof of Payment <span class="fpp-req">*</span></div>
+                   <div class="fpp-upload"><i class="fas fa-cloud-upload-alt fpp-upload-icon"></i>Click or drag a file here<br><span style="font-size:.62rem;">PDF · JPG · PNG · Max 5 MB</span></div>`
+        },
+        paragraph: {
+            label: 'Paragraph Text', desc: 'Static display text / instructions',
+            html: `<div class="fpp-para">Please read the following terms carefully before filling out this form...</div>`
+        },
+        image: {
+            label: 'Image Display', desc: 'Show an image inside the form',
+            html: `<div class="fpp-img-mock"><i class="fas fa-image"></i> Image displayed here</div>`
+        },
+        section_break: {
+            label: 'Section Break', desc: 'Splits form into multiple pages',
+            html: `<div class="fpp-section-divider"><i class="fas fa-columns"></i> New Section <div class="fpp-section-line"></div></div>
+                   <div class="fpp-hint" style="margin-top:4px;">Form is divided into multiple pages (steps).</div>`
+        },
+        header_image: {
+            label: 'Header Image', desc: 'Banner image pinned to form top',
+            html: `<div class="fpp-img-mock" style="height:50px; background:linear-gradient(135deg,#00a79d,#0ea5e9); color:#fff; border-radius:7px;"><i class="fas fa-image"></i> Banner 1600×400</div>`
+        }
+    };
+
+    const popup   = document.getElementById('fppWrap');
+    const fppLbl  = document.getElementById('fppLabel');
+    const fppDesc = document.getElementById('fppDesc');
+    const fppBody = document.getElementById('fppBody');
+    let hideTimer = null;
+
+    function show(btn) {
+        const type = btn.dataset.type;
+        const p    = PREVIEWS[type];
+        if (!p || !popup) return;
+
+        fppLbl.textContent  = p.label;
+        fppDesc.textContent = p.desc;
+        fppBody.innerHTML   = p.html;
+
+        // Position to the right of the button
+        popup.style.top  = '-9999px';
+        popup.style.left = '-9999px';
+        popup.classList.add('visible');
+
+        const rect = btn.getBoundingClientRect();
+        const ph   = popup.offsetHeight;
+        let top    = rect.top + rect.height / 2 - ph / 2;
+        const left = rect.right + 10;
+
+        // Clamp vertically
+        if (top + ph > window.innerHeight - 8) top = window.innerHeight - ph - 8;
+        if (top < 8) top = 8;
+
+        popup.style.top  = top + 'px';
+        popup.style.left = left + 'px';
+    }
+
+    function hide() { popup && popup.classList.remove('visible'); }
+
+    document.querySelectorAll('.field-type-btn').forEach(function (btn) {
+        btn.addEventListener('mouseenter', function () {
+            clearTimeout(hideTimer);
+            show(btn);
+        });
+        btn.addEventListener('mouseleave', function () {
+            hideTimer = setTimeout(hide, 100);
+        });
+    });
+
+    if (popup) {
+        popup.addEventListener('mouseenter', function () { clearTimeout(hideTimer); });
+        popup.addEventListener('mouseleave', function () { hideTimer = setTimeout(hide, 100); });
+    }
+}); */
+
+// ===== CUSTOM SELECT =====
+(function () {
+    function initCustomSelect(native) {
+        if (!native || native._bmCselDone) return;
+        native._bmCselDone = true;
+
+        const inlineWidth = native.style.width;
+        native.style.display = 'none';
+
+        const wrap = document.createElement('div');
+        wrap.className = 'bm-csel';
+        native.parentNode.insertBefore(wrap, native);
+        wrap.appendChild(native);
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'bm-csel-btn';
+        // Only set explicit width when the native had an inline width (e.g. "80px").
+        // When width comes from CSS flex/class (sr-route-select), leave it to CSS.
+        if (inlineWidth) btn.style.width = inlineWidth;
+
+        // List mounted on body so modal overflow can't clip it
+        const list = document.createElement('div');
+        list.className = 'bm-csel-list';
+        document.body.appendChild(list);
+
+        function buildList() {
+            list.innerHTML = '';
+            Array.from(native.options).forEach(function (opt) {
+                const item = document.createElement('div');
+                item.className = 'bm-csel-opt' + (opt.selected ? ' is-active' : '');
+                item.textContent = opt.text;
+                item.dataset.value = opt.value;
+                item.addEventListener('mousedown', function (e) {
+                    // mousedown before blur so close() from document click fires after
+                    e.preventDefault();
+                    native.value = opt.value;
+                    native.dispatchEvent(new Event('change', { bubbles: true }));
+                    syncActive();
+                    updateBtn();
+                    close();
+                });
+                list.appendChild(item);
+            });
+        }
+
+        function syncActive() {
+            list.querySelectorAll('.bm-csel-opt').forEach(function (item) {
+                item.classList.toggle('is-active', item.dataset.value === native.value);
+            });
+        }
+
+        function updateBtn() {
+            const sel = native.options[native.selectedIndex];
+            btn.innerHTML = '<span>' + (sel ? sel.text : '') + '</span><i class="fas fa-chevron-down bm-csel-arrow"></i>';
+        }
+
+        function positionList() {
+            const rect = btn.getBoundingClientRect();
+            const listH = list.offsetHeight;
+            const spaceBelow = window.innerHeight - rect.bottom - 6;
+            const spaceAbove = rect.top - 6;
+            const openAbove = spaceBelow < listH && spaceAbove > spaceBelow;
+            list.style.width = rect.width + 'px';
+            list.style.left  = rect.left + 'px';
+            if (openAbove) {
+                list.style.top    = '';
+                list.style.bottom = (window.innerHeight - rect.top + 5) + 'px';
+            } else {
+                list.style.bottom = '';
+                list.style.top    = (rect.bottom + 5) + 'px';
+            }
+        }
+
+        function open() {
+            // Close any other open custom selects
+            document.querySelectorAll('.bm-csel-list.is-open').forEach(function (el) {
+                el.classList.remove('is-open');
+            });
+            document.querySelectorAll('.bm-csel-btn.is-open').forEach(function (el) {
+                el.classList.remove('is-open');
+            });
+            list.classList.add('is-open');
+            btn.classList.add('is-open');
+            positionList();
+            var active = list.querySelector('.is-active');
+            if (active) active.scrollIntoView({ block: 'nearest' });
+        }
+
+        function close() {
+            list.classList.remove('is-open');
+            btn.classList.remove('is-open');
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            list.classList.contains('is-open') ? close() : open();
+        });
+
+        document.addEventListener('click', close);
+        window.addEventListener('resize', function () { if (list.classList.contains('is-open')) positionList(); });
+
+        native.addEventListener('_bmRefresh', function () {
+            syncActive();
+            updateBtn();
+        });
+
+        buildList();
+        updateBtn();
+        wrap.insertBefore(btn, native);
+    }
+
+    // Patch native value setter so external assignments (native.value = x) stay in sync
+    function patchValueSetter(native) {
+        var proto = Object.getPrototypeOf(native);
+        var desc  = Object.getOwnPropertyDescriptor(proto, 'value');
+        if (!desc) return;
+        Object.defineProperty(native, 'value', {
+            get: function () { return desc.get.call(this); },
+            set: function (v) {
+                desc.set.call(this, v);
+                this.dispatchEvent(new Event('_bmRefresh'));
+            },
+        });
+    }
+
+    var SELECT_IDS = [
+        'modalRatingMax', 'editRatingMax',
+        'modalLinearScaleMin', 'modalLinearScaleMax',
+        'editLinearScaleMin',  'editLinearScaleMax',
+    ];
+
+    // Expose to global scope so buildRoutingRows (outside IIFE) can call it
+    window.initCustomSelect = initCustomSelect;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        SELECT_IDS.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) { patchValueSetter(el); initCustomSelect(el); }
+        });
+    });
+})();
 </script>

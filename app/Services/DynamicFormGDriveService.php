@@ -397,6 +397,49 @@ class DynamicFormGDriveService
         }
     }
 
+    /**
+     * Read all rows from the responses spreadsheet.
+     * Returns [headers[], row[], row[], ...] where row[i] corresponds to headers[i].
+     */
+    public function readSpreadsheetRows(string $spreadsheetID): array
+    {
+        try {
+            $response = $this->sheetsService->spreadsheets_values->get($spreadsheetID, 'Sheet1');
+            return $response->getValues() ?? [];
+        } catch (\Exception $e) {
+            Log::error("[DynamicFormGDriveService] Failed to read spreadsheet {$spreadsheetID}: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Delete a single file from Google Drive by its file ID.
+     */
+    public function deleteFile(string $fileID): void
+    {
+        try {
+            $this->driveService->files->delete($fileID);
+        } catch (\Exception $e) {
+            Log::error("[DynamicFormGDriveService] Failed to delete file {$fileID}: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Clear all data rows from the responses spreadsheet (keep header row).
+     * Uses batchClear on A2:ZZ to wipe data without touching the header.
+     */
+    public function clearSpreadsheetResponses(string $spreadsheetID): void
+    {
+        try {
+            $body = new \Google_Service_Sheets_BatchClearValuesRequest([
+                'ranges' => ['A2:ZZ'],
+            ]);
+            $this->sheetsService->spreadsheets_values->batchClear($spreadsheetID, $body);
+        } catch (\Exception $e) {
+            Log::error("[DynamicFormGDriveService] Failed to clear spreadsheet {$spreadsheetID}: " . $e->getMessage());
+        }
+    }
+
     // =========================================================================
     // Private helpers
     // =========================================================================
@@ -601,6 +644,43 @@ class DynamicFormGDriveService
         return [
             'gdriveFileID' => $fileID,
             'publicUrl'    => "https://lh3.googleusercontent.com/d/{$fileID}",
+        ];
+    }
+
+    /**
+     * Upload a video file to the form's assets/ folder.
+     * Returns an embed URL (GDrive preview — supports play/pause) and the file ID.
+     *
+     * @return array {gdriveFileID, embedUrl}
+     */
+    public function uploadVideoToAssetsFolder(
+        string       $assetsFolderID,
+        UploadedFile $file,
+        string       $fieldLabel
+    ): array {
+        $storedName = $fieldLabel . '_' . time() . '_' . $file->getClientOriginalName();
+        $mimeType   = $file->getMimeType() ?? 'video/mp4';
+
+        $driveFile = new Google_Service_Drive_DriveFile([
+            'name'    => $storedName,
+            'parents' => [$assetsFolderID],
+        ]);
+
+        $uploaded = $this->driveService->files->create($driveFile, [
+            'data'       => file_get_contents($file->getRealPath()),
+            'mimeType'   => $mimeType,
+            'uploadType' => 'multipart',
+            'fields'     => 'id,name',
+        ]);
+
+        $fileID = $uploaded->getId();
+
+        $permission = new Google_Service_Drive_Permission(['type' => 'anyone', 'role' => 'reader']);
+        $this->driveService->permissions->create($fileID, $permission);
+
+        return [
+            'gdriveFileID' => $fileID,
+            'embedUrl'     => "https://drive.google.com/file/d/{$fileID}/preview",
         ];
     }
 

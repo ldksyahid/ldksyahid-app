@@ -94,6 +94,10 @@
                         <div class="cs-progress-track">
                             <div class="cs-progress-fill" style="width: {{ min($percent, 100) }}%"></div>
                         </div>
+                        <div class="cs-progress-meta">
+                            <span class="cs-progress-pct">{{ number_format($percent, 0) }}% tercapai</span>
+                            <span class="cs-progress-target">Target {{ LFC::formatRupiah($campaign->target_biaya) }}</span>
+                        </div>
                     </div>
 
                     {{-- Stats --}}
@@ -101,6 +105,11 @@
                         <div class="cs-stat-item">
                             <span class="cs-stat-label">Terkumpul</span>
                             <span class="cs-stat-value cs-stat-primary">{{ LFC::formatRupiah($donationTotal) }}</span>
+                        </div>
+                        <div class="cs-stat-sep"></div>
+                        <div class="cs-stat-item cs-stat-center">
+                            <span class="cs-stat-label">Donatur</span>
+                            <span class="cs-stat-value">{{ $donorCount }}</span>
                         </div>
                         <div class="cs-stat-sep"></div>
                         <div class="cs-stat-item cs-stat-right">
@@ -118,8 +127,8 @@
                             <i class="fas fa-times-circle"></i><span>Campaign Berakhir</span>
                         </span>
                         @else
-                        <a href="{{ route('service.celengansyahid.detail.donatenow', $campaign->link) }}" class="cs-btn-donate">
-                            <i class="fas fa-heart"></i><span>Donasi Sekarang</span>
+                        <a href="{{ route('service.celengansyahid.detail', $campaign->link) }}" class="cs-btn-donate">
+                            <i class="fas fa-heart"></i><span>Selengkapnya</span>
                         </a>
                         @endif
                         <div class="cs-share-group">
@@ -129,7 +138,7 @@
                                 <i class="fas fa-link"></i>
                             </button>
                             <button class="cs-share-btn cs-share-wa"
-                                    onclick="csShareWa('{{ route('service.celengansyahid.detail', $campaign->link) }}', '{{ e($campaign->judul) }}', event)"
+                                    onclick="csShareWa('{{ route('service.celengansyahid.detail', $campaign->link) }}', '{{ $campaign->judul }}', event)"
                                     title="Bagikan via WhatsApp">
                                 <i class="fab fa-whatsapp"></i>
                             </button>
@@ -188,18 +197,19 @@
             @endphp
             <div class="cs-mobile-card"
                  style="--cs-cat: {{ $catColor }}"
-                 data-title="{{ e($campaign->judul) }}"
+                 data-title="{{ $campaign->judul }}"
                  data-cover="{{ $cover }}"
-                 data-org="{{ e($orgName) }}"
+                 data-org="{{ $orgName }}"
                  data-org-logo="{{ $logoSrc }}"
-                 data-org-link="{{ e($orgLink) }}"
-                 data-category="{{ e($campaign->kategori) }}"
+                 data-org-link="{{ $orgLink }}"
+                 data-category="{{ $campaign->kategori }}"
                  data-percent="{{ number_format($percent, 0) }}"
                  data-collected="{{ LFC::formatRupiah($donationTotal) }}"
+                 data-target="{{ LFC::formatRupiah($campaign->target_biaya) }}"
                  data-days="{{ $daysLeft }}"
                  data-deadline-passed="{{ $isDeadlinePassed ? '1' : '0' }}"
                  data-donors="{{ $donorCount }}"
-                 data-excerpt="{{ e(Str::limit(strip_tags($campaign->cerita), 160)) }}"
+                 data-excerpt="{{ Str::limit(strip_tags($campaign->cerita), 160) }}"
                  data-url="{{ route('service.celengansyahid.detail', $campaign->link) }}"
                  data-donate-url="{{ route('service.celengansyahid.detail.donatenow', $campaign->link) }}"
                  onclick="csOpenBottomSheet(this)">
@@ -221,8 +231,14 @@
                         <div class="cs-m-progress-fill" style="width: {{ min($percent, 100) }}%"></div>
                     </div>
                     <div class="cs-m-stats">
-                        <span class="cs-m-collected">{{ LFC::formatRupiah($donationTotal) }}</span>
-                        <span class="cs-m-days {{ $isDeadlinePassed ? 'cs-m-ended' : '' }}">{{ $daysLeft }}</span>
+                        <span class="cs-m-collected">{{ LFC::formatRupiah($donationTotal) }} <span class="cs-m-target">/ {{ LFC::formatRupiah($campaign->target_biaya) }}</span></span>
+                        @if(!$campaign->deadline)
+                            <span class="cs-m-days">Tanpa Batas</span>
+                        @elseif($isDeadlinePassed)
+                            <span class="cs-m-days cs-m-ended">Berakhir</span>
+                        @else
+                            <span class="cs-m-days"><i class="far fa-clock" style="font-size:.65rem;margin-right:2px"></i>{{ $daysLeft }} hari lagi</span>
+                        @endif
                     </div>
                     <span class="cs-m-hint"><i class="fas fa-hand-pointer"></i> Lihat detail</span>
                 </div>

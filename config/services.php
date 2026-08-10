@@ -34,8 +34,80 @@ return [
         'api_key' => env('BREVO_API_KEY'),
     ],
 
+    // Toggle the donation-form reCAPTCHA server-side verification. Set to false
+    // only as a temporary measure (e.g. while migrating a deprecated Google key);
+    // keep true in production for bot protection.
+    'recaptcha_enabled' => env('RECAPTCHA_ENABLED', true),
+
+    // "checkbox" — reCAPTCHA v2 checkbox widget (visible, user must tick).
+    // "score"    — reCAPTCHA v3 invisible (no user interaction, risk score based).
+    // Each type requires its own site/secret key pair from console.recaptcha.google.com.
+    'recaptcha_type'            => env('RECAPTCHA_TYPE', 'score'),
+    'recaptcha_score_threshold' => (float) env('RECAPTCHA_SCORE_THRESHOLD', 0.5),
+    'recaptcha_project_id'      => env('RECAPTCHA_PROJECT_ID', ''),
+    // Google Cloud API key — used to authenticate Enterprise Assessment API calls.
+    // Reads RECAPTCHA_API_KEY first; falls back to legacy RECAPTCHA_SECRET_KEY name.
+    'recaptcha_api_key'         => env('RECAPTCHA_API_KEY', env('RECAPTCHA_SECRET_KEY', '')),
+
     'xendit' => [
         'webhook_token' => env('XENDIT_WEBHOOK_TOKEN'),
+    ],
+
+    // BisaTopup (mitra.bisatopup.co.id) — Payment Gateway for Celengan Syahid donations.
+    // base_url is the API host (confirm exact value from the API reference); the
+    // dashboard itself lives at mitra.bisatopup.co.id.
+    // BisaTopup (Bisabiller backend) — Payment Gateway for Celengan Syahid donations.
+    'bisatopup' => [
+        'username'        => env('BISATOPUP_USERNAME'),
+        'password_api'    => env('BISATOPUP_PASSWORD_API'),
+        'widget_key'      => env('BISATOPUP_WIDGET_KEY'),
+        'env'             => env('BISATOPUP_ENV', 'dev'), // 'dev' | 'live'
+        'base_url_live'   => env('BISATOPUP_BASE_URL_LIVE', 'https://api.bisabiller.com'),
+        'base_url_dev'    => env('BISATOPUP_BASE_URL_DEV', 'https://api-sandbox.bisabiller.com'),
+        'qris_payment_id'  => env('BISATOPUP_QRIS_PAYMENT_ID', 33),
+        // Admin fee as a percentage of the donation amount (e.g. 1 = 1%, 0.5 = 0.5%).
+        // Change BISATOPUP_ADMIN_FEE_PERCENT in .env to adjust without touching code.
+        'admin_fee_percent'          => (float) env('BISATOPUP_ADMIN_FEE_PERCENT', 1),
+        // Bisabiller QRIS MDR charged per-transaction on total_tagihan (used in balance report).
+        'qris_mdr_percent'           => (float) env('BISATOPUP_QRIS_MDR_PERCENT', 1),
+        // Enforce callback signature check — ignored on live (always enforced); only
+        // relevant for dev/staging where you may want to temporarily disable it.
+        'enforce_callback_signature' => env('BISATOPUP_ENFORCE_CALLBACK_SIGNATURE', false),
+        // URL secret appended to the disbursement callback URL registered in the
+        // Bisabiller dashboard, e.g. ?_sec=XXXX. Bisabiller's Transfer callback
+        // does not include a signature field, so a URL secret is the primary guard.
+        // Set a random 32-char string here and update the Bisabiller dashboard URL.
+        'callback_disbursement_secret' => env('BISATOPUP_CALLBACK_DISBURSEMENT_SECRET'),
+        // Comma-separated list of Bisabiller server IPs to allowlist on webhook routes.
+        // Leave empty to skip IP filtering (still protected by URL secret + throttle).
+        'allowed_ips'                  => array_filter(array_map('trim', explode(',', env('BISATOPUP_ALLOWED_IPS', '')))),
+        // Minutes after a QRIS PAID event before the credit appears in Bisatopup's wallet.
+        // Donations settled within this window are excluded from the discrepancy calculation
+        // to prevent false "Deficit" alerts during the settlement delay (~5 min in practice).
+        'settlement_minutes'         => (int) env('BISATOPUP_SETTLEMENT_MINUTES', 15),
+    ],
+
+    // Kirimdev (api.kirimdev.com) — official Meta WhatsApp Business Cloud
+    // API passthrough, used for all outbound WhatsApp messages via
+    // App\Services\WhatsApp. Sending only works per-message-type once that
+    // message's Template is APPROVED by Meta (see
+    // `php artisan kirimdev:templates:sync`).
+    'kirimdev' => [
+        'api_key'         => env('KIRIMDEV_API_KEY'),
+        'phone_number_id' => env('KIRIMDEV_PHONE_NUMBER_ID'),
+        'base_url'        => env('KIRIMDEV_BASE_URL', 'https://api.kirimdev.com/v1'),
+        'template_language' => env('KIRIMDEV_TEMPLATE_LANGUAGE', 'id'),
+        // Comma-separated webhook signing secrets. Kirimdev signs every
+        // delivery with BOTH the old and new secret during a rotation
+        // window, so a delivery is accepted if ANY configured secret
+        // verifies — list both during rotation, drop the old one after.
+        'webhook_secrets' => array_filter(array_map('trim', explode(',', env('KIRIMDEV_WEBHOOK_SECRETS', '')))),
+    ],
+
+    'two_fa' => [
+        'allowed_users'          => array_filter(array_map('trim', explode(',', env('TWO_FA_ALLOWED_USERS', '')))),
+        'app_name'               => env('TWO_FA_APP_NAME', 'LDK Syahid Admin'),
+        'discrepancy_threshold'  => (int) env('TWO_FA_DISCREPANCY_THRESHOLD', 50000),
     ],
 
     'google' => [

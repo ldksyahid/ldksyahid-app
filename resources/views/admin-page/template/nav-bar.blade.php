@@ -7,9 +7,10 @@
         'admin/service/callkestari' => ['parent' => 'Service', 'parentIcon' => 'fa-tools', 'name' => 'Call Kestari', 'icon' => 'fa-phone'],
 
         // Celsyahid submenus
-        'admin/service/celengansyahid/dashboard' => ['parent' => 'Celsyahid', 'parentIcon' => 'fa-donate', 'name' => 'Dashboard', 'icon' => 'fa-tachometer-alt'],
-        'admin/service/celengansyahid/campaigns' => ['parent' => 'Celsyahid', 'parentIcon' => 'fa-donate', 'name' => 'Campaign', 'icon' => 'fa-bullhorn'],
-        'admin/service/celengansyahid/donations' => ['parent' => 'Celsyahid', 'parentIcon' => 'fa-donate', 'name' => 'Donation', 'icon' => 'fa-hand-holding-usd'],
+        'admin/celengan-syahid/dashboard' => ['parent' => 'Celsyahid', 'parentIcon' => 'fa-donate', 'name' => 'Dashboard', 'icon' => 'fa-tachometer-alt'],
+        'admin/celengan-syahid/campaigns' => ['parent' => 'Celsyahid', 'parentIcon' => 'fa-donate', 'name' => 'Campaign', 'icon' => 'fa-bullhorn'],
+        'admin/celengan-syahid/donations' => ['parent' => 'Celsyahid', 'parentIcon' => 'fa-donate', 'name' => 'Donation', 'icon' => 'fa-hand-holding-usd'],
+        'admin/celengan-syahid/audit-logs' => ['parent' => 'Celsyahid', 'parentIcon' => 'fa-donate', 'name' => 'Audit Log', 'icon' => 'fa-history'],
 
         // Home submenus
         'admin/jumbotron' => ['parent' => 'Home', 'parentIcon' => 'fa-home', 'name' => 'Jumbotron', 'icon' => 'fa-images'],

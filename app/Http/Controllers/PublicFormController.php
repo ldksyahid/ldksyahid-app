@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendSingleMailJob;
 use App\Mail\FormSubmissionConfirmation;
 use App\Models\forms\MsForm;
 use App\Models\forms\MsFormSetting;
@@ -12,6 +11,7 @@ use App\Services\DynamicFormGDriveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class PublicFormController extends Controller
 {
@@ -33,14 +33,25 @@ class PublicFormController extends Controller
                 ->with('needsLogin', true);
         }
 
-        // 2. Check if form is accepting submissions
-        if (!$form->isAcceptingSubmissions()) {
+        // 2. Privilege check — superadmin, creator, and collaborators can preview closed/draft forms.
+        /** @var \App\Models\User $user */
+        $user         = auth()->user();
+        $collabs      = $form->collaboratorEmails ?: [];
+        $isPrivileged = $user->hasRole('Superadmin')
+            || $form->createdBy === $user->email
+            || $form->createdBy === $user->name
+            || in_array($user->email, $collabs);
+
+        $isAccepting = $form->isAcceptingSubmissions();
+
+        // Non-privileged users are blocked when form is not accepting submissions
+        if (!$isPrivileged && !$isAccepting) {
             return view('landing-page.forms.closed', compact('form'))
                 ->with('title', $form->title);
         }
 
-        // 3. Single-submission check via logged-in user's email
-        if (!$form->isMultipleSubmit) {
+        // 3. Single-submission check — skip for privileged users (preview mode)
+        if (!$isPrivileged && !$form->isMultipleSubmit) {
             $userEmail = auth()->user()->email;
             if (TrFormSubmission::hasSubmittedBefore($form->formID, $userEmail)) {
                 return view('landing-page.forms.closed', compact('form'))
@@ -49,9 +60,11 @@ class PublicFormController extends Controller
             }
         }
 
-        $fields = $form->activeFields()->get();
+        $fields        = $form->activeFields()->get();
+        // Pass preview flag so the form can show a notice when viewed while closed/draft
+        $isPreviewMode = $isPrivileged && !$isAccepting;
 
-        return view('landing-page.forms.show', compact('form', 'fields'))
+        return view('landing-page.forms.show', compact('form', 'fields', 'isPreviewMode'))
             ->with('title', $form->title);
     }
 
@@ -104,8 +117,17 @@ class PublicFormController extends Controller
             return back()->withErrors(['rate_limit' => $msg])->withInput();
         }
 
-        // 3. Check if form is still accepting submissions
-        if (!$form->isAcceptingSubmissions()) {
+        // Privilege check (same logic as show())
+        /** @var \App\Models\User $authUser */
+        $authUser        = auth()->user();
+        $submitCollabs   = $form->collaboratorEmails ?: [];
+        $isPrivilegedSub = $authUser->hasRole('Superadmin')
+            || $form->createdBy === $authUser->email
+            || $form->createdBy === $authUser->name
+            || in_array($authUser->email, $submitCollabs);
+
+        // 3. Check if form is still accepting submissions (skip for privileged)
+        if (!$isPrivilegedSub && !$form->isAcceptingSubmissions()) {
             if ($request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'Formulir ini sudah tidak menerima pengisian.'], 422);
             }
@@ -113,8 +135,8 @@ class PublicFormController extends Controller
                 ->with('title', $form->title);
         }
 
-        // 4. Single-submission check via logged-in user's email
-        if (!$form->isMultipleSubmit && TrFormSubmission::hasSubmittedBefore($form->formID, $userEmail)) {
+        // 4. Single-submission check (skip for privileged)
+        if (!$isPrivilegedSub && !$form->isMultipleSubmit && TrFormSubmission::hasSubmittedBefore($form->formID, $userEmail)) {
             $msg = 'Email ' . $userEmail . ' sudah pernah digunakan untuk mengisi formulir ini.';
             if ($request->ajax()) {
                 return response()->json(['success' => false, 'message' => $msg], 422);
@@ -291,17 +313,24 @@ class PublicFormController extends Controller
             // 12. Increment form submission counter
             $form->incrementSubmissionCount();
 
-            // 13. Dispatch confirmation email
+            // 13. Send confirmation email directly via Gmail
             $sendConfirmEmail = (bool) $form->getSetting(MsFormSetting::KEY_SEND_CONFIRM_EMAIL, true);
             if ($sendConfirmEmail && !empty($respondentEmail)) {
-                $mailable = new FormSubmissionConfirmation(
-                    formTitle:      $form->title,
-                    respondentName: $respondentName,
-                    answers:        $answerMap,
-                    submittedAt:    $now->timezone('Asia/Jakarta')->format('d F Y, H:i') . ' WIB',
-                );
-
-                dispatch(new SendSingleMailJob($respondentEmail, $mailable));
+                try {
+                    Mail::mailer('gmail')
+                        ->to($respondentEmail)
+                        ->send(new FormSubmissionConfirmation(
+                            formTitle:      $form->title,
+                            respondentName: $respondentName,
+                            answers:        $answerMap,
+                            submittedAt:    $now->timezone('Asia/Jakarta')->format('d F Y, H:i') . ' WIB',
+                        ));
+                } catch (\Throwable $e) {
+                    Log::error('[PublicFormController] Failed to send confirmation email: ' . $e->getMessage(), [
+                        'form'  => $slug,
+                        'email' => $respondentEmail,
+                    ]);
+                }
             }
 
             return $this->successResponse($form, $request);

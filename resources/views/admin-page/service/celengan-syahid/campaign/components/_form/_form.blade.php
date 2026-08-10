@@ -8,7 +8,46 @@
     $currentPoster = ($data && $data->gdrive_id) ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id : null;
     $currentLogo = ($data && $data->gdrive_id_1) ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id_1 : null;
 
-    $hasOrganization = $data && ($data->nama_pj != null || $data->link_pj != null);
+    // nama_pj is now always set (required PIC Name field, see Media &
+    // Contact below) — it's no longer a signal that this campaign belongs
+    // to an external organization, so only link_pj/gdrive_id_1 (logo) count.
+    $hasOrganization = $data && ($data->link_pj != null || $data->gdrive_id_1 != null);
+
+    // PIC Contact phone: telp_pj is stored as a full number including its
+    // country code (e.g. "62812xxxxxxx"), no leading "+". Split it back into
+    // {code, local} so the country dropdown + local-number input can be
+    // pre-filled when editing an existing campaign.
+    //
+    // "62" is checked first, before scanning the rest of the code list.
+    // This matters because Indonesian mobile prefixes (811-813, 821-823,
+    // 851-859, 877-878, 881-889, 895-899...) collide with real calling codes
+    // (+81 Japan, +82 Korea, +855 Cambodia, etc.) — relying purely on
+    // longest-prefix-match would misdetect a bare Indonesian number lacking
+    // its "62" prefix as one of those countries instead. The generic scan
+    // below is only safe to run at all because the
+    // backfill_country_code_campaigns_telp_pj migration guarantees every
+    // pre-existing row already starts with "62"; anything that legitimately
+    // doesn't was entered through this same dropdown with its real code.
+    $phoneCodes = config('phone_codes', []);
+    $rawPicPhone = old('telp_pj', $data->telp_pj ?? '');
+    $picPhoneCode = '62';
+    $picPhoneLocal = $rawPicPhone;
+    if ($rawPicPhone !== '') {
+        if (str_starts_with($rawPicPhone, '62')) {
+            $picPhoneLocal = substr($rawPicPhone, 2);
+        } else {
+            $otherPhoneCodes = collect($phoneCodes)
+                ->reject(fn($pc) => $pc['code'] === '62')
+                ->sortByDesc(fn($pc) => strlen($pc['code']));
+            foreach ($otherPhoneCodes as $pc) {
+                if (str_starts_with($rawPicPhone, $pc['code'])) {
+                    $picPhoneCode = $pc['code'];
+                    $picPhoneLocal = substr($rawPicPhone, strlen($pc['code']));
+                    break;
+                }
+            }
+        }
+    }
 @endphp
 
 <div class="container-fluid pt-4 px-4">
@@ -79,7 +118,7 @@
                                     @else
                                         <select class="form-select @error('kategori') is-invalid @enderror" name="kategori" id="chooseKategoriCampaign" data-placeholder="-- Choose Category --" required>
                                             <option value="" disabled {{ !old('kategori', $data->kategori ?? '') ? 'selected' : '' }}>-- Choose Category --</option>
-                                            @foreach (['Pendidikan', 'Kemanusiaan', 'Kesehatan', 'Ekonomi', 'Sosial Dakwah', 'Lingkungan'] as $cat)
+                                            @foreach (['Education', 'Humanity', 'Health', 'Economy', 'Social & Da\'wah', 'Environment'] as $cat)
                                                 <option value="{{ $cat }}" {{ old('kategori', $data->kategori ?? '') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
                                             @endforeach
                                         </select>
@@ -122,10 +161,13 @@
                                     @if ($operation === 'view')
                                         <div class="form-control-plaintext">{{ $data->provinsi ?? '-' }}</div>
                                     @else
+                                        @php
+                                            $rawProvince = old('provinsi', $data->provinsi ?? '');
+                                        @endphp
                                         <select class="form-select" name="provinsi" id="inputProvinsiCampaign" data-placeholder="-- Choose Province --">
                                             <option value="">-- Choose Province --</option>
                                             @foreach ($provinces as $id => $name)
-                                                <option value="{{ $name }}" {{ old('provinsi', $data->provinsi ?? '') == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                                <option value="{{ $name }}" {{ strcasecmp($rawProvince, $name) === 0 ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                         </select>
                                     @endif
@@ -222,6 +264,66 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
+                                    <label for="inputDeadlineCampaign" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        Deadline @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">
+                                            {{ $data->deadline ? \Carbon\Carbon::parse($data->deadline)->isoFormat('dddd, DD MMMM YYYY') : '-' }}
+                                        </div>
+                                    @else
+                                        <input type="text" class="form-control flatpickr-date @error('deadline') is-invalid @enderror" id="inputDeadlineCampaign" name="deadline"
+                                            value="{{ old('deadline', $data->deadline ?? '') }}" {{ $operation === 'create' ? 'required' : '' }}>
+                                        @error('deadline') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="inputNamaPJ" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        PIC Name @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $data->nama_pj ?: '-' }}</div>
+                                    @else
+                                        <input type="text" class="form-control @error('nama_pj') is-invalid @enderror" id="inputNamaPJ"
+                                            name="nama_pj" value="{{ old('nama_pj', $data->nama_pj ?? '') }}" required>
+                                        @error('nama_pj') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                        <div class="form-text">Used to greet the PIC by name in the WhatsApp notification.</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="inputTelpPJLocal" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
+                                        PIC Contact @if($operation !== 'view') <span class="text-danger">*</span> @endif
+                                    </label>
+                                    @if ($operation === 'view')
+                                        <div class="form-control-plaintext">{{ $data->telp_pj ? '+' . $data->telp_pj : '-' }}</div>
+                                    @else
+                                        <div class="pic-phone-group @error('telp_pj') is-invalid @enderror">
+                                            <select class="form-select" id="inputTelpPJCode" autocomplete="tel-country-code">
+                                                @foreach($phoneCodes as $pc)
+                                                <option value="{{ $pc['code'] }}"
+                                                        data-placeholder="{{ $pc['placeholder'] }}"
+                                                        data-flag="{{ $pc['flag'] }}"
+                                                        {{ $picPhoneCode === $pc['code'] ? 'selected' : '' }}>
+                                                    {{ $pc['flag'] }} +{{ $pc['code'] }} {{ $pc['name'] }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                            <input type="text" class="form-control @error('telp_pj') is-invalid @enderror" id="inputTelpPJLocal"
+                                                value="{{ $picPhoneLocal }}" placeholder="8xxxxxxxxxx" inputmode="numeric"
+                                                {{ $operation === 'create' ? 'required' : '' }}>
+                                        </div>
+                                        <input type="hidden" name="telp_pj" id="inputTelpPJFull" value="{{ $rawPicPhone }}">
+                                        @error('telp_pj') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                        <div class="form-text">This number will receive a WhatsApp message whenever a donation comes in.</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6 offset-md-3">
+                                <div class="mb-3">
                                     <label for="poster" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
                                         Poster @if($operation !== 'view') <span class="small text-muted">(1920 x 1080 Pixel)</span> @endif
                                     </label>
@@ -239,39 +341,6 @@
                                         <input type="file" class="form-control @error('poster') is-invalid @enderror" id="poster" name="poster"
                                             accept="image/jpeg,image/png,image/jpg" {{ $operation === 'create' ? 'required' : '' }}>
                                         @error('poster') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="inputDeadlineCampaign" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
-                                        Deadline @if($operation !== 'view') <span class="text-danger">*</span> @endif
-                                    </label>
-                                    @if ($operation === 'view')
-                                        <div class="form-control-plaintext">
-                                            {{ $data->deadline ? \Carbon\Carbon::parse($data->deadline)->isoFormat('dddd, DD MMMM YYYY') : '-' }}
-                                        </div>
-                                    @else
-                                        <input type="text" class="form-control flatpickr-date @error('deadline') is-invalid @enderror" id="inputDeadlineCampaign" name="deadline"
-                                            value="{{ old('deadline', $data->deadline ?? '') }}" {{ $operation === 'create' ? 'required' : '' }}>
-                                        @error('deadline') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="inputTelpPJ" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">
-                                        PIC Contact @if($operation !== 'view') <span class="text-danger">*</span> @endif
-                                    </label>
-                                    @if ($operation === 'view')
-                                        <div class="form-control-plaintext">+62{{ $data->telp_pj ?? '-' }}</div>
-                                    @else
-                                        <div class="input-group">
-                                            <span class="input-group-text">+62</span>
-                                            <input type="text" class="form-control @error('telp_pj') is-invalid @enderror" id="inputTelpPJ" name="telp_pj"
-                                                value="{{ old('telp_pj', $data->telp_pj ?? '') }}" {{ $operation === 'create' ? 'required' : '' }}>
-                                            @error('telp_pj') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                        </div>
                                     @endif
                                 </div>
                             </div>
@@ -296,7 +365,7 @@
                                 <div class="form-control-plaintext text-muted">No external organization</div>
                             @else
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="logoPj" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Organization Logo</label>
                                             <div class="text-center mb-3">
@@ -315,18 +384,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="inputNamaPJ" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Organization Name</label>
-                                            @if ($operation === 'view')
-                                                <div class="form-control-plaintext">{{ $data->nama_pj ?: '-' }}</div>
-                                            @else
-                                                <input type="text" class="form-control" id="inputNamaPJ" name="nama_pj"
-                                                    value="{{ old('nama_pj', $data->nama_pj ?? '') }}">
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="inputLinkPJ" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Organization Profile Links</label>
                                             @if ($operation === 'view')

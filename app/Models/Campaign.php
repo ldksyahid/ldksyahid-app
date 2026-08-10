@@ -32,6 +32,59 @@ class Campaign extends Model
         return $this->hasMany(Donation::class, 'campaign_id');
     }
 
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class, 'campaign_id');
+    }
+
+    public function getBalanceSummary(): array
+    {
+        // Use CEIL MDR formula — same as balanceReport() — to match Bisatopup's
+        // actual wallet credit (they CEIL the 1% fee per transaction).
+        $mdrRate           = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+        $settlementMinutes = (int) config('services.bisatopup.settlement_minutes', 15);
+        $cutoff            = now()->subMinutes($settlementMinutes);
+
+        $creditSelect = 'SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wallet_credit';
+
+        $qrisPaid = (int) Donation::where('campaign_id', $this->id)
+            ->where('gateway', 'bisatopup')
+            ->where('payment_status', 'PAID')
+            ->selectRaw($creditSelect, [$mdrRate])
+            ->value('wallet_credit');
+
+        // Amount paid within settlement window — in-transit, not yet in Bisatopup wallet
+        $pendingSettlementWallet = (int) Donation::where('campaign_id', $this->id)
+            ->where('gateway', 'bisatopup')
+            ->where('payment_status', 'PAID')
+            ->where('updated_at', '>=', $cutoff)
+            ->selectRaw($creditSelect, [$mdrRate])
+            ->value('wallet_credit');
+
+        $manualPaid = Donation::where('campaign_id', $this->id)
+            ->where('gateway', 'manual')
+            ->where('payment_status', 'PAID')
+            ->sum('jumlah_donasi');
+
+        $totalWithdrawn = Withdrawal::where('campaign_id', $this->id)
+            ->where('status', 'COMPLETED')
+            ->sum('amount');
+
+        $pendingWithdrawal = Withdrawal::where('campaign_id', $this->id)
+            ->where('status', 'PENDING')
+            ->sum('amount');
+
+        return [
+            'qris_paid'               => (int) $qrisPaid,
+            'manual_paid'             => (int) $manualPaid,
+            'total_paid'              => (int) ($qrisPaid + $manualPaid),
+            'total_withdrawn'         => (int) $totalWithdrawn,
+            'pending_withdrawal'      => (int) $pendingWithdrawal,
+            'pending_settlement_wallet' => $pendingSettlementWallet,
+            'available'               => (int) ($qrisPaid - $totalWithdrawn - $pendingWithdrawal),
+        ];
+    }
+
     /* ================================================================
        TABLE CONFIG & OPTIONS
        ================================================================ */
@@ -52,7 +105,23 @@ class Campaign extends Model
             'actions' => [
                 'view'   => ['enabled' => true, 'route' => 'admin.service.preview.campaign', 'routeKey' => 'id'],
                 'edit'   => ['enabled' => true, 'type' => 'link', 'route' => 'admin.service.edit.campaign', 'routeKey' => 'id'],
-                'delete' => ['enabled' => true, 'btnClass' => 'delete-campaign-btn'],
+                'delete' => [
+                    'enabled'                => true,
+                    'btnClass'               => 'delete-campaign-btn',
+                    'disabledConditionField' => 'has_donations',
+                    'disabledConditionTitle' => 'Cannot delete: this campaign already has donations',
+                ],
+                'custom' => [
+                    [
+                        'enabled'  => true,
+                        'type'     => 'link',
+                        'route'    => 'admin.celsyahid.campaign.finance',
+                        'routeKey' => 'id',
+                        'class'    => 'btn-custom-primary',
+                        'icon'     => 'fa-wallet',
+                        'title'    => 'Finance',
+                    ],
+                ],
             ],
         ];
     }
@@ -124,7 +193,11 @@ class Campaign extends Model
                         : 'created_at';
         $sortOrder = $request->input('sort_order', 'desc') === 'asc' ? 'asc' : 'desc';
 
-        return $query->orderBy($sortBy, $sortOrder)->paginate(15)->appends($request->query());
+        return $query
+            ->withCount('donation as donation_count')
+            ->orderBy($sortBy, $sortOrder)
+            ->paginate(15)
+            ->appends($request->query());
     }
 
     public static function getDataDonationCampaignByLink(string $link)

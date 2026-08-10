@@ -27,9 +27,6 @@
                         Worker in <span id="countdown-value">—</span>
                     </div>
                     <span class="text-muted small d-none d-sm-inline" id="last-updated-text">Connecting...</span>
-                    <button class="btn btn-sm btn-outline-secondary btn-rounded" id="btn-pause-resume">
-                        <i class="fas fa-pause me-1"></i>Pause
-                    </button>
                 </div>
             </div>
         </div>
@@ -95,85 +92,128 @@
             </div>
         </div>
 
-        {{-- Estimated Completion Card --}}
-        <div class="col-12 mb-3" id="eta-card-wrap" style="display:none;">
+        {{-- Estimated Completion Card — Email --}}
+        <div class="col-12 mb-3">
             <div class="eta-card">
-                <div class="eta-icon">
-                    <i class="fas fa-flag-checkered"></i>
-                </div>
-                <div class="eta-body">
-                    <div class="eta-title">Estimated Completion</div>
-                    <div class="eta-main" id="eta-main">—</div>
-                    <div class="eta-meta" id="eta-meta"></div>
-                </div>
-                <div class="eta-detail">
-                    <div class="eta-detail-row">
-                        <span class="eta-detail-label"><i class="fas fa-paper-plane me-1"></i>Rate</span>
-                        <span class="eta-detail-val" id="eta-rate">—</span>
+                <div class="eta-main-row">
+                    <div class="eta-icon">
+                        <i class="fas fa-envelope"></i>
                     </div>
-                    <div class="eta-detail-row">
-                        <span class="eta-detail-label"><i class="fas fa-calendar-day me-1"></i>Daily limit</span>
-                        <span class="eta-detail-val" id="eta-daily">300 / day</span>
+                    <div class="eta-body">
+                        <div class="eta-title">Email — Estimated Completion</div>
+                        <div class="eta-main" id="eta-main">Queue is clear</div>
+                        <div class="eta-meta" id="eta-meta">No pending email jobs</div>
                     </div>
-                    <div class="eta-detail-row">
-                        <span class="eta-detail-label"><i class="fas fa-envelope me-1"></i>Remaining</span>
-                        <span class="eta-detail-val" id="eta-remaining">—</span>
+                    <div class="eta-detail">
+                        <div class="eta-detail-row">
+                            <span class="eta-detail-label"><i class="fas fa-paper-plane me-1"></i>Rate</span>
+                            <span class="eta-detail-val" id="eta-rate">—</span>
+                        </div>
+                        <div class="eta-detail-row">
+                            <span class="eta-detail-label"><i class="fas fa-calendar-day me-1"></i>Daily limit</span>
+                            <span class="eta-detail-val" id="eta-daily">300 / day</span>
+                        </div>
+                        <div class="eta-detail-row">
+                            <span class="eta-detail-label"><i class="fas fa-envelope me-1"></i>Remaining</span>
+                            <span class="eta-detail-val" id="eta-remaining">0 jobs</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        {{-- Gmail Daily Limit Banner --}}
-        <div class="col-12 mb-3" id="daily-limit-banner" style="display:none;">
-            <div class="daily-limit-alert">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div>
-                        <strong>Gmail Daily Sending Limit Active</strong>
-                        <div class="small mt-1">
-                            Email jobs are paused until the limit resets.
-                            <span id="daily-limit-job-count" class="fw-semibold"></span> job(s) waiting.
-                            Attempts will increase but these jobs are <strong>not stuck</strong> — they will resume automatically.
+                <div class="daily-limit-alert eta-inline-alert" id="daily-limit-banner" style="display:none;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>Gmail Daily Sending Limit Active</strong>
+                            <div class="small mt-1">
+                                Email jobs are paused until the limit resets.
+                                <span id="daily-limit-job-count" class="fw-semibold"></span> job(s) waiting.
+                                Attempts will increase but these jobs are <strong>not stuck</strong> — they will resume automatically.
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Filter Bar --}}
+        {{-- Estimated Completion Card — WhatsApp --}}
         <div class="col-12 mb-3">
-            <div class="filter-bar">
-                <select id="filter-status">
-                    <option value="all">All Statuses</option>
-                    <option value="pending">Pending</option>
-                    <option value="processing">Processing</option>
-                    <option value="delayed">Delayed</option>
-                    <option value="daily_limit">Daily Limit</option>
-                    <option value="stuck">Stuck</option>
-                    <option value="failed">Failed</option>
-                </select>
-                <select id="filter-queue">
-                    <option value="all">All Queues</option>
-                </select>
-                <input type="text" class="form-control form-control-sm filter-search" id="filter-search"
-                    placeholder="Search job type...">
-                <div class="d-flex gap-1 ms-auto filter-actions">
-                    <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-stuck">
-                        <i class="fas fa-trash-alt me-1"></i>Delete Stuck
-                    </button>
-                    <button class="btn btn-sm btn-outline-success btn-rounded" id="btn-retry-all-failed" style="display:none;">
-                        <i class="fas fa-redo me-1"></i>Retry All
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-all-failed" style="display:none;">
-                        <i class="fas fa-trash-alt me-1"></i>Delete All Failed
-                    </button>
+            <div class="eta-card eta-card-wa">
+                <div class="eta-main-row">
+                    <div class="eta-icon eta-icon-wa">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="eta-body">
+                        <div class="eta-title-row">
+                            <div class="eta-title">WhatsApp — Estimated Completion</div>
+                            <div class="wa-device-badge wa-device-unknown" id="wa-device-badge" title="Kirimdev WhatsApp phone number status">
+                                <i class="fab fa-whatsapp"></i>
+                                <span id="wa-device-label">Unknown</span>
+                            </div>
+                        </div>
+                        <div class="eta-main" id="wa-eta-main">Queue is clear</div>
+                        <div class="eta-meta" id="wa-eta-meta">No pending WhatsApp jobs</div>
+                    </div>
+                    <div class="eta-detail">
+                        <div class="eta-detail-row">
+                            <span class="eta-detail-label"><i class="fas fa-paper-plane me-1"></i>Rate</span>
+                            <span class="eta-detail-val" id="wa-eta-rate">—</span>
+                        </div>
+                        <div class="eta-detail-row">
+                            <span class="eta-detail-label"><i class="fas fa-comment-dots me-1"></i>Remaining</span>
+                            <span class="eta-detail-val" id="wa-eta-remaining">0 jobs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="wa-disconnect-alert eta-inline-alert" id="wa-disconnect-banner" style="display:none;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong id="wa-disconnect-title">Kirimdev WhatsApp Number Disconnected</strong>
+                            <div class="small mt-1" id="wa-disconnect-text">
+                                <span id="wa-disconnect-job-count" class="fw-semibold"></span> WhatsApp job(s) on hold
+                                until this is fixed. Check this phone number's status in the Kirimdev dashboard (or
+                                Meta Business Manager) to reconnect it.
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {{-- Table --}}
+        {{-- Filter Bar + Table --}}
         <div class="col-12 mb-3">
             <div class="table-card">
+                <div class="filter-bar">
+                    <select id="filter-status">
+                        <option value="all">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="delayed">Delayed</option>
+                        <option value="daily_limit">Daily Limit</option>
+                        <option value="stuck">Stuck</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                    <select id="filter-queue">
+                        <option value="all">All Queues</option>
+                    </select>
+                    <div class="search-input-wrap">
+                        <i class="fas fa-search search-input-icon"></i>
+                        <input type="text" class="form-control form-control-sm filter-search" id="filter-search"
+                            placeholder="Search job type or payload content..."
+                            title="Matches the job's class name (e.g. SendSingleMailJob) or anything else inside its raw payload, such as an email address or phone number">
+                    </div>
+                    <div class="d-flex gap-1 ms-auto filter-actions">
+                        <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-stuck">
+                            <i class="fas fa-trash-alt me-1"></i>Delete Stuck
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-rounded" id="btn-retry-all-failed" style="display:none;">
+                            <i class="fas fa-redo me-1"></i>Retry All
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger btn-rounded" id="btn-delete-all-failed" style="display:none;">
+                            <i class="fas fa-trash-alt me-1"></i>Delete All Failed
+                        </button>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-sm align-middle mb-0" id="jobs-table">
                         <thead>

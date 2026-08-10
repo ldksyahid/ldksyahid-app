@@ -138,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var category    = el.dataset.category     || '';
         var percent     = el.dataset.percent      || '0';
         var collected   = el.dataset.collected    || 'Rp0';
+        var target      = el.dataset.target       || 'Rp0';
         var days        = el.dataset.days         || '';
         var deadlinePassed = el.dataset.deadlinePassed === '1';
         var donors      = el.dataset.donors       || '0';
@@ -168,7 +169,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<div class="cs-bs-progress-wrap">' +
                     '<div class="cs-bs-progress-head">' +
                         '<span class="cs-bs-progress-pct">' + escHtml(percent) + '% tercapai</span>' +
-                        '<span class="cs-bs-progress-days' + (deadlinePassed ? ' ended' : '') + '">' + escHtml(days) + '</span>' +
+                        '<span class="cs-bs-progress-days' + (deadlinePassed ? ' ended' : '') + '">' +
+                            (!days || days === 'selesai'
+                                ? (deadlinePassed ? 'Berakhir' : 'Tanpa Batas')
+                                : (deadlinePassed ? 'Berakhir' : days + ' hari lagi')
+                            ) +
+                        '</span>' +
                     '</div>' +
                     '<div class="cs-bs-progress-track">' +
                         '<div class="cs-bs-progress-fill" style="width:' + Math.min(parseFloat(percent)||0, 100) + '%"></div>' +
@@ -178,14 +184,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     '<div class="cs-bs-stat"><span class="cs-bs-stat-label">Terkumpul</span><span class="cs-bs-stat-val primary">' + escHtml(collected) + '</span></div>' +
                     '<div class="cs-bs-stat-sep"></div>' +
                     '<div class="cs-bs-stat"><span class="cs-bs-stat-label">Donatur</span><span class="cs-bs-stat-val">' + escHtml(donors) + ' orang</span></div>' +
+                    '<div class="cs-bs-stat-sep"></div>' +
+                    '<div class="cs-bs-stat"><span class="cs-bs-stat-label">Target</span><span class="cs-bs-stat-val">' + escHtml(target) + '</span></div>' +
                 '</div>' +
                 (excerpt ? '<p class="cs-bs-excerpt">' + escHtml(excerpt) + '</p>' : '') +
                 '<div class="cs-bs-btns">' +
                     (deadlinePassed
                         ? '<span class="cs-bs-btn-donate cs-btn-ended"><i class="fas fa-times-circle"></i><span>Campaign Berakhir</span></span>'
-                        : '<a href="' + escHtml(donateUrl) + '" class="cs-bs-btn-donate"><i class="fas fa-heart"></i><span>Donasi Sekarang</span></a>'
+                        : '<a href="' + escHtml(url) + '" class="cs-bs-btn-donate"><i class="fas fa-heart"></i><span>Selengkapnya</span></a>'
                     ) +
-                    '<a href="' + escHtml(url) + '" class="cs-bs-btn-detail"><i class="fas fa-info-circle"></i><span>Lihat Detail</span></a>' +
                 '</div>' +
                 '<div class="cs-bs-share-wrap">' +
                     '<span class="cs-bs-share-label">Bagikan</span>' +

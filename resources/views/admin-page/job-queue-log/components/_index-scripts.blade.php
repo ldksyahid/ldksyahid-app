@@ -3,7 +3,6 @@
 <script>
 $(function () {
     // ── State ──────────────────────────────────────────────────────────────
-    var isPaused        = false;
     var pollingInterval = null;
     var updateTimer     = null;
     var secondsSince    = 0;
@@ -65,11 +64,6 @@ $(function () {
         pollingInterval = setInterval(fetchData, POLL_INTERVAL);
     }
 
-    function stopPolling() {
-        clearInterval(pollingInterval);
-        pollingInterval = null;
-    }
-
     function resetUpdateTimer() {
         secondsSince = 0;
         clearInterval(updateTimer);
@@ -93,13 +87,12 @@ $(function () {
                 isFailedView = !!response.is_failed_view;
                 syncServerTime(response.server_time);
                 if (!countdownStarted) { startWorkerCountdown(); countdownStarted = true; }
-                updateStats(response.stats, response.gmail_daily_limit);
+                updateKirimdevAccountStatus(response.kirimdev_account_status, response.stats.whatsapp_pending);
+                updateStats(response.stats, response.whatsapp_rate_per_minute);
                 updateQueuesFilter(response.queues);
                 updateTable(response.jobs);
                 toggleFilterActions();
-                // Keep the "Polling paused" text frozen when paused (the initial
-                // load still fetches once to populate the table).
-                if (!isPaused) resetUpdateTimer();
+                resetUpdateTimer();
                 setLiveState(true);
             })
             .fail(function () {
@@ -108,8 +101,58 @@ $(function () {
             });
     }
 
+    // ── WhatsApp (Kirimdev) Account Status ──────────────────────────────────
+    // Meta's own phone-number health, not a WhatsApp-Web QR-pairing session
+    // (that concept doesn't exist on the official Cloud API) — statuses are
+    // connected/disconnected/degraded/onboarding, or null if not cached yet.
+    function updateKirimdevAccountStatus(status, waPending) {
+        var $badge = $('#wa-device-badge');
+        var $label = $('#wa-device-label');
+        var $banner = $('#wa-disconnect-banner');
+
+        $badge.removeClass('wa-device-connect wa-device-disconnect wa-device-degraded wa-device-onboarding wa-device-unknown');
+
+        if (status === 'connected') {
+            $badge.addClass('wa-device-connect');
+            $label.text('Connected');
+            $banner.slideUp(200);
+        } else if (status === 'disconnected') {
+            $badge.addClass('wa-device-disconnect');
+            $label.text('Disconnected');
+            $('#wa-disconnect-title').text('Kirimdev WhatsApp Number Disconnected');
+            $('#wa-disconnect-text').html(
+                '<span id="wa-disconnect-job-count" class="fw-semibold"></span> WhatsApp job(s) on hold ' +
+                'until this is fixed. Check this phone number\'s status in the Kirimdev dashboard (or ' +
+                'Meta Business Manager) to reconnect it.'
+            );
+            $('#wa-disconnect-job-count').text(waPending || 0);
+            $banner.removeClass('wa-disconnect-alert-warning').addClass('wa-disconnect-alert');
+            $banner.slideDown(200);
+        } else if (status === 'degraded') {
+            $badge.addClass('wa-device-degraded');
+            $label.text('Degraded');
+            $('#wa-disconnect-title').text('Kirimdev WhatsApp Number Quality Degraded');
+            $('#wa-disconnect-text').html(
+                'Meta has flagged this number\'s quality as degraded — messages still send, but the number ' +
+                'risks further restriction. Review recent sends in the Kirimdev dashboard.'
+            );
+            $banner.removeClass('wa-disconnect-alert').addClass('wa-disconnect-alert-warning');
+            $banner.slideDown(200);
+        } else if (status === 'onboarding') {
+            $badge.addClass('wa-device-onboarding');
+            $label.text('Onboarding');
+            $banner.slideUp(200);
+        } else {
+            // null/undefined — cache never populated yet (e.g. right after
+            // deploy) or Kirimdev isn't configured yet.
+            $badge.addClass('wa-device-unknown');
+            $label.text('Unknown');
+            $banner.slideUp(200);
+        }
+    }
+
     // ── Stats ──────────────────────────────────────────────────────────────
-    function updateStats(stats, gmailDailyLimit) {
+    function updateStats(stats, whatsappRatePerMinute) {
         $('#stat-total').text(Number(stats.total).toLocaleString());
         $('#stat-pending').text(Number(stats.pending).toLocaleString());
         $('#stat-processing').text(Number(stats.processing).toLocaleString());
@@ -125,8 +168,10 @@ $(function () {
         }
         previousStats = stats;
 
-        // Gmail daily limit banner
-        if (gmailDailyLimit && stats.daily_limit > 0) {
+        // Gmail daily limit banner — daily_limit is now derived purely from
+        // each job's own recorded delay (see dailyLimitThreshold() backend
+        // comment), not a live cache flag, so this count alone is reliable.
+        if (stats.daily_limit > 0) {
             $('#daily-limit-job-count').text(stats.daily_limit);
             $('#daily-limit-banner').slideDown(200);
         } else {
@@ -134,29 +179,38 @@ $(function () {
         }
 
         updateEta(stats);
+        updateWaEta(stats, whatsappRatePerMinute);
     }
 
-    // ── Estimated Completion ───────────────────────────────────────────────
+    // ── Estimated Completion — Email ─────────────────────────────────────────
     var BREVO_DAILY_LIMIT  = 300;   // free plan emails per day
     var RATE_PER_MIN       = 10;    // RateLimiter setting in AppServiceProvider
 
     function updateEta(stats) {
-        var pending = (stats.pending || 0) + (stats.daily_limit || 0);
+        // Scoped to queue='email' only (Bagian backend: email_pending) — the
+        // generic stats.pending/daily_limit mix every queue together, which
+        // would wrongly blend in WhatsApp jobs that have no daily cap at all.
+        var pending = stats.email_pending || 0;
+
+        // Card always stays visible — Rate/Daily limit are static config
+        // values, shown regardless of whether there's a backlog right now.
+        $('#eta-rate').text(RATE_PER_MIN + ' emails / min');
+        $('#eta-daily').text(BREVO_DAILY_LIMIT.toLocaleString() + ' / day (Brevo free)');
+        $('#eta-remaining').text(pending.toLocaleString() + ' jobs');
+
         if (pending <= 0) {
-            $('#eta-card-wrap').slideUp(200);
+            $('#eta-main').text('Queue is clear');
+            $('#eta-meta').text('No pending email jobs');
             return;
         }
 
         // Days needed based on Brevo daily limit (bottleneck)
-        var daysNeeded  = Math.ceil(pending / BREVO_DAILY_LIMIT);
+        var daysNeeded  = Math.max(1, Math.ceil(pending / BREVO_DAILY_LIMIT));
         var hoursNeeded = Math.ceil(pending / RATE_PER_MIN / 60);
 
         var etaMain, etaMeta;
 
-        if (daysNeeded <= 0) {
-            $('#eta-card-wrap').slideUp(200);
-            return;
-        } else if (daysNeeded === 1 && hoursNeeded <= 23) {
+        if (daysNeeded === 1 && hoursNeeded <= 23) {
             // Less than a day — show hours
             var finishDate = new Date(Date.now() + serverOffset + hoursNeeded * 3600 * 1000);
             etaMain = 'Today around ' + formatTime(finishDate);
@@ -169,10 +223,46 @@ $(function () {
 
         $('#eta-main').text(etaMain);
         $('#eta-meta').text(etaMeta);
-        $('#eta-rate').text(RATE_PER_MIN + ' emails / min');
-        $('#eta-daily').text(BREVO_DAILY_LIMIT.toLocaleString() + ' / day (Brevo free)');
-        $('#eta-remaining').text(pending.toLocaleString() + ' jobs');
-        $('#eta-card-wrap').slideDown(200);
+    }
+
+    // ── Estimated Completion — WhatsApp ──────────────────────────────────────
+    // No daily cap — Kirimdev/Meta doesn't publish one, so the only
+    // bottleneck is the configured rate itself (WHATSAPP_RATE_PER_MINUTE).
+    function updateWaEta(stats, ratePerMinute) {
+        var pending = stats.whatsapp_pending || 0;
+
+        $('#wa-eta-rate').text((ratePerMinute || '—') + ' messages / min');
+        $('#wa-eta-remaining').text(pending.toLocaleString() + ' jobs');
+
+        if (pending <= 0 || !ratePerMinute) {
+            $('#wa-eta-main').text('Queue is clear');
+            $('#wa-eta-meta').text('No pending WhatsApp jobs');
+            return;
+        }
+
+        var minutesNeeded = Math.ceil(pending / ratePerMinute);
+        var etaMain, etaMeta;
+
+        if (minutesNeeded < 60) {
+            var finishDate = new Date(Date.now() + serverOffset + minutesNeeded * 60 * 1000);
+            etaMain = 'Around ' + formatTime(finishDate);
+            etaMeta = 'Approximately ' + minutesNeeded + ' minute' + (minutesNeeded !== 1 ? 's' : '') + ' remaining';
+        } else {
+            var hoursNeeded = Math.ceil(minutesNeeded / 60);
+            if (hoursNeeded < 24) {
+                var finishDate = new Date(Date.now() + serverOffset + hoursNeeded * 3600 * 1000);
+                etaMain = 'Around ' + formatTime(finishDate);
+                etaMeta = 'Approximately ' + hoursNeeded + ' hour' + (hoursNeeded !== 1 ? 's' : '') + ' remaining';
+            } else {
+                var daysNeeded  = Math.ceil(hoursNeeded / 24);
+                var finishDate  = new Date(Date.now() + serverOffset + daysNeeded * 86400 * 1000);
+                etaMain = formatDate(finishDate);
+                etaMeta = daysNeeded + ' day' + (daysNeeded !== 1 ? 's' : '') + ' remaining · ' + pending.toLocaleString() + ' jobs';
+            }
+        }
+
+        $('#wa-eta-main').text(etaMain);
+        $('#wa-eta-meta').text(etaMeta);
     }
 
     function formatTime(date) {
@@ -472,28 +562,7 @@ $(function () {
 
     // ── Helpers ────────────────────────────────────────────────────────────
     function setLiveState(live) {
-        if (live) {
-            // Respect the paused state so a successful fetch (e.g. the initial
-            // load while paused) does not visually flip the indicator to live.
-            if (isPaused) {
-                $('#live-indicator').addClass('paused');
-                $('#live-label').text('PAUSED');
-            } else {
-                $('#live-indicator').removeClass('paused');
-                $('#live-label').text('LIVE');
-            }
-        } else {
-            $('#live-label').text('ERROR');
-        }
-    }
-
-    // Apply the paused UI (button label, indicator, status text) without polling.
-    function applyPausedUi() {
-        clearInterval(updateTimer);
-        $('#btn-pause-resume').html('<i class="fas fa-play me-1"></i>Resume');
-        $('#live-indicator').addClass('paused');
-        $('#live-label').text('PAUSED');
-        $('#last-updated-text').text('Polling paused');
+        $('#live-label').text(live ? 'LIVE' : 'ERROR');
     }
 
     function escHtml(s) {
@@ -504,22 +573,6 @@ $(function () {
     }
 
     // ── Event Handlers ─────────────────────────────────────────────────────
-
-    // Pause / Resume
-    $('#btn-pause-resume').on('click', function () {
-        isPaused = !isPaused;
-        // Persist so the paused state survives a page refresh.
-        localStorage.setItem('jobQueuePaused', isPaused ? 'true' : 'false');
-        if (isPaused) {
-            stopPolling();
-            applyPausedUi();
-        } else {
-            $(this).html('<i class="fas fa-pause me-1"></i>Pause');
-            $('#live-indicator').removeClass('paused');
-            $('#live-label').text('LIVE');
-            fetchData(); startPolling();
-        }
-    });
 
     // Filters
     $('#filter-status, #filter-queue').on('change', function () {
@@ -723,14 +776,7 @@ $(function () {
         dropdownAutoWidth: false,
     });
 
-    // Restore the paused state from a previous session before starting.
-    isPaused = localStorage.getItem('jobQueuePaused') === 'true';
-
-    fetchData(); // always load current data once, even when paused
-    if (isPaused) {
-        applyPausedUi();
-    } else {
-        startPolling();
-    }
+    fetchData();
+    startPolling();
 });
 </script>

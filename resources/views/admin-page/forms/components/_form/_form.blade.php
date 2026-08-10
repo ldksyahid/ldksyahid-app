@@ -86,10 +86,10 @@
                             <h5 class="section-title mb-3 d-flex align-items-center justify-content-between">
                                 <span><i class="fas fa-info-circle me-2"></i>Basic Information</span>
                                 <span class="badge status-badge-lg
-                                    @if($form->status === 'published') bg-success
-                                    @elseif($form->status === 'draft') bg-secondary
-                                    @elseif($form->status === 'closed') bg-warning text-dark
-                                    @else bg-dark @endif">
+                                    @if($form->status === 'published') badge-status-published
+                                    @elseif($form->status === 'draft') badge-status-draft
+                                    @elseif($form->status === 'closed') badge-status-closed
+                                    @else badge-status-archived @endif">
                                     {{ ucfirst($form->status) }}
                                 </span>
                             </h5>
@@ -122,11 +122,14 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Public URL</label>
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
                                     <code id="formPublicUrl">{{ url('/form/' . $form->slug) }}</code>
                                     <button class="copy-url-btn" onclick="copyFormUrl()" title="Copy URL">
                                         <i class="fa fa-copy"></i> Copy
                                     </button>
+                                    <a href="{{ url('/form/' . $form->slug) }}" target="_blank" class="copy-url-btn" title="Open in new tab">
+                                        <i class="fa fa-external-link-alt"></i> Open
+                                    </a>
                                 </div>
                             </div>
 

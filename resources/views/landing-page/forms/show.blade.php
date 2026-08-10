@@ -20,7 +20,9 @@
     }
 
     // Group remaining fields into sections separated by section_break fields.
-    $sections = [];
+    // Also build a map: section_break formFieldID → section index (for routing).
+    $sections            = [];
+    $sectionBreakToIndex = []; // formFieldID => secIndex
     $currentSec = [
         'title'       => $form->title,
         'description' => $form->description ?? '',
@@ -28,6 +30,8 @@
     ];
     foreach ($contentFields as $field) {
         if ($field->fieldType === 'section_break') {
+            $newSecIdx                             = count($sections) + 1;
+            $sectionBreakToIndex[$field->formFieldID] = $newSecIdx;
             $sections[] = $currentSec;
             $currentSec = [
                 'title'       => $field->label,
@@ -49,6 +53,17 @@
 
 <div class="gf-page">
     <div class="gf-wrap">
+
+        {{-- ── Preview mode notice (shown to superadmin/creator when form is closed/draft) ── --}}
+        @if(!empty($isPreviewMode))
+        <div class="gf-preview-banner">
+            <i class="fas fa-eye gf-preview-icon"></i>
+            <div class="gf-preview-text">
+                <strong>Mode Pratinjau</strong>
+                <span> — Formulir ini belum aktif. Hanya Anda (admin/pembuat/kolabolator) yang dapat melihat pratinjau ini.</span>
+            </div>
+        </div>
+        @endif
 
         {{-- ── Header Banner Image (pinned to very top when present) ── --}}
         @if($headerImageField && $headerImageField->helpText)
@@ -100,7 +115,7 @@
 
                     {{-- Fields in this section --}}
                     @foreach($section['fields'] as $field)
-                        @include('landing-page.forms.components._field-renderer', ['field' => $field])
+                        @include('landing-page.forms.components._field-renderer', ['field' => $field, 'sectionBreakToIndex' => $sectionBreakToIndex])
                     @endforeach
 
                     {{-- Section navigation --}}
@@ -131,7 +146,7 @@
             @else
                 {{-- ── Single-page form (no section_break) ─────────── --}}
                 @foreach($contentFields as $field)
-                    @include('landing-page.forms.components._field-renderer', ['field' => $field])
+                    @include('landing-page.forms.components._field-renderer', ['field' => $field, 'sectionBreakToIndex' => $sectionBreakToIndex])
                 @endforeach
 
                 {{-- ── Submit area ──────────────────────────────────── --}}

@@ -12,6 +12,7 @@ class VerifyEmailNotification extends BaseVerifyEmail
         $verificationUrl = $this->verificationUrl($notifiable);
 
         return (new MailMessage)
+            ->mailer('gmail')
             ->subject('Verifikasi Email Kamu – LDK Syahid')
             ->view('emails.verifiy-email.index', [
                 'name' => $notifiable->name,

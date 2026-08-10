@@ -27,7 +27,7 @@
                             <a href="{{ route('admin.forms.show', $form->formID) }}">{{ Str::limit($form->title, 40) }}</a>
                             &nbsp;·&nbsp; v{{ $form->version }}
                             &nbsp;·&nbsp;
-                            <span class="badge @if($form->status==='published') bg-success @elseif($form->status==='draft') bg-secondary @else bg-warning text-dark @endif">
+                            <span class="badge @if($form->status==='published') badge-status-published @elseif($form->status==='draft') badge-status-draft @elseif($form->status==='closed') badge-status-closed @else badge-status-archived @endif">
                                 {{ ucfirst($form->status) }}
                             </span>
                         </p>
@@ -193,8 +193,9 @@
     </div>
 </div>
 
+
 {{-- ===== ADD FIELD MODAL ===== --}}
-<div class="modal fade add-field-modal" id="addFieldModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade add-field-modal" id="addFieldModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content bm-card">
             <div class="bm-header bm-header--add">
@@ -205,7 +206,9 @@
                 </div>
                 <button type="button" class="btn-close bm-btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body bm-body">
+            <div class="modal-body bm-body p-0" style="overflow:hidden;">
+              <div class="d-flex" style="align-items:stretch;min-height:0;">
+                <div class="bmp-config-col">
                 <input type="hidden" id="modalFieldType">
                 <input type="hidden" id="modalFormID" value="{{ $form->formID }}">
 
@@ -218,17 +221,26 @@
                         <label class="field-modal-label">Placeholder</label>
                         <input type="text" class="form-control" id="modalPlaceholder" placeholder="e.g. Enter your name" maxlength="255">
                     </div>
-                    <div class="col-md-6" id="modalHelpTextWrap">
-                        <label class="field-modal-label">Help Text</label>
-                        <input type="text" class="form-control" id="modalHelpText" placeholder="Optional — hint shown below the field" maxlength="500">
+                    <div class="col-12" id="modalHelpTextWrap">
+                        <label class="field-modal-label" id="modalHelpTextLabel">Help Text</label>
+                        <input type="text" class="form-control" id="modalHelpText" placeholder="Optional — hint shown below the field" maxlength="2000" style="display:none;">
+                        <textarea class="form-control" id="modalHelpTextArea" rows="6" placeholder="Write paragraph text here. Press Enter for a new line." maxlength="2000" style="display:none; resize:vertical; min-height:120px;"></textarea>
                     </div>
 
-                    {{-- Image file upload (shown only for image display field) --}}
+                    {{-- Image file upload --}}
                     <div class="col-12" id="imageUrlSection" style="display:none;">
                         <label class="field-modal-label">Upload Image</label>
                         <input type="file" class="form-control" id="modalImageFile" accept="image/*">
-                        <div class="form-text">Max 5 MB. Image will be stored in Google Drive and displayed in the form.</div>
+                        <div class="form-text">Max 5 MB. Stored in Google Drive.</div>
                     </div>
+
+                    {{-- Video file upload --}}
+                    <div class="col-12" id="videoUrlSection" style="display:none;">
+                        <label class="field-modal-label">Upload Video</label>
+                        <input type="file" class="form-control" id="modalVideoFile" accept="video/mp4,video/webm,video/quicktime">
+                        <div class="form-text">Max 300 MB. Supported: MP4, WebM, MOV. Stored in Google Drive — plays directly in the form.</div>
+                    </div>
+
                     <div class="col-12" id="modalRequiredWrap">
                         <div class="bm-required-toggle">
                             <input class="form-check-input" type="checkbox" id="modalIsRequired">
@@ -328,8 +340,38 @@
                         </div>
                         <div class="form-text mt-1">Leave all unchecked to allow any file type.</div>
                     </div>
+                </div>{{-- end row g-3 --}}
+                </div>{{-- end bmp-config-col --}}
+
+                {{-- ── Live Preview Panel ───────────────── --}}
+                <div class="bmp-preview-col">
+                    <div class="bmp-preview-header">
+                        <div class="bmp-preview-header-left"><i class="fas fa-eye me-1"></i>Live Preview</div>
+                        <div class="bmp-preview-tabs">
+                            <button class="bmp-preview-tab active" data-view="desktop" title="Desktop">
+                                <i class="fas fa-desktop"></i>
+                            </button>
+                            <button class="bmp-preview-tab" data-view="mobile" title="Mobile">
+                                <i class="fas fa-mobile-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bmp-preview-view bmp-preview-view--desktop">
+                        <div id="modalPreviewField" class="bmp-preview-field"></div>
+                    </div>
+                    <div class="bmp-preview-view bmp-preview-view--mobile" style="display:none;">
+                        <div class="bmp-phone-frame">
+                            <div class="bmp-phone-notch"></div>
+                            <div class="bmp-phone-screen">
+                                <div id="modalPreviewFieldMobile" class="bmp-preview-field bmp-preview-field--phone"></div>
+                            </div>
+                            <div class="bmp-phone-home"></div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+              </div>{{-- end d-flex --}}
+            </div>{{-- end bm-body --}}
             <div class="bm-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                     <i class="fa fa-times me-1"></i> Cancel
@@ -343,7 +385,7 @@
 </div>
 
 {{-- ===== EDIT FIELD MODAL ===== --}}
-<div class="modal fade" id="editFieldModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="editFieldModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content bm-card">
             <div class="bm-header bm-header--edit">
@@ -365,9 +407,22 @@
                         <label class="field-modal-label">Placeholder</label>
                         <input type="text" class="form-control" id="editPlaceholder" maxlength="255">
                     </div>
-                    <div class="col-md-6" id="editHelpTextWrap">
-                        <label class="field-modal-label">Help Text</label>
-                        <input type="text" class="form-control" id="editHelpText" maxlength="500">
+                    <div class="col-12" id="editHelpTextWrap">
+                        <label class="field-modal-label" id="editHelpTextLabel">Help Text</label>
+                        <input type="text" class="form-control" id="editHelpText" maxlength="2000" style="display:none;">
+                        <textarea class="form-control" id="editHelpTextArea" rows="6" placeholder="Write paragraph text here. Press Enter for a new line." maxlength="2000" style="display:none; resize:vertical; min-height:120px;"></textarea>
+                    </div>
+
+                    {{-- Video file upload (edit) --}}
+                    <div class="col-12" id="editVideoUrlSection" style="display:none;">
+                        <div id="editCurrentVideoPreview" style="display:none; margin-bottom:10px;">
+                            <a id="editCurrentVideoLink" href="#" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-play-circle me-1"></i> Preview current video
+                            </a>
+                        </div>
+                        <label class="field-modal-label">Replace Video <small class="text-muted">(optional)</small></label>
+                        <input type="file" class="form-control" id="editVideoFile" accept="video/mp4,video/webm,video/quicktime">
+                        <div class="form-text">Leave blank to keep the current video. Max 300 MB.</div>
                     </div>
 
                     {{-- Image file upload (shown only for image display field) --}}
@@ -395,6 +450,25 @@
                         <button type="button" class="btn btn-sm btn-outline-secondary mt-1" onclick="addEditOption()">
                             <i class="fa fa-plus me-1"></i> Add Option
                         </button>
+                    </div>
+
+                    {{-- Section Routing (radio only) --}}
+                    <div class="col-12" id="editSectionRoutingWrap" style="display:none;">
+                        <div class="sr-panel">
+                            <div class="sr-panel-header">
+                                <div class="sr-panel-title">
+                                    <i class="fas fa-code-branch me-1"></i>Section Routing
+                                </div>
+                                <label class="sr-toggle-label">
+                                    <input type="checkbox" id="editRoutingEnabled" onchange="onRoutingToggle(this)">
+                                    <span class="sr-toggle-track"><span class="sr-toggle-thumb"></span></span>
+                                </label>
+                            </div>
+                            <div id="editRoutingBody" style="display:none;">
+                                <p class="sr-hint">Choose which section respondents jump to based on their answer.</p>
+                                <div id="editRoutingRows"></div>
+                            </div>
+                        </div>
                     </div>
 
                     {{-- Linear Scale config (edit) --}}

@@ -20,13 +20,13 @@ class JobQueueLogController extends Controller
 
     public function data(Request $request)
     {
-        $now               = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
-        $dailyLimitActive  = $this->isGmailDailyLimitActive();
-        $status            = $request->get('status', 'all');
+        $now       = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
+        $threshold = $this->dailyLimitThreshold($now);
+        $status    = $request->get('status', 'all');
 
         // Failed jobs come from a different table — handle separately
         if ($status === 'failed') {
-            return $this->failedData($request, $now, $dailyLimitActive);
+            return $this->failedData($request, $now);
         }
 
         $query = TrJobQueue::query();
@@ -40,21 +40,36 @@ class JobQueueLogController extends Controller
                 break;
             case 'delayed':
                 $query->whereNull('reservedDate')->where('availableDate', '>', $now);
-                if ($dailyLimitActive) {
-                    $query->where('attempts', 0);
-                }
+                // Exclude what 'daily_limit' below already shows (avoid double-listing).
+                $query->where(function ($q) use ($threshold) {
+                    $q->where('queue', '!=', 'email')
+                      ->orWhere('attempts', 0)
+                      ->orWhere('availableDate', '<=', $threshold);
+                });
                 break;
             case 'daily_limit':
-                $query->whereNull('reservedDate')->where('availableDate', '>', $now)->where('attempts', '>', 0);
+                // Email-only concept (Brevo/Gmail daily cap). Distinguished
+                // from a normal short retry/rate-limit delay (never more than
+                // ~60s for this job type) by the delay being well past
+                // $threshold — only SendSingleMailJob::holdUntilReset()-style
+                // holds (until the next midnight reset) push availableDate
+                // that far out. See dailyLimitThreshold() for why this
+                // doesn't use the mail_daily_limit_exceeded cache flag.
+                $query->where('queue', 'email')
+                      ->whereNull('reservedDate')->where('attempts', '>', 0)
+                      ->where('availableDate', '>', $threshold);
                 break;
             case 'stuck':
                 $query->where('attempts', '>=', 8);
-                if ($dailyLimitActive) {
-                    $query->where(function ($q) use ($now) {
-                        $q->where('availableDate', '<=', $now)
-                          ->orWhereNotNull('reservedDate');
-                    });
-                }
+                // Only hide EMAIL jobs here that are already shown under the
+                // 'daily_limit' filter instead (avoids listing them twice).
+                // A stuck WhatsApp job must always show under "Stuck" — WA
+                // has no daily_limit bucket to overlap with in the first place.
+                $query->where(function ($q) use ($threshold) {
+                    $q->where('queue', '!=', 'email')
+                      ->orWhere('availableDate', '<=', $threshold)
+                      ->orWhereNotNull('reservedDate');
+                });
                 break;
         }
 
@@ -68,12 +83,12 @@ class JobQueueLogController extends Controller
 
         $jobs = $query->orderByDesc('ID')->paginate(15);
 
-        $jobs->getCollection()->transform(function ($job) use ($now, $dailyLimitActive) {
+        $jobs->getCollection()->transform(function ($job) use ($now) {
             $payload            = json_decode($job->payload, true) ?? [];
             $job->job_type      = $this->parseJobType($payload);
             $job->job_full      = $payload['displayName'] ?? 'Unknown';
             $job->job_uuid      = $payload['uuid'] ?? '-';
-            $job->job_status    = $this->computeStatus($job, $now, $dailyLimitActive);
+            $job->job_status    = $this->computeStatus($job, $now);
             $job->mail_info     = $this->extractMailInfo($payload);
             $job->payload_clean = $this->cleanPayload($payload);
             unset($job->payload);
@@ -81,16 +96,17 @@ class JobQueueLogController extends Controller
         });
 
         return response()->json([
-            'jobs'              => $jobs,
-            'stats'             => $this->getStats($now, $dailyLimitActive),
-            'queues'            => TrJobQueue::distinct()->pluck('queue'),
-            'server_time'       => $now,
-            'gmail_daily_limit' => $dailyLimitActive,
-            'is_failed_view'    => false,
+            'jobs'                      => $jobs,
+            'stats'                     => $this->getStats($now),
+            'queues'                    => TrJobQueue::distinct()->pluck('queue'),
+            'server_time'               => $now,
+            'is_failed_view'            => false,
+            'kirimdev_account_status'   => $this->kirimdevAccountStatus(),
+            'whatsapp_rate_per_minute'  => (int) env('WHATSAPP_RATE_PER_MINUTE', 8),
         ]);
     }
 
-    private function failedData(Request $request, string $now, bool $dailyLimitActive)
+    private function failedData(Request $request, string $now)
     {
         $query = DB::table('failed_jobs');
 
@@ -123,12 +139,13 @@ class JobQueueLogController extends Controller
         });
 
         return response()->json([
-            'jobs'              => $jobs,
-            'stats'             => $this->getStats($now, $dailyLimitActive),
-            'queues'            => TrJobQueue::distinct()->pluck('queue'),
-            'server_time'       => $now,
-            'gmail_daily_limit' => $dailyLimitActive,
-            'is_failed_view'    => true,
+            'jobs'                      => $jobs,
+            'stats'                     => $this->getStats($now),
+            'queues'                    => TrJobQueue::distinct()->pluck('queue'),
+            'server_time'               => $now,
+            'is_failed_view'            => true,
+            'kirimdev_account_status'   => $this->kirimdevAccountStatus(),
+            'whatsapp_rate_per_minute'  => (int) env('WHATSAPP_RATE_PER_MINUTE', 8),
         ]);
     }
 
@@ -192,47 +209,92 @@ class JobQueueLogController extends Controller
 
     public function destroyStuck()
     {
-        $query = TrJobQueue::where('attempts', '>=', 8);
+        $now       = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
+        $threshold = $this->dailyLimitThreshold($now);
 
-        // When daily limit is active, don't delete jobs that are just waiting for reset
-        if ($this->isGmailDailyLimitActive()) {
-            $now = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
-            $query->where(function ($q) use ($now) {
-                $q->where('availableDate', '<=', $now)
+        // Don't delete email jobs that are just being held for the Brevo/Gmail
+        // daily reset — matches exactly what the "Stuck" filter/count show
+        // (see computeStatus()/getStats()), so this button never deletes more
+        // than what the admin can see under that status.
+        $query = TrJobQueue::where('attempts', '>=', 8)
+            ->where(function ($q) use ($threshold) {
+                $q->where('queue', '!=', 'email')
+                  ->orWhere('availableDate', '<=', $threshold)
                   ->orWhereNotNull('reservedDate');
             });
-        }
 
         $count = $query->delete();
         return response()->json(['success' => true, 'deleted' => $count]);
     }
 
-    private function getStats(string $now, bool $dailyLimitActive): array
+    private function getStats(string $now): array
     {
+        $threshold   = $this->dailyLimitThreshold($now);
         $delayedBase = TrJobQueue::whereNull('reservedDate')->where('availableDate', '>', $now);
         $stuckBase   = TrJobQueue::where('attempts', '>=', 8);
 
-        $dailyLimitCount = 0;
-        if ($dailyLimitActive) {
-            $dailyLimitCount = (clone $delayedBase)->where('attempts', '>', 0)->count();
-            $delayedCount    = (clone $delayedBase)->where('attempts', 0)->count();
-            $stuckCount      = (clone $stuckBase)->where(function ($q) use ($now) {
-                $q->where('availableDate', '<=', $now)->orWhereNotNull('reservedDate');
-            })->count();
-        } else {
-            $delayedCount = $delayedBase->count();
-            $stuckCount   = $stuckBase->count();
-        }
+        // Email-only (Brevo/Gmail daily cap) — see dailyLimitThreshold() for
+        // why this is derived from the delay itself rather than a live
+        // Cache::has() flag. A rate-limited WhatsApp job (attempts>0,
+        // availableDate in the near future) is unrelated and never counted here.
+        $dailyLimitCount = TrJobQueue::where('queue', 'email')
+            ->whereNull('reservedDate')
+            ->where('attempts', '>', 0)
+            ->where('availableDate', '>', $threshold)
+            ->count();
+
+        // Everything else still delayed (any non-email job regardless of
+        // attempts, plus email jobs with a short/normal retry delay) stays "Delayed".
+        $delayedCount = $delayedBase->count() - $dailyLimitCount;
+
+        // Same email-only exclusion as the 'stuck' filter case in data() —
+        // a stuck WhatsApp job must always be counted here.
+        $stuckCount = (clone $stuckBase)->where(function ($q) use ($threshold) {
+            $q->where('queue', '!=', 'email')
+              ->orWhere('availableDate', '<=', $threshold)->orWhereNotNull('reservedDate');
+        })->count();
 
         return [
-            'total'       => TrJobQueue::count(),
-            'pending'     => TrJobQueue::whereNull('reservedDate')->where('availableDate', '<=', $now)->count(),
-            'processing'  => TrJobQueue::whereNotNull('reservedDate')->count(),
-            'delayed'     => $delayedCount,
-            'stuck'       => $stuckCount,
-            'daily_limit' => $dailyLimitCount,
-            'failed'      => DB::table('failed_jobs')->count(),
+            'total'             => TrJobQueue::count(),
+            'pending'           => TrJobQueue::whereNull('reservedDate')->where('availableDate', '<=', $now)->count(),
+            'processing'        => TrJobQueue::whereNotNull('reservedDate')->count(),
+            'delayed'           => $delayedCount,
+            'stuck'             => $stuckCount,
+            'daily_limit'       => $dailyLimitCount,
+            'failed'            => DB::table('failed_jobs')->count(),
+            // Queue-scoped counts for the two separate "Estimated Completion"
+            // cards — the generic 'pending' above mixes every queue together,
+            // which would wrongly blend the email (Brevo daily-limit) and
+            // WhatsApp (rate-limit-only, no daily cap) bottlenecks into one
+            // misleading number if used for ETA math. Deliberately just "not
+            // yet reserved" — see dailyLimitThreshold() for why this can't
+            // depend on a live cache flag either.
+            'email_pending'     => TrJobQueue::where('queue', 'email')->whereNull('reservedDate')->count(),
+            'whatsapp_pending'  => TrJobQueue::where('queue', 'whatsapp')->whereNull('reservedDate')->count(),
         ];
+    }
+
+    /**
+     * Datetime string past which an unreserved, already-attempted email job's
+     * delay can only be explained by SendSingleMailJob's Brevo/Gmail
+     * daily-limit hold (holdUntilReset(), delayed until the next midnight
+     * reset) — never by a normal transient retry.
+     *
+     * This deliberately does NOT read the 'mail_daily_limit_exceeded' cache
+     * flag (Cache::has(), see WaitForMailDailyReset) — that flag only gets
+     * refreshed while the worker is actively re-attempting a held job. Once a
+     * job is delayed for hours, nothing touches it again until its
+     * availableDate arrives, so the flag can lapse/read false in between even
+     * though the backlog is still very much there. The job's own recorded
+     * delay is a stable signal that isn't subject to that flicker.
+     *
+     * Ordinary retries for this job type never exceed ~60s (RateLimited's
+     * decay window, or SendSingleMailJob::backoff() = [30, 60]), so anything
+     * delayed more than 5 minutes out is unambiguously a daily-limit hold.
+     */
+    private function dailyLimitThreshold(string $now): string
+    {
+        return Carbon::parse($now)->addMinutes(5)->format('Y-m-d H:i:s');
     }
 
     private function parseJobType(array $payload): string
@@ -245,9 +307,16 @@ class JobQueueLogController extends Controller
         return 'Unknown';
     }
 
-    private function computeStatus($job, string $now, bool $dailyLimitActive): string
+    private function computeStatus($job, string $now): string
     {
-        if ($dailyLimitActive && $job->availableDate > $now && is_null($job->reservedDate) && $job->attempts > 0) {
+        // Email-only concept (Brevo/Gmail daily cap) — see dailyLimitThreshold()
+        // for why this is based on the delay itself, not a live cache flag.
+        // Without the queue check, a WhatsApp job that got rate-limiter-released
+        // (attempts>0, availableDate briefly in the future — completely normal
+        // for it) would be mislabeled "Daily Limit", even though the two have
+        // nothing to do with each other.
+        if ($job->queue === 'email' && is_null($job->reservedDate) && $job->attempts > 0
+            && $job->availableDate > $this->dailyLimitThreshold($now)) {
             return 'daily_limit';
         }
         if ($job->attempts >= 8) return 'stuck';
@@ -256,10 +325,15 @@ class JobQueueLogController extends Controller
         return 'pending';
     }
 
-    private function isGmailDailyLimitActive(): bool
+    /**
+     * WhatsApp (Kirimdev) phone number status, populated by the
+     * kirimdev:check-account-status scheduled command. Null means the cache
+     * has never been populated (e.g. right after deploy, or Kirimdev isn't
+     * configured yet) — the frontend renders that as "Unknown", not an error.
+     */
+    private function kirimdevAccountStatus(): ?string
     {
-        // Cache key generalized from Gmail to any mail relay (Brevo).
-        return Cache::has('mail_daily_limit_exceeded');
+        return Cache::get('kirimdev_account_status');
     }
 
     private function extractMailInfo(array $payload): array

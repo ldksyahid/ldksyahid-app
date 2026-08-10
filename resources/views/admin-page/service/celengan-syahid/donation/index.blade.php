@@ -72,23 +72,34 @@
             'options' => $paymentStatusOptions ?? [],
         ],
         [
+            'key' => 'metode_pembayaran',
+            'label' => 'Payment Method',
+            'width' => '150px',
+            'sortable' => false,
+            'filter' => 'select',
+            'filterKey' => 'metode_pembayaran',
+            'placeholder' => 'All Methods',
+            'options' => $paymentMethodOptions ?? [],
+        ],
+        [
             'key' => 'payment_link',
             'label' => 'Payment Link',
-            'width' => '200px',
+            'width' => '160px',
             'sortable' => false,
         ],
     ];
 
     $columnWidths = [
-        1 => '50px',
-        2 => '50px',
-        3 => '180px',
-        4 => '150px',
-        5 => '200px',
-        6 => '200px',
-        7 => '130px',
-        8 => '200px',
-        9 => '120px',
+        1  => '50px',
+        2  => '50px',
+        3  => '180px',
+        4  => '150px',
+        5  => '200px',
+        6  => '200px',
+        7  => '130px',
+        8  => '150px',
+        9  => '160px',
+        10 => '120px',
     ];
 @endphp
 
@@ -106,7 +117,7 @@
     :columnWidths="$columnWidths"
     ajaxUrl="{{ route('admin.service.index.donation') }}"
     csrfToken="{{ csrf_token() }}"
-    deleteUrl="{{ url('admin/service/celengansyahid/donation') }}"
+    deleteUrl="{{ url('admin/celengan-syahid/donation') }}"
     bulkDeleteUrl="{{ route('admin.service.donation.bulk-delete') }}"
     :includeSelect2="true"
     defaultSortBy="created_at"
@@ -117,5 +128,18 @@
     select2Field="campaign_id"
     select2Placeholder="All Campaigns"
     :isSuperadmin="$isSuperadmin"
-/>
+>
+    <x-slot name="leftButtons">
+        <a href="{{ route('admin.service.donation.create') }}" class="btn btn-custom-primary me-2">
+            <i class="fa fa-plus me-1"></i> Add Donation
+        </a>
+        <a href="#" id="exportCsvBtn" class="btn btn-custom-primary" onclick="exportDonationsCsv(); return false;">
+            <i class="fa fa-file-csv me-1"></i> Export CSV
+        </a>
+    </x-slot>
+</x-admin-index.template>
 @endsection
+
+@push('scripts')
+@include('admin-page.service.celengan-syahid.donation.components._index-scripts')
+@endpush

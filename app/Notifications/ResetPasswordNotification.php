@@ -15,6 +15,7 @@ class ResetPasswordNotification extends BaseResetPassword
         ], false));
 
         return (new MailMessage)
+            ->mailer('gmail')
             ->subject('Reset Password Kamu – LDK Syahid')
             ->view('emails.reset-password.index', [
                 'name' => $notifiable->name ?? 'Pengguna',

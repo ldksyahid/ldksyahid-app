@@ -24,14 +24,16 @@
             </p>
 
             {{-- Links --}}
-            @if($form->isMultipleSubmit)
-            <a href="{{ route('forms.show', $form->slug) }}" class="gf-state-link">
-                <i class="fas fa-redo me-1"></i> Kirim jawaban lain
-            </a>
-            @endif
-            <a href="{{ url('/') }}" class="gf-state-link">
-                <i class="fas fa-home me-1"></i> Kembali ke beranda
-            </a>
+            <div class="gf-state-links">
+                @if($form->isMultipleSubmit)
+                <a href="{{ route('forms.show', $form->slug) }}" class="gf-state-link">
+                    <i class="fas fa-redo me-1"></i> Kirim jawaban lain
+                </a>
+                @endif
+                <a href="{{ url('/') }}" class="gf-state-link">
+                    <i class="fas fa-home me-1"></i> Kembali ke beranda
+                </a>
+            </div>
 
         </div>
     </div>

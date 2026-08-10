@@ -55,6 +55,7 @@
 
         {{-- Superadmin Sidebar --}}
         @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
+            @php $twoFaAllowed = in_array(auth()->user()->email ?? '', config('services.two_fa.allowed_users', [])); @endphp
             <div class="navbar-nav w-100">
                 <a href="/admin/dashboard" class="nav-item nav-link {{ $isActive('admin/dashboard') ? 'active' : '' }}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="/admin/user" class="nav-item nav-link {{ $isActive('admin/user') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>User</a>
@@ -70,11 +71,16 @@
                 <a href="/admin/schedule" class="nav-item nav-link {{ $isActive('admin/schedule') ? 'active' : '' }}"><i class="fa fa-list-alt me-2"></i>Schedule</a>
                 <a href="/admin/news" class="nav-item nav-link {{ $isActive('admin/news') ? 'active' : '' }}"><i class="fa fa-newspaper me-2"></i>News</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/service/celengansyahid']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/celengan-syahid']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
-                        <a href="/admin/service/celengansyahid/dashboard" class="dropdown-item {{ $isActive('admin/service/celengansyahid/dashboard') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Dashboard</a>
-                        <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item {{ $isActive('admin/service/celengansyahid/campaigns') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Campaign</a>
-                        <a href="/admin/service/celengansyahid/donations" class="dropdown-item {{ $isActive('admin/service/celengansyahid/donations') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Donation</a>
+                        <a href="/admin/celengan-syahid/dashboard" class="dropdown-item {{ $isActive('admin/celengan-syahid/dashboard') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Dashboard</a>
+                        <a href="/admin/celengan-syahid/campaigns" class="dropdown-item {{ ($isActive('admin/celengan-syahid/campaigns') || $isActive('admin/celengan-syahid/campaign')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Campaign</a>
+                        <a href="/admin/celengan-syahid/donations" class="dropdown-item {{ ($isActive('admin/celengan-syahid/donations') || $isActive('admin/celengan-syahid/donation')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Donation</a>
+                        <a href="/admin/celengan-syahid/withdrawals" class="dropdown-item {{ $isActive('admin/celengan-syahid/withdrawal*') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Withdrawal</a>
+                        <a href="/admin/celengan-syahid/balance-report" class="dropdown-item {{ $isActive('admin/celengan-syahid/balance-report') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Balance Report</a>
+                        @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
+                        <a href="/admin/celengan-syahid/audit-logs" class="dropdown-item {{ $isActive('admin/celengan-syahid/audit-logs') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Audit Log</a>
+                        @endif
                     </div>
                 </div>
                 <div class="nav-item dropdown">
@@ -118,6 +124,15 @@
                     </div>
                 </div>
                 <a href="/admin/job-queue-log" class="nav-item nav-link {{ $isActive('admin/job-queue-log') ? 'active' : '' }}"><i class="fas fa-stream me-2"></i>Job Queue Log</a>
+                @if($twoFaAllowed)
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/security/2fa']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-user-shield me-2"></i>2FA Security</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="{{ route('admin.security.2fa') }}" class="dropdown-item {{ ($isActive('admin/security/2fa') && !$isActive('admin/security/2fa/users')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Setup</a>
+                        <a href="{{ route('admin.security.2fa.users') }}" class="dropdown-item {{ $isActive('admin/security/2fa/users') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Users</a>
+                    </div>
+                </div>
+                @endif
                 <a href="/admin/setting" class="nav-item nav-link {{ $isActive('admin/setting') ? 'active' : '' }}"><i class="fas fa-cog me-2"></i>Setting</a>
             </div>
 
@@ -162,13 +177,19 @@
                 <a href="/admin/news" class="nav-item nav-link {{ $isActive('admin/news') ? 'active' : '' }}"><i class="fa fa-newspaper me-2"></i>News</a>
                 <a href="/admin/event" class="nav-item nav-link {{ $isActive('admin/event') ? 'active' : '' }}"><i class="fas fa-calendar-check me-2"></i>Event</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/service/celengansyahid']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
+                    <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/celengan-syahid']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-donate me-2"></i>Celsyahid</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
-                        <a href="/admin/service/celengansyahid/dashboard" class="dropdown-item {{ $isActive('admin/service/celengansyahid/dashboard') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Dashboard</a>
-                        <a href="/admin/service/celengansyahid/campaigns" class="dropdown-item {{ $isActive('admin/service/celengansyahid/campaigns') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Campaign</a>
-                        <a href="/admin/service/celengansyahid/donations" class="dropdown-item {{ $isActive('admin/service/celengansyahid/donations') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Donation</a>
+                        <a href="/admin/celengan-syahid/dashboard" class="dropdown-item {{ $isActive('admin/celengan-syahid/dashboard') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Dashboard</a>
+                        <a href="/admin/celengan-syahid/campaigns" class="dropdown-item {{ ($isActive('admin/celengan-syahid/campaigns') || $isActive('admin/celengan-syahid/campaign')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Campaign</a>
+                        <a href="/admin/celengan-syahid/donations" class="dropdown-item {{ ($isActive('admin/celengan-syahid/donations') || $isActive('admin/celengan-syahid/donation')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Donation</a>
+                        <a href="/admin/celengan-syahid/withdrawals" class="dropdown-item {{ $isActive('admin/celengan-syahid/withdrawal*') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Withdrawal</a>
+                        <a href="/admin/celengan-syahid/balance-report" class="dropdown-item {{ $isActive('admin/celengan-syahid/balance-report') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Balance Report</a>
+                        @if (LFC::getRoleName(auth()->user()->getRoleNames()) == 'Superadmin')
+                        <a href="/admin/celengan-syahid/audit-logs" class="dropdown-item {{ $isActive('admin/celengan-syahid/audit-logs') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Audit Log</a>
+                        @endif
                     </div>
                 </div>
+                <a href="/admin/forms" class="nav-item nav-link {{ $isActive('admin/forms') ? 'active' : '' }}"><i class="fas fa-clipboard-list me-2"></i>Dynamic Forms</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/service/shortlink']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
@@ -196,6 +217,7 @@
                 </div>
                 <a href="/admin/ktaldksyahid" class="nav-item nav-link {{ $isActive('admin/ktaldksyahid') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i>KTA LDK Syahid</a>
                 <a href="/admin/catalog/books" class="nav-item nav-link {{ $isActive('admin/catalog/books') ? 'active' : '' }}"><i class="fa fa-book me-2"></i>Book Catalog</a>
+                <a href="/admin/forms" class="nav-item nav-link {{ $isActive('admin/forms') ? 'active' : '' }}"><i class="fas fa-clipboard-list me-2"></i>Dynamic Forms</a>
             </div>
 
         {{-- HelperEventMart Sidebar --}}
@@ -208,6 +230,7 @@
                         <a href="/admin/jumbotron" class="dropdown-item {{ $isActive('admin/jumbotron') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Jumbotron</a>
                     </div>
                 </div>
+                <a href="/admin/forms" class="nav-item nav-link {{ $isActive('admin/forms') ? 'active' : '' }}"><i class="fas fa-clipboard-list me-2"></i>Dynamic Forms</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/service/shortlink']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
@@ -235,6 +258,7 @@
                         <a href="/admin/about/contact/message" class="dropdown-item {{ $isActive('admin/about/contact/message') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Contact Us Message</a>
                     </div>
                 </div>
+                <a href="/admin/forms" class="nav-item nav-link {{ $isActive('admin/forms') ? 'active' : '' }}"><i class="fas fa-clipboard-list me-2"></i>Dynamic Forms</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/service/shortlink']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-tools me-2"></i>Service</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
@@ -280,6 +304,7 @@
                     </div>
                 </div>
                 <a href="/admin/catalog/books" class="nav-item nav-link {{ $isActive('admin/catalog/books') ? 'active' : '' }}"><i class="fa fa-book me-2"></i>Book Catalog</a>
+                <a href="/admin/forms" class="nav-item nav-link {{ $isActive('admin/forms') ? 'active' : '' }}"><i class="fas fa-clipboard-list me-2"></i>Dynamic Forms</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/finance-report']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fa fa-file-alt me-2"></i>Reports</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
@@ -343,11 +368,14 @@ $(document).ready(function() {
         }
     });
 
-    // Open dropdown that has active submenu on page load (no animation)
-    $('.sidebar .dropdown-item.active').each(function() {
+    // Open dropdown if any child item is active OR the toggle itself is active
+    $('.sidebar .dropdown-item.active, .sidebar .dropdown-toggle.active').each(function() {
         var $dropdown = $(this).closest('.dropdown');
-        $dropdown.find('.dropdown-menu').addClass('show').show();
-        $dropdown.find('.dropdown-toggle').attr('aria-expanded', 'true');
+        var $menu     = $dropdown.find('.dropdown-menu');
+        if (!$menu.hasClass('show')) {
+            $menu.addClass('show').show();
+            $dropdown.find('.dropdown-toggle').attr('aria-expanded', 'true');
+        }
     });
 });
 </script>

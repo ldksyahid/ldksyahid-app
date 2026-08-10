@@ -1,0 +1,432 @@
+<?php
+
+namespace App\Http\Controllers\CelenganSyahid\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\LibraryFunctionController as LFC;
+use App\Models\Campaign;
+use App\Models\CelsyahidAuditLog;
+use App\Models\Withdrawal;
+use App\Services\BisaTopup;
+use App\Services\GoogleDrive;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Laravolt\Indonesia\Models\City;
+use Laravolt\Indonesia\Models\Province;
+use RealRashid\SweetAlert\Facades\Alert;
+
+class CampaignController extends Controller
+{
+    public $pathCampaignsGDrive = '1w48iZmjPCkYwVUL26zIj8fBIX37OMaGT';
+
+    public function indexAdminCampaign(Request $request)
+    {
+        $items       = Campaign::searchAdminCampaigns($request);
+        $tableConfig = Campaign::getTableConfig();
+
+        $items->getCollection()->transform(function ($campaign) {
+            $campaign->target_biaya  = LFC::formatRupiah($campaign->target_biaya);
+            $campaign->has_donations = $campaign->donation_count > 0;
+            return $campaign;
+        });
+
+        $categoryOptions = Campaign::getCategoryOptions();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody'  => view('components.admin-index.index-table', compact('items', 'tableConfig'))->render(),
+                'pagination' => $items->appends($request->query())->links()->render(),
+                'total'      => $items->total(),
+                'from'       => $items->firstItem(),
+                'to'         => $items->lastItem(),
+            ]);
+        }
+
+        return view('admin-page.service.celengan-syahid.campaign.index',
+            compact('items', 'tableConfig', 'categoryOptions'))
+            ->with('title', 'Celengan Syahid');
+    }
+
+    public function createAdminCampaign()
+    {
+        $provinces = Province::pluck('name', 'id');
+        return view('admin-page.service.celengan-syahid.campaign.create',
+            compact('provinces'), ['title' => 'Celengan Syahid']);
+    }
+
+    public function storeAdminCampaign(Request $request)
+    {
+        // Idempotency guard: Chrome queues and replays POST requests during slow GDrive uploads.
+        // If this link was created in the last 5 minutes, treat it as the same submission.
+        $recentCampaign = Campaign::where('link', $request->input('link'))
+            ->where('created_at', '>=', now()->subMinutes(5))
+            ->first();
+
+        if ($recentCampaign) {
+            Alert::success('Success', 'Campaign has been uploaded!');
+            return redirect('/admin/celengan-syahid/campaigns');
+        }
+
+        $request->validate([
+            'judul'        => 'required|string|max:255',
+            'link'         => 'required|string|max:255|unique:campaigns,link',
+            'kategori'     => 'required|string',
+            'target_biaya' => 'required',
+            'cerita'       => 'required',
+            'tujuan'       => 'required',
+            'deadline'     => 'required|date',
+            'nama_pj'      => 'required|string|max:255',
+            'telp_pj'      => 'required|string',
+            'poster'       => 'required|file|mimes:jpg,jpeg,png|max:5120',
+        ], [
+            'link.unique' => 'This campaign link is already taken. Please choose a different link.',
+        ]);
+
+        try {
+            $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
+
+            $fileNamePoster = time() . '_poster_' . $request->file('poster')->getClientOriginalName();
+            $uploadResultPoster = $gdriveService->uploadImage(
+                $request->file('poster'),
+                $fileNamePoster,
+                $this->pathCampaignsGDrive . '/' . $fileNamePoster
+            );
+
+            $uploadResultLogoPic = [];
+            if ($request->hasFile('logo_pj')) {
+                $fileNameLogo = time() . '_logo-pic_' . $request->file('logo_pj')->getClientOriginalName();
+                $uploadResultLogoPic = $gdriveService->uploadImage(
+                    $request->file('logo_pj'),
+                    $fileNameLogo,
+                    $this->pathCampaignsGDrive . '/' . $fileNameLogo
+                );
+            }
+
+            $campaign = Campaign::createCampaign($request->all(), $uploadResultPoster, $uploadResultLogoPic);
+
+            CelsyahidAuditLog::record('campaign.create', 'campaign', $campaign->id, 'Created campaign: ' . $request->input('judul'));
+
+            Alert::success('Success', 'Campaign has been uploaded!');
+        } catch (\Exception $e) {
+            Log::error('storeAdminCampaign: ' . $e->getMessage());
+            Alert::error('Error', 'Failed to save campaign. Please try again or contact the administrator.');
+        }
+
+        return redirect('/admin/celengan-syahid/campaigns');
+    }
+
+    public function editAdminCampaign($id)
+    {
+        $province = Province::pluck('name', 'id');
+        $data     = Campaign::findOrFail($id);
+        return view('admin-page.service.celengan-syahid.campaign.update',
+            compact('province', 'data'), ['title' => 'Celengan Syahid']);
+    }
+
+    public function updateAdminCampaign(Request $request, $id)
+    {
+        $request->validate([
+            'judul'    => 'required|string|max:255',
+            'link'     => 'required|string|max:255|unique:campaigns,link,' . $id,
+            'kategori' => 'required|string',
+            'deadline' => 'nullable|date',
+            'nama_pj'  => 'required|string|max:255',
+            'poster'   => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
+        ], [
+            'link.unique' => 'This campaign link is already taken. Please choose a different link.',
+        ]);
+
+        try {
+            $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
+            $campaign      = Campaign::findOrFail($id);
+
+            if ($request->hasFile('poster')) {
+                $fileNamePoster = time() . '_poster_' . $request->file('poster')->getClientOriginalName();
+                $uploaded = $gdriveService->uploadImage(
+                    $request->file('poster'),
+                    $fileNamePoster,
+                    $this->pathCampaignsGDrive . '/' . $fileNamePoster
+                );
+                if (!empty($uploaded)) {
+                    if ($campaign->gdrive_id) {
+                        $gdriveService->deleteImage($campaign->gdrive_id);
+                    }
+                    $campaign->update([
+                        'poster'    => $uploaded['fileName'],
+                        'gdrive_id' => $uploaded['gdriveID'],
+                    ]);
+                }
+            }
+
+            if ($request->hasFile('logo_pj')) {
+                $fileNameLogo = time() . '_logo-pic_' . $request->file('logo_pj')->getClientOriginalName();
+                $uploaded = $gdriveService->uploadImage(
+                    $request->file('logo_pj'),
+                    $fileNameLogo,
+                    $this->pathCampaignsGDrive . '/' . $fileNameLogo
+                );
+                if (!empty($uploaded)) {
+                    if ($campaign->gdrive_id_1) {
+                        $gdriveService->deleteImage($campaign->gdrive_id_1);
+                    }
+                    $campaign->update([
+                        'logo_pj'    => $uploaded['fileName'],
+                        'gdrive_id_1' => $uploaded['gdriveID'],
+                    ]);
+                }
+            }
+
+            Campaign::updateCampaign($id, $request->all());
+
+            CelsyahidAuditLog::record('campaign.update', 'campaign', $id, 'Updated campaign: ' . $request->input('judul'));
+
+            toast('Campaign has been updated!', 'success')->autoClose(1500)->width('400px');
+        } catch (\Exception $e) {
+            Log::error('updateAdminCampaign: ' . $e->getMessage());
+            Alert::error('Error', 'Failed to update campaign. Please try again or contact the administrator.');
+        }
+
+        return redirect('/admin/celengan-syahid/campaigns');
+    }
+
+    public function previewAdminCampaign($id)
+    {
+        $province = Province::pluck('name', 'id');
+        $data     = Campaign::getDataDonationCampaignById($id);
+        return view('admin-page.service.celengan-syahid.campaign.view', [
+            'data'     => $data,
+            'title'    => 'Celengan Syahid',
+            'province' => $province,
+        ]);
+    }
+
+    public function financeAdminCampaign(\Illuminate\Http\Request $request, string $id)
+    {
+        $campaign = Campaign::findOrFail($id);
+
+        $withdrawals = Withdrawal::where('campaign_id', $id)
+            ->with('creator')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'tableBody'    => view('admin-page.service.celengan-syahid.campaign.components._finance._withdrawal-rows', compact('withdrawals'))->render(),
+                'total'        => $withdrawals->total(),
+                'from'         => $withdrawals->firstItem() ?? 0,
+                'to'           => $withdrawals->lastItem() ?? 0,
+                'current_page' => $withdrawals->currentPage(),
+                'last_page'    => $withdrawals->lastPage(),
+            ]);
+        }
+
+        $balance  = $campaign->getBalanceSummary();
+
+        $bisabillerBalance = Cache::remember('bisabiller_wallet_balance', 300, function () {
+            return (new BisaTopup())->walletBalance();
+        });
+
+        return view('admin-page.service.celengan-syahid.campaign.finance', [
+            'campaign'          => $campaign,
+            'balance'           => $balance,
+            'withdrawals'       => $withdrawals,
+            'bisabillerBalance' => $bisabillerBalance,
+            'title'             => 'Celengan Syahid',
+        ]);
+    }
+
+    public function destroyAdminCampaign($id)
+    {
+        try {
+            $campaign = Campaign::findOrFail($id);
+
+            // 1. Check PAID donations, but allow if the balance has been fully withdrawn
+            $paidCount = \App\Models\Donation::where('campaign_id', $id)
+                ->where('payment_status', 'PAID')
+                ->count();
+
+            if ($paidCount > 0) {
+                // Block if there is a withdrawal still in PENDING state
+                $hasPendingWithdrawal = \App\Models\Withdrawal::where('campaign_id', $id)
+                    ->where('status', 'PENDING')
+                    ->exists();
+
+                if ($hasPendingWithdrawal) {
+                    return response()->json([
+                        'success' => false,
+                        'blocked' => true,
+                        'message' => 'Cannot delete: there is a withdrawal currently in progress for this campaign. Wait until it completes.',
+                    ], 422);
+                }
+
+                // Block if available balance > 0 (paid donations not yet withdrawn)
+                $balance = $campaign->getBalanceSummary();
+                if (($balance['available'] ?? 0) > 0) {
+                    return response()->json([
+                        'success' => false,
+                        'blocked' => true,
+                        'message' => "Cannot delete: this campaign has {$paidCount} confirmed donation(s) with an unwithdrawn balance of Rp" . number_format($balance['available'], 0, ',', '.') . ". Please complete the withdrawal first.",
+                    ], 422);
+                }
+
+                // PAID donations exist but balance is 0 — all withdrawn.
+                // Before allowing, verify global DB vs Bisabiller wallet balance is reconciled.
+                // Reuses the same formula as balanceReport() so behaviour is consistent.
+                $mdrRate           = (float) config('services.bisatopup.qris_mdr_percent', 1) / 100;
+                $settlementMinutes = (int) config('services.bisatopup.settlement_minutes', 15);
+                $cutoff            = now()->subMinutes($settlementMinutes);
+                $creditSelect      = 'SUM(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) - CEIL(COALESCE(total_tagihan, jumlah_donasi + biaya_admin) * ?)) as wallet_credit';
+
+                $totalExpectedAll = (int) \App\Models\Donation::where('gateway', 'bisatopup')
+                    ->where('payment_status', 'PAID')
+                    ->selectRaw($creditSelect, [$mdrRate])
+                    ->value('wallet_credit')
+                    - (int) \App\Models\Withdrawal::where('status', 'COMPLETED')->sum('amount')
+                    - (int) \App\Models\Withdrawal::where('status', 'PENDING')->sum('amount');
+
+                $actualBalance = (new BisaTopup())->walletBalance();
+
+                if ($actualBalance !== null) {
+                    $recentCredit = (int) \App\Models\Donation::where('gateway', 'bisatopup')
+                        ->where('payment_status', 'PAID')
+                        ->where('updated_at', '>=', $cutoff)
+                        ->selectRaw($creditSelect, [$mdrRate])
+                        ->value('wallet_credit');
+
+                    $rawGap            = $totalExpectedAll - $actualBalance;
+                    $pendingSettlement = $rawGap > 0 ? min($rawGap, $recentCredit) : 0;
+                    $totalExpected     = $totalExpectedAll - $pendingSettlement;
+                    $discrepancy       = abs($actualBalance - $totalExpected);
+                    $threshold         = (int) config('services.two_fa.discrepancy_threshold', 50000);
+
+                    if ($discrepancy > $threshold) {
+                        return response()->json([
+                            'success' => false,
+                            'blocked' => true,
+                            'message' => 'Cannot delete: balance discrepancy of Rp' . number_format($discrepancy, 0, ',', '.') . ' detected between DB and BisaTopup wallet. Please reconcile the Balance Report before deleting.',
+                        ], 422);
+                    }
+                }
+
+                // Global balance is reconciled — allow proceed
+            }
+
+            // 2. Block if there are active PENDING BisaTopup QRIS transactions (not yet expired)
+            $pendingQris = \App\Models\Donation::where('campaign_id', $id)
+                ->where('payment_status', 'PENDING')
+                ->where('gateway', 'bisatopup')
+                ->where(function ($q) {
+                    $q->whereNull('expired_at')->orWhere('expired_at', '>', now());
+                })
+                ->get(['doc_no', 'expired_at']);
+
+            if ($pendingQris->isNotEmpty()) {
+                // Cross-check against Bisabiller API: the pending donations in our DB
+                // may have been paid without callback reaching us.
+                $bisaTopup   = new BisaTopup();
+                $liveResults = $bisaTopup->listTransactionsByDocNos(
+                    $pendingQris->pluck('doc_no')->all()
+                );
+
+                foreach ($liveResults as $txn) {
+                    $liveStatus = BisaTopup::mapStatus($txn['status_id'] ?? 1);
+                    if ($liveStatus === 'PAID') {
+                        // Update our DB silently so next time the count check catches it
+                        \App\Models\Donation::where('doc_no', $txn['transaction_id'])
+                            ->update(['payment_status' => 'PAID', 'status_id' => $txn['status_id']]);
+
+                        return response()->json([
+                            'success' => false,
+                            'blocked' => true,
+                            'message' => 'Cannot delete: a pending QRIS payment has been confirmed as PAID on BisaTopup. Campaign balance must be settled first.',
+                        ], 422);
+                    }
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'blocked' => true,
+                    'message' => "Cannot delete: there are {$pendingQris->count()} active QRIS payment(s) still pending on this campaign. Wait until they expire or are confirmed.",
+                ], 422);
+            }
+
+            // 3. Block if any other PENDING donation exists (manual, Xendit, etc.)
+            $pendingOther = \App\Models\Donation::where('campaign_id', $id)
+                ->where('payment_status', 'PENDING')
+                ->count();
+
+            if ($pendingOther > 0) {
+                return response()->json([
+                    'success' => false,
+                    'blocked' => true,
+                    'message' => "Cannot delete: there are {$pendingOther} pending donation(s) on this campaign.",
+                ], 422);
+            }
+
+            // Safe to delete
+            $gdriveService = new GoogleDrive($this->pathCampaignsGDrive);
+            if ($campaign->gdrive_id)   $gdriveService->deleteImage($campaign->gdrive_id);
+            if ($campaign->gdrive_id_1) $gdriveService->deleteImage($campaign->gdrive_id_1);
+
+            Campaign::deleteCampaign($id);
+
+            CelsyahidAuditLog::record('campaign.delete', 'campaign', $id, 'Deleted campaign: ' . $campaign->judul);
+
+            return response()->json(['success' => true, 'message' => 'Campaign has been deleted!']);
+        } catch (\Exception $e) {
+            Log::error('destroyAdminCampaign: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Error deleting campaign.'], 500);
+        }
+    }
+
+    public function bulkDeleteCampaign(Request $request)
+    {
+        $ids = $request->input('ids', []);
+
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'No campaigns selected for deletion'], 400);
+        }
+
+        try {
+            $deleted = Campaign::bulkDeleteCampaigns($ids);
+            CelsyahidAuditLog::record('campaign.bulk_delete', 'campaign', null, "Bulk deleted {$deleted} campaign(s)");
+            return response()->json(['success' => true, 'message' => "{$deleted} campaign(s) have been deleted!"]);
+        } catch (\Exception $e) {
+            Log::error('bulkDeleteCampaign: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Error deleting campaigns: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function checkLink(Request $request)
+    {
+        $link      = strtolower(trim($request->input('link', '')));
+        $excludeId = $request->input('exclude_id'); // for edit: ignore current campaign's own link
+
+        if (empty($link)) {
+            return response()->json(['available' => false, 'message' => 'Link cannot be empty.']);
+        }
+
+        $query = Campaign::where('link', $link);
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        $exists = $query->exists();
+
+        return response()->json([
+            'available' => !$exists,
+            'message'   => $exists ? 'This link is already taken.' : 'Link is available.',
+        ]);
+    }
+
+    public function storeCity(Request $request)
+    {
+        $dataProvince = Province::where('name', $request->input('id'))->first();
+        if (!$dataProvince) {
+            return response()->json([]);
+        }
+        $cities = City::where('province_code', $dataProvince->code)->pluck('name', 'id');
+        return response()->json($cities);
+    }
+}
