@@ -7,6 +7,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use ZipStream\CompressionMethod;
+use ZipStream\ZipStream;
 use App\Models\SuratLog;
 use App\Models\MsSetting; // <-- WAJIB IMPORT INI UNTUK SETTING KESTARI
 
@@ -192,6 +194,54 @@ class LetterController extends Controller
         return $this->streamPdf($suratLog);
     }
 
+    /** Download every letter layout with safe example data for visual review. */
+    public function downloadExampleTemplates()
+    {
+        $types           = SuratLog::getSuratTypes();
+        $sampleData      = $this->exampleLetterData();
+        $verificationUrl = route('service.persuratan.index');
+        $qrCode          = 'data:image/svg+xml;base64,' . base64_encode(
+            (string) QrCode::size(120)->margin(0)->generate($verificationUrl)
+        );
+
+        return response()->streamDownload(function () use ($types, $sampleData, $verificationUrl, $qrCode) {
+            // PDF sudah terkompresi; tidak perlu dikompresi ulang saat membuat ZIP.
+            $zip = new ZipStream(
+                sendHttpHeaders: false,
+                defaultCompressionMethod: CompressionMethod::STORE,
+            );
+
+            foreach ($types as $type => $definition) {
+                $data = array_intersect_key($sampleData, array_flip($definition['fields']));
+                $view = View::exists('landing-page.service.e-letter.' . $type)
+                    ? 'landing-page.service.e-letter.' . $type
+                    : 'landing-page.service.e-letter.surat';
+                $nomor = $this->exampleLetterNumber($type);
+
+                $pdf = Pdf::loadView($view, [
+                    'data'           => $data,
+                    'nomorSurat'     => $nomor,
+                    'tanggalSurat'   => now()->locale('id')->translatedFormat('d F Y'),
+                    'label'          => $definition['label'],
+                    'user'           => null,
+                    'kodeVerifikasi' => 'CONTOH-TEMPLATE',
+                    'verifikasiUrl'  => $verificationUrl,
+                    'qrCode'         => $qrCode,
+                    'suratLog'       => null,
+                ])->setPaper('a4', 'portrait')->output();
+
+                $zip->addFile(
+                    fileName: sprintf('%s-%s.pdf', $type, str_replace('/', '-', $nomor)),
+                    data: $pdf,
+                );
+            }
+
+            $zip->finish();
+        }, 'contoh-template-persuratan.zip', [
+            'Content-Type' => 'application/zip',
+        ]);
+    }
+
     public function destroy(SuratLog $suratLog)
     {
         // Pakai deleteModel() agar PDF-nya juga ikut terhapus dari server
@@ -251,5 +301,44 @@ $pdfView = View::exists('landing-page.service.e-letter.' . $suratLog->jenis_sura
             'qrCode'         => $qrCodeBase64,
             'suratLog'       => $suratLog,
         ])->setPaper('a4', 'portrait')->download($suratLog->filename ?: $suratLog->jenis_surat . '.pdf');
+    }
+
+    private function exampleLetterNumber(string $type): string
+    {
+        $codes = [
+            'izin-orang-tua'              => 'Ph-e',
+            'peminjaman-alat'             => 'Ph-e',
+            'peminjaman-tempat-kampus'    => 'Ph-e',
+            'permohonan-bantuan-dana'     => 'Ph-e',
+            'permohonan-izin-luar-kampus' => 'Ph-e',
+            'surat-rekomendasi'           => 'SR-e',
+            'surat-undangan'              => 'Und-e',
+            'surat-aktif-organisasi'      => 'S.Ket-e',
+            'permohonan-pemateri'         => 'Ph-e',
+            'kerja-sama-sponsorship'      => 'Ks-e',
+            'surat-pemberitahuan'         => 'Pb-e',
+        ];
+
+        return sprintf('900/%s/KDR/LDK SYAHID/%d/%d', $codes[$type] ?? 'Ph-e', now()->month, now()->year);
+    }
+
+    private function exampleLetterData(): array
+    {
+        return [
+            'kode_bidang' => 'KDR', 'nama_acara' => 'Kegiatan Contoh LDK Syahid',
+            'tema_acara' => 'Membangun Generasi Berdaya', 'hari_tanggal' => now()->toDateString(),
+            'waktu' => '08.00–12.00 WIB', 'tempat' => 'Aula Student Center UIN Jakarta',
+            'jenis_peminjaman' => 'eksternal', 'ditujukan_kepada' => 'Pihak Terkait',
+            'daftar_alat' => "1. Proyektor\n2. Sound system", 'nama_ketua_pelaksana' => 'Ahmad Fulan',
+            'nim_ketua_pelaksana' => '11230000000001', 'tempat_dipinjam' => 'Aula Student Center UIN Jakarta',
+            'nama_program' => 'Program Kaderisasi', 'keperluan' => 'keperluan administrasi kegiatan',
+            'alamat_tempat' => 'Jl. Ir. H. Juanda No. 95, Tangerang Selatan', 'nama' => 'Muhammad Fakhri Alfarisi',
+            'nim' => '11230910000029', 'fakultas' => 'Sains dan Teknologi', 'jurusan' => 'Teknik Informatika',
+            'jabatan' => 'Anggota Bidang Kaderisasi', 'program_rekomendasi' => 'Program Beasiswa Prestasi',
+            'pertimbangan' => 'aktif berkontribusi dalam kegiatan organisasi', 'jenis_undangan' => 'eksternal',
+            'ttl' => 'Tangerang, 26 Januari 2005', 'penyelenggara' => 'BAZNAS',
+            'materi' => 'Kepemimpinan dan Pengembangan Diri', 'bentuk_kerjasama' => 'Dukungan publikasi dan pendanaan',
+            'nama_kegiatan' => 'Kegiatan Contoh LDK Syahid',
+        ];
     }
 }

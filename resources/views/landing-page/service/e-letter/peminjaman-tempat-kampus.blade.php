@@ -6,6 +6,18 @@
     <style>
 @include('pdf.components._index-styles')
     .identity-label { width: 44mm; }
+    .campus-approval {
+        width: 100%;
+        margin-top: 6pt;
+        border-collapse: collapse;
+        page-break-inside: avoid;
+    }
+    .campus-approval td {
+        line-height: 1.1;
+        text-align: center;
+        vertical-align: top;
+    }
+    .campus-approval-space { height: 10mm; }
     </style>
 </head>
 <body>
@@ -115,13 +127,13 @@
         </table>
 
         {{-- TTD Wakil Rektor — tengah halaman --}}
-        <table style="width:100%; margin-top:14pt; border-collapse:collapse; page-break-inside:avoid;">
+        <table class="campus-approval">
             <tr>
                 <td style="width:20%;"></td>
-                <td style="width:60%; text-align:center; vertical-align:top; line-height:1.15;">
+                <td style="width:60%;">
                     <strong>Mengetahui,</strong><br>
                     Wakil Rektor Bidang Kemahasiswaan
-                    <div style="height:20mm;"></div>
+                    <div class="campus-approval-space"></div>
                     <strong>Prof. Ali Munhanif, M.A., Ph.D.</strong><br>
                     NIP. 196512121992031004
                 </td>

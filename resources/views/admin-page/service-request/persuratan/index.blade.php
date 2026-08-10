@@ -13,6 +13,9 @@
             <h4 class="fw-bold mb-1">Manajemen Persuratan</h4>
             <p class="text-muted small mb-0">Daftar pengajuan surat dari kader LDK Syahid.</p>
         </div>
+        <a href="{{ route('admin.persuratan.download-examples') }}" class="btn btn-outline-primary rounded-3">
+            <i class="fas fa-file-archive me-1"></i> Unduh Contoh Template
+        </a>
     </div>
 
     {{-- Alert --}}

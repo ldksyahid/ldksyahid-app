@@ -6,8 +6,8 @@ body {
     margin: 0;
     color: #000;
     font-family: "Times New Roman", Times, serif;
-    font-size: 12pt;
-    line-height: 1.15;
+    font-size: 11pt;
+    line-height: 1.12;
 }
 
 /* ── BACKGROUND KOP ── */
@@ -23,13 +23,13 @@ body {
    panjang tidak terpotong & halaman bisa overflow.
    padding-bottom kecil saja — verifikasi QR sudah punya margin sendiri ── */
 .content {
-    padding: 53mm 25mm 22mm 25mm;
+    padding: 49mm 22mm 14mm 22mm;
 }
 
 /* ── HEADER META (Nomor / Lampiran / Hal) ── */
 .meta {
     width: 100%;
-    margin: 0 0 16pt 0;
+    margin: 0 0 10pt 0;
     border-collapse: collapse;
 }
 .meta td {
@@ -42,22 +42,22 @@ body {
 
 /* ── BODY SURAT ── */
 .body-surat {
-    margin-left: 26mm;
+    margin-left: 10mm;
     text-align: justify;
 }
 
-/* Semua <p>: justify + jarak bawah 8pt */
+/* Semua <p>: justify + jarak bawah yang cukup, namun tetap hemat ruang. */
 p {
-    margin: 0 0 8pt 0;
+    margin: 0 0 5pt 0;
     text-align: justify;
 }
 
 /* Indentasi awal paragraf */
-.indent { text-indent: 9mm; }
+.indent { text-indent: 8mm; }
 
 /* ── ALAMAT PENERIMA ── */
 .recipient {
-    margin-bottom: 12pt;
+    margin-bottom: 8pt;
     text-align: left;
 }
 .recipient p { margin-bottom: 0; }
@@ -66,27 +66,27 @@ p {
 .salam {
     font-weight: bold;
     font-style: italic;
-    margin: 0 0 10pt 0;
+    margin: 0 0 7pt 0;
     text-align: left;
 }
 .salam-penutup {
     font-weight: bold;
     font-style: italic;
-    margin: 10pt 0 0 0;
+    margin: 7pt 0 0 0;
     text-align: left;
 }
 
 /* ── TABEL IDENTITAS (Hari/Tanggal, Waktu, Tempat, dst) ── */
 .identity {
     width: 100%;
-    margin: 4pt 0 8pt 0;
+    margin: 3pt 0 6pt 0;
     border-collapse: collapse;
 }
 .identity td {
-    padding: 1pt 0;
+    padding: 0.5pt 0;
     vertical-align: top;
-    line-height: 1.15;
-    font-size: 12pt;
+    line-height: 1.12;
+    font-size: 11pt;
 }
 /* Default lebar label — bisa di-override per template */
 .identity-label { width: 38mm; }
@@ -105,7 +105,7 @@ ol li, ul li {
 /* ── TANDA TANGAN ── */
 .signature-table {
     width: 100%;
-    margin-top: 14pt;
+    margin-top: 9pt;
     border-collapse: collapse;
     page-break-inside: avoid;
 }
@@ -115,38 +115,38 @@ ol li, ul li {
     width: 50%;
     text-align: center;
     vertical-align: bottom;   /* dompdf support vertical-align pada td */
-    line-height: 1.4;
+    line-height: 1.25;
     padding-bottom: 0;
 }
 
 /* Ruang TTD: dompdf tidak support flex, pakai block + height */
 .ttd-space {
-    height: 16mm;
+    height: 12mm;
     display: block;
     text-align: center;
 }
 .ttd-space img {
-    width: 14mm;
-    height: 14mm;
+    width: 11mm;
+    height: 11mm;
     display: block;
-    margin: 2mm auto 0 auto;  /* push QR ke atas sedikit dari bawah */
+    margin: 1mm auto 0 auto;
 }
 
 /* ── KOTAK VERIFIKASI QR (footer surat) ── */
 .verification {
     width: 68mm;
-    margin-top: 8pt;
+    margin-top: 6pt;
     border: 0.5px solid #36aaa1;
     border-collapse: collapse;
     color: #444;
     font-family: "DejaVu Sans", Arial, sans-serif;
-    font-size: 6pt;
-    line-height: 1.25;
+    font-size: 5.5pt;
+    line-height: 1.15;
     page-break-inside: avoid;
     page-break-before: avoid;
 }
 .verification td {
-    padding: 2pt;
+    padding: 1.5pt;
     vertical-align: middle;
 }
 .verification .qr-cell {
@@ -163,8 +163,8 @@ ol li, ul li {
 .verification p {
     margin: 0 0 1pt 0;
     text-align: left;
-    font-size: 6pt;
-    line-height: 1.25;
+    font-size: 5.5pt;
+    line-height: 1.15;
 }
 .verification-url {
     word-break: break-all;

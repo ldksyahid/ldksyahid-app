@@ -40,6 +40,9 @@ use App\Http\Controllers\KirimdevWebhookController;
 use App\Http\Controllers\Admin\AdminFormController;
 use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LetterController;
+use App\Http\Controllers\PopupMessageController;
+use App\Http\Controllers\TwoFactorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -682,6 +685,7 @@ Route::middleware(['role:Superadmin|HelperLetter'])
     ->name('admin.persuratan.')
     ->group(function () {
         Route::get('/', [LetterController::class, 'indexAdmin'])->name('index');
+        Route::get('/download-contoh', [LetterController::class, 'downloadExampleTemplates'])->name('download-examples');
         Route::get('/{suratLog}', [LetterController::class, 'showAdmin'])->name('show');
         Route::post('/{suratLog}/approve', [LetterController::class, 'approve'])->name('approve');
         Route::post('/{suratLog}/reject', [LetterController::class, 'reject'])->name('reject');
