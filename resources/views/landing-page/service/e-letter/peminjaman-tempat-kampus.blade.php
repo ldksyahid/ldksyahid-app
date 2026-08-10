@@ -6,18 +6,7 @@
     <style>
 @include('pdf.components._index-styles')
     .identity-label { width: 44mm; }
-    .campus-approval {
-        width: 100%;
-        margin-top: 6pt;
-        border-collapse: collapse;
-        page-break-inside: avoid;
-    }
-    .campus-approval td {
-        line-height: 1.1;
-        text-align: center;
-        vertical-align: top;
-    }
-    .campus-approval-space { height: 10mm; }
+    .signature-table--three .ttd-cell { width: 33.333%; font-size: 10pt; }
     </style>
 </head>
 <body>
@@ -29,6 +18,7 @@
     $hariTanggal  = !empty($data['hari_tanggal'])
         ? \Carbon\Carbon::parse($data['hari_tanggal'])->locale('id')->translatedFormat('l, d F Y')
         : '-';
+    $requiresWarek = $requiresWarek ?? true;
 @endphp
 
 @if ($templateUri)
@@ -98,11 +88,14 @@
 
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
 
-        {{-- TTD: Ketua Pelaksana (kiri) + Ketua Umum (kanan) --}}
-        <table class="signature-table">
+        {{-- Fasilitas kampus bersama memerlukan pengesahan Warek. --}}
+        <table class="signature-table {{ $requiresWarek ? 'signature-table--three' : '' }}">
             <tr>
                 <td class="ttd-cell"><strong>Mengetahui,</strong><br>Ketua Pelaksana</td>
                 <td class="ttd-cell"><strong>Ketua Umum LDK Syahid</strong></td>
+                @if ($requiresWarek)
+                    <td class="ttd-cell"><strong>Mengetahui,</strong><br>Wakil Rektor Bidang Kemahasiswaan</td>
+                @endif
             </tr>
             <tr>
                 <td class="ttd-cell">
@@ -113,31 +106,25 @@
                         <img src="{!! $qrCode !!}" alt="QR Verifikasi">
                     </div>
                 </td>
+                @if ($requiresWarek)
+                    <td class="ttd-cell"><div class="ttd-space"></div></td>
+                @endif
             </tr>
             <tr>
                 <td class="ttd-cell">
                     <strong>{{ $data['nama_ketua_pelaksana'] ?? '(............................................)' }}</strong>
                 </td>
                 <td class="ttd-cell"><strong>Muhammad Syauqi Mubarak</strong></td>
+                @if ($requiresWarek)
+                    <td class="ttd-cell"><strong>Prof. Ali Munhanif, M.A., Ph.D.</strong></td>
+                @endif
             </tr>
             <tr>
                 <td class="ttd-cell">NIM. {{ $data['nim_ketua_pelaksana'] ?? '................' }}</td>
                 <td class="ttd-cell">NIM. 11230600000067</td>
-            </tr>
-        </table>
-
-        {{-- TTD Wakil Rektor — tengah halaman --}}
-        <table class="campus-approval">
-            <tr>
-                <td style="width:20%;"></td>
-                <td style="width:60%;">
-                    <strong>Mengetahui,</strong><br>
-                    Wakil Rektor Bidang Kemahasiswaan
-                    <div class="campus-approval-space"></div>
-                    <strong>Prof. Ali Munhanif, M.A., Ph.D.</strong><br>
-                    NIP. 196512121992031004
-                </td>
-                <td style="width:20%;"></td>
+                @if ($requiresWarek)
+                    <td class="ttd-cell">NIP. 196512121992031004</td>
+                @endif
             </tr>
         </table>
 

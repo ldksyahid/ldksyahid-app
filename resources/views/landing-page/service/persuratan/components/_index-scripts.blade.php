@@ -137,6 +137,10 @@
         ],
     };
 
+    // Ketiga surat peminjaman tempat memakai data pengajuan yang sama.
+    fieldMap['peminjaman-tempat-fakultas'] = fieldMap['peminjaman-tempat-kampus'];
+    fieldMap['peminjaman-tempat-luar-kampus'] = fieldMap['peminjaman-tempat-kampus'];
+
     var oldValues = @json(old());
 
     function escapeAttr(v) {

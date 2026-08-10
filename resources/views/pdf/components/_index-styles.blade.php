@@ -131,6 +131,12 @@ ol li, ul li {
     display: block;
     margin: 1mm auto 0 auto;
 }
+.ttd-space img.ttd-signature {
+    width: 30mm;
+    height: auto;
+    max-height: 11mm;
+    margin: 1mm auto 0 auto;
+}
 
 /* ── KOTAK VERIFIKASI QR (footer surat) ── */
 .verification {

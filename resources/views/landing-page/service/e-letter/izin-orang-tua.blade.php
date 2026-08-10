@@ -104,7 +104,7 @@
                     </div>
                 </td>
                 <td class="ttd-cell">
-                    <div class="ttd-space"></div>
+                    <div class="ttd-space">@include('pdf.components._sekjen-signature')</div>
                 </td>
             </tr>
             <tr>

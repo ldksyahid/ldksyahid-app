@@ -30,7 +30,9 @@ class SuratLog extends Model
     private const KODE_JENIS = [
         'izin-orang-tua'              => ['kode' => 'Ph',    'sifat' => 'e'],
         'peminjaman-alat'             => ['kode' => 'Ph',    'sifat' => 'e'],
-        'peminjaman-tempat-kampus'    => ['kode' => 'Ph',    'sifat' => 'e'],
+        'peminjaman-tempat-kampus'    => ['kode' => 'Ph',    'sifat' => 'i'],
+        'peminjaman-tempat-fakultas'  => ['kode' => 'Ph',    'sifat' => 'i'],
+        'peminjaman-tempat-luar-kampus' => ['kode' => 'Ph',  'sifat' => 'e'],
         'permohonan-bantuan-dana'     => ['kode' => 'Ph',    'sifat' => 'e'],
         'permohonan-izin-luar-kampus' => ['kode' => 'Ph',    'sifat' => 'e'],
         'surat-rekomendasi'           => ['kode' => 'SR',    'sifat' => 'e'],
@@ -146,7 +148,9 @@ class SuratLog extends Model
         return [
             'izin-orang-tua'              => ['label' => 'Surat Izin Orang Tua', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat']],
             'peminjaman-alat'             => ['label' => 'Surat Peminjaman Alat', 'fields' => ['kode_bidang', 'jenis_peminjaman', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'daftar_alat']],
-            'peminjaman-tempat-kampus'    => ['label' => 'Surat Peminjaman Tempat (Kampus)', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam']],
+            'peminjaman-tempat-kampus'    => ['label' => 'Surat Peminjaman Fasilitas Kampus Bersama', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam']],
+            'peminjaman-tempat-fakultas'  => ['label' => 'Surat Peminjaman Tempat Fakultas (Internal)', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam']],
+            'peminjaman-tempat-luar-kampus' => ['label' => 'Surat Peminjaman Tempat Luar Kampus', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam']],
             'permohonan-bantuan-dana'     => ['label' => 'Surat Permohonan Bantuan Dana', 'fields' => ['kode_bidang', 'nama_program', 'ditujukan_kepada', 'keperluan']],
             'permohonan-izin-luar-kampus' => ['label' => 'Surat Permohonan Izin Kegiatan di Luar Kampus', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat', 'alamat_tempat']],
             'surat-rekomendasi'           => ['label' => 'Surat Rekomendasi', 'fields' => ['kode_bidang', 'nama', 'nim', 'fakultas', 'jurusan', 'jabatan', 'program_rekomendasi', 'pertimbangan']],
