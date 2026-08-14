@@ -269,13 +269,19 @@
                                     </label>
                                     @if ($operation === 'view')
                                         <div class="form-control-plaintext">
-                                            {{ $data->deadline ? \Carbon\Carbon::parse($data->deadline)->isoFormat('dddd, DD MMMM YYYY [Pukul] HH:mm') : '-' }}
+                                            {{ $data->deadline ? \Carbon\Carbon::parse($data->deadline)->isoFormat('dddd, DD MMMM YYYY [Pukul] HH:mm:ss') : '-' }}
                                         </div>
                                     @else
                                         @php
-                                            $deadlineValue = old('deadline', $data && $data->deadline ? \Carbon\Carbon::parse($data->deadline)->format('Y-m-d H:i') : '');
+                                            // Own class (not the shared .flatpickr-datetime, see
+                                            // admin-page.template.body's global init) — that global
+                                            // config has no enableSeconds, and is reused across
+                                            // multiple unrelated modules (forms/news/article/event),
+                                            // so a second scoped init just for this field is safer
+                                            // than changing seconds-precision for all of them.
+                                            $deadlineValue = old('deadline', $data && $data->deadline ? \Carbon\Carbon::parse($data->deadline)->format('Y-m-d H:i:s') : '');
                                         @endphp
-                                        <input type="text" class="form-control flatpickr-datetime @error('deadline') is-invalid @enderror" id="inputDeadlineCampaign" name="deadline"
+                                        <input type="text" class="form-control flatpickr-datetime-sec @error('deadline') is-invalid @enderror" id="inputDeadlineCampaign" name="deadline"
                                             value="{{ $deadlineValue }}" {{ $operation === 'create' ? 'required' : '' }}>
                                         @error('deadline') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                     @endif

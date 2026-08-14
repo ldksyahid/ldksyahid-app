@@ -197,7 +197,7 @@
                                         <td class="text-center">
                                             @if($dl)
                                                 <div class="small {{ $isExpired ? 'text-danger fw-semibold' : 'text-muted' }}">
-                                                    {{ $dl->format('d M Y, H:i') }}
+                                                    {{ $dl->format('d M Y, H:i:s') }}
                                                 </div>
                                                 @if($isExpired)
                                                     <span class="cs-expired-tag">Expired</span>
