@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LibraryFunctionController as LFC;
 use App\Models\Donation;
 use App\Models\MsSetting;
+use App\Models\Withdrawal;
 use App\Constants\SettingKey\Key1;
 use App\Constants\SettingKey\Key2;
 
@@ -239,6 +240,56 @@ class WhatsApp
             LFC::formatRupiah($donation->jumlah_donasi),
             $paidAt,
             'Total terkumpul ' . LFC::formatRupiah($summary['total_paid']) . ', saldo tersedia ' . LFC::formatRupiah($summary['available']),
+        ]);
+
+        return null;
+    }
+
+    /**
+     * Notify the campaign's PIC (Campaign.telp_pj) whenever a withdrawal is
+     * marked COMPLETED. Skips silently (logs info) if the campaign has no
+     * PIC phone number on file. Call this AFTER the Withdrawal row's status
+     * has been updated to COMPLETED, so getBalanceSummary() reflects the
+     * post-withdrawal balance.
+     */
+    public static function sendCampaignPicWithdrawSuccess(Withdrawal $withdrawal): ?array
+    {
+        $campaign = $withdrawal->campaign;
+
+        if (!$campaign || blank($campaign->telp_pj)) {
+            Log::info('[WhatsApp] Skipped PIC withdraw notification: campaign has no telp_pj', [
+                'withdrawal_id' => $withdrawal->id ?? null,
+                'campaign_id'   => $campaign->id ?? null,
+            ]);
+            return null;
+        }
+
+        $summary = $campaign->getBalanceSummary();
+
+        $picTarget = preg_replace('/[^\d]/', '', $campaign->telp_pj);
+
+        $picName = $campaign->nama_pj ?: ('PIC ' . $campaign->judul);
+
+        $completedAt = ($withdrawal->completed_at ?? now())->format('d M Y, H:i') . ' WIB';
+
+        $destination = trim($withdrawal->bank_code . ' ' . $withdrawal->account_number . ' a.n. ' . $withdrawal->account_holder);
+
+        $message = "💸 *[WITHDRAW BERHASIL]* 💸\n\n"
+            . "Assalammu'alaikum, {$picName}\n\n"
+            . "Alhamdulillah, penarikan dana untuk campaign *{$campaign->judul}* telah berhasil diproses:\n\n"
+            . "💰 *Jumlah:* " . LFC::formatRupiah($withdrawal->amount) . "\n"
+            . "🏦 *Tujuan:* {$destination}\n"
+            . "🕐 *Waktu:* {$completedAt}\n\n"
+            . "💵 *Saldo Tersedia Saat Ini:* " . LFC::formatRupiah($summary['available']) . "\n\n"
+            . "#LDKSyahid\n#CelenganSyahid";
+
+        self::send($picTarget, $message, 'notifikasi_pic_withdraw', [
+            $picName,
+            $campaign->judul,
+            LFC::formatRupiah($withdrawal->amount),
+            $destination,
+            $completedAt,
+            LFC::formatRupiah($summary['available']),
         ]);
 
         return null;
