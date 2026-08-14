@@ -116,7 +116,7 @@
                             <span class="cd-days-badge ended">{{ $daysLeft }}</span>
                         @else
                             <span>Sisa waktu</span>
-                            <span class="cd-days-badge">{{ $daysLeft }} hari</span>
+                            <span class="cd-days-badge cd-live-countdown" data-deadline-ts="{{ strtotime($data->deadline) }}">{{ $daysLeft }} hari</span>
                         @endif
                     </div>
 
