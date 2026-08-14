@@ -114,7 +114,8 @@
                         <div class="cs-stat-sep"></div>
                         <div class="cs-stat-item cs-stat-right">
                             <span class="cs-stat-label">{{ $isDeadlinePassed ? 'Status' : 'Sisa Hari' }}</span>
-                            <span class="cs-stat-value {{ $isDeadlinePassed ? 'cs-stat-ended' : '' }}">
+                            <span class="cs-stat-value cs-live-countdown {{ $isDeadlinePassed ? 'cs-stat-ended' : '' }}"
+                                  @if(!$isDeadlinePassed) data-deadline-ts="{{ strtotime($campaign->deadline) }}" @endif>
                                 {{ $daysLeft }}
                             </span>
                         </div>
@@ -207,6 +208,7 @@
                  data-collected="{{ LFC::formatRupiah($donationTotal) }}"
                  data-target="{{ LFC::formatRupiah($campaign->target_biaya) }}"
                  data-days="{{ $daysLeft }}"
+                 data-deadline-ts="{{ $campaign->deadline ? strtotime($campaign->deadline) : '' }}"
                  data-deadline-passed="{{ $isDeadlinePassed ? '1' : '0' }}"
                  data-donors="{{ $donorCount }}"
                  data-excerpt="{{ Str::limit(strip_tags($campaign->cerita), 160) }}"
@@ -237,7 +239,7 @@
                         @elseif($isDeadlinePassed)
                             <span class="cs-m-days cs-m-ended">Berakhir</span>
                         @else
-                            <span class="cs-m-days"><i class="far fa-clock" style="font-size:.65rem;margin-right:2px"></i>{{ $daysLeft }} hari lagi</span>
+                            <span class="cs-m-days"><i class="far fa-clock" style="font-size:.65rem;margin-right:2px"></i><span class="cs-live-countdown" data-deadline-ts="{{ strtotime($campaign->deadline) }}">{{ $daysLeft }} hari lagi</span></span>
                         @endif
                     </div>
                     <span class="cs-m-hint"><i class="fas fa-hand-pointer"></i> Lihat detail</span>
