@@ -269,11 +269,14 @@
                                     </label>
                                     @if ($operation === 'view')
                                         <div class="form-control-plaintext">
-                                            {{ $data->deadline ? \Carbon\Carbon::parse($data->deadline)->isoFormat('dddd, DD MMMM YYYY') : '-' }}
+                                            {{ $data->deadline ? \Carbon\Carbon::parse($data->deadline)->isoFormat('dddd, DD MMMM YYYY [Pukul] HH:mm') : '-' }}
                                         </div>
                                     @else
-                                        <input type="text" class="form-control flatpickr-date @error('deadline') is-invalid @enderror" id="inputDeadlineCampaign" name="deadline"
-                                            value="{{ old('deadline', $data->deadline ?? '') }}" {{ $operation === 'create' ? 'required' : '' }}>
+                                        @php
+                                            $deadlineValue = old('deadline', $data && $data->deadline ? \Carbon\Carbon::parse($data->deadline)->format('Y-m-d H:i') : '');
+                                        @endphp
+                                        <input type="text" class="form-control flatpickr-datetime @error('deadline') is-invalid @enderror" id="inputDeadlineCampaign" name="deadline"
+                                            value="{{ $deadlineValue }}" {{ $operation === 'create' ? 'required' : '' }}>
                                         @error('deadline') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                     @endif
                                 </div>
