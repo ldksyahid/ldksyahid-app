@@ -1,6 +1,37 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
+    /* ── Live countdown: switch to HH:MM:SS once under 24h remain ── */
+    var cdBadge = document.querySelector('.cd-live-countdown[data-deadline-ts]');
+    if (cdBadge) {
+        var cdDeadlineTs   = parseInt(cdBadge.dataset.deadlineTs, 10);
+        var cdOriginalText = cdBadge.textContent;
+
+        function cdPad2(n) { return String(n).padStart(2, '0'); }
+
+        function cdTickCountdown() {
+            var remainingMs = cdDeadlineTs * 1000 - Date.now();
+            if (remainingMs <= 0) {
+                cdBadge.textContent = 'Berakhir';
+                cdBadge.classList.add('ended');
+                return;
+            }
+            if (remainingMs >= 86400000) {
+                cdBadge.textContent = cdOriginalText;
+                return;
+            }
+
+            var totalSeconds = Math.floor(remainingMs / 1000);
+            var h = Math.floor(totalSeconds / 3600);
+            var m = Math.floor((totalSeconds % 3600) / 60);
+            var s = totalSeconds % 60;
+            cdBadge.textContent = cdPad2(h) + ':' + cdPad2(m) + ':' + cdPad2(s);
+        }
+
+        cdTickCountdown();
+        setInterval(cdTickCountdown, 1000);
+    }
+
     /* ── Tab switching ── */
     var tabs  = document.querySelectorAll('.cd-tab');
     var panes = document.querySelectorAll('.cd-tab-pane');

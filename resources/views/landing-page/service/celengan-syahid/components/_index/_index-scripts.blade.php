@@ -11,6 +11,47 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     /* ============================================================
+       LIVE COUNTDOWN — switches "X hari lagi" to a ticking HH:MM:SS
+       once under 24h remain. Applies to any element carrying both
+       class="cs-live-countdown" and data-deadline-ts (unix seconds) —
+       covers the desktop grid card, mobile card, AND the bottom sheet
+       (injected into the DOM later via innerHTML, still picked up
+       since this re-queries the whole document every tick).
+       ============================================================ */
+    function csPad2(n) { return String(n).padStart(2, '0'); }
+
+    function csTickCountdowns() {
+        document.querySelectorAll('.cs-live-countdown[data-deadline-ts]').forEach(function (el) {
+            var ts = parseInt(el.dataset.deadlineTs, 10);
+            if (!ts) return;
+
+            // Remember the server-rendered "X hari" text once, so we can
+            // keep showing it untouched while >= 24h remain.
+            if (el.dataset.originalText === undefined) el.dataset.originalText = el.textContent;
+
+            var remainingMs = ts * 1000 - Date.now();
+            if (remainingMs <= 0) {
+                el.textContent = 'Berakhir';
+                el.classList.add('cs-stat-ended', 'ended');
+                return;
+            }
+            if (remainingMs >= 86400000) {
+                el.textContent = el.dataset.originalText;
+                return;
+            }
+
+            var totalSeconds = Math.floor(remainingMs / 1000);
+            var h = Math.floor(totalSeconds / 3600);
+            var m = Math.floor((totalSeconds % 3600) / 60);
+            var s = totalSeconds % 60;
+            el.textContent = csPad2(h) + ':' + csPad2(m) + ':' + csPad2(s);
+        });
+    }
+
+    csTickCountdowns();
+    setInterval(csTickCountdowns, 1000);
+
+    /* ============================================================
        SELECT2 INIT
        ============================================================ */
     if (typeof $.fn !== 'undefined' && typeof $.fn.select2 !== 'undefined') {
@@ -140,6 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var collected   = el.dataset.collected    || 'Rp0';
         var target      = el.dataset.target       || 'Rp0';
         var days        = el.dataset.days         || '';
+        var deadlineTs  = el.dataset.deadlineTs    || '';
         var deadlinePassed = el.dataset.deadlinePassed === '1';
         var donors      = el.dataset.donors       || '0';
         var excerpt     = el.dataset.excerpt      || '';
@@ -172,7 +214,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         '<span class="cs-bs-progress-days' + (deadlinePassed ? ' ended' : '') + '">' +
                             (!days || days === 'selesai'
                                 ? (deadlinePassed ? 'Berakhir' : 'Tanpa Batas')
-                                : (deadlinePassed ? 'Berakhir' : days + ' hari lagi')
+                                : (deadlinePassed
+                                    ? 'Berakhir'
+                                    : '<span class="cs-live-countdown" data-deadline-ts="' + escHtml(deadlineTs) + '">' + escHtml(days) + ' hari lagi</span>')
                             ) +
                         '</span>' +
                     '</div>' +
