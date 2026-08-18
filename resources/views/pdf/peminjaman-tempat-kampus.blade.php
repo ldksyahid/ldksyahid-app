@@ -3,9 +3,29 @@
 <head>
     <meta charset="utf-8">
     <title>{{ $label }}</title>
+    @include('pdf.components._index-styles')
     <style>
-    @include('persuratan.components._index-styles')
     .identity-label { width: 44mm; }
+
+    /* Blok TTD Wakil Rektor (khusus fasilitas rektorat / requiresWarek=true).
+       Ditaruh sebagai baris terpisah di BAWAH baris Ketum+Sekjen (bukan kolom ke-3),
+       lebar disamakan dengan 1 kolom signature-table (50%) dan diposisikan di tengah. */
+    .signature-table--warek {
+        width: 50%;
+        margin: 10pt auto 0 auto;
+        border-collapse: collapse;
+        page-break-inside: avoid;
+    }
+    .signature-table--warek .ttd-cell { width: 100%; }
+
+    /* Placeholder posisi TTD basah Wakil Rektor. Warek berada di luar sistem digital LDK,
+       jadi belum ada citra tanda tangan/QR — tanda "^" dipakai sebagai anchor manual untuk
+       proses verifikasi berikutnya (lihat catatan di app/Http/Controllers/LetterController.php). */
+    .ttd-caret {
+        font-size: 13pt;
+        font-weight: bold;
+        color: #999;
+    }
     </style>
 </head>
 <body>
@@ -17,6 +37,7 @@
     $hariTanggal  = !empty($data['hari_tanggal'])
         ? \Carbon\Carbon::parse($data['hari_tanggal'])->locale('id')->translatedFormat('l, d F Y')
         : '-';
+    $requiresWarek = $requiresWarek ?? true;
 @endphp
 
 @if ($templateUri)
@@ -75,6 +96,11 @@
                 <td class="identity-sep">:</td>
                 <td><strong>{{ $data['tempat_dipinjam'] ?? '-' }}</strong></td>
             </tr>
+            <tr>
+                <td class="identity-label">Penanggung Jawab</td>
+                <td class="identity-sep">:</td>
+                <td>{{ $data['nama_ketua_pelaksana'] ?? '-' }} (NIM. {{ $data['nim_ketua_pelaksana'] ?? '-' }})</td>
+            </tr>
         </table>
 
         <p class="indent">Mengingat pentingnya kelancaran kegiatan tersebut, kami memohon izin dan
@@ -86,48 +112,50 @@
 
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
 
-        {{-- TTD: Ketua Pelaksana (kiri) + Ketua Umum (kanan) --}}
+        {{-- TTD Ketua Umum & Sekjen — SELALU 2 kolom ini, di semua jenis (rektorat/non-rektorat/luar kampus). --}}
         <table class="signature-table">
             <tr>
-                <td class="ttd-cell"><strong>Mengetahui,</strong><br>Ketua Pelaksana</td>
                 <td class="ttd-cell"><strong>Ketua Umum LDK Syahid</strong></td>
+                <td class="ttd-cell"><strong>Sekretaris Jenderal</strong></td>
             </tr>
             <tr>
                 <td class="ttd-cell">
-                    <div class="ttd-space"></div>
+                    <div class="ttd-space"><img src="{!! $qrCode !!}" alt="QR Verifikasi"></div>
                 </td>
                 <td class="ttd-cell">
-                    <div class="ttd-space">
-                        <img src="{!! $qrCode !!}" alt="QR Verifikasi">
-                    </div>
+                    <div class="ttd-space">@include('pdf.components._sekjen-signature')</div>
                 </td>
             </tr>
             <tr>
-                <td class="ttd-cell">
-                    <strong>{{ $data['nama_ketua_pelaksana'] ?? '(............................................)' }}</strong>
-                </td>
                 <td class="ttd-cell"><strong>Muhammad Syauqi Mubarak</strong></td>
+                <td class="ttd-cell"><strong>Muhammad Zhaffar Rabbani</strong></td>
             </tr>
             <tr>
-                <td class="ttd-cell">NIM. {{ $data['nim_ketua_pelaksana'] ?? '................' }}</td>
                 <td class="ttd-cell">NIM. 11230600000067</td>
+                <td class="ttd-cell">NIM. 11230340000016</td>
             </tr>
         </table>
 
-        {{-- TTD Wakil Rektor — tengah halaman --}}
-        <table style="width:100%; margin-top:14pt; border-collapse:collapse; page-break-inside:avoid;">
-            <tr>
-                <td style="width:20%;"></td>
-                <td style="width:60%; text-align:center; vertical-align:top; line-height:1.15;">
-                    <strong>Mengetahui,</strong><br>
-                    Wakil Rektor Bidang Kemahasiswaan
-                    <div style="height:20mm;"></div>
-                    <strong>Prof. Ali Munhanif, M.A., Ph.D.</strong><br>
-                    NIP. 196512121992031004
-                </td>
-                <td style="width:20%;"></td>
-            </tr>
-        </table>
+        {{-- TTD Wakil Rektor Bidang Kemahasiswaan — HANYA untuk fasilitas rektorat (requiresWarek = true).
+             Baris ke-3 terpisah di bawah, bukan kolom ke-3 sejajar Ketum/Sekjen. --}}
+        @if ($requiresWarek)
+            <table class="signature-table--warek">
+                <tr>
+                    <td class="ttd-cell"><strong>Mengetahui,</strong><br>Wakil Rektor Bidang Kemahasiswaan</td>
+                </tr>
+                <tr>
+                    <td class="ttd-cell">
+                        <div class="ttd-space"><span class="ttd-caret">^</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ttd-cell"><strong>Prof. Ali Munhanif, M.A., Ph.D.</strong></td>
+                </tr>
+                <tr>
+                    <td class="ttd-cell">NIP. 196512121992031004</td>
+                </tr>
+            </table>
+        @endif
 
         {{-- VERIFIKASI --}}
         <table class="verification">

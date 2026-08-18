@@ -274,7 +274,7 @@
      data-label="Mulai"
      data-disabled="0">
     <div class="sv-m-thumb">
-        <img src="https://lh3.googleusercontent.com/d/GANTI_DENGAN_FILE_ID_GAMBAR"
+        <img src="https://lh3.googleusercontent.com/d/1nCOWbWIYhzZ59jR39Y_kYA3eKfJzJUkF"
              alt="Layanan Persuratan" loading="lazy"
              onerror="this.src='https://via.placeholder.com/80x80/0ea5e9/ffffff?text=P'">
     </div>

@@ -3,10 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>{{ $label }}</title>
-    <style>
-    {{-- Paste isi _surat-base.css di sini, atau gunakan @include --}}
-    @include('persuratan.components._index-styles')
-    </style>
+    @include('pdf.components._index-styles')
 </head>
 <body>
 @php
