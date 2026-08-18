@@ -197,7 +197,7 @@
                                         <td class="text-center">
                                             @if($dl)
                                                 <div class="small {{ $isExpired ? 'text-danger fw-semibold' : 'text-muted' }}">
-                                                    {{ $dl->format('d M Y') }}
+                                                    {{ $dl->format('d M Y, H:i:s') }}
                                                 </div>
                                                 @if($isExpired)
                                                     <span class="cs-expired-tag">Expired</span>
@@ -205,7 +205,7 @@
                                                     <span class="cs-tag-soon">{{ $daysLeft }}d left</span>
                                                 @else
                                                     <div class="text-muted" style="font-size:.7rem">
-                                                        in {{ $dl->diffForHumans(null, true, true, 1) }}
+                                                        in {{ $dl->locale('en')->diffForHumans(null, true, true, 1) }}
                                                     </div>
                                                 @endif
                                             @else

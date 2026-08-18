@@ -9,6 +9,7 @@ use App\Models\CelsyahidAuditLog;
 use App\Models\Donation;
 use App\Models\Withdrawal;
 use App\Services\BisaTopup;
+use App\Services\WhatsApp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -826,6 +827,14 @@ class WithdrawalController extends Controller
             'status'   => $newStatus,
             'status_id'=> $statusId,
         ]);
+
+        if ($newStatus === 'COMPLETED') {
+            try {
+                WhatsApp::sendCampaignPicWithdrawSuccess($withdrawal->fresh());
+            } catch (\Throwable $e) {
+                Log::error('[Withdrawal Callback] WhatsApp PIC withdraw notification failed: ' . $e->getMessage());
+            }
+        }
 
         return response()->json(['status' => 'ok']);
     }

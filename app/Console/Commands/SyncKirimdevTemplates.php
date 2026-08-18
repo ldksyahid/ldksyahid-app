@@ -189,6 +189,22 @@ class SyncKirimdevTemplates extends Command
                     ],
                 ],
             ],
+            [
+                'name'     => 'notifikasi_pic_withdraw',
+                'category' => 'UTILITY',
+                'language' => 'id',
+                'components' => [
+                    [
+                        'type' => 'BODY',
+                        'text' => "💸 *Withdraw Berhasil* 💸\n\nAssalamu'alaikum, {{1}}\n\nAlhamdulillah, penarikan dana untuk campaign *{{2}}* telah berhasil diproses:\n\n💰 Jumlah: {{3}}\n🏦 Tujuan: {{4}}\n🕐 Waktu: {{5}}\n\n💵 Saldo tersedia saat ini: {{6}}.\n\nJazakallah Khairan Katsiiran 🙏",
+                        'example' => [
+                            'body_text' => [[
+                                'Andi', 'Bantu Palestina', 'Rp5.000.000', 'BCA 1234567890 a.n. Ahmad Fauzi', '14 Agu 2026, 15:00 WIB', 'Rp2.500.000',
+                            ]],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 

@@ -4,6 +4,24 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Deadline: seconds-precision datetime picker, scoped to this field
+        // only via its own class (.flatpickr-datetime-sec) — the shared
+        // .flatpickr-datetime global init (admin-page.template.body) has no
+        // enableSeconds and is reused by other unrelated admin modules, so
+        // this stays a separate init rather than changing that one.
+        if (typeof flatpickr !== 'undefined') {
+            flatpickr('.flatpickr-datetime-sec:not([readonly]):not([disabled])', {
+                dateFormat: 'Y-m-d H:i:S',
+                altInput: true,
+                altFormat: 'd/m/Y H:i:S',
+                enableTime: true,
+                enableSeconds: true,
+                time_24hr: true,
+                allowInput: true,
+                monthSelectorType: 'static'
+            });
+        }
+
         // Init Select2 for dropdowns
         $('#inputProvinsiCampaign, #inputKotaCampaign, #chooseKategoriCampaign').each(function() {
             $(this).select2({
