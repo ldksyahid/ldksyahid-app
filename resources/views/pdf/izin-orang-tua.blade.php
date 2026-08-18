@@ -16,8 +16,11 @@
         : '-';
 @endphp
 
+<!-- Gambar dibungkus elemen kontainer agar CSS width/height A4 bekerja maksimal -->
 @if ($templateUri)
-    <img class="page-bg" src="{{ $templateUri }}" alt="">
+    <div class="page-bg">
+        <img src="{{ $templateUri }}" style="width: 100%; height: 100%;" alt="">
+    </div>
 @endif
 
 <div class="content">
@@ -101,7 +104,7 @@
                     </div>
                 </td>
                 <td class="ttd-cell">
-                    <div class="ttd-space"></div>
+                    <div class="ttd-space">@include('pdf.components._sekjen-signature')</div>
                 </td>
             </tr>
             <tr>
@@ -127,7 +130,7 @@
             </tr>
         </table>
 
-    </div>{{-- end .body-surat --}}
-</div>{{-- end .content --}}
+    </div>
+</div>
 </body>
 </html>

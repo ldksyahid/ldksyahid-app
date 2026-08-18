@@ -69,7 +69,7 @@
                 <td class="ttd-cell">
                     <div class="ttd-space"><img src="{!! $qrCode !!}" alt="QR Verifikasi"></div>
                 </td>
-                <td class="ttd-cell"><div class="ttd-space"></div></td>
+                <td class="ttd-cell"><div class="ttd-space">@include('pdf.components._sekjen-signature')</div></td>
             </tr>
             <tr>
                 <td class="ttd-cell"><strong>Muhammad Syauqi Mubarak</strong></td>

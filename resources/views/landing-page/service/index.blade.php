@@ -199,7 +199,7 @@
 
             <div class="sv-card" style="--sv-accent: #0ea5e9;">
     <div class="sv-card-img-wrap">
-        <img src="https://lh3.googleusercontent.com/d/GANTI_DENGAN_FILE_ID_GAMBAR"
+        <img src="https://lh3.googleusercontent.com/d/1nCOWbWIYhzZ59jR39Y_kYA3eKfJzJUkF"
              alt="Layanan Persuratan" class="sv-card-img" loading="lazy"
              onerror="this.src='https://via.placeholder.com/400x200/0ea5e9/ffffff?text=Layanan+Persuratan'">
     </div>

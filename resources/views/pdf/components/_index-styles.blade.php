@@ -1,7 +1,6 @@
 <style>
 @page { margin: 0; }
 
-/* ── GLOBAL ── */
 body {
     margin: 0;
     color: #000;
@@ -10,23 +9,19 @@ body {
     line-height: 1.12;
 }
 
-/* ── BACKGROUND KOP ── */
 .page-bg {
-    position: fixed;
-    top: 0; left: 0;
-    width: 210mm; height: 297mm;
-    z-index: -1;
+    position: fixed; 
+    top: 0; 
+    left: 0;
+    width: 210mm; 
+    height: 297mm;
+    z-index: -1;   
 }
 
-/* ── WRAPPER KONTEN
-   padding-top menggantikan position:absolute agar konten
-   panjang tidak terpotong & halaman bisa overflow.
-   padding-bottom kecil saja — verifikasi QR sudah punya margin sendiri ── */
 .content {
     padding: 49mm 22mm 14mm 22mm;
 }
 
-/* ── HEADER META (Nomor / Lampiran / Hal) ── */
 .meta {
     width: 100%;
     margin: 0 0 10pt 0;
@@ -46,7 +41,6 @@ body {
     text-align: justify;
 }
 
-/* Semua <p>: justify + jarak bawah yang cukup, namun tetap hemat ruang. */
 p {
     margin: 0 0 5pt 0;
     text-align: justify;
@@ -76,7 +70,6 @@ p {
     text-align: left;
 }
 
-/* ── TABEL IDENTITAS (Hari/Tanggal, Waktu, Tempat, dst) ── */
 .identity {
     width: 100%;
     margin: 3pt 0 6pt 0;
@@ -114,12 +107,12 @@ ol li, ul li {
 .ttd-cell {
     width: 50%;
     text-align: center;
-    vertical-align: bottom;   /* dompdf support vertical-align pada td */
+    vertical-align: bottom;  
     line-height: 1.25;
     padding-bottom: 0;
 }
 
-/* Ruang TTD: dompdf tidak support flex, pakai block + height */
+
 .ttd-space {
     height: 12mm;
     display: block;
@@ -136,6 +129,21 @@ ol li, ul li {
     height: auto;
     max-height: 11mm;
     margin: 1mm auto 0 auto;
+}
+
+/* ── TTD KHUSUS WAREK (Fasilitas Kampus Bersama) ── */
+.signature-table--warek {
+    width: 50%;
+    margin: 10pt auto 0 auto;
+    border-collapse: collapse;
+    page-break-inside: avoid;
+}
+.signature-table--warek .ttd-cell { width: 100%; }
+
+.ttd-caret {
+    font-size: 13pt;
+    font-weight: bold;
+    color: #999;
 }
 
 /* ── KOTAK VERIFIKASI QR (footer surat) ── */

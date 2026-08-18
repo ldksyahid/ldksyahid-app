@@ -103,7 +103,7 @@
                     <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/reqservice', 'admin/persuratan']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fa fa-bullhorn me-2"></i>Req Service</a>
                     <div class="dropdown-menu bg-transparent border-0 ">
                         <a href="/admin/reqservice/shortlink" class="dropdown-item {{ $isActive('admin/reqservice/shortlink') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Request Shortlink</a>
-                        <a href="/admin/persuratan" class="dropdown-item {{ $isActive('admin/persuratan') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Persuratan</a>
+                        <a href="/admin/persuratan" class="dropdown-item {{ $isActive('admin/persuratan') ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Letter Request</a>
                     </div>
                 </div>
                 <a href="/admin/comments" class="nav-item nav-link {{ $isActive('admin/comments') ? 'active' : '' }}"><i class="fas fa-comments me-2"></i>Comments</a>

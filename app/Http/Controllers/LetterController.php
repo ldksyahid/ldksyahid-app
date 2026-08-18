@@ -10,7 +10,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use ZipStream\CompressionMethod;
 use ZipStream\ZipStream;
 use App\Models\SuratLog;
-use App\Models\MsSetting; // <-- WAJIB IMPORT INI UNTUK SETTING KESTARI
+use App\Models\MsSetting;
 
 class LetterController extends Controller
 {
@@ -19,7 +19,6 @@ class LetterController extends Controller
     // =================================================================
     public function index()
     {
-        // Fitur Setting Kestari yang tadi kita buat!
         $waSekjen    = MsSetting::getSettingValue1('Persuratan', 'Kontak Sekjen') ?? '6285776923137';
         $namaSekjen  = MsSetting::getSettingValue2('Persuratan', 'Kontak Sekjen') ?? 'M. Zhaffar Rabbany';
         $waKestari   = MsSetting::getSettingValue1('Persuratan', 'Kontak Kestari') ?? '6285819353387';
@@ -101,19 +100,22 @@ class LetterController extends Controller
     }
 
     // =================================================================
-    // 2. ADMIN PANEL ACTIONS (SKINNY CONTROLLER!)
+    // 2. ADMIN PANEL ACTIONS
     // =================================================================
     public function indexAdmin(Request $request)
     {
-        // Sangat Rapi! Logic pencarian diserahkan ke Model SuratLog
         $suratLogs   = SuratLog::searchAdminPersuratan($request);
-        $tableConfig = SuratLog::getTableConfig(); // Panggil konfigurasi UI dari model
+        $tableConfig = SuratLog::getTableConfig();
 
         return view('admin-page.service-request.persuratan.index', [
-            'title'       => 'Manajemen Persuratan',
-            'suratLogs'   => $suratLogs,
-            'tableConfig' => $tableConfig,
-            'suratTypes'  => SuratLog::getSuratTypes(),
+            'title'         => 'Letter Management',
+            'suratLogs'     => $suratLogs,
+            'tableConfig'   => $tableConfig,
+            'suratTypes'    => SuratLog::getSuratTypes(),
+            'totalCount'    => SuratLog::count(),
+            'pendingCount'  => SuratLog::where('status', 'pending')->count(),
+            'approvedCount' => SuratLog::where('status', 'approved')->count(),
+            'rejectedCount' => SuratLog::where('status', 'rejected')->count(),
         ]);
     }
 
@@ -126,7 +128,7 @@ class LetterController extends Controller
             ->first();
 
         return view('admin-page.service-request.persuratan.show', [
-            'title'             => 'Detail Pengajuan Surat',
+            'title'             => 'Letter Request Details',
             'suratLog'          => $suratLog->load('user', 'approvedBy'),
             'lastNomor'         => $lastDocument?->nomor_surat,
             'kodeBidangOptions' => SuratLog::getKodeBidangOptions(),
@@ -136,7 +138,7 @@ class LetterController extends Controller
 
     public function approve(Request $request, SuratLog $suratLog)
     {
-        abort_if(!$suratLog->isPending(), 422, 'Dokumen ini sudah diproses sebelumnya.');
+        abort_if(!$suratLog->isPending(), 422, 'This document has already been processed.');
 
         $request->validate([
             'kode_bidang'        => 'required|string|max:20',
@@ -153,8 +155,8 @@ class LetterController extends Controller
 
         if (!$result['success']) {
             $message = match ($result['error']) {
-                'mundur' => 'Nomor surat manual tidak valid: nomor ini mundur atau bentrok dengan nomor yang sudah diterbitkan sebelumnya.',
-                default  => 'Format nomor surat manual tidak valid.',
+                'mundur' => 'Manual letter number is invalid: this sequence goes backward or conflicts with previously issued numbers.',
+                default  => 'Manual letter number format is invalid.',
             };
 
             return back()->withErrors(['nomor_surat_manual' => $message])->withInput();
@@ -162,12 +164,12 @@ class LetterController extends Controller
 
         return redirect()
             ->route('admin.persuratan.show', $suratLog)
-            ->with('success', 'Surat berhasil disetujui dan nomor surat telah diterbitkan.');
+            ->with('success', 'Letter request has been approved and the letter number has been issued successfully.');
     }
 
     public function reject(Request $request, SuratLog $suratLog)
     {
-        abort_if(!$suratLog->isPending(), 422, 'Dokumen ini sudah diproses sebelumnya.');
+        abort_if(!$suratLog->isPending(), 422, 'This document has already been processed.');
 
         $request->validate(['catatan_admin' => 'required|string|max:500']);
 
@@ -178,7 +180,7 @@ class LetterController extends Controller
             'approved_at'   => now(),
         ]);
 
-        return back()->with('success', 'Pengajuan surat telah ditolak.');
+        return back()->with('success', 'Letter request has been rejected.');
     }
 
     public function downloadAdmin(SuratLog $suratLog)
@@ -205,17 +207,14 @@ class LetterController extends Controller
         );
 
         return response()->streamDownload(function () use ($types, $sampleData, $verificationUrl, $qrCode) {
-            // PDF sudah terkompresi; tidak perlu dikompresi ulang saat membuat ZIP.
             $zip = new ZipStream(
                 sendHttpHeaders: false,
                 defaultCompressionMethod: CompressionMethod::STORE,
             );
 
             foreach ($types as $type => $definition) {
-                $data = array_intersect_key($sampleData, array_flip($definition['fields']));
-                $view = View::exists('landing-page.service.e-letter.' . $type)
-                    ? 'landing-page.service.e-letter.' . $type
-                    : 'landing-page.service.e-letter.surat';
+                $data  = array_intersect_key($sampleData, array_flip($definition['fields']));
+                $view  = $this->getPdfView($type);
                 $nomor = $this->exampleLetterNumber($type);
 
                 $pdf = Pdf::loadView($view, [
@@ -244,9 +243,8 @@ class LetterController extends Controller
 
     public function destroy(SuratLog $suratLog)
     {
-        // Pakai deleteModel() agar PDF-nya juga ikut terhapus dari server
-        if(method_exists($suratLog, 'deleteModel')) {
-            $suratLog->deleteModel(); 
+        if (method_exists($suratLog, 'deleteModel')) {
+            $suratLog->deleteModel();
         } else {
             $suratLog->delete();
         }
@@ -256,18 +254,17 @@ class LetterController extends Controller
             ->with('success', 'Data pengajuan berhasil dihapus.');
     }
 
-    // (Opsional) Tambahkan bulkDestroy jika Aa mau fitur hapus massal
     public function bulkDestroy(Request $request)
     {
         $ids = $request->input('ids', []);
-        if(method_exists(SuratLog::class, 'bulkDeleteModel')) {
+        if (method_exists(SuratLog::class, 'bulkDeleteModel')) {
             SuratLog::bulkDeleteModel($ids);
         } else {
             SuratLog::whereIn('id', $ids)->delete();
         }
-        
+
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'message' => 'Surat terpilih berhasil dihapus!'
         ]);
     }
@@ -286,9 +283,7 @@ class LetterController extends Controller
         $qrSvg        = QrCode::size(120)->margin(0)->generate($verificationUrl);
         $qrCodeBase64 = 'data:image/svg+xml;base64,' . base64_encode((string) $qrSvg);
 
-$pdfView = View::exists('landing-page.service.e-letter.' . $suratLog->jenis_surat)
-            ? 'landing-page.service.e-letter.' . $suratLog->jenis_surat
-            : 'landing-page.service.e-letter.surat';
+        $pdfView = $this->getPdfView($suratLog->jenis_surat);
 
         return Pdf::loadView($pdfView, [
             'data'           => $suratLog->data,
@@ -301,6 +296,15 @@ $pdfView = View::exists('landing-page.service.e-letter.' . $suratLog->jenis_sura
             'qrCode'         => $qrCodeBase64,
             'suratLog'       => $suratLog,
         ])->setPaper('a4', 'portrait')->download($suratLog->filename ?: $suratLog->jenis_surat . '.pdf');
+    }
+
+    private function getPdfView(?string $type): string
+    {
+        if ($type && View::exists('pdf.' . $type)) {
+            return 'pdf.' . $type;
+        }
+
+        return 'pdf.surat';
     }
 
     private function exampleLetterNumber(string $type): string

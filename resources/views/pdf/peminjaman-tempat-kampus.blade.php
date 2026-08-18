@@ -20,7 +20,7 @@
 
     /* Placeholder posisi TTD basah Wakil Rektor. Warek berada di luar sistem digital LDK,
        jadi belum ada citra tanda tangan/QR — tanda "^" dipakai sebagai anchor manual untuk
-       proses verifikasi berikutnya (lihat catatan di app/Http/Controllers/LetterController.php). */
+       proses verifikasi berikutnya. */
     .ttd-caret {
         font-size: 13pt;
         font-weight: bold;
@@ -40,8 +40,11 @@
     $requiresWarek = $requiresWarek ?? true;
 @endphp
 
+{{-- 🛠️ PERBAIKAN 1: Membungkus gambar background ke dalam div .page-bg --}}
 @if ($templateUri)
-    <img class="page-bg" src="{{ $templateUri }}" alt="">
+    <div class="page-bg">
+        <img src="{{ $templateUri }}" style="width: 100%; height: 100%;" alt="">
+    </div>
 @endif
 
 <div class="content">
@@ -112,7 +115,7 @@
 
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
 
-        {{-- TTD Ketua Umum & Sekjen — SELALU 2 kolom ini, di semua jenis (rektorat/non-rektorat/luar kampus). --}}
+        {{-- TTD Ketua Umum & Sekjen --}}
         <table class="signature-table">
             <tr>
                 <td class="ttd-cell"><strong>Ketua Umum LDK Syahid</strong></td>
@@ -136,8 +139,7 @@
             </tr>
         </table>
 
-        {{-- TTD Wakil Rektor Bidang Kemahasiswaan — HANYA untuk fasilitas rektorat (requiresWarek = true).
-             Baris ke-3 terpisah di bawah, bukan kolom ke-3 sejajar Ketum/Sekjen. --}}
+        {{-- TTD Wakil Rektor Bidang Kemahasiswaan --}}
         @if ($requiresWarek)
             <table class="signature-table--warek">
                 <tr>
@@ -170,7 +172,7 @@
             </tr>
         </table>
 
-    </div>
-</div>
+    </div>{{-- end .body-surat --}}
+</div>{{-- end .content --}}
 </body>
 </html>
