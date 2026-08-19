@@ -5,10 +5,11 @@
 @section('content')
 
 @php
-    $totalSurat = $riwayat->total();
-    $pendingCount = $riwayat->getCollection()->where('status', 'pending')->count();
-    $approvedCount = $riwayat->getCollection()->where('status', 'approved')->count();
-    $rejectedCount = $riwayat->getCollection()->where('status', 'rejected')->count();
+    $totalSurat    = $totalSurat ?? $riwayat->total();
+    $pendingCount  = $pendingCount ?? $riwayat->getCollection()->where('status', 'pending')->count();
+    $approvedCount = $approvedCount ?? $riwayat->getCollection()->where('status', 'approved')->count();
+    $rejectedCount = $rejectedCount ?? $riwayat->getCollection()->where('status', 'rejected')->count();
+    $expiredCount  = $expiredCount ?? $riwayat->getCollection()->where('status', 'expired')->count();
 @endphp
 
 <section id="persuratan-riwayat-section">
@@ -37,7 +38,7 @@
                         <span class="pr-stat-icon total"><i class="fas fa-file-alt"></i></span>
                         <div>
                             <strong>{{ $totalSurat }}</strong>
-                            <span>Total Pengajuan</span>
+                            <span>Total</span>
                         </div>
                     </div>
                     <div class="pr-stat">
@@ -61,6 +62,13 @@
                             <span>Ditolak</span>
                         </div>
                     </div>
+                    <div class="pr-stat">
+                        <span class="pr-stat-icon expired"><i class="fas fa-hourglass-end"></i></span>
+                        <div>
+                            <strong>{{ $expiredCount }}</strong>
+                            <span>Kadaluarsa</span>
+                        </div>
+                    </div>
                 </div>
 
                 @if ($riwayat->isEmpty())
@@ -82,6 +90,8 @@
                                         <i class="fas fa-check"></i>
                                     @elseif ($log->isRejected())
                                         <i class="fas fa-times"></i>
+                                    @elseif ($log->isExpired())
+                                        <i class="fas fa-hourglass-end"></i>
                                     @else
                                         <i class="fas fa-clock"></i>
                                     @endif
@@ -104,7 +114,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="pr-item-actions">
+                                        <div class="pr-item-actions d-flex align-items-center gap-2">
                                             <span class="pr-status bg-{{ $log->statusBadgeClass() }}">
                                                 {{ $log->statusLabel() }}
                                             </span>
@@ -113,15 +123,22 @@
                                                     <i class="fas fa-download"></i>
                                                     PDF
                                                 </a>
+                                            @elseif ($log->isExpired() || $log->isRejected())
+                                                <a href="{{ route('service.persuratan.index', ['reapply' => $log->id]) }}"
+                                                   class="btn btn-sm btn-outline-primary"
+                                                   title="Ajukan Ulang dengan data sebelumnya">
+                                                    <i class="fas fa-redo-alt me-1"></i>
+                                                    Ajukan Ulang
+                                                </a>
                                             @endif
                                         </div>
                                     </div>
 
                                     @if ($log->catatan_admin)
-                                        <div class="pr-note {{ $log->isRejected() ? 'is-rejected' : 'is-approved' }}">
+                                        <div class="pr-note {{ $log->isRejected() || $log->isExpired() ? 'is-rejected' : 'is-approved' }}">
                                             <i class="fas fa-comment-alt"></i>
                                             <div>
-                                                <strong>Catatan Admin</strong>
+                                                <strong>Catatan:</strong>
                                                 <span>{{ $log->catatan_admin }}</span>
                                             </div>
                                         </div>
@@ -192,7 +209,7 @@
 
 #persuratan-riwayat-section .pr-stats {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: .75rem;
     margin-bottom: 1rem;
 }
@@ -222,6 +239,7 @@
 #persuratan-riwayat-section .pr-stat-icon.pending { background: rgba(255, 193, 7, .16); color: #b58100; }
 #persuratan-riwayat-section .pr-stat-icon.approved { background: rgba(25, 135, 84, .14); color: #198754; }
 #persuratan-riwayat-section .pr-stat-icon.rejected { background: rgba(220, 53, 69, .12); color: #dc3545; }
+#persuratan-riwayat-section .pr-stat-icon.expired { background: rgba(108, 117, 125, .15); color: #6c757d; }
 
 #persuratan-riwayat-section .pr-stat strong {
     display: block;

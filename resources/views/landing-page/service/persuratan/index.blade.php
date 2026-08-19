@@ -163,6 +163,15 @@
                         </div>
                     @endif
 
+                    @if (isset($reapplyLog) && $reapplyLog)
+                        <div class="prs-alert prs-alert-info mb-3">
+                            <i class="fas fa-redo-alt"></i>
+                            <div>
+                                <strong>Mode Ajukan Ulang:</strong> Formulir telah diisi otomatis dari pengajuan sebelumnya (<em>{{ $reapplyLog->label }}</em>). Silakan sesuaikan data tanggal atau rincian lainnya sebelum mengirim.
+                            </div>
+                        </div>
+                    @endif
+
                     <form action="{{ route('service.persuratan.submit') }}" method="POST" id="form-persuratan">
                         @csrf
 
@@ -177,7 +186,7 @@
                                     class="prs-form-select @error('jenis_surat') is-invalid @enderror">
                                     <option value="" disabled selected>-- Pilih jenis surat yang dibutuhkan --</option>
                                     @foreach ($suratTypes as $key => $surat)
-                                        <option value="{{ $key }}" {{ old('jenis_surat') === $key ? 'selected' : '' }}>
+                                        <option value="{{ $key }}" {{ old('jenis_surat', $reapplyLog?->jenis_surat ?? '') === $key ? 'selected' : '' }}>
                                             {{ $surat['label'] }}
                                         </option>
                                     @endforeach

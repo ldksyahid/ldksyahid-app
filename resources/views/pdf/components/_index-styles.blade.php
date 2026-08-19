@@ -6,7 +6,7 @@ body {
     color: #000;
     font-family: "Times New Roman", Times, serif;
     font-size: 11pt;
-    line-height: 1.12;
+    line-height: 1.15;
 }
 
 .page-bg {
@@ -18,39 +18,42 @@ body {
     z-index: -1;   
 }
 
+/* Jarak atas 52mm seimbang di bawah kaligrafi Basmallah */
 .content {
-    padding: 49mm 22mm 14mm 22mm;
+    padding: 52mm 22mm 12mm 22mm;
 }
 
 .meta {
     width: 100%;
-    margin: 0 0 10pt 0;
+    margin: 0 0 9pt 0;
     border-collapse: collapse;
 }
 .meta td {
-    padding: 0 0 3pt 0;
+    padding: 0 0 2.5pt 0;
     vertical-align: top;
 }
 .meta-label { width: 22mm; }
-.meta-sep   { width:  4mm; }
+.meta-sep   { width:  4mm; text-align: left; }
 .date-cell  { text-align: right; white-space: nowrap; }
 
-/* ── BODY SURAT ── */
+/* ── BODY SURAT (Rata lurus dengan titik dua meta header di atas: 22mm + 4mm = 26mm) ── */
 .body-surat {
-    margin-left: 10mm;
+    margin-left: 26mm;
     text-align: justify;
 }
 
 p {
-    margin: 0 0 5pt 0;
+    margin: 0 0 4.5pt 0;
     text-align: justify;
+    line-height: 1.15;
 }
 
-/* Indentasi awal paragraf */
+/* Indentasi paragraf (tab/menjorok ke dalam 8mm) */
 .indent { text-indent: 8mm; }
 
 /* ── ALAMAT PENERIMA ── */
 .recipient {
+    margin-left: 0;
     margin-bottom: 8pt;
     text-align: left;
 }
@@ -60,7 +63,7 @@ p {
 .salam {
     font-weight: bold;
     font-style: italic;
-    margin: 0 0 7pt 0;
+    margin: 0 0 6pt 0;
     text-align: left;
 }
 .salam-penutup {
@@ -70,35 +73,35 @@ p {
     text-align: left;
 }
 
+/* ── TABEL IDENTITAS / RINCIAN ACARA (Sejajar dengan indentasi paragraf: 8mm) ── */
 .identity {
     width: 100%;
-    margin: 3pt 0 6pt 0;
+    margin: 3pt 0 4.5pt 8mm;
     border-collapse: collapse;
 }
 .identity td {
-    padding: 0.5pt 0;
+    padding: 0.8pt 0;
     vertical-align: top;
-    line-height: 1.12;
+    line-height: 1.15;
     font-size: 11pt;
 }
-/* Default lebar label — bisa di-override per template */
-.identity-label { width: 38mm; }
-.identity-sep   { width:  5mm; }
+.identity-label { width: 34mm; }
+.identity-sep   { width:  3mm; text-align: left; padding-right: 1mm; }
 
 /* ── LIST (ol/ul) dalam isi surat ── */
 ol, ul {
-    margin: 4pt 0 10pt 0;
-    padding-left: 14mm;
+    margin: 3pt 0 7pt 0;
+    padding-left: 10mm;
 }
 ol li, ul li {
-    margin-bottom: 3pt;
+    margin-bottom: 2pt;
     line-height: 1.15;
 }
 
-/* ── TANDA TANGAN ── */
+/* ── TANDA TANGAN (14pt setelah wasalam) ── */
 .signature-table {
     width: 100%;
-    margin-top: 9pt;
+    margin-top: 14pt;
     border-collapse: collapse;
     page-break-inside: avoid;
 }
@@ -108,33 +111,33 @@ ol li, ul li {
     width: 50%;
     text-align: center;
     vertical-align: bottom;  
-    line-height: 1.25;
+    line-height: 1.2;
     padding-bottom: 0;
 }
 
-
 .ttd-space {
-    height: 12mm;
+    height: 18mm;
     display: block;
     text-align: center;
 }
 .ttd-space img {
-    width: 11mm;
-    height: 11mm;
+    width: 16mm;
+    height: 16mm;
     display: block;
-    margin: 1mm auto 0 auto;
+    margin: 0 auto;
 }
 .ttd-space img.ttd-signature {
-    width: 30mm;
-    height: auto;
-    max-height: 11mm;
-    margin: 1mm auto 0 auto;
+    width: auto;
+    height: 18mm;
+    max-width: 30mm;
+    display: block;
+    margin: 0 auto;
 }
 
 /* ── TTD KHUSUS WAREK (Fasilitas Kampus Bersama) ── */
 .signature-table--warek {
     width: 50%;
-    margin: 10pt auto 0 auto;
+    margin: 7pt auto 0 auto;
     border-collapse: collapse;
     page-break-inside: avoid;
 }
@@ -149,7 +152,7 @@ ol li, ul li {
 /* ── KOTAK VERIFIKASI QR (footer surat) ── */
 .verification {
     width: 68mm;
-    margin-top: 6pt;
+    margin-top: 5pt;
     border: 0.5px solid #36aaa1;
     border-collapse: collapse;
     color: #444;

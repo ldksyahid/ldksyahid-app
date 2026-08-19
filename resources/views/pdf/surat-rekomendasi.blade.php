@@ -11,9 +11,7 @@
 </head>
 <body>
 @php
-    $templatePath  = public_path('assets/persuratan/kop-ldk.png');
-    $templateUri   = file_exists($templatePath)
-        ? 'data:image/png;base64,' . base64_encode(file_get_contents($templatePath)) : null;
+    $templateUri = \App\Models\SuratLog::getKopImageBase64();
     $program       = $data['program_rekomendasi'] ?? 'program yang direkomendasikan';
     $pertimbangan  = preg_split('/\r\n|\r|\n/', trim($data['pertimbangan'] ?? ''));
     $pertimbangan  = array_values(array_filter(array_map(
@@ -70,20 +68,20 @@
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
         <table class="signature-table">
             <tr>
-                <td class="ttd-cell"><strong>Ketua Umum LDK Syahid</strong></td>
                 <td class="ttd-cell"><strong>Sekretaris Jenderal</strong></td>
+                <td class="ttd-cell"><strong>Ketua Umum LDK Syahid</strong></td>
             </tr>
             <tr>
-                <td class="ttd-cell"><div class="ttd-space"><img src="{!! $qrCode !!}" alt="QR"></div></td>
                 <td class="ttd-cell"><div class="ttd-space">@include('pdf.components._sekjen-signature')</div></td>
+                <td class="ttd-cell"><div class="ttd-space"><img src="{!! $qrCode !!}" alt="QR Verifikasi"></div></td>
             </tr>
             <tr>
+                <td class="ttd-cell"><strong>Muhammad Zhafar Rabbany</strong></td>
                 <td class="ttd-cell"><strong>Muhammad Syauqi Mubarak</strong></td>
-                <td class="ttd-cell"><strong>Muhammad Zhaffar Rabbani</strong></td>
             </tr>
             <tr>
-                <td class="ttd-cell">NIM. 11230600000067</td>
                 <td class="ttd-cell">NIM. 11230340000016</td>
+                <td class="ttd-cell">NIM. 11230600000067</td>
             </tr>
         </table>
         <table class="verification">

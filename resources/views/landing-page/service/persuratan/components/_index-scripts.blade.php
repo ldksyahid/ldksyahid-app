@@ -44,6 +44,11 @@
         'surat-undangan': 'Surat undangan resmi menghadiri acara atau agenda LDK Syahid untuk pihak internal maupun eksternal (Kode format: <strong>Und-i / Und-e</strong>).',
         'surat-aktif-organisasi': 'Surat keterangan resmi keaktifan kepengurusan mahasiswa di UKM LDK Syahid UIN Jakarta (Kode format: <strong>S.Ket-e</strong>).',
         'permohonan-pemateri': 'Permohonan resmi kesediaan menjadi narasumber/pemateri pada acara atau kajian (Kode format: <strong>Ph-e</strong>).',
+        'permohonan-sambutan': 'Permohonan resmi kepada pimpinan/tokoh untuk memberikan kata sambutan dalam pembukaan acara (Kode format: <strong>Ph-e</strong>).',
+        'surat-izin-buka-stand': 'Permohonan izin membuka stand/booth promosi atau bazar pada area tertentu (Kode format: <strong>Ph-i</strong>).',
+        'surat-izin-pengambilan-gambar-video': 'Permohonan izin dokumentasi, pengambilan foto, dan video resmi kegiatan (Kode format: <strong>Ph-i</strong>).',
+        'surat-kunjungan-lembaga': 'Permohonan kunjungan silaturahmi, kolaborasi, atau studi banding ke lembaga/instansi/organisasi lain (Kode format: <strong>Ph-e</strong>).',
+        'surat-imbauan': 'Surat imbauan dan arahan resmi pengurus kepada seluruh anggota/kader atau civitas akademika (Kode format: <strong>Pb-e</strong>).',
         'kerja-sama-sponsorship': 'Permohonan kemitraan, media partner, atau kerja sama sponsorship dengan pihak mitra/perusahaan (Kode format: <strong>Ks-e</strong>).',
         'surat-pemberitahuan': 'Surat pemberitahuan resmi mengenai kegiatan kepada pihak pengamanan, pengelola gedung, atau instansi terkait (Kode format: <strong>Pb-e</strong>).'
     };
@@ -54,7 +59,7 @@
             { name: 'nama_acara',   label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Rihlah LDK Syahid 2026' },
             { name: 'tema_acara',   label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Membangun Generasi Islami' },
             { name: 'hari_tanggal', label: 'Tanggal Pelaksanaan',  icon: 'fa-calendar',        type: 'date' },
-            { name: 'waktu',        label: 'Waktu Pelaksanaan',    icon: 'fa-clock',           type: 'time-range', placeholder: 'Contoh: 08.00 - 16.00 WIB' },
+            { name: 'waktu',        label: 'Waktu Pelaksanaan',    icon: 'fa-clock',           type: 'time-range' },
             { name: 'tempat',       label: 'Tempat Pelaksanaan',   icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Aula Madya UIN Jakarta' },
         ],
         'peminjaman-alat': [
@@ -65,7 +70,7 @@
             { name: 'tema_acara',       label: 'Tema Acara',           icon: 'fa-tag',          placeholder: 'Contoh: Moderasi Beragama di Era Digital' },
             { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',     placeholder: 'Contoh: Kepala Biro Umum / Bagian Logistik' },
             { name: 'hari_tanggal',     label: 'Tanggal Peminjaman',   icon: 'fa-calendar',     type: 'date' },
-            { name: 'waktu',            label: 'Waktu Peminjaman',     icon: 'fa-clock',        type: 'time-range', placeholder: 'Contoh: 08.00 - 15.00 WIB' },
+            { name: 'waktu',            label: 'Waktu Peminjaman',     icon: 'fa-clock',        type: 'time-range' },
             { name: 'tempat',           label: 'Tempat Penggunaan',    icon: 'fa-map-marker-alt', placeholder: 'Contoh: Aula Student Center Lt. 3' },
             { name: 'daftar_alat',      label: 'Daftar Alat yang Dipinjam', icon: 'fa-list-ol', type: 'textarea', placeholder: "Tuliskan daftar alat (1 per baris):\n1. Proyektor Epson 1 unit\n2. Sound Portable 1 set\n3. Kabel Roll 2 buah" },
         ],
@@ -77,7 +82,7 @@
             { name: 'nim_ketua_pelaksana',  label: 'NIM Ketua Pelaksana',    icon: 'fa-id-card',  inputmode: 'numeric', pattern: '[0-9]*', placeholder: 'Contoh: 11230600000067' },
             { name: 'ditujukan_kepada',     label: 'Ditujukan Kepada',       icon: 'fa-envelope', placeholder: 'Contoh: Kepala Bagian Umum UIN Jakarta' },
             { name: 'hari_tanggal',         label: 'Tanggal Peminjaman',     icon: 'fa-calendar', type: 'date' },
-            { name: 'waktu',                label: 'Waktu Peminjaman',       icon: 'fa-clock',    type: 'time-range', placeholder: 'Contoh: 08.00 - 17.00 WIB' },
+            { name: 'waktu',                label: 'Waktu Peminjaman',       icon: 'fa-clock',    type: 'time-range' },
             { name: 'tempat_dipinjam',      label: 'Tempat yang Dipinjam',   icon: 'fa-building', placeholder: 'Contoh: Aula Student Center Lt. 3 / Lapangan SC' },
         ],
         'peminjaman-tempat-fakultas': [
@@ -88,7 +93,7 @@
             { name: 'nim_ketua_pelaksana',  label: 'NIM Ketua Pelaksana',    icon: 'fa-id-card',  inputmode: 'numeric', pattern: '[0-9]*', placeholder: 'Contoh: 11230000000001' },
             { name: 'ditujukan_kepada',     label: 'Ditujukan Kepada',       icon: 'fa-envelope', placeholder: 'Contoh: Dekan Fakultas Sains dan Teknologi' },
             { name: 'hari_tanggal',         label: 'Tanggal Peminjaman',     icon: 'fa-calendar', type: 'date' },
-            { name: 'waktu',                label: 'Waktu Peminjaman',       icon: 'fa-clock',    type: 'time-range', placeholder: 'Contoh: 08.00 - 16.00 WIB' },
+            { name: 'waktu',                label: 'Waktu Peminjaman',       icon: 'fa-clock',    type: 'time-range' },
             { name: 'tempat_dipinjam',      label: 'Tempat yang Dipinjam',   icon: 'fa-building', placeholder: 'Contoh: Teater FST Lt. 2' },
         ],
         'peminjaman-tempat-luar-kampus': [
@@ -99,7 +104,7 @@
             { name: 'nim_ketua_pelaksana',  label: 'NIM Ketua Pelaksana',    icon: 'fa-id-card',  inputmode: 'numeric', pattern: '[0-9]*', placeholder: 'Contoh: 11230000000002' },
             { name: 'ditujukan_kepada',     label: 'Ditujukan Kepada',       icon: 'fa-envelope', placeholder: 'Contoh: Pengelola Villa Cisarua' },
             { name: 'hari_tanggal',         label: 'Tanggal Peminjaman',     icon: 'fa-calendar', type: 'date' },
-            { name: 'waktu',                label: 'Waktu Peminjaman',       icon: 'fa-clock',    type: 'time-range', placeholder: 'Contoh: 2 Hari 1 Malam' },
+            { name: 'waktu',                label: 'Waktu Peminjaman',       icon: 'fa-clock',    type: 'time-range' },
             { name: 'tempat_dipinjam',      label: 'Tempat yang Dipinjam',   icon: 'fa-building', placeholder: 'Contoh: Villa Alam Hijau, Puncak, Bogor' },
         ],
         'permohonan-bantuan-dana': [
@@ -113,7 +118,7 @@
             { name: 'nama_acara',    label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Kemah Bakti Mahasiswa' },
             { name: 'tema_acara',    label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Mengabdi untuk Negeri' },
             { name: 'hari_tanggal',  label: 'Tanggal Pelaksanaan',  icon: 'fa-calendar',        type: 'date' },
-            { name: 'waktu',         label: 'Waktu Pelaksanaan',    icon: 'fa-clock',           type: 'time-range', placeholder: 'Contoh: 07.00 - Selesai' },
+            { name: 'waktu',         label: 'Waktu Pelaksanaan',    icon: 'fa-clock',           type: 'time-range' },
             { name: 'tempat',        label: 'Nama Tempat',          icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Desa Wisata Babakan Madang' },
             { name: 'alamat_tempat', label: 'Alamat Lengkap',       icon: 'fa-map-pin',         placeholder: 'Contoh: Jl. Raya Babakan No. 45, Bogor, Jawa Barat' },
         ],
@@ -135,7 +140,7 @@
             { name: 'tema_acara',      label: 'Tema Acara',           icon: 'fa-tag',          placeholder: 'Contoh: Harmoni Dakwah Kreatif' },
             { name: 'ditujukan_kepada',label: 'Ditujukan Kepada',     icon: 'fa-envelope',     placeholder: 'Contoh: Ketua BEM Universitas / Bapak Rektor' },
             { name: 'hari_tanggal',    label: 'Tanggal Acara',        icon: 'fa-calendar',     type: 'date' },
-            { name: 'waktu',           label: 'Waktu Acara',          icon: 'fa-clock',        type: 'time-range', placeholder: 'Contoh: 08.30 - 12.00 WIB' },
+            { name: 'waktu',           label: 'Waktu Acara',          icon: 'fa-clock',        type: 'time-range' },
             { name: 'tempat',          label: 'Tempat Acara',         icon: 'fa-map-marker-alt', placeholder: 'Contoh: Auditorium Utama Harun Nasution' },
         ],
         'surat-aktif-organisasi': [
@@ -156,8 +161,51 @@
             { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',       placeholder: 'Contoh: Ustadz Dr. Fulan, M.A.' },
             { name: 'materi',           label: 'Tema Materi Khusus',   icon: 'fa-book-open',      placeholder: 'Contoh: Urgensi Menuntut Ilmu di Era Disrupsi' },
             { name: 'hari_tanggal',     label: 'Tanggal Acara',        icon: 'fa-calendar',       type: 'date' },
-            { name: 'waktu',            label: 'Waktu Acara',          icon: 'fa-clock',          type: 'time-range', placeholder: 'Contoh: 09.00 - 11.30 WIB' },
+            { name: 'waktu',            label: 'Waktu Acara',          icon: 'fa-clock',          type: 'time-range' },
             { name: 'tempat',           label: 'Tempat Acara',         icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Ruang Teater Prof. Aqib Suminto' },
+        ],
+        'permohonan-sambutan': [
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
+            { name: 'nama_acara',       label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Grand Opening Syahid Fair 2026' },
+            { name: 'tema_acara',       label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Meneguhkan Langkah Dakwah Kampus' },
+            { name: 'ditujukan_kepada', label: 'Nama Tokoh / Pejabat', icon: 'fa-user-tie',       placeholder: 'Contoh: Prof. Dr. Hj. Amany Lubis, M.A.' },
+            { name: 'jabatan_tujuan',   label: 'Jabatan / Instansi',   icon: 'fa-id-badge',        placeholder: 'Contoh: Guru Besar UIN Syarif Hidayatullah Jakarta' },
+            { name: 'hari_tanggal',     label: 'Tanggal Pelaksanaan',  icon: 'fa-calendar',        type: 'date' },
+            { name: 'waktu',            label: 'Waktu Pelaksanaan',    icon: 'fa-clock',           type: 'time-range' },
+            { name: 'tempat',           label: 'Tempat Pelaksanaan',   icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Auditorium Harun Nasution' },
+        ],
+        'surat-izin-buka-stand': [
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
+            { name: 'nama_acara',       label: 'Nama Agenda / Bazar',  icon: 'fa-store',           placeholder: 'Contoh: Bazar Kuliner Syahid Entrepreneur' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',        placeholder: 'Contoh: Kepala Biro Umum / Pengelola Tempat' },
+            { name: 'hari_tanggal',     label: 'Tanggal Pelaksanaan',  icon: 'fa-calendar',        type: 'date' },
+            { name: 'waktu',            label: 'Waktu Operasional',    icon: 'fa-clock',           type: 'time-range' },
+            { name: 'tempat',           label: 'Lokasi Stand/Booth',   icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Selasar Depan Student Center' },
+            { name: 'keperluan',        label: 'Deskripsi Stand',      icon: 'fa-file-alt',        type: 'textarea', placeholder: 'Contoh: Penjualan merchandise resmi, buku islami, dan produk kewirausahaan kader.' },
+        ],
+        'surat-izin-pengambilan-gambar-video': [
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
+            { name: 'nama_acara',       label: 'Nama Kegiatan / Proyek', icon: 'fa-video',        placeholder: 'Contoh: Pembuatan Video Profil LDK Syahid 2026' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',        placeholder: 'Contoh: Kepala Bagian Keamanan / Pengelola Gedung' },
+            { name: 'hari_tanggal',     label: 'Tanggal Pengambilan',  icon: 'fa-calendar',        type: 'date' },
+            { name: 'waktu',            label: 'Waktu Pengambilan',    icon: 'fa-clock',           type: 'time-range' },
+            { name: 'tempat',           label: 'Lokasi / Area',        icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Area Rektorat dan Taman SC' },
+            { name: 'keperluan',        label: 'Rincian Keperluan',    icon: 'fa-file-alt',        type: 'textarea', placeholder: 'Contoh: Dokumentasi visual, video cinematic profil organisasi, dan publikasi dakwah.' },
+        ],
+        'surat-kunjungan-lembaga': [
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
+            { name: 'nama_kegiatan',    label: 'Nama Program Kunjungan', icon: 'fa-handshake',     placeholder: 'Contoh: Studi Banding & Silaturahmi Kelembagaan' },
+            { name: 'ditujukan_kepada', label: 'Lembaga / Instansi Tujuan', icon: 'fa-building', placeholder: 'Contoh: Pengurus Pusat BAZNAS RI / LDK Sahabat Kampus' },
+            { name: 'hari_tanggal',     label: 'Tanggal Kunjungan',    icon: 'fa-calendar',        type: 'date' },
+            { name: 'waktu',            label: 'Waktu Kunjungan',      icon: 'fa-clock',           type: 'time-range' },
+            { name: 'tempat',           label: 'Alamat / Tempat Tujuan', icon: 'fa-map-marker-alt', placeholder: 'Contoh: Gedung BAZNAS RI, Jl. Matraman Raya No. 134, Jakarta' },
+            { name: 'keperluan',        label: 'Fokus Agenda Kunjungan', icon: 'fa-file-alt',     type: 'textarea', placeholder: 'Contoh: Sharing session manajemen organisasi, kolaborasi program dakwah, dan penyerahan cinderamata.' },
+        ],
+        'surat-imbauan': [
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
+            { name: 'perihal_imbauan',  label: 'Perihal Imbauan',      icon: 'fa-bullhorn',        placeholder: 'Contoh: Menjaga Ketertiban dan Kebersihan Fasilitas Dakwah' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',        placeholder: 'Contoh: Seluruh Pengurus dan Kader LDK Syahid' },
+            { name: 'poin_imbauan',     label: 'Poin-poin Imbauan (1 per baris)', icon: 'fa-list-ol', type: 'textarea', placeholder: "Tuliskan poin imbauan (1 baris = 1 poin):\n1. Menjaga kebersihan dan ketertiban sekretariat.\n2. Mematikan alat elektronik setelah selesai digunakan.\n3. Menjaga koordinasi dan komunikasi yang santun." },
         ],
         'kerja-sama-sponsorship': [
             { name: 'kode_bidang',     label: 'Asal Bidang / LDKSF', icon: 'fa-users',     type: 'select', options: bidangOptions },
@@ -171,7 +219,7 @@
             { name: 'nama_kegiatan',    label: 'Nama Kegiatan',        icon: 'fa-star',            placeholder: 'Contoh: Rihlah Akbar Kader LDK Syahid' },
             { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',       placeholder: 'Contoh: Komandan Satpam / Pengelola Keamanan Kampus' },
             { name: 'hari_tanggal',     label: 'Tanggal Pelaksanaan',  icon: 'fa-calendar',       type: 'date' },
-            { name: 'waktu',            label: 'Waktu Pelaksanaan',    icon: 'fa-clock',          type: 'time-range', placeholder: 'Contoh: 06.00 - 18.00 WIB' },
+            { name: 'waktu',            label: 'Waktu Pelaksanaan',    icon: 'fa-clock',          type: 'time-range' },
             { name: 'tempat',           label: 'Tempat Pelaksanaan',   icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Parkiran Utama UIN Syarif Hidayatullah' },
         ],
     };
@@ -213,13 +261,12 @@
             group.className = 'prs-form-group';
 
             var iconHtml = f.icon ? '<i class="fas ' + f.icon + '"></i>' : '<i class="fas fa-circle"></i>';
-            var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
-
-            var inputHtml = '';
             var prefixIcon = f.icon ? '<i class="fas ' + f.icon + ' prs-input-prefix-icon"></i>' : '';
 
+            // 1. SELECT FIELD
             if (f.type === 'select') {
-                inputHtml = '<div class="prs-input-group">' + prefixIcon +
+                var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
+                var inputHtml = '<div class="prs-input-group">' + prefixIcon +
                     '<select name="' + f.name + '" id="field_' + f.name + '" class="prs-form-select" required>' +
                     '<option value="" disabled ' + (val === '' ? 'selected' : '') + '>-- Pilih ' + f.label + ' --</option>';
 
@@ -229,41 +276,253 @@
                 });
 
                 inputHtml += '</select></div>';
-            } else if (f.type === 'textarea') {
-                inputHtml = '<div class="prs-input-group">' + prefixIcon +
+                group.innerHTML = labelHtml + inputHtml;
+            }
+            // 2. TEXTAREA FIELD
+            else if (f.type === 'textarea') {
+                var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
+                var inputHtml = '<div class="prs-input-group">' + prefixIcon +
                     '<textarea name="' + f.name + '" id="field_' + f.name + '" class="prs-form-textarea" placeholder="' + escapeAttr(f.placeholder || '') + '" required>' +
                     escapeAttr(val) + '</textarea></div>';
-            } else if (f.type === 'date') {
-                inputHtml = '<div class="prs-input-group">' + prefixIcon +
-                    '<input type="text" name="' + f.name + '" id="field_' + f.name + '" class="prs-form-input prs-datepicker" value="' + escapeAttr(val) + '" placeholder="Pilih tanggal" required autocomplete="off">' +
-                    '</div>';
-            } else {
+                group.innerHTML = labelHtml + inputHtml;
+            }
+            // 3. DATE FIELD (Single Day vs Multi-Day Range Toggle)
+            else if (f.type === 'date') {
+                var isMulti = String(val).indexOf('to') !== -1 || String(val).indexOf('s.d.') !== -1;
+                
+                var headerHtml = '<div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">' +
+                    '<label class="prs-form-label mb-0" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>' +
+                    '<div class="prs-date-toggle-wrap">' +
+                        '<button type="button" class="prs-date-toggle-btn ' + (!isMulti ? 'active' : '') + '" id="btn_date_single">1 Hari</button>' +
+                        '<button type="button" class="prs-date-toggle-btn ' + (isMulti ? 'active' : '') + '" id="btn_date_range">Rentang Hari (&gt; 1 Hari)</button>' +
+                    '</div>' +
+                '</div>';
+
+                var inputHtml = '<input type="hidden" name="' + f.name + '" id="field_' + f.name + '" value="' + escapeAttr(val) + '" required>' +
+                    '<div class="prs-input-group">' + prefixIcon +
+                        '<input type="text" id="picker_' + f.name + '" class="prs-form-input prs-datepicker" placeholder="Pilih tanggal kegiatan..." autocomplete="off" readonly required>' +
+                    '</div>' +
+                    '<span class="prs-form-hint" id="hint_' + f.name + '">Pilih 1 tanggal jika acara 1 hari, atau pilih rentang tanggal jika lebih dari 1 hari.</span>';
+
+                group.innerHTML = headerHtml + inputHtml;
+            }
+            // 4. TIME-RANGE FIELD (Interactive Time Picker - s.d.)
+            else if (f.type === 'time-range') {
+                var defaultVal = val || '08.00 s.d. 16.00 WIB';
+
+                var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
+                var inputHtml = '<input type="hidden" name="' + f.name + '" id="field_' + f.name + '" value="' + escapeAttr(defaultVal) + '" required>' +
+                    '<div class="prs-time-box">' +
+                        '<div class="row g-2 align-items-end">' +
+                            '<div class="col-sm-4 col-6">' +
+                                '<label class="small text-muted mb-1" style="font-size:0.76rem; font-weight:600;"><i class="fas fa-hourglass-start me-1 text-primary"></i> Jam Mulai</label>' +
+                                '<div class="prs-input-group">' +
+                                    '<input type="text" id="picker_time_start" class="prs-form-input prs-time-picker text-center font-weight-bold" style="padding-left:0.9rem!important;" value="08:00" readonly>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="col-sm-4 col-6">' +
+                                '<label class="small text-muted mb-1" style="font-size:0.76rem; font-weight:600;"><i class="fas fa-hourglass-end me-1 text-primary"></i> Jam Selesai</label>' +
+                                '<div class="prs-input-group">' +
+                                    '<input type="text" id="picker_time_end" class="prs-form-input prs-time-picker text-center font-weight-bold" style="padding-left:0.9rem!important;" value="16:00" readonly>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="col-sm-4 col-12">' +
+                                '<label class="small text-muted mb-1" style="font-size:0.76rem; font-weight:600;"><i class="fas fa-globe me-1 text-primary"></i> Zona</label>' +
+                                '<select id="select_timezone" class="prs-form-select" style="padding-left:0.8rem!important; padding-right:1.8rem!important;">' +
+                                    '<option value="WIB" selected>WIB (Waktu Indonesia Barat)</option>' +
+                                    '<option value="WITA">WITA (Waktu Indonesia Tengah)</option>' +
+                                    '<option value="WIT">WIT (Waktu Indonesia Timur)</option>' +
+                                '</select>' +
+                            '</div>' +
+                            '<div class="col-12 mt-2">' +
+                                '<div class="form-check">' +
+                                    '<input class="form-check-input" type="checkbox" id="check_until_finish" style="cursor:pointer;">' +
+                                    '<label class="form-check-label text-muted small" for="check_until_finish" style="cursor:pointer; font-size:0.82rem;">' +
+                                        'Acara berlangsung <strong>sampai selesai</strong> (tanpa batas jam berakhir)' +
+                                    '</label>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<span class="prs-form-hint mt-2" id="preview_waktu_text">' +
+                        '<i class="fas fa-check-circle text-success me-1"></i> Format waktu di surat: <strong class="text-primary" id="badge_compiled_time">08.00 s.d. 16.00 WIB</strong>' +
+                    '</span>';
+
+                group.innerHTML = labelHtml + inputHtml;
+            }
+            // 5. STANDARD INPUT FIELD
+            else {
+                var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
                 var extraAttr = '';
                 if (f.inputmode) extraAttr += ' inputmode="' + f.inputmode + '"';
                 if (f.pattern) extraAttr += ' pattern="' + f.pattern + '"';
 
-                inputHtml = '<div class="prs-input-group">' + prefixIcon +
+                var inputHtml = '<div class="prs-input-group">' + prefixIcon +
                     '<input type="text" name="' + f.name + '" id="field_' + f.name + '" class="prs-form-input" value="' + escapeAttr(val) + '" placeholder="' + escapeAttr(f.placeholder || '') + '"' + extraAttr + ' required>' +
                     '</div>';
+                group.innerHTML = labelHtml + inputHtml;
             }
 
-            group.innerHTML = labelHtml + inputHtml;
             container.appendChild(group);
         });
 
-        // Initialize Flatpickr on date inputs
-        if (typeof flatpickr !== 'undefined') {
-            flatpickr('.prs-datepicker', {
+        // ── Initialize Datepicker with Single / Range Mode ──
+        initDatePickers();
+
+        // ── Initialize Interactive Time Pickers ──
+        initTimePickers();
+
+        submitBtn.style.setProperty('display', 'block', 'important');
+    }
+
+    // Function to setup single or multi-day datepicker
+    function initDatePickers() {
+        var hiddenDateInput = document.getElementById('field_hari_tanggal');
+        var pickerInput     = document.getElementById('input_hari_tanggal_picker') || document.querySelector('.prs-datepicker');
+        var btnSingle       = document.getElementById('btn_date_single');
+        var btnRange        = document.getElementById('btn_date_range');
+        var hintDate        = document.getElementById('hint_hari_tanggal');
+
+        if (!pickerInput || !hiddenDateInput || typeof flatpickr === 'undefined') return;
+
+        var currentMode = (hiddenDateInput.value.indexOf('to') !== -1 || hiddenDateInput.value.indexOf('s.d.') !== -1) ? 'range' : 'single';
+        var fpInstance = null;
+
+        function createFlatpickr(mode) {
+            if (fpInstance) {
+                fpInstance.destroy();
+            }
+
+            var initialDate = hiddenDateInput.value || null;
+
+            fpInstance = flatpickr(pickerInput, {
+                mode: mode,
                 dateFormat: 'Y-m-d',
                 altInput: true,
-                altFormat: 'j F Y',
+                altFormat: mode === 'single' ? 'l, j F Y' : 'j F Y',
                 locale: 'id',
                 minDate: 'today',
-                disableMobile: false
+                defaultDate: initialDate,
+                onChange: function (selectedDates, dateStr, instance) {
+                    if (mode === 'single') {
+                        hiddenDateInput.value = dateStr;
+                        if (hintDate && selectedDates.length > 0) {
+                            hintDate.innerHTML = '<i class="fas fa-check-circle text-success me-1"></i> Acara berlangsung 1 hari: <strong>' + instance.altInput.value + '</strong>';
+                        }
+                    } else {
+                        if (selectedDates.length === 2) {
+                            var d1 = instance.formatDate(selectedDates[0], 'Y-m-d');
+                            var d2 = instance.formatDate(selectedDates[1], 'Y-m-d');
+                            hiddenDateInput.value = d1 + ' to ' + d2;
+                            if (hintDate) {
+                                var alt1 = instance.formatDate(selectedDates[0], 'j F Y');
+                                var alt2 = instance.formatDate(selectedDates[1], 'j F Y');
+                                hintDate.innerHTML = '<i class="fas fa-check-circle text-success me-1"></i> Acara berlangsung multi-hari: <strong>' + alt1 + ' s.d. ' + alt2 + '</strong>';
+                            }
+                        } else if (selectedDates.length === 1) {
+                            hiddenDateInput.value = dateStr;
+                            if (hintDate) {
+                                hintDate.innerHTML = '<i class="fas fa-info-circle text-primary me-1"></i> Silakan klik tanggal selesai di kalender.';
+                            }
+                        }
+                    }
+                }
             });
         }
 
-        submitBtn.style.setProperty('display', 'block', 'important');
+        createFlatpickr(currentMode);
+
+        if (btnSingle && btnRange) {
+            btnSingle.addEventListener('click', function () {
+                if (btnSingle.classList.contains('active')) return;
+                btnSingle.classList.add('active');
+                btnRange.classList.remove('active');
+                pickerInput.placeholder = 'Pilih tanggal kegiatan (1 hari)...';
+                createFlatpickr('single');
+            });
+
+            btnRange.addEventListener('click', function () {
+                if (btnRange.classList.contains('active')) return;
+                btnRange.classList.add('active');
+                btnSingle.classList.remove('active');
+                pickerInput.placeholder = 'Pilih rentang tanggal (mulai s.d. selesai)...';
+                createFlatpickr('range');
+            });
+        }
+    }
+
+    // Function to setup interactive time pickers
+    function initTimePickers() {
+        var hiddenTimeInput = document.getElementById('field_waktu');
+        var startInput      = document.getElementById('picker_time_start');
+        var endInput        = document.getElementById('picker_time_end');
+        var tzSelect        = document.getElementById('select_timezone');
+        var checkUntil      = document.getElementById('check_until_finish');
+        var badgeCompiled   = document.getElementById('badge_compiled_time');
+
+        if (!hiddenTimeInput || !startInput || !endInput || typeof flatpickr === 'undefined') return;
+
+        function updateCompiledTime() {
+            var startVal = (startInput.value || '08:00').replace(':', '.');
+            var endVal   = (endInput.value || '16:00').replace(':', '.');
+            var tzVal    = tzSelect ? tzSelect.value : 'WIB';
+            var isUntil  = checkUntil ? checkUntil.checked : false;
+
+            var result = '';
+            if (isUntil) {
+                result = startVal + ' ' + tzVal + ' s.d. Selesai';
+            } else {
+                result = startVal + ' s.d. ' + endVal + ' ' + tzVal;
+            }
+
+            hiddenTimeInput.value = result;
+            if (badgeCompiled) {
+                badgeCompiled.textContent = result;
+            }
+        }
+
+        flatpickr(startInput, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: 'H:i',
+            time_24hr: true,
+            minuteIncrement: 15,
+            defaultDate: '08:00',
+            onChange: function () {
+                updateCompiledTime();
+            }
+        });
+
+        var fpEnd = flatpickr(endInput, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: 'H:i',
+            time_24hr: true,
+            minuteIncrement: 15,
+            defaultDate: '16:00',
+            onChange: function () {
+                updateCompiledTime();
+            }
+        });
+
+        if (tzSelect) {
+            tzSelect.addEventListener('change', updateCompiledTime);
+        }
+
+        if (checkUntil) {
+            checkUntil.addEventListener('change', function () {
+                if (this.checked) {
+                    endInput.disabled = true;
+                    endInput.style.opacity = '0.5';
+                } else {
+                    endInput.disabled = false;
+                    endInput.style.opacity = '1';
+                }
+                updateCompiledTime();
+            });
+        }
+
+        updateCompiledTime();
     }
 
     var jenisSuratSelect = document.getElementById('jenis_surat');

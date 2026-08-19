@@ -187,7 +187,7 @@
 
     {{-- ── 3. KPI Stat Cards ─────────────────────────────────────── --}}
     <div class="row mb-4">
-        <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
+        <div class="col-sm-6 col-xl mb-3 mb-xl-0">
             <a href="{{ route('admin.persuratan.index') }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon primary">
@@ -200,7 +200,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
+        <div class="col-sm-6 col-xl mb-3 mb-xl-0">
             <a href="{{ route('admin.persuratan.index', ['status' => 'pending']) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon warning">
@@ -213,7 +213,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
+        <div class="col-sm-6 col-xl mb-3 mb-xl-0">
             <a href="{{ route('admin.persuratan.index', ['status' => 'approved']) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon success">
@@ -226,7 +226,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
+        <div class="col-sm-6 col-xl mb-3 mb-xl-0">
             <a href="{{ route('admin.persuratan.index', ['status' => 'rejected']) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon danger">
@@ -235,6 +235,19 @@
                     <div>
                         <div class="adm-kpi-title">Rejected</div>
                         <div class="adm-kpi-number danger">{{ $rejectedCount ?? 0 }}</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-xl mb-3 mb-xl-0">
+            <a href="{{ route('admin.persuratan.index', ['status' => 'expired']) }}" class="adm-kpi-link">
+                <div class="adm-kpi-card">
+                    <div class="adm-kpi-icon secondary" style="background: rgba(108, 117, 125, 0.12); color: #6c757d;">
+                        <i class="fas fa-hourglass-end"></i>
+                    </div>
+                    <div>
+                        <div class="adm-kpi-title">Expired</div>
+                        <div class="adm-kpi-number" style="color: #6c757d;">{{ $expiredCount ?? 0 }}</div>
                     </div>
                 </div>
             </a>
@@ -251,6 +264,7 @@
                     <option value="pending"  {{ request('status') === 'pending'   ? 'selected' : '' }}>⏳ Pending Review</option>
                     <option value="approved" {{ request('status') === 'approved'  ? 'selected' : '' }}>✅ Approved</option>
                     <option value="rejected" {{ request('status') === 'rejected'  ? 'selected' : '' }}>❌ Rejected</option>
+                    <option value="expired"  {{ request('status') === 'expired'   ? 'selected' : '' }}>⌛ Expired</option>
                 </select>
             </div>
             <div class="col-md-5 mb-2 mb-md-0">

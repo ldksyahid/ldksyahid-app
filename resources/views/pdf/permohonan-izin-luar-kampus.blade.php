@@ -11,13 +11,8 @@
 </head>
 <body>
 @php
-    $templatePath = public_path('assets/persuratan/kop-ldk.png');
-    $templateUri  = file_exists($templatePath)
-        ? 'data:image/png;base64,' . base64_encode(file_get_contents($templatePath))
-        : null;
-    $hariTanggal  = !empty($data['hari_tanggal'])
-        ? \Carbon\Carbon::parse($data['hari_tanggal'])->locale('id')->translatedFormat('l, d F Y')
-        : '-';
+    $templateUri = \App\Models\SuratLog::getKopImageBase64();
+    $hariTanggal  = \App\Models\SuratLog::formatHariTanggal($data['hari_tanggal'] ?? null);
 @endphp
 @if ($templateUri)<img class="page-bg" src="{{ $templateUri }}" alt="">@endif
 
@@ -61,7 +56,7 @@
             <tr>
                 <td class="identity-label">Waktu</td>
                 <td class="identity-sep">:</td>
-                <td>{{ $data['waktu'] ?? '-' }}</td>
+                <td>{{ \App\Models\SuratLog::formatWaktu($data['waktu'] ?? null) }}</td>
             </tr>
             <tr>
                 <td class="identity-label">Nama Tempat</td>
@@ -86,22 +81,20 @@
 
         <table class="signature-table">
             <tr>
-                <td class="ttd-cell"><strong>Ketua Umum LDK Syahid</strong></td>
                 <td class="ttd-cell"><strong>Sekretaris Jenderal</strong></td>
+                <td class="ttd-cell"><strong>Ketua Umum LDK Syahid</strong></td>
             </tr>
             <tr>
-                <td class="ttd-cell">
-                    <div class="ttd-space"><img src="{!! $qrCode !!}" alt="QR Verifikasi"></div>
-                </td>
                 <td class="ttd-cell"><div class="ttd-space">@include('pdf.components._sekjen-signature')</div></td>
+                <td class="ttd-cell"><div class="ttd-space"><img src="{!! $qrCode !!}" alt="QR Verifikasi"></div></td>
             </tr>
             <tr>
+                <td class="ttd-cell"><strong>Muhammad Zhafar Rabbany</strong></td>
                 <td class="ttd-cell"><strong>Muhammad Syauqi Mubarak</strong></td>
-                <td class="ttd-cell"><strong>Muhammad Zhaffar Rabbani</strong></td>
             </tr>
             <tr>
-                <td class="ttd-cell">NIM. 11230600000067</td>
                 <td class="ttd-cell">NIM. 11230340000016</td>
+                <td class="ttd-cell">NIM. 11230600000067</td>
             </tr>
         </table>
 

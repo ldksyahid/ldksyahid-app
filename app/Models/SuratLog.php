@@ -27,20 +27,28 @@ class SuratLog extends Model
         'approved_at' => 'datetime',
     ];
 
+    public const KOP_IMAGE_URL = 'https://lh3.googleusercontent.com/d/1e0N2_8TIi0B0csz1h1A_aCyPdIiVn8J3';
+    public const TTD_SEKJEN_URL = 'https://lh3.googleusercontent.com/d/1ONULC0i5OAs7wFY7ro3DEm__k5C-Q2Ex';
+
     private const KODE_JENIS = [
-        'izin-orang-tua'              => ['kode' => 'Ph',    'sifat' => 'e'],
-        'peminjaman-alat'             => ['kode' => 'Ph',    'sifat' => 'e'],
-        'peminjaman-tempat-kampus'    => ['kode' => 'Ph',    'sifat' => 'i'],
-        'peminjaman-tempat-fakultas'  => ['kode' => 'Ph',    'sifat' => 'i'],
-        'peminjaman-tempat-luar-kampus' => ['kode' => 'Ph',  'sifat' => 'e'],
-        'permohonan-bantuan-dana'     => ['kode' => 'Ph',    'sifat' => 'e'],
-        'permohonan-izin-luar-kampus' => ['kode' => 'Ph',    'sifat' => 'e'],
-        'surat-rekomendasi'           => ['kode' => 'SR',    'sifat' => 'e'],
-        'surat-undangan'              => ['kode' => 'Und',   'sifat' => null],
-        'surat-aktif-organisasi'      => ['kode' => 'S.Ket', 'sifat' => 'e'],
-        'permohonan-pemateri'         => ['kode' => 'Ph',    'sifat' => 'e'],
-        'kerja-sama-sponsorship'      => ['kode' => 'Ks',    'sifat' => 'e'],
-        'surat-pemberitahuan'         => ['kode' => 'Pb',    'sifat' => 'e'],
+        'izin-orang-tua'                      => ['kode' => 'Ph',    'sifat' => 'e'],
+        'peminjaman-alat'                     => ['kode' => 'Ph',    'sifat' => 'e'],
+        'peminjaman-tempat-kampus'            => ['kode' => 'Ph',    'sifat' => 'i'],
+        'peminjaman-tempat-fakultas'          => ['kode' => 'Ph',    'sifat' => 'i'],
+        'peminjaman-tempat-luar-kampus'       => ['kode' => 'Ph',    'sifat' => 'e'],
+        'permohonan-bantuan-dana'             => ['kode' => 'Ph',    'sifat' => 'e'],
+        'permohonan-izin-luar-kampus'         => ['kode' => 'Ph',    'sifat' => 'e'],
+        'surat-rekomendasi'                   => ['kode' => 'SR',    'sifat' => 'e'],
+        'surat-undangan'                      => ['kode' => 'Und',   'sifat' => null],
+        'surat-aktif-organisasi'              => ['kode' => 'S.Ket', 'sifat' => 'e'],
+        'permohonan-pemateri'                 => ['kode' => 'Ph',    'sifat' => 'e'],
+        'permohonan-sambutan'                 => ['kode' => 'Ph',    'sifat' => 'e'],
+        'surat-izin-buka-stand'               => ['kode' => 'Ph',    'sifat' => 'i'],
+        'surat-izin-pengambilan-gambar-video' => ['kode' => 'Ph',    'sifat' => 'i'],
+        'surat-kunjungan-lembaga'             => ['kode' => 'Ph',    'sifat' => 'e'],
+        'surat-imbauan'                       => ['kode' => 'Pb',    'sifat' => 'e'],
+        'kerja-sama-sponsorship'              => ['kode' => 'Ks',    'sifat' => 'e'],
+        'surat-pemberitahuan'                 => ['kode' => 'Pb',    'sifat' => 'e'],
     ];
 
     private const KODE_BIDANG_GROUPS = [
@@ -146,19 +154,24 @@ class SuratLog extends Model
     public static function getSuratTypes(): array
     {
         return [
-            'izin-orang-tua'              => ['label' => 'Surat Izin Orang Tua', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat']],
-            'peminjaman-alat'             => ['label' => 'Surat Peminjaman Alat', 'fields' => ['kode_bidang', 'jenis_peminjaman', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'daftar_alat']],
-            'peminjaman-tempat-kampus'    => ['label' => 'Surat Peminjaman Fasilitas Kampus Bersama', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam']],
-            'peminjaman-tempat-fakultas'  => ['label' => 'Surat Peminjaman Tempat Fakultas (Internal)', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam']],
-            'peminjaman-tempat-luar-kampus' => ['label' => 'Surat Peminjaman Tempat Luar Kampus', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam']],
-            'permohonan-bantuan-dana'     => ['label' => 'Surat Permohonan Bantuan Dana', 'fields' => ['kode_bidang', 'nama_program', 'ditujukan_kepada', 'keperluan']],
-            'permohonan-izin-luar-kampus' => ['label' => 'Surat Permohonan Izin Kegiatan di Luar Kampus', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat', 'alamat_tempat']],
-            'surat-rekomendasi'           => ['label' => 'Surat Rekomendasi', 'fields' => ['kode_bidang', 'nama', 'nim', 'fakultas', 'jurusan', 'jabatan', 'program_rekomendasi', 'pertimbangan']],
-            'surat-undangan'              => ['label' => 'Surat Undangan', 'fields' => ['kode_bidang', 'jenis_undangan', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat']],
-            'surat-aktif-organisasi'      => ['label' => 'Surat Keterangan Aktif Organisasi', 'fields' => ['kode_bidang', 'nama', 'ttl', 'nim', 'fakultas', 'jurusan', 'jabatan', 'keperluan', 'penyelenggara']],
-            'permohonan-pemateri'         => ['label' => 'Surat Permohonan Pemateri / Narasumber', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'materi']],
-            'kerja-sama-sponsorship'      => ['label' => 'Surat Kerja Sama / Sponsorship', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'bentuk_kerjasama']],
-            'surat-pemberitahuan'         => ['label' => 'Surat Pemberitahuan', 'fields' => ['kode_bidang', 'nama_kegiatan', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat']],
+            'izin-orang-tua'                      => ['label' => 'Surat Izin Orang Tua', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat']],
+            'peminjaman-alat'                     => ['label' => 'Surat Peminjaman Alat', 'fields' => ['kode_bidang', 'jenis_peminjaman', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'daftar_alat']],
+            'peminjaman-tempat-kampus'            => ['label' => 'Surat Peminjaman Fasilitas Kampus Bersama', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam']],
+            'peminjaman-tempat-fakultas'          => ['label' => 'Surat Peminjaman Tempat Fakultas (Internal)', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam']],
+            'peminjaman-tempat-luar-kampus'       => ['label' => 'Surat Peminjaman Tempat Luar Kampus', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam']],
+            'permohonan-bantuan-dana'             => ['label' => 'Surat Permohonan Bantuan Dana', 'fields' => ['kode_bidang', 'nama_program', 'ditujukan_kepada', 'keperluan']],
+            'permohonan-izin-luar-kampus'         => ['label' => 'Surat Permohonan Izin Kegiatan di Luar Kampus', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat', 'alamat_tempat']],
+            'surat-rekomendasi'                   => ['label' => 'Surat Rekomendasi', 'fields' => ['kode_bidang', 'nama', 'nim', 'fakultas', 'jurusan', 'jabatan', 'program_rekomendasi', 'pertimbangan']],
+            'surat-undangan'                      => ['label' => 'Surat Undangan', 'fields' => ['kode_bidang', 'jenis_undangan', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat']],
+            'surat-aktif-organisasi'              => ['label' => 'Surat Keterangan Aktif Organisasi', 'fields' => ['kode_bidang', 'nama', 'ttl', 'nim', 'fakultas', 'jurusan', 'jabatan', 'keperluan', 'penyelenggara']],
+            'permohonan-pemateri'                 => ['label' => 'Surat Permohonan Narasumber / Pemateri', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'materi']],
+            'permohonan-sambutan'                 => ['label' => 'Surat Permohonan Sambutan', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'jabatan_tujuan', 'hari_tanggal', 'waktu', 'tempat']],
+            'surat-izin-buka-stand'               => ['label' => 'Surat Izin Buka Stand', 'fields' => ['kode_bidang', 'nama_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'keperluan']],
+            'surat-izin-pengambilan-gambar-video' => ['label' => 'Surat Izin Pengambilan Gambar / Video', 'fields' => ['kode_bidang', 'nama_acara', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'keperluan']],
+            'surat-kunjungan-lembaga'             => ['label' => 'Surat Kunjungan Lembaga / Studi Banding', 'fields' => ['kode_bidang', 'nama_kegiatan', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat', 'keperluan']],
+            'surat-imbauan'                       => ['label' => 'Surat Imbauan', 'fields' => ['kode_bidang', 'perihal_imbauan', 'ditujukan_kepada', 'poin_imbauan']],
+            'kerja-sama-sponsorship'              => ['label' => 'Surat Kerja Sama / Sponsorship', 'fields' => ['kode_bidang', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'bentuk_kerjasama']],
+            'surat-pemberitahuan'                 => ['label' => 'Surat Pemberitahuan', 'fields' => ['kode_bidang', 'nama_kegiatan', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat']],
         ];
     }
 
@@ -177,15 +190,91 @@ class SuratLog extends Model
             } elseif (in_array($field, ['jenis_undangan', 'jenis_peminjaman'])) {
                 $rules[$field] = 'required|in:internal,eksternal';
             } elseif (in_array($field, ['hari_tanggal', 'tanggal_mulai', 'tanggal_selesai'])) {
-                $rules[$field] = 'required|date';
-            } elseif (in_array($field, ['daftar_alat', 'keperluan', 'pertimbangan', 'bentuk_kerjasama', 'materi'])) {
-                $rules[$field] = 'required|string|max:1000';
+                $rules[$field] = 'required|string|max:100';
+            } elseif (in_array($field, ['daftar_alat', 'keperluan', 'pertimbangan', 'bentuk_kerjasama', 'materi', 'poin_imbauan'])) {
+                $rules[$field] = 'required|string|max:2000';
             } else {
                 $rules[$field] = 'required|string|max:255';
             }
         }
 
         return $rules;
+    }
+
+    public static function getKopImageBase64(): ?string
+    {
+        return static::fetchImageBase64(self::KOP_IMAGE_URL, 'kop_ldk');
+    }
+
+    public static function getTtdSekjenBase64(): ?string
+    {
+        return static::fetchImageBase64(self::TTD_SEKJEN_URL, 'ttd_sekjen');
+    }
+
+    public static function fetchImageBase64(string $url, string $cacheKey): ?string
+    {
+        return \Illuminate\Support\Facades\Cache::remember('asset_img_' . $cacheKey, 86400, function () use ($url) {
+            $context = stream_context_create([
+                'http' => ['method' => 'GET', 'header' => "User-Agent: Mozilla/5.0\r\n", 'timeout' => 15],
+                'ssl'  => ['verify_peer' => false, 'verify_peer_name' => false]
+            ]);
+            $data = @file_get_contents($url, false, $context);
+            return $data ? 'data:image/png;base64,' . base64_encode($data) : null;
+        });
+    }
+
+    public static function formatWaktu(?string $waktuStr): string
+    {
+        if (empty($waktuStr)) {
+            return '-';
+        }
+
+        $waktuStr = trim($waktuStr);
+        $formatted = preg_replace('/\s*[-–—]+\s*/u', ' s.d. ', $waktuStr);
+        $formatted = preg_replace('/\s*s\.d\.\s*/i', ' s.d. ', $formatted);
+        $formatted = preg_replace('/\s+/', ' ', $formatted);
+
+        return trim($formatted);
+    }
+
+    public static function formatHariTanggal(?string $dateStr): string
+    {
+        if (empty($dateStr)) {
+            return '-';
+        }
+
+        $dateStr = trim($dateStr);
+
+        // Multi-day date range
+        if (preg_match('/^(\d{4}-\d{2}-\d{2})\s*(?:to|s\.d\.|-)\s*(\d{4}-\d{2}-\d{2})$/i', $dateStr, $matches)) {
+            try {
+                $start = \Carbon\Carbon::parse($matches[1])->locale('id');
+                $end   = \Carbon\Carbon::parse($matches[2])->locale('id');
+
+                if ($start->isSameDay($end)) {
+                    return $start->translatedFormat('l, d F Y');
+                }
+
+                if ($start->format('Y-m') === $end->format('Y-m')) {
+                    return $start->translatedFormat('l') . ' – ' . $end->translatedFormat('l') . ', ' . $start->format('d') . ' – ' . $end->translatedFormat('d F Y');
+                }
+
+                if ($start->format('Y') === $end->format('Y')) {
+                    return $start->translatedFormat('l, d F') . ' – ' . $end->translatedFormat('l, d F Y');
+                }
+
+                return $start->translatedFormat('l, d F Y') . ' – ' . $end->translatedFormat('l, d F Y');
+            } catch (\Throwable $e) {
+                return $dateStr;
+            }
+        }
+
+        // Single date
+        try {
+            return \Carbon\Carbon::parse($dateStr)->locale('id')->translatedFormat('l, d F Y');
+        } catch (\Throwable $e) {
+            return $dateStr;
+        }
     }
 
     public function user()

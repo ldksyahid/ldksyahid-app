@@ -7,56 +7,38 @@
 </head>
 <body>
 @php
-    $templateUri = \App\Models\SuratLog::getKopImageBase64();
+    $templateUri  = \App\Models\SuratLog::getKopImageBase64();
+    $hariTanggal  = \App\Models\SuratLog::formatHariTanggal($data['hari_tanggal'] ?? null);
+    $waktu        = \App\Models\SuratLog::formatWaktu($data['waktu'] ?? null);
 @endphp
 @if ($templateUri)<img class="page-bg" src="{{ $templateUri }}" alt="">@endif
-
 <div class="content">
     <table class="meta">
         <tr>
             <td class="meta-label">Nomor</td><td class="meta-sep">:</td>
-            <td>{{ $nomorSurat }}</td>
-            <td class="date-cell">Jakarta, {{ $tanggalSurat }}</td>
+            <td>{{ $nomorSurat }}</td><td class="date-cell">Jakarta, {{ $tanggalSurat }}</td>
         </tr>
         <tr><td>Lampiran</td><td>:</td><td colspan="2">-</td></tr>
-        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>Permohonan Bantuan Dana</strong></td></tr>
+        <tr><td>Hal</td><td>:</td><td colspan="2"><strong>Permohonan Izin Pengambilan Gambar / Video</strong></td></tr>
     </table>
-
     <div class="body-surat">
         <div class="recipient">
             <p>Yth.</p>
-            <p><strong>{{ $data['ditujukan_kepada'] ?? 'Bapak/Ibu Pimpinan' }}</strong></p>
+            <p><strong>{{ $data['ditujukan_kepada'] ?? 'Pihak Pengelola / Kepala Keamanan' }}</strong></p>
             <p>di Tempat</p>
         </div>
-
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
-
-        <p class="indent">Puji syukur senantiasa kita panjatkan ke hadirat Allah SWT atas segala
-            nikmat-Nya. Shalawat dan salam selalu tercurah kepada Nabi Muhammad SAW beserta
-            keluarga dan para pengikutnya.</p>
-
-        <p class="indent">Melalui surat ini, kami dari pengurus UKM Lembaga Dakwah Kampus (LDK) Syahid
-            UIN Syarif Hidayatullah Jakarta bermaksud mengajukan permohonan bantuan dana untuk
-            mendukung keberlangsungan program:</p>
-
-        <p style="text-align:center; margin:10pt 0;">
-            <strong><em>&ldquo;{{ $data['nama_program'] ?? '-' }}&rdquo;</em></strong>
-        </p>
-
-        <p class="indent">Adapun bantuan dana tersebut akan dialokasikan untuk keperluan:</p>
-
-        <div style="margin: 4pt 0 10pt 9mm; line-height:1.5;">
-            {!! nl2br(e($data['keperluan'] ?? '-')) !!}
-        </div>
-
-        <p class="indent">Besar harapan kami agar Bapak/Ibu berkenan memberikan bantuan dana demi
-            kelancaran dan kesuksesan program yang telah direncanakan.</p>
-
-        <p class="indent">Demikian surat permohonan ini kami buat. Atas perhatian, dukungan, dan bantuan
-            yang diberikan, kami ucapkan jazakumullah khairan katsiran.</p>
-
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu senantiasa dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan amanah sehari-hari.</p>
+        <p class="indent">Sehubungan dengan kebutuhan dokumentasi dan publikasi program <strong>{{ $data['nama_acara'] ?? '-' }}</strong> oleh tim Media UKM Lembaga Dakwah Kampus (LDK) Syahid UIN Syarif Hidayatullah Jakarta, yang InsyaAllah akan dilaksanakan pada:</p>
+        <table class="identity">
+            <tr><td class="identity-label">Hari, Tanggal</td><td class="identity-sep">:</td><td>{{ $hariTanggal }}</td></tr>
+            <tr><td class="identity-label">Waktu</td><td class="identity-sep">:</td><td>{{ $waktu }}</td></tr>
+            <tr><td class="identity-label">Lokasi</td><td class="identity-sep">:</td><td>{{ $data['tempat'] ?? '-' }}</td></tr>
+            <tr><td class="identity-label">Keperluan</td><td class="identity-sep">:</td><td>{{ $data['keperluan'] ?? 'Pengambilan Foto dan Video Dokumentasi Resmi' }}</td></tr>
+        </table>
+        <p class="indent">Maka kami bermaksud memohon izin kepada pihak pengelola agar tim dokumentasi kami diperkenankan mengambil gambar/video pada area dan waktu tersebut.</p>
+        <p class="indent">Demikian surat permohonan izin ini kami sampaikan. Atas izin dan kerja sama yang baik, kami ucapkan jazakumullah khairan katsiran.</p>
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
-
         <table class="signature-table">
             <tr>
                 <td class="ttd-cell"><strong>Sekretaris Jenderal</strong></td>
@@ -75,7 +57,6 @@
                 <td class="ttd-cell">NIM. 11230600000067</td>
             </tr>
         </table>
-
         <table class="verification">
             <tr>
                 <td class="qr-cell"><img src="{!! $qrCode !!}" alt="QR Verifikasi"></td>

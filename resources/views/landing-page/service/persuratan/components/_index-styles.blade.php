@@ -1,7 +1,7 @@
 @verbatim
 <style>
 /* ================================================================
-   PERSURATAN LANDING PAGE — Modern Redesign (Zakat-style Layout)
+   PERSURATAN LANDING PAGE — Modern Redesign
    Palette: #0ea5e9 (Sky/Ocean Blue) / #0284c7 (Dark Sky Blue) / #0369a1
    Prefix: prs-
    ================================================================ */
@@ -472,7 +472,7 @@
 
 /* Form Groups & Inputs */
 .prs-form-group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.35rem;
     position: relative;
     animation: prsFadeIn 0.35s ease both;
 }
@@ -566,6 +566,43 @@
     font-size: 0.78rem;
     font-weight: 600;
     margin-top: 0.4rem;
+}
+
+/* ── Interactive Date Toggle & UI ── */
+.prs-date-toggle-wrap {
+    display: inline-flex;
+    background: var(--prs-gray-light);
+    border: 1px solid var(--prs-gray-border);
+    border-radius: 10px;
+    padding: 2px;
+    gap: 2px;
+}
+.prs-date-toggle-btn {
+    border: none;
+    background: transparent;
+    color: var(--prs-gray);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.prs-date-toggle-btn.active {
+    background: var(--prs-primary);
+    color: white;
+    box-shadow: 0 2px 6px rgba(14, 165, 233, 0.3);
+}
+
+/* ── Interactive Time UI ── */
+.prs-time-box {
+    background: var(--prs-gray-light);
+    border: 1.5px solid var(--prs-gray-border);
+    border-radius: 16px;
+    padding: 1rem 1.15rem;
+}
+.prs-time-picker {
+    cursor: pointer !important;
 }
 
 /* Description / Type Box */
