@@ -134,7 +134,8 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'admin service shortlink destroy']);
 
         //create roles and assign existing permissions
-        $superadminRole = Role::create(['name' => 'Superadmin']);
+        Permission::firstOrCreate(['name' => 'admin']);
+        $superadminRole = Role::firstOrCreate(['name' => 'Superadmin']);
         // gets all permissions via Gate::before rule
 
         $helperAdminRole = Role::create(['name' => 'HelperAdmin']);

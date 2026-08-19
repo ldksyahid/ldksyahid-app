@@ -294,4 +294,87 @@ class WhatsApp
 
         return null;
     }
+
+    /**
+     * Send notification to Kestari/Sekjen admin for a new letter request.
+     * Includes quick-reply buttons (Approve / Reject) and fallback YES/NO instructions.
+     */
+    public static function sendLetterRequestNotification(array $data)
+    {
+        $appUrl     = config('app.url');
+        $adminUrl   = $appUrl . '/admin/persuratan/' . $data['letterId'];
+        $previewUrl = $data['previewUrl'] ?? ($appUrl . '/layanan/persuratan/preview/' . ($data['verificationCode'] ?? ''));
+        $date       = now()->format('d M Y, H:i') . ' WIB';
+
+        $message = "📩 *[REQUEST LETTER #" . $data['letterId'] . "]* 📩\n\n"
+            . "_Permohonan surat baru!_\n\n"
+            . "➖➖➖➖➖➖➖➖➖\n"
+            . "📋 *Detail Permohonan:*\n\n"
+            . "👤 *Pemohon:* " . $data['name'] . "\n"
+            . "📌 *Jenis Surat:* " . $data['letterType'] . "\n"
+            . "🏢 *Bidang/LDKSF:* " . $data['department'] . "\n"
+            . "📝 *Acara / Keperluan:* " . $data['activity'] . "\n"
+            . "🕐 *Waktu Pengajuan:* " . $date . "\n\n"
+            . "🔍 *Preview Draft Dokumen (PDF):*\n"
+            . $previewUrl . "\n"
+            . "➖➖➖➖➖➖➖➖➖\n\n"
+            . "Balas *YES* untuk _approve_ (terbitkan nomor otomatis) atau *NO* untuk _tolak_ permohonan ini.\n\n"
+            . "Atau proses & atur nomor manual via panel admin:\n"
+            . $adminUrl . "\n\n"
+            . "#LDKSyahid\n#LayananPersuratan";
+
+        return self::send($data['targetPhone'], $message, 'request_letter_v1', [
+            (string) $data['letterId'],
+            $data['name'],
+            $data['letterType'],
+            $data['department'],
+            $data['activity'],
+            $previewUrl,
+        ], ['approve_letter', 'reject_letter']);
+    }
+
+    /**
+     * Notify applicant that their letter request has been approved.
+     */
+    public static function sendLetterApproved(array $data)
+    {
+        $message = "✅ *[SURAT TELAH DISETUJUI]* ✅\n\n"
+            . "Assalamu'alaikum, {$data['name']} 😊\n\n"
+            . "Alhamdulillah, pengajuan surat kamu telah disetujui:\n\n"
+            . "📄 *Jenis Surat:* {$data['letterType']}\n"
+            . "🔢 *Nomor Surat:* {$data['letterNumber']}\n\n"
+            . "Unduh dokumen PDF resmi ber-QR Code pada tautan berikut:\n"
+            . "🔗 {$data['downloadUrl']}\n\n"
+            . "Terima kasih telah menggunakan Layanan Persuratan LDK Syahid 🙏\n\n"
+            . "#LDKSyahid\n#KitaAdalahSaudara";
+
+        return self::send($data['targetPhone'], $message, 'letter_approved_v1', [
+            $data['name'],
+            $data['letterType'],
+            $data['letterNumber'],
+            $data['downloadUrl'],
+        ]);
+    }
+
+    /**
+     * Notify applicant that their letter request has been rejected.
+     */
+    public static function sendLetterRejected(array $data)
+    {
+        $reason = !empty($data['reason']) ? $data['reason'] : 'Silakan periksa kembali kelengkapan formulir atau hubungi Kestari.';
+
+        $message = "❌ *[PENGAJUAN SURAT BELUM DISETUJUI]* ❌\n\n"
+            . "Assalamu'alaikum, {$data['name']} 🙏\n\n"
+            . "Mohon maaf, pengajuan surat *{$data['letterType']}* belum dapat kami setujui.\n\n"
+            . "📝 *Catatan Admin:* {$reason}\n\n"
+            . "Silakan hubungi Kestari atau ajukan ulang melalui website jika masih dibutuhkan.\n\n"
+            . "Terima kasih atas pengertiannya 🙏\n\n"
+            . "#LDKSyahid\n#KitaAdalahSaudara";
+
+        return self::send($data['targetPhone'], $message, 'letter_rejected_v1', [
+            $data['name'],
+            $data['letterType'],
+            $reason,
+        ]);
+    }
 }

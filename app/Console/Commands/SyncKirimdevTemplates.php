@@ -205,6 +205,61 @@ class SyncKirimdevTemplates extends Command
                     ],
                 ],
             ],
+            [
+                'name'     => 'request_letter_v1',
+                'category' => 'UTILITY',
+                'language' => 'id',
+                'components' => [
+                    [
+                        'type' => 'BODY',
+                        'text' => "📩 *Request Letter #{{1}}* 📩\n\nAda permohonan surat baru!\n\n👤 Nama: {{2}}\n📌 Jenis Surat: {{3}}\n🏢 Bidang: {{4}}\n📝 Acara: {{5}}\n\n🔍 Preview Draft:\n{{6}}\n\nGunakan tombol di bawah untuk approve atau tolak permohonan ini.",
+                        'example' => [
+                            'body_text' => [[
+                                '1', 'Ahmad Fauzi', 'Surat Izin Orang Tua', 'Kaderisasi', 'Rihlah Akbar 2026', 'https://ldksyah.id/layanan/persuratan/preview/uuid-example',
+                            ]],
+                        ],
+                    ],
+                    [
+                        'type' => 'BUTTONS',
+                        'buttons' => [
+                            ['type' => 'QUICK_REPLY', 'text' => 'Approve'],
+                            ['type' => 'QUICK_REPLY', 'text' => 'Reject'],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'name'     => 'letter_approved_v1',
+                'category' => 'UTILITY',
+                'language' => 'id',
+                'components' => [
+                    [
+                        'type' => 'BODY',
+                        'text' => "✅ *Surat Telah Disetujui* ✅\n\nAssalamu'alaikum, {{1}} 😊\n\nAlhamdulillah, permohonan surat *{{2}}* telah disetujui dengan nomor *{{3}}*. Silakan unduh dokumen PDF resmi pada link berikut:\n{{4}}\n\nTerima kasih 😇",
+                        'example' => [
+                            'body_text' => [[
+                                'Ahmad Fauzi', 'Surat Izin Orang Tua', '001/Ph-e/KDR/LDK SYAHID/8/2026', 'https://ldksyah.id/layanan/persuratan/download/1',
+                            ]],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'name'     => 'letter_rejected_v1',
+                'category' => 'UTILITY',
+                'language' => 'id',
+                'components' => [
+                    [
+                        'type' => 'BODY',
+                        'text' => "❌ *Pengajuan Surat Belum Disetujui* ❌\n\nAssalamu'alaikum, {{1}} 🙏\n\nMohon maaf, permohonan surat *{{2}}* belum dapat disetujui.\n\nCatatan admin: {{3}}.\n\nSilakan hubungi admin Kestari untuk info lebih lanjut ya 🙏",
+                        'example' => [
+                            'body_text' => [[
+                                'Ahmad Fauzi', 'Surat Izin Orang Tua', 'Data tanggal tidak sesuai',
+                            ]],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 

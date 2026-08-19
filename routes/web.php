@@ -40,8 +40,10 @@ use App\Http\Controllers\KirimdevWebhookController;
 use App\Http\Controllers\Admin\AdminFormController;
 use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\TwoFactorController;
+use App\Http\Controllers\LetterController;
+use App\Http\Controllers\LetterAdminController;
 use App\Http\Controllers\PopupMessageController;
+use App\Http\Controllers\TwoFactorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -663,4 +665,33 @@ Route::prefix('/form')
         Route::get('/{slug}/terima-kasih', [PublicFormController::class, 'thankYou'])->name('thank-you');
     });
 
+// ======================================= PERSURATAN =======================================
+// Landing — semua user login bisa akses
+Route::middleware(['auth'])
+    ->prefix('/layanan/persuratan')
+    ->name('service.persuratan.')
+    ->group(function () {
+        Route::get('/', [LetterController::class, 'index'])->name('index');
+        Route::post('/submit', [LetterController::class, 'submit'])->name('submit');
+        Route::get('/riwayat', [LetterController::class, 'riwayat'])->name('riwayat');
+        Route::get('/{suratLog}/download', [LetterController::class, 'download'])->name('download');
+    });
+
+// Verifikasi & Preview draft publik — tanpa login (bisa diakses via link WhatsApp)
+Route::get('/verifikasi-surat/{kode}', [LetterController::class, 'verifikasi'])->name('persuratan.verifikasi');
+Route::get('/layanan/persuratan/preview/{kode}', [LetterController::class, 'previewDraft'])->name('service.persuratan.preview');
+
+// Admin — HelperLetter & Superadmin
+Route::middleware(['role:Superadmin|HelperLetter'])
+    ->prefix('/admin/persuratan')
+    ->name('admin.persuratan.')
+    ->group(function () {
+        Route::get('/', [LetterAdminController::class, 'index'])->name('index');
+        Route::get('/download-contoh', [LetterAdminController::class, 'downloadExampleTemplates'])->name('download-examples');
+        Route::get('/{suratLog}', [LetterAdminController::class, 'show'])->name('show');
+        Route::post('/{suratLog}/approve', [LetterAdminController::class, 'approve'])->name('approve');
+        Route::post('/{suratLog}/reject', [LetterAdminController::class, 'reject'])->name('reject');
+        Route::get('/{suratLog}/download', [LetterAdminController::class, 'download'])->name('download');
+        Route::delete('/{suratLog}', [LetterAdminController::class, 'destroy'])->name('destroy')->middleware('role:Superadmin');
+    });
 // ======================================= END ROUTE ADMIN PAGE =======================================

@@ -63,6 +63,11 @@ class Kernel extends ConsoleKernel
                  ->everyTenMinutes()
                  ->withoutOverlapping(15);
 
+        // Letter Requests (Persuratan): auto-expire pending letter requests older than 7 days
+        $schedule->command('letter:expire-stale')
+                 ->dailyAt('00:05')
+                 ->withoutOverlapping(15);
+
         // Auto-cleanup disabled — visitor data is kept indefinitely
         // $schedule->command('visitors:cleanup')->dailyAt('02:00');
     }
@@ -84,6 +89,7 @@ class Kernel extends ConsoleKernel
         Commands\AggregateVisitorStats::class,
         Commands\CloseExpiredForms::class,
         Commands\ExpireStaleQrisDonations::class,
+        Commands\ExpireStaleLetterRequests::class,
         Commands\CheckKirimdevAccountStatus::class,
         Commands\SyncKirimdevTemplates::class,
         Commands\RegisterKirimdevWebhook::class,
