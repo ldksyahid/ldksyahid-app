@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\SuratLog;
-use App\Services\WhatsApp;
+use App\Services\LetterNumberingService;
 use App\Services\LetterPdfService;
-use Illuminate\Support\Facades\Log;
+use App\Support\DepartmentRegistry;
+use App\Support\LetterRegistry;
+use Illuminate\Http\Request;
 
 class LetterAdminController extends Controller
 {
-    public function __construct(
-        protected LetterPdfService $pdfService
-    ) {}
+    protected LetterPdfService $pdfService;
+    protected LetterNumberingService $numberingService;
 
-    /**
-     * Display a listing of all letter requests for admin.
-     */
+    public function __construct(LetterPdfService $pdfService, LetterNumberingService $numberingService)
+    {
+        $this->pdfService       = $pdfService;
+        $this->numberingService = $numberingService;
+    }
+
     public function index(Request $request)
     {
         $suratLogs   = SuratLog::searchAdminPersuratan($request);
@@ -26,92 +29,102 @@ class LetterAdminController extends Controller
             'title'         => 'Letter Management',
             'suratLogs'     => $suratLogs,
             'tableConfig'   => $tableConfig,
-            'suratTypes'    => SuratLog::getSuratTypes(),
+            'suratTypes'    => LetterRegistry::all(),
             'totalCount'    => SuratLog::count(),
-            'pendingCount'  => SuratLog::where('status', 'pending')->count(),
-            'approvedCount' => SuratLog::where('status', 'approved')->count(),
-            'rejectedCount' => SuratLog::where('status', 'rejected')->count(),
-            'expiredCount'  => SuratLog::where('status', 'expired')->count(),
+            'pendingCount'  => SuratLog::pending()->count(),
+            'approvedCount' => SuratLog::approved()->count(),
+            'rejectedCount' => SuratLog::rejected()->count(),
+            'expiredCount'  => SuratLog::expired()->count(),
         ]);
     }
 
-    /**
-     * Display the specified letter request details for review.
-     */
     public function show(SuratLog $suratLog)
     {
-        $lastDocument = SuratLog::where('status', 'approved')
-            ->whereNotNull('nomor_surat')
-            ->where('nomor_surat', '!=', '-')
+        $suratLog->load(['user', 'approvedBy']);
+
+        $lastDocument = SuratLog::approved()
             ->latest('approved_at')
             ->first();
 
+        $lastNomor = $lastDocument ? $lastDocument->nomor_surat : 'Belum ada surat yang disetujui';
+
         return view('admin-page.service-request.persuratan.show', [
-            'title'             => 'Letter Request Details',
-            'suratLog'          => $suratLog->load('user', 'approvedBy'),
-            'lastNomor'         => $lastDocument?->nomor_surat,
-            'kodeBidangOptions' => SuratLog::getKodeBidangOptions(),
-            'kodeBidangGroups'  => SuratLog::getKodeBidangGroups(),
+            'title'             => 'Review Pengajuan Surat — ' . $suratLog->label,
+            'suratLog'          => $suratLog,
+            'lastNomor'         => $lastNomor,
+            'kodeBidangOptions' => DepartmentRegistry::options(),
+            'kodeBidangGroups'  => DepartmentRegistry::groups(),
         ]);
     }
 
-    /**
-     * Approve the letter request and issue an official letter number.
-     */
     public function approve(Request $request, SuratLog $suratLog)
     {
-        abort_if(!$suratLog->isPending(), 422, 'This document has already been processed.');
+        if ($suratLog->isApproved()) {
+            return redirect()
+                ->route('admin.persuratan.show', $suratLog)
+                ->with('error', 'Surat ini sudah disetujui sebelumnya.');
+        }
 
         $request->validate([
-            'kode_bidang'        => 'required|string|max:20',
-            'catatan_admin'      => 'nullable|string|max:500',
-            'nomor_surat_manual' => 'nullable|string|max:100',
+            'mode_penomoran' => 'required|in:otomatis,manual',
+            'nomor_manual'   => 'nullable|string|max:100',
+            'catatan_admin'  => 'nullable|string|max:500',
+            'kode_bidang'    => 'required|string|max:30',
         ]);
 
-        $result = $suratLog->executeApproval(
-            $request->nomor_surat_manual,
+        $mode        = $request->mode_penomoran;
+        $nomorManual = $mode === 'manual' ? trim($request->nomor_manual) : null;
+        $kodeBidang  = $request->kode_bidang;
+
+        if ($mode === 'manual' && empty($nomorManual)) {
+            return redirect()
+                ->route('admin.persuratan.show', $suratLog)
+                ->withInput()
+                ->with('error', 'Nomor surat manual wajib diisi jika memilih mode manual.');
+        }
+
+        $result = $this->numberingService->approve(
+            $suratLog,
+            $nomorManual,
             $request->catatan_admin,
             auth()->id(),
-            $request->kode_bidang
+            $kodeBidang
         );
 
         if (!$result['success']) {
-            $message = match ($result['error']) {
-                'mundur' => 'Manual letter number is invalid: this sequence goes backward or conflicts with previously issued numbers.',
-                default  => 'Manual letter number format is invalid.',
-            };
+            if ($result['error'] === 'format') {
+                return redirect()
+                    ->route('admin.persuratan.show', $suratLog)
+                    ->withInput()
+                    ->with('error', 'Format nomor surat manual tidak valid. Contoh format lengkap: 001/Ph-e/BPH/LDK SYAHID/8/2026 atau cukup ketik nomor urutnya saja, misal: 001 atau 001.01');
+            }
 
-            return back()->withErrors(['nomor_surat_manual' => $message])->withInput();
-        }
-
-        // Notify applicant via WhatsApp if phone number is available
-        if (!empty($suratLog->data['whatsapp'])) {
-            try {
-                WhatsApp::sendLetterApproved([
-                    'name'         => $suratLog->user?->name ?: ($suratLog->data['nama'] ?? 'Pemohon'),
-                    'targetPhone'  => $suratLog->data['whatsapp'],
-                    'letterType'   => $suratLog->label,
-                    'letterNumber' => $suratLog->nomor_surat,
-                    'downloadUrl'  => route('service.persuratan.riwayat'),
-                ]);
-            } catch (\Throwable $e) {
-                Log::error('[LetterAdminController] WhatsApp approve notification failed: ' . $e->getMessage());
+            if ($result['error'] === 'mundur') {
+                return redirect()
+                    ->route('admin.persuratan.show', $suratLog)
+                    ->withInput()
+                    ->with('error', 'Nomor surat yang dimasukkan lebih kecil dari counter saat ini (counter tidak boleh mundur).');
             }
         }
 
         return redirect()
             ->route('admin.persuratan.show', $suratLog)
-            ->with('success', 'Letter request has been approved and the letter number has been issued successfully.');
+            ->with('success', "Surat berhasil disetujui dengan Nomor: {$suratLog->nomor_surat}");
     }
 
-    /**
-     * Reject the letter request with admin reason.
-     */
     public function reject(Request $request, SuratLog $suratLog)
     {
-        abort_if(!$suratLog->isPending(), 422, 'This document has already been processed.');
+        if ($suratLog->isApproved()) {
+            return redirect()
+                ->route('admin.persuratan.show', $suratLog)
+                ->with('error', 'Surat yang sudah disetujui tidak dapat ditolak.');
+        }
 
-        $request->validate(['catatan_admin' => 'required|string|max:500']);
+        $request->validate([
+            'catatan_admin' => 'required|string|max:500',
+        ], [
+            'catatan_admin.required' => 'Alasan penolakan wajib diisi agar pengaju mengetahui kekurangannya.',
+        ]);
 
         $suratLog->update([
             'status'        => 'rejected',
@@ -120,78 +133,55 @@ class LetterAdminController extends Controller
             'approved_at'   => now(),
         ]);
 
-        // Notify applicant via WhatsApp if phone number is available
-        if (!empty($suratLog->data['whatsapp'])) {
-            try {
-                WhatsApp::sendLetterRejected([
-                    'name'        => $suratLog->user?->name ?: ($suratLog->data['nama'] ?? 'Pemohon'),
-                    'targetPhone' => $suratLog->data['whatsapp'],
-                    'letterType'  => $suratLog->label,
-                    'reason'      => $request->catatan_admin,
-                ]);
-            } catch (\Throwable $e) {
-                Log::error('[LetterAdminController] WhatsApp reject notification failed: ' . $e->getMessage());
-            }
-        }
-
-        return back()->with('success', 'Letter request has been rejected.');
+        return redirect()
+            ->route('admin.persuratan.show', $suratLog)
+            ->with('success', 'Pengajuan surat telah ditolak.');
     }
 
-    /**
-     * Download the official approved PDF from admin panel.
-     */
     public function download(SuratLog $suratLog)
     {
-        abort_if(!$suratLog->isApproved(), 403, 'Surat belum disetujui.');
-
-        abort_if(
-            empty($suratLog->filename) || $suratLog->nomor_surat === '-',
-            404,
-            'Dokumen belum tersedia.'
-        );
-
-        return $this->pdfService->downloadApproved($suratLog);
+        return $this->pdfService->streamOfficialPdf($suratLog);
     }
 
-    /**
-     * Download sample ZIP package containing all template layouts.
-     */
+    public function downloadExample(string $type)
+    {
+        return $this->pdfService->streamExamplePdf($type);
+    }
+
+    public function downloadAllExamples()
+    {
+        return $this->pdfService->downloadAllExamplesZip();
+    }
+
     public function downloadExampleTemplates()
     {
-        return $this->pdfService->downloadExampleTemplates();
+        return $this->downloadAllExamples();
     }
 
-    /**
-     * Delete a single letter request record (Superadmin only).
-     */
     public function destroy(SuratLog $suratLog)
     {
-        if (method_exists($suratLog, 'deleteModel')) {
-            $suratLog->deleteModel();
-        } else {
-            $suratLog->delete();
-        }
+        $suratLog->delete();
 
         return redirect()
             ->route('admin.persuratan.index')
-            ->with('success', 'Data pengajuan berhasil dihapus.');
+            ->with('success', 'Data pengajuan surat berhasil dihapus.');
     }
 
-    /**
-     * Bulk delete letter request records.
-     */
-    public function bulkDestroy(Request $request)
+    public function bulkDelete(Request $request)
     {
         $ids = $request->input('ids', []);
-        if (method_exists(SuratLog::class, 'bulkDeleteModel')) {
-            SuratLog::bulkDeleteModel($ids);
-        } else {
-            SuratLog::whereIn('id', $ids)->delete();
+        if (is_string($ids)) {
+            $ids = explode(',', $ids);
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Surat terpilih berhasil dihapus!'
-        ]);
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'Tidak ada data yang dipilih.'], 422);
+        }
+
+        SuratLog::whereIn('id', $ids)->delete();
+
+        return response()->json(['success' => true, 'message' => count($ids) . ' pengajuan surat berhasil dihapus.']);
     }
 }

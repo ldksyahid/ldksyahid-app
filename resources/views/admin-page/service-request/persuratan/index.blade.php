@@ -4,152 +4,7 @@
 @section('title', $title)
 
 @section('head')
-<style>
-/* ── High-Contrast Admin Styles for Letter Management ──────────────── */
-.adm-letter-container {
-    padding: 1.5rem 0.5rem;
-}
-.adm-card {
-    background: #ffffff !important;
-    border-radius: 14px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-}
-.adm-kpi-link {
-    text-decoration: none !important;
-    color: inherit !important;
-    display: block;
-}
-.adm-kpi-card {
-    background: #ffffff !important;
-    border-radius: 14px;
-    border: 1px solid #e2e8f0;
-    padding: 1.25rem 1.35rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-}
-.adm-kpi-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
-.adm-kpi-icon {
-    width: 52px;
-    height: 52px;
-    min-width: 52px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.35rem;
-}
-.adm-kpi-icon.primary { background: #e0f2fe !important; color: #0284c7 !important; }
-.adm-kpi-icon.warning { background: #fef3c7 !important; color: #d97706 !important; }
-.adm-kpi-icon.success { background: #d1fae5 !important; color: #059669 !important; }
-.adm-kpi-icon.danger  { background: #fee2e2 !important; color: #dc2626 !important; }
-
-.adm-kpi-title {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #64748b;
-    margin-bottom: 0.2rem;
-}
-.adm-kpi-number {
-    font-size: 1.55rem;
-    font-weight: 800;
-    line-height: 1;
-    color: #0f172a;
-    margin: 0;
-}
-.adm-kpi-number.warning { color: #d97706 !important; }
-.adm-kpi-number.success { color: #059669 !important; }
-.adm-kpi-number.danger  { color: #dc2626 !important; }
-
-/* Status Badges */
-.adm-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.35rem 0.75rem;
-    border-radius: 50rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    line-height: 1.3;
-}
-.adm-badge-success {
-    background-color: #dcfce7 !important;
-    color: #15803d !important;
-    border: 1px solid #86efac !important;
-}
-.adm-badge-warning {
-    background-color: #fef3c7 !important;
-    color: #b45309 !important;
-    border: 1px solid #fcd34d !important;
-}
-.adm-badge-danger {
-    background-color: #fee2e2 !important;
-    color: #b91c1c !important;
-    border: 1px solid #fca5a5 !important;
-}
-.adm-badge-neutral {
-    background-color: #f1f5f9 !important;
-    color: #334155 !important;
-    border: 1px solid #cbd5e1 !important;
-}
-
-/* User Avatar */
-.adm-user-avatar {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    border-radius: 50%;
-    background-color: #e0f2fe;
-    color: #0284c7;
-    font-weight: 700;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Table Style */
-.adm-table-wrap {
-    background: #ffffff;
-    border-radius: 14px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    overflow: hidden;
-}
-.adm-table {
-    width: 100%;
-    margin-bottom: 0;
-}
-.adm-table th {
-    background-color: #f8fafc !important;
-    color: #475569 !important;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 0.9rem 1rem;
-    border-bottom: 2px solid #e2e8f0;
-    border-top: none;
-}
-.adm-table td {
-    padding: 0.95rem 1rem;
-    vertical-align: middle;
-    border-bottom: 1px solid #f1f5f9;
-    color: #1e293b;
-    font-size: 0.85rem;
-}
-.adm-table tbody tr:hover {
-    background-color: #f8fafc;
-}
-</style>
+@include('admin-page.service-request.persuratan.components._index-styles')
 @endsection
 
 @section('content')
@@ -186,9 +41,9 @@
     @endif
 
     {{-- ── 3. KPI Stat Cards ─────────────────────────────────────── --}}
-    <div class="row mb-4">
+    <div class="row mb-3">
         <div class="col-sm-6 col-xl mb-3 mb-xl-0">
-            <a href="{{ route('admin.persuratan.index') }}" class="adm-kpi-link">
+            <a href="{{ route('admin.persuratan.index', request()->except('status', 'page')) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon primary">
                         <i class="fas fa-folder-open"></i>
@@ -201,7 +56,7 @@
             </a>
         </div>
         <div class="col-sm-6 col-xl mb-3 mb-xl-0">
-            <a href="{{ route('admin.persuratan.index', ['status' => 'pending']) }}" class="adm-kpi-link">
+            <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'pending'])) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon warning">
                         <i class="fas fa-clock"></i>
@@ -214,7 +69,7 @@
             </a>
         </div>
         <div class="col-sm-6 col-xl mb-3 mb-xl-0">
-            <a href="{{ route('admin.persuratan.index', ['status' => 'approved']) }}" class="adm-kpi-link">
+            <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'approved'])) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon success">
                         <i class="fas fa-check-circle"></i>
@@ -227,7 +82,7 @@
             </a>
         </div>
         <div class="col-sm-6 col-xl mb-3 mb-xl-0">
-            <a href="{{ route('admin.persuratan.index', ['status' => 'rejected']) }}" class="adm-kpi-link">
+            <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'rejected'])) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon danger">
                         <i class="fas fa-times-circle"></i>
@@ -240,47 +95,95 @@
             </a>
         </div>
         <div class="col-sm-6 col-xl mb-3 mb-xl-0">
-            <a href="{{ route('admin.persuratan.index', ['status' => 'expired']) }}" class="adm-kpi-link">
+            <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'expired'])) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
-                    <div class="adm-kpi-icon secondary" style="background: rgba(108, 117, 125, 0.12); color: #6c757d;">
+                    <div class="adm-kpi-icon secondary">
                         <i class="fas fa-hourglass-end"></i>
                     </div>
                     <div>
                         <div class="adm-kpi-title">Expired</div>
-                        <div class="adm-kpi-number" style="color: #6c757d;">{{ $expiredCount ?? 0 }}</div>
+                        <div class="adm-kpi-number text-muted">{{ $expiredCount ?? 0 }}</div>
                     </div>
                 </div>
             </a>
         </div>
     </div>
 
-    {{-- ── 4. Filter Card ────────────────────────────────────────── --}}
-    <div class="adm-card p-3 mb-4">
-        <form method="GET" action="{{ route('admin.persuratan.index') }}" class="form-row align-items-end" id="filter-form">
-            <div class="col-md-3 mb-2 mb-md-0">
-                <label class="small font-weight-bold text-muted mb-1">Request Status</label>
-                <select name="status" class="form-control form-control-sm rounded-3">
-                    <option value="">All Status</option>
-                    <option value="pending"  {{ request('status') === 'pending'   ? 'selected' : '' }}>⏳ Pending Review</option>
-                    <option value="approved" {{ request('status') === 'approved'  ? 'selected' : '' }}>✅ Approved</option>
-                    <option value="rejected" {{ request('status') === 'rejected'  ? 'selected' : '' }}>❌ Rejected</option>
-                    <option value="expired"  {{ request('status') === 'expired'   ? 'selected' : '' }}>⌛ Expired</option>
-                </select>
+    {{-- ── 4. Quick Status Filter Pills ─────────────────────────── --}}
+    <div class="adm-status-pills-wrap">
+        <a href="{{ route('admin.persuratan.index', request()->except('status', 'page')) }}"
+           class="adm-status-pill {{ !request('status') ? 'active' : '' }}">
+            <i class="fas fa-layer-group"></i> All Status ({{ $totalCount ?? $suratLogs->total() }})
+        </a>
+        <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'pending'])) }}"
+           class="adm-status-pill pending {{ request('status') === 'pending' ? 'active' : '' }}">
+            <i class="fas fa-clock"></i> ⏳ Pending ({{ $pendingCount ?? 0 }})
+        </a>
+        <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'approved'])) }}"
+           class="adm-status-pill approved {{ request('status') === 'approved' ? 'active' : '' }}">
+            <i class="fas fa-check-circle"></i> ✅ Approved ({{ $approvedCount ?? 0 }})
+        </a>
+        <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'rejected'])) }}"
+           class="adm-status-pill rejected {{ request('status') === 'rejected' ? 'active' : '' }}">
+            <i class="fas fa-times-circle"></i> ❌ Rejected ({{ $rejectedCount ?? 0 }})
+        </a>
+        <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'expired'])) }}"
+           class="adm-status-pill expired {{ request('status') === 'expired' ? 'active' : '' }}">
+            <i class="fas fa-hourglass-end"></i> ⌛ Expired ({{ $expiredCount ?? 0 }})
+        </a>
+    </div>
+
+    {{-- ── 5. Advanced Filter & Keyword Search Bar ───────────────── --}}
+    @php
+        $selectedJenis = request('jenis');
+        $selectedJenisInfo = $selectedJenis && isset($suratTypes[$selectedJenis]) ? $suratTypes[$selectedJenis] : null;
+    @endphp
+
+    <div class="adm-filter-card">
+        <form method="GET" action="{{ route('admin.persuratan.index') }}" class="row g-2 align-items-center" id="filter-form">
+            @if (request('status'))
+                <input type="hidden" name="status" value="{{ request('status') }}">
+            @endif
+            <input type="hidden" name="jenis" id="admin_filter_jenis" value="{{ request('jenis', '') }}">
+
+            {{-- 1. Keyword Search Input --}}
+            <div class="col-lg-5 col-md-12">
+                <div class="input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-transparent border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                    </div>
+                    <input type="text" name="q" class="form-control form-control-sm border-start-0"
+                           placeholder="Search requester name, email, letter number..."
+                           value="{{ request('q') }}">
+                </div>
             </div>
-            <div class="col-md-5 mb-2 mb-md-0">
-                <label class="small font-weight-bold text-muted mb-1">Letter Type</label>
-                <select name="jenis" class="form-control form-control-sm rounded-3">
-                    <option value="">All Letter Types</option>
-                    @foreach ($suratTypes as $key => $surat)
-                        <option value="{{ $key }}" {{ request('jenis') === $key ? 'selected' : '' }}>
-                            {{ $surat['label'] }}
-                        </option>
-                    @endforeach
-                </select>
+
+            {{-- 2. Letter Type Picker Trigger Button (No long native scroll!) --}}
+            <div class="col-lg-4 col-md-7 col-12">
+                <div class="adm-type-picker-btn {{ $selectedJenisInfo ? 'has-filter' : '' }}"
+                     data-toggle="modal" data-target="#modalAdminChooseLetter" role="button">
+                    <i class="fas {{ $selectedJenisInfo['icon'] ?? 'fa-file-signature' }} text-primary"></i>
+                    <span class="text-truncate">
+                        {{ $selectedJenisInfo['label'] ?? 'All Letter Types (18 Types)' }}
+                    </span>
+                    @if ($selectedJenis)
+                        <a href="{{ route('admin.persuratan.index', request()->except('jenis', 'page')) }}"
+                           class="adm-clear-filter-btn" title="Reset Letter Type"
+                           onclick="event.stopPropagation();">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    @else
+                        <i class="fas fa-chevron-down text-muted small ms-auto"></i>
+                    @endif
+                </div>
             </div>
-            <div class="col-md-4 d-flex gap-2">
+
+            {{-- 3. Action Buttons --}}
+            <div class="col-lg-3 col-md-5 col-12 d-flex gap-2">
                 <button type="submit" class="btn btn-primary btn-sm rounded-3 px-3 flex-grow-1 font-weight-bold shadow-sm">
-                    <i class="fas fa-filter me-1"></i> Apply Filter
+                    <i class="fas fa-filter me-1"></i> Filter
                 </button>
                 <a href="{{ route('admin.persuratan.index') }}" class="btn btn-light btn-sm rounded-3 px-3 text-secondary border">
                     <i class="fas fa-undo me-1"></i> Reset
@@ -289,7 +192,7 @@
         </form>
     </div>
 
-    {{-- ── 5. Main Table ─────────────────────────────────────────── --}}
+    {{-- ── 6. Main Table ─────────────────────────────────────────── --}}
     <div class="adm-table-wrap">
         <div class="table-responsive">
             <table class="table adm-table">
@@ -416,5 +319,8 @@
     </div>
 
 </div>
+
+{{-- Modals --}}
+@include('admin-page.service-request.persuratan.components._modal-choose-letter')
 
 @endsection

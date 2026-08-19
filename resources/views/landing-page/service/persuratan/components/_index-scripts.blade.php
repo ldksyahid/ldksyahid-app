@@ -6,64 +6,20 @@
 
 <script>
 (function () {
-    var bidangOptions = [
-        {value: 'BPH', label: 'BPH (Badan Pengurus Harian)'},
-        {value: 'KST', label: 'KST (Biro Kesekretariatan)'},
-        {value: 'KEU', label: 'KEU (Biro Keuangan)'},
-        {value: 'KPT', label: 'KPT (Biro Keputrian)'},
-        {value: 'PE',  label: 'PE (Pengembangan Ekonomi)'},
-        {value: 'KDR', label: 'KDR (Kaderisasi)'},
-        {value: 'SYR', label: 'SYR (Syiar)'},
-        {value: 'PABK',label: 'PABK (Pengembangan Akademik & Keilmuan)'},
-        {value: 'HUM', label: 'HUM (Humas)'},
-        {value: 'MED', label: 'MED (Media Center)'},
-        {value: 'PSU', label: 'PSU'},
-        {value: 'SQC', label: 'SQC'},
-        {value: 'RMSC',label: 'RMSC'},
-        {value: 'LDKS.FST',     label: 'LDKS Fakultas Sains dan Teknologi'},
-        {value: 'LDKS.FDIKOM',  label: 'LDKS Fakultas Dakwah dan Ilmu Komunikasi'},
-        {value: 'LDKS.FU',      label: 'LDKS Fakultas Ushuluddin'},
-        {value: 'LDKS.FSH',     label: 'LDKS Fakultas Syariah dan Hukum'},
-        {value: 'LDKS.FAH',     label: 'LDKS Fakultas Adab dan Humaniora'},
-        {value: 'LDKS.FITK',    label: 'LDKS Fakultas Ilmu Tarbiyah dan Keguruan'},
-        {value: 'LDKS.FDI',     label: 'LDKS Fakultas Dirasat Islamiyah'},
-        {value: 'LDKS.FPsi',    label: 'LDKS Fakultas Psikologi'},
-        {value: 'LDKS.FISIP',   label: 'LDKS Ilmu Sosial dan Politik'},
-        {value: 'LDKS.FIKES-FK',label: 'LDKS Fakultas Kedokteran dan Ilmu Kesehatan'},
-    ];
-
-    var descriptions = {
-        'izin-orang-tua': 'Permohonan izin kepada Orang Tua/Wali kader LDK Syahid untuk mengikuti agenda kegiatan (Kode format: <strong>Ph-e</strong>).',
-        'peminjaman-alat': 'Permohonan peminjaman inventaris/alat untuk operasional kegiatan, baik internal maupun eksternal (Kode format: <strong>Ph-e</strong>).',
-        'peminjaman-tempat-kampus': 'Permohonan izin peminjaman fasilitas bersama kampus UIN Jakarta (Student Center/Aula/Lapangan) dengan pengesahan Warek Kemahasiswaan (Kode format: <strong>Ph-i</strong>).',
-        'peminjaman-tempat-fakultas': 'Permohonan izin peminjaman ruang/aula internal fakultas di lingkungan UIN Jakarta (Kode format: <strong>Ph-i</strong>).',
-        'peminjaman-tempat-luar-kampus': 'Permohonan peminjaman tempat/lokasi kegiatan di luar kampus (Kode format: <strong>Ph-e</strong>).',
-        'permohonan-bantuan-dana': 'Permohonan pengajuan bantuan dana sponsorship/donasi kegiatan kepada pimpinan atau instansi terkait (Kode format: <strong>Ph-e</strong>).',
-        'permohonan-izin-luar-kampus': 'Surat resmi permohonan izin penyelenggaraan agenda di luar kampus yang ditujukan kepada Wakil Rektor Bidang Kemahasiswaan (Kode format: <strong>Ph-e</strong>).',
-        'surat-rekomendasi': 'Rekomendasi resmi pengurus LDK Syahid untuk pendaftaran beasiswa, delegasi, atau program kemahasiswaan (Kode format: <strong>SR-e</strong>).',
-        'surat-undangan': 'Surat undangan resmi menghadiri acara atau agenda LDK Syahid untuk pihak internal maupun eksternal (Kode format: <strong>Und-i / Und-e</strong>).',
-        'surat-aktif-organisasi': 'Surat keterangan resmi keaktifan kepengurusan mahasiswa di UKM LDK Syahid UIN Jakarta (Kode format: <strong>S.Ket-e</strong>).',
-        'permohonan-pemateri': 'Permohonan resmi kesediaan menjadi narasumber/pemateri pada acara atau kajian (Kode format: <strong>Ph-e</strong>).',
-        'permohonan-sambutan': 'Permohonan resmi kepada pimpinan/tokoh untuk memberikan kata sambutan dalam pembukaan acara (Kode format: <strong>Ph-e</strong>).',
-        'surat-izin-buka-stand': 'Permohonan izin membuka stand/booth promosi atau bazar pada area tertentu (Kode format: <strong>Ph-i</strong>).',
-        'surat-izin-pengambilan-gambar-video': 'Permohonan izin dokumentasi, pengambilan foto, dan video resmi kegiatan (Kode format: <strong>Ph-i</strong>).',
-        'surat-kunjungan-lembaga': 'Permohonan kunjungan silaturahmi, kolaborasi, atau studi banding ke lembaga/instansi/organisasi lain (Kode format: <strong>Ph-e</strong>).',
-        'surat-imbauan': 'Surat imbauan dan arahan resmi pengurus kepada seluruh anggota/kader atau civitas akademika (Kode format: <strong>Pb-e</strong>).',
-        'kerja-sama-sponsorship': 'Permohonan kemitraan, media partner, atau kerja sama sponsorship dengan pihak mitra/perusahaan (Kode format: <strong>Ks-e</strong>).',
-        'surat-pemberitahuan': 'Surat pemberitahuan resmi mengenai kegiatan kepada pihak pengamanan, pengelola gedung, atau instansi terkait (Kode format: <strong>Pb-e</strong>).'
-    };
+    var deptRegistry = @json(\App\Support\DepartmentRegistry::items());
+    var oldData = @json(old() ?: ($reapplyLog?->data ?? []));
 
     var fieldMap = {
         'izin-orang-tua': [
-            { name: 'kode_bidang',  label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
-            { name: 'nama_acara',   label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Rihlah LDK Syahid 2026' },
-            { name: 'tema_acara',   label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Membangun Generasi Islami' },
-            { name: 'hari_tanggal', label: 'Tanggal Pelaksanaan',  icon: 'fa-calendar',        type: 'date' },
-            { name: 'waktu',        label: 'Waktu Pelaksanaan',    icon: 'fa-clock',           type: 'time-range' },
-            { name: 'tempat',       label: 'Tempat Pelaksanaan',   icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Aula Madya UIN Jakarta' },
+            { name: 'kode_bidang',  label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',   label: 'Nama Acara',                  icon: 'fa-star',    placeholder: 'Contoh: Rihlah LDK Syahid 2026' },
+            { name: 'tema_acara',   label: 'Tema Acara',                  icon: 'fa-tag',     placeholder: 'Contoh: Membangun Generasi Islami' },
+            { name: 'hari_tanggal', label: 'Tanggal Pelaksanaan',         icon: 'fa-calendar', type: 'date' },
+            { name: 'waktu',        label: 'Waktu Pelaksanaan',           icon: 'fa-clock',    type: 'time-range' },
+            { name: 'tempat',       label: 'Tempat Pelaksanaan',          icon: 'fa-map-marker-alt', placeholder: 'Contoh: Aula Madya UIN Jakarta' },
         ],
         'peminjaman-alat': [
-            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',  type: 'select', options: bidangOptions },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
             { name: 'jenis_peminjaman', label: 'Sifat Peminjaman',     icon: 'fa-tag',    type: 'select',
               options: [{value:'internal',label:'Internal (LDK Syahid)'},{value:'eksternal',label:'Eksternal'}] },
             { name: 'nama_acara',       label: 'Nama Acara',           icon: 'fa-star',         placeholder: 'Contoh: Seminar Nasional' },
@@ -75,7 +31,7 @@
             { name: 'daftar_alat',      label: 'Daftar Alat yang Dipinjam', icon: 'fa-list-ol', type: 'textarea', placeholder: "Tuliskan daftar alat (1 per baris):\n1. Proyektor Epson 1 unit\n2. Sound Portable 1 set\n3. Kabel Roll 2 buah" },
         ],
         'peminjaman-tempat-kampus': [
-            { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF',   icon: 'fa-users',    type: 'select', options: bidangOptions },
+            { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
             { name: 'nama_acara',           label: 'Nama Acara',             icon: 'fa-star',     placeholder: 'Contoh: Pelatihan Kepemimpinan' },
             { name: 'tema_acara',           label: 'Tema Acara',             icon: 'fa-tag',      placeholder: 'Contoh: Menyiapkan Pemimpin Peradaban' },
             { name: 'nama_ketua_pelaksana', label: 'Nama Ketua Pelaksana',   icon: 'fa-user',     placeholder: 'Contoh: Muhammad Syauqi Mubarak' },
@@ -86,7 +42,7 @@
             { name: 'tempat_dipinjam',      label: 'Tempat yang Dipinjam',   icon: 'fa-building', placeholder: 'Contoh: Aula Student Center Lt. 3 / Lapangan SC' },
         ],
         'peminjaman-tempat-fakultas': [
-            { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF',   icon: 'fa-users',    type: 'select', options: bidangOptions },
+            { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
             { name: 'nama_acara',           label: 'Nama Acara',             icon: 'fa-star',     placeholder: 'Contoh: Seminar Fakultas' },
             { name: 'tema_acara',           label: 'Tema Acara',             icon: 'fa-tag',      placeholder: 'Contoh: Eksplorasi Sains Islam' },
             { name: 'nama_ketua_pelaksana', label: 'Nama Ketua Pelaksana',   icon: 'fa-user',     placeholder: 'Contoh: Ahmad Fulan' },
@@ -97,225 +53,244 @@
             { name: 'tempat_dipinjam',      label: 'Tempat yang Dipinjam',   icon: 'fa-building', placeholder: 'Contoh: Teater FST Lt. 2' },
         ],
         'peminjaman-tempat-luar-kampus': [
-            { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF',   icon: 'fa-users',    type: 'select', options: bidangOptions },
-            { name: 'nama_acara',           label: 'Nama Acara',             icon: 'fa-star',     placeholder: 'Contoh: Rihlah Akbar' },
-            { name: 'tema_acara',           label: 'Tema Acara',             icon: 'fa-tag',      placeholder: 'Contoh: Menjalin Ukhuwah Tanpa Batas' },
-            { name: 'nama_ketua_pelaksana', label: 'Nama Ketua Pelaksana',   icon: 'fa-user',     placeholder: 'Contoh: Muhammad Fulan' },
-            { name: 'nim_ketua_pelaksana',  label: 'NIM Ketua Pelaksana',    icon: 'fa-id-card',  inputmode: 'numeric', pattern: '[0-9]*', placeholder: 'Contoh: 11230000000002' },
-            { name: 'ditujukan_kepada',     label: 'Ditujukan Kepada',       icon: 'fa-envelope', placeholder: 'Contoh: Pengelola Villa Cisarua' },
+            { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',           label: 'Nama Acara',             icon: 'fa-star',     placeholder: 'Contoh: Kemah Bakti Syahid' },
+            { name: 'tema_acara',           label: 'Tema Acara',             icon: 'fa-tag',      placeholder: 'Contoh: Harmoni Alam dan Iman' },
+            { name: 'nama_ketua_pelaksana', label: 'Nama Ketua Pelaksana',   icon: 'fa-user',     placeholder: 'Contoh: Ahmad Fulan' },
+            { name: 'nim_ketua_pelaksana',  label: 'NIM Ketua Pelaksana',    icon: 'fa-id-card',  inputmode: 'numeric', pattern: '[0-9]*', placeholder: 'Contoh: 11230000000001' },
+            { name: 'ditujukan_kepada',     label: 'Ditujukan Kepada',       icon: 'fa-envelope', placeholder: 'Contoh: Pengelola Villa Bukit Cisarua' },
             { name: 'hari_tanggal',         label: 'Tanggal Peminjaman',     icon: 'fa-calendar', type: 'date' },
             { name: 'waktu',                label: 'Waktu Peminjaman',       icon: 'fa-clock',    type: 'time-range' },
-            { name: 'tempat_dipinjam',      label: 'Tempat yang Dipinjam',   icon: 'fa-building', placeholder: 'Contoh: Villa Alam Hijau, Puncak, Bogor' },
+            { name: 'tempat_dipinjam',      label: 'Tempat yang Dipinjam',   icon: 'fa-map-marker-alt', placeholder: 'Contoh: Villa & Lapangan Utama' },
         ],
         'permohonan-bantuan-dana': [
-            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',           type: 'select', options: bidangOptions },
-            { name: 'nama_program',     label: 'Nama Program Kegiatan',icon: 'fa-project-diagram', placeholder: 'Contoh: Gebyar Ramadan LDK Syahid 1448 H' },
-            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',        placeholder: 'Contoh: Pimpinan BAZNAS Pusat / Bank Syariah Indonesia' },
-            { name: 'keperluan',        label: 'Rincian Keperluan Bantuan', icon: 'fa-file-alt',    type: 'textarea', placeholder: 'Jelaskan alokasi dan urgensi kebutuhan bantuan dana secara singkat...' },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_program',     label: 'Nama Program/Acara',   icon: 'fa-hand-holding-usd', placeholder: 'Contoh: Syahid Peduli Ummat 2026' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',     placeholder: 'Contoh: Pimpinan BAZNAS RI / Direktur Utama PT...' },
+            { name: 'keperluan',        label: 'Tujuan & Rincian Penggunaan Dana', icon: 'fa-align-left', type: 'textarea', placeholder: 'Jelaskan tujuan permohonan bantuan dana serta ringkasan peruntukan anggaran kegiatan...' },
         ],
         'permohonan-izin-luar-kampus': [
-            { name: 'kode_bidang',   label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
-            { name: 'nama_acara',    label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Kemah Bakti Mahasiswa' },
-            { name: 'tema_acara',    label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Mengabdi untuk Negeri' },
+            { name: 'kode_bidang',   label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',    label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Rihlah Akbar Pengurus LDK Syahid' },
+            { name: 'tema_acara',    label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Menjalin Ukhuwah, Menggapai Berkah' },
             { name: 'hari_tanggal',  label: 'Tanggal Pelaksanaan',  icon: 'fa-calendar',        type: 'date' },
             { name: 'waktu',         label: 'Waktu Pelaksanaan',    icon: 'fa-clock',           type: 'time-range' },
-            { name: 'tempat',        label: 'Nama Tempat',          icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Desa Wisata Babakan Madang' },
-            { name: 'alamat_tempat', label: 'Alamat Lengkap',       icon: 'fa-map-pin',         placeholder: 'Contoh: Jl. Raya Babakan No. 45, Bogor, Jawa Barat' },
+            { name: 'tempat',        label: 'Tempat/Lokasi Acara',  icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Villa Bukit Cisarua' },
+            { name: 'alamat_tempat', label: 'Alamat Lengkap',       icon: 'fa-directions',      placeholder: 'Contoh: Jl. Raya Puncak KM 84, Cisarua, Bogor, Jawa Barat' },
         ],
         'surat-rekomendasi': [
-            { name: 'kode_bidang',         label: 'Asal Bidang / LDKSF',            icon: 'fa-users',        type: 'select', options: bidangOptions },
-            { name: 'nama',                label: 'Nama Lengkap Mahasiswa',          icon: 'fa-user',         placeholder: 'Contoh: Muhammad Fakhri Alfarisi' },
-            { name: 'nim',                 label: 'NIM',                             icon: 'fa-id-card',      placeholder: 'Contoh: 11230910000029' },
-            { name: 'fakultas',            label: 'Fakultas',                        icon: 'fa-university',   placeholder: 'Contoh: Sains dan Teknologi' },
-            { name: 'jurusan',             label: 'Program Studi / Jurusan',         icon: 'fa-graduation-cap', placeholder: 'Contoh: Teknik Informatika' },
-            { name: 'jabatan',             label: 'Bidang / Jabatan di LDK',         icon: 'fa-briefcase',    placeholder: 'Contoh: Anggota Bidang Media Center' },
-            { name: 'program_rekomendasi', label: 'Program yang Direkomendasikan',   icon: 'fa-award',        placeholder: 'Contoh: Beasiswa Prestasi BAZNAS 2026' },
-            { name: 'pertimbangan',        label: 'Poin Pertimbangan Rekomendasi',   icon: 'fa-list-ul',      type: 'textarea', placeholder: "Tuliskan poin pertimbangan (1 baris = 1 poin):\n1. Aktif berkontribusi dalam berbagai program kerja organisasi.\n2. Memiliki komitmen integritas dan akhlak yang baik." },
+            { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama',                 label: 'Nama Lengkap Mahasiswa', icon: 'fa-user',  placeholder: 'Contoh: Ahmad Fulan' },
+            { name: 'nim',                  label: 'NIM Mahasiswa',       icon: 'fa-id-card',  inputmode: 'numeric', pattern: '[0-9]*', placeholder: 'Contoh: 11230000000001' },
+            { name: 'fakultas',             label: 'Fakultas',            icon: 'fa-school',   placeholder: 'Contoh: Sains dan Teknologi' },
+            { name: 'jurusan',              label: 'Program Studi / Jurusan', icon: 'fa-graduation-cap', placeholder: 'Contoh: Teknik Informatika' },
+            { name: 'jabatan',              label: 'Jabatan di LDK Syahid', icon: 'fa-briefcase', placeholder: 'Contoh: Ketua Departemen Kaderisasi' },
+            { name: 'program_rekomendasi',  label: 'Untuk Keperluan / Program', icon: 'fa-award', placeholder: 'Contoh: Pendaftaran Beasiswa Unggulan 2026' },
+            { name: 'pertimbangan',         label: 'Keterangan Pertimbangan', icon: 'fa-align-left', type: 'textarea', placeholder: 'Tuliskan pertimbangan rekomendasi (contoh: Mahasiswa aktif, berprestasi, dan memiliki integritas tinggi...)' },
         ],
         'surat-undangan': [
-            { name: 'kode_bidang',     label: 'Asal Bidang / LDKSF', icon: 'fa-users', type: 'select', options: bidangOptions },
-            { name: 'jenis_undangan',  label: 'Sifat Undangan',       icon: 'fa-tag',   type: 'select',
-              options: [{value:'internal',label:'Internal (UIN Syahid)'},{value:'eksternal',label:'Eksternal'}] },
-            { name: 'nama_acara',      label: 'Nama Acara',           icon: 'fa-star',         placeholder: 'Contoh: Grand Opening Syahid Fair' },
-            { name: 'tema_acara',      label: 'Tema Acara',           icon: 'fa-tag',          placeholder: 'Contoh: Harmoni Dakwah Kreatif' },
-            { name: 'ditujukan_kepada',label: 'Ditujukan Kepada',     icon: 'fa-envelope',     placeholder: 'Contoh: Ketua BEM Universitas / Bapak Rektor' },
-            { name: 'hari_tanggal',    label: 'Tanggal Acara',        icon: 'fa-calendar',     type: 'date' },
-            { name: 'waktu',           label: 'Waktu Acara',          icon: 'fa-clock',        type: 'time-range' },
-            { name: 'tempat',          label: 'Tempat Acara',         icon: 'fa-map-marker-alt', placeholder: 'Contoh: Auditorium Utama Harun Nasution' },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'jenis_undangan',   label: 'Sifat Undangan',       icon: 'fa-tag',    type: 'select',
+              options: [{value:'internal',label:'Internal Kampus (UIN Syahid)'},{value:'eksternal',label:'Eksternal Kampus'}] },
+            { name: 'nama_acara',       label: 'Nama Acara',           icon: 'fa-star',         placeholder: 'Contoh: Milad Akbar LDK Syahid ke-30' },
+            { name: 'tema_acara',       label: 'Tema Acara',           icon: 'fa-tag',          placeholder: 'Contoh: Tiga Dekade Menebar Inspirasi Kebaikan' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',     placeholder: 'Contoh: Ketua BEM UIN Syarif Hidayatullah Jakarta' },
+            { name: 'hari_tanggal',     label: 'Tanggal Acara',        icon: 'fa-calendar',     type: 'date' },
+            { name: 'waktu',            label: 'Waktu Acara',          icon: 'fa-clock',        type: 'time-range' },
+            { name: 'tempat',           label: 'Tempat Pelaksanaan',   icon: 'fa-map-marker-alt', placeholder: 'Contoh: Auditorium Harun Nasution' },
         ],
         'surat-aktif-organisasi': [
-            { name: 'kode_bidang',  label: 'Asal Bidang / LDKSF',    icon: 'fa-users',        type: 'select', options: bidangOptions },
-            { name: 'nama',         label: 'Nama Lengkap',            icon: 'fa-user',          placeholder: 'Contoh: Ahmad Fulan' },
-            { name: 'ttl',          label: 'Tempat, Tanggal Lahir',   icon: 'fa-calendar-alt', placeholder: 'Contoh: Tangerang, 26 Januari 2005' },
-            { name: 'nim',          label: 'NIM',                     icon: 'fa-id-card',       placeholder: 'Contoh: 11230910000029' },
-            { name: 'fakultas',     label: 'Fakultas',                icon: 'fa-university',    placeholder: 'Contoh: Sains dan Teknologi' },
-            { name: 'jurusan',      label: 'Semester / Jurusan',      icon: 'fa-graduation-cap', placeholder: 'Contoh: Semester 4 / Teknik Informatika' },
-            { name: 'jabatan',      label: 'Bidang / Jabatan di LDK', icon: 'fa-briefcase',     placeholder: 'Contoh: Anggota Bidang Kaderisasi' },
-            { name: 'keperluan',    label: 'Keperluan Surat',         icon: 'fa-file-alt',      type: 'textarea', placeholder: 'Contoh: Persyaratan Beasiswa Unggulan Kemendikbud' },
-            { name: 'penyelenggara',label: 'Instansi / Penyelenggara',icon: 'fa-building',      placeholder: 'Contoh: Kementerian Pendidikan dan Kebudayaan' },
+            { name: 'kode_bidang',   label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama',          label: 'Nama Lengkap Mahasiswa', icon: 'fa-user',        placeholder: 'Contoh: Ahmad Fulan' },
+            { name: 'ttl',           label: 'Tempat, Tanggal Lahir', icon: 'fa-birthday-cake', placeholder: 'Contoh: Jakarta, 17 Agustus 2003' },
+            { name: 'nim',           label: 'NIM Mahasiswa',       icon: 'fa-id-card',        inputmode: 'numeric', pattern: '[0-9]*', placeholder: 'Contoh: 11230000000001' },
+            { name: 'fakultas',      label: 'Fakultas',            icon: 'fa-school',         placeholder: 'Contoh: Ushuluddin' },
+            { name: 'jurusan',       label: 'Jurusan / Prodi',     icon: 'fa-graduation-cap', placeholder: 'Contoh: Ilmu Al-Qur\'an dan Tafsir' },
+            { name: 'jabatan',       label: 'Jabatan di LDK Syahid', icon: 'fa-briefcase',    placeholder: 'Contoh: Anggota Bidang Syiar' },
+            { name: 'keperluan',     label: 'Tujuan Surat Digunakan', icon: 'fa-file-alt',    placeholder: 'Contoh: Pengajuan Beasiswa Kemitraan' },
+            { name: 'penyelenggara', label: 'Lembaga / Instansi Penyelenggara', icon: 'fa-building', placeholder: 'Contoh: Kementerian Agama RI' },
         ],
         'permohonan-pemateri': [
-            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
-            { name: 'nama_acara',       label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Talkshow Inspirasi Muslim' },
-            { name: 'tema_acara',       label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Menjadi Generasi Emas Islami' },
-            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',       placeholder: 'Contoh: Ustadz Dr. Fulan, M.A.' },
-            { name: 'materi',           label: 'Tema Materi Khusus',   icon: 'fa-book-open',      placeholder: 'Contoh: Urgensi Menuntut Ilmu di Era Disrupsi' },
-            { name: 'hari_tanggal',     label: 'Tanggal Acara',        icon: 'fa-calendar',       type: 'date' },
-            { name: 'waktu',            label: 'Waktu Acara',          icon: 'fa-clock',          type: 'time-range' },
-            { name: 'tempat',           label: 'Tempat Acara',         icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Ruang Teater Prof. Aqib Suminto' },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',       label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Kajian Spesial Ramadhan' },
+            { name: 'tema_acara',       label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Menghidupkan Nilai Al-Qur\'an di Era Digital' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada (Calon Pemateri)', icon: 'fa-user-tie', placeholder: 'Contoh: Ustadz Dr. Fulan, M.A.' },
+            { name: 'hari_tanggal',     label: 'Tanggal Acara',        icon: 'fa-calendar',        type: 'date' },
+            { name: 'waktu',            label: 'Waktu Pelaksanaan',    icon: 'fa-clock',           type: 'time-range' },
+            { name: 'tempat',           label: 'Tempat Acara',         icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Masjid Al-Jami\'ah UIN Jakarta / Zoom Meeting' },
+            { name: 'materi',           label: 'Topik / Materi yang Dimohonkan', icon: 'fa-book-open', placeholder: 'Contoh: Fiqih Prioritas dalam Gerakan Dakwah Kampus' },
         ],
         'permohonan-sambutan': [
-            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
-            { name: 'nama_acara',       label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Grand Opening Syahid Fair 2026' },
-            { name: 'tema_acara',       label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Meneguhkan Langkah Dakwah Kampus' },
-            { name: 'ditujukan_kepada', label: 'Nama Tokoh / Pejabat', icon: 'fa-user-tie',       placeholder: 'Contoh: Prof. Dr. Hj. Amany Lubis, M.A.' },
-            { name: 'jabatan_tujuan',   label: 'Jabatan / Instansi',   icon: 'fa-id-badge',        placeholder: 'Contoh: Guru Besar UIN Syarif Hidayatullah Jakarta' },
-            { name: 'hari_tanggal',     label: 'Tanggal Pelaksanaan',  icon: 'fa-calendar',        type: 'date' },
-            { name: 'waktu',            label: 'Waktu Pelaksanaan',    icon: 'fa-clock',           type: 'time-range' },
-            { name: 'tempat',           label: 'Tempat Pelaksanaan',   icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Auditorium Harun Nasution' },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',       label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Seminar Nasional Pemuda Muslim' },
+            { name: 'tema_acara',       label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Kontribusi Pemuda Menuju Indonesia Emas' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-user-tie',        placeholder: 'Contoh: Prof. Dr. Hj. Fulanah, M.A.' },
+            { name: 'jabatan_tujuan',   label: 'Jabatan Pimpinan',     icon: 'fa-briefcase',       placeholder: 'Contoh: Wakil Rektor Bidang Kemahasiswaan' },
+            { name: 'hari_tanggal',     label: 'Tanggal Acara',        icon: 'fa-calendar',        type: 'date' },
+            { name: 'waktu',            label: 'Waktu Sambutan',       icon: 'fa-clock',           type: 'time-range' },
+            { name: 'tempat',           label: 'Tempat Acara',         icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Auditorium Harun Nasution' },
         ],
         'surat-izin-buka-stand': [
-            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
-            { name: 'nama_acara',       label: 'Nama Agenda / Bazar',  icon: 'fa-store',           placeholder: 'Contoh: Bazar Kuliner Syahid Entrepreneur' },
-            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',        placeholder: 'Contoh: Kepala Biro Umum / Pengelola Tempat' },
-            { name: 'hari_tanggal',     label: 'Tanggal Pelaksanaan',  icon: 'fa-calendar',        type: 'date' },
-            { name: 'waktu',            label: 'Waktu Operasional',    icon: 'fa-clock',           type: 'time-range' },
-            { name: 'tempat',           label: 'Lokasi Stand/Booth',   icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Selasar Depan Student Center' },
-            { name: 'keperluan',        label: 'Deskripsi Stand',      icon: 'fa-file-alt',        type: 'textarea', placeholder: 'Contoh: Penjualan merchandise resmi, buku islami, dan produk kewirausahaan kader.' },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',       label: 'Nama Agenda / Kegiatan Stand', icon: 'fa-store',  placeholder: 'Contoh: Stand Open Recruitment & Expo UKM' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',        placeholder: 'Contoh: Pengelola Gedung Student Center UIN Jakarta' },
+            { name: 'hari_tanggal',     label: 'Tanggal Stand',        icon: 'fa-calendar',        type: 'date' },
+            { name: 'waktu',            label: 'Waktu Operasional Stand', icon: 'fa-clock',        type: 'time-range' },
+            { name: 'tempat',           label: 'Lokasi Stand',         icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Lobby Student Center Lt. 1' },
+            { name: 'keperluan',        label: 'Rincian Kegiatan Stand', icon: 'fa-align-left',    type: 'textarea', placeholder: 'Jelaskan keperluan pembukaan stand (contoh: Sosialisasi pendaftaran anggota baru dan penjualan merchandise resmi)...' },
         ],
         'surat-izin-pengambilan-gambar-video': [
-            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
-            { name: 'nama_acara',       label: 'Nama Kegiatan / Proyek', icon: 'fa-video',        placeholder: 'Contoh: Pembuatan Video Profil LDK Syahid 2026' },
-            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',        placeholder: 'Contoh: Kepala Bagian Keamanan / Pengelola Gedung' },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',       label: 'Nama Agenda Peliputan', icon: 'fa-camera',       placeholder: 'Contoh: Shooting Video Profil & Dokumentasi Milad' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',        placeholder: 'Contoh: Kepala Biro Administrasi Umum' },
             { name: 'hari_tanggal',     label: 'Tanggal Pengambilan',  icon: 'fa-calendar',        type: 'date' },
             { name: 'waktu',            label: 'Waktu Pengambilan',    icon: 'fa-clock',           type: 'time-range' },
-            { name: 'tempat',           label: 'Lokasi / Area',        icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Area Rektorat dan Taman SC' },
-            { name: 'keperluan',        label: 'Rincian Keperluan',    icon: 'fa-file-alt',        type: 'textarea', placeholder: 'Contoh: Dokumentasi visual, video cinematic profil organisasi, dan publikasi dakwah.' },
+            { name: 'tempat',           label: 'Area / Spot Pengambilan', icon: 'fa-map-marker-alt', placeholder: 'Contoh: Taman Kampus 1 dan Area SC' },
+            { name: 'keperluan',        label: 'Keperluan / Konten Video', icon: 'fa-align-left',  type: 'textarea', placeholder: 'Tuliskan tujuan pengambilan gambar/video dan daftar kru peliput...' },
         ],
         'surat-kunjungan-lembaga': [
-            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
-            { name: 'nama_kegiatan',    label: 'Nama Program Kunjungan', icon: 'fa-handshake',     placeholder: 'Contoh: Studi Banding & Silaturahmi Kelembagaan' },
-            { name: 'ditujukan_kepada', label: 'Lembaga / Instansi Tujuan', icon: 'fa-building', placeholder: 'Contoh: Pengurus Pusat BAZNAS RI / LDK Sahabat Kampus' },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_kegiatan',    label: 'Nama Agenda Kunjungan', icon: 'fa-people-arrows', placeholder: 'Contoh: Studi Banding & Silaturahmi Lembaga' },
+            { name: 'ditujukan_kepada', label: 'Lembaga / Instansi Tujuan', icon: 'fa-building', placeholder: 'Contoh: Pengurus LDK SALAM Universitas Indonesia' },
             { name: 'hari_tanggal',     label: 'Tanggal Kunjungan',    icon: 'fa-calendar',        type: 'date' },
             { name: 'waktu',            label: 'Waktu Kunjungan',      icon: 'fa-clock',           type: 'time-range' },
-            { name: 'tempat',           label: 'Alamat / Tempat Tujuan', icon: 'fa-map-marker-alt', placeholder: 'Contoh: Gedung BAZNAS RI, Jl. Matraman Raya No. 134, Jakarta' },
-            { name: 'keperluan',        label: 'Fokus Agenda Kunjungan', icon: 'fa-file-alt',     type: 'textarea', placeholder: 'Contoh: Sharing session manajemen organisasi, kolaborasi program dakwah, dan penyerahan cinderamata.' },
+            { name: 'tempat',           label: 'Tempat / Lokasi Kunjungan', icon: 'fa-map-marker-alt', placeholder: 'Contoh: Pusgiwa UI Depok' },
+            { name: 'keperluan',        label: 'Tujuan & Pembahasan',  icon: 'fa-align-left',      type: 'textarea', placeholder: 'Jelaskan tujuan kunjungan, poin diskusi kemitraan, dan perkiraan jumlah delegasi...' },
         ],
         'surat-imbauan': [
-            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
-            { name: 'perihal_imbauan',  label: 'Perihal Imbauan',      icon: 'fa-bullhorn',        placeholder: 'Contoh: Menjaga Ketertiban dan Kebersihan Fasilitas Dakwah' },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'perihal_imbauan',  label: 'Perihal Imbauan',      icon: 'fa-bullhorn',        placeholder: 'Contoh: Imbauan Ketertiban & Partisipasi Pemilu Raya' },
             { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',        placeholder: 'Contoh: Seluruh Pengurus dan Kader LDK Syahid' },
-            { name: 'poin_imbauan',     label: 'Poin-poin Imbauan (1 per baris)', icon: 'fa-list-ol', type: 'textarea', placeholder: "Tuliskan poin imbauan (1 baris = 1 poin):\n1. Menjaga kebersihan dan ketertiban sekretariat.\n2. Mematikan alat elektronik setelah selesai digunakan.\n3. Menjaga koordinasi dan komunikasi yang santun." },
+            { name: 'poin_imbauan',     label: 'Poin-Poin Imbauan',    icon: 'fa-list-ol',         type: 'textarea', placeholder: "Tuliskan poin imbauan (1 per baris):\n1. Menjaga netralitas dan etika dakwah\n2. Berpartisipasi aktif dengan damai\n3. Menjaga ukhuwah islamiyah" },
         ],
         'kerja-sama-sponsorship': [
-            { name: 'kode_bidang',     label: 'Asal Bidang / LDKSF', icon: 'fa-users',     type: 'select', options: bidangOptions },
-            { name: 'nama_acara',      label: 'Nama Acara',           icon: 'fa-star',      placeholder: 'Contoh: Syahid Entrepreneur Fest' },
-            { name: 'tema_acara',      label: 'Tema Acara',           icon: 'fa-tag',       placeholder: 'Contoh: Wirausaha Berkah Berdaya' },
-            { name: 'ditujukan_kepada',label: 'Ditujukan Kepada',     icon: 'fa-envelope',  placeholder: 'Contoh: Pimpinan PT Wardah Cosmetics / Bank Muamalat' },
-            { name: 'bentuk_kerjasama',label: 'Bentuk Kerja Sama',    icon: 'fa-handshake', type: 'textarea', placeholder: "Jelaskan ringkasan bentuk kerja sama:\n1. Dukungan pendanaan dan publikasi bersama\n2. Booth sponsor pada venue kegiatan" },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',       label: 'Nama Acara',           icon: 'fa-star',            placeholder: 'Contoh: Festival Syahid Fest 2026' },
+            { name: 'tema_acara',       label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Eksplorasi Seni & Budaya Islami Nusantara' },
+            { name: 'ditujukan_kepada', label: 'Mitra / Perusahaan Tujuan', icon: 'fa-handshake', placeholder: 'Contoh: Pimpinan PT Telkom Indonesia / Paragon Corp' },
+            { name: 'bentuk_kerjasama', label: 'Bentuk Kerja Sama yang Ditawarkan', icon: 'fa-align-left', type: 'textarea', placeholder: 'Jelaskan paket sponsorship, publikasi logo, media partner, atau benefit kemitraan yang ditawarkan...' },
         ],
         'surat-pemberitahuan': [
-            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF', icon: 'fa-users',          type: 'select', options: bidangOptions },
-            { name: 'nama_kegiatan',    label: 'Nama Kegiatan',        icon: 'fa-star',            placeholder: 'Contoh: Rihlah Akbar Kader LDK Syahid' },
-            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',       placeholder: 'Contoh: Komandan Satpam / Pengelola Keamanan Kampus' },
-            { name: 'hari_tanggal',     label: 'Tanggal Pelaksanaan',  icon: 'fa-calendar',       type: 'date' },
-            { name: 'waktu',            label: 'Waktu Pelaksanaan',    icon: 'fa-clock',          type: 'time-range' },
-            { name: 'tempat',           label: 'Tempat Pelaksanaan',   icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Parkiran Utama UIN Syarif Hidayatullah' },
+            { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_kegiatan',    label: 'Nama Kegiatan',        icon: 'fa-star',            placeholder: 'Contoh: Pelaksanaan Training Advokasi Mahasiswa' },
+            { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',        placeholder: 'Contoh: Koordinator Keamanan Kampus 1 UIN Jakarta' },
+            { name: 'hari_tanggal',     label: 'Tanggal Kegiatan',     icon: 'fa-calendar',        type: 'date' },
+            { name: 'waktu',            label: 'Waktu Kegiatan',       icon: 'fa-clock',           type: 'time-range' },
+            { name: 'tempat',           label: 'Tempat Kegiatan',      icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Lapangan Student Center' },
         ],
     };
 
-    var oldValues = @json(old());
-
-    function escapeAttr(v) {
-        return String(v || '')
-            .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
-            .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    function escapeAttr(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     }
 
     function renderFields(type) {
         var container = document.getElementById('dynamic-fields');
         var submitBtn = document.getElementById('btn-submit-wrapper');
-        var descBox   = document.getElementById('prsDescBox');
+        if (!container || !submitBtn) return;
 
         container.innerHTML = '';
 
-        if (!type || !fieldMap[type]) {
+        var fields = fieldMap[type];
+        if (!fields) {
             submitBtn.style.setProperty('display', 'none', 'important');
-            if (descBox) descBox.style.display = 'none';
             return;
         }
 
-        // Show description
-        if (descBox && descriptions[type]) {
-            descBox.innerHTML = '<i class="fas fa-info-circle me-1 text-primary"></i> ' + descriptions[type];
-            descBox.style.display = 'block';
-        } else if (descBox) {
-            descBox.style.display = 'none';
-        }
-
-        var fields = fieldMap[type];
-
         fields.forEach(function (f) {
-            var val = oldValues[f.name] !== undefined ? oldValues[f.name] : '';
+            var val = oldData[f.name] || '';
             var group = document.createElement('div');
             group.className = 'prs-form-group';
 
-            var iconHtml = f.icon ? '<i class="fas ' + f.icon + '"></i>' : '<i class="fas fa-circle"></i>';
-            var prefixIcon = f.icon ? '<i class="fas ' + f.icon + ' prs-input-prefix-icon"></i>' : '';
+            var iconHtml   = '<i class="fas ' + (f.icon || 'fa-pencil-alt') + '"></i>';
+            var prefixIcon = '<i class="fas ' + (f.icon || 'fa-pencil-alt') + ' prs-input-prefix-icon"></i>';
 
-            // 1. SELECT FIELD
-            if (f.type === 'select') {
-                var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
-                var inputHtml = '<div class="prs-input-group">' + prefixIcon +
-                    '<select name="' + f.name + '" id="field_' + f.name + '" class="prs-form-select" required>' +
-                    '<option value="" disabled ' + (val === '' ? 'selected' : '') + '>-- Pilih ' + f.label + ' --</option>';
+            // 1. DEPARTMENT / FACULTY PICKER (MODERN CHOOSE MODAL)
+            if (f.type === 'dept-picker') {
+                var selectedDept = deptRegistry[val] || null;
+                var labelHtml = '<label class="prs-form-label"><i class="fas fa-sitemap"></i> ' + f.label + '</label>';
 
-                f.options.forEach(function (opt) {
-                    var selected = String(val) === String(opt.value) ? 'selected' : '';
-                    inputHtml += '<option value="' + escapeAttr(opt.value) + '" ' + selected + '>' + escapeAttr(opt.label) + '</option>';
-                });
+                var pickerHtml = '<input type="hidden" name="kode_bidang" id="field_kode_bidang" value="' + escapeAttr(val) + '" required>' +
+                    '<div class="prs-picker-card ' + (selectedDept ? 'has-value' : '') + '" id="prsDeptPickerTrigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#modalChooseDepartment">' +
+                        '<div class="prs-picker-icon-wrap" id="prsDeptPickerIcon">' +
+                            '<i class="fas ' + (selectedDept ? selectedDept.icon : 'fa-sitemap') + '"></i>' +
+                        '</div>' +
+                        '<div class="prs-picker-content">' +
+                            '<div class="prs-picker-title" id="prsDeptPickerTitle">' +
+                                (selectedDept ? escapeAttr(selectedDept.name) : 'Pilih Bidang / LDKSF Pengaju...') +
+                            '</div>' +
+                            '<div class="prs-picker-desc" id="prsDeptPickerDesc">' +
+                                (selectedDept ? escapeAttr(selectedDept.desc) : 'Klik untuk memilih dari 13 Bidang Pusat atau 10 LDKS Fakultas') +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="prs-picker-action">' +
+                            '<span class="prs-picker-btn">' +
+                                '<span>' + (selectedDept ? 'Ganti' : 'Pilih Bidang') + '</span>' +
+                                '<i class="fas fa-th-large ms-1"></i>' +
+                            '</span>' +
+                        '</div>' +
+                    '</div>';
 
-                inputHtml += '</select></div>';
-                group.innerHTML = labelHtml + inputHtml;
+                group.innerHTML = labelHtml + pickerHtml;
             }
-            // 2. TEXTAREA FIELD
+            // 2. SELECT FIELD
+            else if (f.type === 'select') {
+                var optsHtml = (f.options || []).map(function (o) {
+                    var isSelected = String(val) === String(o.value) ? ' selected' : '';
+                    return '<option value="' + escapeAttr(o.value) + '"' + isSelected + '>' + escapeAttr(o.label) + '</option>';
+                }).join('');
+
+                var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
+                var selectHtml = '<div class="prs-input-group">' + prefixIcon +
+                    '<select name="' + f.name + '" id="field_' + f.name + '" class="prs-form-select" required>' +
+                    '<option value="" disabled' + (!val ? ' selected' : '') + '>-- Pilih ' + escapeAttr(f.label) + ' --</option>' +
+                    optsHtml +
+                    '</select></div>';
+                group.innerHTML = labelHtml + selectHtml;
+            }
+            // 3. TEXTAREA FIELD
             else if (f.type === 'textarea') {
                 var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
-                var inputHtml = '<div class="prs-input-group">' + prefixIcon +
-                    '<textarea name="' + f.name + '" id="field_' + f.name + '" class="prs-form-textarea" placeholder="' + escapeAttr(f.placeholder || '') + '" required>' +
-                    escapeAttr(val) + '</textarea></div>';
-                group.innerHTML = labelHtml + inputHtml;
+                var textareaHtml = '<div class="prs-input-group">' + prefixIcon +
+                    '<textarea name="' + f.name + '" id="field_' + f.name + '" class="prs-form-textarea" placeholder="' + escapeAttr(f.placeholder || '') + '" rows="3" required>' + escapeAttr(val) + '</textarea>' +
+                    '</div>';
+                group.innerHTML = labelHtml + textareaHtml;
             }
-            // 3. DATE FIELD (Single Day vs Multi-Day Range Toggle)
+            // 4. DATEPICKER FIELD
             else if (f.type === 'date') {
-                var isMulti = String(val).indexOf('to') !== -1 || String(val).indexOf('s.d.') !== -1;
-                
-                var headerHtml = '<div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">' +
+                var isRange = val.indexOf('to') !== -1 || val.indexOf('s.d.') !== -1;
+
+                var labelHtml = '<div class="d-flex align-items-center justify-content-between mb-2">' +
                     '<label class="prs-form-label mb-0" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>' +
                     '<div class="prs-date-toggle-wrap">' +
-                        '<button type="button" class="prs-date-toggle-btn ' + (!isMulti ? 'active' : '') + '" id="btn_date_single">1 Hari</button>' +
-                        '<button type="button" class="prs-date-toggle-btn ' + (isMulti ? 'active' : '') + '" id="btn_date_range">Rentang Hari (&gt; 1 Hari)</button>' +
+                        '<button type="button" class="prs-date-toggle-btn' + (!isRange ? ' active' : '') + '" id="btn_date_single">1 Hari</button>' +
+                        '<button type="button" class="prs-date-toggle-btn' + (isRange ? ' active' : '') + '" id="btn_date_range">Multi-Hari (Rentang)</button>' +
                     '</div>' +
                 '</div>';
 
-                var inputHtml = '<input type="hidden" name="' + f.name + '" id="field_' + f.name + '" value="' + escapeAttr(val) + '" required>' +
-                    '<div class="prs-input-group">' + prefixIcon +
-                        '<input type="text" id="picker_' + f.name + '" class="prs-form-input prs-datepicker" placeholder="Pilih tanggal kegiatan..." autocomplete="off" readonly required>' +
+                var inputHtml = '<div class="prs-input-group">' + prefixIcon +
+                    '<input type="hidden" name="' + f.name + '" id="field_' + f.name + '" value="' + escapeAttr(val) + '">' +
+                    '<input type="text" id="input_hari_tanggal_picker" class="prs-form-input prs-datepicker" placeholder="Klik untuk memilih tanggal..." readonly required>' +
                     '</div>' +
-                    '<span class="prs-form-hint" id="hint_' + f.name + '">Pilih 1 tanggal jika acara 1 hari, atau pilih rentang tanggal jika lebih dari 1 hari.</span>';
+                    '<span class="prs-form-hint" id="hint_hari_tanggal"><i class="fas fa-info-circle me-1 text-primary"></i> Format tanggal otomatis diterjemahkan ke Bahasa Indonesia di surat.</span>';
 
-                group.innerHTML = headerHtml + inputHtml;
+                group.innerHTML = labelHtml + inputHtml;
             }
-            // 4. TIME-RANGE FIELD (Interactive Time Picker - s.d.)
+            // 5. TIME RANGE PICKER FIELD
             else if (f.type === 'time-range') {
-                var defaultVal = val || '08.00 s.d. 16.00 WIB';
-
                 var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
-                var inputHtml = '<input type="hidden" name="' + f.name + '" id="field_' + f.name + '" value="' + escapeAttr(defaultVal) + '" required>' +
+
+                var inputHtml = '<input type="hidden" name="' + f.name + '" id="field_' + f.name + '" value="' + escapeAttr(val || '08.00 s.d. 16.00 WIB') + '">' +
                     '<div class="prs-time-box">' +
-                        '<div class="row g-2 align-items-end">' +
+                        '<div class="row g-2 align-items-center">' +
                             '<div class="col-sm-4 col-6">' +
-                                '<label class="small text-muted mb-1" style="font-size:0.76rem; font-weight:600;"><i class="fas fa-hourglass-start me-1 text-primary"></i> Jam Mulai</label>' +
+                                '<label class="small text-muted mb-1" style="font-size:0.76rem; font-weight:600;"><i class="fas fa-play-circle me-1 text-primary"></i> Jam Mulai</label>' +
                                 '<div class="prs-input-group">' +
                                     '<input type="text" id="picker_time_start" class="prs-form-input prs-time-picker text-center font-weight-bold" style="padding-left:0.9rem!important;" value="08:00" readonly>' +
                                 '</div>' +
@@ -350,7 +325,7 @@
 
                 group.innerHTML = labelHtml + inputHtml;
             }
-            // 5. STANDARD INPUT FIELD
+            // 6. STANDARD INPUT FIELD
             else {
                 var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
                 var extraAttr = '';
@@ -371,6 +346,9 @@
 
         // ── Initialize Interactive Time Pickers ──
         initTimePickers();
+
+        // ── Re-bind Department Picker Event Handlers ──
+        initDepartmentPicker();
 
         submitBtn.style.setProperty('display', 'block', 'important');
     }
@@ -493,7 +471,7 @@
             }
         });
 
-        var fpEnd = flatpickr(endInput, {
+        flatpickr(endInput, {
             enableTime: true,
             noCalendar: true,
             dateFormat: 'H:i',
@@ -525,15 +503,266 @@
         updateCompiledTime();
     }
 
-    var jenisSuratSelect = document.getElementById('jenis_surat');
-    if (jenisSuratSelect) {
-        jenisSuratSelect.addEventListener('change', function () {
-            renderFields(this.value);
+    // ============================================================
+    // MODAL CHOOSE LETTER TYPE ENGINE
+    // ============================================================
+    var hiddenJenisInput = document.getElementById('jenis_surat');
+    var triggerCard      = document.getElementById('prsPickerTrigger');
+    var triggerIcon      = document.getElementById('prsPickerIcon');
+    var triggerTitle     = document.getElementById('prsPickerTitle');
+    var triggerDesc      = document.getElementById('prsPickerDesc');
+    var searchInput      = document.getElementById('prsSearchInput');
+    var clearSearchBtn   = document.getElementById('prsClearSearch');
+    var catPills         = document.querySelectorAll('.prs-cat-pill:not(.prs-dept-cat-pill)');
+    var letterCards      = document.querySelectorAll('.prs-letter-card:not(.prs-dept-card)');
+    var emptySearchResult = document.getElementById('prsEmptySearch');
+
+    function selectLetterType(key, label, desc, icon, badge) {
+        if (!key) return;
+
+        if (hiddenJenisInput) {
+            hiddenJenisInput.value = key;
+        }
+
+        if (triggerCard) {
+            triggerCard.classList.add('has-value');
+        }
+
+        if (triggerIcon && icon) {
+            triggerIcon.innerHTML = '<i class="fas ' + icon + '"></i>';
+        }
+
+        if (triggerTitle && label) {
+            triggerTitle.textContent = label;
+        }
+
+        if (triggerDesc && desc) {
+            triggerDesc.textContent = desc;
+        }
+
+        letterCards.forEach(function (c) {
+            if (c.getAttribute('data-key') === key) {
+                c.classList.add('selected');
+            } else {
+                c.classList.remove('selected');
+            }
         });
 
-        if (jenisSuratSelect.value) {
-            renderFields(jenisSuratSelect.value);
+        renderFields(key);
+
+        var modalEl = document.getElementById('modalChooseLetter');
+        if (modalEl && typeof bootstrap !== 'undefined') {
+            var modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
         }
+
+        var container = document.getElementById('dynamic-fields');
+        if (container) {
+            setTimeout(function () {
+                container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
+        }
+    }
+
+    letterCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+            var key   = this.getAttribute('data-key');
+            var label = this.getAttribute('data-label');
+            var desc  = this.getAttribute('data-desc');
+            var icon  = this.getAttribute('data-icon');
+            var badge = this.getAttribute('data-badge');
+            selectLetterType(key, label, desc, icon, badge);
+        });
+    });
+
+    var activeLetterCategory = 'all';
+
+    function filterLetterCards() {
+        var query = (searchInput ? searchInput.value.toLowerCase().trim() : '');
+        var visibleCount = 0;
+
+        if (clearSearchBtn) {
+            clearSearchBtn.style.display = query.length > 0 ? 'flex' : 'none';
+        }
+
+        letterCards.forEach(function (card) {
+            var cardCat   = card.getAttribute('data-category');
+            var cardLabel = (card.getAttribute('data-label') || '').toLowerCase();
+            var cardDesc  = (card.getAttribute('data-desc') || '').toLowerCase();
+            var cardBadge = (card.getAttribute('data-badge') || '').toLowerCase();
+
+            var matchesCat   = (activeLetterCategory === 'all' || cardCat === activeLetterCategory);
+            var matchesQuery = (query === '' || cardLabel.indexOf(query) !== -1 || cardDesc.indexOf(query) !== -1 || cardBadge.indexOf(query) !== -1);
+
+            if (matchesCat && matchesQuery) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (emptySearchResult) {
+            emptySearchResult.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', filterLetterCards);
+    }
+
+    if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', function () {
+            if (searchInput) {
+                searchInput.value = '';
+                searchInput.focus();
+                filterLetterCards();
+            }
+        });
+    }
+
+    catPills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+            catPills.forEach(function (p) { p.classList.remove('active'); });
+            this.classList.add('active');
+            activeLetterCategory = this.getAttribute('data-category');
+            filterLetterCards();
+        });
+    });
+
+    var modalElement = document.getElementById('modalChooseLetter');
+    if (modalElement) {
+        modalElement.addEventListener('shown.bs.modal', function () {
+            if (searchInput) searchInput.focus();
+        });
+    }
+
+    // ============================================================
+    // MODAL CHOOSE DEPARTMENT / FACULTY ENGINE (LANDING PAGE)
+    // ============================================================
+    var deptCards        = document.querySelectorAll('.prs-dept-card');
+    var searchDeptInput  = document.getElementById('prsSearchDeptInput');
+    var clearDeptSearch  = document.getElementById('prsClearDeptSearch');
+    var deptCatPills     = document.querySelectorAll('.prs-dept-cat-pill');
+    var emptyDeptSearch  = document.getElementById('prsEmptyDeptSearch');
+    var activeDeptCat    = 'all';
+
+    function initDepartmentPicker() {
+        var hiddenDeptInput = document.getElementById('field_kode_bidang');
+        var triggerDeptCard = document.getElementById('prsDeptPickerTrigger');
+        var triggerDeptIcon = document.getElementById('prsDeptPickerIcon');
+        var triggerDeptTitle = document.getElementById('prsDeptPickerTitle');
+        var triggerDeptDesc = document.getElementById('prsDeptPickerDesc');
+
+        deptCards.forEach(function (card) {
+            // Unbind previous to avoid duplicate listeners
+            card.onclick = function () {
+                var code = this.getAttribute('data-code');
+                var name = this.getAttribute('data-name');
+                var icon = this.getAttribute('data-icon');
+                var desc = this.getAttribute('data-desc');
+
+                if (hiddenDeptInput) {
+                    hiddenDeptInput.value = code;
+                }
+                oldData['kode_bidang'] = code;
+
+                if (triggerDeptCard) {
+                    triggerDeptCard.classList.add('has-value');
+                }
+                if (triggerDeptIcon && icon) {
+                    triggerDeptIcon.innerHTML = '<i class="fas ' + icon + '"></i>';
+                }
+                if (triggerDeptTitle && name) {
+                    triggerDeptTitle.textContent = name;
+                }
+                if (triggerDeptDesc && desc) {
+                    triggerDeptDesc.textContent = desc;
+                }
+
+                // Highlight active in modal
+                deptCards.forEach(function (c) {
+                    c.classList.toggle('selected', c.getAttribute('data-code') === code);
+                });
+
+                // Close Department modal
+                var deptModalEl = document.getElementById('modalChooseDepartment');
+                if (deptModalEl && typeof bootstrap !== 'undefined') {
+                    var modalInst = bootstrap.Modal.getInstance(deptModalEl);
+                    if (modalInst) {
+                        modalInst.hide();
+                    }
+                }
+            };
+        });
+    }
+
+    function filterDeptCards() {
+        var query = (searchDeptInput ? searchDeptInput.value.toLowerCase().trim() : '');
+        var visibleCount = 0;
+
+        if (clearDeptSearch) {
+            clearDeptSearch.style.display = query.length > 0 ? 'flex' : 'none';
+        }
+
+        deptCards.forEach(function (card) {
+            var cardCat   = card.getAttribute('data-cat');
+            var cardName  = (card.getAttribute('data-name') || '').toLowerCase();
+            var cardCode  = (card.getAttribute('data-code') || '').toLowerCase();
+            var cardBadge = (card.getAttribute('data-badge') || '').toLowerCase();
+            var cardDesc  = (card.getAttribute('data-desc') || '').toLowerCase();
+
+            var matchesCat   = (activeDeptCat === 'all' || cardCat === activeDeptCat);
+            var matchesQuery = (query === '' || cardName.indexOf(query) !== -1 || cardCode.indexOf(query) !== -1 || cardBadge.indexOf(query) !== -1 || cardDesc.indexOf(query) !== -1);
+
+            if (matchesCat && matchesQuery) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (emptyDeptSearch) {
+            emptyDeptSearch.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+    }
+
+    if (searchDeptInput) {
+        searchDeptInput.addEventListener('input', filterDeptCards);
+    }
+
+    if (clearDeptSearch) {
+        clearDeptSearch.addEventListener('click', function () {
+            if (searchDeptInput) {
+                searchDeptInput.value = '';
+                searchDeptInput.focus();
+                filterDeptCards();
+            }
+        });
+    }
+
+    deptCatPills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+            deptCatPills.forEach(function (p) { p.classList.remove('active'); });
+            this.classList.add('active');
+            activeDeptCat = this.getAttribute('data-dept-cat');
+            filterDeptCards();
+        });
+    });
+
+    var deptModalElement = document.getElementById('modalChooseDepartment');
+    if (deptModalElement) {
+        deptModalElement.addEventListener('shown.bs.modal', function () {
+            if (searchDeptInput) searchDeptInput.focus();
+        });
+    }
+
+    // Initial render if preselected
+    if (hiddenJenisInput && hiddenJenisInput.value) {
+        renderFields(hiddenJenisInput.value);
     }
 
     // FAQ Accordion Toggle
@@ -545,7 +774,6 @@
         btn.addEventListener('click', function () {
             var isActive = item.classList.contains('active');
 
-            // Close all
             faqItems.forEach(function (other) {
                 other.classList.remove('active');
                 other.querySelector('.prs-faq-answer').style.maxHeight = null;

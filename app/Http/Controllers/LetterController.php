@@ -2,29 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\SuratLog;
+use App\Constants\SettingKey\Key1;
+use App\Constants\SettingKey\Key2;
 use App\Models\MsSetting;
-use App\Services\WhatsApp;
+use App\Models\SuratLog;
 use App\Services\LetterPdfService;
+use App\Services\WhatsApp;
+use App\Support\LetterRegistry;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 class LetterController extends Controller
 {
-    public function __construct(
-        protected LetterPdfService $pdfService
-    ) {}
+    protected LetterPdfService $pdfService;
 
-    /**
-     * Landing page for letter submission service.
-     */
+    public function __construct(LetterPdfService $pdfService)
+    {
+        $this->pdfService = $pdfService;
+    }
+
     public function index(Request $request)
     {
-        $waSekjen    = MsSetting::getSettingValue1('Persuratan', 'Kontak Sekjen') ?? '6285776923137';
-        $namaSekjen  = MsSetting::getSettingValue2('Persuratan', 'Kontak Sekjen') ?? 'M. Zhafar Rabbany';
-        $waKestari   = MsSetting::getSettingValue1('Persuratan', 'Kontak Kestari') ?? '6285819353387';
-        $namaKestari = MsSetting::getSettingValue2('Persuratan', 'Kontak Kestari') ?? 'M. Fiqhan Fajar';
+        $waKestari   = MsSetting::getSettingValue1(Key1::PERSURATAN, Key2::KontakKestari) ?: '6285819353387';
+        $namaKestari = MsSetting::getSettingValue2(Key1::PERSURATAN, Key2::KontakKestari) ?: 'Biro Kesekretariatan';
+        $waSekjen    = MsSetting::getSettingValue1(Key1::PERSURATAN, Key2::KontakSekjen) ?: '6285776923137';
+        $namaSekjen  = MsSetting::getSettingValue2(Key1::PERSURATAN, Key2::KontakSekjen) ?: 'Sekretaris Jenderal';
 
         $reapplyLog = null;
         if ($request->filled('reapply') && auth()->check()) {
@@ -34,8 +36,8 @@ class LetterController extends Controller
         }
 
         return view('landing-page.service.persuratan.index', [
-            'title'       => 'Layanan Persuratan',
-            'suratTypes'  => SuratLog::getSuratTypes(),
+            'title'       => 'Layanan Persuratan — LDK Syahid',
+            'suratTypes'  => LetterRegistry::all(),
             'waSekjen'    => $waSekjen,
             'namaSekjen'  => $namaSekjen,
             'waKestari'   => $waKestari,
@@ -47,127 +49,126 @@ class LetterController extends Controller
         ]);
     }
 
-    /**
-     * Submit a new letter request.
-     */
     public function submit(Request $request)
     {
-        $validationRules = SuratLog::getValidationRules($request->jenis_surat);
+        $request->validate(['jenis_surat' => 'required|string']);
+
+        $validationRules = LetterRegistry::getValidationRules($request->jenis_surat);
         if (!$validationRules) {
-            return back()->withErrors(['jenis_surat' => 'Jenis surat tidak valid.'])->withInput();
+            return back()->withInput()->withErrors(['jenis_surat' => 'Jenis surat tidak valid.']);
         }
+
+        $validated = $request->validate($validationRules);
+        unset($validated['jenis_surat']);
 
         $suratLog = SuratLog::create([
             'user_id'     => auth()->id(),
             'jenis_surat' => $request->jenis_surat,
-            'label'       => SuratLog::getSuratTypes()[$request->jenis_surat]['label'],
+            'label'       => LetterRegistry::getLabel($request->jenis_surat),
             'nomor_surat' => '-',
-            'data'        => $request->validate($validationRules),
-            'filename'    => '',
+            'data'        => $validated,
             'status'      => 'pending',
         ]);
 
-        // Send WhatsApp notification based on applicant origin:
-        // - Pengurus Pusat -> Kontak Kestari
-        // - LDK Syahid Fakultas (LDKSF) -> Kontak Sekjen
+        // Smart Routing: Pusat -> Kestari, Fakultas -> Sekjen
         $isFakultas  = $suratLog->isFakultas();
         $targetPhone = $isFakultas
-            ? (MsSetting::getSettingValue1('Persuratan', 'Kontak Sekjen') ?: '6285776923137')
-            : (MsSetting::getSettingValue1('Persuratan', 'Kontak Kestari') ?: '6285819353387');
+            ? (MsSetting::getSettingValue1(Key1::PERSURATAN, Key2::KontakSekjen) ?: '6285776923137')
+            : (MsSetting::getSettingValue1(Key1::PERSURATAN, Key2::KontakKestari) ?: '6285819353387');
 
-        $activity = $suratLog->data['nama_acara']
-            ?? $suratLog->data['nama_program']
-            ?? $suratLog->data['nama_kegiatan']
-            ?? $suratLog->data['keperluan']
-            ?? $suratLog->data['materi']
-            ?? $suratLog->data['program_rekomendasi']
-            ?? '-';
-
-        $previewUrl = route('service.persuratan.preview', ['kode' => $suratLog->kode_verifikasi]);
-
-        $notificationData = [
-            'letterId'    => $suratLog->id,
-            'name'        => auth()->user()?->name ?: ($suratLog->data['nama'] ?? 'Pemohon'),
-            'letterType'  => $suratLog->label,
-            'department'  => $suratLog->labelBidangPengaju(),
-            'activity'    => $activity,
-            'previewUrl'  => $previewUrl,
-            'targetPhone' => $targetPhone,
-        ];
-
-        try {
-            WhatsApp::sendLetterRequestNotification($notificationData);
-
-            $normPhone = preg_replace('/[^0-9]/', '', $targetPhone);
-            if (!empty($normPhone)) {
-                Cache::put("whatsapp_pending_letter:{$normPhone}", $suratLog->id, now()->addDays(7));
-            }
-        } catch (\Throwable $e) {
-            Log::error('[LetterController] WhatsApp notification dispatch failed: ' . $e->getMessage());
+        $normPhone = preg_replace('/[^0-9]/', '', $targetPhone);
+        if ($normPhone) {
+            Cache::put("whatsapp_pending_letter:{$normPhone}", $suratLog->id, now()->addDays(7));
         }
 
-        return back()->with('success', 'Pengajuan surat berhasil dikirim!');
+        $applicantName = $suratLog->user?->name ?: ($validated['nama'] ?? 'Pemohon');
+
+        WhatsApp::sendLetterRequestNotification([
+            'letterId'    => $suratLog->id,
+            'name'        => $applicantName,
+            'letterType'  => $suratLog->label,
+            'department'  => $suratLog->labelBidangPengaju(),
+            'activity'    => $suratLog->keperluanKegiatan(),
+            'previewUrl'  => route('service.persuratan.preview', $suratLog->kode_verifikasi),
+            'targetPhone' => $targetPhone,
+        ]);
+
+        return redirect()
+            ->route('service.persuratan.index')
+            ->with('success', "Pengajuan '{$suratLog->label}' berhasil dikirim! Silakan pantau status surat di menu Riwayat.");
     }
 
-    /**
-     * User's personal letter request history page.
-     */
     public function riwayat()
     {
         $query = SuratLog::where('user_id', auth()->id());
 
+        $totalSurat    = (clone $query)->count();
+        $pendingCount  = (clone $query)->pending()->count();
+        $approvedCount = (clone $query)->approved()->count();
+        $rejectedCount = (clone $query)->rejected()->count();
+        $expiredCount  = (clone $query)->expired()->count();
+
+        $riwayat = $query->latest()->paginate(10);
+
         return view('landing-page.service.persuratan.riwayat', [
-            'title'         => 'Riwayat Surat Saya',
-            'riwayat'       => (clone $query)->latest()->paginate(10),
-            'totalSurat'    => (clone $query)->count(),
-            'pendingCount'  => (clone $query)->where('status', 'pending')->count(),
-            'approvedCount' => (clone $query)->where('status', 'approved')->count(),
-            'rejectedCount' => (clone $query)->where('status', 'rejected')->count(),
-            'expiredCount'  => (clone $query)->where('status', 'expired')->count(),
+            'title'         => 'Riwayat Pengajuan Surat — LDK Syahid',
+            'riwayat'       => $riwayat,
+            'totalSurat'    => $totalSurat,
+            'pendingCount'  => $pendingCount,
+            'approvedCount' => $approvedCount,
+            'rejectedCount' => $rejectedCount,
+            'expiredCount'  => $expiredCount,
         ]);
     }
 
-    /**
-     * User download approved official letter PDF.
-     */
     public function download(SuratLog $suratLog)
     {
-        abort_if(
-            $suratLog->user_id !== auth()->id() || !$suratLog->isApproved(),
-            403,
-            'Akses tidak diizinkan.'
-        );
+        if (!auth()->check() || auth()->id() !== $suratLog->user_id) {
+            abort(403, 'Anda tidak memiliki akses untuk mengunduh dokumen ini.');
+        }
 
-        abort_if(
-            empty($suratLog->filename) || $suratLog->nomor_surat === '-',
-            404,
-            'Dokumen belum tersedia.'
-        );
+        if (!$suratLog->isApproved()) {
+            return redirect()
+                ->route('service.persuratan.riwayat')
+                ->with('error', 'Surat belum disetujui atau tidak dapat diunduh.');
+        }
 
-        return $this->pdfService->downloadApproved($suratLog);
+        return $this->pdfService->streamOfficialPdf($suratLog);
     }
 
-    /**
-     * Stream a draft preview of the document.
-     */
-    public function previewDraft(string $kode)
+    public function previewDraft(Request $request)
     {
-        $suratLog = SuratLog::where('kode_verifikasi', $kode)->firstOrFail();
+        $request->validate(['jenis_surat' => 'required|string']);
 
-        return $this->pdfService->streamDraft($suratLog);
+        $rules = LetterRegistry::getValidationRules($request->jenis_surat);
+        if (!$rules) {
+            abort(404, 'Jenis surat tidak valid.');
+        }
+
+        $validated = $request->validate($rules);
+        unset($validated['jenis_surat']);
+
+        return $this->pdfService->streamDraftPdf($request->jenis_surat, $validated);
     }
 
-    /**
-     * Public verification page for checking letter authenticity via QR / URL.
-     */
-    public function verifikasi(string $kode)
+    public function verifikasi(Request $request, ?string $kode = null)
     {
-        $suratLog = SuratLog::where('kode_verifikasi', $kode)->first();
+        $kode = $kode ?: $request->query('kode', '');
+        $suratLog = null;
+
+        if (!empty($kode)) {
+            $suratLog = SuratLog::where('kode_verifikasi', $kode)->first();
+        }
 
         return view('landing-page.service.persuratan.verifikasi', [
-            'title'    => 'Verifikasi Dokumen',
+            'title'    => 'Verifikasi Keaslian Dokumen — LDK Syahid',
             'suratLog' => $suratLog,
             'kode'     => $kode,
         ]);
+    }
+
+    public function verifikasiPublik(Request $request, ?string $kode = null)
+    {
+        return $this->verifikasi($request, $kode);
     }
 }

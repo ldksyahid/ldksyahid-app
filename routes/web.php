@@ -678,8 +678,10 @@ Route::middleware(['auth'])
     });
 
 // Verifikasi & Preview draft publik — tanpa login (bisa diakses via link WhatsApp)
-Route::get('/verifikasi-surat/{kode}', [LetterController::class, 'verifikasi'])->name('persuratan.verifikasi');
+Route::get('/verifikasi-surat/{kode?}', [LetterController::class, 'verifikasi'])->name('persuratan.verifikasi');
+Route::get('/layanan/persuratan/verifikasi/{kode?}', [LetterController::class, 'verifikasi'])->name('service.persuratan.verifikasi');
 Route::get('/layanan/persuratan/preview/{kode}', [LetterController::class, 'previewDraft'])->name('service.persuratan.preview');
+Route::get('/layanan/persuratan/riwayat-alias', [LetterController::class, 'riwayat'])->name('persuratan.riwayat')->middleware('auth');
 
 // Admin — HelperLetter & Superadmin
 Route::middleware(['role:Superadmin|HelperLetter'])

@@ -4,12 +4,21 @@
 
 @section('styles')
 <style>
-/* ── Modern Verification Page Styles ───────────────────────── */
+/* ── Modern Verification Page Styles & Dark Mode ──────────── */
 .vfy-section {
     padding: 7rem 0 5rem;
     min-height: 100vh;
     background: radial-gradient(circle at 50% 10%, rgba(14, 165, 233, 0.08) 0%, rgba(248, 250, 252, 0.95) 70%);
     position: relative;
+}
+[data-theme="dark"] .vfy-section {
+    background: radial-gradient(circle at 50% 10%, rgba(14, 165, 233, 0.12) 0%, rgba(15, 23, 42, 0.98) 70%);
+}
+
+@media (max-width: 767.98px) {
+    .vfy-section {
+        padding: 5rem 0 3.5rem;
+    }
 }
 
 .vfy-card {
@@ -22,10 +31,15 @@
     overflow: hidden;
     animation: vfyFadeUp 0.45s ease both;
 }
+[data-theme="dark"] .vfy-card {
+    background: #1a1f2e;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
 
 @media (max-width: 575.98px) {
     .vfy-card {
-        padding: 2rem 1.35rem;
+        padding: 1.85rem 1.25rem;
         border-radius: 22px;
     }
 }
@@ -57,23 +71,43 @@
     box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.12), 0 8px 24px rgba(239, 68, 68, 0.2);
 }
 
+[data-theme="dark"] .vfy-seal-wrap.success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.3) 100%);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.15), 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] .vfy-seal-wrap.warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.3) 100%);
+    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.15), 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] .vfy-seal-wrap.danger {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.3) 100%);
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.15), 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
 .vfy-seal-icon {
     font-size: 2.5rem;
 }
 
 .vfy-title {
-    font-size: 1.65rem;
+    font-size: clamp(1.4rem, 4vw, 1.75rem);
     font-weight: 800;
     color: #0f172a;
     margin-bottom: 0.5rem;
     line-height: 1.25;
 }
+[data-theme="dark"] .vfy-title {
+    color: #f1f5f9;
+}
+
 .vfy-sub {
     font-size: 0.92rem;
     color: #64748b;
     line-height: 1.6;
     max-width: 520px;
     margin: 0 auto 1.75rem;
+}
+[data-theme="dark"] .vfy-sub {
+    color: #94a3b8;
 }
 
 /* Certificate Data Sheet */
@@ -85,10 +119,15 @@
     margin-bottom: 1.75rem;
     text-align: left;
 }
+[data-theme="dark"] .vfy-data-sheet {
+    background: #1e2535;
+    border-color: rgba(255, 255, 255, 0.08);
+}
 
 @media (max-width: 575.98px) {
     .vfy-data-sheet {
-        padding: 1.2rem 1rem;
+        padding: 1.15rem 1rem;
+        border-radius: 16px;
     }
 }
 
@@ -97,6 +136,9 @@
     flex-direction: column;
     padding: 0.65rem 0;
     border-bottom: 1px dashed #e2e8f0;
+}
+[data-theme="dark"] .vfy-data-row {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 .vfy-data-row:last-child {
     border-bottom: none;
@@ -123,95 +165,64 @@
     color: #64748b;
     margin-bottom: 0.2rem;
 }
+[data-theme="dark"] .vfy-data-label {
+    color: #94a3b8;
+}
 @media (min-width: 576px) {
     .vfy-data-label {
         margin-bottom: 0;
-        min-width: 150px;
     }
 }
 
 .vfy-data-val {
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: #0f172a;
-    text-align: left;
+    word-break: break-word;
 }
-@media (min-width: 576px) {
-    .vfy-data-val {
-        text-align: right;
-    }
+[data-theme="dark"] .vfy-data-val {
+    color: #f8fafc;
 }
 
 .vfy-code-badge {
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    padding: 0.35rem 0.75rem;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 0.35rem 0.65rem;
     border-radius: 8px;
-    font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.85rem;
-    color: #0369a1;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-}
-
-/* Security Notice Box */
-.vfy-notice-box {
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.06) 0%, rgba(224, 242, 254, 0.4) 100%);
-    border: 1px solid #bae6fd;
-    border-radius: 14px;
-    padding: 0.9rem 1.15rem;
     font-size: 0.82rem;
-    color: #0369a1;
-    line-height: 1.5;
-    margin-bottom: 1.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    text-align: left;
+    font-family: monospace;
+    word-break: break-all;
+    display: inline-block;
+}
+[data-theme="dark"] .vfy-code-badge {
+    background: rgba(14, 165, 233, 0.2);
+    color: #38bdf8;
 }
 
-/* Search Other Token */
-.vfy-search-box {
-    background: #ffffff;
-    border: 1.5px solid #e2e8f0;
+.vfy-notice-box {
+    background: #f0f9ff;
+    border: 1.5px solid #bae6fd;
     border-radius: 16px;
-    padding: 0.4rem 0.4rem 0.4rem 1rem;
+    padding: 1.15rem 1.35rem;
+    margin-bottom: 1.75rem;
+    text-align: left;
+    font-size: 0.84rem;
+    color: #0369a1;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+    gap: 0.85rem;
+    line-height: 1.5;
 }
-.vfy-search-input {
-    border: none;
-    outline: none;
-    width: 100%;
-    font-size: 0.9rem;
-    color: #0f172a;
-    font-family: inherit;
-}
-.vfy-search-btn {
-    background: #0ea5e9;
-    color: #ffffff;
-    border: none;
-    border-radius: 12px;
-    padding: 0.65rem 1.25rem;
-    font-size: 0.85rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s;
-    white-space: nowrap;
-}
-.vfy-search-btn:hover {
-    background: #0284c7;
-    color: #ffffff;
+[data-theme="dark"] .vfy-notice-box {
+    background: rgba(14, 165, 233, 0.12);
+    border-color: rgba(14, 165, 233, 0.25);
+    color: #7dd3fc;
 }
 
 /* Action Buttons */
 .vfy-btn-primary {
     background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-    color: #ffffff;
+    color: #ffffff !important;
     border: none;
     border-radius: 14px;
     padding: 0.85rem 1.5rem;
@@ -219,6 +230,7 @@
     font-weight: 700;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     text-decoration: none;
     box-shadow: 0 6px 18px rgba(14, 165, 233, 0.3);
@@ -227,12 +239,12 @@
 .vfy-btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 24px rgba(14, 165, 233, 0.4);
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
 .vfy-btn-outline {
     background: #ffffff;
-    color: #475569;
+    color: #475569 !important;
     border: 1.5px solid #cbd5e1;
     border-radius: 14px;
     padding: 0.85rem 1.5rem;
@@ -240,6 +252,7 @@
     font-weight: 700;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     text-decoration: none;
     transition: all 0.2s;
@@ -247,7 +260,68 @@
 .vfy-btn-outline:hover {
     background: #f8fafc;
     border-color: #94a3b8;
+    color: #0f172a !important;
+}
+[data-theme="dark"] .vfy-btn-outline {
+    background: #252b3b;
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #e2e8f0 !important;
+}
+[data-theme="dark"] .vfy-btn-outline:hover {
+    background: #1e2535;
+    border-color: #38bdf8;
+    color: #38bdf8 !important;
+}
+
+.vfy-search-box {
+    display: flex;
+    gap: 0.65rem;
+    margin-top: 0.5rem;
+}
+@media (max-width: 575.98px) {
+    .vfy-search-box {
+        flex-direction: column;
+    }
+}
+
+.vfy-search-input {
+    flex-grow: 1;
+    min-height: 48px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
     color: #0f172a;
+    padding-left: 1rem;
+}
+[data-theme="dark"] .vfy-search-input {
+    background: #252b3b;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+}
+.vfy-search-input:focus {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2);
+}
+
+.vfy-search-btn {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    color: #ffffff !important;
+    border: none;
+    border-radius: 14px;
+    padding: 0.75rem 1.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+.vfy-search-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(14, 165, 233, 0.4);
+}
+[data-theme="dark"] .vfy-search-btn {
+    box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4);
 }
 
 @keyframes vfyFadeUp {

@@ -4,106 +4,7 @@
 @section('title', $title)
 
 @section('head')
-<style>
-/* ── High-Contrast Admin Styles for Letter Details ──────────────────── */
-.adm-letter-container {
-    padding: 1.5rem 0.5rem;
-}
-.adm-card {
-    background: #ffffff !important;
-    border-radius: 14px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-.adm-card-header {
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 1rem;
-    margin-bottom: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-.adm-card-header h5, .adm-card-header h6 {
-    margin: 0;
-    font-weight: 700;
-    color: #0f172a;
-}
-.adm-info-box {
-    background-color: #f8fafc !important;
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 12px;
-    padding: 1rem 1.15rem;
-    height: 100%;
-}
-.adm-info-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-bottom: 0.25rem;
-}
-.adm-info-val {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #0f172a;
-}
-
-/* Status Badges */
-.adm-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.45rem 1rem;
-    border-radius: 50rem;
-    font-size: 0.82rem;
-    font-weight: 700;
-    line-height: 1.3;
-}
-.adm-badge-success {
-    background-color: #dcfce7 !important;
-    color: #15803d !important;
-    border: 1px solid #86efac !important;
-}
-.adm-badge-warning {
-    background-color: #fef3c7 !important;
-    color: #b45309 !important;
-    border: 1px solid #fcd34d !important;
-}
-.adm-badge-danger {
-    background-color: #fee2e2 !important;
-    color: #b91c1c !important;
-    border: 1px solid #fca5a5 !important;
-}
-.adm-badge-neutral {
-    background-color: #f1f5f9 !important;
-    color: #334155 !important;
-    border: 1px solid #cbd5e1 !important;
-}
-
-/* Detail Table */
-.adm-detail-table {
-    width: 100%;
-    margin-bottom: 0;
-}
-.adm-detail-table td {
-    padding: 0.85rem 0.75rem;
-    border-bottom: 1px solid #f1f5f9;
-    vertical-align: top;
-    font-size: 0.88rem;
-}
-.adm-detail-label {
-    width: 220px;
-    font-weight: 600;
-    color: #64748b;
-}
-.adm-detail-val {
-    font-weight: 600;
-    color: #0f172a;
-}
-</style>
+@include('admin-page.service-request.persuratan.components._show-styles')
 @endsection
 
 @section('content')
@@ -145,23 +46,23 @@
 
     {{-- ── 2. Flash Feedback Alert ───────────────────────────────── --}}
     @if (session('success'))
-        <div class="alert alert-success border-0 shadow-sm rounded-4 d-flex align-items-center gap-3 mb-4 py-3 px-4" style="background-color: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0 !important;">
-            <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:36px;height:36px; background-color: #d1fae5; color: #059669;">
+        <div class="alert alert-success adm-alert-success border-0 shadow-sm rounded-4 d-flex align-items-center gap-3 mb-4 py-3 px-4">
+            <div class="adm-header-icon success">
                 <i class="fas fa-check-circle fs-5"></i>
             </div>
             <div>
-                <strong class="d-block" style="color: #065f46;">Success!</strong>
-                <span class="small" style="color: #047857;">{{ session('success') }}</span>
+                <strong class="d-block text-success">Success!</strong>
+                <span class="small">{{ session('success') }}</span>
             </div>
         </div>
     @endif
 
     @if ($errors->any())
-        <div class="alert alert-danger border-0 shadow-sm rounded-4 mb-4 py-3 px-4" style="background-color: #fef2f2; color: #991b1b; border: 1px solid #fecaca !important;">
-            <strong class="d-flex align-items-center gap-2 mb-1">
+        <div class="alert alert-danger adm-alert-danger border-0 shadow-sm rounded-4 mb-4 py-3 px-4">
+            <strong class="d-flex align-items-center gap-2 mb-1 text-danger">
                 <i class="fas fa-exclamation-triangle"></i> Please check the form errors below:
             </strong>
-            <ul class="mb-0 ps-3 small">
+            <ul class="mb-0 ps-3 small text-danger">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -177,85 +78,89 @@
             {{-- Card 1: Requester & Document Overview --}}
             <div class="adm-card">
                 <div class="adm-card-header">
-                    <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:34px;height:34px; background-color:#e0f2fe; color:#0284c7;">
-                        <i class="fas fa-id-card"></i>
+                    <div class="adm-header-icon primary">
+                        <i class="fas fa-user-check"></i>
                     </div>
                     <h5>Requester &amp; Document Overview</h5>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <div class="adm-info-box">
-                            <div class="adm-info-label">Requester Name</div>
-                            <div class="adm-info-val">{{ $suratLog->user?->name ?? 'Anonymous User' }}</div>
-                            <div class="text-muted small">{{ $suratLog->user?->email ?? '-' }}</div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <div class="adm-info-box">
-                            <div class="adm-info-label">Department / Division</div>
-                            <div class="adm-info-val">
-                                @if ($suratLog->kodeBidangPengaju())
-                                    <span class="adm-badge adm-badge-neutral me-1" style="font-size:0.75rem; padding:0.2rem 0.5rem;">
-                                        {{ $suratLog->kodeBidangPengaju() }}
+                <div class="table-responsive">
+                    <table class="adm-detail-table">
+                        <tbody>
+                            <tr>
+                                <td class="adm-detail-label">Requester Name</td>
+                                <td class="adm-detail-val">
+                                    <strong>{{ $suratLog->user?->name ?? 'Anonymous User' }}</strong>
+                                    <div class="text-muted small">{{ $suratLog->user?->email ?? '-' }}</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="adm-detail-label">Department / Division</td>
+                                <td>
+                                    <span class="adm-badge adm-badge-neutral">
+                                        <i class="fas fa-users me-1 text-primary"></i>
+                                        {{ $suratLog->kodeBidangPengaju() ? $suratLog->kodeBidangPengaju() . ' · ' : '' }}{{ $suratLog->labelBidangPengaju() }}
                                     </span>
-                                @endif
-                                {{ $suratLog->labelBidangPengaju() }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <div class="adm-info-box">
-                            <div class="adm-info-label">Submission Date</div>
-                            <div class="adm-info-val">
-                                <i class="fas fa-calendar-alt me-1 text-primary"></i>
-                                {{ $suratLog->created_at->locale('en')->translatedFormat('d F Y, H:i') }} WIB
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <div class="adm-info-box">
-                            <div class="adm-info-label">Official Letter Number</div>
-                            <div class="adm-info-val">
-                                @if ($suratLog->nomor_surat !== '-')
-                                    <span class="adm-badge adm-badge-neutral font-monospace font-weight-bold" style="font-size:0.82rem;">
-                                        {{ $suratLog->nomor_surat }}
-                                    </span>
-                                @else
-                                    <span class="text-muted small fst-italic">— Not Issued Yet —</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-
-                    @if ($suratLog->approved_at)
-                        <div class="col-12">
-                            <div class="p-3 rounded-3" style="background-color: {{ $suratLog->isApproved() ? '#ecfdf5' : '#fef2f2' }}; border: 1px solid {{ $suratLog->isApproved() ? '#a7f3d0' : '#fecaca' }};">
-                                <div class="font-weight-bold mb-1" style="color: {{ $suratLog->isApproved() ? '#065f46' : '#991b1b' }};">
-                                    <i class="fas {{ $suratLog->isApproved() ? 'fa-check-circle' : 'fa-times-circle' }} me-1"></i>
-                                    {{ $suratLog->isApproved() ? 'Approved' : 'Rejected' }} by: {{ $suratLog->approvedBy?->name ?? 'Admin' }}
-                                </div>
-                                <div class="small" style="color: {{ $suratLog->isApproved() ? '#047857' : '#b91c1c' }};">
-                                    On: {{ $suratLog->approved_at->locale('en')->translatedFormat('d F Y, H:i') }} WIB
-                                </div>
-                                @if ($suratLog->catatan_admin)
-                                    <div class="mt-2 pt-2 border-top small" style="border-color: rgba(0,0,0,0.08) !important; color: #334155;">
-                                        <strong>Admin Notes:</strong> {{ $suratLog->catatan_admin }}
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="adm-detail-label">Letter Classification</td>
+                                <td>
+                                    <strong class="text-dark">{{ $suratLog->label }}</strong>
+                                    <div class="text-muted font-monospace small">{{ $suratLog->jenis_surat }}</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="adm-detail-label">Official Letter Number</td>
+                                <td>
+                                    @if ($suratLog->nomor_surat !== '-')
+                                        <span class="adm-badge adm-badge-neutral font-monospace font-weight-bold" style="font-size:0.85rem;">
+                                            {{ $suratLog->nomor_surat }}
+                                        </span>
+                                    @else
+                                        <span class="text-muted small fst-italic">— Not Issued (Pending Approval) —</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="adm-detail-label">Submission Date</td>
+                                <td class="adm-detail-val">
+                                    {{ $suratLog->created_at->locale('id')->translatedFormat('d F Y, H:i') }} WIB
+                                    <span class="text-muted small">({{ $suratLog->created_at->diffForHumans() }})</span>
+                                </td>
+                            </tr>
+                            @if ($suratLog->approved_at)
+                                <tr>
+                                    <td class="adm-detail-label">Approved At</td>
+                                    <td class="adm-detail-val text-success">
+                                        <i class="fas fa-check-circle me-1"></i>
+                                        {{ $suratLog->approved_at->locale('id')->translatedFormat('d F Y, H:i') }} WIB
+                                        @if ($suratLog->approvedBy)
+                                            <span class="text-muted small">&bull; by {{ $suratLog->approvedBy->name }}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endif
+                            @if ($suratLog->catatan_admin)
+                                <tr>
+                                    <td class="adm-detail-label">Admin Notes</td>
+                                    <td>
+                                        <div class="adm-action-box small">
+                                            <i class="fas fa-comment-alt text-primary me-1"></i>
+                                            {{ $suratLog->catatan_admin }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            {{-- Card 2: Form Submission Data --}}
+            {{-- Card 2: Submitted Dynamic Fields --}}
             <div class="adm-card">
                 <div class="adm-card-header">
-                    <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:34px;height:34px; background-color:#e0f2fe; color:#0284c7;">
+                    <div class="adm-header-icon primary">
                         <i class="fas fa-list-check"></i>
                     </div>
                     <h5>Form Submission Details</h5>
@@ -305,7 +210,7 @@
                                     </td>
                                     <td>
                                         @if ($key === 'daftar_alat' || $key === 'pertimbangan' || $key === 'bentuk_kerjasama' || $key === 'keperluan')
-                                            <div class="p-3 rounded-3 font-monospace small" style="background-color: #f8fafc; border: 1px solid #e2e8f0; white-space: pre-wrap; color: #1e293b;">{{ $value }}</div>
+                                            <div class="adm-action-box font-monospace small" style="white-space: pre-wrap;">{{ $value }}</div>
                                         @elseif ($key === 'hari_tanggal')
                                             <span class="adm-badge adm-badge-neutral" style="font-size:0.8rem;">
                                                 <i class="fas fa-calendar-alt me-1 text-primary"></i> {{ $value }}
@@ -327,25 +232,24 @@
 
         </div>
 
-
         {{-- ── 4. RIGHT COLUMN: Action & Verification Panel ──────────── --}}
         <div class="col-lg-5 col-xl-4">
 
             {{-- ── Action 1: Approval Form (Pending Status) ── --}}
             @if ($suratLog->isPending())
-                <div class="adm-card" style="border-top: 4px solid #10b981 !important;">
+                <div class="adm-card adm-card-approval" style="border-top: 4px solid #10b981 !important;">
                     <div class="adm-card-header">
-                        <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:34px;height:34px; background-color:#d1fae5; color:#059669;">
+                        <div class="adm-header-icon success">
                             <i class="fas fa-check"></i>
                         </div>
-                        <h6 style="color: #065f46;">Approve &amp; Issue Letter</h6>
+                        <h6 class="text-success mb-0">Approve &amp; Issue Letter</h6>
                     </div>
 
                     <form action="{{ route('admin.persuratan.approve', $suratLog) }}" method="POST" id="form-approve">
                         @csrf
 
                         {{-- Last Issued Number Indicator --}}
-                        <div class="p-3 rounded-3 mb-3" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+                        <div class="adm-action-box mb-3">
                             <div class="small font-weight-bold text-muted" style="font-size: 0.72rem; text-transform: uppercase;">Last Issued Letter Number:</div>
                             <strong class="font-monospace small text-dark d-block mt-1">{{ $lastNomor ?? 'None (Start New Sequence)' }}</strong>
                         </div>
@@ -355,27 +259,27 @@
                             <label class="small font-weight-bold text-muted mb-2 d-block">Numbering Mode</label>
                             
                             <div class="custom-control custom-radio mb-2">
-                                <input type="radio" id="nomor-mode-auto" name="nomor_mode" class="custom-control-input" value="auto" checked>
+                                <input type="radio" id="nomor-mode-auto" name="mode_penomoran" class="custom-control-input" value="otomatis" checked>
                                 <label class="custom-control-label small font-weight-bold text-dark" for="nomor-mode-auto">
                                     Automatic Generation (Next sequence this month)
                                 </label>
                             </div>
 
                             <div class="custom-control custom-radio mb-2">
-                                <input type="radio" id="nomor-mode-manual" name="nomor_mode" class="custom-control-input" value="manual">
+                                <input type="radio" id="nomor-mode-manual" name="mode_penomoran" class="custom-control-input" value="manual" {{ old('mode_penomoran') === 'manual' ? 'checked' : '' }}>
                                 <label class="custom-control-label small font-weight-bold text-dark" for="nomor-mode-manual">
                                     Manual Sequence Input
                                 </label>
                             </div>
 
-                            <div id="nomor-manual-wrapper" class="d-none mt-2 p-2 rounded-3" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+                            <div id="nomor-manual-wrapper" class="{{ old('mode_penomoran') === 'manual' ? '' : 'd-none' }} mt-2 adm-action-box">
                                 <div class="input-group input-group-sm mb-1">
-                                    <input type="text" name="nomor_surat_manual" id="input_nomor_manual"
-                                           class="form-control @error('nomor_surat_manual') is-invalid @enderror"
+                                    <input type="text" name="nomor_manual" id="input_nomor_manual"
+                                           class="form-control @error('nomor_manual') is-invalid @enderror"
                                            placeholder="e.g. 047 or 047.01"
-                                           value="{{ old('nomor_surat_manual') }}">
+                                           value="{{ old('nomor_manual') }}">
                                     <div class="input-group-append">
-                                        <span class="input-group-text bg-white text-muted small">
+                                        <span class="input-group-text bg-transparent text-muted small">
                                             / PREFIX / ...
                                         </span>
                                     </div>
@@ -386,23 +290,37 @@
                             </div>
                         </div>
 
-                        {{-- Division Dropdown --}}
+                        {{-- Division / Faculty Modern Picker --}}
+                        @php
+                            $currentBidangCode = old('kode_bidang', $suratLog->kodeBidangPengaju());
+                            $currentBidangInfo = \App\Support\DepartmentRegistry::get($currentBidangCode);
+                        @endphp
+
                         <div class="form-group mb-3">
-                            <label class="small font-weight-bold text-dark">
+                            <label class="small font-weight-bold text-dark d-block mb-1">
                                 Department / Division Code <span class="text-danger">*</span>
                             </label>
-                            <select name="kode_bidang" class="form-control form-control-sm rounded-3" required>
-                                <option value="">-- Select Division Code --</option>
-                                @foreach ($kodeBidangGroups as $groupLabel => $options)
-                                    <optgroup label="{{ $groupLabel }}">
-                                        @foreach ($options as $value => $optionLabel)
-                                            <option value="{{ $value }}" {{ old('kode_bidang', $suratLog->kodeBidangPengaju()) === $value ? 'selected' : '' }}>
-                                                {{ $optionLabel }}
-                                            </option>
-                                        @endforeach
-                                    </optgroup>
-                                @endforeach
-                            </select>
+                            <input type="hidden" name="kode_bidang" id="admin_kode_bidang" value="{{ $currentBidangCode }}" required>
+
+                            <div class="adm-type-picker-btn has-filter" id="admDeptPickerTrigger"
+                                 data-toggle="modal" data-target="#modalAdminChooseDept" role="button">
+                                <div class="adm-header-icon primary"
+                                     id="admDeptPickerIcon"
+                                     style="width:28px;height:28px; min-width:28px; font-size:0.85rem;">
+                                    <i class="fas {{ $currentBidangInfo['icon'] ?? 'fa-sitemap' }}"></i>
+                                </div>
+                                <div class="flex-grow-1 min-width-0">
+                                    <div class="small font-weight-bold text-dark text-truncate" id="admDeptPickerTitle">
+                                        {{ $currentBidangInfo['name'] ?? \App\Support\DepartmentRegistry::label($currentBidangCode) }}
+                                    </div>
+                                    <div class="text-muted small text-truncate" style="font-size:0.72rem;" id="admDeptPickerDesc">
+                                        {{ $currentBidangInfo['desc'] ?? 'Click to change division / faculty' }}
+                                    </div>
+                                </div>
+                                <span class="btn btn-outline-primary btn-sm rounded-3 py-0 px-2 font-weight-bold" style="font-size:0.75rem;">
+                                    Change
+                                </span>
+                            </div>
                         </div>
 
                         {{-- Admin Notes --}}
@@ -420,12 +338,12 @@
                 </div>
 
                 {{-- ── Action 2: Reject Form ── --}}
-                <div class="adm-card" style="border-top: 4px solid #ef4444 !important;">
+                <div class="adm-card adm-card-reject" style="border-top: 4px solid #ef4444 !important;">
                     <div class="adm-card-header">
-                        <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:34px;height:34px; background-color:#fee2e2; color:#dc2626;">
+                        <div class="adm-header-icon danger">
                             <i class="fas fa-times"></i>
                         </div>
-                        <h6 style="color: #991b1b;">Reject Letter Request</h6>
+                        <h6 class="text-danger mb-0">Reject Letter Request</h6>
                     </div>
 
                     <form action="{{ route('admin.persuratan.reject', $suratLog) }}" method="POST" id="form-reject">
@@ -447,12 +365,12 @@
 
             {{-- ── Action 3: Download PDF (Approved) ── --}}
             @if ($suratLog->isApproved())
-                <div class="adm-card" style="border-top: 4px solid #10b981 !important;">
+                <div class="adm-card adm-card-download" style="border-top: 4px solid #10b981 !important;">
                     <div class="adm-card-header">
-                        <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:34px;height:34px; background-color:#d1fae5; color:#059669;">
+                        <div class="adm-header-icon success">
                             <i class="fas fa-file-pdf"></i>
                         </div>
-                        <h6>Official PDF Document</h6>
+                        <h6 class="text-success mb-0">Official PDF Document</h6>
                     </div>
                     <p class="small text-muted mb-3">The letter has been approved and issued with an official QR verification code. You can download the PDF document below.</p>
                     <a href="{{ route('admin.persuratan.download', $suratLog) }}"
@@ -465,15 +383,15 @@
             {{-- ── Action 4: QR Code & Verification ── --}}
             <div class="adm-card">
                 <div class="adm-card-header">
-                    <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:34px;height:34px; background-color:#e0f2fe; color:#0284c7;">
+                    <div class="adm-header-icon primary">
                         <i class="fas fa-qrcode"></i>
                     </div>
-                    <h6>QR Verification &amp; Authenticity</h6>
+                    <h6 class="mb-0 text-dark">QR Verification &amp; Authenticity</h6>
                 </div>
 
-                <div class="p-3 rounded-3 text-center mb-3" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+                <div class="adm-action-box text-center mb-3">
                     <div class="text-muted small mb-1" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">Document Verification Token</div>
-                    <code class="font-weight-bold fs-6 text-primary">{{ $suratLog->kode_verifikasi }}</code>
+                    <code class="font-weight-bold fs-6 text-primary p-2 d-inline-block rounded-3" style="letter-spacing: 0.05em;">{{ $suratLog->kode_verifikasi }}</code>
                 </div>
 
                 <a href="{{ route('persuratan.verifikasi', ['kode' => $suratLog->kode_verifikasi]) }}"
@@ -486,9 +404,12 @@
     </div>
 </div>
 
+{{-- Modals --}}
+@include('admin-page.service-request.persuratan.components._modal-choose-dept')
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    var radios  = document.querySelectorAll('input[name="nomor_mode"]');
+    var radios  = document.querySelectorAll('input[name="mode_penomoran"]');
     var wrapper = document.getElementById('nomor-manual-wrapper');
     var input   = document.getElementById('input_nomor_manual');
 
@@ -502,7 +423,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         radios.forEach(function (r) { r.addEventListener('change', sync); });
 
-        @error('nomor_surat_manual')
+        @error('nomor_manual')
             document.getElementById('nomor-mode-manual').checked = true;
         @enderror
 
