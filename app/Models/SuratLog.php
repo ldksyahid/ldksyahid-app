@@ -99,7 +99,7 @@ class SuratLog extends Model
         };
     }
 
-    /* ── Department Helpers ────────────────────────────────── */
+    /* ── Department & Activity Helpers ────────────────────── */
     public function kodeBidangPengaju(): ?string
     {
         return $this->data['kode_bidang'] ?? null;
@@ -108,6 +108,34 @@ class SuratLog extends Model
     public function labelBidangPengaju(): string
     {
         return DepartmentRegistry::label($this->kodeBidangPengaju());
+    }
+
+    public function isFakultas(): bool
+    {
+        $code = $this->kodeBidangPengaju();
+        if (!$code) {
+            return false;
+        }
+
+        $item = DepartmentRegistry::get($code);
+        if ($item) {
+            return ($item['group'] ?? '') === 'fakultas';
+        }
+
+        return str_starts_with($code, 'LDKS.');
+    }
+
+    public function keperluanKegiatan(): string
+    {
+        $data = $this->data ?? [];
+
+        return $data['nama_acara']
+            ?? $data['nama_kegiatan']
+            ?? $data['nama_program']
+            ?? $data['program_rekomendasi']
+            ?? $data['perihal_imbauan']
+            ?? $data['keperluan']
+            ?? '-';
     }
 
     /* ── Query Scopes ──────────────────────────────────────── */

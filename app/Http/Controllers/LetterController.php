@@ -136,8 +136,20 @@ class LetterController extends Controller
         return $this->pdfService->streamOfficialPdf($suratLog);
     }
 
-    public function previewDraft(Request $request)
+    public function previewDraft(Request $request, ?string $kode = null)
     {
+        $kode = $kode ?: $request->route('kode') ?: $request->query('kode');
+
+        if (!empty($kode)) {
+            $suratLog = SuratLog::where('kode_verifikasi', $kode)->firstOrFail();
+
+            if ($suratLog->isApproved()) {
+                return $this->pdfService->streamOfficialPdf($suratLog);
+            }
+
+            return $this->pdfService->streamDraftPdf($suratLog->jenis_surat, $suratLog->data ?? [], $suratLog);
+        }
+
         $request->validate(['jenis_surat' => 'required|string']);
 
         $rules = LetterRegistry::getValidationRules($request->jenis_surat);

@@ -8,7 +8,7 @@ use App\Support\LetterRegistry;
 
 class LetterNumberingService
 {
-    public const NOMOR_MANUAL_PATTERN = '/^\d{3}(\.\d{2})?\/[A-Za-z.\-]+-(i|e)\/[A-Za-z.\-]+\/LDK SYAHID\/\d{1,2}\/\d{4}$/';
+    public const NOMOR_MANUAL_PATTERN = '/^\d{3}(\.\d{2})?\/[A-Za-z.\-]+-(i|e)\/[A-Za-z.\-]+\/LDK SYAHID\/(0?[1-9]|1[0-2])\/\d{4}$/';
 
     public function approve(SuratLog $log, ?string $nomorManual, ?string $catatanAdmin, int $adminId, string $kodeBidang = 'KST'): array
     {

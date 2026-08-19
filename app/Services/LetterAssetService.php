@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class LetterAssetService
 {
@@ -21,13 +22,23 @@ class LetterAssetService
 
     public static function fetchBase64(string $url, string $cacheKey): ?string
     {
-        return Cache::remember('asset_img_' . $cacheKey, 86400, function () use ($url) {
-            $context = stream_context_create([
-                'http' => ['method' => 'GET', 'header' => "User-Agent: Mozilla/5.0\r\n", 'timeout' => 15],
-                'ssl'  => ['verify_peer' => false, 'verify_peer_name' => false]
-            ]);
-            $data = @file_get_contents($url, false, $context);
-            return $data ? 'data:image/png;base64,' . base64_encode($data) : null;
+        return Cache::remember('asset_img_' . $cacheKey, 86400, function () use ($url, $cacheKey) {
+            try {
+                $context = stream_context_create([
+                    'http' => ['method' => 'GET', 'header' => "User-Agent: Mozilla/5.0\r\n", 'timeout' => 15],
+                    'ssl'  => ['verify_peer' => false, 'verify_peer_name' => false]
+                ]);
+                $data = @file_get_contents($url, false, $context);
+                if ($data) {
+                    return 'data:image/png;base64,' . base64_encode($data);
+                }
+
+                Log::warning("[LetterAssetService] Failed to fetch remote asset: {$cacheKey} from {$url}");
+            } catch (\Throwable $e) {
+                Log::error("[LetterAssetService] Error fetching asset {$cacheKey}: " . $e->getMessage());
+            }
+
+            return null;
         });
     }
 }

@@ -37,9 +37,9 @@ class LetterPdfService
         return $pdf->stream($filename);
     }
 
-    public function streamDraftPdf(string $jenisSurat, array $data)
+    public function streamDraftPdf(string $jenisSurat, array $data, ?SuratLog $existingLog = null)
     {
-        $dummyLog = new SuratLog([
+        $dummyLog = $existingLog ?: new SuratLog([
             'jenis_surat'     => $jenisSurat,
             'label'           => LetterRegistry::getLabel($jenisSurat),
             'nomor_surat'     => 'DRAFT/Ph-e/BPH/LDK SYAHID/' . now()->month . '/' . now()->year,
@@ -51,12 +51,12 @@ class LetterPdfService
         $kodeVerifikasi = $dummyLog->kode_verifikasi;
         $verifikasiUrl  = route('persuratan.verifikasi', $kodeVerifikasi);
         $qrCodeUri      = $this->generateQrCodeBase64($kodeVerifikasi);
-        $nomorSurat     = $dummyLog->nomor_surat;
-        $tanggalSurat   = now()->locale('id')->translatedFormat('d F Y');
+        $nomorSurat     = ($dummyLog->nomor_surat && $dummyLog->nomor_surat !== '-') ? $dummyLog->nomor_surat : ('DRAFT/Ph-e/BPH/LDK SYAHID/' . now()->month . '/' . now()->year);
+        $tanggalSurat   = ($dummyLog->created_at ?: now())->locale('id')->translatedFormat('d F Y');
 
         $pdf = Pdf::loadView('pdf.' . $jenisSurat, [
             'suratLog'       => $dummyLog,
-            'label'          => $dummyLog->label,
+            'label'          => $dummyLog->label ?: LetterRegistry::getLabel($jenisSurat),
             'nomorSurat'     => $nomorSurat,
             'nomor'          => $nomorSurat,
             'tanggalSurat'   => $tanggalSurat,
