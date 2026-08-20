@@ -17,7 +17,7 @@
                 </button>
             </div>
 
-            <div class="px-4 py-3 border-bottom" style="background-color: #f8fafc;">
+            <div class="px-4 py-3 adm-modal-search-wrap">
                 {{-- Live Search Bar in Modal --}}
                 <div class="input-group input-group-sm mb-2">
                     <div class="input-group-prepend">

@@ -304,6 +304,38 @@
     font-weight: 700;
 }
 
+/* ── Flash Feedback Alert & Header Icons ─────────────────── */
+.adm-header-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+}
+.adm-header-icon.primary { background-color: #e0f2fe; color: #0284c7; }
+.adm-header-icon.success { background-color: #d1fae5; color: #059669; }
+.adm-header-icon.danger  { background-color: #fee2e2; color: #dc2626; }
+.adm-header-icon.warning { background-color: #fef3c7; color: #d97706; }
+
+.adm-alert-success {
+    background-color: #ecfdf5 !important;
+    border: 1px solid #a7f3d0 !important;
+    color: #065f46 !important;
+}
+.adm-alert-danger {
+    background-color: #fef2f2 !important;
+    border: 1px solid #fecaca !important;
+    color: #991b1b !important;
+}
+
+.adm-modal-search-wrap {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
 /* ============================================================
    GLOBAL DARK MODE OVERRIDES (HTML.DARK-MODE / BODY.DARK-MODE)
    ============================================================ */
@@ -594,6 +626,56 @@ body.dark-mode .pagination .page-item.active .page-link,
     color: #ffffff !important;
 }
 
+/* Header Icons in Dark Mode */
+html.dark-mode .adm-header-icon.primary,
+body.dark-mode .adm-header-icon.primary,
+[data-theme="dark"] .adm-header-icon.primary {
+    background: rgba(14, 165, 233, 0.2) !important;
+    color: #38bdf8 !important;
+}
+html.dark-mode .adm-header-icon.success,
+body.dark-mode .adm-header-icon.success,
+[data-theme="dark"] .adm-header-icon.success {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #34d399 !important;
+}
+html.dark-mode .adm-header-icon.danger,
+body.dark-mode .adm-header-icon.danger,
+[data-theme="dark"] .adm-header-icon.danger {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+}
+html.dark-mode .adm-header-icon.warning,
+body.dark-mode .adm-header-icon.warning,
+[data-theme="dark"] .adm-header-icon.warning {
+    background: rgba(245, 158, 11, 0.2) !important;
+    color: #fbbf24 !important;
+}
+
+/* Alerts in Dark Mode */
+html.dark-mode .adm-alert-success,
+body.dark-mode .adm-alert-success,
+[data-theme="dark"] .adm-alert-success {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    color: #6ee7b7 !important;
+}
+html.dark-mode .adm-alert-danger,
+body.dark-mode .adm-alert-danger,
+[data-theme="dark"] .adm-alert-danger {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+    color: #fca5a5 !important;
+}
+
+/* Modal Search Box in Dark Mode */
+html.dark-mode .adm-modal-search-wrap,
+body.dark-mode .adm-modal-search-wrap,
+[data-theme="dark"] .adm-modal-search-wrap {
+    background-color: #1e2535 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
 /* ── Mobile Responsive Overrides ─────────────────────────── */
 @media (max-width: 767.98px) {
     .adm-status-pills-wrap {
@@ -611,6 +693,19 @@ body.dark-mode .pagination .page-item.active .page-link,
     .adm-table th,
     .adm-table td {
         padding: 0.75rem 0.85rem;
+    }
+    .adm-user-avatar {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        font-size: 0.8rem;
+    }
+}
+@media (max-width: 575.98px) {
+    .adm-table th,
+    .adm-table td {
+        padding: 0.65rem 0.65rem;
+        font-size: 0.8rem;
     }
 }
 

@@ -29,20 +29,31 @@
 
     {{-- ── 2. Flash Feedback Alert ───────────────────────────────── --}}
     @if (session('success'))
-        <div class="alert alert-success border-0 shadow-sm rounded-4 d-flex align-items-center gap-3 mb-4 py-3 px-4" style="background-color: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0 !important;">
-            <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:36px;height:36px; background-color: #d1fae5; color: #059669;">
+        <div class="alert alert-success adm-alert-success border-0 shadow-sm rounded-4 d-flex align-items-center gap-3 mb-4 py-3 px-4">
+            <div class="adm-header-icon success">
                 <i class="fas fa-check-circle fs-5"></i>
             </div>
             <div>
-                <strong class="d-block" style="color: #065f46;">Success!</strong>
-                <span class="small" style="color: #047857;">{{ session('success') }}</span>
+                <strong class="d-block text-success">Success!</strong>
+                <span class="small">{{ session('success') }}</span>
+            </div>
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="alert alert-danger adm-alert-danger border-0 shadow-sm rounded-4 d-flex align-items-center gap-3 mb-4 py-3 px-4">
+            <div class="adm-header-icon danger">
+                <i class="fas fa-exclamation-circle fs-5"></i>
+            </div>
+            <div>
+                <strong class="d-block text-danger">Error!</strong>
+                <span class="small">{{ session('error') }}</span>
             </div>
         </div>
     @endif
 
     {{-- ── 3. KPI Stat Cards ─────────────────────────────────────── --}}
     <div class="row mb-3">
-        <div class="col-sm-6 col-xl mb-3 mb-xl-0">
+        <div class="col-12 col-sm-6 col-xl mb-3 mb-xl-0">
             <a href="{{ route('admin.persuratan.index', request()->except('status', 'page')) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon primary">
@@ -55,7 +66,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-sm-6 col-xl mb-3 mb-xl-0">
+        <div class="col-12 col-sm-6 col-xl mb-3 mb-xl-0">
             <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'pending'])) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon warning">
@@ -68,7 +79,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-sm-6 col-xl mb-3 mb-xl-0">
+        <div class="col-12 col-sm-6 col-xl mb-3 mb-xl-0">
             <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'approved'])) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon success">
@@ -81,7 +92,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-sm-6 col-xl mb-3 mb-xl-0">
+        <div class="col-12 col-sm-6 col-xl mb-3 mb-xl-0">
             <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'rejected'])) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon danger">
@@ -94,7 +105,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-sm-6 col-xl mb-3 mb-xl-0">
+        <div class="col-12 col-sm-6 col-xl mb-3 mb-xl-0">
             <a href="{{ route('admin.persuratan.index', array_merge(request()->except('page'), ['status' => 'expired'])) }}" class="adm-kpi-link">
                 <div class="adm-kpi-card">
                     <div class="adm-kpi-icon secondary">
@@ -198,13 +209,13 @@
             <table class="table adm-table">
                 <thead>
                     <tr>
-                        <th class="ps-4" style="width: 50px;">#</th>
+                        <th class="ps-4 d-none d-sm-table-cell" style="width: 50px;">#</th>
                         <th>Requester &amp; Division</th>
                         <th>Letter Type</th>
-                        <th>Letter Number</th>
-                        <th>Submitted Date</th>
+                        <th class="d-none d-lg-table-cell">Letter Number</th>
+                        <th class="d-none d-md-table-cell">Submitted Date</th>
                         <th>Status</th>
-                        <th class="text-center" style="width: 130px;">Actions</th>
+                        <th class="text-center text-nowrap" style="width: 120px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -214,7 +225,7 @@
                             $initial = strtoupper(substr($log->user?->name ?? 'U', 0, 1));
                         @endphp
                         <tr>
-                            <td class="ps-4 text-muted small">{{ $suratLogs->firstItem() + $loop->index }}</td>
+                            <td class="ps-4 text-muted small d-none d-sm-table-cell">{{ $suratLogs->firstItem() + $loop->index }}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="adm-user-avatar">
@@ -235,8 +246,18 @@
                             <td>
                                 <div class="font-weight-bold small text-dark">{{ $log->label }}</div>
                                 <code class="text-muted" style="font-size: 0.72rem;">{{ $log->jenis_surat }}</code>
+                                <div class="d-lg-none mt-1">
+                                    @if ($log->nomor_surat !== '-')
+                                        <span class="adm-badge adm-badge-neutral font-monospace font-weight-bold" style="font-size: 0.68rem; padding: 0.15rem 0.45rem;">
+                                            {{ $log->nomor_surat }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="d-md-none text-muted small mt-1" style="font-size: 0.72rem;">
+                                    <i class="fas fa-calendar-alt me-1 text-secondary"></i> {{ $log->created_at->format('d M Y') }}
+                                </div>
                             </td>
-                            <td>
+                            <td class="d-none d-lg-table-cell">
                                 @if ($log->nomor_surat !== '-')
                                     <span class="adm-badge adm-badge-neutral font-monospace font-weight-bold" style="font-size: 0.75rem;">
                                         {{ $log->nomor_surat }}
@@ -245,11 +266,11 @@
                                     <span class="text-muted small fst-italic">— Not Issued —</span>
                                 @endif
                             </td>
-                            <td class="small text-muted">
+                            <td class="small text-muted d-none d-md-table-cell text-nowrap">
                                 <div><i class="fas fa-calendar-alt me-1 text-secondary"></i> {{ $log->created_at->locale('en')->translatedFormat('d M Y') }}</div>
                                 <div style="font-size: 0.72rem;"><i class="fas fa-clock me-1 text-secondary"></i> {{ $log->created_at->format('H:i') }} WIB</div>
                             </td>
-                            <td>
+                            <td class="text-nowrap">
                                 @if ($log->status === 'approved')
                                     <span class="adm-badge adm-badge-success">
                                         <i class="fas fa-check-circle me-1"></i> Approved
@@ -264,7 +285,7 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="text-center">
+                            <td class="text-center text-nowrap">
                                 <div class="btn-group btn-group-sm shadow-sm rounded-3 overflow-hidden">
                                     <a href="{{ route('admin.persuratan.show', $log) }}"
                                        class="btn btn-light text-primary border" title="View Details">

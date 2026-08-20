@@ -42,7 +42,7 @@ class LetterPdfService
         $dummyLog = $existingLog ?: new SuratLog([
             'jenis_surat'     => $jenisSurat,
             'label'           => LetterRegistry::getLabel($jenisSurat),
-            'nomor_surat'     => 'DRAFT/Ph-e/BPH/LDK SYAHID/' . now()->month . '/' . now()->year,
+            'nomor_surat'     => 'DRAFT/Ph-e/BPH/LDK-SYAHID/' . now()->month . '/' . now()->year,
             'kode_verifikasi' => '00000000-draft-preview-00000000',
             'data'            => $data,
             'status'          => 'pending',
@@ -51,7 +51,7 @@ class LetterPdfService
         $kodeVerifikasi = $dummyLog->kode_verifikasi;
         $verifikasiUrl  = route('persuratan.verifikasi', $kodeVerifikasi);
         $qrCodeUri      = $this->generateQrCodeBase64($kodeVerifikasi);
-        $nomorSurat     = ($dummyLog->nomor_surat && $dummyLog->nomor_surat !== '-') ? $dummyLog->nomor_surat : ('DRAFT/Ph-e/BPH/LDK SYAHID/' . now()->month . '/' . now()->year);
+        $nomorSurat     = ($dummyLog->nomor_surat && $dummyLog->nomor_surat !== '-') ? $dummyLog->nomor_surat : ('DRAFT/Ph-e/BPH/LDK-SYAHID/' . now()->month . '/' . now()->year);
         $tanggalSurat   = ($dummyLog->created_at ?: now())->locale('id')->translatedFormat('d F Y');
 
         $pdf = Pdf::loadView('pdf.' . $jenisSurat, [
@@ -150,7 +150,7 @@ class LetterPdfService
         $dummyLog = new SuratLog([
             'jenis_surat'     => $type,
             'label'           => LetterRegistry::getLabel($type),
-            'nomor_surat'     => '001/Ph-e/BPH/LDK SYAHID/' . now()->month . '/' . now()->year,
+            'nomor_surat'     => '001/Ph-e/BPH/LDK-SYAHID/' . now()->month . '/' . now()->year,
             'kode_verifikasi' => 'contoh-verifikasi-' . $type,
             'status'          => 'approved',
             'created_at'      => now(),

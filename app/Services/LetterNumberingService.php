@@ -8,7 +8,7 @@ use App\Support\LetterRegistry;
 
 class LetterNumberingService
 {
-    public const NOMOR_MANUAL_PATTERN = '/^\d{3}(\.\d{2})?\/[A-Za-z.\-]+-(i|e)\/[A-Za-z.\-]+\/LDK SYAHID\/(0?[1-9]|1[0-2])\/\d{4}$/';
+    public const NOMOR_MANUAL_PATTERN = '/^\d{3}(\.\d{2})?\/[A-Za-z.\-]+-(i|e)\/[A-Za-z.\-]+\/LDK[- ]SYAHID\/(0?[1-9]|1[0-2])\/\d{4}$/';
 
     public function approve(SuratLog $log, ?string $nomorManual, ?string $catatanAdmin, int $adminId, string $kodeBidang = 'KST'): array
     {
@@ -19,7 +19,7 @@ class LetterNumberingService
                 $bulan     = now()->month;
                 $tahun     = now()->year;
 
-                $nomorManual = "{$nomorManual}/{$kodeJenis}-{$sifat}/{$kodeBidang}/LDK SYAHID/{$bulan}/{$tahun}";
+                $nomorManual = "{$nomorManual}/{$kodeJenis}-{$sifat}/{$kodeBidang}/LDK-SYAHID/{$bulan}/{$tahun}";
             }
 
             if (!preg_match(self::NOMOR_MANUAL_PATTERN, $nomorManual)) {
@@ -70,7 +70,7 @@ class LetterNumberingService
         $kodeJenis = $this->resolveKodeJenis($log);
         $sifat     = $this->resolveSifat($log);
 
-        return "{$urut}{$subNomor}/{$kodeJenis}-{$sifat}/{$kodeBidang}/LDK SYAHID/{$bulan}/{$tahun}";
+        return "{$urut}{$subNomor}/{$kodeJenis}-{$sifat}/{$kodeBidang}/LDK-SYAHID/{$bulan}/{$tahun}";
     }
 
     public function resolveKodeJenis(SuratLog $log): string

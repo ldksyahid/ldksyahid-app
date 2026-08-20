@@ -83,15 +83,19 @@ class LetterController extends Controller
 
         $applicantName = $suratLog->user?->name ?: ($validated['nama'] ?? 'Pemohon');
 
-        WhatsApp::sendLetterRequestNotification([
-            'letterId'    => $suratLog->id,
-            'name'        => $applicantName,
-            'letterType'  => $suratLog->label,
-            'department'  => $suratLog->labelBidangPengaju(),
-            'activity'    => $suratLog->keperluanKegiatan(),
-            'previewUrl'  => route('service.persuratan.preview', $suratLog->kode_verifikasi),
-            'targetPhone' => $targetPhone,
-        ]);
+        try {
+            WhatsApp::sendLetterRequestNotification([
+                'letterId'    => $suratLog->id,
+                'name'        => $applicantName,
+                'letterType'  => $suratLog->label,
+                'department'  => $suratLog->labelBidangPengaju(),
+                'activity'    => $suratLog->keperluanKegiatan(),
+                'previewUrl'  => route('service.persuratan.preview', $suratLog->kode_verifikasi),
+                'targetPhone' => $targetPhone,
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('[LetterController] WhatsApp notification dispatch skipped: ' . $e->getMessage());
+        }
 
         return redirect()
             ->route('service.persuratan.index')

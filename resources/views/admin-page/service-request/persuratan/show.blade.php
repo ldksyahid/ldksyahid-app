@@ -73,7 +73,7 @@
     <div class="row">
 
         {{-- ── 3. LEFT COLUMN: Requester & Form Details ─────────────── --}}
-        <div class="col-lg-7 col-xl-8">
+        <div class="col-12 col-lg-7 col-xl-8 mb-4 mb-lg-0">
 
             {{-- Card 1: Requester & Document Overview --}}
             <div class="adm-card">
@@ -233,7 +233,7 @@
         </div>
 
         {{-- ── 4. RIGHT COLUMN: Action & Verification Panel ──────────── --}}
-        <div class="col-lg-5 col-xl-4">
+        <div class="col-12 col-lg-5 col-xl-4">
 
             {{-- ── Action 1: Approval Form (Pending Status) ── --}}
             @if ($suratLog->isPending())

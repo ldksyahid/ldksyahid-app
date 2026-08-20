@@ -96,7 +96,7 @@ class LetterAdminController extends Controller
                 return redirect()
                     ->route('admin.persuratan.show', $suratLog)
                     ->withInput()
-                    ->with('error', 'Format nomor surat manual tidak valid. Contoh format lengkap: 001/Ph-e/BPH/LDK SYAHID/8/2026 atau cukup ketik nomor urutnya saja, misal: 001 atau 001.01');
+                    ->with('error', 'Format nomor surat manual tidak valid. Contoh format lengkap: 001/Ph-e/BPH/LDK-SYAHID/8/2026 atau cukup ketik nomor urutnya saja, misal: 001 atau 001.01');
             }
 
             if ($result['error'] === 'mundur') {

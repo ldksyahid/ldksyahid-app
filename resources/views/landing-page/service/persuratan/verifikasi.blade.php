@@ -324,6 +324,60 @@
     box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4);
 }
 
+/* Status Pills */
+.vfy-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 1rem;
+    border-radius: 50rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+.vfy-status-pill.success {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
+}
+.vfy-status-pill.warning {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fcd34d;
+}
+.vfy-status-pill.danger {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+[data-theme="dark"] .vfy-status-pill.success {
+    background: rgba(16, 185, 129, 0.2);
+    color: #6ee7b7;
+    border-color: rgba(16, 185, 129, 0.35);
+}
+[data-theme="dark"] .vfy-status-pill.warning {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fcd34d;
+    border-color: rgba(245, 158, 11, 0.35);
+}
+[data-theme="dark"] .vfy-status-pill.danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+.vfy-alert-danger {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca !important;
+}
+[data-theme="dark"] .vfy-alert-danger {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #fca5a5 !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+}
+
 @keyframes vfyFadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: none; }
@@ -348,7 +402,7 @@
                             <i class="fas fa-shield-check vfy-seal-icon"></i>
                         </div>
 
-                        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style="background:#dcfce7; color:#15803d; font-size:0.78rem; font-weight:700; border:1px solid #86efac;">
+                        <div class="vfy-status-pill success">
                             <i class="fas fa-certificate"></i>
                             <span>DOKUMEN RESMI SAH</span>
                         </div>
@@ -439,7 +493,7 @@
                             <i class="fas fa-clock-rotate-left vfy-seal-icon"></i>
                         </div>
 
-                        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style="background:#fef3c7; color:#b45309; font-size:0.78rem; font-weight:700; border:1px solid #fcd34d;">
+                        <div class="vfy-status-pill warning">
                             <i class="fas fa-hourglass-half"></i>
                             <span>DALAM PROSES PENINJAUAN</span>
                         </div>
@@ -485,7 +539,7 @@
                             <i class="fas fa-circle-xmark vfy-seal-icon"></i>
                         </div>
 
-                        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style="background:#fee2e2; color:#b91c1c; font-size:0.78rem; font-weight:700; border:1px solid #fca5a5;">
+                        <div class="vfy-status-pill danger">
                             <i class="fas fa-ban"></i>
                             <span>DOKUMEN DITOLAK / TIDAK BERLAKU</span>
                         </div>
@@ -496,7 +550,7 @@
                         </p>
 
                         @if ($suratLog->catatan_admin)
-                            <div class="alert alert-danger border-0 rounded-4 text-start small mb-4 py-3 px-4" style="background:#fef2f2; color:#991b1b; border:1px solid #fecaca !important;">
+                            <div class="alert vfy-alert-danger border-0 rounded-4 text-start small mb-4 py-3 px-4">
                                 <strong class="d-block mb-1"><i class="fas fa-info-circle me-1"></i> Catatan Penolakan:</strong>
                                 {{ $suratLog->catatan_admin }}
                             </div>
@@ -519,14 +573,14 @@
                             <i class="fas fa-triangle-exclamation vfy-seal-icon"></i>
                         </div>
 
-                        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style="background:#fee2e2; color:#b91c1c; font-size:0.78rem; font-weight:700; border:1px solid #fca5a5;">
+                        <div class="vfy-status-pill danger">
                             <i class="fas fa-exclamation-triangle"></i>
                             <span>TIDAK TERDAFTAR</span>
                         </div>
 
                         <h1 class="vfy-title">Dokumen Tidak Ditemukan</h1>
                         <p class="vfy-sub">
-                            Kode verifikasi <code class="px-2 py-1 bg-light rounded text-danger fw-bold">{{ $kode }}</code> tidak terdaftar dalam basis data resmi LDK Syahid. Harap waspada terhadap indikasi pemalsuan dokumen.
+                            Kode verifikasi <code class="px-2 py-1 rounded text-danger fw-bold vfy-code-badge">{{ $kode }}</code> tidak terdaftar dalam basis data resmi LDK Syahid. Harap waspada terhadap indikasi pemalsuan dokumen.
                         </p>
 
                         <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
