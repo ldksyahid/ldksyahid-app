@@ -34,7 +34,7 @@ class WhatsAppInboundHandler
         $isApproved       = in_array($message, ['yes', 'approve'], true);
         $normalizedSender = preg_replace('/[^0-9]/', '', $sender);
 
-        // Check active letter pending session
+        // Check active letter pending session (Kestari for Pusat / Sekjen for Fakultas)
         if ($this->isLetterAdmin($normalizedSender) && Cache::has("whatsapp_pending_letter:{$normalizedSender}")) {
             return $this->resolveLetterDecision($sender, $isApproved);
         }
@@ -358,8 +358,8 @@ class WhatsAppInboundHandler
 
     public function isLetterAdmin(string $normalizedSender): bool
     {
-        $kestariPhone = MsSetting::getSettingValue1('Persuratan', 'Kontak Kestari') ?: '6285819353387';
-        $sekjenPhone  = MsSetting::getSettingValue1('Persuratan', 'Kontak Sekjen') ?: '6285776923137';
+        $kestariPhone = MsSetting::getSettingValue1(Key1::PERSURATAN, Key2::KontakKestari) ?: '6285819353387';
+        $sekjenPhone  = MsSetting::getSettingValue1(Key1::PERSURATAN, Key2::KontakSekjen) ?: '6285776923137';
 
         $normKestari = preg_replace('/[^0-9]/', '', $kestariPhone);
         $normSekjen  = preg_replace('/[^0-9]/', '', $sekjenPhone);

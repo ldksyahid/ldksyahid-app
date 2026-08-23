@@ -160,112 +160,276 @@
 
 <style>
 #persuratan-riwayat-section {
-    min-height: 82vh;
-    background:
-        linear-gradient(180deg, rgba(var(--bs-primary-rgb), .06), rgba(255,255,255,0) 260px);
+    padding: 6.5rem 0 5rem;
+    min-height: 100vh;
+    background: transparent;
+}
+@media (max-width: 767.98px) {
+    #persuratan-riwayat-section {
+        padding: 5rem 0 3.5rem;
+    }
 }
 
 #persuratan-riwayat-section .pr-header {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
 }
 
 #persuratan-riwayat-section .pr-eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: .45rem;
-    padding: .45rem .75rem;
-    border-radius: 999px;
-    background: rgba(var(--bs-primary-rgb), .1);
-    color: var(--bs-primary);
-    font-size: .78rem;
+    gap: 0.45rem;
+    font-size: 0.78rem;
     font-weight: 700;
-    margin-bottom: .85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #0284c7;
+    margin-bottom: 0.4rem;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-eyebrow {
+    color: #38bdf8;
 }
 
 #persuratan-riwayat-section .pr-header h2 {
-    font-size: 1.75rem;
+    font-size: clamp(1.5rem, 4vw, 2rem);
     font-weight: 800;
-    margin: 0 0 .35rem;
+    color: #0f172a;
+    margin-bottom: 0.35rem;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-header h2 {
+    color: #f1f5f9;
 }
 
 #persuratan-riwayat-section .pr-header p {
-    color: #6c757d;
+    color: #64748b;
     margin: 0;
-    max-width: 620px;
+    font-size: 0.92rem;
+    max-width: 600px;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-header p {
+    color: #94a3b8;
 }
 
 #persuratan-riwayat-section .pr-header-action {
     display: inline-flex;
     align-items: center;
-    gap: .5rem;
-    border-radius: 12px;
+    gap: 0.5rem;
+    border-radius: 14px;
     font-weight: 700;
+    padding: 0.75rem 1.4rem;
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    border: none;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(14, 165, 233, 0.3);
     white-space: nowrap;
+    transition: all 0.25s ease;
+}
+#persuratan-riwayat-section .pr-header-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
+    color: #fff;
 }
 
 #persuratan-riwayat-section .pr-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: .75rem;
-    margin-bottom: 1rem;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
 }
 
 #persuratan-riwayat-section .pr-stat {
     display: flex;
     align-items: center;
-    gap: .75rem;
-    background: #fff;
-    border: 1px solid rgba(15, 23, 42, .06);
-    border-radius: 14px;
-    box-shadow: 0 8px 24px rgba(15, 23, 42, .06);
-    padding: .9rem;
+    gap: 0.85rem;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    padding: 0.95rem 1rem;
+    transition: transform 0.2s;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-stat {
+    background: #1a1f2e;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
 }
 
 #persuratan-riwayat-section .pr-stat-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     border-radius: 12px;
-    flex: 0 0 38px;
+    flex-shrink: 0;
+    font-size: 1.15rem;
 }
+#persuratan-riwayat-section .pr-stat-icon.total { background: #e0f2fe; color: #0284c7; }
+#persuratan-riwayat-section .pr-stat-icon.pending { background: #fef3c7; color: #d97706; }
+#persuratan-riwayat-section .pr-stat-icon.approved { background: #d1fae5; color: #059669; }
+#persuratan-riwayat-section .pr-stat-icon.rejected { background: #fee2e2; color: #dc2626; }
+#persuratan-riwayat-section .pr-stat-icon.expired { background: #f1f5f9; color: #64748b; }
 
-#persuratan-riwayat-section .pr-stat-icon.total { background: rgba(var(--bs-primary-rgb), .12); color: var(--bs-primary); }
-#persuratan-riwayat-section .pr-stat-icon.pending { background: rgba(255, 193, 7, .16); color: #b58100; }
-#persuratan-riwayat-section .pr-stat-icon.approved { background: rgba(25, 135, 84, .14); color: #198754; }
-#persuratan-riwayat-section .pr-stat-icon.rejected { background: rgba(220, 53, 69, .12); color: #dc3545; }
-#persuratan-riwayat-section .pr-stat-icon.expired { background: rgba(108, 117, 125, .15); color: #6c757d; }
+[data-theme="dark"] #persuratan-riwayat-section .pr-stat-icon.total { background: rgba(14, 165, 233, 0.2); color: #38bdf8; }
+[data-theme="dark"] #persuratan-riwayat-section .pr-stat-icon.pending { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+[data-theme="dark"] #persuratan-riwayat-section .pr-stat-icon.approved { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+[data-theme="dark"] #persuratan-riwayat-section .pr-stat-icon.rejected { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+[data-theme="dark"] #persuratan-riwayat-section .pr-stat-icon.expired { background: rgba(148, 163, 184, 0.2); color: #94a3b8; }
 
 #persuratan-riwayat-section .pr-stat strong {
     display: block;
-    font-size: 1.15rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
     line-height: 1;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-stat strong {
+    color: #f8fafc;
 }
 
 #persuratan-riwayat-section .pr-stat span:last-child {
     display: block;
-    color: #6c757d;
-    font-size: .75rem;
-    margin-top: .25rem;
+    color: #64748b;
+    font-size: 0.74rem;
+    margin-top: 0.25rem;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-stat span:last-child {
+    color: #94a3b8;
+}
+
+#persuratan-riwayat-section .pr-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.95rem;
+}
+
+#persuratan-riwayat-section .pr-item {
+    display: flex;
+    gap: 1.1rem;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    padding: 1.25rem 1.35rem;
+    transition: all 0.25s ease;
+}
+#persuratan-riwayat-section .pr-item:hover {
+    border-color: rgba(14, 165, 233, 0.4);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-item {
+    background: #1a1f2e;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-item:hover {
+    background: #252b3b;
+    border-color: rgba(14, 165, 233, 0.4);
+}
+
+#persuratan-riwayat-section .pr-item-marker {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+#persuratan-riwayat-section .pr-item-body {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+#persuratan-riwayat-section .pr-item-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.35rem;
+    line-height: 1.35;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-item-title {
+    color: #f1f5f9;
+}
+
+#persuratan-riwayat-section .pr-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    color: #64748b;
+    font-size: 0.8rem;
+    margin-bottom: 0.65rem;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-item-meta {
+    color: #94a3b8;
+}
+
+#persuratan-riwayat-section .pr-item-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+#persuratan-riwayat-section .pr-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.75rem;
+    border-radius: 50rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+#persuratan-riwayat-section .pr-note {
+    display: flex;
+    gap: 0.65rem;
+    margin-top: 0.85rem;
+    border-radius: 12px;
+    padding: 0.75rem 0.95rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+#persuratan-riwayat-section .pr-note.is-approved {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+}
+#persuratan-riwayat-section .pr-note.is-rejected {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-note.is-approved {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-note.is-rejected {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
 }
 
 #persuratan-riwayat-section .pr-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
-    background: #fff;
-    border: 1px solid rgba(15, 23, 42, .06);
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 20px;
     padding: 3rem 1.5rem;
 }
-
+[data-theme="dark"] #persuratan-riwayat-section .pr-empty {
+    background: #1a1f2e;
+    border-color: rgba(255, 255, 255, 0.08);
+}
 #persuratan-riwayat-section .pr-empty span {
     display: inline-flex;
     align-items: center;
@@ -273,198 +437,98 @@
     width: 64px;
     height: 64px;
     border-radius: 18px;
-    background: rgba(var(--bs-primary-rgb), .1);
-    color: var(--bs-primary);
+    background: rgba(14, 165, 233, 0.1);
+    color: #0ea5e9;
     font-size: 1.8rem;
     margin-bottom: 1rem;
 }
-
 #persuratan-riwayat-section .pr-empty h5 {
     font-weight: 800;
-    margin-bottom: .4rem;
+    color: #0f172a;
+    margin-bottom: 0.4rem;
 }
-
+[data-theme="dark"] #persuratan-riwayat-section .pr-empty h5 {
+    color: #f1f5f9;
+}
 #persuratan-riwayat-section .pr-empty p {
-    color: #6c757d;
+    color: #64748b;
     max-width: 420px;
-    margin-bottom: 1rem;
+    margin: 0 auto 1.25rem;
+}
+[data-theme="dark"] #persuratan-riwayat-section .pr-empty p {
+    color: #94a3b8;
 }
 
-#persuratan-riwayat-section .pr-list {
-    display: flex;
-    flex-direction: column;
-    gap: .85rem;
+[data-theme="dark"] #persuratan-riwayat-section .btn-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35) !important;
 }
-
-#persuratan-riwayat-section .pr-item {
-    display: grid;
-    grid-template-columns: 42px minmax(0, 1fr);
-    gap: .9rem;
-    background: #fff;
-    border: 1px solid rgba(15, 23, 42, .06);
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(15, 23, 42, .06);
-    padding: 1rem;
+[data-theme="dark"] #persuratan-riwayat-section .btn-outline-primary {
+    background: #1e2535 !important;
+    border: 1.5px solid rgba(14, 165, 233, 0.4) !important;
+    color: #38bdf8 !important;
 }
-
-#persuratan-riwayat-section .pr-item-marker {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 14px;
-    color: #fff;
+[data-theme="dark"] #persuratan-riwayat-section .btn-outline-primary:hover {
+    background: #0ea5e9 !important;
+    color: #ffffff !important;
+    border-color: #0ea5e9 !important;
 }
-
-#persuratan-riwayat-section .pr-item-main {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+[data-theme="dark"] #persuratan-riwayat-section .pr-empty .btn-primary {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4) !important;
 }
-
-#persuratan-riwayat-section .pr-item-title {
-    font-weight: 800;
-    color: #172033;
-    margin-bottom: .35rem;
+[data-theme="dark"] #persuratan-riwayat-section .pr-header-action {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%) !important;
+    box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4) !important;
 }
-
-#persuratan-riwayat-section .pr-item-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .45rem .9rem;
-    color: #6c757d;
-    font-size: .8rem;
+[data-theme="dark"] .pagination .page-item .page-link {
+    background: #1e2535;
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
 }
-
-#persuratan-riwayat-section .pr-item-meta span {
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;
-    min-width: 0;
-}
-
-#persuratan-riwayat-section .pr-item-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: .45rem;
-    flex: 0 0 auto;
-}
-
-#persuratan-riwayat-section .pr-status {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 28px;
-    border-radius: 999px;
-    color: #fff;
-    font-size: .74rem;
-    font-weight: 800;
-    padding: .25rem .7rem;
-    white-space: nowrap;
-}
-
-#persuratan-riwayat-section .pr-item-actions .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;
-    border-radius: 10px;
-    font-weight: 700;
-}
-
-#persuratan-riwayat-section .pr-note {
-    display: flex;
-    gap: .65rem;
-    margin-top: .85rem;
-    border-radius: 12px;
-    padding: .75rem;
-    font-size: .82rem;
-}
-
-#persuratan-riwayat-section .pr-note.is-approved {
-    background: rgba(25, 135, 84, .09);
-    color: #146c43;
-}
-
-#persuratan-riwayat-section .pr-note.is-rejected {
-    background: rgba(220, 53, 69, .09);
-    color: #b02a37;
-}
-
-#persuratan-riwayat-section .pr-note i {
-    margin-top: .15rem;
-}
-
-#persuratan-riwayat-section .pr-note strong,
-#persuratan-riwayat-section .pr-note span {
-    display: block;
-}
-
-#persuratan-riwayat-section .pr-pagination {
-    margin-top: 1.25rem;
+[data-theme="dark"] .pagination .page-item.active .page-link {
+    background: #0ea5e9;
+    border-color: #0ea5e9;
+    color: #ffffff;
 }
 
 @media (max-width: 767.98px) {
     #persuratan-riwayat-section .pr-header {
-        align-items: stretch;
         flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
     }
-
-    #persuratan-riwayat-section .pr-header h2 {
-        font-size: 1.45rem;
-    }
-
     #persuratan-riwayat-section .pr-header-action {
-        justify-content: center;
         width: 100%;
+        justify-content: center;
     }
-
     #persuratan-riwayat-section .pr-stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-
     #persuratan-riwayat-section .pr-item {
-        grid-template-columns: 1fr;
-    }
-
-    #persuratan-riwayat-section .pr-item-main,
-    #persuratan-riwayat-section .pr-item-actions {
-        align-items: flex-start;
         flex-direction: column;
+        padding: 1.15rem 1rem;
+    }
+    #persuratan-riwayat-section .pr-item-actions {
+        width: 100%;
+        margin-top: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+    }
+    #persuratan-riwayat-section .pr-item-actions .btn {
+        width: 100%;
+        justify-content: center;
     }
 }
-
 @media (max-width: 420px) {
     #persuratan-riwayat-section .pr-stats {
         grid-template-columns: 1fr;
     }
-}
-
-[data-theme="dark"] #persuratan-riwayat-section {
-    background: linear-gradient(180deg, rgba(var(--bs-primary-rgb), .1), rgba(17, 24, 39, 0) 260px);
-}
-
-[data-theme="dark"] #persuratan-riwayat-section .pr-stat,
-[data-theme="dark"] #persuratan-riwayat-section .pr-empty,
-[data-theme="dark"] #persuratan-riwayat-section .pr-item {
-    background: #1a1f2e;
-    border-color: rgba(255, 255, 255, .07);
-    box-shadow: none;
-}
-
-[data-theme="dark"] #persuratan-riwayat-section .pr-header p,
-[data-theme="dark"] #persuratan-riwayat-section .pr-stat span:last-child,
-[data-theme="dark"] #persuratan-riwayat-section .pr-empty p,
-[data-theme="dark"] #persuratan-riwayat-section .pr-item-meta {
-    color: #9ca3af;
-}
-
-[data-theme="dark"] #persuratan-riwayat-section .pr-header h2,
-[data-theme="dark"] #persuratan-riwayat-section .pr-empty h5,
-[data-theme="dark"] #persuratan-riwayat-section .pr-item-title,
-[data-theme="dark"] #persuratan-riwayat-section .pr-stat strong {
-    color: #e5e7eb;
 }
 </style>
 

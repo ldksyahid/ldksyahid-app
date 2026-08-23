@@ -678,8 +678,10 @@ Route::middleware(['auth'])
     });
 
 // Verifikasi & Preview draft publik — tanpa login (bisa diakses via link WhatsApp)
-Route::get('/verifikasi-surat/{kode}', [LetterController::class, 'verifikasi'])->name('persuratan.verifikasi');
-Route::get('/layanan/persuratan/preview/{kode}', [LetterController::class, 'previewDraft'])->name('service.persuratan.preview');
+Route::get('/verifikasi-surat/{kode?}', [LetterController::class, 'verifikasi'])->name('persuratan.verifikasi');
+Route::get('/layanan/persuratan/verifikasi/{kode?}', [LetterController::class, 'verifikasi'])->name('service.persuratan.verifikasi');
+Route::get('/layanan/persuratan/preview/{kode?}', [LetterController::class, 'previewDraft'])->name('service.persuratan.preview');
+Route::get('/layanan/persuratan/riwayat-alias', [LetterController::class, 'riwayat'])->name('persuratan.riwayat')->middleware('auth');
 
 // Admin — HelperLetter & Superadmin
 Route::middleware(['role:Superadmin|HelperLetter'])
@@ -688,6 +690,7 @@ Route::middleware(['role:Superadmin|HelperLetter'])
     ->group(function () {
         Route::get('/', [LetterAdminController::class, 'index'])->name('index');
         Route::get('/download-contoh', [LetterAdminController::class, 'downloadExampleTemplates'])->name('download-examples');
+        Route::post('/bulk-delete', [LetterAdminController::class, 'bulkDelete'])->name('bulk-delete')->middleware('role:Superadmin');
         Route::get('/{suratLog}', [LetterAdminController::class, 'show'])->name('show');
         Route::post('/{suratLog}/approve', [LetterAdminController::class, 'approve'])->name('approve');
         Route::post('/{suratLog}/reject', [LetterAdminController::class, 'reject'])->name('reject');

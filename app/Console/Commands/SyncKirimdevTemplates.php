@@ -238,7 +238,7 @@ class SyncKirimdevTemplates extends Command
                         'text' => "✅ *Surat Telah Disetujui* ✅\n\nAssalamu'alaikum, {{1}} 😊\n\nAlhamdulillah, permohonan surat *{{2}}* telah disetujui dengan nomor *{{3}}*. Silakan unduh dokumen PDF resmi pada link berikut:\n{{4}}\n\nTerima kasih 😇",
                         'example' => [
                             'body_text' => [[
-                                'Ahmad Fauzi', 'Surat Izin Orang Tua', '001/Ph-e/KDR/LDK SYAHID/8/2026', 'https://ldksyah.id/layanan/persuratan/download/1',
+                                'Ahmad Fauzi', 'Surat Izin Orang Tua', '001/Ph-e/KDR/LDK-SYAHID/8/2026', 'https://ldksyah.id/layanan/persuratan/download/1',
                             ]],
                         ],
                     ],

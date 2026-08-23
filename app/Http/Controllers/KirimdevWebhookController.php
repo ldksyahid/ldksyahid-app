@@ -44,12 +44,17 @@ class KirimdevWebhookController extends Controller
                     $status = $handler->handleReply($message['from'] ?? '', data_get($message, 'text.body', ''));
                     Log::info('[Kirimdev Webhook] inbound text reply processed', ['status' => $status]);
                 } elseif ($type === 'button') {
-                    // Quick-reply button tap (see request_shortlink_v6 /
-                    // Kirimdev::deliver()'s $buttonPayloads) — payload is
-                    // whatever string we set when sending, not the button's
-                    // display text.
+                    // Quick-reply button tap (see request_shortlink_v6 / request_letter_v1 /
+                    // Kirimdev::deliver()'s $buttonPayloads) — payload is whatever string we set.
                     $status = $handler->handleButtonReply($message['from'] ?? '', data_get($message, 'button.payload', ''));
                     Log::info('[Kirimdev Webhook] inbound button reply processed', ['status' => $status]);
+                } elseif ($type === 'interactive') {
+                    // Meta Cloud API interactive quick-reply or button response
+                    $buttonPayload = data_get($message, 'interactive.button_reply.id')
+                        ?: data_get($message, 'interactive.list_reply.id')
+                        ?: data_get($message, 'interactive.button_reply.title', '');
+                    $status = $handler->handleButtonReply($message['from'] ?? '', (string) $buttonPayload);
+                    Log::info('[Kirimdev Webhook] inbound interactive reply processed', ['status' => $status]);
                 }
             }
 

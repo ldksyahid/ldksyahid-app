@@ -74,6 +74,12 @@ class SendSingleWhatsAppJob implements ShouldQueue
 
     public function handle(): void
     {
+        // Skip if Kirimdev credentials are not configured (e.g. in local/testing environment)
+        if (blank(config('services.kirimdev.api_key')) || blank(config('services.kirimdev.phone_number_id'))) {
+            Log::info('[SendSingleWhatsAppJob] Skipped: Kirimdev API key or phone_number_id is not configured.');
+            return;
+        }
+
         // Kirimdev account is disconnected (checked by
         // kirimdev:check-account-status) — hold this job instead of forcing
         // a guaranteed failure. This is a soft release, NOT an exception, so
@@ -84,10 +90,21 @@ class SendSingleWhatsAppJob implements ShouldQueue
             return;
         }
 
-        if ($this->templateName === null) {
-            Kirimdev::deliverText($this->target, $this->message);
-        } else {
-            Kirimdev::deliver($this->target, $this->templateName, $this->templateParams, $this->buttonPayloads);
+        try {
+            if ($this->templateName === null) {
+                Kirimdev::deliverText($this->target, $this->message);
+            } else {
+                Kirimdev::deliver($this->target, $this->templateName, $this->templateParams, $this->buttonPayloads);
+            }
+        } catch (\RuntimeException $e) {
+            // When running synchronously (e.g. local development with QUEUE_CONNECTION=sync),
+            // catch external API failure (e.g. HTTP 401) so it doesn't crash user web requests.
+            if (config('queue.default') === 'sync') {
+                Log::warning('[SendSingleWhatsAppJob] Sync send failed: ' . $e->getMessage());
+                return;
+            }
+
+            throw $e;
         }
     }
 
