@@ -1,0 +1,65 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+# Cegah dua deployment jalan bersamaan (mencegah race condition saat migration).
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy main to Production
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout (untuk mengambil deploy script versi commit ini)
+        uses: actions/checkout@v4
+
+      - name: Validate required secrets
+        run: |
+          missing=0
+          for var in PRODUCTION_HOST PRODUCTION_PORT PRODUCTION_USER PRODUCTION_SSH_KEY PRODUCTION_PATH; do
+            if [ -z "${!var:-}" ]; then
+              echo "::error::Secret $var belum di-set di GitHub repo Settings > Secrets and variables > Actions"
+              missing=1
+            fi
+          done
+          if [ "$missing" = "1" ]; then
+            exit 1
+          fi
+        env:
+          PRODUCTION_HOST: ${{ secrets.PRODUCTION_HOST }}
+          PRODUCTION_PORT: ${{ secrets.PRODUCTION_PORT }}
+          PRODUCTION_USER: ${{ secrets.PRODUCTION_USER }}
+          PRODUCTION_SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
+          PRODUCTION_PATH: ${{ secrets.PRODUCTION_PATH }}
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.PRODUCTION_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "${{ secrets.PRODUCTION_PORT }}" -H "${{ secrets.PRODUCTION_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Run remote deployment script over SSH
+        env:
+          PRODUCTION_HOST: ${{ secrets.PRODUCTION_HOST }}
+          PRODUCTION_PORT: ${{ secrets.PRODUCTION_PORT }}
+          PRODUCTION_USER: ${{ secrets.PRODUCTION_USER }}
+          PRODUCTION_PATH: ${{ secrets.PRODUCTION_PATH }}
+          PRODUCTION_PHP_BIN: ${{ secrets.PRODUCTION_PHP_BIN }}
+          PRODUCTION_COMPOSER_BIN: ${{ secrets.PRODUCTION_COMPOSER_BIN }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "$PRODUCTION_PORT" -o StrictHostKeyChecking=yes \
+            "$PRODUCTION_USER@$PRODUCTION_HOST" \
+            "PHP_BIN='${PRODUCTION_PHP_BIN:-php}' COMPOSER_BIN='${PRODUCTION_COMPOSER_BIN:-composer}' bash -s -- '$PRODUCTION_PATH'" \
+            < .github/scripts/deploy-remote.sh
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

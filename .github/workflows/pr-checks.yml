@@ -1,0 +1,48 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  composer-validate:
+    name: Composer validate & install (production deps)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer:v2
+          coverage: none
+
+      - name: Validate composer.json & composer.lock are in sync
+        run: composer validate --strict --no-check-publish
+
+      - name: Install production dependencies (catches broken/conflicting lock file)
+        run: composer install --no-dev --no-interaction --no-progress --prefer-dist
+
+  php-lint:
+    name: PHP syntax lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+
+      - name: Lint all PHP files (excluding vendor)
+        run: |
+          set -e
+          find . -path ./vendor -prune -o -name '*.php' -print \
+            | xargs -n1 -P4 php -l
