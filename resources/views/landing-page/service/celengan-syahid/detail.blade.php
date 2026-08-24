@@ -21,7 +21,7 @@
     $logoSrc          = $data->gdrive_id_1
                             ? 'https://lh3.googleusercontent.com/d/' . $data->gdrive_id_1
                             : 'https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1';
-    $orgName          = ($data->nama_pj && $data->link_pj) ? $data->nama_pj : 'UKM LDK Syahid';
+    $orgName          = $data->nama_organisasi ?: (($data->nama_pj && $data->link_pj) ? $data->nama_pj : 'UKM LDK Syahid');
     $orgLink          = ($data->nama_pj && $data->link_pj) ? $data->link_pj : 'https://www.ldksyah.id/';
     $waText           = urlencode(
         "🚨 *[CELENGAN SYAHID]* 🚨\n\n_*{$data->judul}*_\n\n_" . route('service.celengansyahid.detail', $data->link) . "_\n\nYuk teman-teman kita bantu saudara kita 😇\n\n_\"Dan berbuat-baiklah kepada kedua orang tua, karib-kerabat, anak-anak yatim, orang-orang miskin, tetangga dekat dan tetangga jauh, teman sejawat, ibnu sabil dan hamba sahaya yang kamu miliki. Sungguh, Allah tidak menyukai orang yang sombong dan membanggakan diri,\" ● (QS. An-Nisa 4: Ayat 36)_\n\n#CelenganSyahid\n#{$data->link}\n#UKMLDKSyahid\n#KitaAdalahSaudara\n#Bismillah"

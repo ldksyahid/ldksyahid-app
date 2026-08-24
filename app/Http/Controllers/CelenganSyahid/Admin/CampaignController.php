@@ -77,6 +77,7 @@ class CampaignController extends Controller
             'tujuan'       => 'required',
             'deadline'     => 'required|date',
             'nama_pj'      => 'required|string|max:255',
+            'nama_organisasi' => 'nullable|string|max:255',
             'telp_pj'      => 'required|string',
             'poster'       => 'required|file|mimes:jpg,jpeg,png|max:5120',
         ], [
@@ -132,6 +133,7 @@ class CampaignController extends Controller
             'kategori' => 'required|string',
             'deadline' => 'nullable|date',
             'nama_pj'  => 'required|string|max:255',
+            'nama_organisasi' => 'nullable|string|max:255',
             'poster'   => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
         ], [
             'link.unique' => 'This campaign link is already taken. Please choose a different link.',

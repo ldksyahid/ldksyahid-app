@@ -10,8 +10,9 @@
 
     // nama_pj is now always set (required PIC Name field, see Media &
     // Contact below) — it's no longer a signal that this campaign belongs
-    // to an external organization, so only link_pj/gdrive_id_1 (logo) count.
-    $hasOrganization = $data && ($data->link_pj != null || $data->gdrive_id_1 != null);
+    // to an external organization, so only link_pj/gdrive_id_1 (logo) and
+    // the optional nama_organisasi count.
+    $hasOrganization = $data && ($data->link_pj != null || $data->gdrive_id_1 != null || $data->nama_organisasi != null);
 
     // PIC Contact phone: telp_pj is stored as a full number including its
     // country code (e.g. "62812xxxxxxx"), no leading "+". Split it back into
@@ -373,6 +374,22 @@
                             @if ($operation === 'view' && !$hasOrganization)
                                 <div class="form-control-plaintext text-muted">No external organization</div>
                             @else
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="inputNamaOrganisasi" class="form-label {{ $operation === 'view' ? 'fw-bold' : '' }}">Organization Name</label>
+                                            @if ($operation === 'view')
+                                                <div class="form-control-plaintext">
+                                                    {{ $data->nama_organisasi ?: '-' }}
+                                                </div>
+                                            @else
+                                                <input type="text" class="form-control" id="inputNamaOrganisasi" name="nama_organisasi"
+                                                    value="{{ old('nama_organisasi', $data->nama_organisasi ?? '') }}"
+                                                    placeholder="e.g. UKM LDK Syahid">
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
