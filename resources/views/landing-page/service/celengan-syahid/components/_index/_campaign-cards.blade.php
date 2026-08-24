@@ -61,7 +61,7 @@
                 $logoSrc = $campaign->gdrive_id_1
                     ? 'https://lh3.googleusercontent.com/d/' . $campaign->gdrive_id_1
                     : 'https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1';
-                $orgName = ($campaign->nama_pj && $campaign->link_pj) ? $campaign->nama_pj : 'UKM LDK Syahid';
+                $orgName = $campaign->nama_organisasi ?: (($campaign->nama_pj && $campaign->link_pj) ? $campaign->nama_pj : 'UKM LDK Syahid');
                 $orgLink = ($campaign->nama_pj && $campaign->link_pj) ? $campaign->link_pj : 'https://www.ldksyah.id/';
                 $catColor = $categoryColors[$campaign->kategori] ?? '#00a79d';
             @endphp
@@ -192,7 +192,7 @@
                 $logoSrc = $campaign->gdrive_id_1
                     ? 'https://lh3.googleusercontent.com/d/' . $campaign->gdrive_id_1
                     : 'https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1';
-                $orgName = ($campaign->nama_pj && $campaign->link_pj) ? $campaign->nama_pj : 'UKM LDK Syahid';
+                $orgName = $campaign->nama_organisasi ?: (($campaign->nama_pj && $campaign->link_pj) ? $campaign->nama_pj : 'UKM LDK Syahid');
                 $orgLink = ($campaign->nama_pj && $campaign->link_pj) ? $campaign->link_pj : 'https://www.ldksyah.id/';
                 $catColor = $categoryColors[$campaign->kategori] ?? '#00a79d';
             @endphp

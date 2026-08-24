@@ -245,6 +245,7 @@ class Campaign extends Model
             'logo_pj'     => $uploadResultLogoPic['fileName'] ?? null,
             'gdrive_id_1' => $uploadResultLogoPic['gdriveID'] ?? null,
             'nama_pj'     => $requestData['nama_pj'],
+            'nama_organisasi' => $requestData['nama_organisasi'] ?? null,
             'telp_pj'     => $requestData['telp_pj'],
             'link_pj'     => $requestData['link_pj'],
         ]);
@@ -277,6 +278,7 @@ class Campaign extends Model
             'deadline'      => $requestData['deadline'],
             'tujuan'        => $requestData['tujuan'],
             'nama_pj'       => $requestData['nama_pj'],
+            'nama_organisasi' => $requestData['nama_organisasi'] ?? null,
             'telp_pj'       => $requestData['telp_pj'],
             'link_pj'       => $requestData['link_pj'],
         ])->save();
