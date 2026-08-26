@@ -233,6 +233,15 @@ class PublicFormController extends Controller
                     $form->gdriveSpreadsheetID,
                     $rowData
                 );
+
+                // Re-apply the Timestamp column's date format on this specific row.
+                // A freshly INSERT_ROWS-appended row inherits formatting from whatever
+                // row precedes it, which reverts to unformatted once older rows get
+                // deleted — so this must run per-submission, not just once at sheet
+                // creation, to keep displaying correctly.
+                if ($gsheetRowIndex) {
+                    $gdriveService->formatTimestampColumn($form->gdriveSpreadsheetID, $gsheetRowIndex);
+                }
             }
 
             // 9. Record submission metadata in DB

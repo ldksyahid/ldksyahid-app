@@ -291,8 +291,8 @@ class DynamicFormGDriveService
      */
     public function updateCell(string $spreadsheetID, int $rowIndex, int $colIndex, string $value): void
     {
-        // Convert column index to A1 notation (0=A, 1=B, 2=C, ...)
-        $colLetter = chr(65 + $colIndex);
+        // Convert column index to A1 notation (0=A, 1=B, ..., 25=Z, 26=AA, 27=AB, ...)
+        $colLetter = $this->colIndexToLetter($colIndex);
         $range     = "Sheet1!{$colLetter}{$rowIndex}";
 
         $body = new Google_Service_Sheets_ValueRange([
@@ -305,6 +305,24 @@ class DynamicFormGDriveService
             $body,
             ['valueInputOption' => 'USER_ENTERED']
         );
+    }
+
+    /**
+     * Convert a 0-based column index to its A1 notation letter(s).
+     * 0=A, 1=B, ..., 25=Z, 26=AA, 27=AB, ..., matching spreadsheet column naming.
+     */
+    private function colIndexToLetter(int $colIndex): string
+    {
+        $letter = '';
+        $n      = $colIndex + 1; // switch to 1-based for the base-26 conversion
+
+        while ($n > 0) {
+            $n--;
+            $letter = chr(65 + ($n % 26)) . $letter;
+            $n      = intdiv($n, 26);
+        }
+
+        return $letter;
     }
 
     // =========================================================================
@@ -492,12 +510,66 @@ class DynamicFormGDriveService
             );
 
             $this->autoResizeColumns($spreadsheetID, count($headers));
+            $this->formatTimestampColumn($spreadsheetID);
         }
 
         return [
             'id'  => $spreadsheetID,
             'url' => "https://docs.google.com/spreadsheets/d/{$spreadsheetID}/edit",
         ];
+    }
+
+    /**
+     * Force column A (Timestamp) to render as a date/time instead of a raw serial
+     * number. Without an explicit number format, a newly inserted row only shows
+     * a formatted date when Sheets can inherit it from the row it was inserted
+     * after — which breaks (falls back to a raw serial like "46260,83808") once
+     * that reference row is deleted, since the next INSERT_ROWS append then
+     * inherits from the header row instead. Pass $rowIndex to (re-)apply the
+     * format to one specific row (call this right after every append, not just
+     * once at sheet creation, so it survives row deletions); omit it to format
+     * the whole column (used once at sheet creation as a first-pass default).
+     * Non-fatal: logs warning on failure.
+     */
+    public function formatTimestampColumn(string $spreadsheetID, ?int $rowIndex = null): void
+    {
+        try {
+            $range = [
+                'sheetId'          => 0,
+                'startColumnIndex' => 0,
+                'endColumnIndex'   => 1,
+            ];
+
+            if ($rowIndex !== null) {
+                $range['startRowIndex'] = $rowIndex - 1; // 0-based
+                $range['endRowIndex']   = $rowIndex;
+            } else {
+                $range['startRowIndex'] = 1; // skip header row, unbounded downward
+            }
+
+            $request = new \Google_Service_Sheets_Request([
+                'repeatCell' => [
+                    'range' => $range,
+                    'cell' => [
+                        'userEnteredFormat' => [
+                            'numberFormat' => [
+                                'type'    => 'DATE_TIME',
+                                'pattern' => 'yyyy-mm-dd hh:mm:ss',
+                            ],
+                        ],
+                    ],
+                    'fields' => 'userEnteredFormat.numberFormat',
+                ],
+            ]);
+
+            $batchBody = new \Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
+                'requests' => [$request],
+            ]);
+
+            $this->sheetsService->spreadsheets->batchUpdate($spreadsheetID, $batchBody);
+        } catch (\Throwable $e) {
+            Log::error('[DynamicFormGDriveService] formatTimestampColumn failed: ' . $e->getMessage());
+        }
     }
 
     // =========================================================================
