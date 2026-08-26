@@ -74,6 +74,7 @@
 
         {{-- ── Header Card (always visible) ────────────────────────── --}}
         <div class="gf-header-card">
+            <span class="gf-draft-status" id="gfDraftStatus"></span>
             {{-- Section chip (multi-step only, sits inside card at top) --}}
             @if($isMultiStep)
             <div class="gf-section-chip" id="gfSectionIndicator">

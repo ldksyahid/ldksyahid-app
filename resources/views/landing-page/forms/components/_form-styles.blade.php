@@ -93,6 +93,7 @@
 
 /* ─── Header Card ──────────────────────────────────────────────── */
 .gf-header-card {
+    position: relative;
     background: var(--gf-card-bg);
     border-radius: var(--gf-radius);
     box-shadow: var(--gf-shadow);
@@ -100,6 +101,24 @@
     border-top: 8px solid var(--gf-primary);
     padding: 24px;
     margin-bottom: 12px;
+}
+
+.gf-draft-status {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    font-size: .72rem;
+    color: var(--gf-text-muted);
+    opacity: .8;
+}
+
+@media (max-width: 480px) {
+    .gf-draft-status {
+        position: static;
+        display: block;
+        text-align: right;
+        margin-bottom: 8px;
+    }
 }
 
 .gf-form-title {

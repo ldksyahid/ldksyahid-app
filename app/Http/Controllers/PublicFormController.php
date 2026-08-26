@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\FormSubmissionConfirmation;
 use App\Models\forms\MsForm;
 use App\Models\forms\MsFormSetting;
+use App\Models\forms\TrFormDraft;
 use App\Models\forms\TrFormFile;
 use App\Models\forms\TrFormSubmission;
 use App\Services\DynamicFormGDriveService;
@@ -64,8 +65,52 @@ class PublicFormController extends Controller
         // Pass preview flag so the form can show a notice when viewed while closed/draft
         $isPreviewMode = $isPrivileged && !$isAccepting;
 
-        return view('landing-page.forms.show', compact('form', 'fields', 'isPreviewMode'))
+        // Restore any in-progress draft for this user so answers survive a
+        // refresh or a switch to another device (draft is account-based, not
+        // per-browser). Each field partial falls back to it via old($key, $draft[$key]).
+        $draftAnswers = TrFormDraft::findAnswers($form->formID, $user->id) ?? [];
+
+        return view('landing-page.forms.show', compact('form', 'fields', 'isPreviewMode', 'draftAnswers'))
             ->with('title', $form->title);
+    }
+
+    // -------------------------------------------------------------------------
+    // Autosave a partial draft (AJAX, debounced from the client)
+    // -------------------------------------------------------------------------
+
+    public function saveDraft(Request $request, string $slug)
+    {
+        if (!auth()->check()) {
+            return response()->json(['success' => false], 401);
+        }
+
+        $form = MsForm::where('slug', $slug)->where('flagActive', true)->first();
+        if (!$form) {
+            return response()->json(['success' => false], 404);
+        }
+
+        // Only persist keys that correspond to real, non-file, non-system fields
+        // on this form — never trust arbitrary keys from the client; file inputs
+        // can't be restored into a <input type="file"> anyway; and system fields
+        // (e.g. the readonly auto-filled email) must always come fresh from the
+        // logged-in account, never from a possibly-stale draft.
+        $allowedKeys = $form->activeFields()
+            ->get()
+            ->reject(fn ($field) => $field->isDisplayOnly() || $field->isFileUpload() || $field->isSystemField)
+            ->map(fn ($field) => 'field_' . $field->formFieldID)
+            ->all();
+
+        $answers = $request->only($allowedKeys);
+        // Drop empty values so a cleared field doesn't linger in the draft
+        $answers = array_filter($answers, fn ($v) => $v !== null && $v !== '' && $v !== []);
+
+        if (empty($answers)) {
+            TrFormDraft::clear($form->formID, auth()->id());
+        } else {
+            TrFormDraft::upsertAnswers($form->formID, auth()->id(), $answers);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     // -------------------------------------------------------------------------
@@ -321,6 +366,9 @@ class PublicFormController extends Controller
 
             // 12. Increment form submission counter
             $form->incrementSubmissionCount();
+
+            // Submission succeeded — the autosaved draft is no longer needed
+            TrFormDraft::clear($form->formID, auth()->id());
 
             // 13. Send confirmation email directly via Gmail
             $sendConfirmEmail = (bool) $form->getSetting(MsFormSetting::KEY_SEND_CONFIRM_EMAIL, true);
