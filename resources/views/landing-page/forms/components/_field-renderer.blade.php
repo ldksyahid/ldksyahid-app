@@ -6,7 +6,9 @@
 @php
     $fieldName = 'field_' . $field->formFieldID;
     $fieldID   = 'f_' . $field->formFieldID;
-    $oldValue  = old($fieldName);
+    // Falls back to the user's autosaved draft when there's no flashed validation
+    // input to redisplay — restores answers after a refresh or a device switch.
+    $oldValue  = old($fieldName, ($draftAnswers ?? [])[$fieldName] ?? null);
     $isError   = $errors->has($fieldName);
 @endphp
 

@@ -55,6 +55,7 @@
                 var val   = opt.dataset.value;
                 var label = opt.textContent.trim();
                 native.value = val;
+                native.dispatchEvent(new Event('change', { bubbles: true }));
                 current.textContent = val ? label : '-- Pilih salah satu --';
                 current.classList.toggle('placeholder', !val);
                 opts.forEach(function (o) { o.classList.remove('selected'); });
@@ -94,6 +95,7 @@
                 if (!opt) return;
                 if (opt.classList.contains('gf-csel-opt-placeholder')) {
                     native.value = '';
+                    native.dispatchEvent(new Event('change', { bubbles: true }));
                     current.textContent = '-- Pilih salah satu --';
                     current.classList.add('placeholder');
                     opts.forEach(function (o) { o.classList.remove('selected'); });
@@ -264,6 +266,7 @@
             function pick(date) {
                 selected = new Date(date); selected.setHours(0,0,0,0);
                 native.value = toRaw(selected);
+                native.dispatchEvent(new Event('change', { bubbles: true }));
                 if (dispText) {
                     dispText.textContent = toDisplay(selected);
                     dispText.classList.remove('placeholder');
@@ -332,6 +335,7 @@
 
             btnClear && btnClear.addEventListener('click', function () {
                 selected = null; native.value = '';
+                native.dispatchEvent(new Event('change', { bubbles: true }));
                 if (dispText) { dispText.textContent = 'Pilih tanggal'; dispText.classList.add('placeholder'); }
                 close(); trigger.focus();
             });
@@ -428,6 +432,7 @@
                 if (selH === null || selM === null) return;
                 var val = pad(selH) + ':' + pad(selM);
                 native.value = val;
+                native.dispatchEvent(new Event('change', { bubbles: true }));
                 if (dispText) {
                     dispText.textContent = val;
                     dispText.classList.remove('placeholder');
@@ -486,6 +491,7 @@
 
             btnClear && btnClear.addEventListener('click', function () {
                 selH = null; selM = null; native.value = '';
+                native.dispatchEvent(new Event('change', { bubbles: true }));
                 if (dispText) { dispText.textContent = '--:--'; dispText.classList.add('placeholder'); }
                 close(); trigger.focus();
             });
@@ -700,6 +706,7 @@
                 var h = selH !== null ? selH : 0;
                 var m = selM !== null ? selM : 0;
                 native.value = toRaw(selDate, h, m);
+                native.dispatchEvent(new Event('change', { bubbles: true }));
                 if (dispText) {
                     dispText.textContent = toDisplay(selDate, h, m);
                     dispText.classList.remove('placeholder');
@@ -765,6 +772,7 @@
 
             btnClear && btnClear.addEventListener('click', function () {
                 selDate = null; selH = null; selM = null; native.value = '';
+                native.dispatchEvent(new Event('change', { bubbles: true }));
                 if (dispText) { dispText.textContent = 'dd/mm/yyyy --:--'; dispText.classList.add('placeholder'); }
                 close(); trigger.focus();
             });
@@ -888,6 +896,77 @@
     // ── AJAX form submission ────────────────────────────────────────
     var form = document.getElementById('publicFormSubmit');
     if (!form) return;
+
+    // ── Draft autosave ───────────────────────────────────────────────
+    // Keeps in-progress answers on the server (per logged-in account) so
+    // they survive a refresh or picking the form back up on another device.
+    // File inputs are never included — browsers can't restore them anyway.
+    (function () {
+        var draftUrl    = '{{ route("forms.draft.save", $form->slug) }}';
+        var statusEl    = document.getElementById('gfDraftStatus');
+        var saveTimer   = null;
+        var DEBOUNCE_MS = 1500;
+
+        function setStatus(text) {
+            if (statusEl) statusEl.textContent = text;
+        }
+
+        function collectAnswers() {
+            var data = {};
+            form.querySelectorAll('[name^="field_"]').forEach(function (el) {
+                if (el.type === 'file') return;
+                var name = el.name.replace(/\[\]$/, '');
+
+                if (el.type === 'checkbox') {
+                    if (!el.checked) return;
+                    (data[name] = data[name] || []).push(el.value);
+                    return;
+                }
+                if (el.type === 'radio') {
+                    if (!el.checked) return;
+                    data[name] = el.value;
+                    return;
+                }
+                data[name] = el.value;
+            });
+            return data;
+        }
+
+        function saveDraftNow() {
+            var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfMeta) return;
+
+            setStatus('Menyimpan...');
+
+            fetch(draftUrl, {
+                method : 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN'    : csrfMeta.content,
+                    'Content-Type'    : 'application/json',
+                    'Accept'          : 'application/json',
+                },
+                body: JSON.stringify(collectAnswers()),
+            })
+            .then(function (res) { setStatus(res.ok ? 'Tersimpan otomatis' : ''); })
+            .catch(function ()  { setStatus(''); });
+        }
+
+        function scheduleSave() {
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(saveDraftNow, DEBOUNCE_MS);
+        }
+
+        form.addEventListener('input', scheduleSave);
+        form.addEventListener('change', scheduleSave);
+
+        // Exposed so multi-step section navigation can force an immediate save
+        // instead of waiting out the debounce right before the page scrolls away.
+        window.gfSaveDraftNow = function () {
+            clearTimeout(saveTimer);
+            saveDraftNow();
+        };
+    })();
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -1188,7 +1267,46 @@
             dot.classList.toggle('active', i === currentIndex);
             dot.classList.toggle('done',   i < currentIndex);
         });
+
+        updateDescClamp();
+
+        // Force an immediate draft save on every section change instead of
+        // waiting out the input debounce right before the page scrolls away.
+        if (window.gfSaveDraftNow) window.gfSaveDraftNow();
     }
+
+    // ── Header description: full on Bagian 1, wrapped (with toggle) after ──
+    var gfDescEl    = document.getElementById('gfFormDesc');
+    var gfDescToggle = document.getElementById('gfDescToggle');
+
+    function setDescToggleLabel(expanded) {
+        if (gfDescToggle) gfDescToggle.textContent = expanded ? 'Lihat lebih sedikit' : 'Lihat selengkapnya';
+    }
+
+    function updateDescClamp() {
+        if (!gfDescEl) return;
+
+        if (currentIndex === 0) {
+            gfDescEl.classList.remove('gf-form-desc--clamped');
+            if (gfDescToggle) gfDescToggle.style.display = 'none';
+            return;
+        }
+
+        gfDescEl.classList.add('gf-form-desc--clamped');
+        setDescToggleLabel(false);
+        if (gfDescToggle) {
+            gfDescToggle.style.display = gfDescEl.scrollHeight > gfDescEl.clientHeight + 1 ? 'inline-block' : 'none';
+        }
+    }
+
+    if (gfDescToggle) {
+        gfDescToggle.addEventListener('click', function () {
+            gfDescEl.classList.toggle('gf-form-desc--clamped');
+            setDescToggleLabel(!gfDescEl.classList.contains('gf-form-desc--clamped'));
+        });
+    }
+
+    updateDescClamp();
 
     // Validate required fields in the current section before advancing
     function validateSection(index) {

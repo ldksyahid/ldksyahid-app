@@ -662,6 +662,8 @@ Route::prefix('/form')
         Route::get('/{slug}',          [PublicFormController::class, 'show'])     ->name('show');
         Route::post('/{slug}',         [PublicFormController::class, 'submit'])   ->name('submit')
              ->middleware('throttle:15,10');
+        Route::post('/{slug}/draft',   [PublicFormController::class, 'saveDraft'])->name('draft.save')
+             ->middleware('throttle:40,1');
         Route::get('/{slug}/terima-kasih', [PublicFormController::class, 'thankYou'])->name('thank-you');
     });
 

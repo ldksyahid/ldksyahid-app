@@ -74,6 +74,7 @@
 
         {{-- ── Header Card (always visible) ────────────────────────── --}}
         <div class="gf-header-card">
+            <span class="gf-draft-status" id="gfDraftStatus"></span>
             {{-- Section chip (multi-step only, sits inside card at top) --}}
             @if($isMultiStep)
             <div class="gf-section-chip" id="gfSectionIndicator">
@@ -82,7 +83,10 @@
             @endif
             <h1 class="gf-form-title">{{ $form->title }}</h1>
             @if($form->description)
-            <p class="gf-form-desc">{{ $form->description }}</p>
+            <p class="gf-form-desc" id="gfFormDesc">{{ $form->description }}</p>
+            @if($isMultiStep)
+            <button type="button" class="gf-desc-toggle" id="gfDescToggle">Lihat selengkapnya</button>
+            @endif
             @endif
             @if($isMultiStep)
             <div class="gf-progress-track gf-progress-track--hdr">

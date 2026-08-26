@@ -93,6 +93,7 @@
 
 /* ─── Header Card ──────────────────────────────────────────────── */
 .gf-header-card {
+    position: relative;
     background: var(--gf-card-bg);
     border-radius: var(--gf-radius);
     box-shadow: var(--gf-shadow);
@@ -100,6 +101,24 @@
     border-top: 8px solid var(--gf-primary);
     padding: 24px;
     margin-bottom: 12px;
+}
+
+.gf-draft-status {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    font-size: .72rem;
+    color: var(--gf-text-muted);
+    opacity: .8;
+}
+
+@media (max-width: 480px) {
+    .gf-draft-status {
+        position: static;
+        display: block;
+        text-align: right;
+        margin-bottom: 8px;
+    }
 }
 
 .gf-form-title {
@@ -116,6 +135,29 @@
     line-height: 1.7;
     margin: 0;
     white-space: pre-line;
+}
+
+.gf-form-desc--clamped {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.gf-desc-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 4px 0 0;
+    margin: 0;
+    font-size: .8125rem;
+    font-weight: 600;
+    color: var(--gf-primary);
+    cursor: pointer;
+}
+
+.gf-desc-toggle:hover {
+    text-decoration: underline;
 }
 
 /* ─── Error Card ───────────────────────────────────────────────── */

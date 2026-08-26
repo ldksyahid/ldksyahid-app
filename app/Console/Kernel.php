@@ -70,6 +70,11 @@ class Kernel extends ConsoleKernel
 
         // Auto-cleanup disabled — visitor data is kept indefinitely
         // $schedule->command('visitors:cleanup')->dailyAt('02:00');
+
+        // Dynamic forms: delete draft autosaves abandoned for 7+ days
+        $schedule->command('forms:cleanup-drafts')
+                 ->dailyAt('00:15')
+                 ->withoutOverlapping(15);
     }
 
     /**
@@ -93,5 +98,6 @@ class Kernel extends ConsoleKernel
         Commands\CheckKirimdevAccountStatus::class,
         Commands\SyncKirimdevTemplates::class,
         Commands\RegisterKirimdevWebhook::class,
+        Commands\CleanupFormDrafts::class,
     ];
 }
