@@ -1188,7 +1188,42 @@
             dot.classList.toggle('active', i === currentIndex);
             dot.classList.toggle('done',   i < currentIndex);
         });
+
+        updateDescClamp();
     }
+
+    // ── Header description: full on Bagian 1, wrapped (with toggle) after ──
+    var gfDescEl    = document.getElementById('gfFormDesc');
+    var gfDescToggle = document.getElementById('gfDescToggle');
+
+    function setDescToggleLabel(expanded) {
+        if (gfDescToggle) gfDescToggle.textContent = expanded ? 'Lihat lebih sedikit' : 'Lihat selengkapnya';
+    }
+
+    function updateDescClamp() {
+        if (!gfDescEl) return;
+
+        if (currentIndex === 0) {
+            gfDescEl.classList.remove('gf-form-desc--clamped');
+            if (gfDescToggle) gfDescToggle.style.display = 'none';
+            return;
+        }
+
+        gfDescEl.classList.add('gf-form-desc--clamped');
+        setDescToggleLabel(false);
+        if (gfDescToggle) {
+            gfDescToggle.style.display = gfDescEl.scrollHeight > gfDescEl.clientHeight + 1 ? 'inline-block' : 'none';
+        }
+    }
+
+    if (gfDescToggle) {
+        gfDescToggle.addEventListener('click', function () {
+            gfDescEl.classList.toggle('gf-form-desc--clamped');
+            setDescToggleLabel(!gfDescEl.classList.contains('gf-form-desc--clamped'));
+        });
+    }
+
+    updateDescClamp();
 
     // Validate required fields in the current section before advancing
     function validateSection(index) {

@@ -82,7 +82,10 @@
             @endif
             <h1 class="gf-form-title">{{ $form->title }}</h1>
             @if($form->description)
-            <p class="gf-form-desc">{{ $form->description }}</p>
+            <p class="gf-form-desc" id="gfFormDesc">{{ $form->description }}</p>
+            @if($isMultiStep)
+            <button type="button" class="gf-desc-toggle" id="gfDescToggle">Lihat selengkapnya</button>
+            @endif
             @endif
             @if($isMultiStep)
             <div class="gf-progress-track gf-progress-track--hdr">

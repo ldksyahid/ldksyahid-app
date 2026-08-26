@@ -118,6 +118,29 @@
     white-space: pre-line;
 }
 
+.gf-form-desc--clamped {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.gf-desc-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 4px 0 0;
+    margin: 0;
+    font-size: .8125rem;
+    font-weight: 600;
+    color: var(--gf-primary);
+    cursor: pointer;
+}
+
+.gf-desc-toggle:hover {
+    text-decoration: underline;
+}
+
 /* ─── Error Card ───────────────────────────────────────────────── */
 .gf-error-card {
     background: #fff;
