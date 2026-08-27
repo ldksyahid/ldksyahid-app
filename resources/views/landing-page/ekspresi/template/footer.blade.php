@@ -15,8 +15,8 @@
                 </div>
 
                 <div class="col-lg-6 col-md-6 d-flex justify-content-center footer-links">
-                    <img src="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI"
-                        class="" alt="" style="width: 35%">
+                    <img src="{{ $logoEkspresiUrl ?? asset('landing-page-ext-rsrc/img/ekspresi-2026-logo.png') }}"
+                        class="img-fluid" alt="Logo EKSPRESI 2026" style="max-height: 180px;">
                 </div>
 
                 <div class="col-lg-3 col-md-6 footer-links">
