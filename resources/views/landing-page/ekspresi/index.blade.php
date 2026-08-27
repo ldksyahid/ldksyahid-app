@@ -524,12 +524,12 @@
         </section>
         <!-- End Frequently Asked Questions Section -->
 
-        <!-- ======= Clients / Partner Section ======= -->
+        <!-- ======= Join Us / LDK Fakultas Section ======= -->
         <section id="logo" class="clients section-bg py-5">
             <div class="container" data-aos="fade-up">
                 <div class="section-title">
-                    <h2>Media Partner & Sponsor</h2>
-                    <p>Didukung oleh berbagai media partner dan sponsor terpercaya</p>
+                    <h2>Join Us!</h2>
+                    <p>Keluarga Besar LDK Syahid & LDK Fakultas se-UIN Syarif Hidayatullah Jakarta</p>
                 </div>
                 <div class="mx-3">
                     <div class="container rounded border-0 p-4" style="background-color: #fff">
