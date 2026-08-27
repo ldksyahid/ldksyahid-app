@@ -29,7 +29,7 @@
     <link href="{{ $logoEkspresiUrl }}" rel="icon">
     <link href="{{ $logoEkspresiUrl }}" rel="apple-touch-icon">
 
-    @include('landing-page.ekspresi._index-styles-v2')
+    @include('landing-page.ekspresi._index-styles')
 
     <!-- =======================================================
     * Template Name: Arsha
