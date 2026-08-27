@@ -1,3 +1,9 @@
+@php
+    $googleDriveLogoId = '1nQ3wAqQlB8_4mxETAWM8VcDwgAaOjEv2';
+    $logoEkspresiUrl = !empty($googleDriveLogoId) 
+        ? "https://lh3.googleusercontent.com/d/{$googleDriveLogoId}" 
+        : asset('landing-page-ext-rsrc/img/ekspresi-2026-logo.png');
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,22 +12,22 @@
     <meta charset="utf-8" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+    <meta content="Finding Direction, Building Civilization: Menjadi Muslim Berdaya di Tengah Perubahan Zaman" name="description">
+    <meta content="Ekspresi, LDK Syahid, UIN Jakarta, Kaderisasi, Ekspresi 30, 2026" name="keywords">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <meta property="og:title" content="Ekspresi &#9679; LDK Syahid" />
+    <meta property="og:title" content="EKSPRESI 2026 &#9679; LDK Syahid" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ url()->current() }}" />
-    <meta property="og:image" content="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI" />
+    <meta property="og:image" content="{{ $logoEkspresiUrl }}" />
     <meta property="og:image:width" content="400" />
     <meta property="og:image:height" content="300" />
-    <meta property="og:description" content="Eksplorasi Potensi Diri Islami" />
+    <meta property="og:description" content="Finding Direction, Building Civilization: Menjadi Muslim Berdaya di Tengah Perubahan Zaman" />
 
-    <title>Ekspresi &#9679; LDK Syahid</title>
+    <title>EKSPRESI 2026 &#9679; LDK Syahid</title>
 
-    <link href="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI" rel="icon">
-    <link href="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI" rel="apple-touch-icon">
+    <link href="{{ $logoEkspresiUrl }}" rel="icon">
+    <link href="{{ $logoEkspresiUrl }}" rel="apple-touch-icon">
 
     @include('landing-page.ekspresi._index-styles')
 
@@ -42,18 +48,18 @@
             <div class="row">
                 <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
                     data-aos="fade-up" data-aos-delay="200">
-                    <h1>Menjadi Muslim Visioner di Era Digital : Menjaga Nilai Islam di Tengah Disrupsi Teknologi dan Budaya</h1>
-                    <h2>Berkembang Dalam Digitalisasi, Bangkitkan Muslim Sejati</h2>
+                    <h1 class="fw-bold">Finding Direction, Building Civilization: Menjadi Muslim Berdaya di Tengah Perubahan Zaman</h1>
+                    <h2>Eksplorasi Potensi Diri Islami 2026 — LDK Syahid UIN Syarif Hidayatullah Jakarta</h2>
                     <div class="d-flex flex-column flex-md-row justify-content-center justify-content-lg-start">
-                        <a href="https://ldksyah.id/EKSPRESI25"
-                            class="btn-get-started scrollto mb-3 mb-md-0 me-md-3" target="_blank">Daftar Sekarang</a>
+                        <a href="https://ldksyah.id/ekspresi26"
+                            class="btn-get-started scrollto mb-3 mb-md-0 me-md-3" target="_blank" rel="noopener noreferrer">Daftar Sekarang</a>
                         <a href="https://youtu.be/oReHVyhX8xQ?si=rqtMWSf-LcY88ViQ" class="glightbox btn-watch-video d-flex align-items-center"><i
                                 class="bi bi-play-circle me-2"></i><span>Tonton Video</span></a>
                     </div>
                 </div>
                 <div class="col-lg-6 order-1 order-lg-2 hero-img text-center" data-aos="zoom-in" data-aos-delay="200">
-                    <img src="https://lh3.googleusercontent.com/d/19WKz1f2gnjxw4tx9_RFZK9MHd6nj4ZcI"
-                        class="img-fluid animated" alt="" style="width: 60%">
+                    <img src="{{ $logoEkspresiUrl }}"
+                        class="img-fluid animated" alt="Logo EKSPRESI 2026" style="max-height: 380px;">
                 </div>
             </div>
         </div>
@@ -61,161 +67,6 @@
     <!-- End Hero -->
 
     <main id="main">
-        <!-- ======= Clients Section ======= -->
-        <section id="logo" class="clients section-bg">
-            <div class="mx-3">
-                <div class="container rounded border-0" style="background-color: #fff">
-                    <div class="row justify-content-center" data-aos="zoom-in">
-
-                        <div class="col-lg-12 col-md-4 col-12 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1"
-                                class="img-fluid" alt="" style="width: 100px;">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1Fj4hZRy7SNQ1Kq72JvY4M557noiULg-i"
-                                class="img-fluid" alt="" style="max-width: 65%;">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1R-3mi9Jzw5vt3-VKVPic9BTvJeFkaikK"
-                                class="img-fluid" alt="" style="max-width: 65%;">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1INzkD8YgOvf5_FVIXEnW40wUCsxJdepp"
-                                class="img-fluid" alt="" style="max-width: 65%;">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1t_dDa8IDgpOnH85RvU67DV3W2CxhSetx"
-                                class="img-fluid" alt="" style="max-width: 65%;">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1yU1Oj1qrFBanjcoj3ZhO1LPFOon7V92-"
-                                class="img-fluid" alt="" style="max-width: 65%;">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1u6mS175Q2Fbqd2k6CRNqKq0E3q5Sde1U"
-                                class="img-fluid" alt="" style="max-width: 65%;">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1Iem3JZgYMXRitO1GOb9lTMVeMjiUQFUI"
-                                class="img-fluid" alt="" style="max-width: 65%;">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1HinEWSv90pL0MUZ1F0dAbyHNSmk2L-B5"
-                                class="img-fluid" alt="" style="max-width: 65%;">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1zgyRIwgN-wnFHAquVyBvSuyhb4ZzpJ0R"
-                                class="img-fluid" alt="" style="max-width: 65%;">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
-                            <img src="https://lh3.googleusercontent.com/d/1sr4GI8TE-Z2Og4PBm3hqm1Bb38NryJ6U"
-                                class="img-fluid" alt="" style="max-width: 65%;">
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </section>
-        <!-- End Cliens Section -->
-
-        <!-- ======= Services Section ======= -->
-        <section id="hyperlink" class="services section-bg">
-            <div class="container" data-aos="fade-up">
-
-                <div class="section-title">
-                    <h2>Hyperlink</h2>
-                    <p>Klik link berikut untuk melihat informasi lainnya tentang ekspresi</p>
-                </div>
-
-                <div class="row text-center justify-content-center">
-                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://ldksyah.id/EKSPRESI25" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
-                            <div class="icon-box text-center">
-                                <div class="icon"><i class="bi bi-rocket-takeoff"></i></div>
-                                <h4>Pendaftaran Ekspresi</h4>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://ldksyah.id/SuratIzinOrtu_EKSPRESI2025" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
-                            <div class="icon-box text-center">
-                                <div class="icon"><i class="bi bi-file-earmark-check"></i></div>
-                                <h4>Surat Izin Orangtua</h4>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://wa.me/6287725850526"  target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
-                            <div class="icon-box text-center">
-                                <div class="icon"><i class="bi bi-whatsapp"></i></div>
-                                <h4>Pembayaran Ekspresi</h4>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://ldksyah.id/TwibbonEkspresi25" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
-                            <div class="icon-box text-center">
-                                <div class="icon"><i class="bi bi-reddit"></i></div>
-                                <h4>Twibbon Ekspresi</h4>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://ldksyah.id/TMEkspresi25" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
-                            <div class="icon-box text-center">
-                                <div class="icon"><i class="bi bi-building-fill-exclamation"></i></div>
-                                <h4>Technical Meeting</h4>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://ldksyah.id/NameTagEkspresi25" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
-                            <div class="icon-box text-center">
-                                <div class="icon"><i class="bi bi-person-badge-fill"></i></div>
-                                <h4>Name Tag Peserta</h4>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://ldksyah.id/KelompokMentoring" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
-                            <div class="icon-box text-center">
-                                <div class="icon"><i class="bi bi-house-heart"></i></div>
-                                <h4>Kelompok Mentoring</h4>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://wa.me/62085213041492" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
-                            <div class="icon-box text-center">
-                                <div class="icon"><i class="bi bi-whatsapp"></i></div>
-                                <h4>Narahubung Ikhwan</h4>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex justify-content-center m-3" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://wa.me/628978386874" target="_blank" rel="noopener noreferrer" class="w-100 hyperlink-item">
-                            <div class="icon-box text-center">
-                                <div class="icon"><i class="bi bi-whatsapp"></i></div>
-                                <h4>Narahubung Akhwat</h4>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- End Services Section -->
-
         <!-- ======= Why Us Section ======= -->
         <section id="pengenalan" class="why-us section-bg py-5">
             <div class="container-fluid" data-aos="fade-up">
@@ -250,8 +101,8 @@
                             class="col-lg-12 d-flex flex-column justify-content-center align-items-stretch order-2 order-lg-1">
                             <div class="content">
                                 <h4>Berpijak pada pemikiran tersebut, LDK Syahid bermaksud melaksanakan kegiatan Latihan
-                                    Kader Dakwah (LKD) 2025 yang dinamakan "EKSPRESI - Eksplorasi Potensi Diri Islami
-                                    2025.</h4>
+                                    Kader Dakwah (LKD) 2026 yang dinamakan "EKSPRESI 30 - Eksplorasi Potensi Diri Islami
+                                    2026".</h4>
                             </div>
                         </div>
                         <div
@@ -331,125 +182,249 @@
         </section>
         <!-- End About Us Section -->
 
-        <!-- ======= Skills Section ======= -->
-        <section id="pendaftaran" class="skills section-bg">
+        <!-- ======= Pendaftaran & Tanggal Penting Section ======= -->
+        <section id="pendaftaran" class="skills section-bg py-5">
             <div class="container" data-aos="fade-up">
 
-                <div class="row">
-                    <div class="col-lg-4 pt-4 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
-                        <h3>Tanggal Penting</h3>
-                        <br>
-                        <div class="border-rules">
-                            <div class="p-2">
-                                <p><b>1 September 2025 - 6 Oktober 2025</b> <br> Pendaftaran (Mengisi Form Pendaftaran)
-                                </p>
+                <div class="section-title">
+                    <h2>Tanggal Penting & Tata Cara Pendaftaran</h2>
+                    <p>Catat jadwal penting dan ikuti 5 langkah mudah pendaftaran EKSPRESI 30</p>
+                </div>
+
+                {{-- Row 1: 3 Card Tanggal Penting --}}
+                <div class="row g-4 justify-content-center mb-5">
+                    {{-- 1. Pendaftaran Peserta --}}
+                    <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="date-card text-center h-100">
+                            <div class="date-card-icon">
+                                <i class="bi bi-calendar2-check"></i>
                             </div>
-                        </div>
-                        <br>
-                        <div class="border-rules">
-                            <div class="p-2">
-                                <p><b>08 Oktober 2025</b> <br> Technical Meeting</p>
+                            <h4>Pendaftaran Peserta</h4>
+                            <div class="date-badge mb-3">
+                                30 Agustus – 05 Oktober 2026
                             </div>
-                        </div>
-                        <br>
-                        <div class="border-rules">
-                            <div class="p-2">
-                                <p><b>10 - 12 Oktober 2025</b> <br> Mengikuti EKSPRESI </p>
-                            </div>
+                            <p class="date-card-desc">Pengisian formulir pendaftaran online dan penyerahan berkas perizinan.</p>
                         </div>
                     </div>
-                    <div class="col-lg-8 pt-4 pt-lg-0 content timeline" data-aos="fade-right" data-aos-delay="100">
-                        <h3 class="text-end">Tata Cara Pendaftaran</h3>
-                        <ul class="mt-5">
-                            <li style="--accent-color:#a20007">
-                                <div class="date">Langkah 1</div>
-                                <div class="title">
-                                    <p>Buka Website</p>
-                                </div>
-                                <div style="z-index : 1">
-                                    <p>Masuk ke website Ekspresi LDK syahid <a href="https://www.ldksyah.id/ekspresi"
-                                            target="_blank" rel="noopener noreferrer">(ldksyah.id/ekspresi)</a> dan
-                                        klik <a
-                                            href="https://ldksyah.id/EKSPRESI25"
-                                            target="_blank" rel="noopener noreferrer">Daftar Sekarang</a></p>
-                                </div>
-                            </li>
-                            <li style="--accent-color:#a20007">
-                                <div class="date">Langkah 2</div>
-                                <div class="title">
-                                    <p>Siapkan Berkas</p>
-                                </div>
-                                <div>
-                                    <p>Untuk memudahkan pengisian form, silahkan siapkan berkas yang dibutuhkan</p>
-                                    <div class="border-rules">
-                                        <p class="p-2">KTM (Kartu tanda Mahasiswa) / KRS (Kartu Rencana Studi)</p>
-                                    </div>
-                                    <br>
-                                    <div class="border-rules">
-                                        <p class="p-2">Bukti pembayaran EKSPRESI (jika melakukan pembayaran secara
-                                            tunai, silahkan ke stand EKSPRESI terdekatmu untuk meminta kwitansi sebagai
-                                            bukti pembayaran)</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li style="--accent-color:#a20007">
-                                <div class="date">Langkah 3</div>
-                                <div class="title">
-                                    <p>Download File Izin Orang Tua</p>
-                                </div>
-                                <div style="z-index : 1">
-                                    <p>Ditengah pertanyaan akan ada file izin orang tua yang harus kamu download,
-                                        pastikan kamu tidak lupa mendownload file tersebut</p>
-                                </div>
-                            </li>
-                            <li style="--accent-color:#a20007">
-                                <div class="date">Langkah 4</div>
-                                <div class="title">
-                                    <p>Isi Semua Pertanyaan Dan Kirim</p>
-                                </div>
-                                <div>
-                                    <p>Pastikan semua pertanyaan telah diisi, lalu silahkan submit pendaftaran kemudian
-                                        join grup yang ada di akhir informasi pendaftaran</p>
-                                </div>
-                            </li>
-                            <li style="--accent-color:#a20007">
-                                <div class="date">Langkah 5</div>
-                                <div class="title">
-                                    <p>Pergi ke stand Ekspresi Membawa File Izin Orang Tua</p>
-                                </div>
-                                <div style="z-index : 1">
-                                    <p>Setelah mengisi semua rangkaian pendaftaran, selanjutnya silahkan isi file izin
-                                        orang tua lalu serahkan ke stand EKSPRESI terdekatmu sebagai bukti kamu telah
-                                        mengisi pendaftaran (wajib diserahkan)</p>
-                                </div>
-                            </li>
-                            <li style="--accent-color:#a20007">
-                                <div class="date">Langkah 6</div>
-                                <div class="title">
-                                    <p>Contact Person</p>
-                                </div>
-                                <div>
-                                    <p>Jika ada pertanyaan lebih lanjut silahkan menghubungi nomor berikut</p>
-                                    <div class="border-rules">
-                                        <p class="p-2">Ikhwan : <a href="http://wa.me/6285213041492"
-                                                target="_blank" rel="noopener noreferrer">085213041492 </a><br>(M. Azzam Alhanif)</p>
-                                    </div>
-                                    <br>
-                                    <div class="border-rules">
-                                        <p class="p-2">Akhwat : <a href="http://wa.me/628978386874"
-                                                target="_blank" rel="noopener noreferrer">08978386874
-                                            </a><br>(Adinda Kamilaturrahma)</p>
-                                    </div>
-                                </div>
-                            </li>
 
-                        </ul>
+                    {{-- 2. Technical Meeting --}}
+                    <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="date-card text-center h-100">
+                            <div class="date-card-icon">
+                                <i class="bi bi-megaphone"></i>
+                            </div>
+                            <h4>Technical Meeting (TM)</h4>
+                            <div class="date-badge mb-3">
+                                08 Oktober 2026
+                            </div>
+                            <p class="date-card-desc">Briefing teknis kegiatan, pembagian kelompok, dan pengenalan tata tertib.</p>
+                        </div>
+                    </div>
+
+                    {{-- 3. Pelaksanaan EKSPRESI --}}
+                    <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="date-card text-center h-100">
+                            <div class="date-card-icon">
+                                <i class="bi bi-trophy"></i>
+                            </div>
+                            <h4>Pelaksanaan EKSPRESI</h4>
+                            <div class="date-badge mb-3">
+                                09 – 11 Oktober 2026
+                            </div>
+                            <p class="date-card-desc">Rangkaian acara kaderisasi LDK Syahid (materi, kelas minat bakat, & outbound).</p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Row 2: Tata Cara Pendaftaran (5 Langkah Berurutan) --}}
+                <div class="mt-4" data-aos="fade-up">
+                    <div class="text-center mb-4">
+                        <h3 class="fw-bold" style="color: #1E6310;">
+                            <i class="bi bi-list-check me-2"></i>Alur Pendaftaran (5 Langkah Mudah)
+                        </h3>
+                    </div>
+
+                    <div class="row g-3 g-lg-4 justify-content-center">
+                        {{-- Step 1 --}}
+                        <div class="col-xl col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                            <div class="step-card h-100 text-center">
+                                <div class="step-badge">01</div>
+                                <div class="step-icon mb-2"><i class="bi bi-globe2"></i></div>
+                                <h4>Buka Website</h4>
+                                <p>Akses website <a href="https://www.ldksyah.id/ekspresi" target="_blank" rel="noopener noreferrer">ldksyah.id/ekspresi</a> lalu klik tombol <b>Daftar Sekarang</b>.</p>
+                            </div>
+                        </div>
+
+                        {{-- Step 2 --}}
+                        <div class="col-xl col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="150">
+                            <div class="step-card h-100 text-center">
+                                <div class="step-badge">02</div>
+                                <div class="step-icon mb-2"><i class="bi bi-folder2-open"></i></div>
+                                <h4>Siapkan Berkas</h4>
+                                <p>Siapkan foto/scan <b>KTM / KRS aktif</b> dan bukti transfer / bukti bayar tunai di stand.</p>
+                            </div>
+                        </div>
+
+                        {{-- Step 3 --}}
+                        <div class="col-xl col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                            <div class="step-card h-100 text-center">
+                                <div class="step-badge">03</div>
+                                <div class="step-icon mb-2"><i class="bi bi-file-earmark-arrow-down"></i></div>
+                                <h4>Surat Izin Ortu</h4>
+                                <p>Unduh berkas izin di <a href="https://ldksyah.id/SuratIzinOrtu_Ekspresi2026" target="_blank" rel="noopener noreferrer">Template Surat Izin</a>, cetak & minta tanda tangan orang tua/wali.</p>
+                            </div>
+                        </div>
+
+                        {{-- Step 4 --}}
+                        <div class="col-xl col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="250">
+                            <div class="step-card h-100 text-center">
+                                <div class="step-badge">04</div>
+                                <div class="step-icon mb-2"><i class="bi bi-pencil-square"></i></div>
+                                <h4>Isi Form & Kirim</h4>
+                                <p>Lengkapi seluruh formulir pendaftaran di <a href="https://ldksyah.id/ekspresi26" target="_blank" rel="noopener noreferrer">Form Pendaftaran</a> lalu klik submit.</p>
+                            </div>
+                        </div>
+
+                        {{-- Step 5 --}}
+                        <div class="col-xl col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                            <div class="step-card h-100 text-center">
+                                <div class="step-badge">05</div>
+                                <div class="step-icon mb-2"><i class="bi bi-check2-circle"></i></div>
+                                <h4>Upload & Konfirmasi</h4>
+                                <p>Upload berkas yang sudah ditandatangani ke <a href="https://ldksyah.id/PengumpulanSuratIzinOrtu_Ekspresi26" target="_blank" rel="noopener noreferrer">Form Pengumpulan</a> atau serahkan ke stand.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
             </div>
         </section>
-        <!-- End Skills Section -->
+        <!-- End Skills / Pendaftaran Section -->
+
+        <!-- ======= Services / Hyperlink Section ======= -->
+        <section id="hyperlink" class="services section-bg py-5">
+            <div class="container" data-aos="fade-up">
+
+                <div class="section-title">
+                    <h2>Pusat Tautan & Berkas</h2>
+                    <p>Akses cepat seluruh formulir pendaftaran, berkas perizinan, atribut peserta, dan narahubung</p>
+                </div>
+
+                {{-- Kategori 1: Alur Pendaftaran Utama (4 Kolom) --}}
+                <div class="row g-4 justify-content-center mb-4">
+                    {{-- 1. Form Pendaftaran Peserta --}}
+                    <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://ldksyah.id/ekspresi26" target="_blank" rel="noopener noreferrer" class="hyperlink-item">
+                            <div class="icon-box highlight-card text-center">
+                                <div class="icon"><i class="bi bi-rocket-takeoff"></i></div>
+                                <h4>Form Pendaftaran</h4>
+                                <span class="badge-card-sub">Daftar online peserta</span>
+                            </div>
+                        </a>
+                    </div>
+                    {{-- 2. Template Surat Izin Ortu --}}
+                    <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="150">
+                        <a href="https://ldksyah.id/SuratIzinOrtu_Ekspresi2026" target="_blank" rel="noopener noreferrer" class="hyperlink-item">
+                            <div class="icon-box text-center">
+                                <div class="icon"><i class="bi bi-file-earmark-check"></i></div>
+                                <h4>Template Surat Izin</h4>
+                                <span class="badge-card-sub">Unduh file izin orang tua</span>
+                            </div>
+                        </a>
+                    </div>
+                    {{-- 3. Form Pengumpulan Surat Izin Ortu --}}
+                    <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                        <a href="https://ldksyah.id/PengumpulanSuratIzinOrtu_Ekspresi26" target="_blank" rel="noopener noreferrer" class="hyperlink-item">
+                            <div class="icon-box text-center">
+                                <div class="icon"><i class="bi bi-file-earmark-arrow-up"></i></div>
+                                <h4>Pengumpulan Surat Izin</h4>
+                                <span class="badge-card-sub">Upload berkas bertanda tangan</span>
+                            </div>
+                        </a>
+                    </div>
+                    {{-- 4. Konfirmasi Pembayaran --}}
+                    <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="250">
+                        <a href="https://wa.me/6287796214820" target="_blank" rel="noopener noreferrer" class="hyperlink-item">
+                            <div class="icon-box text-center">
+                                <div class="icon"><i class="bi bi-credit-card-2-front"></i></div>
+                                <h4>Konfirmasi Pembayaran</h4>
+                                <span class="badge-card-sub">Kirim bukti via WhatsApp</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Kategori 2: Atribut & Persiapan Acara (4 Kolom) --}}
+                <div class="row g-4 justify-content-center mb-5">
+                    {{-- 5. Twibbon Ekspresi --}}
+                    <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="javascript:void(0)" class="hyperlink-item disabled-link" title="Informasi Twibbon Menyusul">
+                            <div class="icon-box dashed-card text-center">
+                                <span class="badge-status-menyusul">Menyusul</span>
+                                <div class="icon"><i class="bi bi-image"></i></div>
+                                <h4>Twibbon Peserta</h4>
+                                <span class="badge-card-sub">Segera dirilis</span>
+                            </div>
+                        </a>
+                    </div>
+                    {{-- 6. Technical Meeting --}}
+                    <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="150">
+                        <a href="javascript:void(0)" class="hyperlink-item disabled-link" title="Informasi Technical Meeting Menyusul">
+                            <div class="icon-box dashed-card text-center">
+                                <span class="badge-status-menyusul">Menyusul</span>
+                                <div class="icon"><i class="bi bi-building-fill-exclamation"></i></div>
+                                <h4>Technical Meeting</h4>
+                                <span class="badge-card-sub">Briefing & persiapan</span>
+                            </div>
+                        </a>
+                    </div>
+                    {{-- 7. Name Tag Peserta --}}
+                    <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                        <a href="javascript:void(0)" class="hyperlink-item disabled-link" title="Informasi Name Tag Peserta Menyusul">
+                            <div class="icon-box dashed-card text-center">
+                                <span class="badge-status-menyusul">Menyusul</span>
+                                <div class="icon"><i class="bi bi-person-badge-fill"></i></div>
+                                <h4>Name Tag Peserta</h4>
+                                <span class="badge-card-sub">Format identitas peserta</span>
+                            </div>
+                        </a>
+                    </div>
+                    {{-- 8. Kelompok Mentoring --}}
+                    <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="250">
+                        <a href="javascript:void(0)" class="hyperlink-item disabled-link" title="Informasi Kelompok Mentoring Menyusul">
+                            <div class="icon-box dashed-card text-center">
+                                <span class="badge-status-menyusul">Menyusul</span>
+                                <div class="icon"><i class="bi bi-people-fill"></i></div>
+                                <h4>Kelompok Mentoring</h4>
+                                <span class="badge-card-sub">Daftar kelompok peserta</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Kategori 3: Narahubung WhatsApp Strip (2 Kontak) --}}
+                <div class="row justify-content-center">
+                    <div class="col-lg-10" data-aos="fade-up" data-aos-delay="300">
+                        <div class="contact-strip text-center p-3 p-md-4">
+                            <h5 class="text-white fw-bold mb-1">
+                                <i class="bi bi-headset me-2 text-warning"></i>Butuh Bantuan atau Informasi Lebih Lanjut?
+                            </h5>
+                            <p class="text-light opacity-75 mb-3 small">Silahkan hubungi narahubung resmi panitia EKSPRESI 2026 melalui WhatsApp:</p>
+                            <div class="d-flex flex-wrap justify-content-center gap-3">
+                                <a href="https://wa.me/6287713671510" target="_blank" rel="noopener noreferrer" class="btn btn-contact-wa">
+                                    <i class="bi bi-whatsapp me-2"></i>Narahubung Ikhwan (0877-1367-1510)
+                                </a>
+                                <a href="https://wa.me/6285779446994" target="_blank" rel="noopener noreferrer" class="btn btn-contact-wa">
+                                    <i class="bi bi-whatsapp me-2"></i>Narahubung Akhwat (0857-7944-6994)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- End Services / Hyperlink Section -->
 
         <!-- ======= Frequently Asked Questions Section ======= -->
         <section id="QnA" class="faq section-bg">
@@ -509,7 +484,7 @@
                             <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
                                 <p class="answere">
                                     Di Catat yah, jangan sampai kamu ketinggalan!! Untuk tanggal pendaftarannya kita
-                                    buka dari 1 September - 6 Oktober 2025
+                                    buka dari 30 Agustus - 05 Oktober 2026
                                 </p>
                             </div>
                         </li>
@@ -548,6 +523,80 @@
             </div>
         </section>
         <!-- End Frequently Asked Questions Section -->
+
+        <!-- ======= Clients / Partner Section ======= -->
+        <section id="logo" class="clients section-bg py-5">
+            <div class="container" data-aos="fade-up">
+                <div class="section-title">
+                    <h2>Media Partner & Sponsor</h2>
+                    <p>Didukung oleh berbagai media partner dan sponsor terpercaya</p>
+                </div>
+                <div class="mx-3">
+                    <div class="container rounded border-0 p-4" style="background-color: #fff">
+                        <div class="row justify-content-center align-items-center" data-aos="zoom-in">
+
+                            <div class="col-lg-12 col-md-4 col-12 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1a0T3LKmzN9mow39mWYwFPGqTpmSXjNk1"
+                                    class="img-fluid" alt="" style="width: 100px;">
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1Fj4hZRy7SNQ1Kq72JvY4M557noiULg-i"
+                                    class="img-fluid" alt="" style="max-width: 65%;">
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1R-3mi9Jzw5vt3-VKVPic9BTvJeFkaikK"
+                                    class="img-fluid" alt="" style="max-width: 65%;">
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1INzkD8YgOvf5_FVIXEnW40wUCsxJdepp"
+                                    class="img-fluid" alt="" style="max-width: 65%;">
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1t_dDa8IDgpOnH85RvU67DV3W2CxhSetx"
+                                    class="img-fluid" alt="" style="max-width: 65%;">
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1yU1Oj1qrFBanjcoj3ZhO1LPFOon7V92-"
+                                    class="img-fluid" alt="" style="max-width: 65%;">
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1u6mS175Q2Fbqd2k6CRNqKq0E3q5Sde1U"
+                                    class="img-fluid" alt="" style="max-width: 65%;">
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1Iem3JZgYMXRitO1GOb9lTMVeMjiUQFUI"
+                                    class="img-fluid" alt="" style="max-width: 65%;">
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1HinEWSv90pL0MUZ1F0dAbyHNSmk2L-B5"
+                                    class="img-fluid" alt="" style="max-width: 65%;">
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1zgyRIwgN-wnFHAquVyBvSuyhb4ZzpJ0R"
+                                    class="img-fluid" alt="" style="max-width: 65%;">
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center mb-4">
+                                <img src="https://lh3.googleusercontent.com/d/1sr4GI8TE-Z2Og4PBm3hqm1Bb38NryJ6U"
+                                    class="img-fluid" alt="" style="max-width: 65%;">
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Clients Section -->
     </main>
 
     <div id="preloader"></div>
