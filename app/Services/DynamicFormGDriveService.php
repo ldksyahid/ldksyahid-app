@@ -458,6 +458,97 @@ class DynamicFormGDriveService
         }
     }
 
+    /**
+     * Find the 1-based sheet row for a submission by matching column B
+     * (the "Submission ID" cell, written by PublicFormController::submit()),
+     * not by trusting a possibly-stale TrFormSubmission.gsheetRowIndex — a
+     * row deleted elsewhere shifts every later row up, so the stored index
+     * can drift. Callers doing a WRITE against a specific row (update/delete)
+     * must always re-resolve it through this method first.
+     */
+    public function findRowIndexBySubmissionId(string $spreadsheetID, int $submissionID): ?int
+    {
+        $rows = $this->readSpreadsheetRows($spreadsheetID);
+
+        foreach ($rows as $i => $row) {
+            if ($i === 0) {
+                continue; // header row (Sheet1 row 1)
+            }
+            if (($row[1] ?? null) === (string) $submissionID) {
+                return $i + 1; // $rows[0] is Sheet1 row 1, so array index i => sheet row i+1
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Read a single row's cell values (1-based sheet row number).
+     */
+    public function readRow(string $spreadsheetID, int $rowIndex): array
+    {
+        try {
+            $response = $this->sheetsService->spreadsheets_values->get($spreadsheetID, "Sheet1!A{$rowIndex}:ZZ{$rowIndex}");
+            $values   = $response->getValues();
+            return $values[0] ?? [];
+        } catch (\Exception $e) {
+            Log::error("[DynamicFormGDriveService] Failed to read row {$rowIndex} of {$spreadsheetID}: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Overwrite an entire row in one batched call (1-based sheet row number).
+     * Exceptions are NOT caught here — callers update DB state based on
+     * whether this succeeds, so a failure must propagate instead of being
+     * silently swallowed.
+     */
+    public function updateRow(string $spreadsheetID, int $rowIndex, array $rowData): void
+    {
+        $lastColLetter = $this->colIndexToLetter(max(count($rowData) - 1, 0));
+        $range         = "Sheet1!A{$rowIndex}:{$lastColLetter}{$rowIndex}";
+
+        $body = new Google_Service_Sheets_ValueRange([
+            'values' => [array_values($rowData)],
+        ]);
+
+        $this->sheetsService->spreadsheets_values->update(
+            $spreadsheetID,
+            $range,
+            $body,
+            ['valueInputOption' => 'USER_ENTERED']
+        );
+    }
+
+    /**
+     * Physically delete a single row (1-based sheet row number) — every row
+     * below it shifts up by one. Callers MUST decrement
+     * TrFormSubmission.gsheetRowIndex for every other submission of this
+     * form whose stored index is greater than $rowIndex right after this
+     * succeeds. Exceptions are NOT caught here for the same reason as
+     * updateRow() — the caller's DB changes must stay conditional on this
+     * actually succeeding.
+     */
+    public function deleteRow(string $spreadsheetID, int $rowIndex): void
+    {
+        $request = new \Google_Service_Sheets_Request([
+            'deleteDimension' => [
+                'range' => [
+                    'sheetId'    => 0,
+                    'dimension'  => 'ROWS',
+                    'startIndex' => $rowIndex - 1, // 0-based, inclusive
+                    'endIndex'   => $rowIndex,     // 0-based, exclusive
+                ],
+            ],
+        ]);
+
+        $batchBody = new \Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
+            'requests' => [$request],
+        ]);
+
+        $this->sheetsService->spreadsheets->batchUpdate($spreadsheetID, $batchBody);
+    }
+
     // =========================================================================
     // Private helpers
     // =========================================================================

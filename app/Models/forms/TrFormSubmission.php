@@ -123,4 +123,19 @@ class TrFormSubmission extends Model
 
         return $count >= $maxPerIp;
     }
+
+    /**
+     * After a sheet row is physically deleted (DynamicFormGDriveService::deleteRow()),
+     * every row below it shifts up by one — keep every other submission's
+     * cached row pointer in sync. This is a best-effort cache: any write
+     * path (edit/delete) MUST still re-resolve the true row via
+     * DynamicFormGDriveService::findRowIndexBySubmissionId() before trusting
+     * it, so a missed/partial decrement here self-heals on the next write.
+     */
+    public static function decrementRowIndexesAfter(int $formID, int $deletedRowIndex): void
+    {
+        self::where('formID', $formID)
+            ->where('gsheetRowIndex', '>', $deletedRowIndex)
+            ->decrement('gsheetRowIndex');
+    }
 }
