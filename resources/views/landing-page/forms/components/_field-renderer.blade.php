@@ -636,6 +636,10 @@
 
 {{-- ===== FILE ===== --}}
 @case('file')
+    @php
+        $draftFile = ($draftAnswers ?? [])[$fieldName] ?? null;
+        $draftFile = (is_array($draftFile) && !empty($draftFile['__file'])) ? $draftFile : null;
+    @endphp
     <div class="gf-card {{ $isError ? 'has-error' : '' }}">
         <label class="gf-label">
             {{ $field->label }}
@@ -645,12 +649,17 @@
         <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
 
-        <div class="gf-file-drop" id="drop_{{ $fieldID }}">
+        <div class="gf-file-drop{{ $draftFile ? ' gf-file-drop--staged' : '' }}"
+             id="drop_{{ $fieldID }}"
+             data-field-id="{{ $field->formFieldID }}"
+             data-required="{{ $field->isRequired ? '1' : '0' }}"
+             data-upload-url="{{ route('forms.draft.uploadFile', [$form->slug, $field->formFieldID]) }}"
+             data-remove-url="{{ route('forms.draft.removeFile', [$form->slug, $field->formFieldID]) }}">
             <input
                 type="file"
                 id="{{ $fieldID }}"
                 name="{{ $fieldName }}"
-                {{ $field->isRequired ? 'required' : '' }}
+                {{ ($field->isRequired && !$draftFile) ? 'required' : '' }}
                 @if($field->fieldType === 'image') accept="image/*" @endif
                 @if(!empty($field->validation['acceptedTypes']))
                     accept=".{{ implode(',.', (array) $field->validation['acceptedTypes']) }}"
@@ -669,8 +678,13 @@
                 @endif
             </div>
             <div class="gf-file-badge">
-                <i class="fas fa-paperclip fa-xs"></i>
-                <span>Belum ada file dipilih</span>
+                <i class="fas fa-{{ $draftFile ? 'check-circle' : 'paperclip' }} fa-xs"></i>
+                <span>{{ $draftFile ? $draftFile['originalFileName'] . ' (tersimpan sementara)' : 'Belum ada file dipilih' }}</span>
+                @if($draftFile)
+                <button type="button" class="gf-file-remove" title="Hapus file ini">
+                    <i class="fas fa-times"></i>
+                </button>
+                @endif
             </div>
         </div>
 

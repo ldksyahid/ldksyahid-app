@@ -847,13 +847,22 @@
         });
     });
 
-    // ── File upload drag & drop ─────────────────────────────────────
+    // ── File upload drag & drop, with eager pre-upload into the draft ────
+    // The moment a file is picked (before the form is submitted), it's sent
+    // to storage/app/form-uploads-tmp and tied to the user's draft, so it
+    // survives a refresh or a switch to another device — the actual Google
+    // Drive upload only happens at final submit (see PublicFormController).
     document.querySelectorAll('.gf-file-drop').forEach(function (drop) {
-        var input    = drop.querySelector('input[type="file"]');
-        var badge    = drop.querySelector('.gf-file-badge');
-        var badgeTxt = badge ? badge.querySelector('span') : null;
+        var input     = drop.querySelector('input[type="file"]');
+        var badge     = drop.querySelector('.gf-file-badge');
+        var badgeTxt  = badge ? badge.querySelector('span') : null;
+        var badgeIcon = badge ? badge.querySelector('i') : null;
+        var uploadUrl = drop.dataset.uploadUrl;
+        var removeUrl = drop.dataset.removeUrl;
+        var isRequired = drop.dataset.required === '1';
 
         drop.addEventListener('click', function (e) {
+            if (e.target.closest('.gf-file-remove')) return;
             if (e.target !== input) input.click();
         });
         drop.addEventListener('dragover', function (e) {
@@ -867,25 +876,134 @@
             e.preventDefault();
             drop.classList.remove('dragover');
             if (e.dataTransfer.files.length) {
-                setFile(e.dataTransfer.files[0]);
                 try { input.files = e.dataTransfer.files; } catch (_) {}
+                handleFile(e.dataTransfer.files[0]);
             }
         });
         input && input.addEventListener('change', function () {
-            if (this.files && this.files[0]) setFile(this.files[0]);
-            else resetFile();
+            if (this.files && this.files[0]) handleFile(this.files[0]);
         });
 
-        function setFile(file) {
-            if (badgeTxt) badgeTxt.textContent = file.name;
-            if (badge) {
-                badge.style.display = '';
-                var ic = badge.querySelector('i');
-                if (ic) ic.className = 'fas fa-file-check fa-xs';
-            }
+        function handleFile(file) {
+            uploadToDraft(file);
         }
+
+        function uploadToDraft(file) {
+            if (!uploadUrl) return;
+            var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfMeta) return;
+
+            drop.classList.add('gf-file-drop--uploading');
+            drop.classList.remove('gf-file-drop--staged');
+            if (badge) { badge.style.display = ''; badge.classList.remove('gf-file-badge--error'); }
+            if (badgeIcon) badgeIcon.className = 'fas fa-spinner fa-spin fa-xs';
+            if (badgeTxt) badgeTxt.textContent = 'Mengunggah "' + file.name + '"...';
+            removeRemoveButton();
+
+            var formData = new FormData();
+            formData.append('file', file);
+
+            fetch(uploadUrl, {
+                method : 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN'    : csrfMeta.content,
+                    'Accept'          : 'application/json',
+                },
+                body: formData,
+            })
+            .then(function (res) {
+                return res.json().then(function (data) { return { status: res.status, data: data }; });
+            })
+            .then(function (result) {
+                drop.classList.remove('gf-file-drop--uploading');
+                if (result.status === 200 && result.data.success) {
+                    drop.classList.add('gf-file-drop--staged');
+                    if (badgeIcon) badgeIcon.className = 'fas fa-check-circle fa-xs';
+                    if (badgeTxt) badgeTxt.textContent = result.data.originalFileName + ' (tersimpan sementara)';
+                    input.required = false;
+                    addRemoveButton();
+                } else {
+                    showUploadError(result.data);
+                }
+            })
+            .catch(function () {
+                drop.classList.remove('gf-file-drop--uploading');
+                showUploadError(null);
+            });
+        }
+
+        function showUploadError(data) {
+            var msg = 'Gagal mengunggah file. Coba lagi.';
+            if (data && data.errors && data.errors.file && data.errors.file[0]) msg = data.errors.file[0];
+            else if (data && data.message) msg = data.message;
+
+            if (badge) badge.classList.add('gf-file-badge--error');
+            if (badgeIcon) badgeIcon.className = 'fas fa-exclamation-triangle fa-xs';
+            if (badgeTxt) badgeTxt.textContent = msg;
+            drop.classList.remove('gf-file-drop--staged');
+        }
+
+        function addRemoveButton() {
+            if (!badge || badge.querySelector('.gf-file-remove')) return;
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'gf-file-remove';
+            btn.title = 'Hapus file ini';
+            btn.innerHTML = '<i class="fas fa-times"></i>';
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                removeFromDraft();
+            });
+            badge.appendChild(btn);
+        }
+
+        function removeRemoveButton() {
+            var btn = badge ? badge.querySelector('.gf-file-remove') : null;
+            if (btn) btn.remove();
+        }
+
+        function removeFromDraft() {
+            if (!removeUrl) return;
+            var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfMeta) return;
+
+            drop.classList.add('gf-file-drop--uploading');
+
+            fetch(removeUrl, {
+                method : 'DELETE',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN'    : csrfMeta.content,
+                    'Accept'          : 'application/json',
+                },
+            })
+            .then(function () {
+                drop.classList.remove('gf-file-drop--uploading', 'gf-file-drop--staged');
+                input.value = '';
+                if (isRequired) input.required = true;
+                resetFile();
+            })
+            .catch(function () {
+                drop.classList.remove('gf-file-drop--uploading');
+            });
+        }
+
         function resetFile() {
             if (badgeTxt) badgeTxt.textContent = 'Belum ada file dipilih';
+            if (badgeIcon) badgeIcon.className = 'fas fa-paperclip fa-xs';
+            if (badge) badge.classList.remove('gf-file-badge--error');
+            removeRemoveButton();
+        }
+
+        // Wire up the remove button already rendered server-side (draft file
+        // present when this page was loaded).
+        var existingRemoveBtn = badge ? badge.querySelector('.gf-file-remove') : null;
+        if (existingRemoveBtn) {
+            existingRemoveBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                removeFromDraft();
+            });
         }
     });
 
