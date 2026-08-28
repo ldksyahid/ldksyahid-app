@@ -71,6 +71,29 @@ class PublicFormController extends Controller
         // per-browser). Each field partial falls back to it via old($key, $draft[$key]).
         $draftAnswers = TrFormDraft::findAnswers($form->formID, $user->id) ?? [];
 
+        // A staged file can be swept by forms:cleanup-stale-uploads (3 days)
+        // before its draft row is swept by forms:cleanup-drafts (7 days) —
+        // when that happens, drop the now-dangling reference so the field
+        // renders as "not uploaded yet" instead of a misleading "tersimpan
+        // sementara" badge for a file that no longer exists on disk.
+        $staleFileKeys = [];
+        foreach ($draftAnswers as $key => $value) {
+            if (is_array($value) && !empty($value['__file']) && !empty($value['tempRelativePath'])
+                && !Storage::disk('local')->exists($value['tempRelativePath'])) {
+                $staleFileKeys[] = $key;
+            }
+        }
+        if (!empty($staleFileKeys)) {
+            foreach ($staleFileKeys as $key) {
+                unset($draftAnswers[$key]);
+            }
+            if (empty($draftAnswers)) {
+                TrFormDraft::clear($form->formID, $user->id);
+            } else {
+                TrFormDraft::upsertAnswers($form->formID, $user->id, $draftAnswers);
+            }
+        }
+
         return view('landing-page.forms.show', compact('form', 'fields', 'isPreviewMode', 'draftAnswers'))
             ->with('title', $form->title);
     }
