@@ -53,7 +53,7 @@
 
     <div class="field-card-body section-break-body">
         <div class="section-break-rule"></div>
-        <div class="section-break-label">
+        <div class="section-break-label" title="{{ $field->label ?: 'New Section' }}">
             <i class="fa fa-columns me-2"></i>{{ $field->label ?: 'New Section' }}
         </div>
         <div class="section-break-rule"></div>

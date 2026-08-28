@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UploadFormFileToGDriveJob;
 use App\Mail\FormSubmissionConfirmation;
 use App\Models\forms\MsForm;
 use App\Models\forms\MsFormSetting;
 use App\Models\forms\TrFormDraft;
-use App\Models\forms\TrFormFile;
 use App\Models\forms\TrFormSubmission;
 use App\Services\DynamicFormGDriveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class PublicFormController extends Controller
 {
@@ -258,7 +259,11 @@ class PublicFormController extends Controller
 
                 if ($field->isFileUpload()) {
                     $rowData[]                = '[file pending]';
-                    $answerMap[$field->label] = '[file]';
+                    // File uploads are processed by a background job (see step 11
+                    // below), so the real Drive link isn't known yet when this
+                    // confirmation email is sent — this placeholder is final for
+                    // the email regardless of when the upload job completes.
+                    $answerMap[$field->label] = '[File diterima, sedang diproses]';
                 } else {
                     $value = $validated[$fieldKey] ?? '';
 
@@ -311,7 +316,12 @@ class PublicFormController extends Controller
                 );
             }
 
-            // 11. Upload files and update sheet cells + DB
+            // 11. Move uploaded files to local temp storage and hand them off to a
+            // background job for the actual Drive upload — keeps this request fast
+            // and resilient to a slow/flaky Drive API call. The job fills in the
+            // TrFormFile row and overwrites the sheet's "[file pending]" cell once
+            // the upload succeeds; forms:cleanup-stale-uploads sweeps up any temp
+            // file left behind by a job that never completes (default: 3+ days old).
             $fileColOffset = 2;
             foreach ($activeFields as $field) {
                 if (!$field->isFileUpload()) {
@@ -332,33 +342,21 @@ class PublicFormController extends Controller
                 $gdriveFolderID = $field->getGdriveFolderID();
 
                 if ($gdriveFolderID) {
-                    $uploadResult = $gdriveService->uploadFileToFieldFolder(
+                    $tempRelativePath = Storage::disk('local')->putFileAs('form-uploads-tmp', $file, $file->hashName());
+
+                    UploadFormFileToGDriveJob::dispatch(
+                        $tempRelativePath,
+                        $file->getClientOriginalName(),
+                        $file->getMimeType() ?? 'application/octet-stream',
                         $gdriveFolderID,
-                        $file,
-                        $submission->formSubmissionID
+                        $submission->formSubmissionID,
+                        $field->formFieldID,
+                        $form->gdriveSpreadsheetID,
+                        $gsheetRowIndex,
+                        $form->gdriveSpreadsheetID && $gsheetRowIndex ? $fileColOffset : null
                     );
 
-                    TrFormFile::record(
-                        submissionID:      $submission->formSubmissionID,
-                        fieldID:           $field->formFieldID,
-                        originalFileName:  $uploadResult['originalFileName'],
-                        mimeType:          $uploadResult['mimeType'],
-                        fileSizeKB:        $uploadResult['fileSizeKB'],
-                        gdriveFileID:      $uploadResult['gdriveFileID'],
-                        gdriveFolderID:    $gdriveFolderID,
-                        gdriveFileUrl:     $uploadResult['gdriveFileUrl']
-                    );
-
-                    if ($form->gdriveSpreadsheetID && $gsheetRowIndex) {
-                        $gdriveService->updateCell(
-                            $form->gdriveSpreadsheetID,
-                            $gsheetRowIndex,
-                            $fileColOffset,
-                            $uploadResult['gdriveFileUrl']
-                        );
-                    }
-
-                    $answerMap[$field->label] = $uploadResult['gdriveFileUrl'];
+                    $answerMap[$field->label] = '[File diterima, sedang diproses]';
                 }
 
                 $fileColOffset++;

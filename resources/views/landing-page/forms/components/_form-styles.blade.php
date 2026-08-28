@@ -134,7 +134,15 @@
     color: var(--gf-text-muted);
     line-height: 1.7;
     margin: 0;
-    white-space: pre-line;
+}
+
+.gf-form-desc a,
+.gf-help a,
+.gf-section-desc a,
+.gf-para-body a {
+    color: var(--gf-primary);
+    text-decoration: underline;
+    word-break: break-word;
 }
 
 .gf-form-desc--clamped {
@@ -229,6 +237,7 @@
     -webkit-appearance: none;
     appearance: none;
     font-family: inherit;
+    text-overflow: ellipsis;
 }
 
 .gf-input:focus,
@@ -1244,7 +1253,6 @@
     color: var(--gf-text);
     margin: 0;
     line-height: 1.7;
-    white-space: pre-line;
 }
 .gf-para-title { font-weight: 700; margin-bottom: .4rem; }
 .gf-para-body  { font-size: .9rem; opacity: .85; }

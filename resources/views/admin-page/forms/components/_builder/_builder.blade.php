@@ -42,28 +42,31 @@
                     <div class="builder-wrap">
 
                 {{-- ===== LEFT: Field Type Palette ===== --}}
-                <div>
+                <div class="builder-col-sticky">
                     <div class="card border-0 shadow-sm">
-                        <div class="card-body" style="max-height: calc(100vh - 220px); overflow-y: auto;">
+                        <div class="card-body builder-addfield-card-body">
                             <h5 class="section-title"><i class="fa fa-plus-square me-2"></i>Add Field</h5>
-                            @php
-                                $groups = collect($fieldTypes)->groupBy('group');
-                            @endphp
 
-                            @foreach($groups as $groupName => $types)
-                            <div class="field-type-group">
-                                <div class="field-type-group-label">{{ $groupName }}</div>
-                                @foreach($types as $type)
-                                <button type="button" class="field-type-btn"
-                                        data-type="{{ $type['type'] }}"
-                                        data-label="{{ $type['label'] }}"
-                                        onclick="openAddFieldModal('{{ $type['type'] }}', '{{ $type['label'] }}')">
-                                    <i class="fa {{ $type['icon'] }}"></i>
-                                    {{ $type['label'] }}
-                                </button>
+                            <div class="builder-addfield-scroll">
+                                @php
+                                    $groups = collect($fieldTypes)->groupBy('group');
+                                @endphp
+
+                                @foreach($groups as $groupName => $types)
+                                <div class="field-type-group">
+                                    <div class="field-type-group-label">{{ $groupName }}</div>
+                                    @foreach($types as $type)
+                                    <button type="button" class="field-type-btn"
+                                            data-type="{{ $type['type'] }}"
+                                            data-label="{{ $type['label'] }}"
+                                            onclick="openAddFieldModal('{{ $type['type'] }}', '{{ $type['label'] }}')">
+                                        <i class="fa {{ $type['icon'] }}"></i>
+                                        {{ $type['label'] }}
+                                    </button>
+                                    @endforeach
+                                </div>
                                 @endforeach
                             </div>
-                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -72,7 +75,7 @@
                 <div>
                     <div class="card border-0 shadow-sm">
                         <div class="card-body">
-                            <div class="builder-fields-header">
+                            <div class="builder-fields-header" id="builderFieldsHeader">
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <span class="fw-semibold" style="font-size:1rem;"><i class="fa fa-list me-2"></i>Active Fields</span>
                                     <span class="badge bg-light text-dark border" id="fieldCount">{{ $form->activeFields->count() }} fields</span>
@@ -104,7 +107,7 @@
                 </div>
 
                 {{-- ===== RIGHT: Settings panel ===== --}}
-                <div class="builder-sidebar-right">
+                <div class="builder-sidebar-right builder-col-sticky">
 
                     {{-- Google Drive --}}
                     <div class="card border-0 shadow-sm mb-3">
@@ -172,6 +175,19 @@
                                 <p class="mb-0"><i class="fa fa-save fa-xs me-1"></i> Changes are saved automatically to the database.</p>
                             </div>
                         </div>
+                    </div>
+
+                    {{-- Floating copy of Header Image / Add Section — appears once the
+                         Active Fields list has been scrolled, so these actions stay
+                         reachable without scrolling back up. Hidden at rest. --}}
+                    <div class="builder-floating-actions" id="builderFloatingActions">
+                        <div class="builder-floating-actions-label">Quick add</div>
+                        <button type="button" class="btn-add-header-image" onclick="addHeaderImage()" title="Add a banner image pinned to the top of the form">
+                            <i class="fa fa-image me-1"></i> Header Image
+                        </button>
+                        <button type="button" class="btn-add-section" onclick="addSection()" title="Add a new section to split the form into pages">
+                            <i class="fa fa-columns me-1"></i> Add Section
+                        </button>
                     </div>
                 </div>
 
