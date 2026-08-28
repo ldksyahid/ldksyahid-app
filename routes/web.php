@@ -643,6 +643,12 @@ Route::middleware(['auth', 'role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEv
         Route::delete('/{id}/responses',       [AdminFormController::class, 'deleteResponses'])  ->name('responses.delete');
         Route::get('/{id}/analytics',          [AdminFormController::class, 'analytics'])        ->name('analytics');
 
+        // Manage Responses (list / edit / delete a single response, kept in sync with the Google Sheet)
+        Route::get('/{id}/responses',                    [AdminFormController::class, 'responses'])      ->name('responses.index');
+        Route::get('/{id}/responses/{submissionID}',      [AdminFormController::class, 'showResponse'])   ->name('responses.show');
+        Route::put('/{id}/responses/{submissionID}',      [AdminFormController::class, 'updateResponse']) ->name('responses.update');
+        Route::delete('/{id}/responses/{submissionID}',   [AdminFormController::class, 'destroyResponse'])->name('responses.destroy');
+
         // Form builder (visual drag-drop editor)
         Route::get('/{id}/builder',    [AdminFormController::class, 'builder']) ->name('builder');
 
@@ -659,15 +665,22 @@ Route::middleware(['auth', 'role:Superadmin|HelperAdmin|HelperCelsyahid|HelperEv
 Route::prefix('/form')
     ->name('forms.')
     ->group(function () {
+        // Named throttle prefixes below are required, not decorative: Laravel's
+        // bare `throttle:X,Y` keys an authenticated user's bucket by user ID
+        // ALONE (see ThrottleRequests::resolveRequestSignature) — with no
+        // prefix, every route below would share ONE counter. On an 18-section
+        // form, draft.save alone fires on every "Selanjutnya" click (17+ times)
+        // plus every debounced keystroke, which was silently burning through
+        // the submit route's budget before the user ever clicked submit.
         Route::get('/{slug}',          [PublicFormController::class, 'show'])     ->name('show');
         Route::post('/{slug}',         [PublicFormController::class, 'submit'])   ->name('submit')
-             ->middleware('throttle:15,10');
+             ->middleware('throttle:15,10,form-submit');
         Route::post('/{slug}/draft',   [PublicFormController::class, 'saveDraft'])->name('draft.save')
-             ->middleware('throttle:40,1');
+             ->middleware('throttle:40,1,form-draft-save');
         Route::post('/{slug}/draft/file/{fieldID}', [PublicFormController::class, 'uploadDraftFile'])->name('draft.uploadFile')
-             ->middleware('throttle:20,1');
+             ->middleware('throttle:20,1,form-draft-upload');
         Route::delete('/{slug}/draft/file/{fieldID}', [PublicFormController::class, 'removeDraftFile'])->name('draft.removeFile')
-             ->middleware('throttle:30,1');
+             ->middleware('throttle:30,1,form-draft-remove');
         Route::get('/{slug}/terima-kasih', [PublicFormController::class, 'thankYou'])->name('thank-you');
     });
 

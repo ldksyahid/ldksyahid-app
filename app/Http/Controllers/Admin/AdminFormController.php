@@ -8,6 +8,8 @@ use App\Models\forms\MsFormField;
 use App\Models\forms\MsFormSection;
 use App\Models\forms\MsFormSetting;
 use App\Models\forms\TrFormAuditLog;
+use App\Models\forms\TrFormFile;
+use App\Models\forms\TrFormSubmission;
 use App\Services\DynamicFormGDriveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -536,6 +538,318 @@ class AdminFormController extends Controller
         } catch (\Throwable $e) {
             Log::error('[AdminFormController::deleteResponses] ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to delete responses: ' . $e->getMessage()], 500);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Manage Responses — list / edit / delete a single response
+    //
+    // Answers are never mirrored into the DB (TrFormSubmission stores
+    // metadata only) — they live solely in the Google Sheet. Any write here
+    // (edit or delete) must therefore re-resolve the response's true sheet
+    // row via DynamicFormGDriveService::findRowIndexBySubmissionId() (which
+    // matches the "Submission ID" column, not the cached gsheetRowIndex)
+    // before touching it — the cached pointer drifts whenever an earlier row
+    // is deleted, and self-healing this way keeps every operation correct
+    // even if a previous decrement was missed or partial.
+    // -------------------------------------------------------------------------
+
+    public function responses(int $id)
+    {
+        $form = MsForm::where('flagActive', true)->findOrFail($id);
+
+        if (!$this->canManageForm($form)) {
+            Alert::error('Access Denied', 'You do not have permission to manage responses for this form.');
+            return redirect()->route('admin.forms.index');
+        }
+
+        $submissions = TrFormSubmission::where('formID', $id)
+            ->orderBy('submittedAt', 'desc')
+            ->paginate(20);
+
+        return view('admin-page.forms.responses.index', compact('form', 'submissions'))
+            ->with('title', 'Manage Responses — ' . $form->title);
+    }
+
+    public function showResponse(int $id, int $submissionID)
+    {
+        $form = MsForm::where('flagActive', true)->findOrFail($id);
+
+        if (!$this->canManageForm($form)) {
+            Alert::error('Access Denied', 'You do not have permission to manage responses for this form.');
+            return redirect()->route('admin.forms.index');
+        }
+
+        $submission   = TrFormSubmission::where('formID', $id)->findOrFail($submissionID);
+        $activeFields = $form->activeFields()->get()->reject(fn ($f) => $f->isDisplayOnly());
+        $files        = TrFormFile::where('formSubmissionID', $submissionID)->get()->keyBy('formFieldID');
+
+        $answers      = [];
+        $sheetMissing = (bool) $form->gdriveSpreadsheetID;
+
+        if ($form->gdriveSpreadsheetID) {
+            $service   = new DynamicFormGDriveService();
+            $sheetRows = $service->readSpreadsheetRows($form->gdriveSpreadsheetID);
+
+            if (count($sheetRows) > 1) {
+                $headers        = array_map('trim', $sheetRows[0]);
+                $headerMapLower = [];
+                foreach ($headers as $hi => $hdr) {
+                    $headerMapLower[strtolower($hdr)] = $hi;
+                }
+
+                foreach ($sheetRows as $i => $row) {
+                    if ($i === 0) {
+                        continue;
+                    }
+                    if (($row[1] ?? null) !== (string) $submissionID) {
+                        continue;
+                    }
+
+                    $sheetMissing = false;
+                    $matchedRowIndex = $i + 1;
+                    if ($submission->gsheetRowIndex !== $matchedRowIndex) {
+                        $submission->update(['gsheetRowIndex' => $matchedRowIndex]);
+                    }
+
+                    foreach ($activeFields as $field) {
+                        $colIdx = $headerMapLower[strtolower(trim($field->label))] ?? null;
+                        $answers[$field->formFieldID] = $colIdx !== null ? ($row[$colIdx] ?? '') : '';
+                    }
+                    break;
+                }
+            }
+        }
+
+        return view('admin-page.forms.responses.edit', compact(
+            'form', 'submission', 'activeFields', 'answers', 'files', 'sheetMissing'
+        ))->with('title', 'Edit Response — ' . $form->title);
+    }
+
+    public function updateResponse(Request $request, int $id, int $submissionID)
+    {
+        $form = MsForm::where('flagActive', true)->findOrFail($id);
+
+        if (!$this->canManageForm($form)) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        $submission   = TrFormSubmission::where('formID', $id)->findOrFail($submissionID);
+        $activeFields = $form->activeFields()->get()->reject(fn ($f) => $f->isDisplayOnly());
+
+        // 1. Validate non-file fields (file fields are optional here — only
+        // validated below if a replacement was actually uploaded).
+        $rules    = [];
+        $messages = [];
+        foreach ($activeFields as $field) {
+            if ($field->isFileUpload()) {
+                continue;
+            }
+            $key            = 'field_' . $field->formFieldID;
+            $rules[$key]    = $field->buildValidationRules();
+            $lbl            = "\"{$field->label}\"";
+            $messages[$key . '.required'] = "Kolom {$lbl} wajib diisi.";
+        }
+        $validated = $request->validate($rules, $messages);
+
+        if (!$form->gdriveSpreadsheetID) {
+            return response()->json(['success' => false, 'message' => 'Formulir ini tidak terhubung ke Google Sheets.'], 422);
+        }
+
+        try {
+            $service = new DynamicFormGDriveService();
+
+            // 2. Self-heal: resolve the TRUE current row via the Submission ID
+            // column before writing anything — never trust the cached index.
+            $sheetRows = $service->readSpreadsheetRows($form->gdriveSpreadsheetID);
+            $headers   = array_map('trim', $sheetRows[0] ?? []);
+
+            $rowIndex    = null;
+            $existingRow = null;
+            foreach ($sheetRows as $i => $row) {
+                if ($i === 0) {
+                    continue;
+                }
+                if (($row[1] ?? null) === (string) $submissionID) {
+                    $rowIndex    = $i + 1;
+                    $existingRow = $row;
+                    break;
+                }
+            }
+
+            if (!$rowIndex) {
+                return response()->json(['success' => false, 'message' => 'Baris response ini tidak ditemukan di spreadsheet (mungkin sudah dihapus manual).'], 404);
+            }
+
+            $headerMapLower = [];
+            foreach ($headers as $hi => $hdr) {
+                $headerMapLower[strtolower($hdr)] = $hi;
+            }
+
+            // 3. Replace any file fields that got a new upload — old file (DB
+            // row + Drive file) is removed first, then the new one recorded.
+            $fileUpdates = []; // formFieldID => new gdrive URL
+
+            foreach ($activeFields as $field) {
+                if (!$field->isFileUpload()) {
+                    continue;
+                }
+
+                $fieldKey = 'field_' . $field->formFieldID;
+                $newFile  = $request->file($fieldKey);
+                if (!$newFile) {
+                    continue; // no replacement — leave the existing cell/file untouched
+                }
+
+                $fileValidator = validator($request->all(), [$fieldKey => $field->buildValidationRules()]);
+                if ($fileValidator->fails()) {
+                    return response()->json(['success' => false, 'errors' => [$fieldKey => $fileValidator->errors()->get($fieldKey)]], 422);
+                }
+
+                $gdriveFolderID = $field->getGdriveFolderID();
+                if (!$gdriveFolderID) {
+                    continue;
+                }
+
+                $oldFile = TrFormFile::where('formSubmissionID', $submissionID)
+                    ->where('formFieldID', $field->formFieldID)
+                    ->first();
+                if ($oldFile) {
+                    if ($oldFile->gdriveFileID) {
+                        $service->deleteFile($oldFile->gdriveFileID);
+                    }
+                    $oldFile->delete();
+                }
+
+                $uploadResult = $service->uploadFileToFieldFolder($gdriveFolderID, $newFile, $submissionID);
+
+                TrFormFile::record(
+                    submissionID:     $submissionID,
+                    fieldID:          $field->formFieldID,
+                    originalFileName: $uploadResult['originalFileName'],
+                    mimeType:         $uploadResult['mimeType'],
+                    fileSizeKB:       $uploadResult['fileSizeKB'],
+                    gdriveFileID:     $uploadResult['gdriveFileID'],
+                    gdriveFolderID:   $gdriveFolderID,
+                    gdriveFileUrl:    $uploadResult['gdriveFileUrl']
+                );
+
+                $fileUpdates[$field->formFieldID] = $uploadResult['gdriveFileUrl'];
+            }
+
+            // 4. Rebuild the row — start from the existing cells (preserves
+            // Timestamp, Submission ID, and any columns this form no longer
+            // has a matching field for), padded out if the header has grown
+            // since this row was written, then overlay every edited value.
+            $rowData = $existingRow;
+            while (count($rowData) < count($headers)) {
+                $rowData[] = '';
+            }
+
+            foreach ($activeFields as $field) {
+                $colIdx = $headerMapLower[strtolower(trim($field->label))] ?? null;
+                if ($colIdx === null) {
+                    continue;
+                }
+
+                if ($field->isFileUpload()) {
+                    if (isset($fileUpdates[$field->formFieldID])) {
+                        $rowData[$colIdx] = $fileUpdates[$field->formFieldID];
+                    }
+                    continue;
+                }
+
+                $value = $validated['field_' . $field->formFieldID] ?? '';
+                if (is_array($value)) {
+                    $value = implode(', ', $value);
+                }
+                $rowData[$colIdx] = $value;
+            }
+
+            $service->updateRow($form->gdriveSpreadsheetID, $rowIndex, $rowData);
+
+            // 5. Mirror respondent identity onto the DB row if those fields changed
+            $emailField = $activeFields->first(fn ($f) => $f->isSystemField && $f->fieldType === 'email');
+            if ($emailField && isset($validated['field_' . $emailField->formFieldID])) {
+                $submission->respondentEmail = $validated['field_' . $emailField->formFieldID];
+            }
+            $nameField = $activeFields->first(fn ($f) =>
+                in_array(strtolower($f->label), ['nama', 'name', 'nama lengkap', 'full name'])
+            );
+            if ($nameField && isset($validated['field_' . $nameField->formFieldID])) {
+                $submission->respondentName = $validated['field_' . $nameField->formFieldID];
+            }
+            $submission->gsheetRowIndex = $rowIndex;
+            $submission->save();
+
+            TrFormAuditLog::recordAction($form->formID, TrFormAuditLog::ACTION_UPDATE, [
+                'action'       => 'edit_response',
+                'submissionID' => $submissionID,
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Response berhasil diperbarui.']);
+
+        } catch (\Throwable $e) {
+            Log::error('[AdminFormController::updateResponse] ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Gagal memperbarui response: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function destroyResponse(int $id, int $submissionID)
+    {
+        $form = MsForm::where('flagActive', true)->findOrFail($id);
+
+        if (!$this->canManageForm($form)) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        $submission = TrFormSubmission::where('formID', $id)->findOrFail($submissionID);
+
+        try {
+            $service = new DynamicFormGDriveService();
+
+            // 1. Delete this submission's GDrive files + DB rows
+            $files = TrFormFile::where('formSubmissionID', $submissionID)->get();
+            foreach ($files as $file) {
+                if ($file->gdriveFileID) {
+                    $service->deleteFile($file->gdriveFileID);
+                }
+            }
+            TrFormFile::where('formSubmissionID', $submissionID)->delete();
+
+            // 2. Self-heal: resolve the TRUE current row before deleting it —
+            // never trust the cached gsheetRowIndex for a write.
+            $rowIndex = $form->gdriveSpreadsheetID
+                ? $service->findRowIndexBySubmissionId($form->gdriveSpreadsheetID, $submissionID)
+                : null;
+
+            // 3. Physically delete the sheet row (shifts every later row up),
+            // then decrement every other submission's cached pointer so it
+            // stays in sync — self-healed again on their own next write
+            // regardless, so a missed/partial decrement here isn't fatal.
+            if ($rowIndex) {
+                $service->deleteRow($form->gdriveSpreadsheetID, $rowIndex);
+                TrFormSubmission::decrementRowIndexesAfter($form->formID, $rowIndex);
+            }
+
+            // 4. Only now delete the DB submission row — keeping this last
+            // means a failure anywhere above leaves the submission intact
+            // and retryable instead of silently orphaning sheet/Drive state.
+            $submission->delete();
+
+            // 5. Recompute the exact remaining count (safer than a blind decrement)
+            $form->update(['totalSubmission' => TrFormSubmission::where('formID', $form->formID)->count()]);
+
+            TrFormAuditLog::recordAction($form->formID, TrFormAuditLog::ACTION_UPDATE, [
+                'action'       => 'delete_response',
+                'submissionID' => $submissionID,
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Response berhasil dihapus.']);
+
+        } catch (\Throwable $e) {
+            Log::error('[AdminFormController::destroyResponse] ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Gagal menghapus response: ' . $e->getMessage()], 500);
         }
     }
 
