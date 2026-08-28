@@ -83,7 +83,7 @@
             @endif
             <h1 class="gf-form-title">{{ $form->title }}</h1>
             @if($form->description)
-            <p class="gf-form-desc" id="gfFormDesc">{{ $form->description }}</p>
+            <p class="gf-form-desc" id="gfFormDesc">{!! \App\Helpers\TextFormatter::linkify($form->description) !!}</p>
             @if($isMultiStep)
             <button type="button" class="gf-desc-toggle" id="gfDescToggle">Lihat selengkapnya</button>
             @endif

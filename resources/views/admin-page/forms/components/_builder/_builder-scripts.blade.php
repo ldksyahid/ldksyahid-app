@@ -111,13 +111,19 @@ function openAddFieldModal(type, label) {
         mHelpWrap.id = 'modalHelpTextWrap';
     }
 
-    // Paragraph: swap help text input for a full-width textarea
+    // Help text is always a multi-line textarea (not just for paragraph) so
+    // admins can add line breaks in instructions instead of them getting
+    // stuck on one un-wrappable line.
     const mHelpInput = document.getElementById('modalHelpText');
     const mHelpArea  = document.getElementById('modalHelpTextArea');
     const mHelpLabel = document.getElementById('modalHelpTextLabel');
     if (mHelpInput && mHelpArea) {
-        mHelpInput.style.display = isParagraph ? 'none' : '';
-        mHelpArea.style.display  = isParagraph ? ''     : 'none';
+        mHelpInput.style.display = 'none';
+        mHelpArea.style.display  = '';
+        mHelpArea.rows = isParagraph ? 6 : 3;
+        mHelpArea.placeholder = isParagraph
+            ? 'Write paragraph text here. Press Enter for a new line.'
+            : 'Optional — hint shown below the field. Press Enter for a new line.';
         mHelpArea.value = '';
         mHelpInput.value = '';
         if (mHelpLabel) mHelpLabel.textContent = isParagraph ? 'Text Content' : 'Help Text';
@@ -145,7 +151,7 @@ function submitAddField() {
     const placeholder = document.getElementById('modalPlaceholder').value.trim();
     const helpText    = type === 'paragraph'
         ? (document.getElementById('modalHelpTextArea')?.value ?? '')
-        : document.getElementById('modalHelpText').value.trim();
+        : (document.getElementById('modalHelpTextArea')?.value ?? '').trim();
     const isRequired  = document.getElementById('modalIsRequired').checked;
 
     // For image display fields, label is an optional caption — don't block submission
@@ -301,18 +307,23 @@ function openEditModal(btn) {
     } else if (isVideoDisplay) {
         // helpText (embedUrl) is managed by the video section above — do nothing here
     } else {
+        // Help text is always a multi-line textarea (not just for paragraph) so
+        // admins can add line breaks in instructions instead of them getting
+        // stuck on one un-wrappable line.
         const isParaEdit = fieldType === 'paragraph';
         const eHelpIn  = document.getElementById('editHelpText');
         const eHelpTA  = document.getElementById('editHelpTextArea');
         const eHelpLbl = document.getElementById('editHelpTextLabel');
-        if (eHelpIn && eHelpTA) {
-            eHelpIn.style.display = isParaEdit ? 'none' : '';
-            eHelpTA.style.display = isParaEdit ? ''     : 'none';
-            if (isParaEdit) { eHelpTA.value = helpText; } else { eHelpIn.value = helpText; }
-            if (eHelpLbl) eHelpLbl.textContent = isParaEdit ? 'Text Content' : 'Help Text';
-        } else {
-            if (eHelpIn) eHelpIn.value = helpText;
+        if (eHelpTA) {
+            eHelpTA.style.display = '';
+            eHelpTA.rows = isParaEdit ? 6 : 3;
+            eHelpTA.placeholder = isParaEdit
+                ? 'Write paragraph text here. Press Enter for a new line.'
+                : 'Optional — hint shown below the field. Press Enter for a new line.';
+            eHelpTA.value = helpText;
         }
+        if (eHelpIn) eHelpIn.style.display = 'none';
+        if (eHelpLbl) eHelpLbl.textContent = isParaEdit ? 'Text Content' : 'Help Text';
     }
 
     // Hide placeholder/required for display-only types; also hide help text for section_break / header_image
@@ -516,7 +527,7 @@ function submitEditField() {
     const placeholder = document.getElementById('editPlaceholder').value.trim();
     const helpText    = fieldType === 'paragraph'
         ? (document.getElementById('editHelpTextArea')?.value ?? '')
-        : document.getElementById('editHelpText').value.trim();
+        : (document.getElementById('editHelpTextArea')?.value ?? '').trim();
     const isRequired  = document.getElementById('editIsRequired').checked;
 
     const LABEL_OPTIONAL_TYPES = [...IMAGE_DISPLAY_TYPES, ...VIDEO_DISPLAY_TYPES, ...HEADER_IMAGE_TYPES, 'section_break'];
@@ -1598,5 +1609,42 @@ function showAlert(type, message) {
             if (el) { patchValueSetter(el); initCustomSelect(el); }
         });
     });
+})();
+
+// ===== STICKY OFFSET BELOW THE ADMIN NAVBAR =====
+// The admin panel's top navbar (.content > .navbar) is itself
+// `position: sticky; top: 0` with no fixed height — it's a responsive flex
+// row that shrinks at the 768px/575.98px breakpoints. Our sticky sidebar
+// columns (.builder-col-sticky) must offset by its REAL rendered height or
+// they slide underneath it (it has z-index:1000) once the page is scrolled.
+// Measured at runtime instead of guessed so it stays correct across screen
+// sizes and any future navbar content changes.
+(function () {
+    function updateStickyOffset() {
+        var navbar = document.querySelector('.content > .navbar');
+        var height = navbar ? navbar.getBoundingClientRect().height : 0;
+        document.documentElement.style.setProperty('--builder-sticky-top', (height + 12) + 'px');
+    }
+
+    updateStickyOffset();
+    window.addEventListener('resize', updateStickyOffset);
+})();
+
+// ===== FLOATING QUICK-ADD ACTIONS =====
+// Reveals a copy of the Header Image / Add Section buttons in the right
+// sidebar (below Tips) once the ORIGINAL buttons (top of Active Fields) have
+// scrolled out of view — via IntersectionObserver, so it reacts correctly to
+// page-level scroll regardless of page layout/height. Hides it again once
+// the original buttons are back in view (scrolled to the top).
+(function () {
+    var originalHeader = document.getElementById('builderFieldsHeader');
+    var floatWrap       = document.getElementById('builderFloatingActions');
+    if (!originalHeader || !floatWrap || !('IntersectionObserver' in window)) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+        floatWrap.classList.toggle('show', !entries[0].isIntersecting);
+    }, { threshold: 0 });
+
+    observer.observe(originalHeader);
 })();
 </script>

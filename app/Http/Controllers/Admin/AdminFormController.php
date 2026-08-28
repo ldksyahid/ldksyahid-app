@@ -12,6 +12,7 @@ use App\Services\DynamicFormGDriveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -676,30 +677,48 @@ class AdminFormController extends Controller
             'fieldConfig.maxRating'  => 'nullable|integer|min:1|max:10',
         ]);
 
+        // Guard against duplicate field creation: a slow response (this method
+        // makes several synchronous Google Drive/Sheets API calls below) can
+        // tempt a second click, a double-fired event, or a client/proxy retry
+        // to land here again before the first request finishes — without this
+        // lock that produces two MsFormField rows (and for file/image/header
+        // image types, two GDrive folders/uploads) from what was meant to be
+        // a single add. Non-blocking: a genuine duplicate request is rejected
+        // immediately rather than queued and processed anyway.
+        $lock = Cache::lock("form:{$formID}:add-field", 15);
+        if (!$lock->get()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Another field is already being added to this form — please wait a moment.',
+            ], 429);
+        }
+
         try {
             $now = Carbon::now();
 
-            // Determine next sort order
-            $maxOrder = MsFormField::where('formID', $formID)
-                                   ->where('flagActive', true)
-                                   ->max('sortOrder') ?? 0;
+            $field = DB::transaction(function () use ($formID, $validated, $now) {
+                // Determine next sort order
+                $maxOrder = MsFormField::where('formID', $formID)
+                                       ->where('flagActive', true)
+                                       ->max('sortOrder') ?? 0;
 
-            $field = MsFormField::create([
-                'formID'        => $formID,
-                'formSectionID' => $validated['formSectionID']  ?? null,
-                'fieldType'     => $validated['fieldType'],
-                'label'         => $validated['label'] ?? '',
-                'placeholder'   => $validated['placeholder']   ?? null,
-                'helpText'      => $validated['helpText']       ?? null,
-                'isRequired'    => (bool) ($validated['isRequired'] ?? false),
-                'isSystemField' => false,
-                'sortOrder'     => $maxOrder + 1,
-                'options'       => $validated['options']        ?? null,
-                'validation'    => $validated['validation']     ?? null,
-                'fieldConfig'   => $validated['fieldConfig']    ?? null,
-                'flagActive'    => true,
-                'createdDate'   => $now,
-            ]);
+                return MsFormField::create([
+                    'formID'        => $formID,
+                    'formSectionID' => $validated['formSectionID']  ?? null,
+                    'fieldType'     => $validated['fieldType'],
+                    'label'         => $validated['label'] ?? '',
+                    'placeholder'   => $validated['placeholder']   ?? null,
+                    'helpText'      => $validated['helpText']       ?? null,
+                    'isRequired'    => (bool) ($validated['isRequired'] ?? false),
+                    'isSystemField' => false,
+                    'sortOrder'     => $maxOrder + 1,
+                    'options'       => $validated['options']        ?? null,
+                    'validation'    => $validated['validation']     ?? null,
+                    'fieldConfig'   => $validated['fieldConfig']    ?? null,
+                    'flagActive'    => true,
+                    'createdDate'   => $now,
+                ]);
+            });
 
             // file field → create per-field subfolder in attachments/
             if ($field->isFileUpload() && $form->gdriveAttachmentsFolderID) {
@@ -780,6 +799,8 @@ class AdminFormController extends Controller
         } catch (\Throwable $e) {
             Log::error('[AdminFormController::addField] ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        } finally {
+            $lock->release();
         }
     }
 

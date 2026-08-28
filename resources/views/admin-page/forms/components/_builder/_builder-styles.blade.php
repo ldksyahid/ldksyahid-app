@@ -12,6 +12,82 @@
     .builder-sidebar-right { order: -1; }
 }
 
+/* Left "Add Field" palette and right sidebar stay in view while the (much
+   taller) Active Fields column is scrolled — no need to scroll back up to
+   reach them. Reverts to normal in-flow position once scrolled back to top.
+   --builder-sticky-top is set at runtime (see _builder-scripts.blade.php) to
+   the ADMIN NAVBAR's real rendered height + a gap — that navbar is itself
+   `position: sticky; top: 0` with no fixed height (it's responsive), so a
+   hardcoded top offset here would let this sidebar slide underneath it. */
+.builder-col-sticky {
+    position: sticky;
+    top: var(--builder-sticky-top, 20px);
+    align-self: start;
+}
+@media (max-width: 1199px) {
+    .builder-col-sticky { position: static; }
+}
+
+/* Active Fields column renders in the normal page flow (no internal height
+   cap / scrollbar of its own) — the page simply grows as tall as the field
+   list needs. Add Field / Google Drive / Tips / the floating quick-add stay
+   reachable via .builder-col-sticky + the floating actions below instead. */
+
+/* Add Field palette: title stays fixed at the top of its (sticky, viewport-
+   bounded) card; only the field-type list below it scrolls internally. */
+.builder-addfield-card-body {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - var(--builder-sticky-top, 20px) - 20px);
+}
+.builder-addfield-card-body > .section-title { flex-shrink: 0; }
+.builder-addfield-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: .25rem;
+}
+
+/* Floating "quick add" copy of Header Image / Add Section, revealed in the
+   right sidebar (below Tips) once the Active Fields list has been scrolled. */
+.builder-floating-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .4rem;
+    margin-top: .75rem;
+    padding: .75rem;
+    background: #fff;
+    border: 1px solid #e0f7f5;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,167,157,.1);
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    border-width: 0;
+    transform: translateY(-8px);
+    transition: max-height .35s ease, opacity .3s ease, transform .3s ease,
+                padding .35s ease, margin-top .35s ease, border-width .2s ease;
+}
+.builder-floating-actions.show {
+    max-height: 140px;
+    opacity: 1;
+    padding: .75rem;
+    margin-top: .75rem;
+    border-width: 1px;
+    transform: translateY(0);
+}
+.builder-floating-actions-label {
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #9ca3af;
+}
+
 /* ===== FIELD TYPE PALETTE ===== */
 .field-type-group { margin-bottom: .85rem; }
 .field-type-group-label {
@@ -96,7 +172,7 @@
     border: 1px solid #c4b5fd; border-radius: 4px; padding: 1px 6px;
     vertical-align: middle; margin-left: .35rem; white-space: nowrap;
 }
-.field-card-actions { display: flex; gap: .3rem; }
+.field-card-actions { display: flex; gap: .3rem; flex-shrink: 0; }
 .field-card-actions button {
     border: none; background: none; cursor: pointer;
     color: #9ca3af; font-size: .85rem; padding: .2rem .35rem;
@@ -346,7 +422,8 @@ html.dark-mode .builder-fields-header { border-bottom-color: #2d3139; }
     min-width: 0;
 }
 .section-break-rule {
-    flex: 1;
+    flex: 1 1 20px;
+    min-width: 0;
     height: 1.5px;
     background: linear-gradient(90deg, transparent, #a7f3e8, transparent);
     border-radius: 2px;
@@ -356,13 +433,19 @@ html.dark-mode .builder-fields-header { border-bottom-color: #2d3139; }
     font-weight: 700;
     color: #00756e;
     letter-spacing: .03em;
-    white-space: nowrap;
     text-transform: uppercase;
-    flex-shrink: 0;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .section-break-label i { color: #00a79d; }
 
 /* ===== DARK MODE ===== */
+html.dark-mode .builder-floating-actions { background: #1a1d23; border-color: #2d3139; }
+html.dark-mode .builder-floating-actions-label { color: #6b7280; }
 /* card base — neutral dark, teal accent on section-title border only */
 html.dark-mode .card { background: #1a1d23; border-color: #2d3139 !important; }
 html.dark-mode .section-title { border-bottom-color: #2d4a30; }

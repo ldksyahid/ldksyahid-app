@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UploadFormFileToGDriveJob;
 use App\Mail\FormSubmissionConfirmation;
 use App\Models\forms\MsForm;
 use App\Models\forms\MsFormSetting;
 use App\Models\forms\TrFormDraft;
-use App\Models\forms\TrFormFile;
 use App\Models\forms\TrFormSubmission;
 use App\Services\DynamicFormGDriveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class PublicFormController extends Controller
 {
@@ -90,24 +91,119 @@ class PublicFormController extends Controller
         }
 
         // Only persist keys that correspond to real, non-file, non-system fields
-        // on this form — never trust arbitrary keys from the client; file inputs
-        // can't be restored into a <input type="file"> anyway; and system fields
-        // (e.g. the readonly auto-filled email) must always come fresh from the
-        // logged-in account, never from a possibly-stale draft.
+        // on this form — never trust arbitrary keys from the client; file fields
+        // are staged separately by uploadDraftFile() the moment they're picked
+        // (see below), not by this periodic text/choice-field autosave; and
+        // system fields (e.g. the readonly auto-filled email) must always come
+        // fresh from the logged-in account, never from a possibly-stale draft.
         $allowedKeys = $form->activeFields()
             ->get()
             ->reject(fn ($field) => $field->isDisplayOnly() || $field->isFileUpload() || $field->isSystemField)
             ->map(fn ($field) => 'field_' . $field->formFieldID)
             ->all();
 
-        $answers = $request->only($allowedKeys);
+        $incoming = $request->only($allowedKeys);
         // Drop empty values so a cleared field doesn't linger in the draft
-        $answers = array_filter($answers, fn ($v) => $v !== null && $v !== '' && $v !== []);
+        $incoming = array_filter($incoming, fn ($v) => $v !== null && $v !== '' && $v !== []);
 
-        if (empty($answers)) {
+        // This payload represents the full current state of every non-file
+        // field (the client always sends all of them), so it's authoritative
+        // for those keys — but merge rather than replace wholesale, so it
+        // never wipes out a file-field entry staged by uploadDraftFile().
+        $existing  = TrFormDraft::findAnswers($form->formID, auth()->id()) ?? [];
+        $preserved = collect($existing)->except($allowedKeys)->all();
+        $merged    = array_merge($preserved, $incoming);
+
+        if (empty($merged)) {
             TrFormDraft::clear($form->formID, auth()->id());
         } else {
-            TrFormDraft::upsertAnswers($form->formID, auth()->id(), $answers);
+            TrFormDraft::upsertAnswers($form->formID, auth()->id(), $merged);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    // -------------------------------------------------------------------------
+    // Eagerly stage a file field's upload the moment it's picked (before the
+    // form is submitted) — saved to local temp storage and tied to the user's
+    // draft so it survives a refresh or a switch to another device. Actually
+    // uploaded to Google Drive only at submit() time (see step 11 there).
+    // -------------------------------------------------------------------------
+
+    public function uploadDraftFile(Request $request, string $slug, int $fieldID)
+    {
+        if (!auth()->check()) {
+            return response()->json(['success' => false, 'message' => 'Anda harus login terlebih dahulu.'], 401);
+        }
+
+        $form = MsForm::where('slug', $slug)->where('flagActive', true)->first();
+        if (!$form) {
+            return response()->json(['success' => false], 404);
+        }
+
+        $field = $form->activeFields()->where('formFieldID', $fieldID)->first();
+        if (!$field || !$field->isFileUpload()) {
+            return response()->json(['success' => false, 'message' => 'Field tidak valid.'], 422);
+        }
+
+        $validated = $request->validate(['file' => $field->buildValidationRules()]);
+        $file      = $request->file('file');
+
+        $draft    = TrFormDraft::findAnswers($form->formID, auth()->id()) ?? [];
+        $fieldKey = 'field_' . $fieldID;
+
+        // Replacing a previously staged file for this field — remove the old
+        // temp copy so it doesn't linger until the 3-day sweep for no reason.
+        if (isset($draft[$fieldKey]['tempRelativePath'])) {
+            Storage::disk('local')->delete($draft[$fieldKey]['tempRelativePath']);
+        }
+
+        $tempRelativePath = Storage::disk('local')->putFileAs('form-uploads-tmp', $file, $file->hashName());
+
+        $draft[$fieldKey] = [
+            '__file'           => true,
+            'tempRelativePath' => $tempRelativePath,
+            'originalFileName' => $file->getClientOriginalName(),
+            'mimeType'         => $file->getMimeType() ?? 'application/octet-stream',
+            'fileSizeKB'       => (int) ceil($file->getSize() / 1024),
+        ];
+
+        TrFormDraft::upsertAnswers($form->formID, auth()->id(), $draft);
+
+        return response()->json([
+            'success'          => true,
+            'originalFileName' => $file->getClientOriginalName(),
+        ]);
+    }
+
+    // -------------------------------------------------------------------------
+    // Remove a staged draft file (user picked the wrong file, or wants to
+    // clear it without replacing it with another).
+    // -------------------------------------------------------------------------
+
+    public function removeDraftFile(Request $request, string $slug, int $fieldID)
+    {
+        if (!auth()->check()) {
+            return response()->json(['success' => false], 401);
+        }
+
+        $form = MsForm::where('slug', $slug)->where('flagActive', true)->first();
+        if (!$form) {
+            return response()->json(['success' => false], 404);
+        }
+
+        $draft    = TrFormDraft::findAnswers($form->formID, auth()->id()) ?? [];
+        $fieldKey = 'field_' . $fieldID;
+
+        if (isset($draft[$fieldKey]['tempRelativePath'])) {
+            Storage::disk('local')->delete($draft[$fieldKey]['tempRelativePath']);
+        }
+        unset($draft[$fieldKey]);
+
+        if (empty($draft)) {
+            TrFormDraft::clear($form->formID, auth()->id());
+        } else {
+            TrFormDraft::upsertAnswers($form->formID, auth()->id(), $draft);
         }
 
         return response()->json(['success' => true]);
@@ -192,12 +288,16 @@ class PublicFormController extends Controller
         }
 
         // 5. Build and run dynamic validation rules
+        // File-upload fields are excluded here and validated separately below
+        // (5b) — by the time the user submits, the file may already be staged
+        // via uploadDraftFile() rather than attached to this request, so the
+        // standard `required|file` rule can't be applied to $fieldKey directly.
         $activeFields = $form->activeFields()->get();
         $rules        = [];
         $messages     = [];
 
         foreach ($activeFields as $field) {
-            if ($field->isDisplayOnly()) {
+            if ($field->isDisplayOnly() || $field->isFileUpload()) {
                 continue;
             }
 
@@ -227,6 +327,44 @@ class PublicFormController extends Controller
         }
 
         $validated = $request->validate($rules, $messages);
+
+        // 5b. Validate file-upload fields separately — satisfied by either a
+        // live multipart upload in this request, OR a file already staged
+        // via uploadDraftFile() (the normal path once the field's JS has run).
+        $draftAnswers = TrFormDraft::findAnswers($form->formID, auth()->id()) ?? [];
+        $fileErrors   = [];
+
+        foreach ($activeFields as $field) {
+            if (!$field->isFileUpload()) {
+                continue;
+            }
+
+            $fieldKey    = 'field_' . $field->formFieldID;
+            $hasLiveFile = $request->hasFile($fieldKey);
+            $draftEntry  = $draftAnswers[$fieldKey] ?? null;
+            $hasStaged   = is_array($draftEntry)
+                && !empty($draftEntry['tempRelativePath'])
+                && Storage::disk('local')->exists($draftEntry['tempRelativePath']);
+
+            if ($field->isRequired && !$hasLiveFile && !$hasStaged) {
+                $fileErrors[$fieldKey] = ["Kolom \"{$field->label}\" wajib diisi."];
+                continue;
+            }
+
+            if ($hasLiveFile) {
+                $fileValidator = validator($request->all(), [$fieldKey => $field->buildValidationRules()]);
+                if ($fileValidator->fails()) {
+                    $fileErrors[$fieldKey] = $fileValidator->errors()->get($fieldKey);
+                }
+            }
+        }
+
+        if (!empty($fileErrors)) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $fileErrors], 422);
+            }
+            return back()->withErrors($fileErrors)->withInput();
+        }
 
         // 6. Use logged-in user's email as the respondent email
         $respondentEmail = $userEmail;
@@ -258,7 +396,11 @@ class PublicFormController extends Controller
 
                 if ($field->isFileUpload()) {
                     $rowData[]                = '[file pending]';
-                    $answerMap[$field->label] = '[file]';
+                    // File uploads are processed by a background job (see step 11
+                    // below), so the real Drive link isn't known yet when this
+                    // confirmation email is sent — this placeholder is final for
+                    // the email regardless of when the upload job completes.
+                    $answerMap[$field->label] = '[File diterima, sedang diproses]';
                 } else {
                     $value = $validated[$fieldKey] ?? '';
 
@@ -311,7 +453,17 @@ class PublicFormController extends Controller
                 );
             }
 
-            // 11. Upload files and update sheet cells + DB
+            // 11. Push each file field's upload to Google Drive via a background
+            // job — keeps this request fast and resilient to a slow/flaky Drive
+            // API call. Normally the file was already staged to local temp
+            // storage by uploadDraftFile() the moment the user picked it (see
+            // that method above); this falls back to staging a live multipart
+            // upload right here if that never happened (e.g. the field's JS
+            // failed) but a file is still attached to this request. The job
+            // fills in the TrFormFile row and overwrites the sheet's
+            // "[file pending]" cell once the upload succeeds;
+            // forms:cleanup-stale-uploads sweeps up any temp file left behind
+            // by a job that never completes (default: 3+ days old).
             $fileColOffset = 2;
             foreach ($activeFields as $field) {
                 if (!$field->isFileUpload()) {
@@ -321,10 +473,19 @@ class PublicFormController extends Controller
                     continue;
                 }
 
-                $fieldKey = 'field_' . $field->formFieldID;
-                $file     = $request->file($fieldKey);
+                $fieldKey   = 'field_' . $field->formFieldID;
+                $draftEntry = $draftAnswers[$fieldKey] ?? null;
 
-                if (!$file) {
+                if (is_array($draftEntry) && !empty($draftEntry['tempRelativePath']) && Storage::disk('local')->exists($draftEntry['tempRelativePath'])) {
+                    $tempRelativePath = $draftEntry['tempRelativePath'];
+                    $originalFileName = $draftEntry['originalFileName'];
+                    $mimeType         = $draftEntry['mimeType'];
+                } elseif ($request->hasFile($fieldKey)) {
+                    $file              = $request->file($fieldKey);
+                    $tempRelativePath  = Storage::disk('local')->putFileAs('form-uploads-tmp', $file, $file->hashName());
+                    $originalFileName  = $file->getClientOriginalName();
+                    $mimeType          = $file->getMimeType() ?? 'application/octet-stream';
+                } else {
                     $fileColOffset++;
                     continue;
                 }
@@ -332,33 +493,19 @@ class PublicFormController extends Controller
                 $gdriveFolderID = $field->getGdriveFolderID();
 
                 if ($gdriveFolderID) {
-                    $uploadResult = $gdriveService->uploadFileToFieldFolder(
+                    UploadFormFileToGDriveJob::dispatch(
+                        $tempRelativePath,
+                        $originalFileName,
+                        $mimeType,
                         $gdriveFolderID,
-                        $file,
-                        $submission->formSubmissionID
+                        $submission->formSubmissionID,
+                        $field->formFieldID,
+                        $form->gdriveSpreadsheetID,
+                        $gsheetRowIndex,
+                        $form->gdriveSpreadsheetID && $gsheetRowIndex ? $fileColOffset : null
                     );
 
-                    TrFormFile::record(
-                        submissionID:      $submission->formSubmissionID,
-                        fieldID:           $field->formFieldID,
-                        originalFileName:  $uploadResult['originalFileName'],
-                        mimeType:          $uploadResult['mimeType'],
-                        fileSizeKB:        $uploadResult['fileSizeKB'],
-                        gdriveFileID:      $uploadResult['gdriveFileID'],
-                        gdriveFolderID:    $gdriveFolderID,
-                        gdriveFileUrl:     $uploadResult['gdriveFileUrl']
-                    );
-
-                    if ($form->gdriveSpreadsheetID && $gsheetRowIndex) {
-                        $gdriveService->updateCell(
-                            $form->gdriveSpreadsheetID,
-                            $gsheetRowIndex,
-                            $fileColOffset,
-                            $uploadResult['gdriveFileUrl']
-                        );
-                    }
-
-                    $answerMap[$field->label] = $uploadResult['gdriveFileUrl'];
+                    $answerMap[$field->label] = '[File diterima, sedang diproses]';
                 }
 
                 $fileColOffset++;

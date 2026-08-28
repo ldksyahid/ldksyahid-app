@@ -664,6 +664,10 @@ Route::prefix('/form')
              ->middleware('throttle:15,10');
         Route::post('/{slug}/draft',   [PublicFormController::class, 'saveDraft'])->name('draft.save')
              ->middleware('throttle:40,1');
+        Route::post('/{slug}/draft/file/{fieldID}', [PublicFormController::class, 'uploadDraftFile'])->name('draft.uploadFile')
+             ->middleware('throttle:20,1');
+        Route::delete('/{slug}/draft/file/{fieldID}', [PublicFormController::class, 'removeDraftFile'])->name('draft.removeFile')
+             ->middleware('throttle:30,1');
         Route::get('/{slug}/terima-kasih', [PublicFormController::class, 'thankYou'])->name('thank-you');
     });
 

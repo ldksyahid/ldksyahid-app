@@ -75,6 +75,13 @@ class Kernel extends ConsoleKernel
         $schedule->command('forms:cleanup-drafts')
                  ->dailyAt('00:15')
                  ->withoutOverlapping(15);
+
+        // Dynamic forms: delete leftover local temp uploads (storage/app/form-uploads-tmp)
+        // that never made it to Google Drive (job never ran/kept failing) — kept 3 days
+        // to leave room for the queue's own retries/backoff before sweeping.
+        $schedule->command('forms:cleanup-stale-uploads')
+                 ->dailyAt('00:20')
+                 ->withoutOverlapping(15);
     }
 
     /**
@@ -99,5 +106,6 @@ class Kernel extends ConsoleKernel
         Commands\SyncKirimdevTemplates::class,
         Commands\RegisterKirimdevWebhook::class,
         Commands\CleanupFormDrafts::class,
+        Commands\CleanupStaleFormUploads::class,
     ];
 }

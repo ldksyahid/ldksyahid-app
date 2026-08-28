@@ -25,7 +25,7 @@
         <div class="gf-section-title">{{ $field->label }}</div>
         @endif
         @if($field->helpText)
-        <p class="gf-section-desc">{{ $field->helpText }}</p>
+        <p class="gf-section-desc">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
     </div>
     @break
@@ -37,7 +37,7 @@
         <p class="gf-para-text gf-para-title">{{ $field->label }}</p>
         @endif
         @if($field->helpText)
-        <div class="gf-para-text gf-para-body">{!! nl2br(e($field->helpText)) !!}</div>
+        <div class="gf-para-text gf-para-body">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</div>
         @endif
     </div>
     @break
@@ -50,7 +50,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <input
             type="text"
@@ -74,7 +74,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <input
             type="tel"
@@ -100,7 +100,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <input
             type="url"
@@ -129,7 +129,7 @@
             @if($field->isRequired || $field->isSystemField)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @elseif($field->isSystemField)
         <p class="gf-help">Email konfirmasi akan dikirimkan ke alamat ini.</p>
         @endif
@@ -157,7 +157,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <input
             type="number"
@@ -182,7 +182,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <textarea
             id="{{ $fieldID }}"
@@ -212,7 +212,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <div class="gf-dp-wrap{{ $isError ? ' is-invalid' : '' }}">
             <input type="date" id="{{ $fieldID }}" name="{{ $fieldName }}"
@@ -263,7 +263,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <div class="gf-tp-wrap{{ $isError ? ' is-invalid' : '' }}">
             <input type="time" id="{{ $fieldID }}" name="{{ $fieldName }}"
@@ -319,7 +319,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <div class="gf-dtp-wrap{{ $isError ? ' is-invalid' : '' }}">
             <input type="datetime-local" id="{{ $fieldID }}" name="{{ $fieldName }}"
@@ -400,7 +400,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <div class="gf-csel-wrap{{ $isError ? ' is-invalid' : '' }}">
             {{-- Hidden native select (form submission only) --}}
@@ -463,7 +463,7 @@
                 @if($field->isRequired)<span class="gf-required">*</span>@endif
             </legend>
             @if($field->helpText)
-            <p class="gf-help">{{ $field->helpText }}</p>
+            <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
             @endif
             <div class="gf-options">
                 @foreach($field->options ?? [] as $i => $option)
@@ -496,7 +496,7 @@
                 @if($field->isRequired)<span class="gf-required">*</span>@endif
             </legend>
             @if($field->helpText)
-            <p class="gf-help">{{ $field->helpText }}</p>
+            <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
             @endif
             <div class="gf-options">
                 @foreach($field->options ?? [] as $i => $option)
@@ -533,7 +533,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <div class="gf-linear-scale">
             <div class="gf-scale-row">
@@ -577,7 +577,7 @@
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
         <div class="gf-rating-wrap" data-field="{{ $fieldName }}">
             @for($n = 1; $n <= $rtMax; $n++)
@@ -636,21 +636,30 @@
 
 {{-- ===== FILE ===== --}}
 @case('file')
+    @php
+        $draftFile = ($draftAnswers ?? [])[$fieldName] ?? null;
+        $draftFile = (is_array($draftFile) && !empty($draftFile['__file'])) ? $draftFile : null;
+    @endphp
     <div class="gf-card {{ $isError ? 'has-error' : '' }}">
         <label class="gf-label">
             {{ $field->label }}
             @if($field->isRequired)<span class="gf-required">*</span>@endif
         </label>
         @if($field->helpText)
-        <p class="gf-help">{{ $field->helpText }}</p>
+        <p class="gf-help">{!! \App\Helpers\TextFormatter::linkify($field->helpText) !!}</p>
         @endif
 
-        <div class="gf-file-drop" id="drop_{{ $fieldID }}">
+        <div class="gf-file-drop{{ $draftFile ? ' gf-file-drop--staged' : '' }}"
+             id="drop_{{ $fieldID }}"
+             data-field-id="{{ $field->formFieldID }}"
+             data-required="{{ $field->isRequired ? '1' : '0' }}"
+             data-upload-url="{{ route('forms.draft.uploadFile', [$form->slug, $field->formFieldID]) }}"
+             data-remove-url="{{ route('forms.draft.removeFile', [$form->slug, $field->formFieldID]) }}">
             <input
                 type="file"
                 id="{{ $fieldID }}"
                 name="{{ $fieldName }}"
-                {{ $field->isRequired ? 'required' : '' }}
+                {{ ($field->isRequired && !$draftFile) ? 'required' : '' }}
                 @if($field->fieldType === 'image') accept="image/*" @endif
                 @if(!empty($field->validation['acceptedTypes']))
                     accept=".{{ implode(',.', (array) $field->validation['acceptedTypes']) }}"
@@ -669,8 +678,13 @@
                 @endif
             </div>
             <div class="gf-file-badge">
-                <i class="fas fa-paperclip fa-xs"></i>
-                <span>Belum ada file dipilih</span>
+                <i class="fas fa-{{ $draftFile ? 'check-circle' : 'paperclip' }} fa-xs"></i>
+                <span>{{ $draftFile ? $draftFile['originalFileName'] . ' (tersimpan sementara)' : 'Belum ada file dipilih' }}</span>
+                @if($draftFile)
+                <button type="button" class="gf-file-remove" title="Hapus file ini">
+                    <i class="fas fa-times"></i>
+                </button>
+                @endif
             </div>
         </div>
 

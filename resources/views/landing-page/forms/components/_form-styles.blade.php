@@ -134,7 +134,15 @@
     color: var(--gf-text-muted);
     line-height: 1.7;
     margin: 0;
-    white-space: pre-line;
+}
+
+.gf-form-desc a,
+.gf-help a,
+.gf-section-desc a,
+.gf-para-body a {
+    color: var(--gf-primary);
+    text-decoration: underline;
+    word-break: break-word;
 }
 
 .gf-form-desc--clamped {
@@ -229,6 +237,7 @@
     -webkit-appearance: none;
     appearance: none;
     font-family: inherit;
+    text-overflow: ellipsis;
 }
 
 .gf-input:focus,
@@ -1204,6 +1213,38 @@
     transition: var(--gf-transition);
 }
 
+/* File already staged (eager-uploaded to temp storage, tied to the draft) —
+   solid border instead of dashed, so it visually reads as "done" rather than
+   an empty drop target. */
+.gf-file-drop--staged {
+    border-style: solid;
+    border-color: var(--gf-primary);
+    background: var(--gf-primary-light);
+}
+
+/* While the eager upload request is in flight */
+.gf-file-drop--uploading {
+    opacity: .65;
+    pointer-events: none;
+}
+
+.gf-file-badge--error {
+    color: var(--gf-danger);
+    background: rgba(239, 68, 68, .1);
+}
+
+.gf-file-remove {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0 0 0 .35rem;
+    font-size: .7rem;
+    line-height: 1;
+    opacity: .75;
+}
+.gf-file-remove:hover { opacity: 1; }
+
 /* ─── Section Break Card ───────────────────────────────────────── */
 .gf-section-card {
     background: var(--gf-card-bg);
@@ -1244,7 +1285,6 @@
     color: var(--gf-text);
     margin: 0;
     line-height: 1.7;
-    white-space: pre-line;
 }
 .gf-para-title { font-weight: 700; margin-bottom: .4rem; }
 .gf-para-body  { font-size: .9rem; opacity: .85; }
@@ -1701,6 +1741,10 @@
     border-color: var(--gf-primary);
 }
 [data-theme="dark"] .gf-file-hint { color: var(--gf-text); }
+[data-theme="dark"] .gf-file-drop--staged {
+    background: rgba(0,167,157,.1);
+    border-color: var(--gf-primary);
+}
 [data-theme="dark"] .gf-select-icon  { color: #6b7280; }
 
 [data-theme="dark"] .gf-error-card {
