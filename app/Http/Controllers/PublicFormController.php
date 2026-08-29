@@ -11,6 +11,7 @@ use App\Models\forms\TrFormSubmission;
 use App\Services\DynamicFormGDriveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -172,31 +173,47 @@ class PublicFormController extends Controller
         $validated = $request->validate(['file' => $field->buildValidationRules()]);
         $file      = $request->file('file');
 
-        $draft    = TrFormDraft::findAnswers($form->formID, auth()->id()) ?? [];
-        $fieldKey = 'field_' . $fieldID;
+        // Serialize concurrent uploads to the SAME field: this method does a
+        // read-delete-write-write sequence (drop the old temp file, stage the
+        // new one, persist the new reference) that is not atomic. If the same
+        // field's file input somehow fires two overlapping upload requests
+        // (a flaky connection retry, a double-fired change/drop event), the
+        // slower one can finish last and write back a reference to a temp
+        // file the faster one already deleted — leaving the draft pointing
+        // at a file that no longer exists. A lock scoped to this exact field
+        // makes the second request wait instead of racing.
+        $fieldLock = Cache::lock("form:{$form->formID}:draft-file:{$fieldID}:" . auth()->id(), 30);
+        $fieldLock->block(10);
 
-        // Replacing a previously staged file for this field — remove the old
-        // temp copy so it doesn't linger until the 3-day sweep for no reason.
-        if (isset($draft[$fieldKey]['tempRelativePath'])) {
-            Storage::disk('local')->delete($draft[$fieldKey]['tempRelativePath']);
+        try {
+            $draft    = TrFormDraft::findAnswers($form->formID, auth()->id()) ?? [];
+            $fieldKey = 'field_' . $fieldID;
+
+            // Replacing a previously staged file for this field — remove the old
+            // temp copy so it doesn't linger until the 3-day sweep for no reason.
+            if (isset($draft[$fieldKey]['tempRelativePath'])) {
+                Storage::disk('local')->delete($draft[$fieldKey]['tempRelativePath']);
+            }
+
+            $tempRelativePath = Storage::disk('local')->putFileAs('form-uploads-tmp', $file, $file->hashName());
+
+            $draft[$fieldKey] = [
+                '__file'           => true,
+                'tempRelativePath' => $tempRelativePath,
+                'originalFileName' => $file->getClientOriginalName(),
+                'mimeType'         => $file->getMimeType() ?? 'application/octet-stream',
+                'fileSizeKB'       => (int) ceil($file->getSize() / 1024),
+            ];
+
+            TrFormDraft::upsertAnswers($form->formID, auth()->id(), $draft);
+
+            return response()->json([
+                'success'          => true,
+                'originalFileName' => $file->getClientOriginalName(),
+            ]);
+        } finally {
+            $fieldLock->release();
         }
-
-        $tempRelativePath = Storage::disk('local')->putFileAs('form-uploads-tmp', $file, $file->hashName());
-
-        $draft[$fieldKey] = [
-            '__file'           => true,
-            'tempRelativePath' => $tempRelativePath,
-            'originalFileName' => $file->getClientOriginalName(),
-            'mimeType'         => $file->getMimeType() ?? 'application/octet-stream',
-            'fileSizeKB'       => (int) ceil($file->getSize() / 1024),
-        ];
-
-        TrFormDraft::upsertAnswers($form->formID, auth()->id(), $draft);
-
-        return response()->json([
-            'success'          => true,
-            'originalFileName' => $file->getClientOriginalName(),
-        ]);
     }
 
     // -------------------------------------------------------------------------
@@ -215,21 +232,30 @@ class PublicFormController extends Controller
             return response()->json(['success' => false], 404);
         }
 
-        $draft    = TrFormDraft::findAnswers($form->formID, auth()->id()) ?? [];
-        $fieldKey = 'field_' . $fieldID;
+        // Same field-scoped lock as uploadDraftFile() — prevents a remove
+        // racing against a near-simultaneous (re)upload for this field.
+        $fieldLock = Cache::lock("form:{$form->formID}:draft-file:{$fieldID}:" . auth()->id(), 30);
+        $fieldLock->block(10);
 
-        if (isset($draft[$fieldKey]['tempRelativePath'])) {
-            Storage::disk('local')->delete($draft[$fieldKey]['tempRelativePath']);
+        try {
+            $draft    = TrFormDraft::findAnswers($form->formID, auth()->id()) ?? [];
+            $fieldKey = 'field_' . $fieldID;
+
+            if (isset($draft[$fieldKey]['tempRelativePath'])) {
+                Storage::disk('local')->delete($draft[$fieldKey]['tempRelativePath']);
+            }
+            unset($draft[$fieldKey]);
+
+            if (empty($draft)) {
+                TrFormDraft::clear($form->formID, auth()->id());
+            } else {
+                TrFormDraft::upsertAnswers($form->formID, auth()->id(), $draft);
+            }
+
+            return response()->json(['success' => true]);
+        } finally {
+            $fieldLock->release();
         }
-        unset($draft[$fieldKey]);
-
-        if (empty($draft)) {
-            TrFormDraft::clear($form->formID, auth()->id());
-        } else {
-            TrFormDraft::upsertAnswers($form->formID, auth()->id(), $draft);
-        }
-
-        return response()->json(['success' => true]);
     }
 
     // -------------------------------------------------------------------------
@@ -309,6 +335,26 @@ class PublicFormController extends Controller
                 ->with('title', $form->title)
                 ->with('alreadySubmitted', true);
         }
+
+        // Idempotency guard: a slow submit (real, synchronous Google Sheets/
+        // Drive API calls below) can tempt a confused user into clicking
+        // "Kirimkan Formulir" again — a refresh-and-resubmit, a double click,
+        // or the button not visibly re-enabling — minutes apart, well outside
+        // any debounce window. Without this, that produces two fully valid,
+        // duplicate submissions (two DB rows, two sheet rows) since nothing
+        // else in this flow is idempotent. A second concurrent/near-term
+        // attempt for the same form+user is rejected immediately instead of
+        // being allowed to also succeed.
+        $submitLock = Cache::lock("form:{$form->formID}:submit:" . auth()->id(), 120);
+        if (!$submitLock->get()) {
+            $msg = 'Formulir Anda sedang diproses. Mohon tunggu beberapa saat sebelum mencoba lagi.';
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $msg], 429);
+            }
+            return back()->withErrors(['submit' => $msg])->withInput();
+        }
+
+        try {
 
         // 5. Build and run dynamic validation rules
         // File-upload fields are excluded here and validated separately below
@@ -574,6 +620,10 @@ class PublicFormController extends Controller
                 return response()->json(['success' => false, 'message' => $msg], 500);
             }
             return back()->withErrors(['error' => $msg])->withInput();
+        }
+
+        } finally {
+            $submitLock->release();
         }
     }
 

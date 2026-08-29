@@ -1007,6 +1007,12 @@
             color: #fff;
         }
 
+        html.dark-mode .page-item.disabled .page-link {
+            background-color: #1a1d21;
+            border-color: #373b3e;
+            color: #6c757d;
+        }
+
         /* Select2 dark mode */
         html.dark-mode .select2-container--default .select2-selection--single {
             background-color: #1a1d21 !important;
