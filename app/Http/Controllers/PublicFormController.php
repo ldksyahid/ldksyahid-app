@@ -298,16 +298,9 @@ class PublicFormController extends Controller
             }
         }
 
-        // 2. Rate limit check
-        if (TrFormSubmission::isRateLimited($form->formID, $request->ip())) {
-            $msg = 'Terlalu banyak pengiriman formulir. Silakan coba lagi beberapa saat kemudian.';
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => $msg], 429);
-            }
-            return back()->withErrors(['rate_limit' => $msg])->withInput();
-        }
-
-        // Privilege check (same logic as show())
+        // Privilege check (same logic as show()) — computed before the rate
+        // limit check below so form owners/collaborators/Superadmin testing
+        // the same form repeatedly aren't blocked by the public-abuse guard.
         /** @var \App\Models\User $authUser */
         $authUser        = auth()->user();
         $submitCollabs   = $form->collaboratorEmails ?: [];
@@ -315,6 +308,22 @@ class PublicFormController extends Controller
             || $form->createdBy === $authUser->email
             || $form->createdBy === $authUser->name
             || in_array($authUser->email, $submitCollabs);
+
+        // 2. Rate limit check (skip for privileged — otherwise repeated QA
+        // testing from the same IP trips the public per-IP abuse guard)
+        if (!$isPrivilegedSub && TrFormSubmission::isRateLimited($form->formID, $request->ip())) {
+            $retryAfterSeconds = TrFormSubmission::rateLimitRetryAfterSeconds($form->formID, $request->ip());
+            $msg = 'Terlalu banyak pengiriman formulir. Silakan coba lagi '
+                . ($retryAfterSeconds !== null ? 'dalam ' . $this->formatWaitTime($retryAfterSeconds) . '.' : 'beberapa saat kemudian.');
+            if ($request->ajax()) {
+                return response()->json([
+                    'success'           => false,
+                    'message'           => $msg,
+                    'retryAfterSeconds' => $retryAfterSeconds,
+                ], 429);
+            }
+            return back()->withErrors(['rate_limit' => $msg])->withInput();
+        }
 
         // 3. Check if form is still accepting submissions (skip for privileged)
         if (!$isPrivilegedSub && !$form->isAcceptingSubmissions()) {
@@ -642,6 +651,24 @@ class PublicFormController extends Controller
     // -------------------------------------------------------------------------
     // Private helpers
     // -------------------------------------------------------------------------
+
+    /**
+     * "90 detik" / "2 menit" / "2 menit 30 detik" — human-readable Indonesian
+     * wait-time estimate for rate-limit messages.
+     */
+    private function formatWaitTime(int $seconds): string
+    {
+        if ($seconds < 60) {
+            return $seconds . ' detik';
+        }
+
+        $minutes = intdiv($seconds, 60);
+        $remainingSeconds = $seconds % 60;
+
+        return $remainingSeconds > 0
+            ? $minutes . ' menit ' . $remainingSeconds . ' detik'
+            : $minutes . ' menit';
+    }
 
     private function successResponse(MsForm $form, Request $request)
     {

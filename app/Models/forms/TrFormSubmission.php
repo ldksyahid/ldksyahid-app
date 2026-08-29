@@ -125,6 +125,40 @@ class TrFormSubmission extends Model
     }
 
     /**
+     * When isRateLimited() is true, this tells you how many seconds until
+     * it clears — i.e. how long until the oldest submission inside the
+     * current rolling window ages out and drops the count back under the
+     * limit. Returns null if the IP isn't currently rate-limited.
+     */
+    public static function rateLimitRetryAfterSeconds(int $formID, string $ipAddress): ?int
+    {
+        $form = MsForm::find($formID);
+
+        $maxPerIp      = (int) ($form?->getSetting(MsFormSetting::KEY_RATE_LIMIT_PER_IP, 5));
+        $windowMinutes = (int) ($form?->getSetting(MsFormSetting::KEY_RATE_LIMIT_WINDOW_MIN, 10));
+
+        $since = Carbon::now()->subMinutes($windowMinutes);
+
+        $recent = self::where('formID', $formID)
+                     ->where('ipAddress', $ipAddress)
+                     ->where('submittedAt', '>=', $since)
+                     ->orderBy('submittedAt', 'asc')
+                     ->get(['submittedAt']);
+
+        if ($recent->count() < $maxPerIp) {
+            return null;
+        }
+
+        // The count only drops back under the limit once enough of the
+        // oldest submissions age out — the (count - maxPerIp + 1)-th oldest
+        // one is the one whose expiry actually unblocks the next attempt.
+        $blockingSubmission = $recent[$recent->count() - $maxPerIp];
+        $availableAt        = $blockingSubmission->submittedAt->copy()->addMinutes($windowMinutes);
+
+        return max(0, (int) Carbon::now()->diffInSeconds($availableAt, false));
+    }
+
+    /**
      * After a sheet row is physically deleted (DynamicFormGDriveService::deleteRow()),
      * every row below it shifts up by one — keep every other submission's
      * cached row pointer in sync. This is a best-effort cache: any write
