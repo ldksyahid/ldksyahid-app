@@ -328,7 +328,14 @@ class PublicFormController extends Controller
         // 3. Check if form is still accepting submissions (skip for privileged)
         if (!$isPrivilegedSub && !$form->isAcceptingSubmissions()) {
             if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'Formulir ini sudah tidak menerima pengisian.'], 422);
+                // Redirect to show() instead of an inline error banner — it
+                // re-runs this exact check and renders the proper "closed"
+                // page (same one a fresh page load would show).
+                return response()->json([
+                    'success'     => false,
+                    'message'     => 'Formulir ini sudah tidak menerima pengisian.',
+                    'redirectUrl' => route('forms.show', $form->slug),
+                ], 422);
             }
             return view('landing-page.forms.closed', compact('form'))
                 ->with('title', $form->title);
@@ -336,9 +343,17 @@ class PublicFormController extends Controller
 
         // 4. Single-submission check (skip for privileged)
         if (!$isPrivilegedSub && !$form->isMultipleSubmit && TrFormSubmission::hasSubmittedBefore($form->formID, $userEmail)) {
-            $msg = 'Email ' . $userEmail . ' sudah pernah digunakan untuk mengisi formulir ini.';
+            $msg = 'Jazakallah khair, email ' .$userEmail . ' sudah pernah digunakan untuk mengisi formulir ini. Silakan refresh halaman dan periksa kotak masuk email Kamu untuk melihat konfirmasi sebelumnya.';
             if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => $msg], 422);
+                // Redirect to show() instead of an inline error banner — it
+                // will detect hasSubmittedBefore() itself and render the
+                // "Alhamdulillah, kamu telah mengisi formulir ini
+                // sebelumnya..." page, same as a fresh page load would.
+                return response()->json([
+                    'success'     => false,
+                    'message'     => $msg,
+                    'redirectUrl' => route('forms.show', $form->slug),
+                ], 422);
             }
             return view('landing-page.forms.closed', compact('form'))
                 ->with('title', $form->title)

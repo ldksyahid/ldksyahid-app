@@ -1136,10 +1136,17 @@
                 restoreBtn(btn, span, icon);
             } else if (status === 429) {
                 // ── Rate limit (throttle middleware or controller) ────
-                showGeneralError('Terlalu banyak percobaan pengiriman. Silakan tunggu beberapa saat dan coba lagi.');
+                showGeneralError(data.message || 'Terlalu banyak percobaan pengiriman. Silakan tunggu beberapa saat dan coba lagi.');
                 restoreBtn(btn, span, icon);
+            } else if (data.redirectUrl) {
+                // ── Already submitted / form closed ───────────────────
+                // Instead of an inline error banner on top of a form the
+                // user can no longer submit, send them to the same page a
+                // fresh visit would show (e.g. "Alhamdulillah, kamu telah
+                // mengisi formulir ini sebelumnya...").
+                window.location.href = data.redirectUrl;
             } else {
-                // ── Server / closed error ─────────────────────────────
+                // ── Server error ────────────────────────────────────
                 showGeneralError(data.message || 'Terjadi kesalahan. Silakan coba lagi.');
                 restoreBtn(btn, span, icon);
             }
