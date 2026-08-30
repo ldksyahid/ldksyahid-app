@@ -13,7 +13,7 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="Finding Direction, Building Civilization: Menjadi Muslim Berdaya di Tengah Perubahan Zaman" name="description">
-    <meta content="Ekspresi, LDK Syahid, UIN Jakarta, Kaderisasi, Ekspresi 30, 2026" name="keywords">
+    <meta content="Ekspresi, LDK Syahid, UIN Jakarta, Kaderisasi, Ekspresi 2026" name="keywords">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <meta property="og:title" content="EKSPRESI 2026 &#9679; LDK Syahid" />
@@ -101,7 +101,7 @@
                             class="col-lg-12 d-flex flex-column justify-content-center align-items-stretch order-2 order-lg-1">
                             <div class="content">
                                 <h4>Berpijak pada pemikiran tersebut, LDK Syahid bermaksud melaksanakan kegiatan Latihan
-                                    Kader Dakwah (LKD) 2026 yang dinamakan "EKSPRESI 30 - Eksplorasi Potensi Diri Islami
+                                    Kader Dakwah (LKD) 2026 yang dinamakan "EKSPRESI 2026 - Eksplorasi Potensi Diri Islami
                                     2026".</h4>
                             </div>
                         </div>
@@ -165,7 +165,7 @@
                     <div class="row content">
                         <div class="col-lg-5 border-rules mb-4 mb-lg-0">
                             <p class="p-2">
-                                Mahasiswa aktif UIN Syarif Hidayatullah Jakarta semester 1 & 3 (Dibuktikan dengan
+                                Mahasiswa aktif UIN Syarif Hidayatullah Jakarta semester 1 atau 3 (Dibuktikan dengan
                                 KTM/KRS)
                             </p>
                         </div>
@@ -188,7 +188,7 @@
 
                 <div class="section-title">
                     <h2>Tanggal Penting & Tata Cara Pendaftaran</h2>
-                    <p>Catat jadwal penting dan ikuti 5 langkah mudah pendaftaran EKSPRESI 30</p>
+                    <p>Catat jadwal penting dan ikuti 5 langkah mudah pendaftaran EKSPRESI 2026</p>
                 </div>
 
                 {{-- Row 1: 3 Card Tanggal Penting --}}
@@ -215,7 +215,7 @@
                             </div>
                             <h4>Technical Meeting (TM)</h4>
                             <div class="date-badge mb-3">
-                                08 Oktober 2026
+                                07 Oktober 2026
                             </div>
                             <p class="date-card-desc">Briefing teknis kegiatan, pembagian kelompok, dan pengenalan tata tertib.</p>
                         </div>
@@ -470,7 +470,7 @@
                                     class="bx bx-chevron-up icon-close"></i></a>
                             <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
                                 <p class="answere">
-                                    Syaratnya gampang banget loh, yaitu Mahasiswa aktif semester 1 dan 3 yang siap
+                                    Syaratnya gampang banget loh, yaitu Mahasiswa aktif semester 1 atau 3 yang siap
                                     belajar serta mau berkomitmen penuh menjadi anggota LDK Syahid
                                 </p>
                             </div>
@@ -510,9 +510,7 @@
                                     class="bx bx-chevron-up icon-close"></i></a>
                             <div id="faq-list-6" class="collapse" data-bs-parent=".faq-list">
                                 <p class="answere">
-                                    Untuk biaya pendaftarannya terjangkau banget loh yaitu sebesar 60.000 sudah include
-                                    marchindise EKSPRESI, buku KIT Peserta, tempat menginap, biaya makan dan biaya
-                                    transportasi.
+                                    Untuk biaya pendaftaran EKSPRESI, kamu cukup membayar sebesar Rp80.000,00 saja. Biaya tersebut sudah mencakup seluruh kebutuhan selama mengikuti kegiatan, mulai dari Buku KIT Peserta EKSPRESI, tempat menginap selama 3 hari 2 malam, transportasi menuju lokasi EKSPRESI, hingga biaya Kelas Minat Bakat (KMB).
                                 </p>
                             </div>
                         </li>
