@@ -18,7 +18,10 @@ class LetterPdfService
         $nomorSurat     = $suratLog->nomor_surat ?: '-';
         $tanggalSurat   = ($suratLog->approved_at ?: now())->locale('id')->translatedFormat('d F Y');
 
-        $pdf = Pdf::loadView('pdf.' . $suratLog->jenis_surat, [
+        $isPusat        = !$suratLog->isFakultas();
+        $viewName       = $this->resolveView($suratLog->jenis_surat, $isPusat);
+
+        $pdf = Pdf::loadView($viewName, [
             'suratLog'       => $suratLog,
             'label'          => $suratLog->label,
             'nomorSurat'     => $nomorSurat,
@@ -54,7 +57,10 @@ class LetterPdfService
         $nomorSurat     = ($dummyLog->nomor_surat && $dummyLog->nomor_surat !== '-') ? $dummyLog->nomor_surat : ('DRAFT/Ph-e/BPH/LDK-SYAHID/' . now()->month . '/' . now()->year);
         $tanggalSurat   = ($dummyLog->created_at ?: now())->locale('id')->translatedFormat('d F Y');
 
-        $pdf = Pdf::loadView('pdf.' . $jenisSurat, [
+        $isPusat        = !str_starts_with((string)($data['kode_bidang'] ?? ''), 'LDKS.');
+        $viewName       = $this->resolveView($jenisSurat, $isPusat);
+
+        $pdf = Pdf::loadView($viewName, [
             'suratLog'       => $dummyLog,
             'label'          => $dummyLog->label ?: LetterRegistry::getLabel($jenisSurat),
             'nomorSurat'     => $nomorSurat,
@@ -79,7 +85,10 @@ class LetterPdfService
         $nomorSurat     = $dummy['suratLog']->nomor_surat;
         $tanggalSurat   = now()->locale('id')->translatedFormat('d F Y');
 
-        $pdf = Pdf::loadView('pdf.' . $type, [
+        $isPusat        = !$dummy['suratLog']->isFakultas();
+        $viewName       = $this->resolveView($type, $isPusat);
+
+        $pdf = Pdf::loadView($viewName, [
             'suratLog'       => $dummy['suratLog'],
             'label'          => $dummy['suratLog']->label,
             'nomorSurat'     => $nomorSurat,
@@ -115,7 +124,10 @@ class LetterPdfService
             $nomorSurat     = $dummy['suratLog']->nomor_surat;
             $tanggalSurat   = now()->locale('id')->translatedFormat('d F Y');
 
-            $pdf = Pdf::loadView('pdf.' . $type, [
+            $isPusat        = !$dummy['suratLog']->isFakultas();
+            $viewName       = $this->resolveView($type, $isPusat);
+
+            $pdf = Pdf::loadView($viewName, [
                 'suratLog'       => $dummy['suratLog'],
                 'label'          => $dummy['suratLog']->label,
                 'nomorSurat'     => $nomorSurat,
@@ -135,6 +147,23 @@ class LetterPdfService
         $zip->close();
 
         return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+    }
+
+    public function resolveView(string $jenisSurat, bool $isPusat = false): string
+    {
+        if ($isPusat && view()->exists("pdf.kemasis.{$jenisSurat}")) {
+            return "pdf.kemasis.{$jenisSurat}";
+        }
+
+        if (view()->exists("pdf.{$jenisSurat}")) {
+            return "pdf.{$jenisSurat}";
+        }
+
+        if (view()->exists("pdf.kemasis.{$jenisSurat}")) {
+            return "pdf.kemasis.{$jenisSurat}";
+        }
+
+        return 'pdf.surat';
     }
 
     public function generateQrCodeBase64(string $kode): string
@@ -172,6 +201,10 @@ class LetterPdfService
             'jabatan_tujuan'          => 'Dekan Fakultas Sains dan Teknologi',
             'nama_ketua_pelaksana'    => 'Muhammad Syauqi Mubarak',
             'nim_ketua_pelaksana'     => '11230600000067',
+            'no_hp_ketua_pelaksana'   => '081234567890',
+            'nama_kendaraan'          => 'Bus Kampus UIN Syarif Hidayatullah Jakarta (1 Unit)',
+            'jumlah_peserta'          => '500 orang',
+            'narahubung'              => '085776923137 (Zhafar)',
             'nama'                    => 'Ahmad Fulan',
             'nim'                     => '11230000000001',
             'ttl'                     => 'Jakarta, 17 Agustus 2003',
@@ -189,6 +222,7 @@ class LetterPdfService
             'perihal_imbauan'         => 'Partisipasi Seluruh Pengurus dalam Rangkaian Milad LDK Syahid ke-30',
             'poin_imbauan'            => "1. Menjaga ketertiban dan kebersihan sekretariat bersama.\n2. Menghadiri agenda opening ceremony tepat waktu.\n3. Memakai atribut resmi organisasi LDK Syahid.",
             'bentuk_kerjasama'        => 'Media Partner, Publikasi Konten Bersama, dan Booth Promosi',
+            'opsi_sponsor'            => 'bebas',
         ];
 
         $dummyLog->data = $data;

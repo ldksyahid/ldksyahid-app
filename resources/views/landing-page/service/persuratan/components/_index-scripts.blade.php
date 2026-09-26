@@ -178,6 +178,37 @@
             { name: 'waktu',            label: 'Waktu Kegiatan',       icon: 'fa-clock',           type: 'time-range' },
             { name: 'tempat',           label: 'Tempat Kegiatan',      icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Lapangan Student Center' },
         ],
+        'peminjaman-kendaraan': [
+            { name: 'kode_bidang',     label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',      label: 'Nama Kegiatan / Acara',       icon: 'fa-star',    placeholder: 'Contoh: Milad Akbar LDK Syahid ke-30' },
+            { name: 'tema_acara',      label: 'Tema Kegiatan',               icon: 'fa-tag',     placeholder: 'Contoh: Merajut Hangatnya Ukhuwah, Mengukir Gemilangnya Dakwah' },
+            { name: 'nama_kendaraan',  label: 'Nama Kendaraan yang Dimohon', icon: 'fa-bus',     placeholder: 'Contoh: Bus Kampus UIN Jakarta (1 Unit)' },
+            { name: 'hari_tanggal',    label: 'Tanggal Penggunaan',          icon: 'fa-calendar', type: 'date' },
+            { name: 'waktu',           label: 'Waktu Penggunaan',            icon: 'fa-clock',    type: 'time-range' },
+            { name: 'tempat',          label: 'Tempat / Lokasi Tujuan',      icon: 'fa-map-marker-alt', placeholder: 'Contoh: Cisarua, Bogor / Auditorium Harun Nasution' },
+            { name: 'jumlah_peserta',  label: 'Jumlah Peserta / Rombongan',  icon: 'fa-users',   placeholder: 'Contoh: 50 orang' },
+            { name: 'narahubung',      label: 'Kontak Narahubung (WhatsApp)',icon: 'fa-phone',   placeholder: 'Contoh: 085776923137 (Zhafar)' },
+        ],
+        'permohonan-izin-berkegiatan-malam': [
+            { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',           label: 'Nama Kegiatan / Acara',       icon: 'fa-star',    placeholder: 'Contoh: Malam Bina Iman dan Taqwa (MABIT)' },
+            { name: 'tema_acara',           label: 'Tema Kegiatan',               icon: 'fa-tag',     placeholder: 'Contoh: Mengokohkan Ruhiyah Menuju Kemenangan Dakwah' },
+            { name: 'nama_ketua_pelaksana', label: 'Nama Ketua Pelaksana',        icon: 'fa-user',    placeholder: 'Contoh: Muhammad Syauqi Mubarak' },
+            { name: 'nim_ketua_pelaksana',  label: 'NIM Ketua Pelaksana',         icon: 'fa-id-card', inputmode: 'numeric', pattern: '[0-9]*', placeholder: 'Contoh: 11230600000067' },
+            { name: 'hari_tanggal',         label: 'Tanggal Pelaksanaan',         icon: 'fa-calendar', type: 'date' },
+            { name: 'waktu',                label: 'Waktu Pelaksanaan',           icon: 'fa-clock',    type: 'time-range' },
+            { name: 'tempat',               label: 'Tempat / Lokasi Kegiatan',    icon: 'fa-map-marker-alt', placeholder: 'Contoh: Masjid Al-Jami\'ah UIN Jakarta' },
+            { name: 'jumlah_peserta',       label: 'Jumlah Peserta & Panitia',    icon: 'fa-users',   placeholder: 'Contoh: 200 orang' },
+            { name: 'no_hp_ketua_pelaksana',label: 'No. HP / WA Ketua Pelaksana', icon: 'fa-phone',   placeholder: 'Contoh: 081234567890' },
+        ],
+        'permohonan-tte-proposal': [
+            { name: 'kode_bidang',  label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
+            { name: 'nama_acara',   label: 'Nama Kegiatan / Acara',       icon: 'fa-star',    placeholder: 'Contoh: Musyawarah Kerja LDK Syahid 2026' },
+            { name: 'tema_acara',   label: 'Tema Kegiatan',               icon: 'fa-tag',     placeholder: 'Contoh: Sinergi Dakwah Menuju Peradaban Gemilang' },
+            { name: 'hari_tanggal', label: 'Tanggal Pelaksanaan',         icon: 'fa-calendar', type: 'date' },
+            { name: 'waktu',        label: 'Waktu Pelaksanaan',           icon: 'fa-clock',    type: 'time-range' },
+            { name: 'tempat',       label: 'Tempat Pelaksanaan',          icon: 'fa-map-marker-alt', placeholder: 'Contoh: Auditorium Harun Nasution' },
+        ],
     };
 
     function escapeAttr(str) {

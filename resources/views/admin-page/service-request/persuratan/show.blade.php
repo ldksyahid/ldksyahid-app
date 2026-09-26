@@ -199,6 +199,13 @@
                                         'materi'               => 'Specific Topic / Material',
                                         'bentuk_kerjasama'     => 'Partnership Proposal Summary',
                                         'penyelenggara'        => 'Organizer / Institution',
+                                        'nama_kendaraan'       => 'Vehicle Requested',
+                                        'jumlah_peserta'       => 'Total Participants',
+                                        'narahubung'           => 'Contact Person (WhatsApp)',
+                                        'no_hp_ketua_pelaksana'=> 'Chief Committee Phone/WA',
+                                        'fakultas_ketua_pelaksana' => 'Chief Committee Faculty',
+                                        'jurusan_ketua_pelaksana'  => 'Chief Committee Major',
+                                        'opsi_sponsor'         => 'Sponsorship Status',
                                     ];
                                 @endphp
 

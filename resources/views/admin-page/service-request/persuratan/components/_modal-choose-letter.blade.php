@@ -29,10 +29,13 @@
 
                 {{-- Category Pills --}}
                 <div class="adm-modal-cat-pills">
-                    <button type="button" class="adm-modal-cat-pill active" data-cat="all">All (18)</button>
-                    <button type="button" class="adm-modal-cat-pill" data-cat="izin_peminjaman">Izin &amp; Peminjaman (8)</button>
-                    <button type="button" class="adm-modal-cat-pill" data-cat="permohonan_kemitraan">Permohonan &amp; Mitra (5)</button>
-                    <button type="button" class="adm-modal-cat-pill" data-cat="keterangan_undangan">Keterangan &amp; Undangan (5)</button>
+                    <button type="button" class="adm-modal-cat-pill active" data-cat="all">All ({{ count($suratTypes) }})</button>
+                    @foreach (\App\Support\LetterRegistry::categories() as $catKey => $catData)
+                        @php
+                            $catCount = count(array_filter($suratTypes, fn($s) => ($s['category'] ?? '') === $catKey));
+                        @endphp
+                        <button type="button" class="adm-modal-cat-pill" data-cat="{{ $catKey }}">{{ $catData['label'] }} ({{ $catCount }})</button>
+                    @endforeach
                 </div>
             </div>
 
