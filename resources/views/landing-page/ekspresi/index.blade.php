@@ -358,12 +358,11 @@
                 <div class="row g-4 justify-content-center mb-5">
                     {{-- 5. Twibbon Ekspresi --}}
                     <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="javascript:void(0)" class="hyperlink-item disabled-link" title="Informasi Twibbon Menyusul">
-                            <div class="icon-box dashed-card text-center">
-                                <span class="badge-status-menyusul">Menyusul</span>
+                        <a href="https://ldksyah.id/TwibbonEkspresi26" target="_blank" rel="noopener noreferrer" class="hyperlink-item">
+                            <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-image"></i></div>
                                 <h4>Twibbon Peserta</h4>
-                                <span class="badge-card-sub">Segera dirilis</span>
+                                <span class="badge-card-sub">Unduh twibbon & caption</span>
                             </div>
                         </a>
                     </div>
