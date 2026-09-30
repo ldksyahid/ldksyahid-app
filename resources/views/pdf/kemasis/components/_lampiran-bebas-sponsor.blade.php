@@ -22,7 +22,7 @@
             <td>{{ $data['fakultas_ketua_pelaksana'] ?? $data['fakultas'] ?? '-' }}</td>
         </tr>
         <tr>
-            <td class="id-label">Semester / Jurusan</td>
+            <td class="id-label">Program Studi / Jurusan</td>
             <td class="id-sep">:</td>
             <td>{{ $data['jurusan_ketua_pelaksana'] ?? $data['jurusan'] ?? '-' }}</td>
         </tr>

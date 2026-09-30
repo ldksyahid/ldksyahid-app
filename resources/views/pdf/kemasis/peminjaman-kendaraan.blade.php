@@ -78,15 +78,15 @@
             <tr>
                 <td class="identity-label">Jumlah Peserta</td>
                 <td class="identity-sep">:</td>
-                <td>{{ $data['jumlah_peserta'] ?? '500 orang' }}</td>
+                <td>{{ $data['jumlah_peserta'] ?? '-' }}</td>
             </tr>
         </table>
 
         <p class="indent">
             Maka dengan ini kami mengajukan permohonan kepada Kepala Biro AUK untuk dapat menggunakan
-            <strong>{{ $data['nama_kendaraan'] ?? 'Kendaraan Operasional / Bus Kampus' }}</strong>
+            <strong>{{ $data['nama_kendaraan'] ?? '-' }}</strong>
             demi terlaksananya kegiatan tersebut. Berikut narahubung untuk komunikasi lebih lanjut;
-            <strong>{{ $data['narahubung'] ?? $data['kontak_person'] ?? '085776923137 (Zhafar)' }}</strong>.
+            <strong>{{ $data['narahubung'] ?? '-' }}</strong>.
         </p>
 
         <p class="indent">

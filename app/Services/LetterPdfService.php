@@ -201,6 +201,8 @@ class LetterPdfService
             'jabatan_tujuan'          => 'Dekan Fakultas Sains dan Teknologi',
             'nama_ketua_pelaksana'    => 'Muhammad Syauqi Mubarak',
             'nim_ketua_pelaksana'     => '11230600000067',
+            'fakultas_ketua_pelaksana' => 'Fakultas Sains dan Teknologi',
+            'jurusan_ketua_pelaksana' => 'Teknik Informatika',
             'no_hp_ketua_pelaksana'   => '081234567890',
             'nama_kendaraan'          => 'Bus Kampus UIN Syarif Hidayatullah Jakarta (1 Unit)',
             'jumlah_peserta'          => '500 orang',
@@ -223,7 +225,16 @@ class LetterPdfService
             'poin_imbauan'            => "1. Menjaga ketertiban dan kebersihan sekretariat bersama.\n2. Menghadiri agenda opening ceremony tepat waktu.\n3. Memakai atribut resmi organisasi LDK Syahid.",
             'bentuk_kerjasama'        => 'Media Partner, Publikasi Konten Bersama, dan Booth Promosi',
             'opsi_sponsor'            => 'bebas',
+            'susunan_acara'           => [
+                ['waktu' => '08.30 - 09.00', 'kegiatan' => 'Registrasi Peserta', 'pengisi' => 'Panitia'],
+                ['waktu' => '09.00 - 09.10', 'kegiatan' => 'Pembukaan', 'pengisi' => 'MC'],
+                ['waktu' => '09.10 - 10.00', 'kegiatan' => 'Acara Utama', 'pengisi' => 'Panitia'],
+            ],
         ];
+
+        if (in_array($type, ['permohonan-izin-berkegiatan-malam', 'permohonan-tte-proposal'], true)) {
+            $data['ditujukan_kepada'] = 'Wakil Rektor Bidang Kemahasiswaan';
+        }
 
         $dummyLog->data = $data;
 

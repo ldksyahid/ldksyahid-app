@@ -4,6 +4,14 @@
     <meta charset="utf-8">
     <title>{{ $label }}</title>
     @include('pdf.kemasis.components._styles')
+    <style>
+        .main-letter .signature-table { margin-top: 6pt; }
+        .main-letter .ttd-space { height: 10mm; }
+        .main-letter .ttd-space img { width: 10mm; height: 10mm; }
+        .main-letter .signature-table--warek { margin-top: 3pt; }
+        .main-letter .signature-table--warek .ttd-space { height: 8mm; }
+        .main-letter .verification { margin-top: 2pt; }
+    </style>
 </head>
 <body>
 @php
@@ -18,7 +26,7 @@
 @endif
 
 {{-- HALAMAN 1: SURAT UTAMA --}}
-<div class="content">
+<div class="content main-letter">
 
     <table class="meta">
         <tr>
@@ -30,7 +38,7 @@
         <tr>
             <td>Lampiran</td>
             <td>:</td>
-            <td colspan="2">3 (tiga) Berkas</td>
+            <td colspan="2">{{ !empty($data['opsi_sponsor']) ? '3 (tiga)' : '2 (dua)' }} Berkas</td>
         </tr>
         <tr>
             <td>Hal</td>
@@ -74,12 +82,12 @@
             <tr>
                 <td class="identity-label">Tempat</td>
                 <td class="identity-sep">:</td>
-                <td><strong>{{ $data['tempat_dipinjam'] ?? $data['tempat'] ?? '-' }}</strong></td>
+                <td><strong>{{ $data['tempat'] ?? '-' }}</strong></td>
             </tr>
             <tr>
                 <td class="identity-label">Jumlah Peserta</td>
                 <td class="identity-sep">:</td>
-                <td>{{ $data['jumlah_peserta'] ?? '500 orang' }}</td>
+                <td>{{ $data['jumlah_peserta'] ?? '-' }}</td>
             </tr>
         </table>
 
@@ -158,9 +166,9 @@
 @include('pdf.kemasis.components._lampiran-komitmen-kepatuhan')
 
 {{-- HALAMAN 4: LAMPIRAN 3 - SURAT PERNYATAAN BEBAS SPONSOR / PEMBERITAHUAN SPONSOR --}}
-@if(($data['opsi_sponsor'] ?? 'bebas') === 'pemberitahuan' || !empty($data['dengan_sponsor']) || !empty($data['ada_sponsor']))
+@if(($data['opsi_sponsor'] ?? null) === 'pemberitahuan')
     @include('pdf.kemasis.components._lampiran-pemberitahuan-sponsor')
-@else
+@elseif(($data['opsi_sponsor'] ?? null) === 'bebas')
     @include('pdf.kemasis.components._lampiran-bebas-sponsor')
 @endif
 

@@ -58,7 +58,7 @@ class LetterRegistry
             'icon'        => 'fa-landmark',
             'badge'       => 'Ph-i',
             'description' => 'Peminjaman fasilitas bersama kampus UIN Jakarta (Student Center, Aula, Lapangan).',
-            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam'],
+            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'fakultas_ketua_pelaksana', 'jurusan_ketua_pelaksana', 'no_hp_ketua_pelaksana', 'jumlah_peserta', 'susunan_acara', 'opsi_sponsor', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam'],
         ],
         'peminjaman-tempat-fakultas' => [
             'label'       => 'Surat Peminjaman Tempat Fakultas (Internal)',
@@ -194,7 +194,7 @@ class LetterRegistry
             'icon'        => 'fa-moon',
             'badge'       => 'Ph-i',
             'description' => 'Permohonan izin berkegiatan malam bagi panitia & peserta kepada Wakil Rektor Kemahasiswaan.',
-            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'hari_tanggal', 'waktu', 'tempat', 'jumlah_peserta', 'no_hp_ketua_pelaksana'],
+            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'fakultas_ketua_pelaksana', 'jurusan_ketua_pelaksana', 'hari_tanggal', 'waktu', 'tempat', 'jumlah_peserta', 'no_hp_ketua_pelaksana', 'susunan_acara', 'opsi_sponsor'],
         ],
         'permohonan-tte-proposal' => [
             'label'       => 'Surat Permohonan TTE Proposal',
@@ -265,8 +265,31 @@ class LetterRegistry
             }
         }
 
-        $rules['susunan_acara'] = 'nullable|array';
-        $rules['opsi_sponsor']  = 'nullable|string|in:bebas,pemberitahuan';
+        if (in_array($type, ['peminjaman-tempat-kampus', 'permohonan-izin-berkegiatan-malam'], true)) {
+            $rules['fakultas_ketua_pelaksana'] = 'required|string|max:255';
+            $rules['jurusan_ketua_pelaksana'] = 'required|string|max:255';
+            $rules['jumlah_peserta'] = 'required|string|max:100';
+            $rules['no_hp_ketua_pelaksana'] = 'required|string|max:30';
+            $rules['susunan_acara'] = [
+                'required',
+                'string',
+                'max:10000',
+                function ($attribute, $value, $fail) {
+                    foreach (preg_split('/\r\n|\r|\n/', $value) as $line) {
+                        if (trim($line) === '') {
+                            continue;
+                        }
+
+                        $parts = array_map('trim', explode('|', $line));
+                        if (count($parts) !== 3 || in_array('', $parts, true)) {
+                            $fail('Setiap baris susunan acara harus berisi waktu | kegiatan | pengisi.');
+                            return;
+                        }
+                    }
+                },
+            ];
+            $rules['opsi_sponsor'] = 'required|string|in:bebas,pemberitahuan';
+        }
 
         return $rules;
     }
