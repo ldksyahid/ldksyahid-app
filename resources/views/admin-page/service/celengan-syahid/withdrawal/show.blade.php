@@ -136,6 +136,43 @@ html.dark-mode .wd-breakdown { background: rgba(0,167,157,.08); border-color: rg
 .wd-net-value { font-size: 1.3rem; font-weight: 800; color: #059669; }
 html.dark-mode .wd-net-value { color: #4ade80; }
 
+/* ── Callback response ─────────────────────────────── */
+.wd-tl-message {
+    font-size: .8rem;
+    margin-top: .4rem;
+    padding: .5rem .65rem;
+    border-radius: 8px;
+    line-height: 1.4;
+}
+.wd-tl-message.ok   { background: rgba(16,185,129,.1); color: #047857; }
+.wd-tl-message.fail { background: rgba(239,68,68,.1); color: #b91c1c; }
+html.dark-mode .wd-tl-message.ok   { background: rgba(16,185,129,.15); color: #34d399; }
+html.dark-mode .wd-tl-message.fail { background: rgba(239,68,68,.15); color: #f87171; }
+
+.wd-raw-response summary {
+    cursor: pointer;
+    font-size: .78rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    user-select: none;
+}
+html.dark-mode .wd-raw-response summary { color: #9ca3af; }
+.wd-raw-response pre {
+    font-size: .75rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: .65rem .75rem;
+    margin-top: .5rem;
+    max-height: 220px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+html.dark-mode .wd-raw-response pre { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.1); color: #e5e7eb; }
+
 /* ── Dark mode hero ────────────────────────────────── */
 html.dark-mode .wd-hero-pending   { background: linear-gradient(135deg, #b45309, #92400e); }
 html.dark-mode .wd-hero-completed { background: linear-gradient(135deg, #047857, #065f46); }
@@ -335,6 +372,13 @@ html.dark-mode .wd-hero-draft     { background: linear-gradient(135deg, #374151,
                                         Waiting for Bisabiller callback...
                                     @endif
                                 </div>
+                                @if($withdrawal->callback_message)
+                                <div class="wd-tl-message {{ $isDone ? 'ok' : 'fail' }}" id="tl-final-message">
+                                    {{ $withdrawal->callback_message }}
+                                </div>
+                                @else
+                                <div class="wd-tl-message {{ $isDone ? 'ok' : 'fail' }}" id="tl-final-message" style="display:none"></div>
+                                @endif
                             </div>
                         </li>
                     </ul>
@@ -345,6 +389,13 @@ html.dark-mode .wd-hero-draft     { background: linear-gradient(135deg, #374151,
                         </div>
                         <code class="d-block small mt-1" style="word-break:break-all">{{ $withdrawal->reff_id }}</code>
                     </div>
+
+                    @if($withdrawal->callback_response)
+                    <details class="wd-raw-response border-top pt-3 mt-3">
+                        <summary>Raw Callback Response</summary>
+                        <pre>{{ json_encode($withdrawal->callback_response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+                    </details>
+                    @endif
                 </div>
             </div>
         </div>
@@ -414,6 +465,18 @@ html.dark-mode .wd-hero-draft     { background: linear-gradient(135deg, #374151,
             icon.className  = 'fas ' + tMap.icon;
             title.textContent = tMap.title;
             time.textContent  = data.completed_at || '—';
+        }
+
+        // Callback message
+        const msgEl = document.getElementById('tl-final-message');
+        if (msgEl) {
+            if (data.message) {
+                msgEl.textContent = data.message;
+                msgEl.className   = 'wd-tl-message ' + (s === 'COMPLETED' ? 'ok' : 'fail');
+                msgEl.style.display = '';
+            } else {
+                msgEl.style.display = 'none';
+            }
         }
 
         // Receipt link
