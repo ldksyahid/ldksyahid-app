@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
 <style>
 /* ── Page Title ── */
 .page-title {
@@ -63,6 +64,53 @@
 .filter-bar .form-control:focus, .filter-bar .form-select:focus {
     border-color: #00a79d !important;
     box-shadow: 0 0 0 0.2rem rgba(0,167,157,0.25) !important;
+}
+
+/* ── Select2 in Filter Bar ── */
+.filter-bar .select2-container .select2-selection--single {
+    height: 31px; border: 1px solid #dee2e6;
+    border-radius: 8px !important; background-color: #fff;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.filter-bar .select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 29px; padding-left: 14px; padding-right: 28px;
+    font-size: 0.875rem; color: #495057;
+}
+.filter-bar .select2-container .select2-selection--single .select2-selection__arrow {
+    height: 29px; right: 10px;
+}
+.filter-bar .select2-container--open .select2-selection--single,
+.filter-bar .select2-container--focus .select2-selection--single {
+    border-color: #00a79d !important;
+    box-shadow: 0 0 0 0.2rem rgba(0,167,157,0.25) !important; outline: none;
+}
+
+/* ── Select2 Dropdown List ── */
+.select2-container--default .select2-results__option {
+    padding: 8px 14px; font-size: 0.875rem; color: #333;
+    transition: background-color 0.15s ease;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected],
+.select2-container--default .select2-results__option--highlighted {
+    background-color: #00a79d !important; color: #fff !important;
+}
+.select2-container--default .select2-results__option[aria-selected="true"] {
+    background-color: #e0f7f5 !important; color: #008b84 !important; font-weight: 600;
+}
+.select2-container--default .select2-selection__arrow b {
+    border-color: #00a79d transparent transparent transparent;
+}
+.select2-dropdown {
+    border-radius: 8px !important; border: 1px solid #00bfa6 !important;
+    overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    animation: select2FadeIn 0.15s ease forwards;
+}
+.select2-results__option { border-bottom: 1px solid #f0fffe; cursor: pointer; }
+.select2-results__option:last-child { border-bottom: none; }
+@keyframes select2FadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Table Card ── */
@@ -147,6 +195,22 @@ html.dark-mode .table-pagination { border-top-color: #373b3e !important; }
 html.dark-mode .filter-bar .form-control, html.dark-mode .filter-bar .form-select {
     background-color: #1a1d21; border-color: #373b3e; color: #e4e6eb;
 }
+html.dark-mode .filter-bar .select2-container .select2-selection--single {
+    background-color: #1a1d21 !important; border-color: #373b3e !important;
+}
+html.dark-mode .filter-bar .select2-container .select2-selection--single .select2-selection__rendered {
+    color: #e4e6eb !important;
+}
+html.dark-mode .filter-bar .select2-container--open .select2-selection--single,
+html.dark-mode .filter-bar .select2-container--focus .select2-selection--single {
+    border-color: #00a79d !important;
+    box-shadow: 0 0 0 0.2rem rgba(0,167,157,0.25) !important;
+}
+html.dark-mode .select2-dropdown {
+    background-color: #2b2f33 !important; border-color: #373b3e !important;
+}
+html.dark-mode .select2-container--default .select2-results__option { color: #e4e6eb !important; }
+html.dark-mode .select2-results__option { border-bottom-color: #373b3e !important; }
 html.dark-mode #log-table thead th { background: #1a1d21; color: #9ca3af; border-bottom-color: #373b3e; }
 html.dark-mode #log-table tbody td { color: #e4e6eb; }
 html.dark-mode #log-table tbody tr:hover > td { background: rgba(255,255,255,0.04); }
