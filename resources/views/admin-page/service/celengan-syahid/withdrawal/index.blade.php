@@ -237,6 +237,7 @@ $(function () {
                 $('#wi-result-info').text(res.total > 0 ? res.total + ' record(s)' : '');
                 updateChips();
                 renderPagination(res);
+                $('#withdrawal-table-wrap [data-bs-toggle="tooltip"]').tooltip();
                 $('html, body').animate({ scrollTop: $('#withdrawal-table-wrap').offset().top - 100 }, 200);
             },
             error: function () { $('#withdrawal-table-wrap').removeClass('wi-loading'); }
@@ -253,6 +254,7 @@ $(function () {
 
     // Init
     updateChips();
+    $('#withdrawal-table-wrap [data-bs-toggle="tooltip"]').tooltip();
     renderPagination({
         from:         {{ $items->firstItem() ?? 0 }},
         to:           {{ $items->lastItem() ?? 0 }},

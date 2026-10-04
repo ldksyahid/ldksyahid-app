@@ -15,16 +15,41 @@ class Withdrawal extends Model
         'amount', 'fee', 'bank_code', 'account_number',
         'account_holder', 'recipient_city_code', 'remark',
         'status', 'bisabiller_status_id', 'receipt_url',
-        'inquiry_response', 'disbursement_response',
+        'inquiry_response', 'disbursement_response', 'callback_response',
         'executed_at', 'completed_at',
     ];
 
     protected $casts = [
         'inquiry_response'      => 'array',
         'disbursement_response' => 'array',
+        'callback_response'     => 'array',
         'executed_at'           => 'datetime',
         'completed_at'          => 'datetime',
     ];
+
+    /**
+     * Per Bisabiller's "Callback Transfer" API docs, the webhook payload only
+     * guarantees a human-readable `status` label (e.g. "Completed") — there is
+     * no dedicated failure-reason field, and no documented example for a FAILED
+     * payload. The other keys below are a best-effort fallback in case
+     * Bisabiller includes extra detail undocumented. `remark` is deliberately
+     * excluded — it just echoes the remark we sent on disbursement, not a
+     * gateway-provided reason.
+     */
+    public function getCallbackMessageAttribute(): ?string
+    {
+        if (empty($this->callback_response)) {
+            return null;
+        }
+
+        foreach (['message', 'notes', 'description', 'reason', 'keterangan'] as $key) {
+            if (!empty($this->callback_response[$key]) && is_string($this->callback_response[$key])) {
+                return $this->callback_response[$key];
+            }
+        }
+
+        return $this->callback_response['status'] ?? null;
+    }
 
     protected static function boot()
     {

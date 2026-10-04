@@ -62,6 +62,10 @@
                         <i class="fas {{ $statusIcon }}"></i>
                         {{ $wd->status }}
                     </span>
+                    @if($wd->callback_message)
+                    <i class="fas fa-circle-info ms-1 text-muted" style="cursor:help"
+                       data-bs-toggle="tooltip" title="{{ $wd->callback_message }}"></i>
+                    @endif
                 </td>
                 <td class="text-center">
                     <div class="btn-group btn-group-sm" role="group">
