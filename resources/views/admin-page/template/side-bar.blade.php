@@ -124,6 +124,7 @@
                     </div>
                 </div>
                 <a href="/admin/job-queue-log" class="nav-item nav-link {{ $isActive('admin/job-queue-log') ? 'active' : '' }}"><i class="fas fa-stream me-2"></i>Job Queue Log</a>
+                <a href="/admin/laravel-log" class="nav-item nav-link {{ $isActive('admin/laravel-log') ? 'active' : '' }}"><i class="fas fa-file-alt me-2"></i>Laravel Log</a>
                 @if($twoFaAllowed)
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle {{ $isDropdownActive(['admin/security/2fa']) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fas fa-user-shield me-2"></i>2FA Security</a>

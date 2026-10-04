@@ -35,6 +35,7 @@ use App\Http\Controllers\ShortLinkController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\GenerateEmailController;
 use App\Http\Controllers\JobQueueLogController;
+use App\Http\Controllers\LaravelLogController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\KirimdevWebhookController;
 use App\Http\Controllers\Admin\AdminFormController;
@@ -401,6 +402,17 @@ Route::middleware(['role:Superadmin'])
         Route::delete('/failed/all', [JobQueueLogController::class, 'destroyAllFailed'])->name('.failed.destroy-all');
         Route::post('/failed/{id}/retry', [JobQueueLogController::class, 'retryFailed'])->name('.failed.retry');
         Route::delete('/failed/{id}', [JobQueueLogController::class, 'destroyFailed'])->name('.failed.destroy');
+    });
+
+// Route AdminPage Laravel Log
+Route::middleware(['role:Superadmin'])
+    ->prefix('/admin/laravel-log')
+    ->name('admin.laravel-log')
+    ->group(function () {
+        Route::get('/', [LaravelLogController::class, 'index'])->name('');
+        Route::get('/data', [LaravelLogController::class, 'data'])->name('.data');
+        Route::get('/download', [LaravelLogController::class, 'download'])->name('.download');
+        Route::delete('/', [LaravelLogController::class, 'clear'])->name('.clear');
     });
 
 // Route AdminPage News
