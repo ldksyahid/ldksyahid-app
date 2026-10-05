@@ -429,6 +429,7 @@ class WithdrawalController extends Controller
             'executed_at'  => optional($w->executed_at)->isoFormat('D MMM YYYY, HH:mm'),
             'completed_at' => optional($w->completed_at)->isoFormat('D MMM YYYY, HH:mm'),
             'receipt_url'  => $w->receipt_url,
+            'message'      => $w->callback_message,
         ]);
     }
 
@@ -817,10 +818,17 @@ class WithdrawalController extends Controller
             'status'               => $newStatus,
             'bisabiller_status_id' => $statusId,
             'receipt_url'          => $payload['receipt'] ?? null,
+            'callback_response'    => $payload,
             'completed_at'         => $newStatus === 'COMPLETED' ? now() : null,
         ]);
 
         Cache::forget('bisabiller_wallet_balance');
+
+        if ($newStatus === 'COMPLETED') {
+            CelsyahidAuditLog::record('withdrawal.completed', 'withdrawal', $withdrawal->id, 'Disbursement confirmed by Amdigipay - Bisatopup callback.');
+        } elseif ($newStatus === 'FAILED') {
+            CelsyahidAuditLog::record('withdrawal.failed', 'withdrawal', $withdrawal->id, 'Disbursement failed per Amdigipay - Bisatopup callback.' . ($withdrawal->callback_message ? ' Reason: ' . $withdrawal->callback_message : ''));
+        }
 
         Log::info('[Withdrawal Callback] updated', [
             'reff_id'  => $reffId,
