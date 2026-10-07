@@ -35,11 +35,14 @@
                 {{-- Category Filter Pills --}}
                 <div class="prs-cat-pills-wrap">
                     <button type="button" class="prs-cat-pill active" data-category="all">
-                        <i class="fas fa-th-large me-1"></i> Semua (18)
+                        <i class="fas fa-th-large me-1"></i> Semua ({{ count($suratTypes) }})
                     </button>
                     @foreach (\App\Support\LetterRegistry::categories() as $catKey => $catData)
+                        @php
+                            $catCount = count(array_filter($suratTypes, fn($s) => ($s['category'] ?? '') === $catKey));
+                        @endphp
                         <button type="button" class="prs-cat-pill" data-category="{{ $catKey }}">
-                            <i class="fas {{ $catData['icon'] }} me-1"></i> {{ $catData['label'] }}
+                            <i class="fas {{ $catData['icon'] }} me-1"></i> {{ $catData['label'] }} ({{ $catCount }})
                         </button>
                     @endforeach
                 </div>

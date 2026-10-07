@@ -177,7 +177,7 @@
                         <div class="prs-step-num">1</div>
                         <div>
                             <div class="prs-step-label">Pilih Surat</div>
-                            <div class="prs-step-sub">18 Template Resmi</div>
+                            <div class="prs-step-sub">{{ count($suratTypes) }} Template Resmi</div>
                         </div>
                     </div>
                     <div class="prs-step-item">
@@ -242,7 +242,7 @@
                                             {{ $selectedSurat['label'] ?? 'Pilih Jenis Surat Resmi...' }}
                                         </div>
                                         <div class="prs-picker-desc" id="prsPickerDesc">
-                                            {{ $selectedSurat['description'] ?? 'Klik di sini untuk membuka katalog 18 jenis surat resmi LDK Syahid' }}
+                                            {{ $selectedSurat['description'] ?? ('Klik di sini untuk membuka katalog ' . count($suratTypes) . ' jenis surat resmi LDK Syahid') }}
                                         </div>
                                     </div>
                                     <div class="prs-picker-action">
