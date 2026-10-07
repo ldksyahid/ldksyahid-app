@@ -368,20 +368,18 @@
                     </div>
                     {{-- 6. Technical Meeting --}}
                     <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="150">
-                        <a href="javascript:void(0)" class="hyperlink-item disabled-link" title="Informasi Technical Meeting Menyusul">
-                            <div class="icon-box dashed-card text-center">
-                                <span class="badge-status-menyusul">Menyusul</span>
-                                <div class="icon"><i class="bi bi-building-fill-exclamation"></i></div>
-                                <h4>Technical Meeting</h4>
-                                <span class="badge-card-sub">Briefing & persiapan</span>
+                        <a href="https://ldksyah.id/PPTTechnicalMeetingEkspresi26" target="_blank" rel="noopener noreferrer" class="hyperlink-item">
+                            <div class="icon-box text-center">
+                                <div class="icon"><i class="bi bi-file-earmark-slides"></i></div>
+                                <h4>PPT Technical Meeting</h4>
+                                <span class="badge-card-sub">Materi briefing & persiapan</span>
                             </div>
                         </a>
                     </div>
                     {{-- 7. Name Tag Peserta --}}
                     <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
-                        <a href="javascript:void(0)" class="hyperlink-item disabled-link" title="Informasi Name Tag Peserta Menyusul">
-                            <div class="icon-box dashed-card text-center">
-                                <span class="badge-status-menyusul">Menyusul</span>
+                        <a href="https://ldksyah.id/NameTagPesertaEkspresi26" target="_blank" rel="noopener noreferrer" class="hyperlink-item">
+                            <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-person-badge-fill"></i></div>
                                 <h4>Name Tag Peserta</h4>
                                 <span class="badge-card-sub">Format identitas peserta</span>
@@ -390,9 +388,8 @@
                     </div>
                     {{-- 8. Kelompok Mentoring --}}
                     <div class="col-xl-3 col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="250">
-                        <a href="javascript:void(0)" class="hyperlink-item disabled-link" title="Informasi Kelompok Mentoring Menyusul">
-                            <div class="icon-box dashed-card text-center">
-                                <span class="badge-status-menyusul">Menyusul</span>
+                        <a href="https://ldksyah.id/KelompokMentoringEkspresi26" target="_blank" rel="noopener noreferrer" class="hyperlink-item">
+                            <div class="icon-box text-center">
                                 <div class="icon"><i class="bi bi-people-fill"></i></div>
                                 <h4>Kelompok Mentoring</h4>
                                 <span class="badge-card-sub">Daftar kelompok peserta</span>
