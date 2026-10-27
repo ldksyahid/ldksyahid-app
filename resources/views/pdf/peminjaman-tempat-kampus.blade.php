@@ -51,7 +51,7 @@
             <td>{{ $nomorSurat }}</td>
             <td class="date-cell">Jakarta, {{ $tanggalSurat }}</td>
         </tr>
-        <tr><td>Lampiran</td><td>:</td><td colspan="2">-</td></tr>
+        <tr><td>Lampiran</td><td>:</td><td colspan="2">{{ !empty($data['berkas_lampiran']) ? '1 (satu) Berkas' : '-' }}</td></tr>
         <tr>
             <td>Hal</td>
             <td>:</td>
@@ -69,9 +69,7 @@
 
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
 
-        <p class="indent">Puji syukur senantiasa kita panjatkan ke hadirat Allah SWT. Shalawat serta salam
-            semoga selalu tercurah kepada junjungan kita Nabi Muhammad SAW, beserta keluarga,
-            sahabat, dan umatnya.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
 
         <p class="indent">Sehubungan dengan akan dilaksanakannya agenda
             <strong>{{ $data['nama_acara'] ?? '-' }}</strong>
@@ -94,19 +92,13 @@
                 <td class="identity-sep">:</td>
                 <td><strong>{{ $data['tempat_dipinjam'] ?? '-' }}</strong></td>
             </tr>
-            <tr>
-                <td class="identity-label">Penanggung Jawab</td>
-                <td class="identity-sep">:</td>
-                <td>{{ $data['nama_ketua_pelaksana'] ?? '-' }} (NIM. {{ $data['nim_ketua_pelaksana'] ?? '-' }})</td>
-            </tr>
         </table>
 
         <p class="indent">Mengingat pentingnya kelancaran kegiatan tersebut, kami memohon izin dan
             perkenan Bapak/Ibu untuk meminjam fasilitas tempat tersebut pada waktu yang telah
             disebutkan di atas.</p>
 
-        <p class="indent">Demikian permohonan peminjaman tempat ini kami sampaikan. Atas izin dan
-            dukungan yang diberikan, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Demikian permohonan ini kami sampaikan. Atas perhatian dan bantuannya, kami ucapkan terima kasih.</p>
 
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
 

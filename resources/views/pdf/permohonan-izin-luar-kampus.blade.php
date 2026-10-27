@@ -23,7 +23,7 @@
             <td>{{ $nomorSurat }}</td>
             <td class="date-cell">Jakarta, {{ $tanggalSurat }}</td>
         </tr>
-        <tr><td>Lampiran</td><td>:</td><td colspan="2">-</td></tr>
+        <tr><td>Lampiran</td><td>:</td><td colspan="2">{{ !empty($data['berkas_lampiran']) ? '1 (satu) Berkas Proposal' : '-' }}</td></tr>
         <tr><td>Hal</td><td>:</td><td colspan="2"><strong>Permohonan Izin Kegiatan di Luar Kampus</strong></td></tr>
     </table>
 
@@ -36,9 +36,7 @@
 
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
 
-        <p class="indent">Puji syukur senantiasa kita panjatkan ke hadirat Allah SWT. Shalawat serta
-            salam semoga selalu tercurah kepada Nabi Muhammad SAW beserta keluarga, sahabat,
-            dan umatnya.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
 
         <p class="indent">Sehubungan dengan program kerja pengurus UKM Lembaga Dakwah Kampus (LDK)
             Syahid, kami bermaksud akan menyelenggarakan kegiatan
@@ -74,8 +72,7 @@
             kegiatan mahasiswa yang berlokasi di luar kampus tersebut dapat berjalan dengan
             lancar dan resmi.</p>
 
-        <p class="indent">Demikian surat permohonan izin ini kami sampaikan. Atas perhatian dan izin
-            yang diberikan, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Demikian permohonan ini kami sampaikan. Atas perhatian dan bantuannya, kami ucapkan terima kasih.</p>
 
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
 

@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -28,8 +28,7 @@
             <p>di Tempat</p>
         </div>
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
-        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu/Saudara/i dalam keadaan sehat
-            wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
         <p class="indent">Melalui surat ini, kami memberitahukan bahwa UKM Lembaga Dakwah Kampus
             (LDK) Syahid UIN Syarif Hidayatullah Jakarta akan melaksanakan kegiatan
             <strong>{{ $data['nama_kegiatan'] ?? '-' }}</strong>.
@@ -41,8 +40,7 @@
         </table>
         <p class="indent">Sehubungan dengan hal tersebut, kami mohon maklum dan memberitahukan kepada
             pihak-pihak terkait demi kelancaran dan ketertiban berlangsungnya acara.</p>
-        <p class="indent">Demikian surat pemberitahuan ini kami sampaikan. Atas perhatian dan
-            kerjasamanya, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Demikian permohonan ini kami sampaikan. Atas perhatian dan bantuannya, kami ucapkan terima kasih.</p>
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
         <table class="signature-table">
             <tr>

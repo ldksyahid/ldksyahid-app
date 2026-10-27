@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -9,7 +9,7 @@
 @php
     $templateUri = \App\Models\SuratLog::getKopImageBase64();
     $hariTanggal  = \App\Models\SuratLog::formatHariTanggal($data['hari_tanggal'] ?? null);
-    $daftarAlat   = preg_split('/\r\n|\r|\n/', trim($data['daftar_alat'] ?? ''));
+    $daftarAlat   = preg_split('/\r\n|\r|\n/', trim(is_array($data['daftar_alat'] ?? '') ? implode("\n", $data['daftar_alat']) : ($data['daftar_alat'] ?? '')));
     $daftarAlat   = array_values(array_filter(array_map(
         fn($item) => trim(preg_replace('/^\d+[\.\)]\s*/', '', $item)),
         $daftarAlat
@@ -37,8 +37,7 @@
 
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
 
-        <p class="indent">Segala puji bagi Allah SWT yang senantiasa melimpahkan rahmat dan hidayah-Nya.
-            Shalawat dan salam selalu tercurah kepada Rasulullah Muhammad SAW.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
 
         <p class="indent">Sehubungan dengan akan dilaksanakannya agenda
             <strong>{{ $data['nama_acara'] ?? '-' }}</strong>
@@ -74,8 +73,7 @@
             @endforelse
         </ol>
 
-        <p class="indent">Demikian surat permohonan peminjaman alat ini kami sampaikan. Atas perhatian
-            dan izin yang diberikan, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Demikian permohonan ini kami sampaikan. Atas perhatian dan bantuannya, kami ucapkan terima kasih.</p>
 
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
 

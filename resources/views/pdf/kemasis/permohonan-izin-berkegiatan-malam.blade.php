@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -59,7 +59,7 @@
         <p class="salam">Assalamualaikum warahmatullah wabarakatuh,</p>
 
         <p class="indent">
-            Teriring doa dan harapan semoga Bapak/Ibu dalam keadaan sehat wal afiat serta berkah dalam menjalankan aktivitas sehari-hari.
+            Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.
         </p>
 
         <p class="indent">

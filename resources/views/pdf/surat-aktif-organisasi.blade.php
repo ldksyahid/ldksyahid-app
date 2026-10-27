@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -31,9 +31,7 @@
             <p>di Tempat</p>
         </div>
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
-        <p class="indent">Puji syukur senantiasa kita panjatkan ke hadirat Allah SWT. Shalawat serta
-            salam semoga selalu tercurah kepada Nabi Muhammad SAW beserta keluarga dan para
-            pengikutnya.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
         <p class="indent">Yang bertanda tangan di bawah ini, Pengurus UKM Lembaga Dakwah Kampus (LDK)
             Syahid UIN Syarif Hidayatullah Jakarta menerangkan bahwa:</p>
         <table class="identity">
@@ -46,8 +44,7 @@
         <p class="indent">Merupakan mahasiswa/i UIN Syarif Hidayatullah Jakarta yang
             <strong>benar-benar aktif</strong> sebagai pengurus LDK Syahid.
             Surat keterangan ini dibuat untuk keperluan {{ $data['keperluan'] ?? '-' }}.</p>
-        <p class="indent">Demikian surat keterangan ini kami buat agar dapat dipergunakan sebagaimana
-            mestinya. Atas perhatiannya, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Demikian surat keterangan ini kami buat agar dapat dipergunakan sebagaimana mestinya. Atas perhatian dan bantuannya, kami ucapkan terima kasih.</p>
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
         <table class="signature-table">
             <tr>

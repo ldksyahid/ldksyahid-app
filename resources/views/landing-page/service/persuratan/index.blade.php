@@ -36,7 +36,7 @@
                         Alur Pengajuan
                     </p>
                     <ul class="prs-info-list">
-                        <li>Pilih template dari <strong>18 jenis surat resmi</strong> yang tersedia</li>
+                        <li>Pilih template dari <strong>{{ count($suratTypes) }} jenis surat resmi</strong> yang tersedia</li>
                         <li>Lengkapi data kegiatan pada formulir otomatis</li>
                         <li>Notifikasi dikirim langsung ke <strong>Kestari (Pusat)</strong> atau <strong>Sekjen (LDKSF)</strong></li>
                         <li>Admin memeriksa draft dokumen sebelum memberikan persetujuan</li>
@@ -205,7 +205,7 @@
 
                 {{-- Main Form Card --}}
                 <div class="prs-form-card">
-                    <form action="{{ route('service.persuratan.submit') }}" method="POST" id="form-persuratan">
+                    <form action="{{ route('service.persuratan.submit') }}" method="POST" id="form-persuratan" enctype="multipart/form-data">
                         @csrf
 
                         <div class="prs-form-card-header">

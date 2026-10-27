@@ -206,6 +206,7 @@
                                         'fakultas_ketua_pelaksana' => 'Chief Committee Faculty',
                                         'jurusan_ketua_pelaksana'  => 'Chief Committee Major',
                                         'opsi_sponsor'         => 'Sponsorship Status',
+                                        'berkas_lampiran'      => 'Berkas Lampiran / Proposal',
                                     ];
                                 @endphp
 
@@ -219,7 +220,18 @@
                                                         {{ $fieldLabels[$key] ?? ucwords(str_replace('_', ' ', $key)) }}
                                                     </td>
                                                     <td>
-                                                        @if ($key === 'daftar_alat' || $key === 'pertimbangan' || $key === 'bentuk_kerjasama' || $key === 'keperluan')
+                                                        @if ($key === 'berkas_lampiran')
+                                                            @php
+                                                                $fileInfo = is_array($value) ? $value : ['nama_file' => basename((string)$value), 'url' => asset((string)$value)];
+                                                            @endphp
+                                                            @if (!empty($fileInfo['url']))
+                                                                <a href="{{ $fileInfo['url'] }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary fw-semibold">
+                                                                    <i class="fas fa-file-download me-1"></i> Buka / Unduh Berkas ({{ $fileInfo['nama_file'] ?? 'Lampiran' }})
+                                                                </a>
+                                                            @else
+                                                                <span class="text-muted small fst-italic">Berkas tidak tersedia</span>
+                                                            @endif
+                                                        @elseif ($key === 'daftar_alat' || $key === 'pertimbangan' || $key === 'bentuk_kerjasama' || $key === 'keperluan')
                                                             <div class="adm-action-box font-monospace small" style="white-space: pre-wrap;">{{ $value }}</div>
                                                         @elseif ($key === 'hari_tanggal')
                                                             <span class="adm-badge adm-badge-neutral" style="font-size:0.8rem;">

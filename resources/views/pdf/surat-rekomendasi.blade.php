@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -42,9 +42,7 @@
             <p>di Tempat</p>
         </div>
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
-        <p class="indent">Segala puji bagi Allah Rabb semesta alam dengan rahmat dan karunia yang tak
-            terhingga. Shalawat dan salam semoga tetap tercurah kepada Rasulullah SAW., keluarga,
-            sahabat, dan para pengikutnya yang setia hingga akhir zaman.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
         <p class="indent">Dengan ini UKM Lembaga Dakwah Kampus Syarif Hidayatullah Jakarta (LDK Syahid)
             memberikan <strong>Rekomendasi</strong> terhadap peserta program
             <strong><em>&ldquo;{{ $program }}&rdquo;</em></strong>.
@@ -63,8 +61,7 @@
                 <li>{{ $item }}</li>
             @endforeach
         </ol>
-        <p class="indent">Demikian rekomendasi ini kami sampaikan. Atas perhatian dan kerja sama yang
-            diberikan kami ucapkan terima kasih.</p>
+        <p class="indent">Demikian rekomendasi ini kami sampaikan. Atas perhatian dan bantuannya, kami ucapkan terima kasih.</p>
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
         <table class="signature-table">
             <tr>

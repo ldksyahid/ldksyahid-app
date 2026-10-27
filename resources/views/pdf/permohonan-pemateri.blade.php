@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -36,8 +36,7 @@
 
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
 
-        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu senantiasa dalam keadaan sehat
-            wal 'afiat serta selalu berada dalam lindungan Allah SWT.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
 
         <p class="indent">Sehubungan dengan akan diadakannya agenda
             <strong>{{ $data['nama_acara'] ?? '-' }}</strong>
@@ -70,8 +69,7 @@
         </table>
 
         <p class="indent">Besar harapan kami agar Bapak/Ibu berkenan hadir dan memberikan ilmu serta
-            motivasi kepada para peserta kegiatan. Demikian surat permohonan ini kami sampaikan,
-            atas perhatian dan kesediaannya kami ucapkan jazakumullah khairan katsiran.</p>
+            motivasi kepada para peserta kegiatan. Demikian permohonan ini kami sampaikan. Atas perhatian dan bantuannya, kami ucapkan terima kasih.</p>
 
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
 

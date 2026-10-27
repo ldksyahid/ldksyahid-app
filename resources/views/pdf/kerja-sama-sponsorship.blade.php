@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -31,9 +31,7 @@
 
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
 
-        <p class="indent">Puji syukur senantiasa kita panjatkan ke hadirat Allah SWT atas segala
-            nikmat-Nya. Shalawat dan salam senantiasa tercurah kepada Nabi Muhammad SAW beserta
-            keluarga dan para pengikutnya.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
 
         <p class="indent">Melalui surat ini, kami dari pengurus UKM Lembaga Dakwah Kampus (LDK) Syahid
             UIN Syarif Hidayatullah Jakarta bermaksud mengajukan permohonan dukungan kerja
@@ -53,8 +51,7 @@
             (benefit) telah kami lampirkan dalam proposal bersama surat ini. Besar harapan kami agar
             Bapak/Ibu berkenan menjalin kerja sama demi kesuksesan program tersebut.</p>
 
-        <p class="indent">Demikian surat permohonan ini kami sampaikan. Atas perhatian, dukungan,
-            dan kerja sama yang diberikan, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Demikian permohonan ini kami sampaikan. Atas perhatian dan bantuannya, kami ucapkan terima kasih.</p>
 
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
 

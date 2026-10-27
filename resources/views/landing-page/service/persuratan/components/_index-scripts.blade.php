@@ -46,6 +46,7 @@
             { name: 'hari_tanggal',         label: 'Tanggal Peminjaman',     icon: 'fa-calendar', type: 'date' },
             { name: 'waktu',                label: 'Waktu Peminjaman',       icon: 'fa-clock',    type: 'time-range' },
             { name: 'tempat_dipinjam',      label: 'Tempat yang Dipinjam',   icon: 'fa-building', placeholder: 'Contoh: Aula Student Center Lt. 3 / Lapangan SC' },
+            { name: 'berkas_lampiran',      label: 'Berkas Lampiran / Proposal Acara', icon: 'fa-paperclip', type: 'file', accept: '.pdf,.doc,.docx,.zip', help: 'Unggah berkas proposal atau lampiran pendukung acara (Format: PDF, Word, atau ZIP. Maks. 20 MB).' },
         ],
         'peminjaman-tempat-fakultas': [
             { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
@@ -57,6 +58,7 @@
             { name: 'hari_tanggal',         label: 'Tanggal Peminjaman',     icon: 'fa-calendar', type: 'date' },
             { name: 'waktu',                label: 'Waktu Peminjaman',       icon: 'fa-clock',    type: 'time-range' },
             { name: 'tempat_dipinjam',      label: 'Tempat yang Dipinjam',   icon: 'fa-building', placeholder: 'Contoh: Teater FST Lt. 2' },
+            { name: 'berkas_lampiran',      label: 'Berkas Lampiran / Proposal Acara', icon: 'fa-paperclip', type: 'file', accept: '.pdf,.doc,.docx,.zip', help: 'Unggah berkas proposal atau lampiran pendukung acara (Format: PDF, Word, atau ZIP. Maks. 20 MB).' },
         ],
         'peminjaman-tempat-luar-kampus': [
             { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
@@ -68,12 +70,14 @@
             { name: 'hari_tanggal',         label: 'Tanggal Peminjaman',     icon: 'fa-calendar', type: 'date' },
             { name: 'waktu',                label: 'Waktu Peminjaman',       icon: 'fa-clock',    type: 'time-range' },
             { name: 'tempat_dipinjam',      label: 'Tempat yang Dipinjam',   icon: 'fa-map-marker-alt', placeholder: 'Contoh: Villa & Lapangan Utama' },
+            { name: 'berkas_lampiran',      label: 'Berkas Lampiran / Proposal Acara', icon: 'fa-paperclip', type: 'file', accept: '.pdf,.doc,.docx,.zip', help: 'Unggah berkas proposal atau lampiran pendukung acara (Format: PDF, Word, atau ZIP. Maks. 20 MB).' },
         ],
         'permohonan-bantuan-dana': [
             { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
             { name: 'nama_program',     label: 'Nama Program/Acara',   icon: 'fa-hand-holding-usd', placeholder: 'Contoh: Syahid Peduli Ummat 2026' },
             { name: 'ditujukan_kepada', label: 'Ditujukan Kepada',     icon: 'fa-envelope',     placeholder: 'Contoh: Pimpinan BAZNAS RI / Direktur Utama PT...' },
             { name: 'keperluan',        label: 'Tujuan & Rincian Penggunaan Dana', icon: 'fa-align-left', type: 'textarea', placeholder: 'Jelaskan tujuan permohonan bantuan dana serta ringkasan peruntukan anggaran kegiatan...' },
+            { name: 'berkas_lampiran',  label: 'Berkas Lampiran / Proposal Anggaran', icon: 'fa-paperclip', type: 'file', accept: '.pdf,.doc,.docx,.zip', help: 'Unggah proposal kegiatan atau rincian RAB anggaran (Format: PDF, Word, atau ZIP. Maks. 20 MB).' },
         ],
         'permohonan-izin-luar-kampus': [
             { name: 'kode_bidang',   label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
@@ -83,6 +87,7 @@
             { name: 'waktu',         label: 'Waktu Pelaksanaan',    icon: 'fa-clock',           type: 'time-range' },
             { name: 'tempat',        label: 'Tempat/Lokasi Acara',  icon: 'fa-map-marker-alt',  placeholder: 'Contoh: Villa Bukit Cisarua' },
             { name: 'alamat_tempat', label: 'Alamat Lengkap',       icon: 'fa-directions',      placeholder: 'Contoh: Jl. Raya Puncak KM 84, Cisarua, Bogor, Jawa Barat' },
+            { name: 'berkas_lampiran', label: 'Berkas Lampiran / Proposal Acara', icon: 'fa-paperclip', type: 'file', accept: '.pdf,.doc,.docx,.zip', help: 'Unggah berkas proposal kegiatan atau susunan acara (Format: PDF, Word, atau ZIP. Maks. 20 MB).' },
         ],
         'surat-rekomendasi': [
             { name: 'kode_bidang',          label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
@@ -175,6 +180,7 @@
             { name: 'tema_acara',       label: 'Tema Acara',           icon: 'fa-tag',             placeholder: 'Contoh: Eksplorasi Seni & Budaya Islami Nusantara' },
             { name: 'ditujukan_kepada', label: 'Mitra / Perusahaan Tujuan', icon: 'fa-handshake', placeholder: 'Contoh: Pimpinan PT Telkom Indonesia / Paragon Corp' },
             { name: 'bentuk_kerjasama', label: 'Bentuk Kerja Sama yang Ditawarkan', icon: 'fa-align-left', type: 'textarea', placeholder: 'Jelaskan paket sponsorship, publikasi logo, media partner, atau benefit kemitraan yang ditawarkan...' },
+            { name: 'berkas_lampiran',  label: 'Berkas Proposal Sponsorship', icon: 'fa-paperclip', type: 'file', accept: '.pdf,.doc,.docx,.zip', help: 'Unggah berkas proposal sponsorship resmi (Format: PDF, Word, atau ZIP. Maks. 20 MB).' },
         ],
         'surat-pemberitahuan': [
             { name: 'kode_bidang',      label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
@@ -210,6 +216,7 @@
             { name: 'no_hp_ketua_pelaksana',label: 'No. HP / WA Ketua Pelaksana', icon: 'fa-phone',   placeholder: 'Contoh: 081234567890' },
             { name: 'susunan_acara',         label: 'Susunan Acara (satu acara per baris)', icon: 'fa-list-ol', type: 'textarea', placeholder: '08.00-08.30 | Registrasi | Panitia\n08.30-09.00 | Pembukaan | MC' },
             { name: 'opsi_sponsor',          label: 'Status Sponsor', icon: 'fa-handshake', type: 'select', options: [{value:'bebas',label:'Tidak ada sponsor'}, {value:'pemberitahuan',label:'Ada sponsor (surat pemberitahuan)'}] },
+            { name: 'berkas_lampiran',       label: 'Berkas Lampiran / Proposal Kegiatan', icon: 'fa-paperclip', type: 'file', accept: '.pdf,.doc,.docx,.zip', help: 'Unggah proposal kegiatan atau berkas pendukung izin malam (Format: PDF, Word, atau ZIP. Maks. 20 MB).' },
         ],
         'permohonan-tte-proposal': [
             { name: 'kode_bidang',  label: 'Asal Bidang / LDKSF Pengaju', icon: 'fa-sitemap', type: 'dept-picker' },
@@ -218,6 +225,7 @@
             { name: 'hari_tanggal', label: 'Tanggal Pelaksanaan',         icon: 'fa-calendar', type: 'date' },
             { name: 'waktu',        label: 'Waktu Pelaksanaan',           icon: 'fa-clock',    type: 'time-range' },
             { name: 'tempat',       label: 'Tempat Pelaksanaan',          icon: 'fa-map-marker-alt', placeholder: 'Contoh: Auditorium Harun Nasution' },
+            { name: 'berkas_lampiran', label: 'Berkas Proposal yang Dimohonkan TTE', icon: 'fa-paperclip', type: 'file', accept: '.pdf,.doc,.docx,.zip', required: true, help: 'Wajib unggah berkas proposal kegiatan yang dimohonkan tanda tangannya (Format: PDF, Word, atau ZIP. Maks. 20 MB).' },
         ],
     };
 
@@ -374,7 +382,31 @@
 
                 group.innerHTML = labelHtml + inputHtml;
             }
-            // 6. STANDARD INPUT FIELD
+                        // 6. FILE UPLOAD FIELD
+            else if (f.type === 'file') {
+                var isRequired = f.required ? ' <span class="text-danger">*</span>' : ' <span class="text-muted small fw-normal">(Opsional)</span>';
+                var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + isRequired + '</label>';
+
+                var existingHtml = '';
+                if (val && typeof val === 'object' && val.nama_file) {
+                    existingHtml = '<div class="prs-file-existing mb-2 p-2 rounded bg-light border d-flex align-items-center justify-content-between">' +
+                        '<div class="d-flex align-items-center gap-2"><i class="fas fa-file-pdf text-danger fs-5"></i><div><div class="fw-bold small text-dark">' + escapeAttr(val.nama_file) + '</div><div class="text-muted" style="font-size:0.75rem;">Berkas tersimpan di sistem</div></div></div>' +
+                        '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="fas fa-check me-1"></i>Tersedia</span>' +
+                    '</div>' +
+                    '<input type="hidden" name="old_' + f.name + '" value="' + escapeAttr(JSON.stringify(val)) + '">';
+                }
+
+                var fileInputHtml = '<div class="prs-file-upload-wrap">' +
+                    existingHtml +
+                    '<div class="prs-input-group">' + prefixIcon +
+                        '<input type="file" name="' + f.name + '" id="field_' + f.name + '" class="prs-form-input prs-file-input" accept="' + (f.accept || '.pdf,.doc,.docx,.zip') + '"' + (f.required && !val ? ' required' : '') + '>' +
+                    '</div>' +
+                    '<span class="prs-form-hint mt-1"><i class="fas fa-info-circle me-1 text-primary"></i> ' + (f.help || 'Format yang didukung: PDF, Word (DOC/DOCX), atau ZIP (Maksimal 20 MB).') + '</span>' +
+                '</div>';
+
+                group.innerHTML = labelHtml + fileInputHtml;
+            }
+            // 7. STANDARD INPUT FIELD
             else {
                 var labelHtml = '<label class="prs-form-label" for="field_' + f.name + '">' + iconHtml + ' ' + f.label + '</label>';
                 var extraAttr = '';

@@ -7,8 +7,8 @@ class LetterRegistry
     public const KODE_JENIS = [
         'izin-orang-tua'                      => ['kode' => 'Ph',    'sifat' => 'e'],
         'peminjaman-alat'                     => ['kode' => 'Ph',    'sifat' => 'e'],
-        'peminjaman-tempat-kampus'            => ['kode' => 'Ph',    'sifat' => 'i'],
-        'peminjaman-tempat-fakultas'          => ['kode' => 'Ph',    'sifat' => 'i'],
+        'peminjaman-tempat-kampus'            => ['kode' => 'Ph',    'sifat' => 'e'],
+        'peminjaman-tempat-fakultas'          => ['kode' => 'Ph',    'sifat' => 'e'],
         'peminjaman-tempat-luar-kampus'       => ['kode' => 'Ph',    'sifat' => 'e'],
         'permohonan-bantuan-dana'             => ['kode' => 'Ph',    'sifat' => 'e'],
         'permohonan-izin-luar-kampus'         => ['kode' => 'Ph',    'sifat' => 'e'],
@@ -42,7 +42,7 @@ class LetterRegistry
             'icon'        => 'fa-user-shield',
             'badge'       => 'Ph-e',
             'description' => 'Izin kepada orang tua/wali kader untuk mengikuti agenda kegiatan resmi LDK Syahid.',
-            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat'],
+            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat', 'berkas_lampiran'],
         ],
         'peminjaman-alat' => [
             'label'       => 'Surat Peminjaman Alat',
@@ -56,17 +56,17 @@ class LetterRegistry
             'label'       => 'Surat Peminjaman Fasilitas Kampus Bersama',
             'category'    => 'izin_peminjaman',
             'icon'        => 'fa-landmark',
-            'badge'       => 'Ph-i',
+            'badge'       => 'Ph-e',
             'description' => 'Peminjaman fasilitas bersama kampus UIN Jakarta (Student Center, Aula, Lapangan).',
-            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'fakultas_ketua_pelaksana', 'jurusan_ketua_pelaksana', 'no_hp_ketua_pelaksana', 'jumlah_peserta', 'susunan_acara', 'opsi_sponsor', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam'],
+            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'fakultas_ketua_pelaksana', 'jurusan_ketua_pelaksana', 'no_hp_ketua_pelaksana', 'jumlah_peserta', 'susunan_acara', 'opsi_sponsor', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam', 'berkas_lampiran'],
         ],
         'peminjaman-tempat-fakultas' => [
             'label'       => 'Surat Peminjaman Tempat Fakultas (Internal)',
             'category'    => 'izin_peminjaman',
             'icon'        => 'fa-school',
-            'badge'       => 'Ph-i',
+            'badge'       => 'Ph-e',
             'description' => 'Peminjaman ruang kuliah, teater, atau aula internal di lingkungan fakultas UIN.',
-            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam'],
+            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam', 'berkas_lampiran'],
         ],
         'peminjaman-tempat-luar-kampus' => [
             'label'       => 'Surat Peminjaman Tempat Luar Kampus',
@@ -74,7 +74,7 @@ class LetterRegistry
             'icon'        => 'fa-map-marked-alt',
             'badge'       => 'Ph-e',
             'description' => 'Permohonan izin peminjaman tempat atau lokasi kegiatan di luar kampus.',
-            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam'],
+            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'ditujukan_kepada', 'hari_tanggal', 'waktu', 'tempat_dipinjam', 'berkas_lampiran'],
         ],
         'permohonan-bantuan-dana' => [
             'label'       => 'Surat Permohonan Bantuan Dana',
@@ -82,7 +82,7 @@ class LetterRegistry
             'icon'        => 'fa-hand-holding-usd',
             'badge'       => 'Ph-e',
             'description' => 'Pengajuan permohonan donasi atau bantuan sponsorship dana kegiatan.',
-            'fields'      => ['kode_bidang', 'nama_program', 'ditujukan_kepada', 'keperluan'],
+            'fields'      => ['kode_bidang', 'nama_program', 'ditujukan_kepada', 'keperluan', 'berkas_lampiran'],
         ],
         'permohonan-izin-luar-kampus' => [
             'label'       => 'Surat Permohonan Izin Kegiatan di Luar Kampus',
@@ -90,7 +90,7 @@ class LetterRegistry
             'icon'        => 'fa-bus',
             'badge'       => 'Ph-e',
             'description' => 'Permohonan izin kegiatan di luar kampus kepada Wakil Rektor Bidang Kemahasiswaan.',
-            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat', 'alamat_tempat'],
+            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat', 'alamat_tempat', 'berkas_lampiran'],
         ],
         'surat-rekomendasi' => [
             'label'       => 'Surat Rekomendasi',
@@ -170,7 +170,7 @@ class LetterRegistry
             'icon'        => 'fa-handshake',
             'badge'       => 'Ks-e',
             'description' => 'Permohonan kemitraan, media partner, atau kerja sama sponsorship dengan mitra.',
-            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'bentuk_kerjasama'],
+            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'ditujukan_kepada', 'bentuk_kerjasama', 'berkas_lampiran'],
         ],
         'surat-pemberitahuan' => [
             'label'       => 'Surat Pemberitahuan',
@@ -194,7 +194,7 @@ class LetterRegistry
             'icon'        => 'fa-moon',
             'badge'       => 'Ph-i',
             'description' => 'Permohonan izin berkegiatan malam bagi panitia & peserta kepada Wakil Rektor Kemahasiswaan.',
-            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'fakultas_ketua_pelaksana', 'jurusan_ketua_pelaksana', 'hari_tanggal', 'waktu', 'tempat', 'jumlah_peserta', 'no_hp_ketua_pelaksana', 'susunan_acara', 'opsi_sponsor'],
+            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'nama_ketua_pelaksana', 'nim_ketua_pelaksana', 'fakultas_ketua_pelaksana', 'jurusan_ketua_pelaksana', 'hari_tanggal', 'waktu', 'tempat', 'jumlah_peserta', 'no_hp_ketua_pelaksana', 'susunan_acara', 'opsi_sponsor', 'berkas_lampiran'],
         ],
         'permohonan-tte-proposal' => [
             'label'       => 'Surat Permohonan TTE Proposal',
@@ -202,7 +202,7 @@ class LetterRegistry
             'icon'        => 'fa-file-signature',
             'badge'       => 'Ph-i',
             'description' => 'Permohonan tanda tangan (TTE) proposal kegiatan kepada Wakil Rektor Bidang Kemahasiswaan.',
-            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat'],
+            'fields'      => ['kode_bidang', 'nama_acara', 'tema_acara', 'hari_tanggal', 'waktu', 'tempat', 'berkas_lampiran'],
         ],
     ];
 
@@ -252,6 +252,8 @@ class LetterRegistry
         foreach (self::TYPES[$type]['fields'] as $field) {
             if ($field === 'kode_bidang') {
                 $rules[$field] = 'required|string|max:20';
+            } elseif ($field === 'berkas_lampiran') {
+                $rules[$field] = 'nullable';
             } elseif ($field === 'nim_ketua_pelaksana') {
                 $rules[$field] = 'required|string|max:30|regex:/^[0-9]+$/';
             } elseif (in_array($field, ['jenis_undangan', 'jenis_peminjaman'])) {

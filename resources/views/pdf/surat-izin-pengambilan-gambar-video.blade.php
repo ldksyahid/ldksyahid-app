@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -28,7 +28,7 @@
             <p>di Tempat</p>
         </div>
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
-        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu senantiasa dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan amanah sehari-hari.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
         <p class="indent">Sehubungan dengan kebutuhan dokumentasi dan publikasi program <strong>{{ $data['nama_acara'] ?? '-' }}</strong> oleh tim Media UKM Lembaga Dakwah Kampus (LDK) Syahid UIN Syarif Hidayatullah Jakarta, yang InsyaAllah akan dilaksanakan pada:</p>
         <table class="identity">
             <tr><td class="identity-label">Hari, Tanggal</td><td class="identity-sep">:</td><td>{{ $hariTanggal }}</td></tr>
@@ -37,7 +37,7 @@
             <tr><td class="identity-label">Keperluan</td><td class="identity-sep">:</td><td>{{ $data['keperluan'] ?? 'Pengambilan Foto dan Video Dokumentasi Resmi' }}</td></tr>
         </table>
         <p class="indent">Maka kami bermaksud memohon izin kepada pihak pengelola agar tim dokumentasi kami diperkenankan mengambil gambar/video pada area dan waktu tersebut.</p>
-        <p class="indent">Demikian surat permohonan izin ini kami sampaikan. Atas izin dan kerja sama yang baik, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Demikian permohonan ini kami sampaikan. Atas perhatian dan bantuannya, kami ucapkan terima kasih.</p>
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
         <table class="signature-table">
             <tr>
