@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -28,7 +28,7 @@
             <p>di Tempat</p>
         </div>
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
-        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu senantiasa dalam lindungan Allah SWT serta sukses dalam menjalankan aktivitas sehari-hari.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
         <p class="indent">Sehubungan dengan rangkaian kegiatan <strong>{{ $data['nama_acara'] ?? '-' }}</strong> yang diselenggarakan oleh UKM Lembaga Dakwah Kampus (LDK) Syahid UIN Syarif Hidayatullah Jakarta, yang InsyaAllah akan dilaksanakan pada:</p>
         <table class="identity">
             <tr><td class="identity-label">Hari, Tanggal</td><td class="identity-sep">:</td><td>{{ $hariTanggal }}</td></tr>
@@ -37,7 +37,7 @@
             <tr><td class="identity-label">Keperluan Stand</td><td class="identity-sep">:</td><td>{{ $data['keperluan'] ?? '-' }}</td></tr>
         </table>
         <p class="indent">Maka kami bermaksud memohon izin dan perkenan Bapak/Ibu agar diperkenankan membuka stand/booth pada lokasi dan waktu tersebut di atas.</p>
-        <p class="indent">Demikian surat permohonan izin ini kami sampaikan. Atas perhatian, kerja sama, dan izin yang diberikan, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Demikian permohonan ini kami sampaikan. Atas perhatian dan bantuannya, kami ucapkan terima kasih.</p>
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
         <table class="signature-table">
             <tr>

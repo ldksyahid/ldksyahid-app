@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -43,8 +43,7 @@
         </table>
         <p class="indent">Kehadiran dan partisipasi dari {{ $sapaan }} sangat kami harapkan guna
             menyemarakkan dan mendukung kesuksesan kegiatan tersebut.</p>
-        <p class="indent">Demikian surat undangan ini kami sampaikan. Atas perhatian dan kesediaan
-            waktunya, kami ucapkan jazakumullah khairan katsiran.</p>
+        <p class="indent">Demikian surat undangan ini kami sampaikan. Atas perhatian dan kehadirannya, kami ucapkan terima kasih.</p>
         <p class="salam-penutup">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p>
         <table class="signature-table">
             <tr>

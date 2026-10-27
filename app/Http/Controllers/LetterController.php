@@ -11,6 +11,7 @@ use App\Services\WhatsApp;
 use App\Support\LetterRegistry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class LetterController extends Controller
 {

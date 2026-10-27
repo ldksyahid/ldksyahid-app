@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -37,7 +37,7 @@
             <p>di Tempat</p>
         </div>
         <p class="salam">Assalamu'alaikum Warahmatullahi Wabarakatuh,</p>
-        <p class="indent">Puji syukur kita panjatkan ke hadirat Allah SWT atas limpahan rahmat dan karunia-Nya. Shalawat dan salam senantiasa tercurah kepada junjungan kita Nabi Muhammad SAW.</p>
+        <p class="indent">Teriring do'a dan harapan semoga Bapak/Ibu/Saudara/i dalam keadaan sehat wal 'afiat serta berkah dalam menjalankan aktivitas sehari-hari.</p>
         <p class="indent">Sehubungan dengan <strong>{{ $data['perihal_imbauan'] ?? 'arahan dan perkembangan situasi terkini' }}</strong>, maka dengan ini Pengurus UKM Lembaga Dakwah Kampus (LDK) Syahid UIN Syarif Hidayatullah Jakarta menyampaikan beberapa poin imbauan sebagai berikut:</p>
         <ol>
             @foreach ($poinImbauan as $item)
