@@ -122,3 +122,4 @@ class FordataController extends Controller
         return response()->json($data, $status);
     }
 }
+
