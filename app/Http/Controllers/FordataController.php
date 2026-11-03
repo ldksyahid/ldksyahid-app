@@ -21,9 +21,9 @@ class FordataController extends Controller
         $data = [
             'judulWebsite'        => 'FORDATA 2 - LDK Syahid',
             'sekarangFordata'     => '#2 2026',
-            'logoWebsite'         => 'https://i.ibb.co.com/mYMhQNQ/FORDATA-8.png',
-            'gambarHeaderPusat'   => 'https://i.ibb.co.com/mYMhQNQ/FORDATA-8.png',
-            'gambarHeaderCSI'     => 'https://i.ibb.co.com/N6yYBTG0/Screenshot-2026-11-01-172202.png',
+            'logoWebsite'         => 'https://i.ibb.co.com/6cZDZznZ/FORDATA.png',
+            'gambarHeaderPusat'   => 'https://i.ibb.co.com/6cZDZznZ/FORDATA.png',
+            'gambarHeaderCSI'     => 'https://i.ibb.co.com/ksSX0bK0/FORDATA-1600-x-400-px.png',
             'kontakAdminPusat'    => '6285779446994',
             'kontakAdminCSI'      => '6285814010759',
             'linkFordata'         => url('/fordata'),
