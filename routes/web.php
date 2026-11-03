@@ -45,6 +45,7 @@ use App\Http\Controllers\LetterController;
 use App\Http\Controllers\LetterAdminController;
 use App\Http\Controllers\PopupMessageController;
 use App\Http\Controllers\TwoFactorController;
+use App\Http\Controllers\FordataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -269,6 +270,15 @@ Route::get('/perpustakaan/buku/{slug}/baca', [CatalogBooksController::class, 'pd
 // Route LandingPage Report
 Route::get('/laporan', [ReportController::class, 'index'])->name('report.index');
 Route::get('/laporan-keuangan', [ReportController::class, 'financeReport'])->name('report.finance.index');
+
+// Route LandingPage FORDATA
+Route::get('/fordata', [FordataController::class, 'index'])->name('fordata.index');
+Route::get('/fordata/check', [FordataController::class, 'check'])->name('fordata.check');
+Route::post('/fordata/check', [FordataController::class, 'check'])->name('fordata.check.post');
+Route::get('/public/fordata', function () {
+    return redirect()->route('fordata.index');
+});
+Route::get('/public/fordata/appscript.php', [FordataController::class, 'check']);
 
 // Route LandingPage EKSPRESI
 Route::get('/ekspresi', function () {
