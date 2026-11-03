@@ -7,9 +7,9 @@
 const judulWebsiteviaAppScript = "FORDATA 2 - LDK Syahid";
 
 // Gambar Banner & Logo
-const logoWebsiteviaAppScript = "https://i.ibb.co.com/mYMhQNQ/FORDATA-8.png";
-const gambarHeaderPusat = "https://i.ibb.co.com/mYMhQNQ/FORDATA-8.png"; // Header LDK Syahid Pusat
-const gambarHeaderCSI = "https://i.ibb.co.com/N6yYBTG0/Screenshot-2026-11-01-172202.png"; // Header CSI FEB
+const logoWebsiteviaAppScript = "https://i.ibb.co.com/6cZDZznZ/FORDATA.png";
+const gambarHeaderPusat = "https://i.ibb.co.com/6cZDZznZ/FORDATA.png"; // Header LDK Syahid Pusat
+const gambarHeaderCSI = "https://i.ibb.co.com/ksSX0bK0/FORDATA-1600-x-400-px.png"; // Header CSI FEB
 const gambarHeaderDiPortalAppScript = gambarHeaderPusat; // Default halaman depan adalah Pusat
 
 const linkFordataviaAppScript = "http://ldksyah.id/fordata";
