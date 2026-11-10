@@ -19,9 +19,9 @@
             'description' => 'Click <i class="fa fa-edit small text-primary"></i> on any row to modify its year or generation name in a popup modal.'
         ],
         [
-            'icon' => 'fa-trash',
-            'title' => 'Delete Generation',
-            'description' => 'Delete an unused generation safely. Generations linked to KTA members are protected from deletion.'
+            'icon' => 'fa-shield-alt',
+            'title' => 'Delete Protection',
+            'description' => 'The delete button is automatically disabled if a generation is currently linked to active KTA member cards.'
         ],
     ];
 
