@@ -108,12 +108,6 @@
                 </div>
                 <a href="/admin/comments" class="nav-item nav-link {{ $isActive('admin/comments') ? 'active' : '' }}"><i class="fas fa-comments me-2"></i>Comments</a>
                 <a href="/admin/ktaldksyahid" class="nav-item nav-link {{ $isActive('admin/ktaldksyahid') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i>KTA LDK Syahid</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {{ ($isDropdownActive(['admin/master']) || request()->is('admin/master*')) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fa fa-database me-2"></i>Master</a>
-                    <div class="dropdown-menu bg-transparent border-0 ">
-                        <a href="/admin/master/generation" class="dropdown-item {{ ($isActive('admin/master/generation') || request()->is('admin/master*')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Generation</a>
-                    </div>
-                </div>
                 <a href="/admin/catalog/books" class="nav-item nav-link {{ $isActive('admin/catalog/books') ? 'active' : '' }}"><i class="fa fa-book me-2"></i>Book Catalog</a>
                 <a href="/admin/forms" class="nav-item nav-link {{ $isActive('admin/forms') ? 'active' : '' }}"><i class="fas fa-clipboard-list me-2"></i>Dynamic Forms</a>
                 <div class="nav-item dropdown">
@@ -141,6 +135,12 @@
                 </div>
                 @endif
                 <a href="/admin/setting" class="nav-item nav-link {{ $isActive('admin/setting') ? 'active' : '' }}"><i class="fas fa-cog me-2"></i>Setting</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle {{ ($isDropdownActive(['admin/master']) || request()->is('admin/master*')) ? 'active' : '' }}" data-bs-toggle="dropdown"><i class="fa fa-database me-2"></i>Master</a>
+                    <div class="dropdown-menu bg-transparent border-0 ">
+                        <a href="/admin/master/generation" class="dropdown-item {{ ($isActive('admin/master/generation') || request()->is('admin/master*')) ? 'active' : '' }}"><i class="fas fa-angle-right me-2"></i>Generation</a>
+                    </div>
+                </div>
             </div>
 
         {{-- HelperAdmin Sidebar --}}
