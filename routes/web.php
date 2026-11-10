@@ -30,6 +30,7 @@ use App\Http\Controllers\CelenganSyahid\Admin\AuditLogController as CelsyahidAud
 use App\Http\Controllers\CelenganSyahid\Admin\WithdrawalController as CelsyahidWithdrawalController;
 use App\Http\Controllers\FinanceReportController;
 use App\Http\Controllers\MsKTALDKSyahidController;
+use App\Http\Controllers\LkGenerationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShortLinkController;
 use App\Http\Controllers\SubscriptionController;
@@ -579,6 +580,20 @@ Route::middleware(['role:Superadmin|HelperLetter'])->prefix('/admin/ktaldksyahid
     Route::get('/{id}/edit', [MsKTALDKSyahidController::class, 'edit'])->name('admin.ktaldksyahid.edit');
     Route::put('/{id}/update', [MsKTALDKSyahidController::class, 'update'])->name('admin.ktaldksyahid.update');
 });
+
+// Route AdminPage Master Data (Superadmin Only)
+Route::middleware(['role:Superadmin'])->prefix('/admin/master')->name('admin.master.')->group(function () {
+    Route::prefix('generation')->name('generation.')->group(function () {
+        Route::get('/', [LkGenerationController::class, 'indexAdmin'])->name('index');
+        Route::post('/store', [LkGenerationController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [LkGenerationController::class, 'edit'])->name('edit');
+        Route::put('/{id}/update', [LkGenerationController::class, 'update'])->name('update');
+        Route::delete('/{id}', [LkGenerationController::class, 'destroy'])->name('destroy');
+        Route::post('/bulk-delete', [LkGenerationController::class, 'bulkDelete'])->name('bulk-delete');
+    });
+});
+// Convenience redirect: /admin/master/generations -> /admin/master/generation
+Route::get('/admin/master/generations', fn () => redirect()->route('admin.master.generation.index'))->middleware(['role:Superadmin']);
 
 // START Route AdminPage Service Shortlink
 Route::prefix('admin/service/shortlink')->group(function () {
